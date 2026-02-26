@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.2...@aziontech/icons@1.0.3) (2026-02-26)
+
+
+### Bug Fixes
+
+* remove npm token, using only iodc to test ([1fccb01](https://github.com/aziontech/webkit/commit/1fccb01c3363e37d116deedeb59ccfc714b60c04))
+
 ## [1.0.2](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.1...@aziontech/icons@1.0.2) (2026-02-26)
 
 
