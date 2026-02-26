@@ -165,6 +165,54 @@ The generated CSS base class sets the following properties on each icon prefix (
 
 ---
 
+## Designing
+
+### Drawing Icons
+
+Use the [Figma template file to draw](https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Azion-Icons?node-id=937-361) and turn new icons avaiable in [Icon Library](https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Azion-Icons?node-id=933-65) across design files in Figma.
+
+<img width="192" height="192" alt="image" src="https://github.com/user-attachments/assets/6616ec55-a7eb-4517-8dd4-de0593d549d6" />
+
+Follow these rules when drawing icons:
+- Tam: 90x90
+- Stroke: 6pt
+- Grid: 4px
+- Grid 2: 2px
+- Color: #000000 or text-color
+- Layer name: Vector
+
+After the icon is finished move to the Library page, put in the right category in 14x14px size and organize the layer follow this sample above:
+<img width="422" height="303" alt="image" src="https://github.com/user-attachments/assets/e4d9feb1-4c6b-411c-b86b-afff689f9561" />
+*Always use the Union feature to convert strokes into a unified path.*
+
+### Preparing SVG files for export
+
+To ensure compatibility with our icon font pipeline (fantasticon + validation script), all SVGs must be properly cleaned and normalized before being added to src/svg-raw/.
+
+We recommend using the Figma [SVG Export plugin](https://www.figma.com/community/plugin/814345141907543603/svg-export) with the linked preset (Icons Library) to automatically prepare icons according to our standards.
+
+Preset reference file: [`src/presets/preset-svg-export.json`](src/presets/preset-svg-export.json)
+
+- Convert all shapes to `<path>`
+- Remove unnecessary metadata and attributes
+- Merge paths when possible
+- Remove strokes
+- Normalize fills
+- Minify + optimize path data (multipass)
+- Convert `black` to `currentColor`
+- Remove hard-coded fills and strokes
+
+### Checking the SVG
+
+Here's how that your SVG needs to looks in code:
+```
+<svg width="14" height="14" fill="currentColor">
+  <path d="M6.882.032a.581.581 0 0 1 .35.036l6.4 2.8a.58.58 0 0 1 .348.532v7.2a.58.58 0 0 1-.348.531l-6.4 2.8a.58.58 0 0 1-.464 0l-6.4-2.8A.58.58 0 0 1 .02 10.6V3.4a.58.58 0 0 1 .348-.532l6.4-2.8.114-.036ZM1.18 10.22l5.24 2.293V6.579L1.18 4.286v5.934Zm6.4-3.64v5.932l5.24-2.292V4.286L7.58 6.58ZM2.047 3.4 7 5.566 11.953 3.4 7 1.233 2.046 3.4Z"/>
+</svg>
+```
+
+---
+
 ## Development
 
 ### Project structure
@@ -216,20 +264,9 @@ The generated CSS base class sets the following properties on each icon prefix (
 
 Follow the same steps above but place the SVG in [`src/svg-raw/pi/`](src/svg-raw/pi/) using the `pi-` prefix.
 
-### SVG requirements
+### Validate the SVG
 
 All SVG source files are validated by [`scripts/validate.mjs`](scripts/validate.mjs) before font generation. SVGs must:
-
-| Requirement | Detail |
-|-------------|--------|
-| ✅ Have a `<path>` element | Icon fonts require path data |
-| ✅ Use `fill` (not `stroke`) | Icon fonts only support filled shapes |
-| ✅ Use `currentColor` for fill | Enables CSS color theming (no `fill="black"` or `fill="#000"`) |
-| ✅ Square `viewBox` | Required for consistent rendering |
-| ✅ `24x24` viewBox preferred | Standard size (`viewBox="0 0 24 24"`) |
-| ✅ No spaces in filename | Causes build failures |
-| ✅ No placeholder content | No `<rect>` + `<text>` with `?` |
-| ⚠️ No `<clipPath>` | May not render correctly in icon fonts |
 
 Run the validation script at any time:
 
