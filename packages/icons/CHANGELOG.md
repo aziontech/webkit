@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.3...@aziontech/icons@1.0.4) (2026-02-26)
+
+
+### Bug Fixes
+
+* rollback of ai-ask-azion icon deletion ([cf7b46e](https://github.com/aziontech/webkit/commit/cf7b46e5c15c67d50d18d00821b41990fb075baa))
+
 ## [1.0.3](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.2...@aziontech/icons@1.0.3) (2026-02-26)
 
 
