@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.1...@aziontech/icons@1.0.2) (2026-02-26)
+
+
+### Bug Fixes
+
+* ai-ask-azion added ([8e4343f](https://github.com/aziontech/webkit/commit/8e4343fc86fd2e55c9f0a63f0fc565b9836c4caf))
+
 ## [1.0.1](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.0...@aziontech/icons@1.0.1) (2026-02-26)
 
 
