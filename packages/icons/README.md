@@ -137,7 +137,7 @@ Icons inherit color via `currentColor`, making them trivially themeable with CSS
 
 ```css
 .my-icon {
-  font-size: 24px;  /* control size */
+  font-size: 14px;  /* control size */
   color: #f97316;   /* control color */
 }
 ```
@@ -173,7 +173,9 @@ Use the [Figma template file to draw](https://www.figma.com/design/aerxJReCkLz3x
 
 <img width="192" height="192" alt="image" src="https://github.com/user-attachments/assets/6616ec55-a7eb-4517-8dd4-de0593d549d6" />
 
+
 Follow these rules when drawing icons:
+
 - Tam: 90x90
 - Stroke: 6pt
 - Grid: 4px
@@ -181,8 +183,11 @@ Follow these rules when drawing icons:
 - Color: #000000 or text-color
 - Layer name: Vector
 
+
 After the icon is finished move to the Library page, put in the right category in 14x14px size and organize the layer follow this sample above:
+
 <img width="422" height="303" alt="image" src="https://github.com/user-attachments/assets/e4d9feb1-4c6b-411c-b86b-afff689f9561" />
+
 *Always use the Union feature to convert strokes into a unified path.*
 
 ### Preparing SVG files for export
@@ -191,7 +196,7 @@ To ensure compatibility with our icon font pipeline (fantasticon + validation sc
 
 We recommend using the Figma [SVG Export plugin](https://www.figma.com/community/plugin/814345141907543603/svg-export) with the linked preset (Icons Library) to automatically prepare icons according to our standards.
 
-Preset reference file: [`src/presets/preset-svg-export.json`](src/presets/preset-svg-export.json)
+Preset reference file: [`presets/preset-svg-export.json`](presets/svg-export.json)
 
 - Convert all shapes to `<path>`
 - Remove unnecessary metadata and attributes
@@ -288,7 +293,7 @@ The report shows ❌ errors (blocking — build will fail), ⚠️ warnings (may
 - Non-square viewBox
 
 **Info-level checks**:
-- Non-standard viewBox size (anything other than 24×24)
+- Non-standard viewBox size (anything other than 14x14)
 
 ---
 
