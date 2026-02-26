@@ -1,0 +1,12 @@
+tmp
+dist
+dist-app
+node_modules
+src/icon-fonts
+
+yarn.lock
+package-lock.json
+
+.edge/
+.vulcan
+.DS_Store

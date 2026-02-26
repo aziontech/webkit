@@ -1,0 +1,62 @@
+{
+  "branches": ["main"],
+  "tagFormat": "@aziontech/icons@${version}",
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "parserOpts": {
+          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "subject"]
+        },
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "hotfix", "release": "patch" },
+          { "type": "chore", "release": "patch" }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "parserOpts": {
+          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "subject"]
+        }
+      }
+    ],
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "echo '=== DEBUG prepareCmd: cwd ===' && pwd && echo '=== DEBUG prepareCmd: ls ===' && ls -la && node scripts/build-package.mjs",
+        "publishCmd": "echo '=== DEBUG: cwd ===' && pwd && echo '=== DEBUG: ls dist/ ===' && ls -la dist/ && echo '=== DEBUG: cat dist/package.json ===' && cat dist/package.json && npm publish dist --provenance --access public"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): @aziontech/icons ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "labels": false
+      }
+    ]
+  ]
+}

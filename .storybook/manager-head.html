@@ -1,0 +1,63 @@
+<style>
+  /* Custom Azion branding for Storybook */
+  
+  /* Hide default Storybook logo */
+  .sidebar-header div {
+    display: none !important;
+  }
+  
+  /* Add Azion logo */
+  .sidebar-header::before {
+    content: '';
+    display: block;
+    width: 90px;
+    height: 24px;
+    margin: 8px 0;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCA5MCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfNDI2M184MjM5KSI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04Ni42MzcgMEw4NS4xNDQ1IDcuNzkwMzNMODcuODYxIDExLjE2NzFMOTAgMEg4Ni42MzdaTTcyLjUwOTkgMEw2OS4xNDY1IDE3LjU2MUg3Mi41MTExTDc0LjgxNjMgNS41MjIyNEw4NC41MzMzIDE3LjU2MUg4Ni42MzdMODcuMDUxOCAxNS40MTEyTDc0LjYxMzEgMEg3Mi41MDk5WiIgZmlsbD0iI0YzNjUyQiI+PC9wYXRoPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNTEuNjU2MyAwTDQ4LjI5MyAxNy41NjFINjUuNzgzM0w2OS4xNDY2IDBINTEuNjU2M1pNNTQuMzg4NCAzLjMxNzk0SDY1LjEzOTJMNjMuMDQ2NyAxNC4yNDNINTIuMjk2TDU0LjM4ODQgMy4zMTc5NFoiIGZpbGw9IiNGMzY1MkIiPjwvcGF0aD48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTQ1LjAwMDEgMEw0MS43MDcgMTcuNTYxSDQ0Ljk5OTRMNDguMjkyNCAwSDQ1LjAwMDFaIiBmaWxsPSIjRjM2NTJCIj48L3BhdGg+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNC4yMTcgMEwyMy41ODE0IDMuMzE4MDFIMzUuMTk2MkwyMS4zNTExIDE0Ljk3NTZMMjAuODUzNSAxNy41NjFIMzguMzQzN0wzOC45NzkzIDE0LjI0M0gyNy4zNjQ2TDQxLjIxMjYgMi41ODI4OUw0MS43MDcyIDBIMjQuMjE3WiIgZmlsbD0iI0YzNjUyQiI+PC9wYXRoPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTguMjg2OCAwTDAuNDkwODkyIDE0Ljk4MjFMMCAxNy41NjFIMi41NjM5TDE2LjM0OSA1Ljk2MTQxTDE0LjEyNzEgMTcuNTYxSDE3LjQ4OThMMjAuODUzNyAwSDE4LjI4NjhaIiBmaWxsPSIjRjM2NTJCIj48L3BhdGg+PC9nPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDBfNDI2M184MjM5Ij48cmVjdCB3aWR0aD0iOTAiIGhlaWdodD0iMTgiIGZpbGw9IndoaXRlIj48L3JlY3Q+PC9jbGlwUGF0aD48L2RlZnM+PC9zdmc+');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+  }
+  
+  /* Custom Azion colors */
+  :root {
+    --color-orange-500: #F3652B;
+  }
+  
+  
+  /* Sidebar text color */
+  .sidebar-item,
+  .sidebar-item span,
+  .sidebar-subheading,
+  [data-nodetype="story"],
+  [data-nodetype="component"],
+  [data-nodetype="group"],
+  [data-nodetype="root"],
+  .sidebar-item a,
+  .sidebar-item button,
+  [class*="TreeNode"] span,
+  [class*="LeafNode"] span {
+    color: #e5e5e5 !important;
+  }
+  
+  /* Sidebar container */
+  [class*="Container"] {
+    background: #0a0a0a !important;
+  }
+  
+  /* Active/selected items */
+  [data-selected="true"],
+  [aria-selected="true"] {
+    color: var(--color-orange-500) !important;
+  }
+  
+  /* Links hover */
+  .sidebar-item:hover {
+    color: var(--color-orange-500) !important;
+  }
+  
+  /* Toolbar */
+  .css-1wa3eu0-placeholder {
+    color: #a3a3a3 !important;
+  }
+</style>
