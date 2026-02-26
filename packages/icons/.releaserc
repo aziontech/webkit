@@ -38,8 +38,8 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "echo '=== DEBUG prepareCmd: cwd ===' && pwd && echo '=== DEBUG prepareCmd: ls ===' && ls -la && node scripts/build-package.mjs",
-        "publishCmd": "echo '=== DEBUG: cwd ===' && pwd && echo '=== DEBUG: ls dist/ ===' && ls -la dist/ && echo '=== DEBUG: cat dist/package.json ===' && cat dist/package.json && npm publish dist --provenance --access public"
+        "prepareCmd": "node scripts/build-package.mjs",
+        "publishCmd": "npm publish ./dist --provenance --access public"
       }
     ],
     [
