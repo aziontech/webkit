@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.0...@aziontech/icons@1.0.1) (2026-02-26)
+
+
+### Bug Fixes
+
+* packages/icons/.releaserc ([27b477b](https://github.com/aziontech/webkit/commit/27b477bf982d4fbf614edd977cb178c1513a6bfc))
+
 ## 1.0.0 (2026-02-26)
 
 
