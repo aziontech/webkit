@@ -10,11 +10,17 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
+    
+    "icons:ui:install:npm": "pnpm --filter icons-gallery run install:npm",
+    "icons:ui:install:yarn": "pnpm --filter icons-gallery run install:yarn",
+    "icons:ui:build": "pnpm --filter icons-gallery run build",
+    "icons:ui:serve": "pnpm --filter icons-gallery run serve",
+
     "icons:install:npm": "pnpm --filter icons run install:npm",
     "icons:install:yarn": "pnpm --filter icons run install:yarn",
-    "icons:build": "pnpm --filter azion-icons run build",
-    "icons:validate": "pnpm --filter azion-icons run validate",
-    "icons:publish": "pnpm --filter azion-icons run publish"
+    "icons:build": "pnpm --filter icons run build",
+    "icons:validate": "pnpm --filter icons run validate",
+    "icons:publish": "pnpm --filter icons run publish"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.10",

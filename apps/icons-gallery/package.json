@@ -1,0 +1,52 @@
+{
+  "name": "icons-gallery",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Azion icon font library — azionicons + primeicons as CSS/woff2",
+  "license": "MIT",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --dest dist-app",
+    "build:package": "node scripts/build-package.mjs",
+    "validate": "node scripts/validate.mjs",
+    "pack:dry": "cd dist && npm pack --dry-run",
+    "publish:package": "cd dist && npm publish",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint",
+    "format": "prettier --write scripts/ src/"
+  },
+  "dependencies": {
+    "@aziontech/icons": "workspace:*",
+    "@aziontech/icons": "1.0.4",
+    "@babel/plugin-transform-runtime": "^7.24.7",
+    "axios": "^1.7.7",
+    "azion": "^1.17.4",
+    "core-js": "^3.8.3",
+    "tailwind-gradient-mask-image": "^1.2.0",
+    "vue": "^3.2.13",
+    "vue3-colorpicker": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/eslint-parser": "^7.12.16",
+    "@babel/preset-env": "^7.25.4",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-unit-jest": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/test-utils": "^2.4.0-alpha.2",
+    "@vue/vue3-jest": "^27.0.0-alpha.1",
+    "autoprefixer": "^10.4.19",
+    "babel-jest": "^27.5.1",
+    "babel-loader": "^8.2.5",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "jest": "^27.5.1",
+    "jest-transform-stub": "^2.0.0",
+    "postcss": "^8.4.38",
+    "sass": "^1.77.5",
+    "sass-loader": "^14.2.1",
+    "tailwindcss": "^3.4.4",
+    "vue-loader": "^16.8.3"
+  }
+}
