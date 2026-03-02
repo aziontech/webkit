@@ -1,57 +1,46 @@
-<script>
-import IconCard from "./components/IconCard.vue";
-import SearchBar from "./components/SearchBar.vue";
-import icons from "./icons.json";
-import { isDarkMode, getThemeIcon, toggleTheme } from "./theme";
+<script setup>
+import { ref, watch } from "vue"
+import IconCard from "./components/IconCard.vue"
+import SearchBar from "./components/SearchBar.vue"
+import icons from "./icons.json"
+import { getThemeIcon, toggleTheme } from "./theme"
 
-export default {
-  name: "App",
-  components: {
-    IconCard,
-    SearchBar,
-  },
-  data() {
-    return {
-      isDarkMode,
-      getThemeIcon,
-      IconsColor: "rgb(133, 133, 133)",
-      circleColors: [
-        "rgb(133, 133, 133)",
-        "rgb(133, 133, 133)",
-        "rgb(133, 133, 133)",
-      ],
-      circlePositions: [
-        { top: "-30%", left: "-30%" },
-        { top: "20%", left: "90%" },
-        { top: "80%", left: "20%" },
-      ],
-      selectedFontSize: 20, // Default font size
-      sliderValue: 2, // Default value in the exponential range
-      fontSizeValues: [8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 320], // Exponential values
-      icons: icons,
-      pureColor: "rgb(133, 133, 133)",
-      downloadFormat: "png",
-      openBottombar: false,
-    };
-  },
-  watch: {
-    pureColor(newVal) {
-      this.IconsColor = newVal;
-      this.circleColors = [newVal, newVal, newVal];
-    },
-  },
-  methods: {
-    toggleTheme,
-    toggleBottombar() {
-      this.openBottombar = !this.openBottombar;
-    },
-    updateFontSize() {
-      window.requestAnimationFrame(() => {
-        this.selectedFontSize = this.fontSizeValues[this.sliderValue];
-      });
-    },
-  },
-};
+// Reactive data
+const IconsColor = ref("rgb(133, 133, 133)")
+const circleColors = ref([
+  "rgb(133, 133, 133)",
+  "rgb(133, 133, 133)",
+  "rgb(133, 133, 133)",
+])
+const circlePositions = [
+  { top: "-30%", left: "-30%" },
+  { top: "20%", left: "90%" },
+  { top: "80%", left: "20%" },
+]
+const selectedFontSize = ref(20)
+const sliderValue = ref(2)
+const fontSizeValues = [8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 320]
+const iconsList = icons
+const pureColor = ref("rgb(133, 133, 133)")
+const downloadFormat = ref("png")
+const openBottombar = ref(false)
+
+// Watcher
+watch(pureColor, (newVal) => {
+  IconsColor.value = newVal
+  circleColors.value = [newVal, newVal, newVal]
+})
+
+// Methods
+function toggleBottombar() {
+  openBottombar.value = !openBottombar.value
+}
+
+function updateFontSize() {
+  window.requestAnimationFrame(() => {
+    selectedFontSize.value = fontSizeValues[sliderValue.value]
+  })
+}
 </script>
 
 <template>
@@ -115,7 +104,7 @@ export default {
             id="myUL"
           >
             <icon-card
-              v-for="icon in icons"
+              v-for="icon in iconsList"
               :key="icon.name"
               :name="icon.name"
               :keywords="icon.keywords"

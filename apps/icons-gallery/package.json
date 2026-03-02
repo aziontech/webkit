@@ -5,18 +5,14 @@
   "description": "Azion icon font library — azionicons + primeicons as CSS/woff2",
   "license": "MIT",
   "scripts": {
+    "build": "vue-cli-service build",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest dist-app",
-    "build:package": "node scripts/build-package.mjs",
-    "validate": "node scripts/validate.mjs",
-    "pack:dry": "cd dist && npm pack --dry-run",
-    "publish:package": "cd dist && npm publish",
+    "preview": "vite preview",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "format": "prettier --write scripts/ src/"
   },
   "dependencies": {
-    "@aziontech/icons": "workspace:*",
     "@aziontech/icons": "1.0.4",
     "@babel/plugin-transform-runtime": "^7.24.7",
     "axios": "^1.7.7",
@@ -47,6 +43,7 @@
     "sass": "^1.77.5",
     "sass-loader": "^14.2.1",
     "tailwindcss": "^3.4.4",
+    "vite": "^6.4.1",
     "vue-loader": "^16.8.3"
   }
 }

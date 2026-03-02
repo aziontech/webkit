@@ -12,8 +12,6 @@
     "access": "public"
   },
   "scripts": {
-    "install:npm": "npm install",
-    "install:yarn": "yarn install",
     "build": "node scripts/build-package.mjs",
     "validate": "node scripts/validate.mjs",
     "publish": "cd dist && npm publish && cd ..",

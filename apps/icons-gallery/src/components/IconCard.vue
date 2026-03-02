@@ -1,306 +1,316 @@
-<script>
-/* global ClipboardItem */
-export default {
-  name: "IconCard",
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    icon: {
-      type: String,
-      required: true,
-    },
-    keywords: {
-      type: String,
-      required: false,
-    },
-    color: {
-      type: String,
-      required: true,
-    },
-    size: {
-      type: String,
-      required: true, // Esse "size" pode ser uma classe do Tailwind CSS
-    },
-    downloadFormat: {
-      type: String,
-      required: true,
-    },
+<script setup>
+// /* global ClipboardItem */
+/* global defineProps */
+import { ref } from "vue"
+
+// Props
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
   },
-  data() {
-    return {
-      showCheckIcon: false,
-      showImageCheckIcon: false, // Estado para controlar o ícone de "check" no Copy Image
-    };
+  icon: {
+    type: String,
+    required: true,
   },
-  methods: {
-    // Extração do valor em pixels de uma string no formato `text-[XXpx]`
-    getPixelSize(sizeClass) {
-      if (typeof sizeClass === "string" && sizeClass.endsWith("px")) {
-        return parseInt(sizeClass.replace("px", ""), 10);
-      }
-      return sizeClass; // Se já for um número ou outra unidade que não é px, retorna diretamente
-    },
-    // Mapeia as classes do Tailwind para tamanhos reais em pixels
-    getDimension(sizeClass) {
-      const sizeMap = {
-        "text-xs": 12,
-        "text-sm": 16,
-        "text-base": 20,
-        "text-lg": 24,
-        "text-xl": 28,
-        "text-2xl": 32,
-        "text-3xl": 40,
-        "text-4xl": 48,
-        "text-5xl": 56,
-        "text-6xl": 64,
-      };
-      return sizeMap[sizeClass] || 100; // Valor padrão caso a classe não seja mapeada
-    },
-    async downloadIcon() {
-      if (this.downloadFormat === "svg") {
-        this.downloadSVG();
-      } else {
-        this.downloadPNG();
-      }
-    },
-    async downloadSVG() {
-      // try {
-      //   const iconPath = require(`@/assets/svg-raw/${this.name}.svg`);
-      //   const response = await fetch(iconPath);
-
-      //   if (!response.ok) throw new Error("Network response was not ok");
-
-      //   let svg = await response.text();
-
-      //   if (!svg.includes("fill=")) {
-      //     svg = svg.replace(/<path/g, `<path fill="${this.color}"`);
-      //   } else {
-      //     svg = svg.replace(/fill="[^"]*"/g, `fill="${this.color}"`);
-      //   }
-
-      //   const dimension = this.getPixelSize(this.size); // Usa o valor correto em pixels
-
-      //   if (!svg.includes("width=")) {
-      //     svg = svg.replace(
-      //       /<svg/,
-      //       `<svg width="${dimension}" height="${dimension}"`
-      //     );
-      //   } else {
-      //     svg = svg
-      //       .replace(/(width|height)="[^"]*"/g, "")
-      //       .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
-      //   }
-
-      //   const blob = new Blob([svg], { type: "image/svg+xml" });
-      //   const url = window.URL.createObjectURL(blob);
-
-      //   const link = document.createElement("a");
-      //   link.href = url;
-      //   link.download = `${this.name.toLowerCase()}.svg`;
-      //   document.body.appendChild(link);
-      //   link.click();
-      //   document.body.removeChild(link);
-      // } catch (error) {
-      //   console.error("Failed to download SVG:", error);
-      // }
-    },
-    async downloadPNG() {
-      // try {
-      //   const iconPath = require(`@/assets/svg-raw/${this.name}.svg`);
-      //   const response = await fetch(iconPath);
-      //   if (!response.ok) throw new Error("Network response was not ok");
-      //   let svg = await response.text();
-
-      //   svg = svg.replace(/fill="[^"]*"/g, `fill="${this.color}"`);
-
-      //   const dimension = this.getDimension(this.size); // Usa o tamanho correto
-
-      //   svg = svg
-      //     .replace(/(width|height)="[^"]*"/g, "")
-      //     .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
-
-      //   const canvas = document.createElement("canvas");
-      //   canvas.width = dimension;
-      //   canvas.height = dimension;
-      //   const ctx = canvas.getContext("2d");
-
-      //   const img = new Image();
-      //   img.onload = () => {
-      //     ctx.drawImage(img, 0, 0, dimension, dimension);
-      //     canvas.toBlob((blob) => {
-      //       const element = document.createElement("a");
-      //       element.download = `${this.name.toLowerCase()}.png`;
-      //       element.href = window.URL.createObjectURL(blob);
-      //       element.click();
-      //       element.remove();
-      //     }, "image/png");
-      //   };
-
-      //   const svgBlob = new Blob([svg], { type: "image/svg+xml" });
-      //   img.src = URL.createObjectURL(svgBlob);
-      // } catch (error) {
-      //   console.error("Failed to download PNG:", error);
-      // }
-    },
-    async copyCode() {
-      // try {
-      //   const textToCopy = `<i class='${this.icon.toLowerCase()}'></i>`;
-
-      //   if (navigator.clipboard && navigator.clipboard.writeText) {
-      //     await navigator.clipboard.writeText(textToCopy);
-      //   } else {
-      //     // Fallback for browsers without clipboard API
-      //     const textArea = document.createElement("textarea");
-      //     textArea.value = textToCopy;
-      //     textArea.style.position = "fixed";
-      //     textArea.style.left = "-9999px";
-      //     document.body.appendChild(textArea);
-      //     textArea.select();
-      //     document.execCommand("copy");
-      //     document.body.removeChild(textArea);
-      //   }
-
-      //   this.showCheckIcon = true;
-      //   setTimeout(() => {
-      //     this.showCheckIcon = false;
-      //   }, 1200);
-      // } catch (error) {
-      //   console.error("Failed to copy:", error);
-      // }
-    },
-    async copyImage() {
-      if (this.downloadFormat === "svg") {
-        this.copySVG();
-      } else {
-        this.copyPNG();
-      }
-    },
-    async copySVG() {
-      // try {
-      //   const iconPath = require(`@/assets/svg-raw/${this.name}.svg`);
-      //   const response = await fetch(iconPath);
-
-      //   if (!response.ok) throw new Error("Network response was not ok");
-
-      //   let svg = await response.text();
-
-      //   if (!svg.includes("fill=")) {
-      //     svg = svg.replace(/<path/g, `<path fill="${this.color}"`);
-      //   } else {
-      //     svg = svg.replace(/fill="[^"]*"/g, `fill="${this.color}"`);
-      //   }
-
-      //   const dimension = this.getPixelSize(this.size); // Usa o valor correto em pixels
-
-      //   if (!svg.includes("width=")) {
-      //     svg = svg.replace(
-      //       /<svg/,
-      //       `<svg width="${dimension}" height="${dimension}"`
-      //     );
-      //   } else {
-      //     svg = svg
-      //       .replace(/(width|height)="[^"]*"/g, "")
-      //       .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
-      //   }
-
-      //   if (navigator.clipboard && navigator.clipboard.writeText) {
-      //     await navigator.clipboard.writeText(svg);
-      //   } else {
-      //     // Fallback for browsers without clipboard API
-      //     const textArea = document.createElement("textarea");
-      //     textArea.value = svg;
-      //     textArea.style.position = "fixed";
-      //     textArea.style.left = "-9999px";
-      //     document.body.appendChild(textArea);
-      //     textArea.select();
-      //     document.execCommand("copy");
-      //     document.body.removeChild(textArea);
-      //   }
-      //   console.log("SVG content copied to clipboard!");
-
-      //   this.showImageCheckIcon = true;
-      //   setTimeout(() => {
-      //     this.showImageCheckIcon = false;
-      //   }, 1200);
-      // } catch (error) {
-      //   console.error("Failed to copy SVG content:", error);
-      // }
-    },
-    async copyPNG() {
-      // try {
-      //   const iconPath = require(`@/assets/svg-raw/${this.name}.svg`);
-      //   const response = await fetch(iconPath);
-      //   if (!response.ok) throw new Error("Network response was not ok");
-      //   let svg = await response.text();
-
-      //   svg = svg.replace(/fill="[^"]*"/g, `fill="${this.color}"`);
-
-      //   const dimension = this.getPixelSize(this.size); // Usa o valor correto em pixels
-
-      //   svg = svg
-      //     .replace(/(width|height)="[^"]*"/g, "")
-      //     .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
-
-      //   const canvas = document.createElement("canvas");
-      //   canvas.width = dimension;
-      //   canvas.height = dimension;
-      //   const ctx = canvas.getContext("2d");
-
-      //   const img = new Image();
-      //   img.onload = async () => {
-      //     ctx.drawImage(img, 0, 0, dimension, dimension);
-      //     canvas.toBlob(async (blob) => {
-      //       try {
-      //         if (
-      //           typeof ClipboardItem !== "undefined" &&
-      //           navigator.clipboard &&
-      //           navigator.clipboard.write
-      //         ) {
-      //           const clipboardItem = new ClipboardItem({ "image/png": blob });
-      //           await navigator.clipboard.write([clipboardItem]);
-      //           console.log("PNG copied to clipboard!");
-      //         } else {
-      //           // Fallback: copy as base64 data URL text
-      //           const reader = new FileReader();
-      //           reader.onloadend = async () => {
-      //             const base64data = reader.result;
-      //             if (navigator.clipboard && navigator.clipboard.writeText) {
-      //               await navigator.clipboard.writeText(base64data);
-      //             } else {
-      //               const textArea = document.createElement("textarea");
-      //               textArea.value = base64data;
-      //               textArea.style.position = "fixed";
-      //               textArea.style.left = "-9999px";
-      //               document.body.appendChild(textArea);
-      //               textArea.select();
-      //               document.execCommand("copy");
-      //               document.body.removeChild(textArea);
-      //             }
-      //             console.log("PNG copied as base64 to clipboard!");
-      //           };
-      //           reader.readAsDataURL(blob);
-      //         }
-
-      //         this.showImageCheckIcon = true;
-      //         setTimeout(() => {
-      //           this.showImageCheckIcon = false;
-      //         }, 1200);
-      //       } catch (err) {
-      //         console.error("Failed to copy PNG to clipboard:", err);
-      //       }
-      //     }, "image/png");
-      //   };
-
-      //   const svgBlob = new Blob([svg], { type: "image/svg+xml" });
-      //   img.src = URL.createObjectURL(svgBlob);
-      // } catch (error) {
-      //   console.error("Failed to copy PNG:", error);
-      // }
-    },
+  keywords: {
+    type: String,
+    required: false,
   },
-};
+  color: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: String,
+    required: true,
+  },
+  downloadFormat: {
+    type: String,
+    required: true,
+  },
+})
+
+// Data
+const showCheckIcon = ref(false)
+const showImageCheckIcon = ref(false)
+const mySlot = ref(null)
+
+// Methods
+// Extração do valor em pixels de uma string no formato `text-[XXpx]`
+// eslint-disable-next-line no-unused-vars
+function getPixelSize(sizeClass) {
+  if (typeof sizeClass === "string" && sizeClass.endsWith("px")) {
+    return parseInt(sizeClass.replace("px", ""), 10)
+  }
+  return sizeClass // Se já for um número ou outra unidade que não é px, retorna diretamente
+}
+
+// Mapeia as classes do Tailwind para tamanhos reais em pixels
+// eslint-disable-next-line no-unused-vars
+function getDimension(sizeClass) {
+  const sizeMap = {
+    "text-xs": 12,
+    "text-sm": 16,
+    "text-base": 20,
+    "text-lg": 24,
+    "text-xl": 28,
+    "text-2xl": 32,
+    "text-3xl": 40,
+    "text-4xl": 48,
+    "text-5xl": 56,
+    "text-6xl": 64,
+  }
+  return sizeMap[sizeClass] || 100 // Valor padrão caso a classe não seja mapeada
+}
+
+async function downloadIcon() {
+  if (props.downloadFormat === "svg") {
+    downloadSVG()
+  } else {
+    downloadPNG()
+  }
+}
+
+async function downloadSVG() {
+  // try {
+  //   const iconPath = require(`@/assets/svg-raw/${props.name}.svg`);
+  //   const response = await fetch(iconPath);
+
+  //   if (!response.ok) throw new Error("Network response was not ok");
+
+  //   let svg = await response.text();
+
+  //   if (!svg.includes("fill=")) {
+  //     svg = svg.replace(/<path/g, `<path fill="${props.color}"`);
+  //   } else {
+  //     svg = svg.replace(/fill="[^"]*"/g, `fill="${props.color}"`);
+  //   }
+
+  //   const dimension = getPixelSize(props.size); // Usa o valor correto em pixels
+
+  //   if (!svg.includes("width=")) {
+  //     svg = svg.replace(
+  //       /<svg/,
+  //       `<svg width="${dimension}" height="${dimension}"`
+  //     );
+  //   } else {
+  //     svg = svg
+  //       .replace(/(width|height)="[^"]*"/g, "")
+  //       .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
+  //   }
+
+  //   const blob = new Blob([svg], { type: "image/svg+xml" });
+  //   const url = window.URL.createObjectURL(blob);
+
+  //   const link = document.createElement("a");
+  //   link.href = url;
+  //   link.download = `${props.name.toLowerCase()}.svg`;
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // } catch (error) {
+  //   console.error("Failed to download SVG:", error);
+  // }
+}
+
+async function downloadPNG() {
+  // try {
+  //   const iconPath = require(`@/assets/svg-raw/${props.name}.svg`);
+  //   const response = await fetch(iconPath);
+  //   if (!response.ok) throw new Error("Network response was not ok");
+  //   let svg = await response.text();
+
+  //   svg = svg.replace(/fill="[^"]*"/g, `fill="${props.color}"`);
+
+  //   const dimension = getDimension(props.size); // Usa o tamanho correto
+
+  //   svg = svg
+  //     .replace(/(width|height)="[^"]*"/g, "")
+  //     .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
+
+  //   const canvas = document.createElement("canvas");
+  //   canvas.width = dimension;
+  //   canvas.height = dimension;
+  //   const ctx = canvas.getContext("2d");
+
+  //   const img = new Image();
+  //   img.onload = () => {
+  //     ctx.drawImage(img, 0, 0, dimension, dimension);
+  //     canvas.toBlob((blob) => {
+  //       const element = document.createElement("a");
+  //       element.download = `${props.name.toLowerCase()}.png`;
+  //       element.href = window.URL.createObjectURL(blob);
+  //       element.click();
+  //       element.remove();
+  //     }, "image/png");
+  //   };
+
+  //   const svgBlob = new Blob([svg], { type: "image/svg+xml" });
+  //   img.src = URL.createObjectURL(svgBlob);
+  // } catch (error) {
+  //   console.error("Failed to download PNG:", error);
+  // }
+}
+
+async function copyCode() {
+  // try {
+  //   const textToCopy = `<i class='${props.icon.toLowerCase()}'></i>`;
+
+  //   if (navigator.clipboard && navigator.clipboard.writeText) {
+  //     await navigator.clipboard.writeText(textToCopy);
+  //   } else {
+  //     // Fallback for browsers without clipboard API
+  //     const textArea = document.createElement("textarea");
+  //     textArea.value = textToCopy;
+  //     textArea.style.position = "fixed";
+  //     textArea.style.left = "-9999px";
+  //     document.body.appendChild(textArea);
+  //     textArea.select();
+  //     document.execCommand("copy");
+  //     document.body.removeChild(textArea);
+  //   }
+
+  //   showCheckIcon.value = true;
+  //   setTimeout(() => {
+  //     showCheckIcon.value = false;
+  //   }, 1200);
+  // } catch (error) {
+  //   console.error("Failed to copy:", error);
+  // }
+}
+
+async function copyImage() {
+  if (props.downloadFormat === "svg") {
+    copySVG()
+  } else {
+    copyPNG()
+  }
+}
+
+async function copySVG() {
+  // try {
+  //   const iconPath = require(`@/assets/svg-raw/${props.name}.svg`);
+  //   const response = await fetch(iconPath);
+
+  //   if (!response.ok) throw new Error("Network response was not ok");
+
+  //   let svg = await response.text();
+
+  //   if (!svg.includes("fill=")) {
+  //     svg = svg.replace(/<path/g, `<path fill="${props.color}"`);
+  //   } else {
+  //     svg = svg.replace(/fill="[^"]*"/g, `fill="${props.color}"`);
+  //   }
+
+  //   const dimension = getPixelSize(props.size); // Usa o valor correto em pixels
+
+  //   if (!svg.includes("width=")) {
+  //     svg = svg.replace(
+  //       /<svg/,
+  //       `<svg width="${dimension}" height="${dimension}"`
+  //     );
+  //   } else {
+  //     svg = svg
+  //       .replace(/(width|height)="[^"]*"/g, "")
+  //       .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
+  //   }
+
+  //   if (navigator.clipboard && navigator.clipboard.writeText) {
+  //     await navigator.clipboard.writeText(svg);
+  //   } else {
+  //     // Fallback for browsers without clipboard API
+  //     const textArea = document.createElement("textarea");
+  //     textArea.value = svg;
+  //     textArea.style.position = "fixed";
+  //     textArea.style.left = "-9999px";
+  //     document.body.appendChild(textArea);
+  //     textArea.select();
+  //     document.execCommand("copy");
+  //     document.body.removeChild(textArea);
+  //   }
+  //   console.log("SVG content copied to clipboard!");
+
+  //   showImageCheckIcon.value = true;
+  //   setTimeout(() => {
+  //     showImageCheckIcon.value = false;
+  //   }, 1200);
+  // } catch (error) {
+  //   console.error("Failed to copy SVG content:", error);
+  // }
+}
+
+async function copyPNG() {
+  // try {
+  //   const iconPath = require(`@/assets/svg-raw/${props.name}.svg`);
+  //   const response = await fetch(iconPath);
+  //   if (!response.ok) throw new Error("Network response was not ok");
+  //   let svg = await response.text();
+
+  //   svg = svg.replace(/fill="[^"]*"/g, `fill="${props.color}"`);
+
+  //   const dimension = getPixelSize(props.size); // Usa o valor correto em pixels
+
+  //   svg = svg
+  //     .replace(/(width|height)="[^"]*"/g, "")
+  //     .replace(/<svg/, `<svg width="${dimension}" height="${dimension}"`);
+
+  //   const canvas = document.createElement("canvas");
+  //   canvas.width = dimension;
+  //   canvas.height = dimension;
+  //   const ctx = canvas.getContext("2d");
+
+  //   const img = new Image();
+  //   img.onload = async () => {
+  //     ctx.drawImage(img, 0, 0, dimension, dimension);
+  //     canvas.toBlob(async (blob) => {
+  //       try {
+  //         if (
+  //           typeof ClipboardItem !== "undefined" &&
+  //           navigator.clipboard &&
+  //           navigator.clipboard.write
+  //         ) {
+  //           const clipboardItem = new ClipboardItem({ "image/png": blob });
+  //           await navigator.clipboard.write([clipboardItem]);
+  //           console.log("PNG copied to clipboard!");
+  //         } else {
+  //           // Fallback: copy as base64 data URL text
+  //           const reader = new FileReader();
+  //           reader.onloadend = async () => {
+  //             const base64data = reader.result;
+  //             if (navigator.clipboard && navigator.clipboard.writeText) {
+  //               await navigator.clipboard.writeText(base64data);
+  //             } else {
+  //               const textArea = document.createElement("textarea");
+  //               textArea.value = base64data;
+  //               textArea.style.position = "fixed";
+  //               textArea.style.left = "-9999px";
+  //               document.body.appendChild(textArea);
+  //               textArea.select();
+  //               document.execCommand("copy");
+  //               document.body.removeChild(textArea);
+  //             }
+  //             console.log("PNG copied as base64 to clipboard!");
+  //           };
+  //           reader.readAsDataURL(blob);
+  //         }
+
+  //         showImageCheckIcon.value = true;
+  //         setTimeout(() => {
+  //           showImageCheckIcon.value = false;
+  //         }, 1200);
+  //       } catch (err) {
+  //         console.error("Failed to copy PNG to clipboard:", err);
+  //       }
+  //     }, "image/png");
+  //   };
+
+  //   const svgBlob = new Blob([svg], { type: "image/svg+xml" });
+  //   img.src = URL.createObjectURL(svgBlob);
+  // } catch (error) {
+  //   console.error("Failed to copy PNG:", error);
+  // }
+}
 </script>
 <template>
   <li
