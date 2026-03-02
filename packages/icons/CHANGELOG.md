@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.4...@aziontech/icons@1.1.0) (2026-03-02)
+
+
+### Features
+
+* adding app/icons-gallery ([4ebf60f](https://github.com/aziontech/webkit/commit/4ebf60f5185694a17b920d350483f2a27d41c198))
+
 ## [1.0.4](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.3...@aziontech/icons@1.0.4) (2026-02-26)
 
 
