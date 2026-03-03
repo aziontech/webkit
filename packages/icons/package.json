@@ -31,5 +31,11 @@
     "@semantic-release/release-notes-generator": "^12.1.0",
     "conventional-changelog-conventionalcommits": "^7.0.0",
     "semantic-release": "^23.0.0"
+  },
+  "main": "./dist/index.css",
+  "exports": {
+    ".": "./dist/index.css",
+    "./azionicons": "./dist/azionicons.css",
+    "./primeicons": "./dist/primeicons.css"
   }
 }

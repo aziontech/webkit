@@ -103,8 +103,8 @@ importers:
   apps/icons-gallery:
     dependencies:
       '@aziontech/icons':
-        specifier: 1.0.4
-        version: 1.0.4
+        specifier: workspace:*
+        version: link:../../packages/icons
       '@babel/plugin-transform-runtime':
         specifier: ^7.24.7
         version: 7.29.0(@babel/core@7.29.0)
@@ -243,9 +243,6 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
-
-  '@aziontech/icons@1.0.4':
-    resolution: {integrity: sha512-nR5aAkqSnQMpjXIaELqljW6o0jK9pPDhVK1TTH+rrpuTSekyJMoK6xqyX/DrhCz8DhGpfIYKD30yb6qE6aywhg==}
 
   '@babel/code-frame@7.12.11':
     resolution: {integrity: sha512-Zt1yodBx1UcyiePMSkWnU4hPqhwq7hGi2nFL1LeA3EUl+q2LQx16MISgJ0+z7dnmgvP9QtIleuETGOiOH1RcIw==}
@@ -8454,8 +8451,6 @@ snapshots:
   '@aesoper/normal-utils@0.1.5': {}
 
   '@alloc/quick-lru@5.2.0': {}
-
-  '@aziontech/icons@1.0.4': {}
 
   '@babel/code-frame@7.12.11':
     dependencies:
