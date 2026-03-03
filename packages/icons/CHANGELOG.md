@@ -1,3 +1,16 @@
+## [1.2.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.1.0...@aziontech/icons@1.2.0) (2026-03-03)
+
+
+### Features
+
+* icons gallery cicd deploy to azion ([d5b538e](https://github.com/aziontech/webkit/commit/d5b538e597bff54fe587adb9f7e63408c31f97f3))
+* icons gallery deploy to azion ([fe60b25](https://github.com/aziontech/webkit/commit/fe60b25fa0273376ee71ec922826c793a35553ac))
+
+
+### Bug Fixes
+
+* @aziontech/icons development mode export ([bbb28fb](https://github.com/aziontech/webkit/commit/bbb28fb8d98c4027427113b072c46b8c6ebd1d01))
+
 ## [1.1.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.0.4...@aziontech/icons@1.1.0) (2026-03-02)
 
 
