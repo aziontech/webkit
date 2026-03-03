@@ -1,0 +1,59 @@
+name: Deploy Application Icons Gallery
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/icons-gallery/**'
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GIT_PKG }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Azion CLI
+        run: |
+          curl -o azionlinux https://downloads.azion.com/linux/x86_64/azion
+          sudo mv azionlinux /usr/bin/azion
+          sudo chmod u+x /usr/bin/azion
+
+      - name: CLI version
+        run: azion --version
+        
+      - name: Configure token
+        run: |
+          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}  
+          azion whoami
+
+      - name: Azion Build
+        run: |
+          npm run icons:gallery:build:azion
+          
+      - name: Azion Deploy
+        run: |
+          npm run icons:gallery:publish
