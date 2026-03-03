@@ -6,11 +6,13 @@
   "license": "MIT",
   "scripts": {
     "build": "vue-cli-service build",
+    "build:azion": "azion build --debug",
     "serve": "vue-cli-service serve",
     "preview": "vite preview",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "format": "prettier --write scripts/ src/"
+    "format": "prettier --write scripts/ src/",
+    "publish": "azion deploy --local --debug"
   },
   "dependencies": {
     "@aziontech/icons": "1.0.4",

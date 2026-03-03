@@ -10,8 +10,10 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "icons:gallery:build": "pnpm --filter icons-gallery run build",
+    "icons:gallery:build:azion": "pnpm --filter icons-gallery run build:azion",
     "icons:gallery:preview": "pnpm --filter icons-gallery run preview",
     "icons:gallery:serve": "pnpm --filter icons-gallery run serve",
+    "icons:gallery:publish": "pnpm --filter icons-gallery run publish",
     "icons:build": "pnpm --filter icons run build",
     "icons:validate": "pnpm --filter icons run validate",
     "icons:publish": "pnpm --filter icons run publish"

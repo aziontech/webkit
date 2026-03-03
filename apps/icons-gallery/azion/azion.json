@@ -1,0 +1,63 @@
+{
+  "name": "icons-gallery",
+  "bucket": "icons-gallery",
+  "preset": "vue",
+  "env": "production",
+  "prefix": "1772549361146",
+  "rotate-prefix": false,
+  "not-first-run": true,
+  "function": [],
+  "application": {
+    "id": 1772542164,
+    "name": "__DEFAULT__"
+  },
+  "domain": {
+    "id": 0,
+    "name": "__DEFAULT__",
+    "domain_name": "",
+    "url": ""
+  },
+  "rt-purge": {
+    "purge_on_publish": true
+  },
+  "origin": null,
+  "rules-engine": {
+    "created": false,
+    "rules": [
+      {
+        "id": 521014,
+        "name": "Deliver Static Assets and Set Cache Policy",
+        "phase": "request"
+      },
+      {
+        "id": 521015,
+        "name": "Redirect to index.html",
+        "phase": "request"
+      }
+    ]
+  },
+  "cache-settings": [
+    {
+      "id": 273821,
+      "name": "icons-gallery"
+    }
+  ],
+  "workloads": {
+    "id": 1772546267,
+    "name": "icons-gallery",
+    "domains": [],
+    "url": "https://mxyrsakcpus.map.azionedge.net",
+    "deployment_id": [
+      {
+        "id": 184235,
+        "name": "icons-gallery"
+      }
+    ]
+  },
+  "connectors": [
+    {
+      "id": 8731,
+      "name": "icons-gallery"
+    }
+  ]
+}
