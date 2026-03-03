@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'apps/icons-gallery/**'
+      - 'packages/icons/**'
 
 jobs:
   deploy:
