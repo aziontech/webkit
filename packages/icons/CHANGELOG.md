@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.2.0...@aziontech/icons@1.2.1) (2026-03-04)
+
+
+### Bug Fixes
+
+* catalog.json generated to be consumed by icons-gallery ([6ee87fa](https://github.com/aziontech/webkit/commit/6ee87fa08fbb8c1aa06b4b977d69c05e265bbe5a))
+* format code, icons-gallery using exported @aziontech/icons/catalog.json ([431ef0f](https://github.com/aziontech/webkit/commit/431ef0f25ae13be3d24d6510a76b29baf1b3b49b))
+* semanctic release prepareCmd adjust cmd ([d42161f](https://github.com/aziontech/webkit/commit/d42161f717d1b8a2d78b790737a7fe27f31922a8))
+
 ## [1.2.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.1.0...@aziontech/icons@1.2.0) (2026-03-03)
 
 
