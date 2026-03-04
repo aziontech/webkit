@@ -280,7 +280,7 @@ The [`scripts/build-package.mjs`](scripts/build-package.mjs) orchestrator runs 7
 4. **Create `index.css`** — barrel file importing both `azionicons.css` and `primeicons.css`
 5. **Generate `dist/package.json`** — creates a clean package manifest with exports for npm
 6. **Copy LICENSE & README.md** — into `dist/` for npm
-7. **Sync to `src/icon-fonts/`** — copies CSS + woff2 for local development use
+7. **Generate to `dist/catalog.json/`** — create file to consume to display the available icons
 
 ### Publishing
 
