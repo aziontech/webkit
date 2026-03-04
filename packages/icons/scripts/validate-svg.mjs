@@ -15,7 +15,7 @@
  */
 
 import { readdirSync, readFileSync } from 'node:fs'
-import { join, basename } from 'node:path'
+import { join } from 'node:path'
 
 const SVG_DIRS = ['./src/svg-raw/ai/', './src/svg-raw/pi']
 
@@ -36,7 +36,6 @@ for (const dir of SVG_DIRS) {
   for (const file of files) {
     const filePath = join(dir, file)
     const content = readFileSync(filePath, 'utf-8')
-    const name = basename(file, '.svg')
 
     // Filename with spaces
     if (file.includes(' ')) {
