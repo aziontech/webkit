@@ -8,7 +8,7 @@
  *   4. Create index.css barrel file
  *   5. Generate dist/package.json for npm publish
  *   6. Copy LICENSE and README.md into dist/
- *   7. Sync generated fonts back to src/icon-fonts/ for dev app
+ *   7. Generate dist/catalog.json to be consumed to display the available icons
  *
  * After running this script, publish with:
  *   cd dist && npm pack --dry-run   (preview)

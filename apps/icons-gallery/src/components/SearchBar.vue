@@ -1,31 +1,27 @@
 <script setup>
-import { ref } from "vue";
-import icons from "../icons.json";
+  import { ref } from 'vue'
+  import icons from '@aziontech/icons/catalog'
 
-let input = ref("");
+  let input = ref('')
 
-function searchIcons() {
-  // Obter o filtro em letras maiúsculas
-  let filter = input.value.toUpperCase();
+  function searchIcons() {
+    let filter = input.value.toUpperCase()
 
-  // Selecionar a lista de ícones
-  let ul = document.getElementById("myUL");
-  let li = ul.getElementsByTagName("li");
+    let ul = document.getElementById('myUL')
+    let li = ul.getElementsByTagName('li')
 
-  // Loop através de todos os itens da lista e ocultar aqueles que não correspondem à consulta de pesquisa
-  for (let i = 0; i < li.length; i++) {
-    let icon = icons[i];
-    let nameMatch = icon.name.toUpperCase().indexOf(filter) > -1;
-    let keywordMatch = icon.keywords.toUpperCase().indexOf(filter) > -1;
+    for (let i = 0; i < li.length; i++) {
+      let icon = icons[i]
+      let nameMatch = icon.name.toUpperCase().indexOf(filter) > -1
+      let keywordMatch = icon.keywords.toUpperCase().indexOf(filter) > -1
 
-    // Mostrar o item da lista se houver correspondência com o nome, as palavras-chave ou o texto do conteúdo
-    if (nameMatch || keywordMatch) {
-      li[i].style.display = "";
-    } else {
-      li[i].style.display = "none";
+      if (nameMatch || keywordMatch) {
+        li[i].style.display = ''
+      } else {
+        li[i].style.display = 'none'
+      }
     }
   }
-}
 </script>
 
 <template>
@@ -44,7 +40,7 @@ function searchIcons() {
 </template>
 
 <style scoped>
-#searchInput {
-  @apply h-12 pl-10 box-border text-xs;
-}
+  #searchInput {
+    @apply h-12 pl-10 box-border text-xs;
+  }
 </style>

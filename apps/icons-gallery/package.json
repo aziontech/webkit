@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "format": "prettier --write scripts/ src/",
+    "format": "prettier --write src/",
     "publish": "azion deploy --local --debug"
   },
   "dependencies": {

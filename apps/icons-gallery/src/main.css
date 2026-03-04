@@ -41,7 +41,7 @@ input {
 .radio-group:first-child {
   @apply rounded-lg;
 }
-input[type="radio"] {
+input[type='radio'] {
   @apply flex absolute overflow-hidden h-0 w-0 bg-none;
 }
 .radio-container {
