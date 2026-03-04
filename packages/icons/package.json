@@ -12,8 +12,9 @@
     "access": "public"
   },
   "scripts": {
-    "build": "node scripts/build-package.mjs",
-    "validate": "node scripts/validate.mjs",
+    "clean": "rm -rf dist/",
+    "build": "npm run clean; node scripts/build.mjs",
+    "validate": "node scripts/validate-svg.mjs",
     "publish": "cd dist && npm publish && cd ..",
     "pack:dry": "cd dist && npm pack --dry-run && cd ..",
     "format": "prettier --write scripts/ src/"
@@ -36,6 +37,7 @@
   "exports": {
     ".": "./dist/index.css",
     "./azionicons": "./dist/azionicons.css",
-    "./primeicons": "./dist/primeicons.css"
+    "./primeicons": "./dist/primeicons.css",
+    "./catalog": "./dist/catalog.json"
   }
 }
