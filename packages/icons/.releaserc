@@ -38,7 +38,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "node scripts/build-package.mjs",
+        "prepareCmd": "node scripts/build.mjs",
         "publishCmd": "npm publish ./dist --provenance --access public"
       }
     ],
