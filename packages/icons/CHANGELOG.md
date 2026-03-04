@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.2.1...@aziontech/icons@1.2.2) (2026-03-04)
+
+
+### Bug Fixes
+
+* @aziontech/icons step 7 documentation ([1e623c0](https://github.com/aziontech/webkit/commit/1e623c0cacf66b830e5a6e021aed20caae08ca51))
+
 ## [1.2.1](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.2.0...@aziontech/icons@1.2.1) (2026-03-04)
 
 
