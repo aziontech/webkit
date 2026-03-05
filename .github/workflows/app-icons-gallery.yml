@@ -50,6 +50,10 @@ jobs:
         run: |
           azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}  
           azion whoami
+      
+      - name: Building workspace @aziontech/icons
+        run: |
+          npm run icons:build
 
       - name: Azion Build
         run: |
