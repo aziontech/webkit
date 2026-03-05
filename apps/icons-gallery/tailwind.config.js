@@ -1,5 +1,5 @@
 // tailwind.config.js
-module.exports = {
+export default {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
@@ -8,5 +8,5 @@ module.exports = {
     extend: {},
   },
   darkMode: 'class',
-  plugins: [require("tailwind-gradient-mask-image")],
+  plugins: [],
 };

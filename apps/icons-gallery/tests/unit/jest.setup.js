@@ -1,6 +1,6 @@
 import { config } from '@vue/test-utils';
 
-// Desativar transições globalmente para evitar problemas de manipulação de DOM
+// Disable transitions globally to avoid DOM manipulation issues
 config.global.stubs = {
   transition: false,
   'transition-group': false,
