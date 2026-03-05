@@ -2,8 +2,12 @@
 
 > Icon font library for Azion — **azionicons** (`ai`) + **primeicons** (`pi`) delivered as CSS + woff2.
 
+[![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml)
+[![npm version](https://badge.fury.io/js/%40aziontech%2Ficons.svg)](https://badge.fury.io/js/%40aziontech%2Ficons)
+[![npm downloads](https://img.shields.io/npm/dm/@aziontech/icons)](https://www.npmjs.com/package/@aziontech/icons)
+[![npm unpacked size](https://img.shields.io/npm/unpacked-size/@aziontech/icons)](https://www.npmjs.com/package/@aziontech/icons)
+[![npm last publish](https://img.shields.io/npm/last-update/@aziontech/icons)](https://www.npmjs.com/package/@aziontech/icons)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)
 
 ---
 
