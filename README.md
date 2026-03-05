@@ -4,6 +4,6 @@ Central Front-End repository for Azion, containing shared components, styles, an
 
 ## Packages
 
-| Package | Description | Version | Link |
+| Package | Description | Version | Deploy |
 |---------|-------------|---------|------|
-| @aziontech/icons | Azion and Primevue Icons used across Azion projects. | [![npm version](https://badge.fury.io/js/%40azion%2Fazion-icons.svg)](https://badge.fury.io/js/%40azion%2Fazion-icons) | --- |
+| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons) | Azion and Primevue Icons used across Azion projects. | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons) | [![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml?query=branch%3Amain) |
