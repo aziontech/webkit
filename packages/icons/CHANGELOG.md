@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.2.2...@aziontech/icons@1.2.3) (2026-03-05)
+
+
+### Bug Fixes
+
+* icons gallery cicd building @aziontech/icons ([17c9903](https://github.com/aziontech/webkit/commit/17c990308afa73fb8c04a10b428423bf3a76a9fb))
+
 ## [1.2.2](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.2.1...@aziontech/icons@1.2.2) (2026-03-04)
 
 
