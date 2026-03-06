@@ -1,0 +1,36 @@
+{
+  "name": "@aziontech/theme",
+  "version": "0.0.1",
+  "description": "Design tokens and theme utilities for styling Azion web interfaces.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aziontech/webkit.git",
+    "directory": "packages/theme"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf dist/",
+    "publish": "cd dist && npm publish && cd ..",
+    "pack:dry": "cd dist && npm pack --dry-run && cd ..",
+    "format": "prettier --write scripts/ src/"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^10.0.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "@semantic-release/npm": "^11.0.0",
+    "@semantic-release/release-notes-generator": "^12.1.0",
+    "conventional-changelog-conventionalcommits": "^7.0.0",
+    "semantic-release": "^23.0.0"
+  },
+  "main": "",
+  "exports": {
+    ".": ""
+  }
+}
