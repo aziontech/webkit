@@ -1,0 +1,9 @@
+@import './variables-widget';
+
+.azion {
+  @import './_fonts';
+  @import './theme-base/components.scss';
+  @import './_extensions';
+  @import './custom';
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

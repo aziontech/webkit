@@ -1,15 +1,20 @@
 {
   "name": "@aziontech/theme",
+  "type": "module",
   "version": "0.0.1",
-  "description": "Design tokens and theme utilities for styling Azion web interfaces.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/aziontech/webkit.git",
-    "directory": "packages/theme"
-  },
-  "publishConfig": {
-    "access": "public"
+  "author": "aziontech",
+  "exports": {
+    ".": "./default.js",
+    "./widget": "./widget.js",
+    "./tokens": "./tokens.js",
+    "./tokens/primitive": "./tokens.js",
+    "./tokens/brand": "./tokens.js",
+    "./tokens/semantic/text": "./tokens.js",
+    "./tokens/semantic/backgrounds": "./tokens.js",
+    "./tokens/semantic/borders": "./tokens.js",
+    "./tokens/build/preset": "./src/tokens/build/preset.js",
+    "./tokens/build/tailwind-helper": "./src/tokens/build/tailwind-helper.js",
+    "./tokens/build/tailwind-plugin": "./src/tokens/build/tailwind-plugin.js"
   },
   "scripts": {
     "clean": "rm -rf dist/",
@@ -21,17 +26,8 @@
     "pack:dry": "cd dist && npm pack --dry-run && cd ..",
     "format": "prettier --write scripts/ src/"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^10.0.1",
-    "@semantic-release/exec": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
-    "@semantic-release/npm": "^11.0.0",
-    "@semantic-release/release-notes-generator": "^12.1.0",
-    "conventional-changelog-conventionalcommits": "^7.0.0",
-    "semantic-release": "^23.0.0"
+    "tailwindcss": "^3.4.17"
   },
   "keywords": [
     "design-tokens",

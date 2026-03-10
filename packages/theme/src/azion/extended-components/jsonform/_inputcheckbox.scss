@@ -1,0 +1,41 @@
+.azion-json-form {
+  .wrapper {
+    input.input[type="checkbox"] {
+      min-width: 20px !important;
+      max-width: 20px !important;
+      font-family: var(--font-family);
+      font-feature-settings: var(--font-feature-settings, normal);
+      font-size: $inputTextFontSize;
+      color: $inputTextColor;
+      background: $inputBg;
+      padding: 9px;
+      border: $inputBorder;
+      transition: $formElementTransition;
+      appearance: none;
+      border-radius: $borderRadius;
+      position: relative !important;
+
+      &:enabled:hover {
+        border-color: $inputHoverBorderColor;
+      }
+
+      &:enabled:focus {
+        @include focused-input();
+      }
+
+      &:checked {
+        background-color: $inputHoverBorderColor;
+
+        &::before {
+          font-family: "primeicons";
+          content: "\f1f1";
+          display: block;
+          position: absolute;
+          top: -1px;
+          left: 2px;
+        }
+      }
+
+    }
+  }
+}

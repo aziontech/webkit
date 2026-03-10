@@ -1,0 +1,34 @@
+.azion-json-form {
+  .wrapper {
+    .select::picker(select) {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .select {
+      min-width: 100%;
+      max-width: 320px;
+      height: 34px;
+      font-family: var(--font-family);
+      font-feature-settings: var(--font-feature-settings, normal);
+      font-size: $inputTextFontSize;
+      color: $inputTextColor;
+      background: $inputBg;
+      padding: $inputPadding;
+      border: $inputBorder;
+      transition: $formElementTransition;
+      border-radius: $borderRadius;
+      position: relative !important;
+
+      &:enabled:hover {
+        border-color: $inputHoverBorderColor;
+      }
+
+      &:enabled:focus {
+        @include focused-input();
+      }
+    }
+  }
+}

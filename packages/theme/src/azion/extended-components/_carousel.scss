@@ -1,0 +1,9 @@
+// Custom carousel
+
+.p-carousel-indicators {
+    .p-carousel-indicator {
+        &.p-highlight {
+            background: var(--carousel-indicator-highlight) !important;
+        }
+    }
+}
