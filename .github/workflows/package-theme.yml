@@ -40,12 +40,9 @@ jobs:
           cd packages/theme
           npm run build
 
-      - name: Release with Semantic Release
+      - name: Run Semantic Release
+        working-directory: packages/theme
+        run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd packages/theme
-          npx semantic-release
-        # Note: semantic-release will fail without NPM_TOKEN for npm publishing,
-        # but it will still generate release notes. Configure NPM_TOKEN in GitHub secrets.
+          GITHUB_TOKEN: ${{ secrets.GIT_PKG }}
+          NPM_CONFIG_PROVENANCE: true
