@@ -1,0 +1,51 @@
+name: Release Package Theme
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/theme/**'
+      - '.releaserc'
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  release:
+    name: Release Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd packages/theme
+          npm ci
+
+      - name: Build package
+        run: |
+          cd packages/theme
+          npm run build
+
+      - name: Release with Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd packages/theme
+          npx semantic-release
+        # Note: semantic-release will fail without NPM_TOKEN for npm publishing,
+        # but it will still generate release notes. Configure NPM_TOKEN in GitHub secrets.
