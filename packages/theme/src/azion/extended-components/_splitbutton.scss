@@ -1,0 +1,22 @@
+.p-splitbutton.p-button-sm {
+    display: inline-flex;
+    align-items: center;
+    height: 2rem !important;
+    
+    .p-button-icon-only.p-splitbutton-menubutton {
+        height: 100% !important;
+        width: 2rem !important;
+        border-radius: 0 6px 6px 0 !important;
+    }
+}
+.p-splitbutton {
+    display: inline-flex;
+    align-items: center;
+    height: 37px !important;
+    
+    .p-button-icon-only.p-splitbutton-menubutton {
+        height: 37px !important;
+        width: 37px !important;
+        border-radius: 0 6px 6px 0 !important;
+    }
+}

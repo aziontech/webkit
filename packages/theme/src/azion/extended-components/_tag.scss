@@ -1,0 +1,47 @@
+// Custom Tag
+@use "sass:math";
+
+.p-tag {
+  background: var(--p-tag-background) !important;
+  color: var(--p-tag-color) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01rem;
+  padding: $tagPadding;
+
+  .p-tag-icon {
+    margin-right: math.div($inlineSpacing, 2);
+    font-size: $badgeFontSize;
+
+    &.p-icon {
+      width: $badgeFontSize;
+      height: $badgeFontSize;
+    }
+  }
+
+  &.p-tag-info {
+    background-color: var(--surface-section) !important;
+    color: $textColor !important;
+    box-shadow: 0px 0px 0px 1px var(--surface-border) !important;
+  }
+
+  &.p-tag-success {
+    background-color: var(--p-tag-success-background) !important;
+    color: var(--p-tag-success-color) !important;
+  }
+
+  &.p-tag-warning {
+    background-color: var(--p-tag-warning-background) !important;
+    color: var(--p-tag-warning-color) !important;
+  }
+
+  &.p-tag-danger {
+    background-color: var(--p-tag-danger-background) !important;
+    color: var(--p-tag-danger-color) !important;
+  }
+
+  &.tag-close {
+    background-color: var(--p-tag-close-background) !important;
+    color: var(--p-tag-close-color) !important;
+  }
+}

@@ -1,0 +1,9 @@
+// Custom TabView
+.p-toast {
+  .p-toast-message {
+    .p-toast-message-content {
+      background: var(--surface-card) !important;
+      border-radius: $borderRadius !important;
+    }
+  }
+}

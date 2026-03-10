@@ -1,0 +1,26 @@
+.azion-json-form {
+  .wrapper {
+    .input {
+      min-width: 100%;
+      max-width: 320px;
+      font-family: var(--font-family);
+      font-feature-settings: var(--font-feature-settings, normal);
+      font-size: $inputTextFontSize;
+      color: $inputTextColor;
+      background: $inputBg;
+      padding: $inputPadding;
+      border: $inputBorder;
+      transition: $formElementTransition;
+      appearance: none;
+      border-radius: $borderRadius;
+
+      &:enabled:hover {
+        border-color: $inputHoverBorderColor;
+      }
+
+      &:enabled:focus {
+        @include focused-input();
+      }
+    }
+  }
+}

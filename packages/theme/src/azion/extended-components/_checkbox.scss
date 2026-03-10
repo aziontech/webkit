@@ -1,0 +1,33 @@
+// Custom Checkbox
+.p-checkbox {
+  .p-checkbox-box {
+    border: 2px solid var(--surface-border) !important;
+
+    &.p-highlight {
+      border-color: #f3652b !important;
+      background: #f3652b !important;
+    }
+  }
+
+  &:not(.p-checkbox-disabled) {
+    .p-checkbox-box {
+      &:hover {
+        background: var(--gray-100) !important;
+        border-color: #f5793f !important;
+      }
+
+      &.p-focus {
+        @include focused-input();
+      }
+
+      &.p-highlight:hover {
+        border-color: #f5793f !important;
+        background: #f5793f !important;
+      }
+    }
+  }
+
+  &.p-invalid > .p-checkbox-box {
+    @include invalid-input();
+  }
+}
