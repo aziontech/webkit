@@ -13,12 +13,15 @@
   },
   "scripts": {
     "clean": "rm -rf dist/",
+    "clean:dts": "rm -rf src/core/**/*.d.ts src/core/**/*.d.ts.map",
+    "build:dts": "vue-tsc --declaration --emitDeclarationOnly",
+    "build": "npm run clean:dts; npm run build:dts",
     "publish": "cd dist && npm publish && cd ..",
     "pack:dry": "cd dist && npm pack --dry-run && cd ..",
-    "format": "prettier --write scripts/ src/",
-    "tsc:dts": "vue-tsc --declaration --emitDeclarationOnly"
+    "format": "prettier --write scripts/ src/"
   },
   "dependencies": {
+    "vee-validate": "^4.15.1",
     "vue-tsc": "^3.2.5"
   },
   "devDependencies": {
@@ -31,9 +34,5 @@
     "@semantic-release/release-notes-generator": "^12.1.0",
     "conventional-changelog-conventionalcommits": "^7.0.0",
     "semantic-release": "^23.0.0"
-  },
-  "main": "",
-  "exports": {
-    ".": ""
   }
 }
