@@ -16,12 +16,9 @@
       "jsx": "preserve",
       "incremental": true,
       "paths": {
-        "@assets/*": ["src/assets/*"],
-        "@templates/*": ["src/templates-old/*"],
-        "@services": ["src/services"],
-        "@services/*": ["src/services/*"]
+        "@core/*": ["src/core/*"]
       }
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist", "storybook-static"]
+  "include": ["**/*.ts", "**/*.vue"],
+  "exclude": ["node_modules", "dist"]
 }

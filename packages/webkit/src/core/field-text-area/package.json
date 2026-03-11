@@ -1,0 +1,11 @@
+{
+  "main": "./field-text-area.vue",
+  "module": "./field-text-area.vue",
+  "types": "./field-text-area.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-text-area.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

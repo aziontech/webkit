@@ -1,0 +1,11 @@
+{
+  "main": "./field-group-switch.vue",
+  "module": "./field-group-switch.vue",
+  "types": "./field-group-switch.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-group-switch.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

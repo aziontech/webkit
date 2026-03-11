@@ -1,0 +1,11 @@
+{
+  "main": "./field-multi-select.vue",
+  "module": "./field-multi-select.vue",
+  "types": "./field-multi-select.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-multi-select.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

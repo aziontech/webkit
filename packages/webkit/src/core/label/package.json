@@ -1,0 +1,11 @@
+{
+  "main": "./label.vue",
+  "module": "./label.vue",
+  "types": "./label.vue.d.ts",
+  "browser": {
+    "./sfc": "./label.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
