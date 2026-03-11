@@ -1,0 +1,11 @@
+{
+  "main": "./field-dropdown-icon.vue",
+  "module": "./field-dropdown-icon.vue",
+  "types": "./field-dropdown-icon.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-dropdown-icon.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

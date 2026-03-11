@@ -1,0 +1,11 @@
+{
+  "main": "./field-dropdown-lazy-loader-with-filter.vue",
+  "module": "./field-dropdown-lazy-loader-with-filter.vue",
+  "types": "./field-dropdown-lazy-loader-with-filter.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-dropdown-lazy-loader-with-filter.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

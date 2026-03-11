@@ -15,9 +15,12 @@
     "clean": "rm -rf dist/",
     "publish": "cd dist && npm publish && cd ..",
     "pack:dry": "cd dist && npm pack --dry-run && cd ..",
-    "format": "prettier --write scripts/ src/"
+    "format": "prettier --write scripts/ src/",
+    "tsc:dts": "vue-tsc --declaration --emitDeclarationOnly"
   },
-  "dependencies": {},
+  "dependencies": {
+    "vue-tsc": "^3.2.5"
+  },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^10.0.1",

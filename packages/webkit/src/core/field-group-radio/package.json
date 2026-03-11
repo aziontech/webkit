@@ -1,0 +1,11 @@
+{
+  "main": "./field-group-radio.vue",
+  "module": "./field-group-radio.vue",
+  "types": "./field-group-radio.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-group-radio.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
