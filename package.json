@@ -1,5 +1,5 @@
 {
-  "name": "Webkit Monorepo",
+  "name": "@aziontech/webkit-monorepo",
   "author": "@aziontech",
   "private": true,
   "repository": {
