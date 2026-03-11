@@ -24,7 +24,7 @@
 
 <script setup>
   import PrimeCheckbox from 'primevue/checkbox'
-  import SelectorBlock from '../selector-block'
+  import SelectorBlock from '../../selector-block/selector-block.vue'
 
   import { useField } from 'vee-validate'
   import { toRefs } from 'vue'

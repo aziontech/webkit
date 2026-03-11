@@ -3,20 +3,18 @@
     v-bind="props"
     :selected="checked"
     :nameId="props.name"
-    @change="changeState"
-    :inputClass="props.selectorClass"
-    :rootClass="rootClass"
-    :data-testid="customTestId.selector"
+    @click="clickCard"
   >
     <template #selector>
-      <InputSwitch
+      <PrimeRadio
         :disabled="disabled"
         :inputId="props.name"
         :name="props.name"
-        @change="stopPropagation"
+        @click="stopPropagation"
+        :value="props.inputValue"
         v-model="inputValue"
-        :readonly="readonly"
-        :data-testid="customTestId.switch"
+        :binary="props.binary"
+        @change="emit('onRadioChange')"
       />
     </template>
     <template #footer>
@@ -26,13 +24,14 @@
 </template>
 
 <script setup>
-  import InputSwitch from 'primevue/inputswitch'
-  import SelectorBlock from '../selector-block'
+  import PrimeRadio from 'primevue/radiobutton'
+  import SelectorBlock from '../../selector-block/selector-block.vue'
 
   import { useField } from 'vee-validate'
-  import { toRefs, useAttrs, computed } from 'vue'
+  import { toRefs } from 'vue'
 
-  defineOptions({ name: 'FieldSwitchBlock' })
+  defineOptions({ name: 'FieldRadioBlock' })
+  const emit = defineEmits(['onRadioChange'])
 
   const props = defineProps({
     title: {
@@ -72,33 +71,17 @@
       type: String,
       required: true
     },
-    value: {
-      type: Boolean
+    inputValue: {
+      type: [Boolean, String, Object],
+      default: false
     },
-    readonly: {
-      type: Boolean
-    },
-    selectorClass: {
-      type: String
-    },
-    rootClass: {
-      type: String
+    binary: {
+      type: Boolean,
+      default: false
     }
   })
 
   const { nameField } = toRefs(props)
-  const emit = defineEmits(['onSwitchChange'])
-
-  const attrs = useAttrs()
-
-  const customTestId = computed(() => {
-    const id = attrs['data-testid'] || 'field-switch'
-
-    return {
-      selector: `${id}__selector`,
-      switch: `${id}__switch`
-    }
-  })
 
   const {
     value: inputValue,
@@ -106,18 +89,20 @@
     handleChange
   } = useField(nameField, undefined, {
     type: 'checkbox',
-    checkedValue: true,
-    uncheckedValue: false
+    checkedValue: props.binary ? true : props.inputValue,
+    uncheckedValue: props.binary ? false : ''
   })
 
   const stopPropagation = (event) => {
     event.preventDefault()
     event.stopPropagation()
-    emit('onSwitchChange', inputValue.value)
   }
 
-  const changeState = (event) => {
-    stopPropagation(event)
-    handleChange(!inputValue.value)
+  const clickCard = (event) => {
+    if (props.binary) {
+      stopPropagation(event)
+      handleChange(!inputValue.value)
+      return
+    }
   }
 </script>
