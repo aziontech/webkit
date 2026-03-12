@@ -1,0 +1,11 @@
+{
+  "main": "./azion-system-status.vue",
+  "module": "./azion-system-status.vue",
+  "types": "./azion-system-status.vue.d.ts",
+  "browser": {
+    "./sfc": "./azion-system-status.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

@@ -13,8 +13,7 @@
         "releaseRules": [
           { "type": "feat", "release": "minor" },
           { "type": "fix", "release": "patch" },
-          { "type": "hotfix", "release": "patch" },
-          { "type": "chore", "release": "patch" }
+          { "type": "hotfix", "release": "patch" }
         ]
       }
     ],
@@ -38,7 +37,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "rm -rf src/core/**/*.d.ts src/core/**/*.d.ts.map && vue-tsc --declaration --emitDeclarationOnly",
+        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish . --provenance --access public"
       }
     ],

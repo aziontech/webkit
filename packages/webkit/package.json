@@ -66,6 +66,8 @@
     "./field-text-password": "./src/core/form/field-text-password/field-text-password.vue",
     "./field-text-privacy": "./src/core/form/field-text-privacy/field-text-privacy.vue",
     "./label": "./src/core/form/label/label.vue",
-    "./selector-block": "./src/core/selector-block/selector-block.vue"
+    "./selector-block": "./src/core/selector-block/selector-block.vue",
+
+    "./azion-system-status": "./src/components/azion-system-status/azion-system-status.vue"
   }
 }
