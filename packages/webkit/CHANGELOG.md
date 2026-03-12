@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.0.1...@aziontech/webkit@1.1.0) (2026-03-12)
+
+
+### Features
+
+* adding | core -> form -> field text privacy ([eaf5927](https://github.com/aziontech/webkit/commit/eaf59270ad78723388053c6cd24990bced57d8f7))
+
 ## [1.0.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.0.0...@aziontech/webkit@1.0.1) (2026-03-12)
 
 
