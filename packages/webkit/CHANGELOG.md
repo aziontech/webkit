@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.0.0...@aziontech/webkit@1.0.1) (2026-03-12)
+
+
+### Bug Fixes
+
+* add docs, trigger publish to use semantic release ([f24ca8f](https://github.com/aziontech/webkit/commit/f24ca8f6c459d201fb2d6bfd53bcedfe1b1abc3b))
+
 ## 1.0.0 (2026-03-12)
 
 
