@@ -1,3 +1,15 @@
+## [1.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.1.0...@aziontech/webkit@1.2.0) (2026-03-12)
+
+
+### Features
+
+* adding button azion system status ([a2cd287](https://github.com/aziontech/webkit/commit/a2cd287eea8c8a695d3e1b744b0ba729e082d2c7))
+
+
+### Bug Fixes
+
+* publish trigger to npm publish ([fc2ae3c](https://github.com/aziontech/webkit/commit/fc2ae3cf3793a92e2045bdd80a4b5e2f1c94543e))
+
 ## [1.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.0.1...@aziontech/webkit@1.1.0) (2026-03-12)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "repository": {
@@ -67,7 +67,6 @@
     "./field-text-privacy": "./src/core/form/field-text-privacy/field-text-privacy.vue",
     "./label": "./src/core/form/label/label.vue",
     "./selector-block": "./src/core/selector-block/selector-block.vue",
-
     "./azion-system-status": "./src/components/azion-system-status/azion-system-status.vue"
   }
 }
