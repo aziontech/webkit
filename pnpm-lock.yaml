@@ -171,6 +171,9 @@ importers:
 
   packages/webkit:
     dependencies:
+      primevue:
+        specifier: 3.35.0
+        version: 3.35.0(vue@3.5.29(typescript@5.9.3))
       vee-validate:
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.29(typescript@5.9.3))
@@ -4564,6 +4567,11 @@ packages:
 
   primeflex@3.3.1:
     resolution: {integrity: sha512-zaOq3YvcOYytbAmKv3zYc+0VNS9Wg5d37dfxZnveKBFPr7vEIwfV5ydrpiouTft8MVW6qNjfkaQphHSnvgQbpQ==}
+
+  primevue@3.35.0:
+    resolution: {integrity: sha512-p1YTxBtxG9SyGvHKRqO0LbacJZUYJfUOPgLu7kwhXR34E1Rcmu6iDBnZ2c3jkH+wmRL4fMzQmNnpX6DUrLtGfQ==}
+    peerDependencies:
+      vue: ^3.0.0
 
   primevue@3.47.2:
     resolution: {integrity: sha512-/vgIhc2vxNW8amBGBJX/NMBgWi/THOwT0DIPgy/aswJ86x+uwLwGtjNz22c/uSE5UkHu4E5rpktWOJtFvTbRPg==}
@@ -10188,6 +10196,10 @@ snapshots:
       parse-ms: 4.0.0
 
   primeflex@3.3.1: {}
+
+  primevue@3.35.0(vue@3.5.29(typescript@5.9.3)):
+    dependencies:
+      vue: 3.5.29(typescript@5.9.3)
 
   primevue@3.47.2(vue@3.5.29(typescript@5.9.3)):
     dependencies:
