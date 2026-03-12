@@ -1,0 +1,11 @@
+{
+  "main": "./field-text-privacy.vue",
+  "module": "./field-text-privacy.vue",
+  "types": "./field-text-privacy.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-text-privacy.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
