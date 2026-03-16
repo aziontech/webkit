@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue';
 import type { PropsValues, PreviewSurface, PreviewTheme } from './types';
-import { useAzionStatusFetchMock } from './useAzionStatusFetchMock';
 
 /**
  * PlaygroundPreview
@@ -9,8 +8,6 @@ import { useAzionStatusFetchMock } from './useAzionStatusFetchMock';
  * Renders the component being edited in the playground.
  * Provides different surface backgrounds and responsive containers.
  * Supports light/dark theme switching for the preview area only.
- * When demo-only values include demoStatus (e.g. Azion System Status),
- * installs a fetch mock so the component shows the simulated status.
  */
 
 interface Props {
@@ -43,10 +40,6 @@ const props = withDefaults(defineProps<Props>(), {
   minHeight: '120px',
   slotContent: '',
 });
-
-// When "Simulate status" is set, mock status.azion.com API so the component shows that status
-const demoStatus = computed(() => (props.demoOnlyValues?.demoStatus as string) ?? undefined);
-useAzionStatusFetchMock(demoStatus);
 
 const emit = defineEmits<{
   (e: 'update:previewTheme', value: PreviewTheme): void;
