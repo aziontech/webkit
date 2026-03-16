@@ -7,7 +7,11 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (required)'
+    },
+    value: {
+      control: 'object',
+      description: 'Initial selected values as an array'
     },
     label: {
       control: 'text',
@@ -28,6 +32,30 @@ export default {
     options: {
       control: 'object',
       description: 'Array of options to display'
+    },
+    optionLabel: {
+      control: 'text',
+      description: 'Property name to use for option label'
+    },
+    optionValue: {
+      control: 'text',
+      description: 'Property name to use for option value'
+    },
+    optionDisabled: {
+      control: 'text',
+      description: 'Property name or function to determine disabled options'
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Shows loading indicator'
+    },
+    filter: {
+      control: 'boolean',
+      description: 'Enables filtering of options'
+    },
+    pt: {
+      control: 'object',
+      description: 'Pass-through styles for PrimeVue components'
     }
   }
 };
@@ -64,6 +92,35 @@ export const WithDescription = {
     label: 'Multi-Select with Description',
     placeholder: 'Select options...',
     description: 'Select multiple options from the list',
+    options: sampleOptions
+  }
+};
+
+export const WithFilter = {
+  args: {
+    name: 'field-multiselect-filter',
+    label: 'Filterable Multi-Select',
+    placeholder: 'Type to filter...',
+    filter: true,
+    options: sampleOptions
+  }
+};
+
+export const Loading = {
+  args: {
+    name: 'field-multiselect-loading',
+    label: 'Loading Multi-Select',
+    placeholder: 'Loading...',
+    loading: true,
+    options: []
+  }
+};
+
+export const WithPreselectedValues = {
+  args: {
+    name: 'field-multiselect-preselected',
+    label: 'Pre-selected Multi-Select',
+    value: ['option1', 'option3'],
     options: sampleOptions
   }
 };

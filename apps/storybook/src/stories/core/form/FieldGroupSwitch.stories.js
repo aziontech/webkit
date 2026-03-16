@@ -5,15 +5,11 @@ export default {
   component: FieldGroupSwitch,
   tags: ['autodocs'],
   argTypes: {
-    name: {
-      control: 'text',
-      description: 'Field name for form submission'
-    },
     label: {
       control: 'text',
       description: 'Group label displayed above the switches'
     },
-    description: {
+    helpText: {
       control: 'text',
       description: 'Helper text displayed below the group'
     },
@@ -23,20 +19,35 @@ export default {
     },
     options: {
       control: 'object',
-      description: 'Array of switch options'
+      description: 'Array of switch options (required)'
+    },
+    hideSelector: {
+      control: 'boolean',
+      description: 'Whether to hide the switch selectors'
+    },
+    auto: {
+      control: 'boolean',
+      description: 'Auto width layout'
+    },
+    isCard: {
+      control: 'boolean',
+      description: 'Whether to display as cards'
+    },
+    inputClass: {
+      control: 'text',
+      description: 'Additional CSS class for the input'
     }
   }
 };
 
 const switchOptions = [
-  { label: 'Enable Notifications', value: 'notifications' },
-  { label: 'Enable Dark Mode', value: 'darkMode' },
-  { label: 'Enable Auto-save', value: 'autoSave' }
+  { nameField: 'enable-notifications', title: 'Enable Notifications', value: 'notifications' },
+  { nameField: 'enable-dark-mode', title: 'Enable Dark Mode', value: 'darkMode' },
+  { nameField: 'enable-auto-save', title: 'Enable Auto-save', value: 'autoSave' }
 ];
 
 export const Default = {
   args: {
-    name: 'field-group-switch-default',
     label: 'Toggle Options',
     options: switchOptions
   }
@@ -44,18 +55,16 @@ export const Default = {
 
 export const Disabled = {
   args: {
-    name: 'field-group-switch-disabled',
     label: 'Disabled Switch Group',
     options: switchOptions,
     disabled: true
   }
 };
 
-export const WithDescription = {
+export const WithHelpText = {
   args: {
-    name: 'field-group-switch-desc',
     label: 'Preferences',
-    description: 'Enable or disable the features you prefer',
+    helpText: 'Enable or disable the features you prefer',
     options: switchOptions
   }
 };

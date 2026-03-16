@@ -5,15 +5,15 @@ export default {
   component: FieldGroupRadio,
   tags: ['autodocs'],
   argTypes: {
-    name: {
+    nameField: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for vee-validate binding (form validation) (required)'
     },
     label: {
       control: 'text',
       description: 'Group label displayed above the radio buttons'
     },
-    description: {
+    helpText: {
       control: 'text',
       description: 'Helper text displayed below the group'
     },
@@ -23,20 +23,36 @@ export default {
     },
     options: {
       control: 'object',
-      description: 'Array of radio options'
+      description: 'Array of radio options (required)'
+    },
+    hideSelector: {
+      control: 'boolean',
+      description: 'Whether to hide the radio selectors'
+    },
+    auto: {
+      control: 'boolean',
+      description: 'Auto width layout'
+    },
+    isCard: {
+      control: 'boolean',
+      description: 'Whether to display as cards'
+    },
+    isRequired: {
+      control: 'boolean',
+      description: 'Whether the field is required'
     }
   }
 };
 
 const radioOptions = [
-  { label: 'Option A', value: 'a' },
-  { label: 'Option B', value: 'b' },
-  { label: 'Option C', value: 'c' }
+  { nameField: 'plan-a', title: 'Option A', inputValue: 'a' },
+  { nameField: 'plan-b', title: 'Option B', inputValue: 'b' },
+  { nameField: 'plan-c', title: 'Option C', inputValue: 'c' }
 ];
 
 export const Default = {
   args: {
-    name: 'field-group-radio-default',
+    nameField: 'field-group-radio-default',
     label: 'Select One Option',
     options: radioOptions
   }
@@ -44,18 +60,18 @@ export const Default = {
 
 export const Disabled = {
   args: {
-    name: 'field-group-radio-disabled',
+    nameField: 'field-group-radio-disabled',
     label: 'Disabled Radio Group',
     options: radioOptions,
     disabled: true
   }
 };
 
-export const WithDescription = {
+export const WithHelpText = {
   args: {
-    name: 'field-group-radio-desc',
+    nameField: 'field-group-radio-desc',
     label: 'Choose Your Plan',
-    description: 'Select one plan from the options below',
+    helpText: 'Select one plan from the options below',
     options: radioOptions
   }
 };

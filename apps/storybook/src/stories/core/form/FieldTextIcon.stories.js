@@ -7,7 +7,11 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (required)'
+    },
+    value: {
+      control: 'text',
+      description: 'Initial value of the input'
     },
     label: {
       control: 'text',
@@ -25,13 +29,22 @@ export default {
       control: 'boolean',
       description: 'Disables the input'
     },
-    required: {
+    readonly: {
       control: 'boolean',
-      description: 'Marks the field as required'
+      description: 'Makes the input read-only'
     },
     icon: {
       control: 'text',
-      description: 'Icon class to display'
+      description: 'Icon class to display (e.g., "pi pi-search")'
+    },
+    iconPosition: {
+      control: 'radio',
+      options: ['left', 'right'],
+      description: 'Position of the icon (left or right)'
+    },
+    required: {
+      control: 'boolean',
+      description: 'Marks the field as required'
     }
   }
 };
@@ -72,5 +85,35 @@ export const Required = {
     placeholder: 'This field is required...',
     required: true,
     icon: 'pi pi-search'
+  }
+};
+
+export const IconLeft = {
+  args: {
+    name: 'field-text-icon-left',
+    label: 'Icon on Left',
+    placeholder: 'Search...',
+    icon: 'pi pi-search',
+    iconPosition: 'left'
+  }
+};
+
+export const IconRight = {
+  args: {
+    name: 'field-text-icon-right',
+    label: 'Icon on Right',
+    placeholder: 'Enter email...',
+    icon: 'pi pi-envelope',
+    iconPosition: 'right'
+  }
+};
+
+export const Readonly = {
+  args: {
+    name: 'field-text-icon-readonly',
+    label: 'Read-only Field',
+    value: 'Pre-filled value',
+    readonly: true,
+    icon: 'pi pi-lock'
   }
 };

@@ -7,7 +7,11 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (required)'
+    },
+    value: {
+      control: 'number',
+      description: 'Initial value of the input'
     },
     label: {
       control: 'text',
@@ -25,6 +29,14 @@ export default {
       control: 'boolean',
       description: 'Disables the input'
     },
+    readonly: {
+      control: 'boolean',
+      description: 'Makes the input read-only'
+    },
+    inputClass: {
+      control: 'text',
+      description: 'Additional CSS class for the input'
+    },
     min: {
       control: 'number',
       description: 'Minimum allowed value'
@@ -32,6 +44,22 @@ export default {
     max: {
       control: 'number',
       description: 'Maximum allowed value'
+    },
+    step: {
+      control: 'number',
+      description: 'Step value for increment/decrement buttons'
+    },
+    showButtons: {
+      control: 'boolean',
+      description: 'Shows increment/decrement buttons'
+    },
+    useGrouping: {
+      control: 'boolean',
+      description: 'Uses grouping separator (e.g., thousands separator)'
+    },
+    aditionalError: {
+      control: 'text',
+      description: 'Additional error message to display'
     }
   }
 };
@@ -61,5 +89,52 @@ export const WithMinMax = {
     description: 'Value must be between 1 and 100',
     min: 1,
     max: 100
+  }
+};
+
+export const WithoutButtons = {
+  args: {
+    name: 'field-number-no-buttons',
+    label: 'Number Field (No Buttons)',
+    placeholder: 'Type a number...',
+    showButtons: false
+  }
+};
+
+export const WithStep = {
+  args: {
+    name: 'field-number-step',
+    label: 'Number Field with Step',
+    placeholder: 'Enter number...',
+    step: 5,
+    description: 'Increments/decrements by 5'
+  }
+};
+
+export const WithoutGrouping = {
+  args: {
+    name: 'field-number-no-grouping',
+    label: 'Number Field (No Grouping)',
+    placeholder: 'Enter number...',
+    useGrouping: false,
+    description: 'No thousands separator'
+  }
+};
+
+export const Readonly = {
+  args: {
+    name: 'field-number-readonly',
+    label: 'Read-only Number Field',
+    value: 42,
+    readonly: true
+  }
+};
+
+export const WithError = {
+  args: {
+    name: 'field-number-error',
+    label: 'Number Field with Error',
+    placeholder: 'Enter number...',
+    aditionalError: 'This field has an error'
   }
 };

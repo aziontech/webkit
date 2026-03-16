@@ -5,15 +5,11 @@ export default {
   component: FieldGroupCheckbox,
   tags: ['autodocs'],
   argTypes: {
-    name: {
-      control: 'text',
-      description: 'Field name for form submission'
-    },
     label: {
       control: 'text',
       description: 'Group label displayed above the checkboxes'
     },
-    description: {
+    helpText: {
       control: 'text',
       description: 'Helper text displayed below the group'
     },
@@ -23,20 +19,35 @@ export default {
     },
     options: {
       control: 'object',
-      description: 'Array of checkbox options'
+      description: 'Array of checkbox options (each needs nameField, title, value)'
+    },
+    hideSelector: {
+      control: 'boolean',
+      description: 'Whether to hide the checkbox selectors'
+    },
+    auto: {
+      control: 'boolean',
+      description: 'Auto width layout'
+    },
+    isCard: {
+      control: 'boolean',
+      description: 'Whether to display as cards'
+    },
+    hasDivider: {
+      control: 'boolean',
+      description: 'Whether to show dividers between options'
     }
   }
 };
 
 const checkboxOptions = [
-  { label: 'Option A', value: 'a' },
-  { label: 'Option B', value: 'b' },
-  { label: 'Option C', value: 'c' }
+  { nameField: 'option-a', title: 'Option A', value: 'a' },
+  { nameField: 'option-b', title: 'Option B', value: 'b' },
+  { nameField: 'option-c', title: 'Option C', value: 'c' }
 ];
 
 export const Default = {
   args: {
-    name: 'field-group-checkbox-default',
     label: 'Select Options',
     options: checkboxOptions
   }
@@ -44,18 +55,16 @@ export const Default = {
 
 export const Disabled = {
   args: {
-    name: 'field-group-checkbox-disabled',
     label: 'Disabled Checkbox Group',
     options: checkboxOptions,
     disabled: true
   }
 };
 
-export const WithDescription = {
+export const WithHelpText = {
   args: {
-    name: 'field-group-checkbox-desc',
     label: 'Choose Your Preferences',
-    description: 'Select all that apply',
+    helpText: 'Select all that apply',
     options: checkboxOptions
   }
 };

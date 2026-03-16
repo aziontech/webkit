@@ -7,7 +7,7 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (required)'
     },
     label: {
       control: 'text',
@@ -16,10 +16,6 @@ export default {
     description: {
       control: 'text',
       description: 'Helper text displayed below the switch'
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables the switch'
     }
   }
 };
@@ -31,18 +27,18 @@ export const Default = {
   }
 };
 
-export const Disabled = {
-  args: {
-    name: 'field-switch-disabled',
-    label: 'Disabled Switch',
-    disabled: true
-  }
-};
-
 export const WithDescription = {
   args: {
     name: 'field-switch-desc',
     label: 'Enable Feature',
     description: 'Toggle to enable or disable this feature'
+  }
+};
+
+export const WithLongLabel = {
+  args: {
+    name: 'field-switch-long',
+    label: 'Enable automatic updates and notifications for this account',
+    description: 'When enabled, you will receive email notifications about updates'
   }
 };

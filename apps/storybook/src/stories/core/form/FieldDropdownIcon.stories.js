@@ -7,7 +7,11 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (required)'
+    },
+    value: {
+      control: 'text',
+      description: 'Initial value of the dropdown'
     },
     label: {
       control: 'text',
@@ -25,9 +29,25 @@ export default {
       control: 'boolean',
       description: 'Disables the dropdown'
     },
-    options: {
+    readonly: {
+      control: 'boolean',
+      description: 'Makes the dropdown read-only'
+    },
+    icon: {
+      control: 'text',
+      description: 'Icon class to display in the input addon (e.g., "pi pi-search")'
+    },
+    suggestions: {
       control: 'object',
       description: 'Array of options with icons'
+    },
+    onComplete: {
+      control: false,
+      description: 'Callback function when user types'
+    },
+    completeOnFocus: {
+      control: 'boolean',
+      description: 'Whether to show suggestions on focus'
     }
   }
 };
@@ -44,7 +64,7 @@ export const Default = {
     name: 'field-dropdown-icon-default',
     label: 'Dropdown with Icons',
     placeholder: 'Select an option...',
-    options: iconOptions
+    suggestions: iconOptions
   }
 };
 
@@ -54,6 +74,36 @@ export const Disabled = {
     label: 'Disabled Dropdown with Icons',
     placeholder: 'Cannot select',
     disabled: true,
-    options: iconOptions
+    suggestions: iconOptions
+  }
+};
+
+export const WithDescription = {
+  args: {
+    name: 'field-dropdown-icon-desc',
+    label: 'Dropdown with Description',
+    placeholder: 'Select an option...',
+    description: 'Choose an option from the dropdown',
+    suggestions: iconOptions
+  }
+};
+
+export const WithIcon = {
+  args: {
+    name: 'field-dropdown-icon-withicon',
+    label: 'Search Dropdown',
+    placeholder: 'Search...',
+    icon: 'pi pi-search',
+    suggestions: iconOptions
+  }
+};
+
+export const Readonly = {
+  args: {
+    name: 'field-dropdown-icon-readonly',
+    label: 'Read-only Dropdown',
+    value: 'dashboard',
+    readonly: true,
+    suggestions: iconOptions
   }
 };
