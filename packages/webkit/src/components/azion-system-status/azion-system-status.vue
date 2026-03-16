@@ -1,5 +1,4 @@
 <script setup>
-// azion system status button
 import PrimeButton from 'primevue/button'
 import { ref, computed, onMounted } from 'vue'
 

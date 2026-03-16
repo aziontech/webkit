@@ -2,7 +2,8 @@
   import Dropdown from 'primevue/dropdown'
   import { useField } from 'vee-validate'
   import { computed, toRef, useSlots, useAttrs } from 'vue'
-  import LabelBlock from '../label'
+  import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const props = defineProps({
     value: {
@@ -172,69 +173,71 @@
 </script>
 
 <template>
-  <LabelBlock
-    :for="props.name"
-    :label="props.label"
-    :isRequired="$attrs.required"
-    :data-testid="customTestId.label"
-    v-if="props.label"
-  />
-  <Dropdown
-    :dropdown-icon="isDisabledIcon"
-    :editable="props.editable"
-    appendTo="self"
-    :id="name"
-    :name="props.name"
-    :loading="props.loading"
-    v-model="inputValue"
-    :options="props.options"
-    :optionLabel="props.optionLabel"
-    :optionDisabled="props.optionDisabled"
-    :filter="props.filter"
-    :optionValue="props.optionValue"
-    :optionGroupLabel="props.optionGroupLabel"
-    :optionGroupChildren="props.optionGroupChildren"
-    :placeholder="props.placeholder"
-    :autoFilterFocus="props.filter"
-    :emptyMessage="props.emptyMessage"
-    :emptyFilterMessage="props.emptyFilterMessage"
-    @change="emitChange"
-    @blur="emitBlur"
-    :class="{ 'p-invalid': aditionalError || errorMessage }"
-    v-bind="$attrs"
-    :disabled="props.disabled"
-    class="w-full"
-    :pt="passThrough"
-    :data-testid="customTestId.dropdown"
-  >
-    <template
-      v-if="enableCustomLabel"
-      #value="slotProps"
+  <InputSlot>
+    <Label
+      :for="props.name"
+      :label="props.label"
+      :isRequired="$attrs.required"
+      :data-testid="customTestId.label"
+      v-if="props.label"
+    />
+    <Dropdown
+      :dropdown-icon="isDisabledIcon"
+      :editable="props.editable"
+      appendTo="self"
+      :id="name"
+      :name="props.name"
+      :loading="props.loading"
+      v-model="inputValue"
+      :options="props.options"
+      :optionLabel="props.optionLabel"
+      :optionDisabled="props.optionDisabled"
+      :filter="props.filter"
+      :optionValue="props.optionValue"
+      :optionGroupLabel="props.optionGroupLabel"
+      :optionGroupChildren="props.optionGroupChildren"
+      :placeholder="props.placeholder"
+      :autoFilterFocus="props.filter"
+      :emptyMessage="props.emptyMessage"
+      :emptyFilterMessage="props.emptyFilterMessage"
+      @change="emitChange"
+      @blur="emitBlur"
+      :class="{ 'p-invalid': aditionalError || errorMessage }"
+      v-bind="$attrs"
+      :disabled="props.disabled"
+      class="w-full"
+      :pt="passThrough"
+      :data-testid="customTestId.dropdown"
     >
-      <span :data-testid="customTestId.value">
-        {{ getLabelBySelectedValue(slotProps.value) }}
-      </span>
-    </template>
+      <template
+        v-if="enableCustomLabel"
+        #value="slotProps"
+      >
+        <span :data-testid="customTestId.value">
+          {{ getLabelBySelectedValue(slotProps.value) }}
+        </span>
+      </template>
 
-    <template #footer>
-      <slot name="footer" />
-    </template>
-  </Dropdown>
+      <template #footer>
+        <slot name="footer" />
+      </template>
+    </Dropdown>
 
-  <small
-    v-if="aditionalError || errorMessage"
-    :data-testid="customTestId.error"
-    class="p-error text-xs font-normal leading-tight"
-  >
-    {{ aditionalError || errorMessage }}
-  </small>
-  <small
-    class="text-xs text-color-secondary font-normal leading-5"
-    :data-testid="customTestId.description"
-    v-if="props.description || hasDescriptionSlot"
-  >
-    <slot name="description">
-      {{ props.description }}
-    </slot>
-  </small>
+    <small
+      v-if="aditionalError || errorMessage"
+      :data-testid="customTestId.error"
+      class="p-error text-xs font-normal leading-tight"
+    >
+      {{ aditionalError || errorMessage }}
+    </small>
+    <small
+      class="text-xs text-color-secondary font-normal leading-5"
+      :data-testid="customTestId.description"
+      v-if="props.description || hasDescriptionSlot"
+    >
+      <slot name="description">
+        {{ props.description }}
+      </slot>
+    </small>
+  </InputSlot>
 </template>

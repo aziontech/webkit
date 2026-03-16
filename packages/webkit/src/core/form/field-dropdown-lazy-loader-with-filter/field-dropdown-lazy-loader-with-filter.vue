@@ -1,5 +1,5 @@
 <template>
-  <LabelBlock
+  <Label
     v-if="props.label"
     :for="props.name"
     :label="props.label"
@@ -111,7 +111,7 @@
   import { useField } from 'vee-validate'
   import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch } from 'vue'
   import { watchDebounced } from '@vueuse/core'
-  import LabelBlock from '../label'
+  import Label from '../label'
 
   const props = defineProps({
     value: {

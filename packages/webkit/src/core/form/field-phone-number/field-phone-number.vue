@@ -3,7 +3,7 @@
   import { useField } from 'vee-validate'
   import Dropdown from 'primevue/dropdown'
   import InputMask from 'primevue/inputmask'
-  import LabelBlock from '../label'
+  import Label from '../label'
 
   const props = defineProps({
     options: {
@@ -76,7 +76,7 @@
 
 <template>
   <div class="flex flex-col sm:max-w-lg w-full gap-2">
-    <LabelBlock
+    <Label
       :data-testid="customTestId.label"
       :for="mobileName"
       :label="props.label"
