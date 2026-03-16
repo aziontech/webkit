@@ -1,0 +1,63 @@
+{
+  "name": "webkit-storybook",
+  "bucket": "webkit-storybook",
+  "preset": "html",
+  "env": "production",
+  "prefix": "20260316141821",
+  "rotate-prefix": true,
+  "not-first-run": true,
+  "function": [],
+  "application": {
+    "id": 1773684562,
+    "name": "webkit-storybook"
+  },
+  "domain": {
+    "id": 0,
+    "name": "__DEFAULT__",
+    "domain_name": "",
+    "url": ""
+  },
+  "rt-purge": {
+    "purge_on_publish": true
+  },
+  "origin": null,
+  "rules-engine": {
+    "created": false,
+    "rules": [
+      {
+        "id": 524999,
+        "name": "Deliver Static Assets and Set Cache Policy",
+        "phase": "request"
+      },
+      {
+        "id": 525000,
+        "name": "Redirect to index.html",
+        "phase": "request"
+      }
+    ]
+  },
+  "cache-settings": [
+    {
+      "id": 274966,
+      "name": "webkit-storybook"
+    }
+  ],
+  "workloads": {
+    "id": 1773688858,
+    "name": "webkit-storybook",
+    "domains": [],
+    "url": "https://iiirmefzrt4.map.azionedge.net",
+    "deployment_id": [
+      {
+        "id": 186821,
+        "name": "webkit-storybook"
+      }
+    ]
+  },
+  "connectors": [
+    {
+      "id": 10418,
+      "name": "webkit-storybook"
+    }
+  ]
+}
