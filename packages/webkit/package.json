@@ -22,7 +22,8 @@
   "dependencies": {
     "primevue": "3.35.0",
     "vee-validate": "^4.15.1",
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": "^3.2.5",
+    "@vueuse/core": "^10.11.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",

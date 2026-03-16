@@ -2,7 +2,7 @@
   import Checkbox from 'primevue/checkbox'
   import { useField } from 'vee-validate'
   import { computed, toRef, useSlots, useAttrs } from 'vue'
-  import LabelBlock from '../label'
+  import Label from '../label'
 
   const props = defineProps({
     value: {
@@ -95,7 +95,7 @@
 </script>
 
 <template>
-  <LabelBlock
+  <Label
     :for="props.name"
     :label="props.label"
     :isRequired="$attrs.required"

@@ -2,7 +2,8 @@
   import { computed, ref, toRef, useAttrs, useSlots } from 'vue'
   import { useField } from 'vee-validate'
   import Password from 'primevue/password'
-  import LabelBlock from '../label'
+  import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const emit = defineEmits(['blur', 'input'])
   const props = defineProps({
@@ -86,42 +87,44 @@
 </script>
 
 <template>
-  <LabelBlock
-    v-if="props.label"
-    :for="props.name"
-    :data-testid="customTestId.label"
-    :label="props.label"
-    :isRequired="attrs.required"
-  />
-  <Password
-    toggleMask
-    ref="inputPasswordRef"
-    v-model="inputValue"
-    :id="name"
-    :name="name"
-    :readonly="readonly"
-    :disabled="disabled"
-    :placeholder="props.placeholder"
-    :class="[{ 'p-invalid': aditionalError || veeValidateErrorMessage }, props.class]"
-    :feedback="false"
-    :data-testid="customTestId.input"
-    @input="onChange"
-    @blur="onBlur"
-  />
-  <small
-    v-if="aditionalError || veeValidateErrorMessage"
-    class="p-error text-xs font-normal leading-tight"
-    :data-testid="customTestId.error"
-  >
-    {{ aditionalError || veeValidateErrorMessage }}
-  </small>
-  <small
-    v-if="props.description || hasDescriptionSlot"
-    class="text-xs text-color-secondary font-normal leading-5"
-    :data-testid="customTestId.description"
-  >
-    <slot name="description">
-      {{ props.description }}
-    </slot>
-  </small>
+  <InputSlot>
+    <Label
+      v-if="props.label"
+      :for="props.name"
+      :data-testid="customTestId.label"
+      :label="props.label"
+      :isRequired="attrs.required"
+    />
+    <Password
+      toggleMask
+      ref="inputPasswordRef"
+      v-model="inputValue"
+      :id="name"
+      :name="name"
+      :readonly="readonly"
+      :disabled="disabled"
+      :placeholder="props.placeholder"
+      :class="[{ 'p-invalid': aditionalError || veeValidateErrorMessage }, props.class]"
+      :feedback="false"
+      :data-testid="customTestId.input"
+      @input="onChange"
+      @blur="onBlur"
+    />
+    <small
+      v-if="aditionalError || veeValidateErrorMessage"
+      class="p-error text-xs font-normal leading-tight"
+      :data-testid="customTestId.error"
+    >
+      {{ aditionalError || veeValidateErrorMessage }}
+    </small>
+    <small
+      v-if="props.description || hasDescriptionSlot"
+      class="text-xs text-color-secondary font-normal leading-5"
+      :data-testid="customTestId.description"
+    >
+      <slot name="description">
+        {{ props.description }}
+      </slot>
+    </small>
+  </InputSlot>
 </template>

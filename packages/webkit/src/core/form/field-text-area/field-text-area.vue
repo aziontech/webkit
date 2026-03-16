@@ -3,7 +3,8 @@
   import { useField } from 'vee-validate'
   import TextArea from 'primevue/textarea'
   import Skeleton from 'primevue/skeleton'
-  import LabelBlock from '../label'
+  import InputSlot from '../slots/input-slot'
+  import Label from '../label'
 
   const emit = defineEmits(['blur', 'input'])
   const props = defineProps({
@@ -117,62 +118,64 @@
 </script>
 
 <template>
-  <LabelBlock
-    :for="props.name"
-    :data-testid="customTestId.label"
-    :label="props.label"
-    :isRequired="attrs.required"
-  />
-  <span
-    class="w-full"
-    :class="iconPositionClass"
-  >
-    <i
-      v-if="props.icon"
-      :class="props.icon"
-      class="text-color-secondary top-5 right-5"
+  <InputSlot>
+    <Label
+      :for="props.name"
+      :data-testid="customTestId.label"
+      :label="props.label"
+      :isRequired="attrs.required"
     />
-    <!-- Skeleton only for textarea input -->
-    <Skeleton
-      v-if="props.loading"
-      width="100%"
-      :height="textareaHeight"
-      borderRadius="6px"
-    />
-    <TextArea
-      v-else
-      v-bind="sensitive ? { 'data-sentry-mask': '' } : {}"
-      v-model="inputValue"
-      ref="inputRef"
-      type="text"
-      class="w-full min-h-[2.75rem]"
-      :class="[{ 'p-invalid': aditionalError || veeValidateErrorMessage }, props.class]"
-      :id="name"
-      :data-testid="customTestId.textarea"
-      :name="props.name"
-      :disabled="props.disabled"
-      :autoResize="props.autoResize"
-      :rows="props.rows"
-      :cols="props.cols"
-      :placeholder="props.placeholder"
-      @input="onChange"
-      @blur="onBlur"
-    />
-  </span>
-  <small
-    v-if="aditionalError || veeValidateErrorMessage"
-    class="p-error text-xs font-normal leading-tight"
-    :data-testid="customTestId.error"
-  >
-    {{ aditionalError || veeValidateErrorMessage }}
-  </small>
-  <small
-    class="text-xs text-color-secondary font-normal leading-5"
-    :data-testid="customTestId.description"
-    v-if="props.description || hasDescriptionSlot"
-  >
-    <slot name="description">
-      {{ props.description }}
-    </slot>
-  </small>
+    <span
+      class="w-full"
+      :class="iconPositionClass"
+    >
+      <i
+        v-if="props.icon"
+        :class="props.icon"
+        class="text-color-secondary top-5 right-5"
+      />
+      <!-- Skeleton only for textarea input -->
+      <Skeleton
+        v-if="props.loading"
+        width="100%"
+        :height="textareaHeight"
+        borderRadius="6px"
+      />
+      <TextArea
+        v-else
+        v-bind="sensitive ? { 'data-sentry-mask': '' } : {}"
+        v-model="inputValue"
+        ref="inputRef"
+        type="text"
+        class="w-full min-h-[2.75rem]"
+        :class="[{ 'p-invalid': aditionalError || veeValidateErrorMessage }, props.class]"
+        :id="name"
+        :data-testid="customTestId.textarea"
+        :name="props.name"
+        :disabled="props.disabled"
+        :autoResize="props.autoResize"
+        :rows="props.rows"
+        :cols="props.cols"
+        :placeholder="props.placeholder"
+        @input="onChange"
+        @blur="onBlur"
+      />
+    </span>
+    <small
+      v-if="aditionalError || veeValidateErrorMessage"
+      class="p-error text-xs font-normal leading-tight"
+      :data-testid="customTestId.error"
+    >
+      {{ aditionalError || veeValidateErrorMessage }}
+    </small>
+    <small
+      class="text-xs text-color-secondary font-normal leading-5"
+      :data-testid="customTestId.description"
+      v-if="props.description || hasDescriptionSlot"
+    >
+      <slot name="description">
+        {{ props.description }}
+      </slot>
+    </small>
+  </InputSlot>
 </template>

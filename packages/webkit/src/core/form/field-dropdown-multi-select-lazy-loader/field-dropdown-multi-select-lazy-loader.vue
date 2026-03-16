@@ -4,7 +4,8 @@
   import MultiSelect from 'primevue/multiselect'
   import InputText from 'primevue/inputtext'
   import { useField } from 'vee-validate'
-  import LabelBlock from '../label'
+  import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const props = defineProps({
     value: {
@@ -355,95 +356,97 @@
 </script>
 
 <template>
-  <LabelBlock
-    v-if="props.label"
-    :for="props.name"
-    :label="props.label"
-    :isRequired="$attrs.required"
-    :data-testid="customTestId.label"
-  />
-  <MultiSelect
-    :id="name"
-    :name="props.name"
-    :loading="loading"
-    v-model="inputValue"
-    :options="data"
-    :optionLabel="props.optionLabel"
-    :optionDisabled="props.optionDisabled"
-    :optionValue="props.optionValue"
-    :placeholder="props.placeholder"
-    :showClear="props.enableClearOption"
-    @change="emitChange"
-    @blur="emitBlur"
-    :class="errorMessage ? 'p-invalid' : ''"
-    v-bind="$attrs"
-    class="w-full md:w-80"
-    display="chip"
-    :pt="{
-      clearIcon: {
-        'data-testid': customTestId.clearIcon
-      },
-      filterInput: {
-        class: 'w-full',
-        'data-testid': customTestId.filterInput
-      },
-      trigger: {
-        'data-testid': customTestId.trigger
-      },
-      loadingIcon: {
-        'data-testid': customTestId.loadingIcon
-      }
-    }"
-    :data-testid="customTestId.multiselect"
-    :virtualScrollerOptions="VIRTUAL_SCROLLER_CONFIG"
-  >
-    <template
-      v-if="enableCustomLabel"
-      #value="slotProps"
+  <InputSlot>
+    <Label
+      v-if="props.label"
+      :for="props.name"
+      :label="props.label"
+      :isRequired="$attrs.required"
+      :data-testid="customTestId.label"
+    />
+    <MultiSelect
+      :id="name"
+      :name="props.name"
+      :loading="loading"
+      v-model="inputValue"
+      :options="data"
+      :optionLabel="props.optionLabel"
+      :optionDisabled="props.optionDisabled"
+      :optionValue="props.optionValue"
+      :placeholder="props.placeholder"
+      :showClear="props.enableClearOption"
+      @change="emitChange"
+      @blur="emitBlur"
+      :class="errorMessage ? 'p-invalid' : ''"
+      v-bind="$attrs"
+      class="w-full md:w-80"
+      display="chip"
+      :pt="{
+        clearIcon: {
+          'data-testid': customTestId.clearIcon
+        },
+        filterInput: {
+          class: 'w-full',
+          'data-testid': customTestId.filterInput
+        },
+        trigger: {
+          'data-testid': customTestId.trigger
+        },
+        loadingIcon: {
+          'data-testid': customTestId.loadingIcon
+        }
+      }"
+      :data-testid="customTestId.multiselect"
+      :virtualScrollerOptions="VIRTUAL_SCROLLER_CONFIG"
     >
-      <span :data-testid="customTestId.value">
-        {{ getLabelsForSelectedValues(slotProps.value) }}
-      </span>
-    </template>
-    <template #header>
-      <div class="p-2 flex">
-        <div class="p-inputgroup">
-          <InputText
-            type="text"
-            v-model="search"
-            placeholder="Search"
-            class="w-full rounded-r-none"
-            ref="focusSearch"
-            :data-testid="customTestId.search"
-          />
-          <span
-            class="p-inputgroup-addon"
-            @click="searchFilter"
-          >
-            <i class="pi pi-search"></i>
-          </span>
+      <template
+        v-if="enableCustomLabel"
+        #value="slotProps"
+      >
+        <span :data-testid="customTestId.value">
+          {{ getLabelsForSelectedValues(slotProps.value) }}
+        </span>
+      </template>
+      <template #header>
+        <div class="p-2 flex">
+          <div class="p-inputgroup">
+            <InputText
+              type="text"
+              v-model="search"
+              placeholder="Search"
+              class="w-full rounded-r-none"
+              ref="focusSearch"
+              :data-testid="customTestId.search"
+            />
+            <span
+              class="p-inputgroup-addon"
+              @click="searchFilter"
+            >
+              <i class="pi pi-search"></i>
+            </span>
+          </div>
         </div>
-      </div>
-    </template>
-    <template #footer>
-      <slot name="footer" />
-    </template>
-  </MultiSelect>
-  <small
-    v-if="errorMessage"
-    :data-testid="customTestId.error"
-    class="p-error text-xs font-normal leading-tight"
-  >
-    {{ errorMessage }}
-  </small>
-  <small
-    class="text-xs text-color-secondary font-normal leading-5"
-    :data-testid="customTestId.description"
-    v-if="props.description || hasDescriptionSlot"
-  >
-    <slot name="description">
-      {{ props.description }}
-    </slot>
-  </small>
+      </template>
+      <template #footer>
+        <slot name="footer" />
+      </template>
+    </MultiSelect>
+    <small
+      v-if="errorMessage"
+      :data-testid="customTestId.error"
+      class="p-error text-xs font-normal leading-tight"
+    >
+      {{ errorMessage }}
+    </small>
+    <small
+      class="text-xs text-color-secondary font-normal leading-5"
+      :data-testid="customTestId.description"
+      v-if="props.description || hasDescriptionSlot"
+    >
+      <slot name="description">
+        {{ props.description }}
+      </slot>
+    </small>
+  </InputSlot>
 </template>
 
