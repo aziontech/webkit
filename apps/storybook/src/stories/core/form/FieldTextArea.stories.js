@@ -7,11 +7,15 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (required)'
+    },
+    value: {
+      control: 'text',
+      description: 'Initial value of the textarea'
     },
     label: {
       control: 'text',
-      description: 'Label text displayed above the textarea'
+      description: 'Label text displayed above the textarea (required)'
     },
     placeholder: {
       control: 'text',
@@ -21,13 +25,42 @@ export default {
       control: 'text',
       description: 'Helper text displayed below the textarea'
     },
+    rows: {
+      control: 'number',
+      description: 'Number of visible text lines'
+    },
+    cols: {
+      control: 'number',
+      description: 'Visible width of the textarea'
+    },
+    autoResize: {
+      control: 'boolean',
+      description: 'Automatically resize the textarea to fit content'
+    },
     disabled: {
       control: 'boolean',
       description: 'Disables the textarea'
     },
-    readonly: {
+    icon: {
+      control: 'text',
+      description: 'Icon class to display'
+    },
+    iconPosition: {
+      control: 'radio',
+      options: ['left', 'right'],
+      description: 'Position of the icon'
+    },
+    sensitive: {
       control: 'boolean',
-      description: 'Makes the textarea read-only'
+      description: 'Marks the field as containing sensitive data'
+    },
+    aditionalError: {
+      control: 'text',
+      description: 'Additional error message to display'
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Shows loading skeleton'
     }
   }
 };
@@ -54,7 +87,7 @@ export const ReadOnly = {
     name: 'field-textarea-readonly',
     label: 'Read-Only Text Area',
     value: 'This text cannot be edited.',
-    readonly: true
+    disabled: true
   }
 };
 
@@ -64,5 +97,52 @@ export const WithDescription = {
     label: 'Message',
     placeholder: 'Enter your message...',
     description: 'Write a detailed description of your request'
+  }
+};
+
+export const AutoResize = {
+  args: {
+    name: 'field-textarea-autoresize',
+    label: 'Auto-resize Text Area',
+    placeholder: 'Type to see the textarea grow...',
+    autoResize: true,
+    rows: 3
+  }
+};
+
+export const WithRowsAndCols = {
+  args: {
+    name: 'field-textarea-dimensions',
+    label: 'Fixed Size Text Area',
+    placeholder: 'Enter your message...',
+    rows: 6,
+    cols: 40
+  }
+};
+
+export const WithError = {
+  args: {
+    name: 'field-textarea-error',
+    label: 'Text Area with Error',
+    placeholder: 'Enter your message...',
+    aditionalError: 'This field has an error'
+  }
+};
+
+export const Loading = {
+  args: {
+    name: 'field-textarea-loading',
+    label: 'Loading Text Area',
+    loading: true
+  }
+};
+
+export const Sensitive = {
+  args: {
+    name: 'field-textarea-sensitive',
+    label: 'Sensitive Text Area',
+    placeholder: 'Enter sensitive information...',
+    sensitive: true,
+    description: 'This field contains sensitive information'
   }
 };

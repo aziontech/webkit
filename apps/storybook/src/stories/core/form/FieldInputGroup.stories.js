@@ -7,7 +7,11 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (required)'
+    },
+    value: {
+      control: 'text',
+      description: 'Initial value of the input'
     },
     label: {
       control: 'text',
@@ -24,6 +28,14 @@ export default {
     disabled: {
       control: 'boolean',
       description: 'Disables the input group'
+    },
+    readonly: {
+      control: 'boolean',
+      description: 'Makes the input read-only'
+    },
+    inputClass: {
+      control: 'text',
+      description: 'Additional CSS class for the input'
     }
   }
 };
@@ -51,5 +63,23 @@ export const WithDescription = {
     label: 'Input Group with Description',
     placeholder: 'Enter value...',
     description: 'Add prefix or suffix to your input'
+  }
+};
+
+export const Readonly = {
+  args: {
+    name: 'field-input-group-readonly',
+    label: 'Read-only Input Group',
+    value: 'Pre-filled value',
+    readonly: true
+  }
+};
+
+export const WithInputClass = {
+  args: {
+    name: 'field-input-group-class',
+    label: 'Styled Input Group',
+    placeholder: 'Custom styled input...',
+    inputClass: 'bg-gray-100'
   }
 };

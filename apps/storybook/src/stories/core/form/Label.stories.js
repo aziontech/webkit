@@ -7,35 +7,38 @@ export default {
   argTypes: {
     label: {
       control: 'text',
-      description: 'Label text'
+      description: 'Label text to display (required)'
     },
     isRequired: {
       control: 'boolean',
-      description: 'Shows required indicator'
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables the label styling'
+      description: 'Shows required indicator (*) next to the label'
     }
   }
 };
 
 export const Default = {
   args: {
-    label: 'Form Label'
+    label: 'Field Label'
   }
 };
 
 export const Required = {
   args: {
     label: 'Required Field',
-    required: true
+    isRequired: true
   }
 };
 
-export const Disabled = {
+export const Optional = {
   args: {
-    label: 'Disabled Label',
-    disabled: true
+    label: 'Optional Field',
+    isRequired: false
+  }
+};
+
+export const LongLabel = {
+  args: {
+    label: 'This is a longer label that describes the field in more detail for the user',
+    isRequired: true
   }
 };

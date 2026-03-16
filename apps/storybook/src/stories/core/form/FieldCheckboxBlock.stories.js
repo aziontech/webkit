@@ -5,13 +5,17 @@ export default {
   component: FieldCheckboxBlock,
   tags: ['autodocs'],
   argTypes: {
-    name: {
+    title: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Title text displayed in the card'
     },
-    label: {
+    isLabel: {
+      control: 'boolean',
+      description: 'Whether to show as label style'
+    },
+    subtitle: {
       control: 'text',
-      description: 'Label text displayed next to the checkbox'
+      description: 'Subtitle text displayed in the card'
     },
     description: {
       control: 'text',
@@ -20,6 +24,34 @@ export default {
     disabled: {
       control: 'boolean',
       description: 'Disables the checkbox'
+    },
+    auto: {
+      control: 'boolean',
+      description: 'Auto width layout'
+    },
+    isCard: {
+      control: 'boolean',
+      description: 'Whether to display as a card'
+    },
+    hideSelector: {
+      control: 'boolean',
+      description: 'Whether to hide the checkbox selector'
+    },
+    nameField: {
+      control: 'text',
+      description: 'Field name for vee-validate binding (required)'
+    },
+    name: {
+      control: 'text',
+      description: 'Field name for form submission (required)'
+    },
+    value: {
+      control: 'text',
+      description: 'Value for the checkbox'
+    },
+    binary: {
+      control: 'boolean',
+      description: 'Whether the checkbox is binary (true/false)'
     }
   }
 };
@@ -27,14 +59,16 @@ export default {
 export const Default = {
   args: {
     name: 'field-checkbox-default',
-    label: 'Accept terms and conditions'
+    nameField: 'field-checkbox-default',
+    title: 'Accept terms and conditions'
   }
 };
 
 export const Disabled = {
   args: {
     name: 'field-checkbox-disabled',
-    label: 'Disabled checkbox',
+    nameField: 'field-checkbox-disabled',
+    title: 'Disabled checkbox',
     disabled: true
   }
 };
@@ -42,7 +76,35 @@ export const Disabled = {
 export const WithDescription = {
   args: {
     name: 'field-checkbox-desc',
-    label: 'Subscribe to newsletter',
+    nameField: 'field-checkbox-desc',
+    title: 'Subscribe to newsletter',
     description: 'Receive monthly updates about our products'
+  }
+};
+
+export const WithSubtitle = {
+  args: {
+    name: 'field-checkbox-subtitle',
+    nameField: 'field-checkbox-subtitle',
+    title: 'Enable notifications',
+    subtitle: 'Get notified about new features'
+  }
+};
+
+export const BinaryCheckbox = {
+  args: {
+    name: 'field-checkbox-binary',
+    nameField: 'field-checkbox-binary',
+    title: 'I agree to the terms',
+    binary: true
+  }
+};
+
+export const WithoutCard = {
+  args: {
+    name: 'field-checkbox-no-card',
+    nameField: 'field-checkbox-no-card',
+    title: 'Simple checkbox',
+    isCard: false
   }
 };

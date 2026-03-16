@@ -7,11 +7,23 @@ export default {
   argTypes: {
     name: {
       control: 'text',
-      description: 'Field name for form submission'
+      description: 'Field name for form submission (DOM element ID) (required)'
     },
-    label: {
+    nameField: {
       control: 'text',
-      description: 'Label text displayed next to the radio button'
+      description: 'Field name for vee-validate binding (form validation) (required)'
+    },
+    title: {
+      control: 'text',
+      description: 'Title text displayed in the card'
+    },
+    isLabel: {
+      control: 'boolean',
+      description: 'Whether to show as label style'
+    },
+    subtitle: {
+      control: 'text',
+      description: 'Subtitle text displayed in the card'
     },
     description: {
       control: 'text',
@@ -20,6 +32,26 @@ export default {
     disabled: {
       control: 'boolean',
       description: 'Disables the radio button'
+    },
+    auto: {
+      control: 'boolean',
+      description: 'Auto width layout'
+    },
+    isCard: {
+      control: 'boolean',
+      description: 'Whether to display as a card'
+    },
+    hideSelector: {
+      control: 'boolean',
+      description: 'Whether to hide the radio selector'
+    },
+    inputValue: {
+      control: 'text',
+      description: 'Value for the radio button'
+    },
+    binary: {
+      control: 'boolean',
+      description: 'Whether the radio is binary'
     }
   }
 };
@@ -27,14 +59,16 @@ export default {
 export const Default = {
   args: {
     name: 'field-radio-block-default',
-    label: 'Select this option'
+    nameField: 'field-radio-block-field',
+    title: 'Select this option'
   }
 };
 
 export const Disabled = {
   args: {
     name: 'field-radio-block-disabled',
-    label: 'Disabled radio option',
+    nameField: 'field-radio-block-field-disabled',
+    title: 'Disabled radio option',
     disabled: true
   }
 };
@@ -42,7 +76,8 @@ export const Disabled = {
 export const WithDescription = {
   args: {
     name: 'field-radio-block-desc',
-    label: 'Choose this option',
+    nameField: 'field-radio-block-field-desc',
+    title: 'Choose this option',
     description: 'This is an additional description for this radio option'
   }
 };
