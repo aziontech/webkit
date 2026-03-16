@@ -13,10 +13,8 @@ import type { PropsValues, PreviewSurface, PreviewTheme } from './types';
 interface Props {
   /** The Vue component to render */
   component?: Component | null;
-  /** Current props values (excluding demo-only; these are not passed to the component) */
+  /** Current props values passed to the component */
   propsValues: PropsValues;
-  /** Demo-only values (e.g. "Simulate status") used for mocks in the preview */
-  demoOnlyValues?: PropsValues;
   /** Surface/background style */
   surface?: PreviewSurface;
   /** Preview theme (light/dark) - only affects the preview container */
@@ -33,7 +31,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   component: null,
-  demoOnlyValues: () => ({}),
   surface: 'neutral',
   previewTheme: 'light',
   center: false,
@@ -114,14 +111,13 @@ const containerStyle = computed(() => ({
     </div>
 
     <!-- Scroll region: padded area, no forced centering so components lay out naturally -->
-    <div class="p-8 flex-1 min-h-0 overflow-auto">
-      <div
-        :class="[
-          'azion',
+    <div         :class="[
+          'azion ',
           azionThemeClass,
           surfaceClasses,
           customClass
-        ]"
+        ]" class="p-8 flex-1 min-h-0 overflow-auto">
+      <div
         :style="containerStyle"
       >
         <!-- Component rendering -->
