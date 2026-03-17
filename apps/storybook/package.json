@@ -1,5 +1,5 @@
 {
-  "name": "webkit-storybook",
+  "name": "storybook",
   "version": "0.1.0",
   "private": true,
   "description": "Storybook documentation for @aziontech/webkit component library",
