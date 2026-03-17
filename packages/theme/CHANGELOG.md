@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.0...@aziontech/theme@1.0.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* adding documentation theme ([bec0490](https://github.com/aziontech/webkit/commit/bec04901f809ac385503ce2f0eb3b1c15e583293))
+* prevent GitHub Actions loop in theme package publish workflow ([5bdc561](https://github.com/aziontech/webkit/commit/5bdc561ee9067301b9252299c8a0f221b14c6c77))
+* prevent GitHub Actions loop in webkit package publish workflow ([cd3db78](https://github.com/aziontech/webkit/commit/cd3db78a2f328eedf24078fb6219e4cce158f8be))
+
 ## 1.0.0 (2026-03-17)
 
 
