@@ -1,0 +1,17 @@
+{
+  "component": "DemoPreview",
+  "source": "E:\\dev2\\webkit\\apps\\ds-docs\\src\\components\\docs\\DemoPreview.vue",
+  "props": [],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "code",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-17T02:51:16.706Z"
+}

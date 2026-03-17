@@ -1,4 +1,5 @@
 ---
+id: foundations/index
 title: Foundations
 description: Core design principles and guidelines that shape the Azion Design System.
 navLabel: Foundations

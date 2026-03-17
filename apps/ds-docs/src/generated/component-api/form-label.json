@@ -1,0 +1,23 @@
+{
+  "component": "form-label",
+  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\label\\label.vue",
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-17T02:51:17.521Z"
+}

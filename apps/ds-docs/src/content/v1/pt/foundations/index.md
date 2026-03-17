@@ -1,4 +1,5 @@
 ---
+id: foundations/index
 title: Fundamentos
 description: Princípios e diretrizes de design principais que moldam o Azion Design System.
 navLabel: Fundamentos

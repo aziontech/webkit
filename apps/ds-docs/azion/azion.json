@@ -1,0 +1,36 @@
+{
+  "name": "ds-docs",
+  "bucket": "",
+  "preset": "astro",
+  "env": "production",
+  "prefix": "",
+  "not-first-run": false,
+  "function": [],
+  "application": {
+    "id": 0,
+    "name": "__DEFAULT__"
+  },
+  "domain": {
+    "id": 0,
+    "name": "__DEFAULT__",
+    "domain_name": "",
+    "url": ""
+  },
+  "rt-purge": {
+    "purge_on_publish": true
+  },
+  "origin": null,
+  "rules-engine": {
+    "created": false,
+    "rules": null
+  },
+  "cache-settings": null,
+  "workloads": {
+    "id": 0,
+    "name": "",
+    "domains": null,
+    "url": "",
+    "deployment_id": null
+  },
+  "connectors": null
+}

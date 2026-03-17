@@ -6,6 +6,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string"
+            },
             "title": {
               "type": "string"
             },
@@ -353,6 +356,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -424,6 +430,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -497,6 +506,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -594,6 +606,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -670,6 +685,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -740,6 +758,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -823,6 +844,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -890,6 +914,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },
@@ -959,6 +986,9 @@
         {
           "type": "object",
           "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-en/anyOf/0/properties/id"
+            },
             "title": {
               "$ref": "#/definitions/v1-en/anyOf/0/properties/title"
             },

@@ -1,0 +1,30 @@
+{
+  "component": "DocsSidebarItem",
+  "source": "E:\\dev2\\webkit\\apps\\ds-docs\\src\\components\\docs\\DocsSidebarItem.vue",
+  "props": [
+    {
+      "name": "item",
+      "type": "NavItem",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "isActive",
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "language",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-17T02:51:16.707Z"
+}

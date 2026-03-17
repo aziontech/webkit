@@ -1,0 +1,30 @@
+{
+  "component": "form-field-switch",
+  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-switch\\field-switch.vue",
+  "props": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-17T02:51:17.513Z"
+}

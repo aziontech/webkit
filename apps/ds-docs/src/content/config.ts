@@ -5,6 +5,8 @@ import { glob } from 'astro/loaders';
  * Base frontmatter schema shared across all page types
  */
 const baseSchema = z.object({
+  /** Optional explicit id (e.g. "foundations/index") to avoid duplicate id warnings when same path exists in multiple locales */
+  id: z.string().optional(),
   title: z.string(),
   description: z.string(),
   // Navigation metadata

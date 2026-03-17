@@ -129,6 +129,22 @@ pnpm build:scaffold:dry  # Dry run with verbose output
 pnpm build:api:webkit   # Extract API from webkit core (../../packages/webkit/src/core)
 ```
 
+### Deploy (Azion)
+
+This app is configured for Azion (preset Astro). The monorepo uses **pnpm** and `workspace:*` dependencies; **do not** run `npm install` inside `apps/ds-docs` or the Azion CLI step that installs dependencies will fail.
+
+**CI (GitHub Actions) — recommended:** The workflow `.github/workflows/azion-deploy.yml` runs on Linux, installs from the monorepo root with pnpm, and runs `azion build` / `azion deploy` from `apps/ds-docs`. Add the secret `AZION_PERSONAL_TOKEN` in the repo (create with `azion create personal-token`), then run the workflow manually or on push. This avoids Windows-specific Azion CLI issues (path backslashes and chunk resolution).
+
+**Local deploy:**
+
+- **On Windows:** Use WSL or the GitHub Actions workflow; native `azion build` often fails with path/chunk errors.
+- **On Linux or WSL:**
+  1. From the **monorepo root**: `pnpm install`
+2. Install the [Azion CLI](https://github.com/aziontech/cli) and log in: `azion -t YOUR_TOKEN` (or `azion login`)
+3. From `apps/ds-docs`: `azion build` then `azion deploy --local --skip-build` (skip the install-dependencies step if the CLI offers to run npm).
+
+Replace `$BUCKET_NAME`, `$APPLICATION_NAME`, etc. in `azion.config.mjs` and `azion/azion.json` as needed for your Azion project.
+
 ### Lint & Checks
 
 ```bash

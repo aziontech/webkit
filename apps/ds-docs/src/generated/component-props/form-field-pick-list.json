@@ -1,0 +1,46 @@
+{
+  "disabled": {
+    "label": "Disabled",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "dataPick": {
+    "label": "Data Pick",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[[], []]"
+  },
+  "dataKey": {
+    "label": "Data Key",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "title": {
+    "label": "Title",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "service": {
+    "label": "Service",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "function",
+    "control": "none"
+  }
+}

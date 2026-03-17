@@ -1,0 +1,83 @@
+{
+  "component": "form-field-group-radio",
+  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-group-radio\\field-group-radio.vue",
+  "props": [
+    {
+      "name": "hideSelector",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "auto",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "isCard",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "options",
+      "type": "any[]",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "helpText",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "nameField",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "isRequired",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "onRadioChange",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "footer",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-17T02:51:17.503Z"
+}

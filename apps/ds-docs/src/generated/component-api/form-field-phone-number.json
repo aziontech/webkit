@@ -1,0 +1,69 @@
+{
+  "component": "form-field-phone-number",
+  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-phone-number\\field-phone-number.vue",
+  "props": [
+    {
+      "name": "options",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": "Phone Number",
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "countryCodeName",
+      "type": "string",
+      "required": false,
+      "default": "countryCallCode",
+      "description": ""
+    },
+    {
+      "name": "mobileName",
+      "type": "string",
+      "required": false,
+      "default": "mobile",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "change:countryCode",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "change:mobile",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-17T02:51:17.509Z"
+}

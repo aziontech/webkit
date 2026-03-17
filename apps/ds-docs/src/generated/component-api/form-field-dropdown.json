@@ -1,0 +1,165 @@
+{
+  "component": "form-field-dropdown",
+  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-dropdown\\field-dropdown.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "[String",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "optionLabel",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "optionValue",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "optionDisabled",
+      "type": "[String",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "options",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "enableWorkaroundLabelToDisabledOptions",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "filter",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "pt",
+      "type": "object",
+      "required": false,
+      "default": "{}",
+      "description": ""
+    },
+    {
+      "name": "optionGroupLabel",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "optionGroupChildren",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "editable",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "emptyMessage",
+      "type": "string",
+      "required": false,
+      "default": "No available options",
+      "description": ""
+    },
+    {
+      "name": "emptyFilterMessage",
+      "type": "string",
+      "required": false,
+      "default": "No results found",
+      "description": ""
+    },
+    {
+      "name": "aditionalError",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "onBlur",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "onChange",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "onSelectOption",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-17T02:51:17.492Z"
+}
