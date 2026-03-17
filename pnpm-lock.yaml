@@ -163,6 +163,42 @@ importers:
         specifier: ^23.0.0
         version: 23.1.1(typescript@5.9.3)
 
+  packages/theme:
+    devDependencies:
+      tailwindcss:
+        specifier: ^3.4.17
+        version: 3.4.19
+
+  packages/webkit:
+    devDependencies:
+      '@semantic-release/changelog':
+        specifier: ^6.0.3
+        version: 6.0.3(semantic-release@23.1.1(typescript@5.9.3))
+      '@semantic-release/commit-analyzer':
+        specifier: ^10.0.1
+        version: 10.0.4(semantic-release@23.1.1(typescript@5.9.3))
+      '@semantic-release/exec':
+        specifier: ^6.0.3
+        version: 6.0.3(semantic-release@23.1.1(typescript@5.9.3))
+      '@semantic-release/git':
+        specifier: ^10.0.1
+        version: 10.0.1(semantic-release@23.1.1(typescript@5.9.3))
+      '@semantic-release/github':
+        specifier: ^9.2.6
+        version: 9.2.6(semantic-release@23.1.1(typescript@5.9.3))
+      '@semantic-release/npm':
+        specifier: ^11.0.0
+        version: 11.0.3(semantic-release@23.1.1(typescript@5.9.3))
+      '@semantic-release/release-notes-generator':
+        specifier: ^12.1.0
+        version: 12.1.0(semantic-release@23.1.1(typescript@5.9.3))
+      conventional-changelog-conventionalcommits:
+        specifier: ^7.0.0
+        version: 7.0.2
+      semantic-release:
+        specifier: ^23.0.0
+        version: 23.1.1(typescript@5.9.3)
+
 packages:
 
   '@adobe/css-tools@4.4.4':

@@ -1,33 +1,21 @@
 {
   "name": "@aziontech/theme",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "aziontech",
-  "exports": {
-    ".": "./default.js",
-    "./widget": "./widget.js",
-    "./tokens": "./tokens.js",
-    "./tokens/primitive": "./tokens.js",
-    "./tokens/brand": "./tokens.js",
-    "./tokens/semantic/text": "./tokens.js",
-    "./tokens/semantic/backgrounds": "./tokens.js",
-    "./tokens/semantic/borders": "./tokens.js",
-    "./tokens/build/preset": "./src/tokens/build/preset.js",
-    "./tokens/build/tailwind-helper": "./src/tokens/build/tailwind-helper.js",
-    "./tokens/build/tailwind-plugin": "./src/tokens/build/tailwind-plugin.js"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aziontech/webkit.git",
+    "directory": "packages/theme"
   },
   "scripts": {
-    "clean": "rm -rf dist/",
-    "build": "node scripts/build.mjs",
-    "validate": "node scripts/validate-theme.mjs",
-    "compile": "node scripts/compile-tokens.mjs",
-    "generate-css": "node scripts/generate-css.mjs",
     "publish": "cd dist && npm publish && cd ..",
     "pack:dry": "cd dist && npm pack --dry-run && cd ..",
     "format": "prettier --write scripts/ src/"
   },
-  "devDependencies": {
-    "tailwindcss": "^3.4.17"
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "design-tokens",
@@ -39,25 +27,26 @@
     "ui-kit",
     "token-generator"
   ],
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^10.0.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "@semantic-release/npm": "^11.0.0",
+    "@semantic-release/release-notes-generator": "^12.1.0",
+    "conventional-changelog-conventionalcommits": "^7.0.0",
+    "semantic-release": "^23.0.0"
+  },
   "files": [
-    "tokens/",
-    "LICENSE",
-    "README.md"
+    "src/",
+    "LICENSE"
   ],
-  "main": "./dist/tokens/index.js",
-  "style": "./dist/tokens/tokens.css",
-  "types": "./dist/tokens/index.d.ts",
+  "main": "./default.js",
   "exports": {
-    ".": {
-      "import": "./dist/tokens/index.js",
-      "require": "./dist/tokens/index.js",
-      "default": "./dist/tokens/tokens.css",
-      "types": "./dist/tokens/index.d.ts"
-    },
-    "./tokens": "./dist/tokens/index.js",
-    "./primitives": "./dist/tokens/primitives/colors.js",
-    "./semantic": "./dist/tokens/semantic/",
-    "./tokens/light.css": "./dist/tokens/light.css",
-    "./tokens/dark.css": "./dist/tokens/dark.css"
+    ".": "./default.js",
+    "./widget": "./widget.js",
+    "./tokens": "./src/tokens/index.js"
   }
 }
