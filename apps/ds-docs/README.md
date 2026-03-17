@@ -133,15 +133,21 @@ pnpm build:api:webkit   # Extract API from webkit core (../../packages/webkit/sr
 
 This app is configured for Azion (preset Astro). The monorepo uses **pnpm** and `workspace:*` dependencies; **do not** run `npm install` inside `apps/ds-docs` or the Azion CLI step that installs dependencies will fail.
 
-**CI (GitHub Actions) — recommended:** The workflow `.github/workflows/azion-deploy.yml` runs on Linux, installs from the monorepo root with pnpm, and runs `azion build` / `azion deploy` from `apps/ds-docs`. Add the secret `AZION_PERSONAL_TOKEN` in the repo (create with `azion create personal-token`), then run the workflow manually or on push. This avoids Windows-specific Azion CLI issues (path backslashes and chunk resolution).
+**CI (GitHub Actions):** The workflow **Deploy Application using Azion CLI** (`.github/workflows/azion-deploy-ds-docs.yml` at repo root) runs on Linux. Add the secret `AZION_PERSONAL_TOKEN`, then run the workflow manually from the Actions tab (it must exist on the default branch to appear).
 
-**Local deploy:**
+**Local deploy (Windows) — sem `azion build`:**
 
-- **On Windows:** Use WSL or the GitHub Actions workflow; native `azion build` often fails with path/chunk errors.
-- **On Linux or WSL:**
-  1. From the **monorepo root**: `pnpm install`
-2. Install the [Azion CLI](https://github.com/aziontech/cli) and log in: `azion -t YOUR_TOKEN` (or `azion login`)
-3. From `apps/ds-docs`: `azion build` then `azion deploy --local --skip-build` (skip the install-dependencies step if the CLI offers to run npm).
+No Windows o `azion build` falha (paths com `\` nos polyfills e chunk do Astro). Use **apenas** o script que não chama o bundler da Azion:
+
+1. Na **raiz do monorepo**: `pnpm install`
+2. Instale o [Azion CLI](https://github.com/aziontech/cli) e faça login: `azion -t SEU_TOKEN` (ou `azion login`)
+3. Em **apps/ds-docs**: **`pnpm run deploy:azion`** (faz: `pnpm build` → `manifest generate` → `azion deploy --local --skip-build --path dist`)
+
+Se mesmo assim aparecer `[Azion] [Build]` e erros de "Syntax error n" / "Could not resolve chunk", o CLI pode estar ignorando `--skip-build` no preset Astro. Nesse caso:
+- **Workaround:** rode o deploy no **WSL** (ex.: `wsl` e depois `pnpm run deploy:azion` no mesmo repo), ou
+- Use o **GitHub Actions** (workflow "Deploy Application using Azion CLI") para publicar a partir do Linux.
+
+**Local deploy (Linux / WSL / Mac):** Pode rodar `azion build` e em seguida `azion deploy --local --skip-build --path dist`; o preset Astro funciona nesses ambientes.
 
 Replace `$BUCKET_NAME`, `$APPLICATION_NAME`, etc. in `azion.config.mjs` and `azion/azion.json` as needed for your Azion project.
 

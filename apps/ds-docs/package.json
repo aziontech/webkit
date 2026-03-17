@@ -22,7 +22,9 @@
     "lint:rules": "tsx scripts/check-docs.ts rules",
     "lint:coverage": "tsx scripts/checkComponentDocs.ts",
     "check": "tsx scripts/check-docs.ts all",
-    "changelog": "tsx scripts/generateChangelog.ts"
+    "changelog": "tsx scripts/generateChangelog.ts",
+    "deploy:azion": "pnpm build && npx --yes edge-functions@7.0.0 manifest generate -e azion.config.mjs -o .edge && azion deploy --local --skip-build --path dist",
+    "deploy:azion:upload": "azion deploy --local --skip-build --path dist"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

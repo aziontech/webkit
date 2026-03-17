@@ -1,13 +1,13 @@
 {
   "name": "ds-docs",
-  "bucket": "",
+  "bucket": "ds-docs-20260317011207",
   "preset": "astro",
   "env": "production",
-  "prefix": "",
+  "prefix": "20260317015532",
   "not-first-run": false,
   "function": [],
   "application": {
-    "id": 0,
+    "id": 1773714689,
     "name": "__DEFAULT__"
   },
   "domain": {

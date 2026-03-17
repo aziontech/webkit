@@ -21,34 +21,33 @@ export default {
   build: {
     preset: 'astro',
     polyfills: true,
-    // Static site: serve pre-built dist from storage only; no edge worker (avoids Windows path/chunk errors in Azion bundler)
     worker: false
   },
   storage: [
     {
-      name: '$BUCKET_NAME',
-      prefix: '$BUCKET_PREFIX',
+      name: 'ds-docs-20260317011207',
+      prefix: '20260317011201',
       dir: './dist',
       workloadsAccess: 'read_only'
     }
   ],
   connectors: [
     {
-      name: '$CONNECTOR_NAME',
+      name: 'ds-docs',
       active: true,
       type: 'storage',
       attributes: {
-        bucket: '$BUCKET_NAME',
-        prefix: '$BUCKET_PREFIX'
+        bucket: 'ds-docs-20260317011207',
+        prefix: '20260317011201'
       }
     }
   ],
   applications: [
     {
-      name: '$APPLICATION_NAME',
+      name: 'ds-docs',
       cache: [
         {
-          name: '$APPLICATION_NAME',
+          name: 'ds-docs',
           browser: {
             maxAgeSeconds: 7200
           },
@@ -79,13 +78,13 @@ export default {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: '$CONNECTOR_NAME'
+                  value: 'ds-docs'
                 }
               },
               {
                 type: 'set_cache_policy',
                 attributes: {
-                  value: '$APPLICATION_NAME'
+                  value: 'ds-docs'
                 }
               },
               {
@@ -111,7 +110,7 @@ export default {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: '$CONNECTOR_NAME'
+                  value: 'ds-docs'
                 }
               },
               {
@@ -140,7 +139,7 @@ export default {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: '$CONNECTOR_NAME'
+                  value: 'ds-docs'
                 }
               },
               {
@@ -158,7 +157,7 @@ export default {
   ],
   workloads: [
     {
-      name: '$WORKLOAD_NAME',
+      name: 'ds-docs',
       active: true,
       infrastructure: 1,
       protocols: {
@@ -171,13 +170,13 @@ export default {
       },
       deployments: [
         {
-          name: '$DEPLOYMENT_NAME',
+          name: 'ds-docs',
           current: true,
           active: true,
           strategy: {
             type: 'default',
             attributes: {
-              application: '$APPLICATION_NAME'
+              application: 'ds-docs'
             }
           }
         }
