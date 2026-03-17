@@ -1,3 +1,11 @@
+## [1.0.3](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.2...@aziontech/theme@1.0.3) (2026-03-17)
+
+
+### Bug Fixes
+
+* @aziontech/theme export ([e2a9170](https://github.com/aziontech/webkit/commit/e2a9170c7c6834a0e5474e005230de197db3dcdc))
+* update documentation to trigger deploy ([6fb4680](https://github.com/aziontech/webkit/commit/6fb46804be7c176547f4f95fa2d745bad945a9dc))
+
 ## [1.0.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.1...@aziontech/theme@1.0.2) (2026-03-17)
 
 
