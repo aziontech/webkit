@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.1...@aziontech/webkit@1.4.2) (2026-03-17)
+
+
+### Bug Fixes
+
+* resolve storybook preview.js dynamic import failure ([f2f1d28](https://github.com/aziontech/webkit/commit/f2f1d2895b1a7f9c03b331154eae8ba8e478d264))
+
 ## [1.4.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.0...@aziontech/webkit@1.4.1) (2026-03-17)
 
 
