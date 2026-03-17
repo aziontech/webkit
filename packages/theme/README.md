@@ -1,6 +1,6 @@
 # @aziontech/theme
 
-A comprehensive design token system and theming solution for Azion's web applications. This package provides primitive colors, semantic tokens, brand colors, and seamless integration with Tailwind CSS.
+~ A comprehensive design token system and theming solution for Azion's web applications. This package provides primitive colors, semantic tokens, brand colors, and seamless integration with Tailwind CSS.
 
 ## Features
 
