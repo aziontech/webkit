@@ -40,7 +40,11 @@
   },
   "files": [
     "src/",
-    "LICENSE"
+    "LICENSE",
+    "colors-brand.js",
+    "default.js",
+    "tokens.js",
+    "widget.js"
   ],
   "exports": {
     ".": "./default.js",
