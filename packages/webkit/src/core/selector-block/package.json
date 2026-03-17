@@ -1,0 +1,11 @@
+{
+  "main": "./selector-block.vue",
+  "module": "./selector-block.vue",
+  "types": "./selector-block.vue.d.ts",
+  "browser": {
+    "./sfc": "./selector-block.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

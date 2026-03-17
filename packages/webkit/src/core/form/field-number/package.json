@@ -1,0 +1,11 @@
+{
+  "main": "./field-number.vue",
+  "module": "./field-number.vue",
+  "types": "./field-number.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-number.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

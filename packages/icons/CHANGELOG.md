@@ -1,3 +1,21 @@
+## [1.3.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.2.3...@aziontech/icons@1.3.0) (2026-03-12)
+
+
+### Features
+
+* @aziontech/webkit adding form inputs ([5b5eaf4](https://github.com/aziontech/webkit/commit/5b5eaf4aadb9e9f0695083b0a43295bc5e3f6c38))
+* adding | core -> form -> field text privacy ([eaf5927](https://github.com/aziontech/webkit/commit/eaf59270ad78723388053c6cd24990bced57d8f7))
+* adding button azion system status ([a2cd287](https://github.com/aziontech/webkit/commit/a2cd287eea8c8a695d3e1b744b0ba729e082d2c7))
+* exporting all the form fields ([7316086](https://github.com/aziontech/webkit/commit/731608696ac0b179abbe61fa13097f386b815e5a))
+* migrating azion-theme to @aziontech/theme ([bf89e8d](https://github.com/aziontech/webkit/commit/bf89e8db5decf18e5b0e4bec5b7b918970532a8a))
+
+
+### Bug Fixes
+
+* 9/10 vulnerabilities fixed ([ca4e9a6](https://github.com/aziontech/webkit/commit/ca4e9a6296a36d956f762cc675756e8e050d4768))
+* add docs, trigger publish to use semantic release ([f24ca8f](https://github.com/aziontech/webkit/commit/f24ca8f6c459d201fb2d6bfd53bcedfe1b1abc3b))
+* sync with new dev azionconsole fix ([63c6d8e](https://github.com/aziontech/webkit/commit/63c6d8e228fd5b0c7c84fecc4a8a53e92dc1c49d))
+
 ## [1.2.3](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.2.2...@aziontech/icons@1.2.3) (2026-03-05)
 
 
