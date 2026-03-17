@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.1...@aziontech/theme@1.0.2) (2026-03-17)
+
+
+### Bug Fixes
+
+* remove dist from npm script of from theme repo ([9dd3205](https://github.com/aziontech/webkit/commit/9dd3205a8a2531ef4879271ea68d0b6664776b70))
+* remove npm publish from theme package.json ([640ce7f](https://github.com/aziontech/webkit/commit/640ce7f4fc59b9c22c93f0df20c81a1b44a1d0a5))
+
 ## [1.0.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.0...@aziontech/theme@1.0.1) (2026-03-17)
 
 
