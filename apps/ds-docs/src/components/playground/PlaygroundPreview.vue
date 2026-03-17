@@ -111,12 +111,15 @@ const containerStyle = computed(() => ({
     </div>
 
     <!-- Scroll region: padded area, no forced centering so components lay out naturally -->
-    <div         :class="[
-          'azion ',
-          azionThemeClass,
-          surfaceClasses,
-          customClass
-        ]" class="p-8 flex-1 min-h-0 overflow-auto">
+    <div
+      :class="[
+        'azion',
+        azionThemeClass,
+        surfaceClasses,
+        customClass
+      ]"
+      class="p-8 flex-1 min-h-0 overflow-auto"
+    >
       <div
         :style="containerStyle"
       >

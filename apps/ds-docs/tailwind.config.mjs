@@ -7,6 +7,8 @@ export default {
   content: [
     './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
     './content/**/*.md',
+    // Webkit components (playground preview): so Tailwind generates utilities they use (e.g. text-[0.625rem])
+    '../../packages/webkit/src/**/*.{vue,js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
