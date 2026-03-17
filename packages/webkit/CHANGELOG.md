@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.0...@aziontech/webkit@1.4.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* css remove char ([91cda15](https://github.com/aziontech/webkit/commit/91cda1592cf9e427b59a33e3b19ef100b8dea92b))
+* rollback exports ([58469be](https://github.com/aziontech/webkit/commit/58469be8614ac7b8814376cbf833727ff733eed5))
+
 ## [1.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.3.0...@aziontech/webkit@1.4.0) (2026-03-17)
 
 
