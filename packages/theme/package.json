@@ -42,10 +42,17 @@
     "src/",
     "LICENSE"
   ],
-  "main": "./default.js",
   "exports": {
     ".": "./default.js",
     "./widget": "./widget.js",
-    "./tokens": "./src/tokens/index.js"
+    "./tokens": "./tokens.js",
+    "./tokens/primitive": "./tokens.js",
+    "./tokens/brand": "./tokens.js",
+    "./tokens/semantic/text": "./tokens.js",
+    "./tokens/semantic/backgrounds": "./tokens.js",
+    "./tokens/semantic/borders": "./tokens.js",
+    "./tokens/build/preset": "./src/tokens/build/preset.js",
+    "./tokens/build/tailwind-helper": "./src/tokens/build/tailwind-helper.js",
+    "./tokens/build/tailwind-plugin": "./src/tokens/build/tailwind-plugin.js"
   }
 }
