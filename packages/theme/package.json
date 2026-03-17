@@ -1,43 +1,52 @@
 {
   "name": "@aziontech/theme",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "aziontech",
-  "exports": {
-    ".": "./default.js",
-    "./widget": "./widget.js",
-    "./tokens": "./tokens.js",
-    "./tokens/primitive": "./tokens.js",
-    "./tokens/brand": "./tokens.js",
-    "./tokens/semantic/text": "./tokens.js",
-    "./tokens/semantic/backgrounds": "./tokens.js",
-    "./tokens/semantic/borders": "./tokens.js",
-    "./tokens/build/preset": "./src/tokens/build/preset.js",
-    "./tokens/build/tailwind-helper": "./src/tokens/build/tailwind-helper.js",
-    "./tokens/build/tailwind-plugin": "./src/tokens/build/tailwind-plugin.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.17"
-  },
-  "keywords": [
-    "css",
-    "brand",
-    "design",
-    "system",
-    "primevue",
-    "azion",
-    "css",
-    "azion",
-    "theme",
-    "theme-base"
-  ],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/aziontech/webkit.git",
     "directory": "packages/theme"
+  },
+  "scripts": {
+    "publish": "cd dist && npm publish && cd ..",
+    "pack:dry": "cd dist && npm pack --dry-run && cd ..",
+    "format": "prettier --write scripts/ src/"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "design-tokens",
+    "theme",
+    "css",
+    "css-vars",
+    "tailwind-css",
+    "branding",
+    "ui-kit",
+    "token-generator"
+  ],
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^10.0.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "@semantic-release/npm": "^11.0.0",
+    "@semantic-release/release-notes-generator": "^12.1.0",
+    "conventional-changelog-conventionalcommits": "^7.0.0",
+    "semantic-release": "^23.0.0"
+  },
+  "files": [
+    "src/",
+    "LICENSE"
+  ],
+  "main": "./default.js",
+  "exports": {
+    ".": "./default.js",
+    "./widget": "./widget.js",
+    "./tokens": "./src/tokens/index.js"
   }
 }

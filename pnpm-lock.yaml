@@ -258,19 +258,6 @@ importers:
         version: 3.4.19
 
   packages/webkit:
-    dependencies:
-      '@vueuse/core':
-        specifier: ^10.11.1
-        version: 10.11.1(vue@3.5.29(typescript@5.9.3))
-      primevue:
-        specifier: 3.35.0
-        version: 3.35.0(vue@3.5.29(typescript@5.9.3))
-      vee-validate:
-        specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.29(typescript@5.9.3))
-      vue-tsc:
-        specifier: ^3.2.5
-        version: 3.2.5(typescript@5.9.3)
     devDependencies:
       '@semantic-release/changelog':
         specifier: ^6.0.3
