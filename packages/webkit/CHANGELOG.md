@@ -1,3 +1,18 @@
+## [1.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.2.0...@aziontech/webkit@1.3.0) (2026-03-17)
+
+
+### Features
+
+* storybook azion deploy ([6b2af1d](https://github.com/aziontech/webkit/commit/6b2af1dc0f7a912458a12d1cb870b370a56c3279))
+
+
+### Bug Fixes
+
+* adding InputSlot to field-dropdown-lazy-loader-with-filter.vue ([4a4060b](https://github.com/aziontech/webkit/commit/4a4060b93908b3530299ba4e66e4c3aa911c039a))
+* input space between label, input and descriptions ([594b601](https://github.com/aziontech/webkit/commit/594b601f2c0d7b0eebd30455f20e8db58ebdad97))
+* input space between label, input and descriptions ([45c58a9](https://github.com/aziontech/webkit/commit/45c58a9d58de20cf4c9ee8c5a0352f419af48038))
+* review exatly props .vue files to stories ([21ba95f](https://github.com/aziontech/webkit/commit/21ba95ff379831afb7db1e0c09952fc48ca80e54))
+
 ## [1.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.1.0...@aziontech/webkit@1.2.0) (2026-03-12)
 
 
