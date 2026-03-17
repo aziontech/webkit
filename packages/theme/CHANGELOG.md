@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.3...@aziontech/theme@1.0.4) (2026-03-17)
+
+
+### Bug Fixes
+
+* theme exporting, packagejson["files"] updated ([3fc7359](https://github.com/aziontech/webkit/commit/3fc7359a43a2085e519bef167cc4f24f4b7d61fa))
+
 ## [1.0.3](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.2...@aziontech/theme@1.0.3) (2026-03-17)
 
 
