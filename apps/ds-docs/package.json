@@ -13,6 +13,8 @@
     "build:api:webkit": "tsx scripts/extractComponentApi.ts --webkit-source=../../packages/webkit/src/core",
     "build:scaffold": "tsx scripts/scaffoldComponentDocs.ts",
     "build:scaffold:dry": "tsx scripts/scaffoldComponentDocs.ts --dry-run --verbose",
+    "build:preview-examples": "tsx scripts/generatePreviewExamples.ts",
+    "build:scaffold:full": "tsx scripts/scaffoldComponentDocs.ts && tsx scripts/generatePreviewExamples.ts",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "tsx scripts/check-docs.ts lint",

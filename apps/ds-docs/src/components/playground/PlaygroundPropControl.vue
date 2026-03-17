@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import type { PropMetadata, PropsValues } from './types';
 import PlaygroundTextControl from './PlaygroundTextControl.vue';
 import PlaygroundBooleanControl from './PlaygroundBooleanControl.vue';
 import PlaygroundNumberControl from './PlaygroundNumberControl.vue';
 import PlaygroundSelectControl from './PlaygroundSelectControl.vue';
+import { t } from '@/lib/i18n';
+import { getDefaultLanguage } from '@/config';
 
 /**
  * PlaygroundPropControl
- * 
+ *
  * Dynamic control renderer that selects the appropriate
  * control component based on the prop metadata.
  */
@@ -26,18 +28,38 @@ const emit = defineEmits<{
 
 // Determine which control to render based on metadata
 const controlType = computed(() => props.metadata.control);
+
+// Language for icon help text (detect from URL: /pt/ → pt)
+const language = ref(getDefaultLanguage());
+onMounted(() => {
+  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/pt')) {
+    language.value = 'pt';
+  }
+});
+const iconHelpViewFull = computed(() => t('playground.iconHelpViewFull', language.value));
+const iconHelpIconList = computed(() => t('playground.iconHelpIconList', language.value));
 </script>
 
 <template>
   <div class="w-full">
     <!-- Text Control -->
-    <PlaygroundTextControl
-      v-if="controlType === 'text'"
-      :name="name"
-      :metadata="metadata as any"
-      :model-value="(modelValue as string)"
-      @update:model-value="emit('update:modelValue', $event)"
-    />
+    <div v-if="controlType === 'text'" class="flex flex-col gap-1">
+      <PlaygroundTextControl
+        :name="name"
+        :metadata="metadata as any"
+        :model-value="(modelValue as string)"
+        @update:model-value="emit('update:modelValue', $event)"
+      />
+      <span v-if="name === 'icon'" class="text-xs text-muted">
+        {{ iconHelpViewFull }}
+        <a
+          href="https://icons-gallery.azion.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-default transition-colors"
+        >{{ iconHelpIconList }}</a>
+      </span>
+    </div>
 
     <!-- Boolean Control -->
     <PlaygroundBooleanControl

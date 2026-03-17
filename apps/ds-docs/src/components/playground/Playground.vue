@@ -124,9 +124,29 @@ function initializeValues(): PropsValues {
   return values;
 }
 
+// Generic options for lazy-load dropdown stubs: { name, id } format expected by field-dropdown-lazy-loader-*
+const LAZY_LOAD_OPTIONS = [
+  { name: 'Option A', id: 'a' },
+  { name: 'Option B', id: 'b' },
+  { name: 'Option C', id: 'c' },
+];
+
 // Stubs for required function props (cannot be serialized in MDX/JSON)
-const FUNCTION_STUBS: Record<string, () => unknown> = {
+const FUNCTION_STUBS: Record<string, (...args: unknown[]) => unknown> = {
   listCountriesPhoneService: () => Promise.resolve([]),
+  // Lazy loader dropdowns: service returns paginated list, loadService returns single item by id
+  service: () =>
+    Promise.resolve({
+      count: LAZY_LOAD_OPTIONS.length,
+      body: LAZY_LOAD_OPTIONS,
+    }),
+  loadService: (...args: unknown[]) => {
+    const params = (args[0] as { id?: string | number } | undefined) ?? {};
+    const found = LAZY_LOAD_OPTIONS.find((o) => String(o.id) === String(params?.id));
+    return Promise.resolve(
+      found ?? { name: 'Option ' + (params?.id ?? ''), id: params?.id ?? 'a' }
+    );
+  },
 };
 
 // Reactive state
@@ -140,7 +160,8 @@ onMounted(() => {
   previewTheme.value = isDark ? 'dark' : 'light';
 });
 
-// Merge in stub functions for props with type 'function' so components receive callables
+// Merge in stub functions for props with type 'function' so components receive callables.
+// Also normalize initalData for lazy-loader-dynamic: component expects { body: [{ name, id }], count }.
 const resolvedPropsValues = computed<PropsValues>(() => {
   const raw = propsValues.value;
   const resolved = { ...raw };
@@ -149,6 +170,34 @@ const resolvedPropsValues = computed<PropsValues>(() => {
     if (meta.type !== 'function') continue;
     if (typeof resolved[name] !== 'function' && FUNCTION_STUBS[name]) {
       resolved[name] = FUNCTION_STUBS[name];
+    }
+  }
+  // FieldDropdownLazyLoaderDynamic watch expects initalData as { body: [{ name, id }], count }
+  if (props.componentName === 'FieldDropdownLazyLoaderDynamic' && typeof resolved.initalData === 'string') {
+    try {
+      const parsed = JSON.parse(resolved.initalData as string) as Array<{ label?: string; value?: string; name?: string; id?: string }>;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        resolved.initalData = {
+          body: parsed.map((item) => ({
+            name: item.name ?? item.label ?? String(item.value ?? item.id ?? ''),
+            id: item.id ?? item.value ?? '',
+          })),
+          count: parsed.length,
+        };
+      }
+    } catch {
+      // keep string if parse fails
+    }
+  }
+  // FieldDropdownLazyLoaderWithFilter: valuesToFilter must be an array so filterData doesn't empty the list
+  if (props.componentName === 'FieldDropdownLazyLoaderWithFilter' && typeof resolved.valuesToFilter === 'string') {
+    try {
+      const parsed = JSON.parse(resolved.valuesToFilter as string);
+      if (Array.isArray(parsed)) {
+        resolved.valuesToFilter = parsed;
+      }
+    } catch {
+      // keep string if parse fails
     }
   }
   return resolved;

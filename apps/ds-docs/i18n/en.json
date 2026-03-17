@@ -88,7 +88,9 @@
     "copyCode": "Copy code",
     "copied": "Copied!",
     "reset": "Reset to defaults",
-    "noComponent": "No component selected"
+    "noComponent": "No component selected",
+    "iconHelpViewFull": "View full ",
+    "iconHelpIconList": "icon list"
   },
   "icons": {
     "title": "Icon Library",

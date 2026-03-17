@@ -120,9 +120,6 @@ const containerStyle = computed(() => ({
       ]"
       class="p-8 flex-1 min-h-0 overflow-auto"
     >
-      <div
-        :style="containerStyle"
-      >
         <!-- Component rendering -->
         <component
           :is="component"
@@ -140,7 +137,6 @@ const containerStyle = computed(() => ({
           <i class="pi pi-th-large text-2xl text-muted dark:text-muted" aria-hidden="true" />
           <span class="text-sm">No component selected</span>
         </div>
-      </div>
     </div>
   </div>
 </template>
