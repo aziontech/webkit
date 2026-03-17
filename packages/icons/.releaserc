@@ -13,8 +13,7 @@
         "releaseRules": [
           { "type": "feat", "release": "minor" },
           { "type": "fix", "release": "patch" },
-          { "type": "hotfix", "release": "patch" },
-          { "type": "chore", "release": "patch" }
+          { "type": "hotfix", "release": "patch" }
         ]
       }
     ],

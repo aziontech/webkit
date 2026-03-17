@@ -1,0 +1,11 @@
+{
+  "main": "./field-checkbox-block.vue",
+  "module": "./field-checkbox-block.vue",
+  "types": "./field-checkbox-block.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-checkbox-block.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

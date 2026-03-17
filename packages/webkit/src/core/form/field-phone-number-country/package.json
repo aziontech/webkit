@@ -1,0 +1,11 @@
+{
+  "main": "./field-phone-number-country.vue",
+  "module": "./field-phone-number-country.vue",
+  "types": "./field-phone-number-country.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-phone-number-country.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

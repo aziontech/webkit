@@ -1,0 +1,11 @@
+{
+  "main": "./field-input-group.vue",
+  "module": "./field-input-group.vue",
+  "types": "./field-input-group.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-input-group.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "main": "./field-switch-block.vue",
+  "module": "./field-switch-block.vue",
+  "types": "./field-switch-block.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-switch-block.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

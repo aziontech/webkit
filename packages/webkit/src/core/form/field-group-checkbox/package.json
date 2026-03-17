@@ -1,0 +1,11 @@
+{
+  "main": "./field-group-checkbox.vue",
+  "module": "./field-group-checkbox.vue",
+  "types": "./field-group-checkbox.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-group-checkbox.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

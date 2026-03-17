@@ -1,0 +1,11 @@
+{
+  "main": "./field-auto-complete.vue",
+  "module": "./field-auto-complete.vue",
+  "types": "./field-auto-complete.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-auto-complete.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "main": "./field-text-icon.vue",
+  "module": "./field-text-icon.vue",
+  "types": "./field-text-icon.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-text-icon.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

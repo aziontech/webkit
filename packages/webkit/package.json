@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "0.0.1",
+  "version": "1.3.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "repository": {
@@ -13,11 +13,18 @@
   },
   "scripts": {
     "clean": "rm -rf dist/",
-    "publish": "cd dist && npm publish && cd ..",
-    "pack:dry": "cd dist && npm pack --dry-run && cd ..",
-    "format": "prettier --write scripts/ src/"
+    "clean:dts": "rm -rf src/**/*.d.ts src/**/*.d.ts.map",
+    "build:dts": "vue-tsc --declaration --emitDeclarationOnly",
+    "publish": "npm publish",
+    "pack:dry": "npm pack --dry-run",
+    "format": "prettier --write src/"
   },
-  "dependencies": {},
+  "dependencies": {
+    "primevue": "3.35.0",
+    "vee-validate": "^4.15.1",
+    "vue-tsc": "^3.2.5",
+    "@vueuse/core": "^10.11.1"
+  },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^10.0.1",

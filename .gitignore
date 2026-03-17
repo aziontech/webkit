@@ -30,6 +30,9 @@ package-lock.json
 yarn.lock
 
 .DS_Store
+*.tsbuildinfo
+*.d.ts
+*d.ts.map
 
 # packages folder to ignore
 

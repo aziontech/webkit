@@ -1,0 +1,11 @@
+{
+  "main": "./field-radio-block.vue",
+  "module": "./field-radio-block.vue",
+  "types": "./field-radio-block.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-radio-block.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

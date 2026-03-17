@@ -1,0 +1,11 @@
+{
+  "main": "./field-pick-list.vue",
+  "module": "./field-pick-list.vue",
+  "types": "./field-pick-list.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-pick-list.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

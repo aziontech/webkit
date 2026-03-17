@@ -1,0 +1,11 @@
+{
+  "main": "./field-dropdown-lazy-loader-dynamic.vue",
+  "module": "./field-dropdown-lazy-loader-dynamic.vue",
+  "types": "./field-dropdown-lazy-loader-dynamic.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-dropdown-lazy-loader-dynamic.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
