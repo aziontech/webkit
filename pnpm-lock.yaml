@@ -103,9 +103,6 @@ importers:
       motion-v:
         specifier: ^2.0.0
         version: 2.0.0(@vueuse/core@10.11.1)(react-dom@19.2.4)(react@19.2.4)(vue@3.5.30)
-      primeflex:
-        specifier: ^3.3.1
-        version: 3.3.1
       primevue:
         specifier: 3.35.0
         version: 3.35.0(vue@3.5.30)
@@ -131,12 +128,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.27
         version: 10.4.27(postcss@8.5.8)
-      postcss:
-        specifier: ^8.4.38
-        version: 8.5.8
-      postcss-prefixwrap:
-        specifier: ^1.49.0
-        version: 1.57.2(postcss@8.5.8)
       sass:
         specifier: ^1.77.0
         version: 1.98.0
@@ -9960,14 +9951,6 @@ packages:
     dependencies:
       postcss: 8.5.8
       postcss-selector-parser: 6.1.2
-
-  /postcss-prefixwrap@1.57.2(postcss@8.5.8):
-    resolution: {integrity: sha512-HKfOJJCFUtZiUu6CaWmxb6JxYZetn8McOuFUa0t4CJ0ZtcxCPlD8COSPu6804xNc4WPBu34BI0h96wkONLd9lQ==}
-    peerDependencies:
-      postcss: '*'
-    dependencies:
-      postcss: 8.5.8
-    dev: true
 
   /postcss-selector-parser@6.0.10:
     resolution: {integrity: sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==}
