@@ -2,8 +2,11 @@
   import { computed, toRef, ref, watch } from 'vue'
   import { useField } from 'vee-validate'
   import InputText from 'primevue/inputtext'
-  import LabelBlock from '../label'
+  import InputSlot from '../slots/input-slot'
+  import Label from '../label'
+
   const emit = defineEmits(['click-icon'])
+  
   const props = defineProps({
     value: {
       type: String,
@@ -48,7 +51,6 @@
   })
 
   const nameInput = toRef(props, 'name')
-
   const inputValue = ref(props.value)
   const errorMessage = ref('')
   let handleBlur = () => {}
@@ -58,8 +60,10 @@
     const field = useField(nameInput, undefined, {
       initialValue: props.value
     })
+    
     inputValue.value = field.value
     errorMessage.value = field.errorMessage
+    
     handleBlur = field.handleBlur
     handleChange = field.handleChange
   } else {
@@ -81,47 +85,49 @@
 </script>
 
 <template>
-  <LabelBlock
-    :for="props.name"
-    :label="props.label"
-    :isRequired="props.required"
-  />
-  <span
-    class="w-full"
-    :class="iconPositionClass"
-  >
-    <i
-      v-if="props.icon"
-      :class="props.icon"
-      class="text-color-secondary cursor-pointer"
-      @click="handleClick"
+  <InputSlot>
+    <Label
+      :for="props.name"
+      :label="props.label"
+      :isRequired="props.required"
     />
-    <InputText
-      :id="props.name"
-      v-model="inputValue"
-      :name="props.name"
-      :readonly="props.readonly"
-      :disabled="props.disabled"
-      type="text"
+    <span
       class="w-full"
-      :class="{ 'p-invalid': errorMessage }"
-      :placeholder="props.placeholder"
-      @input="handleChange"
-      @blur="handleBlur"
-      v-bind="$attrs"
-    />
-  </span>
+      :class="iconPositionClass"
+    >
+      <i
+        v-if="props.icon"
+        :class="props.icon"
+        class="text-color-secondary cursor-pointer"
+        @click="handleClick"
+      />
+      <InputText
+        :id="props.name"
+        v-model="inputValue"
+        :name="props.name"
+        :readonly="props.readonly"
+        :disabled="props.disabled"
+        type="text"
+        class="w-full"
+        :class="{ 'p-invalid': errorMessage }"
+        :placeholder="props.placeholder"
+        @input="handleChange"
+        @blur="handleBlur"
+        v-bind="$attrs"
+      />
+    </span>
 
-  <small
-    v-if="errorMessage"
-    class="p-error text-xs font-normal leading-tight"
-  >
-    {{ errorMessage }}
-  </small>
-  <small
-    class="text-xs text-color-secondary font-normal leading-5"
-    v-if="props.description"
-  >
-    {{ props.description }}
-  </small>
+    <small
+      v-if="errorMessage"
+      class="p-error text-xs font-normal leading-tight"
+    >
+      {{ errorMessage }}
+    </small>
+    <small
+      class="text-xs text-color-secondary font-normal leading-5"
+      v-if="props.description"
+    >
+      {{ props.description }}
+    </small>
+  </InputSlot>
 </template>

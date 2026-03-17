@@ -2,7 +2,8 @@
   import { toRef, useSlots, computed, useAttrs } from 'vue'
   import { useField } from 'vee-validate'
   import InputText from 'primevue/inputtext'
-  import LabelBlock from '../label'
+  import InputSlot from '../slots/input-slot'
+  import Label from '../label'
 
   const props = defineProps({
     value: {
@@ -67,45 +68,47 @@
 </script>
 
 <template>
-  <LabelBlock
-    v-if="props.label"
-    :for="props.name"
-    :data-testid="customTestId.label"
-    :label="props.label"
-    :isRequired="attrs.required"
-  />
-  <div class="p-inputgroup">
-    <div
-      class="p-inputgroup-addon"
-      v-if="hasIconSlot"
-    >
-      <slot name="icon"></slot>
-    </div>
-
-    <InputText
-      :id="name"
-      v-model="inputValue"
-      :name="name"
-      :readonly="readonly"
-      :disabled="disabled"
-      :class="[{ 'p-invalid': errorMessage }, $attrs.class, inputClass]"
-      type="text"
-      :placeholder="props.placeholder"
-      @input="handleChange"
-      @blur="handleBlur"
+  <InputSlot>
+    <Label
+      v-if="props.label"
+      :for="props.name"
+      :data-testid="customTestId.label"
+      :label="props.label"
+      :isRequired="attrs.required"
     />
-    <slot name="button"></slot>
-  </div>
-  <small
-    v-if="errorMessage"
-    class="p-error text-xs font-normal leading-tight"
-  >
-    {{ errorMessage }}
-  </small>
-  <small
-    class="text-xs text-color-secondary font-normal leading-5"
-    v-if="props.description"
-  >
-    {{ props.description }}
-  </small>
+    <div class="p-inputgroup">
+      <div
+        class="p-inputgroup-addon"
+        v-if="hasIconSlot"
+      >
+        <slot name="icon"></slot>
+      </div>
+
+      <InputText
+        :id="name"
+        v-model="inputValue"
+        :name="name"
+        :readonly="readonly"
+        :disabled="disabled"
+        :class="[{ 'p-invalid': errorMessage }, $attrs.class, inputClass]"
+        type="text"
+        :placeholder="props.placeholder"
+        @input="handleChange"
+        @blur="handleBlur"
+      />
+      <slot name="button"></slot>
+    </div>
+    <small
+      v-if="errorMessage"
+      class="p-error text-xs font-normal leading-tight"
+    >
+      {{ errorMessage }}
+    </small>
+    <small
+      class="text-xs text-color-secondary font-normal leading-5"
+      v-if="props.description"
+    >
+      {{ props.description }}
+    </small>
+  </InputSlot>
 </template>

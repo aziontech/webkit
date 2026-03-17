@@ -67,7 +67,7 @@ packages/webkit/src/core/
 
 | Old Import | New Import |
 |------------|------------|
-| `import LabelBlock from '@/templates/label-block'` | `import LabelBlock from '../label'` |
+| `import Label from '@/templates/label-block'` | `import Label from '../label'` |
 | `import SelectorBlock from '@/templates/selector-block'` | `import SelectorBlock from '../selector-block'` |
 
 ### 3. Internal Component Dependencies
@@ -171,8 +171,8 @@ Each component directory needs a `package.json` file:
 
 ## Import Changes by Component
 
-### Components Using LabelBlock
-The following components import `LabelBlock` and need the import path updated:
+### Components Using Label
+The following components import `Label` and need the import path updated:
 
 - `fieldDropdown.vue`
 - `fieldDropdownLazyLoader.vue`
@@ -188,7 +188,7 @@ The following components import `LabelBlock` and need the import path updated:
 - `fieldTextIcon.vue`
 - `fieldTextPassword.vue`
 
-**Change:** `import LabelBlock from '@/templates/label-block'` → `import LabelBlock from '../label'`
+**Change:** `import Label from '@/templates/label-block'` → `import Label from '../label'`
 
 ### Components Using SelectorBlock
 The following components import `SelectorBlock`:
