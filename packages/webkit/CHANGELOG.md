@@ -1,3 +1,26 @@
+## [1.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.3.0...@aziontech/webkit@1.4.0) (2026-03-17)
+
+
+### Features
+
+* add theme ([2b41a6d](https://github.com/aziontech/webkit/commit/2b41a6d9a00886ac77434cd271e44d83d0cdacff))
+* adjust workflow ([cb67f25](https://github.com/aziontech/webkit/commit/cb67f252db65092325f881c0c800f60d7c125514))
+
+
+### Bug Fixes
+
+* .releaserc of @aziontech/theme ([d71b3e3](https://github.com/aziontech/webkit/commit/d71b3e3846de4fe26c23641596f84ee22f991a9e))
+* @aziontech/theme export ([e2a9170](https://github.com/aziontech/webkit/commit/e2a9170c7c6834a0e5474e005230de197db3dcdc))
+* adding documentation theme ([bec0490](https://github.com/aziontech/webkit/commit/bec04901f809ac385503ce2f0eb3b1c15e583293))
+* code review ([c2fb899](https://github.com/aziontech/webkit/commit/c2fb89959c50b3a2e1e80346d47714e2730d44fc))
+* prevent GitHub Actions loop in theme package publish workflow ([5bdc561](https://github.com/aziontech/webkit/commit/5bdc561ee9067301b9252299c8a0f221b14c6c77))
+* prevent GitHub Actions loop in webkit package publish workflow ([cd3db78](https://github.com/aziontech/webkit/commit/cd3db78a2f328eedf24078fb6219e4cce158f8be))
+* remove dist from npm script of from theme repo ([9dd3205](https://github.com/aziontech/webkit/commit/9dd3205a8a2531ef4879271ea68d0b6664776b70))
+* remove npm publish from theme package.json ([640ce7f](https://github.com/aziontech/webkit/commit/640ce7f4fc59b9c22c93f0df20c81a1b44a1d0a5))
+* remove resolution and storybook ([f19b4f6](https://github.com/aziontech/webkit/commit/f19b4f6e3c07ca8994c1e9dde4bf6013f23216d7))
+* theme exporting, packagejson["files"] updated ([3fc7359](https://github.com/aziontech/webkit/commit/3fc7359a43a2085e519bef167cc4f24f4b7d61fa))
+* update documentation to trigger deploy ([6fb4680](https://github.com/aziontech/webkit/commit/6fb46804be7c176547f4f95fa2d745bad945a9dc))
+
 ## [1.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.2.0...@aziontech/webkit@1.3.0) (2026-03-17)
 
 
