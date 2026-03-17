@@ -32,13 +32,6 @@ Import the main theme stylesheet:
 import '@aziontech/theme';
 ```
 
-Or for widget contexts:
-
-```javascript
-// Widget-optimized theme
-import '@aziontech/theme/widget';
-```
-
 Add the theme class to your root element:
 
 ```html
