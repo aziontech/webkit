@@ -1,0 +1,42 @@
+@layer tailwind-base, primevue;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  background-color: var(--surface-section);
+}
+
+/* https://github.com/primefaces/primevue/issues/882#issuecomment-1780802552 */
+body.p-overflow-hidden {
+  --scrollbar-width: 0px !important;
+}
+
+/* https://aziontech.atlassian.net/browse/UXE-1798 */
+/* child scroll behaviour is affecting the parent scroll behaviour */
+* {
+  overscroll-behavior: auto !important;
+}a
+
+.grecaptcha-badge {
+  bottom: 75px !important;
+  z-index: 11;
+}
+
+#app {
+  font-family: var(--font-family);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}

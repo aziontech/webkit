@@ -1,95 +1,97 @@
 <template>
-  <LabelBlock
-    v-if="props.label"
-    :for="props.name"
-    :label="props.label"
-    :isRequired="$attrs.required"
-    :data-testid="customTestId.label"
-  />
-  <Dropdown
-    appendTo="self"
-    :id="name"
-    :name="props.name"
-    :loading="loading"
-    v-model="inputValue"
-    :options="data"
-    :optionLabel="props.optionLabel"
-    :optionDisabled="props.optionDisabled"
-    :optionValue="props.optionValue"
-    :placeholder="props.placeholder"
-    :showClear="props.enableClearOption"
-    @change="emitChange"
-    @blur="emitBlur"
-    :class="errorMessage ? 'p-invalid' : ''"
-    v-bind="$attrs"
-    class="w-full"
-    :pt="{
-      filterInput: {
-        class: 'w-full',
-        'data-testid': customTestId.filterInput
-      },
-      trigger: {
-        'data-testid': customTestId.trigger
-      },
-      loadingIcon: {
-        'data-testid': customTestId.loadingIcon
-      }
-    }"
-    :data-testid="customTestId.dropdown"
-    :virtualScrollerOptions="VIRTUAL_SCROLLER_CONFIG"
-  >
-    <template
-      v-if="enableCustomLabel"
-      #value="slotProps"
+  <InputSlot>
+    <Label
+      v-if="props.label"
+      :for="props.name"
+      :label="props.label"
+      :isRequired="$attrs.required"
+      :data-testid="customTestId.label"
+    />
+    <Dropdown
+      appendTo="self"
+      :id="name"
+      :name="props.name"
+      :loading="loading"
+      v-model="inputValue"
+      :options="data"
+      :optionLabel="props.optionLabel"
+      :optionDisabled="props.optionDisabled"
+      :optionValue="props.optionValue"
+      :placeholder="props.placeholder"
+      :showClear="props.enableClearOption"
+      @change="emitChange"
+      @blur="emitBlur"
+      :class="errorMessage ? 'p-invalid' : ''"
+      v-bind="$attrs"
+      class="w-full"
+      :pt="{
+        filterInput: {
+          class: 'w-full',
+          'data-testid': customTestId.filterInput
+        },
+        trigger: {
+          'data-testid': customTestId.trigger
+        },
+        loadingIcon: {
+          'data-testid': customTestId.loadingIcon
+        }
+      }"
+      :data-testid="customTestId.dropdown"
+      :virtualScrollerOptions="VIRTUAL_SCROLLER_CONFIG"
     >
-      <span :data-testid="customTestId.value">
-        {{ getLabelBySelectedValue(slotProps.value) }}
-      </span>
-    </template>
+      <template
+        v-if="enableCustomLabel"
+        #value="slotProps"
+      >
+        <span :data-testid="customTestId.value">
+          {{ getLabelBySelectedValue(slotProps.value) }}
+        </span>
+      </template>
 
-    <template #header>
-      <div class="p-2 flex">
-        <div class="p-inputgroup">
-          <InputText
-            type="text"
-            v-model="search"
-            placeholder="Search"
-            class="w-full rounded-r-none"
-            :disabled="!hasServiceAccess"
-            ref="focusSearch"
-            :data-testid="customTestId.search"
-          />
-          <span
-            class="p-inputgroup-addon"
-            @click="searchFilter"
-          >
-            <i class="pi pi-search"></i>
-          </span>
+      <template #header>
+        <div class="p-2 flex">
+          <div class="p-inputgroup">
+            <InputText
+              type="text"
+              v-model="search"
+              placeholder="Search"
+              class="w-full rounded-r-none"
+              :disabled="!hasServiceAccess"
+              ref="focusSearch"
+              :data-testid="customTestId.search"
+            />
+            <span
+              class="p-inputgroup-addon"
+              @click="searchFilter"
+            >
+              <i class="pi pi-search"></i>
+            </span>
+          </div>
         </div>
-      </div>
-    </template>
+      </template>
 
-    <template #footer>
-      <slot name="footer" />
-    </template>
-  </Dropdown>
+      <template #footer>
+        <slot name="footer" />
+      </template>
+    </Dropdown>
 
-  <small
-    v-if="errorMessage"
-    :data-testid="customTestId.error"
-    class="p-error text-xs font-normal leading-tight"
-  >
-    {{ errorMessage }}
-  </small>
-  <small
-    class="text-xs text-color-secondary font-normal leading-5"
-    :data-testid="customTestId.description"
-    v-if="props.description || hasDescriptionSlot"
-  >
-    <slot name="description">
-      {{ props.description }}
-    </slot>
-  </small>
+    <small
+      v-if="errorMessage"
+      :data-testid="customTestId.error"
+      class="p-error text-xs font-normal leading-tight"
+    >
+      {{ errorMessage }}
+    </small>
+    <small
+      class="text-xs text-color-secondary font-normal leading-5"
+      :data-testid="customTestId.description"
+      v-if="props.description || hasDescriptionSlot"
+    >
+      <slot name="description">
+        {{ props.description }}
+      </slot>
+    </small>
+  </InputSlot>
 </template>
 
 <script setup>
@@ -98,7 +100,8 @@
   import { useField } from 'vee-validate'
   import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch } from 'vue'
   import { watchDebounced } from '@vueuse/core'
-  import LabelBlock from '../label'
+  import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const props = defineProps({
     value: {
