@@ -1,4 +1,4 @@
-name: Deploy Application using Azion CLI
+name: Deploy Application Design System Documentation
 
 on:
   workflow_dispatch:
@@ -18,16 +18,19 @@ jobs:
     permissions:
       contents: write
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Use Node.js 20.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Enable pnpm (monorepo uses workspace:*)
@@ -45,11 +48,11 @@ jobs:
       - name: CLI version
         run: azion --version
 
-		# Configure a personal token in your github secrets
-		# You may create a personal token by running 'azion create personal-token'
+      # Configure a personal token in your github secrets
+      # You may create a personal token by running 'azion create personal-token'
       - name: Configure token
         run: |
-          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}  
+          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}
           azion whoami
 
       - name: Azion Build
