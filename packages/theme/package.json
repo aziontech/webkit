@@ -10,7 +10,6 @@
     "directory": "packages/theme"
   },
   "scripts": {
-    "publish": "npm publish",
     "pack:dry": "npm pack --dry-run",
     "format": "prettier --write scripts/ src/"
   },
