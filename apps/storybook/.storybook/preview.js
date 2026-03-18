@@ -3,6 +3,7 @@ import PrimeVue from 'primevue/config';
 import Tooltip from 'primevue/tooltip';
 import { withThemeByClassName } from '@storybook/addon-themes'
 
+// Import critical CSS
 import 'primeflex/primeflex.css'
 import '../src/styles/preview.css';
 import '../src/styles/flag.css';
@@ -13,7 +14,7 @@ setup((app) => {
   app.use(PrimeVue, {
     ripple: false
   });
- 
+
   app.directive('tooltip', Tooltip);
 });
 
