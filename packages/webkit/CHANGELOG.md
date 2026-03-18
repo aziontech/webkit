@@ -1,3 +1,15 @@
+## [1.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.2...@aziontech/webkit@1.5.0) (2026-03-18)
+
+
+### Features
+
+* storybook github actions azion deploy ([328e0a9](https://github.com/aziontech/webkit/commit/328e0a9eb94887e15f04f8da47ff8f6ae0fff2f1))
+
+
+### Bug Fixes
+
+* prevent loop during npm publishing process ([8a90666](https://github.com/aziontech/webkit/commit/8a906662f9b769d273d11fe89c82cb6c17849ef9))
+
 ## [1.4.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.1...@aziontech/webkit@1.4.2) (2026-03-17)
 
 
