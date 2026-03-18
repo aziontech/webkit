@@ -68,6 +68,6 @@
     "./label": "./src/core/form/label/label.vue",
     "./selector-block": "./src/core/selector-block/selector-block.vue",
     "./azion-system-status": "./src/components/azion-system-status/azion-system-status.vue",
-    "./client-testimonials-block": "./src/components/client-testimonials-block/client-testimonials-block.vue"
+    "./testimonials-carousel": "./src/components/testimonials-carousel/testimonials-carousel.vue"
   }
 }

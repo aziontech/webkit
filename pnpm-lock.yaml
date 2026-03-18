@@ -135,8 +135,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/icons
       '@aziontech/theme':
-        specifier: ^1.0.4
-        version: 1.0.4
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@aziontech/webkit':
         specifier: workspace:*
         version: link:../../packages/webkit
@@ -344,9 +344,6 @@ packages:
 
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
-
-  '@aziontech/theme@1.0.4':
-    resolution: {integrity: sha512-K6or5V3Cs9OyXEif906x8Y/7xvxeb+OcEsRmI8Tlci3YnD5ZRIaznWeDDOxLZ/zn0VP28OShj9WggkVM0gsSmg==}
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -6363,8 +6360,6 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.4
       lru-cache: 10.4.3
     optional: true
-
-  '@aziontech/theme@1.0.4': {}
 
   '@babel/code-frame@7.29.0':
     dependencies:
