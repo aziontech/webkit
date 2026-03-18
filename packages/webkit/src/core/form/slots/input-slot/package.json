@@ -1,0 +1,11 @@
+{
+  "main": "./input-slot.vue",
+  "module": "./input-slot.vue",
+  "types": "./input-slot.vue.d.ts",
+  "browser": {
+    "./sfc": "./input-slot.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

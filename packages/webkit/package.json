@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "1.2.0",
+  "version": "1.4.2",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "repository": {
@@ -22,7 +22,8 @@
   "dependencies": {
     "primevue": "3.35.0",
     "vee-validate": "^4.15.1",
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": "^3.2.5",
+    "@vueuse/core": "^10.11.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -67,6 +68,7 @@
     "./field-text-privacy": "./src/core/form/field-text-privacy/field-text-privacy.vue",
     "./label": "./src/core/form/label/label.vue",
     "./selector-block": "./src/core/selector-block/selector-block.vue",
-    "./azion-system-status": "./src/components/azion-system-status/azion-system-status.vue"
+    "./azion-system-status": "./src/components/azion-system-status/azion-system-status.vue",
+    "./client-testimonials-block": "./src/components/client-testimonials-block/client-testimonials-block.vue"
   }
 }

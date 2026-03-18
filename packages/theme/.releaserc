@@ -1,0 +1,64 @@
+{
+  "branches": ["main"],
+  "tagFormat": "@aziontech/theme@${version}",
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "parserOpts": {
+          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "subject"]
+        },
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "hotfix", "release": "patch" },
+          { "type": "chore", "release": "patch" },
+          { "type": "docs", "release": "patch" },
+          { "type": "style", "release": "patch" },
+          { "type": "refactor", "release": "patch" }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "parserOpts": {
+          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "subject"]
+        }
+      }
+    ],
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "npm publish --provenance --access public"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): @aziontech/theme ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "labels": false
+      }
+    ]
+  ]
+}

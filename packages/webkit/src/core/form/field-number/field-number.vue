@@ -2,7 +2,8 @@
   import { computed, toRef, useAttrs } from 'vue'
   import { useField } from 'vee-validate'
   import InputNumber from 'primevue/inputnumber'
-  import LabelBlock from '../label'
+  import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const emit = defineEmits(['blur', 'input'])
   const props = defineProps({
@@ -98,47 +99,49 @@
 </script>
 
 <template>
-  <LabelBlock
-    :for="props.name"
-    :data-testid="customTestId.label"
-    :label="props.label"
-    :isRequired="$attrs.required"
-  />
-  <InputNumber
-    v-model="inputValue"
-    :showButtons="props.showButtons"
-    :placeholder="props.placeholder"
-    :disabled="props.disabled"
-    :readonly="props.readonly"
-    :id="name"
-    :min="props.min"
-    :max="props.max"
-    :step="props.step"
-    :useGrouping="props.useGrouping"
-    type="number"
-    @input="onInput"
-    @blur="onBlur"
-    :pt="{
-      input: {
-        name: props.name
-      }
-    }"
-    :class="[{ 'p-invalid': aditionalError || errorMessage }, props.inputClass]"
-    :data-testid="customTestId.input"
-  />
+  <InputSlot>
+    <Label
+      :for="props.name"
+      :data-testid="customTestId.label"
+      :label="props.label"
+      :isRequired="$attrs.required"
+    />
+    <InputNumber
+      v-model="inputValue"
+      :showButtons="props.showButtons"
+      :placeholder="props.placeholder"
+      :disabled="props.disabled"
+      :readonly="props.readonly"
+      :id="name"
+      :min="props.min"
+      :max="props.max"
+      :step="props.step"
+      :useGrouping="props.useGrouping"
+      type="number"
+      @input="onInput"
+      @blur="onBlur"
+      :pt="{
+        input: {
+          name: props.name
+        }
+      }"
+      :class="[{ 'p-invalid': aditionalError || errorMessage }, props.inputClass]"
+      :data-testid="customTestId.input"
+    />
 
-  <small
-    v-if="aditionalError || errorMessage"
-    class="p-error text-xs font-normal leading-tight"
-    :data-testid="customTestId.error"
-  >
-    {{ aditionalError || errorMessage }}
-  </small>
-  <small
-    class="text-xs text-color-secondary font-normal leading-5"
-    :data-testid="customTestId.description"
-    v-if="props.description"
-  >
-    {{ props.description }}
-  </small>
+    <small
+      v-if="aditionalError || errorMessage"
+      class="p-error text-xs font-normal leading-tight"
+      :data-testid="customTestId.error"
+    >
+      {{ aditionalError || errorMessage }}
+    </small>
+    <small
+      class="text-xs text-color-secondary font-normal leading-5"
+      :data-testid="customTestId.description"
+      v-if="props.description"
+    >
+      {{ props.description }}
+    </small>
+  </InputSlot>
 </template>
