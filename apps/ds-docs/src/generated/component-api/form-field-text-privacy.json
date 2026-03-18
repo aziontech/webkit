@@ -1,6 +1,6 @@
 {
   "component": "form-field-text-privacy",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-text-privacy\\field-text-privacy.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-text-privacy/field-text-privacy.vue",
   "props": [
     {
       "name": "value",
@@ -107,5 +107,5 @@
       "description": ""
     }
   ],
-  "extractedAt": "2026-03-17T04:56:55.057Z"
+  "extractedAt": "2026-03-17T13:23:15.646Z"
 }

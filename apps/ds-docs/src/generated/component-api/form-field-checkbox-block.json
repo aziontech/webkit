@@ -1,6 +1,6 @@
 {
   "component": "form-field-checkbox-block",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-checkbox-block\\field-checkbox-block.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-checkbox-block/field-checkbox-block.vue",
   "props": [
     {
       "name": "title",
@@ -89,5 +89,5 @@
   ],
   "events": [],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.034Z"
+  "extractedAt": "2026-03-17T13:23:15.628Z"
 }

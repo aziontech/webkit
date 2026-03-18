@@ -1,6 +1,6 @@
 {
   "component": "form-field-phone-number",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-phone-number\\field-phone-number.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-phone-number/field-phone-number.vue",
   "props": [
     {
       "name": "options",
@@ -65,5 +65,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.050Z"
+  "extractedAt": "2026-03-17T13:23:15.638Z"
 }

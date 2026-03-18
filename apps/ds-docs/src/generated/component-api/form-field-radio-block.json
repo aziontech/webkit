@@ -1,6 +1,6 @@
 {
   "component": "form-field-radio-block",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-radio-block\\field-radio-block.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-radio-block/field-radio-block.vue",
   "props": [
     {
       "name": "title",
@@ -95,5 +95,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.052Z"
+  "extractedAt": "2026-03-17T13:23:15.640Z"
 }

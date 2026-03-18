@@ -26,7 +26,7 @@ export default {
   storage: [
     {
       name: 'ds-docs-20260317011207',
-      prefix: '20260317011201',
+      prefix: 'dist',
       dir: './dist',
       workloadsAccess: 'read_only'
     }
@@ -38,7 +38,7 @@ export default {
       type: 'storage',
       attributes: {
         bucket: 'ds-docs-20260317011207',
-        prefix: '20260317011201'
+        prefix: 'dist'
       }
     }
   ],
@@ -150,8 +150,7 @@ export default {
               }
             ]
           }
-        ],
-        response: []
+        ]
       }
     }
   ],
@@ -162,10 +161,10 @@ export default {
       infrastructure: 1,
       protocols: {
         http: {
-          versions: ['http1', 'http2'],
+          versions: ['http1', 'http2', 'http3'],
           httpPorts: [80],
           httpsPorts: [443],
-          quicPorts: null
+          quicPorts: [443]
         }
       },
       deployments: [

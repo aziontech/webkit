@@ -1,6 +1,6 @@
 {
   "component": "selector-block",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\selector-block\\selector-block.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/selector-block/selector-block.vue",
   "props": [
     {
       "name": "title",
@@ -95,5 +95,5 @@
       "description": ""
     }
   ],
-  "extractedAt": "2026-03-17T04:56:55.058Z"
+  "extractedAt": "2026-03-17T13:23:15.647Z"
 }

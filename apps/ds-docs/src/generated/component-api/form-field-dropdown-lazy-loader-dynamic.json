@@ -1,6 +1,6 @@
 {
   "component": "form-field-dropdown-lazy-loader-dynamic",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-dropdown-lazy-loader-dynamic\\field-dropdown-lazy-loader-dynamic.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-dropdown-lazy-loader-dynamic/field-dropdown-lazy-loader-dynamic.vue",
   "props": [
     {
       "name": "value",
@@ -126,5 +126,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.040Z"
+  "extractedAt": "2026-03-17T13:23:15.632Z"
 }

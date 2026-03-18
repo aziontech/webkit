@@ -3,8 +3,8 @@
   "bucket": "ds-docs-20260317011207",
   "preset": "astro",
   "env": "production",
-  "prefix": "20260317015532",
-  "not-first-run": false,
+  "prefix": "20260317024529",
+  "not-first-run": true,
   "function": [],
   "application": {
     "id": 1773714689,
@@ -22,15 +22,46 @@
   "origin": null,
   "rules-engine": {
     "created": false,
-    "rules": null
+    "rules": [
+      {
+        "id": 525329,
+        "name": "Deliver Static Assets and Set Cache Policy",
+        "phase": "request"
+      },
+      {
+        "id": 525330,
+        "name": "Redirect to index.html",
+        "phase": "request"
+      },
+      {
+        "id": 525331,
+        "name": "Redirect to index.html for Subpaths",
+        "phase": "request"
+      }
+    ]
   },
-  "cache-settings": null,
+  "cache-settings": [
+    {
+      "id": 275061,
+      "name": "ds-docs"
+    }
+  ],
   "workloads": {
-    "id": 0,
-    "name": "",
-    "domains": null,
-    "url": "",
-    "deployment_id": null
+    "id": 1773729028,
+    "name": "ds-docs",
+    "domains": [],
+    "url": "https://7brbtkkzdvk.map.azionedge.net",
+    "deployment_id": [
+      {
+        "id": 186990,
+        "name": "ds-docs"
+      }
+    ]
   },
-  "connectors": null
+  "connectors": [
+    {
+      "id": 10534,
+      "name": "ds-docs"
+    }
+  ]
 }

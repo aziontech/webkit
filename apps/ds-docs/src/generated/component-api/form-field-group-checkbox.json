@@ -1,6 +1,6 @@
 {
   "component": "form-field-group-checkbox",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-group-checkbox\\field-group-checkbox.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-group-checkbox/field-group-checkbox.vue",
   "props": [
     {
       "name": "hideSelector",
@@ -66,5 +66,5 @@
       "description": ""
     }
   ],
-  "extractedAt": "2026-03-17T04:56:55.044Z"
+  "extractedAt": "2026-03-17T13:23:15.634Z"
 }

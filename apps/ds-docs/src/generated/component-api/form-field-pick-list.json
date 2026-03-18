@@ -1,6 +1,6 @@
 {
   "component": "form-field-pick-list",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-pick-list\\field-pick-list.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-pick-list/field-pick-list.vue",
   "props": [
     {
       "name": "disabled",
@@ -40,5 +40,5 @@
   ],
   "events": [],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.051Z"
+  "extractedAt": "2026-03-17T13:23:15.640Z"
 }

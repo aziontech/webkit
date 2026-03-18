@@ -1,6 +1,6 @@
 {
   "component": "form-field-text-icon",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-text-icon\\field-text-icon.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-text-icon/field-text-icon.vue",
   "props": [
     {
       "name": "value",
@@ -81,5 +81,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.055Z"
+  "extractedAt": "2026-03-17T13:23:15.643Z"
 }

@@ -1,6 +1,6 @@
 {
   "component": "form-field-dropdown-multi-select-lazy-loader",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-dropdown-multi-select-lazy-loader\\field-dropdown-multi-select-lazy-loader.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-dropdown-multi-select-lazy-loader/field-dropdown-multi-select-lazy-loader.vue",
   "props": [
     {
       "name": "value",
@@ -141,5 +141,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.043Z"
+  "extractedAt": "2026-03-17T13:23:15.634Z"
 }

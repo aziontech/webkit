@@ -1,6 +1,6 @@
 {
   "component": "form-field-switch-block",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-switch-block\\field-switch-block.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-switch-block/field-switch-block.vue",
   "props": [
     {
       "name": "title",
@@ -109,5 +109,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.053Z"
+  "extractedAt": "2026-03-17T13:23:15.641Z"
 }

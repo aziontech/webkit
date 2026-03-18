@@ -1,6 +1,6 @@
 {
   "component": "Tabs",
-  "source": "E:\\dev2\\webkit\\apps\\ds-docs\\src\\components\\docs\\Tabs.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/apps/ds-docs/src/components/docs/Tabs.vue",
   "props": [],
   "events": [],
   "slots": [
@@ -9,5 +9,5 @@
       "description": ""
     }
   ],
-  "extractedAt": "2026-03-17T04:56:54.232Z"
+  "extractedAt": "2026-03-17T13:23:14.405Z"
 }

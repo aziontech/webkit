@@ -1,6 +1,6 @@
 {
   "component": "DocsHeader",
-  "source": "E:\\dev2\\webkit\\apps\\ds-docs\\src\\components\\docs\\DocsHeader.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/apps/ds-docs/src/components/docs/DocsHeader.vue",
   "props": [
     {
       "name": "section",
@@ -26,5 +26,5 @@
   ],
   "events": [],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:54.229Z"
+  "extractedAt": "2026-03-17T13:23:14.402Z"
 }

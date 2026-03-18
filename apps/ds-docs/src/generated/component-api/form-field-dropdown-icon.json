@@ -1,6 +1,6 @@
 {
   "component": "form-field-dropdown-icon",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-dropdown-icon\\field-dropdown-icon.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-dropdown-icon/field-dropdown-icon.vue",
   "props": [
     {
       "name": "value",
@@ -88,5 +88,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.037Z"
+  "extractedAt": "2026-03-17T13:23:15.630Z"
 }

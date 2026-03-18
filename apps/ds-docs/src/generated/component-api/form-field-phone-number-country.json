@@ -1,6 +1,6 @@
 {
   "component": "form-field-phone-number-country",
-  "source": "E:\\dev2\\webkit\\packages\\webkit\\src\\core\\form\\field-phone-number-country\\field-phone-number-country.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-phone-number-country/field-phone-number-country.vue",
   "props": [
     {
       "name": "listCountriesPhoneService",
@@ -18,5 +18,5 @@
     }
   ],
   "slots": [],
-  "extractedAt": "2026-03-17T04:56:55.050Z"
+  "extractedAt": "2026-03-17T13:23:15.639Z"
 }

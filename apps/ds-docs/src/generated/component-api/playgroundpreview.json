@@ -1,6 +1,6 @@
 {
   "component": "PlaygroundPreview",
-  "source": "E:\\dev2\\webkit\\apps\\ds-docs\\src\\components\\playground\\PlaygroundPreview.vue",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/apps/ds-docs/src/components/playground/PlaygroundPreview.vue",
   "props": [],
   "events": [],
   "slots": [
@@ -13,5 +13,5 @@
       "description": ""
     }
   ],
-  "extractedAt": "2026-03-17T04:56:54.234Z"
+  "extractedAt": "2026-03-17T13:23:14.407Z"
 }
