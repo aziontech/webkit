@@ -15,7 +15,6 @@
     "clean": "rm -rf dist/",
     "clean:dts": "rm -rf src/**/*.d.ts src/**/*.d.ts.map",
     "build:dts": "vue-tsc --declaration --emitDeclarationOnly",
-    "publish": "npm publish",
     "pack:dry": "npm pack --dry-run",
     "format": "prettier --write src/"
   },
