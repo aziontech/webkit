@@ -35,4 +35,5 @@ yarn.lock
 *d.ts.map
 
 # packages folder to ignore
-
+tmp
+.tmp
