@@ -134,6 +134,9 @@ importers:
       '@aziontech/icons':
         specifier: workspace:*
         version: link:../../packages/icons
+      '@aziontech/theme':
+        specifier: ^1.0.4
+        version: 1.0.4
       '@aziontech/webkit':
         specifier: workspace:*
         version: link:../../packages/webkit
@@ -143,9 +146,6 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.19(tailwindcss@3.4.19)
-      azion-theme:
-        specifier: ^1.20.0
-        version: 1.20.0(tailwindcss@3.4.19)
       primeflex:
         specifier: ^3.3.1
         version: 3.3.1
@@ -344,6 +344,9 @@ packages:
 
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
+
+  '@aziontech/theme@1.0.4':
+    resolution: {integrity: sha512-K6or5V3Cs9OyXEif906x8Y/7xvxeb+OcEsRmI8Tlci3YnD5ZRIaznWeDDOxLZ/zn0VP28OShj9WggkVM0gsSmg==}
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -2799,11 +2802,6 @@ packages:
 
   azion-theme@1.18.3:
     resolution: {integrity: sha512-jTSHwjuM1HSmIN/uErunbTJyi2JGnXL/xXhZ81aF310iT83xKOhXHsLAuANroQvxnv0Bdt55QzBoYVHl0PDvkg==}
-
-  azion-theme@1.20.0:
-    resolution: {integrity: sha512-zMclDcMv3bM8910Ownb97kZ9Iixcv2mqD3Nh8Gp3ODx+eq+ZTbuc1WjIi8bSBtt31LTtub7D2lHuEsttZkqexg==}
-    peerDependencies:
-      tailwindcss: ^3.4.0
 
   azion@1.20.21:
     resolution: {integrity: sha512-9+jczsoRi99rIM9wY9Gn3o3IIm3XK6MW7s4vAxUhntBBoFc+/fG6uzyoJrNiIoyYVeqnysetwYIeO7h4KQO3Cw==}
@@ -6366,6 +6364,8 @@ snapshots:
       lru-cache: 10.4.3
     optional: true
 
+  '@aziontech/theme@1.0.4': {}
+
   '@babel/code-frame@7.29.0':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
@@ -8995,10 +8995,6 @@ snapshots:
       - debug
 
   azion-theme@1.18.3: {}
-
-  azion-theme@1.20.0(tailwindcss@3.4.19):
-    dependencies:
-      tailwindcss: 3.4.19
 
   azion@1.20.21(@babel/core@7.29.0)(@fastly/js-compute@3.40.1(typescript@5.9.3)):
     dependencies:
