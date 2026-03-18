@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.1.0...@aziontech/theme@1.1.1) (2026-03-18)
+
+
+### Bug Fixes
+
+* import default ([68197b9](https://github.com/aziontech/webkit/commit/68197b9aee734c6dfae10385e4214c01d06e14be))
+
 ## [1.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.4...@aziontech/theme@1.1.0) (2026-03-18)
 
 
