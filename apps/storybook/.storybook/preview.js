@@ -7,6 +7,7 @@ import { withThemeByClassName } from '@storybook/addon-themes'
 import 'primeflex/primeflex.css'
 import '../src/styles/preview.css';
 import '../src/styles/flag.css';
+import '../src/styles/theme-root-vars.scss';
 import '@aziontech/theme'
 import '@aziontech/icons'
 
