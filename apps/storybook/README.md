@@ -1,4 +1,4 @@
-# @aziontech/webkit storybook
+# @aziontech/webkit --> storybook
 
 This is the Storybook documentation application for the `@aziontech/webkit` component library. It provides interactive documentation and development environment for all webkit components.
 
