@@ -1,0 +1,11 @@
+{
+  "main": "./field-password.vue",
+  "module": "./field-password.vue",
+  "types": "./field-password.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-password.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

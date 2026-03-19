@@ -264,7 +264,7 @@ export default {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },
     sensitive: { control: 'boolean', description: 'Mark as sensitive data' },
-    aditionalError: { control: 'text', description: 'Additional error message' },
+    additionalError: { control: 'text', description: 'Additional error message' },
     value: { control: 'text' }
   }
 };
@@ -292,7 +292,7 @@ export const WithError = {
     name: 'field-text-error',
     label: 'Field with Error',
     placeholder: 'Enter text...',
-    aditionalError: 'This field has an error'
+    additionalError: 'This field has an error'
   }
 };
 

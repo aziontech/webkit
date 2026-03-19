@@ -42,7 +42,7 @@
       type: Boolean,
       default: false
     },
-    aditionalError: {
+    additionalError: {
       type: String,
       default: ''
     }
@@ -106,17 +106,17 @@
       :readonly="readonly"
       :disabled="disabled"
       :placeholder="props.placeholder"
-      :class="[{ 'p-invalid': aditionalError || veeValidateErrorMessage }, props.class]"
+      :class="[{ 'p-invalid': additionalError || veeValidateErrorMessage }, props.class]"
       @input="onChange"
       @keypress.enter.prevent
       @blur="onBlur"
     />
     <small
-      v-if="aditionalError || veeValidateErrorMessage"
+      v-if="additionalError || veeValidateErrorMessage"
       class="p-error text-xs font-normal leading-tight"
       :data-testid="customTestId.error"
     >
-      {{ aditionalError || veeValidateErrorMessage }}
+      {{ additionalError || veeValidateErrorMessage }}
     </small>
     <small
       v-if="props.description || hasDescriptionSlot"
