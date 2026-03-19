@@ -1,3 +1,17 @@
+## [1.5.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.0...@aziontech/webkit@1.5.1) (2026-03-19)
+
+
+### Bug Fixes
+
+* adding sprite country used by flag.css ([39d8464](https://github.com/aziontech/webkit/commit/39d84647d4606ba3ffde846aaa9b4fda61998ea8))
+* color variable on tailwind ([611d352](https://github.com/aziontech/webkit/commit/611d35238e270a0662e369d85e9f259cf0f1931c))
+* import default ([68197b9](https://github.com/aziontech/webkit/commit/68197b9aee734c6dfae10385e4214c01d06e14be))
+* improve storybook performance dev server ([dac62a9](https://github.com/aziontech/webkit/commit/dac62a91df1baf4521029d5e0b576d6433432d65))
+* storybook Build workspace packages ([a6c6264](https://github.com/aziontech/webkit/commit/a6c6264cacfa9c960526fdb7f990b9e59e68058a))
+* storybook github actions 404 icons ([69ac399](https://github.com/aziontech/webkit/commit/69ac399e84faa780a4b58183353d2e8fe31cf168))
+* theme semantic tokens fix ([2a19e9e](https://github.com/aziontech/webkit/commit/2a19e9e8b8405380a3be505d9cd5372f2ad9b63c))
+* tmp and .tpm added to gitignore ([644902a](https://github.com/aziontech/webkit/commit/644902a0a881b73a41a78be9c34761aff804b85a))
+
 ## [1.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.2...@aziontech/webkit@1.5.0) (2026-03-18)
 
 
