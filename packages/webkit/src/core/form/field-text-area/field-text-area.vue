@@ -54,7 +54,7 @@
       type: Boolean,
       default: false
     },
-    aditionalError: {
+    additionalError: {
       type: String,
       default: ''
     },
@@ -148,7 +148,7 @@
         ref="inputRef"
         type="text"
         class="w-full min-h-[2.75rem]"
-        :class="[{ 'p-invalid': aditionalError || veeValidateErrorMessage }, props.class]"
+        :class="[{ 'p-invalid': additionalError || veeValidateErrorMessage }, props.class]"
         :id="name"
         :data-testid="customTestId.textarea"
         :name="props.name"
@@ -162,11 +162,11 @@
       />
     </span>
     <small
-      v-if="aditionalError || veeValidateErrorMessage"
+      v-if="additionalError || veeValidateErrorMessage"
       class="p-error text-xs font-normal leading-tight"
       :data-testid="customTestId.error"
     >
-      {{ aditionalError || veeValidateErrorMessage }}
+      {{ additionalError || veeValidateErrorMessage }}
     </small>
     <small
       class="text-xs text-color-secondary font-normal leading-5"

@@ -57,7 +57,7 @@
       type: Boolean,
       default: true
     },
-    aditionalError: {
+    additionalError: {
       type: String,
       default: ''
     }
@@ -125,16 +125,16 @@
           name: props.name
         }
       }"
-      :class="[{ 'p-invalid': aditionalError || errorMessage }, props.inputClass]"
+      :class="[{ 'p-invalid': additionalError || errorMessage }, props.inputClass]"
       :data-testid="customTestId.input"
     />
 
     <small
-      v-if="aditionalError || errorMessage"
+      v-if="additionalError || errorMessage"
       class="p-error text-xs font-normal leading-tight"
       :data-testid="customTestId.error"
     >
-      {{ aditionalError || errorMessage }}
+      {{ additionalError || errorMessage }}
     </small>
     <small
       class="text-xs text-color-secondary font-normal leading-5"

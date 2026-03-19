@@ -37,7 +37,7 @@ export default {
       control: 'boolean',
       description: 'Marks the field as containing sensitive data'
     },
-    aditionalError: {
+    additionalError: {
       control: 'text',
       description: 'Additional error message to display'
     },
@@ -108,7 +108,7 @@ export const WithError = {
     name: 'field-text-privacy-error',
     label: 'Privacy Field with Error',
     placeholder: 'Enter data...',
-    aditionalError: 'This field has an error'
+    additionalError: 'This field has an error'
   }
 };
 
