@@ -1,3 +1,15 @@
+## [1.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.4...@aziontech/webkit@1.6.0) (2026-03-19)
+
+
+### Features
+
+* add testimonials-carousel component and fix storybook setup ([dfb885f](https://github.com/aziontech/webkit/commit/dfb885f107cee3dde0a8244fbe4d14182e249d02))
+
+
+### Bug Fixes
+
+* restore field-text-password export, remove non-existent field-password entries ([a423582](https://github.com/aziontech/webkit/commit/a4235823a32c382392c788d00bb4a68495337780))
+
 ## [1.5.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.3...@aziontech/webkit@1.5.4) (2026-03-19)
 
 
