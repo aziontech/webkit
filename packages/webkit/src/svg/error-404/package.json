@@ -1,0 +1,9 @@
+{
+  "main": "./error-404.vue",
+  "module": "./error-404.vue",
+  "types": "./error-404.vue.d.ts",
+  "browser": {
+    "./sfc": "./error-404.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
