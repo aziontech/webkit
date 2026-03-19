@@ -16,8 +16,8 @@
     "icons:validate": "pnpm --filter icons run validate",
     "icons:publish": "pnpm --filter icons run publish",
     "webkit:build:dts": "pnpm --filter webkit run build:dts",
-    "storybook:dev": "pnpm --filter storybook run dev",
-    "storybook:build": "pnpm --filter storybook run build",
+    "storybook:dev": "pnpm --filter icons run build && pnpm --filter storybook run dev",
+    "storybook:build": "pnpm --filter icons run build && pnpm --filter storybook run build",
     "storybook:preview": "pnpm --filter storybook run preview"
   },
   "dependencies": {

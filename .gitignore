@@ -34,6 +34,10 @@ yarn.lock
 *.d.ts
 *d.ts.map
 
+CLAUDE.md
+.claude
+
 # packages folder to ignore
+packages/icons/tmp/
 tmp
 .tmp
