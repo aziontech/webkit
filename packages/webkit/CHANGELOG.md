@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.2...@aziontech/webkit@1.5.3) (2026-03-19)
+
+
+### Bug Fixes
+
+* storybook svgs 404/403 ([13c6399](https://github.com/aziontech/webkit/commit/13c639942e22acf7f8ce0fcfd5eaa79f7d6df6c6))
+
 ## [1.5.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.1...@aziontech/webkit@1.5.2) (2026-03-19)
 
 
