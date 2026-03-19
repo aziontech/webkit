@@ -7,7 +7,7 @@ img.flag {
   width: 30px;
 }
 .flag {
-  background: url('images/countryFlags.png') no-repeat;
+  background: url('../images/country-flags.png') no-repeat;
   background-size: 100%;
   vertical-align: middle;
 }

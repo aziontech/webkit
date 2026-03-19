@@ -5,7 +5,7 @@ export default {
   important: true,
   content: [
     './src/**/*.{vue,js,ts,jsx,tsx}',
-    './node_modules/@aziontech/webkit/**/*.{vue,js,ts,jsx,tsx}' 
+    '../../packages/webkit/src/**/*.{vue,js,ts,jsx,tsx}'
   ],
   darkMode: 'class',
   theme: {
