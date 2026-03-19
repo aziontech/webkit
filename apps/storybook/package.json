@@ -13,9 +13,8 @@
   "dependencies": {
     "@aziontech/icons": "workspace:*",
     "@aziontech/webkit": "workspace:*",
-    "@storybook/addon-themes": "^8.6.0",
-    "@tailwindcss/typography": "^0.5.10",
     "@aziontech/theme": "workspace:*",
+    "@tailwindcss/typography": "^0.5.10",
     "primeflex": "^3.3.1",
     "primevue": "3.35.0",
     "tailwindcss": "^3.3.3",
@@ -23,16 +22,9 @@
     "vue": "^3.5.29"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^8.6.0",
-    "@storybook/addon-controls": "^8.6.0",
-    "@storybook/addon-docs": "^8.6.0",
     "@storybook/addon-essentials": "^8.6.0",
-    "@storybook/addon-interactions": "^8.6.0",
     "@storybook/addon-links": "^8.6.0",
-    "@storybook/addon-measure": "^8.6.0",
-    "@storybook/addon-outline": "^8.6.0",
-    "@storybook/addon-toolbars": "^8.6.0",
-    "@storybook/addon-viewport": "^8.6.0",
+    "@storybook/addon-themes": "^8.6.0",
     "@storybook/vue3": "^8.6.0",
     "@storybook/vue3-vite": "^8.6.0",
     "@vitejs/plugin-vue": "^5.2.4",

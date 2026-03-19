@@ -53,7 +53,9 @@ jobs:
       - name: Building Storybook
         working-directory: apps/storybook
         run: |
-          npm run build
+          pnpm --filter @aziontech/icons build
+          pnpm --filter @aziontech/webkit build:dts
+          pnpm build
 
       - name: Azion Build
         working-directory: apps/storybook
