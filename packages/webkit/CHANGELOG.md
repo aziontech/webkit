@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.6.0...@aziontech/webkit@1.7.0) (2026-03-20)
+
+
+### Features
+
+* adding azion used primevue components ([afe100a](https://github.com/aziontech/webkit/commit/afe100aa0e8af190188761ec38bd704b93bc5e30))
+
 ## [1.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.4...@aziontech/webkit@1.6.0) (2026-03-19)
 
 
