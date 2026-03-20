@@ -24,7 +24,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "value"
   },
   "title": {
     "label": "Title",
@@ -33,7 +33,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Title"
   },
   "service": {
     "label": "Service",

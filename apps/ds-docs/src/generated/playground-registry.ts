@@ -109,5 +109,6 @@ export const webkitRegistry: WebkitRegistryEntry[] = [
   { slug: 'form-field-text-password', exportKey: 'field-text-password', displayName: 'FieldTextPassword', category: 'form' },
   { slug: 'form-field-text-privacy', exportKey: 'field-text-privacy', displayName: 'FieldTextPrivacy', category: 'form' },
   { slug: 'form-label', exportKey: 'label', displayName: 'Label', category: 'form' },
+  { slug: 'form-slots-input-slot', exportKey: 'input-slot', displayName: 'InputSlot', category: 'form' },
   { slug: 'selector-block', exportKey: 'selector-block', displayName: 'SelectorBlock', category: 'ui' },
 ];

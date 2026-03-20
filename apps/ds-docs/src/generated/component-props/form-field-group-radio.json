@@ -33,7 +33,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Label"
   },
   "options": {
     "label": "Options",
@@ -42,7 +42,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "[{\"label\":\"Option A\",\"value\":\"a\"},{\"label\":\"Option B\",\"value\":\"b\"},{\"label\":\"Option C\",\"value\":\"c\"}]"
   },
   "helpText": {
     "label": "Help Text",
@@ -51,7 +51,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "This is a help text."
   },
   "disabled": {
     "label": "Disabled",
@@ -69,7 +69,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "example-field"
   },
   "isRequired": {
     "label": "Is Required",
