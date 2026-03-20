@@ -1,7 +1,7 @@
 import ProgressBar from '@aziontech/webkit/progressbar';
 
 export default {
-  title: 'Components/ProgressBar',
+  title: 'Core/PrimeVue/ProgressBar',
   component: ProgressBar,
   tags: ['autodocs'],
   argTypes: {

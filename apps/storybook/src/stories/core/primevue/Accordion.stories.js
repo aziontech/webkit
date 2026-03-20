@@ -2,7 +2,7 @@ import Accordion from '@aziontech/webkit/accordion';
 import AccordionTab from '@aziontech/webkit/accordion-tab';
 
 export default {
-  title: 'Components/Accordion',
+  title: 'Core/PrimeVue/Accordion',
   component: Accordion,
   tags: ['autodocs'],
   argTypes: {

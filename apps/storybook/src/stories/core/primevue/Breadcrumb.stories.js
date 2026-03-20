@@ -1,7 +1,7 @@
 import Breadcrumb from '@aziontech/webkit/breadcrumb';
 
 export default {
-  title: 'Components/Breadcrumb',
+  title: 'Core/PrimeVue/Breadcrumb',
   component: Breadcrumb,
   tags: ['autodocs'],
   argTypes: {

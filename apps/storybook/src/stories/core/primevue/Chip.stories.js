@@ -1,7 +1,7 @@
 import Chip from '@aziontech/webkit/chip';
 
 export default {
-  title: 'Components/Chip',
+  title: 'Core/PrimeVue/Chip',
   component: Chip,
   tags: ['autodocs'],
   argTypes: {

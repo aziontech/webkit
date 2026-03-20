@@ -1,7 +1,7 @@
 import Skeleton from '@aziontech/webkit/skeleton';
 
 export default {
-  title: 'Components/Skeleton',
+  title: 'Core/PrimeVue/Skeleton',
   component: Skeleton,
   tags: ['autodocs'],
   argTypes: {

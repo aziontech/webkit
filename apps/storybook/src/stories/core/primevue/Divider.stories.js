@@ -1,7 +1,7 @@
 import Divider from '@aziontech/webkit/divider';
 
 export default {
-  title: 'Components/Divider',
+  title: 'Core/PrimeVue/Divider',
   component: Divider,
   tags: ['autodocs'],
   argTypes: {
