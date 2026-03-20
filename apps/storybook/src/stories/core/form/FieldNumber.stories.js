@@ -57,7 +57,7 @@ export default {
       control: 'boolean',
       description: 'Uses grouping separator (e.g., thousands separator)'
     },
-    aditionalError: {
+    additionalError: {
       control: 'text',
       description: 'Additional error message to display'
     }
@@ -135,6 +135,6 @@ export const WithError = {
     name: 'field-number-error',
     label: 'Number Field with Error',
     placeholder: 'Enter number...',
-    aditionalError: 'This field has an error'
+    additionalError: 'This field has an error'
   }
 };
