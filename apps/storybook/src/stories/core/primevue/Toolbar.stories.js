@@ -2,7 +2,7 @@ import Toolbar from '@aziontech/webkit/toolbar';
 import Button from '@aziontech/webkit/button';
 
 export default {
-  title: 'Components/Toolbar',
+  title: 'Core/PrimeVue/Toolbar',
   component: Toolbar,
   tags: ['autodocs']
 };

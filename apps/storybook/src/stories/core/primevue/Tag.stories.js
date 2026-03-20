@@ -1,7 +1,7 @@
 import Tag from '@aziontech/webkit/tag';
 
 export default {
-  title: 'Components/Tag',
+  title: 'Core/PrimeVue/Tag',
   component: Tag,
   tags: ['autodocs'],
   argTypes: {

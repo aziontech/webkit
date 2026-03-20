@@ -1,7 +1,7 @@
 import Avatar from '@aziontech/webkit/avatar';
 
 export default {
-  title: 'Components/Avatar',
+  title: 'Core/PrimeVue/Avatar',
   component: Avatar,
   tags: ['autodocs'],
   argTypes: {

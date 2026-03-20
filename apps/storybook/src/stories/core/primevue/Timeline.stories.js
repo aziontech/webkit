@@ -1,7 +1,7 @@
 import Timeline from '@aziontech/webkit/timeline';
 
 export default {
-  title: 'Components/Timeline',
+  title: 'Core/PrimeVue/Timeline',
   component: Timeline,
   tags: ['autodocs'],
   argTypes: {

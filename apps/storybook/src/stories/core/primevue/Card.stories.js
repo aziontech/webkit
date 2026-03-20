@@ -1,7 +1,7 @@
 import Card from '@aziontech/webkit/card';
 
 export default {
-  title: 'Components/Card',
+  title: 'Core/PrimeVue/Card',
   component: Card,
   tags: ['autodocs']
 };

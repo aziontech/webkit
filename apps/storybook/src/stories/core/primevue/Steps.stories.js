@@ -1,7 +1,7 @@
 import Steps from '@aziontech/webkit/steps';
 
 export default {
-  title: 'Components/Steps',
+  title: 'Core/PrimeVue/Steps',
   component: Steps,
   tags: ['autodocs'],
   argTypes: {

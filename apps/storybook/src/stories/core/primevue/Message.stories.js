@@ -1,7 +1,7 @@
 import Message from '@aziontech/webkit/message';
 
 export default {
-  title: 'Components/Message',
+  title: 'Core/PrimeVue/Message',
   component: Message,
   tags: ['autodocs'],
   argTypes: {

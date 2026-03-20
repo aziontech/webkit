@@ -1,7 +1,7 @@
 import Badge from '@aziontech/webkit/badge';
 
 export default {
-  title: 'Components/Badge',
+  title: 'Core/PrimeVue/Badge',
   component: Badge,
   tags: ['autodocs'],
   argTypes: {

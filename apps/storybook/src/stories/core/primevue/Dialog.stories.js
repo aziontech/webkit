@@ -3,7 +3,7 @@ import Button from '@aziontech/webkit/button';
 import { ref } from 'vue';
 
 export default {
-  title: 'Components/Dialog',
+  title: 'Core/PrimeVue/Dialog',
   component: Dialog,
   tags: ['autodocs'],
   argTypes: {

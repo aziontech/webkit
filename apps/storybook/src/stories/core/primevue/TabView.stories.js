@@ -2,7 +2,7 @@ import TabView from '@aziontech/webkit/tabview';
 import TabPanel from '@aziontech/webkit/tabpanel';
 
 export default {
-  title: 'Components/TabView',
+  title: 'Core/PrimeVue/TabView',
   component: TabView,
   tags: ['autodocs'],
   argTypes: {

@@ -1,7 +1,7 @@
 import Button from '@aziontech/webkit/button';
 
 export default {
-  title: 'Components/Button',
+  title: 'Core/PrimeVue/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {

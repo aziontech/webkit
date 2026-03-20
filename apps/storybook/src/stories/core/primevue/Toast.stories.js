@@ -3,7 +3,7 @@ import Button from '@aziontech/webkit/button';
 import { useToast } from 'primevue/usetoast';
 
 export default {
-  title: 'Components/Toast',
+  title: 'Core/PrimeVue/Toast',
   component: Toast,
   tags: ['autodocs'],
   argTypes: {

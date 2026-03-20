@@ -1,7 +1,7 @@
 import InlineMessage from '@aziontech/webkit/inline-message';
 
 export default {
-  title: 'Components/InlineMessage',
+  title: 'Core/PrimeVue/InlineMessage',
   component: InlineMessage,
   tags: ['autodocs'],
   argTypes: {

@@ -3,7 +3,7 @@ import Button from '@aziontech/webkit/button';
 import { ref } from 'vue';
 
 export default {
-  title: 'Components/Menu',
+  title: 'Core/PrimeVue/Menu',
   component: Menu,
   tags: ['autodocs']
 };

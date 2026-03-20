@@ -3,7 +3,7 @@ import Button from '@aziontech/webkit/button';
 import { ref } from 'vue';
 
 export default {
-  title: 'Components/Sidebar',
+  title: 'Core/PrimeVue/Sidebar',
   component: Sidebar,
   tags: ['autodocs'],
   argTypes: {
