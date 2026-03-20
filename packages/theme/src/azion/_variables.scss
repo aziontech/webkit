@@ -60,7 +60,9 @@ $colors: (
 @import "./variables/_media";
 @import "./variables/_misc";
 
-:root.azion.azion-dark {
+/* Also support .azion.azion-* on any element (e.g. playground preview) so components respect scoped theme */
+:root.azion.azion-dark,
+.azion.azion-dark {
   color-scheme: dark;
 
   --primary-color: #f4f4f4;
@@ -238,7 +240,8 @@ $colors: (
   --special-button-hover-bg: rgba(23, 23, 23, 0.25);
 }
 
-:root.azion.azion-light {
+:root.azion.azion-light,
+.azion.azion-light {
   color-scheme: light;
   --text-color: #1c1c1c;
   --primary-color-text: #f4f4f4;

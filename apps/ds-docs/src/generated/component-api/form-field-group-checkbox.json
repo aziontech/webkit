@@ -1,0 +1,70 @@
+{
+  "component": "form-field-group-checkbox",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-group-checkbox/field-group-checkbox.vue",
+  "props": [
+    {
+      "name": "hideSelector",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "auto",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "isCard",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "options",
+      "type": "any[]",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "helpText",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "hasDivider",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-19T13:10:14.936Z"
+}

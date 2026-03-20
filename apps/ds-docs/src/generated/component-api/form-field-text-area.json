@@ -1,0 +1,127 @@
+{
+  "component": "form-field-text-area",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-text-area/field-text-area.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "rows",
+      "type": "[Number",
+      "required": false,
+      "default": "5",
+      "description": ""
+    },
+    {
+      "name": "cols",
+      "type": "number",
+      "required": false,
+      "default": "30",
+      "description": ""
+    },
+    {
+      "name": "autoResize",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "iconPosition",
+      "type": "string",
+      "required": false,
+      "default": "right",
+      "description": ""
+    },
+    {
+      "name": "sensitive",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "aditionalError",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "blur",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "input",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "description",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-19T13:10:14.952Z"
+}

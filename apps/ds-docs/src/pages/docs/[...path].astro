@@ -1,0 +1,151 @@
+---
+/**
+ * Documentation Catch-All Route
+ * 
+ * Handles all documentation URLs with support for:
+ * - Version routing: /v1/..., /v2/...
+ * - Language routing: /en/..., /pt/...
+ * - Short URLs for default language and current version
+ * 
+ * URL patterns:
+ * - /{section}/{slug} - Default version and language
+ * - /{lang}/{section}/{slug} - Non-default language
+ * - /{version}/{section}/{slug} - Non-current version, default language
+ * - /{version}/{lang}/{section}/{slug} - Non-current version, non-default language
+ */
+
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import { 
+  getCurrentVersion, 
+  isValidVersion, 
+  getDefaultLanguage, 
+  isSupportedLanguage,
+  isDefaultLanguage,
+  isCurrentVersion,
+} from '@/config';
+import { getSectionById } from '@/lib/content/sections';
+import { getSeoMetadata } from '@/lib/docs';
+
+// Define dynamic path parameters
+export function getStaticPaths() {
+  const paths: Array<{
+    params: { path: string };
+    props: {
+      entry: any;
+      section: any;
+      version: string;
+      language: string;
+      slug: string;
+    };
+  }> = [];
+
+  // Generate paths for all content.
+  // Astro collections are only 'v1-en' and 'v1-pt'. section.collectionName is a logical
+  // name (e.g. 'templates', 'icons') for routing/nav — do not pass it to getCollection().
+  // Path generation would use getCollection('v1-en') and getCollection('v1-pt') then
+  // filter by section.id; left as empty for now so this catch-all does not emit invalid
+  // collection warnings for sections that have no dedicated collection.
+  return paths;
+}
+
+// For now, we'll use a simpler approach that works with existing routes
+// This file serves as documentation for the future routing structure
+
+// Parse the path to extract version, language, section, and slug
+function parseDocPath(pathSegments: string[]) {
+  const currentVersion = getCurrentVersion();
+  const defaultLanguage = getDefaultLanguage();
+
+  if (pathSegments.length === 0) {
+    return null;
+  }
+
+  const [first, ...rest] = pathSegments;
+
+  // Check if first segment is a version
+  if (first.startsWith('v') && isValidVersion(first)) {
+    const version = first;
+    
+    if (rest.length === 0) {
+      return null; // Need at least a section
+    }
+
+    const [second, ...remaining] = rest;
+
+    // Check if second segment is a language
+    if (isSupportedLanguage(second) && second.length === 2) {
+      // Pattern: /{version}/{lang}/{section}/{slug}
+      const language = second;
+      const section = remaining[0];
+      const slug = remaining.length > 1 ? remaining.slice(1).join('/') : 'index';
+      
+      return { version, language, section, slug };
+    } else {
+      // Pattern: /{version}/{section}/{slug} (default language)
+      const language = defaultLanguage;
+      const section = second;
+      const slug = remaining.length > 0 ? remaining.join('/') : 'index';
+      
+      return { version, language, section, slug };
+    }
+  }
+
+  // Check if first segment is a language (non-default)
+  if (isSupportedLanguage(first) && first.length === 2 && !isDefaultLanguage(first)) {
+    // Pattern: /{lang}/{section}/{slug}
+    const version = currentVersion;
+    const language = first;
+    const section = rest[0];
+    const slug = rest.length > 1 ? rest.slice(1).join('/') : 'index';
+    
+    return { version, language, section, slug };
+  }
+
+  // Pattern: /{section}/{slug} (default version and language)
+  const version = currentVersion;
+  const language = defaultLanguage;
+  const section = first;
+  const slug = rest.length > 0 ? rest.join('/') : 'index';
+
+  return { version, language, section, slug };
+}
+
+// This would be the actual page rendering logic
+// For now, we redirect to existing routes
+const { path } = Astro.params;
+const pathSegments = path?.split('/').filter(Boolean) || [];
+
+const parsed = parseDocPath(pathSegments);
+
+if (!parsed) {
+  return Astro.redirect('/404');
+}
+
+const { version, language, section, slug } = parsed;
+
+// Get the section
+const sectionConfig = getSectionById(section);
+if (!sectionConfig) {
+  return Astro.redirect('/404');
+}
+
+// Get the content entry
+// This would use the resolveDoc function from the lib
+// For now, we'll use the existing routing
+
+// Render the page
+// This would render using DocsLayout with the resolved content
+---
+
+<!--
+  This file documents the routing structure for versioned/i18n documentation.
+  
+  In production, this would be implemented as a catch-all route that:
+  1. Parses the URL to extract version, language, section, and slug
+  2. Resolves the content using resolveDoc()
+  3. Handles fallbacks for missing translations
+  4. Renders the page with appropriate SEO metadata
+  
+  For now, the existing routes in /pages/components/, /pages/foundations/, etc.
+  continue to work and will be gradually migrated to this unified structure.
+-->

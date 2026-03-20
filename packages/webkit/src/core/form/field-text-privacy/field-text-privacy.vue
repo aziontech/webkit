@@ -81,8 +81,9 @@
 
   const groupShadowClass = computed(() => {
     if (isFocused.value || isHovered.value) {
-      const color = aditionalError.value || veeValidateErrorMessage.value ? '#ef4444' : '#f3652b'
-      return `shadow-[0_0_0_1px_${color}]`
+      return aditionalError.value || veeValidateErrorMessage.value
+        ? 'shadow-[0_0_0_1px_#ef4444]'
+        : 'shadow-[0_0_0_1px_#f3652b]'
     }
     return ''
   })

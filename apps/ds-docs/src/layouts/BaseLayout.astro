@@ -1,0 +1,65 @@
+---
+/**
+ * BaseLayout
+ * 
+ * Base HTML layout providing the shell structure for all pages.
+ * Handles global head, body classes, and global styles.
+ * Supports internationalization (i18n) with language attribute.
+ */
+
+import '../styles/global.css';
+// PrimeVue normalisation layer (transitions, overlay utilities, animations)
+import 'primevue/resources/primevue.min.css';
+import '../styles/primevue-theme.scss';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Language code for the HTML lang attribute */
+  language?: string;
+}
+
+const { title, description = 'Azion Design System Documentation', language = 'en' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang={language} class="azion azion-light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | Azion Design System</title>
+    <slot name="head" />
+    {/* Sync Azion theme vars (azion-light/azion-dark) and Tailwind dark with saved theme before paint */}
+    <script is:inline define:vars={{}}>
+      (function () {
+        var stored = typeof localStorage !== 'undefined' && localStorage.getItem('docs-theme');
+        var dark = false;
+        if (stored === 'dark') dark = true;
+        else if (stored === 'light') dark = false;
+        else dark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var root = document.documentElement;
+        root.classList.toggle('dark', dark);
+        root.classList.toggle('azion-dark', dark);
+        root.classList.toggle('azion-light', !dark);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-surface text-default antialiased">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  /* Ensure smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  /* Selection styles */
+  ::selection {
+    background-color: var(--color-primary-100, #dbeafe);
+    color: var(--color-primary-900, #1e3a8a);
+  }
+</style>

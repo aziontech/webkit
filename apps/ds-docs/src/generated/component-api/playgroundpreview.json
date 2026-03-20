@@ -1,0 +1,17 @@
+{
+  "component": "PlaygroundPreview",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/apps/ds-docs/src/components/playground/PlaygroundPreview.vue",
+  "props": [],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "toolbar",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-19T13:06:16.860Z"
+}

@@ -1,0 +1,250 @@
+---
+/**
+ * ComponentTabs
+ * 
+ * A specialized tabs component for component documentation pages.
+ * Provides three fixed tabs: Overview, Usage, and API.
+ * 
+ * Features:
+ * - Accessible with proper ARIA attributes
+ * - URL hash sync for deep linking
+ * - Keyboard navigation
+ * - Fixed tab structure for consistency
+ */
+
+interface Props {
+  /** Initial active tab ID */
+  defaultTab?: 'overview' | 'usage' | 'api';
+}
+
+const { defaultTab = 'overview' } = Astro.props;
+---
+
+<div class="component-tabs" data-initial-tab={defaultTab}>
+  <!-- Tab List -->
+  <div 
+    role="tablist" 
+    class="component-tabs__list flex border-b border-default mb-6"
+    aria-label="Component documentation sections"
+  >
+    <button
+      id="tab-overview"
+      role="tab"
+      aria-selected={defaultTab === 'overview' ? 'true' : 'false'}
+      aria-controls="panel-overview"
+      tabindex={defaultTab === 'overview' ? '0' : '-1'}
+      data-tab-id="overview"
+      class:list={[
+        ' px-4 py-2.5 !text-sm font-medium border-b-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+        defaultTab === 'overview'
+          ? 'border-default-hover text-default'
+          : 'border-transparent text-muted hover:text-default hover:border-default'
+      ]}
+    >
+      Overview
+    </button>
+    <button
+      id="tab-usage"
+      role="tab"
+      aria-selected={defaultTab === 'usage' ? 'true' : 'false'}
+      aria-controls="panel-usage"
+      tabindex={defaultTab === 'usage' ? '0' : '-1'}
+      data-tab-id="usage"
+      class:list={[
+        ' px-4 py-2.5 !text-sm font-medium border-b-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+        defaultTab === 'usage'
+          ? 'border-default-hover text-default'
+          : 'border-transparent text-muted hover:text-default hover:border-default'
+      ]}
+    >
+      Usage
+    </button>
+    <button
+      id="tab-api"
+      role="tab"
+      aria-selected={defaultTab === 'api' ? 'true' : 'false'}
+      aria-controls="panel-api"
+      tabindex={defaultTab === 'api' ? '0' : '-1'}
+      data-tab-id="api"
+      class:list={[
+        ' px-4 py-2.5 !text-sm font-medium border-b-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+        defaultTab === 'api'
+          ? 'border-default-hover text-default'
+          : 'border-transparent text-muted hover:text-default hover:border-default'
+      ]}
+    >
+      API
+    </button>
+  </div>
+  
+  <!-- Tab Panels -->
+  <div class="component-tabs__panels">
+    <div
+      id="panel-overview"
+      role="tabpanel"
+      aria-labelledby="tab-overview"
+      data-panel-id="overview"
+      hidden={defaultTab !== 'overview'}
+      tabindex="0"
+      class="component-tabs__panel"
+    >
+      <slot name="overview" />
+    </div>
+    <div
+      id="panel-usage"
+      role="tabpanel"
+      aria-labelledby="tab-usage"
+      data-panel-id="usage"
+      hidden={defaultTab !== 'usage'}
+      tabindex="0"
+      class="component-tabs__panel"
+    >
+      <slot name="usage" />
+    </div>
+    <div
+      id="panel-api"
+      role="tabpanel"
+      aria-labelledby="tab-api"
+      data-panel-id="api"
+      hidden={defaultTab !== 'api'}
+      tabindex="0"
+      class="component-tabs__panel"
+    >
+      <slot name="api" />
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * Client-side tab switching with keyboard navigation
+   * and URL hash synchronization
+   */
+  document.addEventListener('DOMContentLoaded', () => {
+    const containers = document.querySelectorAll('.component-tabs');
+    
+    containers.forEach(container => {
+      const tabs = container.querySelectorAll('[role="tab"]');
+      const panels = container.querySelectorAll('[role="tabpanel"]');
+      
+      // Initialize from URL hash
+      const hash = window.location.hash.slice(1);
+      if (hash && ['overview', 'usage', 'api'].includes(hash)) {
+        const targetTab = container.querySelector(`[data-tab-id="${hash}"]`);
+        if (targetTab) {
+          activateTab(targetTab as HTMLElement, false);
+        }
+      }
+      
+      // Tab click handlers
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          activateTab(tab as HTMLElement, true);
+        });
+      });
+      
+      // Keyboard navigation
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('keydown', (e: Event) => {
+          const keyEvent = e as KeyboardEvent;
+          const tabsArray = Array.from(tabs);
+          let newIndex: number | null = null;
+          
+          switch (keyEvent.key) {
+            case 'ArrowLeft':
+              newIndex = index === 0 ? tabsArray.length - 1 : index - 1;
+              break;
+            case 'ArrowRight':
+              newIndex = index === tabsArray.length - 1 ? 0 : index + 1;
+              break;
+            case 'Home':
+              newIndex = 0;
+              break;
+            case 'End':
+              newIndex = tabsArray.length - 1;
+              break;
+            default:
+              return;
+          }
+          
+          if (newIndex !== null) {
+            keyEvent.preventDefault();
+            activateTab(tabsArray[newIndex] as HTMLElement, true);
+          }
+        });
+      });
+    });
+    
+    /**
+     * Activate a tab and update UI state
+     */
+    function activateTab(tab: HTMLElement, updateHash: boolean) {
+      const container = tab.closest('.component-tabs');
+      if (!container) return;
+      
+      const tabId = tab.dataset.tabId;
+      const allTabs = container.querySelectorAll('[role="tab"]');
+      const allPanels = container.querySelectorAll('[role="tabpanel"]');
+      
+      // Update tabs
+      allTabs.forEach(t => {
+        const el = t as HTMLElement;
+        const isActive = el.dataset.tabId === tabId;
+        el.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        el.setAttribute('tabindex', isActive ? '0' : '-1');
+        el.classList.toggle('border-default-hover', isActive);
+        el.classList.toggle('text-default', isActive);
+        el.classList.toggle('border-transparent', !isActive);
+        el.classList.toggle('text-muted', !isActive);
+      });
+      
+      // Update panels
+      allPanels.forEach(p => {
+        const el = p as HTMLElement;
+        const isActive = el.dataset.panelId === tabId;
+        el.hidden = !isActive;
+      });
+      
+      // Update URL hash
+      if (updateHash && tabId) {
+        history.replaceState(null, '', `#${tabId}`);
+      }
+      
+      // Focus the tab
+      tab.focus();
+    }
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.slice(1);
+      if (hash && ['overview', 'usage', 'api'].includes(hash)) {
+        const targetTab = document.querySelector(`.component-tabs [data-tab-id="${hash}"]`);
+        if (targetTab) {
+          activateTab(targetTab as HTMLElement, false);
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .component-tabs {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Ensure hidden panels don't affect layout */
+  .component-tabs__panel[hidden] {
+    display: none;
+  }
+</style>

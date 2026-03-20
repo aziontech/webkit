@@ -1,0 +1,30 @@
+{
+  "component": "DocsHeader",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/apps/ds-docs/src/components/docs/DocsHeader.vue",
+  "props": [
+    {
+      "name": "section",
+      "type": "Section  |  null",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "item",
+      "type": "NavItem  |  null",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "language",
+      "type": "string",
+      "required": false,
+      "default": "getDefaultLanguage()",
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-19T13:06:16.855Z"
+}

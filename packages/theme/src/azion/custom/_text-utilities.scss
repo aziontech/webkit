@@ -1,0 +1,12 @@
+/**
+ * Text color utilities for Azion theme.
+ * Components (e.g. webkit form labels) use .text-color and .text-color-secondary
+ * expecting these to resolve to theme variables. Imported under .azion in theme.scss.
+ */
+.text-color {
+  color: var(--text-color) !important;
+}
+
+.text-color-secondary {
+  color: var(--text-color-secondary) !important;
+}

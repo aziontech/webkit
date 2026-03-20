@@ -1,0 +1,104 @@
+---
+/**
+ * ComponentsIndex
+ * 
+ * Dynamic component list that fetches components from content collection
+ * and displays them grouped by category with status tracking.
+ * 
+ * Used in components/index.mdx for both EN and PT languages.
+ */
+
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Tabs from './Tabs.astro';
+import ComponentsStatusTable from './ComponentsStatusTable.astro';
+import StatusBadge from './StatusBadge.vue';
+import { componentStatusData } from '../../data/component-status';
+
+interface Props {
+  /** Language code for filtering content collection */
+  language?: 'en' | 'pt';
+  /** Category labels translated */
+  categoryLabels?: Record<string, string>;
+}
+
+const { 
+  language = 'en',
+  categoryLabels = {
+    form: 'Form Components',
+    navigation: 'Navigation Components',
+    feedback: 'Feedback Components',
+    'data-display': 'Data Display Components',
+    layout: 'Layout Components',
+    utility: 'Utility Components',
+  }
+} = Astro.props;
+
+// Get all content from the appropriate collection based on language
+let allContent: CollectionEntry<'v1-en'>[] | CollectionEntry<'v1-pt'>[];
+if (language === 'pt') {
+  allContent = await getCollection('v1-pt');
+} else {
+  allContent = await getCollection('v1-en');
+}
+
+// Filter to only get components (not other content types)
+const components = allContent.filter(item => {
+  const id = item.id || '';
+  const idParts = id.split('/');
+  return idParts[0] === 'components' && idParts.length > 1 && !idParts[1].startsWith('index.');
+});
+
+// Group components by category
+const componentsByCategory = components.reduce((acc, component) => {
+  const category = component.data.category || 'other';
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(component);
+  return acc;
+}, {} as Record<string, typeof components>);
+
+// Build URL prefix based on language
+const urlPrefix = language === 'en' ? '/components' : `/${language}/components`;
+---
+
+<Tabs>
+  <Fragment slot="overview">
+    {Object.entries(componentsByCategory).map(([category, items]) => (
+      <section class="mb-10">
+        <h2 class="text-xl font-sans font-medium mb-4">{categoryLabels[category] || category}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((component) => {
+            const componentName = component.id.replace(/\.(md|mdx)$/, '').split('/').pop() || component.id;
+            return (
+              <a
+                href={`${urlPrefix}/${componentName}`}
+                class="group block p-4 border border-default rounded-lg hover:border-strong transition-colors bg-surface"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-medium font-sans text-default">
+                    {component.data.title}
+                  </h3>
+                  {component.data.status && (
+                    <StatusBadge client:visible status={component.data.status} />
+                  )}
+                </div>
+                <p class="text-sm font-sans text-muted line-clamp-2">
+                  {component.data.description}
+                </p>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+  </Fragment>
+  
+  <Fragment slot="status">
+    <ComponentsStatusTable 
+      components={componentStatusData}
+      caption="Track the progress of each component across design and development."
+    />
+  </Fragment>
+</Tabs>

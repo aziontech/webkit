@@ -1,0 +1,180 @@
+---
+title: Button
+description: Buttons trigger actions and events when users interact with them.
+navLabel: Button
+order: 1
+type: component
+category: form
+status: stable
+since: 1.0.0
+component: Button
+source: https://github.com/aziontech/webkit/tree/main/packages/components/src/Button
+storybook: https://storybook.azion.com/components/button
+figma: https://figma.com/file/azion-design-system/components/button
+related:
+  - Input
+  - Select
+  - IconButton
+tags:
+  - action
+  - form
+  - interactive
+anatomy:
+  - label: Container
+    description: The clickable area with background styling and border
+  - label: Label
+    description: The text content describing the action
+  - label: Icon (optional)
+    description: An optional icon for visual emphasis before or after the label
+accessibility:
+  keyboard:
+    - keys: Tab
+      action: Moves focus to the button
+    - keys: Enter
+      action: Activates the button when focused
+    - keys: Space
+      action: Activates the button when focused
+  aria:
+    - attribute: aria-disabled="true"
+      usage: Use instead of disabled attribute for screen readers to announce the disabled state
+    - attribute: aria-label
+      usage: Required for icon-only buttons to provide accessible name
+    - attribute: aria-busy="true"
+      usage: When button is in loading state
+  wcag:
+    - "2.1.1 Keyboard"
+    - "4.1.2 Name, Role, Value"
+usage:
+  whenToUse:
+    - Trigger primary actions (Submit, Save, Continue)
+    - Navigate to different views or pages
+    - Toggle states or settings
+    - Trigger secondary actions (Cancel, Delete)
+    - Submit forms
+  whenNotToUse:
+    - Navigation to external links (use a link instead)
+    - Displaying static content (use text or labels)
+    - When a more subtle interaction is needed (consider a text link)
+  doDonts:
+    - type: do
+      description: Use buttons for actionable items
+      example: '<Button>Submit Form</Button>'
+    - type: do
+      description: Use clear, action-oriented labels
+      example: '<Button>Save Changes</Button>'
+    - type: dont
+      description: Don't use buttons for navigation
+      example: '<Button>Go to Docs</Button>'
+    - type: dont
+      description: Don't use vague labels
+      example: '<Button>Click Here</Button>'
+  examples:
+    - title: Primary Button
+      description: The default button style for primary actions
+      code: '<Button severity="primary">Primary Button</Button>'
+    - title: Secondary Button
+      description: For alternative or less prominent actions
+      code: '<Button severity="secondary">Secondary Button</Button>'
+    - title: Danger Button
+      description: For dangerous actions like delete or remove
+      code: '<Button severity="danger">Delete</Button>'
+    - title: Button Sizes
+      description: Available in small, medium, and large sizes
+      code: |-
+        <Button size="sm">Small</Button>
+        <Button size="md">Medium</Button>
+        <Button size="lg">Large</Button>'
+api:
+  props:
+    - name: severity
+      type: "'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'plain' | 'contrast'"
+      default: "'primary'"
+      required: false
+      description: Visual severity level - affects color scheme
+    - name: variant
+      type: "'filled' | 'raised' | 'rounded' | 'outlined' | 'text' | 'link'"
+      default: "'filled'"
+      required: false
+      description: Style variant of the button
+    - name: size
+      type: "'sm' | 'md' | 'lg'"
+      default: "'md'"
+      required: false
+      description: Size of the button
+    - name: disabled
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Whether the button is disabled
+    - name: loading
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Shows loading spinner and disables interaction
+    - name: iconOnly
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Render as icon-only button (no text)
+    - name: iconPosition
+      type: "'left' | 'right'"
+      default: "'left'"
+      required: false
+      description: Position of the icon relative to label
+    - name: fullWidth
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Whether button takes full width of container
+  slots:
+    - name: default
+      description: Button label content
+    - name: icon-left
+      description: Custom icon before the label
+      props: "iconClass: string"
+    - name: icon-right
+      description: Custom icon after the label
+      props: "iconClass: string"
+  events:
+    - name: click
+      payload: "MouseEvent"
+      description: Fired when button is clicked and not disabled
+---
+
+import { Playground, StateGrid, CodeBlock, Callout } from '@components/docs';
+import { buttonProps } from '@components/demo/props-metadata';
+import Button from '@components/demo/Button.vue';
+
+Buttons are interactive elements that trigger actions when clicked or tapped. They communicate actions that users can take and are typically placed throughout your UI, from forms to dialogs to navigation.
+
+The Button component provides a consistent, accessible way to trigger actions throughout your application.
+
+## Import
+
+<CodeBlock code={`import { Button } from '@aziontech/webkit';`} lang="javascript" />
+
+## Playground
+
+Explore the Button component interactively. Adjust props and see live changes.
+
+<Playground
+  client:load
+  component-name="Button"
+  props={buttonProps}
+  slot-content="Button"
+/>
+
+## States
+
+<StateGrid columns={4}>
+  <Button slot="default" client:load>Button</Button>
+  <Button slot="hover" client:load state="hover">Button</Button>
+  <Button slot="focus" client:load state="focus">Button</Button>
+  <Button slot="active" client:load state="active">Button</Button>
+  <Button slot="disabled" client:load disabled>Button</Button>
+  <Button slot="loading" client:load loading>Button</Button>
+</StateGrid>
+
+<Callout type="tip" title="Choosing the right severity">
+  Use **primary** for the main action, **secondary** for alternative actions, **danger** for destructive actions, and **plain** for less prominent actions.
+</Callout>

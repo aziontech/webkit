@@ -1,0 +1,353 @@
+---
+/**
+ * Semantic Colors Table – all tokens from packages/theme/src/tokens/semantic.
+ * Resolved at build time via resolveRefsToCssVars; Light/Dark from theme.
+ */
+import {
+  primitives,
+  surfacePrimitives,
+  brandPrimitives,
+  textSemantic,
+  backgroundSemantic,
+  borderSemantic,
+  resolveRefsToCssVars,
+} from '@aziontech/theme/tokens';
+
+const { light, dark } = resolveRefsToCssVars({
+  primitives,
+  surfacePrimitives,
+  brandPrimitives,
+  textSemantic,
+  backgroundSemantic,
+  borderSemantic,
+});
+
+const SEMANTIC_PREFIXES = ['--text-', '--background-', '--border-'];
+const semanticKeys = Object.keys(light).filter((k: string) =>
+  SEMANTIC_PREFIXES.some((p) => k.startsWith(p))
+);
+
+/** Converts CSS var (e.g. --text-textAccent) to Tailwind class (e.g. text-accent). */
+function cssVarToTailwindClass(cssVar: string): string {
+  const name = cssVar.slice(2);
+  const dash = name.indexOf('-');
+  const category = name.slice(0, dash);
+  const rest = name.slice(dash + 1);
+  const tailwindPrefix = category === 'background' ? 'bg' : category;
+  const stripLen = tailwindPrefix === 'bg' ? 2 : tailwindPrefix.length;
+  const afterStrip = rest.slice(stripLen) || rest;
+  const kebab = afterStrip.replace(/([A-Z])/g, (m) => '-' + m.toLowerCase()).replace(/^-/, '');
+  return `${tailwindPrefix}-${kebab}`;
+}
+
+function bySection(key: string): 'TEXT' | 'BACKGROUND' | 'BORDER' | 'OTHER' {
+  if (key.startsWith('--text-')) return 'TEXT';
+  if (key.startsWith('--background-')) return 'BACKGROUND';
+  if (key.startsWith('--border-')) return 'BORDER';
+  return 'OTHER';
+}
+
+interface SemanticRow {
+  token: string;
+  cssVar: string;
+  light: string;
+  dark: string;
+}
+/** Preferred order: these tokens appear first in each section. */
+const TEXT_ORDER = ['text-default', 'text-muted', 'text-primary', 'text-accent'];
+const BACKGROUND_ORDER = ['bg-canvas', 'bg-surface', 'bg-surface-raised', 'bg-surface-overlay'];
+const BORDER_ORDER = ['border-default', 'border-subtle', 'border-strong'];
+
+function sortRowsByPreferredOrder(rows: SemanticRow[], order: string[]): void {
+  rows.sort((a, b) => {
+    const i = order.indexOf(a.token);
+    const j = order.indexOf(b.token);
+    if (i === -1 && j === -1) return a.token.localeCompare(b.token);
+    if (i === -1) return 1;
+    if (j === -1) return -1;
+    return i - j;
+  });
+}
+
+const rowsBySection: Record<string, SemanticRow[]> = { TEXT: [], BACKGROUND: [], BORDER: [], OTHER: [] };
+semanticKeys.sort().forEach((key: string) => {
+  const section = bySection(key);
+  const lightVal = light[key as keyof typeof light];
+  const darkVal = dark[key as keyof typeof dark];
+  if (lightVal == null && darkVal == null) return;
+  rowsBySection[section].push({
+    token: cssVarToTailwindClass(key),
+    cssVar: key,
+    light: lightVal ?? '—',
+    dark: darkVal ?? '—',
+  });
+});
+
+sortRowsByPreferredOrder(rowsBySection.TEXT, TEXT_ORDER);
+sortRowsByPreferredOrder(rowsBySection.BACKGROUND, BACKGROUND_ORDER);
+sortRowsByPreferredOrder(rowsBySection.BORDER, BORDER_ORDER);
+
+const sections: { title: string; rows: SemanticRow[] }[] = [
+  { title: 'TEXT', rows: rowsBySection.TEXT },
+  { title: 'BACKGROUND', rows: rowsBySection.BACKGROUND },
+  { title: 'BORDER', rows: rowsBySection.BORDER },
+].filter((s) => s.rows.length > 0);
+---
+
+<div class="semantic-colors">
+  <p class="semantic-colors__intro">
+    Semantic tokens from <code>packages/theme/src/tokens/semantic</code>. They carry meaning, not raw values. Use them in component code; values adapt automatically per theme.
+  </p>
+
+  {sections.map((section) => (
+    <div class="semantic-colors__section">
+      <h3 class="semantic-colors__section-title">{section.title}</h3>
+      <div class="semantic-colors__table-wrap">
+        <table class="semantic-colors__table">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>CSS Variable</th>
+              <th>Light</th>
+              <th>Dark</th>
+            </tr>
+          </thead>
+          <tbody>
+            {section.rows.map((row) => (
+              <tr>
+                <td>
+                  <button
+                    type="button"
+                    class="semantic-colors__copy-token"
+                    data-copyable
+                    data-token={row.token}
+                    title="Copy token"
+                  >
+                    <code class="semantic-colors__token">{row.token}</code>
+                    <span class="semantic-colors__copy-hint" aria-hidden="true"></span>
+                  </button>
+                </td>
+                <td><code class="semantic-colors__var">{row.cssVar}</code></td>
+                <td>
+                  <span class="semantic-colors__cell">
+                    {typeof row.light === 'string' && row.light.startsWith('#') ? (
+                      <>
+                        <span class="semantic-colors__swatch" style={`background-color: ${row.light};`} />
+                        <span class="semantic-colors__hex">{row.light}</span>
+                      </>
+                    ) : (
+                      <span class="semantic-colors__hex">{row.light}</span>
+                    )}
+                  </span>
+                </td>
+                <td>
+                  <span class="semantic-colors__cell">
+                    {typeof row.dark === 'string' && row.dark.startsWith('#') ? (
+                      <>
+                        <span class="semantic-colors__swatch" style={`background-color: ${row.dark};`} />
+                        <span class="semantic-colors__hex">{row.dark}</span>
+                      </>
+                    ) : (
+                      <span class="semantic-colors__hex">{row.dark}</span>
+                    )}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .semantic-colors {
+    margin: 1.5rem 0;
+  }
+
+  .semantic-colors__intro {
+    font-size: 0.875rem;
+    color: var(--text-textMuted, #525252);
+    margin: 0 0 1.25rem 0;
+    max-width: 52rem;
+  }
+
+  .semantic-colors__intro code {
+    font-size: 0.8125rem;
+    padding: 0.125rem 0.25rem;
+    border-radius: 4px;
+    background: var(--background-bgLayer2, #fafafa);
+  }
+
+  .dark .semantic-colors__intro,
+  .azion.azion-dark .semantic-colors__intro {
+    color: var(--text-textMuted);
+  }
+
+  .semantic-colors__section {
+    margin-bottom: 1.5rem;
+  }
+
+  .semantic-colors__section:last-child {
+    margin-bottom: 0;
+  }
+
+  .semantic-colors__section-title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-textMuted, #525252);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .semantic-colors__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-borderBase, #e5e5e5);
+    border-radius: 8px;
+    background: var(--background-bgLayer1, #fff);
+  }
+
+  .dark .semantic-colors__table-wrap,
+  .azion.azion-dark .semantic-colors__table-wrap {
+    border-color: var(--border-borderBase);
+    background: var(--background-bgLayer1);
+  }
+
+  .semantic-colors__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .semantic-colors__table th,
+  .semantic-colors__table td {
+    padding: 0.625rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-borderBase, #e5e5e5);
+    color: var(--text-textBase, #171717);
+  }
+
+  .dark .semantic-colors__table th,
+  .dark .semantic-colors__table td,
+  .azion.azion-dark .semantic-colors__table th,
+  .azion.azion-dark .semantic-colors__table td {
+    border-color: var(--border-borderBase);
+    color: var(--text-textBase);
+  }
+
+  .semantic-colors__table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .semantic-colors__table th {
+    font-weight: 600;
+    color: var(--text-textMuted, #525252);
+  }
+
+  .semantic-colors__token,
+  .semantic-colors__var {
+    font-family: ui-monospace, 'Roboto Mono', monospace;
+    font-size: 0.8125rem;
+    padding: 0.125rem 0.25rem;
+    border-radius: 4px;
+    background: var(--background-bgLayer2, #fafafa);
+  }
+
+  .dark .semantic-colors__token,
+  .dark .semantic-colors__var,
+  .azion.azion-dark .semantic-colors__token,
+  .azion.azion-dark .semantic-colors__var {
+    background: var(--background-bgLayer2);
+  }
+
+  .semantic-colors__cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .semantic-colors__swatch {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .semantic-colors__hex {
+    font-family: ui-monospace, 'Roboto Mono', monospace;
+    font-size: 0.8125rem;
+    color: var(--text-textMuted, #525252);
+  }
+
+  .semantic-colors__copy-token {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.375rem;
+    margin: -0.25rem -0.375rem;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    transition: background 0.15s ease;
+  }
+
+  .semantic-colors__copy-token:hover {
+    background: var(--background-bgLayer2, #f5f5f5);
+  }
+
+  .dark .semantic-colors__copy-token:hover,
+  .azion.azion-dark .semantic-colors__copy-token:hover {
+    background: var(--background-bgLayer2);
+  }
+
+  .semantic-colors__copy-token:focus-visible {
+    outline: 2px solid var(--border-borderPrimary, #fe601f);
+    outline-offset: 2px;
+  }
+
+  .semantic-colors__copy-hint {
+    font-size: 0.6875rem;
+    color: var(--text-textMuted, #525252);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .semantic-colors__copy-token:hover .semantic-colors__copy-hint {
+    opacity: 1;
+  }
+
+  .semantic-colors__copy-token[data-copied] .semantic-colors__copy-hint {
+    opacity: 1;
+    color: var(--text-textSuccess, #16a34a);
+  }
+
+  .semantic-colors__copy-token[data-copied] .semantic-colors__copy-hint::after {
+    content: 'Copied!';
+  }
+
+  .semantic-colors__copy-token:not([data-copied]) .semantic-colors__copy-hint::after {
+    content: 'Copy';
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.semantic-colors').forEach((container) => {
+    container.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest?.('[data-copyable][data-token]');
+      if (!btn || !(btn instanceof HTMLElement)) return;
+      const token = btn.getAttribute('data-token');
+      if (!token || !navigator.clipboard?.writeText) return;
+      navigator.clipboard.writeText(token).then(() => {
+        btn.setAttribute('data-copied', '');
+        window.setTimeout(() => btn.removeAttribute('data-copied'), 1500);
+      });
+    });
+  });
+</script>

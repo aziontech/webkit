@@ -1,0 +1,22 @@
+{
+  "component": "form-field-phone-number-country",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-phone-number-country/field-phone-number-country.vue",
+  "props": [
+    {
+      "name": "listCountriesPhoneService",
+      "type": "Function",
+      "required": true,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "countries-loaded",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-19T13:10:14.944Z"
+}

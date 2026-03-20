@@ -1,0 +1,132 @@
+{
+  "brand": {
+    "name": "design system"
+  },
+  "nav": {
+    "documentation": "Documentação",
+    "getStarted": "Começar",
+    "foundations": "Fundamentos",
+    "tokens": "Tokens",
+    "components": "Componentes",
+    "blocks": "Blocos",
+    "patterns": "Padrões",
+    "templates": "Templates",
+    "icons": "Ícones",
+    "playground": "Playground",
+    "contributing": "Contribuir"
+  },
+  "search": {
+    "placeholder": "Buscar na documentação...",
+    "noResults": "Nenhum resultado encontrado para \"{query}\"",
+    "clear": "Limpar busca",
+    "close": "Fechar busca",
+    "resultsCount": "{count} resultado{plural}",
+    "inSection": "em {section}",
+    "startTyping": "Comece a digitar para buscar..."
+  },
+  "version": {
+    "current": "Atual",
+    "latest": "Mais recente",
+    "older": "Versão anterior",
+    "banner": "Você está visualizando uma versão anterior da documentação. Pode haver uma versão mais recente disponível.",
+    "viewLatest": "Ver versão mais recente"
+  },
+  "language": {
+    "switch": "Alterar idioma",
+    "current": "Idioma atual",
+    "available": "Idiomas disponíveis"
+  },
+  "status": {
+    "stable": "Estável",
+    "beta": "Beta",
+    "deprecated": "Descontinuado",
+    "planned": "Planejado",
+    "experimental": "Experimental"
+  },
+  "common": {
+    "onThisPage": "Nesta página",
+    "lastUpdated": "Última atualização",
+    "contributors": "Colaboradores",
+    "editPage": "Editar esta página",
+    "reportIssue": "Reportar um problema",
+    "backTo": "Voltar para {title}",
+    "skipToContent": "Pular para o conteúdo",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "component": {
+    "overview": "Visão geral",
+    "usage": "Uso",
+    "api": "API",
+    "props": "Props",
+    "slots": "Slots",
+    "events": "Eventos",
+    "accessibility": "Acessibilidade",
+    "anatomy": "Anatomia",
+    "examples": "Exemplos",
+    "related": "Componentes relacionados",
+    "sourceCode": "Código fonte",
+    "storybook": "Storybook",
+    "figma": "Figma",
+    "noProps": "Nenhuma prop definida.",
+    "noSlots": "Nenhum slot definido.",
+    "noEvents": "Nenhum evento definido.",
+    "required": "Obrigatório",
+    "optional": "Opcional",
+    "defaultValue": "Padrão",
+    "type": "Tipo",
+    "name": "Nome",
+    "description": "Descrição",
+    "value": "Valor"
+  },
+  "playground": {
+    "title": "Playground",
+    "description": "Experimente componentes em tempo real",
+    "controls": "Controles",
+    "preview": "Pré-visualização",
+    "code": "Código",
+    "copyCode": "Copiar código",
+    "copied": "Copiado!",
+    "reset": "Restaurar padrões",
+    "noComponent": "Nenhum componente selecionado",
+    "iconHelpViewFull": "Ver lista completa de ",
+    "iconHelpIconList": "ícones"
+  },
+  "icons": {
+    "title": "Biblioteca de Ícones",
+    "search": "Buscar ícones...",
+    "noResults": "Nenhum ícone encontrado para \"{query}\"",
+    "download": "Baixar",
+    "copyName": "Copiar nome do ícone",
+    "copySvg": "Copiar SVG",
+    "copied": "Copiado!",
+    "categories": {
+      "azionicons": "Ícones Azion",
+      "primeicons": "Prime Icons"
+    }
+  },
+  "callout": {
+    "info": "Informação",
+    "warning": "Aviso",
+    "danger": "Perigo",
+    "tip": "Dica",
+    "note": "Nota"
+  },
+  "doDont": {
+    "do": "Faça",
+    "dont": "Não faça",
+    "bestPractice": "Melhor prática",
+    "avoid": "Evitar"
+  },
+  "footer": {
+    "preferences": "Preferências",
+    "language": "Idioma",
+    "theme": "Tema",
+    "copyright": "Azion Technologies ou suas afiliadas. Todos os direitos reservados.",
+    "lastUpdated": "Última atualização",
+    "documentation": "Documentação",
+    "resources": "Recursos",
+    "community": "Comunidade",
+    "more": "Mais"
+  }
+}

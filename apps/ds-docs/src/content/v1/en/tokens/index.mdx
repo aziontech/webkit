@@ -1,0 +1,271 @@
+---
+title: Design Tokens
+description: Design tokens are the smallest units of the design system, storing visual values like colors for consistent usage across products. The tokens live in the @aziontech/theme package.
+navLabel: Tokens
+order: 1
+type: token
+category: color
+---
+
+# Tokens
+
+Design tokens are the smallest units of the design system. They store visual values like colors so that products and platforms stay consistent.
+
+In this monorepo, tokens are provided by the **`@aziontech/theme`** package. They support light and dark themes via semantic tokens and can be used with Tailwind CSS in the docs and other apps.
+
+## Package and structure
+
+The theme package is **`@aziontech/theme`**. Design tokens are under the `/tokens` export.
+
+### Install
+
+In the monorepo, the docs app already depends on the theme:
+
+```json
+{
+  "dependencies": {
+    "@aziontech/theme": "workspace:*"
+  }
+}
+```
+
+For an external project:
+
+```bash
+npm install @aziontech/theme
+```
+
+### Token source layout
+
+Inside `packages/theme` the token source is:
+
+```
+packages/theme/
+├── tokens.js              # Main entry: re-exports from src/tokens
+├── default.js              # Theme SCSS entry (full theme)
+└── src/tokens/
+    ├── index.js            # Public token exports
+    ├── primitives/
+    │   ├── colors.js       # Raw palettes (gray, neutral, orange, violet, etc.)
+    │   └── brand.js        # Brand + surface primitives (surface, primary, accent)
+    ├── colors-brand.js     # Brand color aliases (orange, white, black, etc.)
+    ├── semantic/
+    │   ├── text.js         # Light/dark text semantics (textColorBase, textMuted, …)
+    │   ├── backgrounds.js  # Light/dark background semantics (bgLayer1, bgCanvas, …)
+    │   └── borders.js     # Light/dark border semantics (borderBase, borderPrimary, …)
+    └── build/
+        ├── preset.js           # Tailwind preset (theme.extend.colors with CSS vars)
+        ├── tailwind-plugin.js   # tokenUtilities() for semantic utility classes
+        ├── resolve.js           # Resolve refs to concrete values
+        ├── css-vars.js          # CSS variable output for runtime theming
+        └── refs.js              # Token reference helpers
+```
+
+- **Primitives** are raw values (e.g. `neutral.900`, `orange.500`). They do not switch by theme; use Tailwind's `dark:` when needed.
+- **Semantic** tokens are defined per theme (light/dark) in `semantic/*.js`. The **Tailwind plugin** turns them into utility classes that automatically follow the active theme (e.g. `.dark` or `.azion.azion-dark`).
+
+## Primitive tokens
+
+Primitives are the base palettes. Use them when you need a fixed value or when building new semantic tokens.
+
+| Category | Example | Usage |
+|----------|---------|--------|
+| Neutrals | `neutral-50` … `neutral-950` | Surfaces, borders, text when not using semantic |
+| Primary (orange) | `orange-50` … `orange-950` | Brand primary; `orange-500` is the main orange |
+| Accent (violet) | `violet-50` … `violet-950` | Accent/highlights |
+| Surface | `surface-0`, `surface-50`, … `surface-950` | Same scale as neutral, used for layers |
+| Status | `red-*`, `green-*`, `yellow-*`, `blue-*` | Status and feedback |
+
+**In Tailwind (docs):** The docs config extends `theme.extend.colors` with `primitives`, `surface`, `primaryBrand`, and `accent` from `@aziontech/theme/tokens`, so you can use classes like `bg-neutral-100`, `text-orange-500`, `border-surface-200`.
+
+**In JS:** You can import and use the same values:
+
+```js
+import { primitives, surfacePrimitives, brandPrimitives } from '@aziontech/theme/tokens';
+
+primitives.neutral[900];           // #171717
+surfacePrimitives.surface[50];     // #fafafa
+brandPrimitives.primary[500];       // #fe601f
+```
+
+<Callout type="warning" title="Use primitives sparingly">
+  Prefer semantic tokens for UI so the app adapts to light/dark. Use primitives when you need a fixed value or when defining new semantics.
+</Callout>
+
+## Semantic tokens
+
+Semantic tokens are theme-aware: one name maps to different primitive values in light vs dark. The **Tailwind plugin** (`tokenUtilities`) generates utilities that switch with `.dark` (and `.azion.azion-dark`).
+
+### How the docs use them
+
+The docs app wires the theme like this:
+
+1. **Tailwind config**
+   - `darkMode: ['class', '.dark', '.azion.azion-dark']`
+   - `plugins: [tokenUtilities(), …]`
+   - `theme.extend.colors` extended with primitives/surface/primaryBrand/accent from `@aziontech/theme/tokens`.
+
+2. **Utility classes** from the plugin (no `dark:` needed):
+   - **Text:** `text-default`, `text-muted`, `text-link`, `text-primary`, `text-accent`, `text-code`, and hover variants.
+   - **Background:** `bg-layer1`, `bg-layer2`, `bg-surface`, `bg-canvas`, hover variants, and semantic (e.g. `bg-primary`, `bg-danger`).
+   - **Border:** `border-default`, `border-primary`, `border-accent`, and semantic (e.g. `border-danger`, `border-success`).
+
+Class names are **not** prefixed with the category: use `text-default`, `bg-layer1`, `border-default` (not `text-text-default`, `bg-bg-layer1`, `border-border-default`).
+
+### Examples in the docs
+
+```html
+<!-- Page / section background -->
+<div class="bg-canvas">…</div>
+
+<!-- Cards and panels -->
+<div class="bg-layer1 border border-default rounded-lg p-4">
+  <p class="text-default">Primary text</p>
+  <p class="text-muted">Secondary text</p>
+</div>
+
+<!-- Themed border -->
+<div class="border border-primary">…</div>
+```
+
+### Theme switching
+
+The plugin emits separate rules for light and dark. When the root (e.g. `<html>`) has the class `.dark` or `.azion.azion-dark`, the semantic utilities use the dark values. No extra CSS variables are required for this.
+
+## Using tokens with Tailwind
+
+### Minimal setup (semantic utilities only)
+
+```js
+// tailwind.config.js
+import { tokenUtilities } from '@aziontech/theme/tokens/build/tailwind-plugin';
+
+export default {
+  darkMode: ['class', '.dark', '.azion.azion-dark'],
+  content: ['./src/**/*.{html,js,ts,jsx,tsx,vue,astro,mdx}'],
+  plugins: [tokenUtilities()],
+};
+```
+
+After that you can use `bg-layer1`, `text-default`, `border-default`, etc.
+
+### With primitives in theme
+
+To also have primitive colors (e.g. `neutral-500`, `orange-500`) in your theme:
+
+```js
+import { tokenUtilities } from '@aziontech/theme/tokens/build/tailwind-plugin';
+import { primitives, surfacePrimitives, brandPrimitives } from '@aziontech/theme/tokens';
+
+export default {
+  darkMode: ['class', '.dark', '.azion.azion-dark'],
+  content: ['./src/**/*.{html,js,ts,jsx,tsx,vue,astro,mdx}'],
+  theme: {
+    extend: {
+      colors: {
+        ...primitives,
+        surface: { ...surfacePrimitives.surface, DEFAULT: surfacePrimitives.surface[0] },
+        primaryBrand: brandPrimitives.primary,
+        accent: brandPrimitives.accent,
+      },
+    },
+  },
+  plugins: [tokenUtilities()],
+};
+```
+
+## Semantic token examples (visual)
+
+### Text colors
+
+<div className="space-y-4 my-6" style={{viewTransitionName: 'text-colors'}}>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-default font-medium">text-default</p>
+  <p className="text-sm text-muted mt-1">Primary text for headings and body</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-muted font-medium">text-muted</p>
+  <p className="text-sm text-muted mt-1">Secondary text for descriptions and labels</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-link font-medium">text-link</p>
+  <p className="text-sm text-muted mt-1">Link color</p>
+</div>
+
+</div>
+
+### Background layers
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6" style={{viewTransitionName: 'bg-layers'}}>
+
+<div className="p-6 rounded-lg bg-layer1 border border-default">
+  <p className="font-medium text-default">Layer 1</p>
+  <p className="text-sm text-muted mt-2">bg-layer1</p>
+  <p className="text-xs text-muted mt-1">Cards and panels</p>
+</div>
+
+<div className="p-6 rounded-lg bg-layer2 border border-default">
+  <p className="font-medium text-default">Layer 2</p>
+  <p className="text-sm text-muted mt-2">bg-layer2</p>
+  <p className="text-xs text-muted mt-1">Elevated surfaces</p>
+</div>
+
+<div className="p-6 rounded-lg bg-canvas border border-default">
+  <p className="font-medium text-default">Canvas</p>
+  <p className="text-sm text-muted mt-2">bg-canvas</p>
+  <p className="text-xs text-muted mt-1">Page background</p>
+</div>
+
+</div>
+
+### Border tokens
+
+<div className="space-y-4 my-6" style={{viewTransitionName: 'border-tokens'}}>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-default font-medium">border-default</p>
+  <p className="text-sm text-muted mt-1">Default border</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border-2 border-primary">
+  <p className="text-default font-medium">border-primary</p>
+  <p className="text-sm text-muted mt-1">Primary (orange) border</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border-2 border-accent">
+  <p className="text-default font-medium">border-accent</p>
+  <p className="text-sm text-muted mt-1">Accent (violet) border</p>
+</div>
+
+</div>
+
+## Sync and maintenance
+
+Tokens can be synced from Figma via the scripts under `packages/theme/scripts` (e.g. Figma Variables → Tokens Studio → export into `src/tokens/figma-reference-tokens-studio/`). The source files to edit manually are:
+
+- **Primitives:** `src/tokens/primitives/colors.js`, `src/tokens/primitives/brand.js`
+- **Semantic:** `src/tokens/semantic/text.js`, `src/tokens/semantic/backgrounds.js`, `src/tokens/semantic/borders.js`
+- **Brand aliases:** `src/tokens/colors-brand.js`
+
+See `packages/theme/src/tokens/README.md` for the full token README and sync workflow.
+
+## Related resources
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 mb-8">
+
+<FoundationCard
+  title="Color"
+  description="Color foundation and how tokens implement the color system."
+  href="/foundations/color"
+/>
+
+<FoundationCard
+  title="Typography"
+  description="Typography foundations and token-based text styles."
+  href="/foundations/typography"
+/>
+
+</div>

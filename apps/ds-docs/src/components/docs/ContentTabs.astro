@@ -1,0 +1,141 @@
+---
+/**
+ * ContentTabs
+ *
+ * In-content tabs with custom labels (for pattern docs and MDX).
+ * Use when you need more than the fixed Overview/Status tabs.
+ *
+ * Usage in MDX:
+ * <ContentTabs tab1Label="Fluxo Principal" tab2Label="Estados">
+ *   <Fragment slot="tab1">First tab content...</Fragment>
+ *   <Fragment slot="tab2">Second tab content...</Fragment>
+ * </ContentTabs>
+ */
+
+interface Props {
+  tab1Label: string;
+  tab2Label: string;
+  tab3Label?: string;
+  /** Initial active tab: 'tab1' | 'tab2' | 'tab3' */
+  defaultTab?: 'tab1' | 'tab2' | 'tab3';
+}
+
+const { tab1Label, tab2Label, tab3Label, defaultTab = 'tab1' } = Astro.props;
+
+const tabs = [
+  { id: 'tab1', label: tab1Label },
+  { id: 'tab2', label: tab2Label },
+  ...(tab3Label ? [{ id: 'tab3' as const, label: tab3Label }] : []),
+];
+---
+
+<div class="content-tabs-container tabs-container" data-initial-tab={defaultTab}>
+  <div
+    role="tablist"
+    class="flex border-b border-default mb-6"
+    aria-label="Seções"
+  >
+    {tabs.map((tab) => (
+      <button
+        id={`tab-${tab.id}`}
+        role="tab"
+        aria-selected={tab.id === defaultTab ? 'true' : 'false'}
+        aria-controls={`panel-${tab.id}`}
+        tabindex={tab.id === defaultTab ? '0' : '-1'}
+        data-tab-id={tab.id}
+        class:list={[
+          'px-4 py-2.5 !text-sm font-medium border-b-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+          tab.id === defaultTab
+            ? 'border-default-hover text-default'
+            : 'border-transparent text-muted hover:text-default hover:border-default',
+        ]}
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
+  <div class="tab-panels">
+    <div
+      id="panel-tab1"
+      role="tabpanel"
+      aria-labelledby="tab-tab1"
+      data-panel-id="tab1"
+      hidden={defaultTab !== 'tab1'}
+      tabindex="0"
+      class="prose prose-sm max-w-none"
+    >
+      <slot name="tab1" />
+    </div>
+    <div
+      id="panel-tab2"
+      role="tabpanel"
+      aria-labelledby="tab-tab2"
+      data-panel-id="tab2"
+      hidden={defaultTab !== 'tab2'}
+      tabindex="0"
+      class="prose prose-sm max-w-none"
+    >
+      <slot name="tab2" />
+    </div>
+    {tab3Label && (
+      <div
+        id="panel-tab3"
+        role="tabpanel"
+        aria-labelledby="tab-tab3"
+        data-panel-id="tab3"
+        hidden={defaultTab !== 'tab3'}
+        tabindex="0"
+        class="prose prose-sm max-w-none"
+      >
+        <slot name="tab3" />
+      </div>
+    )}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.content-tabs-container').forEach((container) => {
+      const tabs = container.querySelectorAll('[role="tab"]');
+      const panels = container.querySelectorAll('[role="tabpanel"]');
+      const initialTab = (container as HTMLElement).dataset.initialTab;
+      let activeId = initialTab || (tabs[0] as HTMLElement)?.dataset?.tabId;
+
+      function setActive(id: string) {
+        activeId = id;
+        tabs.forEach((t) => {
+          const el = t as HTMLElement;
+          const isActive = el.dataset.tabId === id;
+          el.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          el.setAttribute('tabindex', isActive ? '0' : '-1');
+          el.classList.toggle('border-default-hover', isActive);
+          el.classList.toggle('text-default', isActive);
+          el.classList.toggle('border-transparent', !isActive);
+          el.classList.toggle('text-muted', !isActive);
+        });
+        panels.forEach((p) => {
+          const panel = p as HTMLElement;
+          panel.hidden = panel.dataset.panelId !== id;
+        });
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => setActive((tab as HTMLElement).dataset.tabId || ''));
+        tab.addEventListener('keydown', (e: Event) => {
+          const ke = e as KeyboardEvent;
+          const idx = Array.from(tabs).indexOf(tab as Element);
+          if (ke.key === 'ArrowRight' && idx < tabs.length - 1) {
+            ke.preventDefault();
+            setActive((tabs[idx + 1] as HTMLElement).dataset.tabId || '');
+            (tabs[idx + 1] as HTMLElement).focus();
+          }
+          if (ke.key === 'ArrowLeft' && idx > 0) {
+            ke.preventDefault();
+            setActive((tabs[idx - 1] as HTMLElement).dataset.tabId || '');
+            (tabs[idx - 1] as HTMLElement).focus();
+          }
+        });
+      });
+    });
+  });
+</script>
