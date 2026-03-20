@@ -27,6 +27,17 @@ export default {
 };
 
 export const Default = {
+  render: (args) => ({
+    components: { Badge },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div class="flex">
+        <Badge v-bind="args" />
+      </div>
+    `
+  }),
   args: {
     value: 5
   }
