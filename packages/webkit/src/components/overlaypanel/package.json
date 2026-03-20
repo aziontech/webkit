@@ -1,0 +1,1 @@
+{"main": "./overlaypanel.vue", "module": "./overlaypanel.vue", "browser": {"./sfc": "./overlaypanel.vue"}, "sideEffects": ["*.vue"]}

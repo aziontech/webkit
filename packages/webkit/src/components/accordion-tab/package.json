@@ -1,0 +1,8 @@
+{
+  "main": "./accordion-tab.vue",
+  "module": "./accordion-tab.vue",
+  "browser": {
+    "./sfc": "./accordion-tab.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

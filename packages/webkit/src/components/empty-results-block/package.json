@@ -1,0 +1,9 @@
+{
+  "main": "./empty-results-block.vue",
+  "module": "./empty-results-block.vue",
+  "types": "./empty-results-block.vue.d.ts",
+  "browser": {
+    "./sfc": "./empty-results-block.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

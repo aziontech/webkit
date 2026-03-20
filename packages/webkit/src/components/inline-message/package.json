@@ -1,0 +1,8 @@
+{
+  "main": "./inline-message.vue",
+  "module": "./inline-message.vue",
+  "browser": {
+    "./sfc": "./inline-message.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

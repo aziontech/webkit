@@ -1,0 +1,1 @@
+{"main": "./tabview.vue", "module": "./tabview.vue", "browser": {"./sfc": "./tabview.vue"}, "sideEffects": ["*.vue"]}

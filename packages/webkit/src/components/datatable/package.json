@@ -1,0 +1,1 @@
+{"main": "./datatable.vue", "module": "./datatable.vue", "browser": {"./sfc": "./datatable.vue"}, "sideEffects": ["*.vue"]}

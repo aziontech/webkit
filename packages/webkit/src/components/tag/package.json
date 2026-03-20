@@ -1,0 +1,8 @@
+{
+  "main": "./tag.vue",
+  "module": "./tag.vue",
+  "browser": {
+    "./sfc": "./tag.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
