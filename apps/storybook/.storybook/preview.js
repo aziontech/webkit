@@ -32,19 +32,28 @@ export const parameters = {
     },
     theme: {
       base: 'dark',
+      // Typography
+      fontBase: '"Sora", sans-serif',
+      fontCode: '"Roboto Mono", monospace',
+      // Colors
       colorPrimary: '#F3652B',
       colorSecondary: '#585C6D',
+      // UI
       appBg: '#0a0a0a',
       appContentBg: '#0a0a0a',
-      appBorderColor: '#404040',
-      textColor: '#FFFFFF',
+      appBorderColor: '#3e3e3e',
+      appBorderRadius: 4,
+      // Text colors
+      textColor: '#ededed',
       textInverseColor: '#0a0a0a',
-      barTextColor: '#999999',
+      // Toolbar
+      barTextColor: '#b5b5b5',
       barSelectedColor: '#F3652B',
-      barBg: '#0A0A0A',
-      inputBg: '#0A0A0A',
-      inputBorder: '#404040',
-      inputTextColor: '#FFFFFF',
+      barBg: '#111111',
+      // Form
+      inputBg: '#171717',
+      inputBorder: '#3e3e3e',
+      inputTextColor: '#ededed',
       inputBorderRadius: 4
     }
   },
