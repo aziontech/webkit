@@ -1,3 +1,11 @@
+## [1.7.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.7.0...@aziontech/webkit@1.7.1) (2026-03-20)
+
+
+### Bug Fixes
+
+* badge wrap flex with storybook azion style class ([f94aa49](https://github.com/aziontech/webkit/commit/f94aa49a37d47c195b651b9174111ae9a13a1121))
+* storybook azion theme ([e7e76ef](https://github.com/aziontech/webkit/commit/e7e76efec8b79a3eb996d103bbf8899d4f3a808d))
+
 ## [1.7.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.6.0...@aziontech/webkit@1.7.0) (2026-03-20)
 
 
