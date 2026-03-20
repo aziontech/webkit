@@ -1,0 +1,1 @@
+{"main": "./sidebar.vue", "module": "./sidebar.vue", "browser": {"./sfc": "./sidebar.vue"}, "sideEffects": ["*.vue"]}

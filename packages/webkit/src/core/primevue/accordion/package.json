@@ -1,0 +1,8 @@
+{
+  "main": "./accordion.vue",
+  "module": "./accordion.vue",
+  "browser": {
+    "./sfc": "./accordion.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

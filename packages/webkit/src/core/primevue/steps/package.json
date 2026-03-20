@@ -1,0 +1,1 @@
+{"main": "./steps.vue", "module": "./steps.vue", "browser": {"./sfc": "./steps.vue"}, "sideEffects": ["*.vue"]}

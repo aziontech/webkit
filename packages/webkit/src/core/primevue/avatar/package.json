@@ -1,0 +1,1 @@
+{"main": "./avatar.vue", "module": "./avatar.vue", "browser": {"./sfc": "./avatar.vue"}, "sideEffects": ["*.vue"]}

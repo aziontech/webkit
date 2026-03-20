@@ -1,0 +1,9 @@
+{
+  "main": "./resizable-splitter.vue",
+  "module": "./resizable-splitter.vue",
+  "types": "./resizable-splitter.vue.d.ts",
+  "browser": {
+    "./sfc": "./resizable-splitter.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

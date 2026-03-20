@@ -1,0 +1,1 @@
+{"main": "./carousel.vue", "module": "./carousel.vue", "browser": {"./sfc": "./carousel.vue"}, "sideEffects": ["*.vue"]}

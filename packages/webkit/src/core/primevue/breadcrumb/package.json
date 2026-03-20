@@ -1,0 +1,1 @@
+{"main": "./breadcrumb.vue", "module": "./breadcrumb.vue", "browser": {"./sfc": "./breadcrumb.vue"}, "sideEffects": ["*.vue"]}
