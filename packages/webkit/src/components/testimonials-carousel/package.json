@@ -1,0 +1,11 @@
+{
+  "main": "./testimonials-carousel.vue",
+  "module": "./testimonials-carousel.vue",
+  "types": "./testimonials-carousel.vue.d.ts",
+  "browser": {
+    "./sfc": "./testimonials-carousel.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

@@ -1,3 +1,62 @@
+## [1.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.4...@aziontech/webkit@1.6.0) (2026-03-19)
+
+
+### Features
+
+* add testimonials-carousel component and fix storybook setup ([dfb885f](https://github.com/aziontech/webkit/commit/dfb885f107cee3dde0a8244fbe4d14182e249d02))
+
+
+### Bug Fixes
+
+* restore field-text-password export, remove non-existent field-password entries ([a423582](https://github.com/aziontech/webkit/commit/a4235823a32c382392c788d00bb4a68495337780))
+
+## [1.5.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.3...@aziontech/webkit@1.5.4) (2026-03-19)
+
+
+### Bug Fixes
+
+* reusable country-flag css and image sprite ([7a98395](https://github.com/aziontech/webkit/commit/7a983955d92526e7ea42e32b14d21a0d313eb7d3))
+
+## [1.5.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.2...@aziontech/webkit@1.5.3) (2026-03-19)
+
+
+### Bug Fixes
+
+* storybook svgs 404/403 ([13c6399](https://github.com/aziontech/webkit/commit/13c639942e22acf7f8ce0fcfd5eaa79f7d6df6c6))
+
+## [1.5.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.1...@aziontech/webkit@1.5.2) (2026-03-19)
+
+
+### Bug Fixes
+
+* storybook svgs 404/403 ([e3da2f3](https://github.com/aziontech/webkit/commit/e3da2f3c0040d206094dea6043e86afc5e06cd78))
+
+## [1.5.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.0...@aziontech/webkit@1.5.1) (2026-03-19)
+
+
+### Bug Fixes
+
+* adding sprite country used by flag.css ([39d8464](https://github.com/aziontech/webkit/commit/39d84647d4606ba3ffde846aaa9b4fda61998ea8))
+* color variable on tailwind ([611d352](https://github.com/aziontech/webkit/commit/611d35238e270a0662e369d85e9f259cf0f1931c))
+* import default ([68197b9](https://github.com/aziontech/webkit/commit/68197b9aee734c6dfae10385e4214c01d06e14be))
+* improve storybook performance dev server ([dac62a9](https://github.com/aziontech/webkit/commit/dac62a91df1baf4521029d5e0b576d6433432d65))
+* storybook Build workspace packages ([a6c6264](https://github.com/aziontech/webkit/commit/a6c6264cacfa9c960526fdb7f990b9e59e68058a))
+* storybook github actions 404 icons ([69ac399](https://github.com/aziontech/webkit/commit/69ac399e84faa780a4b58183353d2e8fe31cf168))
+* theme semantic tokens fix ([2a19e9e](https://github.com/aziontech/webkit/commit/2a19e9e8b8405380a3be505d9cd5372f2ad9b63c))
+* tmp and .tpm added to gitignore ([644902a](https://github.com/aziontech/webkit/commit/644902a0a881b73a41a78be9c34761aff804b85a))
+
+## [1.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.2...@aziontech/webkit@1.5.0) (2026-03-18)
+
+
+### Features
+
+* storybook github actions azion deploy ([328e0a9](https://github.com/aziontech/webkit/commit/328e0a9eb94887e15f04f8da47ff8f6ae0fff2f1))
+
+
+### Bug Fixes
+
+* prevent loop during npm publishing process ([8a90666](https://github.com/aziontech/webkit/commit/8a906662f9b769d273d11fe89c82cb6c17849ef9))
+
 ## [1.4.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.4.1...@aziontech/webkit@1.4.2) (2026-03-17)
 
 

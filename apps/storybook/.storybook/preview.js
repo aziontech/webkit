@@ -1,20 +1,20 @@
 import { setup } from '@storybook/vue3';
 import PrimeVue from 'primevue/config';
 import Tooltip from 'primevue/tooltip';
-
-import '../src/styles/preview.css';
-import 'primeflex/primeflex.css'
-import '@aziontech/icons'
-import 'azion-theme'
-
-
 import { withThemeByClassName } from '@storybook/addon-themes'
+
+import 'primeflex/primeflex.css'
+import '../src/styles/preview.css';
+import '../src/styles/theme-root-vars.scss';
+import '@aziontech/theme'
+import '@aziontech/icons'
+import '@aziontech/webkit/styles/country-flags'
 
 setup((app) => {
   app.use(PrimeVue, {
     ripple: false
   });
- 
+
   app.directive('tooltip', Tooltip);
 });
 

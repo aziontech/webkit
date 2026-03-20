@@ -1,3 +1,32 @@
+## [1.1.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.1.0...@aziontech/theme@1.1.1) (2026-03-18)
+
+
+### Bug Fixes
+
+* import default ([68197b9](https://github.com/aziontech/webkit/commit/68197b9aee734c6dfae10385e4214c01d06e14be))
+
+## [1.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.4...@aziontech/theme@1.1.0) (2026-03-18)
+
+
+### Features
+
+* storybook github actions azion deploy ([328e0a9](https://github.com/aziontech/webkit/commit/328e0a9eb94887e15f04f8da47ff8f6ae0fff2f1))
+
+
+### Bug Fixes
+
+* color variable on tailwind ([611d352](https://github.com/aziontech/webkit/commit/611d35238e270a0662e369d85e9f259cf0f1931c))
+* css remove char ([91cda15](https://github.com/aziontech/webkit/commit/91cda1592cf9e427b59a33e3b19ef100b8dea92b))
+* improve storybook performance dev server ([dac62a9](https://github.com/aziontech/webkit/commit/dac62a91df1baf4521029d5e0b576d6433432d65))
+* prevent loop during npm publishing process ([8a90666](https://github.com/aziontech/webkit/commit/8a906662f9b769d273d11fe89c82cb6c17849ef9))
+* remove resolution and storybook ([f19b4f6](https://github.com/aziontech/webkit/commit/f19b4f6e3c07ca8994c1e9dde4bf6013f23216d7))
+* resolve storybook preview.js dynamic import failure ([f2f1d28](https://github.com/aziontech/webkit/commit/f2f1d2895b1a7f9c03b331154eae8ba8e478d264))
+* rollback exports ([58469be](https://github.com/aziontech/webkit/commit/58469be8614ac7b8814376cbf833727ff733eed5))
+* storybook Build workspace packages ([a6c6264](https://github.com/aziontech/webkit/commit/a6c6264cacfa9c960526fdb7f990b9e59e68058a))
+* storybook github actions 404 icons ([69ac399](https://github.com/aziontech/webkit/commit/69ac399e84faa780a4b58183353d2e8fe31cf168))
+* theme semantic tokens fix ([2a19e9e](https://github.com/aziontech/webkit/commit/2a19e9e8b8405380a3be505d9cd5372f2ad9b63c))
+* tmp and .tpm added to gitignore ([644902a](https://github.com/aziontech/webkit/commit/644902a0a881b73a41a78be9c34761aff804b85a))
+
 ## [1.0.4](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.0.3...@aziontech/theme@1.0.4) (2026-03-17)
 
 
