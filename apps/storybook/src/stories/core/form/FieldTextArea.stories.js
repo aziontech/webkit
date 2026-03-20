@@ -54,7 +54,7 @@ export default {
       control: 'boolean',
       description: 'Marks the field as containing sensitive data'
     },
-    aditionalError: {
+    additionalError: {
       control: 'text',
       description: 'Additional error message to display'
     },
@@ -125,7 +125,7 @@ export const WithError = {
     name: 'field-textarea-error',
     label: 'Text Area with Error',
     placeholder: 'Enter your message...',
-    aditionalError: 'This field has an error'
+    additionalError: 'This field has an error'
   }
 };
 

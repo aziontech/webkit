@@ -73,7 +73,7 @@ export default {
       control: 'text',
       description: 'Message to display when filter has no results'
     },
-    aditionalError: {
+    additionalError: {
       control: 'text',
       description: 'Additional error message to display'
     },
@@ -158,7 +158,7 @@ export const WithError = {
     name: 'field-dropdown-error',
     label: 'Dropdown with Error',
     placeholder: 'Select an option...',
-    aditionalError: 'This field has an error',
+    additionalError: 'This field has an error',
     options: sampleOptions
   }
 };

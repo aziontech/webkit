@@ -1,0 +1,11 @@
+{
+  "main": "./field-password-strength.vue",
+  "module": "./field-password-strength.vue",
+  "types": "./field-password-strength.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-password-strength.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

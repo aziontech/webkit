@@ -1,10 +1,21 @@
-import FieldTextPassword from '@aziontech/webkit/field-text-password';
+import FieldPassword from '@aziontech/webkit/field-password'
+import { useForm } from 'vee-validate'
 
 export default {
-  title: 'Core/Form/FieldTextPassword',
-  component: FieldTextPassword,
+  title: 'Core/Form/FieldPassword',
+  component: FieldPassword,
   tags: ['autodocs'],
+  decorators: [
+    () => ({
+      setup() {
+        useForm()
+      },
+      template: '<div style="max-width: 400px;"><story /></div>'
+    })
+  ],
   argTypes: {
+    onInput: { action: 'input', description: 'Fired when password value changes' },
+    onBlur: { action: 'blur', description: 'Fired when field loses focus' },
     name: {
       control: 'text',
       description: 'Field name for form submission (required)'
@@ -37,63 +48,63 @@ export default {
       control: 'boolean',
       description: 'Marks the field as containing sensitive data'
     },
-    aditionalError: {
+    additionalError: {
       control: 'text',
       description: 'Additional error message to display'
     }
   }
-};
+}
 
 export const Default = {
   args: {
-    name: 'field-text-password-default',
+    name: 'field-password-default',
     label: 'Password',
     placeholder: 'Enter password...'
   }
-};
+}
 
 export const Disabled = {
   args: {
-    name: 'field-text-password-disabled',
+    name: 'field-password-disabled',
     label: 'Disabled Password Field',
     placeholder: 'Cannot edit',
     disabled: true
   }
-};
+}
 
 export const WithDescription = {
   args: {
-    name: 'field-text-password-desc',
+    name: 'field-password-desc',
     label: 'Password',
     placeholder: 'Enter password...',
     description: 'Password must be at least 8 characters'
   }
-};
+}
 
 export const Readonly = {
   args: {
-    name: 'field-text-password-readonly',
+    name: 'field-password-readonly',
     label: 'Read-only Password',
     value: 'preset-password',
     readonly: true
   }
-};
+}
 
 export const Sensitive = {
   args: {
-    name: 'field-text-password-sensitive',
+    name: 'field-password-sensitive',
     label: 'Sensitive Password Field',
     placeholder: 'Enter password...',
     sensitive: true,
     description: 'This field contains sensitive information'
   }
-};
+}
 
 export const WithError = {
   args: {
-    name: 'field-text-password-error',
+    name: 'field-password-error',
     label: 'Password with Error',
     placeholder: 'Enter password...',
-    aditionalError: 'Password does not meet requirements'
+    additionalError: 'Password does not meet requirements'
   }
-};
+}
