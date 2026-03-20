@@ -1,0 +1,8 @@
+{
+  "main": "./button.vue",
+  "module": "./button.vue",
+  "browser": {
+    "./sfc": "./button.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
