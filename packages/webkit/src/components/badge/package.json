@@ -1,0 +1,8 @@
+{
+  "main": "./badge.vue",
+  "module": "./badge.vue",
+  "browser": {
+    "./sfc": "./badge.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

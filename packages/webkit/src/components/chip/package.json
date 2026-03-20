@@ -1,0 +1,1 @@
+{"main": "./chip.vue", "module": "./chip.vue", "browser": {"./sfc": "./chip.vue"}, "sideEffects": ["*.vue"]}

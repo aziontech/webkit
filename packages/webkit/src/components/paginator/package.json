@@ -1,0 +1,1 @@
+{"main": "./paginator.vue", "module": "./paginator.vue", "browser": {"./sfc": "./paginator.vue"}, "sideEffects": ["*.vue"]}
