@@ -68,6 +68,7 @@
     "./field-text-privacy": "./src/core/form/field-text-privacy/field-text-privacy.vue",
     "./label": "./src/core/form/label/label.vue",
     "./selector-block": "./src/core/selector-block/selector-block.vue",
+    "./copy-block": "./src/components/copy-block/copy-block.vue",
     "./azion-system-status": "./src/components/azion-system-status/azion-system-status.vue",
     "./testimonials-carousel": "./src/components/testimonials-carousel/testimonials-carousel.vue",
     "./client-testimonials-block": "./src/components/client-testimonials-block/client-testimonials-block.vue",
