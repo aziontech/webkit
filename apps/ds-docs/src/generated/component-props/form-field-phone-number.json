@@ -42,7 +42,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Brief description of the field."
+    "default": ""
   },
   "countryCodeName": {
     "label": "Country Code Name",

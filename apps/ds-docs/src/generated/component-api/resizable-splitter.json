@@ -1,0 +1,75 @@
+{
+  "component": "resizable-splitter",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/resizable-splitter/resizable-splitter.vue",
+  "props": [
+    {
+      "name": "panelSizes",
+      "type": "any[]",
+      "required": false,
+      "default": "[70, 30]",
+      "description": ""
+    },
+    {
+      "name": "direction",
+      "type": "string",
+      "required": false,
+      "default": "horizontal",
+      "description": ""
+    },
+    {
+      "name": "minSize",
+      "type": "any[]",
+      "required": false,
+      "default": "[10, 10]",
+      "description": ""
+    },
+    {
+      "name": "maxSize",
+      "type": "any[]",
+      "required": false,
+      "default": "[95, 95]",
+      "description": ""
+    },
+    {
+      "name": "initialTopPanelPercent",
+      "type": "number",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "initialTopPanelPixels",
+      "type": "number",
+      "required": false,
+      "default": "null",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:panelSizes",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "resizeend",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "panel-a",
+      "description": ""
+    },
+    {
+      "name": "panel-b",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-23T19:23:35.518Z"
+}

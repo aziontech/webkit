@@ -1,0 +1,125 @@
+{
+  "component": "primevue-carousel",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/carousel/carousel.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "page",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "numVisible",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "description": ""
+    },
+    {
+      "name": "numScroll",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "description": ""
+    },
+    {
+      "name": "responsiveOptions",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "orientation",
+      "type": "string",
+      "required": false,
+      "default": "horizontal",
+      "description": ""
+    },
+    {
+      "name": "verticalViewPortHeight",
+      "type": "string",
+      "required": false,
+      "default": "300px",
+      "description": ""
+    },
+    {
+      "name": "contentClass",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "containerClass",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "indicatorsContentClass",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "circular",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "autoplayInterval",
+      "type": "number",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "showNavigators",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "showIndicators",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:page",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-23T19:23:35.328Z"
+}

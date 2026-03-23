@@ -24,7 +24,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": "Label"
+    "default": ""
   },
   "placeholder": {
     "label": "Placeholder",
@@ -33,7 +33,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Type here..."
+    "default": ""
   },
   "description": {
     "label": "Description",
@@ -42,7 +42,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Brief description of the field."
+    "default": ""
   },
   "rows": {
     "label": "Rows",
@@ -87,7 +87,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "pi pi-box"
+    "default": ""
   },
   "iconPosition": {
     "label": "Icon Position",
@@ -107,8 +107,8 @@
     "control": "boolean",
     "default": false
   },
-  "aditionalError": {
-    "label": "Aditional Error",
+  "additionalError": {
+    "label": "Additional Error",
     "description": "",
     "required": false,
     "category": "Optional",

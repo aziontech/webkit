@@ -1,0 +1,91 @@
+{
+  "title": {
+    "label": "Title",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "description": {
+    "label": "Description",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "createButtonLabel": {
+    "label": "Create Button Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "disabledList": {
+    "label": "Disabled List",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "inTabs": {
+    "label": "In Tabs",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "noBorder": {
+    "label": "No Border",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "noShowBorderTop": {
+    "label": "No Show Border Top",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "showLearnMoreButton": {
+    "label": "Show Learn More Button",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "documentationService": {
+    "label": "Documentation Service",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "function",
+    "control": "none"
+  },
+  "pt": {
+    "label": "Pt",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "({})"
+  }
+}

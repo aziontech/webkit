@@ -1,0 +1,90 @@
+{
+  "component": "primevue-paginator",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/paginator/paginator.vue",
+  "props": [
+    {
+      "name": "totalRecords",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "rows",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "first",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "pageLinkSize",
+      "type": "number",
+      "required": false,
+      "default": "5",
+      "description": ""
+    },
+    {
+      "name": "rowsPerPageOptions",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "template",
+      "type": "string",
+      "required": false,
+      "default": "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown",
+      "description": ""
+    },
+    {
+      "name": "currentPageReportTemplate",
+      "type": "string",
+      "required": false,
+      "default": "({currentPage} of {totalPages})",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:first",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:rows",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "page",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "start",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-23T19:23:35.347Z"
+}

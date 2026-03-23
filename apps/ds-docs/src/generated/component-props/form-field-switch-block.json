@@ -6,7 +6,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Title"
+    "default": ""
   },
   "isLabel": {
     "label": "Is Label",
@@ -24,7 +24,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Subtitle"
+    "default": ""
   },
   "description": {
     "label": "Description",
@@ -33,7 +33,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Brief description of the field."
+    "default": ""
   },
   "disabled": {
     "label": "Disabled",
@@ -78,7 +78,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": "example-field"
+    "default": ""
   },
   "name": {
     "label": "Name",

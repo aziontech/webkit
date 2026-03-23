@@ -1,0 +1,302 @@
+{
+  "component": "primevue-datatable",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/datatable/datatable.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "dataKey",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "rows",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "first",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "totalRecords",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "paginator",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "lazy",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "sortField",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "sortOrder",
+      "type": "number",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "defaultSortOrder",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "description": ""
+    },
+    {
+      "name": "multiSortMeta",
+      "type": "any[]",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "sortMode",
+      "type": "string",
+      "required": false,
+      "default": "single",
+      "description": ""
+    },
+    {
+      "name": "removableSort",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "filters",
+      "type": "object",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "filterDisplay",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "globalFilterFields",
+      "type": "any[]",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "selection",
+      "type": "[Array",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "selectionMode",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "compareSelectionBy",
+      "type": "string",
+      "required": false,
+      "default": "equals",
+      "description": ""
+    },
+    {
+      "name": "metaKeySelection",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "contextMenu",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "contextMenuSelection",
+      "type": "object",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "rowHover",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:first",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:rows",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:sortField",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:sortOrder",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:multiSortMeta",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:selection",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:contextMenuSelection",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:filters",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "page",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "sort",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "filter",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-select",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-unselect",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-select-all",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-unselect-all",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-click",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-dblclick",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-contextmenu",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-expand",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-collapse",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "column-resize-end",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "column-reorder",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "row-reorder",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "header",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-23T19:23:35.332Z"
+}

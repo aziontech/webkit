@@ -66,7 +66,7 @@
       "description": ""
     },
     {
-      "name": "aditionalError",
+      "name": "additionalError",
       "type": "string",
       "required": false,
       "default": null,
@@ -95,5 +95,5 @@
       "description": ""
     }
   ],
-  "extractedAt": "2026-03-19T13:10:14.951Z"
+  "extractedAt": "2026-03-23T19:23:35.278Z"
 }

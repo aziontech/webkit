@@ -24,7 +24,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Label"
+    "default": ""
   },
   "placeholder": {
     "label": "Placeholder",
@@ -33,7 +33,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Type here..."
+    "default": ""
   },
   "description": {
     "label": "Description",
@@ -42,7 +42,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Brief description of the field."
+    "default": ""
   },
   "disabled": {
     "label": "Disabled",
@@ -69,7 +69,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "pi pi-box"
+    "default": ""
   },
   "suggestions": {
     "label": "Suggestions",
@@ -78,7 +78,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "[{\"label\":\"Option A\",\"value\":\"a\"},{\"label\":\"Option B\",\"value\":\"b\"},{\"label\":\"Option C\",\"value\":\"c\"}]"
+    "default": "[]"
   },
   "onComplete": {
     "label": "On Complete",

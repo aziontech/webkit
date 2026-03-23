@@ -1,0 +1,114 @@
+{
+  "component": "primevue-dialog",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/dialog/dialog.vue",
+  "props": [
+    {
+      "name": "visible",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "header",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "modal",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "contentClass",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "rtl",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "closable",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "closeOnEscape",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "showHeader",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "breakpoints",
+      "type": "object",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:visible",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "hide",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "show",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "maximize",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "unmaximize",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "header",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-23T19:23:35.333Z"
+}

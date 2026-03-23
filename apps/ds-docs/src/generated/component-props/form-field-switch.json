@@ -15,7 +15,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Label"
+    "default": ""
   },
   "description": {
     "label": "Description",
@@ -24,6 +24,6 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "Brief description of the field."
+    "default": ""
   }
 }

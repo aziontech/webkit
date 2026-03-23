@@ -1,0 +1,58 @@
+{
+  "component": "testimonials-carousel",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/testimonials-carousel/testimonials-carousel.vue",
+  "props": [
+    {
+      "name": "testimonials",
+      "type": "any[]",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "subtitle",
+      "type": "string",
+      "required": false,
+      "default": "Trusted by market leaders across banking, e-commerce, tech, and other industries.",
+      "description": ""
+    },
+    {
+      "name": "autoplayInterval",
+      "type": "number",
+      "required": false,
+      "default": "AUTOPLAY_INTERVAL_MS",
+      "description": ""
+    },
+    {
+      "name": "circular",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "showNavigators",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "showIndicators",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "quoted",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-23T19:23:35.523Z"
+}

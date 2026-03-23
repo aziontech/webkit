@@ -1,0 +1,58 @@
+{
+  "component": "primevue-skeleton",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/skeleton/skeleton.vue",
+  "props": [
+    {
+      "name": "shape",
+      "type": "string",
+      "required": false,
+      "default": "rectangle",
+      "description": ""
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "width",
+      "type": "string",
+      "required": false,
+      "default": "100%",
+      "description": ""
+    },
+    {
+      "name": "height",
+      "type": "string",
+      "required": false,
+      "default": "1rem",
+      "description": ""
+    },
+    {
+      "name": "borderRadius",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "animation",
+      "type": "string",
+      "required": false,
+      "default": "wave",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-23T19:23:35.357Z"
+}
