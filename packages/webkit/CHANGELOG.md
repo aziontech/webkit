@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.1...@aziontech/webkit@1.8.2) (2026-03-23)
+
+
+### Bug Fixes
+
+* breacrumb ([67aa5d7](https://github.com/aziontech/webkit/commit/67aa5d7bcc43c73bcab2ebb9df145c816c741c65))
+
 ## [1.8.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.0...@aziontech/webkit@1.8.1) (2026-03-23)
 
 
