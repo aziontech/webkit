@@ -1,3 +1,15 @@
+## [1.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.7.1...@aziontech/webkit@1.8.0) (2026-03-23)
+
+
+### Features
+
+* add copy-block component migrated from console ([0dbcea5](https://github.com/aziontech/webkit/commit/0dbcea5f5c6ab37bffeb22a2e26d16bb4af68d50))
+
+
+### Bug Fixes
+
+* restore isCopyVisible prop for backwards compatibility with console ([5b6594c](https://github.com/aziontech/webkit/commit/5b6594c09b479049492482f8e873479daf45378d))
+
 ## [1.7.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.7.0...@aziontech/webkit@1.7.1) (2026-03-20)
 
 
