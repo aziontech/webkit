@@ -1,3 +1,11 @@
+<script setup>
+  import Breadcrumb from 'primevue/breadcrumb'
+  
+  const props = defineProps({
+    data: { type: Array }
+  })
+</script>
+
 <template>
   <div class="h-[24px] -ml-2">
     <Breadcrumb :model="props.data">
@@ -24,10 +32,3 @@
     </Breadcrumb>
   </div>
 </template>
-
-<script setup>
-  import Breadcrumb from 'primevue/breadcrumb'
-  const props = defineProps({
-    data: { type: Array }
-  })
-</script>
