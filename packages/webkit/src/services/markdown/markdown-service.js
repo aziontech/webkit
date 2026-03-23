@@ -21,11 +21,11 @@ export const parseMarkdown = (markdown) => {
 
   text = text
     .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
 
   text = text
     .replace(/\\#/g, '#')
