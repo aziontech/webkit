@@ -1,3 +1,15 @@
+## [1.8.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.0...@aziontech/webkit@1.8.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* dts build ([81c87af](https://github.com/aziontech/webkit/commit/81c87af1f4e14f6451d64c35e084673fe481589e))
+* pnpm-lock.yaml ([d8094ea](https://github.com/aziontech/webkit/commit/d8094eaccb572a8b8d4da180587aa35db63230d7))
+* Potential fix for code scanning alert no. 15: Double escaping or unescaping ([7a7346a](https://github.com/aziontech/webkit/commit/7a7346aeeb23398a38f60e2046ae8215622fc360))
+* remove the ts of buttom ask azion and trigger storybook ([62f47ba](https://github.com/aziontech/webkit/commit/62f47ba094529a59db685ae0f22c77a4f7cad374))
+* remove unsused files ([12baaac](https://github.com/aziontech/webkit/commit/12baaac9018cfa0cdb1f361a55f85aeed872cd11))
+* trigger build with updated frozen file ([7006895](https://github.com/aziontech/webkit/commit/7006895936d305ac176123cc3965e1d4f4f061c7))
+
 ## [1.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.7.1...@aziontech/webkit@1.8.0) (2026-03-23)
 
 
