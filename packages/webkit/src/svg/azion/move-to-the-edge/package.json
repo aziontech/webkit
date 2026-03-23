@@ -1,0 +1,11 @@
+{
+  "main": "./move-to-the-edge.vue",
+  "module": "./move-to-the-edge.vue",
+  "types": "./move-to-the-edge.vue.d.ts",
+  "browser": {
+    "./sfc": "./move-to-the-edge.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

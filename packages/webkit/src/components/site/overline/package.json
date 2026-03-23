@@ -1,0 +1,11 @@
+{
+  "main": "./overline.vue",
+  "module": "./overline.vue",
+  "types": "./overline.vue.d.ts",
+  "browser": {
+    "./sfc": "./overline.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

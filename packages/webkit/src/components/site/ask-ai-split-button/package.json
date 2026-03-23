@@ -1,0 +1,11 @@
+{
+  "main": "./ask-ai-split-button.vue",
+  "module": "./ask-ai-split-button.vue",
+  "types": "./ask-ai-split-button.vue.d.ts",
+  "browser": {
+    "./sfc": "./ask-ai-split-button.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
