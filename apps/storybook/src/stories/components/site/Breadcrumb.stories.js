@@ -1,4 +1,4 @@
-import Breadcrumb from '@aziontech/webkit/site/breadcrumb';
+import Breadcrumb from '@aziontech/webkit/site/breadcrumb'
 
 export default {
   title: 'Components/Site/Breadcrumb',
