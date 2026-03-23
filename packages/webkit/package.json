@@ -79,7 +79,6 @@
     "./accordion": "./src/core/primevue/accordion/accordion.vue",
     "./accordion-tab": "./src/core/primevue/accordion-tab/accordion-tab.vue",
     "./avatar": "./src/core/primevue/avatar/avatar.vue",
-    "./breadcrumb": "./src/core/primevue/breadcrumb/breadcrumb.vue",
     "./button": "./src/core/primevue/button/button.vue",
     "./card": "./src/core/primevue/card/card.vue",
     "./carousel": "./src/core/primevue/carousel/carousel.vue",
