@@ -44,7 +44,8 @@
     "colors-brand.js",
     "default.js",
     "tokens.js",
-    "widget.js"
+    "widget.js",
+    "tailwind-theme.js"
   ],
   "exports": {
     ".": "./default.js",
@@ -57,6 +58,11 @@
     "./tokens/semantic/borders": "./tokens.js",
     "./tokens/build/preset": "./src/tokens/build/preset.js",
     "./tokens/build/tailwind-helper": "./src/tokens/build/tailwind-helper.js",
-    "./tokens/build/tailwind-plugin": "./src/tokens/build/tailwind-plugin.js"
+    "./tokens/build/tailwind-plugin": "./src/tokens/build/tailwind-plugin.js",
+    "./tokens/build/css-vars.js": "./src/tokens/build/css-vars.js",
+    "./tailwind/tailwind-theme.js": "./src/tailwind/tailwind-theme.js",
+    "./tailwind/semantic-colors-plugin.js": "./src/tailwind/semantic-colors-plugin.js",
+    "./tailwind/semantic-texts-plugin.js": "./src/tailwind/semantic-texts-plugin.js",
+    "./tailwind/semantic-spacing-plugin.js": "./src/tailwind/semantic-spacing-plugin.js"
   }
 }
