@@ -1,0 +1,11 @@
+{
+  "main": "./breadcrumb.vue",
+  "module": "./breadcrumb.vue",
+  "types": "./breadcrumb.vue.d.ts",
+  "browser": {
+    "./sfc": "./breadcrumb.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

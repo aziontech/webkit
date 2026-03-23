@@ -1,0 +1,11 @@
+{
+  "main": "./card-link.vue",
+  "module": "./card-link.vue",
+  "types": "./card-link.vue.d.ts",
+  "browser": {
+    "./sfc": "./card-link.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
