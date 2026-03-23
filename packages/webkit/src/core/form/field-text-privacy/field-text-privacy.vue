@@ -43,7 +43,7 @@
       type: Boolean,
       default: false
     },
-    aditionalError: {
+    additionalError: {
       type: String,
       default: ''
     },
@@ -74,16 +74,15 @@
   })
 
   const groupBorderClass = computed(() => {
-    if (aditionalError.value || veeValidateErrorMessage.value) return '!border-red-500'
+    if (additionalError.value || veeValidateErrorMessage.value) return '!border-red-500'
     if (isFocused.value || isHovered.value) return '!border-[#f3652b]'
     return ''
   })
 
   const groupShadowClass = computed(() => {
     if (isFocused.value || isHovered.value) {
-      return aditionalError.value || veeValidateErrorMessage.value
-        ? 'shadow-[0_0_0_1px_#ef4444]'
-        : 'shadow-[0_0_0_1px_#f3652b]'
+      const color = additionalError.value || veeValidateErrorMessage.value ? '#ef4444' : '#f3652b'
+      return `shadow-[0_0_0_1px_${color}]`
     }
     return ''
   })
@@ -97,7 +96,7 @@
     initialValue: props.value
   })
 
-  const aditionalError = computed(() => props.aditionalError)
+  const additionalError = computed(() => props.additionalError)
 
   const onBlur = (event) => {
     handleBlur(event)
@@ -164,7 +163,7 @@
         :class="[
           '!border-r-0 !outline-none !shadow-none transition-colors duration-150',
           groupBorderClass,
-          { 'p-invalid': aditionalError || veeValidateErrorMessage },
+          { 'p-invalid': additionalError || veeValidateErrorMessage },
           props.class
         ]"
         @input="onChange"
@@ -261,11 +260,11 @@
     </div>
 
     <small
-      v-if="aditionalError || veeValidateErrorMessage"
+      v-if="additionalError || veeValidateErrorMessage"
       class="p-error text-xs font-normal leading-tight"
       :data-testid="customTestId.error"
     >
-      {{ aditionalError || veeValidateErrorMessage }}
+      {{ additionalError || veeValidateErrorMessage }}
     </small>
 
     <small

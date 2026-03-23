@@ -9,11 +9,11 @@ Create a reusable `FieldMessages` component that combines error and description 
 ### Error Display Pattern
 ```vue
 <small
-  v-if="aditionalError || veeValidateErrorMessage"
+  v-if="additionalError || veeValidateErrorMessage"
   class="p-error text-xs font-normal leading-tight"
   :data-testid="customTestId.error"
 >
-  {{ aditionalError || veeValidateErrorMessage }}
+  {{ additionalError || veeValidateErrorMessage }}
 </small>
 ```
 
@@ -34,15 +34,15 @@ Create a reusable `FieldMessages` component that combines error and description 
 
 | Component | Error Source | Description | Slot Support |
 |-----------|--------------|-------------|--------------|
-| field-text | aditionalError + veeValidateErrorMessage | ✓ | ✓ |
-| field-text-area | aditionalError + veeValidateErrorMessage | ✓ | ✓ |
-| field-number | aditionalError + errorMessage | ✓ | ✗ |
-| field-dropdown | aditionalError + errorMessage | ✓ | ✓ |
+| field-text | additionalError + veeValidateErrorMessage | ✓ | ✓ |
+| field-text-area | additionalError + veeValidateErrorMessage | ✓ | ✓ |
+| field-number | additionalError + errorMessage | ✓ | ✗ |
+| field-dropdown | additionalError + errorMessage | ✓ | ✓ |
 | field-auto-complete | errorMessage only | ✓ | ✗ |
 | field-multi-select | errorMessage only | ✓ | ✓ |
 | field-text-icon | errorMessage only | ✓ | ✗ |
-| field-text-password | aditionalError + veeValidateErrorMessage | ✓ | ✓ |
-| field-text-privacy | aditionalError + veeValidateErrorMessage | ✓ | ✓ |
+| field-text-password | additionalError + veeValidateErrorMessage | ✓ | ✓ |
+| field-text-privacy | additionalError + veeValidateErrorMessage | ✓ | ✓ |
 | field-input-group | errorMessage only | ✓ | ✗ |
 
 ## Component Design
@@ -136,11 +136,11 @@ const testIds = computed(() => ({
 ### Before (field-text.vue)
 ```vue
 <small
-  v-if="aditionalError || veeValidateErrorMessage"
+  v-if="additionalError || veeValidateErrorMessage"
   class="p-error text-xs font-normal leading-tight"
   :data-testid="customTestId.error"
 >
-  {{ aditionalError || veeValidateErrorMessage }}
+  {{ additionalError || veeValidateErrorMessage }}
 </small>
 <small
   v-if="props.description || hasDescriptionSlot"
@@ -156,7 +156,7 @@ const testIds = computed(() => ({
 ### After (field-text.vue)
 ```vue
 <FieldMessages
-  :error="(props.aditionalError || veeValidateErrorMessage)"
+  :error="(props.additionalError || veeValidateErrorMessage)"
   :description="props.description"
   :testId="customTestId.input"
 >
@@ -192,12 +192,12 @@ The following components need to be updated to use `FieldMessages`:
 ## Notes
 
 - Keep the `hasDescriptionSlot` check inside FieldMessages using `useSlots()`
-- The `additionalError` prop naming should remain consistent with existing convention (note: it's intentionally spelled `aditionalError` in existing code - we should maintain consistency or fix spelling across all components)
+- The `additionalError` prop naming should remain consistent with existing convention (note: it's intentionally spelled `additionalError` in existing code - we should maintain consistency or fix spelling across all components)
 - Test ID pattern: `${baseId}__error-message` and `${baseId}__description`
 
 ## Decision Points
 
-1. **Prop Naming**: Should we keep `aditionalError` (typo) or fix to `additionalError`?
+1. **Prop Naming**: Should we keep `additionalError` (typo) or fix to `additionalError`?
    - Recommendation: Keep existing naming for backwards compatibility, or create alias
 
 2. **Component Location**: Should this be in `slots/` directory or a new `messages/` directory?

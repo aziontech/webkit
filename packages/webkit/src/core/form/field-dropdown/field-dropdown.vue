@@ -82,7 +82,7 @@
       type: String,
       default: 'No results found'
     },
-    aditionalError: {
+    additionalError: {
       type: String,
       default: ''
     }
@@ -202,7 +202,7 @@
       :emptyFilterMessage="props.emptyFilterMessage"
       @change="emitChange"
       @blur="emitBlur"
-      :class="{ 'p-invalid': aditionalError || errorMessage }"
+      :class="{ 'p-invalid': additionalError || errorMessage }"
       v-bind="$attrs"
       :disabled="props.disabled"
       class="w-full"
@@ -224,11 +224,11 @@
     </Dropdown>
 
     <small
-      v-if="aditionalError || errorMessage"
+      v-if="additionalError || errorMessage"
       :data-testid="customTestId.error"
       class="p-error text-xs font-normal leading-tight"
     >
-      {{ aditionalError || errorMessage }}
+      {{ additionalError || errorMessage }}
     </small>
     <small
       class="text-xs text-color-secondary font-normal leading-5"

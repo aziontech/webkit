@@ -1,3 +1,30 @@
+## [1.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.7.1...@aziontech/webkit@1.8.0) (2026-03-23)
+
+
+### Features
+
+* add copy-block component migrated from console ([0dbcea5](https://github.com/aziontech/webkit/commit/0dbcea5f5c6ab37bffeb22a2e26d16bb4af68d50))
+
+
+### Bug Fixes
+
+* restore isCopyVisible prop for backwards compatibility with console ([5b6594c](https://github.com/aziontech/webkit/commit/5b6594c09b479049492482f8e873479daf45378d))
+
+## [1.7.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.7.0...@aziontech/webkit@1.7.1) (2026-03-20)
+
+
+### Bug Fixes
+
+* badge wrap flex with storybook azion style class ([f94aa49](https://github.com/aziontech/webkit/commit/f94aa49a37d47c195b651b9174111ae9a13a1121))
+* storybook azion theme ([e7e76ef](https://github.com/aziontech/webkit/commit/e7e76efec8b79a3eb996d103bbf8899d4f3a808d))
+
+## [1.7.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.6.0...@aziontech/webkit@1.7.0) (2026-03-20)
+
+
+### Features
+
+* adding azion used primevue components ([afe100a](https://github.com/aziontech/webkit/commit/afe100aa0e8af190188761ec38bd704b93bc5e30))
+
 ## [1.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.5.4...@aziontech/webkit@1.6.0) (2026-03-19)
 
 
