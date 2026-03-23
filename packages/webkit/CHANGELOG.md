@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.2...@aziontech/webkit@1.8.3) (2026-03-23)
+
+
+### Bug Fixes
+
+* storybook the breadcrumb ([09c3323](https://github.com/aziontech/webkit/commit/09c3323ef815da1d4d6b74ba8fd88c7ab34f5451))
+
 ## [1.8.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.1...@aziontech/webkit@1.8.2) (2026-03-23)
 
 
