@@ -1,0 +1,11 @@
+{
+  "main": "./min.vue",
+  "module": "./min.vue",
+  "types": "./min.vue.d.ts",
+  "browser": {
+    "./sfc": "./min.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

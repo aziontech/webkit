@@ -1,0 +1,11 @@
+{
+  "main": "./technologies.vue",
+  "module": "./technologies.vue",
+  "types": "./technologies.vue.d.ts",
+  "browser": {
+    "./sfc": "./technologies.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
