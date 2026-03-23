@@ -30,7 +30,7 @@
     }"
     @click="getPageMarkdown"
     :label="label"
-    :model="menuItems[props.lang as keyof typeof menuItems]"
+    :model="menuItems[props.lang]"
   >
     <template #item="{ item }">
       <div class="flex gap-2 hover:bg-neutral-900 p-1 rounded-md cursor-pointer">
