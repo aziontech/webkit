@@ -301,15 +301,17 @@ All semantic tokens are available as CSS variables:
 ```css
 /* Automatically generated */
 :root, [data-theme=light], .azion.azion-light {
-  --text-textColorBase: #171717;
-  --background-bgLayer1: #ffffff;
-  --border-borderBase: #e5e5e5;
+  --text-default: #171717;
+  --text-muted: #525252;
+  --background-surface: #ffffff;
+  --border-default: #e5e5e5;
 }
 
 [data-theme=dark], .dark, .azion.azion-dark {
-  --text-textColorBase: #fafafa;
-  --background-bgLayer1: #262626;
-  --border-borderBase: #404040;
+  --text-default: #fafafa;
+  --text-muted: #a3a3a3;
+  --background-surface: #262626;
+  --border-default: #404040;
 }
 ```
 
@@ -317,9 +319,9 @@ Use in your CSS:
 
 ```css
 .custom-component {
-  color: var(--text-textColorBase);
-  background-color: var(--background-bgLayer1);
-  border-color: var(--border-borderBase);
+  color: var(--text-default);
+  background-color: var(--background-surface);
+  border-color: var(--border-default);
 }
 ```
 
