@@ -1,3 +1,28 @@
+## [1.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.1.1...@aziontech/theme@1.2.0) (2026-03-23)
+
+
+### Features
+
+* add copy-block component migrated from console ([0dbcea5](https://github.com/aziontech/webkit/commit/0dbcea5f5c6ab37bffeb22a2e26d16bb4af68d50))
+* add testimonials-carousel component and fix storybook setup ([dfb885f](https://github.com/aziontech/webkit/commit/dfb885f107cee3dde0a8244fbe4d14182e249d02))
+* adding azion used primevue components ([afe100a](https://github.com/aziontech/webkit/commit/afe100aa0e8af190188761ec38bd704b93bc5e30))
+
+
+### Bug Fixes
+
+* adding sprite country used by flag.css ([39d8464](https://github.com/aziontech/webkit/commit/39d84647d4606ba3ffde846aaa9b4fda61998ea8))
+* badge wrap flex with storybook azion style class ([f94aa49](https://github.com/aziontech/webkit/commit/f94aa49a37d47c195b651b9174111ae9a13a1121))
+* pnpm-lock.yaml ([d8094ea](https://github.com/aziontech/webkit/commit/d8094eaccb572a8b8d4da180587aa35db63230d7))
+* Potential fix for code scanning alert no. 15: Double escaping or unescaping ([7a7346a](https://github.com/aziontech/webkit/commit/7a7346aeeb23398a38f60e2046ae8215622fc360))
+* remove unsused files ([12baaac](https://github.com/aziontech/webkit/commit/12baaac9018cfa0cdb1f361a55f85aeed872cd11))
+* restore field-text-password export, remove non-existent field-password entries ([a423582](https://github.com/aziontech/webkit/commit/a4235823a32c382392c788d00bb4a68495337780))
+* restore isCopyVisible prop for backwards compatibility with console ([5b6594c](https://github.com/aziontech/webkit/commit/5b6594c09b479049492482f8e873479daf45378d))
+* reusable country-flag css and image sprite ([7a98395](https://github.com/aziontech/webkit/commit/7a983955d92526e7ea42e32b14d21a0d313eb7d3))
+* storybook azion theme ([e7e76ef](https://github.com/aziontech/webkit/commit/e7e76efec8b79a3eb996d103bbf8899d4f3a808d))
+* storybook svgs 404/403 ([13c6399](https://github.com/aziontech/webkit/commit/13c639942e22acf7f8ce0fcfd5eaa79f7d6df6c6))
+* storybook svgs 404/403 ([e3da2f3](https://github.com/aziontech/webkit/commit/e3da2f3c0040d206094dea6043e86afc5e06cd78))
+* trigger build with updated frozen file ([7006895](https://github.com/aziontech/webkit/commit/7006895936d305ac176123cc3965e1d4f4f061c7))
+
 ## [1.1.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.1.0...@aziontech/theme@1.1.1) (2026-03-18)
 
 
