@@ -1,3 +1,10 @@
+## [1.8.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.3...@aziontech/webkit@1.8.4) (2026-03-23)
+
+
+### Bug Fixes
+
+* breadcrumb site ([ebe909c](https://github.com/aziontech/webkit/commit/ebe909c8fa0c9c861593c4968d6a7f091eadb3c9))
+
 ## [1.8.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.2...@aziontech/webkit@1.8.3) (2026-03-23)
 
 
