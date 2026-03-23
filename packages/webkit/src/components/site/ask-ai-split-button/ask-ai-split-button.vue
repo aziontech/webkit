@@ -49,11 +49,10 @@
   </SplitButton>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import { computed, ref } from 'vue'
   import SplitButton from 'primevue/splitbutton'
-  // import type { AskAISplitButtonMenuItem, AskAISplitButtonProps } from './AskAISplitButton'
-
+  
   const props = defineProps({
     lang: {
       type: String,
@@ -66,7 +65,8 @@
   const isCopied = ref(false)
 
   const label = computed(() => {
-    const lang = props.lang as 'en' | 'pt-br' | 'es'
+    const lang = props.lang
+    
     if (isCopied.value) {
       return {
         en: 'Copied!',
@@ -74,6 +74,7 @@
         es: '¡Copiado!'
       }[lang]
     }
+
     return {
       en: 'Copy page',
       'pt-br': 'Copiar página',
@@ -81,7 +82,7 @@
     }[lang]
   })
 
-  const pageMarkdown = ref<string | null>(null)
+  const pageMarkdown = ref(null)
 
   const getPageMarkdown = async () => {
     if (pageMarkdown.value) {
@@ -111,7 +112,7 @@
     }, 2000)
   }
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = async (text) => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       await navigator.clipboard.writeText(text)
     }
@@ -126,7 +127,7 @@
     await copyToClipboard(pageLink)
   }
 
-  const getAIMessage = (): string => {
+  const getAIMessage = () => {
     const pageLink = getPageLink()
 
     const messages = {
@@ -134,10 +135,10 @@
       'pt-br': `Leia esta página da Azion: ${pageLink} e responda perguntas sobre o conteúdo.`,
       es: `Lea esta página de Azion: ${pageLink} y responda preguntas sobre el contenido.`
     }
-    return messages[props.lang as keyof typeof messages]
+    return messages[props.lang]
   }
 
-  const openAILink = (url: string) => {
+  const openAILink = (url) => {
     if (typeof window === 'undefined') return
     const message = encodeURIComponent(getAIMessage())
     window.open(`${url}${message}`, '_blank')
@@ -168,7 +169,7 @@
     openAILink('https://x.com/i/grok?text=')
   }
 
-  const menuItems: Record<AskAISplitButtonProps['lang'], AskAISplitButtonMenuItem[]> = {
+  const menuItems = {
     en: [
       {
         label: 'Get page link',
