@@ -26,7 +26,7 @@ const props = defineProps({
     :class="props.class"
   >
     <template v-if="$slots.item" #item="slotProps">
-      <slot name="item" :item="slotProps.item" />
+      <slot name="item" :item="slotProps.item" :label="slotProps.label" :props="slotProps.props" />
     </template>
   </Breadcrumb>
 </template>

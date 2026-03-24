@@ -18,7 +18,7 @@ export default {
 
 export const Default = {
   args: {
-    home: { icon: 'pi pi-home', to: '/' },
+    home: { icon: 'pi pi-home', url: '/' },
     model: [
       { label: 'Components' },
       { label: 'Breadcrumb' }
@@ -28,10 +28,10 @@ export const Default = {
 
 export const WithLabels = {
   args: {
-    home: { label: 'Home', to: '/' },
+    home: { label: 'Home', url: '/' },
     model: [
-      { label: 'Electronics', to: '/electronics' },
-      { label: 'Computers', to: '/electronics/computers' },
+      { label: 'Electronics', url: '/electronics' },
+      { label: 'Computers', url: '/electronics/computers' },
       { label: 'Laptops' }
     ]
   }
@@ -39,10 +39,10 @@ export const WithLabels = {
 
 export const WithIcons = {
   args: {
-    home: { icon: 'pi pi-home', to: '/' },
+    home: { icon: 'pi pi-home', url: '/' },
     model: [
-      { label: 'Files', icon: 'pi pi-folder', to: '/files' },
-      { label: 'Documents', icon: 'pi pi-file', to: '/files/documents' },
+      { label: 'Files', icon: 'pi pi-folder', url: '/files' },
+      { label: 'Documents', icon: 'pi pi-file', url: '/files/documents' },
       { label: 'Report.pdf', icon: 'pi pi-file-pdf' }
     ]
   }
