@@ -1,3 +1,10 @@
+## [1.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.5...@aziontech/webkit@1.9.0) (2026-03-24)
+
+
+### Features
+
+* unify field-password and field-password-strength into a single component ([393d809](https://github.com/aziontech/webkit/commit/393d809c78386410358f8cfbb8e91bfd9b8fb6a7))
+
 ## [1.8.5](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.4...@aziontech/webkit@1.8.5) (2026-03-24)
 
 
