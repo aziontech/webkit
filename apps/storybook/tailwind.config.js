@@ -1,4 +1,5 @@
 import typography from '@tailwindcss/typography'
+import { primitives, surfacePrimitives, brandPrimitives } from '@aziontech/theme/tokens';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -25,7 +26,10 @@ export default {
         'header-button-enabled': '#ffffff32',
         'header-button-hover': '#f5f5f516',
         'header-avatar': '#363636',
-        'orange-base': '#F3652B'
+        'orange-base': '#F3652B',
+        ...primitives,
+        ...surfacePrimitives,
+        ...brandPrimitives,
       },
       backgroundColor: {
         'orange-bullet': '#F3652B'
