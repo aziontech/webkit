@@ -13,8 +13,20 @@ body,
   height: 100%;
 }
 
-body {
-  background-color: var(--surface-section);
+/* Theme container styles */
+.azion {
+  font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.azion.azion-dark {
+  color-scheme: dark;
+}
+
+.azion.azion-light {
+  color-scheme: light;
 }
 
 /* https://github.com/primefaces/primevue/issues/882#issuecomment-1780802552 */
@@ -31,14 +43,6 @@ body.p-overflow-hidden {
 .grecaptcha-badge {
   bottom: 75px !important;
   z-index: 11;
-}
-
-#app {
-  font-family: var(--font-family);
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: clip;
 }
 
 .font-sora {
