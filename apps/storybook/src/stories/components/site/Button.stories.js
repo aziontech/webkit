@@ -17,7 +17,7 @@ export default {
     },
     type: {
       control: 'select',
-      options: ['primary', 'secondary', 'link', 'linkExternal', 'tertiary', 'linkSecondary'],
+      options: ['primary', 'secondary', 'link'],
       description: 'Button type/variant',
       defaultValue: 'secondary'
     },
@@ -29,16 +29,10 @@ export default {
       control: 'text',
       description: 'Icon class (e.g., pi pi-check)'
     },
-    theme: {
-      control: 'select',
-      options: ['dark', 'light'],
-      description: 'Color theme',
-      defaultValue: 'dark'
-    },
     customClass: {
       control: 'text',
-      description: 'Custom CSS classes',
-      defaultValue: 'px-3 py-3'
+      description: 'Custom CSS classes (default: px-0 py-0)',
+      defaultValue: 'px-0 py-0'
     },
     target: {
       control: 'select',
@@ -50,6 +44,10 @@ export default {
       control: 'text',
       description: 'Analytics location identifier',
       defaultValue: 'cta'
+    },
+    onClick: {
+      action: 'click',
+      description: 'Click event handler'
     }
   }
 };
@@ -58,15 +56,7 @@ export const Primary = {
   args: {
     label: 'Get Started',
     type: 'primary',
-    theme: 'dark'
-  }
-};
-
-export const PrimaryLight = {
-  args: {
-    label: 'Get Started',
-    type: 'primary',
-    theme: 'light'
+    customClass: 'px-3 py-3'
   }
 };
 
@@ -74,23 +64,7 @@ export const Secondary = {
   args: {
     label: 'Learn More',
     type: 'secondary',
-    theme: 'dark'
-  }
-};
-
-export const SecondaryLight = {
-  args: {
-    label: 'Learn More',
-    type: 'secondary',
-    theme: 'light'
-  }
-};
-
-export const Tertiary = {
-  args: {
-    label: 'Special',
-    type: 'tertiary',
-    theme: 'dark'
+    customClass: 'px-3 py-3'
   }
 };
 
@@ -98,36 +72,7 @@ export const Link = {
   args: {
     label: 'View Documentation',
     type: 'link',
-    href: '/docs',
-    theme: 'dark'
-  }
-};
-
-export const LinkLight = {
-  args: {
-    label: 'View Documentation',
-    type: 'link',
-    href: '/docs',
-    theme: 'light'
-  }
-};
-
-export const LinkExternal = {
-  args: {
-    label: 'External Resource',
-    type: 'linkExternal',
-    href: 'https://example.com',
-    target: '_blank',
-    theme: 'dark'
-  }
-};
-
-export const LinkSecondary = {
-  args: {
-    label: 'Read More',
-    type: 'linkSecondary',
-    href: '/blog',
-    theme: 'dark'
+    href: '/docs'
   }
 };
 
@@ -136,7 +81,7 @@ export const SmallSize = {
     label: 'Small Button',
     type: 'secondary',
     size: 'small',
-    theme: 'dark'
+    customClass: 'px-3 py-3'
   }
 };
 
@@ -145,7 +90,7 @@ export const LargeSize = {
     label: 'Large Button',
     type: 'secondary',
     size: 'large',
-    theme: 'dark'
+    customClass: 'px-3 py-3'
   }
 };
 
@@ -154,7 +99,7 @@ export const WithIcon = {
     label: 'Download',
     type: 'primary',
     icon: 'pi pi-download',
-    theme: 'dark'
+    customClass: 'px-3 py-3'
   }
 };
 
@@ -163,7 +108,7 @@ export const SecondaryWithIcon = {
     label: 'Settings',
     type: 'secondary',
     icon: 'pi pi-cog',
-    theme: 'dark'
+    customClass: 'px-3 py-3'
   }
 };
 
@@ -172,8 +117,7 @@ export const LinkWithIcon = {
     label: 'Explore Features',
     type: 'link',
     href: '/features',
-    icon: 'pi pi-arrow-right',
-    theme: 'dark'
+    icon: 'pi pi-arrow-right'
   }
 };
 
@@ -182,7 +126,7 @@ export const ButtonAsLink = {
     label: 'Navigate',
     type: 'primary',
     href: '/dashboard',
-    theme: 'dark'
+    customClass: 'px-3 py-3'
   }
 };
 
@@ -190,7 +134,6 @@ export const CustomStyled = {
   args: {
     label: 'Custom Button',
     type: 'secondary',
-    customClass: 'px-6 py-4',
-    theme: 'dark'
+    customClass: 'px-6 py-4'
   }
 };
