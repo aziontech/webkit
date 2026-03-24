@@ -1,24 +1,6 @@
-<template>
-  <div>
-    <PrimeButton
-      :icon="icon"
-      data-testid="copy-block__copy-button"
-      type="button"
-      :aria-label="ariaLabel"
-      :label="labelText"
-      :outlined="outlined"
-      :text="!outlined"
-      :disabled="disabled"
-      size="small"
-      @click="handleCopy"
-      :class="['transition-opacity duration-200', isCopyVisible ? 'opacity-100' : 'opacity-0']"
-    />
-  </div>
-</template>
-
 <script setup>
   import { ref, computed, onBeforeUnmount } from 'vue'
-  import PrimeButton from 'primevue/button'
+  import Button from 'primevue/button'
 
   const emit = defineEmits(['copy'])
 
@@ -83,3 +65,22 @@
     box-shadow: none;
   }
 </style>
+
+
+<template>
+  <div>
+    <Button
+      :icon="icon"
+      data-testid="copy-block__copy-button"
+      type="button"
+      :aria-label="ariaLabel"
+      :label="labelText"
+      :outlined="outlined"
+      :text="!outlined"
+      :disabled="disabled"
+      size="small"
+      @click="handleCopy"
+      :class="['transition-opacity duration-200', isCopyVisible ? 'opacity-100' : 'opacity-0']"
+    />
+  </div>
+</template>

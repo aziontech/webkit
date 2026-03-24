@@ -1,7 +1,7 @@
-import Toggle from '@aziontech/webkit/site/toggle'
+import Toggle from '@aziontech/webkit/toggle'
 
 export default {
-  title: 'Components/Site/Toggle',
+  title: 'Components/Toggle',
   component: Toggle,
   tags: ['autodocs'],
   argTypes: {
