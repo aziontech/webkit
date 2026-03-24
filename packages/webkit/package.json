@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "repository": {
@@ -106,7 +106,6 @@
     "./toast": "./src/core/primevue/toast/toast.vue",
     "./toolbar": "./src/core/primevue/toolbar/toolbar.vue",
     "./badge": "./src/core/primevue/badge/badge.vue",
-    
     "./site/base-modal": "./src/components/site/base-modal/base-modal.vue",
     "./site/card-content": "./src/components/site/card-content/card-content.vue",
     "./site/card-link": "./src/components/site/card-link/card-link.vue",

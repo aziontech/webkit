@@ -1,3 +1,11 @@
+## [1.10.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.9.0...@aziontech/webkit@1.10.0) (2026-03-24)
+
+
+### Features
+
+* add theme in storybook ([7d2dd17](https://github.com/aziontech/webkit/commit/7d2dd176f74fb6b3e34b37de92dcca0079302f4e))
+* add theme tokens to storybook ([a94a353](https://github.com/aziontech/webkit/commit/a94a353f7e4e62164661758d77f7c742a9fba132))
+
 ## [1.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.5...@aziontech/webkit@1.9.0) (2026-03-24)
 
 
