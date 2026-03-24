@@ -1,12 +1,3 @@
-<template>
-  <span
-    class="text-balance font-proto-mono uppercase tracking-wide"
-    :class="[colorClass[color], sizeClass]"
-  >
-    <slot />
-  </span>
-</template>
-
 <script setup>
   import { computed } from 'vue'
   
@@ -40,3 +31,12 @@
     return sizes[props.size] || 'text-xs'
   })
 </script>
+
+<template>
+  <span
+    class="text-balance font-proto-mono uppercase tracking-wide"
+    :class="[colorClass[color], sizeClass]"
+  >
+    <slot />
+  </span>
+</template>
