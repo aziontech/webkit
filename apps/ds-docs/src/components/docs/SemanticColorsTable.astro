@@ -27,16 +27,14 @@ const semanticKeys = Object.keys(light).filter((k: string) =>
   SEMANTIC_PREFIXES.some((p) => k.startsWith(p))
 );
 
-/** Converts CSS var (e.g. --text-textAccent) to Tailwind class (e.g. text-accent). */
+/** Converts CSS var (e.g. --text-muted) to Tailwind class (e.g. text-muted). */
 function cssVarToTailwindClass(cssVar: string): string {
   const name = cssVar.slice(2);
   const dash = name.indexOf('-');
   const category = name.slice(0, dash);
   const rest = name.slice(dash + 1);
   const tailwindPrefix = category === 'background' ? 'bg' : category;
-  const stripLen = tailwindPrefix === 'bg' ? 2 : tailwindPrefix.length;
-  const afterStrip = rest.slice(stripLen) || rest;
-  const kebab = afterStrip.replace(/([A-Z])/g, (m) => '-' + m.toLowerCase()).replace(/^-/, '');
+  const kebab = rest.replace(/([A-Z])/g, (m) => '-' + m.toLowerCase()).replace(/^-/, '');
   return `${tailwindPrefix}-${kebab}`;
 }
 
