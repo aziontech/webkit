@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.10.0...@aziontech/webkit@1.10.1) (2026-03-24)
+
+
+### Bug Fixes
+
+* export car-content ([557efb5](https://github.com/aziontech/webkit/commit/557efb55aa1bd880d160baa53e458571b8894f20))
+
 ## [1.10.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.9.0...@aziontech/webkit@1.10.0) (2026-03-24)
 
 
