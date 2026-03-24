@@ -6,7 +6,7 @@
   import Label from '../label'
 
   const emit = defineEmits(['click-icon'])
-  
+
   const props = defineProps({
     value: {
       type: String,
@@ -60,10 +60,10 @@
     const field = useField(nameInput, undefined, {
       initialValue: props.value
     })
-    
+
     inputValue.value = field.value
     errorMessage.value = field.errorMessage
-    
+
     handleBlur = field.handleBlur
     handleChange = field.handleChange
   } else {
@@ -87,6 +87,7 @@
 <template>
   <InputSlot>
     <Label
+      v-if="props.label"
       :for="props.name"
       :label="props.label"
       :isRequired="props.required"
