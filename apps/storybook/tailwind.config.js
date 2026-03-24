@@ -36,7 +36,7 @@ export default {
         'header-button-enabled': '#ffffff32',
         'header-button-hover': '#f5f5f516',
         'header-avatar': '#363636',
-        'orange-base': '#F3652B'
+        'orange-base': '#F3652B',
       },
       backgroundColor: {
         'orange-bullet': '#F3652B'
