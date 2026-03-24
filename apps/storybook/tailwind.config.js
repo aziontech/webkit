@@ -1,4 +1,8 @@
 import typography from '@tailwindcss/typography'
+import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js'
+import semanticColors from '@aziontech/theme/tailwind/semantic-colors-plugin.js'
+import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin.js'
+import semanticSpacing from '@aziontech/theme/tailwind/semantic-spacing-plugin.js'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -7,7 +11,9 @@ export default {
     './src/**/*.{vue,js,ts,jsx,tsx}',
     '../../packages/webkit/src/**/*.{vue,js,ts,jsx,tsx}'
   ],
-  darkMode: 'class',
+  // Dark mode configuration with multiple selectors
+  darkMode: ['class', '.dark', '.azion.azion-dark'],
+  // Merge base theme with primitives
   theme: {
     fontFamily: {
       sans: ['Sora', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji']
@@ -19,8 +25,13 @@ export default {
       square: 'square',
       roman: 'upper-roman'
     },
+    // Properly merge the theme's extend with local extend
     extend: {
+      // Import colors from theme (brand, base, surface, primitives)
+      ...theme.extend,
+      // Storybook-specific color extensions
       colors: {
+        ...theme.extend.colors,
         header: '#111111',
         'header-button-enabled': '#ffffff32',
         'header-button-hover': '#f5f5f516',
@@ -88,5 +99,10 @@ export default {
       }
     }
   },
-  plugins: [typography]
+  plugins: [
+    typography,
+    semanticColors(),
+    semanticTexts(),
+    semanticSpacing(),
+  ]
 }
