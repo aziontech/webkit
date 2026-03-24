@@ -106,9 +106,8 @@
     "./toast": "./src/core/primevue/toast/toast.vue",
     "./toolbar": "./src/core/primevue/toolbar/toolbar.vue",
     "./badge": "./src/core/primevue/badge/badge.vue",
-    "./site/ask-ai-split-button": "./src/components/site/ask-ai-split-button/ask-ai-split-button.vue",
-    "./site/breadcrumb": "./src/components/site/breadcrumb/breadcrumb.vue",
-    "./site/card": "./src/components/site/card/card.vue",
+    
+    "./site/base-modal": "./src/components/site/base-modal/base-modal.vue",
     "./site/card-content": "./src/components/site/card-content/card-content.vue",
     "./site/card-link": "./src/components/site/card-link/card-link.vue",
     "./site/pricing-card": "./src/components/site/pricing-card/pricing-card.vue",
