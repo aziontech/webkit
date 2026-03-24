@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "repository": {
@@ -68,7 +68,6 @@
     "./field-text-privacy": "./src/core/form/field-text-privacy/field-text-privacy.vue",
     "./label": "./src/core/form/label/label.vue",
     "./selector-block": "./src/core/selector-block/selector-block.vue",
-    
     "./copy-block": "./src/components/copy-block/copy-block.vue",
     "./azion-system-status": "./src/components/azion-system-status/azion-system-status.vue",
     "./testimonials-carousel": "./src/components/testimonials-carousel/testimonials-carousel.vue",
@@ -77,7 +76,6 @@
     "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
     "./resizable-splitter": "./src/components/resizable-splitter/resizable-splitter.vue",
     "./overline": "./src/components/overline/overline.vue",
-
     "./accordion": "./src/core/primevue/accordion/accordion.vue",
     "./accordion-tab": "./src/core/primevue/accordion-tab/accordion-tab.vue",
     "./avatar": "./src/core/primevue/avatar/avatar.vue",
@@ -109,9 +107,6 @@
     "./toast": "./src/core/primevue/toast/toast.vue",
     "./toolbar": "./src/core/primevue/toolbar/toolbar.vue",
     "./badge": "./src/core/primevue/badge/badge.vue",
-
-    
-
     "./site/base-modal": "./src/components/site/base-modal/base-modal.vue",
     "./site/card-content": "./src/components/site/card-content/card-content.vue",
     "./site/card-link": "./src/components/site/card-link/card-link.vue",
@@ -120,9 +115,7 @@
     "./site/quote": "./src/components/site/quote/quote.vue",
     "./site/button": "./src/components/site/button/button.vue",
     "./site/system-status": "./src/components/site/system-status/system-status.vue",
-    
     "./toggle": "./src/components/toggle/toggle.vue",
-    
     "./svg/error-403": "./src/svg/error-403/error-403.vue",
     "./svg/error-404": "./src/svg/error-404/error-404.vue",
     "./svg/azion/full": "./src/svg/azion/full/full.vue",
