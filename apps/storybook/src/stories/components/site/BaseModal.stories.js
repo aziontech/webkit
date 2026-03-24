@@ -1,4 +1,5 @@
-import { Modal as BaseModal } from '@aziontech/webkit/site/base-modal'
+import BaseModal from '@aziontech/webkit/site/base-modal'
+import Button from '@aziontech/webkit/site/button'
 
 export default {
   title: 'Components/Site/BaseModal',
@@ -22,15 +23,13 @@ export default {
 }
 
 const Template = (args) => ({
-  components: { BaseModal },
+  components: { BaseModal, Button },
   setup() {
     return { args }
   },
   template: `<BaseModal v-bind="args">
               <template #action>
-                <div class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded cursor-pointer">
-                  Click to open modal
-                </div>
+                <Button label="Click to open modal" type="primary" theme="light" />
               </template>
               <template #header>
                 <div class="text-lg font-semibold">Modal Header</div>
@@ -40,8 +39,8 @@ const Template = (args) => ({
               </template>
               <template #footer>
                 <div class="flex gap-2">
-                  <button class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-                  <button class="px-4 py-2 bg-blue-500 text-white rounded">Confirm</button>
+                  <Button label="Cancel" type="secondary" theme="light" />
+                  <Button label="Confirm" type="primary" theme="light" />
                 </div>
               </template>
             </BaseModal>`
