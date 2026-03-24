@@ -64,7 +64,6 @@
     "./field-text": "./src/core/form/field-text/field-text.vue",
     "./field-text-area": "./src/core/form/field-text-area/field-text-area.vue",
     "./field-text-icon": "./src/core/form/field-text-icon/field-text-icon.vue",
-    "./field-password-strength": "./src/core/form/field-password-strength/field-password-strength.vue",
     "./field-password": "./src/core/form/field-password/field-password.vue",
     "./field-text-privacy": "./src/core/form/field-text-privacy/field-text-privacy.vue",
     "./label": "./src/core/form/label/label.vue",
