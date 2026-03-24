@@ -1,3 +1,10 @@
+## [1.8.5](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.4...@aziontech/webkit@1.8.5) (2026-03-24)
+
+
+### Bug Fixes
+
+* primevue breadcrumb wrapper ([815d1e4](https://github.com/aziontech/webkit/commit/815d1e4ce4e86eaed08c2b418266e9b3b6967be7))
+
 ## [1.8.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.3...@aziontech/webkit@1.8.4) (2026-03-23)
 
 
