@@ -117,6 +117,7 @@
     "./site/button": "./src/components/site/button/button.vue",
     "./site/system-status": "./src/components/site/system-status/system-status.vue",
     "./site/tag": "./src/components/site/tag/tag.vue",
+    "./site/toggle": "./src/components/site/toggle/toggle.vue",
     "./site/overline": "./src/components/site/overline/overline.vue",
     "./svg/error-403": "./src/svg/error-403/error-403.vue",
     "./svg/error-404": "./src/svg/error-404/error-404.vue",
