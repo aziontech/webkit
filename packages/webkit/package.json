@@ -113,7 +113,7 @@
     
 
     "./site/base-modal": "./src/components/site/base-modal/base-modal.vue",
-    "./card-content": "./src/components/site/card-content/card-content.vue",
+    "./site/card-content": "./src/components/site/card-content/card-content.vue",
     "./site/card-link": "./src/components/site/card-link/card-link.vue",
     "./site/pricing-card": "./src/components/site/pricing-card/pricing-card.vue",
     "./site/product-quote": "./src/components/site/product-quote/product-quote.vue",
