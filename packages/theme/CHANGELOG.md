@@ -1,3 +1,11 @@
+## [1.4.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.3.0...@aziontech/theme@1.4.0) (2026-03-25)
+
+
+### Features
+
+* add CardBox component to core/card ([9c797ff](https://github.com/aziontech/webkit/commit/9c797ff90dad3f79b59155748d34f37b44e15958))
+* add CardContent component to core/card ([403ed84](https://github.com/aziontech/webkit/commit/403ed84a4925cf0eda1ed396a7212495e730ee02))
+
 ## [1.3.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.2.0...@aziontech/theme@1.3.0) (2026-03-25)
 
 
