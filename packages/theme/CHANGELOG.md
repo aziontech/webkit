@@ -1,3 +1,26 @@
+## [1.3.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.2.0...@aziontech/theme@1.3.0) (2026-03-25)
+
+
+### Features
+
+* add theme in storybook ([7d2dd17](https://github.com/aziontech/webkit/commit/7d2dd176f74fb6b3e34b37de92dcca0079302f4e))
+* add theme tokens to storybook ([a94a353](https://github.com/aziontech/webkit/commit/a94a353f7e4e62164661758d77f7c742a9fba132))
+* adjust button ([cde3c11](https://github.com/aziontech/webkit/commit/cde3c112c96004029f672e348df115129d2dac56))
+* unify field-password and field-password-strength into a single component ([393d809](https://github.com/aziontech/webkit/commit/393d809c78386410358f8cfbb8e91bfd9b8fb6a7))
+
+
+### Bug Fixes
+
+* breacrumb ([67aa5d7](https://github.com/aziontech/webkit/commit/67aa5d7bcc43c73bcab2ebb9df145c816c741c65))
+* breadcrumb site ([ebe909c](https://github.com/aziontech/webkit/commit/ebe909c8fa0c9c861593c4968d6a7f091eadb3c9))
+* dts build ([81c87af](https://github.com/aziontech/webkit/commit/81c87af1f4e14f6451d64c35e084673fe481589e))
+* export car-content ([557efb5](https://github.com/aziontech/webkit/commit/557efb55aa1bd880d160baa53e458571b8894f20))
+* prevent theme or icons trigger webkit publish and vice versa ([d1bed9c](https://github.com/aziontech/webkit/commit/d1bed9c248671c4fda1dd82fc98059f0937fe3d9))
+* primevue breadcrumb wrapper ([815d1e4](https://github.com/aziontech/webkit/commit/815d1e4ce4e86eaed08c2b418266e9b3b6967be7))
+* remove the ts of buttom ask azion and trigger storybook ([62f47ba](https://github.com/aziontech/webkit/commit/62f47ba094529a59db685ae0f22c77a4f7cad374))
+* storybook the breadcrumb ([09c3323](https://github.com/aziontech/webkit/commit/09c3323ef815da1d4d6b74ba8fd88c7ab34f5451))
+* trigger webkit and theme ([48a99fc](https://github.com/aziontech/webkit/commit/48a99fc44121e890ecc5a2bc8b6502055fb037d0))
+
 ## [1.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.1.1...@aziontech/theme@1.2.0) (2026-03-23)
 
 
