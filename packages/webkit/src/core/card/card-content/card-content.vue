@@ -18,13 +18,7 @@
         {{ title }}
       </h3>
 
-      <div
-        v-if="descriptionRawMarkdown"
-        class="text-body-sm font-sora text-muted"
-        v-html="parseMarkdown(descriptionRawMarkdown)"
-      />
-
-      <p class="text-body-sm font-sora text-muted" v-else-if="description">
+      <p class="text-body-sm font-sora text-muted" v-if="description">
         {{ description }}
       </p>
     </div>
@@ -42,7 +36,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { parseMarkdown } from '../../../services/markdown/markdown-service'
 import Button from '../../../components/site/button/button.vue'
 
 defineOptions({ name: 'CardContent' })
@@ -57,10 +50,6 @@ const props = defineProps({
     default: ''
   },
   description: {
-    type: String,
-    default: ''
-  },
-  descriptionRawMarkdown: {
     type: String,
     default: ''
   },
