@@ -1,0 +1,11 @@
+{
+  "main": "./button-copy.vue",
+  "module": "./button-copy.vue",
+  "types": "./button-copy.vue.d.ts",
+  "browser": {
+    "./sfc": "./button-copy.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
