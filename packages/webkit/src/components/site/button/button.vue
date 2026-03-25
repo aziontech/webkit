@@ -1,9 +1,9 @@
 <template>
-  <template v-if="href || type === 'link' || type === 'linkExternal' || type === 'linkSecondary'">
+  <template v-if="href || type === 'link'">
     <a
       :href="href"
       class="flex gap-3 w-fit cursor-pointer group"
-      :class="type.includes('link') ? underlineHover[type][theme] : 'no-underline'"
+      :class="type === 'link' ? underlineHover : 'no-underline'"
       :target="target"
       @click="handleClick"
     >
@@ -11,7 +11,7 @@
         :label="label"
         :size="size"
         :icon="icon"
-        :class="[customClass, buttonClasses[theme]]"
+        :class="buttonClasses"
         :pt="{
           icon: {
             class: iconClasses
@@ -22,13 +22,13 @@
         }"
       />
 
-      <span v-if="type === 'linkExternal' || type === 'linkSecondary' || type === 'link'">
+      <span v-if="type === 'link'">
         <svg
           width="10"
           height="10"
           :class="[
-            'group-hover:translate-x-[.1rem] -translate-x-[.1rem]  transition-transform relative ',
-            type === 'linkExternal' || target === '_blank'
+            'group-hover:translate-x-[.1rem] -translate-x-[.1rem] transition-transform relative',
+            target === '_blank'
               ? 'translate-y-0 group-hover:translate-y-[-50%] top-[20%]'
               : 'rotate-45 -translate-y-1/2 top-1/2'
           ]"
@@ -50,7 +50,7 @@
       :size="size"
       :icon="icon"
       @click="handleClick"
-      :class="[customClass, buttonClasses[theme]]"
+      :class="buttonClasses"
       :pt="{
         icon: {
           class: iconClasses
@@ -68,6 +68,8 @@
   import { computed } from 'vue'
   // import { getAnalytics } from '@azion/tracker'
 
+  const emit = defineEmits(['click'])
+
   const props = defineProps({
     label: String,
     size: {
@@ -77,19 +79,11 @@
     },
     type: {
       type: String,
-      options: ['primary', 'secondary', 'link', 'linkExternal', 'tertiary', 'linkSecondary'],
+      options: ['primary', 'secondary', 'link'],
       default: 'secondary'
     },
     href: String,
     icon: String,
-    theme: {
-      type: String,
-      default: 'dark'
-    },
-    customClass: {
-      type: String,
-      default: 'px-3 py-3'
-    },
     target: {
       type: String,
       default: '_self',
@@ -106,75 +100,42 @@
     const underlineBase =
       "relative after:duration-150 hover:after:w-full group-hover:after:w-full after:left-0 after:w-0 after:h-[1px] after:transition-all after:content-[\'\'] after:absolute after:-bottom-[.1rem]"
 
-    return {
-      link: {
-        dark: `${underlineBase} after:bg-violet-300`,
-        light: `${underlineBase} after:bg-violet-600`
-      },
-      linkSecondary: {
-        dark: `${underlineBase} after:bg-neutral-200`,
-        light: `${underlineBase} after:bg-neutral-200`
-      },
-      linkExternal: {
-        dark: `${underlineBase} after:bg-violet-300`,
-        light: `${underlineBase} after:bg-violet-600`
-      }
-    }
+    return `${underlineBase} after:bg-neutral-200`
   })
 
   const buttonClasses = computed(() => {
     const focusOverride =
       'focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none'
 
-    return {
-      primary: {
-        dark: `h-fit group border-1 border-neutral-900 bg-neutral-900 text-neutral-100 duration-300 transition rounded-md hover:bg-orange-500 hover:border-orange-500 hover:text-neutral-900 ${focusOverride}`,
-        light: `h-fit group border-1 border-neutral-100 bg-neutral-100 text-neutral-900 duration-300 transition rounded-md hover:bg-orange-500 hover:border-orange-500 hover:text-neutral-900 ${focusOverride}`
-      },
-      secondary: {
-        dark: 'h-fit group bg-neutral-900 text-neutral-100 duration-300 transition rounded-md active:bg-neutral-900 border-1 border-neutral-800 hover:bg-neutral-950 hover:text-orange-500 ${focusOverride}',
-        light:
-          'h-fit group bg-neutral-200 text-neutral-900 duration-300 transition rounded-md active:bg-neutral-700 border-1 border-neutral-400 hover:bg-neutral-100 hover:text-orange-500 hover:border-neutral-300 ${focusOverride}'
-      },
-      tertiary: {
-        dark: `h-fit group font-proto-mono bg-orange-900/10 text-orange-500 duration-300 transition rounded-none border-none bg-orange-900/20 ${focusOverride}`,
-        light: `h-fit group font-proto-mono bg-orange-900/10 text-orange-500 duration-300 transition rounded-none border-none bg-orange-900/20 ${focusOverride}`
-      },
-      link: {
-        dark: `w-fit !leading-[.75rem] bg-transparent border-none text-violet-300 px-0 py-0 ${focusOverride}`,
-        light: `w-fit !leading-[.75rem] bg-transparent border-none text-violet-600 px-0 py-0 ${focusOverride}`
-      },
-      linkSecondary: {
-        dark: `w-fit !leading-[.75rem] bg-transparent border-none text-neutral-100 px-0 py-0 ${focusOverride}`,
-        light: `w-fit !leading-[.75rem] bg-transparent border-none text-neutral-950 px-0 py-0 ${focusOverride}`
-      },
-      linkExternal: {
-        dark: `w-fit !leading-[.75rem] bg-transparent border-none text-violet-300 px-0 py-0 ${focusOverride}`,
-        light: `w-fit !leading-[.75rem] bg-transparent border-none text-violet-300 px-0 py-0 ${focusOverride}`
-      }
-    }[props.type]
+    const styles = {
+      // Primary: estilo light (fundo claro)
+      primary: `h-fit group px-3 py-3 border-1 border-neutral-100 bg-neutral-100 text-neutral-900 duration-300 transition rounded-md hover:bg-orange-500 hover:border-orange-500 hover:text-neutral-900 ${focusOverride}`,
+
+      // Secondary: estilo dark (fundo escuro)
+      secondary: `h-fit group px-3 py-3 bg-neutral-900 text-neutral-100 duration-300 transition rounded-md active:bg-neutral-900 border-1 border-neutral-800 hover:bg-neutral-950 hover:text-orange-500 ${focusOverride}`,
+
+      // Link: estilo neutro
+      link: `w-fit px-0 py-0 !leading-[.75rem] bg-transparent border-none text-neutral-200 ${focusOverride}`
+    }
+
+    return styles[props.type]
   })
 
   const iconClasses = computed(() => {
     const baseClasses = '!text-[.75rem] duration-300 transition flex items-center mr-2'
 
-    return {
-      primary: {
-        dark: `h-fit ${baseClasses} text-neutral-100 group-hover:text-white`,
-        light: `h-fit ${baseClasses} text-neutral-900 group-hover:text-white`
-      },
-      secondary: {
-        dark: `h-fit ${baseClasses} text-neutral-100 group-hover:text-neutral-100`,
-        light: `h-fit ${baseClasses} text-neutral-900 group-hover:text-neutral-100`
-      },
-      tertiary: {
-        dark: `h-min ${baseClasses} dark:text-neutral-100 group-hover:text-neutral-100 dark:group-hover:text-neutral-100`,
-        light: `h-min ${baseClasses} text-neutral-900 group-hover:text-neutral-900`
-      },
-      link: `${baseClasses} text-orange-600 hover:text-orange-600 leading-1`,
-      linkSecondary: `${baseClasses} text-orange-600 hover:text-orange-600 leading-1`,
-      linkExternal: `${baseClasses} text-orange-600 hover:text-orange-600 leading-1`
-    }[props.type]
+    const styles = {
+      // Primary: estilo light
+      primary: `h-fit ${baseClasses} text-neutral-900 group-hover:text-white`,
+
+      // Secondary: estilo dark
+      secondary: `h-fit ${baseClasses} text-neutral-100 group-hover:text-neutral-100`,
+
+      // Link
+      link: `${baseClasses} text-orange-600 hover:text-orange-600 leading-1`
+    }
+
+    return styles[props.type]
   })
 
   const labelClasses = computed(() => {
@@ -182,29 +143,16 @@
 
     const fontSize = props.size === 'small' ? 'text-xs' : ''
 
-    return {
+    const styles = {
       primary: `font-proto-mono ${leading} whitespace-nowrap`,
       secondary: `font-proto-mono ${leading} whitespace-nowrap`,
-      tertiary: `font-proto-mono ${leading} whitespace-nowrap`,
-      link: `font-proto-mono ${leading} ${fontSize} after:bg-violet-600 whitespace-nowrap`,
-      linkSecondary: `font-proto-mono ${leading} ${fontSize} after:bg-neutral-900 whitespace-nowrap`,
-      linkExternal: `font-proto-mono ${leading} ${fontSize} after:bg-violet-300 whitespace-nowrap`
-    }[props.type]
+      link: `font-proto-mono ${leading} ${fontSize} after:bg-neutral-900 whitespace-nowrap`
+    }
+
+    return styles[props.type]
   })
 
-  const handleClick = () => {
-    // try {
-    //   const analytics = getAnalytics()
-    //   if (!analytics) return
-      
-    //   analytics.track('Button Clicked', {
-    //     label: props.label,
-    //     target: props.href,
-    //     event: 'click',
-    //     location: props.location,
-    //   })
-    // } catch {
-    //   return
-    // }
+  const handleClick = (event) => {
+    emit('click', event)
   }
 </script>
