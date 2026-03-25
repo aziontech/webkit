@@ -18,6 +18,11 @@ export default {
       options: ['', 'danger', 'secondary', 'success', 'info', 'warning', 'contrast'],
       description: 'Button severity/style variant'
     },
+    size: {
+      control: 'select',
+      options: ['', 'small', 'large'],
+      description: 'Button size'
+    },
     outlined: {
       control: 'boolean',
       description: 'Whether the button is outlined'
@@ -31,34 +36,39 @@ export default {
 
 export const Default = {
   args: {
-    label: 'Delete'
+    label: 'Delete',
+    size: ''
   }
 };
 
 export const WithCustomLabel = {
   args: {
     label: 'Remove Item',
-    icon: 'pi pi-trash'
+    icon: 'pi pi-trash',
+    size: ''
   }
 };
 
 export const Filled = {
   args: {
     label: 'Delete',
-    outlined: false
+    outlined: false,
+    size: ''
   }
 };
 
 export const Disabled = {
   args: {
     label: 'Delete',
-    disabled: true
+    disabled: true,
+    size: ''
   }
 };
 
 export const WithCustomIcon = {
   args: {
     label: 'Delete',
-    icon: 'pi pi-times'
+    icon: 'pi pi-times',
+    size: ''
   }
 };
