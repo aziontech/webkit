@@ -1,3 +1,16 @@
+## [1.11.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.10.1...@aziontech/webkit@1.11.0) (2026-03-25)
+
+
+### Features
+
+* adjust button ([cde3c11](https://github.com/aziontech/webkit/commit/cde3c112c96004029f672e348df115129d2dac56))
+
+
+### Bug Fixes
+
+* prevent theme or icons trigger webkit publish and vice versa ([d1bed9c](https://github.com/aziontech/webkit/commit/d1bed9c248671c4fda1dd82fc98059f0937fe3d9))
+* trigger webkit and theme ([48a99fc](https://github.com/aziontech/webkit/commit/48a99fc44121e890ecc5a2bc8b6502055fb037d0))
+
 ## [1.10.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.10.0...@aziontech/webkit@1.10.1) (2026-03-24)
 
 
