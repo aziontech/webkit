@@ -1,0 +1,11 @@
+{
+  "main": "./button-clone.vue",
+  "module": "./button-clone.vue",
+  "types": "./button-clone.vue.d.ts",
+  "browser": {
+    "./sfc": "./button-clone.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

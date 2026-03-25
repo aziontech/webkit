@@ -1,0 +1,11 @@
+{
+  "main": "./button-delete.vue",
+  "module": "./button-delete.vue",
+  "types": "./button-delete.vue.d.ts",
+  "browser": {
+    "./sfc": "./button-delete.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
