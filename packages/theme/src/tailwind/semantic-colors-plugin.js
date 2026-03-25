@@ -80,9 +80,10 @@ export const semanticColors = () => {
       '.border-accentHover': { 'border-color': 'var(--border-accentHover)' },
     };
 
-    addUtilities(textColors, ['responsive', 'hover', 'dark']);
-    addUtilities(bgColors, ['responsive', 'hover', 'dark']);
-    addUtilities(borderColors, ['responsive', 'hover', 'dark']);
+    const variants = ['responsive', 'hover', 'dark', 'before', 'after', 'focus', 'active', 'disabled'];
+    addUtilities(textColors, variants);
+    addUtilities(bgColors, variants);
+    addUtilities(borderColors, variants);
   });
 };
 
