@@ -82,6 +82,8 @@
     "./button": "./src/core/primevue/button/button.vue",
     "./breadcrumb": "./src/core/primevue/breadcrumb/breadcrumb.vue",
     "./card": "./src/core/primevue/card/card.vue",
+    "./card-box": "./src/core/card/card-box/card-box.vue",
+    "./card-content": "./src/core/card/card-content/card-content.vue",
     "./carousel": "./src/core/primevue/carousel/carousel.vue",
     "./chip": "./src/core/primevue/chip/chip.vue",
     "./column": "./src/core/primevue/column/column.vue",
