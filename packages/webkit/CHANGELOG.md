@@ -1,3 +1,17 @@
+## [1.12.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.11.0...@aziontech/webkit@1.12.0) (2026-03-25)
+
+
+### Features
+
+* add CardBox component to core/card ([9c797ff](https://github.com/aziontech/webkit/commit/9c797ff90dad3f79b59155748d34f37b44e15958))
+* add CardContent component to core/card ([403ed84](https://github.com/aziontech/webkit/commit/403ed84a4925cf0eda1ed396a7212495e730ee02))
+* button action save/delete/copy ([ff0c602](https://github.com/aziontech/webkit/commit/ff0c60248352c604f0da4eb946e4895a3029612c))
+
+
+### Bug Fixes
+
+* remove duplicate CardContent stories from old location ([7802554](https://github.com/aziontech/webkit/commit/7802554efcdd1873781b140f61b9811f5e700483))
+
 ## [1.11.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.10.1...@aziontech/webkit@1.11.0) (2026-03-25)
 
 
