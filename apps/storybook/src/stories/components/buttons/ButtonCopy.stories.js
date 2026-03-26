@@ -13,6 +13,11 @@ export default {
       control: 'text',
       description: 'Text displayed on the button'
     },
+    'iconPos': {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon (left or right)'
+    },
     size: {
       control: 'select',
       options: ['', 'small', 'large'],
@@ -96,6 +101,16 @@ export const CopyAPIKey = {
     label: 'Copy API Key',
     size: '',
     copiedLabel: 'Key Copied!',
+    outlined: true
+  }
+};
+
+export const IconRight = {
+  args: {
+    value: 'Text to copy',
+    label: 'Copy',
+    'iconPos': 'right',
+    size: '',
     outlined: true
   }
 };
