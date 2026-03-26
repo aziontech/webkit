@@ -3,8 +3,10 @@ import { computed } from 'vue'
 import Button from 'primevue/button'
 
 const props = defineProps({
+  'data-testid': { type: String, default: 'button-save' },
   label: { type: String, default: 'Save' },
-  icon: { type: String, default: 'pi pi-save' },
+  icon: { type: String, default: '' },
+  iconPos: { type: String, default: 'right' },
   severity: { type: String, default: 'primary' },
   size: { type: String, default: '' },
   outlined: { type: Boolean, default: false },
@@ -26,13 +28,14 @@ const handleSave = () => {
   <Button
     :label="label"
     :icon="icon"
+    :iconPos="iconPos"
     :severity="severity"
     :size="size"
     :outlined="outlined"
     :disabled="computedDisabled"
     :loading="loading"
     :aria-label="label"
-    data-testid="button-save"
+    :data-testid="data-testid"
     @click="handleSave"
   />
 </template>

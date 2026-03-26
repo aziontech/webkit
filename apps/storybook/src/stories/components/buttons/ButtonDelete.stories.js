@@ -13,6 +13,11 @@ export default {
       control: 'text',
       description: 'Icon class (PrimeIcons format)'
     },
+    'iconPos': {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon (left or right)'
+    },
     severity: {
       control: 'select',
       options: ['', 'danger', 'secondary', 'success', 'info', 'warning', 'contrast'],
@@ -69,6 +74,15 @@ export const WithCustomIcon = {
   args: {
     label: 'Delete',
     icon: 'pi pi-times',
+    size: ''
+  }
+};
+
+export const IconRight = {
+  args: {
+    label: 'Delete',
+    icon: 'pi pi-trash',
+    'iconPos': 'right',
     size: ''
   }
 };

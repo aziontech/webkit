@@ -13,6 +13,11 @@ export default {
       control: 'text',
       description: 'Icon class (PrimeIcons format)'
     },
+    'iconPos': {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon (left or right)'
+    },
     severity: {
       control: 'select',
       options: ['', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'contrast'],
@@ -45,6 +50,15 @@ export const WithCustomIcon = {
   args: {
     label: 'Add Item',
     icon: 'pi pi-plus-circle',
+    size: 'large'
+  }
+};
+
+export const IconRight = {
+  args: {
+    label: 'Create New',
+    icon: 'pi pi-plus',
+    'iconPos': 'right',
     size: 'large'
   }
 };
