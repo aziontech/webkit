@@ -32,6 +32,10 @@ export default {
       control: 'boolean',
       description: 'Whether the button is outlined'
     },
+    loading: {
+      control: 'boolean',
+      description: 'Whether the button shows loading state'
+    },
     disabled: {
       control: 'boolean',
       description: 'Whether the button is disabled'
@@ -66,6 +70,14 @@ export const Disabled = {
   args: {
     label: 'Delete',
     disabled: true,
+    size: ''
+  }
+};
+
+export const Loading = {
+  args: {
+    label: 'Deleting...',
+    loading: true,
     size: ''
   }
 };

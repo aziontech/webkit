@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import Button from 'primevue/button'
 
 const props = defineProps({
@@ -9,12 +10,16 @@ const props = defineProps({
   severity: { type: String, default: 'danger' },
   size: { type: String, default: '' },
   outlined: { type: Boolean, default: true },
+  loading: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false }
 })
 
 const emit = defineEmits(['click'])
 
+const computedDisabled = computed(() => props.disabled || props.loading)
+
 const handleClick = () => {
+  if (computedDisabled.value) return
   emit('click')
 }
 </script>
@@ -27,7 +32,8 @@ const handleClick = () => {
     :severity="severity"
     :size="size"
     :outlined="outlined"
-    :disabled="disabled"
+    :disabled="computedDisabled"
+    :loading="loading"
     :aria-label="label"
     :data-testid="data-testid"
     @click="handleClick"
