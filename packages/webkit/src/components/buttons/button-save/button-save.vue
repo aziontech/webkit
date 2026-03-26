@@ -12,9 +12,7 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['save'])
-
-// const computedIcon = computed(() => props.loading ? 'pi pi-spin pi-spinner' : props.icon)
+const emit = defineEmits(['click'])
 
 const computedDisabled = computed(() => props.disabled || props.loading)
 
