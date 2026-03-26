@@ -13,12 +13,43 @@ body,
   height: 100%;
 }
 
+/* Storybook Docs Preview (sbdocs/sbdocs-preview) canvas background */
+.sb-main-padded,
+.docs-story,
+.docs-story > * {
+  @apply !bg-canvas;
+}
+
+.docblock-code-toggle {
+  @apply !font-mono !font-normal;
+}
+.css-2p1np {
+  @apply !font-mono !font-normal;
+}
+
+/* Text Name Column Props */
+.css-in3yi3 {
+  @apply !font-code !font-normal;
+}
+
+.css-7qiabv {
+  @apply !font-sans !text-muted;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply !font-sans !font-normal;
+}
+
 /* Theme container styles */
 .azion {
   font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.azion-light > body {
+  background: #fff !important;
 }
 
 .azion.azion-dark {
