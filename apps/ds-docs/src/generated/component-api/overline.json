@@ -1,0 +1,28 @@
+{
+  "component": "overline",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/overline/overline.vue",
+  "props": [
+    {
+      "name": "color",
+      "type": "string",
+      "required": false,
+      "default": "primary",
+      "description": ""
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "required": false,
+      "default": "xs",
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.120Z"
+}

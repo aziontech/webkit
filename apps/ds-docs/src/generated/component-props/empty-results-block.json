@@ -6,7 +6,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Title"
   },
   "description": {
     "label": "Description",
@@ -15,7 +15,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Brief description of the field."
   },
   "createButtonLabel": {
     "label": "Create Button Label",

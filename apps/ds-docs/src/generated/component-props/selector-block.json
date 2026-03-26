@@ -6,7 +6,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Option title"
   },
   "subtitle": {
     "label": "Subtitle",
@@ -15,7 +15,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Subtitle"
   },
   "description": {
     "label": "Description",
@@ -24,7 +24,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Short description."
   },
   "disabled": {
     "label": "Disabled",
@@ -78,7 +78,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "example-id"
   },
   "inputClass": {
     "label": "Input Class",

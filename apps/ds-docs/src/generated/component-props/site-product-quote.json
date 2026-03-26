@@ -1,0 +1,76 @@
+{
+  "label": {
+    "label": "Label",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "Label"
+  },
+  "size": {
+    "label": "Size",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "enum",
+    "control": "select",
+    "options": [
+      "small",
+      "large"
+    ],
+    "default": "small"
+  },
+  "type": {
+    "label": "Type",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "enum",
+    "control": "select",
+    "options": [
+      "primary",
+      "secondary",
+      "link",
+      "tertiary",
+      "linkExternal"
+    ],
+    "default": "primary"
+  },
+  "href": {
+    "label": "Href",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "icon": {
+    "label": "Icon",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "pi pi-box"
+  },
+  "theme": {
+    "label": "Theme",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "customClass": {
+    "label": "Custom Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  }
+}

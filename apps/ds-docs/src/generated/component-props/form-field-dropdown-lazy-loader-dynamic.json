@@ -24,7 +24,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Label"
   },
   "placeholder": {
     "label": "Placeholder",
@@ -33,7 +33,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Type here..."
   },
   "description": {
     "label": "Description",
@@ -42,7 +42,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Brief description of the field."
   },
   "optionLabel": {
     "label": "Option Label",
@@ -51,7 +51,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "label"
   },
   "optionValue": {
     "label": "Option Value",
@@ -60,7 +60,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "value"
   },
   "moreOptions": {
     "label": "More Options",
@@ -130,6 +130,6 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": "[]"
+    "default": "[{\"label\":\"Option A\",\"value\":\"a\"},{\"label\":\"Option B\",\"value\":\"b\"},{\"label\":\"Option C\",\"value\":\"c\"}]"
   }
 }

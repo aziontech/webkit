@@ -171,9 +171,9 @@ const donts = usage?.doDonts?.filter(item => item.type === 'dont') || [];
     <div class="usage-content usage-content--fallback">
       <slot />
       <div class="empty-usage-state py-12 text-center border border-dashed border-default rounded-lg bg-surface">
-        <i class="pi pi-book mx-auto text-4xl text-muted" aria-hidden="true" />
+        <i class="pi pi-book mx-auto text-4xl text-primary-600 dark:text-primary-300" aria-hidden="true" />
         <h3 class="mt-2 text-sm font-medium text-default">Usage documentation coming soon</h3>
-        <p class="mt-1 text-sm text-muted">
+        <p class="mt-1 text-sm text-primary-600 dark:text-primary-300">
           When to use, do's and don'ts, and examples will be available shortly.
         </p>
       </div>
@@ -197,7 +197,7 @@ const donts = usage?.doDonts?.filter(item => item.type === 'dont') || [];
   
   /* Paragraph spacing */
   .usage-content :global(p) {
-    @apply mb-4 leading-relaxed text-muted dark:text-[#a3a3a3];
+    @apply mb-4 leading-relaxed text-primary-600 dark:text-primary-300;
   }
   
   /* List styling */
@@ -207,12 +207,12 @@ const donts = usage?.doDonts?.filter(item => item.type === 'dont') || [];
   }
   
   .usage-content :global(li) {
-    @apply mb-2 text-muted dark:text-[#a3a3a3];
+    @apply mb-2 text-primary-600 dark:text-primary-300;
   }
   
   /* Link styling */
   .usage-content :global(a) {
-    @apply text-link hover:text-link-hover underline underline-offset-2;
+    @apply text-primary-600 hover:text-primary-700 dark:text-primary-300 dark:hover:text-primary-200 underline underline-offset-2;
   }
   
   /* Code styling */
@@ -243,7 +243,7 @@ const donts = usage?.doDonts?.filter(item => item.type === 'dont') || [];
   }
 
   .usage-list li {
-    @apply text-muted dark:text-[#a3a3a3] leading-relaxed;
+    @apply text-primary-600 dark:text-primary-300 leading-relaxed;
   }
 
   /* Do/Don't grid */

@@ -33,7 +33,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Label"
   },
   "helpText": {
     "label": "Help Text",
@@ -42,7 +42,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "This is a help text."
   },
   "disabled": {
     "label": "Disabled",

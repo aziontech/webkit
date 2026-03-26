@@ -1,4 +1,13 @@
 {
+  "value": {
+    "label": "Value",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
   "label": {
     "label": "Label",
     "description": "",
@@ -6,7 +15,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Label"
   },
   "disabled": {
     "label": "Disabled",
@@ -17,15 +26,6 @@
     "control": "boolean",
     "default": false
   },
-  "value": {
-    "label": "Value",
-    "description": "",
-    "required": true,
-    "category": "Required",
-    "type": "string",
-    "control": "text",
-    "default": ""
-  },
   "isCopyVisible": {
     "label": "Is Copy Visible",
     "description": "",
@@ -34,5 +34,23 @@
     "type": "boolean",
     "control": "boolean",
     "default": true
+  },
+  "outlined": {
+    "label": "Outlined",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "copiedLabel": {
+    "label": "Copied Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Copied"
   }
 }

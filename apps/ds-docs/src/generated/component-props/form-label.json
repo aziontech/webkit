@@ -6,7 +6,7 @@
     "category": "Required",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Label"
   },
   "isRequired": {
     "label": "Is Required",

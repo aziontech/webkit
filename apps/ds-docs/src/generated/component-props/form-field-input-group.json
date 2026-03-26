@@ -24,7 +24,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Label"
   },
   "disabled": {
     "label": "Disabled",
@@ -51,7 +51,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Type here..."
   },
   "description": {
     "label": "Description",
@@ -60,7 +60,7 @@
     "category": "Optional",
     "type": "string",
     "control": "text",
-    "default": ""
+    "default": "Brief description of the field."
   },
   "inputClass": {
     "label": "Input Class",

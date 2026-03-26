@@ -1,0 +1,29 @@
+{
+  "backgroundColor": {
+    "label": "Background Color",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "default"
+  },
+  "showHeader": {
+    "label": "Show Header",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "disableVisibilityToggle": {
+    "label": "Disable Visibility Toggle",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

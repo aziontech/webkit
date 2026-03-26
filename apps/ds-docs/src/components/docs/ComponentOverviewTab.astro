@@ -82,7 +82,9 @@ const {
   
   /* Paragraph spacing */
   .overview-content :global(p) {
-    @apply mb-4 leading-relaxed text-muted dark:text-[#a3a3a3];
+    /* `text-muted` doesn't exist in this project’s Tailwind config.
+       Use a Tailwind color that exists in this repo instead. */
+    @apply mb-4 leading-relaxed text-primary-600 dark:text-primary-300;
   }
   
   /* List styling */
@@ -92,7 +94,7 @@ const {
   }
   
   .overview-content :global(li) {
-    @apply mb-2 text-muted;
+    @apply mb-2 text-primary-600 dark:text-primary-300;
   }
   
   /* Link styling */

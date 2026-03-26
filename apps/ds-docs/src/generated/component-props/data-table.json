@@ -1,0 +1,396 @@
+{
+  "value": {
+    "label": "Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "data": {
+    "label": "Data",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "showGridlines": {
+    "label": "Show Gridlines",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "lazy": {
+    "label": "Lazy",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "rowHover": {
+    "label": "Row Hover",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "dataKey": {
+    "label": "Data Key",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "id"
+  },
+  "pt": {
+    "label": "Pt",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "({})"
+  },
+  "containerClass": {
+    "label": "Container Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "tableClass": {
+    "label": "Table Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "filters": {
+    "label": "Filters",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "({})"
+  },
+  "sortField": {
+    "label": "Sort Field",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "sortOrder": {
+    "label": "Sort Order",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 1
+  },
+  "sortMode": {
+    "label": "Sort Mode",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "single"
+  },
+  "editMode": {
+    "label": "Edit Mode",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "row"
+  },
+  "editingRows": {
+    "label": "Editing Rows",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "paginator": {
+    "label": "Paginator",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "rowsPerPageOptions": {
+    "label": "Rows Per Page Options",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[10, 25, 50, 100]"
+  },
+  "rows": {
+    "label": "Rows",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 10
+  },
+  "globalFilterFields": {
+    "label": "Global Filter Fields",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "selection": {
+    "label": "Selection",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "null"
+  },
+  "selectionMode": {
+    "label": "Selection Mode",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "null"
+  },
+  "exportFilename": {
+    "label": "Export Filename",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "export"
+  },
+  "exportFunction": {
+    "label": "Export Function",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "function",
+    "control": "none"
+  },
+  "loading": {
+    "label": "Loading",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "totalRecords": {
+    "label": "Total Records",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "first": {
+    "label": "First",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "rowClass": {
+    "label": "Row Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "function",
+    "control": "none"
+  },
+  "hideHeader": {
+    "label": "Hide Header",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "expandableRowGroups": {
+    "label": "Expandable Row Groups",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "rowGroupMode": {
+    "label": "Row Group Mode",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "subheader"
+  },
+  "groupRowsBy": {
+    "label": "Group Rows By",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "expandedRowGroups": {
+    "label": "Expanded Row Groups",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "reorderableRows": {
+    "label": "Reorderable Rows",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "columns": {
+    "label": "Columns",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "skeletonRows": {
+    "label": "Skeleton Rows",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 5
+  },
+  "emptyListMessage": {
+    "label": "Empty List Message",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "No data available"
+  },
+  "emptyBlock": {
+    "label": "Empty Block",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "({\n        title: 'No data has been created"
+  },
+  "scrollable": {
+    "label": "Scrollable",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "scrollHeight": {
+    "label": "Scroll Height",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "calc(100vh - 300px)"
+  },
+  "frozenValue": {
+    "label": "Frozen Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "appliedFilters": {
+    "label": "Applied Filters",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "notShowEmptyBlock": {
+    "label": "Not Show Empty Block",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "isSelectable": {
+    "label": "Is Selectable",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "searchValue": {
+    "label": "Search Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  }
+}

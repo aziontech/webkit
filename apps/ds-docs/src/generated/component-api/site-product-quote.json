@@ -1,0 +1,58 @@
+{
+  "component": "site-product-quote",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/site/product-quote/product-quote.vue",
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "size",
+      "type": "'small'  |  'large'",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "type",
+      "type": "'primary'  |  'secondary'  |  'link'  |  'tertiary'  |  'linkExternal'",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "theme",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "customClass",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.124Z"
+}

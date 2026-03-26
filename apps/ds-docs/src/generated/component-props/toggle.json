@@ -1,0 +1,38 @@
+{
+  "modelValue": {
+    "label": "Model Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "main"
+  },
+  "mainLabel": {
+    "label": "Main Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "monthly"
+  },
+  "alternativeLabel": {
+    "label": "Alternative Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "yearly"
+  },
+  "description": {
+    "label": "Description",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Brief description of the field."
+  }
+}

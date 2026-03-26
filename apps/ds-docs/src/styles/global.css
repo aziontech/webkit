@@ -121,7 +121,7 @@
   }
 
   body {
-    @apply bg-canvas text-default;
+    @apply bg-canvas text-primary-950 dark:text-primary-50;
   }
 
   /* Smooth scrolling */
