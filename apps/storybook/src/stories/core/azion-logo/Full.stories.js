@@ -1,7 +1,7 @@
 import Full from '@aziontech/webkit/svg/azion/full';
 
 export default {
-  title: 'Core/Azion/Full',
+  title: 'Core/Azion Logo/Full',
   component: Full,
   tags: ['autodocs'],
   parameters: {
