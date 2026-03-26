@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.0...@aziontech/webkit@1.12.1) (2026-03-26)
+
+
+### Bug Fixes
+
+* button-save update event save to click ([010ed9f](https://github.com/aziontech/webkit/commit/010ed9f0955cf45d2184f82517631a0c91a9aaf8))
+
 ## [1.12.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.11.0...@aziontech/webkit@1.12.0) (2026-03-25)
 
 
