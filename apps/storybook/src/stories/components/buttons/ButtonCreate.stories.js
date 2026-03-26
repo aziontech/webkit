@@ -32,6 +32,10 @@ export default {
       control: 'boolean',
       description: 'Whether the button is outlined'
     },
+    loading: {
+      control: 'boolean',
+      description: 'Whether the button shows loading state'
+    },
     disabled: {
       control: 'boolean',
       description: 'Whether the button is disabled'
@@ -82,6 +86,14 @@ export const Disabled = {
   args: {
     label: 'Create New',
     disabled: true,
+    size: 'large'
+  }
+};
+
+export const Loading = {
+  args: {
+    label: 'Creating...',
+    loading: true,
     size: 'large'
   }
 };
