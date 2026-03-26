@@ -1,8 +1,8 @@
-import Error403 from '@aziontech/webkit/svg/error-403';
+import Error404 from '@aziontech/webkit/svg/error-404';
 
 export default {
-  title: 'SVG/Error403',
-  component: Error403,
+  title: 'Core/Error404',
+  component: Error404,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',

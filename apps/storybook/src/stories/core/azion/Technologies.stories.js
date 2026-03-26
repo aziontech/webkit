@@ -1,7 +1,7 @@
 import Technologies from '@aziontech/webkit/svg/azion/technologies';
 
 export default {
-  title: 'SVG/Azion/Technologies',
+  title: 'Core/Azion/Technologies',
   component: Technologies,
   tags: ['autodocs'],
   parameters: {

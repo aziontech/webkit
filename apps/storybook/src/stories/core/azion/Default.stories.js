@@ -1,7 +1,7 @@
 import Default from '@aziontech/webkit/svg/azion/default';
 
 export default {
-  title: 'SVG/Azion/Default',
+  title: 'Core/Azion/Default',
   component: Default,
   tags: ['autodocs'],
   parameters: {

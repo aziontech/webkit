@@ -1,7 +1,7 @@
 import ButtonCreate from '@aziontech/webkit/button-create';
 
 export default {
-  title: 'Components/Buttons/ButtonCreate',
+  title: 'Core/Buttons/ButtonCreate',
   component: ButtonCreate,
   tags: ['autodocs'],
   argTypes: {

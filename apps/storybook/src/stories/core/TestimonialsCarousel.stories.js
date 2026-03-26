@@ -51,7 +51,7 @@ const multipleTestimonials = [
 ]
 
 export default {
-  title: 'Components/TestimonialsCarousel',
+  title: 'Core/TestimonialsCarousel',
   component: TestimonialsCarousel,
   tags: ['autodocs'],
   argTypes: {

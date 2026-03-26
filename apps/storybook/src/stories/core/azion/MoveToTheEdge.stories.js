@@ -1,7 +1,7 @@
 import MoveToTheEdge from '@aziontech/webkit/svg/azion/move-to-the-edge';
 
 export default {
-  title: 'SVG/Azion/MoveToTheEdge',
+  title: 'Core/Azion/MoveToTheEdge',
   component: MoveToTheEdge,
   tags: ['autodocs'],
   parameters: {
