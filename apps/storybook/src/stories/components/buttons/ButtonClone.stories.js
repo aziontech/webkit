@@ -13,6 +13,11 @@ export default {
       control: 'text',
       description: 'Icon class (PrimeIcons format)'
     },
+    'iconPos': {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon (left or right)'
+    },
     severity: {
       control: 'select',
       options: ['', 'secondary', 'primary', 'success', 'info', 'warning', 'danger', 'contrast'],
@@ -75,6 +80,15 @@ export const WithCustomIcon = {
   args: {
     label: 'Clone',
     icon: 'pi pi-clone',
+    size: 'large'
+  }
+};
+
+export const IconRight = {
+  args: {
+    label: 'Clone',
+    icon: 'pi pi-clone',
+    'iconPos': 'right',
     size: 'large'
   }
 };
