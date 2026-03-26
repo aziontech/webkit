@@ -16,9 +16,10 @@
 
   const colorClass = computed(() => {
     return {
-      primary: 'text-neutral-200',
-      orange: 'text-orange-500',
-      black: 'text-neutral-900'
+      default: 'text-default',
+      primary: 'text-primary',
+      black: 'text-neutral-900',
+      muted: 'text-muted'
     }
   })
 
