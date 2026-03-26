@@ -30,22 +30,23 @@ body,
 
 /* Text Name Column Props */
 .css-in3yi3 {
-  /* Force the intended code font directly */
-  font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-  font-weight: 400 !important;
+  @apply !font-code !font-normal !text-neutral-50;
 }
 
+.tabbutton > * {
+  @apply !font-mono !font-normal;
+}
 
 .docblock-argstable-head > tr {
   @apply !font-code !lowercase;
 }
 
 .css-in3yi3 {
-  @apply !font-code !font-normal !text-default;
+  @apply !font-code !font-normal !text-neutral-50;
 }
 
 .css-7qiabv {
-  @apply !font-sans !text-muted;
+  @apply !font-sans !text-neutral-500;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -62,6 +63,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .azion-light > body {
   background: #fff !important;
+  transition: all 0.4s ease-in-out !important;
+}
+.azion-dark > body {
+  background: #0A0A0A !important;
+  transition: all 0.4s ease-in-out !important;
 }
 
 .azion.azion-dark {
