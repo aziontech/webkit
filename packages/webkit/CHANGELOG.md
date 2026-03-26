@@ -1,3 +1,10 @@
+## [1.13.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.4...@aziontech/webkit@1.13.0) (2026-03-26)
+
+
+### Features
+
+* add DataTable component with storybook stories ([73f406a](https://github.com/aziontech/webkit/commit/73f406adbe86814e9e0cb2354c5da21e67a6a135))
+
 ## [1.12.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.3...@aziontech/webkit@1.12.4) (2026-03-26)
 
 
