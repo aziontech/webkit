@@ -21,6 +21,7 @@ body,
 }
 
 .docblock-code-toggle {
+  /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
   @apply !font-mono !font-normal;
 }
 .css-2p1np {
@@ -29,7 +30,18 @@ body,
 
 /* Text Name Column Props */
 .css-in3yi3 {
-  @apply !font-code !font-normal;
+  /* Force the intended code font directly */
+  font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-weight: 400 !important;
+}
+
+
+.docblock-argstable-head > tr {
+  @apply !font-code !lowercase;
+}
+
+.css-in3yi3 {
+  @apply !font-code !font-normal !text-default;
 }
 
 .css-7qiabv {
@@ -80,6 +92,10 @@ body.p-overflow-hidden {
   font-family: 'Sora', sans-serif;
 }
 
-.font-proto-mono {
+.font-proto-mono, .font-proto {
   font-family: 'Proto Mono', sans-serif;
+}
+
+.font-code {
+  font-family: 'Roboto Mono', monospace;;
 }
