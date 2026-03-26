@@ -11,16 +11,20 @@ export default {
     './src/**/*.{vue,js,ts,jsx,tsx}',
     '../../packages/webkit/src/**/*.{vue,js,ts,jsx,tsx}'
   ],
-  // Dark mode configuration with multiple selectors
-  darkMode: ['class', '.dark', '.azion.azion-dark'],
+  // Dark mode configuration
+  // Use `.dark` on an ancestor (Storybook uses `withThemeByClassName` to toggle it)
+  darkMode: ['class'],
   // Merge base theme with primitives
   theme: {
+    ...theme,
     fontFamily: {
+      ...(theme.fontFamily ?? {}),
       sans: ['Sora'],
       mono: ['Proto Mono'],
       code: ['Roboto Mono']
     },
     listStyleType: {
+      ...(theme.listStyleType ?? {}),
       none: 'none',
       disc: 'disc',
       decimal: 'decimal',
@@ -30,15 +34,15 @@ export default {
     // Properly merge the theme's extend with local extend
     extend: {
       // Import colors from theme (brand, base, surface, primitives)
-      ...theme.extend,
+      ...(theme.extend ?? {}),
       // Storybook-specific color extensions
       colors: {
-        ...theme.extend.colors,
+        ...(theme.extend?.colors ?? {}),
         header: '#111111',
         'header-button-enabled': '#ffffff32',
         'header-button-hover': '#f5f5f516',
         'header-avatar': '#363636',
-        'orange-base': '#F3652B',
+        'orange-base': '#F3652B'
       },
       backgroundColor: {
         'orange-bullet': '#F3652B'
@@ -75,12 +79,12 @@ export default {
         fadeOut: 'fadeOut 220ms ease-in-out',
         slideDown: 'slideDown 220ms ease-in-out',
         blink: 'blink 1.4s infinite both',
-        'highlight-fade': 'highlight ease-in forwards',
+        'highlight-fade': 'highlight ease-in forwards'
       },
       keyframes: {
         highlight: {
-          '0%': { backgroundColor: 'var(--surface-hover)', fontWeight: '500'},
-          '100%': { backgroundColor: 'var(--surface-hover)',  fontWeight: '500'}
+          '0%': { backgroundColor: 'var(--surface-hover)', fontWeight: '500' },
+          '100%': { backgroundColor: 'var(--surface-hover)', fontWeight: '500' }
         },
         fadeIn: {
           '0%': { opacity: '0' },
