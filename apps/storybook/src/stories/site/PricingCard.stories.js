@@ -1,7 +1,7 @@
 import PricingCard from '@aziontech/webkit/site/pricing-card';
 
 export default {
-  title: '[tech debit] Site to Webkit/PricingCard',
+  title: 'TODO -  Marketing to Webkit/PricingCard',
   component: PricingCard,
   tags: ['autodocs'],
   parameters: {

@@ -1,7 +1,7 @@
 import Quote from '@aziontech/webkit/site/quote';
 
 export default { 
-  title: '[tech debit] Site to Webkit/Quote',
+  title: 'TODO -  Marketing to Webkit/Quote',
   component: Quote,
   tags: ['autodocs'],
   argTypes: {
