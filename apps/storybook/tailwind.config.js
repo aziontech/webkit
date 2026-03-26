@@ -16,7 +16,9 @@ export default {
   // Merge base theme with primitives
   theme: {
     fontFamily: {
-      sans: ['Sora', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji']
+      sans: ['Sora'],
+      mono: ['Proto Mono'],
+      code: ['Roboto Mono']
     },
     listStyleType: {
       none: 'none',
