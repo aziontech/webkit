@@ -1,3 +1,10 @@
+## [1.12.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.3...@aziontech/webkit@1.12.4) (2026-03-26)
+
+
+### Bug Fixes
+
+* delete and create loading stage ([e70ccd1](https://github.com/aziontech/webkit/commit/e70ccd1dbc32c20589e7d3123eb2f669e7d84b47))
+
 ## [1.12.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.2...@aziontech/webkit@1.12.3) (2026-03-26)
 
 
