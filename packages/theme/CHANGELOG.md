@@ -1,3 +1,22 @@
+## [1.5.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.4.0...@aziontech/theme@1.5.0) (2026-03-26)
+
+
+### Features
+
+* add DataTable component with storybook stories ([73f406a](https://github.com/aziontech/webkit/commit/73f406adbe86814e9e0cb2354c5da21e67a6a135))
+* add new spacings ([b7fde6d](https://github.com/aziontech/webkit/commit/b7fde6d158964c7e1531ea03d84f96802c088b30))
+* button action save/delete/copy ([ff0c602](https://github.com/aziontech/webkit/commit/ff0c60248352c604f0da4eb946e4895a3029612c))
+
+
+### Bug Fixes
+
+* azion system status unify site/console ([cf160fe](https://github.com/aziontech/webkit/commit/cf160fec755681e81366450e0130100faba8549c))
+* button-save update event save to click ([010ed9f](https://github.com/aziontech/webkit/commit/010ed9f0955cf45d2184f82517631a0c91a9aaf8))
+* delete and create loading stage ([e70ccd1](https://github.com/aziontech/webkit/commit/e70ccd1dbc32c20589e7d3123eb2f669e7d84b47))
+* iconPos and data-testid param ([1fa0a39](https://github.com/aziontech/webkit/commit/1fa0a396a481e4036ed4281ea78dfe7c1872b361))
+* remove duplicate CardContent stories from old location ([7802554](https://github.com/aziontech/webkit/commit/7802554efcdd1873781b140f61b9811f5e700483))
+* storybook sorting categories components ([d67b887](https://github.com/aziontech/webkit/commit/d67b8879db72f3723c61be335e45ebce2e635daa))
+
 ## [1.4.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.3.0...@aziontech/theme@1.4.0) (2026-03-25)
 
 
