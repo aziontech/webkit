@@ -1,3 +1,10 @@
+## [1.12.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.1...@aziontech/webkit@1.12.2) (2026-03-26)
+
+
+### Bug Fixes
+
+* azion system status unify site/console ([cf160fe](https://github.com/aziontech/webkit/commit/cf160fec755681e81366450e0130100faba8549c))
+
 ## [1.12.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.0...@aziontech/webkit@1.12.1) (2026-03-26)
 
 
