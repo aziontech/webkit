@@ -1,3 +1,127 @@
+## [1.13.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.4...@aziontech/webkit@1.13.0) (2026-03-26)
+
+
+### Features
+
+* add DataTable component with storybook stories ([73f406a](https://github.com/aziontech/webkit/commit/73f406adbe86814e9e0cb2354c5da21e67a6a135))
+
+## [1.12.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.3...@aziontech/webkit@1.12.4) (2026-03-26)
+
+
+### Bug Fixes
+
+* delete and create loading stage ([e70ccd1](https://github.com/aziontech/webkit/commit/e70ccd1dbc32c20589e7d3123eb2f669e7d84b47))
+
+## [1.12.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.2...@aziontech/webkit@1.12.3) (2026-03-26)
+
+
+### Bug Fixes
+
+* iconPos and data-testid param ([1fa0a39](https://github.com/aziontech/webkit/commit/1fa0a396a481e4036ed4281ea78dfe7c1872b361))
+
+## [1.12.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.1...@aziontech/webkit@1.12.2) (2026-03-26)
+
+
+### Bug Fixes
+
+* azion system status unify site/console ([cf160fe](https://github.com/aziontech/webkit/commit/cf160fec755681e81366450e0130100faba8549c))
+
+## [1.12.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.0...@aziontech/webkit@1.12.1) (2026-03-26)
+
+
+### Bug Fixes
+
+* button-save update event save to click ([010ed9f](https://github.com/aziontech/webkit/commit/010ed9f0955cf45d2184f82517631a0c91a9aaf8))
+
+## [1.12.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.11.0...@aziontech/webkit@1.12.0) (2026-03-25)
+
+
+### Features
+
+* add CardBox component to core/card ([9c797ff](https://github.com/aziontech/webkit/commit/9c797ff90dad3f79b59155748d34f37b44e15958))
+* add CardContent component to core/card ([403ed84](https://github.com/aziontech/webkit/commit/403ed84a4925cf0eda1ed396a7212495e730ee02))
+* button action save/delete/copy ([ff0c602](https://github.com/aziontech/webkit/commit/ff0c60248352c604f0da4eb946e4895a3029612c))
+
+
+### Bug Fixes
+
+* remove duplicate CardContent stories from old location ([7802554](https://github.com/aziontech/webkit/commit/7802554efcdd1873781b140f61b9811f5e700483))
+
+## [1.11.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.10.1...@aziontech/webkit@1.11.0) (2026-03-25)
+
+
+### Features
+
+* adjust button ([cde3c11](https://github.com/aziontech/webkit/commit/cde3c112c96004029f672e348df115129d2dac56))
+
+
+### Bug Fixes
+
+* prevent theme or icons trigger webkit publish and vice versa ([d1bed9c](https://github.com/aziontech/webkit/commit/d1bed9c248671c4fda1dd82fc98059f0937fe3d9))
+* trigger webkit and theme ([48a99fc](https://github.com/aziontech/webkit/commit/48a99fc44121e890ecc5a2bc8b6502055fb037d0))
+
+## [1.10.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.10.0...@aziontech/webkit@1.10.1) (2026-03-24)
+
+
+### Bug Fixes
+
+* export car-content ([557efb5](https://github.com/aziontech/webkit/commit/557efb55aa1bd880d160baa53e458571b8894f20))
+
+## [1.10.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.9.0...@aziontech/webkit@1.10.0) (2026-03-24)
+
+
+### Features
+
+* add theme in storybook ([7d2dd17](https://github.com/aziontech/webkit/commit/7d2dd176f74fb6b3e34b37de92dcca0079302f4e))
+* add theme tokens to storybook ([a94a353](https://github.com/aziontech/webkit/commit/a94a353f7e4e62164661758d77f7c742a9fba132))
+
+## [1.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.5...@aziontech/webkit@1.9.0) (2026-03-24)
+
+
+### Features
+
+* unify field-password and field-password-strength into a single component ([393d809](https://github.com/aziontech/webkit/commit/393d809c78386410358f8cfbb8e91bfd9b8fb6a7))
+
+## [1.8.5](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.4...@aziontech/webkit@1.8.5) (2026-03-24)
+
+
+### Bug Fixes
+
+* primevue breadcrumb wrapper ([815d1e4](https://github.com/aziontech/webkit/commit/815d1e4ce4e86eaed08c2b418266e9b3b6967be7))
+
+## [1.8.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.3...@aziontech/webkit@1.8.4) (2026-03-23)
+
+
+### Bug Fixes
+
+* breadcrumb site ([ebe909c](https://github.com/aziontech/webkit/commit/ebe909c8fa0c9c861593c4968d6a7f091eadb3c9))
+
+## [1.8.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.2...@aziontech/webkit@1.8.3) (2026-03-23)
+
+
+### Bug Fixes
+
+* storybook the breadcrumb ([09c3323](https://github.com/aziontech/webkit/commit/09c3323ef815da1d4d6b74ba8fd88c7ab34f5451))
+
+## [1.8.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.1...@aziontech/webkit@1.8.2) (2026-03-23)
+
+
+### Bug Fixes
+
+* breacrumb ([67aa5d7](https://github.com/aziontech/webkit/commit/67aa5d7bcc43c73bcab2ebb9df145c816c741c65))
+
+## [1.8.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.8.0...@aziontech/webkit@1.8.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* dts build ([81c87af](https://github.com/aziontech/webkit/commit/81c87af1f4e14f6451d64c35e084673fe481589e))
+* pnpm-lock.yaml ([d8094ea](https://github.com/aziontech/webkit/commit/d8094eaccb572a8b8d4da180587aa35db63230d7))
+* Potential fix for code scanning alert no. 15: Double escaping or unescaping ([7a7346a](https://github.com/aziontech/webkit/commit/7a7346aeeb23398a38f60e2046ae8215622fc360))
+* remove the ts of buttom ask azion and trigger storybook ([62f47ba](https://github.com/aziontech/webkit/commit/62f47ba094529a59db685ae0f22c77a4f7cad374))
+* remove unsused files ([12baaac](https://github.com/aziontech/webkit/commit/12baaac9018cfa0cdb1f361a55f85aeed872cd11))
+* trigger build with updated frozen file ([7006895](https://github.com/aziontech/webkit/commit/7006895936d305ac176123cc3965e1d4f4f061c7))
+
 ## [1.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.7.1...@aziontech/webkit@1.8.0) (2026-03-23)
 
 

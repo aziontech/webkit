@@ -1,42 +1,32 @@
-<template>
-  <div>
-    <PrimeButton
-      :icon="icon"
-      data-testid="copy-block__copy-button"
-      type="button"
-      :aria-label="labelText"
-      :label="labelText"
-      :outlined="!!label"
-      :text="!label"
-      :rounded="!label"
-      :disabled="disabled"
-      size="small"
-      @click="animate"
-      :class="['transition-opacity duration-200', isCopyVisible ? 'opacity-100' : 'opacity-0']"
-    />
-  </div>
-</template>
-
 <script setup>
   import { ref, computed, onBeforeUnmount } from 'vue'
-  import PrimeButton from 'primevue/button'
+  import Button from 'primevue/button'
 
   const emit = defineEmits(['copy'])
 
   const props = defineProps({
-    label: {
-      type: String
-    },
-    disabled: {
-      type: Boolean
-    },
     value: {
       type: String,
       required: true
     },
+    label: {
+      type: String
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     isCopyVisible: {
       type: Boolean,
       default: true
+    },
+    outlined: {
+      type: Boolean,
+      default: true
+    },
+    copiedLabel: {
+      type: String,
+      default: 'Copied'
     }
   })
 
@@ -46,11 +36,13 @@
   const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
 
   const labelText = computed(() => {
-    if (!props.label) return ''
-    return copied.value ? 'Copied' : props.label
+    if (!props.label) return undefined
+    return copied.value ? props.copiedLabel : props.label
   })
 
-  const animate = () => {
+  const ariaLabel = computed(() => labelText.value || 'Copy')
+
+  const handleCopy = () => {
     copied.value = true
     emit('copy')
     navigator.clipboard.writeText(props.value)
@@ -73,3 +65,22 @@
     box-shadow: none;
   }
 </style>
+
+
+<template>
+  <div>
+    <Button
+      :icon="icon"
+      data-testid="copy-block__copy-button"
+      type="button"
+      :aria-label="ariaLabel"
+      :label="labelText"
+      :outlined="outlined"
+      :text="!outlined"
+      :disabled="disabled"
+      size="small"
+      @click="handleCopy"
+      :class="['transition-opacity duration-200', isCopyVisible ? 'opacity-100' : 'opacity-0']"
+    />
+  </div>
+</template>

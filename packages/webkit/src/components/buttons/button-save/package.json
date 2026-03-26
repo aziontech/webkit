@@ -1,0 +1,11 @@
+{
+  "main": "./button-save.vue",
+  "module": "./button-save.vue",
+  "types": "./button-save.vue.d.ts",
+  "browser": {
+    "./sfc": "./button-save.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

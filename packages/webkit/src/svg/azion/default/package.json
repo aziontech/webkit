@@ -1,0 +1,11 @@
+{
+  "main": "./default.vue",
+  "module": "./default.vue",
+  "types": "./default.vue.d.ts",
+  "browser": {
+    "./sfc": "./default.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

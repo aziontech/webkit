@@ -1,17 +1,17 @@
-# @aziontech/webkit --> storybook
+# Storybook
 
 This is the Storybook documentation application for the `@aziontech/webkit` component library. It provides interactive documentation and development environment for all webkit components.
 
 ## Technology Stack
 
-- **Storybook 8.x** - Component documentation tool
-- **Vue 3.5.x** - Frontend framework
-- **Vite 6.x** - Build tool
-- **PrimeVue 3.47.2** - UI component library
-- **PrimeFlex 3.3.1** - CSS utility library
-- **Tailwind CSS 3.4.x** - Utility-first CSS
-- **azion-theme 1.18.3** - Azion custom theming
-- **vee-validate 4.15.x** - Form validation
+- **Storybook 8.x** - Component documentation tool;
+- **Vue 3.5.x** - Frontend framework;
+- **Vite 6.x** - Build tool;
+- **PrimeVue 3.47.2** - UI component library;
+- **PrimeFlex 3.3.1** - CSS utility library;
+- **Tailwind CSS 3.4.x** - Utility-first CSS;
+- **azion-theme 1.18.3** - Azion custom theming;
+- **vee-validate 4.15.x** - Form validation;
 
 ## Getting Started
 

@@ -1,15 +1,15 @@
 # @aziontech/theme
 
-~ A comprehensive design token system and theming solution for Azion's web applications. This package provides primitive colors, semantic tokens, brand colors, and seamless integration with Tailwind CSS.
+A comprehensive design token system and theming solution for Azion's web applications. This package provides primitive colors, semantic tokens, brand colors, and seamless integration with Tailwind CSS.
 
 ## Features
 
-- **Design Tokens**: Primitive and semantic color tokens generated from Figma
-- **Brand Colors**: Azion's official color palette with primary (orange), accent (violet), and surface colors
-- **Theme Support**: Built-in light and dark mode theming
-- **Tailwind Integration**: Plugin and preset for seamless Tailwind CSS integration
-- **CSS Variables**: Automatic CSS variable generation for dynamic theming
-- **Widget Support**: Separate theme variant for embedded widgets
+- **Design Tokens**: Primitive and semantic color tokens generated from Figma;
+- **Brand Colors**: Azion's official color palette with primary (orange), accent (violet), and surface colors;
+- **Theme Support**: Built-in light and dark mode theming;
+- **Tailwind Integration**: Plugin and preset for seamless Tailwind CSS integration;
+- **CSS Variables**: Automatic CSS variable generation for dynamic theming;
+- **Widget Support**: Separate theme variant for embedded widgets;
 
 ## Installation
 

@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "1.8.0",
+  "version": "1.13.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "repository": {
@@ -19,10 +19,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vueuse/core": "^10.11.1",
+    "motion-v": "^2.1.0",
     "primevue": "3.35.0",
     "vee-validate": "^4.15.1",
-    "vue-tsc": "^3.2.5",
-    "@vueuse/core": "^10.11.1"
+    "vue-tsc": "^3.2.5"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -63,7 +64,6 @@
     "./field-text": "./src/core/form/field-text/field-text.vue",
     "./field-text-area": "./src/core/form/field-text-area/field-text-area.vue",
     "./field-text-icon": "./src/core/form/field-text-icon/field-text-icon.vue",
-    "./field-password-strength": "./src/core/form/field-password-strength/field-password-strength.vue",
     "./field-password": "./src/core/form/field-password/field-password.vue",
     "./field-text-privacy": "./src/core/form/field-text-privacy/field-text-privacy.vue",
     "./label": "./src/core/form/label/label.vue",
@@ -75,12 +75,21 @@
     "./loading-block": "./src/components/loading-block/loading-block.vue",
     "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
     "./resizable-splitter": "./src/components/resizable-splitter/resizable-splitter.vue",
+    "./overline": "./src/components/overline/overline.vue",
     "./accordion": "./src/core/primevue/accordion/accordion.vue",
     "./accordion-tab": "./src/core/primevue/accordion-tab/accordion-tab.vue",
     "./avatar": "./src/core/primevue/avatar/avatar.vue",
-    "./breadcrumb": "./src/core/primevue/breadcrumb/breadcrumb.vue",
     "./button": "./src/core/primevue/button/button.vue",
+    "./button-cancel": "./src/components/buttons/button-cancel/button-cancel.vue",
+    "./button-clone": "./src/components/buttons/button-clone/button-clone.vue",
+    "./button-copy": "./src/components/buttons/button-copy/button-copy.vue",
+    "./button-create": "./src/components/buttons/button-create/button-create.vue",
+    "./button-delete": "./src/components/buttons/button-delete/button-delete.vue",
+    "./button-save": "./src/components/buttons/button-save/button-save.vue",
+    "./breadcrumb": "./src/core/primevue/breadcrumb/breadcrumb.vue",
     "./card": "./src/core/primevue/card/card.vue",
+    "./card-box": "./src/core/card/card-box/card-box.vue",
+    "./card-content": "./src/core/card/card-content/card-content.vue",
     "./carousel": "./src/core/primevue/carousel/carousel.vue",
     "./chip": "./src/core/primevue/chip/chip.vue",
     "./column": "./src/core/primevue/column/column.vue",
@@ -106,8 +115,25 @@
     "./toast": "./src/core/primevue/toast/toast.vue",
     "./toolbar": "./src/core/primevue/toolbar/toolbar.vue",
     "./badge": "./src/core/primevue/badge/badge.vue",
+    "./site/base-modal": "./src/components/site/base-modal/base-modal.vue",
+    "./site/card-content": "./src/components/site/card-content/card-content.vue",
+    "./site/card-link": "./src/components/site/card-link/card-link.vue",
+    "./site/pricing-card": "./src/components/site/pricing-card/pricing-card.vue",
+    "./site/product-quote": "./src/components/site/product-quote/product-quote.vue",
+    "./site/quote": "./src/components/site/quote/quote.vue",
+    "./site/button": "./src/components/site/button/button.vue",
+    "./site/system-status": "./src/components/site/system-status/system-status.vue",
+    "./toggle": "./src/components/toggle/toggle.vue",
     "./svg/error-403": "./src/svg/error-403/error-403.vue",
     "./svg/error-404": "./src/svg/error-404/error-404.vue",
-    "./styles/country-flags": "./src/styles/country-flags.css"
+    "./svg/azion/full": "./src/svg/azion/full/full.vue",
+    "./svg/azion/move-to-the-edge": "./src/svg/azion/move-to-the-edge/move-to-the-edge.vue",
+    "./svg/azion/technologies": "./src/svg/azion/technologies/technologies.vue",
+    "./svg/azion/default": "./src/svg/azion/default/default.vue",
+    "./svg/azion/min": "./src/svg/azion/min/min.vue",
+    "./styles/country-flags": "./src/styles/country-flags.css",
+    "./data-table": "./src/components/data-table/index.js",
+    "./data-table/composables": "./src/components/data-table/composables/index.js",
+    "./data-table/types": "./src/components/data-table/types/index.js"
   }
 }
