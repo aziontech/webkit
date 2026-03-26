@@ -1,33 +1,6 @@
-import { ref, computed, type Ref } from 'vue'
+import { ref, computed } from 'vue'
 
-interface PositionObject {
-  value: number
-  immutableValue: number
-  altered: boolean
-  min: number
-  max: number
-}
-
-interface UseRowOrderingOptions {
-  data: Ref<any[]>
-  groupColumn?: string
-  restrictReorderAcrossGroups?: boolean
-  dataKey?: string
-  /**
-   * Field that holds the position.
-   * Supports two formats:
-   * - Simple number field (e.g. 'order')
-   * - Nested position object with { value, immutableValue, altered, min, max }
-   */
-  positionField?: string
-  /**
-   * If true, treats positionField as a nested object with .value, .immutableValue, .altered
-   * This is the format used by the Azion console-kit Rules Engine pattern.
-   */
-  positionObjectMode?: boolean
-}
-
-export function useRowOrdering(options: UseRowOrderingOptions) {
+export function useRowOrdering(options) {
   const {
     data,
     groupColumn,
@@ -37,17 +10,17 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     positionObjectMode = false
   } = options
 
-  const originalPositions = new Map<any, number>()
+  const originalPositions = new Map()
   let snapshotTaken = false
 
-  function getPositionValue(row: any): number {
+  function getPositionValue(row) {
     if (positionObjectMode) {
       return row[positionField]?.value ?? 0
     }
     return row[positionField] ?? 0
   }
 
-  function setPositionValue(row: any, value: number) {
+  function setPositionValue(row, value) {
     if (positionObjectMode) {
       if (!row[positionField]) {
         row[positionField] = { value: 0, immutableValue: 0, altered: false, min: 0, max: 0 }
@@ -58,14 +31,14 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     }
   }
 
-  function getImmutableValue(row: any): number {
+  function getImmutableValue(row) {
     if (positionObjectMode) {
       return row[positionField]?.immutableValue ?? 0
     }
     return originalPositions.get(row[dataKey]) ?? row[positionField] ?? 0
   }
 
-  function markAltered(row: any) {
+  function markAltered(row) {
     if (positionObjectMode) {
       if (row[positionField]) {
         row[positionField].altered =
@@ -83,7 +56,7 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     }
   }
 
-  function getGroupValue(row: any): string | undefined {
+  function getGroupValue(row) {
     if (!groupColumn) return undefined
     const keys = groupColumn.split('.')
     let value = row
@@ -93,11 +66,11 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     return typeof value === 'object' && value !== null ? value.content : value
   }
 
-  function getGroupItems(groupValue: string | undefined): any[] {
+  function getGroupItems(groupValue) {
     return data.value.filter((r) => getGroupValue(r) === groupValue)
   }
 
-  function updateGroupPositions(items: any[]) {
+  function updateGroupPositions(items) {
     items.forEach((row, index) => {
       setPositionValue(row, index)
       if (positionObjectMode && row[positionField]) {
@@ -108,7 +81,7 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     })
   }
 
-  function onRowReorder(event: { dragIndex: number; dropIndex: number }) {
+  function onRowReorder(event) {
     takeSnapshot()
     const { dragIndex, dropIndex } = event
     const reordered = [...data.value]
@@ -125,7 +98,6 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     reordered.splice(dropIndex, 0, movedItem)
 
     if (restrictReorderAcrossGroups && groupColumn) {
-      // Update positions per group
       const affectedGroup = getGroupValue(movedItem)
       const groupItems = reordered.filter((r) => getGroupValue(r) === affectedGroup)
       updateGroupPositions(groupItems)
@@ -140,7 +112,7 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     return { from: dragIndex, to: dropIndex, reorderedData: reordered, blocked: false }
   }
 
-  function changePosition(row: any, newPosition: number) {
+  function changePosition(row, newPosition) {
     takeSnapshot()
 
     if (restrictReorderAcrossGroups && groupColumn) {
@@ -165,15 +137,14 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     return { reorderedData: reordered, alteredRows: alteredRows.value }
   }
 
-  function changePositionWithinGroup(row: any, newPosition: number) {
+  function changePositionWithinGroup(row, newPosition) {
     const rowGroup = getGroupValue(row)
 
-    // Separate into groups
-    const groups = new Map<string | undefined, any[]>()
+    const groups = new Map()
     data.value.forEach((r) => {
       const g = getGroupValue(r)
       if (!groups.has(g)) groups.set(g, [])
-      groups.get(g)!.push(r)
+      groups.get(g).push(r)
     })
 
     const groupItems = groups.get(rowGroup)
@@ -200,9 +171,8 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     groupItems.splice(targetPosition, 0, movedItem)
     updateGroupPositions(groupItems)
 
-    // Reassemble data preserving group order
-    const reassembled: any[] = []
-    const seenGroups = new Set<string | undefined>()
+    const reassembled = []
+    const seenGroups = new Set()
     data.value.forEach((r) => {
       const g = getGroupValue(r)
       if (!seenGroups.has(g)) {
@@ -238,16 +208,15 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
       })
 
       if (restrictReorderAcrossGroups && groupColumn) {
-        // Sort within each group by immutableValue
-        const groups = new Map<string | undefined, any[]>()
+        const groups = new Map()
         data.value.forEach((r) => {
           const g = getGroupValue(r)
           if (!groups.has(g)) groups.set(g, [])
-          groups.get(g)!.push(r)
+          groups.get(g).push(r)
         })
 
-        const reassembled: any[] = []
-        const seenGroups = new Set<string | undefined>()
+        const reassembled = []
+        const seenGroups = new Set()
         data.value.forEach((r) => {
           const g = getGroupValue(r)
           if (!seenGroups.has(g)) {
@@ -277,7 +246,7 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     }
   }
 
-  function getPositionLimits(row: any): { min: number; max: number } {
+  function getPositionLimits(row) {
     if (positionObjectMode && row[positionField]) {
       return {
         min: row[positionField].min ?? 0,
@@ -297,7 +266,7 @@ export function useRowOrdering(options: UseRowOrderingOptions) {
     return { min: 1, max: data.value.length }
   }
 
-  function scrollToPosition(position: number, containerSelector = '.p-datatable') {
+  function scrollToPosition(position, containerSelector = '.p-datatable') {
     setTimeout(() => {
       const table = document.querySelector(containerSelector)
       const rowElement = table?.querySelector(`#row-${position}`)

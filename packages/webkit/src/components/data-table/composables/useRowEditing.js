@@ -1,15 +1,11 @@
 import { ref, computed } from 'vue'
 
-interface UseRowEditingOptions {
-  dataKey?: string
-}
-
-export function useRowEditing(options: UseRowEditingOptions = {}) {
+export function useRowEditing(options = {}) {
   const dataKey = options.dataKey ?? 'id'
-  const editingRows = ref<any[]>([])
-  const backups = new Map<any, any>()
+  const editingRows = ref([])
+  const backups = new Map()
 
-  function startEdit(row: any) {
+  function startEdit(row) {
     const key = row[dataKey]
     backups.set(key, { ...row })
     if (!editingRows.value.includes(row)) {
@@ -17,7 +13,7 @@ export function useRowEditing(options: UseRowEditingOptions = {}) {
     }
   }
 
-  function saveEdit(event: { data: any; newData: any; index: number }) {
+  function saveEdit(event) {
     const key = event.data[dataKey]
     const originalData = backups.get(key) || { ...event.data }
     backups.delete(key)
@@ -25,7 +21,7 @@ export function useRowEditing(options: UseRowEditingOptions = {}) {
     return { newData: event.newData, originalData, index: event.index }
   }
 
-  function cancelEdit(event: { data: any; index: number }) {
+  function cancelEdit(event) {
     const key = event.data[dataKey]
     const restoredData = backups.get(key) || { ...event.data }
     backups.delete(key)
@@ -38,7 +34,7 @@ export function useRowEditing(options: UseRowEditingOptions = {}) {
     editingRows.value = []
   }
 
-  function isEditing(row: any): boolean {
+  function isEditing(row) {
     return editingRows.value.some((r) => r[dataKey] === row[dataKey])
   }
 

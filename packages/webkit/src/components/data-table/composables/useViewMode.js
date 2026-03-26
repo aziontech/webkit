@@ -1,21 +1,16 @@
 import { ref } from 'vue'
 
-interface UseViewModeOptions {
-  modes: string[]
-  default?: string
-}
-
-export function useViewMode(options: UseViewModeOptions) {
+export function useViewMode(options) {
   const { modes, default: defaultMode } = options
   const currentMode = ref(defaultMode ?? modes[0])
 
-  function setMode(mode: string) {
+  function setMode(mode) {
     if (modes.includes(mode)) {
       currentMode.value = mode
     }
   }
 
-  function isMode(mode: string): boolean {
+  function isMode(mode) {
     return currentMode.value === mode
   }
 

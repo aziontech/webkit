@@ -1,16 +1,10 @@
-import { ref, computed, type Ref } from 'vue'
+import { ref, computed } from 'vue'
 
-interface UseRowSelectionOptions {
-  data: Ref<any[]>
-  isSelectable?: (row: any) => boolean
-  dataKey?: string
-}
-
-export function useRowSelection(options: UseRowSelectionOptions) {
+export function useRowSelection(options) {
   const { data, isSelectable = () => true, dataKey = 'id' } = options
-  const selectedItems = ref<any[]>([])
+  const selectedItems = ref([])
 
-  function toggleRow(row: any) {
+  function toggleRow(row) {
     if (!isSelectable(row)) return
     const key = row[dataKey]
     const index = selectedItems.value.findIndex((item) => item[dataKey] === key)
