@@ -1,7 +1,7 @@
 import Button from '@aziontech/webkit/site/button';
 
 export default {
-  title: 'Components/Site/Button',
+  title: '[tech debit] Site to Webkit/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {

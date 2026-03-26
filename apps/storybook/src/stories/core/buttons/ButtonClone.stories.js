@@ -1,8 +1,8 @@
-import ButtonCancel from '@aziontech/webkit/button-cancel';
+import ButtonClone from '@aziontech/webkit/button-clone';
 
 export default {
-  title: 'Components/Buttons/ButtonCancel',
-  component: ButtonCancel,
+  title: 'Core/Buttons/ButtonClone',
+  component: ButtonClone,
   tags: ['autodocs'],
   argTypes: {
     label: {
@@ -20,7 +20,7 @@ export default {
     },
     severity: {
       control: 'select',
-      options: ['', 'secondary', 'success', 'info', 'warning', 'danger', 'contrast'],
+      options: ['', 'secondary', 'primary', 'success', 'info', 'warning', 'danger', 'contrast'],
       description: 'Button severity/style variant'
     },
     size: {
@@ -41,38 +41,28 @@ export default {
 
 export const Default = {
   args: {
-    label: 'Cancel',
+    label: 'Clone',
     size: ''
   }
 };
 
-export const WithIcon = {
+export const WithCustomLabel = {
   args: {
-    label: 'Cancel',
-    icon: 'pi pi-times',
-    size: 'large'
-  }
-};
-
-export const IconRight = {
-  args: {
-    label: 'Cancel',
-    icon: 'pi pi-times',
-    'iconPos': 'right',
+    label: 'Duplicate',
     size: 'large'
   }
 };
 
 export const Small = {
   args: {
-    label: 'Cancel',
+    label: 'Clone',
     size: 'small'
   }
 };
 
 export const Filled = {
   args: {
-    label: 'Cancel',
+    label: 'Clone',
     outlined: false,
     size: 'large'
   }
@@ -80,8 +70,25 @@ export const Filled = {
 
 export const Disabled = {
   args: {
-    label: 'Cancel',
+    label: 'Clone',
     disabled: true,
+    size: 'large'
+  }
+};
+
+export const WithCustomIcon = {
+  args: {
+    label: 'Clone',
+    icon: 'pi pi-clone',
+    size: 'large'
+  }
+};
+
+export const IconRight = {
+  args: {
+    label: 'Clone',
+    icon: 'pi pi-clone',
+    'iconPos': 'right',
     size: 'large'
   }
 };

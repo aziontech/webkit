@@ -1,7 +1,7 @@
 import ProductQuote from '@aziontech/webkit/site/product-quote';
 
 export default {
-  title: 'Components/Site/ProductQuote',
+  title: '[tech debit] Site to Webkit/ProductQuote',
   component: ProductQuote,
   tags: ['autodocs'],
   argTypes: {

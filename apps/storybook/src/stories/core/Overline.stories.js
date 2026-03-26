@@ -1,7 +1,7 @@
 import Overline from '@aziontech/webkit/overline';
 
 export default {
-  title: 'Components/Overline',
+  title: 'Core/Overline',
   component: Overline,
   tags: ['autodocs'],
   argTypes: {

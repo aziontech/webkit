@@ -1,7 +1,7 @@
 import AzionSystemStatus from '@aziontech/webkit/azion-system-status';
 
 export default {
-  title: 'Components/AzionSystemStatus',
+  title: 'Core/AzionSystemStatus',
   component: AzionSystemStatus,
   tags: ['autodocs'],
   argTypes: {

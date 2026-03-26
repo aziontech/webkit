@@ -1,7 +1,7 @@
 import ResizableSplitter from '@aziontech/webkit/resizable-splitter';
 
 export default {
-  title: 'Components/ResizableSplitter',
+  title: 'Core/ResizableSplitter',
   component: ResizableSplitter,
   tags: ['autodocs'],
   parameters: {
