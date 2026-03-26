@@ -2,7 +2,7 @@ import BaseModal from '@aziontech/webkit/site/base-modal'
 import Button from '@aziontech/webkit/site/button'
 
 export default {
-  title: 'Components/Site/BaseModal',
+  title: '[tech debit] Site to Webkit/BaseModal',
   component: BaseModal,
   tags: ['autodocs'],
   argTypes: {

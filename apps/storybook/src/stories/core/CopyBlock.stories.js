@@ -2,7 +2,7 @@ import CopyBlock from '@aziontech/webkit/copy-block';
 import { ref } from 'vue';
 
 export default {
-  title: 'Components/CopyBlock',
+  title: 'Core/CopyBlock',
   component: CopyBlock,
   tags: ['autodocs'],
   argTypes: {
