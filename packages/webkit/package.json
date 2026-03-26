@@ -126,6 +126,9 @@
     "./svg/azion/technologies": "./src/svg/azion/technologies/technologies.vue",
     "./svg/azion/default": "./src/svg/azion/default/default.vue",
     "./svg/azion/min": "./src/svg/azion/min/min.vue",
-    "./styles/country-flags": "./src/styles/country-flags.css"
+    "./styles/country-flags": "./src/styles/country-flags.css",
+    "./data-table": "./src/components/data-table/index.js",
+    "./data-table/composables": "./src/components/data-table/composables/index.ts",
+    "./data-table/types": "./src/components/data-table/types/index.ts"
   }
 }
