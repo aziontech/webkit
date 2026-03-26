@@ -1,8 +1,8 @@
-import ButtonClone from '@aziontech/webkit/button-clone';
+import ButtonDelete from '@aziontech/webkit/button-delete';
 
 export default {
-  title: 'Components/Buttons/ButtonClone',
-  component: ButtonClone,
+  title: 'Core/Buttons/ButtonDelete',
+  component: ButtonDelete,
   tags: ['autodocs'],
   argTypes: {
     label: {
@@ -20,7 +20,7 @@ export default {
     },
     severity: {
       control: 'select',
-      options: ['', 'secondary', 'primary', 'success', 'info', 'warning', 'danger', 'contrast'],
+      options: ['', 'danger', 'secondary', 'success', 'info', 'warning', 'contrast'],
       description: 'Button severity/style variant'
     },
     size: {
@@ -32,6 +32,10 @@ export default {
       control: 'boolean',
       description: 'Whether the button is outlined'
     },
+    loading: {
+      control: 'boolean',
+      description: 'Whether the button shows loading state'
+    },
     disabled: {
       control: 'boolean',
       description: 'Whether the button is disabled'
@@ -41,54 +45,56 @@ export default {
 
 export const Default = {
   args: {
-    label: 'Clone',
+    label: 'Delete',
     size: ''
   }
 };
 
 export const WithCustomLabel = {
   args: {
-    label: 'Duplicate',
-    size: 'large'
-  }
-};
-
-export const Small = {
-  args: {
-    label: 'Clone',
-    size: 'small'
+    label: 'Remove Item',
+    icon: 'pi pi-trash',
+    size: ''
   }
 };
 
 export const Filled = {
   args: {
-    label: 'Clone',
+    label: 'Delete',
     outlined: false,
-    size: 'large'
+    size: ''
   }
 };
 
 export const Disabled = {
   args: {
-    label: 'Clone',
+    label: 'Delete',
     disabled: true,
-    size: 'large'
+    size: ''
+  }
+};
+
+export const Loading = {
+  args: {
+    label: 'Deleting...',
+    loading: true,
+    size: ''
   }
 };
 
 export const WithCustomIcon = {
   args: {
-    label: 'Clone',
-    icon: 'pi pi-clone',
-    size: 'large'
+    label: 'Delete',
+    icon: 'pi pi-times',
+    size: ''
   }
 };
 
 export const IconRight = {
   args: {
-    label: 'Clone',
-    icon: 'pi pi-clone',
+    label: 'Delete',
+    icon: 'pi pi-trash',
     'iconPos': 'right',
-    size: 'large'
+    size: ''
   }
 };

@@ -6,20 +6,29 @@ const config = {
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    '@storybook/addon-themes'
+    '@storybook/addon-themes',
+    '@whitespace/storybook-addon-html'
   ],
   framework: {
     name: '@storybook/vue3-vite',
     options: {}
   },
   docs: {
-    autodocs: 'tag'
+    autodocs: 'tag',
+    defaultName: 'Documentation'
   },
   core: {
     disableTelemetry: true,
   },
   features: {
     storyStoreV7: true,
+  },
+  refs: {
+    'marketing-components': {
+      title: 'Marketing Components',
+      url: 'https://s07fylnjym.map.azionedge.net/',
+      expanded: true
+    }
   },
   viteFinal: async (config) => {
     // Add Vue plugin to handle .vue SFC files from @aziontech/webkit

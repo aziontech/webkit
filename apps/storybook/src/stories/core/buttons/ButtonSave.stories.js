@@ -1,8 +1,8 @@
-import ButtonDelete from '@aziontech/webkit/button-delete';
+import ButtonSave from '@aziontech/webkit/button-save';
 
 export default {
-  title: 'Components/Buttons/ButtonDelete',
-  component: ButtonDelete,
+  title: 'Core/Buttons/ButtonSave',
+  component: ButtonSave,
   tags: ['autodocs'],
   argTypes: {
     label: {
@@ -20,7 +20,7 @@ export default {
     },
     severity: {
       control: 'select',
-      options: ['', 'danger', 'secondary', 'success', 'info', 'warning', 'contrast'],
+      options: ['', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'contrast'],
       description: 'Button severity/style variant'
     },
     size: {
@@ -45,56 +45,70 @@ export default {
 
 export const Default = {
   args: {
-    label: 'Delete',
-    size: ''
-  }
-};
-
-export const WithCustomLabel = {
-  args: {
-    label: 'Remove Item',
-    icon: 'pi pi-trash',
-    size: ''
-  }
-};
-
-export const Filled = {
-  args: {
-    label: 'Delete',
-    outlined: false,
-    size: ''
-  }
-};
-
-export const Disabled = {
-  args: {
-    label: 'Delete',
-    disabled: true,
+    label: 'Save',
     size: ''
   }
 };
 
 export const Loading = {
   args: {
-    label: 'Deleting...',
+    label: 'Saving...',
     loading: true,
-    size: ''
+    size: 'large'
+  }
+};
+
+export const Small = {
+  args: {
+    label: 'Save',
+    size: 'small'
+  }
+};
+
+export const Filled = {
+  args: {
+    label: 'Save',
+    outlined: false,
+    size: 'large'
+  }
+};
+
+export const Disabled = {
+  args: {
+    label: 'Save',
+    disabled: true,
+    size: 'large'
+  }
+};
+
+export const WithCustomLabel = {
+  args: {
+    label: 'Save Changes',
+    size: 'large'
   }
 };
 
 export const WithCustomIcon = {
   args: {
-    label: 'Delete',
-    icon: 'pi pi-times',
-    size: ''
+    label: 'Save',
+    icon: 'pi pi-check',
+    size: 'large'
   }
 };
 
 export const IconRight = {
   args: {
-    label: 'Delete',
-    icon: 'pi pi-trash',
+    label: 'Save',
+    icon: 'pi pi-check',
     'iconPos': 'right',
-    size: ''
+    size: 'large'
+  }
+};
+
+export const Success = {
+  args: {
+    label: 'Save',
+    severity: 'success',
+    size: 'large'
   }
 };
