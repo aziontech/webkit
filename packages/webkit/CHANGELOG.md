@@ -1,3 +1,10 @@
+## [1.12.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.2...@aziontech/webkit@1.12.3) (2026-03-26)
+
+
+### Bug Fixes
+
+* iconPos and data-testid param ([1fa0a39](https://github.com/aziontech/webkit/commit/1fa0a396a481e4036ed4281ea78dfe7c1872b361))
+
 ## [1.12.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.12.1...@aziontech/webkit@1.12.2) (2026-03-26)
 
 
