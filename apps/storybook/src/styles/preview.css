@@ -17,8 +17,15 @@ body,
 .sb-main-padded,
 .docs-story,
 .docs-story > * {
-  @apply !bg-canvas;
+  background: #ffffff !important;
+  transition: all 0.4s ease-in-out !important;
 }
+
+.azion-dark .sb-main-padded,
+.azion-dark .docs-story,
+.azion-dark .docs-story > * {
+  background: #0A0A0A !important;
+  transition: all 0.4s ease-in-out !important;}
 
 .docblock-code-toggle {
   /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
@@ -62,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .azion-light > body {
-  background: #fff !important;
+  background: #ffffff !important;
   transition: all 0.4s ease-in-out !important;
 }
 .azion-dark > body {
@@ -105,3 +112,4 @@ body.p-overflow-hidden {
 .font-code {
   font-family: 'Roboto Mono', monospace;;
 }
+
