@@ -5,12 +5,17 @@
   const emit = defineEmits(['copy'])
 
   const props = defineProps({
+    'data-testid': { type: String, default: 'button-copy' },
     value: {
       type: String,
       required: true
     },
     label: {
       type: String
+    },
+    iconPos: {
+      type: String,
+      default: 'left'
     },
     size: {
       type: String,
@@ -75,7 +80,8 @@
   <div>
     <Button
       :icon="icon"
-      data-testid="copy-button"
+      :iconPos="iconPos"
+      :data-testid="data-testid"
       type="button"
       :aria-label="ariaLabel"
       :label="labelText"

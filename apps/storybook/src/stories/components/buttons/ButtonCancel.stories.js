@@ -13,6 +13,11 @@ export default {
       control: 'text',
       description: 'Icon class (PrimeIcons format)'
     },
+    'iconPos': {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon (left or right)'
+    },
     severity: {
       control: 'select',
       options: ['', 'secondary', 'success', 'info', 'warning', 'danger', 'contrast'],
@@ -45,6 +50,15 @@ export const WithIcon = {
   args: {
     label: 'Cancel',
     icon: 'pi pi-times',
+    size: 'large'
+  }
+};
+
+export const IconRight = {
+  args: {
+    label: 'Cancel',
+    icon: 'pi pi-times',
+    'iconPos': 'right',
     size: 'large'
   }
 };
