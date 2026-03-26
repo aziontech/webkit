@@ -36,39 +36,39 @@ export const semanticSpacing = () => {
         maxWidth: '1280px',
       },
       '.px-container': {
-        paddingLeft: '0px',
-        paddingRight: '0px',
+        paddingLeft: theme('spacing.0'),
+        paddingRight: theme('spacing.0'),
       },
       '.py-container': {
-        paddingTop: '48px',
-        paddingBottom: '48px',
+        paddingTop: theme('spacing.48'),
+        paddingBottom: theme('spacing.48'),
       },
 
       // Padding elements
       '.p-elements-confortable': {
-        padding: '24px',
+        padding: theme('spacing.24'),
       },
       '.p-elements-base': {
-        padding: '12px',
+        padding: theme('spacing.12'),
       },
       '.p-elements-compact': {
-        padding: '6px',
+        padding: theme('spacing.6'),
       },
 
       // Gap elements
       '.gap-elements-confortable': {
-        gap: '24px',
+        gap: theme('spacing.24'),
       },
       '.gap-elements-base': {
-        gap: '12px',
+        gap: theme('spacing.12'),
       },
       '.gap-elements-compact': {
-        gap: '6px',
+        gap: theme('spacing.6'),
       },
 
       // Gap sections
       '.gap-sections': {
-        gap: '48px',
+        gap: theme('spacing.48'),
       },
     };
 
@@ -78,67 +78,67 @@ export const semanticSpacing = () => {
           maxWidth: '1024px',
         },
         '.px-container': {
-          paddingLeft: '10px',
-          paddingRight: '10px',
+          paddingLeft: theme('spacing.10'),
+          paddingRight: theme('spacing.10'),
         },
         '.py-container': {
-          paddingTop: '32px',
-          paddingBottom: '32px',
+          paddingTop: theme('spacing.32'),
+          paddingBottom: theme('spacing.32'),
         },
         '.p-elements-confortable': {
-          padding: '16px',
+          padding: theme('spacing.16'),
         },
         '.p-elements-base': {
-          padding: '8px',
+          padding: theme('spacing.8'),
         },
         '.p-elements-compact': {
-          padding: '5px',
+          padding: theme('spacing.5'),
         },
         '.gap-elements-confortable': {
-          gap: '16px',
+          gap: theme('spacing.16'),
         },
         '.gap-elements-base': {
-          gap: '8px',
+          gap: theme('spacing.8'),
         },
         '.gap-elements-compact': {
-          gap: '6px',
+          gap: theme('spacing.6'),
         },
         '.gap-sections': {
-          gap: '40px',
+          gap: theme('spacing.40'),
         },
       },
       [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
         '.max-container-width': {
-          maxWidth: '414px',
+          maxWidth: theme('screens.lg'),
         },
         '.px-container': {
-          paddingLeft: '4px',
-          paddingRight: '4px',
+          paddingLeft: theme('spacing.4'),
+          paddingRight: theme('spacing.4'),
         },
         '.py-container': {
-          paddingTop: '16px',
-          paddingBottom: '16px',
+          paddingTop: theme('spacing.16'),
+          paddingBottom: theme('spacing.16'),
         },
         '.p-elements-confortable': {
-          padding: '8px',
+          padding: theme('spacing.8'),
         },
         '.p-elements-base': {
-          padding: '6px',
+          padding: theme('spacing.6'),
         },
         '.p-elements-compact': {
-          padding: '4px',
+          padding: theme('spacing.4'),
         },
         '.gap-elements-confortable': {
-          gap: '8px',
+          gap: theme('spacing.8'),
         },
         '.gap-elements-base': {
-          gap: '6px',
+          gap: theme('spacing.6'),
         },
         '.gap-elements-compact': {
-          gap: '4px',
+          gap: theme('spacing.4'),
         },
         '.gap-sections': {
-          gap: '20px',
+          gap: theme('spacing.20'),
         },
       },
     };
