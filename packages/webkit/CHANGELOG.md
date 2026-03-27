@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.14.0...@aziontech/webkit@1.14.1) (2026-03-27)
+
+
+### Bug Fixes
+
+* storybook collumn adjust ([fa92b6c](https://github.com/aziontech/webkit/commit/fa92b6c58fcb9c300d2917a18430be1c87aa8523))
+
 ## [1.14.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.13.0...@aziontech/webkit@1.14.0) (2026-03-27)
 
 
