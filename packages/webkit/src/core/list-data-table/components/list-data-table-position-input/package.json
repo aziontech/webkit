@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-position-input.vue",
+  "module": "./list-data-table-position-input.vue",
+  "browser": {
+    "./sfc": "./list-data-table-position-input.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

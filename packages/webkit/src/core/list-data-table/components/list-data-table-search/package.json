@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-search.vue",
+  "module": "./list-data-table-search.vue",
+  "browser": {
+    "./sfc": "./list-data-table-search.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

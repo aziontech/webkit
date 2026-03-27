@@ -1,0 +1,8 @@
+{
+  "main": "./country-flag.vue",
+  "module": "./country-flag.vue",
+  "browser": {
+    "./sfc": "./country-flag.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-inline-create.vue",
+  "module": "./list-data-table-inline-create.vue",
+  "browser": {
+    "./sfc": "./list-data-table-inline-create.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

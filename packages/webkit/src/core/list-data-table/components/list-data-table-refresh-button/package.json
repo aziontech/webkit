@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-refresh-button.vue",
+  "module": "./list-data-table-refresh-button.vue",
+  "browser": {
+    "./sfc": "./list-data-table-refresh-button.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

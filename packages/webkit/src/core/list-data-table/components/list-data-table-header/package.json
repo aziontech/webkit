@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-header.vue",
+  "module": "./list-data-table-header.vue",
+  "browser": {
+    "./sfc": "./list-data-table-header.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

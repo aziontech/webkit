@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-actions.vue",
+  "module": "./list-data-table-actions.vue",
+  "browser": {
+    "./sfc": "./list-data-table-actions.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
