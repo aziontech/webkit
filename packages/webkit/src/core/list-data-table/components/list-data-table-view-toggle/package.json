@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-view-toggle.vue",
+  "module": "./list-data-table-view-toggle.vue",
+  "browser": {
+    "./sfc": "./list-data-table-view-toggle.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

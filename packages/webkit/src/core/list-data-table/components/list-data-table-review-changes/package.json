@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-review-changes.vue",
+  "module": "./list-data-table-review-changes.vue",
+  "browser": {
+    "./sfc": "./list-data-table-review-changes.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

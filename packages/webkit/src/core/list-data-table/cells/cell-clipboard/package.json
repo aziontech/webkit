@@ -1,0 +1,8 @@
+{
+  "main": "./cell-clipboard.vue",
+  "module": "./cell-clipboard.vue",
+  "browser": {
+    "./sfc": "./cell-clipboard.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
