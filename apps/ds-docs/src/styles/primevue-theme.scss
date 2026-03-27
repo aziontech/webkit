@@ -1,0 +1,13 @@
+/**
+ * PrimeVue + Azion Theme
+ *
+ * Imports the full Azion theme which itself handles:
+ *   - _variables.scss   → CSS custom properties (:root) + Sass design tokens
+ *   - theme-base/_components.scss → PrimeVue component styles (replaces a prebuilt theme.css)
+ *   - _extensions.scss  → Azion overrides for PrimeVue components (scoped to .azion)
+ *   - _custom.scss      → Azion extra resets and utilities  (scoped to .azion)
+ *
+ * The PrimeVue normalisation CSS (primevue.min.css) is imported separately in
+ * BaseLayout.astro because it is a prebuilt CSS file and imports cleanly that way.
+ */
+@import '@theme-azion/theme';

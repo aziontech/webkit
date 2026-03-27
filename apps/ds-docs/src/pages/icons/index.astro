@@ -1,0 +1,42 @@
+---
+/**
+ * Icons Page (English)
+ * 
+ * Handles the /icons route with information about the icon library
+ * and a link to the external Icon Gallery.
+ * Uses the same layouts as PT routes, with language='en' default
+ */
+
+import { getCollection, render } from 'astro:content';
+import DocPageLayout from '../../layouts/DocPageLayout.astro';
+import { getBreadcrumbContext } from '../../lib/content';
+import { markdownComponents } from '../../components/docs';
+import { createI18nContext } from '../../lib/i18n';
+
+// Get the icons index page
+// In Astro 5, the glob loader uses the folder path as ID for index files (e.g. 'icons' for icons/index.md)
+const allContent = await getCollection('v1-en');
+const iconsEntries = allContent.filter(e => (e.id || '').startsWith('icons'));
+const indexEntry = iconsEntries.find((e) => e.id === 'icons');
+
+if (!indexEntry) {
+  return Astro.redirect('/404');
+}
+
+const { Content } = await render(indexEntry);
+const breadcrumb = await getBreadcrumbContext('/icons');
+
+// Create i18n context for English (default)
+const i18n = createI18nContext('en');
+---
+
+<DocPageLayout
+  title={indexEntry.data.title}
+  description={indexEntry.data.description}
+  section={breadcrumb.section}
+  item={null}
+  language="en"
+  i18n={i18n}
+>
+  <Content components={markdownComponents} />
+</DocPageLayout>

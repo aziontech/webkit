@@ -1,0 +1,37 @@
+---
+/**
+ * Foundations Index Page (English)
+ * 
+ * Uses the same layouts as PT routes, with language='en' default
+ */
+
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { markdownComponents } from '../../components/docs';
+import { getBreadcrumbContext } from '../../lib/content';
+import { createI18nContext } from '../../lib/i18n';
+
+const allContent = await getCollection('v1-en');
+
+// In Astro 5, the glob loader uses the folder path as ID for index files
+// e.g., 'foundations' for foundations/index.md
+const indexEntry = allContent.find((e) => e.id === 'foundations');
+
+if (!indexEntry) {
+  return Astro.redirect('/');
+}
+
+const { Content } = await render(indexEntry);
+
+// Get breadcrumb context for this page
+const breadcrumb = await getBreadcrumbContext('/foundations');
+
+// Create i18n context for English (default)
+const i18n = createI18nContext('en');
+---
+
+<DocsLayout title="Foundations" section={breadcrumb.section} item={breadcrumb.item} language="en" i18n={i18n}>
+  <div class="prose prose-lg max-w-docs-content dark:prose-invert">
+    <Content components={markdownComponents} />
+  </div>
+</DocsLayout>

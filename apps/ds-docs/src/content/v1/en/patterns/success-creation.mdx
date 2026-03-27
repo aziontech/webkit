@@ -1,0 +1,109 @@
+---
+title: Success Creation Pattern
+description: Displays a success notification after creating entities, with links to view and additional actions
+order: 2
+type: pattern
+category: feedback
+language: en
+---
+
+<Callout type="note" title="Pattern Summary">
+Displays a toast notification indicating the successful creation of a new entity in the system. Provides a link to view the created entity details and, optionally, a button for a relevant follow-up action (e.g. start configuration).
+</Callout>
+
+## About
+
+This pattern defines the behavior and visual presentation for positive feedback after a user successfully creates an entity. The system should confirm the action, reduce uncertainty, and let the user quickly access what was created.
+
+### Context & Problem
+
+When creating an item (e.g. workload, network list, digital certificate), users may be unsure whether the operation succeeded. Generic or missing feedback increases uncertainty and makes it harder to find the new entity.
+
+### When to Use
+
+- After the successful completion of create actions (CRUD - Create).
+
+### Components Used
+
+- **Toast** (Block Console Kit)
+
+### Visual Example
+
+![Success creation pattern example](https://console-kit-docs.azion.app/_astro/image-1.BHbpCU6q_Bfn81.webp)
+
+*Workloads > Create Workload*
+
+## Expected Behavior
+
+<ContentTabs tab1Label="Main Flow" tab2Label="States" defaultTab="tab1">
+  <div slot="tab1">
+    1. **Success toast:** The system shows a toast (temporary notification) stating that the creation was completed.
+    2. **Clear message:** "Entity created successfully!" or equivalent, including the entity name.
+    3. **View link:** The toast provides a direct link to the new entity details.
+    4. **Optional action button:** When applicable, show a button for a relevant action (e.g. "Start configuration").
+    5. **Auto-dismiss:** The toast closes automatically after a few seconds or can be closed manually.
+  </div>
+  <div slot="tab2">
+    - **Success:** Green toast with check icon
+    - **Primary action:** Prominent link to view
+    - **Secondary action:** Optional button for next steps
+    - **Auto-dismiss:** Closes automatically in 5-8 seconds
+  </div>
+</ContentTabs>
+
+### Implementation
+
+```javascript title="handleToast.js"
+const handleToast = (response) => {
+   const toast = {
+        feedback: response.feedback,
+        actions: {
+            link: {
+                label: 'View Workload',
+                callback: () => response.redirectToUrl(response.urlToEditView)
+            },
+            secondary: {
+                label: 'Copy Workload URL',
+                icon: 'pi pi-copy',
+                animation: {
+                    time: 3000,
+                    icon: 'pi pi-check',
+                    label: 'Copied'
+                },
+                callback: () => props.clipboardWrite(response.domainName)
+            }
+        }
+    }
+    response.showToastWithActions(toast)
+}
+```
+
+### Best Practices
+
+<Callout type="tip" title="Implementation Tips">
+- Use clear, positive, direct language in the message
+- Always include the name or identifier of the created entity
+- Ensure the link goes directly to the newly created object
+- Show extra actions only when there is clear context
+- Allow closing the toast manually
+- Ensure screen reader users also receive the feedback
+</Callout>
+
+### Anti-patterns
+
+<Callout type="caution" title="What to Avoid">
+- Do not leave the user without feedback after creating something
+- Avoid generic messages ("Success!") without context or overly long messages
+- Do not force multiple notifications; group when possible
+- Never present broken links or buttons
+</Callout>
+
+### Accessibility
+
+- Use `aria-live="polite"` on toast components for screen readers
+- Check contrast between background, icon, and text colors
+- Ensure keyboard navigation to action buttons
+
+### References
+
+- [Atlassian - Success messages](https://atlassian.design/foundations/content/designing-messages/success-messages)

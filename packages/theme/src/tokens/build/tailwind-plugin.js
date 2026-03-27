@@ -69,9 +69,9 @@ const addUtility = (
  * Generate semantic token utilities for light and dark modes
  *
  * Usage:
- * - Background: bg-layer1, bg-layer2, bg-base, bg-canvas, etc.
- * - Text: text-base, text-muted, text-link, text-primary, etc.
- * - Border: border-base, border-warning, border-danger, border-primary, etc.
+ * - Background: bg-surface, bg-canvas, bg-layer1, etc.
+ * - Text: text-default, text-muted, text-link, text-primary, etc.
+ * - Border: border-default, border-warning, border-danger, border-primary, etc.
  */
 export const tokenUtilities = (options = {}) => {
   const { light, dark } = resolveTokenMaps();
@@ -95,25 +95,17 @@ export const tokenUtilities = (options = {}) => {
     );
   });
 
-  // Text color utilities
-  const hasAccent = 'textColorAccent' in textSemantic.light;
-  const accentKey = hasAccent ? 'textColorAccent' : 'textColorSecondary';
-  const accentHoverKey = hasAccent ? 'textColorAccentHover' : 'textColorSecondaryHover';
-
+  // Text color utilities (keys match semantic/text.js: textDefault, textMuted, etc.)
   const textMap = {
-    base: 'textColorBase',
-    muted: 'textColorMuted',
-    link: 'textColorLink',
-    code: 'textColorCode',
-    'muted-hover': 'textColorMutedHover',
-    'link-hover': 'textColorLinkHover',
-    'base-hover': 'textColorBaseHover',
-    primary: 'textColorPrimary',
-    'primary-hover': 'textColorPrimaryHover',
-    accent: accentKey,
-    'accent-hover': accentHoverKey,
-    secondary: 'textColorSecondary',
-    'secondary-hover': 'textColorSecondaryHover',
+    default: 'textDefault',
+    muted: 'textMuted',
+    link: 'textLink',
+    code: 'textCode',
+    'link-hover': 'textLinkHover',
+    primary: 'textPrimary',
+    'primary-hover': 'textPrimaryHover',
+    accent: 'textAccent',
+    'accent-hover': 'textAccentHover',
     danger: 'textDanger',
     'danger-hover': 'textDangerHover',
     warning: 'textWarning',
@@ -135,17 +127,16 @@ export const tokenUtilities = (options = {}) => {
     );
   });
 
-  // Border color utilities
+  // Border color utilities (keys match semantic/borders.js: borderDefault, etc.)
   const borderMap = {
-    base: 'borderBase',
-    'base-hover': 'borderBaseHover',
+    default: 'borderDefault',
+    strong: 'borderStrong',
+    subtle: 'borderSubtle',
     warning: 'borderWarning',
     success: 'borderSuccess',
     danger: 'borderDanger',
     primary: 'borderPrimary',
     'primary-hover': 'borderPrimaryHover',
-    secondary: 'borderSecondary',
-    'secondary-hover': 'borderSecondaryHover',
     accent: 'borderAccent',
     'accent-hover': 'borderAccentHover',
     'warning-hover': 'borderWarningHover',

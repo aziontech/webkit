@@ -1,0 +1,42 @@
+{
+  "component": "primevue-divider",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/divider/divider.vue",
+  "props": [
+    {
+      "name": "align",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "layout",
+      "type": "string",
+      "required": false,
+      "default": "horizontal",
+      "description": ""
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "required": false,
+      "default": "solid",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.096Z"
+}

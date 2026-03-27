@@ -1,0 +1,29 @@
+{
+  "model": {
+    "label": "Model",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "activeIndex": {
+    "label": "Active Index",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": null
+  },
+  "exact": {
+    "label": "Exact",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  }
+}

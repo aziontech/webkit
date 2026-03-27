@@ -1,0 +1,95 @@
+{
+  "component": "primevue-column",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/column/column.vue",
+  "props": [
+    {
+      "name": "field",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "header",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "sortable",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "headerClass",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "bodyClass",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "footerClass",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "sortableDisabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "filterField",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "filterMatchMode",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "filterPlaceholder",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "body",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.092Z"
+}

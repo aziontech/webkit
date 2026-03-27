@@ -1,0 +1,56 @@
+{
+  "component": "primevue-avatar",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/avatar/avatar.vue",
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "image",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "shape",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.083Z"
+}

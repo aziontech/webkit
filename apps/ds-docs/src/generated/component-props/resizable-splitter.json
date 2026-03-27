@@ -1,0 +1,56 @@
+{
+  "panelSizes": {
+    "label": "Panel Sizes",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[70, 30]"
+  },
+  "direction": {
+    "label": "Direction",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "horizontal"
+  },
+  "minSize": {
+    "label": "Min Size",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[10, 10]"
+  },
+  "maxSize": {
+    "label": "Max Size",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[95, 95]"
+  },
+  "initialTopPanelPercent": {
+    "label": "Initial Top Panel Percent",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": null
+  },
+  "initialTopPanelPixels": {
+    "label": "Initial Top Panel Pixels",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": null
+  }
+}

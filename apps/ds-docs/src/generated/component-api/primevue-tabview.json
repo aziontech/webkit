@@ -1,0 +1,53 @@
+{
+  "component": "primevue-tabview",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/tabview/tabview.vue",
+  "props": [
+    {
+      "name": "activeIndex",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "lazy",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "scrollable",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "tab-change",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "tab-click",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.103Z"
+}

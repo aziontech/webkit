@@ -1,0 +1,43 @@
+---
+/**
+ * DoDont
+ * 
+ * Side-by-side comparison of correct and incorrect usage patterns.
+ */
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="do-dont">
+  {title && (
+    <h4 class="text-sm font-medium text-default mb-4">{title}</h4>
+  )}
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {/* Do side */}
+    <div class="do-dont__do rounded-lg border-2 border-green-200 bg-green-50 overflow-hidden">
+      <div class="do-dont__header px-4 py-2 bg-green-100 border-b border-green-200 flex items-center gap-2">
+        <i class="pi pi-check w-5 h-5 text-green-600" aria-hidden="true" />
+        <span class="text-sm font-medium text-green-700">Do</span>
+      </div>
+      <div class="do-dont__content p-4">
+        <slot name="do" />
+      </div>
+    </div>
+    
+    {/* Don't side */}
+    <div class="do-dont__dont rounded-lg border-2 border-red-200 bg-red-50 overflow-hidden">
+      <div class="do-dont__header px-4 py-2 bg-red-100 border-b border-red-200 flex items-center gap-2">
+        <i class="pi pi-times w-5 h-5 text-red-600" aria-hidden="true" />
+        <span class="text-sm font-medium text-red-700">Don't</span>
+      </div>
+      <div class="do-dont__content p-4">
+        <slot name="dont" />
+      </div>
+    </div>
+  </div>
+</div>

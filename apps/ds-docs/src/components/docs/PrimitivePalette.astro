@@ -1,0 +1,267 @@
+---
+/**
+ * Primitive Palette – displays raw color steps from @aziontech/theme primitives.
+ * Never use primitives directly in components; use semantic tokens.
+ */
+import { primitives, surfacePrimitives, brandPrimitives } from '@aziontech/theme/tokens';
+
+const LABELS = {
+  base: 'BASE',
+  gray: 'GRAY',
+  violet: 'VIOLET',
+  orange: 'ORANGE',
+  slate: 'SLATE',
+  yellow: 'YELLOW',
+  green: 'GREEN',
+  blue: 'BLUE',
+  neutral: 'NEUTRAL',
+  red: 'RED',
+  surface: 'SURFACE',
+};
+const NUMERIC_STEPS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
+const SURFACE_STEPS = ['0', '50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
+const HIGHLIGHT_500 = new Set(['orange', 'violet']);
+
+function getSteps(palette: Record<string, string>) {
+  const keys = Object.keys(palette);
+  if (keys.includes('white') || keys.includes('black')) {
+    return ['white', 'black'].filter((s) => keys.includes(s));
+  }
+  if (keys.includes('0') && keys.some((k) => NUMERIC_STEPS.includes(k))) {
+    return SURFACE_STEPS.filter((s) => keys.includes(s));
+  }
+  if (keys.some((k) => NUMERIC_STEPS.includes(k))) {
+    return NUMERIC_STEPS.filter((s) => keys.includes(s));
+  }
+  return keys.sort((a, b) => {
+    const na = Number(a);
+    const nb = Number(b);
+    if (!Number.isNaN(na) && !Number.isNaN(nb)) return na - nb;
+    return String(a).localeCompare(String(b));
+  });
+}
+
+const primitiveOrder = ['orange', 'violet', 'neutral', 'slate', 'gray', 'green', 'red', 'yellow', 'blue', 'base'];
+const primitiveFamilies = primitiveOrder
+  .filter((id) => id in primitives)
+  .map((id) => {
+    const palette = primitives[id as keyof typeof primitives];
+    return {
+      id,
+      varPrefix: 'primitives',
+      label: LABELS[id as keyof typeof LABELS] ?? String(id).toUpperCase(),
+      steps: getSteps(palette as Record<string, string>),
+      highlight500: HIGHLIGHT_500.has(id),
+    };
+  });
+
+const surfaceFamily = surfacePrimitives?.surface
+  ? [{
+      id: 'surface',
+      varPrefix: 'surfacePrimitives-surface',
+      label: LABELS.surface,
+      steps: getSteps(surfacePrimitives.surface),
+      highlight500: false,
+    }]
+  : [];
+
+const families = [...primitiveFamilies, ...surfaceFamily];
+---
+
+<div class="primitive-palette">
+  <div class="primitive-palette__rows">
+    {families.map((family) => (
+      <div class="primitive-palette__row" data-family={family.id}>
+        <div class="primitive-palette__row-label">{family.label}</div>
+        <div class="primitive-palette__swatches">
+          {family.steps.map((step) => {
+            const is500 = step === '500' && family.highlight500;
+            const varName = family.varPrefix === 'primitives'
+              ? `--primitives-${family.id}-${step}`
+              : `--${family.varPrefix}-${step}`;
+            const copyToken = family.varPrefix === 'primitives' ? `${family.id}-${step}` : `surface-${step}`;
+            return (
+              <button
+                type="button"
+                class="primitive-palette__swatch-wrap"
+                data-copyable
+                data-token={copyToken}
+                title={`Copy ${copyToken}`}
+              >
+                <span
+                  class:list={['primitive-palette__swatch', is500 && 'primitive-palette__swatch--highlight']}
+                  style={`background-color: var(${varName});`}
+                />
+                <span class="primitive-palette__swatch-value">{step}</span>
+                {is500 && (
+                  <span class="primitive-palette__swatch-star" aria-hidden="true">★</span>
+                )}
+                <span class="primitive-palette__copy-hint" aria-hidden="true"></span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .primitive-palette {
+    --palette-text: #ededed;
+    --palette-text-muted: #a3a3a3;
+    background: var(--palette-bg);
+    color: var(--palette-text);
+    border-radius: 12px;
+    margin: 1.5rem 0;
+  }
+
+  .primitive-palette__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.02em;
+  }
+
+  .primitive-palette__subtitle {
+    font-size: 0.875rem;
+    color: var(--palette-text-muted);
+    margin: 0 0 1.5rem 0;
+    max-width: 42rem;
+  }
+
+  .primitive-palette__subtitle code {
+    font-size: 0.8125rem;
+    padding: 0.125rem 0.25rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .primitive-palette__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .primitive-palette__row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .primitive-palette__row-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--palette-text-muted);
+  }
+
+  .primitive-palette__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    align-items: flex-end;
+  }
+
+  .primitive-palette__swatch-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+
+  .primitive-palette__swatch-wrap:hover {
+    transform: scale(1.05);
+  }
+
+  .primitive-palette__swatch-wrap:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  .primitive-palette__copy-hint {
+    position: absolute;
+    bottom: -1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5625rem;
+    color: var(--palette-text-muted);
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+  }
+
+  .primitive-palette__swatch-wrap:hover .primitive-palette__copy-hint,
+  .primitive-palette__swatch-wrap[data-copied] .primitive-palette__copy-hint {
+    opacity: 1;
+  }
+
+  .primitive-palette__swatch-wrap[data-copied] .primitive-palette__copy-hint {
+    color: #4ade80;
+  }
+
+  .primitive-palette__swatch-wrap[data-copied] .primitive-palette__copy-hint::after {
+    content: 'Copied!';
+  }
+
+  .primitive-palette__swatch-wrap:not([data-copied]) .primitive-palette__copy-hint::after {
+    content: 'Copy';
+  }
+
+  .primitive-palette__swatch {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .primitive-palette__swatch--highlight {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    z-index: 1;
+  }
+
+  .primitive-palette__swatch-value {
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: var(--palette-text-muted);
+  }
+
+  .primitive-palette__swatch-star {
+    position: absolute;
+    top: 100%;
+    margin-top: 0.125rem;
+    font-size: 0.5rem;
+    line-height: 1;
+  }
+
+  [data-family="orange"] .primitive-palette__swatch-star { color: var(--primitives-orange-500); }
+  [data-family="violet"] .primitive-palette__swatch-star { color: var(--primitives-violet-500); }
+</style>
+
+<script>
+  document.querySelectorAll('.primitive-palette').forEach((container) => {
+    container.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest?.('[data-copyable][data-token]');
+      if (!btn || !(btn instanceof HTMLElement)) return;
+      const token = btn.getAttribute('data-token');
+      if (!token || !navigator.clipboard?.writeText) return;
+      navigator.clipboard.writeText(token).then(() => {
+        btn.setAttribute('data-copied', '');
+        window.setTimeout(() => btn.removeAttribute('data-copied'), 1500);
+      });
+    });
+  });
+</script>

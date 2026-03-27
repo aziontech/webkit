@@ -1,0 +1,53 @@
+---
+/**
+ * AnatomyBlock
+ * 
+ * Displays component anatomy with labeled parts.
+ * Supports both list format and future visual annotation.
+ */
+
+import type { AnatomyPart } from '../../content/config';
+
+interface Props {
+  parts: AnatomyPart[];
+  image?: string;
+  alt?: string;
+}
+
+const { parts, image, alt } = Astro.props;
+---
+
+<div class="anatomy-block">
+  {/* Visual diagram (optional) */}
+  {image && (
+    <div class="anatomy-block__visual mb-6 rounded-lg border border-default overflow-hidden bg-surface">
+      <img 
+        src={image} 
+        alt={alt || 'Component anatomy diagram'}
+        class="w-full h-auto"
+      />
+    </div>
+  )}
+  
+  {/* Parts list */}
+  <div class="anatomy-block__parts">
+    <h4 class="text-sm font-medium text-default mb-3">Component Parts</h4>
+    <ol class="space-y-3">
+      {parts.map((part, index) => (
+        <li class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-medium">
+            {index + 1}
+          </span>
+          <div class="flex-1">
+            <span class="font-medium text-default">{part.label}</span>
+            {part.description && (
+              <p class="text-sm text-muted mt-0.5">
+                {part.description}
+              </p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</div>

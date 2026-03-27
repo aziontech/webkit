@@ -1,0 +1,30 @@
+{
+  "component": "DocsSidebar",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/apps/ds-docs/src/components/docs/DocsSidebar.vue",
+  "props": [
+    {
+      "name": "navigation",
+      "type": "NavigationTree",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "currentPath",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "language",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T16:52:32.060Z"
+}

@@ -1,0 +1,106 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getCollection } from 'astro:content';
+import { getBreadcrumbContext } from '../../lib/content';
+import { createI18nContext } from '../../lib/i18n';
+import Tabs from '../../components/docs/Tabs.astro';
+import ComponentsStatusTable from '../../components/docs/ComponentsStatusTable.astro';
+import StatusBadge from '../../components/docs/StatusBadge.vue';
+import { componentStatusData } from '../../data/component-status';
+
+/**
+ * Components Index Page
+ *
+ * Lists all available components in the design system with tabs for
+ * Overview (component cards) and Status (progress tracking).
+ */
+
+const allContent = await getCollection('v1-en');
+
+// Filter to only get components (not other content types)
+const components = allContent.filter(item => {
+  // Use id instead of slug for the new content collections API
+  const id = item.id || '';
+  const idParts = id.split('/');
+  return idParts[0] === 'components' && idParts.length > 1 && idParts[1] !== 'index.md' && idParts[1] !== 'index.mdx';
+});
+
+// Get breadcrumb context for this page
+const breadcrumb = await getBreadcrumbContext('/components');
+
+// Create i18n context for English
+const i18n = createI18nContext('en');
+
+// Group components by category
+const componentsByCategory = components.reduce((acc, component) => {
+  const category = component.data.category || 'other';
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(component);
+  return acc;
+}, {} as Record<string, typeof components>);
+
+const categoryLabels: Record<string, string> = {
+  form: 'Form Components',
+  navigation: 'Navigation Components',
+  feedback: 'Feedback Components',
+  'data-display': 'Data Display Components',
+  layout: 'Layout Components',
+  utility: 'Utility Components',
+};
+---
+
+<DocsLayout
+  title="Components"
+  description="Explore our component library built with Vue and designed for the Azion platform."
+  section={breadcrumb.section}
+  item={breadcrumb.item}
+  language="en"
+  i18n={i18n}
+>
+  <h1 class="!text-3xl font-medium text-lg mb-1.5">Components</h1>
+  <p class="text-sm text-muted mb-8 mt-4">
+    Explore our component library built with Vue and designed for the Azion platform.
+  </p>
+  
+  <Tabs>
+    <Fragment slot="overview">
+      {Object.entries(componentsByCategory).map(([category, items]) => (
+        <section class="mb-10">
+          <h2 class="text-xl font-sans font-medium mb-4">{categoryLabels[category] || category}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {items.map((component) => {
+              // Extract component name from id (e.g., 'components/button.mdx' -> 'button')
+              const componentName = component.id.replace(/\.(md|mdx)$/, '').split('/').pop() || component.id;
+              return (
+                <a
+                  href={`/components/${componentName}`}
+                  class="group block p-4 border border-default rounded-lg hover:border-strong transition-colors bg-surface"
+                >
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-medium font-sans text-default">
+                    {component.data.title}
+                  </h3>
+                  {component.data.status && (
+                    <StatusBadge client:visible status={component.data.status} />
+                  )}
+                </div>
+                <p class="text-sm font-sans text-muted line-clamp-2">
+                  {component.data.description}
+                </p>
+              </a>
+            )})}
+          </div>
+        </section>
+      ))}
+    </Fragment>
+    
+    <Fragment slot="status">
+      <ComponentsStatusTable 
+        components={componentStatusData}
+        caption="Track the progress of each component across design and development."
+      />
+    </Fragment>
+  </Tabs>
+</DocsLayout>

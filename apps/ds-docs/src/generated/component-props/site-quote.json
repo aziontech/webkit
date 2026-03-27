@@ -1,0 +1,29 @@
+{
+  "logo": {
+    "label": "Logo",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "null"
+  },
+  "testimonial": {
+    "label": "Testimonial",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "source": {
+    "label": "Source",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  }
+}

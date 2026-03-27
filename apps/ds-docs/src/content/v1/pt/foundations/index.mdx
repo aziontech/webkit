@@ -1,0 +1,142 @@
+---
+title: Fundamentos
+description: Fundamentos definem os blocos de construção principais do sistema de design
+type: guide
+---
+
+# Fundamentos
+
+Fundamentos definem os princípios visuais e de interação que orientam cada componente e interface do sistema de design.
+
+Eles garantem consistência, acessibilidade e escalabilidade em todos os produtos e experiências.
+
+## O Que São Fundamentos
+
+Fundamentos são as decisões de design principais que sustentam todo o sistema. Eles definem as regras fundamentais que garantem coerência visual e funcional.
+
+Todo componente no sistema de design é construído sobre esses fundamentos. Entendê-los ajuda você a:
+
+- Tomar decisões de design informadas
+- Criar interfaces consistentes
+- Manter escalabilidade entre produtos
+- Garantir conformidade com acessibilidade
+
+Fundamentos definem:
+
+- **Sistemas de cores** — Paletas, cores semânticas e diretrizes de acessibilidade
+- **Escala tipográfica** — Famílias de fontes, tamanhos, pesos e alturas de linha
+- **Regras de espaçamento** — Margens, padding e gaps consistentes
+- **Estrutura de layout** — Sistemas de grid e breakpoints responsivos
+- **Princípios de movimento** — Timing de animação, easing e transições
+- **Iconografia** — Estilo de ícones, tamanhos e diretrizes de uso
+
+## Fundamentos Disponíveis
+
+Explore cada fundamento para entender as decisões de design e detalhes de implementação.
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 mb-8">
+
+<FoundationCard
+  title="Cor"
+  description="Paletas de cores, cores semânticas e diretrizes de acessibilidade para linguagem visual consistente."
+  href="/foundations/color"
+/>
+
+<FoundationCard
+  title="Tipografia"
+  description="Famílias de fontes, escalas de tipos e estilos de texto para conteúdo legível e hierárquico."
+  href="/foundations/typography"
+/>
+
+<FoundationCard
+  title="Espaçamento"
+  description="Escala de espaçamento consistente para margens, padding e gaps em layouts."
+  href="/foundations/spacing"
+/>
+
+<FoundationCard
+  title="Grid"
+  description="Grids de layout, colunas e breakpoints responsivos para designs estruturados."
+  href="/foundations/grid"
+/>
+
+<FoundationCard
+  title="Elevação"
+  description="Sistemas de sombra e z-index para criar hierarquia visual e profundidade."
+  href="/foundations/elevation"
+/>
+
+<FoundationCard
+  title="Movimento"
+  description="Princípios de animação, funções de timing e diretrizes de transição."
+  href="/foundations/motion"
+/>
+
+<FoundationCard
+  title="Iconografia"
+  description="Estilo de ícones, tamanhos e diretrizes de uso para implementação consistente de ícones."
+  href="/foundations/iconography"
+/>
+
+</div>
+
+## Por Que Fundamentos Importam
+
+Fundamentos fornecem os blocos de construção essenciais que permitem às equipes construir interfaces consistentes e escaláveis.
+
+### Consistência
+
+Fundamentos estabelecem linguagem visual compartilhada entre todos os produtos. Quando todos usam a mesma paleta de cores, escala tipográfica e regras de espaçamento, as interfaces parecem coesas e previsíveis.
+
+### Previsibilidade
+
+Designers e desenvolvedores podem tomar decisões mais rapidamente quando as regras fundamentais são claras. Não há necessidade de reinventar valores de espaçamento ou adivinhar estados de hover — as respostas já estão definidas.
+
+### Acessibilidade
+
+Fundamentos incorporam acessibilidade no sistema de design desde o início. Taxas de contraste de cores, estados de foco e preferências de movimento são todos considerados no nível fundamental.
+
+### Escalabilidade
+
+À medida que os produtos crescem, os fundamentos garantem que novas funcionalidades se integrem perfeitamente às existentes. Os mesmos design tokens e regras se aplicam a todo novo trabalho.
+
+### Manutenibilidade
+
+Quando um valor fundamental precisa mudar — como atualizar uma cor primária — a mudança se propaga por todo o sistema. Isso reduz dívida técnica e inconsistências de design.
+
+## Relação com Tokens
+
+Fundamentos e design tokens trabalham juntos para traduzir decisões de design em implementação.
+
+### Fundamentos Definem Regras
+
+Fundamentos são conceituais. Eles definem as **regras e princípios** que orientam as decisões de design.
+
+Por exemplo, o fundamento de Cor define:
+- O propósito das cores semânticas (primária, sucesso, alerta, erro)
+- Requisitos de acessibilidade para contraste
+- Como usar cor para comunicar significado
+
+### Tokens Implementam Valores
+
+Design tokens são a **camada de implementação**. Eles traduzem regras de fundamentos em valores específicos que podem ser usados no código.
+
+Por exemplo, tokens implementam o fundamento de Cor:
+
+| Conceito do Fundamento | Token | Valor |
+|------------------------|-------|-------|
+| Cor primária | `color.primary.500` | `#3b82f6` |
+| Cor de sucesso | `color.success.500` | `#22c55e` |
+| Texto primário | `color.text.primary` | `#111827` |
+
+### Como Eles Trabalham Juntos
+
+1. **Fundamentos** definem o que estamos tentando alcançar (ex: "Use cor primária para ações principais")
+2. **Tokens** fornecem os valores específicos (ex: `color.primary.500`)
+3. **Componentes** usam tokens para implementar as regras do fundamento
+
+Essa separação permite que os fundamentos evoluam conceitualmente enquanto os tokens fornecem referências de implementação estáveis.
+
+<Callout type="info" title="Saiba mais sobre tokens">
+  Explore a [documentação de Tokens](/tokens) para ver como os design tokens implementam esses fundamentos no código.
+</Callout>

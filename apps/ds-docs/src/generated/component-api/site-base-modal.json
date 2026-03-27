@@ -1,0 +1,49 @@
+{
+  "component": "site-base-modal",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/site/base-modal/base-modal.vue",
+  "props": [
+    {
+      "name": "backgroundColor",
+      "type": "string",
+      "required": false,
+      "default": "default",
+      "description": ""
+    },
+    {
+      "name": "showHeader",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "disableVisibilityToggle",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:visible",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "action",
+      "description": ""
+    },
+    {
+      "name": "header",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.121Z"
+}

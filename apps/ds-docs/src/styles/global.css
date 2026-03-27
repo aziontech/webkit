@@ -1,0 +1,266 @@
+/* Import fonts - must be before @tailwind directives */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+/* Design tokens as CSS variables (light/dark) – same selectors as Tailwind darkMode */
+@import './theme-vars.css';
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+/* Azion Fonts - Roboto Mono */
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('https://fonts.azion.com/roboto-mono/roboto-mono-light.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('https://fonts.azion.com/roboto-mono/roboto-mono-regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('https://fonts.azion.com/roboto-mono/roboto-mono-medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('https://fonts.azion.com/roboto-mono/roboto-mono-semi-bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('https://fonts.azion.com/roboto-mono/roboto-mono-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Sora */
+
+@font-face {
+    font-family: 'Sora';
+    src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
+    font-weight: 200 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Proto Mono */
+
+@font-face {
+    font-family: 'Proto Mono';
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-Light.eot');
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-Light.eot?#iefix') format('embedded-opentype'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Light.woff2') format('woff2'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Light.woff') format('woff'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Proto Mono';
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.eot');
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.eot?#iefix') format('embedded-opentype'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.woff2') format('woff2'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.woff') format('woff'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Proto Mono';
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.eot');
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.eot?#iefix') format('embedded-opentype'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.woff2') format('woff2'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.woff') format('woff'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Proto Mono';
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.eot');
+    src: url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.woff2') format('woff2'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.woff') format('woff'),
+        url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: 'Sora', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-canvas text-primary-950 dark:text-primary-50;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+}
+
+.astro-code {
+  background: #171717 !important;
+}
+
+.astro-code .astro-code-themes pre {
+  background: #171717 !important;
+}
+
+/* Force Shiki dark theme for code blocks on get-started and tokens (same look as Playground, regardless of site theme) */
+.docs-code-always-dark .astro-code,
+.docs-code-always-dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: #171717 !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+.docs-code-always-dark .astro-code pre,
+.docs-code-always-dark .astro-code .astro-code-themes pre,
+.docs-code-always-dark .prose pre {
+  background: #171717 !important;
+  background-color: #171717 !important;
+  border: 1px solid #3a3a3a !important;
+}
+.docs-code-always-dark .astro-code pre code,
+.docs-code-always-dark .astro-code .astro-code-themes pre code {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Prose in dark mode: use theme text tokens so body text is light (text-white feel) */
+.dark .prose,
+.azion.azion-dark .prose {
+  color: var(--text-textBase);
+}
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6,
+.azion.azion-dark .prose h1,
+.azion.azion-dark .prose h2,
+.azion.azion-dark .prose h3,
+.azion.azion-dark .prose h4,
+.azion.azion-dark .prose h5,
+.azion.azion-dark .prose h6 {
+  color: var(--text-textBase);
+}
+.dark .prose a,
+.azion.azion-dark .prose a {
+  color: var(--text-textLink);
+}
+.dark .prose a:hover,
+.azion.azion-dark .prose a:hover {
+  color: var(--text-textLinkHover);
+}
+/* Only inline code (exclude code blocks: pre > code keeps Shiki/astro-code styling) */
+.dark .prose :not(pre) > code,
+.azion.azion-dark .prose :not(pre) > code {
+  color: var(--text-textCode);
+  background-color: var(--background-bgLayer2);
+}
+.dark .prose strong,
+.azion.azion-dark .prose strong {
+  color: var(--text-textBase);
+}
+.dark .prose th {
+  color: var(--text-textBase);
+}
+.dark .prose tr, .dark .prose thead {
+  border-color: #1c1c1c;
+}
+
+/* Custom components - prose sizes are defined in tailwind.config typography theme */
+@layer components {
+  /* code font for inline code */
+  code {
+    @apply !font-code;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text balance for headings */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Playground preview: when preview is light, force background so it stays light
+   even when the site is in dark mode. Higher specificity than .dark .bg-surface and
+   explicit value so it wins regardless of cascade order. */
+.playground-preview-light.azion.azion-light,
+.playground-preview-light.azion.azion-light .bg-surface {
+  background-color: #ffffff;
+}
+
+/* Code blocks in get-started/tokens: force #171717 after Tailwind so typography’s .prose pre doesn’t override */
+/* Wrapper div (e.g. Shiki with wrap) and pre/code block itself */
+.docs-code-always-dark div:has(> pre.astro-code),
+.docs-code-always-dark div:has(> pre > code),
+.docs-code-always-dark pre.astro-code,
+.docs-code-always-dark pre:has(> code),
+.docs-code-always-dark .astro-code,
+.docs-code-always-dark .astro-code pre,
+.docs-code-always-dark .astro-code .astro-code-themes,
+.docs-code-always-dark .astro-code .astro-code-themes pre,
+.docs-code-always-dark .prose pre {
+  background: #171717 !important;
+  background-color: #171717 !important;
+}
+.docs-code-always-dark pre.astro-code code,
+.docs-code-always-dark pre:has(> code) code,
+.docs-code-always-dark .astro-code pre code,
+.docs-code-always-dark .astro-code .astro-code-themes pre code {
+  background: transparent !important;
+  background-color: transparent !important;
+}

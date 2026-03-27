@@ -1,0 +1,11 @@
+{
+  "modelValue": {
+    "label": "Model Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  }
+}
