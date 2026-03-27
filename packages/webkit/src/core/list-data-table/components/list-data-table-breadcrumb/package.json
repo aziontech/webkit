@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-breadcrumb.vue",
+  "module": "./list-data-table-breadcrumb.vue",
+  "browser": {
+    "./sfc": "./list-data-table-breadcrumb.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

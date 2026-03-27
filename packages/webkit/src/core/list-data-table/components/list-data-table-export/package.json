@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-export.vue",
+  "module": "./list-data-table-export.vue",
+  "browser": {
+    "./sfc": "./list-data-table-export.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

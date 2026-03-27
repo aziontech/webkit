@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-last-modified-popup.vue",
+  "module": "./list-data-table-last-modified-popup.vue",
+  "browser": {
+    "./sfc": "./list-data-table-last-modified-popup.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

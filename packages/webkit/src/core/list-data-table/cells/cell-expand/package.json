@@ -1,0 +1,8 @@
+{
+  "main": "./cell-expand.vue",
+  "module": "./cell-expand.vue",
+  "browser": {
+    "./sfc": "./cell-expand.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

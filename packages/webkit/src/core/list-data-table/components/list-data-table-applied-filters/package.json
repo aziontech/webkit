@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-applied-filters.vue",
+  "module": "./list-data-table-applied-filters.vue",
+  "browser": {
+    "./sfc": "./list-data-table-applied-filters.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
