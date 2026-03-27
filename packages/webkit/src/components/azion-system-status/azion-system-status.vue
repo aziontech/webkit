@@ -113,7 +113,7 @@ onMounted(() => {
     :loading="!label"
     :pt="{
       root: { class: 'flex items-center gap-3 bg-transparent' },
-      label: { class: 'font-proto-mono text-white leading-relaxed text-xs' },
+      label: { class: 'font-proto-mono text-default leading-relaxed text-xs' },
       icon: { style: colorStatus, class: 'text-xs' }
     }"
     @click="redirectToLink"
