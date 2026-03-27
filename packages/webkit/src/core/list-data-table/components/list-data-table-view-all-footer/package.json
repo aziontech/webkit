@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-view-all-footer.vue",
+  "module": "./list-data-table-view-all-footer.vue",
+  "browser": {
+    "./sfc": "./list-data-table-view-all-footer.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

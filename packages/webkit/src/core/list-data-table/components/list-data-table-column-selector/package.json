@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-column-selector.vue",
+  "module": "./list-data-table-column-selector.vue",
+  "browser": {
+    "./sfc": "./list-data-table-column-selector.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

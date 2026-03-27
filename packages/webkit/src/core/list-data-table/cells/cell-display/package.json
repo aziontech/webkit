@@ -1,0 +1,8 @@
+{
+  "main": "./cell-display.vue",
+  "module": "./cell-display.vue",
+  "browser": {
+    "./sfc": "./cell-display.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

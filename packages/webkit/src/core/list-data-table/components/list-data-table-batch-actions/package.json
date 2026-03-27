@@ -1,0 +1,8 @@
+{
+  "main": "./list-data-table-batch-actions.vue",
+  "module": "./list-data-table-batch-actions.vue",
+  "browser": {
+    "./sfc": "./list-data-table-batch-actions.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
