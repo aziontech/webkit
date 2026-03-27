@@ -1,8 +1,8 @@
-import Error404 from '@aziontech/webkit/svg/error-404';
+import Min from '@aziontech/webkit/svg/azion/min';
 
 export default {
-  title: 'Core/Error404',
-  component: Error404,
+  title: 'Core/Azion Logo/Min',
+  component: Min,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',

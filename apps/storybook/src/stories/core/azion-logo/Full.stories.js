@@ -1,8 +1,8 @@
-import Error403 from '@aziontech/webkit/svg/error-403';
+import Full from '@aziontech/webkit/svg/azion/full';
 
 export default {
-  title: 'Core/Error403',
-  component: Error403,
+  title: 'Core/Azion Logo/Full',
+  component: Full,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',

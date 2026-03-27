@@ -7,9 +7,9 @@ export default {
   argTypes: {
     color: {
       control: 'select',
-      options: ['primary', 'orange', 'black'],
+      options: ['default', 'primary', 'muted', 'black'],
       description: 'Text color variant',
-      defaultValue: 'primary'
+      defaultValue: 'muted'
     },
     size: {
       control: 'select',
@@ -18,6 +18,19 @@ export default {
       defaultValue: 'xs'
     }
   }
+};
+
+export const Default = {
+  args: {
+    color: 'default'
+  },
+  render: (args) => ({
+    components: { Overline },
+    setup() {
+      return { args };
+    },
+    template: '<Overline v-bind="args">OVERLINE TEXT</Overline>'
+  })
 };
 
 export const Primary = {
@@ -33,9 +46,9 @@ export const Primary = {
   })
 };
 
-export const Orange = {
+export const Muted = {
   args: {
-    color: 'orange'
+    color: 'muted'
   },
   render: (args) => ({
     components: { Overline },
@@ -61,8 +74,7 @@ export const Black = {
 
 export const SizeXS = {
   args: {
-    size: 'xs',
-    color: 'primary'
+    size: 'xs'
   },
   render: (args) => ({
     components: { Overline },
@@ -75,8 +87,7 @@ export const SizeXS = {
 
 export const SizeSM = {
   args: {
-    size: 'sm',
-    color: 'primary'
+    size: 'sm'
   },
   render: (args) => ({
     components: { Overline },
@@ -89,8 +100,7 @@ export const SizeSM = {
 
 export const SizeLG = {
   args: {
-    size: 'lg',
-    color: 'primary'
+    size: 'lg'
   },
   render: (args) => ({
     components: { Overline },
