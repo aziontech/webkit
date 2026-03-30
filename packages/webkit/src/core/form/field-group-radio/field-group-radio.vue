@@ -3,6 +3,7 @@
   import { useField } from 'vee-validate'
   import { computed, ref, toRefs, useAttrs } from 'vue'
   import PrimeDivider from 'primevue/divider'
+  import LabelBlock from '../label'
 
   defineOptions({ name: 'FieldGroupRadio' })
 
@@ -86,19 +87,11 @@
 
 <template>
   <div :class="['flex flex-col gap-2', classStateRoot]">
-    <label
-      class="text-color text-base font-medium leading-5 flex gap-1 align-items-center"
+    <LabelBlock
+      :label="props.label"
+      :isRequired="props.isRequired"
       :data-testid="customTestId.label"
-    >
-      {{ props.label }}
-      <div
-        v-if="props.isRequired"
-        class="text-sm text-orange-500 flex gap-1"
-      >
-        *
-        <span class="text-[0.625rem] text-color-secondary">(Required)</span>
-      </div>
-    </label>
+    />
     <div
       class="flex"
       :class="classListSelector"

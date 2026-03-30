@@ -7,7 +7,7 @@ export default {
   argTypes: {
     label: {
       control: 'text',
-      description: 'Label text to display (required)'
+      description: 'Label text to display. When empty, the label is not rendered.'
     },
     isRequired: {
       control: 'boolean',
