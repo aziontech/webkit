@@ -9,6 +9,16 @@ import {
   borderTokens,
 } from '../../foundations/data/colors.js';
 
+import {
+  PageContainer,
+  PageHeader,
+  SectionHeader,
+  Alert,
+  ArchitectureDiagram,
+  CategoryCard,
+  TokenPreview,
+} from '../../foundations/components/layout/index.js';
+
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
 export default {
@@ -33,109 +43,51 @@ export default {
 export const Overview = {
   name: 'Overview',
   render: () => ({
+    components: {
+      PageContainer,
+      PageHeader,
+      SectionHeader,
+      ArchitectureDiagram,
+      CategoryCard,
+    },
     template: /* html */ `
-      <div style="font-family: Sora, sans-serif; max-width: 1000px; padding: 40px;">
-
-        <!-- Header -->
-        <h1 class="text-heading-xl text-default" style="margin: 0 0 12px;">Color System</h1>
-        <p class="text-body-md text-muted" style="max-width: 620px; line-height: 1.75; margin: 0 0 48px;">
-          The Azion color system is a <strong style="color: var(--text-default)">layered token architecture</strong>.
+      <PageContainer>
+        <PageHeader title="Color System">
+          The Azion color system is a <strong class="text-default">layered token architecture</strong>.
           Raw hex values are never used in components — instead, semantic tokens are referenced, which
           resolve automatically for both light and dark mode via CSS variables.
-        </p>
+        </PageHeader>
 
         <!-- Architecture diagram -->
-        <h2 class="text-heading-sm text-default" style="margin: 0 0 16px;">Token Architecture</h2>
-        <div style="display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0; align-items: center; margin-bottom: 48px;">
-
-          <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-default); border-radius: 10px; padding: 20px 22px;">
-            <p class="text-overline-xs text-muted" style="margin: 0 0 6px;">Layer 1</p>
-            <p class="text-body-sm text-default" style="font-weight: 600; margin: 0 0 6px;">Primitive Colors</p>
-            <p class="text-body-xs text-muted" style="margin: 0 0 12px; line-height: 1.6;">
-              Raw palette values. 9 color families × 11 shades each.
-            </p>
-            <code style="font-family: 'Roboto Mono', monospace; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 3px 7px; border-radius: 4px;">
-              primitives.brand.500
-            </code>
-          </div>
-
-          <div style="padding: 0 14px; color: var(--text-muted); font-size: 20px; user-select: none;">→</div>
-
-          <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-default); border-radius: 10px; padding: 20px 22px;">
-            <p class="text-overline-xs text-muted" style="margin: 0 0 6px;">Layer 2</p>
-            <p class="text-body-sm text-default" style="font-weight: 600; margin: 0 0 6px;">Semantic Tokens</p>
-            <p class="text-body-xs text-muted" style="margin: 0 0 12px; line-height: 1.6;">
-              Intent-based roles with automatic light/dark resolution.
-            </p>
-            <code style="font-family: 'Roboto Mono', monospace; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 3px 7px; border-radius: 4px;">
-              text-primary
-            </code>
-          </div>
-
-          <div style="padding: 0 14px; color: var(--text-muted); font-size: 20px; user-select: none;">→</div>
-
-          <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-default); border-radius: 10px; padding: 20px 22px;">
-            <p class="text-overline-xs text-muted" style="margin: 0 0 6px;">Layer 3</p>
-            <p class="text-body-sm text-default" style="font-weight: 600; margin: 0 0 6px;">Specific Tokens</p>
-            <p class="text-body-xs text-muted" style="margin: 0 0 12px; line-height: 1.6;">
-              Class names for specific components.
-            </p>
-            <code style="font-family: 'Roboto Mono', monospace; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 3px 7px; border-radius: 4px;">
-              text-button-primary
-            </code>
-          </div>
-        </div>
+        <SectionHeader title="Token Architecture" margin-bottom="mb-4" />
+        <ArchitectureDiagram />
 
         <!-- Category summary -->
-        <h2 class="text-heading-sm text-default" style="margin: 0 0 16px;">Semantic Categories</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 48px;">
-          <a
+        <SectionHeader title="Semantic Categories" margin-bottom="mb-4" />
+        <div class="grid grid-cols-3 gap-3.5 mb-12">
+          <CategoryCard
+            overline="Background"
+            title="13 tokens"
+            description="Surface hierarchy, canvas, status fills, and brand-colored backgrounds."
+            tokens="bg-surface · bg-canvas · bg-primary"
             href="?path=/story/foundations-colors--backgrounds"
-            style="padding: 20px; border: 1px solid var(--border-default); border-radius: 8px; cursor: pointer; text-decoration: none; transition: border-color 0.15s, background 0.15s;"
-            onmouseover="this.style.borderColor='var(--border-primary)'; this.style.background='rgba(254,96,31,0.03)';"
-            onmouseout="this.style.borderColor='var(--border-default)'; this.style.background='transparent';"
-          >
-            <p class="text-overline-xs text-muted" style="margin: 0 0 6px;">Background</p>
-            <p class="text-heading-md text-default" style="margin: 0 0 8px;">13 tokens</p>
-            <p class="text-body-xs text-muted" style="margin: 0; line-height: 1.6;">
-              Surface hierarchy, canvas, status fills, and brand-colored backgrounds.
-            </p>
-            <p class="text-body-xs text-muted" style="margin: 8px 0 0; font-family: 'Roboto Mono';">
-              bg-surface · bg-canvas · bg-primary
-            </p>
-          </a>
-          <a
+          />
+          <CategoryCard
+            overline="Text"
+            title="15 tokens"
+            description="Default, muted, link, code, status, brand, and interactive text roles."
+            tokens="text-default · text-muted · text-danger"
             href="?path=/story/foundations-colors--text-colors"
-            style="padding: 20px; border: 1px solid var(--border-default); border-radius: 8px; cursor: pointer; text-decoration: none; transition: border-color 0.15s, background 0.15s;"
-            onmouseover="this.style.borderColor='var(--border-primary)'; this.style.background='rgba(254,96,31,0.03)';"
-            onmouseout="this.style.borderColor='var(--border-default)'; this.style.background='transparent';"
-          >
-            <p class="text-overline-xs text-muted" style="margin: 0 0 6px;">Text</p>
-            <p class="text-heading-md text-default" style="margin: 0 0 8px;">15 tokens</p>
-            <p class="text-body-xs text-muted" style="margin: 0; line-height: 1.6;">
-              Default, muted, link, code, status, brand, and interactive text roles.
-            </p>
-            <p class="text-body-xs text-muted" style="margin: 8px 0 0; font-family: 'Roboto Mono';">
-              text-default · text-muted · text-danger
-            </p>
-          </a>
-          <a
+          />
+          <CategoryCard
+            overline="Border"
+            title="13 tokens"
+            description="Default, subtle, strong, status-based, and brand-colored borders."
+            tokens="border-default · border-subtle · border-danger"
             href="?path=/story/foundations-colors--borders"
-            style="padding: 20px; border: 1px solid var(--border-default); border-radius: 8px; cursor: pointer; text-decoration: none; transition: border-color 0.15s, background 0.15s;"
-            onmouseover="this.style.borderColor='var(--border-primary)'; this.style.background='rgba(254,96,31,0.03)';"
-            onmouseout="this.style.borderColor='var(--border-default)'; this.style.background='transparent';"
-          >
-            <p class="text-overline-xs text-muted" style="margin: 0 0 6px;">Border</p>
-            <p class="text-heading-md text-default" style="margin: 0 0 8px;">13 tokens</p>
-            <p class="text-body-xs text-muted" style="margin: 0; line-height: 1.6;">
-              Default, subtle, strong, status-based, and brand-colored borders.
-            </p>
-            <p class="text-body-xs text-muted" style="margin: 8px 0 0; font-family: 'Roboto Mono';">
-              border-default · border-subtle · border-danger
-            </p>
-          </a>
+          />
         </div>
-      </div>
+      </PageContainer>
     `,
   }),
   parameters: {
@@ -150,27 +102,28 @@ export const Overview = {
 export const Primitives = {
   name: 'Primitive Colors',
   render: () => ({
-    components: { PrimitiveScale },
+    components: {
+      PageContainer,
+      PageHeader,
+      SectionHeader,
+      Alert,
+      PrimitiveScale,
+    },
     setup() { return { primitiveColors }; },
     template: /* html */ `
-      <div style="max-width: 1000px; padding: 40px;">
-        <h2 class="text-heading-lg text-default" style="margin: 0 0 8px;">Primitive Color Palette</h2>
-        <p class="text-body-sm text-muted" style="max-width: 620px; margin: 0 0 10px; line-height: 1.7;">
-          Raw color scales. These are the base values that power the semantic layer.
-        </p>
-        <div
-          style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 6px;
-                 border: 1px solid var(--border-warning); background: rgba(202,138,4,0.06); margin-bottom: 36px;"
-        >
-          <i class="pi pi-exclamation-triangle" style="color: var(--text-warning); font-size: 12px;"></i>
-          <span class="text-body-xs text-warning">
-            Do not reference primitives directly in components. Always use semantic tokens.
-          </span>
-        </div>
-        <div style="display: flex; flex-direction: column;">
+      <PageContainer>
+        <SectionHeader
+          title="Primitive Color Palette"
+          description="Raw color scales. These are the base values that power the semantic layer."
+          size="lg"
+        />
+        <Alert variant="warning" class="mb-9">
+          Do not reference primitives directly in components. Always use semantic tokens.
+        </Alert>
+        <div class="flex flex-col">
           <PrimitiveScale v-for="family in primitiveColors" :key="family.name" :family="family" />
         </div>
-      </div>
+      </PageContainer>
     `,
   }),
   parameters: {
@@ -185,37 +138,31 @@ export const Primitives = {
 export const Backgrounds = {
   name: 'Backgrounds',
   render: () => ({
-    components: { TokenTable },
+    components: {
+      PageContainer,
+      SectionHeader,
+      TokenTable,
+      TokenPreview,
+    },
     setup() { return { backgroundTokens }; },
     template: /* html */ `
-      <div style="max-width: 1000px; padding: 40px;">
-        <h2 class="text-heading-lg text-default" style="margin: 0 0 8px;">Background Tokens</h2>
-        <p class="text-body-sm text-muted" style="max-width: 620px; margin: 0 0 32px; line-height: 1.7;">
-          Background tokens define surface hierarchy, status fills, and brand-colored backgrounds.
-        </p>
+      <PageContainer>
+        <SectionHeader
+          title="Background Tokens"
+          description="Background tokens define surface hierarchy, status fills, and brand-colored backgrounds."
+          size="lg"
+        />
 
         <!-- Quick examples -->
-        <div style="display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap;">
-          <div style="padding: 16px 20px; border-radius: 8px; background: var(--background-canvas); border: 1px solid var(--border-default);">
-            <p class="text-overline-xs text-muted" style="margin: 0 0 4px;">bg-canvas</p>
-            <p class="text-body-xs text-default" style="margin: 0;">Page background</p>
-          </div>
-          <div style="padding: 16px 20px; border-radius: 8px; background: var(--background-surface); border: 1px solid var(--border-default);">
-            <p class="text-overline-xs text-muted" style="margin: 0 0 4px;">bg-surface</p>
-            <p class="text-body-xs text-default" style="margin: 0;">Cards / panels</p>
-          </div>
-          <div style="padding: 16px 20px; border-radius: 8px; background: var(--background-surfaceRaised); border: 1px solid var(--border-default);">
-            <p class="text-overline-xs text-muted" style="margin: 0 0 4px;">bg-surfaceRaised</p>
-            <p class="text-body-xs text-default" style="margin: 0;">Modals / dropdowns</p>
-          </div>
-          <div style="padding: 16px 20px; border-radius: 8px; background: var(--background-primary);">
-            <p class="text-overline-xs" style="margin: 0 0 4px; color: rgba(255,255,255,0.7);">bg-primary</p>
-            <p class="text-body-xs" style="margin: 0; color: #fff;">Brand CTA</p>
-          </div>
+        <div class="flex gap-2.5 mb-8 flex-wrap">
+          <TokenPreview token="background-canvas" label="bg-canvas" description="Page background" type="background" />
+          <TokenPreview token="background-surface" label="bg-surface" description="Cards / panels" type="background" />
+          <TokenPreview token="background-surfaceRaised" label="bg-surfaceRaised" description="Modals / dropdowns" type="background" />
+          <TokenPreview token="background-primary" label="bg-primary" description="Brand CTA" type="background" />
         </div>
 
         <TokenTable :tokens="backgroundTokens" />
-      </div>
+      </PageContainer>
     `,
   }),
   parameters: {
@@ -230,45 +177,34 @@ export const Backgrounds = {
 export const TextColors = {
   name: 'Text Colors',
   render: () => ({
-    components: { TokenTable },
+    components: {
+      PageContainer,
+      SectionHeader,
+      TokenTable,
+    },
     setup() { return { textTokens }; },
     template: /* html */ `
-      <div style="max-width: 1000px; padding: 40px;">
-        <h2 class="text-heading-lg text-default" style="margin: 0 0 8px;">Text Color Tokens</h2>
-        <p class="text-body-sm text-muted" style="max-width: 620px; margin: 0 0 32px; line-height: 1.7;">
-          Text tokens define intent-based roles for all typography in the product.
-        </p>
+      <PageContainer>
+        <SectionHeader
+          title="Text Color Tokens"
+          description="Text tokens define intent-based roles for all typography in the product."
+          size="lg"
+        />
 
         <!-- Quick examples -->
-        <div style="display: flex; flex-direction: column; gap: 8px; padding: 20px 24px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--background-surface); margin-bottom: 32px;">
-          <p class="text-body-sm" style="margin: 0; color: var(--text-default);">
-            text-default — Primary content
-          </p>
-          <p class="text-body-sm" style="margin: 0; color: var(--text-muted);">
-            text-muted — Supporting copy, metadata, labels
-          </p>
-          <p class="text-body-sm" style="margin: 0; color: var(--text-primary);">
-            text-primary — Brand-colored text, active states
-          </p>
-          <p class="text-body-sm" style="margin: 0; color: var(--text-accent);">
-            text-accent — Accent highlights, brand support texts
-          </p>
-          <p class="text-body-sm" style="margin: 0; color: var(--text-danger);">
-            text-danger — Error messages, destructive labels
-          </p>
-          <p class="text-body-sm" style="margin: 0; color: var(--text-success);">
-            text-success — Success confirmation, positive feedback
-          </p>
-          <p class="text-body-sm" style="margin: 0; color: var(--text-warning);">
-            text-warning — Caution messages, degraded states
-          </p>
-          <a class="text-body-sm" style="margin: 0; color: var(--text-link);">
-            text-link — Hyperlinks and navigation
-          </a>
+        <div class="flex flex-col gap-2 p-5 px-6 rounded-lg border border-default bg-surface mb-8">
+          <p class="text-body-sm m-0 text-default">text-default — Primary content</p>
+          <p class="text-body-sm m-0 text-muted">text-muted — Supporting copy, metadata, labels</p>
+          <p class="text-body-sm m-0 text-primary">text-primary — Brand-colored text, active states</p>
+          <p class="text-body-sm m-0 text-accent">text-accent — Accent highlights, brand support texts</p>
+          <p class="text-body-sm m-0 text-danger">text-danger — Error messages, destructive labels</p>
+          <p class="text-body-sm m-0 text-success">text-success — Success confirmation, positive feedback</p>
+          <p class="text-body-sm m-0 text-warning">text-warning — Caution messages, degraded states</p>
+          <a class="text-body-sm m-0 text-link">text-link — Hyperlinks and navigation</a>
         </div>
 
         <TokenTable :tokens="textTokens" />
-      </div>
+      </PageContainer>
     `,
   }),
   parameters: {
@@ -283,39 +219,44 @@ export const TextColors = {
 export const Borders = {
   name: 'Borders',
   render: () => ({
-    components: { TokenTable },
+    components: {
+      PageContainer,
+      SectionHeader,
+      TokenTable,
+    },
     setup() { return { borderTokens }; },
     template: /* html */ `
-      <div style="max-width: 1000px; padding: 40px;">
-        <h2 class="text-heading-lg text-default" style="margin: 0 0 8px;">Border Tokens</h2>
-        <p class="text-body-sm text-muted" style="max-width: 620px; margin: 0 0 32px; line-height: 1.7;">
-          Border tokens define edge and divider colors for UI structure and state feedback.
-        </p>
+      <PageContainer>
+        <SectionHeader
+          title="Border Tokens"
+          description="Border tokens define edge and divider colors for UI structure and state feedback."
+          size="lg"
+        />
 
         <!-- Quick examples -->
-        <div style="display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap;">
-          <div style="padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-default); background: var(--background-surface);">
-            <p class="text-body-xs text-default" style="margin: 0; font-family: monospace;">border-default</p>
+        <div class="flex gap-2.5 mb-8 flex-wrap">
+          <div class="px-4 py-3.5 rounded-lg border border-default bg-surface">
+            <p class="text-body-xs text-default m-0 font-code">border-default</p>
           </div>
-          <div style="padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--background-surface);">
-            <p class="text-body-xs text-default" style="margin: 0; font-family: monospace;">border-subtle</p>
+          <div class="px-4 py-3.5 rounded-lg border border-subtle bg-surface">
+            <p class="text-body-xs text-default m-0 font-code">border-subtle</p>
           </div>
-          <div style="padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-primary); background: var(--background-surface);">
-            <p class="text-body-xs text-default" style="margin: 0; font-family: monospace;">border-primary</p>
+          <div class="px-4 py-3.5 rounded-lg border border-primary bg-surface">
+            <p class="text-body-xs text-default m-0 font-code">border-primary</p>
           </div>
-          <div style="padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-danger); background: var(--background-danger);">
-            <p class="text-body-xs text-default" style="margin: 0; font-family: monospace;">border-danger</p>
+          <div class="px-4 py-3.5 rounded-lg border border-danger bg-danger">
+            <p class="text-body-xs text-default m-0 font-code">border-danger</p>
           </div>
-          <div style="padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-success); background: var(--background-success);">
-            <p class="text-body-xs text-default" style="margin: 0; font-family: monospace;">border-success</p>
+          <div class="px-4 py-3.5 rounded-lg border border-success bg-success">
+            <p class="text-body-xs text-default m-0 font-code">border-success</p>
           </div>
-          <div style="padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-warning); background: var(--background-warning);">
-            <p class="text-body-xs text-default" style="margin: 0; font-family: monospace;">border-warning</p>
+          <div class="px-4 py-3.5 rounded-lg border border-warning bg-warning">
+            <p class="text-body-xs text-default m-0 font-code">border-warning</p>
           </div>
         </div>
 
         <TokenTable :tokens="borderTokens" />
-      </div>
+      </PageContainer>
     `,
   }),
   parameters: {
@@ -330,16 +271,20 @@ export const Borders = {
 export const Playground = {
   name: 'Playground',
   render: () => ({
-    components: { ColorPlayground },
+    components: {
+      PageContainer,
+      SectionHeader,
+      ColorPlayground,
+    },
     template: /* html */ `
-      <div style="max-width: 1000px; padding: 40px;">
-        <h2 class="text-heading-lg text-default" style="margin: 0 0 8px;">Color Playground</h2>
-        <p class="text-body-sm text-muted" style="max-width: 620px; margin: 0 0 32px; line-height: 1.7;">
-          Select any semantic token and preview how it resolves across light and dark modes.
-          Click a code label to copy it to clipboard.
-        </p>
+      <PageContainer>
+        <SectionHeader
+          title="Color Playground"
+          description="Select any semantic token and preview how it resolves across light and dark modes. Click a code label to copy it to clipboard."
+          size="lg"
+        />
         <ColorPlayground />
-      </div>
+      </PageContainer>
     `,
   }),
   parameters: {
