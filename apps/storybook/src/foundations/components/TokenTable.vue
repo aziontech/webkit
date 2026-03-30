@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue';
+
 defineProps({
   /**
    * Array of token objects:
@@ -7,6 +9,10 @@ defineProps({
   tokens: { type: Array, required: true },
 });
 
+// Track copied state per token + field
+const copiedKey = ref(null);
+let copyTimeout = null;
+
 function labelColor(hex) {
   if (!hex || hex.length < 7) return '#888';
   const h = hex.replace('#', '').slice(0, 6);
@@ -14,6 +20,19 @@ function labelColor(hex) {
   const g = parseInt(h.slice(2, 4), 16);
   const b = parseInt(h.slice(4, 6), 16);
   return 0.299 * r + 0.587 * g + 0.114 * b > 140 ? '#000' : '#fff';
+}
+
+function copyToClipboard(text, key) {
+  navigator.clipboard?.writeText(text).catch(() => {});
+  copiedKey.value = key;
+  if (copyTimeout) clearTimeout(copyTimeout);
+  copyTimeout = setTimeout(() => {
+    copiedKey.value = null;
+  }, 1000);
+}
+
+function isCopied(key) {
+  return copiedKey.value === key;
 }
 </script>
 
@@ -33,8 +52,26 @@ function labelColor(hex) {
       <tbody>
         <tr v-for="token in tokens" :key="token.name">
           <td class="cell-name">{{ token.name }}</td>
-          <td><code class="code-tag">{{ token.cssVar }}</code></td>
-          <td><code class="code-tag tw-tag">{{ token.tailwindClass }}</code></td>
+          <td>
+            <button
+              class="copy-btn"
+              @click="copyToClipboard(token.cssVar, `${token.name}-css`)"
+              :title="isCopied(`${token.name}-css`) ? 'Copied!' : 'Copy CSS variable'"
+            >
+              <code class="code-tag">{{ token.cssVar }}</code>
+              <i :class="['pi', isCopied(`${token.name}-css`) ? 'pi-check' : 'pi-copy']" />
+            </button>
+          </td>
+          <td>
+            <button
+              class="copy-btn"
+              @click="copyToClipboard(token.tailwindClass, `${token.name}-tw`)"
+              :title="isCopied(`${token.name}-tw`) ? 'Copied!' : 'Copy Tailwind class'"
+            >
+              <code class="code-tag tw-tag">{{ token.tailwindClass }}</code>
+              <i :class="['pi', isCopied(`${token.name}-tw`) ? 'pi-check' : 'pi-copy']" />
+            </button>
+          </td>
           <td class="cell-desc">{{ token.description }}</td>
           <td>
             <div
@@ -104,6 +141,33 @@ function labelColor(hex) {
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  transition: opacity 120ms ease;
+}
+
+.copy-btn:hover {
+  opacity: 0.8;
+}
+
+.copy-btn .pi-copy,
+.copy-btn .pi-check {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.copy-btn .pi-check {
+  color: #22c55e;
+  opacity: 1;
 }
 
 .cell-desc {

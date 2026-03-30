@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { backgroundTokens, textTokens, borderTokens } from '../data/colors.js';
 
 const CATEGORIES = [
@@ -10,7 +10,27 @@ const CATEGORIES = [
 
 const selectedCategory = ref('background');
 const selectedTokenName = ref(backgroundTokens[0].name);
-const mode = ref('dark');
+
+// Detect global theme from Storybook's theme addon (azion-light/azion-dark class)
+const isDark = ref(true);
+let observer = null;
+
+function updateTheme() {
+  const lightEl = document.querySelector('.azion-light');
+  isDark.value = !lightEl;
+}
+
+onMounted(() => {
+  updateTheme();
+  // Watch for class changes on document body or html element
+  observer = new MutationObserver(updateTheme);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+});
+
+onUnmounted(() => {
+  observer?.disconnect();
+});
 
 const activeTokens = computed(() =>
   CATEGORIES.find((c) => c.key === selectedCategory.value)?.tokens ?? []
@@ -21,8 +41,10 @@ const selectedToken = computed(() =>
 );
 
 const currentHex = computed(() =>
-  mode.value === 'dark' ? selectedToken.value?.darkHex : selectedToken.value?.lightHex
+  isDark.value ? selectedToken.value?.darkHex : selectedToken.value?.lightHex
 );
+
+const modeLabel = computed(() => isDark.value ? 'dark' : 'light');
 
 const previewStyle = computed(() => {
   const hex = currentHex.value;
@@ -52,8 +74,21 @@ function onCategoryChange() {
   selectedTokenName.value = activeTokens.value[0]?.name ?? '';
 }
 
-function copyToClipboard(text) {
+// Track copied state
+const copiedKey = ref(null);
+let copyTimeout = null;
+
+function copyToClipboard(text, key) {
   navigator.clipboard?.writeText(text).catch(() => {});
+  copiedKey.value = key;
+  if (copyTimeout) clearTimeout(copyTimeout);
+  copyTimeout = setTimeout(() => {
+    copiedKey.value = null;
+  }, 1000);
+}
+
+function isCopied(key) {
+  return copiedKey.value === key;
 }
 </script>
 
@@ -81,14 +116,6 @@ function copyToClipboard(text) {
           </option>
         </select>
       </div>
-
-      <div class="control-group">
-        <label class="control-label">Mode</label>
-        <div class="btn-group">
-          <button :class="['seg-btn', { active: mode === 'light' }]" @click="mode = 'light'">Light</button>
-          <button :class="['seg-btn', { active: mode === 'dark'  }]" @click="mode = 'dark'">Dark</button>
-        </div>
-      </div>
     </div>
 
     <!-- Preview ───────────────────────────────────────────────────────────── -->
@@ -102,22 +129,22 @@ function copyToClipboard(text) {
       <div class="meta-panel">
         <div class="meta-row">
           <span class="meta-label">Tailwind class</span>
-          <button class="code-copy" @click="copyToClipboard(selectedToken?.tailwindClass)">
+          <button class="code-copy" @click="copyToClipboard(selectedToken?.tailwindClass, 'tw')">
             <code>{{ selectedToken?.tailwindClass }}</code>
-            <i class="pi pi-copy" style="font-size: 11px; opacity: 0.6;" />
+            <i :class="['pi', isCopied('tw') ? 'pi-check' : 'pi-copy']" style="font-size: 11px;" />
           </button>
         </div>
 
         <div class="meta-row">
           <span class="meta-label">CSS variable</span>
-          <button class="code-copy" @click="copyToClipboard(selectedToken?.cssVar)">
+          <button class="code-copy" @click="copyToClipboard(selectedToken?.cssVar, 'css')">
             <code>{{ selectedToken?.cssVar }}</code>
-            <i class="pi pi-copy" style="font-size: 11px; opacity: 0.6;" />
+            <i :class="['pi', isCopied('css') ? 'pi-check' : 'pi-copy']" style="font-size: 11px;" />
           </button>
         </div>
 
         <div class="meta-row">
-          <span class="meta-label">Resolved ({{ mode }})</span>
+          <span class="meta-label">Resolved ({{ modeLabel }})</span>
           <span class="hex-value">
             <span class="hex-chip" :style="{ background: currentHex ?? 'transparent' }" />
             <code>{{ currentHex }}</code>
@@ -284,6 +311,14 @@ function copyToClipboard(text) {
 
 .code-copy:hover code {
   background: rgba(138, 132, 236, 0.15);
+}
+
+.code-copy .pi-copy {
+  opacity: 0.6;
+}
+
+.code-copy .pi-check {
+  color: #22c55e;
 }
 
 code {

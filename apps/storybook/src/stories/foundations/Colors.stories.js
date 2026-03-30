@@ -56,7 +56,7 @@ export const Overview = {
               Raw palette values. 9 color families × 11 shades each.
             </p>
             <code style="font-family: 'Roboto Mono', monospace; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 3px 7px; border-radius: 4px;">
-              primitives.neutral.900
+              primitives.brand.500
             </code>
           </div>
 
@@ -69,7 +69,7 @@ export const Overview = {
               Intent-based roles with automatic light/dark resolution.
             </p>
             <code style="font-family: 'Roboto Mono', monospace; font-size: 11px; color: var(--text-primary); background: rgba(254,96,31,0.08); padding: 3px 7px; border-radius: 4px;">
-              --text-default
+              text-primary
             </code>
           </div>
 
@@ -77,12 +77,12 @@ export const Overview = {
 
           <div style="background: rgba(138,132,236,0.05); border: 1px solid var(--border-accent); border-radius: 10px; padding: 20px 22px;">
             <p class="text-overline-xs text-muted" style="margin: 0 0 6px;">Layer 3</p>
-            <p class="text-body-sm text-default" style="font-weight: 600; margin: 0 0 6px;">Tailwind Utilities</p>
+            <p class="text-body-sm text-default" style="font-weight: 600; margin: 0 0 6px;">Specific Tokens</p>
             <p class="text-body-xs text-muted" style="margin: 0 0 12px; line-height: 1.6;">
-              Class names consumed directly in Vue components.
+              Class names for specific components.
             </p>
             <code style="font-family: 'Roboto Mono', monospace; font-size: 11px; color: var(--text-accent); background: rgba(138,132,236,0.08); padding: 3px 7px; border-radius: 4px;">
-              text-default
+              text-button-primary
             </code>
           </div>
         </div>
@@ -118,29 +118,6 @@ export const Overview = {
             </p>
             <p class="text-body-xs text-muted" style="margin: 8px 0 0; font-family: 'Roboto Mono';">
               border-default · border-subtle · border-danger
-            </p>
-          </div>
-        </div>
-
-        <!-- Rules -->
-        <h2 class="text-heading-sm text-default" style="margin: 0 0 16px;">Rules</h2>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border-success); background: rgba(34,197,94,0.04);">
-            <i class="pi pi-check-circle" style="color: var(--text-success); margin-top: 1px; flex-shrink: 0;"></i>
-            <p class="text-body-sm" style="margin: 0; color: var(--text-default);">
-              Always use <strong>semantic tokens</strong> in components — e.g. <code style="font-family: monospace; font-size: 11px; color: var(--text-accent)">text-default</code>, <code style="font-family: monospace; font-size: 11px; color: var(--text-accent)">bg-surface</code>.
-            </p>
-          </div>
-          <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border-success); background: rgba(34,197,94,0.04);">
-            <i class="pi pi-check-circle" style="color: var(--text-success); margin-top: 1px; flex-shrink: 0;"></i>
-            <p class="text-body-sm" style="margin: 0; color: var(--text-default);">
-              Use status tokens (<code style="font-family: monospace; font-size: 11px; color: var(--text-accent)">text-danger</code>, <code style="font-family: monospace; font-size: 11px; color: var(--text-accent)">bg-success</code>) for state feedback — never hardcode red or green.
-            </p>
-          </div>
-          <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border-danger); background: rgba(220,38,38,0.04);">
-            <i class="pi pi-times-circle" style="color: var(--text-danger); margin-top: 1px; flex-shrink: 0;"></i>
-            <p class="text-body-sm" style="margin: 0; color: var(--text-default);">
-              Never use raw primitive tokens or hex values directly in components — they do not adapt to theme changes.
             </p>
           </div>
         </div>
