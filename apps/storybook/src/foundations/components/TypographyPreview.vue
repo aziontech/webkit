@@ -133,9 +133,9 @@ function isCopied(key) {
 .token-class {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
-  background: rgba(254, 96, 31, 0.07);
-  border: 1px solid rgba(254, 96, 31, 0.15);
-  color: var(--text-primary, #fe601f);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-code, #aaa);
   padding: 2px 6px;
   border-radius: 4px;
   display: inline-block;

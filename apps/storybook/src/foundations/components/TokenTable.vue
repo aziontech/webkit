@@ -179,19 +179,14 @@ function isCopied(key) {
 .code-tag {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
-  background: rgba(138, 132, 236, 0.08);
-  border: 1px solid rgba(138, 132, 236, 0.15);
-  color: var(--text-accent, #8a84ec);
+  border: 1px solid;
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-code, #AAA);
   padding: 2px 6px;
   border-radius: 4px;
   white-space: nowrap;
   display: inline-block;
-}
-
-.tw-tag {
-  background: rgba(254, 96, 31, 0.07);
-  border-color: rgba(254, 96, 31, 0.15);
-  color: var(--text-primary, #fe601f);
 }
 
 .color-cell {
