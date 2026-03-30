@@ -37,53 +37,57 @@ function isCopied(key) {
 </script>
 
 <template>
-  <div class="table-wrap">
-    <table class="token-table">
+  <div class="overflow-x-auto rounded-lg border border-default">
+    <table class="w-full border-collapse text-[13px]">
       <thead>
         <tr>
-          <th>Token</th>
-          <th>CSS Variable</th>
-          <th>Tailwind</th>
-          <th>Description</th>
-          <th>Light</th>
-          <th>Dark</th>
+          <th class="px-3.5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider border-b border-default text-muted whitespace-nowrap bg-black/15">Token</th>
+          <th class="px-3.5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider border-b border-default text-muted whitespace-nowrap bg-black/15">CSS Variable</th>
+          <th class="px-3.5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider border-b border-default text-muted whitespace-nowrap bg-black/15">Tailwind</th>
+          <th class="px-3.5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider border-b border-default text-muted whitespace-nowrap bg-black/15">Description</th>
+          <th class="px-3.5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider border-b border-default text-muted whitespace-nowrap bg-black/15">Light</th>
+          <th class="px-3.5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider border-b border-default text-muted whitespace-nowrap bg-black/15">Dark</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="token in tokens" :key="token.name">
-          <td class="cell-name">{{ token.name }}</td>
-          <td>
+        <tr
+          v-for="token in tokens"
+          :key="token.name"
+          class="hover:bg-white/5"
+        >
+          <td class="px-3.5 py-2.5 border-b border-subtle align-middle text-default font-code text-xs font-semibold whitespace-nowrap">{{ token.name }}</td>
+          <td class="px-3.5 py-2.5 border-b border-subtle align-middle">
             <button
-              class="copy-btn"
+              class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
               @click="copyToClipboard(token.cssVar, `${token.name}-css`)"
               :title="isCopied(`${token.name}-css`) ? 'Copied!' : 'Copy CSS variable'"
             >
-              <code class="code-tag">{{ token.cssVar }}</code>
-              <i :class="['pi', isCopied(`${token.name}-css`) ? 'pi-check' : 'pi-copy']" />
+              <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ token.cssVar }}</code>
+              <i :class="['pi text-[10px] opacity-50', isCopied(`${token.name}-css`) ? 'pi-check !text-success !opacity-100' : 'pi-copy']" />
             </button>
           </td>
-          <td>
+          <td class="px-3.5 py-2.5 border-b border-subtle align-middle">
             <button
-              class="copy-btn"
+              class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
               @click="copyToClipboard(token.tailwindClass, `${token.name}-tw`)"
               :title="isCopied(`${token.name}-tw`) ? 'Copied!' : 'Copy Tailwind class'"
             >
-              <code class="code-tag tw-tag">{{ token.tailwindClass }}</code>
-              <i :class="['pi', isCopied(`${token.name}-tw`) ? 'pi-check' : 'pi-copy']" />
+              <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ token.tailwindClass }}</code>
+              <i :class="['pi text-[10px] opacity-50', isCopied(`${token.name}-tw`) ? 'pi-check !text-success !opacity-100' : 'pi-copy']" />
             </button>
           </td>
-          <td class="cell-desc">{{ token.description }}</td>
-          <td>
+          <td class="px-3.5 py-2.5 border-b border-subtle align-middle text-muted text-xs min-w-[200px]">{{ token.description }}</td>
+          <td class="px-3.5 py-2.5 border-b border-subtle align-middle">
             <div
-              class="color-cell"
+              class="inline-flex items-center justify-center rounded px-2 py-0.5 min-w-[88px] border border-gray-500/20 font-code text-[10px] whitespace-nowrap"
               :style="{ background: token.lightHex ?? 'transparent' }"
             >
               <span :style="{ color: labelColor(token.lightHex) }">{{ token.lightHex }}</span>
             </div>
           </td>
-          <td>
+          <td class="px-3.5 py-2.5 border-b border-subtle align-middle">
             <div
-              class="color-cell"
+              class="inline-flex items-center justify-center rounded px-2 py-0.5 min-w-[88px] border border-gray-500/20 font-code text-[10px] whitespace-nowrap"
               :style="{ background: token.darkHex ?? 'transparent' }"
             >
               <span :style="{ color: labelColor(token.darkHex) }">{{ token.darkHex }}</span>
@@ -94,111 +98,3 @@ function isCopied(key) {
     </table>
   </div>
 </template>
-
-<style scoped>
-.table-wrap {
-  overflow-x: auto;
-  border-radius: 8px;
-  border: 1px solid var(--border-default, #2a2a2a);
-}
-
-.token-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.token-table th {
-  padding: 10px 14px;
-  text-align: left;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border-bottom: 1px solid var(--border-default, #2a2a2a);
-  color: var(--text-muted, #888);
-  white-space: nowrap;
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.token-table td {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border-subtle, #1e1e1e);
-  vertical-align: middle;
-  color: var(--text-default, #eee);
-}
-
-.token-table tr:last-child td {
-  border-bottom: none;
-}
-
-.token-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.cell-name {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.copy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  color: inherit;
-  transition: opacity 120ms ease;
-}
-
-.copy-btn:hover {
-  opacity: 0.8;
-}
-
-.copy-btn .pi-copy,
-.copy-btn .pi-check {
-  font-size: 10px;
-  opacity: 0.5;
-}
-
-.copy-btn .pi-check {
-  color: #22c55e;
-  opacity: 1;
-}
-
-.cell-desc {
-  font-size: 12px;
-  color: var(--text-muted, #888);
-  min-width: 200px;
-}
-
-.code-tag {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  border: 1px solid;
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: var(--text-code, #AAA);
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.color-cell {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  padding: 3px 8px;
-  min-width: 88px;
-  border: 1px solid rgba(128, 128, 128, 0.2);
-  font-size: 10px;
-  font-family: 'Roboto Mono', monospace;
-  white-space: nowrap;
-}
-</style>

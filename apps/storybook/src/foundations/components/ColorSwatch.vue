@@ -22,54 +22,18 @@ const labelColor = computed(() => {
 </script>
 
 <template>
-  <div class="swatch">
-    <div class="swatch-chip" :style="{ background: hex ?? 'transparent' }">
-      <span class="swatch-shade" :style="{ color: labelColor }">{{ shade }}</span>
+  <div class="flex flex-col rounded-md overflow-hidden border border-gray-500/15 flex-1 min-w-[60px] max-w-[88px] cursor-default">
+    <div
+      class="h-[52px] flex items-end px-1.5 py-1"
+      :style="{ background: hex ?? 'transparent' }"
+    >
+      <span
+        class="text-[10px] font-bold font-code leading-none"
+        :style="{ color: labelColor }"
+      >{{ shade }}</span>
     </div>
-    <div class="swatch-meta">
-      <span class="swatch-hex">{{ hex }}</span>
+    <div class="px-1.5 py-[5px] bg-black/25">
+      <span class="text-[9px] font-code text-gray-400 block break-all leading-tight">{{ hex }}</span>
     </div>
   </div>
 </template>
-
-<style scoped>
-.swatch {
-  display: flex;
-  flex-direction: column;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid rgba(128, 128, 128, 0.15);
-  flex: 1;
-  min-width: 60px;
-  max-width: 88px;
-  cursor: default;
-}
-
-.swatch-chip {
-  height: 52px;
-  display: flex;
-  align-items: flex-end;
-  padding: 4px 6px;
-}
-
-.swatch-shade {
-  font-size: 10px;
-  font-weight: 700;
-  font-family: 'Roboto Mono', monospace;
-  line-height: 1;
-}
-
-.swatch-meta {
-  padding: 5px 6px;
-  background: rgba(0, 0, 0, 0.25);
-}
-
-.swatch-hex {
-  font-size: 9px;
-  font-family: 'Roboto Mono', monospace;
-  color: #ccc;
-  display: block;
-  word-break: break-all;
-  line-height: 1.3;
-}
-</style>

@@ -10,12 +10,12 @@ defineProps({
 </script>
 
 <template>
-  <div class="family-row">
-    <div class="family-header">
-      <span class="family-name">{{ family.label }}</span>
-      <span class="family-role">{{ family.role }}</span>
+  <div class="flex flex-col gap-2 pb-5 border-b border-subtle mb-5 last:border-b-0 last:mb-0 last:pb-0">
+    <div class="flex items-baseline gap-3">
+      <span class="text-[13px] font-semibold text-default min-w-[72px]">{{ family.label }}</span>
+      <span class="text-xs text-muted">{{ family.role }}</span>
     </div>
-    <div class="shades-row">
+    <div class="flex gap-1 flex-nowrap overflow-x-auto pb-0.5">
       <ColorSwatch
         v-for="swatch in family.shades"
         :key="swatch.shade"
@@ -26,46 +26,3 @@ defineProps({
     </div>
   </div>
 </template>
-
-<style scoped>
-.family-row {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-subtle, #1e1e1e);
-  margin-bottom: 20px;
-}
-
-.family-row:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-.family-header {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.family-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-default, #eee);
-  min-width: 72px;
-}
-
-.family-role {
-  font-size: 12px;
-  color: var(--text-muted, #888);
-}
-
-.shades-row {
-  display: flex;
-  gap: 4px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-</style>

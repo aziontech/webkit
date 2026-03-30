@@ -22,209 +22,62 @@ function parseValue(value) {
 </script>
 
 <template>
-  <div class="spacing-row">
-    <div class="meta-col">
-      <p class="token-name">{{ token.label }}</p>
-      <code class="token-class">.{{ token.name }}</code>
-      <p class="token-desc">{{ token.description }}</p>
+  <div class="flex gap-6 py-5 border-b border-subtle items-start last:border-b-0 md:flex-col md:gap-4">
+    <div class="flex-none w-80 flex flex-col gap-1.5 md:w-full">
+      <p class="text-sm font-semibold text-default m-0">{{ token.label }}</p>
+      <code class="font-code text-[11px] bg-white/[0.07] border border-white/15 text-code px-1.5 py-0.5 rounded w-fit">{{ token.name }}</code>
+      <p class="text-xs text-muted m-0 mb-2 leading-relaxed">{{ token.description }}</p>
       
-      <div class="specs-grid">
-        <div class="spec-item">
-          <span class="spec-label">Property</span>
-          <span class="spec-value">{{ token.property }}</span>
+      <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Property</span>
+          <span class="font-code text-[10px] text-muted">{{ token.property }}</span>
         </div>
-        <div class="spec-item">
-          <span class="spec-label">Desktop</span>
-          <span class="spec-value highlight">{{ token.desktop }}</span>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Desktop</span>
+          <span class="font-code text-[10px] text-primary">{{ token.desktop }}</span>
         </div>
-        <div class="spec-item">
-          <span class="spec-label">Tablet</span>
-          <span class="spec-value">{{ token.tablet }}</span>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Tablet</span>
+          <span class="font-code text-[10px] text-muted">{{ token.tablet }}</span>
         </div>
-        <div class="spec-item">
-          <span class="spec-label">Mobile</span>
-          <span class="spec-value">{{ token.mobile }}</span>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Mobile</span>
+          <span class="font-code text-[10px] text-muted">{{ token.mobile }}</span>
         </div>
       </div>
     </div>
     
-    <div class="preview-col">
-      <div class="preview-box">
+    <div class="flex-1 min-w-0">
+      <div class="bg-surface border border-default rounded-lg p-4 min-h-[80px] flex items-center justify-center">
         <div 
           v-if="token.property === 'max-width'"
-          class="max-width-demo"
+          class="bg-primary/15 border-2 border-dashed border-primary rounded h-10 w-full flex items-center justify-center"
           :style="{ maxWidth: token.desktop }"
         >
-          <span class="demo-label">max-width</span>
+          <span class="font-code text-[11px] text-muted">max-width</span>
         </div>
         
         <div 
           v-else-if="token.property.includes('padding')"
-          class="padding-demo"
+          class="bg-accent/15 rounded"
           :style="{ padding: token.desktop }"
         >
-          <div class="padding-inner">
-            <span class="demo-label">{{ token.desktop }}</span>
+          <div class="bg-surface rounded px-3 py-2 min-w-[60px] text-center">
+            <span class="font-code text-[11px] text-muted">{{ token.desktop }}</span>
           </div>
         </div>
         
         <div 
           v-else-if="token.property === 'gap'"
-          class="gap-demo"
+          class="flex w-full"
           :style="{ gap: token.desktop }"
         >
-          <div class="gap-item" />
-          <div class="gap-item" />
-          <div class="gap-item" />
+          <div class="flex-1 h-8 bg-success/30 rounded" />
+          <div class="flex-1 h-8 bg-success/30 rounded" />
+          <div class="flex-1 h-8 bg-success/30 rounded" />
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.spacing-row {
-  display: flex;
-  gap: 24px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border-subtle, #1e1e1e);
-  align-items: flex-start;
-}
-
-.spacing-row:last-child {
-  border-bottom: none;
-}
-
-.meta-col {
-  flex: 0 0 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.token-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-default, #eee);
-  margin: 0;
-}
-
-.token-class {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--text-code, #aaa);
-  padding: 2px 6px;
-  border-radius: 4px;
-  display: inline-block;
-  width: fit-content;
-}
-
-.token-desc {
-  font-size: 12px;
-  color: var(--text-muted, #888);
-  margin: 0 0 8px;
-  line-height: 1.5;
-}
-
-.specs-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 12px;
-}
-
-.spec-item {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.spec-label {
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted, #666);
-}
-
-.spec-value {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  color: var(--text-muted, #888);
-}
-
-.spec-value.highlight {
-  color: var(--text-primary, #fe601f);
-}
-
-.preview-col {
-  flex: 1;
-  min-width: 0;
-}
-
-.preview-box {
-  background: var(--background-surface, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--border-default, #2a2a2a);
-  border-radius: 8px;
-  padding: 16px;
-  min-height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.max-width-demo {
-  background: rgba(254, 96, 31, 0.15);
-  border: 2px dashed var(--border-primary, #fe601f);
-  border-radius: 4px;
-  height: 40px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.demo-label {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  color: var(--text-muted, #888);
-}
-
-.padding-demo {
-  background: rgba(138, 132, 236, 0.15);
-  border-radius: 4px;
-}
-
-.padding-inner {
-  background: var(--background-surface, #1a1a1a);
-  border-radius: 2px;
-  padding: 8px 12px;
-  min-width: 60px;
-  text-align: center;
-}
-
-.gap-demo {
-  display: flex;
-  width: 100%;
-}
-
-.gap-item {
-  flex: 1;
-  height: 32px;
-  background: rgba(34, 197, 94, 0.3);
-  border-radius: 4px;
-}
-
-@media (max-width: 768px) {
-  .spacing-row {
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .meta-col {
-    flex: none;
-    width: 100%;
-  }
-}
-</style>

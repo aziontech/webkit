@@ -59,317 +59,100 @@ function isCopied(name) {
 </script>
 
 <template>
-  <div class="icon-grid-container">
+  <div class="flex flex-col gap-8">
     <!-- Controls -->
-    <div class="controls">
-      <div class="search-group">
-        <i class="pi pi-search search-icon" />
+    <div class="flex gap-5 items-center flex-wrap">
+      <div class="relative flex-1 min-w-[200px] max-w-[400px]">
+        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-muted text-sm" />
         <input
           v-model="searchQuery"
           type="text"
-          class="search-input"
+          class="w-full px-2.5 py-2.5 pl-9 rounded-md border border-default bg-surface text-default text-sm font-sans placeholder:text-muted focus:outline-none focus:border-primary"
           placeholder="Search icons by name..."
         />
-        <span v-if="searchQuery" class="search-count">
+        <span
+          v-if="searchQuery"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-muted font-code"
+        >
           {{ filteredIcons.length }} / {{ icons.length }}
         </span>
       </div>
       
-      <div class="size-group">
-        <label class="size-label">Size</label>
+      <div class="flex items-center gap-2.5">
+        <label class="text-[10px] font-semibold uppercase tracking-wider text-muted">Size</label>
         <input
           v-model.number="iconSize"
           type="range"
           min="12"
           max="64"
           step="4"
-          class="size-slider"
+          class="w-[100px] h-1 appearance-none bg-border-default rounded cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-text-primary [&::-webkit-slider-thumb]:cursor-pointer"
         />
-        <span class="size-value">{{ iconSize }}px</span>
+        <span class="text-[11px] font-code text-muted min-w-[40px]">{{ iconSize }}px</span>
       </div>
     </div>
 
     <!-- Azion Icons -->
-    <div v-if="azionIcons.length > 0" class="icon-section">
-      <div class="section-header">
-        <h3 class="section-title">Azion Icons</h3>
-        <span class="section-count">{{ azionIcons.length }} / {{ totalAzion }}</span>
+    <div v-if="azionIcons.length > 0" class="flex flex-col gap-3">
+      <div class="flex items-baseline gap-3">
+        <h3 class="text-base font-semibold text-default m-0">Azion Icons</h3>
+        <span class="text-[11px] font-code text-muted">{{ azionIcons.length }} / {{ totalAzion }}</span>
       </div>
-      <p class="section-desc">Custom Azion product and technology icons.</p>
+      <p class="text-[13px] text-muted m-0 mb-2">
+        Custom Azion product and technology icons.
+      </p>
       
-      <div class="icon-grid">
+      <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
         <button
           v-for="icon in azionIcons"
           :key="icon.name"
-          class="icon-card"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-subtle bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
-          <i :class="icon.icon" :style="{ fontSize: `${iconSize}px` }" />
-          <span class="icon-name max-w-20 truncate">{{ icon.name.replace('ai-', '') }}</span>
-          <i :class="['corner-icon', isCopied(icon.name) ? 'pi pi-check' : 'pi pi-copy']" />
+          <i :class="icon.icon" :style="{ fontSize: `${iconSize}px` }" class="text-default" />
+          <span class="text-[9px] font-code text-muted text-center leading-tight w-full px-1 truncate max-w-20">{{ icon.name.replace('ai-', '') }}</span>
+          <i :class="[
+            'absolute top-1.5 right-1.5 text-[10px] transition-opacity duration-100',
+            isCopied(icon.name) ? 'pi pi-check !opacity-100 text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
+          ]" />
         </button>
       </div>
     </div>
 
     <!-- PrimeIcons -->
-    <div v-if="primeIcons.length > 0" class="icon-section">
-      <div class="section-header">
-        <h3 class="section-title">PrimeIcons</h3>
-        <span class="section-count">{{ primeIcons.length }} / {{ totalPrime }}</span>
+    <div v-if="primeIcons.length > 0" class="flex flex-col gap-3">
+      <div class="flex items-baseline gap-3">
+        <h3 class="text-base font-semibold text-default m-0">PrimeIcons</h3>
+        <span class="text-[11px] font-code text-muted">{{ primeIcons.length }} / {{ totalPrime }}</span>
       </div>
-      <p class="section-desc">General-purpose UI icons from PrimeIcons.</p>
+      <p class="text-[13px] text-muted m-0 mb-2">
+        General-purpose UI icons from PrimeIcons.
+      </p>
       
-      <div class="icon-grid">
+      <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
         <button
           v-for="icon in primeIcons"
           :key="icon.name"
-          class="icon-card"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-subtle bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
-          <i :class="icon.icon" :style="{ fontSize: `${iconSize}px` }" />
-          <span class="icon-name max-w-20 truncate">{{ icon.name.replace('pi-', '') }}</span>
-          <i :class="['corner-icon', isCopied(icon.name) ? 'pi pi-check' : 'pi pi-copy']" />
+          <i :class="icon.icon" :style="{ fontSize: `${iconSize}px` }" class="text-default" />
+          <span class="text-[9px] font-code text-muted text-center leading-tight w-full px-1 truncate max-w-20">{{ icon.name.replace('pi-', '') }}</span>
+          <i :class="[
+            'absolute top-1.5 right-1.5 text-[10px] transition-opacity duration-100',
+            isCopied(icon.name) ? 'pi pi-check !opacity-100 text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
+          ]" />
         </button>
       </div>
     </div>
 
     <!-- Empty state -->
-    <div v-if="filteredIcons.length === 0" class="empty-state">
-      <i class="pi pi-search" style="font-size: 48px; opacity: 0.3;" />
-      <p class="text-body-md text-muted" style="margin: 16px 0 4px;">No icons found</p>
-      <p class="text-body-sm text-muted" style="margin: 0;">Try a different search term</p>
+    <div v-if="filteredIcons.length === 0" class="flex flex-col items-center justify-center px-5 py-[60px] border border-dashed border-default rounded-lg">
+      <i class="pi pi-search text-5xl opacity-30" />
+      <p class="text-body-md text-muted mt-4 mb-1">No icons found</p>
+      <p class="text-body-sm text-muted m-0">Try a different search term</p>
     </div>
   </div>
 </template>
-
-<style scoped>
-.icon-grid-container {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-/* Controls */
-.controls {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.search-group {
-  position: relative;
-  flex: 1;
-  min-width: 200px;
-  max-width: 400px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted, #888);
-  font-size: 14px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 10px 12px 10px 36px;
-  border-radius: 6px;
-  border: 1px solid var(--border-default, #2a2a2a);
-  background: var(--background-surface, #1a1a1a);
-  color: var(--text-default, #eee);
-  font-size: 14px;
-  font-family: inherit;
-}
-
-.search-input::placeholder {
-  color: var(--text-muted, #666);
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--border-primary, #fe601f);
-}
-
-.search-count {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 11px;
-  color: var(--text-muted, #888);
-  font-family: 'Roboto Mono', monospace;
-}
-
-.size-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.size-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted, #888);
-}
-
-.size-slider {
-  width: 100px;
-  height: 4px;
-  appearance: none;
-  background: var(--border-default, #2a2a2a);
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-.size-slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--text-primary, #fe601f);
-  cursor: pointer;
-}
-
-.size-value {
-  font-size: 11px;
-  font-family: 'Roboto Mono', monospace;
-  color: var(--text-muted, #888);
-  min-width: 40px;
-}
-
-/* Sections */
-.icon-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.section-header {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.section-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-default, #eee);
-  margin: 0;
-}
-
-.section-count {
-  font-size: 11px;
-  font-family: 'Roboto Mono', monospace;
-  color: var(--text-muted, #888);
-}
-
-.section-desc {
-  font-size: 13px;
-  color: var(--text-muted, #888);
-  margin: 0 0 8px;
-}
-
-.section-desc code {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  background: rgba(138, 132, 236, 0.08);
-  border: 1px solid rgba(138, 132, 236, 0.12);
-  color: var(--text-accent, #8a84ec);
-  padding: 1px 5px;
-  border-radius: 3px;
-}
-
-/* Grid */
-.icon-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-@media (min-width: 640px) {
-  .icon-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .icon-grid {
-    grid-template-columns: repeat(8, 1fr);
-  }
-}
-
-.icon-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 16px 8px;
-  border-radius: 6px;
-  border: 1px solid var(--border-subtle, #1e1e1e);
-  background: var(--background-surface, rgba(255, 255, 255, 0.02));
-  cursor: pointer;
-  transition: all 120ms ease;
-  font: inherit;
-  color: inherit;
-}
-
-.icon-card:hover {
-  border-color: var(--border-primary, #fe601f);
-  background: rgba(254, 96, 31, 0.04);
-}
-
-.icon-card i {
-  color: var(--text-default, #eee);
-}
-
-.corner-icon {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 10px !important;
-  opacity: 0;
-  transition: opacity 120ms ease;
-}
-
-.icon-card:hover .corner-icon.pi-copy {
-  opacity: 0.5;
-}
-
-.corner-icon.pi-check {
-  opacity: 1 !important;
-  color: #22c55e !important;
-}
-
-.icon-name {
-  font-size: 9px;
-  font-family: 'Roboto Mono', monospace;
-  color: var(--text-muted, #666);
-  text-align: center;
-  line-height: 1.2;
-  width: 100%;
-  padding: 0 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Empty state */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  border: 1px dashed var(--border-default, #2a2a2a);
-  border-radius: 8px;
-}
-</style>

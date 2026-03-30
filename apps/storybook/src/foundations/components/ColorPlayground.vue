@@ -93,24 +93,32 @@ function isCopied(key) {
 </script>
 
 <template>
-  <div class="playground">
+  <div class="flex flex-col gap-6">
     <!-- Controls ─────────────────────────────────────────────────────────── -->
-    <div class="controls">
-      <div class="control-group">
-        <label class="control-label">Category</label>
-        <div class="btn-group">
+    <div class="flex gap-5 items-end flex-wrap">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[10px] font-semibold uppercase tracking-wider text-muted">Category</label>
+        <div class="flex rounded-md overflow-hidden border border-default">
           <button
             v-for="cat in CATEGORIES"
             :key="cat.key"
-            :class="['seg-btn', { active: selectedCategory === cat.key }]"
+            :class="[
+              'px-3.5 py-1.5 text-xs font-medium cursor-pointer bg-transparent transition-all duration-100',
+              selectedCategory === cat.key
+                ? 'bg-primary text-white font-semibold'
+                : 'text-muted border-r border-default last:border-r-0'
+            ]"
             @click="selectedCategory = cat.key; onCategoryChange()"
           >{{ cat.label }}</button>
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label">Token</label>
-        <select v-model="selectedTokenName" class="select">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[10px] font-semibold uppercase tracking-wider text-muted">Token</label>
+        <select
+          v-model="selectedTokenName"
+          class="px-3 py-1.5 rounded-md border border-default bg-surface text-default font-code text-xs min-w-[220px] cursor-pointer"
+        >
           <option v-for="token in activeTokens" :key="token.name" :value="token.name">
             {{ token.tailwindClass }}
           </option>
@@ -119,233 +127,75 @@ function isCopied(key) {
     </div>
 
     <!-- Preview ───────────────────────────────────────────────────────────── -->
-    <div class="preview-area">
-      <div class="preview-card" :style="previewStyle">
-        <span class="preview-label" :style="previewTextStyle">
+    <div class="flex gap-5 items-start flex-wrap">
+      <div
+        class="flex-1 min-w-[220px] min-h-[160px] rounded-[10px] flex items-center justify-center border border-default transition-all duration-200"
+        :style="previewStyle"
+      >
+        <span
+          class="font-code text-[15px] font-semibold"
+          :style="previewTextStyle"
+        >
           {{ selectedToken?.tailwindClass }}
         </span>
       </div>
 
-      <div class="meta-panel">
-        <div class="meta-row">
-          <span class="meta-label">Tailwind class</span>
-          <button class="code-copy" @click="copyToClipboard(selectedToken?.tailwindClass, 'tw')">
-            <code>{{ selectedToken?.tailwindClass }}</code>
-            <i :class="['pi', isCopied('tw') ? 'pi-check' : 'pi-copy']" style="font-size: 11px;" />
+      <div class="flex-1 min-w-[280px] flex flex-col gap-3.5 p-4.5 rounded-lg border border-default bg-surface">
+        <div class="flex flex-col gap-1.5">
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Tailwind class</span>
+          <button
+            class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
+            @click="copyToClipboard(selectedToken?.tailwindClass, 'tw')"
+          >
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.tailwindClass }}</code>
+            <i :class="['pi text-[11px]', isCopied('tw') ? 'pi-check text-success' : 'pi-copy opacity-60']" />
           </button>
         </div>
 
-        <div class="meta-row">
-          <span class="meta-label">CSS variable</span>
-          <button class="code-copy" @click="copyToClipboard(selectedToken?.cssVar, 'css')">
-            <code>{{ selectedToken?.cssVar }}</code>
-            <i :class="['pi', isCopied('css') ? 'pi-check' : 'pi-copy']" style="font-size: 11px;" />
+        <div class="flex flex-col gap-1.5">
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">CSS variable</span>
+          <button
+            class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
+            @click="copyToClipboard(selectedToken?.cssVar, 'css')"
+          >
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.cssVar }}</code>
+            <i :class="['pi text-[11px]', isCopied('css') ? 'pi-check text-success' : 'pi-copy opacity-60']" />
           </button>
         </div>
 
-        <div class="meta-row">
-          <span class="meta-label">Resolved ({{ modeLabel }})</span>
-          <span class="hex-value">
-            <span class="hex-chip" :style="{ background: currentHex ?? 'transparent' }" />
-            <code>{{ currentHex }}</code>
+        <div class="flex flex-col gap-1.5">
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Resolved ({{ modeLabel }})</span>
+          <span class="flex items-center gap-1.5 flex-wrap">
+            <span
+              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-gray-500/30"
+              :style="{ background: currentHex ?? 'transparent' }"
+            />
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ currentHex }}</code>
           </span>
         </div>
 
-        <div class="meta-row">
-          <span class="meta-label">Description</span>
-          <span class="meta-desc">{{ selectedToken?.description }}</span>
+        <div class="flex flex-col gap-1.5">
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Description</span>
+          <span class="text-[13px] text-default">{{ selectedToken?.description }}</span>
         </div>
 
-        <div class="meta-row">
-          <span class="meta-label">Light → Dark</span>
-          <span class="hex-value">
-            <span class="hex-chip" :style="{ background: selectedToken?.lightHex ?? 'transparent' }" />
-            <code>{{ selectedToken?.lightHex }}</code>
-            <span style="opacity: 0.4; font-size: 11px;">→</span>
-            <span class="hex-chip" :style="{ background: selectedToken?.darkHex ?? 'transparent' }" />
-            <code>{{ selectedToken?.darkHex }}</code>
+        <div class="flex flex-col gap-1.5">
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Light → Dark</span>
+          <span class="flex items-center gap-1.5 flex-wrap">
+            <span
+              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-gray-500/30"
+              :style="{ background: selectedToken?.lightHex ?? 'transparent' }"
+            />
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.lightHex }}</code>
+            <span class="opacity-40 text-[11px]">→</span>
+            <span
+              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-gray-500/30"
+              :style="{ background: selectedToken?.darkHex ?? 'transparent' }"
+            />
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.darkHex }}</code>
           </span>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.playground {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* Controls */
-.controls {
-  display: flex;
-  gap: 20px;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-
-.control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.control-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted, #888);
-}
-
-.btn-group {
-  display: flex;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--border-default, #2a2a2a);
-}
-
-.seg-btn {
-  padding: 7px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  background: transparent;
-  color: var(--text-muted, #888);
-  border: none;
-  transition: all 120ms ease;
-}
-
-.seg-btn:not(:last-child) {
-  border-right: 1px solid var(--border-default, #2a2a2a);
-}
-
-.seg-btn.active {
-  background: var(--background-primary, #fe601f);
-  color: #fff;
-  font-weight: 600;
-}
-
-.select {
-  padding: 7px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border-default, #2a2a2a);
-  background: var(--background-surface, #1a1a1a);
-  color: var(--text-default, #eee);
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  min-width: 220px;
-  cursor: pointer;
-}
-
-/* Preview */
-.preview-area {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.preview-card {
-  flex: 1;
-  min-width: 220px;
-  min-height: 160px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-default, #2a2a2a);
-  transition: all 200ms ease;
-}
-
-.preview-label {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-/* Meta panel */
-.meta-panel {
-  flex: 1;
-  min-width: 280px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 18px;
-  border-radius: 8px;
-  border: 1px solid var(--border-default, #2a2a2a);
-  background: var(--background-surface, rgba(255, 255, 255, 0.02));
-}
-
-.meta-row {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.meta-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted, #888);
-}
-
-.meta-desc {
-  font-size: 13px;
-  color: var(--text-default, #eee);
-}
-
-.code-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-}
-
-.code-copy:hover code {
-  background: rgba(138, 132, 236, 0.15);
-}
-
-.code-copy .pi-copy {
-  opacity: 0.6;
-}
-
-.code-copy .pi-check {
-  color: #22c55e;
-}
-
-code {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  border: 1px solid;
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: var(--text-code, #AAA);
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-
-.hex-value {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.hex-chip {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  display: inline-block;
-  border: 1px solid rgba(128, 128, 128, 0.3);
-  flex-shrink: 0;
-}
-</style>
