@@ -3,6 +3,7 @@
   import { useField } from 'vee-validate'
   import AutoComplete from 'primevue/autocomplete'
   import InputSlot from '../slots/input-slot'
+  import LabelBlock from '../label'
 
   const props = defineProps({
     value: {
@@ -69,12 +70,10 @@
 
 <template>
   <InputSlot>
-    <label
+    <LabelBlock
       :for="props.name"
-      class="text-color text-base font-medium leading-5"
-    >
-      {{ props.label }}
-    </label>
+      :label="props.label"
+    />
 
     <div
       class="p-inputgroup h-fit"

@@ -179,7 +179,6 @@
       :label="props.label"
       :isRequired="$attrs.required"
       :data-testid="customTestId.label"
-      v-if="props.label"
     />
     <Dropdown
       :dropdown-icon="isDisabledIcon"
