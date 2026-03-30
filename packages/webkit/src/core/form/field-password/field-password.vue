@@ -188,7 +188,6 @@
 <template>
   <InputSlot>
     <Label
-      v-if="props.label"
       :for="props.name"
       :data-testid="customTestId.label"
       :label="props.label"

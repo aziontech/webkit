@@ -2,6 +2,7 @@
   import FieldSwitchBlock from '../field-switch-block'
   import { computed, ref, useAttrs } from 'vue'
   import PrimeDivider from 'primevue/divider'
+  import LabelBlock from '../label'
 
   defineOptions({ name: 'FieldGroupSwitch' })
 
@@ -73,12 +74,10 @@
 
 <template>
   <div :class="['flex flex-col gap-2', classStateRoot]">
-    <label
-      class="text-color text-base font-medium leading-5"
+    <LabelBlock
+      :label="props.label"
       :data-testid="customTestId('label')"
-    >
-      {{ props.label }}
-    </label>
+    />
     <div
       class="flex"
       :class="classListSelector"

@@ -1,7 +1,6 @@
 <template>
   <InputSlot>
     <Label
-      v-if="props.label"
       :for="props.name"
       :label="props.label"
       :isRequired="$attrs.required"

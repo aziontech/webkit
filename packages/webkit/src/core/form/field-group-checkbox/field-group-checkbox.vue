@@ -2,6 +2,7 @@
   import FieldCheckboxBlock from '../field-checkbox-block'
   import { computed, ref } from 'vue'
   import PrimeDivider from 'primevue/divider'
+  import LabelBlock from '../label'
 
   defineOptions({ name: 'FieldGroupCheckbox' })
 
@@ -63,9 +64,7 @@
 
 <template>
   <div :class="['flex flex-col gap-2', classStateRoot]">
-    <label class="text-color text-base font-medium leading-5">
-      {{ props.label }}
-    </label>
+    <LabelBlock :label="props.label" />
     <div
       class="flex"
       :class="classListSelector"
