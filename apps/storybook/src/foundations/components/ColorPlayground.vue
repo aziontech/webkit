@@ -324,9 +324,10 @@ function isCopied(key) {
 code {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
-  background: rgba(138, 132, 236, 0.08);
-  border: 1px solid rgba(138, 132, 236, 0.12);
-  color: var(--text-accent, #8a84ec);
+  border: 1px solid;
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-code, #AAA);
   padding: 2px 6px;
   border-radius: 4px;
   white-space: nowrap;

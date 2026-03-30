@@ -95,7 +95,7 @@ function isCopied(name) {
         <h3 class="section-title">Azion Icons</h3>
         <span class="section-count">{{ azionIcons.length }} / {{ totalAzion }}</span>
       </div>
-      <p class="section-desc">Custom Azion product and technology icons. Use with <code>ai ai-{name}</code> class.</p>
+      <p class="section-desc">Custom Azion product and technology icons.</p>
       
       <div class="icon-grid">
         <button
@@ -106,7 +106,7 @@ function isCopied(name) {
           @click="copyIconCode(icon)"
         >
           <i :class="icon.icon" :style="{ fontSize: `${iconSize}px` }" />
-          <span class="icon-name">{{ icon.name.replace('ai-', '') }}</span>
+          <span class="icon-name max-w-20 truncate">{{ icon.name.replace('ai-', '') }}</span>
           <i :class="['corner-icon', isCopied(icon.name) ? 'pi pi-check' : 'pi pi-copy']" />
         </button>
       </div>
@@ -118,7 +118,7 @@ function isCopied(name) {
         <h3 class="section-title">PrimeIcons</h3>
         <span class="section-count">{{ primeIcons.length }} / {{ totalPrime }}</span>
       </div>
-      <p class="section-desc">General-purpose UI icons from PrimeIcons. Use with <code>pi pi-{name}</code> class.</p>
+      <p class="section-desc">General-purpose UI icons from PrimeIcons.</p>
       
       <div class="icon-grid">
         <button
@@ -129,7 +129,7 @@ function isCopied(name) {
           @click="copyIconCode(icon)"
         >
           <i :class="icon.icon" :style="{ fontSize: `${iconSize}px` }" />
-          <span class="icon-name">{{ icon.name.replace('pi-', '') }}</span>
+          <span class="icon-name max-w-20 truncate">{{ icon.name.replace('pi-', '') }}</span>
           <i :class="['corner-icon', isCopied(icon.name) ? 'pi pi-check' : 'pi pi-copy']" />
         </button>
       </div>
@@ -354,9 +354,9 @@ function isCopied(name) {
   font-family: 'Roboto Mono', monospace;
   color: var(--text-muted, #666);
   text-align: center;
-  word-break: break-all;
   line-height: 1.2;
-  max-width: 100%;
+  width: 100%;
+  padding: 0 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
