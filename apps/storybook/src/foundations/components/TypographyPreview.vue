@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { useViewport } from '../composables/useViewport.js';
 
 defineProps({
   /**
@@ -9,7 +10,8 @@ defineProps({
   token: { type: Object, required: true },
 });
 
-// Track copied state
+const { breakpoint } = useViewport();
+
 const copiedKey = ref(null);
 let copyTimeout = null;
 
@@ -28,8 +30,8 @@ function isCopied(key) {
 </script>
 
 <template>
-  <div class="flex gap-6 py-5 border-b border-subtle items-start last:border-b-0 md:flex-col md:gap-4">
-    <div class="flex-none w-80 flex flex-col gap-1.5 md:w-full">
+  <div class="flex flex-col gap-4 py-5 border-b border-subtle items-start last:border-b-0 sm:flex-row sm:gap-6">
+    <div class="w-full flex flex-col gap-1.5 sm:w-72 sm:flex-none">
       <p class="text-sm font-semibold text-default m-0">{{ token.label }}</p>
       <button
         class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer font-inherit group"
@@ -43,38 +45,45 @@ function isCopied(key) {
         ]" />
       </button>
       <p class="text-xs text-muted m-0 mb-2 leading-relaxed">{{ token.description }}</p>
-      
-      <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+
+      <div class="grid grid-cols-2 gap-x-3 gap-y-3 m-0">
         <div class="flex flex-col gap-0.5">
           <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Font</span>
           <span class="font-code text-[10px] text-muted">{{ token.fontFamily }}</span>
         </div>
         <div class="flex flex-col gap-0.5">
-          <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Desktop</span>
+          <span :class="['text-[9px] font-semibold uppercase tracking-wider', breakpoint === 'desktop' ? 'text-primary' : 'text-muted']">Desktop</span>
           <span class="font-code text-[10px] text-muted">{{ token.desktop.fontSize }} / {{ token.desktop.lineHeight }}</span>
         </div>
         <div class="flex flex-col gap-0.5">
-          <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Tablet</span>
+          <span :class="['text-[9px] font-semibold uppercase tracking-wider', breakpoint === 'tablet' ? 'text-primary' : 'text-muted']">Tablet</span>
           <span class="font-code text-[10px] text-muted">{{ token.tablet.fontSize }} / {{ token.tablet.lineHeight }}</span>
         </div>
         <div class="flex flex-col gap-0.5">
-          <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Mobile</span>
+          <span :class="['text-[9px] font-semibold uppercase tracking-wider', breakpoint === 'mobile' ? 'text-primary' : 'text-muted']">Mobile</span>
           <span class="font-code text-[10px] text-muted">{{ token.mobile.fontSize }} / {{ token.mobile.lineHeight }}</span>
         </div>
         <div v-if="token.desktop.letterSpacing" class="flex flex-col gap-0.5">
           <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Tracking</span>
-          <span class="font-code text-[10px] text-muted">{{ token.desktop.letterSpacing }}</span>
+          <span class="font-code text-[10px] text-muted">{{ token[breakpoint]?.letterSpacing ?? token.desktop.letterSpacing }}</span>
         </div>
         <div v-if="token.desktop.textTransform" class="flex flex-col gap-0.5">
           <span class="text-[9px] font-semibold uppercase tracking-wider text-muted">Transform</span>
-          <span class="font-code text-[10px] text-muted">{{ token.desktop.textTransform }}</span>
+          <span class="font-code text-[10px] text-muted">{{ token[breakpoint]?.textTransform ?? token.desktop.textTransform }}</span>
         </div>
       </div>
     </div>
-    
+
     <div class="flex-1 min-w-0">
       <div class="bg-surface border border-default rounded-lg p-6 flex items-center justify-center min-h-[80px]">
-        <span :class="token.name" class="text-default">{{ token.sample }}</span>
+        <span
+          :class="token.name"
+          class="text-default"
+          :style="{
+            fontSize: token[breakpoint]?.fontSize ?? token.desktop.fontSize,
+            lineHeight: token[breakpoint]?.lineHeight ?? token.desktop.lineHeight,
+          }"
+        >{{ token.sample }}</span>
       </div>
     </div>
   </div>

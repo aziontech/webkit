@@ -11,6 +11,10 @@ defineProps({
   language: {
     type: String,
     default: 'javascript'
+  },
+  content: {
+    type: String,
+    default: ''
   }
 })
 </script>
@@ -23,6 +27,6 @@ defineProps({
     >
       {{ label }}
     </p>
-    <pre class="font-code m-0 text-[13px] text-default leading-relaxed"><code class="font-code"><slot /></code></pre>
+    <pre class="font-code w-full h-auto text-wrap m-0 text-[13px] text-default leading-relaxed"><code class="font-code"><template v-if="content">{{ content }}</template><slot v-else /></code></pre>
   </div>
 </template>

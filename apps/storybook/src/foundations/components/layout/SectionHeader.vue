@@ -19,7 +19,7 @@ defineProps({
   },
   marginBottom: {
     type: String,
-    default: 'mb-12'
+    default: 'mb-4'
   }
 })
 </script>

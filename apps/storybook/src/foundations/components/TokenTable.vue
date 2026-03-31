@@ -58,22 +58,22 @@ function isCopied(key) {
           <td class="px-3.5 py-2.5 border-b border-subtle align-middle text-default font-code text-xs font-semibold whitespace-nowrap">{{ token.name }}</td>
           <td class="px-3.5 py-2.5 border-b border-subtle align-middle">
             <button
-              class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
+              class="inline-flex group items-center gap-1.5 bg-none border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
               @click="copyToClipboard(token.cssVar, `${token.name}-css`)"
               :title="isCopied(`${token.name}-css`) ? 'Copied!' : 'Copy CSS variable'"
             >
               <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ token.cssVar }}</code>
-              <i :class="['pi text-[10px] opacity-50', isCopied(`${token.name}-css`) ? 'pi-check !text-success !opacity-100' : 'pi-copy']" />
+              <i :class="['pi text-[10px] opacity-0 group-hover:!opacity-50', isCopied(`${token.name}-css`) ? 'pi-check !text-success !opacity-100' : 'pi-copy']" />
             </button>
           </td>
           <td class="px-3.5 py-2.5 border-b border-subtle align-middle">
             <button
-              class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
+              class="group inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
               @click="copyToClipboard(token.tailwindClass, `${token.name}-tw`)"
               :title="isCopied(`${token.name}-tw`) ? 'Copied!' : 'Copy Tailwind class'"
             >
               <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ token.tailwindClass }}</code>
-              <i :class="['pi text-[10px] opacity-50', isCopied(`${token.name}-tw`) ? 'pi-check !text-success !opacity-100' : 'pi-copy']" />
+              <i :class="['pi text-[10px] opacity-0 group-hover:!opacity-50', isCopied(`${token.name}-css`) ? 'pi-check !text-success !opacity-100' : 'pi-copy']" />
             </button>
           </td>
           <td class="px-3.5 py-2.5 border-b border-subtle align-middle text-muted text-xs min-w-[200px]">{{ token.description }}</td>

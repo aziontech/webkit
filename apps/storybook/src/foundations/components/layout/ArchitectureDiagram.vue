@@ -16,7 +16,7 @@ defineProps({
       {
         number: 'Layer 2',
         title: 'Semantic Tokens',
-        description: 'Intent-based roles with automatic light/dark resolution.',
+        description: 'Intent-based roles with theme switch resolution.',
         code: 'text-primary'
       },
       {

@@ -20,21 +20,28 @@ defineProps({
     type: String,
     required: true
   },
-  href: {
+  storyId: {
     type: String,
     required: true
   }
 })
+
+function navigate(storyId) {
+  const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
+  if (channel) {
+    channel.emit('selectStory', { storyId, viewMode: 'story' });
+  }
+}
 </script>
 
 <template>
-  <a
-    :href="href"
-    class="block p-5 border border-default rounded-lg cursor-pointer no-underline transition-colors duration-150 hover:border-primary hover:bg-primary/5"
+  <button
+    @click="navigate(storyId)"
+    class="block w-full text-left p-5 border border-default rounded-lg cursor-pointer transition-colors duration-150 hover:border-primary bg-transparent"
   >
     <p class="text-overline-xs text-muted m-0 mb-1.5">{{ overline }}</p>
     <p class="text-heading-md text-default m-0 mb-2">{{ title }}</p>
     <p class="text-body-xs text-muted m-0 leading-relaxed">{{ description }}</p>
     <p class="text-body-xs text-muted m-0 mt-2 font-code">{{ tokens }}</p>
-  </a>
+  </button>
 </template>

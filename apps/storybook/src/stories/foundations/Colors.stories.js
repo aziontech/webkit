@@ -70,21 +70,21 @@ export const Overview = {
             title="13 tokens"
             description="Surface hierarchy, canvas, status fills, and brand-colored backgrounds."
             tokens="bg-surface · bg-canvas · bg-primary"
-            href="?path=/story/foundations-colors--backgrounds"
+            story-id="foundations-colors--backgrounds"
           />
           <CategoryCard
             overline="Text"
             title="15 tokens"
             description="Default, muted, link, code, status, brand, and interactive text roles."
             tokens="text-default · text-muted · text-danger"
-            href="?path=/story/foundations-colors--text-colors"
+            story-id="foundations-colors--text-colors"
           />
           <CategoryCard
             overline="Border"
             title="13 tokens"
             description="Default, subtle, strong, status-based, and brand-colored borders."
             tokens="border-default · border-subtle · border-danger"
-            href="?path=/story/foundations-colors--borders"
+            story-id="foundations-colors--borders"
           />
         </div>
       </PageContainer>

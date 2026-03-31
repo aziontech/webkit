@@ -21,7 +21,7 @@ defineProps({
       {{ title }}
     </h1>
     <p
-      v-if="description"
+      v-if="description || $slots.default"
       class="text-body-md text-muted m-0 max-w-[620px] leading-relaxed"
     >
       <slot>
