@@ -223,7 +223,7 @@ export const semanticTexts = () => {
       },
       [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
         '.text-big-number-md': {
-          fontSize: '4.5rem',
+          fontSize: '3rem',
           lineHeight: '1.20',
         },
         '.text-heading-2xl': {
