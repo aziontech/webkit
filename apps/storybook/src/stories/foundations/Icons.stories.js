@@ -46,7 +46,13 @@ export const Overview = {
       IconGrid,
     },
     setup() {
-      return { icons, args };
+      const usageCode = [
+        '<i class="ai ai-azion"></i>',
+        '<i class="ai ai-edge-functions text-default text-2xl"></i>',
+        '<i class="pi pi-check"></i>',
+        '<i class="pi pi-times text-default text-2xl"></i>',
+      ].join('\n');
+      return { icons, args, usageCode };
     },
     template: /* html */ `
       <PageContainer>
@@ -63,12 +69,7 @@ export const Overview = {
 
         <!-- Usage -->
         <SectionHeader title="Usage" />
-        <CodeBlock label="HTML" class="mb-6">
-          &lt;i class="ai ai-azion"&gt;&lt;/i&gt;
-          &lt;i class="ai ai-edge-functions text-default text-2xl"&gt;&lt;/i&gt;
-          &lt;i class="pi pi-check"&gt;&lt;/i&gt;
-          &lt;i class="pi pi-times text-default text-2xl"&gt;&lt;/i&gt;
-        </CodeBlock>
+        <CodeBlock label="HTML" :content="usageCode" class="mb-6" />
         <p class="text-body-sm text-muted m-0 max-w-[620px] leading-relaxed mb-12">
           Icons are a font, which means they inherit text properties.
         </p>

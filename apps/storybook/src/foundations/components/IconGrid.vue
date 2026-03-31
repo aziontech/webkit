@@ -86,7 +86,7 @@ function isCopied(name) {
           min="12"
           max="64"
           step="4"
-          class="w-[100px] h-1 appearance-none bg-border-default rounded cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-text-primary [&::-webkit-slider-thumb]:cursor-pointer"
+          class="w-[100px] h-1 appearance-none bg-neutral-700 rounded cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-orange-500 [&::-webkit-slider-thumb]:cursor-pointer"
         />
         <span class="text-[11px] font-code text-muted min-w-[40px]">{{ iconSize }}px</span>
       </div>

@@ -140,26 +140,26 @@ function isCopied(key) {
         </span>
       </div>
 
-      <div class="flex-1 min-w-[280px] flex flex-col gap-3.5 p-4.5 rounded-lg border border-default bg-surface">
+      <div class="flex-1 min-w-[280px] flex flex-col gap-3.5 p-4 rounded-lg border border-default bg-surface">
         <div class="flex flex-col gap-1.5">
           <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Tailwind class</span>
           <button
-            class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
+            class="group inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
             @click="copyToClipboard(selectedToken?.tailwindClass, 'tw')"
           >
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.tailwindClass }}</code>
-            <i :class="['pi text-[11px]', isCopied('tw') ? 'pi-check text-success' : 'pi-copy opacity-60']" />
+            <i :class="['pi text-[11px] opacity-0 group-hover:!opacity-50', isCopied('css') ? 'pi-check text-success' : 'pi-copy']" />
           </button>
         </div>
 
         <div class="flex flex-col gap-1.5">
           <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">CSS variable</span>
           <button
-            class="inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
+            class="group inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
             @click="copyToClipboard(selectedToken?.cssVar, 'css')"
           >
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.cssVar }}</code>
-            <i :class="['pi text-[11px]', isCopied('css') ? 'pi-check text-success' : 'pi-copy opacity-60']" />
+            <i :class="['pi text-[11px] opacity-0 group-hover:!opacity-50', isCopied('css') ? 'pi-check text-success' : 'pi-copy']" />
           </button>
         </div>
 
