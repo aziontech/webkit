@@ -1,0 +1,8 @@
+{
+  "main": "./inputtext.vue",
+  "module": "./inputtext.vue",
+  "browser": {
+    "./sfc": "./inputtext.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

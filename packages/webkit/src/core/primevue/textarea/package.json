@@ -1,0 +1,8 @@
+{
+  "main": "./textarea.vue",
+  "module": "./textarea.vue",
+  "browser": {
+    "./sfc": "./textarea.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

@@ -1,0 +1,8 @@
+{
+  "main": "./inputnumber.vue",
+  "module": "./inputnumber.vue",
+  "browser": {
+    "./sfc": "./inputnumber.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
