@@ -1,3 +1,19 @@
+## [1.6.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.5.0...@aziontech/theme@1.6.0) (2026-03-31)
+
+
+### Features
+
+* add tokens in overline and changed properties ([54f0b88](https://github.com/aziontech/webkit/commit/54f0b888a81f3c0482611b810e0906a1258af947))
+
+
+### Bug Fixes
+
+* azion system status color text ([03ae1be](https://github.com/aziontech/webkit/commit/03ae1be158331648bb439f688918ac3adaa62ac3))
+* dark light ([0a8539e](https://github.com/aziontech/webkit/commit/0a8539ed2aeeb6ad8ff7178e52eb7ff365c5ac55))
+* fix big number token ([9d9ffc4](https://github.com/aziontech/webkit/commit/9d9ffc4508c2a90c61522b9ae8483992c24ea9b5))
+* storybook collumn adjust ([fa92b6c](https://github.com/aziontech/webkit/commit/fa92b6c58fcb9c300d2917a18430be1c87aa8523))
+* theme colors preview ([15d2e6b](https://github.com/aziontech/webkit/commit/15d2e6bd718f46ed316d6cb0e896cb2ea9f99ee0))
+
 ## [1.5.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.4.0...@aziontech/theme@1.5.0) (2026-03-26)
 
 
