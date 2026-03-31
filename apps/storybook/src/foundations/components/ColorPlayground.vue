@@ -129,7 +129,8 @@ function isCopied(key) {
     <!-- Preview ───────────────────────────────────────────────────────────── -->
     <div class="flex gap-5 items-start flex-wrap">
       <div
-        class="flex-1 min-w-[220px] min-h-[160px] rounded-[10px] flex items-center justify-center border border-default transition-all duration-200"
+        class="flex-1 min-w-[220px] min-h-[160px] rounded-[10px] flex items-center justify-center transition-all duration-200"
+        :class="selectedCategory !== 'border' ? 'border border-default' : ''"
         :style="previewStyle"
       >
         <span
