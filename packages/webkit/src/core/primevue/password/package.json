@@ -1,0 +1,8 @@
+{
+  "main": "./password.vue",
+  "module": "./password.vue",
+  "browser": {
+    "./sfc": "./password.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

@@ -1,0 +1,8 @@
+{
+  "main": "./radiobutton.vue",
+  "module": "./radiobutton.vue",
+  "browser": {
+    "./sfc": "./radiobutton.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

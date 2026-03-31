@@ -1,0 +1,8 @@
+{
+  "main": "./picklist.vue",
+  "module": "./picklist.vue",
+  "browser": {
+    "./sfc": "./picklist.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
