@@ -75,8 +75,7 @@ export const parameters = {
   },
   options: {
     storySort: {
-      method: 'alphabetical',
-      order: ['Introduction', 'Core', 'Components']
+      order: ['Foundations', ['Colors', 'Spacing', 'Typography', 'Icons'], 'Primevue', 'Primevue', 'Components', 'Site']
     }
   }
 };
@@ -90,3 +89,4 @@ export const decorators = [
     defaultTheme: 'dark',
   })
 ]
+
