@@ -1,0 +1,8 @@
+{
+  "main": "./calendar.vue",
+  "module": "./calendar.vue",
+  "browser": {
+    "./sfc": "./calendar.vue"
+  },
+  "sideEffects": ["*.vue"]
+}
