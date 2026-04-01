@@ -1,3 +1,10 @@
+## [1.8.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.7.0...@aziontech/theme@1.8.0) (2026-04-01)
+
+
+### Features
+
+* improve overline and imports ([cd5b375](https://github.com/aziontech/webkit/commit/cd5b3752d942bebb56bd57d793ea7b2fdeb91a3a))
+
 ## [1.7.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.6.0...@aziontech/theme@1.7.0) (2026-04-01)
 
 
