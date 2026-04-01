@@ -20,7 +20,7 @@ export default {
       description: {
         component: [
           'Typography system documentation — semantic text styles for Azion Design System.',
-          'All typography classes are defined in `@aziontech/theme/tailwind/semantic-texts-plugin.js`.',
+          'All typography classes are defined in `@aziontech/theme/tailwind/semantic-texts-plugin`.',
         ].join(' '),
       },
     },
@@ -83,7 +83,7 @@ export const Overview = {
         >
           <h3 class="text-heading-sm text-default m-0 mb-1">{{ group.label }}</h3>
           <p class="text-body-xs text-muted m-0 mb-4">{{ group.description }}</p>
-          
+
           <div class="border border-default rounded-lg px-5">
             <TypographyPreview
               v-for="token in group.tokens"

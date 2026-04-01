@@ -9,8 +9,8 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'xs',
-    validator: (value) => ['xs', 'sm', 'lg'].includes(value)
+    default: 'sm',
+    validator: (value) => ['xs', 'sm', 'md'].includes(value)
   },
   showCursor: {
     type: Boolean,
@@ -34,9 +34,9 @@ const colorClass = computed(() => {
 
 const sizeClass = computed(() => {
   const sizes = {
-    xs: 'text-xs',
-    sm: 'text-sm',
-    lg: 'text-lg'
+    xs: 'text-overline-xs',
+    sm: 'text-overline-sm',
+    md: 'text-overline-md'
   }
   return sizes[props.size] || 'text-xs'
 })
@@ -49,13 +49,13 @@ const sizeClass = computed(() => {
   >
     <span
       v-if="prefix"
-      class="font-proto-mono text-default font-medium leading-[1.2] tracking-[0.7px] whitespace-nowrap shrink-0 text-center not-italic"
+      class="font-proto-mono text-default font-medium leading-1 tracking-tightest whitespace-nowrap shrink-0 text-center not-italic"
       :class="[sizeClass]"
       >
       {{ prefix }}
     </span>
     <span
-      class="font-proto-mono text-sm font-medium leading-[1.2] tracking-[0.7px] whitespace-nowrap shrink-0 text-center not-italic uppercase"
+      class="font-proto-mono font-medium leading-1 tracking-tightest whitespace-nowrap shrink-0 text-center not-italic uppercase"
       :class="[colorClass, sizeClass]"
     >
       <slot />

@@ -6,7 +6,7 @@
  * Usage in tailwind.config.js:
  * ```javascript
  * import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js';
- * import semanticSpacing from '@aziontech/theme/tailwind/semantic-spacing-plugin.js';
+ * import semanticSpacing from '@aziontech/theme/tailwind/semantic-spacing-plugin';
  *
  * export default {
  *   theme,
