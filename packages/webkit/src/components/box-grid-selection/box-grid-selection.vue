@@ -39,7 +39,7 @@
     }
 
     return isSelected(item)
-      ? 'cursor-pointer border-2 border-primary bg-[#FE601F29]'
+      ? 'cursor-pointer border-2 border-primary bg-primary-mask'
       : 'cursor-pointer border surface-border surface-section'
   }
 
@@ -99,7 +99,7 @@
         ></i>
       </div>
 
-      <div class="flex flex-col h-full justify-between gap-[10px] w-full">
+      <div class="flex flex-col h-full justify-between gap-2 w-full">
         <p
           class="w-full font-sans text-xs font-normal leading-[1.3]"
           :class="getTextClass(item)"
