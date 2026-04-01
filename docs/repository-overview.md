@@ -119,7 +119,7 @@ src/tokens/
 │   └── borders.js    # Border colors for light/dark themes
 └── build/
     ├── preset.js         # Tailwind preset
-    ├── tailwind-plugin.js # Static utility classes plugin
+    ├── tailwind-plugin # Static utility classes plugin
     ├── css-vars.js       # CSS variable generation
     └── refs.js           # Token reference system
 ```
