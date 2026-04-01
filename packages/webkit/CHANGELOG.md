@@ -1,3 +1,10 @@
+## [1.17.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.16.0...@aziontech/webkit@1.17.0) (2026-04-01)
+
+
+### Features
+
+* update overline and remove props ([19dfbfc](https://github.com/aziontech/webkit/commit/19dfbfc98b7c4ac27bdf4e1bdcb4570e184fa491))
+
 ## [1.16.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.15.0...@aziontech/webkit@1.16.0) (2026-04-01)
 
 
