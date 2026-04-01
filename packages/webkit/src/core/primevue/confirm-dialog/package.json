@@ -1,0 +1,1 @@
+{"main": "./confirm-dialog.vue", "module": "./confirm-dialog.vue", "browser": {"./sfc": "./confirm-dialog.vue"}, "sideEffects": ["*.vue"]}
