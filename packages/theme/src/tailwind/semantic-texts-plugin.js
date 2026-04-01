@@ -6,7 +6,7 @@
  * Usage in tailwind.config.js:
  * ```javascript
  * import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js';
- * import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin.js';
+ * import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin';
  *
  * export default {
  *   theme,

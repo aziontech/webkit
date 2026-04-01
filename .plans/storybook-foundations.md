@@ -23,8 +23,8 @@ The webkit monorepo has 81 component stories but zero design system foundations 
 apps/storybook/src/
 ├── foundations-data/
 │   ├── tokens.js          ← derives color data from @aziontech/theme/tokens
-│   ├── typography.js      ← mirrors semantic-texts-plugin.js values as JS array
-│   └── spacing.js         ← mirrors semantic-spacing-plugin.js values as JS array
+│   ├── typography.js      ← mirrors semantic-texts-plugin values as JS array
+│   └── spacing.js         ← mirrors semantic-spacing-plugin values as JS array
 ├── components/foundations/
 │   ├── ColorSwatch.vue    ← single color chip (inline style for bg)
 │   ├── ColorPalette.vue   ← grid of swatches under a heading
@@ -71,10 +71,10 @@ const { light, dark } = createCssVars()
 - **Semantic groups**: Walk `textSemantic.light` keys → look up `light['--text-' + key]` and `dark['--text-' + key]`
 
 ### Typography
-Static JS array in `typography.js` mirroring the CSS values from `packages/theme/src/tailwind/semantic-texts-plugin.js`. Class name strings must appear as literals (not dynamically constructed) so Tailwind's scanner includes them.
+Static JS array in `typography.js` mirroring the CSS values from `packages/theme/src/tailwind/semantic-texts-plugin`. Class name strings must appear as literals (not dynamically constructed) so Tailwind's scanner includes them.
 
 ### Spacing
-Same approach as Typography — static array mirroring `semantic-spacing-plugin.js`.
+Same approach as Typography — static array mirroring `semantic-spacing-plugin`.
 
 ### Icons
 ```js
@@ -217,6 +217,6 @@ Creates the entire infrastructure. All subsequent phases reuse it.
 - `apps/storybook/.storybook/preview.js` — modify `storySort.order`
 - `packages/theme/src/tokens/build/css-vars.js` — `createCssVars()` source
 - `packages/theme/src/tokens/index.js` — re-exports all token primitives and utilities
-- `packages/theme/src/tailwind/semantic-texts-plugin.js` — typography CSS values
-- `packages/theme/src/tailwind/semantic-spacing-plugin.js` — spacing CSS values
+- `packages/theme/src/tailwind/semantic-texts-plugin` — typography CSS values
+- `packages/theme/src/tailwind/semantic-spacing-plugin` — spacing CSS values
 - `packages/icons/dist/catalog.json` — icon manifest (87 ai + 315 pi)

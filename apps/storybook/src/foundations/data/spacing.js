@@ -1,7 +1,7 @@
 /**
  * Foundations / Spacing — data layer
  *
- * Static JS array mirroring the CSS values from semantic-spacing-plugin.js.
+ * Static JS array mirroring the CSS values from semantic-spacing-plugin.
  * Class name strings appear as literals so Tailwind's scanner includes them.
  */
 
