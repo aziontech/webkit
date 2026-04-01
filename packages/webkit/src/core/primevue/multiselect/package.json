@@ -1,0 +1,8 @@
+{
+  "main": "./multiselect.vue",
+  "module": "./multiselect.vue",
+  "browser": {
+    "./sfc": "./multiselect.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

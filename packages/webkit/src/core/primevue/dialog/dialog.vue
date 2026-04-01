@@ -40,9 +40,33 @@ const props = defineProps({
     type: Object,
     default: undefined
   },
+  blockScroll: {
+    type: Boolean,
+    default: false
+  },
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
+  },
+  dismissableMask: {
+    type: Boolean,
+    default: false
+  },
+  position: {
+    type: String,
+    default: 'center'
+  },
+  draggable: {
+    type: Boolean,
+    default: true
+  },
+  appendTo: {
+    type: [String, Object],
+    default: 'body'
   }
 })
 
@@ -60,7 +84,13 @@ const emit = defineEmits(['update:visible', 'hide', 'show', 'maximize', 'unmaxim
     :closeOnEscape="props.closeOnEscape"
     :showHeader="props.showHeader"
     :breakpoints="props.breakpoints"
+    :blockScroll="props.blockScroll"
     :class="props.class"
+    :pt="props.pt"
+    :dismissableMask="props.dismissableMask"
+    :position="props.position"
+    :draggable="props.draggable"
+    :appendTo="props.appendTo"
     @update:visible="emit('update:visible', $event)"
     @hide="emit('hide')"
     @show="emit('show')"
