@@ -1,3 +1,20 @@
+## [1.15.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.14.1...@aziontech/webkit@1.15.0) (2026-04-01)
+
+
+### Features
+
+* colors foundation doc first draft ([b2b3bf7](https://github.com/aziontech/webkit/commit/b2b3bf7841f60982ea480ebd1d928624942c7a2f))
+* docs typography, icons and more ([85caac0](https://github.com/aziontech/webkit/commit/85caac015c613e7c1decdf192ae1ce6aeaf1c7cc))
+
+
+### Bug Fixes
+
+* delete unnused component ([79029fc](https://github.com/aziontech/webkit/commit/79029fc9e7d00b771c0c6a1e976ff67e0eebf965))
+* fix big number token ([9d9ffc4](https://github.com/aziontech/webkit/commit/9d9ffc4508c2a90c61522b9ae8483992c24ea9b5))
+* general adjusments ([4389c0b](https://github.com/aziontech/webkit/commit/4389c0bfda10c67b42a2737d1d7091e46b384274))
+* refinando estilos com a marca ([5dcbe1d](https://github.com/aziontech/webkit/commit/5dcbe1d00b5ac609ba487d028710b114406cb488))
+* remove css and style inline to tailwind and components ([4de36a5](https://github.com/aziontech/webkit/commit/4de36a57f097d162fe2aff6527ee203800e295e1))
+
 ## [1.14.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.14.0...@aziontech/webkit@1.14.1) (2026-03-27)
 
 
