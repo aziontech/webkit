@@ -364,7 +364,7 @@ export { tokenRef } from './build/refs.js';
 export { resolveRefsToCssVars } from './build/resolve.js';
 export { createCssVars, cssVarsString, injectCssVars } from './build/css-vars.js';
 export { preset } from './build/preset.js';
-export { tokenUtilities } from './build/tailwind-plugin.js';
+export { tokenUtilities } from './build/tailwind-plugin';
 ```
 
 ## Token Resolution
@@ -425,7 +425,7 @@ packages/theme/
 │       └── build/         # Build utilities
 │           ├── preset.js
 │           ├── css-vars.js
-│           └── tailwind-plugin.js
+│           └── tailwind-plugin
 └── package.json
 ```
 
