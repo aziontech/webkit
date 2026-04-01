@@ -1,3 +1,17 @@
+## [1.16.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.15.0...@aziontech/webkit@1.16.0) (2026-04-01)
+
+
+### Features
+
+* add new overline variation ([49f7631](https://github.com/aziontech/webkit/commit/49f7631d4839c0c3481a65a38aeeb3f1be66f920))
+* add new plugin for animations ([9d03769](https://github.com/aziontech/webkit/commit/9d03769f04f33735af54609b695e46ec5d6f5ff8))
+* improve overline and imports ([cd5b375](https://github.com/aziontech/webkit/commit/cd5b3752d942bebb56bd57d793ea7b2fdeb91a3a))
+
+
+### Bug Fixes
+
+* remove unused css ([d58cceb](https://github.com/aziontech/webkit/commit/d58cceb28273ad90c8c55f71e2c591d8426cd8e1))
+
 ## [1.15.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.14.1...@aziontech/webkit@1.15.0) (2026-04-01)
 
 
