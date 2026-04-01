@@ -49,13 +49,13 @@ const sizeClass = computed(() => {
   >
     <span
       v-if="prefix"
-      class="font-proto-mono text-default font-medium leading-1 tracking-tightest whitespace-nowrap shrink-0 text-center not-italic"
+      class="font-proto-mono text-default font-medium leading-1 tracking-tightest whitespace-nowrap"
       :class="[sizeClass]"
       >
       {{ prefix }}
     </span>
     <span
-      class="font-proto-mono font-medium leading-1 tracking-tightest whitespace-nowrap shrink-0 text-center not-italic uppercase"
+      class="font-proto-mono font-medium leading-1 tracking-tightest whitespace-nowrap uppercase"
       :class="[colorClass, sizeClass]"
     >
       <slot />
