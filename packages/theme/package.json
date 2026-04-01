@@ -63,6 +63,7 @@
     "./tailwind/tailwind-theme.js": "./src/tailwind/tailwind-theme.js",
     "./tailwind/semantic-colors-plugin.js": "./src/tailwind/semantic-colors-plugin.js",
     "./tailwind/semantic-texts-plugin.js": "./src/tailwind/semantic-texts-plugin.js",
-    "./tailwind/semantic-spacing-plugin.js": "./src/tailwind/semantic-spacing-plugin.js"
+    "./tailwind/semantic-spacing-plugin.js": "./src/tailwind/semantic-spacing-plugin.js",
+    "./tailwind/semantic-animations-plugin.js": "./src/tailwind/semantic-animations-plugin.js"
   }
 }
