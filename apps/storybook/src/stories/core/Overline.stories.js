@@ -44,7 +44,7 @@ Use Overline for:
     },
     size: {
       control: 'select',
-      options: ['xs', 'sm', 'lg'],
+      options: ['xs', 'sm', 'md'],
       description: 'Text size',
       defaultValue: 'xs',
       table: {

@@ -1,7 +1,7 @@
 /**
  * Foundations / Typography — data layer
  *
- * Static JS array mirroring the CSS values from semantic-texts-plugin.js.
+ * Static JS array mirroring the CSS values from semantic-texts-plugin.
  * Class name strings appear as literals so Tailwind's scanner includes them.
  */
 
