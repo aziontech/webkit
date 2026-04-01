@@ -3,6 +3,7 @@ import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js'
 import semanticColors from '@aziontech/theme/tailwind/semantic-colors-plugin.js'
 import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin.js'
 import semanticSpacing from '@aziontech/theme/tailwind/semantic-spacing-plugin.js'
+import semanticAnimations from '@aziontech/theme/tailwind/semantic-animations-plugin.js'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -73,35 +74,6 @@ export default {
         sora: ['Sora'],
         protomono: ['Proto Mono'],
         mono: ['Proto Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', 'monospace']
-      },
-      animation: {
-        fadeIn: 'fadeIn 220ms ease-in-out',
-        fadeOut: 'fadeOut 220ms ease-in-out',
-        slideDown: 'slideDown 220ms ease-in-out',
-        blink: 'blink 1.4s infinite both',
-        'highlight-fade': 'highlight ease-in forwards'
-      },
-      keyframes: {
-        highlight: {
-          '0%': { backgroundColor: 'var(--surface-hover)', fontWeight: '500' },
-          '100%': { backgroundColor: 'var(--surface-hover)', fontWeight: '500' }
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' }
-        },
-        fadeOut: {
-          '0%': { opacity: '1' },
-          '100%': { opacity: '0' }
-        },
-        slideDown: {
-          '0%': { height: '0' },
-          '100%': { height: 'auto' }
-        },
-        blink: {
-          '0%, 100% ': { opacity: '0.2' },
-          '20%': { opacity: '1' }
-        }
       }
     }
   },
@@ -110,5 +82,6 @@ export default {
     semanticColors(),
     semanticTexts(),
     semanticSpacing(),
+    semanticAnimations(),
   ]
 }
