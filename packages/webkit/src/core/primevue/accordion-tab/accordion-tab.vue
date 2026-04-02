@@ -15,6 +15,10 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 </script>
@@ -24,6 +28,7 @@ const props = defineProps({
     :header="props.header"
     :disabled="props.disabled"
     :class="props.class"
+    :pt="props.pt"
   >
     <slot />
   </AccordionTab>
