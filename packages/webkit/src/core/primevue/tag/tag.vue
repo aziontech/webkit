@@ -24,6 +24,10 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 </script>
@@ -35,6 +39,7 @@ const props = defineProps({
     :rounded="props.rounded"
     :icon="props.icon"
     :class="props.class"
+    :pt="props.pt"
   >
     <template v-if="$slots.default" #default>
       <slot />
