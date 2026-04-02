@@ -19,6 +19,10 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 
@@ -31,6 +35,7 @@ const emit = defineEmits(['step-change'])
     :activeStep="props.activeStep"
     :readonly="props.readonly"
     :class="props.class"
+    :pt="props.pt"
     @step-change="emit('step-change', $event)"
   >
     <template v-if="$slots.item" #item="slotProps">

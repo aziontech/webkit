@@ -19,6 +19,10 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 
@@ -31,6 +35,7 @@ const emit = defineEmits(['tab-change'])
     :activeIndex="props.activeIndex"
     :exact="props.exact"
     :class="props.class"
+    :pt="props.pt"
     @tab-change="emit('tab-change', $event)"
   >
     <template v-if="$slots.item" #item="slotProps">
