@@ -1,3 +1,12 @@
+## [1.18.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.17.0...@aziontech/webkit@1.18.0) (2026-04-02)
+
+
+### Features
+
+* add PrimeVue abstraction layer documentation ([4e246b1](https://github.com/aziontech/webkit/commit/4e246b1409d761562b17a1109a3fa9441acc89e1))
+* add PrimeVue abstraction layer documentation ([bf1b6d0](https://github.com/aziontech/webkit/commit/bf1b6d0f7f47bbb7f258646a6f4427c0dc39a64e))
+* add PrimeVue abstraction layer for services and composables (ENG-37137) ([5fb7705](https://github.com/aziontech/webkit/commit/5fb77054ef359aa863a078e813d75b402bff77e9))
+
 ## [1.17.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.16.0...@aziontech/webkit@1.17.0) (2026-04-01)
 
 
