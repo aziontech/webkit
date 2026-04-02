@@ -1,4 +1,4 @@
-import { useToast as usePrimeToast } from 'primevue/usetoast'
+import { usePrimeToast } from '../../plugins/primevue/primevue-internals.js'
 
 export function useToast() {
   const toast = usePrimeToast()
