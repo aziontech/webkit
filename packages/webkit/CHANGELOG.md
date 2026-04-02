@@ -1,3 +1,10 @@
+## [1.19.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.18.0...@aziontech/webkit@1.19.0) (2026-04-02)
+
+
+### Features
+
+* add primevue barrel module and vite config helper ([a53b79a](https://github.com/aziontech/webkit/commit/a53b79a18a000db98abac5fcff585bd181e40149))
+
 ## [1.18.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.17.0...@aziontech/webkit@1.18.0) (2026-04-02)
 
 
