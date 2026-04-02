@@ -151,6 +151,7 @@
     "./dynamic-dialog": "./src/core/primevue/dynamic-dialog/dynamic-dialog.vue",
     "./confirm-dialog": "./src/core/primevue/confirm-dialog/confirm-dialog.vue",
     "./tooltip": "./src/directives/tooltip/index.js",
-    "./plugin": "./src/plugins/primevue/index.js"
+    "./plugin": "./src/plugins/primevue/index.js",
+    "./vite": "./src/vite/index.js"
   }
 }

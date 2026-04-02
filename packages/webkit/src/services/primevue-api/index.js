@@ -1,1 +1,1 @@
-export { FilterMatchMode } from 'primevue/api'
+export { FilterMatchMode } from '../../plugins/primevue/primevue-internals.js'

@@ -90,7 +90,7 @@
   import ProgressSpinner from 'primevue/progressspinner'
   import InputText from 'primevue/inputtext'
   import Divider from 'primevue/divider'
-  import { useToast } from 'primevue/usetoast'
+  import { usePrimeToast as useToast } from '../../../plugins/primevue/primevue-internals.js'
 
   const props = defineProps({
     disabled: {
