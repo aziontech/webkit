@@ -7,12 +7,16 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 </script>
 
 <template>
-  <Card :class="props.class">
+  <Card :class="props.class" :pt="props.pt">
     <template v-if="$slots.header" #header>
       <slot name="header" />
     </template>

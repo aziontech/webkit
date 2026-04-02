@@ -20,6 +20,10 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 </script>
@@ -30,5 +34,6 @@ const props = defineProps({
     :mode="props.mode"
     :showValue="props.showValue"
     :class="props.class"
+    :pt="props.pt"
   />
 </template>

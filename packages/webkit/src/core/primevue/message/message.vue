@@ -28,6 +28,10 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 
@@ -42,6 +46,7 @@ const emit = defineEmits(['close'])
     :life="props.life"
     :icon="props.icon"
     :class="props.class"
+    :pt="props.pt"
     @close="emit('close')"
   >
     <slot />

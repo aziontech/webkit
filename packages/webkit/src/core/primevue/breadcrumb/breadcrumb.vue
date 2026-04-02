@@ -15,6 +15,10 @@ const props = defineProps({
   class: {
     type: String,
     default: ''
+  },
+  pt: {
+    type: Object,
+    default: undefined
   }
 })
 </script>
@@ -24,6 +28,7 @@ const props = defineProps({
     :model="props.model"
     :home="props.home"
     :class="props.class"
+    :pt="props.pt"
   >
     <template v-if="$slots.item" #item="slotProps">
       <slot name="item" :item="slotProps.item" :label="slotProps.label" :props="slotProps.props" />

@@ -144,6 +144,13 @@
     "./list-data-table": "./src/core/list-data-table/index.js",
     "./list-data-table/composables": "./src/core/list-data-table/composables/index.js",
     "./list-data-table/types": "./src/core/list-data-table/types/index.js",
-    "./list-data-table/cells": "./src/core/list-data-table/cells/index.js"
+    "./list-data-table/cells": "./src/core/list-data-table/cells/index.js",
+    "./use-toast": "./src/composables/use-toast/index.js",
+    "./use-dialog": "./src/composables/use-dialog/index.js",
+    "./api": "./src/services/primevue-api/index.js",
+    "./dynamic-dialog": "./src/core/primevue/dynamic-dialog/dynamic-dialog.vue",
+    "./confirm-dialog": "./src/core/primevue/confirm-dialog/confirm-dialog.vue",
+    "./tooltip": "./src/directives/tooltip/index.js",
+    "./plugin": "./src/plugins/primevue/index.js"
   }
 }
