@@ -1,1 +1,1 @@
-export { default as Tooltip } from 'primevue/tooltip'
+export { Tooltip } from '../../plugins/primevue/primevue-internals.js'
