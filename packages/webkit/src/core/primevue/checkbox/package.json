@@ -1,0 +1,8 @@
+{
+  "main": "./checkbox.vue",
+  "module": "./checkbox.vue",
+  "browser": {
+    "./sfc": "./checkbox.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

@@ -9,7 +9,7 @@
   const props = defineProps({
     label: {
       type: String,
-      required: true
+      default: ''
     },
     isRequired: {
       type: Boolean,
@@ -20,6 +20,7 @@
 
 <template>
   <label
+    v-if="props.label"
     v-bind="$attrs"
     class="text-color text-base font-medium leading-5 flex gap-1 align-items-center"
   >

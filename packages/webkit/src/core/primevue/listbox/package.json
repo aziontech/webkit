@@ -1,0 +1,8 @@
+{
+  "main": "./listbox.vue",
+  "module": "./listbox.vue",
+  "browser": {
+    "./sfc": "./listbox.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

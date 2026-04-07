@@ -1,0 +1,8 @@
+{
+  "main": "./selectbutton.vue",
+  "module": "./selectbutton.vue",
+  "browser": {
+    "./sfc": "./selectbutton.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

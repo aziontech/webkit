@@ -1,0 +1,8 @@
+{
+  "main": "./dropdown.vue",
+  "module": "./dropdown.vue",
+  "browser": {
+    "./sfc": "./dropdown.vue"
+  },
+  "sideEffects": ["*.vue"]
+}

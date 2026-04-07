@@ -100,7 +100,6 @@
     :label="props.label"
     :isRequired="$attrs.required"
     :data-testid="customTestId.label"
-    v-if="props.label"
   />
 
   <div

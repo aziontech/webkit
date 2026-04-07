@@ -110,6 +110,6 @@ body.p-overflow-hidden {
 }
 
 .font-code {
-  font-family: 'Roboto Mono', monospace;;
+  font-family: 'Roboto Mono', monospace !important;
 }
 
