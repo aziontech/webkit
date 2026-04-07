@@ -26,14 +26,9 @@ const config = {
       url: 'https://s07fylnjym.map.azionedge.net/',
       expanded: true
     },
-    // 'platform-components': {
-    //   title: 'Platform Components',
-    //   url: 'https://storybook-console.azion.app/',
-    //   expanded: true
-    // },
     'platform-components': {
       title: 'Platform Components',
-      url: 'http://localhost:6007/',
+      url: 'https://storybook-console.azion.app/',
       expanded: true
     }
   },
