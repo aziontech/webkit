@@ -43,7 +43,7 @@
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
     "semantic-release": "^23.1.1",
-    "vite": "^6.4.1"
+    "vite": "^6.4.2"
   },
   "overrides": {
     "tar": ">=7.5.10",
