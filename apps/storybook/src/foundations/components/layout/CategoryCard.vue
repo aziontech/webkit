@@ -3,7 +3,9 @@
  * CategoryCard - Link card for navigating between token categories
  * Used in the Colors overview for Background/Text/Border navigation
  */
-defineProps({
+import { navigate } from '@storybook/addon-links';
+
+const props = defineProps({
   overline: {
     type: String,
     required: true
@@ -26,17 +28,16 @@ defineProps({
   }
 })
 
-function navigate(storyId) {
-  const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
-  if (channel) {
-    channel.emit('selectStory', { storyId, viewMode: 'story' });
-  }
+function handleNavigate() {
+  // The navigate function from addon-links takes { storyId } or { kind, story }
+  // It handles composed storybooks automatically through the Storybook manager
+  navigate({ storyId: props.storyId });
 }
 </script>
 
 <template>
   <button
-    @click="navigate(storyId)"
+    @click="handleNavigate"
     class="block w-full text-left p-5 border border-default rounded-lg cursor-pointer transition-colors duration-150 hover:border-primary bg-transparent"
   >
     <p class="text-overline-xs text-muted m-0 mb-1.5">{{ overline }}</p>
