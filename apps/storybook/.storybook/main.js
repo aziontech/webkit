@@ -20,13 +20,15 @@ const config = {
   core: {
     disableTelemetry: true,
   },
-  features: {
-    storyStoreV7: true,
-  },
   refs: {
     'marketing-components': {
       title: 'Marketing Components',
       url: 'https://s07fylnjym.map.azionedge.net/',
+      expanded: true
+    },
+    'platform-components': {
+      title: 'Platform Components',
+      url: 'https://storybook-console.azion.app/',
       expanded: true
     }
   },
