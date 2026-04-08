@@ -94,7 +94,7 @@
     "./datatable": "./src/core/primevue/datatable/datatable.vue",
     "./dialog": "./src/core/primevue/dialog/dialog.vue",
     "./divider": "./src/core/primevue/divider/divider.vue",
-    "./inline-message": "./src/core/primevue/inline-message/inline-message.vue",
+    "./inlinemessage": "./src/core/primevue/inline-message/inline-message.vue",
     "./menu": "./src/core/primevue/menu/menu.vue",
     "./message": "./src/core/primevue/message/message.vue",
     "./overlaypanel": "./src/core/primevue/overlaypanel/overlaypanel.vue",
