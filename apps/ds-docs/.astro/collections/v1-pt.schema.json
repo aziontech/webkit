@@ -1,0 +1,1056 @@
+{
+  "$ref": "#/definitions/v1-pt",
+  "definitions": {
+    "v1-pt": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "navLabel": {
+              "type": "string"
+            },
+            "order": {
+              "type": "number"
+            },
+            "hidden": {
+              "type": "boolean"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "form",
+                "navigation",
+                "feedback",
+                "data-display",
+                "layout",
+                "utility"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "stable",
+                "beta",
+                "deprecated",
+                "planned",
+                "experimental"
+              ]
+            },
+            "since": {
+              "type": "string"
+            },
+            "deprecatedIn": {
+              "type": "string"
+            },
+            "contributors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "lastUpdated": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "integer",
+                  "format": "unix-time"
+                }
+              ]
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "version": {
+              "type": "string",
+              "default": "v1"
+            },
+            "language": {
+              "type": "string",
+              "default": "en"
+            },
+            "translatedFrom": {
+              "type": "string"
+            },
+            "translationStatus": {
+              "type": "string",
+              "enum": [
+                "complete",
+                "partial",
+                "missing"
+              ]
+            },
+            "type": {
+              "type": "string",
+              "const": "component"
+            },
+            "component": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "storybook": {
+              "type": "string"
+            },
+            "figma": {
+              "type": "string"
+            },
+            "related": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "apiFrom": {
+              "type": "string"
+            },
+            "anatomy": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "accessibility": {
+              "type": "object",
+              "properties": {
+                "keyboard": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "keys": {
+                        "type": "string"
+                      },
+                      "action": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "keys",
+                      "action"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "aria": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "attribute": {
+                        "type": "string"
+                      },
+                      "usage": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "attribute",
+                      "usage"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "wcag": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "usage": {
+              "type": "object",
+              "properties": {
+                "whenToUse": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "whenNotToUse": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "doDonts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "do",
+                          "dont"
+                        ]
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "example": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "description"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "code": {
+                        "type": "string"
+                      },
+                      "preview": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "api": {
+              "type": "object",
+              "properties": {
+                "props": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "default": {
+                        "type": "string"
+                      },
+                      "required": {
+                        "type": "boolean"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "type",
+                      "description"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "slots": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "props": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "description"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "events": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "payload": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "description"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "color",
+                "typography",
+                "spacing",
+                "elevation",
+                "motion",
+                "imagery"
+              ]
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "foundation"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "color",
+                "typography",
+                "spacing",
+                "elevation",
+                "motion",
+                "border",
+                "shadow"
+              ]
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "token"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "category",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string"
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "block"
+            },
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "usage": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/usage"
+            },
+            "api": {
+              "type": "object",
+              "properties": {
+                "props": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1-pt/anyOf/0/properties/api/properties/props/items"
+                  }
+                },
+                "slots": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1-pt/anyOf/0/properties/api/properties/slots/items"
+                  }
+                },
+                "events": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1-pt/anyOf/0/properties/api/properties/events/items"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "category",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string"
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "pattern"
+            },
+            "useCases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "related": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "category",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string"
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "template"
+            },
+            "blocks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "category",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "installation",
+                "quick-start",
+                "migration",
+                "contribution"
+              ]
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "guide"
+            },
+            "prerequisites": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "difficulty": {
+              "type": "string",
+              "enum": [
+                "beginner",
+                "intermediate",
+                "advanced"
+              ]
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "azionicons",
+                "primeicons"
+              ]
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "icon"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "guidelines",
+                "development",
+                "documentation",
+                "pull-requests"
+              ]
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "contributing"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/id"
+            },
+            "title": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/title"
+            },
+            "description": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/description"
+            },
+            "navLabel": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/navLabel"
+            },
+            "order": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/order"
+            },
+            "hidden": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/hidden"
+            },
+            "category": {
+              "type": "string"
+            },
+            "status": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/status"
+            },
+            "since": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/since"
+            },
+            "deprecatedIn": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/deprecatedIn"
+            },
+            "contributors": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/contributors"
+            },
+            "lastUpdated": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/lastUpdated"
+            },
+            "tags": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/tags"
+            },
+            "version": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/version"
+            },
+            "language": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/language"
+            },
+            "translatedFrom": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translatedFrom"
+            },
+            "translationStatus": {
+              "$ref": "#/definitions/v1-pt/anyOf/0/properties/translationStatus"
+            },
+            "type": {
+              "type": "string",
+              "const": "playground"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "type"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

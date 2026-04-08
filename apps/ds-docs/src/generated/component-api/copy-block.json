@@ -1,0 +1,57 @@
+{
+  "component": "copy-block",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/copy-block/copy-block.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "isCopyVisible",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "outlined",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "copiedLabel",
+      "type": "string",
+      "required": false,
+      "default": "Copied",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "copy",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.116Z"
+}

@@ -1,0 +1,50 @@
+---
+import DocsLayout from './DocsLayout.astro';
+import PageHeader from '../components/docs/PageHeader.vue';
+import { markdownComponents } from '../components/docs';
+import type { ComponentFrontmatter } from '../content/config';
+
+/**
+ * ComponentPage Layout
+ * 
+ * Layout specifically for component documentation pages.
+ * Renders the page header with status, metadata, and markdown content.
+ */
+
+interface Props {
+  entry: {
+    data: ComponentFrontmatter;
+    render: () => Promise<{ Content: any }>;
+  };
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const {
+  title,
+  description,
+  status,
+  since,
+  source,
+  storybook,
+  figma,
+} = entry.data;
+---
+
+<DocsLayout title={title} description={description}>
+  <PageHeader
+    title={title}
+    description={description}
+    status={status}
+    since={since}
+    source={source}
+    storybook={storybook}
+    figma={figma}
+    client:load
+  />
+  
+  <div class="prose prose-lg max-w-docs-content">
+    <Content components={markdownComponents} />
+  </div>
+</DocsLayout>

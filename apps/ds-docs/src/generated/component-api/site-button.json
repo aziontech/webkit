@@ -1,0 +1,64 @@
+{
+  "component": "site-button",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/site/button/button.vue",
+  "props": [
+    {
+      "name": "label",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "required": false,
+      "default": "large",
+      "description": ""
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "required": false,
+      "default": "secondary",
+      "description": ""
+    },
+    {
+      "name": "href",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "icon",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "required": false,
+      "default": "_self",
+      "description": ""
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "required": false,
+      "default": "cta",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "click",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.122Z"
+}

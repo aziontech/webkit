@@ -1,0 +1,90 @@
+{
+  "component": "primevue-sidebar",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/sidebar/sidebar.vue",
+  "props": [
+    {
+      "name": "visible",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "position",
+      "type": "string",
+      "required": false,
+      "default": "left",
+      "description": ""
+    },
+    {
+      "name": "baseZIndex",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "autoZIndex",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "dismissable",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "showCloseIcon",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "closeOnEscape",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:visible",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "hide",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "show",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "header",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.101Z"
+}

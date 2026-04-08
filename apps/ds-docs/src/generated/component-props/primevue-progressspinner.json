@@ -1,0 +1,29 @@
+{
+  "strokeWidth": {
+    "label": "Stroke Width",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "2"
+  },
+  "fill": {
+    "label": "Fill",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "none"
+  },
+  "animationDuration": {
+    "label": "Animation Duration",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "2s"
+  }
+}

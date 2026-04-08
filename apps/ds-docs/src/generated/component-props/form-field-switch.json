@@ -1,0 +1,29 @@
+{
+  "name": {
+    "label": "Name",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "preview"
+  },
+  "label": {
+    "label": "Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Label"
+  },
+  "description": {
+    "label": "Description",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Brief description of the field."
+  }
+}

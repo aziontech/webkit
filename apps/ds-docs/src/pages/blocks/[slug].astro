@@ -1,0 +1,58 @@
+---
+/**
+ * Blocks Dynamic Routes (English)
+ *
+ * Handles all pages under /blocks/[slug]. Excludes index so /blocks is served by index.astro.
+ * Uses BlockPageLayout with Overview, Usage, and API tabs (same as components).
+ */
+
+import { getCollection, render } from 'astro:content';
+import BlockPageLayout from '../../layouts/BlockPageLayout.astro';
+import { getBreadcrumbContext } from '../../lib/content';
+import { markdownComponents } from '../../components/docs';
+import { createI18nContext } from '../../lib/i18n';
+import type { BlockFrontmatter } from '../../content/config';
+
+export async function getStaticPaths() {
+  const allContent = await getCollection('v1-en');
+  const entries = allContent.filter((entry) => {
+    const id = entry.id || '';
+    if (!id.startsWith('blocks/')) return false;
+    const slug = id.replace('blocks/', '').replace(/\.(md|mdx)$/, '');
+    return slug !== 'index';
+  });
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace('blocks/', '').replace(/\.(md|mdx)$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const entryId = entry.id.replace(/\.(md|mdx)$/, '');
+const slugFromId = entryId.replace('blocks/', '');
+const breadcrumb = await getBreadcrumbContext(`/blocks/${slugFromId}`);
+const i18n = createI18nContext('en');
+const data = entry.data as BlockFrontmatter;
+---
+
+<BlockPageLayout
+  title={data.title}
+  description={data.description}
+  section={breadcrumb.section}
+  item={breadcrumb.item}
+  status={data.status}
+  since={data.since}
+  category={data.category}
+  block={slugFromId}
+  related={data.components || []}
+  anatomy={undefined}
+  accessibility={undefined}
+  usage={data.usage}
+  api={data.api}
+  language="en"
+  i18n={i18n}
+>
+  <Content components={markdownComponents} />
+</BlockPageLayout>

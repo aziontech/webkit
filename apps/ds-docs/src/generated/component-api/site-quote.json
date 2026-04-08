@@ -1,0 +1,30 @@
+{
+  "component": "site-quote",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/site/quote/quote.vue",
+  "props": [
+    {
+      "name": "logo",
+      "type": "[String",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "testimonial",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.125Z"
+}

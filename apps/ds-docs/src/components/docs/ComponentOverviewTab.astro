@@ -1,0 +1,117 @@
+---
+/**
+ * ComponentOverviewTab
+ * 
+ * Renders the Overview tab content for component documentation.
+ * 
+ * Content order:
+ * 1. Overview (prose from markdown)
+ * 2. Import code snippet
+ * 3. Playground (interactive component demo)
+ * 4. States (visual state variations)
+ * 5. Anatomy (from frontmatter)
+ * 6. Accessibility (from frontmatter)
+ */
+
+import AnatomyBlock from './AnatomyBlock.astro';
+import AccessibilityChecklist from './AccessibilityChecklist.astro';
+import type { AnatomyPart, AccessibilityMetadata } from '../../content/config';
+
+interface Props {
+  /** Component name for section IDs */
+  component?: string;
+  /** Anatomy parts from frontmatter */
+  anatomy?: AnatomyPart[];
+  /** Accessibility metadata from frontmatter */
+  accessibility?: AccessibilityMetadata;
+}
+
+const { 
+  component,
+  anatomy,
+  accessibility 
+} = Astro.props;
+---
+
+<div class="component-overview-tab">
+  <!-- Main content slot (overview prose, import, playground, states) -->
+  <div class="overview-content">
+    <slot />
+  </div>
+  
+  <!-- Anatomy Section (from frontmatter) -->
+  {anatomy && anatomy.length > 0 && (
+    <section id="anatomy" class="mt-12 pt-8 border-t border-default">
+      <h2 class="text-2xl font-medium text-default tracking-tight mb-6">
+        Anatomy
+      </h2>
+      <AnatomyBlock parts={anatomy} />
+    </section>
+  )}
+  
+  <!-- Accessibility Section (from frontmatter) -->
+  {accessibility && (
+    <section id="accessibility" class="mt-12 pt-8 border-t border-default">
+      <h2 class="text-2xl font-medium text-default tracking-tight mb-6">
+        Accessibility
+      </h2>
+      <AccessibilityChecklist 
+        keyboard={accessibility.keyboard}
+        aria={accessibility.aria}
+        wcag={accessibility.wcag}
+        notes={accessibility.notes}
+      />
+    </section>
+  )}
+</div>
+
+<style>
+  /* Section styling for consistent spacing */
+  
+  .overview-content :global(h2) {
+    @apply text-2xl font-medium text-black dark:text-white tracking-tight mt-10 mb-4 pb-2;
+  }
+  
+  .overview-content :global(h3) {
+    @apply text-xl font-medium text-black dark:text-white mt-8 mb-3;
+  }
+  
+  .overview-content :global(h4) {
+    @apply text-lg font-medium text-black dark:text-white mt-6 mb-2;
+  }
+  
+  /* Paragraph spacing */
+  .overview-content :global(p) {
+    /* `text-muted` doesn't exist in this project’s Tailwind config.
+       Use a Tailwind color that exists in this repo instead. */
+    @apply mb-4 leading-relaxed text-primary-600 dark:text-primary-300;
+  }
+  
+  /* List styling */
+  .overview-content :global(ul),
+  .overview-content :global(ol) {
+    @apply mb-4 pl-6;
+  }
+  
+  .overview-content :global(li) {
+    @apply mb-2 text-primary-600 dark:text-primary-300;
+  }
+  
+  /* Link styling */
+  .overview-content :global(a) {
+    @apply text-primary-600 hover:text-primary-700 underline underline-offset-2;
+  }
+  
+  /* Code styling */
+  .overview-content :global(code) {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-code;
+  }
+  
+  .overview-content :global(pre) {
+    @apply bg-surface-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+  }
+  
+  .overview-content :global(pre code) {
+    @apply bg-transparent p-0;
+  }
+</style>

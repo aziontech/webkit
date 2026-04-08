@@ -1,0 +1,10 @@
+{
+  "listCountriesPhoneService": {
+    "label": "List Countries Phone Service",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "function",
+    "control": "none"
+  }
+}

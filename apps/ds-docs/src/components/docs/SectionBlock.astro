@@ -1,0 +1,66 @@
+---
+/**
+ * SectionBlock
+ * 
+ * A consistent section wrapper for component documentation pages.
+ * Provides standardized heading, ID for anchor links, and spacing.
+ */
+
+interface Props {
+  id: string;
+  title: string;
+  description?: string;
+  tag?: 'section' | 'div';
+}
+
+const { 
+  id, 
+  title, 
+  description,
+  tag: Tag = 'section' 
+} = Astro.props;
+---
+
+<Tag id={id} class="docs-section mb-12 last:mb-0">
+  <header class="docs-section__header mb-4">
+    <h2 id={`${id}-heading`} class="docs-section__title text-2xl font-medium text-default tracking-tight border-b border-default pb-2">
+      {title}
+    </h2>
+    {description && (
+      <p class="docs-section__description mt-2 text-muted leading-relaxed">
+        {description}
+      </p>
+    )}
+  </header>
+  
+  <div class="docs-section__content">
+    <slot />
+  </div>
+</Tag>
+
+<style>
+  .docs-section {
+    scroll-margin-top: 2rem;
+  }
+  
+  .docs-section__title {
+    position: relative;
+  }
+  
+  .docs-section__title a {
+    position: absolute;
+    left: -1.5rem;
+    width: 1.5rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: var(--color-text-secondary, #6b7280);
+  }
+  
+  .docs-section:hover .docs-section__title a {
+    opacity: 1;
+  }
+</style>

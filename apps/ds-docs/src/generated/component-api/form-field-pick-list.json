@@ -1,0 +1,44 @@
+{
+  "component": "form-field-pick-list",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-pick-list/field-pick-list.vue",
+  "props": [
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "dataPick",
+      "type": "any[]",
+      "required": false,
+      "default": "[[], []]",
+      "description": ""
+    },
+    {
+      "name": "dataKey",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "service",
+      "type": "Function",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.070Z"
+}

@@ -1,0 +1,102 @@
+---
+/**
+ * ComponentApiTab
+ * 
+ * Renders the API tab content for component documentation.
+ * 
+ * Content order:
+ * 1. API header
+ * 2. PropsTable
+ * 3. SlotsTable
+ * 4. EventsTable
+ */
+
+import PropsTable from './PropsTable.astro';
+import SlotsTable from './SlotsTable.astro';
+import EventsTable from './EventsTable.astro';
+import type { PropDefinition, SlotDefinition, EventDefinition } from '../../content/config';
+
+interface Props {
+  /** Component name for display */
+  component?: string;
+  /** Props definitions from frontmatter */
+  props?: PropDefinition[];
+  /** Slots definitions from frontmatter */
+  slots?: SlotDefinition[];
+  /** Events definitions from frontmatter */
+  events?: EventDefinition[];
+}
+
+const { 
+  component,
+  props = [],
+  slots = [],
+  events = []
+} = Astro.props;
+
+const hasApiData = props.length > 0 || slots.length > 0 || events.length > 0;
+---
+
+<div class="component-api-tab">
+  <section id="api" class="api-section">
+    <h2 class="text-2xl font-medium text-default tracking-tight mb-6">
+      API
+    </h2>
+    
+    {hasApiData ? (
+      <div class="api-section__content space-y-10">
+        {/* Props */}
+        {props.length > 0 && (
+          <div class="api-subsection">
+            <h3 class="text-lg font-medium text-default mb-3">Props</h3>
+            <PropsTable rows={props} component={component} />
+          </div>
+        )}
+        
+        {/* Slots */}
+        {slots.length > 0 && (
+          <div class="api-subsection">
+            <h3 class="text-lg font-medium text-default mb-3">Slots</h3>
+            <SlotsTable rows={slots} component={component} />
+          </div>
+        )}
+        
+        {/* Events */}
+        {events.length > 0 && (
+          <div class="api-subsection">
+            <h3 class="text-lg font-medium text-default mb-3">Events</h3>
+            <EventsTable rows={events} component={component} />
+          </div>
+        )}
+      </div>
+    ) : (
+      <div class="empty-api-state py-12 text-center border border-dashed border-default rounded-lg bg-surface">
+        <i class="pi pi-code mx-auto text-4xl text-muted" aria-hidden="true" />
+        <h3 class="mt-2 text-sm font-medium text-default">API documentation coming soon</h3>
+        <p class="mt-1 text-sm text-muted">
+          Component API is being documented and will be available shortly.
+        </p>
+      </div>
+    )}
+    
+    {/* Additional API content slot for custom content */}
+    <slot />
+  </section>
+</div>
+
+<style>
+  .api-section {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

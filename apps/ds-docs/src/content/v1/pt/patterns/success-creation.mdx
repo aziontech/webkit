@@ -1,0 +1,109 @@
+---
+title: Padrão de Criação com Sucesso
+description: Exibe notificação de sucesso após criação de entidades com links para visualização e ações adicionais
+order: 2
+type: pattern
+category: feedback
+language: pt
+---
+
+<Callout type="note" title="Resumo do Padrão">
+Exibe uma notificação (toast) indicando o sucesso da criação de uma nova entidade no sistema. Disponibiliza um link para visualizar os detalhes da entidade criada e, opcionalmente, um botão para ação adicional relevante (ex: começar configuração).
+</Callout>
+
+## Sobre
+
+Este padrão define o comportamento e a apresentação visual para feedback positivo após a criação bem-sucedida de uma entidade pelo usuário. O sistema deve informar a conclusão da ação, reduzir incertezas e permitir ao usuário acessar facilmente o que foi criado.
+
+### Contexto & Problema
+
+Ao criar um item (p.ex: workload, network list, digital certificate), usuários podem não ter certeza sobre o sucesso da operação. Notificações genéricas ou ausência de feedback aumentam a insegurança e dificultam encontrar rapidamente a nova entidade.
+
+### Quando Usar
+
+- Após a conclusão bem-sucedida de ações de criação (CRUD - Create).
+
+### Componentes Utilizados
+
+- **Toast** (Block Console Kit)
+
+### Exemplo Visual
+
+![Exemplo do padrão de criação com sucesso](https://console-kit-docs.azion.app/_astro/image-1.BHbpCU6q_Bfn81.webp)
+
+*Workloads > Create Workload*
+
+## Comportamento Esperado
+
+<ContentTabs tab1Label="Fluxo Principal" tab2Label="Estados" defaultTab="tab1">
+  <div slot="tab1">
+    1. **Exibição de toast de sucesso:** O sistema mostra um toast (notificação temporária) afirmando que a criação foi realizada.
+    2. **Mensagem clara:** "Entidade criada com sucesso!" ou equivalente, contendo o nome da entidade.
+    3. **Link para visualizar:** O toast apresenta um link direto para os detalhes da nova entidade.
+    4. **Botão de ação opcional:** Quando aplicável, mostra um botão com ação relevante (ex: "Iniciar configuração").
+    5. **Desaparecimento automático:** O toast se fecha sozinho após alguns segundos ou pode ser fechado manualmente.
+  </div>
+  <div slot="tab2">
+    - **Sucesso:** Toast verde com ícone de check
+    - **Ação primária:** Link destacado para visualizar
+    - **Ação secundária:** Botão opcional para próximos passos
+    - **Auto-dismiss:** Fechamento automático em 5-8 segundos
+  </div>
+</ContentTabs>
+
+### Implementação
+
+```javascript title="handleToast.js"
+const handleToast = (response) => {
+   const toast = {
+        feedback: response.feedback,
+        actions: {
+            link: {
+                label: 'View Workload',
+                callback: () => response.redirectToUrl(response.urlToEditView)
+            },
+            secondary: {
+                label: 'Copy Workload URL',
+                icon: 'pi pi-copy',
+                animation: {
+                    time: 3000,
+                    icon: 'pi pi-check',
+                    label: 'Copied'
+                },
+                callback: () => props.clipboardWrite(response.domainName)
+            }
+        }
+    }
+    response.showToastWithActions(toast)
+}
+```
+
+### Boas Práticas
+
+<Callout type="tip" title="Dicas de Implementação">
+- Utilize linguagem clara, positiva e direta na mensagem
+- Inclua sempre o nome ou identificador da entidade criada
+- Garanta que o link leva diretamente ao objeto recém-criado
+- Mostre ações extra apenas quando houver contexto claro
+- Permita fechar o toast manualmente
+- Certifique-se de que usuários de leitores de tela também recebem o feedback
+</Callout>
+
+### Anti-padrões
+
+<Callout type="caution" title="O que Evitar">
+- Não deixe o usuário sem feedback após criar algo
+- Evite mensagens genéricas ("Sucesso!") sem contexto ou mensagens muito longas
+- Não force múltiplas notificações, agrupe quando possível
+- Nunca apresente links ou botões "quebrados"
+</Callout>
+
+### Acessibilidade
+
+- Utilize `aria-live="polite"` em componentes de toast para leitores de tela
+- Verifique contraste entre cores de fundo, ícone e texto
+- Garanta navegação por teclado até os botões de ação
+
+### Referências
+
+- [Atlassian - Success messages](https://atlassian.design/foundations/content/designing-messages/success-messages)

@@ -1,0 +1,110 @@
+{
+  "title": {
+    "label": "Title",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Option title"
+  },
+  "isLabel": {
+    "label": "Is Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "subtitle": {
+    "label": "Subtitle",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Subtitle"
+  },
+  "description": {
+    "label": "Description",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Optional description text."
+  },
+  "disabled": {
+    "label": "Disabled",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "auto": {
+    "label": "Auto",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "isCard": {
+    "label": "Is Card",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "hideSelector": {
+    "label": "Hide Selector",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "nameField": {
+    "label": "Name Field",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "example-field"
+  },
+  "name": {
+    "label": "Name",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "preview"
+  },
+  "value": {
+    "label": "Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "false"
+  },
+  "binary": {
+    "label": "Binary",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

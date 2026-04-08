@@ -1,0 +1,37 @@
+{
+  "component": "primevue-badge",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/badge/badge.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "[String",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "severity",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.085Z"
+}

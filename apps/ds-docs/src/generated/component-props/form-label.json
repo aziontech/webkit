@@ -1,0 +1,20 @@
+{
+  "label": {
+    "label": "Label",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "Label"
+  },
+  "isRequired": {
+    "label": "Is Required",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

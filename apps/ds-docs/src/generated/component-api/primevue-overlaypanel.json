@@ -1,0 +1,46 @@
+{
+  "component": "primevue-overlaypanel",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/overlaypanel/overlaypanel.vue",
+  "props": [
+    {
+      "name": "dismissable",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "showCloseIcon",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "show",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "hide",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.098Z"
+}

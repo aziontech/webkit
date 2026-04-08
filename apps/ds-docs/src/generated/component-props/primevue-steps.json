@@ -1,0 +1,29 @@
+{
+  "model": {
+    "label": "Model",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "activeStep": {
+    "label": "Active Step",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "readonly": {
+    "label": "Readonly",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  }
+}

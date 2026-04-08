@@ -1,0 +1,85 @@
+{
+  "component": "form-field-text-icon",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-text-icon/field-text-icon.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "readonly",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "iconPosition",
+      "type": "string",
+      "required": false,
+      "default": "right",
+      "description": ""
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "click-icon",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.075Z"
+}

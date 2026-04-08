@@ -1,0 +1,62 @@
+---
+/**
+ * PatternPageLayout
+ *
+ * Layout for pattern documentation pages. Shell + page header + prose content.
+ * No Overview/Usage/API tabs; pattern docs define their own sections in MDX.
+ */
+
+import DocsShellLayout from './DocsShellLayout.astro';
+import PageHeader from '../components/docs/PageHeader.vue';
+import RelatedLinks from '../components/docs/RelatedLinks.astro';
+import type { Section, NavItem } from '../lib/content/types';
+import type { I18nContext } from '../lib/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  section?: Section | null;
+  item?: NavItem | null;
+  status?: 'stable' | 'beta' | 'deprecated' | 'planned' | 'experimental';
+  category?: string;
+  /** Related pattern slugs for RelatedLinks */
+  related?: string[];
+  language?: string;
+  i18n?: I18nContext;
+}
+
+const {
+  title,
+  description,
+  section,
+  item,
+  status,
+  category,
+  related = [],
+  language = 'en',
+  i18n,
+} = Astro.props;
+
+const relatedItems = related.map((name) => ({
+  title: name,
+  href: language === 'en' ? `/patterns/${name.toLowerCase()}` : `/${language}/patterns/${name.toLowerCase()}`,
+  type: 'pattern' as const,
+}));
+---
+
+<DocsShellLayout title={title} description={description} section={section} item={item} language={language} i18n={i18n}>
+  <article class="doc-page pattern-page" data-pattern={category}>
+    <PageHeader
+      client:load
+      title={title}
+      description={description}
+      status={status}
+    />
+
+    <div class="doc-content prose prose-lg max-w-docs-content max-w-none">
+      <slot />
+    </div>
+
+    {relatedItems.length > 0 && <RelatedLinks items={relatedItems} />}
+  </article>
+</DocsShellLayout>

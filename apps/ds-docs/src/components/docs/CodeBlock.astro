@@ -1,0 +1,96 @@
+---
+/**
+ * CodeBlock Component (Astro)
+ * 
+ * Displays syntax-highlighted code with copy functionality.
+ * Uses Shiki for syntax highlighting via Astro's built-in support.
+ */
+
+import { codeToHtml } from 'shiki';
+
+interface Props {
+  code: string;
+  language?: string;
+  /** Alias for language (e.g. from MDX lang="javascript") */
+  lang?: string;
+  filename?: string;
+  showCopy?: boolean;
+  showLineNumbers?: boolean;
+}
+
+const {
+  code,
+  language: languageProp,
+  lang: langProp,
+  filename,
+  showCopy = true,
+  showLineNumbers = false,
+} = Astro.props;
+
+const language = languageProp ?? langProp ?? 'vue';
+
+// Use Shiki to highlight the code (same options as PlaygroundCode)
+const highlightedCode = await codeToHtml(code, {
+  lang: language,
+  theme: 'github-dark',
+});
+---
+
+<div class="relative overflow-hidden rounded-md border border-neutral-800 docs-code-block">
+  <!-- Header: always dark like Playground (independent of site theme) -->
+  <div class="flex items-center justify-between py-2 px-3 bg-surface-950 border-b border-neutral-800">
+    {filename ? (
+      <span class="text-xs text-neutral-400 font-code">{filename}</span>
+    ) : (
+      <span class="text-xs text-neutral-400 font-code">{language}</span>
+    )}
+    {showCopy && (
+      <button
+        type="button"
+        class="flex items-center gap-1.5 py-1 px-2 text-neutral-400 bg-transparent border-0 rounded cursor-pointer transition-all duration-150 hover:text-neutral-300 hover:bg-neutral-800 font-mono text-xs copy-button"
+        data-code={code}
+        aria-label="Copy code"
+      >
+        <span class="copy-icon-wrapper inline-flex items-center justify-center w-4 h-4">
+          <i class="pi pi-copy copy-icon" aria-hidden="true" />
+          <i class="pi pi-check text-green-500 check-icon" aria-hidden="true" style="display: none" />
+        </span>
+        <span class="copy-text">Copy</span>
+      </button>
+    )}
+  </div>
+  
+  <!-- Code container: same structure as Playground (dark bg, light text, independent of theme) -->
+  <div class="bg-surface-900 overflow-x-auto">
+    <div
+      class="p-4 [&_pre]:m-0 [&_pre]:p-0 [&_pre]:!bg-transparent [&_code]:font-mono [&_code]:text-[0.8125rem] [&_code]:leading-[1.6]"
+      set:html={highlightedCode}
+    />
+  </div>
+</div>
+
+<script>
+  // Copy to clipboard – check icon replaces copy icon only when copied
+  document.querySelectorAll('.copy-button').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const code = button.getAttribute('data-code');
+      if (!code) return;
+      const copyIcon = button.querySelector<HTMLElement>('.copy-icon');
+      const checkIcon = button.querySelector<HTMLElement>('.check-icon');
+      const copyText = button.querySelector('.copy-text');
+      try {
+        await navigator.clipboard.writeText(code);
+        if (copyIcon) copyIcon.style.display = 'none';
+        if (checkIcon) checkIcon.style.display = '';
+        if (copyText) copyText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyIcon) copyIcon.style.display = '';
+          if (checkIcon) checkIcon.style.display = 'none';
+          if (copyText) copyText.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy code:', err);
+      }
+    });
+  });
+</script>

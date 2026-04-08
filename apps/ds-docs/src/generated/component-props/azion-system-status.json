@@ -1,0 +1,19 @@
+{
+  "demoStatus": {
+    "label": "Simulate status",
+    "description": "Simulate status in the docs without calling the real API.",
+    "required": false,
+    "category": "Optional",
+    "type": "enum",
+    "control": "select",
+    "options": [
+      "operational",
+      "minor-outage",
+      "partial-outage",
+      "major-outage",
+      "maintenance"
+    ],
+    "default": "operational",
+    "demoOnly": true
+  }
+}

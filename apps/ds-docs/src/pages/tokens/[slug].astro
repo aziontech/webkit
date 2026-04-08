@@ -1,0 +1,47 @@
+---
+/**
+ * Tokens Dynamic Routes (English)
+ * 
+ * Handles all pages under /tokens/[slug]
+ * Uses the same layouts as PT routes, with language='en' default
+ */
+
+import { getCollection, render } from 'astro:content';
+import DocPageLayout from '../../layouts/DocPageLayout.astro';
+import { getBreadcrumbContext } from '../../lib/content';
+import { markdownComponents } from '../../components/docs';
+import { createI18nContext } from '../../lib/i18n';
+
+export async function getStaticPaths() {
+  const allContent = await getCollection('v1-en');
+  // Filter to only get tokens entries
+  const entries = allContent.filter(entry => (entry.id || '').startsWith('tokens/'));
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace('tokens/', '').replace(/\.(md|mdx)$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const entryId = entry.id.replace(/\.(md|mdx)$/, '');
+const slugFromId = entryId.replace('tokens/', '');
+const breadcrumb = await getBreadcrumbContext(`/tokens/${slugFromId === 'index' ? '' : slugFromId}`);
+
+// Create i18n context for English (default)
+const i18n = createI18nContext('en');
+---
+
+<DocPageLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  section={breadcrumb.section}
+  item={breadcrumb.item}
+  language="en"
+  i18n={i18n}
+>
+  <div class="prose prose-lg max-w-docs-content docs-code-always-dark">
+    <Content components={markdownComponents} />
+  </div>
+</DocPageLayout>

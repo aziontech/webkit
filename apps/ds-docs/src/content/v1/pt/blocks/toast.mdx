@@ -1,0 +1,163 @@
+---
+title: Toast
+description: Bloco de toast para feedback de sucesso e erro com título, descrição, ícone, link de ação, botão fechar e barra de progresso de fechamento automático.
+navLabel: Toast
+order: 1
+type: block
+category: feedback
+status: beta
+components:
+  - Toast
+usage:
+  whenToUse:
+    - Confirmar envio ou salvamento de formulário com sucesso
+    - Mostrar erros de validação ou do servidor sem bloquear a interface
+    - Feedback de curta duração que não exige confirmação do usuário
+  whenNotToUse:
+    - Erros críticos que exigem ação imediata (use um modal ou erro inline)
+    - Mensagens longas (prefira uma mensagem ou página dedicada)
+  doDonts:
+    - type: do
+      description: Use sucesso para confirmações e erro para falhas
+    - type: do
+      description: Mantenha título e descrição curtos
+    - type: dont
+      description: Não empilhe muitos toasts ao mesmo tempo
+  examples:
+    - title: Toast de sucesso
+      description: "Use para confirmações (ex.: salvo com sucesso)."
+      code: |
+        <BlockToastDemo
+          variant="success"
+          title="Alterações salvas"
+          description="Seu perfil foi atualizado."
+          actionText="Ver perfil"
+          actionHref="#"
+          durationMs={5000}
+          autoClose={false}
+        />
+    - title: Toast de erro
+      description: Use para erros de validação ou do servidor.
+      code: |
+        <BlockToastDemo
+          variant="error"
+          title="Algo deu errado"
+          description="Não foi possível salvar. Tente novamente."
+          actionText="Tentar de novo"
+          actionHref="#"
+          durationMs={5000}
+          autoClose={false}
+        />
+api:
+  props:
+    - name: variant
+      type: "'success' | 'error'"
+      default: "'success'"
+      required: false
+      description: Variante visual do toast
+    - name: title
+      type: "string"
+      default: "''"
+      required: true
+      description: Título do toast
+    - name: description
+      type: "string"
+      default: "undefined"
+      required: false
+      description: Texto de descrição opcional
+    - name: actionText
+      type: "string"
+      default: "undefined"
+      required: false
+      description: Rótulo do link ou botão de ação
+    - name: actionHref
+      type: "string"
+      default: "'#'"
+      required: false
+      description: URL do link de ação
+    - name: durationMs
+      type: "number"
+      default: "5000"
+      required: false
+      description: Duração do fechamento automático em milissegundos; a barra de progresso reflete esse valor
+    - name: autoClose
+      type: "boolean"
+      default: "true"
+      required: false
+      description: Quando false, o toast permanece visível e o timer não é iniciado
+    - name: showProgress
+      type: "boolean"
+      default: "true"
+      required: false
+      description: Quando false, a barra de progresso é ocultada
+---
+
+import { Callout, Playground } from '@components/docs';
+import { blockToastDemoProps } from '@components/demo/props-metadata';
+import BlockToastDemo from '@components/demo/BlockToastDemo.vue';
+
+O bloco Toast combina título, descrição opcional, ícone, link ou botão de ação opcional, botão de fechar e uma barra de progresso que indica o tempo restante até o fechamento automático.
+
+## Playground
+
+Explore o bloco Toast de forma interativa. Ajuste as props e veja as alterações em tempo real.
+
+<Playground
+  client:load
+  component-name="BlockToastDemo"
+  props={blockToastDemoProps}
+  initialValues={{ autoClose: false }}
+/>
+
+## Variantes
+
+Variantes de sucesso e erro para diferentes tipos de feedback.
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div class="border border-default rounded-lg overflow-hidden">
+    <div class="p-6 bg-gray-50 flex items-center justify-center min-h-[120px]">
+      <BlockToastDemo
+        client:load
+        variant="success"
+        title="Alterações salvas"
+        description="Seu perfil foi atualizado."
+        actionText="Ver perfil"
+        actionHref="#"
+        autoClose={false}
+        showProgress={true}
+      />
+    </div>
+    <div class="px-4 py-2 bg-layer1 border-t border-default">
+      <span class="text-sm font-medium text-default">Sucesso</span>
+      <p class="text-xs text-muted mt-0.5">Use para confirmações e feedback positivo</p>
+    </div>
+  </div>
+  <div class="border border-default rounded-lg overflow-hidden">
+    <div class="p-6 bg-gray-50 flex items-center justify-center min-h-[120px]">
+      <BlockToastDemo
+        client:load
+        variant="error"
+        title="Algo deu errado"
+        description="Não foi possível salvar suas alterações. Tente novamente."
+        actionText="Tentar de novo"
+        actionHref="#"
+        autoClose={false}
+        showProgress={true}
+      />
+    </div>
+    <div class="px-4 py-2 bg-layer1 border-t border-default">
+      <span class="text-sm font-medium text-default">Erro</span>
+      <p class="text-xs text-muted mt-0.5">Use para erros de validação ou do servidor</p>
+    </div>
+  </div>
+</div>
+
+## Comportamento
+
+- **Fechamento automático**: A barra de progresso diminui ao longo do `durationMs`; ao chegar a zero, o toast fecha.
+- **Botão fechar**: O usuário pode dispensar o toast a qualquer momento.
+- **Ação**: O link ou botão de ação pode navegar ou disparar uma nova tentativa sem fechar o toast (tratado pela sua aplicação).
+
+<Callout type="tip" title="Acessibilidade">
+Garanta que o botão de fechar tenha `aria-label` e que a barra de progresso use `role="progressbar"` com `aria-valuenow`, `aria-valuemin` e `aria-valuemax`.
+</Callout>

@@ -1,0 +1,193 @@
+---
+/**
+ * Tabs Component (Astro)
+ * 
+ * A server-side tabs component for switching between content views.
+ * Uses CSS and minimal JavaScript for tab switching.
+ * 
+ * Features:
+ * - Accessible with proper ARIA attributes
+ * - URL hash sync for deep linking
+ * - No client-side JavaScript required for basic functionality
+ * - Works with Astro slots
+ * 
+ * Usage:
+ * <Tabs>
+ *   <Fragment slot="overview">Content for Overview tab</Fragment>
+ *   <Fragment slot="status">Content for Status tab</Fragment>
+ * </Tabs>
+ */
+
+interface Props {
+  /** Initial active tab ID (default: 'overview') */
+  defaultTab?: 'overview' | 'status';
+}
+
+const { defaultTab = 'overview' } = Astro.props;
+
+// Define tabs statically - this component only supports overview and status tabs
+const tabs = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'status', label: 'Status' },
+] as const;
+
+type TabId = typeof tabs[number]['id'];
+---
+
+<div class="tabs-container" data-initial-tab={defaultTab}>
+  <!-- Tab List -->
+  <div 
+    role="tablist" 
+    class="flex border-b border-default mb-6"
+    aria-label="Content sections"
+  >
+    {tabs.map((tab) => (
+      <button
+        id={`tab-${tab.id}`}
+        role="tab"
+        aria-selected={tab.id === defaultTab ? 'true' : 'false'}
+        aria-controls={`panel-${tab.id}`}
+        tabindex={tab.id === defaultTab ? '0' : '-1'}
+        data-tab-id={tab.id}
+        class:list={[
+          'px-4 py-2.5 !text-sm font-medium border-b-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+          tab.id === defaultTab
+            ? 'border-default-hover text-default'
+            : 'border-transparent text-muted hover:text-default hover:border-default'
+        ]}
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
+  
+  <!-- Tab Panels -->
+  <div class="tab-panels font-mono">
+    <div
+      id="panel-overview"
+      role="tabpanel"
+      aria-labelledby="tab-overview"
+      data-panel-id="overview"
+      hidden={defaultTab !== 'overview'}
+      tabindex="0"
+    >
+      <slot name="overview" />
+    </div>
+    <div
+      id="panel-status"
+      role="tabpanel"
+      aria-labelledby="tab-status"
+      data-panel-id="status"
+      hidden={defaultTab !== 'status'}
+      tabindex="0"
+    >
+      <slot name="status" />
+    </div>
+  </div>
+</div>
+
+<script>
+  // Client-side tab switching with keyboard navigation
+  document.addEventListener('DOMContentLoaded', () => {
+    const containers = document.querySelectorAll('.tabs-container');
+    
+    containers.forEach(container => {
+      const tabs = container.querySelectorAll('[role="tab"]');
+      const panels = container.querySelectorAll('[role="tabpanel"]');
+      
+      // Initialize from URL hash
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const targetTab = container.querySelector(`[data-tab-id="${hash}"]`);
+        if (targetTab) {
+          activateTab(targetTab as HTMLElement, false);
+        }
+      }
+      
+      // Tab click handlers
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          activateTab(tab as HTMLElement, true);
+        });
+      });
+      
+      // Keyboard navigation
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('keydown', (e: Event) => {
+          const keyEvent = e as KeyboardEvent;
+          const tabsArray = Array.from(tabs);
+          let newIndex: number | null = null;
+          
+          switch (keyEvent.key) {
+            case 'ArrowLeft':
+              newIndex = index === 0 ? tabsArray.length - 1 : index - 1;
+              break;
+            case 'ArrowRight':
+              newIndex = index === tabsArray.length - 1 ? 0 : index + 1;
+              break;
+            case 'Home':
+              newIndex = 0;
+              break;
+            case 'End':
+              newIndex = tabsArray.length - 1;
+              break;
+            default:
+              return;
+          }
+          
+          if (newIndex !== null) {
+            keyEvent.preventDefault();
+            activateTab(tabsArray[newIndex] as HTMLElement, true);
+          }
+        });
+      });
+    });
+    
+    function activateTab(tab: HTMLElement, updateHash: boolean) {
+      const container = tab.closest('.tabs-container');
+      if (!container) return;
+      
+      const tabId = tab.dataset.tabId;
+      const allTabs = container.querySelectorAll('[role="tab"]');
+      const allPanels = container.querySelectorAll('[role="tabpanel"]');
+      
+      // Update tabs
+      allTabs.forEach(t => {
+        const tabElement = t as HTMLElement;
+        const isActive = tabElement.dataset.tabId === tabId;
+        tabElement.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tabElement.setAttribute('tabindex', isActive ? '0' : '-1');
+        tabElement.classList.toggle('border-default-hover', isActive);
+        tabElement.classList.toggle('text-default', isActive);
+        tabElement.classList.toggle('border-transparent', !isActive);
+        tabElement.classList.toggle('text-muted', !isActive);
+      });
+      
+      // Update panels
+      allPanels.forEach(p => {
+        const panelElement = p as HTMLElement;
+        const isActive = panelElement.dataset.panelId === tabId;
+        panelElement.hidden = !isActive;
+      });
+      
+      // Update URL hash
+      if (updateHash && tabId) {
+        history.replaceState(null, '', `#${tabId}`);
+      }
+      
+      // Focus the tab
+      tab.focus();
+    }
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const targetTab = document.querySelector(`[data-tab-id="${hash}"]`);
+        if (targetTab) {
+          activateTab(targetTab as HTMLElement, false);
+        }
+      }
+    });
+  });
+</script>

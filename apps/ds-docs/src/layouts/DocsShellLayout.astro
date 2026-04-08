@@ -1,0 +1,157 @@
+---
+/**
+ * DocsShellLayout
+ * 
+ * Documentation shell layout providing header, sidebar, content area, and footer.
+ * This is the main layout for all documentation pages.
+ * Supports internationalization (i18n) with language switching.
+ *
+ * Layout structure:
+ * - Header: Logo, Navigation, Search, Version Switcher
+ * - Sidebar: Navigation tree
+ * - Main: Content area
+ * - Footer: User preferences (Language, Theme), Social links, Copyright
+ */
+
+import BaseLayout from './BaseLayout.astro';
+// Import Azion Icons - icon font library (azionicons + primeicons)
+import '@aziontech/icons';
+import DocsSidebar from '../components/docs/DocsSidebar.vue';
+import DocsHeader from '../components/docs/DocsHeader.vue';
+import DocsFooter from '../components/docs/DocsFooter.vue';
+import SearchModal from '../components/search/SearchModal.vue';
+import { getNavigationTree } from '../lib/content';
+import type { Section, NavItem } from '../lib/content/types';
+import type { I18nContext } from '../lib/i18n';
+import { getDefaultLanguage, isSupportedLanguage, getAllLanguages } from '../config';
+
+interface Props {
+  title: string;
+  description?: string;
+  section?: Section | null;
+  item?: NavItem | null;
+  /** Current language code */
+  language?: string;
+  /** i18n context for translations */
+  i18n?: I18nContext;
+}
+
+const { title, description, section, item, language = 'en', i18n } = Astro.props;
+
+// Get navigation tree
+const navigation = await getNavigationTree();
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
+
+// Determine the language for the HTML lang attribute
+const htmlLang = isSupportedLanguage(language) ? language : getDefaultLanguage();
+
+// Build alternate language URLs for hreflang tags
+const alternateUrls: Record<string, string> = {};
+const pathWithoutLang = currentPath.replace(/^\/(pt|en)/, '') || '/';
+for (const lang of getAllLanguages()) {
+  if (lang === getDefaultLanguage()) {
+    alternateUrls[lang] = pathWithoutLang;
+  } else {
+    alternateUrls[lang] = `/${lang}${pathWithoutLang}`;
+  }
+}
+---
+
+<BaseLayout title={title} description={description} language={htmlLang}>
+  <!-- hreflang tags for SEO -->
+  {getAllLanguages().map((lang) => (
+    <link 
+      rel="alternate" 
+      hreflang={lang} 
+      href={`https://docs.azion.com${alternateUrls[lang]}`} 
+      slot="head"
+    />
+  ))}
+  <link 
+    rel="alternate" 
+    hreflang="x-default" 
+    href={`https://docs.azion.com${alternateUrls[getDefaultLanguage()]}`} 
+    slot="head"
+  />
+  
+  <div class="docs-layout flex">
+    <!-- Sidebar Navigation -->
+    <DocsSidebar
+      client:load
+      navigation={navigation}
+      currentPath={currentPath}
+      language={language}
+    />
+    
+    <!-- Main Content Area -->
+    <main class="docs-main flex-1 min-h-screen flex flex-col bg-canvas">
+      <!-- Header -->
+      <DocsHeader
+        client:load
+        section={section}
+        item={item}
+        language={language}
+      />
+      
+      <!-- Content -->
+      <div class="docs-content docs-content-reveal flex-1 px-8 py-8 max-w-docs-content mx-auto w-full bg-canvas">
+        <slot />
+      </div>
+      
+      <!-- Footer -->
+      <DocsFooter
+        client:load
+        language={language}
+      />
+    </main>
+  </div>
+  
+  <!-- Search Modal - rendered at body level for proper positioning -->
+  <SearchModal client:only="vue" />
+</BaseLayout>
+
+<script>
+  import '@/scripts/scroll-reveal';
+  // Global keyboard shortcut for search
+  document.addEventListener('keydown', (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+      event.preventDefault();
+      // The SearchModal component handles the state via useSearch composable
+      // We dispatch a custom event that the modal listens to
+      document.dispatchEvent(new CustomEvent('toggle-search'));
+    }
+  });
+</script>
+
+<style>
+  .docs-layout {
+    min-height: 100vh;
+  }
+  
+  .docs-content {
+    max-width: 80rem;
+  }
+  
+  .docs-content-reveal {
+    animation: docsContentReveal 0.35s ease-out 0.05s both;
+  }
+  
+  /* Initial state for scroll-reveal blocks (script adds .scroll-reveal-pending, Motion animates when in view) */
+  .docs-content-reveal .scroll-reveal-pending {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  
+  @keyframes docsContentReveal {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

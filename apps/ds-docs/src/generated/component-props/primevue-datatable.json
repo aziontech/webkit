@@ -1,0 +1,209 @@
+{
+  "value": {
+    "label": "Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "dataKey": {
+    "label": "Data Key",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "rows": {
+    "label": "Rows",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "first": {
+    "label": "First",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "totalRecords": {
+    "label": "Total Records",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "paginator": {
+    "label": "Paginator",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "lazy": {
+    "label": "Lazy",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "sortField": {
+    "label": "Sort Field",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "sortOrder": {
+    "label": "Sort Order",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": null
+  },
+  "defaultSortOrder": {
+    "label": "Default Sort Order",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 1
+  },
+  "multiSortMeta": {
+    "label": "Multi Sort Meta",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "sortMode": {
+    "label": "Sort Mode",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "single"
+  },
+  "removableSort": {
+    "label": "Removable Sort",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "filters": {
+    "label": "Filters",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "filterDisplay": {
+    "label": "Filter Display",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "globalFilterFields": {
+    "label": "Global Filter Fields",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "selection": {
+    "label": "Selection",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "selectionMode": {
+    "label": "Selection Mode",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "compareSelectionBy": {
+    "label": "Compare Selection By",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "equals"
+  },
+  "metaKeySelection": {
+    "label": "Meta Key Selection",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "contextMenu": {
+    "label": "Context Menu",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "contextMenuSelection": {
+    "label": "Context Menu Selection",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "rowHover": {
+    "label": "Row Hover",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

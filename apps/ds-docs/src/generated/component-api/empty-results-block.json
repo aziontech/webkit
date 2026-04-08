@@ -1,0 +1,102 @@
+{
+  "component": "empty-results-block",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/empty-results-block/empty-results-block.vue",
+  "props": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "createButtonLabel",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabledList",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "inTabs",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "noBorder",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "noShowBorderTop",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "showLearnMoreButton",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "documentationService",
+      "type": "Function",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "pt",
+      "type": "object",
+      "required": false,
+      "default": "({})",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "click-to-create",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "illustration",
+      "description": ""
+    },
+    {
+      "name": "extraActionsLeft",
+      "description": ""
+    },
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "extraActionsRight",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.119Z"
+}

@@ -1,0 +1,171 @@
+{
+  "value": {
+    "label": "Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "name": {
+    "label": "Name",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "preview"
+  },
+  "label": {
+    "label": "Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Label"
+  },
+  "placeholder": {
+    "label": "Placeholder",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Type here..."
+  },
+  "description": {
+    "label": "Description",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Brief description of the field."
+  },
+  "optionLabel": {
+    "label": "Option Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "label"
+  },
+  "optionValue": {
+    "label": "Option Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "value"
+  },
+  "moreOptions": {
+    "label": "More Options",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "null"
+  },
+  "optionDisabled": {
+    "label": "Option Disabled",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "service": {
+    "label": "Service",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "function",
+    "control": "none"
+  },
+  "loadService": {
+    "label": "Load Service",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "function",
+    "control": "none"
+  },
+  "enableWorkaroundLabelToDisabledOptions": {
+    "label": "Enable Workaround Label To Disabled Options",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "enableClearOption": {
+    "label": "Enable Clear Option",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "disableEmitFirstRender": {
+    "label": "Disable Emit First Render",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "optionGroupLabel": {
+    "label": "Option Group Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "optionGroupChildren": {
+    "label": "Option Group Children",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "defaultPosition": {
+    "label": "Default Position",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "showIcon": {
+    "label": "Show Icon",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "iconColor": {
+    "label": "Icon Color",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "({})"
+  }
+}
