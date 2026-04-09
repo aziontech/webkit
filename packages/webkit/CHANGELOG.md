@@ -1,3 +1,10 @@
+## [1.19.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.1...@aziontech/webkit@1.19.2) (2026-04-09)
+
+
+### Bug Fixes
+
+* add fallback key for skeleton columns ([cc7ec45](https://github.com/aziontech/webkit/commit/cc7ec45c35cc7f12e4ba0627c2de82dd15bed2e0))
+
 ## [1.19.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.0...@aziontech/webkit@1.19.1) (2026-04-09)
 
 
