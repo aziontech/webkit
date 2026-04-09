@@ -90,7 +90,7 @@
     "./card-content": "./src/core/card/card-content/card-content.vue",
     "./carousel": "./src/core/primevue/carousel/carousel.vue",
     "./chip": "./src/core/primevue/chip/chip.vue",
-    "./column": "./src/core/primevue/column/column.vue",
+    "./column": "./src/core/primevue/column/column.js",
     "./datatable": "./src/core/primevue/datatable/datatable.vue",
     "./dialog": "./src/core/primevue/dialog/dialog.vue",
     "./divider": "./src/core/primevue/divider/divider.vue",
