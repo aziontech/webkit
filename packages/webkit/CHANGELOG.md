@@ -1,3 +1,12 @@
+## [1.19.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.0...@aziontech/webkit@1.19.1) (2026-04-09)
+
+
+### Bug Fixes
+
+* embed console storybook url ([f2e6c3d](https://github.com/aziontech/webkit/commit/f2e6c3de1103a7c9d0bbf08e93ced7ab3cb6aa69))
+* inlinemessage export, the primevue wrappers should same name ([62d0234](https://github.com/aziontech/webkit/commit/62d02340dc301f1f4e156928f9de09c2e19fedcb))
+* storybook sidebar console include renderer ([1236946](https://github.com/aziontech/webkit/commit/1236946caae6f8ca2a054fa4de6edfcd4c7543dd))
+
 ## [1.19.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.18.0...@aziontech/webkit@1.19.0) (2026-04-02)
 
 
