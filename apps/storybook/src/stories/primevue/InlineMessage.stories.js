@@ -1,4 +1,4 @@
-import InlineMessage from '@aziontech/webkit/inline-message';
+import InlineMessage from '@aziontech/webkit/inlinemessage';
 
 export default {
   title: 'PrimeVue/InlineMessage',
