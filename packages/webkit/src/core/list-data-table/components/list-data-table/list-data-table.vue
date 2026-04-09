@@ -58,7 +58,7 @@
       <template v-if="shouldShowFullSkeleton">
         <Column
           v-for="(col, index) in columns"
-          :key="col.field"
+          :key="col.field ?? `skeleton-col-${index}`"
           :field="col.field"
           :header="col.header"
         >
