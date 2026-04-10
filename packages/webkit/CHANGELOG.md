@@ -1,3 +1,14 @@
+## [1.19.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.2...@aziontech/webkit@1.19.3) (2026-04-10)
+
+
+### Bug Fixes
+
+* buttons copy code, download, save ([3ad74b2](https://github.com/aziontech/webkit/commit/3ad74b2fc50f7af7853d731c3bb0f8457c00d133))
+* plugin transparent bg ([e9ff368](https://github.com/aziontech/webkit/commit/e9ff3686cb438f546104096dd29eee5a9cc36188))
+* rollback site/button-content ([a2a4dda](https://github.com/aziontech/webkit/commit/a2a4ddadbb7df9ac77b993526c7df29be8da1a61))
+* rollback site/button-content ([1399b5e](https://github.com/aziontech/webkit/commit/1399b5e3099eab9a9ef0145fd7544a354592e60b))
+* storybook logo azion ([a17cef7](https://github.com/aziontech/webkit/commit/a17cef7a4aa253efafa2dc3c63fddc7a940017e8))
+
 ## [1.19.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.1...@aziontech/webkit@1.19.2) (2026-04-09)
 
 
