@@ -128,6 +128,7 @@
     "./calendar": "./src/core/primevue/calendar/calendar.vue",
     "./picklist": "./src/core/primevue/picklist/picklist.vue",
     "./toggle": "./src/components/toggle/toggle.vue",
+    "./site/button": "./src/components/site/button/button.vue",
     "./svg/error-403": "./src/svg/error-403/error-403.vue",
     "./svg/error-404": "./src/svg/error-404/error-404.vue",
     "./svg/azion/full": "./src/svg/azion/full/full.vue",
