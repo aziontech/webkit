@@ -1,9 +1,0 @@
-{
-  "main": "./base-modal.vue",
-  "module": "./base-modal.vue",
-  "types": "./base-modal.vue.d.ts",
-  "browser": {
-    "./sfc": "./base-modal.vue"
-  },
-  "sideEffects": ["*.vue"]
-}
