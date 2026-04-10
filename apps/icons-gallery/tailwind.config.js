@@ -8,5 +8,5 @@ export default {
     extend: {},
   },
   darkMode: 'class',
-  plugins: [],
+  plugins: [require('tailwind-gradient-mask-image')],
 };
