@@ -35,9 +35,9 @@ To start the Storybook development server:
 
 ```bash
 # From the root
-pnpm storybook:dev
+pnpm storybook:dw
 
-# Or from this directory
+# from this directory
 pnpm dev
 ```
 
@@ -51,7 +51,7 @@ To build a static version of the Storybook:
 # From the root
 pnpm storybook:build
 
-# Or from this directory
+# from this directory
 pnpm build
 ```
 
