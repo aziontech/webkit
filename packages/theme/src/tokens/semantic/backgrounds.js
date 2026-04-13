@@ -4,7 +4,7 @@
  * Generated from figma-reference-tokens-studio.
  */
 
-import { tokenRef } from '../build/refs.js';
+import { tokenRef } from '../build/refs.js'
 
 export const backgroundSemantic = {
   light: {
@@ -20,7 +20,8 @@ export const backgroundSemantic = {
     warning: tokenRef('primitives.yellow.200'),
     backdrop: tokenRef('#00000040'),
     primaryHover: tokenRef('brand.primary.primary-600'),
-    primary: tokenRef('brand.primary.primary-500')
+    primary: tokenRef('brand.primary.primary-500'),
+    primaryMask: tokenRef('#FE601F29')
   },
   dark: {
     surfaceRaised: tokenRef('brand.surfaces.surface-800'),
@@ -35,10 +36,11 @@ export const backgroundSemantic = {
     warning: tokenRef('primitives.yellow.800'),
     backdrop: tokenRef('#00000040'),
     primaryHover: tokenRef('brand.primary.primary-400'),
-    primary: tokenRef('brand.primary.primary-500')
-  },
-};
+    primary: tokenRef('brand.primary.primary-500'),
+    primaryMask: tokenRef('#FE601F29')
+  }
+}
 
 export default {
-  backgroundSemantic,
-};
+  backgroundSemantic
+}

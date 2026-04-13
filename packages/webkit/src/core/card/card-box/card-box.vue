@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="border border-default rounded-md flex flex-col"
-  >
+  <div class="border border-default rounded-md flex flex-col">
     <div
       class="rounded-t-md group bg-[var(--table-header-cell-bg)] dark:bg-surface-700 border-b border-default px-4 py-1.5 h-11 flex items-center justify-between overflow-visible"
     >
@@ -20,7 +18,7 @@
 
     <div
       v-if="hasFooterSlot"
-      class="border-t border-default bg-[var(--table-header-cell-bg)] h-11 flex items-center justify-center px-4 rounded-b-md"
+      class="border-t border-default bg-[var(--table-header-cell-bg)] flex items-center justify-center px-4 py-3 rounded-b-md"
     >
       <slot name="footer" />
     </div>
