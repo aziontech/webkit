@@ -45,9 +45,24 @@ const planItems = [
 ]
 
 const basicItems = [
-  { value: 'option1', icon: 'pi pi-check', label: 'Option One', description: 'First option description' },
-  { value: 'option2', icon: 'pi pi-times', label: 'Option Two', description: 'Second option description' },
-  { value: 'option3', icon: 'pi pi-star', label: 'Option Three', description: 'Third option description' }
+  {
+    value: 'option1',
+    icon: 'pi pi-check',
+    label: 'Option One',
+    description: 'First option description'
+  },
+  {
+    value: 'option2',
+    icon: 'pi pi-times',
+    label: 'Option Two',
+    description: 'Second option description'
+  },
+  {
+    value: 'option3',
+    icon: 'pi pi-star',
+    label: 'Option Three',
+    description: 'Third option description'
+  }
 ]
 
 export const PlanSelection = {
@@ -63,9 +78,9 @@ export const PlanSelection = {
     template: `
       <BoxGridSelection v-bind="args">
         <template #tag="{ item }">
-          <Tag 
-            :value="item.tag" 
-            severity="info" 
+          <Tag
+            :value="item.tag"
+            severity="info"
             class="font-mono text-xs"
           />
         </template>
@@ -85,10 +100,22 @@ export const SignupRoleOptions = {
   args: {
     modelValue: 'Software Developer',
     items: [
-      { value: 'Software Developer', label: 'Software Developer', ariaLabel: 'Software Developer role' },
+      {
+        value: 'Software Developer',
+        label: 'Software Developer',
+        ariaLabel: 'Software Developer role'
+      },
       { value: 'DevOps Engineer', label: 'DevOps Engineer', ariaLabel: 'DevOps Engineer role' },
-      { value: 'Infrastructure Analyst', label: 'Infrastructure Analyst', ariaLabel: 'Infrastructure Analyst role' },
-      { value: 'Security Specialist', label: 'Security Specialist', ariaLabel: 'Security Specialist role' }
+      {
+        value: 'Infrastructure Analyst',
+        label: 'Infrastructure Analyst',
+        ariaLabel: 'Infrastructure Analyst role'
+      },
+      {
+        value: 'Security Specialist',
+        label: 'Security Specialist',
+        ariaLabel: 'Security Specialist role'
+      }
     ]
   }
 }
