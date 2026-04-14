@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./badge.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

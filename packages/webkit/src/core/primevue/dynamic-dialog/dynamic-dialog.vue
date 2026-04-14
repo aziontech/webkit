@@ -1,7 +1,7 @@
 <script setup>
-import DynamicDialog from 'primevue/dynamicdialog'
+  import DynamicDialog from 'primevue/dynamicdialog'
 
-defineOptions({ name: 'DynamicDialog' })
+  defineOptions({ name: 'DynamicDialog' })
 </script>
 
 <template>

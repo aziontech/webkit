@@ -1,5 +1,6 @@
 <script setup>
-  import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+
   import CopyBlock from '../../../../components/buttons/button-copy/button-copy.vue'
   import { usePopupPosition } from '../../composables/usePopupPosition.js'
 

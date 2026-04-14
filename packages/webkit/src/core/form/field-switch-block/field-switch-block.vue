@@ -27,10 +27,10 @@
 
 <script setup>
   import InputSwitch from 'primevue/inputswitch'
-  import SelectorBlock from '../../selector-block/selector-block.vue'
-
   import { useField } from 'vee-validate'
-  import { toRefs, useAttrs, computed } from 'vue'
+  import { computed, toRefs, useAttrs } from 'vue'
+
+  import SelectorBlock from '../../selector-block/selector-block.vue'
 
   defineOptions({ name: 'FieldSwitchBlock' })
 

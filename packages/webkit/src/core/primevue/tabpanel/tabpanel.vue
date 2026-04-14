@@ -1,26 +1,26 @@
 <script setup>
-import TabPanel from 'primevue/tabpanel'
+  import TabPanel from 'primevue/tabpanel'
 
-defineOptions({ name: 'TabPanel' })
+  defineOptions({ name: 'TabPanel' })
 
-const props = defineProps({
-  header: {
-    type: String,
-    default: undefined
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    header: {
+      type: String,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 </script>
 
 <template>
@@ -30,10 +30,16 @@ const props = defineProps({
     :class="props.class"
     :pt="props.pt"
   >
-    <template v-if="$slots.header" #header>
+    <template
+      v-if="$slots.header"
+      #header
+    >
       <slot name="header" />
     </template>
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
   </TabPanel>

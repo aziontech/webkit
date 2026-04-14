@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./list-data-table-row-actions.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }
