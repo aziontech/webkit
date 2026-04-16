@@ -1,5 +1,5 @@
 <script setup>
-defineOptions({ name: 'error-404' })
+  defineOptions({ name: 'Error404' })
 </script>
 
 <template>

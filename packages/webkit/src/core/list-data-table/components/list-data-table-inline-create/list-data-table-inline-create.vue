@@ -42,9 +42,9 @@
 </template>
 
 <script setup>
-  import { ref, computed, watch } from 'vue'
-  import InputText from 'primevue/inputtext'
   import PrimeButton from 'primevue/button'
+  import InputText from 'primevue/inputtext'
+  import { computed, ref, watch } from 'vue'
 
   defineOptions({ name: 'DataTableInlineCreate' })
 

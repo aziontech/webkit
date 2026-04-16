@@ -25,10 +25,10 @@
 
 <script setup>
   import PrimeRadio from 'primevue/radiobutton'
-  import SelectorBlock from '../../selector-block/selector-block.vue'
-
   import { useField } from 'vee-validate'
   import { toRefs } from 'vue'
+
+  import SelectorBlock from '../../selector-block/selector-block.vue'
 
   defineOptions({ name: 'FieldRadioBlock' })
   const emit = defineEmits(['onRadioChange'])

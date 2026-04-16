@@ -1,24 +1,24 @@
 <script setup>
-import Accordion from 'primevue/accordion'
+  import Accordion from 'primevue/accordion'
 
-defineOptions({ name: 'Accordion' })
+  defineOptions({ name: 'Accordion' })
 
-const props = defineProps({
-  activeIndex: {
-    type: [Number, Array],
-    default: null
-  },
-  multiple: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    activeIndex: {
+      type: [Number, Array],
+      default: null
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 
-const emit = defineEmits(['tab-open', 'tab-close', 'update:activeIndex'])
+  const emit = defineEmits(['tab-open', 'tab-close', 'update:activeIndex'])
 </script>
 
 <template>

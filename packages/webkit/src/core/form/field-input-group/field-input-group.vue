@@ -1,9 +1,10 @@
 <script setup>
-  import { toRef, useSlots, computed, useAttrs } from 'vue'
-  import { useField } from 'vee-validate'
   import InputText from 'primevue/inputtext'
-  import InputSlot from '../slots/input-slot'
+  import { useField } from 'vee-validate'
+  import { computed, toRef, useAttrs, useSlots } from 'vue'
+
   import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const props = defineProps({
     value: {

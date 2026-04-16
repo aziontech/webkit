@@ -143,10 +143,11 @@
 </template>
 
 <script setup>
-  import { ref, computed, provide, useSlots, watch } from 'vue'
-  import PrimeDataTable from 'primevue/datatable'
   import Column from 'primevue/column'
+  import PrimeDataTable from 'primevue/datatable'
   import Skeleton from 'primevue/skeleton'
+  import { computed, provide, ref, useSlots, watch } from 'vue'
+
   import EmptyResultsBlock from '../../../../components/empty-results-block/empty-results-block.vue'
   import Illustration from '../../../../svg/illustration-layers/illustration-layers.vue'
 

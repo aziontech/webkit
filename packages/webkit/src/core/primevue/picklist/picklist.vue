@@ -1,88 +1,88 @@
 <script setup>
-import PickList from 'primevue/picklist'
+  import PickList from 'primevue/picklist'
 
-defineOptions({ name: 'PickList' })
+  defineOptions({ name: 'PickList' })
 
-const props = defineProps({
-  modelValue: {
-    type: Array,
-    default: undefined
-  },
-  selection: {
-    type: Array,
-    default: undefined
-  },
-  dataKey: {
-    type: String,
-    default: undefined
-  },
-  metaKeySelection: {
-    type: Boolean,
-    default: false
-  },
-  showSourceControls: {
-    type: Boolean,
-    default: true
-  },
-  showTargetControls: {
-    type: Boolean,
-    default: true
-  },
-  responsive: {
-    type: Boolean,
-    default: true
-  },
-  breakpoint: {
-    type: String,
-    default: '960px'
-  },
-  moveToTargetProps: {
-    type: Object,
-    default: undefined
-  },
-  moveAllToTargetProps: {
-    type: Object,
-    default: undefined
-  },
-  moveToSourceProps: {
-    type: Object,
-    default: undefined
-  },
-  moveAllToSourceProps: {
-    type: Object,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  sourceSelection: {
-    type: Array,
-    default: undefined
-  },
-  targetSelection: {
-    type: Array,
-    default: undefined
-  },
-  listStyle: {
-    type: [String, Object],
-    default: undefined
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
+    selection: {
+      type: Array,
+      default: undefined
+    },
+    dataKey: {
+      type: String,
+      default: undefined
+    },
+    metaKeySelection: {
+      type: Boolean,
+      default: false
+    },
+    showSourceControls: {
+      type: Boolean,
+      default: true
+    },
+    showTargetControls: {
+      type: Boolean,
+      default: true
+    },
+    responsive: {
+      type: Boolean,
+      default: true
+    },
+    breakpoint: {
+      type: String,
+      default: '960px'
+    },
+    moveToTargetProps: {
+      type: Object,
+      default: undefined
+    },
+    moveAllToTargetProps: {
+      type: Object,
+      default: undefined
+    },
+    moveToSourceProps: {
+      type: Object,
+      default: undefined
+    },
+    moveAllToSourceProps: {
+      type: Object,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    sourceSelection: {
+      type: Array,
+      default: undefined
+    },
+    targetSelection: {
+      type: Array,
+      default: undefined
+    },
+    listStyle: {
+      type: [String, Object],
+      default: undefined
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits([
-  'update:modelValue',
-  'update:selection',
-  'reorder',
-  'move-to-target',
-  'move-all-to-target',
-  'move-to-source',
-  'move-all-to-source'
-])
+  const emit = defineEmits([
+    'update:modelValue',
+    'update:selection',
+    'reorder',
+    'move-to-target',
+    'move-all-to-target',
+    'move-to-source',
+    'move-all-to-source'
+  ])
 </script>
 
 <template>
@@ -112,14 +112,26 @@ const emit = defineEmits([
     @move-to-source="emit('move-to-source', $event)"
     @move-all-to-source="emit('move-all-to-source', $event)"
   >
-    <template v-if="$slots.sourceheader" #sourceheader>
+    <template
+      v-if="$slots.sourceheader"
+      #sourceheader
+    >
       <slot name="sourceheader" />
     </template>
-    <template v-if="$slots.targetheader" #targetheader>
+    <template
+      v-if="$slots.targetheader"
+      #targetheader
+    >
       <slot name="targetheader" />
     </template>
-    <template v-if="$slots.item" #item="slotProps">
-      <slot name="item" v-bind="slotProps" />
+    <template
+      v-if="$slots.item"
+      #item="slotProps"
+    >
+      <slot
+        name="item"
+        v-bind="slotProps"
+      />
     </template>
   </PickList>
 </template>

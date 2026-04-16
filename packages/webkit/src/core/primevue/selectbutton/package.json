@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./selectbutton.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

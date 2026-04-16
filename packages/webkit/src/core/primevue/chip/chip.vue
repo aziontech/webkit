@@ -1,32 +1,32 @@
 <script setup>
-import Chip from 'primevue/chip'
+  import Chip from 'primevue/chip'
 
-defineOptions({ name: 'Chip' })
+  defineOptions({ name: 'Chip' })
 
-const props = defineProps({
-  label: {
-    type: String,
-    default: undefined
-  },
-  icon: {
-    type: String,
-    default: undefined
-  },
-  image: {
-    type: String,
-    default: undefined
-  },
-  removable: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    label: {
+      type: String,
+      default: undefined
+    },
+    icon: {
+      type: String,
+      default: undefined
+    },
+    image: {
+      type: String,
+      default: undefined
+    },
+    removable: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 
-const emit = defineEmits(['remove'])
+  const emit = defineEmits(['remove'])
 </script>
 
 <template>
@@ -38,7 +38,10 @@ const emit = defineEmits(['remove'])
     :class="props.class"
     @remove="emit('remove')"
   >
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
   </Chip>

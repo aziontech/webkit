@@ -1,1 +1,10 @@
-{"main": "./card.vue", "module": "./card.vue", "browser": {"./sfc": "./card.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./card.vue",
+  "module": "./card.vue",
+  "browser": {
+    "./sfc": "./card.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

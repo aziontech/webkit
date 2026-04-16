@@ -1,41 +1,41 @@
 <script setup>
-import OverlayPanel from 'primevue/overlaypanel'
-import { ref } from 'vue'
+  import OverlayPanel from 'primevue/overlaypanel'
+  import { ref } from 'vue'
 
-defineOptions({ name: 'OverlayPanel' })
+  defineOptions({ name: 'OverlayPanel' })
 
-const props = defineProps({
-  dismissable: {
-    type: Boolean,
-    default: true
-  },
-  showCloseIcon: {
-    type: Boolean,
-    default: false
-  },
-  appendTo: {
-    type: [String, Object],
-    default: 'body'
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    dismissable: {
+      type: Boolean,
+      default: true
+    },
+    showCloseIcon: {
+      type: Boolean,
+      default: false
+    },
+    appendTo: {
+      type: [String, Object],
+      default: 'body'
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['show', 'hide'])
+  const emit = defineEmits(['show', 'hide'])
 
-const panelRef = ref(null)
+  const panelRef = ref(null)
 
-defineExpose({
-  toggle: (...args) => panelRef.value?.toggle(...args),
-  show: (...args) => panelRef.value?.show(...args),
-  hide: (...args) => panelRef.value?.hide(...args)
-})
+  defineExpose({
+    toggle: (...args) => panelRef.value?.toggle(...args),
+    show: (...args) => panelRef.value?.show(...args),
+    hide: (...args) => panelRef.value?.hide(...args)
+  })
 </script>
 
 <template>
@@ -49,7 +49,10 @@ defineExpose({
     @show="emit('show')"
     @hide="emit('hide')"
   >
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
   </OverlayPanel>

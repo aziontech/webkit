@@ -1,44 +1,44 @@
 <script setup>
-import Checkbox from 'primevue/checkbox'
+  import Checkbox from 'primevue/checkbox'
 
-defineOptions({ name: 'Checkbox' })
+  defineOptions({ name: 'Checkbox' })
 
-const props = defineProps({
-  modelValue: {
-    type: null,
-    default: undefined
-  },
-  value: {
-    type: null,
-    default: undefined
-  },
-  binary: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  },
-  inputId: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  tabindex: {
-    type: Number,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: null,
+      default: undefined
+    },
+    value: {
+      type: null,
+      default: undefined
+    },
+    binary: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    inputId: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    tabindex: {
+      type: Number,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['update:modelValue'])
+  const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>

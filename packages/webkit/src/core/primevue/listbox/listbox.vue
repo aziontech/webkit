@@ -1,68 +1,68 @@
 <script setup>
-import Listbox from 'primevue/listbox'
+  import Listbox from 'primevue/listbox'
 
-defineOptions({ name: 'Listbox' })
+  defineOptions({ name: 'Listbox' })
 
-const props = defineProps({
-  modelValue: {
-    type: null,
-    default: undefined
-  },
-  options: {
-    type: Array,
-    default: () => []
-  },
-  optionLabel: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionValue: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionDisabled: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionGroupLabel: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionGroupChildren: {
-    type: [String, Function],
-    default: undefined
-  },
-  multiple: {
-    type: Boolean,
-    default: false
-  },
-  filter: {
-    type: Boolean,
-    default: false
-  },
-  filterPlaceholder: {
-    type: String,
-    default: undefined
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  listStyle: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: null,
+      default: undefined
+    },
+    options: {
+      type: Array,
+      default: () => []
+    },
+    optionLabel: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionValue: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionDisabled: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionGroupLabel: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionGroupChildren: {
+      type: [String, Function],
+      default: undefined
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    filter: {
+      type: Boolean,
+      default: false
+    },
+    filterPlaceholder: {
+      type: String,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    listStyle: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['update:modelValue', 'change', 'filter'])
+  const emit = defineEmits(['update:modelValue', 'change', 'filter'])
 </script>
 
 <template>
@@ -85,20 +85,41 @@ const emit = defineEmits(['update:modelValue', 'change', 'filter'])
     @change="emit('change', $event)"
     @filter="emit('filter', $event)"
   >
-    <template v-if="$slots.option" #option="slotProps">
-      <slot name="option" v-bind="slotProps" />
+    <template
+      v-if="$slots.option"
+      #option="slotProps"
+    >
+      <slot
+        name="option"
+        v-bind="slotProps"
+      />
     </template>
-    <template v-if="$slots.header" #header>
+    <template
+      v-if="$slots.header"
+      #header
+    >
       <slot name="header" />
     </template>
-    <template v-if="$slots.footer" #footer>
+    <template
+      v-if="$slots.footer"
+      #footer
+    >
       <slot name="footer" />
     </template>
-    <template v-if="$slots.empty" #empty>
+    <template
+      v-if="$slots.empty"
+      #empty
+    >
       <slot name="empty" />
     </template>
-    <template v-if="$slots.optiongroup" #optiongroup="slotProps">
-      <slot name="optiongroup" v-bind="slotProps" />
+    <template
+      v-if="$slots.optiongroup"
+      #optiongroup="slotProps"
+    >
+      <slot
+        name="optiongroup"
+        v-bind="slotProps"
+      />
     </template>
   </Listbox>
 </template>

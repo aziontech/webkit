@@ -1,6 +1,7 @@
 <script setup>
-  import { computed, onMounted, ref, watch } from 'vue'
   import { useField } from 'vee-validate'
+  import { computed, onMounted, ref, watch } from 'vue'
+
   import FieldPhoneNumber from '../field-phone-number'
 
   const props = defineProps({

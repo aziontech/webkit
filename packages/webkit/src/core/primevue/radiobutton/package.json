@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./radiobutton.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

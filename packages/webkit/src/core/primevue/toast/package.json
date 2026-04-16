@@ -1,1 +1,10 @@
-{"main": "./toast.vue", "module": "./toast.vue", "browser": {"./sfc": "./toast.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./toast.vue",
+  "module": "./toast.vue",
+  "browser": {
+    "./sfc": "./toast.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

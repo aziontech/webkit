@@ -1,1 +1,10 @@
-{"main": "./column.vue", "module": "./column.vue", "browser": {"./sfc": "./column.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./column.vue",
+  "module": "./column.vue",
+  "browser": {
+    "./sfc": "./column.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

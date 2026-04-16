@@ -1,10 +1,11 @@
 <script setup>
-  import { computed, ref, toRef, useAttrs, useSlots } from 'vue'
-  import { useField } from 'vee-validate'
-  import TextArea from 'primevue/textarea'
   import Skeleton from 'primevue/skeleton'
-  import InputSlot from '../slots/input-slot'
+  import TextArea from 'primevue/textarea'
+  import { useField } from 'vee-validate'
+  import { computed, ref, toRef, useAttrs, useSlots } from 'vue'
+
   import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const emit = defineEmits(['blur', 'input'])
   const props = defineProps({

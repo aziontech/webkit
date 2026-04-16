@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./country-flag.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

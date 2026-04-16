@@ -1,94 +1,94 @@
 <script setup>
-import InputNumber from 'primevue/inputnumber'
+  import InputNumber from 'primevue/inputnumber'
 
-defineOptions({ name: 'InputNumber' })
+  defineOptions({ name: 'InputNumber' })
 
-const props = defineProps({
-  modelValue: {
-    type: Number,
-    default: undefined
-  },
-  mode: {
-    type: String,
-    default: 'decimal',
-    validator: (val) => ['decimal', 'currency'].includes(val)
-  },
-  min: {
-    type: Number,
-    default: undefined
-  },
-  max: {
-    type: Number,
-    default: undefined
-  },
-  step: {
-    type: Number,
-    default: 1
-  },
-  minFractionDigits: {
-    type: Number,
-    default: undefined
-  },
-  maxFractionDigits: {
-    type: Number,
-    default: undefined
-  },
-  currency: {
-    type: String,
-    default: undefined
-  },
-  locale: {
-    type: String,
-    default: undefined
-  },
-  showButtons: {
-    type: Boolean,
-    default: false
-  },
-  buttonLayout: {
-    type: String,
-    default: 'stacked',
-    validator: (val) => ['horizontal', 'vertical', 'stacked'].includes(val)
-  },
-  prefix: {
-    type: String,
-    default: undefined
-  },
-  suffix: {
-    type: String,
-    default: undefined
-  },
-  placeholder: {
-    type: String,
-    default: undefined
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  },
-  inputId: {
-    type: String,
-    default: undefined
-  },
-  inputClass: {
-    type: [String, Object],
-    default: undefined
-  },
-  highlightOnFocus: {
-    type: Boolean,
-    default: false
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: Number,
+      default: undefined
+    },
+    mode: {
+      type: String,
+      default: 'decimal',
+      validator: (val) => ['decimal', 'currency'].includes(val)
+    },
+    min: {
+      type: Number,
+      default: undefined
+    },
+    max: {
+      type: Number,
+      default: undefined
+    },
+    step: {
+      type: Number,
+      default: 1
+    },
+    minFractionDigits: {
+      type: Number,
+      default: undefined
+    },
+    maxFractionDigits: {
+      type: Number,
+      default: undefined
+    },
+    currency: {
+      type: String,
+      default: undefined
+    },
+    locale: {
+      type: String,
+      default: undefined
+    },
+    showButtons: {
+      type: Boolean,
+      default: false
+    },
+    buttonLayout: {
+      type: String,
+      default: 'stacked',
+      validator: (val) => ['horizontal', 'vertical', 'stacked'].includes(val)
+    },
+    prefix: {
+      type: String,
+      default: undefined
+    },
+    suffix: {
+      type: String,
+      default: undefined
+    },
+    placeholder: {
+      type: String,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    },
+    inputId: {
+      type: String,
+      default: undefined
+    },
+    inputClass: {
+      type: [String, Object],
+      default: undefined
+    },
+    highlightOnFocus: {
+      type: Boolean,
+      default: false
+    }
+  })
 
-const emit = defineEmits(['update:modelValue', 'input'])
+  const emit = defineEmits(['update:modelValue', 'input'])
 </script>
 
 <template>
