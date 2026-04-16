@@ -257,7 +257,7 @@ export const semanticTexts = () => {
           fontSize: '10px',
         },
         '.text-overline-md': {
-          fontSize: '14px',
+          fontSize: '12px',
         },
         '.text-overline-sm': {
           fontSize: '12px',

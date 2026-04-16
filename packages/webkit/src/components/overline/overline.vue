@@ -1,12 +1,16 @@
 <script>
   // Using hex escape sequences for angle brackets to avoid Vue template parser issues
-  // \x3C = < (less than), \x3E = > (greater than), \x2F = / (slash)
+  // \x3C = < (less than), \x3E = > (greater than), \x2F = / (slash) [AVAILABLE PREFIXES]
   const ANGLE_OPEN = '\x3C'
   const ANGLE_CLOSE = '\x3E'
   const SLASH = '\x2F'
 
   export default {
     props: {
+      singleLine: {
+        type: Boolean,
+        default: true
+      },
       showCursor: {
         type: Boolean,
         default: false
@@ -28,12 +32,14 @@
   >
     <span
       v-if="prefix"
-      class="font-proto-mono text-default font-medium leading-1 tracking-tightest whitespace-nowrap text-overline-md"
+      class="font-proto-mono text-default font-medium leading-1 tracking-tightest text-overline-md"
+      :class="{ 'whitespace-nowrap': singleLine }"
     >
       {{ prefix }}
     </span>
     <span
-      class="font-proto-mono text-brand-primary-400 font-medium leading-1 tracking-tightest whitespace-nowrap uppercase text-overline-md"
+      class="font-proto-mono text-pretty text-brand-primary-400 font-medium leading-1 tracking-tightest uppercase text-overline-md"
+      :class="{ 'whitespace-nowrap': singleLine }"
     >
       <slot />
     </span>
