@@ -1,0 +1,119 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Get Started"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'Complete onboarding guide for the Azion Webkit monorepo: architecture, packages, local setup, Storybook workflow, and contribution flow.'
+      }
+    }
+  }}
+/>
+
+# Get Started
+
+Welcome to the **Azion Webkit monorepo**.
+This page is a complete onboarding reference for understanding the repository structure,
+running Storybook locally, consuming packages, and contributing safely.
+
+> This Storybook is the source of truth for component behavior and usage.
+> If a component changes, update its story in the same branch.
+
+## 1. Repository Architecture
+
+### Workspace layout
+
+```text
+webkit/
+|- apps/
+|  |- storybook/      # Documentation app for @aziontech/webkit
+|  \- icons-gallery/  # Interactive browser for Azion + Prime icons
+|- packages/
+|  |- webkit/         # Reusable Vue components and utilities
+|  |- theme/          # Design tokens, CSS variables, Tailwind integration
+|  \- icons/          # Icon fonts (ai, pi) delivered as CSS + woff2
+|- package.json       # Root scripts for monorepo workflows
+\- pnpm-workspace.yaml
+```
+
+### What each part does
+
+- **`apps/storybook`**: documentation and visual playground for `@aziontech/webkit`
+- **`apps/icons-gallery`**: icon browser and validation context for `@aziontech/icons`
+- **`packages/webkit`**: Vue components, wrappers, directives, composables
+- **`packages/theme`**: semantic tokens, CSS variables, and Tailwind integration
+- **`packages/icons`**: icon font package with Azion (`ai`) and Prime (`pi`) sets
+
+## 2. Prerequisites and Setup
+
+```bash
+# Recommended runtime
+node --version   # >= 22.18.0
+pnpm --version   # 10.x
+
+# Install dependencies from repository root
+pnpm install
+```
+
+Use the root directory for all workspace commands.
+
+## 3. Daily Development Commands
+
+```bash
+# Start Storybook locally (builds icons first)
+pnpm storybook:dev
+
+# Build static Storybook
+pnpm storybook:build
+
+# Preview static Storybook build
+pnpm storybook:preview
+
+# Build icons package explicitly
+pnpm icons:build
+
+# Generate @aziontech/webkit declaration files
+pnpm webkit:build:dts
+```
+
+## 4. Consuming Packages in Applications
+
+```javascript
+// global styles + tokens
+import '@aziontech/theme'
+import '@aziontech/icons'
+
+// component styles (when needed)
+import '@aziontech/webkit/styles/country-flags'
+
+// component usage
+import Overline from '@aziontech/webkit/overline'
+
+// template example
+// <Overline prefix="//">DEPLOYMENT</Overline>
+```
+
+Avoid hardcoded colors in applications.
+Use semantic tokens from `@aziontech/theme` so light/dark behavior remains consistent.
+
+## 5. Contribution Flow
+
+```text
+1. Create or adjust component code in packages/webkit/src/**
+2. Add or update stories in apps/storybook/src/stories/**
+3. Run pnpm storybook:dev and validate behavior
+4. Commit with a conventional commit message
+5. Push branch and open PR
+```
+
+## 6. Where To Change What
+
+- **Component source**: `packages/webkit/src`
+- **Story source**: `apps/storybook/src/stories`
+- **Theme and tokens**: `packages/theme/src`
+- **Icons and generation pipeline**: `packages/icons`
