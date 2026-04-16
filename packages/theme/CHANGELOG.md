@@ -1,3 +1,31 @@
+## [1.9.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.8.0...@aziontech/theme@1.9.0) (2026-04-16)
+
+
+### Features
+
+* add new token to overline-sm ([d9dd3c7](https://github.com/aziontech/webkit/commit/d9dd3c79574c0aec5ba96f889b351b6ec8acc957))
+* add PrimeVue abstraction layer documentation ([4e246b1](https://github.com/aziontech/webkit/commit/4e246b1409d761562b17a1109a3fa9441acc89e1))
+* add PrimeVue abstraction layer documentation ([bf1b6d0](https://github.com/aziontech/webkit/commit/bf1b6d0f7f47bbb7f258646a6f4427c0dc39a64e))
+* add PrimeVue abstraction layer for services and composables (ENG-37137) ([5fb7705](https://github.com/aziontech/webkit/commit/5fb77054ef359aa863a078e813d75b402bff77e9))
+* add primevue barrel module and vite config helper ([a53b79a](https://github.com/aziontech/webkit/commit/a53b79a18a000db98abac5fcff585bd181e40149))
+* update overline and remove props ([19dfbfc](https://github.com/aziontech/webkit/commit/19dfbfc98b7c4ac27bdf4e1bdcb4570e184fa491))
+
+
+### Bug Fixes
+
+* add fallback key for skeleton columns ([cc7ec45](https://github.com/aziontech/webkit/commit/cc7ec45c35cc7f12e4ba0627c2de82dd15bed2e0))
+* adjust overline to pretty ([178a639](https://github.com/aziontech/webkit/commit/178a63936c689715592b516e0f660e425769c95e))
+* buttons copy code, download, save ([3ad74b2](https://github.com/aziontech/webkit/commit/3ad74b2fc50f7af7853d731c3bb0f8457c00d133))
+* comment to bump webkit version ([febeeee](https://github.com/aziontech/webkit/commit/febeeeecb61cded796095433259437c943ec0f38))
+* embed console storybook url ([f2e6c3d](https://github.com/aziontech/webkit/commit/f2e6c3de1103a7c9d0bbf08e93ced7ab3cb6aa69))
+* inlinemessage export, the primevue wrappers should same name ([62d0234](https://github.com/aziontech/webkit/commit/62d02340dc301f1f4e156928f9de09c2e19fedcb))
+* plugin transparent bg ([e9ff368](https://github.com/aziontech/webkit/commit/e9ff3686cb438f546104096dd29eee5a9cc36188))
+* remove unused css ([d58cceb](https://github.com/aziontech/webkit/commit/d58cceb28273ad90c8c55f71e2c591d8426cd8e1))
+* rollback site/button-content ([a2a4dda](https://github.com/aziontech/webkit/commit/a2a4ddadbb7df9ac77b993526c7df29be8da1a61))
+* rollback site/button-content ([1399b5e](https://github.com/aziontech/webkit/commit/1399b5e3099eab9a9ef0145fd7544a354592e60b))
+* storybook logo azion ([a17cef7](https://github.com/aziontech/webkit/commit/a17cef7a4aa253efafa2dc3c63fddc7a940017e8))
+* storybook sidebar console include renderer ([1236946](https://github.com/aziontech/webkit/commit/1236946caae6f8ca2a054fa4de6edfcd4c7543dd))
+
 ## [1.8.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.7.0...@aziontech/theme@1.8.0) (2026-04-01)
 
 
