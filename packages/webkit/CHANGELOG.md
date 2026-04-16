@@ -1,3 +1,10 @@
+## [1.19.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.3...@aziontech/webkit@1.19.4) (2026-04-16)
+
+
+### Bug Fixes
+
+* comment to bump webkit version ([febeeee](https://github.com/aziontech/webkit/commit/febeeeecb61cded796095433259437c943ec0f38))
+
 ## [1.19.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.2...@aziontech/webkit@1.19.3) (2026-04-10)
 
 
