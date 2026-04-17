@@ -1,0 +1,115 @@
+---
+/**
+ * StateGrid
+ * 
+ * Displays component states in a grid format with visual examples.
+ * Note: Astro requires static slot names, so we use predefined slots.
+ */
+
+interface Props {
+  columns?: 2 | 3 | 4;
+}
+
+const { columns = 3 } = Astro.props;
+
+const gridCols = {
+  2: 'grid-cols-2',
+  3: 'grid-cols-3',
+  4: 'grid-cols-4',
+};
+
+// Standard state names
+const states = ['default', 'hover', 'focus', 'active', 'disabled', 'loading', 'error', 'readonly'];
+---
+
+<div class="state-grid">
+  <div class={`grid ${gridCols[columns]} gap-4`}>
+    {/* Default State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="default" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Default</span>
+        <p class="text-xs text-muted mt-0.5">Normal resting state</p>
+      </div>
+    </div>
+    
+    {/* Hover State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="hover" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Hover</span>
+        <p class="text-xs text-muted mt-0.5">Cursor is over the element</p>
+      </div>
+    </div>
+    
+    {/* Focus State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="focus" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Focus</span>
+        <p class="text-xs text-muted mt-0.5">Element has keyboard focus</p>
+      </div>
+    </div>
+    
+    {/* Active State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="active" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Active</span>
+        <p class="text-xs text-muted mt-0.5">Element is being pressed</p>
+      </div>
+    </div>
+    
+    {/* Disabled State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="disabled" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Disabled</span>
+        <p class="text-xs text-muted mt-0.5">Element is not interactive</p>
+      </div>
+    </div>
+    
+    {/* Loading State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="loading" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Loading</span>
+        <p class="text-xs text-muted mt-0.5">Element is loading</p>
+      </div>
+    </div>
+    
+    {/* Error State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="error" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Error</span>
+        <p class="text-xs text-muted mt-0.5">Element has an error</p>
+      </div>
+    </div>
+    
+    {/* Readonly State */}
+    <div class="state-item border border-default rounded-lg overflow-hidden bg-surface">
+      <div class="state-item__preview p-6 bg-surface flex items-center justify-center min-h-[80px]">
+        <slot name="readonly" />
+      </div>
+      <div class="state-item__label px-4 py-2 border-t border-default">
+        <span class="text-sm font-medium text-default">Readonly</span>
+        <p class="text-xs text-muted mt-0.5">Element is read-only</p>
+      </div>
+    </div>
+  </div>
+</div>

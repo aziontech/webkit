@@ -1,0 +1,52 @@
+{
+  "component": "primevue-tabmenu",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/tabmenu/tabmenu.vue",
+  "props": [
+    {
+      "name": "model",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "activeIndex",
+      "type": "number",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "exact",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "tab-change",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "item",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.102Z"
+}

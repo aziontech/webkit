@@ -1,0 +1,178 @@
+---
+title: Button
+description: Botões disparam ações e eventos quando os usuários interagem com eles.
+navLabel: Button
+order: 1
+type: component
+category: form
+status: stable
+since: 1.0.0
+component: Button
+source: https://github.com/aziontech/webkit/tree/main/packages/components/src/Button
+storybook: https://storybook.azion.com/components/button
+figma: https://figma.com/file/azion-design-system/components/button
+related:
+  - Input
+  - Select
+  - IconButton
+tags:
+  - action
+  - form
+  - interactive
+anatomy:
+  - label: Container
+    description: A área clicável com estilo de fundo e borda
+  - label: Label
+    description: O texto que descreve a ação do botão
+  - label: Icon (optional)
+    description: Um ícone opcional para dar ênfase visual antes ou depois do texto
+accessibility:
+  keyboard:
+    - keys: Tab
+      action: Move o foco para o botão
+    - keys: Enter
+      action: Ativa o botão quando ele está em foco
+    - keys: Space
+      action: Ativa o botão quando ele está em foco
+  aria:
+    - attribute: aria-disabled="true"
+      usage: Use no lugar do atributo disabled para que leitores de tela anunciem corretamente o estado desabilitado
+    - attribute: aria-label
+      usage: Obrigatório para botões que possuem apenas ícone, fornecendo um nome acessível
+    - attribute: aria-busy="true"
+      usage: Utilizado quando o botão está em estado de carregamento
+  wcag:
+    - "2.1.1 Keyboard"
+    - "4.1.2 Name, Role, Value"
+usage:
+  whenToUse:
+    - Disparar ações principais (Enviar, Salvar, Continuar)
+    - Navegar para diferentes telas ou páginas
+    - Alternar estados ou configurações
+    - Disparar ações secundárias (Cancelar, Excluir)
+    - Enviar formulários
+  whenNotToUse:
+    - Navegação para links externos (use um link em vez de um botão)
+    - Exibir conteúdo estático (use texto ou labels)
+    - Quando uma interação mais sutil for necessária (considere usar um link de texto)
+  doDonts:
+    - type: do
+      description: Use botões para itens acionáveis
+      example: '<Button>Enviar Formulário</Button>'
+    - type: do
+      description: Use rótulos claros e orientados à ação
+      example: '<Button>Salvar Alterações</Button>'
+    - type: dont
+      description: Não use botões para navegação
+      example: '<Button>Ir para Dashboard</Button>'
+    - type: dont
+      description: Não use rótulos vagos
+      example: '<Button>Clique Aqui</Button>'
+  examples:
+    - title: Botão Primário
+      description: Estilo padrão do botão para ações principais
+      code: '<Button severity="primary">Botão Primário</Button>'
+    - title: Botão Secundário
+      description: Para ações alternativas ou menos destacadas
+      code: '<Button severity="secondary">Botão Secundário</Button>'
+    - title: Botão de Perigo
+      description: Para ações perigosas como excluir ou remover
+      code: '<Button severity="danger">Excluir</Button>'
+    - title: Tamanhos do Botão
+      description: Disponível nos tamanhos pequeno, médio e grande
+      code: |-
+        <Button size="sm">Pequeno</Button>
+        <Button size="md">Médio</Button>
+        <Button size="lg">Grande</Button>
+api:
+  props:
+    - name: severity
+      type: "'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'plain' | 'contrast'"
+      default: "'primary'"
+      required: false
+      description: Nível de severidade visual - afeta o esquema de cores
+    - name: variant
+      type: "'filled' | 'raised' | 'rounded' | 'outlined' | 'text' | 'link'"
+      default: "'filled'"
+      required: false
+      description: Variante de estilo do botão
+    - name: size
+      type: "'sm' | 'md' | 'lg'"
+      default: "'md'"
+      required: false
+      description: Tamanho do botão
+    - name: disabled
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Define se o botão está desabilitado
+    - name: loading
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Exibe um indicador de carregamento e desativa a interação
+    - name: iconOnly
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Renderiza como botão apenas com ícone (sem texto)
+    - name: iconPosition
+      type: "'left' | 'right'"
+      default: "'left'"
+      required: false
+      description: Posição do ícone em relação ao texto
+    - name: fullWidth
+      type: "boolean"
+      default: "false"
+      required: false
+      description: Define se o botão ocupa toda a largura do container
+  slots:
+    - name: default
+      description: Conteúdo do texto do botão
+    - name: icon-left
+      description: Ícone customizado antes do texto
+      props: "iconClass: string"
+    - name: icon-right
+      description: Ícone customizado após o texto
+      props: "iconClass: string"
+  events:
+    - name: click
+      payload: "MouseEvent"
+      description: Disparado quando o botão é clicado e não está desabilitado
+---
+
+import { Playground, StateGrid, CodeBlock, Callout } from '@components/docs';
+import Button from '@components/demo/Button.vue';
+import { buttonProps } from '@components/demo/props-metadata';
+
+Botões são elementos interativos que disparam ações quando clicados ou tocados. Eles comunicam ações que os usuários podem executar e normalmente aparecem em diversas partes da interface, desde formulários até diálogos e navegação.
+
+O componente Button fornece uma maneira consistente e acessível de disparar ações em toda a sua aplicação.
+
+## Import
+
+<CodeBlock code={`import { Button } from '@aziontech/webkit';`} lang="javascript" />
+
+## Playground
+
+Explore o componente Button de forma interativa. Ajuste as props e veja as mudanças em tempo real.
+
+<Playground
+  client:load
+  component-name="Button"
+  props={buttonProps}
+  slot-content="Button"
+/>
+
+## States
+
+<StateGrid columns={4}>
+  <Button slot="default" client:load>Button</Button>
+  <Button slot="hover" client:load severity="primary" variant="filled">Button</Button>
+  <Button slot="focus" client:load severity="primary" variant="filled">Button</Button>
+  <Button slot="disabled" client:load disabled>Button</Button>
+</StateGrid>
+
+<Callout type="tip" title="Escolhendo a severidade correta">
+  Use **primary** para a ação principal, **secondary** para ações alternativas, **danger** para ações perigosas e **plain** para ações menos destacadas.
+</Callout>

@@ -1,0 +1,11 @@
+{
+  "title": {
+    "label": "Title",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "Title"
+  }
+}

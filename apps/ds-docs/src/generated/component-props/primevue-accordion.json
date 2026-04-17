@@ -1,0 +1,20 @@
+{
+  "activeIndex": {
+    "label": "Active Index",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "null"
+  },
+  "multiple": {
+    "label": "Multiple",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

@@ -1,0 +1,124 @@
+---
+/**
+ * AccessibilityChecklist
+ * 
+ * Displays accessibility requirements and guidelines in a checklist format.
+ */
+
+import type { AccessibilityMetadata, KeyboardInteraction, AriaAttribute } from '../../content/config';
+
+interface Props {
+  items?: string[];
+  keyboard?: KeyboardInteraction[];
+  aria?: AriaAttribute[];
+  wcag?: string[];
+  notes?: string[];
+}
+
+const { 
+  items = [],
+  keyboard = [],
+  aria = [],
+  wcag = [],
+  notes = []
+} = Astro.props;
+---
+
+<div class="accessibility-checklist">
+  {/* Keyboard Interactions */}
+  {keyboard.length > 0 && (
+    <div class="a11y-section mb-6">
+      <h4 class="text-sm font-medium text-default mb-3 flex items-center gap-2">
+        Keyboard Navigation
+      </h4>
+      <div class="bg-surface rounded-lg overflow-hidden">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-default">
+              <th class="py-2 px-3 text-left font-medium text-muted">Keys</th>
+              <th class="py-2 px-3 text-left font-medium text-muted">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {keyboard.map((item) => (
+              <tr class="border-b border-default last:border-0">
+                <td class="py-2 px-3 font-code text-muted">
+                  <kbd class="bg-surface dark:text-white text-black px-2 py-0.5 rounded border border-default text-xs font-mono">
+                    {item.keys}
+                  </kbd>
+                </td>
+                <td class="py-2 px-3 text-muted">
+                  {item.action}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )}
+  
+  {/* ARIA Attributes */}
+  {aria.length > 0 && (
+    <div class="a11y-section mb-6">
+      <h4 class="text-sm font-medium text-default mb-3 flex items-center gap-2">
+        ARIA Attributes
+      </h4>
+      <div class="space-y-2">
+        {aria.map((item) => (
+          <div class="flex items-start gap-3 p-3 bg-surface rounded-lg">
+            <code class="font-code text-muted text-xs bg-surface px-2 py-0.5 rounded border border-default shrink-0">
+              {item.attribute}
+            </code>
+            <p class="text-sm text-muted">
+              {item.usage}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+  
+  {/* WCAG Compliance */}
+  {wcag.length > 0 && (
+    <div class="a11y-section mb-6">
+      <h4 class="text-sm font-medium text-default mb-3 flex items-center gap-2">
+        WCAG Compliance
+      </h4>
+      <div class="flex flex-wrap gap-2">
+        {wcag.map((criterion) => (
+          <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-500/20 dark:text-green-500 text-green-800">
+            {criterion}
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
+  
+  {/* Checklist Items */}
+  {items.length > 0 && (
+    <div class="a11y-section mb-6">
+      <h4 class="text-sm font-medium text-default mb-3">Checklist</h4>
+      <ul class="space-y-2">
+        {items.map((item) => (
+          <li class="flex items-start gap-2">
+            <i class="pi pi-check w-5 h-5 text-green-500 shrink-0 mt-0.5" aria-hidden="true" />
+            <span class="text-sm text-muted">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+  
+  {/* Additional Notes */}
+  {notes.length > 0 && (
+    <div class="a11y-section">
+      <h4 class="text-sm font-medium text-default mb-3">Additional Notes</h4>
+      <ul class="space-y-1 list-disc list-inside text-sm text-muted">
+        {notes.map((note) => (
+          <li>{note}</li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>

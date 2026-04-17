@@ -1,0 +1,86 @@
+{
+  "component": "site-pricing-card",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/site/pricing-card/pricing-card.vue",
+  "props": [
+    {
+      "name": "popular",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "title",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "subtitle",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "features",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "monthlyPrice",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "annualPrice",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "currentPeriod",
+      "type": "string",
+      "required": false,
+      "default": "monthly",
+      "description": ""
+    },
+    {
+      "name": "priceLabel",
+      "type": "string",
+      "required": false,
+      "default": "start at",
+      "description": ""
+    },
+    {
+      "name": "buttonLabel",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "customPrice",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "buttonHidden",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.123Z"
+}

@@ -1,0 +1,13 @@
+{
+  "component": "form-slots-input-slot",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/slots/input-slot/input-slot.vue",
+  "props": [],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.080Z"
+}

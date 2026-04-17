@@ -1,0 +1,46 @@
+{
+  "component": "primevue-toast",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/toast/toast.vue",
+  "props": [
+    {
+      "name": "group",
+      "type": "string",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "position",
+      "type": "string",
+      "required": false,
+      "default": "top-right",
+      "description": ""
+    },
+    {
+      "name": "breakpoints",
+      "type": "object",
+      "required": false,
+      "default": "undefined",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "message",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.104Z"
+}

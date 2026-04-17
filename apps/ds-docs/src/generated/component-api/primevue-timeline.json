@@ -1,0 +1,46 @@
+{
+  "component": "primevue-timeline",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/timeline/timeline.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "align",
+      "type": "string",
+      "required": false,
+      "default": "left",
+      "description": ""
+    },
+    {
+      "name": "layout",
+      "type": "string",
+      "required": false,
+      "default": "vertical",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "content",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.104Z"
+}

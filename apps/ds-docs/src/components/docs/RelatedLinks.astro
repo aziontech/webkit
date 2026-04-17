@@ -1,0 +1,61 @@
+---
+/**
+ * RelatedLinks
+ * 
+ * Displays links to related components, patterns, or resources.
+ */
+
+interface RelatedItem {
+  title: string;
+  href: string;
+  description?: string;
+  type?: 'component' | 'block' | 'pattern' | 'foundation' | 'external';
+}
+
+interface Props {
+  items?: RelatedItem[];
+  title?: string;
+}
+
+const { 
+  items = [],
+  title = 'Related'
+} = Astro.props;
+
+const typeIconClasses: Record<string, string> = {
+  component: 'pi pi-box',
+  block: 'pi pi-th-large',
+  pattern: 'pi pi-th-large',
+  foundation: 'pi pi-book',
+  external: 'pi pi-arrow-up-right',
+};
+---
+
+{items.length > 0 && (
+  <div class="related-links mt-8 pt-6 border-t border-default">
+    <h3 class="text-sm font-medium text-default mb-4">{title}</h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {items.map((item) => (
+        <a 
+          href={item.href}
+          class="related-link items-center group flex bg-surface gap-1.5 p-3 rounded-lg border border-default hover:border-default-hover transition-colors"
+        >
+          <span class="shrink-0 mt-0.5" aria-hidden="true">
+          <i class={typeIconClasses[item.type || 'component']} aria-hidden="true" />
+        </span>
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-default ">
+              {item.title}
+            </span>
+            {item.description && (
+              <p class="text-xs text-muted mt-0.5 line-clamp-2">
+                {item.description}
+              </p>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+)}

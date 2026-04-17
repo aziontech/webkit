@@ -1,0 +1,29 @@
+{
+  "group": {
+    "label": "Group",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "position": {
+    "label": "Position",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "top-right"
+  },
+  "breakpoints": {
+    "label": "Breakpoints",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  }
+}

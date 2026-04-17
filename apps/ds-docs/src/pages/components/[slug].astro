@@ -1,0 +1,65 @@
+---
+/**
+ * Components Dynamic Routes (English)
+ * 
+ * Handles all pages under /components/[slug]
+ * Uses the same layouts as PT routes, with language='en' default
+ */
+
+import { getCollection, render } from 'astro:content';
+import ComponentPageLayout from '../../layouts/ComponentPageLayout.astro';
+import { getBreadcrumbContext } from '../../lib/content';
+import { markdownComponents } from '../../components/docs';
+import { createI18nContext } from '../../lib/i18n';
+
+export async function getStaticPaths() {
+  const allContent = await getCollection('v1-en');
+  // Filter to only get components (entries where id starts with 'components/')
+  const entries = allContent.filter(entry => {
+    const id = entry.id || '';
+    const idParts = id.split('/');
+    return idParts[0] === 'components' && idParts.length > 1 && !idParts[1].startsWith('index.');
+  });
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace('components/', '').replace(/\.(md|mdx)$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Get breadcrumb context
+const entryId = entry.id.replace(/\.(md|mdx)$/, '');
+const slugFromId = entryId.replace('components/', '');
+const breadcrumb = await getBreadcrumbContext(`/components/${slugFromId === 'index' ? '' : slugFromId}`);
+
+// Extract frontmatter data
+const data = entry.data;
+
+// Create i18n context for English (default)
+const i18n = createI18nContext('en');
+---
+
+<ComponentPageLayout
+  title={data.title}
+  description={data.description}
+  section={breadcrumb.section}
+  item={breadcrumb.item}
+  status={data.status}
+  category={data.category}
+  component={data.component}
+  source={data.source}
+  storybook={data.storybook}
+  figma={data.figma}
+  related={data.related}
+  anatomy={data.anatomy}
+  accessibility={data.accessibility}
+  usage={data.usage}
+  api={data.api}
+  apiFrom={(data as any).apiFrom}
+  language="en"
+  i18n={i18n}
+>
+  <Content components={markdownComponents} />
+</ComponentPageLayout>

@@ -1,0 +1,376 @@
+---
+/**
+ * Portuguese Documentation Catch-All Route
+ * 
+ * Handles all Portuguese documentation URLs under /pt/
+ * 
+ * URL patterns:
+ * - /pt/get-started
+ * - /pt/get-started/installation
+ * - /pt/foundations
+ * - /pt/foundations/color
+ * - /pt/components
+ * - /pt/components/button
+ * 
+ * Content is fetched from v1-pt collection (not duplicated).
+ * UI strings are translated via i18n context (not duplicated).
+ */
+
+import { getCollection, render } from 'astro:content';
+import ComponentPageLayout from '../../layouts/ComponentPageLayout.astro';
+import BlockPageLayout from '../../layouts/BlockPageLayout.astro';
+import DocPageLayout from '../../layouts/DocPageLayout.astro';
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import PatternPageLayout from '../../layouts/PatternPageLayout.astro';
+import { getBreadcrumbContext } from '../../lib/content';
+import { markdownComponents } from '../../components/docs';
+import Tabs from '../../components/docs/Tabs.astro';
+import ComponentsStatusTable from '../../components/docs/ComponentsStatusTable.astro';
+import { patternStatusData } from '../../data/pattern-status';
+import { blockStatusData } from '../../data/block-status';
+import { createI18nContext } from '../../lib/i18n';
+import type { BlockFrontmatter } from '../../content/config';
+
+// Define static paths for all Portuguese content
+export async function getStaticPaths() {
+  const paths: Array<{
+    params: { path: string };
+    props: { entry: any; section: string };
+  }> = [];
+
+  // Get all Portuguese content from the nested structure
+  const ptContent = await getCollection('v1-pt');
+  
+  for (const entry of ptContent) {
+    // The id in 'v1-pt' collection includes the subfolder structure
+    // e.g., 'get-started/index.md', 'components/button.mdx'
+    const id = entry.id || '';
+    const idParts = id.replace(/\.(md|mdx)$/, '').split('/');
+    
+    // Build the path parameter
+    // For 'get-started/index' -> path: 'get-started'
+    // For 'components/button' -> path: 'components/button'
+    let pathValue: string;
+    if (idParts[idParts.length - 1] === 'index') {
+      // Remove 'index' from the end
+      pathValue = idParts.slice(0, -1).join('/') || 'index';
+    } else {
+      pathValue = idParts.join('/');
+    }
+    
+    // Determine the section (first part of the path)
+    const section = idParts[0];
+    
+    paths.push({
+      params: { path: pathValue },
+      props: { entry, section },
+    });
+  }
+
+  return paths;
+}
+
+const { entry, section } = Astro.props;
+const { Content } = await render(entry);
+
+// Get breadcrumb context
+const entryId = entry.id.replace(/\.(md|mdx)$/, '');
+const slugFromId = entryId.replace(/\/index$/, '');
+const fullPath = `/pt/${slugFromId === 'index' ? '' : slugFromId}`;
+let breadcrumb;
+try {
+  breadcrumb = await getBreadcrumbContext(fullPath);
+} catch {
+  // Page exists in content but not in navigation tree (e.g. playground) — use a safe fallback
+  breadcrumb = { section: { title: 'Docs', basePath: '/pt', items: [] }, item: null };
+}
+
+// Extract frontmatter data
+const data = entry.data;
+
+// Create i18n context for Portuguese
+const i18n = createI18nContext('pt');
+
+// Determine which layout to use based on section
+// Components index (list) must use DocPageLayout; only component detail pages use ComponentPageLayout.
+// When path is exactly "components" we're on the index; when "components/button" etc we're on a detail page.
+const pathParam = Astro.params.path ?? '';
+const isComponentsIndexPage = pathParam === 'components';
+const isComponentPage =
+  section === 'components' &&
+  data.type === 'component' &&
+  !isComponentsIndexPage;
+
+// Patterns: index shows overview+status (like EN); detail uses PatternPageLayout
+const isPatternsIndexPage = section === 'patterns' && pathParam === 'patterns';
+const isPatternDetailPage = section === 'patterns' && pathParam !== 'patterns';
+
+// Blocks: index shows overview+status; detail uses BlockPageLayout
+const isBlocksIndexPage = section === 'blocks' && pathParam === 'blocks';
+const isBlockDetailPage = section === 'blocks' && pathParam !== 'blocks';
+
+let ptBlocks: Array<{ id: string; data: Record<string, unknown> }> = [];
+let ptBlocksByCategory: Record<string, Array<{ id: string; data: Record<string, unknown> }>> = {};
+const blockCategoryLabels: Record<string, string> = {
+  feedback: 'Feedback',
+  layout: 'Layout',
+  form: 'Formulário',
+  navigation: 'Navegação',
+  other: 'Outros',
+};
+if (isBlocksIndexPage) {
+  const allPt = await getCollection('v1-pt');
+  ptBlocks = allPt.filter((item: { id?: string }) => {
+    const id = item.id || '';
+    const parts = id.split('/');
+    return parts[0] === 'blocks' && parts.length > 1 && !parts[1].startsWith('index.');
+  });
+  ptBlocksByCategory = ptBlocks.reduce((acc: Record<string, typeof ptBlocks>, p) => {
+    const cat = (p.data.category as string) || 'other';
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(p);
+    return acc;
+  }, {});
+}
+let ptPatterns: Array<{ id: string; data: Record<string, unknown> }> = [];
+let ptPatternsByCategory: Record<string, Array<{ id: string; data: Record<string, unknown> }>> = {};
+const patternCategoryLabels: Record<string, string> = {
+  feedback: 'Feedback',
+  usability: 'Usabilidade',
+  navigation: 'Navegação',
+  form: 'Formulário',
+  other: 'Outros',
+};
+if (isPatternsIndexPage) {
+  const allPt = await getCollection('v1-pt');
+  ptPatterns = allPt.filter((item: { id?: string }) => {
+    const id = item.id || '';
+    const parts = id.split('/');
+    return parts[0] === 'patterns' && parts.length > 1 && !parts[1].startsWith('index.');
+  });
+  ptPatternsByCategory = ptPatterns.reduce((acc: Record<string, typeof ptPatterns>, p) => {
+    const cat = (p.data.category as string) || 'other';
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(p);
+    return acc;
+  }, {});
+}
+---
+
+{isComponentPage ? (
+  <ComponentPageLayout
+    title={data.title}
+    description={data.description}
+    section={breadcrumb.section}
+    item={breadcrumb.item}
+    status={data.status}
+    category={data.category}
+    component={data.component}
+    source={data.source}
+    storybook={data.storybook}
+    figma={data.figma}
+    related={data.related}
+    anatomy={data.anatomy}
+    accessibility={data.accessibility}
+    api={data.api}
+    apiFrom={(data as any).apiFrom}
+    language="pt"
+    i18n={i18n}
+  >
+    <Content components={markdownComponents} />
+  </ComponentPageLayout>
+) : isPatternsIndexPage ? (
+  <DocsLayout
+    title="Padrões"
+    description="Padrões de design e boas práticas para construir com o Azion Design System."
+    section={breadcrumb.section}
+    item={breadcrumb.item}
+    language="pt"
+    i18n={i18n}
+  >
+    <h1 class="!text-3xl font-medium text-lg mb-1.5">Padrões</h1>
+    <p class="text-sm text-muted mb-8 mt-4">
+      Padrões de design e boas práticas para construir com o Azion Design System.
+    </p>
+    <Tabs>
+      <Fragment slot="overview">
+        {Object.keys(ptPatternsByCategory).length > 0 ? (
+          Object.entries(ptPatternsByCategory).map(([category, items]) => (
+            <section class="mb-10">
+              <h2 class="text-xl font-sans font-medium mb-4">
+                {patternCategoryLabels[category] || category}
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {items.map((pattern) => {
+                  const name = pattern.id.replace(/\.(md|mdx)$/, '').split('/').pop() || pattern.id;
+                  const patternData = pattern.data as { title?: string; description?: string; status?: string };
+                  return (
+                    <a
+                      href={`/pt/patterns/${name}`}
+                      class="group block p-4 border border-default rounded-lg hover:border-default-hover transition-colors bg-surface"
+                    >
+                      <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-medium font-sans text-default group-hover:text-primary-700">
+                          {patternData.title}
+                        </h3>
+                        {patternData.status && (
+                          <span
+                            class={`text-xs px-2 py-0.5 rounded-full ${
+                              patternData.status === 'stable'
+                                ? 'bg-emerald-50 text-emerald-700'
+                                : patternData.status === 'beta'
+                                  ? 'bg-blue-50 text-blue-700'
+                                  : patternData.status === 'deprecated'
+                                    ? 'bg-amber-50 text-warning'
+                                    : 'bg-gray-50 text-gray-600'
+                            }`}
+                          >
+                            {patternData.status}
+                          </span>
+                        )}
+                      </div>
+                      <p class="text-sm font-sans text-muted line-clamp-2">
+                        {patternData.description}
+                      </p>
+                    </a>
+                  );
+                })}
+              </div>
+            </section>
+          ))
+        ) : (
+          <p class="text-sm text-muted">Nenhum padrão documentado ainda. Volte em breve.</p>
+        )}
+      </Fragment>
+      <Fragment slot="status">
+        <ComponentsStatusTable
+          components={patternStatusData}
+          caption="Acompanhe o progresso de cada padrão em design e desenvolvimento."
+        />
+      </Fragment>
+    </Tabs>
+  </DocsLayout>
+) : isPatternDetailPage ? (
+  <PatternPageLayout
+    title={data.title}
+    description={data.description}
+    section={breadcrumb.section}
+    item={breadcrumb.item}
+    status={data.status}
+    category={data.category}
+    related={data.related || []}
+    language="pt"
+    i18n={i18n}
+  >
+    <Content components={markdownComponents} />
+  </PatternPageLayout>
+) : isBlocksIndexPage ? (
+  <DocsLayout
+    title="Blocos"
+    description="Blocos de UI que combinam vários componentes para casos de uso comuns."
+    section={breadcrumb.section}
+    item={breadcrumb.item}
+    language="pt"
+    i18n={i18n}
+  >
+    <h1 class="!text-3xl font-medium text-lg mb-1.5">Blocos</h1>
+    <p class="text-sm text-muted mb-8 mt-4">
+      Blocos de UI que combinam vários componentes para casos de uso comuns.
+    </p>
+    <Tabs>
+      <Fragment slot="overview">
+        {Object.keys(ptBlocksByCategory).length > 0 ? (
+          Object.entries(ptBlocksByCategory).map(([category, items]) => (
+            <section class="mb-10">
+              <h2 class="text-xl font-sans font-medium mb-4">
+                {blockCategoryLabels[category] || category}
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {items.map((block) => {
+                  const name = block.id.replace(/\.(md|mdx)$/, '').split('/').pop() || block.id;
+                  const blockData = block.data as { title?: string; description?: string; status?: string };
+                  return (
+                    <a
+                      href={`/pt/blocks/${name}`}
+                      class="group block p-4 border border-default rounded-lg hover:border-default-hover transition-colors bg-surface"
+                    >
+                      <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-medium font-sans text-default group-hover:text-primary-700">
+                          {blockData.title}
+                        </h3>
+                        {blockData.status && (
+                          <span
+                            class={`text-xs px-2 py-0.5 rounded-full ${
+                              blockData.status === 'stable'
+                                ? 'bg-emerald-50 text-emerald-700'
+                                : blockData.status === 'beta'
+                                  ? 'bg-blue-50 text-blue-700'
+                                  : blockData.status === 'deprecated'
+                                    ? 'bg-amber-50 text-warning'
+                                    : 'bg-gray-50 text-gray-600'
+                            }`}
+                          >
+                            {blockData.status}
+                          </span>
+                        )}
+                      </div>
+                      <p class="text-sm font-sans text-muted line-clamp-2">
+                        {blockData.description}
+                      </p>
+                    </a>
+                  );
+                })}
+              </div>
+            </section>
+          ))
+        ) : (
+          <p class="text-sm text-muted">Nenhum bloco documentado ainda. Volte em breve.</p>
+        )}
+      </Fragment>
+      <Fragment slot="status">
+        <ComponentsStatusTable
+          components={blockStatusData}
+          caption="Acompanhe o progresso de cada bloco em design e desenvolvimento."
+        />
+      </Fragment>
+    </Tabs>
+  </DocsLayout>
+) : isBlockDetailPage ? (
+  <BlockPageLayout
+    title={(data as BlockFrontmatter).title}
+    description={(data as BlockFrontmatter).description}
+    section={breadcrumb.section}
+    item={breadcrumb.item}
+    status={(data as BlockFrontmatter).status}
+    since={(data as BlockFrontmatter).since}
+    category={(data as BlockFrontmatter).category}
+    block={pathParam.replace('blocks/', '')}
+    related={(data as BlockFrontmatter).components || []}
+    anatomy={undefined}
+    accessibility={undefined}
+    usage={(data as BlockFrontmatter).usage}
+    api={(data as BlockFrontmatter).api}
+    language="pt"
+    i18n={i18n}
+  >
+    <Content components={markdownComponents} />
+  </BlockPageLayout>
+) : (
+  <DocPageLayout
+    title={data.title}
+    description={data.description}
+    section={breadcrumb.section}
+    item={breadcrumb.item}
+    language="pt"
+    i18n={i18n}
+    prose={!isComponentsIndexPage}
+  >
+    {section === 'get-started' || section === 'tokens' ? (
+      <div class="prose prose-lg max-w-docs-content docs-code-always-dark">
+        <Content components={markdownComponents} />
+      </div>
+    ) : (
+      <Content components={markdownComponents} />
+    )}
+  </DocPageLayout>
+)}

@@ -1,0 +1,142 @@
+---
+title: Foundations
+description: Foundations define the core building blocks of the design system
+type: guide
+---
+
+# Foundations
+
+Foundations define the visual and interaction principles that guide every component and interface across the design system.
+
+They ensure consistency, accessibility, and scalability across all products and experiences.
+
+## What are Foundations
+
+Foundations are the core design decisions that underpin the entire system. They define the fundamental rules that ensure visual and functional coherence.
+
+Every component in the design system is built on top of these foundations. Understanding them helps you:
+
+- Make informed design decisions
+- Create consistent interfaces
+- Maintain scalability across products
+- Ensure accessibility compliance
+
+Foundations define:
+
+- **Color systems** — Palettes, semantic colors, and accessibility guidelines
+- **Typography scale** — Font families, sizes, weights, and line heights
+- **Spacing rules** — Consistent margins, padding, and gaps
+- **Layout structure** — Grid systems and responsive breakpoints
+- **Motion principles** — Animation timing, easing, and transitions
+- **Iconography** — Icon style, sizing, and usage guidelines
+
+## Available Foundations
+
+Explore each foundation to understand the design decisions and implementation details.
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 mb-8">
+
+<FoundationCard
+  title="Color"
+  description="Color palettes, semantic colors, and accessibility guidelines for consistent visual language."
+  href="/foundations/color"
+/>
+
+<FoundationCard
+  title="Typography"
+  description="Font families, type scales, and text styles for readable and hierarchical content."
+  href="/foundations/typography"
+/>
+
+<FoundationCard
+  title="Spacing"
+  description="Consistent spacing scale for margins, padding, and gaps across layouts."
+  href="/foundations/spacing"
+/>
+
+<FoundationCard
+  title="Grid"
+  description="Layout grids, columns, and responsive breakpoints for structured designs."
+  href="/foundations/grid"
+/>
+
+<FoundationCard
+  title="Elevation"
+  description="Shadow and z-index systems for creating visual hierarchy and depth."
+  href="/foundations/elevation"
+/>
+
+<FoundationCard
+  title="Motion"
+  description="Animation principles, timing functions, and transition guidelines."
+  href="/foundations/motion"
+/>
+
+<FoundationCard
+  title="Iconography"
+  description="Icon style, sizing, and usage guidelines for consistent icon implementation."
+  href="/foundations/iconography"
+/>
+
+</div>
+
+## Why Foundations Matter
+
+Foundations provide the essential building blocks that enable teams to build consistent, scalable interfaces.
+
+### Consistency
+
+Foundations establish shared visual language across all products. When everyone uses the same color palette, typography scale, and spacing rules, interfaces feel cohesive and predictable.
+
+### Predictability
+
+Designers and developers can make decisions faster when the foundational rules are clear. No need to reinvent spacing values or guess at hover states — the answers are already defined.
+
+### Accessibility
+
+Foundations embed accessibility into the design system from the start. Color contrast ratios, focus states, and motion preferences are all considered at the foundation level.
+
+### Scalability
+
+As products grow, foundations ensure that new features integrate seamlessly with existing ones. The same design tokens and rules apply across all new work.
+
+### Maintainability
+
+When a foundational value needs to change — like updating a primary color — the change propagates through the entire system. This reduces technical debt and design inconsistencies.
+
+## Relationship with Tokens
+
+Foundations and design tokens work together to translate design decisions into implementation.
+
+### Foundations Define Rules
+
+Foundations are conceptual. They define the **rules and principles** that guide design decisions.
+
+For example, the Color foundation defines:
+- The purpose of semantic colors (primary, success, warning, error)
+- Accessibility requirements for contrast
+- How to use color to communicate meaning
+
+### Tokens Implement Values
+
+Design tokens are the **implementation layer**. They translate foundation rules into specific values that can be used in code.
+
+For example, tokens implement the Color foundation:
+
+| Foundation Concept | Token | Value |
+|-------------------|-------|-------|
+| Primary color | `color.primary.500` | `#3b82f6` |
+| Success color | `color.success.500` | `#22c55e` |
+| Text primary | `color.text.primary` | `#111827` |
+
+### How They Work Together
+
+1. **Foundations** define what we're trying to achieve (e.g., "Use primary color for main actions")
+2. **Tokens** provide the specific values (e.g., `color.primary.500`)
+3. **Components** use tokens to implement the foundation rules
+
+This separation allows foundations to evolve conceptually while tokens provide stable implementation references.
+
+<Callout type="info" title="Learn more about tokens">
+  Explore the [Tokens documentation](/tokens) to see how design tokens implement these foundations in code.
+</Callout>

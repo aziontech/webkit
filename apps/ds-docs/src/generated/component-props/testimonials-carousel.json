@@ -1,0 +1,65 @@
+{
+  "testimonials": {
+    "label": "Testimonials",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "subtitle": {
+    "label": "Subtitle",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Trusted by market leaders across banking, e-commerce, tech, and other industries."
+  },
+  "autoplayInterval": {
+    "label": "Autoplay Interval",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": null
+  },
+  "circular": {
+    "label": "Circular",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "showNavigators": {
+    "label": "Show Navigators",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "showIndicators": {
+    "label": "Show Indicators",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "quoted": {
+    "label": "Quoted",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  }
+}

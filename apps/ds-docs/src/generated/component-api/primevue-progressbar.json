@@ -1,0 +1,37 @@
+{
+  "component": "primevue-progressbar",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/progressbar/progressbar.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "required": false,
+      "default": "determinate",
+      "description": ""
+    },
+    {
+      "name": "showValue",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.099Z"
+}
