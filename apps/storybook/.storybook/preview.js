@@ -1,11 +1,11 @@
-import { setup } from '@storybook/vue3';
-import PrimeVue from 'primevue/config';
-import Tooltip from 'primevue/tooltip';
+import { setup } from '@storybook/vue3'
+import PrimeVue from 'primevue/config'
+import Tooltip from 'primevue/tooltip'
 import { withThemeByClassName } from '@storybook/addon-themes'
 import { injectCssVars } from '@aziontech/theme/tokens'
 
 import 'primeflex/primeflex.css'
-import '../src/styles/preview.css';
+import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
@@ -16,10 +16,10 @@ injectCssVars()
 setup((app) => {
   app.use(PrimeVue, {
     ripple: false
-  });
+  })
 
-  app.directive('tooltip', Tooltip);
-});
+  app.directive('tooltip', Tooltip)
+})
 
 export const parameters = {
   controls: {
@@ -75,18 +75,25 @@ export const parameters = {
   },
   options: {
     storySort: {
-      order: ['Foundations', ['Colors', 'Spacing', 'Typography', 'Icons'], 'Primevue', 'Primevue', 'Components', 'Site']
+      order: [
+        'Get Started',
+        'Foundations',
+        ['Colors', 'Spacing', 'Typography', 'Icons'],
+        'Primevue',
+        'Primevue',
+        'Components',
+        'Site'
+      ]
     }
   }
-};
+}
 
 export const decorators = [
   withThemeByClassName({
     themes: {
       light: 'azion azion-light',
-      dark: 'azion azion-dark',
+      dark: 'azion azion-dark'
     },
-    defaultTheme: 'dark',
+    defaultTheme: 'dark'
   })
 ]
-
