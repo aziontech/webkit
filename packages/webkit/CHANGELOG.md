@@ -1,3 +1,15 @@
+## [1.20.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.4...@aziontech/webkit@1.20.0) (2026-04-17)
+
+
+### Features
+
+* add new token to overline-sm ([d9dd3c7](https://github.com/aziontech/webkit/commit/d9dd3c79574c0aec5ba96f889b351b6ec8acc957))
+
+
+### Bug Fixes
+
+* adjust overline to pretty ([178a639](https://github.com/aziontech/webkit/commit/178a63936c689715592b516e0f660e425769c95e))
+
 ## [1.19.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.3...@aziontech/webkit@1.19.4) (2026-04-16)
 
 
