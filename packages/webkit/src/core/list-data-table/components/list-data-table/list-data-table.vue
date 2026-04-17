@@ -122,7 +122,6 @@
         :title="emptyBlock.title"
         :description="emptyBlock.description"
         :createButtonLabel="emptyBlock.createButtonLabel"
-        :createPagePath="emptyBlock.createPagePath"
         :onClickCreate="emptyBlock.onClickCreate"
         :documentationService="emptyBlock.documentationService"
         :pt="pt.emptyState"
@@ -289,7 +288,6 @@
         title: 'No data has been created',
         description: 'No data has been created.',
         createButtonLabel: 'Create',
-        createPagePath: null,
         documentationService: null
       })
     },
