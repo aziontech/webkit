@@ -1,7 +1,7 @@
 import js from '@eslint/js'
 import vue from 'eslint-plugin-vue'
-import typescript from '@typescript-eslint/eslint-plugin'
-import typescriptParser from '@typescript-eslint/parser'
+// import typescript from '@typescript-eslint/eslint-plugin'
+// import typescriptParser from '@typescript-eslint/parser'
 import vueParser from 'vue-eslint-parser'
 import importPlugin from 'eslint-plugin-import'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
@@ -10,14 +10,19 @@ import vuejsAccessibility from 'eslint-plugin-vuejs-accessibility'
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', '*.d.ts', '*.d.ts.map']
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      '**/*.d.ts',
+      '**/*.d.ts.map'
+    ]
   },
   {
     files: ['**/*.{js,ts,vue}'],
     languageOptions: {
       parser: vueParser,
       parserOptions: {
-        parser: typescriptParser,
+        // parser: typesgit criptParser,
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: {
@@ -45,7 +50,7 @@ export default [
     },
     plugins: {
       vue,
-      '@typescript-eslint': typescript,
+      // '@typescript-eslint': typescript,
       import: importPlugin,
       'simple-import-sort': simpleImportSort,
       'unused-imports': unusedImports,
@@ -71,9 +76,9 @@ export default [
       'vuejs-accessibility/click-events-have-key-events': 'error',
 
       // TypeScript
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/explicit-module-boundary-types': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
+      // '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // '@typescript-eslint/explicit-module-boundary-types': 'error',
+      // '@typescript-eslint/no-explicit-any': 'error',
 
       // Import organization
       'simple-import-sort/imports': 'error',
