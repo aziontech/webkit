@@ -33,6 +33,10 @@
       :key="filter.field"
       class="flex items-center gap-2 px-3 py-1.5 bg-[var(--input-bg)] rounded-md text-sm cursor-pointer"
       @click="(event) => editFilter(filter, event)"
+      @keydown.enter="(event) => editFilter(filter, event)"
+      @keydown.space.prevent="(event) => editFilter(filter, event)"
+      tabindex="0"
+      role="button"
     >
       <span class="font-normal">{{ filter.label }} {{ filter.matchMode }}:</span>
       <span>{{ getFormattedValue(filter) }}</span>

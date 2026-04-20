@@ -14,7 +14,8 @@
       default: ''
     },
     class: {
-      type: String
+      type: String,
+      default: ''
     },
     name: {
       type: String,

@@ -34,6 +34,11 @@ export default [
         console: 'readonly',
         fetch: 'readonly',
         localStorage: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        ResizeObserver: 'readonly',
         // Node globals
         process: 'readonly',
         __dirname: 'readonly',
@@ -43,8 +48,7 @@ export default [
         // ES2022 globals
         Promise: 'readonly',
         Symbol: 'readonly',
-        Reflect: 'readonly',
-        console: 'readonly'
+        Reflect: 'readonly'
       }
     },
     plugins: {
@@ -87,7 +91,7 @@ export default [
       'import/no-duplicates': 'error',
 
       // Clean code
-      'no-console': ['error', { allow: ['warn', 'error'] }] // Prevent console.log in production code
+      'no-console': ['error', { allow: ['warn', 'error'] }], // Prevent console.log in production code
       'no-debugger': 'error',
       'prefer-const': 'error'
     },

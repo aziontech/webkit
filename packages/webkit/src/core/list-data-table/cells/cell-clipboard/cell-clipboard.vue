@@ -117,6 +117,10 @@
         v-if="isTruncated"
         class="underline cursor-pointer"
         @click.stop="showAllText = !showAllText"
+        @keydown.enter="showAllText = !showAllText"
+        @keydown.space.prevent="showAllText = !showAllText"
+        tabindex="0"
+        role="button"
       >
         {{ toggleText }}
       </li>
@@ -142,6 +146,9 @@
       :class="{ 'text-[var(--text-color)] hover:underline cursor-pointer': asLink }"
       @mouseenter="handlePopupTriggerEnter"
       @mouseleave="handleTextMouseLeave"
+      @keydown.enter="handlePopupTriggerEnter"
+      @keydown.space.prevent="handlePopupTriggerEnter"
+      tabindex="0"
     >
       {{ content }}
     </p>

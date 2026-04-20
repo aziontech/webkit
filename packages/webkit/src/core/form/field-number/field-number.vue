@@ -41,10 +41,12 @@
       default: ''
     },
     min: {
-      type: Number
+      type: Number,
+      default: undefined
     },
     max: {
-      type: Number
+      type: Number,
+      default: undefined
     },
     step: {
       type: Number,

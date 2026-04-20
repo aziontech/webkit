@@ -432,7 +432,6 @@
   })
 
   const hasFooterSlot = computed(() => !!slots.footer)
-  const hasIllustrationSlot = computed(() => !!slots.illustration)
 
   const hasSkeletonRows = computed(() => {
     return props.data.some((row) => row.isSkeletonRow)

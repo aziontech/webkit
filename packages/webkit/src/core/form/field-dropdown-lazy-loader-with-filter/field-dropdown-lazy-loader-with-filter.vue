@@ -91,7 +91,7 @@
     }
   })
 
-  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied'])
+  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied', 'onClear'])
 
   const PAGE_INCREMENT = 1
   const PAGE_SIZE = 100
@@ -136,7 +136,7 @@
       try {
         page.value += PAGE_INCREMENT
         await fetchData(page.value)
-      } catch (error) {
+      } catch {
         notRequest.value = true
       } finally {
         loading.value = false
@@ -283,14 +283,14 @@
       if (currentPage === INITIAL_PAGE && props.value && search.value === '') {
         await checkValueInList(props.value)
       }
-    } catch (error) {
+    } catch (err) {
       //Here we check if the error was caused by a lack of permission. If that's not the case, we add the ID to avoid blocking the user's experience.
-      if (typeof error === 'string' && error?.includes(PERMISSION_DENIED)) {
+      if (typeof err === 'string' && err?.includes(PERMISSION_DENIED)) {
         hasNoPermission.value = true
         preventValueSetWithoutPermission()
         emit('onAccessDenied')
       }
-      throw error(error)
+      throw err
     } finally {
       loading.value = false
     }
@@ -498,6 +498,10 @@
             <span
               class="p-inputgroup-addon"
               @click="searchFilter"
+              @keydown.enter="searchFilter"
+              @keydown.space.prevent="searchFilter"
+              tabindex="0"
+              role="button"
             >
               <i class="pi pi-search"></i>
             </span>

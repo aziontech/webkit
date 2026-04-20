@@ -7,6 +7,10 @@
       class="text-xs font-normal text-[var(--text-color-link)] hover:underline cursor-pointer"
       data-testid="data-table-view-all-footer-link"
       @click.stop="emit('click')"
+      @keydown.enter.stop="emit('click')"
+      @keydown.space.prevent.stop="emit('click')"
+      tabindex="0"
+      role="button"
     >
       {{ label }}
     </span>
