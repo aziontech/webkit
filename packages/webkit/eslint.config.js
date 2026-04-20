@@ -25,9 +25,6 @@ export default [
         // parser: typesgit criptParser,
         ecmaVersion: 'latest',
         sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true
-        }
       },
       globals: {
         // Browser globals
@@ -35,6 +32,8 @@ export default [
         document: 'readonly',
         navigator: 'readonly',
         console: 'readonly',
+        fetch: 'readonly',
+        localStorage: 'readonly',
         // Node globals
         process: 'readonly',
         __dirname: 'readonly',
@@ -88,7 +87,7 @@ export default [
       'import/no-duplicates': 'error',
 
       // Clean code
-      'no-console': 'error', // Prevent console.log in production code
+      'no-console': ['error', { allow: ['warn', 'error'] }] // Prevent console.log in production code
       'no-debugger': 'error',
       'prefer-const': 'error'
     },
