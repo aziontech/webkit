@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./list-data-table-view-all-footer.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

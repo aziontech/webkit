@@ -1,94 +1,93 @@
 <script setup>
-import MultiSelect from 'primevue/multiselect'
+  import MultiSelect from 'primevue/multiselect'
 
-defineOptions({ name: 'MultiSelect' })
+  defineOptions({ name: 'MultiSelect' })
 
-const props = defineProps({
-  modelValue: {
-    type: Array,
-    default: undefined
-  },
-  options: {
-    type: Array,
-    default: () => []
-  },
-  optionLabel: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionValue: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionDisabled: {
-    type: [String, Function],
-    default: undefined
-  },
-  placeholder: {
-    type: String,
-    default: undefined
-  },
-  display: {
-    type: String,
-    default: 'comma',
-    validator: (val) => ['comma', 'chip'].includes(val)
-  },
-  maxSelectedLabels: {
-    type: Number,
-    default: undefined
-  },
-  filter: {
-    type: Boolean,
-    default: false
-  },
-  filterPlaceholder: {
-    type: String,
-    default: undefined
-  },
-  showToggleAll: {
-    type: Boolean,
-    default: true
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  selectionLimit: {
-    type: Number,
-    default: undefined
-  },
-  appendTo: {
-    type: [String, Object],
-    default: 'body'
-  },
-  autoFilterFocus: {
-    type: Boolean,
-    default: false
-  },
-  resetFilterOnHide: {
-    type: Boolean,
-    default: false
-  },
-  scrollHeight: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
+    options: {
+      type: Array,
+      default: () => []
+    },
+    optionLabel: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionValue: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionDisabled: {
+      type: [String, Function],
+      default: undefined
+    },
+    placeholder: {
+      type: String,
+      default: undefined
+    },
+    display: {
+      type: String,
+      default: 'comma',
+      validator: (val) => ['comma', 'chip'].includes(val)
+    },
+    maxSelectedLabels: {
+      type: Number,
+      default: undefined
+    },
+    filter: {
+      type: Boolean,
+      default: false
+    },
+    filterPlaceholder: {
+      type: String,
+      default: undefined
+    },
+    showToggleAll: {
+      type: Boolean,
+      default: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    selectionLimit: {
+      type: Number,
+      default: undefined
+    },
+    appendTo: {
+      type: [String, Object],
+      default: 'body'
+    },
+    autoFilterFocus: {
+      type: Boolean,
+      default: false
+    },
+    resetFilterOnHide: {
+      type: Boolean,
+      default: false
+    },
+    scrollHeight: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['update:modelValue', 'change', 'filter', 'show', 'hide'])
-
+  const emit = defineEmits(['update:modelValue', 'change', 'filter', 'show', 'hide'])
 </script>
 
 <template>
@@ -119,19 +118,40 @@ const emit = defineEmits(['update:modelValue', 'change', 'filter', 'show', 'hide
     @show="emit('show')"
     @hide="emit('hide')"
   >
-    <template v-if="$slots.value" #value="slotProps">
-      <slot name="value" v-bind="slotProps" />
+    <template
+      v-if="$slots.value"
+      #value="slotProps"
+    >
+      <slot
+        name="value"
+        v-bind="slotProps"
+      />
     </template>
-    <template v-if="$slots.option" #option="slotProps">
-      <slot name="option" v-bind="slotProps" />
+    <template
+      v-if="$slots.option"
+      #option="slotProps"
+    >
+      <slot
+        name="option"
+        v-bind="slotProps"
+      />
     </template>
-    <template v-if="$slots.header" #header>
+    <template
+      v-if="$slots.header"
+      #header
+    >
       <slot name="header" />
     </template>
-    <template v-if="$slots.footer" #footer>
+    <template
+      v-if="$slots.footer"
+      #footer
+    >
       <slot name="footer" />
     </template>
-    <template v-if="$slots.empty" #empty>
+    <template
+      v-if="$slots.empty"
+      #empty
+    >
       <slot name="empty" />
     </template>
   </MultiSelect>

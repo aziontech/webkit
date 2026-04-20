@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./list-data-table-inline-create.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

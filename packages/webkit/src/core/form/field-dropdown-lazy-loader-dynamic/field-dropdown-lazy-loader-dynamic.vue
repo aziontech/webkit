@@ -94,11 +94,12 @@
 </template>
 
 <script setup>
+  import { watchDebounced } from '@vueuse/core'
   import Dropdown from 'primevue/dropdown'
   import InputText from 'primevue/inputtext'
   import { useField } from 'vee-validate'
-  import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch } from 'vue'
-  import { watchDebounced } from '@vueuse/core'
+  import { computed, onMounted, ref, toRef, useAttrs, useSlots, watch, watchEffect } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 
@@ -252,7 +253,7 @@
       })
 
       totalCount.value = response.count
-      let results = response.body?.map((item) => {
+      const results = response.body?.map((item) => {
         return {
           [props.optionLabel]: item.name,
           [props.optionValue]: item.id,
@@ -378,7 +379,7 @@
         return
       }
 
-      let results = newValue.body.map((item) => {
+      const results = newValue.body.map((item) => {
         return {
           [props.optionLabel]: item.name,
           [props.optionValue]: item.id,

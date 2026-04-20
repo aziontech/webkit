@@ -25,12 +25,12 @@ export { default as PrimeVueConfig } from 'primevue/config'
 // ---- Toast (stateful: EventBus + Symbol) ----
 export { default as ToastEventBus } from 'primevue/toasteventbus'
 export { default as ToastService } from 'primevue/toastservice'
-export { useToast as usePrimeToast, PrimeVueToastSymbol } from 'primevue/usetoast'
+export { PrimeVueToastSymbol, useToast as usePrimeToast } from 'primevue/usetoast'
 
 // ---- Dialog (stateful: EventBus + Symbol) ----
-export { default as DynamicDialogEventBus } from 'primevue/dynamicdialogeventbus'
 export { default as DialogService } from 'primevue/dialogservice'
-export { useDialog as usePrimeDialog, PrimeVueDialogSymbol } from 'primevue/usedialog'
+export { default as DynamicDialogEventBus } from 'primevue/dynamicdialogeventbus'
+export { PrimeVueDialogSymbol, useDialog as usePrimeDialog } from 'primevue/usedialog'
 
 // ---- Directives ----
 export { default as Tooltip } from 'primevue/tooltip'

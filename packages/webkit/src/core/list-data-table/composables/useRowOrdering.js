@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export function useRowOrdering(options) {
   const {
@@ -41,8 +41,7 @@ export function useRowOrdering(options) {
   function markAltered(row) {
     if (positionObjectMode) {
       if (row[positionField]) {
-        row[positionField].altered =
-          row[positionField].value !== row[positionField].immutableValue
+        row[positionField].altered = row[positionField].value !== row[positionField].immutableValue
       }
     }
   }
@@ -148,10 +147,12 @@ export function useRowOrdering(options) {
     })
 
     const groupItems = groups.get(rowGroup)
-    if (!groupItems) return { reorderedData: data.value, alteredRows: alteredRows.value, exceeded: false }
+    if (!groupItems)
+      return { reorderedData: data.value, alteredRows: alteredRows.value, exceeded: false }
 
     const originalIndex = groupItems.findIndex((r) => r[dataKey] === row[dataKey])
-    if (originalIndex === -1) return { reorderedData: data.value, alteredRows: alteredRows.value, exceeded: false }
+    if (originalIndex === -1)
+      return { reorderedData: data.value, alteredRows: alteredRows.value, exceeded: false }
 
     const maxPosition = groupItems.length - 1
     let targetPosition = newPosition
@@ -222,14 +223,18 @@ export function useRowOrdering(options) {
           if (!seenGroups.has(g)) {
             seenGroups.add(g)
             const items = groups.get(g) || []
-            items.sort((a, b) => (a[positionField]?.immutableValue ?? 0) - (b[positionField]?.immutableValue ?? 0))
+            items.sort(
+              (a, b) =>
+                (a[positionField]?.immutableValue ?? 0) - (b[positionField]?.immutableValue ?? 0)
+            )
             reassembled.push(...items)
           }
         })
         data.value = reassembled
       } else {
         data.value = [...data.value].sort(
-          (a, b) => (a[positionField]?.immutableValue ?? 0) - (b[positionField]?.immutableValue ?? 0)
+          (a, b) =>
+            (a[positionField]?.immutableValue ?? 0) - (b[positionField]?.immutableValue ?? 0)
         )
       }
     } else {

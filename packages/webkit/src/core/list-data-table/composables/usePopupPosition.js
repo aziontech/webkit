@@ -1,4 +1,4 @@
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 /**
  * Composable for managing popup positioning with hover/click behavior.

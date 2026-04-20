@@ -1,85 +1,85 @@
 <script setup>
-import Calendar from 'primevue/calendar'
+  import Calendar from 'primevue/calendar'
 
-defineOptions({ name: 'Calendar' })
+  defineOptions({ name: 'Calendar' })
 
-const props = defineProps({
-  modelValue: {
-    type: [Date, Array],
-    default: undefined
-  },
-  selectionMode: {
-    type: String,
-    default: 'single',
-    validator: (val) => ['single', 'multiple', 'range'].includes(val)
-  },
-  dateFormat: {
-    type: String,
-    default: undefined
-  },
-  placeholder: {
-    type: String,
-    default: undefined
-  },
-  showIcon: {
-    type: Boolean,
-    default: false
-  },
-  showTime: {
-    type: Boolean,
-    default: false
-  },
-  timeOnly: {
-    type: Boolean,
-    default: false
-  },
-  inline: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  minDate: {
-    type: Date,
-    default: undefined
-  },
-  maxDate: {
-    type: Date,
-    default: undefined
-  },
-  hourFormat: {
-    type: String,
-    default: undefined
-  },
-  showButtonBar: {
-    type: Boolean,
-    default: false
-  },
-  showWeek: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  },
-  manualInput: {
-    type: Boolean,
-    default: true
-  },
-  iconDisplay: {
-    type: String,
-    default: 'button'
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: [Date, Array],
+      default: undefined
+    },
+    selectionMode: {
+      type: String,
+      default: 'single',
+      validator: (val) => ['single', 'multiple', 'range'].includes(val)
+    },
+    dateFormat: {
+      type: String,
+      default: undefined
+    },
+    placeholder: {
+      type: String,
+      default: undefined
+    },
+    showIcon: {
+      type: Boolean,
+      default: false
+    },
+    showTime: {
+      type: Boolean,
+      default: false
+    },
+    timeOnly: {
+      type: Boolean,
+      default: false
+    },
+    inline: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    minDate: {
+      type: Date,
+      default: undefined
+    },
+    maxDate: {
+      type: Date,
+      default: undefined
+    },
+    hourFormat: {
+      type: String,
+      default: undefined
+    },
+    showButtonBar: {
+      type: Boolean,
+      default: false
+    },
+    showWeek: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    },
+    manualInput: {
+      type: Boolean,
+      default: true
+    },
+    iconDisplay: {
+      type: String,
+      default: 'button'
+    }
+  })
 
-const emit = defineEmits(['update:modelValue', 'date-select', 'show', 'hide', 'blur'])
+  const emit = defineEmits(['update:modelValue', 'date-select', 'show', 'hide', 'blur'])
 </script>
 
 <template>
@@ -108,14 +108,26 @@ const emit = defineEmits(['update:modelValue', 'date-select', 'show', 'hide', 'b
     @hide="emit('hide')"
     @blur="emit('blur', $event)"
   >
-    <template v-if="$slots.header" #header>
+    <template
+      v-if="$slots.header"
+      #header
+    >
       <slot name="header" />
     </template>
-    <template v-if="$slots.footer" #footer>
+    <template
+      v-if="$slots.footer"
+      #footer
+    >
       <slot name="footer" />
     </template>
-    <template v-if="$slots.date" #date="slotProps">
-      <slot name="date" v-bind="slotProps" />
+    <template
+      v-if="$slots.date"
+      #date="slotProps"
+    >
+      <slot
+        name="date"
+        v-bind="slotProps"
+      />
     </template>
   </Calendar>
 </template>

@@ -1,23 +1,23 @@
 <script setup>
-import InlineMessage from 'primevue/inlinemessage'
+  import InlineMessage from 'primevue/inlinemessage'
 
-defineOptions({ name: 'InlineMessage' })
+  defineOptions({ name: 'InlineMessage' })
 
-const props = defineProps({
-  severity: {
-    type: String,
-    default: 'error',
-    validator: (val) => ['success', 'info', 'warn', 'error'].includes(val)
-  },
-  icon: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    severity: {
+      type: String,
+      default: 'error',
+      validator: (val) => ['success', 'info', 'warn', 'error'].includes(val)
+    },
+    icon: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 </script>
 
 <template>

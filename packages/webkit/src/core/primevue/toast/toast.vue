@@ -1,31 +1,40 @@
 <script setup>
-import Toast from 'primevue/toast'
+  import Toast from 'primevue/toast'
 
-defineOptions({ name: 'Toast' })
+  defineOptions({ name: 'Toast' })
 
-const props = defineProps({
-  group: {
-    type: String,
-    default: undefined
-  },
-  position: {
-    type: String,
-    default: 'top-right',
-    validator: (val) => ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'center', 'top-center', 'bottom-center'].includes(val)
-  },
-  breakpoints: {
-    type: Object,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    group: {
+      type: String,
+      default: undefined
+    },
+    position: {
+      type: String,
+      default: 'top-right',
+      validator: (val) =>
+        [
+          'top-right',
+          'top-left',
+          'bottom-right',
+          'bottom-left',
+          'center',
+          'top-center',
+          'bottom-center'
+        ].includes(val)
+    },
+    breakpoints: {
+      type: Object,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 </script>
 
 <template>
@@ -36,8 +45,14 @@ const props = defineProps({
     :class="props.class"
     :pt="props.pt"
   >
-    <template v-if="$slots.message" #message="slotProps">
-      <slot name="message" :message="slotProps.message" />
+    <template
+      v-if="$slots.message"
+      #message="slotProps"
+    >
+      <slot
+        name="message"
+        :message="slotProps.message"
+      />
     </template>
   </Toast>
 </template>

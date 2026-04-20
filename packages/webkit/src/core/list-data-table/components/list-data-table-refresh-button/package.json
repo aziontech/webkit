@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./list-data-table-refresh-button.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

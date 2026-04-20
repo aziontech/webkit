@@ -1,26 +1,26 @@
 <script setup>
-import AccordionTab from 'primevue/accordiontab'
+  import AccordionTab from 'primevue/accordiontab'
 
-defineOptions({ name: 'AccordionTab' })
+  defineOptions({ name: 'AccordionTab' })
 
-const props = defineProps({
-  header: {
-    type: String,
-    default: undefined
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    header: {
+      type: String,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 </script>
 
 <template>

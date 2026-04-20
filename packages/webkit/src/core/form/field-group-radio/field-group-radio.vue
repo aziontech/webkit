@@ -1,8 +1,9 @@
 <script setup>
-  import FieldRadioBlock from '../field-radio-block'
+  import PrimeDivider from 'primevue/divider'
   import { useField } from 'vee-validate'
   import { computed, ref, toRefs, useAttrs } from 'vue'
-  import PrimeDivider from 'primevue/divider'
+
+  import FieldRadioBlock from '../field-radio-block'
   import LabelBlock from '../label'
 
   defineOptions({ name: 'FieldGroupRadio' })

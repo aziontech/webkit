@@ -7,6 +7,6 @@
 
 <script>
   export default {
-    name: 'illustration-layers'
+    name: 'IllustrationLayers'
   }
 </script>
