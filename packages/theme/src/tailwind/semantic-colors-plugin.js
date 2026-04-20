@@ -18,11 +18,11 @@
 // Lazy-require to avoid hard dependency for consumers
 const plugin = (() => {
   try {
-    return require('tailwindcss/plugin');
+    return require('tailwindcss/plugin')
   } catch {
-    return (handler) => handler;
+    return (handler) => handler
   }
-})();
+})()
 
 /**
  * Generate semantic color utilities
@@ -45,8 +45,8 @@ export const semanticColors = () => {
       '.text-warning': { color: 'var(--text-warning)' },
       '.text-warningHover': { color: 'var(--text-warningHover)' },
       '.text-success': { color: 'var(--text-success)' },
-      '.text-successHover': { color: 'var(--text-successHover)' },
-    };
+      '.text-successHover': { color: 'var(--text-successHover)' }
+    }
 
     const bgColors = {
       '.bg-surfaceRaised': { 'background-color': 'var(--background-surfaceRaised)' },
@@ -62,7 +62,8 @@ export const semanticColors = () => {
       '.bg-backdrop': { 'background-color': 'var(--background-backdrop)' },
       '.bg-primary': { 'background-color': 'var(--background-primary)' },
       '.bg-primaryHover': { 'background-color': 'var(--background-primaryHover)' },
-    };
+      '.bg-primary-mask': { 'background-color': 'var(--background-primaryMask)' }
+    }
 
     const borderColors = {
       '.border-default': { 'border-color': 'var(--border-default)' },
@@ -77,14 +78,23 @@ export const semanticColors = () => {
       '.border-primary': { 'border-color': 'var(--border-primary)' },
       '.border-primaryHover': { 'border-color': 'var(--border-primaryHover)' },
       '.border-accent': { 'border-color': 'var(--border-accent)' },
-      '.border-accentHover': { 'border-color': 'var(--border-accentHover)' },
-    };
+      '.border-accentHover': { 'border-color': 'var(--border-accentHover)' }
+    }
 
-    const variants = ['responsive', 'hover', 'dark', 'before', 'after', 'focus', 'active', 'disabled'];
-    addUtilities(textColors, variants);
-    addUtilities(bgColors, variants);
-    addUtilities(borderColors, variants);
-  });
-};
+    const variants = [
+      'responsive',
+      'hover',
+      'dark',
+      'before',
+      'after',
+      'focus',
+      'active',
+      'disabled'
+    ]
+    addUtilities(textColors, variants)
+    addUtilities(bgColors, variants)
+    addUtilities(borderColors, variants)
+  })
+}
 
-export default semanticColors;
+export default semanticColors
