@@ -1,9 +1,20 @@
 <script setup>
-  import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch, inject } from 'vue'
   import { watchDebounced } from '@vueuse/core'
   import Dropdown from 'primevue/dropdown'
   import InputText from 'primevue/inputtext'
   import { useField } from 'vee-validate'
+  import {
+    computed,
+    inject,
+    onMounted,
+    ref,
+    toRef,
+    useAttrs,
+    useSlots,
+    watch,
+    watchEffect
+  } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 

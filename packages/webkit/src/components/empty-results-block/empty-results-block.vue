@@ -1,62 +1,62 @@
 <script setup>
-import PrimeButton from 'primevue/button'
+  import PrimeButton from 'primevue/button'
 
-defineOptions({ name: 'empty-results-block' })
+  defineOptions({ name: 'EmptyResultsBlock' })
 
-const emit = defineEmits(['click-to-create'])
+  const emit = defineEmits(['click-to-create'])
 
-const props = defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  createButtonLabel: {
-    type: String,
-    default: ''
-  },
-  disabledList: {
-    type: Boolean,
-    default: false
-  },
-  inTabs: {
-    type: Boolean,
-    default: false
-  },
-  noBorder: {
-    type: Boolean,
-    default: false
-  },
-  noShowBorderTop: {
-    type: Boolean,
-    default: false
-  },
-  showLearnMoreButton: {
-    type: Boolean,
-    default: true
-  },
-  documentationService: {
-    type: Function,
-    default: null
-  },
-  pt: {
-    type: Object,
-    default: () => ({})
+  const props = defineProps({
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    createButtonLabel: {
+      type: String,
+      default: ''
+    },
+    disabledList: {
+      type: Boolean,
+      default: false
+    },
+    inTabs: {
+      type: Boolean,
+      default: false
+    },
+    noBorder: {
+      type: Boolean,
+      default: false
+    },
+    noShowBorderTop: {
+      type: Boolean,
+      default: false
+    },
+    showLearnMoreButton: {
+      type: Boolean,
+      default: true
+    },
+    documentationService: {
+      type: Function,
+      default: null
+    },
+    pt: {
+      type: Object,
+      default: () => ({})
+    }
+  })
+
+  function openDocumentation() {
+    if (props.documentationService) {
+      props.documentationService()
+    }
   }
-})
 
-function openDocumentation() {
-  if (props.documentationService) {
-    props.documentationService()
+  function handleCreateClick() {
+    emit('click-to-create')
   }
-}
-
-function handleCreateClick() {
-  emit('click-to-create')
-}
 </script>
 
 <template>

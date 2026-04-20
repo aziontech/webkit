@@ -16,7 +16,13 @@
     "clean:dts": "rm -rf src/**/*.d.ts src/**/*.d.ts.map",
     "build:dts": "vue-tsc --declaration --emitDeclarationOnly",
     "pack:dry": "npm pack --dry-run",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "lint": "eslint src --ext .js,.ts,.vue --max-warnings 0",
+    "lint:fix": "eslint src --ext .js,.ts,.vue --fix",
+    "lint:style": "stylelint \"src/**/*.{css,scss,vue}\"",
+    "type-check": "vue-tsc --noEmit",
+    "type-coverage": "type-coverage -p . --at-least 95 --detail"
   },
   "dependencies": {
     "@vueuse/core": "^10.11.1",

@@ -5,5 +5,7 @@
   "browser": {
     "./sfc": "./empty-results-block.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

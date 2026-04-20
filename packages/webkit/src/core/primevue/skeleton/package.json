@@ -1,1 +1,10 @@
-{"main": "./skeleton.vue", "module": "./skeleton.vue", "browser": {"./sfc": "./skeleton.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./skeleton.vue",
+  "module": "./skeleton.vue",
+  "browser": {
+    "./sfc": "./skeleton.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

@@ -1,5 +1,5 @@
 <script setup>
-defineOptions({ name: 'svg-azion-default' })
+  defineOptions({ name: 'SvgAzionDefault' })
 </script>
 
 <template>
@@ -44,7 +44,11 @@ defineOptions({ name: 'svg-azion-default' })
     </g>
     <defs>
       <clipPath id="clip0_4263_8239">
-        <rect width="90" height="18" fill="white" />
+        <rect
+          width="90"
+          height="18"
+          fill="white"
+        />
       </clipPath>
     </defs>
   </svg>

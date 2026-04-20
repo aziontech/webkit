@@ -1,7 +1,8 @@
 <script setup>
   import Dropdown from 'primevue/dropdown'
   import { useField } from 'vee-validate'
-  import { computed, toRef, useSlots, useAttrs } from 'vue'
+  import { computed, toRef, useAttrs, useSlots } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 

@@ -1,1 +1,10 @@
-{"main": "./splitbutton.vue", "module": "./splitbutton.vue", "browser": {"./sfc": "./splitbutton.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./splitbutton.vue",
+  "module": "./splitbutton.vue",
+  "browser": {
+    "./sfc": "./splitbutton.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
