@@ -35,7 +35,7 @@
     :disabled="computedDisabled"
     :loading="loading"
     :aria-label="label"
-    :data-testid="data - testid"
+    :data-testid="dataTestid"
     @click="handleClick"
   />
 </template>

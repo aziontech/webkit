@@ -1,7 +1,7 @@
 <script setup>
   import Button from 'primevue/button'
 
-  const props = defineProps({
+  defineProps({
     'data-testid': { type: String, default: 'button-cancel' },
     label: { type: String, default: 'Cancel' },
     icon: { type: String, default: '' },
@@ -29,7 +29,7 @@
     :outlined="outlined"
     :disabled="disabled"
     :aria-label="label"
-    :data-testid="data - testid"
+    :data-testid="dataTestid"
     @click="handleCancel"
   />
 </template>

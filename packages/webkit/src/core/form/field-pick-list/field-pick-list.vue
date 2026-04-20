@@ -106,10 +106,12 @@
       required: true
     },
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     service: {
-      type: Function
+      type: Function,
+      default: null
     }
   })
   let scrollElement = null
@@ -224,7 +226,7 @@
       removeLoadingPickList()
       const dataPicks = [...data.value[0], ...data.value[1]]
       addUniqueItems(dataPicks, response.results)
-    } catch (error) {
+    } catch {
       notRequest.value = true
       removeLoadingPickList()
 

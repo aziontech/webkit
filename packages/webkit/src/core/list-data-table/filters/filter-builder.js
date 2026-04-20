@@ -83,7 +83,7 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
         options: MANAGED_OPTIONS,
         placeholder: 'Select managed'
       })
-    case 'type':
+    case 'type': {
       const isCertificate = normalizedHeader.includes('certificate')
 
       return h(DropdownFilterField, {
@@ -92,6 +92,7 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
         options: isCertificate ? CERTIFICATE_TYPE_OPTIONS : DATA_TYPES_OPTIONS,
         placeholder: 'Select type'
       })
+    }
 
     case 'operation':
       return h(DropdownFilterField, {

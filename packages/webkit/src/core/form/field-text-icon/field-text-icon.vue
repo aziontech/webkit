@@ -101,6 +101,10 @@
         :class="props.icon"
         class="text-color-secondary cursor-pointer"
         @click="handleClick"
+        @keydown.enter="handleClick"
+        @keydown.space.prevent="handleClick"
+        tabindex="0"
+        role="button"
       />
       <InputText
         :id="props.name"

@@ -6,13 +6,16 @@
 
   const props = defineProps({
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     subtitle: {
-      type: String
+      type: String,
+      default: ''
     },
     description: {
-      type: String
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
@@ -39,10 +42,12 @@
       required: true
     },
     inputClass: {
-      type: String
+      type: String,
+      default: ''
     },
     rootClass: {
-      type: String
+      type: String,
+      default: ''
     }
   })
   const slots = useSlots()
@@ -116,6 +121,8 @@
           </p>
           <div
             @click="stopPropagation"
+            @keydown.enter="stopPropagation"
+            @keydown.space.prevent="stopPropagation"
             v-if="slots.footer"
             class="w-full"
           >

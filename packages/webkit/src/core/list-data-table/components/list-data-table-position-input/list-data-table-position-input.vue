@@ -35,7 +35,7 @@
 
   defineOptions({ name: 'DataTablePositionInput' })
 
-  const props = defineProps({
+  defineProps({
     modelValue: {
       type: Number,
       default: 0
