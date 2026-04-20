@@ -97,7 +97,7 @@
     }
   })
 
-  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied', 'onLoaded'])
+  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied', 'onLoaded', 'onClear'])
 
   const PAGE_INCREMENT = 1
   const PAGE_SIZE = 100
@@ -629,6 +629,10 @@
             <span
               class="p-inputgroup-addon"
               @click="searchFilter"
+              @keydown.enter="searchFilter"
+              @keydown.space.prevent="searchFilter"
+              tabindex="0"
+              role="button"
             >
               <i class="pi pi-search"></i>
             </span>

@@ -85,6 +85,8 @@
         <div
           ref="mainButton"
           @click="selectOption('main')"
+          @keydown.enter="selectOption('main')"
+          @keydown.space.prevent="selectOption('main')"
           :class="[
             'whitespace-nowrap relative z-10 px-3 py-1 rounded-md transition-all duration-300 ease-in-out',
             'font-proto-mono tracking-tight uppercase cursor-pointer text-center',
@@ -98,6 +100,8 @@
         <div
           ref="alternativeButton"
           @click="selectOption('alternative')"
+          @keydown.enter="selectOption('alternative')"
+          @keydown.space.prevent="selectOption('alternative')"
           :class="[
             'whitespace-nowrap relative z-10 px-3 py-1 rounded-md transition-all duration-300 ease-in-out',
             'font-proto-mono tracking-tight uppercase cursor-pointer text-center',

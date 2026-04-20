@@ -49,25 +49,9 @@ export default {
 
 export const Default = {
   args: {
-    title: 'No results found',
-    description: 'Get started by creating your first resource.'
-  }
-};
-
-export const WithCreateButton = {
-  args: {
     title: 'No items yet',
     description: 'Create your first item to get started.',
     createButtonLabel: 'Create Item'
-  }
-};
-
-export const WithDocumentation = {
-  args: {
-    title: 'No resources found',
-    description: 'Learn how to create and manage resources in our documentation.',
-    createButtonLabel: 'Create Resource',
-    documentationService: () => console.log('Opening documentation...')
   }
 };
 
@@ -80,28 +64,11 @@ export const DisabledButton = {
   }
 };
 
-export const InTabs = {
-  args: {
-    title: 'No items in this tab',
-    description: 'This tab is empty.',
-    createButtonLabel: 'Add Item',
-    inTabs: true
-  }
-};
-
 export const NoBorder = {
   args: {
     title: 'No border variant',
     description: 'This variant has no border.',
     createButtonLabel: 'Create',
     noBorder: true
-  }
-};
-
-export const WithoutCreateButton = {
-  args: {
-    title: 'Coming soon',
-    description: 'This feature is currently under development.',
-    showLearnMoreButton: false
   }
 };

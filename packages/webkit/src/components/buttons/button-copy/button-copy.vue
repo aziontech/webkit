@@ -11,7 +11,8 @@
       required: true
     },
     label: {
-      type: String
+      type: String,
+      default: ''
     },
     iconPos: {
       type: String,
@@ -80,7 +81,7 @@
     <Button
       :icon="icon"
       :iconPos="iconPos"
-      :data-testid="data - testid"
+      :data-testid="dataTestid"
       type="button"
       :aria-label="ariaLabel"
       :label="labelText"

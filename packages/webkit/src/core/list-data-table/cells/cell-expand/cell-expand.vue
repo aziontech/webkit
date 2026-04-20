@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   import CopyBlock from '../../../../components/buttons/button-copy/button-copy.vue'
   import { usePopupPosition } from '../../composables/usePopupPosition.js'
@@ -148,6 +148,10 @@
         v-if="hasMoreItems"
         class="underline cursor-pointer"
         @click.stop="toggleShowAll"
+        @keydown.enter="toggleShowAll"
+        @keydown.space.prevent="toggleShowAll"
+        tabindex="0"
+        role="button"
       >
         {{ listToggleText }}
       </li>
@@ -170,6 +174,10 @@
       v-if="isTextLong"
       class="underline cursor-pointer"
       @click.stop="toggleShowAll"
+      @keydown.enter="toggleShowAll"
+      @keydown.space.prevent="toggleShowAll"
+      tabindex="0"
+      role="button"
     >
       {{ textToggleText }}
     </li>
@@ -184,6 +192,8 @@
     class="flex items-center gap-1 relative w-full pr-1"
     @mouseenter="handleCellMouseEnter"
     @mouseleave="handleCellMouseLeave"
+    @keydown.enter="handleCellMouseEnter"
+    @keydown.space.prevent="handleCellMouseEnter"
   >
     <div class="flex items-center gap-2 flex-1 min-w-0">
       <p class="overflow-hidden whitespace-nowrap text-ellipsis">
@@ -196,6 +206,10 @@
         @mouseenter="handleTagMouseEnter"
         @mouseleave="handleTagMouseLeave"
         @click.stop="handleTagClick"
+        @keydown.enter="handleTagClick"
+        @keydown.space.prevent="handleTagClick"
+        tabindex="0"
+        role="button"
       >
         +{{ arrayValue.length - 1 }}
       </span>

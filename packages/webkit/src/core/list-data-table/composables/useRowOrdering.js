@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 export function useRowOrdering(options) {
   const {
@@ -13,13 +13,6 @@ export function useRowOrdering(options) {
   const originalPositions = new Map()
   let snapshotTaken = false
 
-  function getPositionValue(row) {
-    if (positionObjectMode) {
-      return row[positionField]?.value ?? 0
-    }
-    return row[positionField] ?? 0
-  }
-
   function setPositionValue(row, value) {
     if (positionObjectMode) {
       if (!row[positionField]) {
@@ -29,13 +22,6 @@ export function useRowOrdering(options) {
     } else {
       row[positionField] = value
     }
-  }
-
-  function getImmutableValue(row) {
-    if (positionObjectMode) {
-      return row[positionField]?.immutableValue ?? 0
-    }
-    return originalPositions.get(row[dataKey]) ?? row[positionField] ?? 0
   }
 
   function markAltered(row) {
@@ -63,10 +49,6 @@ export function useRowOrdering(options) {
       value = value?.[key]
     }
     return typeof value === 'object' && value !== null ? value.content : value
-  }
-
-  function getGroupItems(groupValue) {
-    return data.value.filter((r) => getGroupValue(r) === groupValue)
   }
 
   function updateGroupPositions(items) {

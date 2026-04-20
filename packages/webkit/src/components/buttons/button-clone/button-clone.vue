@@ -1,7 +1,7 @@
 <script setup>
   import Button from 'primevue/button'
 
-  const props = defineProps({
+  defineProps({
     'data-testid': { type: String, default: 'button-clone' },
     label: { type: String, default: 'Clone' },
     icon: { type: String, default: 'pi pi-clone' },
@@ -29,7 +29,7 @@
     :outlined="outlined"
     :disabled="disabled"
     :aria-label="label"
-    :data-testid="data - testid"
+    :data-testid="dataTestid"
     @click="handleClick"
   />
 </template>

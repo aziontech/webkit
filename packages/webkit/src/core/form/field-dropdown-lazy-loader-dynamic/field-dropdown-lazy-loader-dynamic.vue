@@ -62,6 +62,10 @@
             <span
               class="p-inputgroup-addon"
               @click="searchFilter"
+              @keydown.enter="searchFilter"
+              @keydown.space.prevent="searchFilter"
+              tabindex="0"
+              role="button"
             >
               <i class="pi pi-search"></i>
             </span>

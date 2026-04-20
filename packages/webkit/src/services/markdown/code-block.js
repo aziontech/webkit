@@ -73,7 +73,7 @@ const highlightLine = (language, line) => {
   text = text.replace(/\b\d+(?:\.\d+)?\b/g, (m) => save(wrap(m, tokenColors.number)))
 
   if (lang === 'json') {
-    text = text.replace(/([{}\[\]:,])/g, (m) => save(wrap(m, tokenColors.punctuation)))
+    text = text.replace(/([{}[\]:,])/g, (m) => save(wrap(m, tokenColors.punctuation)))
   } else if (lang === 'javascript' || lang === 'typescript' || lang === 'js' || lang === 'ts') {
     const keywords = [
       'export',
@@ -110,7 +110,7 @@ const highlightLine = (language, line) => {
     text = text.replace(/\b(?:true|false|null|undefined)\b/g, (m) =>
       save(wrap(m, tokenColors.builtin))
     )
-    text = text.replace(/([{}\[\]().,:;])/g, (m) => save(wrap(m, tokenColors.punctuation)))
+    text = text.replace(/([{}[\]().,:;])/g, (m) => save(wrap(m, tokenColors.punctuation)))
   }
 
   return restore(text)
