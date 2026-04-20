@@ -276,7 +276,6 @@
   .resizable-splitter {
     --handle-bg: transparent;
   }
-
   .handle {
     background: var(--handle-bg);
   }
