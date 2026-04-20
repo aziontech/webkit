@@ -1,5 +1,5 @@
 <script setup>
-  defineOptions({ name: 'label-block' })
+  defineOptions({ name: 'LabelBlock' })
 
   // const props = defineProps<{
   //   label: string

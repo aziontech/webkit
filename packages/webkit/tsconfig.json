@@ -14,6 +14,11 @@
     "noEmit": false,
     "emitDeclarationOnly": true,
     // "outDir": "./dist",
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "paths": {
       "@/*": ["./src/*"]
     }

@@ -50,10 +50,10 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue'
   import PrimeButton from 'primevue/button'
-  import OverlayPanel from 'primevue/overlaypanel'
   import Listbox from 'primevue/listbox'
+  import OverlayPanel from 'primevue/overlaypanel'
+  import { computed, ref } from 'vue'
 
   const props = defineProps({
     columns: {
@@ -83,9 +83,7 @@
       if (nameColumn && !value.some((col) => col.field === 'name')) {
         value = [nameColumn, ...value]
       }
-      const ordered = props.columns.filter((col) =>
-        value.some((sel) => sel.field === col.field)
-      )
+      const ordered = props.columns.filter((col) => value.some((sel) => sel.field === col.field))
       emit('update:selectedColumns', ordered)
     }
   })

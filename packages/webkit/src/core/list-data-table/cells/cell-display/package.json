@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./cell-display.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

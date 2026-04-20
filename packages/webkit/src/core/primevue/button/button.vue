@@ -1,75 +1,76 @@
 <script setup>
-import Button from 'primevue/button'
+  import Button from 'primevue/button'
 
-defineOptions({ name: 'Button' })
+  defineOptions({ name: 'Button' })
 
-const props = defineProps({
-  label: {
-    type: String,
-    default: undefined
-  },
-  icon: {
-    type: String,
-    default: undefined
-  },
-  iconPos: {
-    type: String,
-    default: 'left',
-    validator: (val) => ['left', 'right', 'top', 'bottom'].includes(val)
-  },
-  iconClass: {
-    type: String,
-    default: undefined
-  },
-  severity: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['secondary', 'success', 'info', 'warning', 'danger', 'contrast'].includes(val)
-  },
-  raised: {
-    type: Boolean,
-    default: false
-  },
-  rounded: {
-    type: Boolean,
-    default: false
-  },
-  text: {
-    type: Boolean,
-    default: false
-  },
-  outlined: {
-    type: Boolean,
-    default: false
-  },
-  size: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['small', 'large'].includes(val)
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  link: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    label: {
+      type: String,
+      default: undefined
+    },
+    icon: {
+      type: String,
+      default: undefined
+    },
+    iconPos: {
+      type: String,
+      default: 'left',
+      validator: (val) => ['left', 'right', 'top', 'bottom'].includes(val)
+    },
+    iconClass: {
+      type: String,
+      default: undefined
+    },
+    severity: {
+      type: String,
+      default: undefined,
+      validator: (val) =>
+        ['secondary', 'success', 'info', 'warning', 'danger', 'contrast'].includes(val)
+    },
+    raised: {
+      type: Boolean,
+      default: false
+    },
+    rounded: {
+      type: Boolean,
+      default: false
+    },
+    text: {
+      type: Boolean,
+      default: false
+    },
+    outlined: {
+      type: Boolean,
+      default: false
+    },
+    size: {
+      type: String,
+      default: undefined,
+      validator: (val) => ['small', 'large'].includes(val)
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    link: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['click'])
+  const emit = defineEmits(['click'])
 </script>
 
 <template>
@@ -91,7 +92,10 @@ const emit = defineEmits(['click'])
     :pt="props.pt"
     @click="emit('click', $event)"
   >
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
   </Button>

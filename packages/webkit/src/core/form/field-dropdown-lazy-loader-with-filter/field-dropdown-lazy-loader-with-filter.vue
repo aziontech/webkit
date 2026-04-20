@@ -1,11 +1,12 @@
 <script setup>
+  import { watchDebounced } from '@vueuse/core'
   import Dropdown from 'primevue/dropdown'
   import InputText from 'primevue/inputtext'
   import { useField } from 'vee-validate'
-  import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch } from 'vue'
-  import { watchDebounced } from '@vueuse/core'
-  import InputSlot from '../slots/input-slot'
+  import { computed, onMounted, ref, toRef, useAttrs, useSlots, watch, watchEffect } from 'vue'
+
   import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const props = defineProps({
     value: {
@@ -249,7 +250,7 @@
       })
 
       totalCount.value = response.count
-      let results = filterData(response.body)
+      const results = filterData(response.body)
 
       if (currentPage === INITIAL_PAGE) {
         data.value = results ? results : []

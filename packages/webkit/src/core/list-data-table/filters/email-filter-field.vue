@@ -1,6 +1,6 @@
 <script setup>
-  import { ref, watch } from 'vue'
   import InputText from 'primevue/inputtext'
+  import { ref, watch } from 'vue'
 
   const props = defineProps({
     modelValue: {

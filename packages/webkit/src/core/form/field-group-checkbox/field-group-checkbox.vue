@@ -1,7 +1,8 @@
 <script setup>
-  import FieldCheckboxBlock from '../field-checkbox-block'
-  import { computed, ref } from 'vue'
   import PrimeDivider from 'primevue/divider'
+  import { computed, ref } from 'vue'
+
+  import FieldCheckboxBlock from '../field-checkbox-block'
   import LabelBlock from '../label'
 
   defineOptions({ name: 'FieldGroupCheckbox' })

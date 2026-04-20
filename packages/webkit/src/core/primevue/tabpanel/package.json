@@ -1,1 +1,10 @@
-{"main": "./tabpanel.vue", "module": "./tabpanel.vue", "browser": {"./sfc": "./tabpanel.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./tabpanel.vue",
+  "module": "./tabpanel.vue",
+  "browser": {
+    "./sfc": "./tabpanel.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

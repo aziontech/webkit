@@ -1,101 +1,100 @@
 <script setup>
-import Dropdown from 'primevue/dropdown'
+  import Dropdown from 'primevue/dropdown'
 
-defineOptions({ name: 'Dropdown' })
+  defineOptions({ name: 'Dropdown' })
 
-const props = defineProps({
-  modelValue: {
-    type: null,
-    default: undefined
-  },
-  options: {
-    type: Array,
-    default: () => []
-  },
-  optionLabel: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionValue: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionDisabled: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionGroupLabel: {
-    type: [String, Function],
-    default: undefined
-  },
-  optionGroupChildren: {
-    type: [String, Function],
-    default: undefined
-  },
-  placeholder: {
-    type: String,
-    default: undefined
-  },
-  filter: {
-    type: Boolean,
-    default: false
-  },
-  filterPlaceholder: {
-    type: String,
-    default: undefined
-  },
-  showClear: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  autoFilterFocus: {
-    type: Boolean,
-    default: false
-  },
-  autoOptionFocus: {
-    type: Boolean,
-    default: false
-  },
-  resetFilterOnHide: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  },
-  appendTo: {
-    type: [String, Object],
-    default: 'body'
-  },
-  emptyMessage: {
-    type: String,
-    default: undefined
-  },
-  filterIcon: {
-    type: String,
-    default: undefined
-  },
-  scrollHeight: {
-    type: String,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: null,
+      default: undefined
+    },
+    options: {
+      type: Array,
+      default: () => []
+    },
+    optionLabel: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionValue: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionDisabled: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionGroupLabel: {
+      type: [String, Function],
+      default: undefined
+    },
+    optionGroupChildren: {
+      type: [String, Function],
+      default: undefined
+    },
+    placeholder: {
+      type: String,
+      default: undefined
+    },
+    filter: {
+      type: Boolean,
+      default: false
+    },
+    filterPlaceholder: {
+      type: String,
+      default: undefined
+    },
+    showClear: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    autoFilterFocus: {
+      type: Boolean,
+      default: false
+    },
+    autoOptionFocus: {
+      type: Boolean,
+      default: false
+    },
+    resetFilterOnHide: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    },
+    appendTo: {
+      type: [String, Object],
+      default: 'body'
+    },
+    emptyMessage: {
+      type: String,
+      default: undefined
+    },
+    filterIcon: {
+      type: String,
+      default: undefined
+    },
+    scrollHeight: {
+      type: String,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['update:modelValue', 'change', 'filter', 'show', 'hide'])
-
+  const emit = defineEmits(['update:modelValue', 'change', 'filter', 'show', 'hide'])
 </script>
 
 <template>
@@ -128,22 +127,46 @@ const emit = defineEmits(['update:modelValue', 'change', 'filter', 'show', 'hide
     @show="emit('show')"
     @hide="emit('hide')"
   >
-    <template v-if="$slots.value" #value="slotProps">
-      <slot name="value" v-bind="slotProps" />
+    <template
+      v-if="$slots.value"
+      #value="slotProps"
+    >
+      <slot
+        name="value"
+        v-bind="slotProps"
+      />
     </template>
-    <template v-if="$slots.option" #option="slotProps">
-      <slot name="option" v-bind="slotProps" />
+    <template
+      v-if="$slots.option"
+      #option="slotProps"
+    >
+      <slot
+        name="option"
+        v-bind="slotProps"
+      />
     </template>
-    <template v-if="$slots.header" #header>
+    <template
+      v-if="$slots.header"
+      #header
+    >
       <slot name="header" />
     </template>
-    <template v-if="$slots.footer" #footer>
+    <template
+      v-if="$slots.footer"
+      #footer
+    >
       <slot name="footer" />
     </template>
-    <template v-if="$slots.empty" #empty>
+    <template
+      v-if="$slots.empty"
+      #empty
+    >
       <slot name="empty" />
     </template>
-    <template v-if="$slots.dropdownicon" #dropdownicon>
+    <template
+      v-if="$slots.dropdownicon"
+      #dropdownicon
+    >
       <slot name="dropdownicon" />
     </template>
   </Dropdown>

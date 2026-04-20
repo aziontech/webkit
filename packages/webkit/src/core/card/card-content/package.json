@@ -1,6 +1,10 @@
 {
   "main": "./card-content.vue",
   "module": "./card-content.vue",
-  "browser": {"./sfc": "./card-content.vue"},
-  "sideEffects": ["*.vue"]
+  "browser": {
+    "./sfc": "./card-content.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
 }

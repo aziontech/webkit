@@ -1,31 +1,31 @@
 <script setup>
-import ProgressBar from 'primevue/progressbar'
+  import ProgressBar from 'primevue/progressbar'
 
-defineOptions({ name: 'ProgressBar' })
+  defineOptions({ name: 'ProgressBar' })
 
-const props = defineProps({
-  value: {
-    type: Number,
-    default: 0
-  },
-  mode: {
-    type: String,
-    default: 'determinate',
-    validator: (val) => ['determinate', 'indeterminate'].includes(val)
-  },
-  showValue: {
-    type: Boolean,
-    default: true
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    value: {
+      type: Number,
+      default: 0
+    },
+    mode: {
+      type: String,
+      default: 'determinate',
+      validator: (val) => ['determinate', 'indeterminate'].includes(val)
+    },
+    showValue: {
+      type: Boolean,
+      default: true
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 </script>
 
 <template>

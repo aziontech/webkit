@@ -1,27 +1,27 @@
 <script setup>
-import { computed } from 'vue'
-import Button from 'primevue/button'
+  import Button from 'primevue/button'
+  import { computed } from 'vue'
 
-const props = defineProps({
-  'data-testid': { type: String, default: 'button-create' },
-  label: { type: String, required: true },
-  icon: { type: String, default: 'pi pi-plus' },
-  iconPos: { type: String, default: 'right' },
-  severity: { type: String, default: 'primary' },
-  size: { type: String, default: '' },
-  outlined: { type: Boolean, default: false },
-  loading: { type: Boolean, default: false },
-  disabled: { type: Boolean, default: false }
-})
+  const props = defineProps({
+    'data-testid': { type: String, default: 'button-create' },
+    label: { type: String, required: true },
+    icon: { type: String, default: 'pi pi-plus' },
+    iconPos: { type: String, default: 'right' },
+    severity: { type: String, default: 'primary' },
+    size: { type: String, default: '' },
+    outlined: { type: Boolean, default: false },
+    loading: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false }
+  })
 
-const emit = defineEmits(['click'])
+  const emit = defineEmits(['click'])
 
-const computedDisabled = computed(() => props.disabled || props.loading)
+  const computedDisabled = computed(() => props.disabled || props.loading)
 
-const handleClick = () => {
-  if (computedDisabled.value) return
-  emit('click')
-}
+  const handleClick = () => {
+    if (computedDisabled.value) return
+    emit('click')
+  }
 </script>
 
 <template>
@@ -35,7 +35,7 @@ const handleClick = () => {
     :disabled="computedDisabled"
     :loading="loading"
     :aria-label="label"
-    :data-testid="data-testid"
+    :data-testid="data - testid"
     @click="handleClick"
   />
 </template>

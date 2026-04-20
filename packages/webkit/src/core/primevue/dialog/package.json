@@ -1,1 +1,10 @@
-{"main": "./dialog.vue", "module": "./dialog.vue", "browser": {"./sfc": "./dialog.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./dialog.vue",
+  "module": "./dialog.vue",
+  "browser": {
+    "./sfc": "./dialog.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

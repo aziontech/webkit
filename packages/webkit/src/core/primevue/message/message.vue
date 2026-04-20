@@ -1,41 +1,41 @@
 <script setup>
-import Message from 'primevue/message'
+  import Message from 'primevue/message'
 
-defineOptions({ name: 'Message' })
+  defineOptions({ name: 'Message' })
 
-const props = defineProps({
-  severity: {
-    type: String,
-    default: 'info',
-    validator: (val) => ['success', 'info', 'warn', 'error'].includes(val)
-  },
-  closable: {
-    type: Boolean,
-    default: false
-  },
-  sticky: {
-    type: Boolean,
-    default: true
-  },
-  life: {
-    type: Number,
-    default: 3000
-  },
-  icon: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    severity: {
+      type: String,
+      default: 'info',
+      validator: (val) => ['success', 'info', 'warn', 'error'].includes(val)
+    },
+    closable: {
+      type: Boolean,
+      default: false
+    },
+    sticky: {
+      type: Boolean,
+      default: true
+    },
+    life: {
+      type: Number,
+      default: 3000
+    },
+    icon: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['close'])
+  const emit = defineEmits(['close'])
 </script>
 
 <template>

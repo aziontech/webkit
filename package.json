@@ -7,6 +7,7 @@
     "url": "https://github.com/aziontech/webkit.git"
   },
   "scripts": {
+    "prepare": "husky",
     "icons:gallery:build": "pnpm --filter icons-gallery run build",
     "icons:gallery:build:azion": "pnpm --filter icons-gallery run build:azion",
     "icons:gallery:preview": "pnpm --filter icons-gallery run preview",
@@ -18,7 +19,15 @@
     "webkit:build:dts": "pnpm --filter webkit run build:dts",
     "storybook:dev": "pnpm --filter icons run build && pnpm --filter storybook run dev",
     "storybook:build": "pnpm --filter icons run build && pnpm --filter storybook run build",
-    "storybook:preview": "pnpm --filter storybook run preview"
+    "storybook:preview": "pnpm --filter storybook run preview",
+    "lint": "pnpm --filter webkit lint",
+    "lint:fix": "pnpm --filter webkit lint:fix",
+    "type-check": "pnpm --filter webkit type-check",
+    "type-coverage": "pnpm --filter webkit type-coverage",
+    "format": "prettier --write packages/webkit/**/*.{js,ts,vue,css,json,md}",
+    "format:check": "prettier --check packages/webkit/**/*.{js,ts,vue,css,json,md}",
+    "security:audit": "pnpm audit --audit-level=high",
+    "governance": "pnpm run lint && pnpm run type-check && pnpm run format:check && pnpm run security:audit"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
@@ -32,18 +41,36 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.1",
+    "@eslint/js": "^9.39.3",
     "@rushstack/eslint-patch": "^1.16.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^10.0.4",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^9.2.6",
     "@semantic-release/release-notes-generator": "12.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.2",
+    "@typescript-eslint/parser": "^8.58.2",
     "@vue/eslint-config-prettier": "^7.1.0",
-    "eslint-plugin-vue": "^8.7.1",
+    "@vue/eslint-config-typescript": "^14.7.0",
+    "eslint": "^9.39.3",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "eslint-plugin-vue": "^9",
+    "eslint-plugin-vuejs-accessibility": "^2.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
     "semantic-release": "^23.1.1",
-    "vite": "^6.4.2"
+    "stylelint": "^17.7.0",
+    "stylelint-config-recommended-vue": "^1.6.1",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "stylelint-order": "^8.1.1",
+    "type-coverage": "^2.29.7",
+    "vite": "^6.4.2",
+    "vue-eslint-parser": "^10.4.0"
   },
   "overrides": {
     "tar": ">=7.5.10",
@@ -54,5 +81,18 @@
       "tar": ">=7.5.10",
       "serialize-javascript": "^7.0.3"
     }
+  },
+  "lint-staged": {
+    "packages/webkit/**/*.{js,ts,vue}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "packages/webkit/**/*.{css,scss}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "packages/webkit/**/*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }

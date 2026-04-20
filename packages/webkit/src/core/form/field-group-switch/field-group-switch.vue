@@ -1,7 +1,8 @@
 <script setup>
-  import FieldSwitchBlock from '../field-switch-block'
-  import { computed, ref, useAttrs } from 'vue'
   import PrimeDivider from 'primevue/divider'
+  import { computed, ref, useAttrs } from 'vue'
+
+  import FieldSwitchBlock from '../field-switch-block'
   import LabelBlock from '../label'
 
   defineOptions({ name: 'FieldGroupSwitch' })

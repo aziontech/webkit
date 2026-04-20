@@ -1,1 +1,10 @@
-{"main": "./progressbar.vue", "module": "./progressbar.vue", "browser": {"./sfc": "./progressbar.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./progressbar.vue",
+  "module": "./progressbar.vue",
+  "browser": {
+    "./sfc": "./progressbar.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

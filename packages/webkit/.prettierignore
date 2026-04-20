@@ -1,0 +1,7 @@
+dist
+*.min.css
+node_modules
+*.d.ts
+*.d.ts.map
+coverage
+storybook-static

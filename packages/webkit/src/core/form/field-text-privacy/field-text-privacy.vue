@@ -1,7 +1,8 @@
 <script setup>
-  import { computed, ref, toRef, useAttrs, useSlots } from 'vue'
-  import { useField } from 'vee-validate'
   import InputText from 'primevue/inputtext'
+  import { useField } from 'vee-validate'
+  import { computed, ref, toRef, useAttrs, useSlots } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 

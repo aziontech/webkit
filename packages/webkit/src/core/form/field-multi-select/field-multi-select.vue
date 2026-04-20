@@ -1,7 +1,8 @@
 <script setup>
   import Checkbox from 'primevue/checkbox'
   import { useField } from 'vee-validate'
-  import { computed, toRef, useSlots, useAttrs } from 'vue'
+  import { computed, toRef, useAttrs, useSlots } from 'vue'
+
   import Label from '../label'
 
   const props = defineProps({

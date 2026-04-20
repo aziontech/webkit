@@ -1,0 +1,182 @@
+name: Governance Pipeline
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/webkit/**'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/webkit/**'
+
+jobs:
+  # Security Scanning (parallel, fast)
+  security:
+    name: Security Scans
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=high
+        working-directory: packages/webkit
+
+      - name: Run Gitleaks (secret detection)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check unused dependencies
+        run: npx depcheck --ignores="@types/*,eslint-*,semantic-release"
+        working-directory: packages/webkit
+        continue-on-error: true
+
+  # Linting & Formatting (parallel)
+  lint:
+    name: Linting & Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint (zero warnings policy)
+        run: pnpm eslint packages/webkit/src --ext .js,.ts,.vue --max-warnings 0
+
+      - name: Run Stylelint
+        run: pnpm stylelint "packages/webkit/**/*.{css,scss,vue}"
+
+      - name: Prettier check (fail on diff)
+        run: pnpm prettier --check "packages/webkit/**/*.{js,ts,vue,css,json,md}"
+
+  # Type Safety & Coverage (parallel)
+  types:
+    name: TypeScript & Type Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript check
+        run: pnpm vue-tsc --noEmit
+        working-directory: packages/webkit
+
+      - name: Type coverage (enforce 95% threshold)
+        run: npx type-coverage -p . --at-least 95 --detail
+        working-directory: packages/webkit
+
+  # Build Verification (needs lint + types)
+  build:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    needs: [lint, types]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build type declarations
+        run: pnpm build:dts
+        working-directory: packages/webkit
+
+      - name: Pack dry run
+        run: pnpm pack:dry
+        working-directory: packages/webkit
+
+  # Storybook Smoke Test
+  storybook:
+    name: Storybook Build
+    runs-on: ubuntu-latest
+    needs: [lint, types]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: pnpm storybook:build
+
+      - name: Verify Storybook output
+        run: test -d apps/storybook/dist && echo "Storybook built successfully"
+
+  # Summary Gate
+  governance-check:
+    name: Governance Gate
+    runs-on: ubuntu-latest
+    needs: [security, lint, types, build, storybook]
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if [[ "${{ needs.security.result }}" != "success" ]] || \
+             [[ "${{ needs.lint.result }}" != "success" ]] || \
+             [[ "${{ needs.types.result }}" != "success" ]] || \
+             [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "❌ Governance checks failed"
+            exit 1
+          fi
+          echo "✅ All governance checks passed"

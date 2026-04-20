@@ -1,9 +1,10 @@
 <script setup>
-  import { ref, toRef } from 'vue'
-  import { useField } from 'vee-validate'
   import Dropdown from 'primevue/dropdown'
-  import InputSlot from '../slots/input-slot'
+  import { useField } from 'vee-validate'
+  import { ref, toRef } from 'vue'
+
   import LabelBlock from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const emit = defineEmits(['onChange'])
 

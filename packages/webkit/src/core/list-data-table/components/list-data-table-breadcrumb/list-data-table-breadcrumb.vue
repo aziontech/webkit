@@ -57,8 +57,8 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue'
   import OverlayPanel from 'primevue/overlaypanel'
+  import { computed, ref } from 'vue'
 
   defineOptions({ name: 'DataTableBreadcrumb' })
 
@@ -102,7 +102,8 @@
     let usedWidth = 0
 
     for (let i = segments.value.length - 1; i >= 0; i--) {
-      const segmentWidth = Math.min(segments.value[i].label.length * avgCharWidth, 200) + separatorWidth
+      const segmentWidth =
+        Math.min(segments.value[i].label.length * avgCharWidth, 200) + separatorWidth
       if (usedWidth + segmentWidth > availableWidth && count > 0) {
         break
       }

@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, watch, computed, onMounted, nextTick } from 'vue'
+  import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
   const props = defineProps({
     modelValue: {

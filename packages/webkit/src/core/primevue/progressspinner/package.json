@@ -1,1 +1,10 @@
-{"main": "./progressspinner.vue", "module": "./progressspinner.vue", "browser": {"./sfc": "./progressspinner.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./progressspinner.vue",
+  "module": "./progressspinner.vue",
+  "browser": {
+    "./sfc": "./progressspinner.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

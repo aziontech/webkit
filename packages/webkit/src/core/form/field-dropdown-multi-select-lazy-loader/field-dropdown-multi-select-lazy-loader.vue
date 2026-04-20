@@ -1,9 +1,10 @@
 <script setup>
-  import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch } from 'vue'
   import { watchDebounced } from '@vueuse/core'
-  import MultiSelect from 'primevue/multiselect'
   import InputText from 'primevue/inputtext'
+  import MultiSelect from 'primevue/multiselect'
   import { useField } from 'vee-validate'
+  import { computed, onMounted, ref, toRef, useAttrs, useSlots, watch, watchEffect } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 
@@ -179,7 +180,7 @@
 
       totalCount.value = response.count
 
-      let results = response.body?.map((item) => {
+      const results = response.body?.map((item) => {
         return {
           [props.optionLabel]: item.name,
           [props.optionValue]: item.id,
@@ -448,4 +449,3 @@
     </small>
   </InputSlot>
 </template>
-

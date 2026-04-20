@@ -1,4 +1,4 @@
-import { PrimeVueConfig, ToastService, DialogService, Tooltip } from './primevue-internals.js'
+import { DialogService, PrimeVueConfig, ToastService, Tooltip } from './primevue-internals.js'
 
 export const WebkitPlugin = {
   install(app, options = {}) {
