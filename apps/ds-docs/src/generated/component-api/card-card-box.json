@@ -1,0 +1,33 @@
+{
+  "component": "card-card-box",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/card/card-box/card-box.vue",
+  "props": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "header-action",
+      "description": ""
+    },
+    {
+      "name": "content",
+      "description": ""
+    },
+    {
+      "name": "footer",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.053Z"
+}

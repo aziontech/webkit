@@ -1,0 +1,65 @@
+{
+  "totalRecords": {
+    "label": "Total Records",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "rows": {
+    "label": "Rows",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "first": {
+    "label": "First",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "pageLinkSize": {
+    "label": "Page Link Size",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 5
+  },
+  "rowsPerPageOptions": {
+    "label": "Rows Per Page Options",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "template": {
+    "label": "Template",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+  },
+  "currentPageReportTemplate": {
+    "label": "Current Page Report Template",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "({currentPage} of {totalPages})"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "field": {
+    "label": "Field",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "header": {
+    "label": "Header",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "sortable": {
+    "label": "Sortable",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "headerClass": {
+    "label": "Header Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "bodyClass": {
+    "label": "Body Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "footerClass": {
+    "label": "Footer Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "sortableDisabled": {
+    "label": "Sortable Disabled",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "filterField": {
+    "label": "Filter Field",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "filterMatchMode": {
+    "label": "Filter Match Mode",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "filterPlaceholder": {
+    "label": "Filter Placeholder",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  }
+}

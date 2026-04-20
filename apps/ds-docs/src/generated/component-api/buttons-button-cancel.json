@@ -1,0 +1,78 @@
+{
+  "component": "buttons-button-cancel",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/buttons/button-cancel/button-cancel.vue",
+  "props": [
+    {
+      "name": "type",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "default",
+      "type": "unknown",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": "Cancel",
+      "description": ""
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "iconPos",
+      "type": "string",
+      "required": false,
+      "default": "left",
+      "description": ""
+    },
+    {
+      "name": "severity",
+      "type": "string",
+      "required": false,
+      "default": "secondary",
+      "description": ""
+    },
+    {
+      "name": "outlined",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "click",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.110Z"
+}

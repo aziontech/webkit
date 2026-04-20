@@ -1,0 +1,22 @@
+{
+  "component": "data-table-filters",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/data-table/filters/text-filter-field.vue",
+  "props": [
+    {
+      "name": "modelValue",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:modelValue",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.118Z"
+}

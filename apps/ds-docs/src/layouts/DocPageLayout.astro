@@ -1,0 +1,56 @@
+---
+/**
+ * DocPageLayout
+ * 
+ * Generic documentation page layout.
+ * Provides page header rendering and markdown content rendering.
+ * Supports internationalization (i18n) with language switching.
+ */
+
+import DocsShellLayout from './DocsShellLayout.astro';
+import PageHeader from '../components/docs/PageHeader.vue';
+import type { Section, NavItem } from '../lib/content/types';
+import type { I18nContext } from '../lib/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  section?: Section | null;
+  item?: NavItem | null;
+  status?: 'stable' | 'beta' | 'deprecated' | 'planned' | 'experimental';
+  navLabel?: string;
+  order?: number;
+  /** When false, content is not wrapped in prose (e.g. components index with cards). Default true. */
+  prose?: boolean;
+  /** Current language code */
+  language?: string;
+  /** i18n context for translations */
+  i18n?: I18nContext;
+}
+
+const { 
+  title, 
+  description, 
+  section, 
+  item,
+  status,
+  prose = true,
+  language = 'en',
+  i18n,
+} = Astro.props;
+---
+
+<DocsShellLayout title={title} description={description} section={section} item={item} language={language} i18n={i18n}>
+  <article class="doc-page">
+    <PageHeader 
+      client:load
+      title={title}
+      description={description}
+      status={status}
+    />
+    
+    <div class={prose ? 'doc-content prose prose-lg max-w-docs-content max-w-none' : 'doc-content max-w-none'}>
+      <slot />
+    </div>
+  </article>
+</DocsShellLayout>

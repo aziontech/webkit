@@ -1,0 +1,48 @@
+{
+  "component": "toggle",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/toggle/toggle.vue",
+  "props": [
+    {
+      "name": "modelValue",
+      "type": "string",
+      "required": false,
+      "default": "main",
+      "description": ""
+    },
+    {
+      "name": "mainLabel",
+      "type": "string",
+      "required": false,
+      "default": "monthly",
+      "description": ""
+    },
+    {
+      "name": "alternativeLabel",
+      "type": "string",
+      "required": false,
+      "default": "yearly",
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "update:modelValue",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "change",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.126Z"
+}

@@ -1,0 +1,128 @@
+{
+  "value": {
+    "label": "Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "name": {
+    "label": "Name",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "preview"
+  },
+  "label": {
+    "label": "Label",
+    "description": "",
+    "required": true,
+    "category": "Required",
+    "type": "string",
+    "control": "text",
+    "default": "Label"
+  },
+  "placeholder": {
+    "label": "Placeholder",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Type here..."
+  },
+  "description": {
+    "label": "Description",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Brief description of the field."
+  },
+  "rows": {
+    "label": "Rows",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "5"
+  },
+  "cols": {
+    "label": "Cols",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 30
+  },
+  "autoResize": {
+    "label": "Auto Resize",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "disabled": {
+    "label": "Disabled",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "icon": {
+    "label": "Icon",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "pi pi-box"
+  },
+  "iconPosition": {
+    "label": "Icon Position",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "right"
+  },
+  "sensitive": {
+    "label": "Sensitive",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "additionalError": {
+    "label": "Additional Error",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "loading": {
+    "label": "Loading",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

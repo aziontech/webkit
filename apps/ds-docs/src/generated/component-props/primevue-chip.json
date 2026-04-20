@@ -1,0 +1,38 @@
+{
+  "label": {
+    "label": "Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "icon": {
+    "label": "Icon",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "image": {
+    "label": "Image",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "removable": {
+    "label": "Removable",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

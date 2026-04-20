@@ -1,0 +1,113 @@
+---
+/**
+ * Patterns Index Page
+ *
+ * Same layout as Components/Blocks: Overview with pattern cards and Status tab.
+ */
+
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getCollection } from 'astro:content';
+import { getBreadcrumbContext } from '../../lib/content';
+import { createI18nContext } from '../../lib/i18n';
+import Tabs from '../../components/docs/Tabs.astro';
+import ComponentsStatusTable from '../../components/docs/ComponentsStatusTable.astro';
+import { patternStatusData } from '../../data/pattern-status';
+
+const allContent = await getCollection('v1-en');
+
+const patterns = allContent.filter((item) => {
+  const id = item.id || '';
+  const parts = id.split('/');
+  return parts[0] === 'patterns' && parts.length > 1 && !parts[1].startsWith('index.');
+});
+
+const breadcrumb = await getBreadcrumbContext('/patterns');
+const i18n = createI18nContext('en');
+
+const patternsByCategory = patterns.reduce((acc, pattern) => {
+  const category = pattern.data.category || 'other';
+  if (!acc[category]) acc[category] = [];
+  acc[category].push(pattern);
+  return acc;
+}, {} as Record<string, typeof patterns>);
+
+const categoryLabels: Record<string, string> = {
+  feedback: 'Feedback',
+  usability: 'Usability',
+  navigation: 'Navigation',
+  form: 'Form',
+  other: 'Other',
+};
+---
+
+<DocsLayout
+  title="Patterns"
+  description="Common design patterns and best practices for building with the Azion Design System."
+  section={breadcrumb.section}
+  item={breadcrumb.item}
+  language="en"
+  i18n={i18n}
+>
+  <h1 class="!text-3xl font-medium text-lg mb-1.5">Patterns</h1>
+  <p class="text-sm text-muted mb-8 mt-4">
+    Common design patterns and best practices for building with the Azion Design System.
+  </p>
+
+  <Tabs>
+    <Fragment slot="overview">
+      {Object.keys(patternsByCategory).length > 0 ? (
+        Object.entries(patternsByCategory).map(([category, items]) => (
+          <section class="mb-10">
+            <h2 class="text-xl font-sans font-medium mb-4">
+              {categoryLabels[category] || category}
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {items.map((pattern) => {
+                const name = pattern.id.replace(/\.(md|mdx)$/, '').split('/').pop() || pattern.id;
+                return (
+                  <a
+                    href={`/patterns/${name}`}
+                    class="group block p-4 border border-default rounded-lg hover:border-default-hover transition-colors bg-surface"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                      <h3 class="font-medium font-sans text-default group-hover:text-primary-700">
+                        {pattern.data.title}
+                      </h3>
+                      {pattern.data.status && (
+                        <span
+                          class={`text-xs px-2 py-0.5 rounded-full ${
+                            pattern.data.status === 'stable'
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : pattern.data.status === 'beta'
+                                ? 'bg-blue-50 text-blue-700'
+                                : pattern.data.status === 'deprecated'
+                                  ? 'bg-amber-50 text-warning'
+                                  : 'bg-gray-50 text-gray-600'
+                          }`}
+                        >
+                          {pattern.data.status}
+                        </span>
+                      )}
+                    </div>
+                    <p class="text-sm font-sans text-muted line-clamp-2">
+                      {pattern.data.description}
+                    </p>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        ))
+      ) : (
+        <p class="text-sm text-muted">No patterns documented yet. Check back soon.</p>
+      )}
+    </Fragment>
+
+    <Fragment slot="status">
+      <ComponentsStatusTable
+        components={patternStatusData}
+        caption="Track the progress of each pattern across design and development."
+      />
+    </Fragment>
+  </Tabs>
+</DocsLayout>

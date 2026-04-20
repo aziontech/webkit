@@ -1,0 +1,209 @@
+---
+title: Design Tokens
+description: Design tokens são as menores unidades do sistema de design, armazenando valores visuais como cores para uso consistente entre produtos. Os tokens ficam no pacote @aziontech/theme.
+navLabel: Tokens
+order: 1
+type: token
+category: color
+---
+
+# Tokens
+
+Design tokens são as menores unidades do sistema de design. Eles armazenam valores visuais como cores para manter produtos e plataformas consistentes.
+
+Neste monorepo, os tokens são fornecidos pelo pacote **`@aziontech/theme`**. Eles suportam temas claro e escuro por meio de tokens semânticos e podem ser usados com Tailwind CSS na documentação e em outros apps.
+
+## Pacote e estrutura
+
+O pacote de tema é **`@aziontech/theme`**. Os design tokens ficam no export `/tokens`.
+
+### Instalação
+
+No monorepo, o app de docs já depende do tema:
+
+```json
+{
+  "dependencies": {
+    "@aziontech/theme": "workspace:*"
+  }
+}
+```
+
+Em um projeto externo:
+
+```bash
+npm install @aziontech/theme
+```
+
+### Estrutura dos tokens
+
+Dentro de `packages/theme`:
+
+```
+packages/theme/
+├── tokens.js              # Entrada principal: reexporta de src/tokens
+├── default.js             # Entrada do tema SCSS (tema completo)
+└── src/tokens/
+    ├── index.js           # Exportações públicas dos tokens
+    ├── primitives/
+    │   ├── colors.js      # Paletas (gray, neutral, orange, violet, etc.)
+    │   └── brand.js       # Primitivos de marca e superfície (surface, primary, accent)
+    ├── colors-brand.js    # Aliases de cor da marca
+    ├── semantic/
+    │   ├── text.js        # Semânticas de texto light/dark
+    │   ├── backgrounds.js # Semânticas de fundo light/dark
+    │   └── borders.js     # Semânticas de borda light/dark
+    └── build/
+        ├── preset.js           # Preset Tailwind
+        ├── tailwind-plugin.js   # tokenUtilities() para classes semânticas
+        ├── resolve.js           # Resolução de refs para valores
+        ├── css-vars.js          # Saída de variáveis CSS
+        └── refs.js              # Helpers de referência
+```
+
+- **Primitivos** são valores fixos (ex.: `neutral.900`, `orange.500`). Não mudam com o tema; use `dark:` do Tailwind quando precisar.
+- **Semânticos** são definidos por tema (light/dark) em `semantic/*.js`. O **plugin Tailwind** gera as classes que seguem o tema ativo (`.dark` ou `.azion.azion-dark`).
+
+## Tokens primitivos
+
+Use primitivos quando precisar de valor fixo ou ao definir novas semânticas.
+
+| Categoria | Exemplo | Uso |
+|----------|---------|-----|
+| Neutros | `neutral-50` … `neutral-950` | Superfícies, bordas, texto sem semântico |
+| Primary (laranja) | `orange-50` … `orange-950` | Marca; `orange-500` é o laranja principal |
+| Accent (violeta) | `violet-50` … `violet-950` | Destaques |
+| Surface | `surface-0`, `surface-50`, … `surface-950` | Camadas |
+| Status | `red-*`, `green-*`, `yellow-*`, `blue-*` | Estados |
+
+**No Tailwind (docs):** O config estende `theme.extend.colors` com `primitives`, `surface`, `primaryBrand` e `accent` de `@aziontech/theme/tokens`. Use `bg-neutral-100`, `text-orange-500`, `border-surface-200`, etc.
+
+**Em JS:**
+
+```js
+import { primitives, surfacePrimitives, brandPrimitives } from '@aziontech/theme/tokens';
+
+primitives.neutral[900];
+surfacePrimitives.surface[50];
+brandPrimitives.primary[500];
+```
+
+<Callout type="warning" title="Use primitivos com moderação">
+  Prefira tokens semânticos na UI para o app se adaptar ao claro/escuro. Use primitivos quando precisar de valor fixo ou ao definir novas semânticas.
+</Callout>
+
+## Tokens semânticos
+
+Os tokens semânticos são conscientes de tema: um nome mapeia para valores diferentes em light e dark. O **plugin Tailwind** (`tokenUtilities`) gera utilitários que mudam com `.dark` (e `.azion.azion-dark`).
+
+### Como a documentação usa
+
+1. **Config Tailwind:** `darkMode: ['class', '.dark', '.azion.azion-dark']`, `plugins: [tokenUtilities(), …]`, e `theme.extend.colors` com primitives/surface/primaryBrand/accent de `@aziontech/theme/tokens`.
+
+2. **Classes do plugin** (sem precisar de `dark:`):
+   - **Texto:** `text-default`, `text-muted`, `text-link`, `text-primary`, `text-accent`, `text-code`.
+   - **Fundo:** `bg-layer1`, `bg-layer2`, `bg-surface`, `bg-canvas`, e variantes semânticas.
+   - **Borda:** `border-default`, `border-primary`, `border-accent`, e variantes semânticas.
+
+Use `text-default`, `bg-layer1`, `border-default` — **não** `text-text-default`, `bg-bg-layer1`, `border-border-default`.
+
+### Exemplos
+
+```html
+<div class="bg-canvas">…</div>
+<div class="bg-layer1 border border-default rounded-lg p-4">
+  <p class="text-default">Texto primário</p>
+  <p class="text-muted">Texto secundário</p>
+</div>
+<div class="border border-primary">…</div>
+```
+
+## Exemplos visuais de tokens semânticos
+
+### Cores de texto
+
+<div className="space-y-4 my-6" style={{viewTransitionName: 'text-colors'}}>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-default font-medium">text-default</p>
+  <p className="text-sm text-muted mt-1">Texto primário para títulos e corpo</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-muted font-medium">text-muted</p>
+  <p className="text-sm text-muted mt-1">Texto secundário</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-link font-medium">text-link</p>
+  <p className="text-sm text-muted mt-1">Cor de link</p>
+</div>
+
+</div>
+
+### Camadas de fundo
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6" style={{viewTransitionName: 'bg-layers'}}>
+
+<div className="p-6 rounded-lg bg-layer1 border border-default">
+  <p className="font-medium text-default">Camada 1</p>
+  <p className="text-sm text-muted mt-2">bg-layer1</p>
+</div>
+
+<div className="p-6 rounded-lg bg-layer2 border border-default">
+  <p className="font-medium text-default">Camada 2</p>
+  <p className="text-sm text-muted mt-2">bg-layer2</p>
+</div>
+
+<div className="p-6 rounded-lg bg-canvas border border-default">
+  <p className="font-medium text-default">Canvas</p>
+  <p className="text-sm text-muted mt-2">bg-canvas</p>
+</div>
+
+</div>
+
+### Bordas
+
+<div className="space-y-4 my-6" style={{viewTransitionName: 'border-tokens'}}>
+
+<div className="p-4 rounded-lg bg-layer1 border border-default">
+  <p className="text-default font-medium">border-default</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border-2 border-primary">
+  <p className="text-default font-medium">border-primary</p>
+</div>
+
+<div className="p-4 rounded-lg bg-layer1 border-2 border-accent">
+  <p className="text-default font-medium">border-accent</p>
+</div>
+
+</div>
+
+## Sincronização e manutenção
+
+Os tokens podem ser sincronizados a partir do Figma pelos scripts em `packages/theme/scripts`. Arquivos para edição manual:
+
+- **Primitivos:** `src/tokens/primitives/colors.js`, `src/tokens/primitives/brand.js`
+- **Semânticos:** `src/tokens/semantic/text.js`, `src/tokens/semantic/backgrounds.js`, `src/tokens/semantic/borders.js`
+- **Marca:** `src/tokens/colors-brand.js`
+
+Consulte `packages/theme/src/tokens/README.md` para o fluxo completo.
+
+## Recursos relacionados
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 mb-8">
+
+<FoundationCard
+  title="Cor"
+  description="Fundação de cor e como os tokens implementam o sistema de cores."
+  href="/foundations/color"
+/>
+
+<FoundationCard
+  title="Tipografia"
+  description="Fundamentos de tipografia e estilos de texto baseados em tokens."
+  href="/foundations/typography"
+/>
+
+</div>

@@ -1,0 +1,397 @@
+{
+  "component": "data-table",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/data-table/data-table.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "data",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "showGridlines",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "lazy",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "rowHover",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "dataKey",
+      "type": "string",
+      "required": false,
+      "default": "id",
+      "description": ""
+    },
+    {
+      "name": "pt",
+      "type": "object",
+      "required": false,
+      "default": "({})",
+      "description": ""
+    },
+    {
+      "name": "containerClass",
+      "type": "[String",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "tableClass",
+      "type": "[String",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "filters",
+      "type": "object",
+      "required": false,
+      "default": "({})",
+      "description": ""
+    },
+    {
+      "name": "sortField",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "sortOrder",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "description": ""
+    },
+    {
+      "name": "sortMode",
+      "type": "string",
+      "required": false,
+      "default": "single",
+      "description": ""
+    },
+    {
+      "name": "editMode",
+      "type": "string",
+      "required": false,
+      "default": "row",
+      "description": ""
+    },
+    {
+      "name": "editingRows",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "paginator",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "rowsPerPageOptions",
+      "type": "any[]",
+      "required": false,
+      "default": "[10, 25, 50, 100]",
+      "description": ""
+    },
+    {
+      "name": "rows",
+      "type": "number",
+      "required": false,
+      "default": "10",
+      "description": ""
+    },
+    {
+      "name": "globalFilterFields",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "selection",
+      "type": "[Object",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "selectionMode",
+      "type": "string",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "exportFilename",
+      "type": "string",
+      "required": false,
+      "default": "export",
+      "description": ""
+    },
+    {
+      "name": "exportFunction",
+      "type": "Function",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "totalRecords",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "first",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "description": ""
+    },
+    {
+      "name": "rowClass",
+      "type": "Function",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "hideHeader",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "expandableRowGroups",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "rowGroupMode",
+      "type": "string",
+      "required": false,
+      "default": "subheader",
+      "description": ""
+    },
+    {
+      "name": "groupRowsBy",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "expandedRowGroups",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "reorderableRows",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "columns",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "skeletonRows",
+      "type": "number",
+      "required": false,
+      "default": "5",
+      "description": ""
+    },
+    {
+      "name": "emptyListMessage",
+      "type": "string",
+      "required": false,
+      "default": "No data available",
+      "description": ""
+    },
+    {
+      "name": "emptyBlock",
+      "type": "object",
+      "required": false,
+      "default": "({\n        title: 'No data has been created",
+      "description": ""
+    },
+    {
+      "name": "scrollable",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "scrollHeight",
+      "type": "string",
+      "required": false,
+      "default": "calc(100vh - 300px)",
+      "description": ""
+    },
+    {
+      "name": "frozenValue",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "appliedFilters",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "notShowEmptyBlock",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "isSelectable",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "searchValue",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "rowReorder",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "rowClick",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "page",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "sort",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:filters",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:sortField",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:sortOrder",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:expandedRowGroups",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:selection",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:editingRows",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:first",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "rowEditSave",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "rowEditCancel",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "click-to-create",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "header",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.117Z"
+}

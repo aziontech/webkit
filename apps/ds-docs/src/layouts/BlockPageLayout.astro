@@ -1,0 +1,103 @@
+---
+/**
+ * BlockPageLayout
+ *
+ * Same structure as ComponentPageLayout: Overview, Usage, and API tabs.
+ * Used for block documentation pages (e.g. Toast block).
+ */
+
+import DocsShellLayout from './DocsShellLayout.astro';
+import PageHeader from '../components/docs/PageHeader.vue';
+import RelatedLinks from '../components/docs/RelatedLinks.astro';
+import ComponentTabs from '../components/docs/ComponentTabs.astro';
+import ComponentOverviewTab from '../components/docs/ComponentOverviewTab.astro';
+import ComponentUsageTab from '../components/docs/ComponentUsageTab.astro';
+import ComponentApiTab from '../components/docs/ComponentApiTab.astro';
+import type { Section, NavItem } from '../lib/content/types';
+import type { I18nContext } from '../lib/i18n';
+import type {
+  PropDefinition,
+  SlotDefinition,
+  EventDefinition,
+  AnatomyPart,
+  AccessibilityMetadata,
+  UsageMetadata,
+} from '../content/config';
+
+interface Props {
+  title: string;
+  description: string;
+  section?: Section | null;
+  item?: NavItem | null;
+  status?: 'stable' | 'beta' | 'deprecated' | 'planned' | 'experimental';
+  since?: string;
+  category?: string;
+  /** Block name for section IDs */
+  block?: string;
+  related?: string[];
+  anatomy?: AnatomyPart[];
+  accessibility?: AccessibilityMetadata;
+  usage?: UsageMetadata;
+  api?: {
+    props?: PropDefinition[];
+    slots?: SlotDefinition[];
+    events?: EventDefinition[];
+  };
+  language?: string;
+  i18n?: I18nContext;
+}
+
+const {
+  title,
+  description,
+  section,
+  item,
+  status,
+  since,
+  category,
+  block,
+  related = [],
+  anatomy,
+  accessibility,
+  usage,
+  api,
+  language = 'en',
+  i18n,
+} = Astro.props;
+
+const relatedItems = related.map((name) => ({
+  title: name,
+  href: language === 'en' ? `/blocks/${name.toLowerCase()}` : `/${language}/blocks/${name.toLowerCase()}`,
+  type: 'block' as const,
+}));
+
+const apiProps = api?.props || [];
+const apiSlots = api?.slots || [];
+const apiEvents = api?.events || [];
+---
+
+<DocsShellLayout title={title} description={description} section={section} item={item} language={language} i18n={i18n}>
+  <article class="component-page block-page" data-component={block}>
+    <PageHeader
+      client:load
+      title={title}
+      description={description}
+      status={status}
+      since={since}
+    />
+
+    <ComponentTabs defaultTab="overview">
+      <ComponentOverviewTab slot="overview" component={block} anatomy={anatomy} accessibility={accessibility}>
+        <slot />
+      </ComponentOverviewTab>
+      <ComponentUsageTab slot="usage" component={block} usage={usage}>
+        <slot name="usage" />
+      </ComponentUsageTab>
+      <ComponentApiTab slot="api" component={block} props={apiProps} slots={apiSlots} events={apiEvents}>
+        <slot name="api" />
+      </ComponentApiTab>
+    </ComponentTabs>
+
+    {relatedItems.length > 0 && <RelatedLinks items={relatedItems} />}
+  </article>
+</DocsShellLayout>

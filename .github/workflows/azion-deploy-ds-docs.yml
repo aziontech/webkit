@@ -1,0 +1,82 @@
+name: Deploy Application Design System Documentation
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+        type: choice
+        default: main
+        options:
+          - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Enable pnpm (monorepo uses workspace:*)
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies (monorepo root)
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Azion CLI
+        run: |
+          curl -o azionlinux https://downloads.azion.com/linux/x86_64/azion
+          sudo mv azionlinux /usr/bin/azion
+          sudo chmod u+x /usr/bin/azion
+
+      - name: CLI version
+        run: azion --version
+
+      # Configure a personal token in your github secrets
+      # You may create a personal token by running 'azion create personal-token'
+      - name: Configure token
+        run: |
+          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}
+          azion whoami
+
+      - name: Azion Build
+        working-directory: apps/ds-docs
+        run: |
+          azion build
+
+      # You may add the --sync flag to sync local and remote resources
+      - name: Azion Deploy
+        working-directory: apps/ds-docs
+        run: |
+          azion deploy --local --skip-build
+
+      - name: Commit Azion files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/ds-docs/azion/azion.json apps/ds-docs/azion.config.* || true
+          # Commit only if there are staged changes
+          if git diff --cached --quiet; then
+            echo "No Azion changes to commit. Skipping push."
+          else
+            git commit -m "chore: update azion files"
+            # Rebase in case remote has new commits, then push
+            git pull --rebase origin ${{ inputs.branch }}
+            git push
+          fi

@@ -1,0 +1,93 @@
+{
+  "component": "card-card-content",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/card/card-content/card-content.vue",
+  "props": [
+    {
+      "name": "overline",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "link",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "linkText",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "showRoundedBorder",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "group",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "isLast",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "isLargeScreen",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "isInLastRow",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "showRightBullets",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.056Z"
+}

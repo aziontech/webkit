@@ -1,0 +1,70 @@
+{
+  "component": "form-field-group-switch",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-group-switch/field-group-switch.vue",
+  "props": [
+    {
+      "name": "hideSelector",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "auto",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "isCard",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "helpText",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "options",
+      "type": "any[]",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "inputClass",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "footer",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.067Z"
+}

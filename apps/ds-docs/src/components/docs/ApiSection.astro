@@ -1,0 +1,73 @@
+---
+/**
+ * ApiSection
+ * 
+ * A unified API documentation section that combines props, slots, and events tables.
+ * Provides a consistent structure for component API documentation.
+ */
+
+import PropsTable from './PropsTable.astro';
+import SlotsTable from './SlotsTable.astro';
+import EventsTable from './EventsTable.astro';
+import type { PropDefinition, SlotDefinition, EventDefinition } from '../../content/config';
+
+interface Props {
+  title?: string;
+  props?: PropDefinition[];
+  slots?: SlotDefinition[];
+  events?: EventDefinition[];
+  component?: string;
+}
+
+const { 
+  title = 'API',
+  props = [],
+  slots = [],
+  events = [],
+  component 
+} = Astro.props;
+
+const hasApiData = props.length > 0 || slots.length > 0 || events.length > 0;
+---
+
+<section id="api" class="api-section mt-12 pt-8 border-t border-default">
+  <h2 class="text-2xl font-medium text-default tracking-tight mb-6">
+    {title}
+  </h2>
+  
+  {hasApiData ? (
+    <div class="api-section__content space-y-10">
+      {/* Props */}
+      {props.length > 0 && (
+        <div class="api-subsection">
+          <h3 class="text-lg font-medium text-default mb-3">Props</h3>
+          <PropsTable rows={props} component={component} />
+        </div>
+      )}
+      
+      {/* Slots */}
+      {slots.length > 0 && (
+        <div class="api-subsection">
+          <h3 class="text-lg font-medium text-default mb-3">Slots</h3>
+          <SlotsTable rows={slots} component={component} />
+        </div>
+      )}
+      
+      {/* Events */}
+      {events.length > 0 && (
+        <div class="api-subsection">
+          <h3 class="text-lg font-medium text-default mb-3">Events</h3>
+          <EventsTable rows={events} component={component} />
+        </div>
+      )}
+    </div>
+  ) : (
+    <div class="empty-api-state py-12 text-center border border-dashed border-default rounded-lg bg-layer2">
+      <i class="pi pi-code mx-auto text-4xl text-muted" aria-hidden="true" />
+      <h3 class="mt-2 text-sm font-medium text-default">API documentation coming soon</h3>
+      <p class="mt-1 text-sm text-muted">
+        Component API is being documented and will be available shortly.
+      </p>
+    </div>
+  )}
+</section>

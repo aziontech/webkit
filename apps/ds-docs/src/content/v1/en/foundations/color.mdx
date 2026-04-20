@@ -1,0 +1,29 @@
+---
+title: Color
+description: The color system provides semantic tokens for consistent and accessible interfaces.
+navLabel: Color
+order: 2
+type: foundation
+category: color
+---
+
+## Color Philosophy
+
+Our color system is designed to be:
+
+- **Accessible**: All color combinations meet WCAG 2.1 AA contrast requirements
+- **Semantic**: Colors are named by purpose, not appearance
+- **Consistent**: The same tokens are used across all components
+- **Themeable**: Colors adapt automatically to light and dark modes
+
+## Primitive palette
+
+Raw color steps by family. Use these only when defining new semantics or when you need a fixed value; in UI components, prefer semantic tokens.
+
+<PrimitivePalette />
+
+## Semantic tokens
+
+Semantic tokens map to different values in light and dark themes. Use them in component code so colors adapt automatically.
+
+<SemanticColorsTable />

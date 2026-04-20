@@ -1,0 +1,77 @@
+---
+/**
+ * PropsTable
+ * 
+ * Displays component props in a structured table format.
+ * Supports manual data or can be extended for generated data.
+ */
+
+import type { PropDefinition } from '../../content/config';
+
+interface Props {
+  rows?: PropDefinition[];
+  component?: string; // For future auto-extraction
+}
+
+const { rows = [], component } = Astro.props;
+
+// Sort props: required first, then alphabetically
+const sortedRows = [...rows].sort((a, b) => {
+  if (a.required && !b.required) return -1;
+  if (!a.required && b.required) return 1;
+  return a.name.localeCompare(b.name);
+});
+---
+
+<div class="props-table overflow-x-auto">
+  {rows.length === 0 ? (
+    <div class="empty-state py-8 text-center text-muted border border-dashed border-default rounded-lg">
+      <p class="text-sm">No props documented yet.</p>
+      <p class="text-xs mt-1 text-muted">
+        Props will be automatically extracted or manually added.
+      </p>
+    </div>
+  ) : (
+    <table class="w-full text-sm border-collapse">
+      <thead>
+        <tr class="border-b border-default">
+          <th class="py-3 px-4 text-left font-medium text-default bg-layer2">Prop</th>
+          <th class="py-3 px-4 text-left font-medium text-default bg-layer2">Type</th>
+          <th class="py-3 px-4 text-left font-medium text-default bg-layer2">Default</th>
+          <th class="py-3 px-4 text-left font-medium text-default bg-layer2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedRows.map((prop, index) => (
+          <tr class="border-b border-default hover:bg-layer2 transition-colors">
+            <td class="py-3 px-4 font-code text-muted">
+              <span class="flex items-center gap-1">
+                {prop.required && (
+                  <span class="text-red-500" title="Required">*</span>
+                )}
+                {prop.name}
+              </span>
+            </td>
+            <td class="py-3 px-4 font-code text-muted text-xs">
+              <code class="bg-layer2 px-1.5 py-0.5 rounded">
+                {prop.type}
+              </code>
+            </td>
+            <td class="py-3 px-4 font-code text-muted text-xs">
+              {prop.default ? (
+                <code class="bg-layer2 px-1.5 py-0.5 rounded">
+                  {prop.default}
+                </code>
+              ) : (
+                <span class="text-muted">—</span>
+              )}
+            </td>
+            <td class="py-3 px-4 text-muted">
+              {prop.description}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>

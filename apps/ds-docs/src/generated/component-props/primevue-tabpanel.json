@@ -1,0 +1,20 @@
+{
+  "header": {
+    "label": "Header",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "undefined"
+  },
+  "disabled": {
+    "label": "Disabled",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

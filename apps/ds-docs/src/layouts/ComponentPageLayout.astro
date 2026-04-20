@@ -1,0 +1,183 @@
+---
+/**
+ * ComponentPageLayout
+ * 
+ * Layout specifically for component documentation pages.
+ * Supports a tabbed structure with Overview, Usage, and API tabs.
+ * 
+ * Architecture:
+ * - Header: title, description, metadata links
+ * - Tabs: Overview | Usage | API
+ * - Related Links: below tabs
+ * 
+ * Tab Content:
+ * - Overview: overview prose (from slot), playground, states, anatomy, accessibility
+ * - Usage: when to use, do/don't, examples (from frontmatter usage field)
+ * - API: props table, slots table, events table (from frontmatter api field)
+ */
+
+import DocsShellLayout from './DocsShellLayout.astro';
+import PageHeader from '../components/docs/PageHeader.vue';
+import RelatedLinks from '../components/docs/RelatedLinks.astro';
+import ComponentTabs from '../components/docs/ComponentTabs.astro';
+import ComponentOverviewTab from '../components/docs/ComponentOverviewTab.astro';
+import ComponentUsageTab from '../components/docs/ComponentUsageTab.astro';
+import ComponentApiTab from '../components/docs/ComponentApiTab.astro';
+import type { Section, NavItem } from '../lib/content/types';
+import type { I18nContext } from '../lib/i18n';
+import type {
+  PropDefinition,
+  SlotDefinition,
+  EventDefinition,
+  AnatomyPart,
+  AccessibilityMetadata,
+  UsageMetadata
+} from '../content/config';
+
+// Pre-load all generated component-api JSON files at build time.
+// Vite resolves these statically; we use the map for dynamic lookup by apiFrom key.
+const generatedApiFiles = import.meta.glob('../generated/component-api/*.json', { eager: true });
+
+interface Props {
+  title: string;
+  description: string;
+  section?: Section | null;
+  item?: NavItem | null;
+  status?: 'stable' | 'beta' | 'deprecated' | 'planned' | 'experimental';
+  since?: string;
+  category?: string;
+  component?: string;
+  source?: string;
+  storybook?: string;
+  figma?: string;
+  related?: string[];
+  // Structured data from frontmatter
+  anatomy?: AnatomyPart[];
+  accessibility?: AccessibilityMetadata;
+  usage?: UsageMetadata;
+  api?: {
+    props?: PropDefinition[];
+    slots?: SlotDefinition[];
+    events?: EventDefinition[];
+  };
+  /**
+   * Key into generated/component-api/<apiFrom>.json.
+   * When set and `api` is absent/empty, loads prop/slot/event data from the
+   * pre-generated JSON so frontmatter duplication is unnecessary.
+   */
+  apiFrom?: string;
+  /** Current language code */
+  language?: string;
+  /** i18n context for translations */
+  i18n?: I18nContext;
+}
+
+const {
+  title,
+  description,
+  section,
+  item,
+  status,
+  since,
+  category,
+  component,
+  source,
+  storybook,
+  figma,
+  related = [],
+  anatomy,
+  accessibility,
+  usage,
+  api,
+  apiFrom,
+  language = 'en',
+  i18n,
+} = Astro.props;
+
+// Resolve API: use frontmatter `api` if present, otherwise load from generated JSON.
+function loadGeneratedApi(key: string) {
+  const jsonPath = `../generated/component-api/${key}.json`;
+  const module = generatedApiFiles[jsonPath] as Record<string, unknown> | undefined;
+  if (!module) return undefined;
+  const data = (module.default ?? module) as Record<string, unknown>;
+  return {
+    props: (data.props ?? []) as PropDefinition[],
+    slots: (data.slots ?? []) as SlotDefinition[],
+    events: (data.events ?? []) as EventDefinition[],
+  };
+}
+
+const hasInlineApi =
+  api && (api.props?.length || api.slots?.length || api.events?.length);
+const resolvedApi = hasInlineApi
+  ? api
+  : (apiFrom ? loadGeneratedApi(apiFrom) : undefined);
+
+// Build related items - use language prefix for non-default languages
+const relatedItems = related.map(name => ({
+  title: name,
+  href: language === 'en' 
+    ? `/components/${name.toLowerCase()}` 
+    : `/${language}/components/${name.toLowerCase()}`,
+  type: 'component' as const,
+}));
+
+// Extract API data from resolved source (inline frontmatter or generated JSON)
+const apiProps = resolvedApi?.props || [];
+const apiSlots = resolvedApi?.slots || [];
+const apiEvents = resolvedApi?.events || [];
+---
+
+<DocsShellLayout title={title} description={description} section={section} item={item} language={language} i18n={i18n}>
+  <article class="component-page" data-component={component}>
+    <!-- Page Header -->
+    <PageHeader
+      client:load
+      title={title}
+      description={description}
+      status={status}
+      since={since}
+      source={source}
+      storybook={storybook}
+      figma={figma}
+    />
+    
+    <!-- Tabbed Content -->
+    <ComponentTabs defaultTab="overview">
+      <!-- Overview Tab - receives default slot content -->
+      <ComponentOverviewTab 
+        slot="overview"
+        component={component}
+        anatomy={anatomy}
+        accessibility={accessibility}
+      >
+        <slot />
+      </ComponentOverviewTab>
+      
+      <!-- Usage Tab - rendered from frontmatter usage field -->
+      <ComponentUsageTab
+        slot="usage"
+        component={component}
+        usage={usage}
+      >
+        <slot name="usage" />
+      </ComponentUsageTab>
+      
+      <!-- API Tab - rendered from frontmatter -->
+      <ComponentApiTab 
+        slot="api"
+        component={component}
+        props={apiProps}
+        slots={apiSlots}
+        events={apiEvents}
+      >
+        <slot name="api" />
+      </ComponentApiTab>
+    </ComponentTabs>
+    
+    <!-- Related Links (if provided via props) -->
+    {relatedItems.length > 0 && (
+      <RelatedLinks items={relatedItems} />
+    )}
+  </article>
+</DocsShellLayout>

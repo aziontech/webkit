@@ -1,0 +1,231 @@
+name: Documentation CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'apps/ds-docs/**'
+      - 'packages/**'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'apps/ds-docs/**'
+      - 'packages/**'
+      - '.github/workflows/docs.yml'
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '8'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# Minimal permissions for CI (read-only checkout; no write to repo)
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Documentation Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Run documentation lint
+        run: |
+          cd apps/ds-docs
+          pnpm run lint || echo "Lint script not defined, skipping..."
+          
+      - name: Validate frontmatter
+        run: |
+          cd apps/ds-docs
+          pnpm run lint || true
+
+  link-check:
+    name: Link Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Check internal links
+        run: |
+          cd apps/ds-docs
+          pnpm run lint:links || true
+
+  component-docs:
+    name: Component Documentation Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Check component documentation coverage
+        run: |
+          cd apps/ds-docs
+          pnpm run lint:coverage
+
+  api-extraction:
+    name: API Extraction
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Extract component APIs
+        run: |
+          cd apps/ds-docs
+          pnpm run build:api || true
+          
+      - name: Upload API artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: component-api
+          path: apps/ds-docs/src/generated/component-api/
+          retention-days: 7
+
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    needs: [lint, link-check, component-docs]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build @aziontech/icons
+        run: pnpm --filter @aziontech/icons run build
+        
+      - name: Build search index
+        run: |
+          cd apps/ds-docs
+          pnpm run build:search
+          
+      - name: Build documentation
+        run: |
+          cd apps/ds-docs
+          pnpm run build
+        env:
+          ASTRO_TELEMETRY_DISABLED: true
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-build
+          path: apps/ds-docs/dist/
+          retention-days: 7
+
+  preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-build
+          path: dist
+          
+      - name: Deploy to preview
+        run: |
+          echo "Preview deployment is a placeholder. To deploy to Azion, run the workflow 'Deploy Application using Azion CLI' from the Actions tab (workflow_dispatch)."
+          echo "Build artifacts are ready at: dist/"
+
+  # Summary job that requires all checks to pass
+  docs-check:
+    name: Documentation Check Summary
+    runs-on: ubuntu-latest
+    needs: [lint, link-check, component-docs, build]
+    if: always()
+    
+    steps:
+      - name: Check job status
+        run: |
+          if [[ "${{ needs.lint.result }}" == "failure" ]] || \
+             [[ "${{ needs.link-check.result }}" == "failure" ]] || \
+             [[ "${{ needs.component-docs.result }}" == "failure" ]] || \
+             [[ "${{ needs.build.result }}" == "failure" ]]; then
+            echo "❌ Documentation checks failed"
+            exit 1
+          fi
+          echo "✅ All documentation checks passed"

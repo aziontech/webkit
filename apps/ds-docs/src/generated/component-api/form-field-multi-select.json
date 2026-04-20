@@ -1,0 +1,120 @@
+{
+  "component": "form-field-multi-select",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-multi-select/field-multi-select.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "optionLabel",
+      "type": "string",
+      "required": false,
+      "default": "label",
+      "description": ""
+    },
+    {
+      "name": "optionValue",
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "description": ""
+    },
+    {
+      "name": "optionDisabled",
+      "type": "[String",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "options",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "filter",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "pt",
+      "type": "object",
+      "required": false,
+      "default": "{}",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "onBlur",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "onChange",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    },
+    {
+      "name": "description",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.068Z"
+}

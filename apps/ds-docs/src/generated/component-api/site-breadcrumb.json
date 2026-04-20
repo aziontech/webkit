@@ -1,0 +1,16 @@
+{
+  "component": "site-breadcrumb",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/components/site/breadcrumb/breadcrumb.vue",
+  "props": [
+    {
+      "name": "data",
+      "type": "any[]",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.122Z"
+}

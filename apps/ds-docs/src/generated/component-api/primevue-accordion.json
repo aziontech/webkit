@@ -1,0 +1,51 @@
+{
+  "component": "primevue-accordion",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/primevue/accordion/accordion.vue",
+  "props": [
+    {
+      "name": "activeIndex",
+      "type": "[Number",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "class",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "tab-open",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "tab-close",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "update:activeIndex",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "description": ""
+    }
+  ],
+  "extractedAt": "2026-03-26T22:13:11.081Z"
+}

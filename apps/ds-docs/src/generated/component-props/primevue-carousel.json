@@ -1,0 +1,128 @@
+{
+  "value": {
+    "label": "Value",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "page": {
+    "label": "Page",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 0
+  },
+  "numVisible": {
+    "label": "Num Visible",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 1
+  },
+  "numScroll": {
+    "label": "Num Scroll",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": 1
+  },
+  "responsiveOptions": {
+    "label": "Responsive Options",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "[]"
+  },
+  "orientation": {
+    "label": "Orientation",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "horizontal"
+  },
+  "verticalViewPortHeight": {
+    "label": "Vertical View Port Height",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "300px"
+  },
+  "contentClass": {
+    "label": "Content Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "containerClass": {
+    "label": "Container Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "indicatorsContentClass": {
+    "label": "Indicators Content Class",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "circular": {
+    "label": "Circular",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  },
+  "autoplayInterval": {
+    "label": "Autoplay Interval",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "number",
+    "control": "number",
+    "default": null
+  },
+  "showNavigators": {
+    "label": "Show Navigators",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "showIndicators": {
+    "label": "Show Indicators",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  }
+}

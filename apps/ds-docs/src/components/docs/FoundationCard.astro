@@ -1,0 +1,72 @@
+---
+/**
+ * FoundationCard
+ * 
+ * A card component for displaying foundation items in a grid layout.
+ * Used on the Foundations landing page to link to individual foundation pages.
+ */
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  icon?: string;
+}
+
+const { title, description, href, icon } = Astro.props;
+
+// Map foundation types to icons (PrimeIcons class names)
+const iconMap: Record<string, string> = {
+  color: 'pi-palette',
+  typography: 'pi-font',
+  spacing: 'pi-bars',
+  grid: 'pi-th-large',
+  elevation: 'pi-layer',
+  motion: 'pi-bolt',
+  iconography: 'pi-star',
+};
+
+const iconClass = icon || iconMap[title.toLowerCase()] || 'pi-circle';
+---
+
+<a 
+  href={href}
+  class="foundation-card group block p-6 rounded-lg border border-default bg-layer1 hover:border-strong transition-all duration-200"
+>
+  <div class="flex items-start gap-4">
+    <div class="foundation-card__icon shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-layer2 text-muted transition-colors">
+      <i class={`pi ${iconClass} text-lg`} aria-hidden="true" />
+    </div>
+    <div class="foundation-card__content flex-1 min-w-0">
+      <h3 class="foundation-card__title text-default font-medium transition-colors">
+        {title}
+      </h3>
+      <p class="foundation-card__description mt-1 text-sm text-muted leading-relaxed">
+        {description}
+      </p>
+    </div>
+    <div class="foundation-card__arrow shrink-0 opacity-0 transition-opacity text-primary">
+      <i class="pi pi-arrow-right" aria-hidden="true" />
+    </div>
+  </div>
+</a>
+
+<style>
+  .foundation-card {
+    text-decoration: none;
+  }
+  
+  .foundation-card:focus {
+    outline: 2px solid var(--color-primary-500, #3b82f6);
+    outline-offset: 2px;
+  }
+  
+  .foundation-card:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  .foundation-card:focus-visible {
+    outline: 2px solid var(--color-primary-500, #3b82f6);
+    outline-offset: 2px;
+  }
+</style>

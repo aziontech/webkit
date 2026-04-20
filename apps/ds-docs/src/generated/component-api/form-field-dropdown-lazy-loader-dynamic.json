@@ -1,0 +1,130 @@
+{
+  "component": "form-field-dropdown-lazy-loader-dynamic",
+  "source": "/Users/eduardo.amarante/Documents/dev/webkit/packages/webkit/src/core/form/field-dropdown-lazy-loader-dynamic/field-dropdown-lazy-loader-dynamic.vue",
+  "props": [
+    {
+      "name": "value",
+      "type": "[String",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "optionLabel",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "optionValue",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "moreOptions",
+      "type": "any[]",
+      "required": false,
+      "default": "null",
+      "description": ""
+    },
+    {
+      "name": "optionDisabled",
+      "type": "[String",
+      "required": false,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "service",
+      "type": "Function",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "loadService",
+      "type": "Function",
+      "required": true,
+      "default": null,
+      "description": ""
+    },
+    {
+      "name": "enableWorkaroundLabelToDisabledOptions",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "enableClearOption",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "disableEmitFirstRender",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "description": ""
+    },
+    {
+      "name": "initalData",
+      "type": "any[]",
+      "required": false,
+      "default": "[]",
+      "description": ""
+    }
+  ],
+  "events": [
+    {
+      "name": "onBlur",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "onChange",
+      "payload": null,
+      "description": ""
+    },
+    {
+      "name": "onSelectOption",
+      "payload": null,
+      "description": ""
+    }
+  ],
+  "slots": [],
+  "extractedAt": "2026-03-26T22:13:11.062Z"
+}

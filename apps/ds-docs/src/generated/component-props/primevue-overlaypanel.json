@@ -1,0 +1,20 @@
+{
+  "dismissable": {
+    "label": "Dismissable",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": true
+  },
+  "showCloseIcon": {
+    "label": "Show Close Icon",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "boolean",
+    "control": "boolean",
+    "default": false
+  }
+}

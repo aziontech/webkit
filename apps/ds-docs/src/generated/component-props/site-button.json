@@ -1,0 +1,65 @@
+{
+  "label": {
+    "label": "Label",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "Label"
+  },
+  "size": {
+    "label": "Size",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "large"
+  },
+  "type": {
+    "label": "Type",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "secondary"
+  },
+  "href": {
+    "label": "Href",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": ""
+  },
+  "icon": {
+    "label": "Icon",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "pi pi-box"
+  },
+  "target": {
+    "label": "Target",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "_self"
+  },
+  "location": {
+    "label": "Location",
+    "description": "",
+    "required": false,
+    "category": "Optional",
+    "type": "string",
+    "control": "text",
+    "default": "cta"
+  }
+}
