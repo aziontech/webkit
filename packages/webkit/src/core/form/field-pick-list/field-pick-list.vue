@@ -75,7 +75,7 @@
             class="flex-1 flex flex-column gap-2"
             v-else
           >
-            <ProgressSpinner style=" height: 25px;width: 25px" />
+            <ProgressSpinner style="height: 25px; width: 25px" />
           </div>
         </div>
       </template>
