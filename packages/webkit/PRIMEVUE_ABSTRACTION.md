@@ -27,6 +27,7 @@ The abstraction layer consists of:
 - **Directive re-exports**: `Tooltip`
 
 **Why this exists:**
+
 - Consumer apps (e.g., console-kit) can remove `primevue` from their direct dependencies
 - Webkit controls the PrimeVue version and can upgrade/swap without breaking consumers
 - Composable wrappers allow adding convenience methods (e.g., `toast.success()`)
@@ -47,12 +48,12 @@ app.use(WebkitPlugin)
 
 ### What the plugin registers
 
-| Registration | What it does |
-|-------------|-------------|
-| `PrimeVue` | Core configuration (locale, ripple, zIndex, etc.) |
-| `ToastService` | Enables `useToast()` and `$toast` global property |
+| Registration    | What it does                                        |
+| --------------- | --------------------------------------------------- |
+| `PrimeVue`      | Core configuration (locale, ripple, zIndex, etc.)   |
+| `ToastService`  | Enables `useToast()` and `$toast` global property   |
 | `DialogService` | Enables `useDialog()` and `$dialog` global property |
-| `v-tooltip` | Tooltip directive available in all templates |
+| `v-tooltip`     | Tooltip directive available in all templates        |
 
 ### Passing options to PrimeVue
 
@@ -93,18 +94,18 @@ toast.removeAllGroups()
 ```js
 const toast = useToast()
 
-toast.success('Item saved')          // severity: success, life: 5000ms
-toast.error('Something went wrong')  // severity: error, life: 0 (manual close)
-toast.warn('Check your input')       // severity: warn, life: 5000ms
-toast.info('New version available')  // severity: info, life: 5000ms
+toast.success('Item saved') // severity: success, life: 5000ms
+toast.error('Something went wrong') // severity: error, life: 0 (manual close)
+toast.warn('Check your input') // severity: warn, life: 5000ms
+toast.info('New version available') // severity: info, life: 5000ms
 ```
 
-| Method | Severity | Default Life | Customizable |
-|--------|----------|:------------:|:------------:|
-| `success(detail, life?)` | success | 5000ms | Yes |
-| `error(detail)` | error | 0 (manual close) | No |
-| `warn(detail, life?)` | warn | 5000ms | Yes |
-| `info(detail, life?)` | info | 5000ms | Yes |
+| Method                   | Severity |   Default Life   | Customizable |
+| ------------------------ | -------- | :--------------: | :----------: |
+| `success(detail, life?)` | success  |      5000ms      |     Yes      |
+| `error(detail)`          | error    | 0 (manual close) |      No      |
+| `warn(detail, life?)`    | warn     |      5000ms      |     Yes      |
+| `info(detail, life?)`    | info     |      5000ms      |     Yes      |
 
 Shortcuts are additive. The original `toast.add()` API works unchanged.
 
@@ -165,7 +166,7 @@ Required at app root level for `useDialog()` to work:
 
 ```vue
 <script setup>
-import DynamicDialog from '@aziontech/webkit/dynamic-dialog'
+  import DynamicDialog from '@aziontech/webkit/dynamic-dialog'
 </script>
 
 <template>
@@ -178,7 +179,7 @@ import DynamicDialog from '@aziontech/webkit/dynamic-dialog'
 
 ```vue
 <script setup>
-import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
 </script>
 
 <template>
@@ -187,6 +188,7 @@ import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
 ```
 
 **Props:**
+
 - `group` (String) - Optional group name
 - `breakpoints` (Object) - Responsive breakpoints
 
@@ -204,15 +206,15 @@ app.directive('tooltip', Tooltip)
 
 ## Exports Reference
 
-| Export Path | Type | Description |
-|-------------|------|-------------|
-| `@aziontech/webkit/plugin` | Plugin | `WebkitPlugin` - unified PrimeVue setup |
-| `@aziontech/webkit/use-toast` | Composable | `useToast` with shortcut methods |
-| `@aziontech/webkit/use-dialog` | Composable | `useDialog` wrapper |
-| `@aziontech/webkit/api` | Utility | `FilterMatchMode` constants |
-| `@aziontech/webkit/dynamic-dialog` | Component | DynamicDialog wrapper |
-| `@aziontech/webkit/confirm-dialog` | Component | ConfirmDialog wrapper |
-| `@aziontech/webkit/tooltip` | Directive | Tooltip re-export |
+| Export Path                        | Type       | Description                             |
+| ---------------------------------- | ---------- | --------------------------------------- |
+| `@aziontech/webkit/plugin`         | Plugin     | `WebkitPlugin` - unified PrimeVue setup |
+| `@aziontech/webkit/use-toast`      | Composable | `useToast` with shortcut methods        |
+| `@aziontech/webkit/use-dialog`     | Composable | `useDialog` wrapper                     |
+| `@aziontech/webkit/api`            | Utility    | `FilterMatchMode` constants             |
+| `@aziontech/webkit/dynamic-dialog` | Component  | DynamicDialog wrapper                   |
+| `@aziontech/webkit/confirm-dialog` | Component  | ConfirmDialog wrapper                   |
+| `@aziontech/webkit/tooltip`        | Directive  | Tooltip re-export                       |
 
 ---
 
@@ -221,6 +223,7 @@ app.directive('tooltip', Tooltip)
 ### Step 1: Replace plugin setup in main.js
 
 **Before:**
+
 ```js
 import PrimeVue from 'primevue/config'
 import Tooltip from 'primevue/tooltip'
@@ -234,6 +237,7 @@ app.use(DialogService)
 ```
 
 **After:**
+
 ```js
 import { WebkitPlugin } from '@aziontech/webkit/plugin'
 
@@ -242,16 +246,16 @@ app.use(WebkitPlugin)
 
 ### Step 2: Replace imports across codebase
 
-| Before | After |
-|--------|-------|
-| `import { useToast } from 'primevue/usetoast'` | `import { useToast } from '@aziontech/webkit/use-toast'` |
-| `import { useDialog } from 'primevue/usedialog'` | `import { useDialog } from '@aziontech/webkit/use-dialog'` |
-| `import { FilterMatchMode } from 'primevue/api'` | `import { FilterMatchMode } from '@aziontech/webkit/api'` |
+| Before                                               | After                                                          |
+| ---------------------------------------------------- | -------------------------------------------------------------- |
+| `import { useToast } from 'primevue/usetoast'`       | `import { useToast } from '@aziontech/webkit/use-toast'`       |
+| `import { useDialog } from 'primevue/usedialog'`     | `import { useDialog } from '@aziontech/webkit/use-dialog'`     |
+| `import { FilterMatchMode } from 'primevue/api'`     | `import { FilterMatchMode } from '@aziontech/webkit/api'`      |
 | `import DynamicDialog from 'primevue/dynamicdialog'` | `import DynamicDialog from '@aziontech/webkit/dynamic-dialog'` |
 | `import ConfirmDialog from 'primevue/confirmdialog'` | `import ConfirmDialog from '@aziontech/webkit/confirm-dialog'` |
-| `import Toast from 'primevue/toast'` | `import Toast from '@aziontech/webkit/toast'` |
-| `import Dialog from 'primevue/dialog'` | `import Dialog from '@aziontech/webkit/dialog'` |
-| `import Button from 'primevue/button'` | `import Button from '@aziontech/webkit/button'` |
+| `import Toast from 'primevue/toast'`                 | `import Toast from '@aziontech/webkit/toast'`                  |
+| `import Dialog from 'primevue/dialog'`               | `import Dialog from '@aziontech/webkit/dialog'`                |
+| `import Button from 'primevue/button'`               | `import Button from '@aziontech/webkit/button'`                |
 
 ### Step 3: Remove primevue from package.json
 
@@ -310,7 +314,7 @@ The webkit wrappers use the **same PrimeVue Symbols** internally, so components 
 **Solution:** Ensure `WebkitPlugin` is registered before the component mounts:
 
 ```js
-app.use(WebkitPlugin)  // Must come before app.mount()
+app.use(WebkitPlugin) // Must come before app.mount()
 app.mount('#app')
 ```
 

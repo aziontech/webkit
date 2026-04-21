@@ -97,7 +97,14 @@
     }
   })
 
-  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied', 'onLoaded', 'onClear'])
+  const emit = defineEmits([
+    'onBlur',
+    'onChange',
+    'onSelectOption',
+    'onAccessDenied',
+    'onLoaded',
+    'onClear'
+  ])
 
   const PAGE_INCREMENT = 1
   const PAGE_SIZE = 100

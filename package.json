@@ -2,6 +2,7 @@
   "name": "@aziontech/design-system",
   "author": "@aziontech",
   "private": true,
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/aziontech/webkit.git"
