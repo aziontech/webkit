@@ -14,6 +14,7 @@ img.flag {
   vertical-align: middle;
 }
 
+/* stylelint-disable number-max-precision */
 .flag-ad {
   background-position: 0 0.413223%;
 }
