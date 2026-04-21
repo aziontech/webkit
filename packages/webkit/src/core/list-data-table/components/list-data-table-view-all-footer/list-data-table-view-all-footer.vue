@@ -36,10 +36,10 @@
 
 <style scoped>
   .data-table-view-all-footer {
+    background: var(--surface-section);
+    border-radius: 0 0 6px 6px;
+    border-top: 1px solid var(--surface-border);
     margin: -1.25rem -1.25rem -0.75rem;
     padding: 0.75rem;
-    background: var(--surface-section);
-    border-top: 1px solid var(--surface-border);
-    border-radius: 0 0 6px 6px;
   }
 </style>
