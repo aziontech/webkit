@@ -282,7 +282,7 @@
 
 <style scoped>
   :deep(.p-inputtext:focus) {
-    outline: none !important;
     box-shadow: none !important;
+    outline: none !important;
   }
 </style>

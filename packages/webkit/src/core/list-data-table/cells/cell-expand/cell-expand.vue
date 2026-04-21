@@ -247,7 +247,7 @@
 
 <style scoped>
   .overflow-y-auto {
-    scrollbar-width: thin;
     scrollbar-color: var(--surface-800) var(--surface-100);
+    scrollbar-width: thin;
   }
 </style>

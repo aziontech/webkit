@@ -22,6 +22,7 @@
     "lint": "eslint src --ext .js,.ts,.vue --max-warnings 0",
     "lint:fix": "eslint src --ext .js,.ts,.vue --fix",
     "lint:style": "stylelint \"src/**/*.{css,scss,vue}\"",
+    "lint:style:fix": "stylelint \"src/**/*.{css,scss,vue}\" --fix",
     "type-check": "vue-tsc --noEmit",
     "type-coverage": "type-coverage -p . --at-least 95 --detail"
   },
