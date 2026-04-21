@@ -10,6 +10,9 @@ on:
     paths:
       - 'packages/webkit/**'
 
+permissions:
+  contents: read
+
 jobs:
   # Security Scanning (parallel, fast)
   security:
