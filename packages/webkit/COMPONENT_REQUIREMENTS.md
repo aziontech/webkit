@@ -23,6 +23,7 @@ This document outlines the requirements and best practices for building componen
 Core components are low-level, reusable building blocks used across applications.
 
 **Characteristics:**
+
 - Located in `src/core/form/` for form-related components or `src/core/<category>/` for others
 - Highly reusable and generic
 - Minimal business logic
@@ -30,6 +31,7 @@ Core components are low-level, reusable building blocks used across applications
 - Examples: `field-text`, `field-dropdown`, `label`, `selector-block`
 
 **When to use:**
+
 - Building form inputs, buttons, labels
 - Creating reusable UI primitives
 - Components that will be composed into larger components
@@ -39,6 +41,7 @@ Core components are low-level, reusable building blocks used across applications
 Regular components are higher-level, more complex components that may include business logic.
 
 **Characteristics:**
+
 - Located in `src/components/<component-name>/`
 - May include API calls, complex state management
 - Often composed of multiple core components
@@ -46,6 +49,7 @@ Regular components are higher-level, more complex components that may include bu
 - Examples: `azion-system-status`, `client-testimonials-block`
 
 **When to use:**
+
 - Complex UI features (status indicators, dashboards, etc.)
 - Components with business logic or API integration
 - Domain-specific functionality
@@ -65,6 +69,7 @@ src/core/<category>/<component-name>/
 ```
 
 **Example:**
+
 ```
 src/core/form/field-text/
 ├── field-text.vue
@@ -84,6 +89,7 @@ src/components/<component-name>/
 ```
 
 **Example:**
+
 ```
 src/components/azion-system-status/
 ├── azion-system-status.vue
@@ -99,6 +105,7 @@ src/components/azion-system-status/
 ### 1. Component Structure Order (Required)
 
 All components MUST follow this structure:
+
 1. `<script setup>` tag first
 2. `<template>` tag second
 
@@ -106,10 +113,11 @@ All components MUST follow this structure:
 Never use `<template>` before `<script setup>`.
 
 **✅ CORRECT:**
+
 ```vue
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-// ... imports and logic
+  import { ref, computed, onMounted } from 'vue'
+  // ... imports and logic
 </script>
 
 <template>
@@ -118,14 +126,15 @@ import { ref, computed, onMounted } from 'vue'
 ```
 
 **❌ INCORRECT:**
+
 ```vue
 <template>
   <!-- Component template -->
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-// ... imports and logic
+  import { ref, computed, onMounted } from 'vue'
+  // ... imports and logic
 </script>
 ```
 
@@ -135,31 +144,31 @@ Define props with `defineProps()` with proper TypeScript types and defaults:
 
 ```vue
 <script setup>
-const props = defineProps({
-  name: {
-    type: String,
-    required: true
-  },
-  label: {
-    type: String,
-    default: ''
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  placeholder: {
-    type: String,
-    default: ''
-  },
-  description: {
-    type: String,
-    default: ''
-  },
-  class: {
-    type: String
-  }
-})
+  const props = defineProps({
+    name: {
+      type: String,
+      required: true
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: ''
+    },
+    description: {
+      type: String,
+      default: ''
+    },
+    class: {
+      type: String
+    }
+  })
 </script>
 ```
 
@@ -169,7 +178,7 @@ Define events with `defineEmits()`:
 
 ```vue
 <script setup>
-const emit = defineEmits(['blur', 'input', 'change'])
+  const emit = defineEmits(['blur', 'input', 'change'])
 </script>
 ```
 
@@ -179,26 +188,26 @@ For form components in `src/core/form/`, MUST integrate with VeeValidate:
 
 ```vue
 <script setup>
-import { useField } from 'vee-validate'
-import { toRef } from 'vue'
+  import { useField } from 'vee-validate'
+  import { toRef } from 'vue'
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true
-  }
-})
+  const props = defineProps({
+    name: {
+      type: String,
+      required: true
+    }
+  })
 
-const name = toRef(props, 'name')
+  const name = toRef(props, 'name')
 
-const {
-  value: inputValue,
-  errorMessage: veeValidateErrorMessage,
-  handleBlur,
-  handleChange
-} = useField(name, undefined, {
-  initialValue: props.value
-})
+  const {
+    value: inputValue,
+    errorMessage: veeValidateErrorMessage,
+    handleBlur,
+    handleChange
+  } = useField(name, undefined, {
+    initialValue: props.value
+  })
 </script>
 ```
 
@@ -208,20 +217,20 @@ All interactive elements MUST have `data-testid` attributes for testing:
 
 ```vue
 <script setup>
-import { computed, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-const attrs = useAttrs()
+  const attrs = useAttrs()
 
-const customTestId = computed(() => {
-  const id = attrs['data-testid'] || 'component-name'
+  const customTestId = computed(() => {
+    const id = attrs['data-testid'] || 'component-name'
 
-  return {
-    label: `${id}__label`,
-    input: `${id}__input`,
-    description: `${id}__description`,
-    error: `${id}__error-message`
-  }
-})
+    return {
+      label: `${id}__label`,
+      input: `${id}__input`,
+      description: `${id}__description`,
+      error: `${id}__error-message`
+    }
+  })
 </script>
 
 <template>
@@ -240,9 +249,9 @@ Leverage PrimeVue components as building blocks:
 
 ```vue
 <script setup>
-import InputText from 'primevue/inputtext'
-import Button from 'primevue/button'
-// ... component logic
+  import InputText from 'primevue/inputtext'
+  import Button from 'primevue/button'
+  // ... component logic
 </script>
 
 <template>
@@ -257,17 +266,26 @@ Organize template logically:
 ```vue
 <template>
   <div class="component-wrapper">
-    <Label v-if="props.label" :label="props.label" />
+    <Label
+      v-if="props.label"
+      :label="props.label"
+    />
     <!-- Main component content -->
     <InputText v-model="inputValue" />
 
     <!-- Error message -->
-    <small v-if="errorMessage" class="p-error">
+    <small
+      v-if="errorMessage"
+      class="p-error"
+    >
       {{ errorMessage }}
     </small>
 
     <!-- Description -->
-    <small v-if="description" class="text-color-secondary">
+    <small
+      v-if="description"
+      class="text-color-secondary"
+    >
       <slot name="description">
         {{ description }}
       </slot>
@@ -290,9 +308,7 @@ Each component directory MUST have a `package.json` file with the following stru
   "browser": {
     "./sfc": "./<component-name>.vue"
   },
-  "sideEffects": [
-    "*.vue"
-  ]
+  "sideEffects": ["*.vue"]
 }
 ```
 
@@ -306,9 +322,7 @@ Each component directory MUST have a `package.json` file with the following stru
   "browser": {
     "./sfc": "./field-text.vue"
   },
-  "sideEffects": [
-    "*.vue"
-  ]
+  "sideEffects": ["*.vue"]
 }
 ```
 
@@ -342,20 +356,21 @@ All components MUST support `data-testid` prop for testing:
 
 ```vue
 <script setup>
-const attrs = useAttrs()
+  const attrs = useAttrs()
 
-const customTestId = computed(() => {
-  const id = attrs['data-testid'] || 'component-name'
-  return {
-    // ... test id variants
-  }
-})
+  const customTestId = computed(() => {
+    const id = attrs['data-testid'] || 'component-name'
+    return {
+      // ... test id variants
+    }
+  })
 </script>
 ```
 
 ### Testable Elements
 
 Ensure these elements have test IDs:
+
 - Labels
 - Inputs/Interactive elements
 - Error messages
@@ -382,6 +397,7 @@ Add to the `exports` field:
 ```
 
 **For Core Components:**
+
 ```json
 {
   "exports": {
@@ -391,6 +407,7 @@ Add to the `exports` field:
 ```
 
 **For Regular Components:**
+
 ```json
 {
   "exports": {
@@ -416,6 +433,7 @@ Some components may require Vue Router for navigation or routing features.
 If your component needs Vue Router:
 
 1. **Check if already installed:**
+
    ```bash
    grep "vue-router" /Users/robson.junior/dev/webkit/packages/webkit/package.json
    ```
@@ -429,14 +447,14 @@ If your component needs Vue Router:
 
 ```vue
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
 
-const router = useRouter()
-const route = useRoute()
+  const router = useRouter()
+  const route = useRoute()
 
-const navigate = () => {
-  router.push('/path')
-}
+  const navigate = () => {
+    router.push('/path')
+  }
 </script>
 
 <template>
@@ -447,17 +465,19 @@ const navigate = () => {
 ### Requirements for Router Components
 
 1. **Import Vue Router composables:**
+
    ```vue
    import { useRouter, useRoute } from 'vue-router'
    ```
 
 2. **Handle cases where router is not available:**
+
    ```vue
    <script setup>
-   import { getCurrentInstance } from 'vue'
+     import { getCurrentInstance } from 'vue'
 
-   const instance = getCurrentInstance()
-   const router = instance?.appContext.config.globalProperties.$router
+     const instance = getCurrentInstance()
+     const router = instance?.appContext.config.globalProperties.$router
    </script>
    ```
 
@@ -580,55 +600,55 @@ When creating a new component, ensure you've completed all requirements:
 
 ```vue
 <script setup>
-import { computed, ref, toRef, useAttrs } from 'vue'
-import { useField } from 'vee-validate'
-import InputText from 'primevue/inputtext'
-import Label from '../label/label.vue'
+  import { computed, ref, toRef, useAttrs } from 'vue'
+  import { useField } from 'vee-validate'
+  import InputText from 'primevue/inputtext'
+  import Label from '../label/label.vue'
 
-const emit = defineEmits(['blur', 'input'])
-const props = defineProps({
-  name: {
-    type: String,
-    required: true
-  },
-  label: {
-    type: String,
-    default: ''
-  },
-  placeholder: {
-    type: String,
-    default: ''
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
-})
+  const emit = defineEmits(['blur', 'input'])
+  const props = defineProps({
+    name: {
+      type: String,
+      required: true
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    placeholder: {
+      type: String,
+      default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  })
 
-const inputRef = ref(null)
-const name = toRef(props, 'name')
-const attrs = useAttrs()
+  const inputRef = ref(null)
+  const name = toRef(props, 'name')
+  const attrs = useAttrs()
 
-const customTestId = computed(() => {
-  const id = attrs['data-testid'] || 'field-simple'
+  const customTestId = computed(() => {
+    const id = attrs['data-testid'] || 'field-simple'
 
-  return {
-    label: `${id}__label`,
-    input: `${id}__input`,
-    error: `${id}__error-message`
-  }
-})
+    return {
+      label: `${id}__label`,
+      input: `${id}__input`,
+      error: `${id}__error-message`
+    }
+  })
 
-const {
-  value: inputValue,
-  errorMessage,
-  handleBlur,
-  handleChange
-} = useField(name, undefined, {
-  initialValue: props.value
-})
+  const {
+    value: inputValue,
+    errorMessage,
+    handleBlur,
+    handleChange
+  } = useField(name, undefined, {
+    initialValue: props.value
+  })
 
-defineExpose({ inputRef })
+  defineExpose({ inputRef })
 </script>
 
 <template>
@@ -666,55 +686,61 @@ defineExpose({ inputRef })
 
 ```vue
 <script setup>
-import { ref, onMounted } from 'vue'
-import Button from 'primevue/button'
+  import { ref, onMounted } from 'vue'
+  import Button from 'primevue/button'
 
-const props = defineProps({
-  apiUrl: {
-    type: String,
-    required: true
+  const props = defineProps({
+    apiUrl: {
+      type: String,
+      required: true
+    }
+  })
+
+  const emit = defineEmits(['data-loaded', 'error'])
+
+  const loading = ref(false)
+  const data = ref(null)
+  const error = ref(null)
+
+  async function fetchData() {
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await fetch(props.apiUrl)
+      const result = await response.json()
+      data.value = result
+      emit('data-loaded', result)
+    } catch (err) {
+      error.value = err.message
+      emit('error', err)
+      console.error(err)
+    } finally {
+      loading.value = false
+    }
   }
-})
 
-const emit = defineEmits(['data-loaded', 'error'])
-
-const loading = ref(false)
-const data = ref(null)
-const error = ref(null)
-
-async function fetchData() {
-  loading.value = true
-  error.value = null
-
-  try {
-    const response = await fetch(props.apiUrl)
-    const result = await response.json()
-    data.value = result
-    emit('data-loaded', result)
-  } catch (err) {
-    error.value = err.message
-    emit('error', err)
-    console.error(err)
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(() => {
-  fetchData()
-})
+  onMounted(() => {
+    fetchData()
+  })
 </script>
 
 <template>
   <div class="data-component">
     <div v-if="loading">Loading...</div>
-    <div v-else-if="error" class="p-error">
+    <div
+      v-else-if="error"
+      class="p-error"
+    >
       Error: {{ error }}
     </div>
     <div v-else-if="data">
       {{ data }}
     </div>
-    <Button @click="fetchData" label="Refresh" />
+    <Button
+      @click="fetchData"
+      label="Refresh"
+    />
   </div>
 </template>
 ```
@@ -723,25 +749,25 @@ onMounted(() => {
 
 ```vue
 <script setup>
-import { useRouter } from 'vue-router'
-import Button from 'primevue/button'
+  import { useRouter } from 'vue-router'
+  import Button from 'primevue/button'
 
-const props = defineProps({
-  to: {
-    type: String,
-    required: true
-  },
-  label: {
-    type: String,
-    required: true
+  const props = defineProps({
+    to: {
+      type: String,
+      required: true
+    },
+    label: {
+      type: String,
+      required: true
+    }
+  })
+
+  const router = useRouter()
+
+  const navigate = () => {
+    router.push(props.to)
   }
-})
-
-const router = useRouter()
-
-const navigate = () => {
-  router.push(props.to)
-}
 </script>
 
 <template>
@@ -762,6 +788,7 @@ const navigate = () => {
 **Problem:** `.d.ts` files are missing or outdated
 
 **Solution:**
+
 ```bash
 npm run clean:dts
 npm run build:dts
@@ -772,6 +799,7 @@ npm run build:dts
 **Problem:** Component cannot be imported
 
 **Solution:**
+
 1. Verify component exists in correct directory
 2. Check `package.json` export in main package.json
 3. Ensure component `package.json` has correct paths
@@ -782,21 +810,22 @@ npm run build:dts
 **Problem:** Component fails when router is not installed
 
 **Solution:**
+
 ```vue
 <script setup>
-import { getCurrentInstance } from 'vue'
+  import { getCurrentInstance } from 'vue'
 
-const instance = getCurrentInstance()
-const router = instance?.appContext.config.globalProperties.$router
+  const instance = getCurrentInstance()
+  const router = instance?.appContext.config.globalProperties.$router
 
-// Provide fallback behavior
-const handleClick = () => {
-  if (router) {
-    router.push('/path')
-  } else {
-    window.location.href = '/path'
+  // Provide fallback behavior
+  const handleClick = () => {
+    if (router) {
+      router.push('/path')
+    } else {
+      window.location.href = '/path'
+    }
   }
-}
 </script>
 ```
 

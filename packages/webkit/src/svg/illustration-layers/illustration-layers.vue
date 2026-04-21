@@ -1,5 +1,5 @@
 <script setup>
-  defineOptions({  name: 'IllustrationLayers' })
+  defineOptions({ name: 'IllustrationLayers' })
 </script>
 
 <template>
