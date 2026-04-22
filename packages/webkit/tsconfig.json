@@ -8,7 +8,7 @@
     "noEmit": false,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.vue"],
