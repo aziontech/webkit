@@ -5,5 +5,7 @@
   "browser": {
     "./sfc": "./resizable-splitter.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

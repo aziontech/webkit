@@ -1,44 +1,44 @@
 <script setup>
-import Chips from 'primevue/chips'
+  import Chips from 'primevue/chips'
 
-defineOptions({ name: 'Chips' })
+  defineOptions({ name: 'Chips' })
 
-const props = defineProps({
-  modelValue: {
-    type: Array,
-    default: undefined
-  },
-  max: {
-    type: Number,
-    default: undefined
-  },
-  separator: {
-    type: String,
-    default: undefined
-  },
-  placeholder: {
-    type: String,
-    default: undefined
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  },
-  inputId: {
-    type: String,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: Array,
+      default: undefined
+    },
+    max: {
+      type: Number,
+      default: undefined
+    },
+    separator: {
+      type: String,
+      default: undefined
+    },
+    placeholder: {
+      type: String,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    },
+    inputId: {
+      type: String,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['update:modelValue', 'add', 'remove'])
+  const emit = defineEmits(['update:modelValue', 'add', 'remove'])
 </script>
 
 <template>

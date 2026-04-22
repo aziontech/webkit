@@ -71,7 +71,10 @@
   const emit = defineEmits(['click'])
 
   const props = defineProps({
-    label: String,
+    label: {
+      type: String,
+      default: ''
+    },
     size: {
       type: String,
       options: ['small', 'large'],
@@ -82,8 +85,14 @@
       options: ['primary', 'secondary', 'link'],
       default: 'secondary'
     },
-    href: String,
-    icon: String,
+    href: {
+      type: String,
+      default: ''
+    },
+    icon: {
+      type: String,
+      default: ''
+    },
     target: {
       type: String,
       default: '_self',
@@ -98,7 +107,7 @@
 
   const underlineHover = computed(() => {
     const underlineBase =
-      "relative after:duration-150 hover:after:w-full group-hover:after:w-full after:left-0 after:w-0 after:h-[1px] after:transition-all after:content-[\'\'] after:absolute after:-bottom-[.1rem]"
+      "relative after:duration-150 hover:after:w-full group-hover:after:w-full after:left-0 after:w-0 after:h-[1px] after:transition-all after:content-[''] after:absolute after:-bottom-[.1rem]"
 
     return `${underlineBase} after:bg-neutral-200`
   })

@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./accordion-tab.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

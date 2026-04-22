@@ -1,35 +1,36 @@
 <script setup>
-import Tag from 'primevue/tag'
+  import Tag from 'primevue/tag'
 
-defineOptions({ name: 'Tag' })
+  defineOptions({ name: 'Tag' })
 
-const props = defineProps({
-  value: {
-    type: String,
-    default: undefined
-  },
-  severity: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['secondary', 'success', 'info', 'warning', 'danger', 'contrast'].includes(val)
-  },
-  rounded: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    value: {
+      type: String,
+      default: undefined
+    },
+    severity: {
+      type: String,
+      default: undefined,
+      validator: (val) =>
+        ['secondary', 'success', 'info', 'warning', 'danger', 'contrast'].includes(val)
+    },
+    rounded: {
+      type: Boolean,
+      default: false
+    },
+    icon: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 </script>
 
 <template>
@@ -41,7 +42,10 @@ const props = defineProps({
     :class="props.class"
     :pt="props.pt"
   >
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
   </Tag>

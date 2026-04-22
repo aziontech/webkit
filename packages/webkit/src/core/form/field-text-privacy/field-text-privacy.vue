@@ -1,7 +1,8 @@
 <script setup>
-  import { computed, ref, toRef, useAttrs, useSlots } from 'vue'
-  import { useField } from 'vee-validate'
   import InputText from 'primevue/inputtext'
+  import { useField } from 'vee-validate'
+  import { computed, ref, toRef, useAttrs, useSlots } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 
@@ -13,7 +14,8 @@
       default: ''
     },
     class: {
-      type: String
+      type: String,
+      default: ''
     },
     name: {
       type: String,
@@ -280,7 +282,7 @@
 
 <style scoped>
   :deep(.p-inputtext:focus) {
-    outline: none !important;
     box-shadow: none !important;
+    outline: none !important;
   }
 </style>

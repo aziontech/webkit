@@ -1,41 +1,41 @@
 <script setup>
-import Skeleton from 'primevue/skeleton'
+  import Skeleton from 'primevue/skeleton'
 
-defineOptions({ name: 'Skeleton' })
+  defineOptions({ name: 'Skeleton' })
 
-const props = defineProps({
-  shape: {
-    type: String,
-    default: 'rectangle',
-    validator: (val) => ['rectangle', 'circle'].includes(val)
-  },
-  size: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['normal', 'large'].includes(val)
-  },
-  width: {
-    type: String,
-    default: '100%'
-  },
-  height: {
-    type: String,
-    default: '1rem'
-  },
-  borderRadius: {
-    type: String,
-    default: undefined
-  },
-  animation: {
-    type: String,
-    default: 'wave',
-    validator: (val) => ['wave', 'none'].includes(val)
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    shape: {
+      type: String,
+      default: 'rectangle',
+      validator: (val) => ['rectangle', 'circle'].includes(val)
+    },
+    size: {
+      type: String,
+      default: undefined,
+      validator: (val) => ['normal', 'large'].includes(val)
+    },
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '1rem'
+    },
+    borderRadius: {
+      type: String,
+      default: undefined
+    },
+    animation: {
+      type: String,
+      default: 'wave',
+      validator: (val) => ['wave', 'none'].includes(val)
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 </script>
 
 <template>

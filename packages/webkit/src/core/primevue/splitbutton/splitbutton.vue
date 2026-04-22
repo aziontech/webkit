@@ -1,58 +1,59 @@
 <script setup>
-import SplitButton from 'primevue/splitbutton'
+  import SplitButton from 'primevue/splitbutton'
 
-defineOptions({ name: 'SplitButton' })
+  defineOptions({ name: 'SplitButton' })
 
-const props = defineProps({
-  label: {
-    type: String,
-    default: undefined
-  },
-  icon: {
-    type: String,
-    default: undefined
-  },
-  model: {
-    type: Array,
-    default: () => []
-  },
-  severity: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['secondary', 'success', 'info', 'warning', 'danger', 'contrast'].includes(val)
-  },
-  raised: {
-    type: Boolean,
-    default: false
-  },
-  rounded: {
-    type: Boolean,
-    default: false
-  },
-  text: {
-    type: Boolean,
-    default: false
-  },
-  outlined: {
-    type: Boolean,
-    default: false
-  },
-  size: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['small', 'large'].includes(val)
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    label: {
+      type: String,
+      default: undefined
+    },
+    icon: {
+      type: String,
+      default: undefined
+    },
+    model: {
+      type: Array,
+      default: () => []
+    },
+    severity: {
+      type: String,
+      default: undefined,
+      validator: (val) =>
+        ['secondary', 'success', 'info', 'warning', 'danger', 'contrast'].includes(val)
+    },
+    raised: {
+      type: Boolean,
+      default: false
+    },
+    rounded: {
+      type: Boolean,
+      default: false
+    },
+    text: {
+      type: Boolean,
+      default: false
+    },
+    outlined: {
+      type: Boolean,
+      default: false
+    },
+    size: {
+      type: String,
+      default: undefined,
+      validator: (val) => ['small', 'large'].includes(val)
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 
-const emit = defineEmits(['click'])
+  const emit = defineEmits(['click'])
 </script>
 
 <template>
@@ -70,7 +71,10 @@ const emit = defineEmits(['click'])
     :class="props.class"
     @click="emit('click')"
   >
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
   </SplitButton>

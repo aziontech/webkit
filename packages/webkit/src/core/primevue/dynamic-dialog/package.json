@@ -1,1 +1,10 @@
-{"main": "./dynamic-dialog.vue", "module": "./dynamic-dialog.vue", "browser": {"./sfc": "./dynamic-dialog.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./dynamic-dialog.vue",
+  "module": "./dynamic-dialog.vue",
+  "browser": {
+    "./sfc": "./dynamic-dialog.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

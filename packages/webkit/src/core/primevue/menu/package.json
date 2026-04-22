@@ -1,1 +1,10 @@
-{"main": "./menu.vue", "module": "./menu.vue", "browser": {"./sfc": "./menu.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./menu.vue",
+  "module": "./menu.vue",
+  "browser": {
+    "./sfc": "./menu.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

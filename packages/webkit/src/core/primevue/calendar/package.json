@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./calendar.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

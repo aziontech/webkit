@@ -1,9 +1,10 @@
 <script setup>
-  import { computed, toRef, ref, watch } from 'vue'
-  import { useField } from 'vee-validate'
   import InputText from 'primevue/inputtext'
-  import InputSlot from '../slots/input-slot'
+  import { useField } from 'vee-validate'
+  import { computed, ref, toRef, watch } from 'vue'
+
   import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const emit = defineEmits(['click-icon'])
 
@@ -100,6 +101,10 @@
         :class="props.icon"
         class="text-color-secondary cursor-pointer"
         @click="handleClick"
+        @keydown.enter="handleClick"
+        @keydown.space.prevent="handleClick"
+        tabindex="0"
+        role="button"
       />
       <InputText
         :id="props.name"

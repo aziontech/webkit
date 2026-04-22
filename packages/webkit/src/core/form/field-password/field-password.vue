@@ -1,8 +1,9 @@
 <script setup>
-  import { computed, ref, toRef, useAttrs, useSlots, watch } from 'vue'
-  import { useField } from 'vee-validate'
-  import Password from 'primevue/password'
   import Divider from 'primevue/divider'
+  import Password from 'primevue/password'
+  import { useField } from 'vee-validate'
+  import { computed, ref, toRef, useAttrs, useSlots, watch } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 
@@ -135,7 +136,9 @@
     const specialChar = strengthRules[4].regex.test(value)
 
     const allValid = minLength && uppercase && lowercase && number && specialChar
-    const passedCount = [minLength, uppercase, lowercase, number, specialChar].filter(Boolean).length
+    const passedCount = [minLength, uppercase, lowercase, number, specialChar].filter(
+      Boolean
+    ).length
 
     let level = 'weak'
     if (allValid) {
@@ -219,8 +222,15 @@
       @focus="onFocus"
       @keydown="onKeydown"
     >
-      <template v-if="showStrength" #header> </template>
-      <template v-if="showStrength && props.requirements.length" #footer>
+      <template
+        v-if="showStrength"
+        #header
+      >
+      </template>
+      <template
+        v-if="showStrength && props.requirements.length"
+        #footer
+      >
         <div class="mt-4 text-sm space-y-4">
           <Divider />
           <p class="font-medium">{{ props.requirementsLabel }}</p>
@@ -230,7 +240,10 @@
             :aria-label="props.requirementsLabel"
             class="list-square font-normal space-y-2 text-color-secondary"
           >
-            <li v-for="(requirement, index) in props.requirements" :key="requirement.text || index">
+            <li
+              v-for="(requirement, index) in props.requirements"
+              :key="requirement.text || index"
+            >
               <span>{{ requirement.text }}</span>
             </li>
           </ul>

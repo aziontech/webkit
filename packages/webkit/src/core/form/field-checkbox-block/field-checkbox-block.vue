@@ -24,26 +24,29 @@
 
 <script setup>
   import PrimeCheckbox from 'primevue/checkbox'
-  import SelectorBlock from '../../selector-block/selector-block.vue'
-
   import { useField } from 'vee-validate'
   import { toRefs } from 'vue'
+
+  import SelectorBlock from '../../selector-block/selector-block.vue'
 
   defineOptions({ name: 'FieldCheckboxBlock' })
 
   const props = defineProps({
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     isLabel: {
       type: Boolean,
       default: false
     },
     subtitle: {
-      type: String
+      type: String,
+      default: ''
     },
     description: {
-      type: String
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,

@@ -1,7 +1,7 @@
 <script setup>
+  import InputSwitch from 'primevue/inputswitch'
   import { useField } from 'vee-validate'
   import { toRef } from 'vue'
-  import InputSwitch from 'primevue/inputswitch'
 
   const props = defineProps({
     name: {

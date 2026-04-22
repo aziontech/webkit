@@ -142,10 +142,11 @@
 </template>
 
 <script setup>
-  import { ref, computed, provide, useSlots, watch } from 'vue'
-  import PrimeDataTable from 'primevue/datatable'
   import Column from 'primevue/column'
+  import PrimeDataTable from 'primevue/datatable'
   import Skeleton from 'primevue/skeleton'
+  import { computed, provide, ref, useSlots, watch } from 'vue'
+
   import EmptyResultsBlock from '../../../../components/empty-results-block/empty-results-block.vue'
   import Illustration from '../../../../svg/illustration-layers/illustration-layers.vue'
 
@@ -431,7 +432,6 @@
   })
 
   const hasFooterSlot = computed(() => !!slots.footer)
-  const hasIllustrationSlot = computed(() => !!slots.illustration)
 
   const hasSkeletonRows = computed(() => {
     return props.data.some((row) => row.isSkeletonRow)
@@ -512,9 +512,9 @@
 
 <style scoped lang="scss">
   .table-with-orange-borders :deep(.p-datatable-tbody > tr > td) {
-    transition: color 0.2s ease !important;
     height: 44px;
     padding: 0 14px;
+    transition: color 0.2s ease !important;
   }
 
   .table-with-orange-borders :deep(.p-datatable-tbody > tr) {
@@ -527,10 +527,10 @@
 
   /* Paginator styling */
   :deep(.p-paginator) {
-    height: 48px;
-    padding: 8px 12px;
     font-size: 12px;
+    height: 48px;
     line-height: 21px;
+    padding: 8px 12px;
   }
 
   :deep(.p-paginator .p-paginator-current) {
@@ -543,57 +543,66 @@
   :deep(.p-paginator .p-paginator-next),
   :deep(.p-paginator .p-paginator-last),
   :deep(.p-paginator .p-paginator-page) {
-    width: 24px;
-    height: 24px;
     font-size: 14px;
+    height: 24px;
     line-height: 21px;
     margin: 0;
+    width: 24px;
   }
 
   :deep(.p-paginator .p-dropdown) {
-    width: 61px;
-    height: 26px;
     font-size: 12px;
+    height: 26px;
     line-height: 21px;
     margin: 0;
+    width: 61px;
+
     .p-dropdown-label {
-      width: fit-content;
-      padding-top: 0;
-      padding-bottom: 0;
-      display: flex;
       align-items: center;
+      display: flex;
+      padding-bottom: 0;
+      padding-top: 0;
+      width: fit-content;
     }
+
     .p-dropdown-trigger {
-      width: 16px;
       padding-right: 6px;
+      width: 16px;
     }
   }
+
   :deep(.p-paginator-page-input .p-inputtext) {
-    width: fit-content;
-    height: 26px;
     font-size: 12px;
+    height: 26px;
     line-height: 21px;
     text-align: center;
+    width: fit-content;
   }
 
   :deep(.p-datatable-wrapper) {
     scrollbar-width: thin;
   }
+
   :deep(.p-datatable-header) {
     padding: 12px 0;
   }
+
   :deep(.p-icon.p-sortable-column-icon) {
     width: 12px;
   }
+
   :deep(.p-paginator-current) {
     cursor: auto;
   }
+
   :deep(.p-frozen-column) {
     z-index: 1;
   }
+
   :deep(.p-datatable-thead) {
     z-index: 2;
   }
+
   :deep(.p-column-resizer:hover) {
     background-color: #f3652b !important;
     width: 2px !important;

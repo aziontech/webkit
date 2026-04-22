@@ -3,6 +3,7 @@
   "version": "1.20.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/aziontech/webkit.git",
@@ -16,7 +17,14 @@
     "clean:dts": "rm -rf src/**/*.d.ts src/**/*.d.ts.map",
     "build:dts": "vue-tsc --declaration --emitDeclarationOnly",
     "pack:dry": "npm pack --dry-run",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "lint": "eslint src --ext .js,.ts,.vue --max-warnings 0",
+    "lint:fix": "eslint src --ext .js,.ts,.vue --fix",
+    "lint:style": "stylelint \"src/**/*.{css,scss,vue}\"",
+    "lint:style:fix": "stylelint \"src/**/*.{css,scss,vue}\" --fix",
+    "type-check": "vue-tsc --noEmit",
+    "type-coverage": "type-coverage -p . --at-least 95 --detail"
   },
   "dependencies": {
     "@vueuse/core": "^10.11.1",
@@ -89,7 +97,7 @@
     "./card-content": "./src/core/card/card-content/card-content.vue",
     "./carousel": "./src/core/primevue/carousel/carousel.vue",
     "./chip": "./src/core/primevue/chip/chip.vue",
-    "./column": "./src/core/primevue/column/column.js",
+    "./column": "./src/core/primevue/column/column.ts",
     "./datatable": "./src/core/primevue/datatable/datatable.vue",
     "./dialog": "./src/core/primevue/dialog/dialog.vue",
     "./divider": "./src/core/primevue/divider/divider.vue",
@@ -137,17 +145,17 @@
     "./svg/azion/min": "./src/svg/azion/min/min.vue",
     "./svg/illustration-layers": "./src/svg/illustration-layers/illustration-layers.vue",
     "./styles/country-flags": "./src/styles/country-flags.css",
-    "./list-data-table": "./src/core/list-data-table/index.js",
-    "./list-data-table/composables": "./src/core/list-data-table/composables/index.js",
-    "./list-data-table/types": "./src/core/list-data-table/types/index.js",
-    "./list-data-table/cells": "./src/core/list-data-table/cells/index.js",
-    "./use-toast": "./src/composables/use-toast/index.js",
-    "./use-dialog": "./src/composables/use-dialog/index.js",
-    "./api": "./src/services/primevue-api/index.js",
+    "./list-data-table": "./src/core/list-data-table/index.ts",
+    "./list-data-table/composables": "./src/core/list-data-table/composables/index.ts",
+    "./list-data-table/types": "./src/core/list-data-table/types/index.ts",
+    "./list-data-table/cells": "./src/core/list-data-table/cells/index.ts",
+    "./use-toast": "./src/composables/use-toast/index.ts",
+    "./use-dialog": "./src/composables/use-dialog/index.ts",
+    "./api": "./src/services/primevue-api/index.ts",
     "./dynamic-dialog": "./src/core/primevue/dynamic-dialog/dynamic-dialog.vue",
     "./confirm-dialog": "./src/core/primevue/confirm-dialog/confirm-dialog.vue",
-    "./tooltip": "./src/directives/tooltip/index.js",
-    "./plugin": "./src/plugins/primevue/index.js",
-    "./vite": "./src/vite/index.js"
+    "./tooltip": "./src/directives/tooltip/index.ts",
+    "./plugin": "./src/plugins/primevue/index.ts",
+    "./vite": "./src/vite/index.ts"
   }
 }

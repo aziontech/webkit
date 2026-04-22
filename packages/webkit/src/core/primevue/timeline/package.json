@@ -1,1 +1,10 @@
-{"main": "./timeline.vue", "module": "./timeline.vue", "browser": {"./sfc": "./timeline.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./timeline.vue",
+  "module": "./timeline.vue",
+  "browser": {
+    "./sfc": "./timeline.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

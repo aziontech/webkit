@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./textarea.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

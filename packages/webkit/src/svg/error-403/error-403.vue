@@ -1,5 +1,5 @@
 <script setup>
-defineOptions({ name: 'svg-error-403' })
+  defineOptions({ name: 'SvgError403' })
 </script>
 
 <template>

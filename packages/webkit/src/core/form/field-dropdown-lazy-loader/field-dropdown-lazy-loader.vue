@@ -1,9 +1,20 @@
 <script setup>
-  import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch, inject } from 'vue'
   import { watchDebounced } from '@vueuse/core'
   import Dropdown from 'primevue/dropdown'
   import InputText from 'primevue/inputtext'
   import { useField } from 'vee-validate'
+  import {
+    computed,
+    inject,
+    onMounted,
+    ref,
+    toRef,
+    useAttrs,
+    useSlots,
+    watch,
+    watchEffect
+  } from 'vue'
+
   import Label from '../label'
   import InputSlot from '../slots/input-slot'
 
@@ -86,7 +97,14 @@
     }
   })
 
-  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied', 'onLoaded'])
+  const emit = defineEmits([
+    'onBlur',
+    'onChange',
+    'onSelectOption',
+    'onAccessDenied',
+    'onLoaded',
+    'onClear'
+  ])
 
   const PAGE_INCREMENT = 1
   const PAGE_SIZE = 100
@@ -618,6 +636,10 @@
             <span
               class="p-inputgroup-addon"
               @click="searchFilter"
+              @keydown.enter="searchFilter"
+              @keydown.space.prevent="searchFilter"
+              tabindex="0"
+              role="button"
             >
               <i class="pi pi-search"></i>
             </span>

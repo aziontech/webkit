@@ -75,7 +75,7 @@
             class="flex-1 flex flex-column gap-2"
             v-else
           >
-            <ProgressSpinner style="width: 25px; height: 25px" />
+            <ProgressSpinner style="height: 25px; width: 25px" />
           </div>
         </div>
       </template>
@@ -84,12 +84,13 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount, nextTick, computed, watch } from 'vue'
   import { watchDebounced } from '@vueuse/core'
+  import Divider from 'primevue/divider'
+  import InputText from 'primevue/inputtext'
   import PickList from 'primevue/picklist'
   import ProgressSpinner from 'primevue/progressspinner'
-  import InputText from 'primevue/inputtext'
-  import Divider from 'primevue/divider'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
   import { usePrimeToast as useToast } from '../../../plugins/primevue/primevue-internals.js'
 
   const props = defineProps({
@@ -105,10 +106,12 @@
       required: true
     },
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     service: {
-      type: Function
+      type: Function,
+      default: null
     }
   })
   let scrollElement = null
@@ -223,7 +226,7 @@
       removeLoadingPickList()
       const dataPicks = [...data.value[0], ...data.value[1]]
       addUniqueItems(dataPicks, response.results)
-    } catch (error) {
+    } catch {
       notRequest.value = true
       removeLoadingPickList()
 

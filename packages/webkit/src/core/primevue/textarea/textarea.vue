@@ -1,44 +1,44 @@
 <script setup>
-import Textarea from 'primevue/textarea'
+  import Textarea from 'primevue/textarea'
 
-defineOptions({ name: 'Textarea' })
+  defineOptions({ name: 'Textarea' })
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: undefined
-  },
-  autoResize: {
-    type: Boolean,
-    default: false
-  },
-  rows: {
-    type: Number,
-    default: undefined
-  },
-  cols: {
-    type: Number,
-    default: undefined
-  },
-  placeholder: {
-    type: String,
-    default: undefined
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  maxlength: {
-    type: Number,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: String,
+      default: undefined
+    },
+    autoResize: {
+      type: Boolean,
+      default: false
+    },
+    rows: {
+      type: Number,
+      default: undefined
+    },
+    cols: {
+      type: Number,
+      default: undefined
+    },
+    placeholder: {
+      type: String,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    maxlength: {
+      type: Number,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 
-const emit = defineEmits(['update:modelValue'])
+  const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>

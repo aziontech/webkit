@@ -5,5 +5,7 @@
   "browser": {
     "./sfc": "./error-404.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

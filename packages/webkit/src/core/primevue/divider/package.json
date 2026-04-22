@@ -1,1 +1,10 @@
-{"main": "./divider.vue", "module": "./divider.vue", "browser": {"./sfc": "./divider.vue"}, "sideEffects": ["*.vue"]}
+{
+  "main": "./divider.vue",
+  "module": "./divider.vue",
+  "browser": {
+    "./sfc": "./divider.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
