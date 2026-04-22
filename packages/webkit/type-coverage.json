@@ -3,6 +3,6 @@
   "atLeast": 95,
   "detail": true,
   "ignoreCatch": true,
-  "ignoreFiles": ["**/*.d.ts", "**/node_modules/**"],
+  "ignoreFiles": ["**/*.d.ts", "**/*.d.ts.map", "**/node_modules/**"],
   "is": "type-coverage"
 }
