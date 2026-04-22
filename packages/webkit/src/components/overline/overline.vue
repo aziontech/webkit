@@ -1,28 +1,26 @@
-<script>
+<script lang="ts" setup>
   // Using hex escape sequences for angle brackets to avoid Vue template parser issues
   // \x3C = < (less than), \x3E = > (greater than), \x2F = / (slash) [AVAILABLE PREFIXES]
   const ANGLE_OPEN = '\x3C'
   const ANGLE_CLOSE = '\x3E'
   const SLASH = '\x2F'
 
-  export default {
-    props: {
-      singleLine: {
-        type: Boolean,
-        default: true
-      },
-      showCursor: {
-        type: Boolean,
-        default: false
-      },
-      prefix: {
-        type: String,
-        default: '',
-        validator: (value) =>
-          ['', '//', ANGLE_OPEN + ANGLE_CLOSE, ANGLE_OPEN + SLASH + ANGLE_CLOSE].includes(value)
-      }
+  defineProps({
+    singleLine: {
+      type: Boolean,
+      default: true
+    },
+    showCursor: {
+      type: Boolean,
+      default: false
+    },
+    prefix: {
+      type: String,
+      default: '',
+      validator: (value: string): boolean =>
+        ['', '//', ANGLE_OPEN + ANGLE_CLOSE, ANGLE_OPEN + SLASH + ANGLE_CLOSE].includes(value)
     }
-  }
+  })
 </script>
 
 <template>

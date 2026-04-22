@@ -23,11 +23,11 @@ const copyIcon = `<svg height="16" viewBox="0 0 16 16" width="16" fill="none" xm
 
 const checkIcon = `<svg height="16" viewBox="0 0 16 16" width="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.66667 11.3333L3.33333 8L2.39052 8.94281L6.66667 13.219L14 5.88562L13.0572 4.94281L6.66667 11.3333Z" fill="currentColor"/></svg>`
 
-export const escapeHtml = (text) => {
+export const escapeHtml = (text: string): string => {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-const escapeHtmlAttribute = (text) => {
+const escapeHtmlAttribute = (text: string): string => {
   return escapeHtml(text).replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 }
 
@@ -40,26 +40,29 @@ const tokenColors = {
   punctuation: '#CCCCCC'
 }
 
-const wrap = (value, color) => `<span style="color:${color}">${value}</span>`
+const wrap = (value: string, color: string): string =>
+  `<span style="color:${color}">${value}</span>`
 
-const highlightLine = (language, line) => {
+const highlightLine = (language: string, line: string): string => {
   const lang = (language || '').toLowerCase()
   const base = escapeHtml(line)
 
-  const placeholders = []
-  const save = (html) => {
+  const placeholders: string[] = []
+  const save = (html: string): string => {
     const key = `@@TOK${placeholders.length}@@`
     placeholders.push(html)
     return key
   }
-  const restore = (text) => text.replace(/@@TOK(\d+)@@/g, (m, i) => placeholders[Number(i)] ?? m)
+  const restore = (text: string): string =>
+    text.replace(/@@TOK(\d+)@@/g, (_m: string, i: string) => placeholders[Number(i)] ?? _m)
 
   let text = base
 
   if (lang === 'bash' || lang === 'shell' || lang === 'sh') {
     text = text.replace(
       /(^|\s)(#[^$].*)$/g,
-      (m, prefix, comment) => prefix + save(wrap(comment, tokenColors.comment))
+      (_m: string, prefix: string, comment: string) =>
+        prefix + save(wrap(comment, tokenColors.comment))
     )
   } else {
     text = text.replace(/\/\/.*$/g, (m) => save(wrap(m, tokenColors.comment)))
@@ -116,7 +119,7 @@ const highlightLine = (language, line) => {
   return restore(text)
 }
 
-export const generateLineNumbers = (code) => {
+export const generateLineNumbers = (code: string): string => {
   const lines = code.split('\n')
   return lines
     .map((line, index) => {
@@ -127,11 +130,12 @@ export const generateLineNumbers = (code) => {
     .join('')
 }
 
-export const getLanguageIcon = (language) => {
-  return langIcons[language.toLowerCase()] || langIcons['bash']
+export const getLanguageIcon = (language: string): string => {
+  const lang = language.toLowerCase() as keyof typeof langIcons
+  return langIcons[lang] || langIcons['bash']
 }
 
-export const generateCodeBlock = (filename, language, code) => {
+export const generateCodeBlock = (filename: string, language: string, code: string): string => {
   const icon = getLanguageIcon(language)
   const encodedRawCode = escapeHtmlAttribute(encodeURIComponent(code))
   const lines = code.split('\n')
@@ -167,7 +171,13 @@ export const generateCodeBlock = (filename, language, code) => {
 
 let tabbedBlockCounter = 0
 
-export const generateTabbedCodeBlock = (tabs) => {
+interface CodeBlockTab {
+  filename: string
+  language: string
+  code: string
+}
+
+export const generateTabbedCodeBlock = (tabs: CodeBlockTab[]): string => {
   if (!tabs || tabs.length === 0) return ''
   if (tabs.length === 1) {
     return generateCodeBlock(tabs[0].filename, tabs[0].language, tabs[0].code)
