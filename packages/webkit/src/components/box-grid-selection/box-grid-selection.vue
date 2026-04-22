@@ -35,12 +35,12 @@
 
   const getCardClasses = (item) => {
     if (isItemDisabled(item)) {
-      return 'border border-[var(--surface-border)] bg-[var(--surface-section)] opacity-50 cursor-not-allowed'
+      return 'border surface-border surface-section opacity-50 cursor-not-allowed'
     }
 
     return isSelected(item)
       ? 'cursor-pointer border-2 border-primary bg-primary-mask'
-      : 'cursor-pointer border border-[var(--surface-border)] bg-[var(--surface-section)]'
+      : 'cursor-pointer border surface-border surface-section'
   }
 
   const getIconClass = (item) => {
