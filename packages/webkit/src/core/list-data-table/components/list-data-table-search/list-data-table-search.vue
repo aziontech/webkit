@@ -23,8 +23,8 @@
 </template>
 
 <script setup>
-  import { useSlots } from 'vue'
   import InputText from 'primevue/inputtext'
+  import { useSlots } from 'vue'
 
   const props = defineProps({
     modelValue: {

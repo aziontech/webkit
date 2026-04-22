@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./cell-expand.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

@@ -1,76 +1,76 @@
 <script setup>
-import Dialog from 'primevue/dialog'
+  import Dialog from 'primevue/dialog'
 
-defineOptions({ name: 'Dialog' })
+  defineOptions({ name: 'Dialog' })
 
-const props = defineProps({
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  header: {
-    type: String,
-    default: undefined
-  },
-  modal: {
-    type: Boolean,
-    default: false
-  },
-  contentClass: {
-    type: String,
-    default: undefined
-  },
-  rtl: {
-    type: Boolean,
-    default: false
-  },
-  closable: {
-    type: Boolean,
-    default: true
-  },
-  closeOnEscape: {
-    type: Boolean,
-    default: true
-  },
-  showHeader: {
-    type: Boolean,
-    default: true
-  },
-  breakpoints: {
-    type: Object,
-    default: undefined
-  },
-  blockScroll: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  },
-  dismissableMask: {
-    type: Boolean,
-    default: false
-  },
-  position: {
-    type: String,
-    default: 'center'
-  },
-  draggable: {
-    type: Boolean,
-    default: true
-  },
-  appendTo: {
-    type: [String, Object],
-    default: 'body'
-  }
-})
+  const props = defineProps({
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    header: {
+      type: String,
+      default: undefined
+    },
+    modal: {
+      type: Boolean,
+      default: false
+    },
+    contentClass: {
+      type: String,
+      default: undefined
+    },
+    rtl: {
+      type: Boolean,
+      default: false
+    },
+    closable: {
+      type: Boolean,
+      default: true
+    },
+    closeOnEscape: {
+      type: Boolean,
+      default: true
+    },
+    showHeader: {
+      type: Boolean,
+      default: true
+    },
+    breakpoints: {
+      type: Object,
+      default: undefined
+    },
+    blockScroll: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    },
+    dismissableMask: {
+      type: Boolean,
+      default: false
+    },
+    position: {
+      type: String,
+      default: 'center'
+    },
+    draggable: {
+      type: Boolean,
+      default: true
+    },
+    appendTo: {
+      type: [String, Object],
+      default: 'body'
+    }
+  })
 
-const emit = defineEmits(['update:visible', 'hide', 'show', 'maximize', 'unmaximize'])
+  const emit = defineEmits(['update:visible', 'hide', 'show', 'maximize', 'unmaximize'])
 </script>
 
 <template>
@@ -97,19 +97,34 @@ const emit = defineEmits(['update:visible', 'hide', 'show', 'maximize', 'unmaxim
     @maximize="emit('maximize', $event)"
     @unmaximize="emit('unmaximize', $event)"
   >
-    <template v-if="$slots.header" #header>
+    <template
+      v-if="$slots.header"
+      #header
+    >
       <slot name="header" />
     </template>
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
-    <template v-if="$slots.footer" #footer>
+    <template
+      v-if="$slots.footer"
+      #footer
+    >
       <slot name="footer" />
     </template>
-    <template v-if="$slots.maximizeicon" #maximizeicon>
+    <template
+      v-if="$slots.maximizeicon"
+      #maximizeicon
+    >
       <slot name="maximizeicon" />
     </template>
-    <template v-if="$slots.closeicon" #closeicon>
+    <template
+      v-if="$slots.closeicon"
+      #closeicon
+    >
       <slot name="closeicon" />
     </template>
   </Dialog>

@@ -27,26 +27,29 @@
 
 <script setup>
   import InputSwitch from 'primevue/inputswitch'
-  import SelectorBlock from '../../selector-block/selector-block.vue'
-
   import { useField } from 'vee-validate'
-  import { toRefs, useAttrs, computed } from 'vue'
+  import { computed, toRefs, useAttrs } from 'vue'
+
+  import SelectorBlock from '../../selector-block/selector-block.vue'
 
   defineOptions({ name: 'FieldSwitchBlock' })
 
   const props = defineProps({
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     isLabel: {
       type: Boolean,
       default: false
     },
     subtitle: {
-      type: String
+      type: String,
+      default: ''
     },
     description: {
-      type: String
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
@@ -79,10 +82,12 @@
       type: Boolean
     },
     selectorClass: {
-      type: String
+      type: String,
+      default: ''
     },
     rootClass: {
-      type: String
+      type: String,
+      default: ''
     }
   })
 

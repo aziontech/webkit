@@ -1,36 +1,36 @@
 <script setup>
-import InputSwitch from 'primevue/inputswitch'
+  import InputSwitch from 'primevue/inputswitch'
 
-defineOptions({ name: 'InputSwitch' })
+  defineOptions({ name: 'InputSwitch' })
 
-const props = defineProps({
-  modelValue: {
-    type: null,
-    default: undefined
-  },
-  trueValue: {
-    type: null,
-    default: true
-  },
-  falseValue: {
-    type: null,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  inputId: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: null,
+      default: undefined
+    },
+    trueValue: {
+      type: null,
+      default: true
+    },
+    falseValue: {
+      type: null,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    inputId: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 
-const emit = defineEmits(['update:modelValue'])
+  const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>

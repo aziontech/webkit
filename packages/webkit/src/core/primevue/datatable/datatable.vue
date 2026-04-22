@@ -1,111 +1,135 @@
 <script setup>
-import DataTable from 'primevue/datatable'
+  import DataTable from 'primevue/datatable'
 
-defineOptions({ name: 'DataTable' })
+  defineOptions({ name: 'DataTable' })
 
-const props = defineProps({
-  value: {
-    type: Array,
-    default: () => []
-  },
-  dataKey: {
-    type: String,
-    default: undefined
-  },
-  rows: {
-    type: Number,
-    default: 0
-  },
-  first: {
-    type: Number,
-    default: 0
-  },
-  totalRecords: {
-    type: Number,
-    default: 0
-  },
-  paginator: {
-    type: Boolean,
-    default: false
-  },
-  lazy: {
-    type: Boolean,
-    default: false
-  },
-  sortField: {
-    type: String,
-    default: undefined
-  },
-  sortOrder: {
-    type: Number,
-    default: undefined
-  },
-  defaultSortOrder: {
-    type: Number,
-    default: 1
-  },
-  multiSortMeta: {
-    type: Array,
-    default: undefined
-  },
-  sortMode: {
-    type: String,
-    default: 'single',
-    validator: (val) => ['single', 'multiple'].includes(val)
-  },
-  removableSort: {
-    type: Boolean,
-    default: false
-  },
-  filters: {
-    type: Object,
-    default: undefined
-  },
-  filterDisplay: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['row', 'menu'].includes(val)
-  },
-  globalFilterFields: {
-    type: Array,
-    default: undefined
-  },
-  selection: {
-    type: [Array, Object],
-    default: undefined
-  },
-  selectionMode: {
-    type: String,
-    default: undefined,
-    validator: (val) => ['single', 'multiple', 'checkbox'].includes(val)
-  },
-  compareSelectionBy: {
-    type: String,
-    default: 'equals'
-  },
-  metaKeySelection: {
-    type: Boolean,
-    default: true
-  },
-  contextMenu: {
-    type: Boolean,
-    default: false
-  },
-  contextMenuSelection: {
-    type: Object,
-    default: undefined
-  },
-  rowHover: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    value: {
+      type: Array,
+      default: () => []
+    },
+    dataKey: {
+      type: String,
+      default: undefined
+    },
+    rows: {
+      type: Number,
+      default: 0
+    },
+    first: {
+      type: Number,
+      default: 0
+    },
+    totalRecords: {
+      type: Number,
+      default: 0
+    },
+    paginator: {
+      type: Boolean,
+      default: false
+    },
+    lazy: {
+      type: Boolean,
+      default: false
+    },
+    sortField: {
+      type: String,
+      default: undefined
+    },
+    sortOrder: {
+      type: Number,
+      default: undefined
+    },
+    defaultSortOrder: {
+      type: Number,
+      default: 1
+    },
+    multiSortMeta: {
+      type: Array,
+      default: undefined
+    },
+    sortMode: {
+      type: String,
+      default: 'single',
+      validator: (val) => ['single', 'multiple'].includes(val)
+    },
+    removableSort: {
+      type: Boolean,
+      default: false
+    },
+    filters: {
+      type: Object,
+      default: undefined
+    },
+    filterDisplay: {
+      type: String,
+      default: undefined,
+      validator: (val) => ['row', 'menu'].includes(val)
+    },
+    globalFilterFields: {
+      type: Array,
+      default: undefined
+    },
+    selection: {
+      type: [Array, Object],
+      default: undefined
+    },
+    selectionMode: {
+      type: String,
+      default: undefined,
+      validator: (val) => ['single', 'multiple', 'checkbox'].includes(val)
+    },
+    compareSelectionBy: {
+      type: String,
+      default: 'equals'
+    },
+    metaKeySelection: {
+      type: Boolean,
+      default: true
+    },
+    contextMenu: {
+      type: Boolean,
+      default: false
+    },
+    contextMenuSelection: {
+      type: Object,
+      default: undefined
+    },
+    rowHover: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 
-const emit = defineEmits(['update:first', 'update:rows', 'update:sortField', 'update:sortOrder', 'update:multiSortMeta', 'update:selection', 'update:contextMenuSelection', 'update:filters', 'page', 'sort', 'filter', 'row-select', 'row-unselect', 'row-select-all', 'row-unselect-all', 'row-click', 'row-dblclick', 'row-contextmenu', 'row-expand', 'row-collapse', 'column-resize-end', 'column-reorder', 'row-reorder'])
+  const emit = defineEmits([
+    'update:first',
+    'update:rows',
+    'update:sortField',
+    'update:sortOrder',
+    'update:multiSortMeta',
+    'update:selection',
+    'update:contextMenuSelection',
+    'update:filters',
+    'page',
+    'sort',
+    'filter',
+    'row-select',
+    'row-unselect',
+    'row-select-all',
+    'row-unselect-all',
+    'row-click',
+    'row-dblclick',
+    'row-contextmenu',
+    'row-expand',
+    'row-collapse',
+    'column-resize-end',
+    'column-reorder',
+    'row-reorder'
+  ])
 </script>
 
 <template>
@@ -135,31 +159,70 @@ const emit = defineEmits(['update:first', 'update:rows', 'update:sortField', 'up
     @column-reorder="emit('column-reorder', $event)"
     @row-reorder="emit('row-reorder', $event)"
   >
-    <template v-if="$slots.header" #header>
+    <template
+      v-if="$slots.header"
+      #header
+    >
       <slot name="header" />
     </template>
-    <template v-if="$slots.footer" #footer>
+    <template
+      v-if="$slots.footer"
+      #footer
+    >
       <slot name="footer" />
     </template>
-    <template v-if="$slots.paginatorstart" #paginatorstart>
+    <template
+      v-if="$slots.paginatorstart"
+      #paginatorstart
+    >
       <slot name="paginatorstart" />
     </template>
-    <template v-if="$slots.paginatorend" #paginatorend>
+    <template
+      v-if="$slots.paginatorend"
+      #paginatorend
+    >
       <slot name="paginatorend" />
     </template>
-    <template v-if="$slots.empty" #empty>
+    <template
+      v-if="$slots.empty"
+      #empty
+    >
       <slot name="empty" />
     </template>
-    <template v-if="$slots.groupheader" #groupheader="slotProps">
-      <slot name="groupheader" :data="slotProps.data" :index="slotProps.index" />
+    <template
+      v-if="$slots.groupheader"
+      #groupheader="slotProps"
+    >
+      <slot
+        name="groupheader"
+        :data="slotProps.data"
+        :index="slotProps.index"
+      />
     </template>
-    <template v-if="$slots.groupfooter" #groupfooter="slotProps">
-      <slot name="groupfooter" :data="slotProps.data" :index="slotProps.index" />
+    <template
+      v-if="$slots.groupfooter"
+      #groupfooter="slotProps"
+    >
+      <slot
+        name="groupfooter"
+        :data="slotProps.data"
+        :index="slotProps.index"
+      />
     </template>
-    <template v-if="$slots.expansion" #expansion="slotProps">
-      <slot name="expansion" :data="slotProps.data" :index="slotProps.index" />
+    <template
+      v-if="$slots.expansion"
+      #expansion="slotProps"
+    >
+      <slot
+        name="expansion"
+        :data="slotProps.data"
+        :index="slotProps.index"
+      />
     </template>
-    <template v-if="$slots.loading" #loading>
+    <template
+      v-if="$slots.loading"
+      #loading
+    >
       <slot name="loading" />
     </template>
     <slot />

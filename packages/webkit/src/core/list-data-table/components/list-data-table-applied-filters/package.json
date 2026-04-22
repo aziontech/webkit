@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./list-data-table-applied-filters.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

@@ -1,52 +1,52 @@
 <script setup>
-import Password from 'primevue/password'
+  import Password from 'primevue/password'
 
-defineOptions({ name: 'Password' })
+  defineOptions({ name: 'Password' })
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: undefined
-  },
-  feedback: {
-    type: Boolean,
-    default: true
-  },
-  toggleMask: {
-    type: Boolean,
-    default: false
-  },
-  placeholder: {
-    type: String,
-    default: undefined
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  inputId: {
-    type: String,
-    default: undefined
-  },
-  appendTo: {
-    type: [String, Object],
-    default: 'body'
-  },
-  autocomplete: {
-    type: String,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    modelValue: {
+      type: String,
+      default: undefined
+    },
+    feedback: {
+      type: Boolean,
+      default: true
+    },
+    toggleMask: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    inputId: {
+      type: String,
+      default: undefined
+    },
+    appendTo: {
+      type: [String, Object],
+      default: 'body'
+    },
+    autocomplete: {
+      type: String,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 
-const emit = defineEmits(['update:modelValue'])
+  const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>

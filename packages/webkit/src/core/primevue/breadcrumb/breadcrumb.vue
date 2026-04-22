@@ -1,26 +1,26 @@
 <script setup>
-import Breadcrumb from 'primevue/breadcrumb'
+  import Breadcrumb from 'primevue/breadcrumb'
 
-defineOptions({ name: 'Breadcrumb' })
+  defineOptions({ name: 'Breadcrumb' })
 
-const props = defineProps({
-  model: {
-    type: Array,
-    default: () => []
-  },
-  home: {
-    type: Object,
-    default: undefined
-  },
-  class: {
-    type: String,
-    default: ''
-  },
-  pt: {
-    type: Object,
-    default: undefined
-  }
-})
+  const props = defineProps({
+    model: {
+      type: Array,
+      default: () => []
+    },
+    home: {
+      type: Object,
+      default: undefined
+    },
+    class: {
+      type: String,
+      default: ''
+    },
+    pt: {
+      type: Object,
+      default: undefined
+    }
+  })
 </script>
 
 <template>
@@ -30,8 +30,16 @@ const props = defineProps({
     :class="props.class"
     :pt="props.pt"
   >
-    <template v-if="$slots.item" #item="slotProps">
-      <slot name="item" :item="slotProps.item" :label="slotProps.label" :props="slotProps.props" />
+    <template
+      v-if="$slots.item"
+      #item="slotProps"
+    >
+      <slot
+        name="item"
+        :item="slotProps.item"
+        :label="slotProps.label"
+        :props="slotProps.props"
+      />
     </template>
   </Breadcrumb>
 </template>

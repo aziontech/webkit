@@ -4,5 +4,7 @@
   "browser": {
     "./sfc": "./list-data-table-last-modified-popup.vue"
   },
-  "sideEffects": ["*.vue"]
+  "sideEffects": [
+    "*.vue"
+  ]
 }

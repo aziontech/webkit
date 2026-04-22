@@ -1,28 +1,28 @@
 <script setup>
-import TabView from 'primevue/tabview'
+  import TabView from 'primevue/tabview'
 
-defineOptions({ name: 'TabView' })
+  defineOptions({ name: 'TabView' })
 
-const props = defineProps({
-  activeIndex: {
-    type: Number,
-    default: 0
-  },
-  lazy: {
-    type: Boolean,
-    default: false
-  },
-  scrollable: {
-    type: Boolean,
-    default: false
-  },
-  class: {
-    type: String,
-    default: ''
-  }
-})
+  const props = defineProps({
+    activeIndex: {
+      type: Number,
+      default: 0
+    },
+    lazy: {
+      type: Boolean,
+      default: false
+    },
+    scrollable: {
+      type: Boolean,
+      default: false
+    },
+    class: {
+      type: String,
+      default: ''
+    }
+  })
 
-const emit = defineEmits(['tab-change', 'tab-click'])
+  const emit = defineEmits(['tab-change', 'tab-click'])
 </script>
 
 <template>
@@ -34,7 +34,10 @@ const emit = defineEmits(['tab-change', 'tab-click'])
     @tab-change="emit('tab-change', $event)"
     @tab-click="emit('tab-click', $event)"
   >
-    <template v-if="$slots.default" #default>
+    <template
+      v-if="$slots.default"
+      #default
+    >
       <slot />
     </template>
   </TabView>

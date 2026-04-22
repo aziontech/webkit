@@ -30,8 +30,8 @@
 </template>
 
 <script setup>
-  import PrimeButton from 'primevue/button'
   import Badge from 'primevue/badge'
+  import PrimeButton from 'primevue/button'
 
   defineOptions({ name: 'DataTableReviewChanges' })
 

@@ -1,11 +1,12 @@
 <script setup>
+  import { watchDebounced } from '@vueuse/core'
   import Dropdown from 'primevue/dropdown'
   import InputText from 'primevue/inputtext'
   import { useField } from 'vee-validate'
-  import { computed, toRef, useSlots, useAttrs, ref, onMounted, watchEffect, watch } from 'vue'
-  import { watchDebounced } from '@vueuse/core'
-  import InputSlot from '../slots/input-slot'
+  import { computed, onMounted, ref, toRef, useAttrs, useSlots, watch, watchEffect } from 'vue'
+
   import Label from '../label'
+  import InputSlot from '../slots/input-slot'
 
   const props = defineProps({
     value: {
@@ -90,7 +91,7 @@
     }
   })
 
-  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied'])
+  const emit = defineEmits(['onBlur', 'onChange', 'onSelectOption', 'onAccessDenied', 'onClear'])
 
   const PAGE_INCREMENT = 1
   const PAGE_SIZE = 100
@@ -135,7 +136,7 @@
       try {
         page.value += PAGE_INCREMENT
         await fetchData(page.value)
-      } catch (error) {
+      } catch {
         notRequest.value = true
       } finally {
         loading.value = false
@@ -249,7 +250,7 @@
       })
 
       totalCount.value = response.count
-      let results = filterData(response.body)
+      const results = filterData(response.body)
 
       if (currentPage === INITIAL_PAGE) {
         data.value = results ? results : []
@@ -282,14 +283,14 @@
       if (currentPage === INITIAL_PAGE && props.value && search.value === '') {
         await checkValueInList(props.value)
       }
-    } catch (error) {
+    } catch (err) {
       //Here we check if the error was caused by a lack of permission. If that's not the case, we add the ID to avoid blocking the user's experience.
-      if (typeof error === 'string' && error?.includes(PERMISSION_DENIED)) {
+      if (typeof err === 'string' && err?.includes(PERMISSION_DENIED)) {
         hasNoPermission.value = true
         preventValueSetWithoutPermission()
         emit('onAccessDenied')
       }
-      throw error(error)
+      throw err
     } finally {
       loading.value = false
     }
@@ -497,6 +498,10 @@
             <span
               class="p-inputgroup-addon"
               @click="searchFilter"
+              @keydown.enter="searchFilter"
+              @keydown.space.prevent="searchFilter"
+              tabindex="0"
+              role="button"
             >
               <i class="pi pi-search"></i>
             </span>
