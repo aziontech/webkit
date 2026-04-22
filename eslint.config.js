@@ -17,7 +17,7 @@ export default [
     languageOptions: {
       parser: vueParser,
       parserOptions: {
-        // parser: typesgit criptParser,
+        parser: typescriptParser,
         ecmaVersion: 'latest',
         sourceType: 'module'
       },
@@ -34,6 +34,9 @@ export default [
         setInterval: 'readonly',
         clearInterval: 'readonly',
         ResizeObserver: 'readonly',
+        HTMLElement: 'readonly',
+        MouseEvent: 'readonly',
+        Node: 'readonly',
         // Node globals
         process: 'readonly',
         __dirname: 'readonly',
@@ -74,6 +77,7 @@ export default [
       'vuejs-accessibility/click-events-have-key-events': 'error',
 
       // TypeScript
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
