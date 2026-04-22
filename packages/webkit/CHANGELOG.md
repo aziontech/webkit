@@ -1,3 +1,20 @@
+## [1.21.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.20.0...@aziontech/webkit@1.21.0) (2026-04-22)
+
+### Features
+
+- adding support to ts, fix the duplicated ts configuration ([f1a2dfa](https://github.com/aziontech/webkit/commit/f1a2dfa60800bdff1099cbba7f92e860390bfeff))
+- adding typescript ([d0020e4](https://github.com/aziontech/webkit/commit/d0020e473bec5faff5b28e9ea5cb441b1702ab38))
+- lint governance ([d19412c](https://github.com/aziontech/webkit/commit/d19412cf9c71399c2275c977674fbfd007cdfe15))
+
+### Bug Fixes
+
+- eslint ignoring d.ts ([609bb90](https://github.com/aziontech/webkit/commit/609bb90683421f39466f62fedc7a4fcf29f8a6cd))
+- lint and stylelint apply configuration ([3b46491](https://github.com/aziontech/webkit/commit/3b46491e80215024ef1580a01be382102f4104a1))
+- lint enabling console.warn and console.error ([181b34d](https://github.com/aziontech/webkit/commit/181b34d0dd1e3dcb9873926845148fd4975f3773))
+- linted codebase ([06c3f9f](https://github.com/aziontech/webkit/commit/06c3f9f3ffca6a8474bab11c319850e3ff32b3ac))
+- pnpm webkit:format ([1db2dd6](https://github.com/aziontech/webkit/commit/1db2dd66cce3c99d7eb8445f6255a486e46b195b))
+- stylelint-disable number-max-precision to flag.css ([e1974cf](https://github.com/aziontech/webkit/commit/e1974cf21afcb8a2ab6a06db69789343d32a05d5))
+
 ## [1.20.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.19.4...@aziontech/webkit@1.20.0) (2026-04-17)
 
 ### Features
