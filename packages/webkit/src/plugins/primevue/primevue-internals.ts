@@ -23,14 +23,16 @@
 export { default as PrimeVueConfig } from 'primevue/config'
 
 // ---- Toast (stateful: EventBus + Symbol) ----
+// @ts-expect-error - PrimeVue doesn't provide types for toasteventbus
 export { default as ToastEventBus } from 'primevue/toasteventbus'
 export { default as ToastService } from 'primevue/toastservice'
-export { PrimeVueToastSymbol, useToast as usePrimeToast } from 'primevue/usetoast'
+export { useToast as usePrimeToast } from 'primevue/usetoast'
 
 // ---- Dialog (stateful: EventBus + Symbol) ----
 export { default as DialogService } from 'primevue/dialogservice'
+// @ts-expect-error - PrimeVue doesn't provide types for dynamicdialogeventbus
 export { default as DynamicDialogEventBus } from 'primevue/dynamicdialogeventbus'
-export { PrimeVueDialogSymbol, useDialog as usePrimeDialog } from 'primevue/usedialog'
+export { useDialog as usePrimeDialog } from 'primevue/usedialog'
 
 // ---- Directives ----
 export { default as Tooltip } from 'primevue/tooltip'

@@ -16,25 +16,40 @@ import LastModifiedPopupComponent from './components/list-data-table-last-modifi
 import ListDataTableRowActionsComponent from './components/list-data-table-row-actions/list-data-table-row-actions.vue'
 import ListDataTableSearchComponent from './components/list-data-table-search/list-data-table-search.vue'
 
-const ListDataTable = ListDataTableComponent
+const ListDataTable = ListDataTableComponent as typeof ListDataTableComponent & {
+  Header: typeof ListDataTableHeaderComponent
+  Actions: typeof ListDataTableActionsComponent
+  Search: typeof ListDataTableSearchComponent
+  Export: typeof ListDataTableExportComponent
+  RowActions: typeof ListDataTableRowActionsComponent
+  ColumnSelector: typeof ListDataTableColumnSelectorComponent
+  Filter: typeof ListDataTableFilterComponent
+  AppliedFilters: typeof ListDataTableAppliedFiltersComponent
+  LastModifiedPopup: typeof LastModifiedPopupComponent
+  Column: typeof Column
+  CellDisplay: typeof CellDisplayComponent
+  CellClipboard: typeof CellClipboardComponent
+  CellExpand: typeof CellExpandComponent
+  CountryFlag: typeof CountryFlagComponent
+}
 
 // Sub-components (compound pattern)
-ListDataTable.Header = ListDataTableHeaderComponent
-ListDataTable.Actions = ListDataTableActionsComponent
-ListDataTable.Search = ListDataTableSearchComponent
-ListDataTable.Export = ListDataTableExportComponent
-ListDataTable.RowActions = ListDataTableRowActionsComponent
-ListDataTable.ColumnSelector = ListDataTableColumnSelectorComponent
-ListDataTable.Filter = ListDataTableFilterComponent
-ListDataTable.AppliedFilters = ListDataTableAppliedFiltersComponent
-ListDataTable.LastModifiedPopup = LastModifiedPopupComponent
-ListDataTable.Column = Column
+ListDataTable['Header'] = ListDataTableHeaderComponent
+ListDataTable['Actions'] = ListDataTableActionsComponent
+ListDataTable['Search'] = ListDataTableSearchComponent
+ListDataTable['Export'] = ListDataTableExportComponent
+ListDataTable['RowActions'] = ListDataTableRowActionsComponent
+ListDataTable['ColumnSelector'] = ListDataTableColumnSelectorComponent
+ListDataTable['Filter'] = ListDataTableFilterComponent
+ListDataTable['AppliedFilters'] = ListDataTableAppliedFiltersComponent
+ListDataTable['LastModifiedPopup'] = LastModifiedPopupComponent
+ListDataTable['Column'] = Column
 
 // Cells (available as ListDataTable.Cell*)
-ListDataTable.CellDisplay = CellDisplayComponent
-ListDataTable.CellClipboard = CellClipboardComponent
-ListDataTable.CellExpand = CellExpandComponent
-ListDataTable.CountryFlag = CountryFlagComponent
+ListDataTable['CellDisplay'] = CellDisplayComponent
+ListDataTable['CellClipboard'] = CellClipboardComponent
+ListDataTable['CellExpand'] = CellExpandComponent
+ListDataTable['CountryFlag'] = CountryFlagComponent
 
 export default ListDataTable
 

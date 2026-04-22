@@ -1,3 +1,4 @@
+import type { VNode } from 'vue'
 import { h } from 'vue'
 
 import DropdownFilterField from './dropdown-filter-field.vue'
@@ -48,7 +49,21 @@ const DATA_TYPES_OPTIONS = [
   { label: 'UUID', value: 'UUID' }
 ]
 
-export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, onValidation }) => {
+interface FilterBuilderOptions {
+  filterKey: string
+  filterHeader: string
+  filterValue: unknown
+  onUpdate: (value: unknown) => void
+  onValidation?: (isValid: boolean) => void
+}
+
+export const filterBuilder = ({
+  filterKey,
+  filterHeader,
+  filterValue,
+  onUpdate,
+  onValidation
+}: FilterBuilderOptions): VNode => {
   const normalizedKey = String(filterKey || '').toLowerCase()
   const normalizedHeader = String(filterHeader || '').toLowerCase()
 
@@ -56,7 +71,7 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
     case 'active':
     case 'status':
       return h(DropdownFilterField, {
-        modelValue: filterValue,
+        modelValue: filterValue as string | number | boolean,
         'onUpdate:modelValue': onUpdate,
         options: STATUS_OPTIONS,
         placeholder: 'Select status'
@@ -64,7 +79,7 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
 
     case 'infrastructure':
       return h(DropdownFilterField, {
-        modelValue: filterValue,
+        modelValue: filterValue as string | number | boolean,
         'onUpdate:modelValue': onUpdate,
         options: INFRASTRUCTURE_OPTIONS,
         placeholder: 'Select infrastructure'
@@ -72,13 +87,13 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
 
     case 'last_editor':
       return h(EmailFilterField, {
-        modelValue: filterValue,
+        modelValue: filterValue as string,
         'onUpdate:modelValue': onUpdate,
         onValidation: onValidation
       })
     case 'managed':
       return h(DropdownFilterField, {
-        modelValue: filterValue,
+        modelValue: filterValue as string | number | boolean,
         'onUpdate:modelValue': onUpdate,
         options: MANAGED_OPTIONS,
         placeholder: 'Select managed'
@@ -87,7 +102,7 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
       const isCertificate = normalizedHeader.includes('certificate')
 
       return h(DropdownFilterField, {
-        modelValue: filterValue,
+        modelValue: filterValue as string | number | boolean,
         'onUpdate:modelValue': onUpdate,
         options: isCertificate ? CERTIFICATE_TYPE_OPTIONS : DATA_TYPES_OPTIONS,
         placeholder: 'Select type'
@@ -96,7 +111,7 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
 
     case 'operation':
       return h(DropdownFilterField, {
-        modelValue: filterValue,
+        modelValue: filterValue as string | number | boolean,
         'onUpdate:modelValue': onUpdate,
         options: OPERATION_OPTIONS,
         placeholder: 'Select operation'
@@ -104,7 +119,7 @@ export const filterBuilder = ({ filterKey, filterHeader, filterValue, onUpdate, 
 
     default:
       return h(TextFilterField, {
-        modelValue: filterValue,
+        modelValue: filterValue as string,
         'onUpdate:modelValue': onUpdate
       })
   }
