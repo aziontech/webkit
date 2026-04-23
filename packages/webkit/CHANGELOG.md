@@ -1,3 +1,9 @@
+## [1.21.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.0...@aziontech/webkit@1.21.1) (2026-04-23)
+
+### Bug Fixes
+
+- array fix ([ab028f3](https://github.com/aziontech/webkit/commit/ab028f35fc5872b2f9c76c0751a6a68163f00592))
+
 ## [1.21.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.20.0...@aziontech/webkit@1.21.0) (2026-04-22)
 
 ### Features
