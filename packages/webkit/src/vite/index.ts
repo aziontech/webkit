@@ -29,7 +29,8 @@ export const webkitViteConfig = {
       'primevue/config',
       'primevue/tooltip',
       'primevue/api',
-      'primevue/utils'
+      'primevue/utils',
+      'vee-validate'
     ]
   }
 }
