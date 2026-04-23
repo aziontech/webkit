@@ -12,15 +12,7 @@ export default {
     },
     items: {
       control: 'object',
-      description: 'Array of items with {value, icon, description, disabled?, ariaLabel?}'
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables all selections'
-    },
-    columns: {
-      control: { type: 'number', min: 1, max: 4 },
-      description: 'Number of grid columns (1-4, default: 3)'
+      description: 'Array of items with { value, label, icon?, description?, ariaLabel? }'
     }
   }
 }
@@ -29,33 +21,38 @@ const planItems = [
   {
     value: 'hobby',
     icon: 'pi pi-sparkles',
+    label: 'Hobby',
     description: 'For learning and small personal projects.',
+    ariaLabel: 'Hobby plan',
     tag: 'Hobby Plan'
   },
   {
     value: 'pro',
     icon: 'pi pi-chart-line',
+    label: 'Pro',
     description: 'For professional or commercial applications.',
+    ariaLabel: 'Pro plan',
     tag: 'Pro Plan'
   },
   {
     value: 'scale',
     icon: 'pi pi-file-check',
+    label: 'Scale',
     description: 'For businesses requiring advanced security and compliance.',
+    ariaLabel: 'Scale plan',
     tag: 'Scale Plan'
   }
 ]
 
 const basicItems = [
-  { value: 'option1', icon: 'pi pi-check', description: 'First option description' },
-  { value: 'option2', icon: 'pi pi-times', description: 'Second option description' },
-  { value: 'option3', icon: 'pi pi-star', description: 'Third option description' }
+  { value: 'option1', icon: 'pi pi-check', label: 'Option One', description: 'First option description' },
+  { value: 'option2', icon: 'pi pi-times', label: 'Option Two', description: 'Second option description' },
+  { value: 'option3', icon: 'pi pi-star', label: 'Option Three', description: 'Third option description' }
 ]
 
 export const PlanSelection = {
   args: {
     modelValue: 'hobby',
-    columns: 3,
     items: planItems
   },
   render: (args) => ({
@@ -80,118 +77,60 @@ export const PlanSelection = {
 export const Default = {
   args: {
     modelValue: 'option1',
-    columns: 3,
     items: basicItems
   }
 }
 
-export const WithTwoColumns = {
+export const SignupRoleOptions = {
   args: {
-    modelValue: 'option1',
-    columns: 2,
+    modelValue: 'Software Developer',
     items: [
-      { value: 'option1', icon: 'pi pi-desktop', description: 'Desktop application' },
-      { value: 'option2', icon: 'pi pi-mobile', description: 'Mobile application' }
+      { value: 'Software Developer', label: 'Software Developer', ariaLabel: 'Software Developer role' },
+      { value: 'DevOps Engineer', label: 'DevOps Engineer', ariaLabel: 'DevOps Engineer role' },
+      { value: 'Infrastructure Analyst', label: 'Infrastructure Analyst', ariaLabel: 'Infrastructure Analyst role' },
+      { value: 'Security Specialist', label: 'Security Specialist', ariaLabel: 'Security Specialist role' }
     ]
   }
 }
 
-export const WithFourColumns = {
+export const WithTagSlot = {
   args: {
-    modelValue: 'option2',
-    columns: 4,
-    items: [
-      { value: 'option1', icon: 'pi pi-cloud', description: 'Cloud storage' },
-      { value: 'option2', icon: 'pi pi-database', description: 'Database service' },
-      { value: 'option3', icon: 'pi pi-server', description: 'Server hosting' },
-      { value: 'option4', icon: 'pi pi-shield', description: 'Security suite' }
-    ]
-  }
-}
-
-export const Disabled = {
-  args: {
-    modelValue: 'option1',
-    columns: 3,
-    items: basicItems,
-    disabled: true
-  }
-}
-
-export const WithDisabledItem = {
-  args: {
-    modelValue: 'option1',
-    columns: 3,
-    items: [
-      { value: 'option1', icon: 'pi pi-check', description: 'Available option' },
-      { value: 'option2', icon: 'pi pi-times', description: 'Unavailable option', disabled: true },
-      { value: 'option3', icon: 'pi pi-star', description: 'Available option' }
-    ]
-  }
+    modelValue: 'pro',
+    items: planItems
+  },
+  render: (args) => ({
+    components: { BoxGridSelection, Tag },
+    setup() {
+      return { args }
+    },
+    template: `
+      <BoxGridSelection v-bind="args">
+        <template #tag="{ item }">
+          <Tag
+            :value="item.tag"
+            severity="info"
+            class="font-mono text-xs"
+          />
+        </template>
+      </BoxGridSelection>
+    `
+  })
 }
 
 export const Interactive = {
   args: {
     modelValue: 'hobby',
-    columns: 3,
     items: planItems
-  },
-  render: (args) => ({
-    components: { BoxGridSelection, Tag },
-    data() {
-      return {
-        selectedValue: 'hobby'
-      }
-    },
-    methods: {
-      handleChange(item) {
-        console.log('Selected:', item)
-      }
-    },
-    template: `
-      <div class="flex flex-col gap-4">
-        <BoxGridSelection 
-          v-model="selectedValue" 
-          :items="args.items"
-          :columns="args.columns"
-          @change="handleChange"
-        >
-          <template #tag="{ item }">
-            <Tag 
-              :value="item.tag" 
-              severity="info" 
-              class="font-mono text-xs"
-            />
-          </template>
-        </BoxGridSelection>
-        <p class="text-sm text-color-secondary">
-          Selected plan: <strong class="text-color">{{ selectedValue }}</strong>
-        </p>
-      </div>
-    `
-  })
-}
-
-export const WithoutIcons = {
-  args: {
-    modelValue: 'basic',
-    columns: 3,
-    items: [
-      { value: 'basic', description: 'Basic tier with essential features' },
-      { value: 'standard', description: 'Standard tier with more features' },
-      { value: 'premium', description: 'Premium tier with all features' }
-    ]
   }
 }
 
-export const SingleColumn = {
+export const MinimalLabels = {
   args: {
-    modelValue: 'option1',
-    columns: 1,
     items: [
-      { value: 'option1', icon: 'pi pi-upload', description: 'Upload files from your computer' },
-      { value: 'option2', icon: 'pi pi-cloud-upload', description: 'Import from cloud storage' },
-      { value: 'option3', icon: 'pi pi-link', description: 'Import from URL' }
-    ]
+      { value: 'learn', label: 'Learn' },
+      { value: 'project', label: 'Personal Project' },
+      { value: 'work', label: 'Work' }
+    ],
+    modelValue: 'learn'
   }
 }
