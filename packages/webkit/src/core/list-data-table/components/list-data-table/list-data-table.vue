@@ -1,146 +1,3 @@
-<template>
-  <div
-    class="w-full max-w-full"
-    :class="containerClass"
-    data-testid="data-table-container"
-  >
-    <PrimeDataTable
-      v-if="shouldRenderTable"
-      ref="dataTableRef"
-      :value="displayData"
-      :lazy="lazy"
-      :rowHover="rowHover"
-      :dataKey="dataKey"
-      :showGridlines="showGridlines"
-      :pt="pt"
-      :class="[tableClass, 'overflow-clip rounded-md table-with-orange-borders']"
-      v-model:filters="internalFilters"
-      v-model:sortField="internalSortField"
-      v-model:sortOrder="internalSortOrder"
-      :editMode="editMode"
-      v-model:editingRows="internalEditingRows"
-      :paginator="paginator"
-      :rowsPerPageOptions="rowsPerPageOptions"
-      :rows="rows"
-      :globalFilterFields="globalFilterFields"
-      v-model:selection="internalSelection"
-      :exportFilename="exportFilename"
-      :exportFunction="exportFunction"
-      :totalRecords="totalRecords"
-      :first="first"
-      :rowClass="rowClass"
-      :expandableRowGroups="expandableRowGroups"
-      :rowGroupMode="rowGroupMode"
-      :groupRowsBy="groupRowsBy"
-      :sortMode="sortMode"
-      v-model:expandedRowGroups="internalExpandedGroups"
-      @rowReorder="emit('rowReorder', $event)"
-      @row-click="emit('rowClick', $event)"
-      @page="emit('page', $event)"
-      @sort="emit('sort', $event)"
-      @row-edit-save="emit('rowEditSave', $event)"
-      @row-edit-cancel="emit('rowEditCancel', $event)"
-      removableSort
-      :resizableColumns="resizableColumns"
-      columnResizeMode="fit"
-      @columnResizeEnd="applyDirtyColumnResizeFix"
-      :frozenValue="frozenValue"
-      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown JumpToPageInput"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    >
-      <template
-        v-if="hasHeaderSlot"
-        #header
-      >
-        <slot name="header" />
-      </template>
-
-      <template v-if="shouldShowFullSkeleton">
-        <Column
-          v-for="(col, index) in columns"
-          :key="col.field ?? `skeleton-col-${index}`"
-          :field="col.field"
-          :header="col.header"
-        >
-          <template #body>
-            <div class="flex gap-10 items-center">
-              <Skeleton
-                v-if="isSelectable && index === 0"
-                width="1.5rem"
-                height="1.5rem"
-              />
-              <Skeleton class="h-[12px]" />
-            </div>
-          </template>
-        </Column>
-      </template>
-      <slot v-else />
-
-      <template #paginatorstart>
-        <div class="flex-1"></div>
-      </template>
-
-      <template
-        v-if="hasGroupHeaderSlot"
-        #groupheader="slotProps"
-      >
-        <slot
-          name="groupheader"
-          :data="slotProps.data"
-        />
-      </template>
-
-      <template
-        v-if="hasFooterSlot"
-        #footer
-      >
-        <slot name="footer" />
-      </template>
-
-      <template #empty>
-        <slot
-          name="empty"
-          v-if="hasEmptySlot"
-        />
-        <div
-          v-else
-          class="my-4 flex flex-col gap-3 justify-center items-start"
-        >
-          <p
-            class="text-md font-normal text-secondary"
-            data-testid="list-table-block__empty-message__text"
-          >
-            {{ emptyListMessage }}
-          </p>
-        </div>
-      </template>
-    </PrimeDataTable>
-    <template v-else>
-      <div v-if="hasEmptyBlockSlot"><slot name="emptyBlock" /></div>
-      <EmptyResultsBlock
-        v-else
-        :title="emptyBlock.title"
-        :description="emptyBlock.description"
-        :createButtonLabel="emptyBlock.createButtonLabel"
-        :onClickCreate="emptyBlock.onClickCreate"
-        :documentationService="emptyBlock.documentationService"
-        :pt="pt.emptyState"
-        data-testid="edge-applications-empty-results-block"
-        @click-to-create="emit('click-to-create')"
-      >
-        <template #illustration>
-          <slot name="illustration">
-            <Illustration />
-          </slot>
-        </template>
-        <template #default>
-          <slot name="emptyBlockButton" />
-        </template>
-      </EmptyResultsBlock>
-    </template>
-  </div>
-</template>
-
 <script setup>
   import Column from 'primevue/column'
   import PrimeDataTable from 'primevue/datatable'
@@ -509,6 +366,149 @@
     }
   }
 </script>
+
+<template>
+  <div
+    class="w-full max-w-full"
+    :class="containerClass"
+    data-testid="data-table-container"
+  >
+    <PrimeDataTable
+      v-if="shouldRenderTable"
+      ref="dataTableRef"
+      :value="displayData"
+      :lazy="lazy"
+      :rowHover="rowHover"
+      :dataKey="dataKey"
+      :showGridlines="showGridlines"
+      :pt="pt"
+      :class="[tableClass, 'overflow-clip rounded-md table-with-orange-borders']"
+      v-model:filters="internalFilters"
+      v-model:sortField="internalSortField"
+      v-model:sortOrder="internalSortOrder"
+      :editMode="editMode"
+      v-model:editingRows="internalEditingRows"
+      :paginator="paginator"
+      :rowsPerPageOptions="rowsPerPageOptions"
+      :rows="rows"
+      :globalFilterFields="globalFilterFields"
+      v-model:selection="internalSelection"
+      :exportFilename="exportFilename"
+      :exportFunction="exportFunction"
+      :totalRecords="totalRecords"
+      :first="first"
+      :rowClass="rowClass"
+      :expandableRowGroups="expandableRowGroups"
+      :rowGroupMode="rowGroupMode"
+      :groupRowsBy="groupRowsBy"
+      :sortMode="sortMode"
+      v-model:expandedRowGroups="internalExpandedGroups"
+      @rowReorder="emit('rowReorder', $event)"
+      @row-click="emit('rowClick', $event)"
+      @page="emit('page', $event)"
+      @sort="emit('sort', $event)"
+      @row-edit-save="emit('rowEditSave', $event)"
+      @row-edit-cancel="emit('rowEditCancel', $event)"
+      removableSort
+      :resizableColumns="resizableColumns"
+      columnResizeMode="fit"
+      @columnResizeEnd="applyDirtyColumnResizeFix"
+      :frozenValue="frozenValue"
+      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown JumpToPageInput"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    >
+      <template
+        v-if="hasHeaderSlot"
+        #header
+      >
+        <slot name="header" />
+      </template>
+
+      <template v-if="shouldShowFullSkeleton">
+        <Column
+          v-for="(col, index) in columns"
+          :key="col.field ?? `skeleton-col-${index}`"
+          :field="col.field"
+          :header="col.header"
+        >
+          <template #body>
+            <div class="flex gap-10 items-center">
+              <Skeleton
+                v-if="isSelectable && index === 0"
+                width="1.5rem"
+                height="1.5rem"
+              />
+              <Skeleton class="h-[12px]" />
+            </div>
+          </template>
+        </Column>
+      </template>
+      <slot v-else />
+
+      <template #paginatorstart>
+        <div class="flex-1"></div>
+      </template>
+
+      <template
+        v-if="hasGroupHeaderSlot"
+        #groupheader="slotProps"
+      >
+        <slot
+          name="groupheader"
+          :data="slotProps.data"
+        />
+      </template>
+
+      <template
+        v-if="hasFooterSlot"
+        #footer
+      >
+        <slot name="footer" />
+      </template>
+
+      <template #empty>
+        <slot
+          name="empty"
+          v-if="hasEmptySlot"
+        />
+        <div
+          v-else
+          class="my-4 flex flex-col gap-3 justify-center items-start"
+        >
+          <p
+            class="text-md font-normal text-secondary"
+            data-testid="list-table-block__empty-message__text"
+          >
+            {{ emptyListMessage }}
+          </p>
+        </div>
+      </template>
+    </PrimeDataTable>
+    <template v-else>
+      <div v-if="hasEmptyBlockSlot"><slot name="emptyBlock" /></div>
+      <EmptyResultsBlock
+        v-else
+        :title="emptyBlock.title"
+        :description="emptyBlock.description"
+        :createButtonLabel="emptyBlock.createButtonLabel"
+        :onClickCreate="emptyBlock.onClickCreate"
+        :documentationService="emptyBlock.documentationService"
+        :pt="pt.emptyState"
+        data-testid="edge-applications-empty-results-block"
+        @click-to-create="emit('click-to-create')"
+      >
+        <template #illustration>
+          <slot name="illustration">
+            <Illustration />
+          </slot>
+        </template>
+        <template #default>
+          <slot name="emptyBlockButton" />
+        </template>
+      </EmptyResultsBlock>
+    </template>
+  </div>
+</template>
 
 <style scoped lang="scss">
   .table-with-orange-borders :deep(.p-datatable-tbody > tr > td) {

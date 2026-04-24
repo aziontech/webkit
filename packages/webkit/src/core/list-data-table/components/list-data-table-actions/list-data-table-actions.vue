@@ -1,3 +1,12 @@
+<script setup>
+  defineProps({
+    containerClass: {
+      type: [String, Object, Array],
+      default: ''
+    }
+  })
+</script>
+
 <template>
   <div
     class="flex gap-2 items-center justify-end"
@@ -7,12 +16,3 @@
     <slot />
   </div>
 </template>
-
-<script setup>
-  defineProps({
-    containerClass: {
-      type: [String, Object, Array],
-      default: ''
-    }
-  })
-</script>

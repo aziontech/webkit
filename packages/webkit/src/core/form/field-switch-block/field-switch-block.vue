@@ -1,30 +1,3 @@
-<template>
-  <SelectorBlock
-    v-bind="props"
-    :selected="checked"
-    :nameId="props.name"
-    @change="changeState"
-    :inputClass="props.selectorClass"
-    :rootClass="rootClass"
-    :data-testid="customTestId.selector"
-  >
-    <template #selector>
-      <InputSwitch
-        :disabled="disabled"
-        :inputId="props.name"
-        :name="props.name"
-        @change="stopPropagation"
-        v-model="inputValue"
-        :readonly="readonly"
-        :data-testid="customTestId.switch"
-      />
-    </template>
-    <template #footer>
-      <slot name="footer" />
-    </template>
-  </SelectorBlock>
-</template>
-
 <script setup>
   import InputSwitch from 'primevue/inputswitch'
   import { useField } from 'vee-validate'
@@ -126,3 +99,30 @@
     handleChange(!inputValue.value)
   }
 </script>
+
+<template>
+  <SelectorBlock
+    v-bind="props"
+    :selected="checked"
+    :nameId="props.name"
+    @change="changeState"
+    :inputClass="props.selectorClass"
+    :rootClass="rootClass"
+    :data-testid="customTestId.selector"
+  >
+    <template #selector>
+      <InputSwitch
+        :disabled="disabled"
+        :inputId="props.name"
+        :name="props.name"
+        @change="stopPropagation"
+        v-model="inputValue"
+        :readonly="readonly"
+        :data-testid="customTestId.switch"
+      />
+    </template>
+    <template #footer>
+      <slot name="footer" />
+    </template>
+  </SelectorBlock>
+</template>

@@ -1,33 +1,18 @@
-import type { ComputedRef, Ref } from 'vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-
-interface PopupPositionOptions {
-  triggerRef?: Ref<HTMLElement | null>
-  popupRef?: Ref<HTMLElement | null>
-  hoverDelay?: number
-  hideDelay?: number
-  maxWidth?: number
-  clickToFix?: boolean
-}
-
-interface PopupPositionReturn {
-  showPopup: Ref<boolean>
-  popupStyle: ComputedRef<{ left: string; top: string; maxWidth: string }>
-  popupPosition: Ref<{ posX: number; posY: number }>
-  isFixed: Ref<boolean>
-  handleTriggerMouseEnter: () => void
-  handleTriggerMouseLeave: () => void
-  handlePopupMouseEnter: () => void
-  handlePopupMouseLeave: () => void
-  handleTriggerClick: () => void
-  hide: () => void
-}
 
 /**
  * Composable for managing popup positioning with hover/click behavior.
  * Shared by CellClipboard (popup mode) and CellExpand (popup variant).
+ *
+ * @param {Object} options
+ * @param {import('vue').Ref<HTMLElement|null>} options.triggerRef - Element that triggers the popup
+ * @param {import('vue').Ref<HTMLElement|null>} options.popupRef - The popup element itself
+ * @param {number} [options.hoverDelay=1000] - Delay before showing popup on hover (ms)
+ * @param {number} [options.hideDelay=100] - Delay before hiding popup after mouse leaves (ms)
+ * @param {number} [options.maxWidth=320] - Max popup width for viewport calculations
+ * @param {boolean} [options.clickToFix=false] - Allow clicking trigger to fix popup open
  */
-export function usePopupPosition(options: PopupPositionOptions = {}): PopupPositionReturn {
+export function usePopupPosition(options = {}) {
   const {
     triggerRef = ref(null),
     popupRef = ref(null),
@@ -39,7 +24,7 @@ export function usePopupPosition(options: PopupPositionOptions = {}): PopupPosit
 
   const showPopup = ref(false)
   const popupPosition = ref({ posX: 0, posY: 0 })
-  const hoverTimeout = ref<number | null>(null)
+  const hoverTimeout = ref(null)
   const popupHovered = ref(false)
   const isFixed = ref(false)
 
@@ -51,7 +36,6 @@ export function usePopupPosition(options: PopupPositionOptions = {}): PopupPosit
 
   function updatePosition() {
     const el = triggerRef.value
-    // @ts-expect-error - Handle both HTMLElement and Vue component with $el property
     const rect = el?.getBoundingClientRect?.() ?? el?.$el?.getBoundingClientRect?.()
     if (!rect) return
 
@@ -115,11 +99,11 @@ export function usePopupPosition(options: PopupPositionOptions = {}): PopupPosit
     }
   }
 
-  function handleClickOutside(event: MouseEvent): void {
+  function handleClickOutside(event) {
     if (!isFixed.value) return
 
-    const clickedInsideTrigger = triggerRef.value?.contains?.(event.target as Node | null)
-    const clickedInsidePopup = popupRef.value?.contains?.(event.target as Node | null)
+    const clickedInsideTrigger = triggerRef.value?.contains?.(event.target)
+    const clickedInsidePopup = popupRef.value?.contains?.(event.target)
 
     if (!clickedInsideTrigger && !clickedInsidePopup) {
       isFixed.value = false
