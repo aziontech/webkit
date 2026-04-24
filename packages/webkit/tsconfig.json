@@ -12,5 +12,11 @@
     }
   },
   "include": ["src/**/*.ts", "src/**/*.vue"],
-  "exclude": ["node_modules", "src/**/*.d.ts", "src/**/*.d.ts.map"]
+  "exclude": [
+    "node_modules",
+    "src/**/*.d.ts",
+    "src/**/*.d.ts.map",
+    "src/core/list-data-table",
+    "src/services/markdown"
+  ]
 }

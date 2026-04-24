@@ -1,14 +1,3 @@
-<template>
-  <SelectButton
-    :modelValue="modelValue"
-    @update:modelValue="emit('update:modelValue', $event)"
-    :options="modes"
-    optionLabel="label"
-    optionValue="value"
-    data-testid="data-table-view-toggle"
-  />
-</template>
-
 <script setup>
   import SelectButton from 'primevue/selectbutton'
 
@@ -27,3 +16,14 @@
 
   const emit = defineEmits(['update:modelValue'])
 </script>
+
+<template>
+  <SelectButton
+    :modelValue="modelValue"
+    @update:modelValue="emit('update:modelValue', $event)"
+    :options="modes"
+    optionLabel="label"
+    optionValue="value"
+    data-testid="data-table-view-toggle"
+  />
+</template>

@@ -1,3 +1,14 @@
+<script setup>
+  import Divider from 'primevue/divider'
+
+  defineProps({
+    showDivider: {
+      type: Boolean,
+      default: true
+    }
+  })
+</script>
+
 <template>
   <div
     class="flex flex-col w-full"
@@ -13,14 +24,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-  import Divider from 'primevue/divider'
-
-  defineProps({
-    showDivider: {
-      type: Boolean,
-      default: true
-    }
-  })
-</script>
