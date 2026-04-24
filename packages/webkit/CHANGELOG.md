@@ -1,3 +1,9 @@
+## [1.21.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.1...@aziontech/webkit@1.21.2) (2026-04-24)
+
+### Bug Fixes
+
+- fix prettier toggle ([78d1bc2](https://github.com/aziontech/webkit/commit/78d1bc2d3cb4ff963d514b80038a27c436ce4336))
+
 ## [1.21.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.0...@aziontech/webkit@1.21.1) (2026-04-23)
 
 ### Bug Fixes
