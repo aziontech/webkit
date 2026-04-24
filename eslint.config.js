@@ -87,14 +87,14 @@ export default [
         //   "disallowVue3BuiltInComponents": false,
         //   "htmlElementCaseSensitive": false,
         // }],
-        'vue/no-restricted-syntax': 'error',
-        'vue/no-reserved-keys': ['error', {
-          'reserved': [],
-          'groups': []
-        }],
-        'vue/no-reserved-props': ['error', {
-          'vueVersion': 3, // or 2
-        }],
+      'vue/no-restricted-syntax': 'error',
+      'vue/no-reserved-keys': ['error', {
+        'reserved': [],
+        'groups': []
+      }],
+      'vue/no-reserved-props': ['error', {
+        'vueVersion': 3, // or 2
+      }],
       'vue/no-unused-vars': 'error',
       'vue/v-if-else-key': 'error',
       'vue/no-ref-as-operand': 'error',
