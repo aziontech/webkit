@@ -72,13 +72,13 @@
 
 <template>
   <div class="flex flex-col items-center gap-3">
-    <div class="flex items-center rounded-lg justify-center bg-[#13131A] w-fit p-2 px-3">
+    <div class="flex items-center rounded-lg justify-center bg-surface w-fit p-2 px-3">
       <div class="flex items-center relative">
         <div
           ref="backgroundElement"
           :class="[
             'absolute top-1 bottom-1 rounded-sm transition-all duration-300 ease-out',
-            'bg-[#B5B1F4]'
+            'bg-violet-300'
           ]"
           :style="backgroundStyle"
         ></div>
@@ -92,7 +92,7 @@
             'font-proto-mono tracking-tight uppercase cursor-pointer text-center',
             selectedOption === 'main'
               ? 'text-neutral-900'
-              : 'text-neutral-400 hover:text-neutral-200'
+              : 'text-muted hover:text-default'
           ]"
         >
           {{ mainLabel }}
@@ -107,7 +107,7 @@
             'font-proto-mono tracking-tight uppercase cursor-pointer text-center',
             selectedOption === 'alternative'
               ? 'text-neutral-900'
-              : 'text-neutral-400 hover:text-neutral-200'
+              : 'text-muted hover:text-default'
           ]"
         >
           {{ alternativeLabel }}
@@ -116,7 +116,7 @@
     </div>
     <p
       v-if="description"
-      class="text-xs font-sora text-neutral-100 text-center mt-3 mb-[3.75rem]"
+      class="text-xs font-sora text-default text-center mt-3 mb-[3.75rem]"
     >
       {{ description }}
     </p>
