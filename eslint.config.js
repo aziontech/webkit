@@ -62,13 +62,47 @@ export default [
       ...js.configs.recommended.rules,
 
       // Vue-specific rules
+      // https://eslint.vuejs.org/rules/no-dupe-v-else-if.html
+      'vue/component-definition-name-casing': ['error', 'PascalCase'],
+      'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+      'vue/component-tags-order': ['error', {'order': ['script[setup]', 'template', 'style']}],
       'vue/multi-word-component-names': 'off', // Allow flexibility in component naming
+      'vue/no-arrow-functions-in-watch': 'error',
+      'vue/no-async-in-computed-properties': 'error',
+      'vue/no-child-content': 'error',
+      'vue/no-dupe-keys': 'error',
+      'vue/no-dupe-v-else-if': 'error',
+      'vue/no-duplicate-attributes': ['error', {
+        'allowCoexistClass': true,
+        'allowCoexistStyle': true
+      }],
+      'vue/no-export-in-script-setup': 'error',
+      'vue/no-empty-component-block': 'error',
+      'vue/no-irregular-whitespace': 'error',
+      'vue/no-mutating-props': ['error', {
+        'shallowOnly': false
+      }],
+      // "vue/no-reserved-component-names": ['error', {
+        //   "disallowVueBuiltInComponents": false,
+        //   "disallowVue3BuiltInComponents": false,
+        //   "htmlElementCaseSensitive": false,
+        // }],
+        'vue/no-restricted-syntax': 'error',
+        'vue/no-reserved-keys': ['error', {
+          'reserved': [],
+          'groups': []
+        }],
+        'vue/no-reserved-props': ['error', {
+          'vueVersion': 3, // or 2
+        }],
+      'vue/no-unused-vars': 'error',
+      'vue/v-if-else-key': 'error',
+      'vue/no-ref-as-operand': 'error',
+      'vue/no-side-effects-in-computed-properties': 'error',
       'vue/no-v-html': 'error', // Security
       'vue/require-default-prop': 'error',
       'vue/require-explicit-emits': 'error',
-      'vue/component-definition-name-casing': ['error', 'PascalCase'],
-      'vue/component-name-in-template-casing': ['error', 'PascalCase'],
-      'vue/no-unused-vars': 'error',
+      'vue/template-curly-spacing': 'error',
 
       // Accessibility (Vue 3)
       'vuejs-accessibility/alt-text': 'error',
@@ -77,9 +111,9 @@ export default [
       'vuejs-accessibility/click-events-have-key-events': 'error',
 
       // TypeScript
-      'no-unused-vars': 'off',
+      'no-unused-vars': 'off', // 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/explicit-module-boundary-types': 'error',
+      // '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
 
       // Import organization

@@ -1,3 +1,51 @@
+<script setup>
+  import PrimeButton from 'primevue/button'
+  import Listbox from 'primevue/listbox'
+  import OverlayPanel from 'primevue/overlaypanel'
+  import { computed, ref } from 'vue'
+
+  const props = defineProps({
+    columns: {
+      type: Array,
+      required: true
+    },
+    selectedColumns: {
+      type: Array,
+      required: true
+    }
+  })
+
+  const emit = defineEmits(['update:selectedColumns'])
+
+  const columnSelectorPanel = ref(null)
+
+  const shouldEnableScroll = computed(() => (props.columns?.length || 0) > 7)
+
+  const selectedColumns = computed({
+    get: () => {
+      return props.columns.filter((col) =>
+        props.selectedColumns.some((sel) => sel.field === col.field)
+      )
+    },
+    set: (value) => {
+      const nameColumn = props.columns.find((col) => col.field === 'name')
+      if (nameColumn && !value.some((col) => col.field === 'name')) {
+        value = [nameColumn, ...value]
+      }
+      const ordered = props.columns.filter((col) => value.some((sel) => sel.field === col.field))
+      emit('update:selectedColumns', ordered)
+    }
+  })
+
+  const toggleColumnSelector = (event) => {
+    columnSelectorPanel.value.toggle(event)
+  }
+
+  defineExpose({
+    toggleColumnSelector
+  })
+</script>
+
 <template>
   <div
     class="flex justify-end"
@@ -48,51 +96,3 @@
     </OverlayPanel>
   </div>
 </template>
-
-<script setup>
-  import PrimeButton from 'primevue/button'
-  import Listbox from 'primevue/listbox'
-  import OverlayPanel from 'primevue/overlaypanel'
-  import { computed, ref } from 'vue'
-
-  const props = defineProps({
-    columns: {
-      type: Array,
-      required: true
-    },
-    selectedColumns: {
-      type: Array,
-      required: true
-    }
-  })
-
-  const emit = defineEmits(['update:selectedColumns'])
-
-  const columnSelectorPanel = ref(null)
-
-  const shouldEnableScroll = computed(() => (props.columns?.length || 0) > 7)
-
-  const selectedColumns = computed({
-    get: () => {
-      return props.columns.filter((col) =>
-        props.selectedColumns.some((sel) => sel.field === col.field)
-      )
-    },
-    set: (value) => {
-      const nameColumn = props.columns.find((col) => col.field === 'name')
-      if (nameColumn && !value.some((col) => col.field === 'name')) {
-        value = [nameColumn, ...value]
-      }
-      const ordered = props.columns.filter((col) => value.some((sel) => sel.field === col.field))
-      emit('update:selectedColumns', ordered)
-    }
-  })
-
-  const toggleColumnSelector = (event) => {
-    columnSelectorPanel.value.toggle(event)
-  }
-
-  defineExpose({
-    toggleColumnSelector
-  })
-</script>

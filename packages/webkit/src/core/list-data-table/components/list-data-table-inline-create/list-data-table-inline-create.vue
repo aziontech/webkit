@@ -1,46 +1,3 @@
-<template>
-  <div
-    class="flex items-center gap-2"
-    data-testid="data-table-inline-create"
-  >
-    <div class="flex flex-col flex-1">
-      <InputText
-        :modelValue="modelValue"
-        @update:modelValue="handleInput"
-        @keyup.enter="handleSave"
-        @keyup.escape="handleCancel"
-        :placeholder="placeholder"
-        :class="{ 'p-invalid': hasError }"
-        class="h-8 w-full"
-        data-testid="data-table-inline-create-input"
-        autofocus
-      />
-      <small
-        v-if="hasError"
-        class="text-red-500 mt-1"
-        data-testid="data-table-inline-create-error"
-      >
-        {{ displayErrorMessage }}
-      </small>
-    </div>
-    <PrimeButton
-      icon="pi pi-check"
-      size="small"
-      severity="secondary"
-      :disabled="hasError || !modelValue"
-      @click="handleSave"
-      data-testid="data-table-inline-create-save"
-    />
-    <PrimeButton
-      icon="pi pi-times"
-      size="small"
-      outlined
-      @click="handleCancel"
-      data-testid="data-table-inline-create-cancel"
-    />
-  </div>
-</template>
-
 <script setup>
   import PrimeButton from 'primevue/button'
   import InputText from 'primevue/inputtext'
@@ -131,3 +88,46 @@
     }
   )
 </script>
+
+<template>
+  <div
+    class="flex items-center gap-2"
+    data-testid="data-table-inline-create"
+  >
+    <div class="flex flex-col flex-1">
+      <InputText
+        :modelValue="modelValue"
+        @update:modelValue="handleInput"
+        @keyup.enter="handleSave"
+        @keyup.escape="handleCancel"
+        :placeholder="placeholder"
+        :class="{ 'p-invalid': hasError }"
+        class="h-8 w-full"
+        data-testid="data-table-inline-create-input"
+        autofocus
+      />
+      <small
+        v-if="hasError"
+        class="text-red-500 mt-1"
+        data-testid="data-table-inline-create-error"
+      >
+        {{ displayErrorMessage }}
+      </small>
+    </div>
+    <PrimeButton
+      icon="pi pi-check"
+      size="small"
+      severity="secondary"
+      :disabled="hasError || !modelValue"
+      @click="handleSave"
+      data-testid="data-table-inline-create-save"
+    />
+    <PrimeButton
+      icon="pi pi-times"
+      size="small"
+      outlined
+      @click="handleCancel"
+      data-testid="data-table-inline-create-cancel"
+    />
+  </div>
+</template>

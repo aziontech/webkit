@@ -1,3 +1,20 @@
+<script setup>
+  import PrimeButton from 'primevue/button'
+
+  defineOptions({ name: 'DataTableBatchActions' })
+
+  defineProps({
+    selectedCount: {
+      type: Number,
+      default: 0
+    },
+    actions: {
+      type: Array,
+      default: () => []
+    }
+  })
+</script>
+
 <template>
   <div
     v-if="selectedCount > 0"
@@ -22,20 +39,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-  import PrimeButton from 'primevue/button'
-
-  defineOptions({ name: 'DataTableBatchActions' })
-
-  defineProps({
-    selectedCount: {
-      type: Number,
-      default: 0
-    },
-    actions: {
-      type: Array,
-      default: () => []
-    }
-  })
-</script>

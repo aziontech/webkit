@@ -1,40 +1,3 @@
-<template>
-  <div
-    ref="root"
-    class="resizable-splitter w-full flex min-h-0 overflow-hidden select-none"
-    :class="{ 'flex-col': isHorizontal, 'flex-row': !isHorizontal }"
-    @mouseleave="onPointerUp"
-  >
-    <div
-      class="panel-a min-w-0 min-h-0 flex-none"
-      :class="{ 'w-full': isHorizontal, 'h-full': !isHorizontal }"
-      :style="panelAStyle"
-    >
-      <slot name="panel-a" />
-    </div>
-
-    <div
-      ref="handle"
-      class="handle flex items-center justify-center group flex-none"
-      :class="handleClass"
-      @mousedown.prevent="onPointerDown"
-      @touchstart.passive="onPointerDown"
-    >
-      <div :class="barOuterClass">
-        <span :class="barInnerClass"></span>
-      </div>
-    </div>
-
-    <div
-      class="panel-b flex-1 min-h-0 min-w-0"
-      :class="{ 'w-full': isHorizontal, 'h-full': !isHorizontal }"
-      :style="panelBStyle"
-    >
-      <slot name="panel-b" />
-    </div>
-  </div>
-</template>
-
 <script setup>
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
@@ -271,6 +234,43 @@
     }
   })
 </script>
+
+<template>
+  <div
+    ref="root"
+    class="resizable-splitter w-full flex min-h-0 overflow-hidden select-none"
+    :class="{ 'flex-col': isHorizontal, 'flex-row': !isHorizontal }"
+    @mouseleave="onPointerUp"
+  >
+    <div
+      class="panel-a min-w-0 min-h-0 flex-none"
+      :class="{ 'w-full': isHorizontal, 'h-full': !isHorizontal }"
+      :style="panelAStyle"
+    >
+      <slot name="panel-a" />
+    </div>
+
+    <div
+      ref="handle"
+      class="handle flex items-center justify-center group flex-none"
+      :class="handleClass"
+      @mousedown.prevent="onPointerDown"
+      @touchstart.passive="onPointerDown"
+    >
+      <div :class="barOuterClass">
+        <span :class="barInnerClass"></span>
+      </div>
+    </div>
+
+    <div
+      class="panel-b flex-1 min-h-0 min-w-0"
+      :class="{ 'w-full': isHorizontal, 'h-full': !isHorizontal }"
+      :style="panelBStyle"
+    >
+      <slot name="panel-b" />
+    </div>
+  </div>
+</template>
 
 <style scoped>
   .resizable-splitter {
