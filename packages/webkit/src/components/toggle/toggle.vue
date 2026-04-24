@@ -90,9 +90,7 @@
           :class="[
             'whitespace-nowrap relative z-10 px-3 py-1 rounded-md transition-all duration-300 ease-in-out',
             'font-proto-mono tracking-tight uppercase cursor-pointer text-center',
-            selectedOption === 'main'
-              ? 'text-neutral-900'
-              : 'text-muted hover:text-default'
+            selectedOption === 'main' ? 'text-neutral-900' : 'text-muted hover:text-default'
           ]"
         >
           {{ mainLabel }}
@@ -105,9 +103,7 @@
           :class="[
             'whitespace-nowrap relative z-10 px-3 py-1 rounded-md transition-all duration-300 ease-in-out',
             'font-proto-mono tracking-tight uppercase cursor-pointer text-center',
-            selectedOption === 'alternative'
-              ? 'text-neutral-900'
-              : 'text-muted hover:text-default'
+            selectedOption === 'alternative' ? 'text-neutral-900' : 'text-muted hover:text-default'
           ]"
         >
           {{ alternativeLabel }}
