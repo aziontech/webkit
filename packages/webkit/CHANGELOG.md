@@ -1,3 +1,13 @@
+## [1.22.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.4...@aziontech/webkit@1.22.0) (2026-04-27)
+
+### Features
+
+- add BoxGridSelection component with storybook integration and update background tokens ([e98bc8f](https://github.com/aziontech/webkit/commit/e98bc8fcdd14d593b6cc969c6c4e1bacf490a49f))
+
+### Bug Fixes
+
+- correct component name casing and adjust class binding indentation ([73224a9](https://github.com/aziontech/webkit/commit/73224a91933c2f4149796ee73eaecca9f6dabdc4))
+
 ## [1.21.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.3...@aziontech/webkit@1.21.4) (2026-04-27)
 
 ### Bug Fixes
