@@ -1,3 +1,9 @@
+## [1.23.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.22.0...@aziontech/webkit@1.23.0) (2026-04-27)
+
+### Features
+
+- update colors value ([2624ffe](https://github.com/aziontech/webkit/commit/2624ffe6a265d82c40e99a9cd26a627371df5927))
+
 ## [1.22.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.4...@aziontech/webkit@1.22.0) (2026-04-27)
 
 ### Features
