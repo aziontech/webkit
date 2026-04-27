@@ -1,3 +1,28 @@
+## [1.10.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.9.0...@aziontech/theme@1.10.0) (2026-04-27)
+
+
+### Features
+
+* add BoxGridSelection component with storybook integration and update background tokens ([e98bc8f](https://github.com/aziontech/webkit/commit/e98bc8fcdd14d593b6cc969c6c4e1bacf490a49f))
+* adding support to ts, fix the duplicated ts configuration ([f1a2dfa](https://github.com/aziontech/webkit/commit/f1a2dfa60800bdff1099cbba7f92e860390bfeff))
+* adding typescript ([d0020e4](https://github.com/aziontech/webkit/commit/d0020e473bec5faff5b28e9ea5cb441b1702ab38))
+* lint governance ([d19412c](https://github.com/aziontech/webkit/commit/d19412cf9c71399c2275c977674fbfd007cdfe15))
+
+
+### Bug Fixes
+
+* array fix ([ab028f3](https://github.com/aziontech/webkit/commit/ab028f35fc5872b2f9c76c0751a6a68163f00592))
+* audit packages ([#532](https://github.com/aziontech/webkit/issues/532)) ([52a692b](https://github.com/aziontech/webkit/commit/52a692b141663b82cd6b6a8e65e13f808c7ec6e8))
+* correct component name casing and adjust class binding indentation ([73224a9](https://github.com/aziontech/webkit/commit/73224a91933c2f4149796ee73eaecca9f6dabdc4))
+* eslint ignoring d.ts ([609bb90](https://github.com/aziontech/webkit/commit/609bb90683421f39466f62fedc7a4fcf29f8a6cd))
+* fix prettier toggle ([78d1bc2](https://github.com/aziontech/webkit/commit/78d1bc2d3cb4ff963d514b80038a27c436ce4336))
+* lint and stylelint apply configuration ([3b46491](https://github.com/aziontech/webkit/commit/3b46491e80215024ef1580a01be382102f4104a1))
+* lint enabling console.warn and console.error ([181b34d](https://github.com/aziontech/webkit/commit/181b34d0dd1e3dcb9873926845148fd4975f3773))
+* linted codebase ([06c3f9f](https://github.com/aziontech/webkit/commit/06c3f9f3ffca6a8474bab11c319850e3ff32b3ac))
+* pnpm webkit:format ([1db2dd6](https://github.com/aziontech/webkit/commit/1db2dd66cce3c99d7eb8445f6255a486e46b195b))
+* rollback .ts --> .js, vue lints adjust ([#529](https://github.com/aziontech/webkit/issues/529)) ([84cf2d1](https://github.com/aziontech/webkit/commit/84cf2d1d3c5dd3fd451822118085701f32b2c2bc))
+* stylelint-disable number-max-precision to flag.css ([e1974cf](https://github.com/aziontech/webkit/commit/e1974cf21afcb8a2ab6a06db69789343d32a05d5))
+
 ## [1.9.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.8.0...@aziontech/theme@1.9.0) (2026-04-16)
 
 
