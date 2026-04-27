@@ -1,3 +1,19 @@
+<script setup>
+  import Badge from 'primevue/badge'
+  import PrimeButton from 'primevue/button'
+
+  defineOptions({ name: 'DataTableReviewChanges' })
+
+  defineProps({
+    alteredCount: {
+      type: Number,
+      default: 0
+    }
+  })
+
+  const emit = defineEmits(['discard', 'review'])
+</script>
+
 <template>
   <div
     class="flex items-center justify-between px-4 py-3 border-t border-[var(--surface-border)] bg-[var(--surface-ground)]"
@@ -28,19 +44,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-  import Badge from 'primevue/badge'
-  import PrimeButton from 'primevue/button'
-
-  defineOptions({ name: 'DataTableReviewChanges' })
-
-  defineProps({
-    alteredCount: {
-      type: Number,
-      default: 0
-    }
-  })
-
-  const emit = defineEmits(['discard', 'review'])
-</script>

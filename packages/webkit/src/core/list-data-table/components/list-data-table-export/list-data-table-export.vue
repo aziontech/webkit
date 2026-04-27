@@ -1,20 +1,3 @@
-<template>
-  <PrimeButton
-    @click="handleExport"
-    outlined
-    :class="buttonClass"
-    icon="pi pi-download"
-    :data-testid="testId"
-    v-tooltip.bottom="{ value: tooltipText, showDelay: 200 }"
-    :disabled="disabled"
-    :loading="loading"
-  >
-    <template v-if="label">
-      {{ label }}
-    </template>
-  </PrimeButton>
-</template>
-
 <script setup>
   import PrimeButton from 'primevue/button'
 
@@ -51,3 +34,20 @@
     emit('export', event)
   }
 </script>
+
+<template>
+  <PrimeButton
+    @click="handleExport"
+    outlined
+    :class="buttonClass"
+    icon="pi pi-download"
+    :data-testid="testId"
+    v-tooltip.bottom="{ value: tooltipText, showDelay: 200 }"
+    :disabled="disabled"
+    :loading="loading"
+  >
+    <template v-if="label">
+      {{ label }}
+    </template>
+  </PrimeButton>
+</template>

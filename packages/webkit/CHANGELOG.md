@@ -1,3 +1,9 @@
+## [1.21.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.2...@aziontech/webkit@1.21.3) (2026-04-24)
+
+### Bug Fixes
+
+- rollback .ts --> .js, vue lints adjust ([#529](https://github.com/aziontech/webkit/issues/529)) ([84cf2d1](https://github.com/aziontech/webkit/commit/84cf2d1d3c5dd3fd451822118085701f32b2c2bc))
+
 ## [1.21.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.1...@aziontech/webkit@1.21.2) (2026-04-24)
 
 ### Bug Fixes
