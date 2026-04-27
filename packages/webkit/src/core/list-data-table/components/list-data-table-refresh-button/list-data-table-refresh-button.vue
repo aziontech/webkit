@@ -1,15 +1,3 @@
-<template>
-  <PrimeButton
-    icon="pi pi-refresh"
-    outlined
-    :disabled="disabled"
-    :loading="loading"
-    v-tooltip.bottom="{ value: tooltipText, showDelay: 200 }"
-    @click="emit('click', $event)"
-    data-testid="data-table-refresh-button"
-  />
-</template>
-
 <script setup>
   import PrimeButton from 'primevue/button'
 
@@ -32,3 +20,15 @@
 
   const emit = defineEmits(['click'])
 </script>
+
+<template>
+  <PrimeButton
+    icon="pi pi-refresh"
+    outlined
+    :disabled="disabled"
+    :loading="loading"
+    v-tooltip.bottom="{ value: tooltipText, showDelay: 200 }"
+    @click="emit('click', $event)"
+    data-testid="data-table-refresh-button"
+  />
+</template>

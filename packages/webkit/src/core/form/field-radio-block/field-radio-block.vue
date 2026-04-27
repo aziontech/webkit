@@ -1,28 +1,3 @@
-<template>
-  <SelectorBlock
-    v-bind="props"
-    :selected="checked"
-    :nameId="props.name"
-    @click="clickCard"
-  >
-    <template #selector>
-      <PrimeRadio
-        :disabled="disabled"
-        :inputId="props.name"
-        :name="props.name"
-        @click="stopPropagation"
-        :value="props.inputValue"
-        v-model="inputValue"
-        :binary="props.binary"
-        @change="emit('onRadioChange')"
-      />
-    </template>
-    <template #footer>
-      <slot name="footer" />
-    </template>
-  </SelectorBlock>
-</template>
-
 <script setup>
   import PrimeRadio from 'primevue/radiobutton'
   import { useField } from 'vee-validate'
@@ -109,3 +84,28 @@
     }
   }
 </script>
+
+<template>
+  <SelectorBlock
+    v-bind="props"
+    :selected="checked"
+    :nameId="props.name"
+    @click="clickCard"
+  >
+    <template #selector>
+      <PrimeRadio
+        :disabled="disabled"
+        :inputId="props.name"
+        :name="props.name"
+        @click="stopPropagation"
+        :value="props.inputValue"
+        v-model="inputValue"
+        :binary="props.binary"
+        @change="emit('onRadioChange')"
+      />
+    </template>
+    <template #footer>
+      <slot name="footer" />
+    </template>
+  </SelectorBlock>
+</template>

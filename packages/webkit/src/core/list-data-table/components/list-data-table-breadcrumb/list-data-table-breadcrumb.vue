@@ -1,61 +1,3 @@
-<template>
-  <div
-    class="flex items-center gap-1 text-sm overflow-hidden"
-    data-testid="data-table-breadcrumb"
-    ref="breadcrumbRef"
-  >
-    <template v-if="hiddenSegments.length > 0">
-      <button
-        class="text-color-secondary hover:text-color cursor-pointer px-1"
-        @mouseenter="showOverflow"
-        @mouseleave="hideOverflowDebounced"
-        ref="overflowTrigger"
-        data-testid="data-table-breadcrumb-overflow"
-      >
-        ...
-      </button>
-      <span class="text-color-secondary">{{ separator }}</span>
-
-      <OverlayPanel
-        ref="overflowPanel"
-        :pt="{ content: { class: 'p-2' } }"
-      >
-        <div class="flex flex-col gap-1">
-          <button
-            v-for="(segment, index) in hiddenSegments"
-            :key="index"
-            class="text-left text-sm px-2 py-1 rounded hover:bg-[var(--surface-hover)] cursor-pointer whitespace-nowrap"
-            @click="handleNavigate(segment.path)"
-          >
-            {{ segment.label }}
-          </button>
-        </div>
-      </OverlayPanel>
-    </template>
-
-    <template
-      v-for="(segment, index) in visibleSegments"
-      :key="index"
-    >
-      <button
-        class="text-color-secondary hover:text-color cursor-pointer truncate max-w-[200px]"
-        :class="{ 'text-color font-medium': index === visibleSegments.length - 1 }"
-        @click="handleNavigate(segment.path)"
-        :title="segment.label"
-        data-testid="data-table-breadcrumb-segment"
-      >
-        {{ segment.label }}
-      </button>
-      <span
-        v-if="index < visibleSegments.length - 1"
-        class="text-color-secondary flex-shrink-0"
-      >
-        {{ separator }}
-      </span>
-    </template>
-  </div>
-</template>
-
 <script setup>
   import OverlayPanel from 'primevue/overlaypanel'
   import { computed, ref } from 'vue'
@@ -149,3 +91,61 @@
     }, 300)
   }
 </script>
+
+<template>
+  <div
+    class="flex items-center gap-1 text-sm overflow-hidden"
+    data-testid="data-table-breadcrumb"
+    ref="breadcrumbRef"
+  >
+    <template v-if="hiddenSegments.length > 0">
+      <button
+        class="text-color-secondary hover:text-color cursor-pointer px-1"
+        @mouseenter="showOverflow"
+        @mouseleave="hideOverflowDebounced"
+        ref="overflowTrigger"
+        data-testid="data-table-breadcrumb-overflow"
+      >
+        ...
+      </button>
+      <span class="text-color-secondary">{{ separator }}</span>
+
+      <OverlayPanel
+        ref="overflowPanel"
+        :pt="{ content: { class: 'p-2' } }"
+      >
+        <div class="flex flex-col gap-1">
+          <button
+            v-for="(segment, index) in hiddenSegments"
+            :key="index"
+            class="text-left text-sm px-2 py-1 rounded hover:bg-[var(--surface-hover)] cursor-pointer whitespace-nowrap"
+            @click="handleNavigate(segment.path)"
+          >
+            {{ segment.label }}
+          </button>
+        </div>
+      </OverlayPanel>
+    </template>
+
+    <template
+      v-for="(segment, index) in visibleSegments"
+      :key="index"
+    >
+      <button
+        class="text-color-secondary hover:text-color cursor-pointer truncate max-w-[200px]"
+        :class="{ 'text-color font-medium': index === visibleSegments.length - 1 }"
+        @click="handleNavigate(segment.path)"
+        :title="segment.label"
+        data-testid="data-table-breadcrumb-segment"
+      >
+        {{ segment.label }}
+      </button>
+      <span
+        v-if="index < visibleSegments.length - 1"
+        class="text-color-secondary flex-shrink-0"
+      >
+        {{ separator }}
+      </span>
+    </template>
+  </div>
+</template>

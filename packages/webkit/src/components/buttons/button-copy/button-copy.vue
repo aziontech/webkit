@@ -70,12 +70,6 @@
   })
 </script>
 
-<style scoped>
-  :deep(.p-button:focus) {
-    box-shadow: none;
-  }
-</style>
-
 <template>
   <div>
     <Button
@@ -94,3 +88,9 @@
     />
   </div>
 </template>
+
+<style scoped>
+  :deep(.p-button:focus) {
+    box-shadow: none;
+  }
+</style>

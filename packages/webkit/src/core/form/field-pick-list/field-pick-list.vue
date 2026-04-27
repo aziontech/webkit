@@ -1,88 +1,3 @@
-<template>
-  <div>
-    <PickList
-      :modelValue="[filteredSource, filteredTarget]"
-      :disabled="disabled"
-      @update:modelValue="onPickListUpdate"
-      :pt="{
-        sourceList: { class: ['h-80'] },
-        targetList: { class: ['h-80'] },
-        sourceWrapper: { class: 'max-w-[340px]' },
-        targetWrapper: { class: 'max-w-[340px]' }
-      }"
-      :dataKey="dataKey"
-      breakpoint="1400px"
-      :showSourceControls="false"
-      :showTargetControls="false"
-      data-testid="picklist__field"
-      :move-all-to-source-props="{
-        'data-testid': 'picklist__move-all-to-source-btn'
-      }"
-      :move-all-to-target-props="{
-        'data-testid': 'picklist__move-all-to-target-btn'
-      }"
-      :move-to-target-props="{
-        'data-testid': 'picklist__move-to-target-btn'
-      }"
-      :move-to-source-props="{
-        'data-testid': 'picklist__move-to-source-btn'
-      }"
-    >
-      <template #sourceheader>
-        <div class="flex flex-col w-full">
-          <span class="mb-4">Available {{ title }}</span>
-
-          <Divider class="ml-[-16px] w-[calc(100%+32px)]" />
-
-          <span class="p-input-icon-right w-full mt-4">
-            <i class="pi pi-search text-[var(--text-color-secondary)]" />
-            <InputText
-              class="h-8 w-full"
-              v-model.trim="searchSource"
-              data-testid="search-input-source"
-              placeholder="Search"
-            />
-          </span>
-        </div>
-      </template>
-      <template #targetheader>
-        <div class="flex flex-col w-full">
-          <span class="mb-4">Chosen {{ title }}</span>
-
-          <Divider class="ml-[-16px] w-[calc(100%+32px)]" />
-
-          <span class="p-input-icon-right w-full mt-4">
-            <i class="pi pi-search text-[var(--text-color-secondary)]" />
-            <InputText
-              class="h-8 w-full"
-              v-model.trim="searchTarget"
-              data-testid="search-input-target"
-              placeholder="Search"
-            />
-          </span>
-        </div>
-      </template>
-
-      <template #item="slotProps">
-        <div class="flex flex-wrap pl-3 align-items-center gap-3 py-2">
-          <div
-            class="flex-1 flex flex-column gap-2"
-            v-if="!slotProps.item?.loading"
-          >
-            <span data-testid="picklist_name-item">{{ slotProps.item.name }} </span>
-          </div>
-          <div
-            class="flex-1 flex flex-column gap-2"
-            v-else
-          >
-            <ProgressSpinner style="height: 25px; width: 25px" />
-          </div>
-        </div>
-      </template>
-    </PickList>
-  </div>
-</template>
-
 <script setup>
   import { watchDebounced } from '@vueuse/core'
   import Divider from 'primevue/divider'
@@ -279,6 +194,91 @@
     }
   })
 </script>
+
+<template>
+  <div>
+    <PickList
+      :modelValue="[filteredSource, filteredTarget]"
+      :disabled="disabled"
+      @update:modelValue="onPickListUpdate"
+      :pt="{
+        sourceList: { class: ['h-80'] },
+        targetList: { class: ['h-80'] },
+        sourceWrapper: { class: 'max-w-[340px]' },
+        targetWrapper: { class: 'max-w-[340px]' }
+      }"
+      :dataKey="dataKey"
+      breakpoint="1400px"
+      :showSourceControls="false"
+      :showTargetControls="false"
+      data-testid="picklist__field"
+      :move-all-to-source-props="{
+        'data-testid': 'picklist__move-all-to-source-btn'
+      }"
+      :move-all-to-target-props="{
+        'data-testid': 'picklist__move-all-to-target-btn'
+      }"
+      :move-to-target-props="{
+        'data-testid': 'picklist__move-to-target-btn'
+      }"
+      :move-to-source-props="{
+        'data-testid': 'picklist__move-to-source-btn'
+      }"
+    >
+      <template #sourceheader>
+        <div class="flex flex-col w-full">
+          <span class="mb-4">Available {{ title }}</span>
+
+          <Divider class="ml-[-16px] w-[calc(100%+32px)]" />
+
+          <span class="p-input-icon-right w-full mt-4">
+            <i class="pi pi-search text-[var(--text-color-secondary)]" />
+            <InputText
+              class="h-8 w-full"
+              v-model.trim="searchSource"
+              data-testid="search-input-source"
+              placeholder="Search"
+            />
+          </span>
+        </div>
+      </template>
+      <template #targetheader>
+        <div class="flex flex-col w-full">
+          <span class="mb-4">Chosen {{ title }}</span>
+
+          <Divider class="ml-[-16px] w-[calc(100%+32px)]" />
+
+          <span class="p-input-icon-right w-full mt-4">
+            <i class="pi pi-search text-[var(--text-color-secondary)]" />
+            <InputText
+              class="h-8 w-full"
+              v-model.trim="searchTarget"
+              data-testid="search-input-target"
+              placeholder="Search"
+            />
+          </span>
+        </div>
+      </template>
+
+      <template #item="slotProps">
+        <div class="flex flex-wrap pl-3 align-items-center gap-3 py-2">
+          <div
+            class="flex-1 flex flex-column gap-2"
+            v-if="!slotProps.item?.loading"
+          >
+            <span data-testid="picklist_name-item">{{ slotProps.item.name }} </span>
+          </div>
+          <div
+            class="flex-1 flex flex-column gap-2"
+            v-else
+          >
+            <ProgressSpinner style="height: 25px; width: 25px" />
+          </div>
+        </div>
+      </template>
+    </PickList>
+  </div>
+</template>
 
 <style>
   .p-picklist-source-wrapper .p-picklist-list li,

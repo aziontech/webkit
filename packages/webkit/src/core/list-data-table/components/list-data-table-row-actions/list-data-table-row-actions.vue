@@ -1,53 +1,3 @@
-<template>
-  <div class="flex items-center gap-2 justify-end">
-    <!-- Inline mode: show direct button with action icon (opt-in via prop) -->
-    <div
-      v-if="inlineAction"
-      class="flex justify-end"
-      data-testid="data-table-actions-column-body-action"
-    >
-      <PrimeButton
-        size="small"
-        outlined
-        :icon="inlineAction.icon || 'pi pi-ellipsis-v'"
-        :disabled="resolvedInlineDisabled"
-        v-tooltip.top="inlineTooltip"
-        @click="executeInlineAction"
-        class="cursor-pointer table-button"
-        data-testid="data-table-actions-column-body-action-button"
-      />
-    </div>
-    <!-- Default mode: ellipsis menu -->
-    <div
-      v-else
-      class="flex justify-end"
-      data-testid="data-table-actions-column-body-actions"
-    >
-      <PrimeMenu
-        :ref="setMenuRef"
-        id="overlay_menu"
-        v-bind:model="menuActions"
-        :popup="true"
-        data-testid="data-table-actions-column-body-actions-menu"
-        :pt="{
-          menuitem: ({ context }) => ({
-            'data-testid': `data-table__actions-menu-item__${context.item?.label}-button`
-          })
-        }"
-      />
-      <PrimeButton
-        v-tooltip.top="{ value: 'Actions', showDelay: 200 }"
-        size="small"
-        icon="pi pi-ellipsis-v"
-        outlined
-        @click="handleMenuToggle"
-        data-testid="data-table-actions-column-body-actions-menu-button"
-        class="cursor-pointer table-button"
-      />
-    </div>
-  </div>
-</template>
-
 <script setup>
   import PrimeButton from 'primevue/button'
   import PrimeMenu from 'primevue/menu'
@@ -132,3 +82,53 @@
     }
   }
 </script>
+
+<template>
+  <div class="flex items-center gap-2 justify-end">
+    <!-- Inline mode: show direct button with action icon (opt-in via prop) -->
+    <div
+      v-if="inlineAction"
+      class="flex justify-end"
+      data-testid="data-table-actions-column-body-action"
+    >
+      <PrimeButton
+        size="small"
+        outlined
+        :icon="inlineAction.icon || 'pi pi-ellipsis-v'"
+        :disabled="resolvedInlineDisabled"
+        v-tooltip.top="inlineTooltip"
+        @click="executeInlineAction"
+        class="cursor-pointer table-button"
+        data-testid="data-table-actions-column-body-action-button"
+      />
+    </div>
+    <!-- Default mode: ellipsis menu -->
+    <div
+      v-else
+      class="flex justify-end"
+      data-testid="data-table-actions-column-body-actions"
+    >
+      <PrimeMenu
+        :ref="setMenuRef"
+        id="overlay_menu"
+        v-bind:model="menuActions"
+        :popup="true"
+        data-testid="data-table-actions-column-body-actions-menu"
+        :pt="{
+          menuitem: ({ context }) => ({
+            'data-testid': `data-table__actions-menu-item__${context.item?.label}-button`
+          })
+        }"
+      />
+      <PrimeButton
+        v-tooltip.top="{ value: 'Actions', showDelay: 200 }"
+        size="small"
+        icon="pi pi-ellipsis-v"
+        outlined
+        @click="handleMenuToggle"
+        data-testid="data-table-actions-column-body-actions-menu-button"
+        class="cursor-pointer table-button"
+      />
+    </div>
+  </div>
+</template>

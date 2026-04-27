@@ -1,27 +1,3 @@
-<template>
-  <SelectorBlock
-    v-bind="props"
-    :selected="checked"
-    :nameId="props.name"
-    @click="clickCard"
-  >
-    <template #selector>
-      <PrimeCheckbox
-        :disabled="props.disabled"
-        :inputId="props.name"
-        :name="props.name"
-        @click="stopPropagation"
-        :value="props.value"
-        v-model="inputValue"
-        :binary="props.binary"
-      />
-    </template>
-    <template #footer>
-      <slot name="footer" />
-    </template>
-  </SelectorBlock>
-</template>
-
 <script setup>
   import PrimeCheckbox from 'primevue/checkbox'
   import { useField } from 'vee-validate'
@@ -107,3 +83,27 @@
     }
   }
 </script>
+
+<template>
+  <SelectorBlock
+    v-bind="props"
+    :selected="checked"
+    :nameId="props.name"
+    @click="clickCard"
+  >
+    <template #selector>
+      <PrimeCheckbox
+        :disabled="props.disabled"
+        :inputId="props.name"
+        :name="props.name"
+        @click="stopPropagation"
+        :value="props.value"
+        v-model="inputValue"
+        :binary="props.binary"
+      />
+    </template>
+    <template #footer>
+      <slot name="footer" />
+    </template>
+  </SelectorBlock>
+</template>
