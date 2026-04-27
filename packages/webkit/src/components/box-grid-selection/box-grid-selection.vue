@@ -7,7 +7,7 @@
       v-for="item in items"
       :key="item.value"
       class="box-item border rounded-md px-4 py-3 transition-colors shrink-0"
-        :class="
+      :class="
         modelValue === item.value
           ? 'border-2 border-primary bg-primary-mask'
           : 'border-subtle bg-surface hover:bg-surface-overlay cursor-pointer'
@@ -53,7 +53,7 @@
 
 <script setup>
   defineOptions({
-    name: 'box-grid-selection'
+    name: 'BoxGridSelection'
   })
 
   defineProps({
