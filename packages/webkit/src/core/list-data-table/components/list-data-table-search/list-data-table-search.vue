@@ -1,27 +1,3 @@
-<template>
-  <span
-    class="flex flex-row p-input-icon-left items-center w-full max-w-[32rem]"
-    data-testid="data-table-search"
-  >
-    <i class="pi pi-search" />
-    <InputText
-      class="h-8 w-full"
-      :modelValue="modelValue"
-      @update:modelValue="handleInput"
-      data-testid="data-table-search-input"
-      :placeholder="placeholder"
-      @keyup.enter="handleEnter"
-      :disabled="disabled"
-    />
-    <div
-      v-if="hasSlot"
-      class="ml-3"
-    >
-      <slot />
-    </div>
-  </span>
-</template>
-
 <script setup>
   import InputText from 'primevue/inputtext'
   import { useSlots } from 'vue'
@@ -68,3 +44,27 @@
     emit('search', props.modelValue)
   }
 </script>
+
+<template>
+  <span
+    class="flex flex-row p-input-icon-left items-center w-full max-w-[32rem]"
+    data-testid="data-table-search"
+  >
+    <i class="pi pi-search" />
+    <InputText
+      class="h-8 w-full"
+      :modelValue="modelValue"
+      @update:modelValue="handleInput"
+      data-testid="data-table-search-input"
+      :placeholder="placeholder"
+      @keyup.enter="handleEnter"
+      :disabled="disabled"
+    />
+    <div
+      v-if="hasSlot"
+      class="ml-3"
+    >
+      <slot />
+    </div>
+  </span>
+</template>

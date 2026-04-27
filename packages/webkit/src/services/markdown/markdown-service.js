@@ -1,19 +1,19 @@
 import { generateCodeBlock, generateTabbedCodeBlock } from './code-block.js'
 
-export const parseMarkdown = (markdown: string): string => {
+export const parseMarkdown = (markdown) => {
   if (!markdown) return ''
 
   let text = markdown
 
   // Extract CodeBlockTabs content FIRST to protect it from processing
-  const codeBlockTabsContents: string[] = []
+  const codeBlockTabsContents = []
   text = text.replace(/<CodeBlockTabs>([\s\S]*?)<\/CodeBlockTabs>/gi, (match) => {
     codeBlockTabsContents.push(match)
     return `@@CODEBLOCKTABS_EARLY${codeBlockTabsContents.length - 1}@@`
   })
 
   // Extract CodeBlock content to protect it from italic/bold processing
-  const codeBlockContents: string[] = []
+  const codeBlockContents = []
   text = text.replace(/<CodeBlock\s+[^>]*>([\s\S]*?)<\/CodeBlock>/gi, (match) => {
     codeBlockContents.push(match)
     return `@@CODEBLOCK_EARLY${codeBlockContents.length - 1}@@`
@@ -49,7 +49,7 @@ export const parseMarkdown = (markdown: string): string => {
 
   text = text.replace(/^\s*\d+\.\s+(.+$)/gim, '<li class="font-sora">$1</li>')
 
-  const htmlTags: string[] = []
+  const htmlTags = []
   text = text.replace(/<[^>]+>/g, (match) => {
     htmlTags.push(match)
     return `@@HTMLTAG${htmlTags.length - 1}@@`
@@ -182,9 +182,9 @@ export const parseMarkdown = (markdown: string): string => {
     return '<p class="font-sora mb-4">' + block.replace(/\n/g, '<br>').trim() + '</p>'
   })
 
-  const codeBlocks: string[] = []
+  const codeBlocks = []
   const withCodeBlockPlaceholders = processedBlocks
-    .filter((block) => Boolean(block.trim()))
+    .filter((block) => block.trim())
     .join('\n')
     .replace(/<aside class="code-block[\s\S]*?<\/aside>/g, (match) => {
       codeBlocks.push(match)

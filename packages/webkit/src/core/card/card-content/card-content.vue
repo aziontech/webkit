@@ -1,54 +1,3 @@
-<template>
-  <div
-    class="border border-default bg-surface px-6 py-5 flex flex-col justify-between"
-    :class="cardContainerClass"
-  >
-    <div
-      class="flex flex-col gap-elements-base"
-      :class="contentInnerClass"
-    >
-      <p
-        class="font-proto-mono text-overline-sm text-brand-primary-400"
-        v-if="overline"
-      >
-        {{ overline }}
-      </p>
-
-      <span
-        v-if="icon"
-        :class="icon"
-        class="text-brand-primary-400 text-heading-sm"
-      ></span>
-
-      <h3
-        class="font-sora text-heading-sm font-normal"
-        v-if="title"
-      >
-        {{ title }}
-      </h3>
-
-      <p
-        class="text-body-sm font-sora text-muted"
-        v-if="description"
-      >
-        {{ description }}
-      </p>
-    </div>
-
-    <div
-      class="mt-6"
-      v-if="link"
-    >
-      <Button
-        type="link"
-        :label="linkText || 'Learn more'"
-        :href="link"
-        :size="'small'"
-      />
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
   import { computed } from 'vue'
 
@@ -191,3 +140,54 @@
     ]
   })
 </script>
+
+<template>
+  <div
+    class="border border-default bg-surface px-6 py-5 flex flex-col justify-between"
+    :class="cardContainerClass"
+  >
+    <div
+      class="flex flex-col gap-elements-base"
+      :class="contentInnerClass"
+    >
+      <p
+        class="font-proto-mono text-overline-sm text-brand-primary-400"
+        v-if="overline"
+      >
+        {{ overline }}
+      </p>
+
+      <span
+        v-if="icon"
+        :class="icon"
+        class="text-brand-primary-400 text-heading-sm"
+      ></span>
+
+      <h3
+        class="font-sora text-heading-sm font-normal"
+        v-if="title"
+      >
+        {{ title }}
+      </h3>
+
+      <p
+        class="text-body-sm font-sora text-muted"
+        v-if="description"
+      >
+        {{ description }}
+      </p>
+    </div>
+
+    <div
+      class="mt-6"
+      v-if="link"
+    >
+      <Button
+        type="link"
+        :label="linkText || 'Learn more'"
+        :href="link"
+        :size="'small'"
+      />
+    </div>
+  </div>
+</template>
