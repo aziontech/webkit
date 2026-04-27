@@ -1,3 +1,20 @@
+<script setup>
+  import { computed, useSlots } from 'vue'
+
+  defineOptions({ name: 'CardBox' })
+
+  defineProps({
+    title: {
+      type: String,
+      required: true
+    }
+  })
+
+  const slots = useSlots()
+  const hasFooterSlot = computed(() => !!slots.footer)
+  const hasHeaderActionSlot = computed(() => !!slots['header-action'])
+</script>
+
 <template>
   <div class="border border-default rounded-md flex flex-col">
     <div
@@ -24,20 +41,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-  import { computed, useSlots } from 'vue'
-
-  defineOptions({ name: 'CardBox' })
-
-  defineProps({
-    title: {
-      type: String,
-      required: true
-    }
-  })
-
-  const slots = useSlots()
-  const hasFooterSlot = computed(() => !!slots.footer)
-  const hasHeaderActionSlot = computed(() => !!slots['header-action'])
-</script>

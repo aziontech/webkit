@@ -1,48 +1,6 @@
-import type { ComputedRef, Ref } from 'vue'
 import { computed } from 'vue'
 
-interface RowOrderingOptions {
-  data: Ref<Record<string, unknown>[]>
-  groupColumn?: string
-  restrictReorderAcrossGroups?: boolean
-  dataKey?: string
-  positionField?: string
-  positionObjectMode?: boolean
-}
-
-interface RowReorderEvent {
-  dragIndex: number
-  dropIndex: number
-}
-
-interface RowOrderingReturn {
-  onRowReorder: (event: RowReorderEvent) => {
-    from: number
-    to: number
-    reorderedData: Record<string, unknown>[]
-    blocked: boolean
-  }
-  changePosition: (
-    row: Record<string, unknown>,
-    newPosition: number
-  ) => { reorderedData: Record<string, unknown>[]; alteredRows: Record<string, unknown>[] }
-  changePositionWithinGroup: (
-    row: Record<string, unknown>,
-    newPosition: number
-  ) => {
-    reorderedData: Record<string, unknown>[]
-    alteredRows: Record<string, unknown>[]
-    exceeded: boolean
-  }
-  alteredRows: ComputedRef<Record<string, unknown>[]>
-  hasChanges: ComputedRef<boolean>
-  discardChanges: () => void
-  getPositionLimits: (row: Record<string, unknown>) => { min: number; max: number }
-  getGroupValue: (row: Record<string, unknown>) => string | undefined
-  scrollToPosition: (position: number, containerSelector?: string) => void
-}
-
-export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
+export function useRowOrdering(options) {
   const {
     data,
     groupColumn,
@@ -55,33 +13,26 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
   const originalPositions = new Map()
   let snapshotTaken = false
 
-  function setPositionValue(row: Record<string, unknown>, value: number): void {
+  function setPositionValue(row, value) {
     if (positionObjectMode) {
       if (!row[positionField]) {
         row[positionField] = { value: 0, immutableValue: 0, altered: false, min: 0, max: 0 }
       }
-      ;(row[positionField] as { value: number }).value = value
+      row[positionField].value = value
     } else {
       row[positionField] = value
     }
   }
 
-  function markAltered(row: Record<string, unknown>): void {
+  function markAltered(row) {
     if (positionObjectMode) {
-      const posObj = row[positionField] as
-        | {
-            value: number
-            immutableValue: number
-            altered: boolean
-          }
-        | undefined
-      if (posObj) {
-        posObj.altered = posObj.value !== posObj.immutableValue
+      if (row[positionField]) {
+        row[positionField].altered = row[positionField].value !== row[positionField].immutableValue
       }
     }
   }
 
-  function takeSnapshot(): void {
+  function takeSnapshot() {
     if (!snapshotTaken && !positionObjectMode) {
       data.value.forEach((row) => {
         originalPositions.set(row[dataKey], row[positionField])
@@ -90,42 +41,28 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
     }
   }
 
-  function getGroupValue(row: Record<string, unknown>): string | undefined {
+  function getGroupValue(row) {
     if (!groupColumn) return undefined
     const keys = groupColumn.split('.')
-    let value: unknown = row
+    let value = row
     for (const key of keys) {
-      value = (value as Record<string, unknown>)?.[key]
+      value = value?.[key]
     }
-    return typeof value === 'object' && value !== null
-      ? ((value as Record<string, unknown>)['content'] as string | undefined)
-      : (value as string | undefined)
+    return typeof value === 'object' && value !== null ? value.content : value
   }
 
-  function updateGroupPositions(items: Record<string, unknown>[]): void {
+  function updateGroupPositions(items) {
     items.forEach((row, index) => {
       setPositionValue(row, index)
       if (positionObjectMode && row[positionField]) {
-        const posObj = row[positionField] as {
-          value: number
-          immutableValue: number
-          altered: boolean
-          min: number
-          max: number
-        }
-        posObj.max = items.length - 1
-        posObj.min = 0
+        row[positionField].max = items.length - 1
+        row[positionField].min = 0
         markAltered(row)
       }
     })
   }
 
-  function onRowReorder(event: RowReorderEvent): {
-    from: number
-    to: number
-    reorderedData: Record<string, unknown>[]
-    blocked: boolean
-  } {
+  function onRowReorder(event) {
     takeSnapshot()
     const { dragIndex, dropIndex } = event
     const reordered = [...data.value]
@@ -156,10 +93,7 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
     return { from: dragIndex, to: dropIndex, reorderedData: reordered, blocked: false }
   }
 
-  function changePosition(
-    row: Record<string, unknown>,
-    newPosition: number
-  ): { reorderedData: Record<string, unknown>[]; alteredRows: Record<string, unknown>[] } {
+  function changePosition(row, newPosition) {
     takeSnapshot()
 
     if (restrictReorderAcrossGroups && groupColumn) {
@@ -184,21 +118,14 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
     return { reorderedData: reordered, alteredRows: alteredRows.value }
   }
 
-  function changePositionWithinGroup(
-    row: Record<string, unknown>,
-    newPosition: number
-  ): {
-    reorderedData: Record<string, unknown>[]
-    alteredRows: Record<string, unknown>[]
-    exceeded: boolean
-  } {
+  function changePositionWithinGroup(row, newPosition) {
     const rowGroup = getGroupValue(row)
 
-    const groups = new Map<string | undefined, Record<string, unknown>[]>()
+    const groups = new Map()
     data.value.forEach((r) => {
       const g = getGroupValue(r)
       if (!groups.has(g)) groups.set(g, [])
-      groups.get(g)?.push(r)
+      groups.get(g).push(r)
     })
 
     const groupItems = groups.get(rowGroup)
@@ -227,8 +154,8 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
     groupItems.splice(targetPosition, 0, movedItem)
     updateGroupPositions(groupItems)
 
-    const reassembled: Record<string, unknown>[] = []
-    const seenGroups = new Set<string | undefined>()
+    const reassembled = []
+    const seenGroups = new Set()
     data.value.forEach((r) => {
       const g = getGroupValue(r)
       if (!seenGroups.has(g)) {
@@ -243,10 +170,7 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
 
   const alteredRows = computed(() => {
     if (positionObjectMode) {
-      return data.value.filter((row) => {
-        const posObj = row[positionField] as { altered: boolean } | undefined
-        return posObj?.altered
-      })
+      return data.value.filter((row) => row[positionField]?.altered)
     }
     if (!snapshotTaken) return []
     return data.value.filter((row) => {
@@ -257,52 +181,43 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
 
   const hasChanges = computed(() => alteredRows.value.length > 0)
 
-  function discardChanges(): void {
+  function discardChanges() {
     if (positionObjectMode) {
       data.value.forEach((row) => {
-        const posObj = row[positionField] as
-          | { value: number; immutableValue: number; altered: boolean }
-          | undefined
-        if (posObj && posObj.altered) {
-          posObj.value = posObj.immutableValue
-          posObj.altered = false
+        if (row[positionField] && row[positionField].altered) {
+          row[positionField].value = row[positionField].immutableValue
+          row[positionField].altered = false
         }
       })
 
       if (restrictReorderAcrossGroups && groupColumn) {
-        const groups = new Map<string | undefined, Record<string, unknown>[]>()
+        const groups = new Map()
         data.value.forEach((r) => {
           const g = getGroupValue(r)
           if (!groups.has(g)) groups.set(g, [])
-          groups.get(g)?.push(r)
+          groups.get(g).push(r)
         })
 
-        const reassembled: Record<string, unknown>[] = []
-        const seenGroups = new Set<string | undefined>()
+        const reassembled = []
+        const seenGroups = new Set()
         data.value.forEach((r) => {
           const g = getGroupValue(r)
           if (!seenGroups.has(g)) {
             seenGroups.add(g)
             const items = groups.get(g) || []
-            items.sort((a, b) => {
-              const aVal =
-                (a[positionField] as { immutableValue: number } | undefined)?.immutableValue ?? 0
-              const bVal =
-                (b[positionField] as { immutableValue: number } | undefined)?.immutableValue ?? 0
-              return aVal - bVal
-            })
+            items.sort(
+              (a, b) =>
+                (a[positionField]?.immutableValue ?? 0) - (b[positionField]?.immutableValue ?? 0)
+            )
             reassembled.push(...items)
           }
         })
         data.value = reassembled
       } else {
-        data.value = [...data.value].sort((a, b) => {
-          const aVal =
-            (a[positionField] as { immutableValue: number } | undefined)?.immutableValue ?? 0
-          const bVal =
-            (b[positionField] as { immutableValue: number } | undefined)?.immutableValue ?? 0
-          return aVal - bVal
-        })
+        data.value = [...data.value].sort(
+          (a, b) =>
+            (a[positionField]?.immutableValue ?? 0) - (b[positionField]?.immutableValue ?? 0)
+        )
       }
     } else {
       if (!snapshotTaken) return
@@ -312,22 +227,17 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
           row[positionField] = original
         }
       })
-      data.value = [...data.value].sort((a, b) => {
-        const aVal = a[positionField] as number
-        const bVal = b[positionField] as number
-        return aVal - bVal
-      })
+      data.value = [...data.value].sort((a, b) => a[positionField] - b[positionField])
       originalPositions.clear()
       snapshotTaken = false
     }
   }
 
-  function getPositionLimits(row: Record<string, unknown>): { min: number; max: number } {
+  function getPositionLimits(row) {
     if (positionObjectMode && row[positionField]) {
-      const posObj = row[positionField] as { min: number; max: number }
       return {
-        min: posObj.min ?? 0,
-        max: posObj.max ?? data.value.length - 1
+        min: row[positionField].min ?? 0,
+        max: row[positionField].max ?? data.value.length - 1
       }
     }
 
@@ -343,7 +253,7 @@ export function useRowOrdering(options: RowOrderingOptions): RowOrderingReturn {
     return { min: 1, max: data.value.length }
   }
 
-  function scrollToPosition(position: number, containerSelector: string = '.p-datatable'): void {
+  function scrollToPosition(position, containerSelector = '.p-datatable') {
     setTimeout(() => {
       const table = document.querySelector(containerSelector)
       const rowElement = table?.querySelector(`#row-${position}`)
