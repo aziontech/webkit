@@ -1,3 +1,9 @@
+## [1.21.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.3...@aziontech/webkit@1.21.4) (2026-04-27)
+
+### Bug Fixes
+
+- audit packages ([#532](https://github.com/aziontech/webkit/issues/532)) ([52a692b](https://github.com/aziontech/webkit/commit/52a692b141663b82cd6b6a8e65e13f808c7ec6e8))
+
 ## [1.21.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.2...@aziontech/webkit@1.21.3) (2026-04-24)
 
 ### Bug Fixes
