@@ -81,6 +81,7 @@
     "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
     "./resizable-splitter": "./src/components/resizable-splitter/resizable-splitter.vue",
     "./overline": "./src/components/overline/overline.vue",
+    "./box-grid-selection": "./src/components/box-grid-selection/box-grid-selection.vue",
     "./accordion": "./src/core/primevue/accordion/accordion.vue",
     "./accordion-tab": "./src/core/primevue/accordion-tab/accordion-tab.vue",
     "./avatar": "./src/core/primevue/avatar/avatar.vue",
