@@ -69,9 +69,7 @@
 
   const normalizedCurrentPrice = computed(() => currentPrice.value || '')
 
-  const currentPeriodSuffix = computed(() =>
-    props.currentPeriod === 'annual' ? '/yr' : '/mo'
-  )
+  const currentPeriodSuffix = computed(() => (props.currentPeriod === 'annual' ? '/yr' : '/mo'))
 </script>
 
 <template>

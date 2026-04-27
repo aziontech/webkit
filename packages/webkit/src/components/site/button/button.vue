@@ -70,20 +70,17 @@
 
   const variantClasses = {
     primary: {
-      root:
-        'group h-fit border-1 border-neutral-100 bg-neutral-100 text-neutral-900 duration-300 transition rounded-md hover:bg-orange-500 hover:border-orange-500 hover:text-neutral-900 focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none',
+      root: 'group h-fit border-1 border-neutral-100 bg-neutral-100 text-neutral-900 duration-300 transition rounded-md hover:bg-orange-500 hover:border-orange-500 hover:text-neutral-900 focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none',
       label: 'font-proto-mono whitespace-nowrap',
       icon: '!text-[.75rem] duration-300 transition flex items-center mr-2 text-neutral-900 group-hover:text-neutral-900'
     },
     secondary: {
-      root:
-        'group h-fit bg-neutral-900 text-neutral-100 duration-300 transition rounded-md active:bg-neutral-900 border-1 border-neutral-800 hover:bg-neutral-950 hover:text-orange-500 focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none',
+      root: 'group h-fit bg-neutral-900 text-neutral-100 duration-300 transition rounded-md active:bg-neutral-900 border-1 border-neutral-800 hover:bg-neutral-950 hover:text-orange-500 focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none',
       label: 'font-proto-mono whitespace-nowrap',
       icon: '!text-[.75rem] duration-300 transition flex items-center mr-2 text-neutral-100 group-hover:text-neutral-100'
     },
     link: {
-      root:
-        "group inline-flex items-center gap-3 w-fit cursor-pointer no-underline relative after:duration-150 hover:after:w-full group-hover:after:w-full after:left-0 after:w-0 after:h-[1px] after:transition-all after:content-[''] after:absolute after:-bottom-[.1rem] after:bg-neutral-200 bg-transparent border-none text-neutral-100 !leading-[.75rem] focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none",
+      root: "group inline-flex items-center gap-3 w-fit cursor-pointer no-underline relative after:duration-150 hover:after:w-full group-hover:after:w-full after:left-0 after:w-0 after:h-[1px] after:transition-all after:content-[''] after:absolute after:-bottom-[.1rem] after:bg-neutral-200 bg-transparent border-none text-neutral-100 !leading-[.75rem] focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none",
       label: 'font-proto-mono whitespace-nowrap',
       icon: ''
     }
@@ -102,7 +99,8 @@
   })
 
   const labelClasses = computed(() => {
-    const sizeClasses = props.size === 'small' ? 'text-xs leading-[1rem]' : 'text-sm leading-[1.5rem]'
+    const sizeClasses =
+      props.size === 'small' ? 'text-xs leading-[1rem]' : 'text-sm leading-[1.5rem]'
     return `${variantClasses[props.type].label} ${sizeClasses}`
   })
 
@@ -116,5 +114,4 @@
       props.target === '_blank' ? 'translate-y-0 group-hover:translate-y-[-50%] top-[20%]' : ''
     ]
   })
-
 </script>
