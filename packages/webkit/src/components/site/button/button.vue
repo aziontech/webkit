@@ -1,36 +1,3 @@
-<template>
-  <a
-    v-if="isLink"
-    :href="href"
-    :target="target"
-    :class="rootClasses"
-    @click="emit('click', $event)"
-  >
-    <span :class="labelClasses">{{ label }}</span>
-    <span
-      :class="arrowClasses"
-      aria-hidden="true"
-    />
-  </a>
-
-  <PrimeButton
-    v-else
-    :label="label"
-    :size="size"
-    :icon="icon"
-    :class="rootClasses"
-    :pt="{
-      icon: {
-        class: iconClasses
-      },
-      label: {
-        class: labelClasses
-      }
-    }"
-    @click="emit('click', $event)"
-  />
-</template>
-
 <script setup>
   import PrimeButton from 'primevue/button'
   import { computed } from 'vue'
@@ -38,7 +5,10 @@
   const emit = defineEmits(['click'])
 
   const props = defineProps({
-    label: String,
+    label: {
+      type: String,
+      default: ''
+    },
     size: {
       type: String,
       options: ['small', 'large'],
@@ -49,10 +19,17 @@
       options: ['primary', 'secondary', 'link'],
       default: 'secondary'
     },
-    href: String,
-    icon: String,
+    href: {
+      type: String,
+      default: ''
+    },
+    icon: {
+      type: String,
+      default: ''
+    },
     customClass: {
-      type: String
+      type: String,
+      default: ''
     },
     target: {
       type: String,
@@ -115,3 +92,36 @@
     ]
   })
 </script>
+
+<template>
+  <a
+    v-if="isLink"
+    :href="href"
+    :target="target"
+    :class="rootClasses"
+    @click="emit('click', $event)"
+  >
+    <span :class="labelClasses">{{ label }}</span>
+    <span
+      :class="arrowClasses"
+      aria-hidden="true"
+    />
+  </a>
+
+  <PrimeButton
+    v-else
+    :label="label"
+    :size="size"
+    :icon="icon"
+    :class="rootClasses"
+    :pt="{
+      icon: {
+        class: iconClasses
+      },
+      label: {
+        class: labelClasses
+      }
+    }"
+    @click="emit('click', $event)"
+  />
+</template>

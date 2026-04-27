@@ -1,5 +1,6 @@
 <script setup>
   import { computed } from 'vue'
+
   import Button from '../site/button/button.vue'
 
   defineOptions({ name: 'PricingCard' })
