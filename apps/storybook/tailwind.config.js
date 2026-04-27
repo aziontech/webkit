@@ -72,6 +72,7 @@ export default {
         roboto: ['Roboto'],
         robotomono: ['Roboto Mono'],
         sora: ['Sora'],
+        'proto-mono': ['Proto Mono'],
         protomono: ['Proto Mono'],
         mono: ['Proto Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', 'monospace']
       }
