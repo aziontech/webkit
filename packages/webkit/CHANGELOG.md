@@ -1,3 +1,13 @@
+## [1.24.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.23.0...@aziontech/webkit@1.24.0) (2026-04-27)
+
+### Features
+
+- adjust lint ([3cb9c19](https://github.com/aziontech/webkit/commit/3cb9c191dcfc944f87014ba984a1aa91fa84a168))
+
+### Bug Fixes
+
+- order ([5293fa7](https://github.com/aziontech/webkit/commit/5293fa7366b500bd765ac984f08feadaac226f77))
+
 ## [1.23.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.22.0...@aziontech/webkit@1.23.0) (2026-04-27)
 
 ### Features
