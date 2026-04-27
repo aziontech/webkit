@@ -141,7 +141,10 @@
       </template>
     </div>
 
-    <div class="pb-4 hidden md:flex">
+    <div
+      v-if="!buttonHidden"
+      class="pb-4 hidden md:flex"
+    >
       <Button
         :icon="'pi pi-chevron-right'"
         :label="buttonLabel"
