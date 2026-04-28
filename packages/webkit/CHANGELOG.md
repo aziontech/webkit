@@ -1,3 +1,9 @@
+## [1.25.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.24.0...@aziontech/webkit@1.25.0) (2026-04-28)
+
+### Features
+
+- add orientation prop to PricingCard component and update layout for horizontal display ([a9c6618](https://github.com/aziontech/webkit/commit/a9c66188e266ebc885d8d65f79d66a7a9de98059))
+
 ## [1.24.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.23.0...@aziontech/webkit@1.24.0) (2026-04-27)
 
 ### Features
