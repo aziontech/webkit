@@ -1,11 +1,11 @@
-import PricingCard from '@aziontech/webkit/pricing-card';
+import PricingCard from '@aziontech/webkit/pricing-card'
 
 const defaultFeatures = [
   { icon: 'pi-check', label: 'Unlimited rules engine' },
   { icon: 'pi-check', label: 'Global edge deployment' },
   { icon: 'pi-check', label: 'Advanced observability' },
   { icon: 'pi-check', label: '24/7 support' }
-];
+]
 
 export default {
   title: 'Core/PricingCard',
@@ -69,9 +69,14 @@ export default {
     buttonHidden: {
       control: 'boolean',
       description: 'Hides the CTA area'
+    },
+    orientation: {
+      control: 'select',
+      options: ['vertical', 'horizontal'],
+      description: 'Card layout orientation'
     }
   }
-};
+}
 
 export const Default = {
   args: {
@@ -88,9 +93,10 @@ export const Default = {
     buttonLink: '#',
     buttonTarget: '_self',
     customPrice: '',
-    buttonHidden: false
+    buttonHidden: false,
+    orientation: 'vertical'
   }
-};
+}
 
 export const Popular = {
   args: {
@@ -98,14 +104,14 @@ export const Popular = {
     popular: true,
     title: 'Business'
   }
-};
+}
 
 export const AnnualBilling = {
   args: {
     ...Default.args,
     currentPeriod: 'annual'
   }
-};
+}
 
 export const CustomPrice = {
   args: {
@@ -114,11 +120,26 @@ export const CustomPrice = {
     customPrice: 'Contact us',
     buttonLabel: 'Talk to Sales'
   }
-};
+}
 
 export const WithoutButton = {
   args: {
     ...Default.args,
     buttonHidden: true
   }
-};
+}
+
+export const Horizontal = {
+  args: {
+    ...Default.args,
+    orientation: 'horizontal'
+  }
+}
+
+export const HorizontalWithoutButton = {
+  args: {
+    ...Default.args,
+    buttonHidden: true,
+    orientation: 'horizontal'
+  }
+}

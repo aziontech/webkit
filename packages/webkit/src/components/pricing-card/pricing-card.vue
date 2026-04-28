@@ -61,6 +61,11 @@
     buttonHidden: {
       type: Boolean,
       default: false
+    },
+    orientation: {
+      type: String,
+      default: 'vertical',
+      validator: (value) => ['vertical', 'horizontal'].includes(value)
     }
   })
 
@@ -71,16 +76,21 @@
   const normalizedCurrentPrice = computed(() => currentPrice.value || '')
 
   const currentPeriodSuffix = computed(() => (props.currentPeriod === 'annual' ? '/yr' : '/mo'))
+
+  const isHorizontal = computed(() => props.orientation === 'horizontal')
 </script>
 
 <template>
   <div
     :class="[
-      'p-6 flex flex-col justify-between h-full w-full md:w-[20rem] border-default border text-default bg-surface',
+      'border-default border text-default bg-surface',
+      isHorizontal
+        ? 'p-5 flex flex-col md:flex-row gap-5 h-full w-full'
+        : 'p-6 flex flex-col justify-between h-full w-full md:w-[20rem]',
       !buttonHidden ? 'rounded-xl pb-2' : 'rounded-t-xl lg:rounded-xl'
     ]"
   >
-    <div class="pb-5">
+    <div :class="isHorizontal ? 'md:w-1/3 md:min-w-56' : 'pb-5'">
       <div class="flex gap-4 pb-4 items-center">
         <h3 class="text-heading-lg font-sora font-bold">{{ title }}</h3>
         <span
@@ -93,8 +103,8 @@
       <p class="text-body-sm text-muted">{{ subtitle }}</p>
     </div>
 
-    <div class="h-[13rem]">
-      <ul class="mb-10">
+    <div :class="isHorizontal ? 'flex-1' : 'h-[13rem]'">
+      <ul :class="isHorizontal ? 'mb-0' : 'mb-10'">
         <li
           v-for="(feature, index) in features"
           :key="`${feature?.label || 'feature'}-${index}`"
@@ -111,7 +121,8 @@
 
     <div
       :class="[
-        'h-24 flex mb-2 justify-between flex-wrap font-proto-mono',
+        'flex mb-2 justify-between flex-wrap font-proto-mono',
+        isHorizontal ? 'md:w-44 md:min-w-44 md:self-stretch' : 'h-24',
         !buttonHidden ? 'pb-2' : 'pb-0',
         customPrice ? 'items-end' : 'items-center'
       ]"
