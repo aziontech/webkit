@@ -1,3 +1,29 @@
+<script setup>
+  defineOptions({
+    name: 'BoxGridSelection'
+  })
+
+  defineProps({
+    modelValue: {
+      type: [String, Number],
+      default: null
+    },
+    items: {
+      type: Array,
+      required: true,
+      validator: (items) => {
+        return items.every((item) => 'value' in item && 'label' in item)
+      }
+    }
+  })
+
+  const emit = defineEmits(['update:modelValue'])
+
+  const handleSelect = (value) => {
+    emit('update:modelValue', value)
+  }
+</script>
+
 <template>
   <div
     class="box-grid-selection flex flex-wrap items-center gap-2"
@@ -10,7 +36,7 @@
       :class="
         modelValue === item.value
           ? 'border-2 border-primary bg-primary-mask'
-          : 'border-subtle bg-surface hover:bg-surface-overlay cursor-pointer'
+          : 'border-subtle bg-surface hover:bg-surfaceRaised cursor-pointer'
       "
       role="radio"
       :aria-checked="String(modelValue === item.value)"
@@ -50,32 +76,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-  defineOptions({
-    name: 'BoxGridSelection'
-  })
-
-  defineProps({
-    modelValue: {
-      type: [String, Number],
-      default: null
-    },
-    items: {
-      type: Array,
-      required: true,
-      validator: (items) => {
-        return items.every((item) => 'value' in item && 'label' in item)
-      }
-    }
-  })
-
-  const emit = defineEmits(['update:modelValue'])
-
-  const handleSelect = (value) => {
-    emit('update:modelValue', value)
-  }
-</script>
 
 <style scoped>
   .box-item {
