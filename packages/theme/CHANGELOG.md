@@ -1,3 +1,10 @@
+## [1.11.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.10.0...@aziontech/theme@1.11.0) (2026-04-27)
+
+
+### Features
+
+* update colors value ([2624ffe](https://github.com/aziontech/webkit/commit/2624ffe6a265d82c40e99a9cd26a627371df5927))
+
 ## [1.10.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.9.0...@aziontech/theme@1.10.0) (2026-04-27)
 
 

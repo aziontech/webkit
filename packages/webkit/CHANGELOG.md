@@ -1,3 +1,25 @@
+## [1.25.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.24.0...@aziontech/webkit@1.25.0) (2026-04-28)
+
+### Features
+
+- add orientation prop to PricingCard component and update layout for horizontal display ([a9c6618](https://github.com/aziontech/webkit/commit/a9c66188e266ebc885d8d65f79d66a7a9de98059))
+
+## [1.24.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.23.0...@aziontech/webkit@1.24.0) (2026-04-27)
+
+### Features
+
+- adjust lint ([3cb9c19](https://github.com/aziontech/webkit/commit/3cb9c191dcfc944f87014ba984a1aa91fa84a168))
+
+### Bug Fixes
+
+- order ([5293fa7](https://github.com/aziontech/webkit/commit/5293fa7366b500bd765ac984f08feadaac226f77))
+
+## [1.23.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.22.0...@aziontech/webkit@1.23.0) (2026-04-27)
+
+### Features
+
+- update colors value ([2624ffe](https://github.com/aziontech/webkit/commit/2624ffe6a265d82c40e99a9cd26a627371df5927))
+
 ## [1.22.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.21.4...@aziontech/webkit@1.22.0) (2026-04-27)
 
 ### Features
