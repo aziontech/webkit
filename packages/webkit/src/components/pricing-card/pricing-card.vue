@@ -1,8 +1,6 @@
 <script setup>
   import { computed } from 'vue'
 
-  import Button from '../site/button/button.vue'
-
   defineOptions({ name: 'PricingCard' })
 
   const props = defineProps({
@@ -155,14 +153,7 @@
       v-if="!buttonHidden"
       class="pb-4 hidden md:flex"
     >
-      <Button
-        :icon="'pi pi-chevron-right'"
-        :label="buttonLabel"
-        :type="'primary'"
-        :href="buttonLink"
-        :target="buttonTarget"
-        size="small"
-      />
+      <slot name="button" />
     </div>
   </div>
 </template>
