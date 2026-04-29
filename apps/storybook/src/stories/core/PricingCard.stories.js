@@ -7,6 +7,20 @@ const defaultFeatures = [
   { icon: 'pi-check', label: '24/7 support' }
 ]
 
+const renderWithButtonSlot = (slotContent) => (args) => ({
+  components: { PricingCard },
+  setup() {
+    return { args }
+  },
+  template: `
+    <PricingCard v-bind="args">
+      <template #button>
+        ${slotContent}
+      </template>
+    </PricingCard>
+  `
+})
+
 export default {
   title: 'Core/PricingCard',
   component: PricingCard,
@@ -53,23 +67,6 @@ export default {
       control: 'text',
       description: 'Custom text replacing numeric price'
     },
-    buttonLabel: {
-      control: 'text',
-      description: 'Call-to-action label'
-    },
-    buttonLink: {
-      control: 'text',
-      description: 'CTA destination URL'
-    },
-    buttonTarget: {
-      control: 'select',
-      options: ['_self', '_blank'],
-      description: 'CTA target behavior'
-    },
-    buttonHidden: {
-      control: 'boolean',
-      description: 'Hides the CTA area'
-    },
     orientation: {
       control: 'select',
       options: ['vertical', 'horizontal'],
@@ -89,13 +86,17 @@ export const Default = {
     annualPrice: '$39',
     currentPeriod: 'monthly',
     priceLabel: 'start at',
-    buttonLabel: 'Get Started',
-    buttonLink: '#',
-    buttonTarget: '_self',
     customPrice: '',
-    buttonHidden: false,
     orientation: 'vertical'
-  }
+  },
+  render: renderWithButtonSlot(`
+    <a
+      href="#"
+      class="w-full justify-center inline-flex px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryHover transition-colors"
+    >
+      Get Started
+    </a>
+  `)
 }
 
 export const Popular = {
@@ -103,43 +104,38 @@ export const Popular = {
     ...Default.args,
     popular: true,
     title: 'Business'
-  }
+  },
+  render: Default.render
 }
 
 export const AnnualBilling = {
   args: {
     ...Default.args,
     currentPeriod: 'annual'
-  }
+  },
+  render: Default.render
 }
 
 export const CustomPrice = {
   args: {
     ...Default.args,
     title: 'Enterprise',
-    customPrice: 'Contact us',
-    buttonLabel: 'Talk to Sales'
-  }
-}
-
-export const WithoutButton = {
-  args: {
-    ...Default.args,
-    buttonHidden: true
-  }
+    customPrice: 'Contact us'
+  },
+  render: renderWithButtonSlot(`
+    <a
+      href="#"
+      class="w-full justify-center inline-flex px-4 py-2 rounded-md border border-default text-default hover:bg-surface transition-colors"
+    >
+      Talk to Sales
+    </a>
+  `)
 }
 
 export const Horizontal = {
   args: {
     ...Default.args,
     orientation: 'horizontal'
-  }
-}
-
-export const HorizontalWithoutButton = {
-  args: {
-    ...Default.args,
-    buttonHidden: true,
-    orientation: 'horizontal'
-  }
+  },
+  render: Default.render
 }
