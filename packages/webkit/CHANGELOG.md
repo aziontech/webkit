@@ -1,3 +1,13 @@
+## [1.26.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.25.0...@aziontech/webkit@1.26.0) (2026-04-29)
+
+### Features
+
+- enhance PricingCard component with button slot and update layout for better customization ([e5a667f](https://github.com/aziontech/webkit/commit/e5a667fbd7ededa049961e28f76415a449da13c2))
+
+### Bug Fixes
+
+- update hover effect and add new semantic color utilities ([76b439e](https://github.com/aziontech/webkit/commit/76b439ee0c28fb870a58443eb998861630408414))
+
 ## [1.25.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.24.0...@aziontech/webkit@1.25.0) (2026-04-28)
 
 ### Features
