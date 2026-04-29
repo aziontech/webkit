@@ -62,6 +62,7 @@ export const semanticColors = () => {
       '.bg-backdrop': { 'background-color': 'var(--background-backdrop)' },
       '.bg-primary': { 'background-color': 'var(--background-primary)' },
       '.bg-primaryHover': { 'background-color': 'var(--background-primaryHover)' },
+      '.bg-primary-mask': { 'background-color': 'var(--background-primaryMask)' },
     };
 
     const borderColors = {

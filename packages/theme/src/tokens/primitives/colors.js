@@ -127,6 +127,16 @@ export const primitives = {
     '900': '#7F1D1D',
     '950': '#450A0A',
     },
+  alpha: {
+    neutral: {
+      '25': '#00000040',
+    },
+  brand: {
+      primary: {
+        '65': '#FE601F29',
+      },
+    },
+  },
 };
 
 export default {
