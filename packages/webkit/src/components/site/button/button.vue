@@ -76,8 +76,7 @@
   })
 
   const labelClasses = computed(() => {
-    const sizeClasses =
-      props.size === 'small' ? 'text-xs leading-[1rem]' : 'text-sm leading-[1.5rem]'
+    const sizeClasses = props.size === 'small' ? 'text-xs' : 'text-sm'
     return `${variantClasses[props.type].label} ${sizeClasses}`
   })
 
