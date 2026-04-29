@@ -1,3 +1,18 @@
+## [1.12.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.11.0...@aziontech/theme@1.12.0) (2026-04-29)
+
+
+### Features
+
+* add orientation prop to PricingCard component and update layout for horizontal display ([a9c6618](https://github.com/aziontech/webkit/commit/a9c66188e266ebc885d8d65f79d66a7a9de98059))
+* adjust lint ([3cb9c19](https://github.com/aziontech/webkit/commit/3cb9c191dcfc944f87014ba984a1aa91fa84a168))
+* enhance PricingCard component with button slot and update layout for better customization ([e5a667f](https://github.com/aziontech/webkit/commit/e5a667fbd7ededa049961e28f76415a449da13c2))
+
+
+### Bug Fixes
+
+* order ([5293fa7](https://github.com/aziontech/webkit/commit/5293fa7366b500bd765ac984f08feadaac226f77))
+* update hover effect and add new semantic color utilities ([76b439e](https://github.com/aziontech/webkit/commit/76b439ee0c28fb870a58443eb998861630408414))
+
 ## [1.11.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.10.0...@aziontech/theme@1.11.0) (2026-04-27)
 
 
