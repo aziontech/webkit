@@ -1,3 +1,10 @@
+## [1.13.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.12.0...@aziontech/theme@1.13.0) (2026-04-30)
+
+
+### Features
+
+* add comment ([32162bb](https://github.com/aziontech/webkit/commit/32162bba3d96a33e8d4f348e01406701f51078dd))
+
 ## [1.12.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.11.0...@aziontech/theme@1.12.0) (2026-04-29)
 
 
