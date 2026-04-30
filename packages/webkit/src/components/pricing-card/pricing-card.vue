@@ -8,7 +8,7 @@
       type: Boolean,
       default: false
     },
-    pupularText: {
+    popularText: {
       type: String,
       default: 'Popular'
     },
@@ -73,7 +73,12 @@
 
   const normalizedCurrentPrice = computed(() => currentPrice.value || '')
 
-  const currentPeriodSuffix = computed(() => (props.currentPeriod === 'annual' ? '/yr' : '/mo'))
+  const currentPeriodSuffix = computed(() => {
+    if (currentPrice.value === '$0') {
+      return '/forever'
+    }
+    return props.currentPeriod === 'annual' ? '/yr' : '/mo'
+  })
 
   const isHorizontal = computed(() => props.orientation === 'horizontal')
 </script>
@@ -95,7 +100,7 @@
           v-if="popular"
           class="h-fit text-body-xs flex font-proto-mono justify-center items-center bg-violet-500 text-neutral-900 px-2 py-1 rounded"
         >
-          {{ pupularText }}
+          {{ popularText }}
         </span>
       </div>
       <p class="text-body-sm text-muted">{{ subtitle }}</p>
@@ -110,7 +115,7 @@
         >
           <span
             v-if="feature?.icon"
-            :class="['pi', feature.icon, 'text-primary']"
+            :class="[feature.icon, 'text-primary']"
           />
           <p class="font-sora text-body-sm">{{ feature?.label }}</p>
         </li>
@@ -135,7 +140,7 @@
       <template v-if="!customPrice">
         <div class="flex items-end text-body-sm font-proto-mono">
           <span v-if="normalizedCurrentPrice.startsWith('$')">$</span>
-          <h4 class="text-big-number-md leading-[3.5rem] tracking-tighter font-proto-mono">
+          <h4 class="text-big-number-lg leading-none tracking-tighter font-proto-mono">
             {{ normalizedCurrentPrice.replace('$', '') }}
           </h4>
           <span class="font-proto-mono">{{ currentPeriodSuffix }}</span>
@@ -143,7 +148,7 @@
       </template>
 
       <template v-else>
-        <span class="text-heading-md w-full flex items-end text-left font-sora">
+        <span class="text-heading-md w-full flex items-end text-left font-proto-mono">
           {{ customPrice }}
         </span>
       </template>
