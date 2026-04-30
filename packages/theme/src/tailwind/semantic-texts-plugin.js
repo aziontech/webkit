@@ -1,21 +1,4 @@
-/**
- * Tailwind plugin to expose semantic text styles (typography).
- *
- * This adds typography components like display-1, body-1, etc.
- *
- * Usage in tailwind.config.js:
- * ```javascript
- * import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js';
- * import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin';
- *
- * export default {
- *   theme,
- *   plugins: [semanticTexts()],
- * };
- * ```
- */
-
-// Lazy-require to avoid hard dependency for consumers
+// Tailwind plugin that registers semantic typography utility classes.
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
@@ -24,14 +7,9 @@ const plugin = (() => {
   }
 })();
 
-/**
- * Generate semantic text style components
- * @returns {import('tailwindcss/plugin').Plugin}
- */
 export const semanticTexts = () => {
   return plugin(({ addComponents, theme }) => {
     const deprecatedTexts = {
-      // Display styles - Desktop
       '.display-1': {
         fontSize: '3rem',
         lineHeight: '1.10',
@@ -63,7 +41,6 @@ export const semanticTexts = () => {
         letterSpacing: '-.05rem',
       },
 
-      // Display styles - Mobile
       '.display-1-mobile': {
         fontSize: '2.5rem',
         lineHeight: '1.15',
@@ -95,7 +72,6 @@ export const semanticTexts = () => {
         letterSpacing: '-.05rem',
       },
 
-      // Body styles
       '.body-1': {
         fontSize: '1rem',
         lineHeight: '1.4rem',
@@ -103,7 +79,7 @@ export const semanticTexts = () => {
         letterSpacing: '-.05rem',
       },
       '.body-2': {
-        fontSize: '.875rem',
+        fontSize: '0.875rem',
         lineHeight: '1.4rem',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
@@ -112,63 +88,71 @@ export const semanticTexts = () => {
 
     const texts = {
       '.text-big-number-md': {
-        fontSize: '4.5rem', // 7xl
+        fontSize: '2.25rem',
         lineHeight: '1.20',
       },
-        '.text-heading-2xl': {
-        fontSize: '3.75rem', // text-6xl
+      '.text-big-number-sm': {
+        fontSize: '1.25rem',
+        lineHeight: '1.20',
+      },
+      '.text-big-number-lg': {
+        fontSize: '3.75rem',
+        lineHeight: '1.20',
+      },
+      '.text-heading-2xl': {
+        fontSize: '3.75rem',
         lineHeight: '1.2',
       },
       '.text-heading-xl': {
-        fontSize: '2.25rem', // text-4xl
+        fontSize: '2.25rem',
         lineHeight: '1.2',
       },
       '.text-heading-lg': {
-        fontSize: '1.875rem', // text-3xl
+        fontSize: '1.875rem',
         lineHeight: '1.2',
       },
       '.text-heading-md': {
-        fontSize: '1.5rem', // text-2xl
+        fontSize: '1.5rem',
         lineHeight: '1.2',
       },
       '.text-heading-sm': {
-        fontSize: '1.125rem', // text-lg
+        fontSize: '1.125rem',
         lineHeight: '1.2',
       },
-        '.text-body-lg': {
-        fontSize: '18px', // text-lg
+      '.text-body-lg': {
+        fontSize: '1.125rem',
         lineHeight: '1.5',
       },
       '.text-body-md': {
-        fontSize: '16px', // text-base
+        fontSize: '1rem',
         lineHeight: '1.5',
       },
       '.text-body-sm': {
-        fontSize: '14px', // text-sm
+        fontSize: '0.875rem',
         lineHeight: '1.5',
       },
       '.text-body-xs': {
-        fontSize: '12px', // text-xs
+        fontSize: '0.75rem',
         lineHeight: '1.5',
       },
       '.text-body-xss': {
-        fontSize: '10px',
+        fontSize: '0.625rem',
         lineHeight: '1.5',
       },
       '.text-overline-md': {
-        fontSize: '14px', // text-sm
+        fontSize: '0.875rem',
         lineHeight: '1.4',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
       },
       '.text-overline-sm': {
-        fontSize: '12px', // text-xs
+        fontSize: '0.75rem',
         lineHeight: '1.4',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
       },
       '.text-overline-xs': {
-        fontSize: '10px',
+        fontSize: '0.625rem',
         lineHeight: '1.4',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
@@ -178,52 +162,68 @@ export const semanticTexts = () => {
     const responsiveTexts = {
       [`@media (max-width: ${theme('screens.md', '768px')})`]: {
         '.text-big-number-md': {
-          fontSize: '3rem',
+          fontSize: '1.5rem',
+          lineHeight: '1.20',
+        },
+        '.text-big-number-sm': {
+          fontSize: '1.25rem',
+          lineHeight: '1.20',
+        },
+        '.text-big-number-lg': {
+          fontSize: '2.25rem',
           lineHeight: '1.20',
         },
         '.text-heading-2xl': {
-          fontSize: '3rem', // text-5xl
+          fontSize: '3rem',
         },
         '.text-heading-xl': {
-          fontSize: '1.875rem', // text-3xl
+          fontSize: '1.875rem',
         },
         '.text-heading-lg': {
-          fontSize: '1.125rem', // text-lg
+          fontSize: '1.125rem',
         },
         '.text-heading-md': {
-          fontSize: '1.25rem', // text-xl
+          fontSize: '1.25rem',
         },
         '.text-heading-sm': {
-          fontSize: '1rem', // text-base
+          fontSize: '1rem',
         },
         '.text-body-lg': {
-          fontSize: '16px', // text-base
+          fontSize: '1rem',
         },
         '.text-body-md': {
-          fontSize: '16px', // mantém
+          fontSize: '1rem',
         },
         '.text-body-sm': {
-          fontSize: '14px',
+          fontSize: '0.875rem',
         },
         '.text-body-xs': {
-          fontSize: '12px',
+          fontSize: '0.75rem',
         },
         '.text-body-xss': {
-          fontSize: '10px',
+          fontSize: '0.625rem',
         },
         '.text-overline-md': {
-          fontSize: '14px',
+          fontSize: '0.875rem',
         },
         '.text-overline-sm': {
-          fontSize: '12px',
+          fontSize: '0.75rem',
         },
         '.text-overline-xs': {
-          fontSize: '10px',
+          fontSize: '0.625rem',
         },
       },
       [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
         '.text-big-number-md': {
-          fontSize: '3rem',
+          fontSize: '1.25rem',
+          lineHeight: '1.20',
+        },
+        '.text-big-number-sm': {
+          fontSize: '1rem',
+          lineHeight: '1.20',
+        },
+        '.text-big-number-lg': {
+          fontSize: '1.5rem',
           lineHeight: '1.20',
         },
         '.text-heading-2xl': {
@@ -242,28 +242,28 @@ export const semanticTexts = () => {
           fontSize: '0.875rem',
         },
         '.text-body-lg': {
-          fontSize: '16px',
+          fontSize: '1rem',
         },
         '.text-body-md': {
-          fontSize: '16px',
+          fontSize: '1rem',
         },
         '.text-body-sm': {
-          fontSize: '14px',
+          fontSize: '0.875rem',
         },
         '.text-body-xs': {
-          fontSize: '12px',
+          fontSize: '0.75rem',
         },
         '.text-body-xss': {
-          fontSize: '10px',
+          fontSize: '0.625rem',
         },
         '.text-overline-md': {
-          fontSize: '12px',
+          fontSize: '0.75rem',
         },
         '.text-overline-sm': {
-          fontSize: '12px',
+          fontSize: '0.75rem',
         },
         '.text-overline-xs': {
-          fontSize: '10px',
+          fontSize: '0.625rem',
         },
       },
 
