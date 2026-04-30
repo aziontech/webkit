@@ -112,10 +112,18 @@ export const semanticTexts = () => {
 
     const texts = {
       '.text-big-number-md': {
-        fontSize: '4.5rem', // 7xl
+        fontSize: '2.25rem', // 7xl
         lineHeight: '1.20',
       },
-        '.text-heading-2xl': {
+      '.text-big-number-sm': {
+        fontSize: '1.25rem', // 7xl
+        lineHeight: '1.20',
+      },
+      '.text-big-number-lg': {
+        fontSize: '3.75rem', // 7xl
+        lineHeight: '1.20',
+      },
+      '.text-heading-2xl': {
         fontSize: '3.75rem', // text-6xl
         lineHeight: '1.2',
       },
@@ -178,7 +186,15 @@ export const semanticTexts = () => {
     const responsiveTexts = {
       [`@media (max-width: ${theme('screens.md', '768px')})`]: {
         '.text-big-number-md': {
-          fontSize: '3rem',
+          fontSize: '1.5rem',
+          lineHeight: '1.20',
+        },
+        '.text-big-number-sm': {
+          fontSize: '1.25rem', // 7xl
+          lineHeight: '1.20',
+        },
+        '.text-big-number-lg': {
+          fontSize: '2.25rem', // 7xl
           lineHeight: '1.20',
         },
         '.text-heading-2xl': {
@@ -223,7 +239,15 @@ export const semanticTexts = () => {
       },
       [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
         '.text-big-number-md': {
-          fontSize: '3rem',
+          fontSize: '1.25rem',
+          lineHeight: '1.20',
+        },
+        '.text-big-number-sm': {
+          fontSize: '1rem', // 7xl
+          lineHeight: '1.20',
+        },
+        '.text-big-number-lg': {
+          fontSize: '1.5rem', // 7xl
           lineHeight: '1.20',
         },
         '.text-heading-2xl': {
