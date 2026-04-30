@@ -39,10 +39,12 @@ jobs:
         run: pnpm audit --audit-level=high
         working-directory: packages/webkit
 
-      - name: Run Gitleaks (secret detection)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run TruffleHog (secret detection)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          extra_args: --only-verified
 
       - name: Check unused dependencies
         run: npx depcheck --ignores="@types/*,eslint-*,semantic-release"
