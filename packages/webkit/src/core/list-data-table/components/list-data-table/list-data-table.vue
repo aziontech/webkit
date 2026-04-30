@@ -155,7 +155,7 @@
     },
     scrollHeight: {
       type: String,
-      default: undefined
+      default: ''
     },
     showLastModifiedColumn: {
       type: Boolean,
@@ -415,7 +415,7 @@
       @columnResizeEnd="applyDirtyColumnResizeFix"
       :frozenValue="frozenValue"
       :scrollable="scrollable"
-      :scrollHeight="scrollable ? scrollHeight : undefined"
+      :scrollHeight="scrollable ? scrollHeight : ''"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown JumpToPageInput"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
