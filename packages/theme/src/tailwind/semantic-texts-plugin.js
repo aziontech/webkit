@@ -1,21 +1,3 @@
-/**
- * Tailwind plugin to expose semantic text styles (typography).
- *
- * This adds typography components like display-1, body-1, etc.
- *
- * Usage in tailwind.config.js:
- * ```javascript
- * import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js';
- * import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin';
- *
- * export default {
- *   theme,
- *   plugins: [semanticTexts()],
- * };
- * ```
- */
-
-// Lazy-require to avoid hard dependency for consumers
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
@@ -24,16 +6,16 @@ const plugin = (() => {
   }
 })();
 
-/**
- * Generate semantic text style components
- * @returns {import('tailwindcss/plugin').Plugin}
- */
 export const semanticTexts = () => {
   return plugin(({ addComponents, theme }) => {
+    const getFontSize = (token, fallback) => {
+      const value = theme(`fontSize.${token}`, fallback);
+      return Array.isArray(value) ? value[0] : value;
+    };
+
     const deprecatedTexts = {
-      // Display styles - Desktop
       '.display-1': {
-        fontSize: '3rem',
+        fontSize: getFontSize('5xl', '3rem'),
         lineHeight: '1.10',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
@@ -51,19 +33,18 @@ export const semanticTexts = () => {
         letterSpacing: '-.05rem',
       },
       '.display-4': {
-        fontSize: '1.5rem',
+        fontSize: getFontSize('2xl', '1.5rem'),
         lineHeight: '1.3',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
       },
       '.display-5': {
-        fontSize: '1.25rem',
+        fontSize: getFontSize('xl', '1.25rem'),
         lineHeight: '1.4',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
       },
 
-      // Display styles - Mobile
       '.display-1-mobile': {
         fontSize: '2.5rem',
         lineHeight: '1.15',
@@ -71,7 +52,7 @@ export const semanticTexts = () => {
         letterSpacing: '-.05rem',
       },
       '.display-2-mobile': {
-        fontSize: '1.875rem',
+        fontSize: getFontSize('3xl', '1.875rem'),
         lineHeight: '1.20',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
@@ -83,27 +64,26 @@ export const semanticTexts = () => {
         letterSpacing: '-.05rem',
       },
       '.display-4-mobile': {
-        fontSize: '1.25rem',
+        fontSize: getFontSize('xl', '1.25rem'),
         lineHeight: '1.35',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
       },
       '.display-5-mobile': {
-        fontSize: '1.125rem',
+        fontSize: getFontSize('lg', '1.125rem'),
         lineHeight: '1.35',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
       },
 
-      // Body styles
       '.body-1': {
-        fontSize: '1rem',
+        fontSize: getFontSize('base', '1rem'),
         lineHeight: '1.4rem',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
       },
       '.body-2': {
-        fontSize: '.875rem',
+        fontSize: getFontSize('sm', '.875rem'),
         lineHeight: '1.4rem',
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
@@ -112,51 +92,51 @@ export const semanticTexts = () => {
 
     const texts = {
       '.text-big-number-md': {
-        fontSize: '2.25rem', // 7xl
+        fontSize: getFontSize('4xl', '2.25rem'),
         lineHeight: '1.20',
       },
       '.text-big-number-sm': {
-        fontSize: '1.25rem', // 7xl
+        fontSize: getFontSize('xl', '1.25rem'),
         lineHeight: '1.20',
       },
       '.text-big-number-lg': {
-        fontSize: '3.75rem', // 7xl
+        fontSize: getFontSize('6xl', '3.75rem'),
         lineHeight: '1.20',
       },
       '.text-heading-2xl': {
-        fontSize: '3.75rem', // text-6xl
+        fontSize: getFontSize('6xl', '3.75rem'),
         lineHeight: '1.2',
       },
       '.text-heading-xl': {
-        fontSize: '2.25rem', // text-4xl
+        fontSize: getFontSize('4xl', '2.25rem'),
         lineHeight: '1.2',
       },
       '.text-heading-lg': {
-        fontSize: '1.875rem', // text-3xl
+        fontSize: getFontSize('3xl', '1.875rem'),
         lineHeight: '1.2',
       },
       '.text-heading-md': {
-        fontSize: '1.5rem', // text-2xl
+        fontSize: getFontSize('2xl', '1.5rem'),
         lineHeight: '1.2',
       },
       '.text-heading-sm': {
-        fontSize: '1.125rem', // text-lg
+        fontSize: getFontSize('lg', '1.125rem'),
         lineHeight: '1.2',
       },
-        '.text-body-lg': {
-        fontSize: '18px', // text-lg
+      '.text-body-lg': {
+        fontSize: getFontSize('lg', '18px'),
         lineHeight: '1.5',
       },
       '.text-body-md': {
-        fontSize: '16px', // text-base
+        fontSize: getFontSize('base', '16px'),
         lineHeight: '1.5',
       },
       '.text-body-sm': {
-        fontSize: '14px', // text-sm
+        fontSize: getFontSize('sm', '14px'),
         lineHeight: '1.5',
       },
       '.text-body-xs': {
-        fontSize: '12px', // text-xs
+        fontSize: getFontSize('xs', '12px'),
         lineHeight: '1.5',
       },
       '.text-body-xss': {
@@ -164,13 +144,13 @@ export const semanticTexts = () => {
         lineHeight: '1.5',
       },
       '.text-overline-md': {
-        fontSize: '14px', // text-sm
+        fontSize: getFontSize('sm', '14px'),
         lineHeight: '1.4',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
       },
       '.text-overline-sm': {
-        fontSize: '12px', // text-xs
+        fontSize: getFontSize('xs', '12px'),
         lineHeight: '1.4',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
@@ -186,52 +166,52 @@ export const semanticTexts = () => {
     const responsiveTexts = {
       [`@media (max-width: ${theme('screens.md', '768px')})`]: {
         '.text-big-number-md': {
-          fontSize: '1.5rem',
+          fontSize: getFontSize('2xl', '1.5rem'),
           lineHeight: '1.20',
         },
         '.text-big-number-sm': {
-          fontSize: '1.25rem', // 7xl
+          fontSize: getFontSize('xl', '1.25rem'),
           lineHeight: '1.20',
         },
         '.text-big-number-lg': {
-          fontSize: '2.25rem', // 7xl
+          fontSize: getFontSize('4xl', '2.25rem'),
           lineHeight: '1.20',
         },
         '.text-heading-2xl': {
-          fontSize: '3rem', // text-5xl
+          fontSize: getFontSize('5xl', '3rem'),
         },
         '.text-heading-xl': {
-          fontSize: '1.875rem', // text-3xl
+          fontSize: getFontSize('3xl', '1.875rem'),
         },
         '.text-heading-lg': {
-          fontSize: '1.125rem', // text-lg
+          fontSize: getFontSize('lg', '1.125rem'),
         },
         '.text-heading-md': {
-          fontSize: '1.25rem', // text-xl
+          fontSize: getFontSize('xl', '1.25rem'),
         },
         '.text-heading-sm': {
-          fontSize: '1rem', // text-base
+          fontSize: getFontSize('base', '1rem'),
         },
         '.text-body-lg': {
-          fontSize: '16px', // text-base
+          fontSize: getFontSize('base', '16px'),
         },
         '.text-body-md': {
-          fontSize: '16px', // mantém
+          fontSize: getFontSize('base', '16px'),
         },
         '.text-body-sm': {
-          fontSize: '14px',
+          fontSize: getFontSize('sm', '14px'),
         },
         '.text-body-xs': {
-          fontSize: '12px',
+          fontSize: getFontSize('xs', '12px'),
         },
         '.text-body-xss': {
           fontSize: '10px',
         },
         '.text-overline-md': {
-          fontSize: '14px',
+          fontSize: getFontSize('sm', '14px'),
         },
         '.text-overline-sm': {
-          fontSize: '12px',
+          fontSize: getFontSize('xs', '12px'),
         },
         '.text-overline-xs': {
           fontSize: '10px',
@@ -239,52 +219,52 @@ export const semanticTexts = () => {
       },
       [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
         '.text-big-number-md': {
-          fontSize: '1.25rem',
+          fontSize: getFontSize('xl', '1.25rem'),
           lineHeight: '1.20',
         },
         '.text-big-number-sm': {
-          fontSize: '1rem', // 7xl
+          fontSize: getFontSize('base', '1rem'),
           lineHeight: '1.20',
         },
         '.text-big-number-lg': {
-          fontSize: '1.5rem', // 7xl
+          fontSize: getFontSize('2xl', '1.5rem'),
           lineHeight: '1.20',
         },
         '.text-heading-2xl': {
-          fontSize: '1.875rem',
+          fontSize: getFontSize('3xl', '1.875rem'),
         },
         '.text-heading-xl': {
-          fontSize: '1.25rem',
+          fontSize: getFontSize('xl', '1.25rem'),
         },
         '.text-heading-lg': {
-          fontSize: '1.125rem',
+          fontSize: getFontSize('lg', '1.125rem'),
         },
         '.text-heading-md': {
-          fontSize: '1rem',
+          fontSize: getFontSize('base', '1rem'),
         },
         '.text-heading-sm': {
-          fontSize: '0.875rem',
+          fontSize: getFontSize('sm', '0.875rem'),
         },
         '.text-body-lg': {
-          fontSize: '16px',
+          fontSize: getFontSize('base', '16px'),
         },
         '.text-body-md': {
-          fontSize: '16px',
+          fontSize: getFontSize('base', '16px'),
         },
         '.text-body-sm': {
-          fontSize: '14px',
+          fontSize: getFontSize('sm', '14px'),
         },
         '.text-body-xs': {
-          fontSize: '12px',
+          fontSize: getFontSize('xs', '12px'),
         },
         '.text-body-xss': {
           fontSize: '10px',
         },
         '.text-overline-md': {
-          fontSize: '12px',
+          fontSize: getFontSize('xs', '12px'),
         },
         '.text-overline-sm': {
-          fontSize: '12px',
+          fontSize: getFontSize('xs', '12px'),
         },
         '.text-overline-xs': {
           fontSize: '10px',
