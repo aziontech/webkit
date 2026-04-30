@@ -1,3 +1,9 @@
+## [1.27.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.27.0...@aziontech/webkit@1.27.1) (2026-04-30)
+
+### Bug Fixes
+
+- corrige popularText e ajustes de tipografia/sufixo em pricing-card e toggle ([#545](https://github.com/aziontech/webkit/issues/545)) ([c5c8b66](https://github.com/aziontech/webkit/commit/c5c8b66d455d62a0502038a0d30d60c4e073609d))
+
 ## [1.27.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.26.0...@aziontech/webkit@1.27.0) (2026-04-30)
 
 ### Features
