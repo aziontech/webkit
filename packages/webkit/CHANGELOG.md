@@ -1,3 +1,13 @@
+## [1.27.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.26.0...@aziontech/webkit@1.27.0) (2026-04-30)
+
+### Features
+
+- add comment ([32162bb](https://github.com/aziontech/webkit/commit/32162bba3d96a33e8d4f348e01406701f51078dd))
+
+### Bug Fixes
+
+- dep minimatch 9.0.0 added to overriders ([#544](https://github.com/aziontech/webkit/issues/544)) ([d672732](https://github.com/aziontech/webkit/commit/d672732ae945fdce8fcf6c6b6a85878f02532c48))
+
 ## [1.26.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.25.0...@aziontech/webkit@1.26.0) (2026-04-29)
 
 ### Features
