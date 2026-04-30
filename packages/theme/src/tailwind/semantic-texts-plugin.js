@@ -1,3 +1,4 @@
+// Tailwind plugin that registers semantic typography utility classes.
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
