@@ -73,7 +73,12 @@
 
   const normalizedCurrentPrice = computed(() => currentPrice.value || '')
 
-  const currentPeriodSuffix = computed(() => (props.currentPeriod === 'annual' ? '/yr' : '/mo'))
+  const currentPeriodSuffix = computed(() => {
+    if (currentPrice.value === '$0') {
+      return '/forever'
+    }
+    return props.currentPeriod === 'annual' ? '/yr' : '/mo'
+  })
 
   const isHorizontal = computed(() => props.orientation === 'horizontal')
 </script>
@@ -110,7 +115,7 @@
         >
           <span
             v-if="feature?.icon"
-            :class="['pi', feature.icon, 'text-primary']"
+            :class="[feature.icon, 'text-primary']"
           />
           <p class="font-sora text-body-sm">{{ feature?.label }}</p>
         </li>
@@ -135,7 +140,7 @@
       <template v-if="!customPrice">
         <div class="flex items-end text-body-sm font-proto-mono">
           <span v-if="normalizedCurrentPrice.startsWith('$')">$</span>
-          <h4 class="text-big-number-md leading-[3.5rem] tracking-tighter font-proto-mono">
+          <h4 class="text-big-number-md tracking-tighter font-proto-mono">
             {{ normalizedCurrentPrice.replace('$', '') }}
           </h4>
           <span class="font-proto-mono">{{ currentPeriodSuffix }}</span>
