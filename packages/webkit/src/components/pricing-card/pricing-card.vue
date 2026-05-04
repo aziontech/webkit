@@ -73,7 +73,13 @@
 
   const normalizedCurrentPrice = computed(() => currentPrice.value || '')
 
-  const currentPeriodSuffix = computed(() => (props.currentPeriod === 'annual' ? '/mo' : '/mo'))
+  const currentPeriodSuffix = computed(() => {
+    if (normalizedCurrentPrice.value === '$0') {
+      return '/forever'
+    }
+
+    return '/mo'
+  })
 
   const isHorizontal = computed(() => props.orientation === 'horizontal')
 </script>
