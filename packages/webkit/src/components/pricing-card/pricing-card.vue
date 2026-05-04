@@ -75,7 +75,7 @@
 
   const currentPeriodSuffix = computed(() => {
     if (normalizedCurrentPrice.value === '$0') {
-      return '/forever'
+      return 'Forever'
     }
 
     return '/mo'
