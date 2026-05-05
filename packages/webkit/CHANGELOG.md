@@ -1,3 +1,9 @@
+## [1.28.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.28.0...@aziontech/webkit@1.28.1) (2026-05-05)
+
+### Bug Fixes
+
+- update suffix for zero price and adjust button visibility ([1f104bb](https://github.com/aziontech/webkit/commit/1f104bb4e32a9265a82a7687dc0df99d72db5729))
+
 ## [1.28.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.27.1...@aziontech/webkit@1.28.0) (2026-05-04)
 
 ### Features
