@@ -33,47 +33,61 @@ export const semanticSpacing = () => {
     const spacing = {
       // Container
       '.max-container-width': {
-        maxWidth: '1280px',
+        maxWidth: theme('screens.lg'),
       },
       '.px-container': {
-        paddingLeft: theme('spacing.0'),
-        paddingRight: theme('spacing.0'),
+        paddingLeft: theme('spacing.4'),
+        paddingRight: theme('spacing.4'),
       },
       '.py-container': {
-        paddingTop: theme('spacing.48'),
-        paddingBottom: theme('spacing.48'),
+        paddingTop: theme('spacing.16'),
+        paddingBottom: theme('spacing.16'),
       },
 
-      // Padding elements
+      // Spacers (mobile-first)
+      '.spacer-xl': {
+        height: theme('spacing.60'),
+      },
+      '.spacer-lg': {
+        height: theme('spacing.16'),
+      },
+      '.spacer-md': {
+        height: theme('spacing.12'),
+      },
+      '.spacer-sm': {
+        height: theme('spacing.8'),
+      },
+
+      // Padding elements (mobile-first)
       '.p-elements-confortable': {
-        padding: theme('spacing.24'),
+        padding: theme('spacing.8'),
       },
       '.p-elements-base': {
-        padding: theme('spacing.12'),
-      },
-      '.p-elements-compact': {
         padding: theme('spacing.6'),
       },
+      '.p-elements-compact': {
+        padding: theme('spacing.4'),
+      },
 
-      // Gap elements
+      // Gap elements (mobile-first)
       '.gap-elements-confortable': {
-        gap: theme('spacing.24'),
+        gap: theme('spacing.8'),
       },
       '.gap-elements-base': {
-        gap: theme('spacing.12'),
-      },
-      '.gap-elements-compact': {
         gap: theme('spacing.6'),
       },
+      '.gap-elements-compact': {
+        gap: theme('spacing.4'),
+      },
 
-      // Gap sections
+      // Gap sections (mobile-first)
       '.gap-sections': {
-        gap: theme('spacing.48'),
+        gap: theme('spacing.20'),
       },
     };
 
     const responsiveSpacing = {
-      [`@media (max-width: ${theme('screens.md', '768px')})`]: {
+      [`@media (min-width: ${theme('screens.md', '768px')})`]: {
         '.max-container-width': {
           maxWidth: '1024px',
         },
@@ -84,6 +98,15 @@ export const semanticSpacing = () => {
         '.py-container': {
           paddingTop: theme('spacing.32'),
           paddingBottom: theme('spacing.32'),
+        },
+        '.spacer-lg': {
+          height: theme('spacing.40'),
+        },
+        '.spacer-md': {
+          height: theme('spacing.32'),
+        },
+        '.spacer-sm': {
+          height: theme('spacing.20'),
         },
         '.p-elements-confortable': {
           padding: theme('spacing.16'),
@@ -107,38 +130,38 @@ export const semanticSpacing = () => {
           gap: theme('spacing.40'),
         },
       },
-      [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
+      [`@media (min-width: ${theme('screens.lg', '1024px')})`]: {
         '.max-container-width': {
-          maxWidth: theme('screens.lg'),
+          maxWidth: '1280px',
         },
         '.px-container': {
-          paddingLeft: theme('spacing.4'),
-          paddingRight: theme('spacing.4'),
+          paddingLeft: theme('spacing.0'),
+          paddingRight: theme('spacing.0'),
         },
         '.py-container': {
-          paddingTop: theme('spacing.16'),
-          paddingBottom: theme('spacing.16'),
+          paddingTop: theme('spacing.48'),
+          paddingBottom: theme('spacing.48'),
         },
         '.p-elements-confortable': {
-          padding: theme('spacing.8'),
+          padding: theme('spacing.24'),
         },
         '.p-elements-base': {
-          padding: theme('spacing.6'),
+          padding: theme('spacing.12'),
         },
         '.p-elements-compact': {
-          padding: theme('spacing.4'),
+          padding: theme('spacing.6'),
         },
         '.gap-elements-confortable': {
-          gap: theme('spacing.8'),
+          gap: theme('spacing.24'),
         },
         '.gap-elements-base': {
-          gap: theme('spacing.6'),
+          gap: theme('spacing.12'),
         },
         '.gap-elements-compact': {
-          gap: theme('spacing.4'),
+          gap: theme('spacing.6'),
         },
         '.gap-sections': {
-          gap: theme('spacing.20'),
+          gap: theme('spacing.48'),
         },
       },
     };
