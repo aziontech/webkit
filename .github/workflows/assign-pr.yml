@@ -13,5 +13,5 @@ jobs:
   assign-author:
     runs-on: ubuntu-latest
     steps:
-      - name: Assign author to PR
+      - name: Auto Author Assign
         uses: technote-space/assign-author@v1
