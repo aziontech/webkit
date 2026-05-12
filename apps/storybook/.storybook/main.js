@@ -1,4 +1,4 @@
-import vue from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue'
 
 /** @type {import('@storybook/vue3-vite').StorybookConfig} */
 const config = {
@@ -18,12 +18,12 @@ const config = {
     defaultName: 'Documentation'
   },
   core: {
-    disableTelemetry: true,
+    disableTelemetry: true
   },
   refs: {
     'marketing-components': {
       title: 'Marketing Components',
-      url: 'https://s07fylnjym.map.azionedge.net/',
+      url: 'https://sxggon4lswe.map.azionedge.net/',
       expanded: true
     },
     'platform-components': {
@@ -34,20 +34,15 @@ const config = {
   },
   viteFinal: async (config) => {
     // Add Vue plugin to handle .vue SFC files from @aziontech/webkit
-    config.plugins = config.plugins || [];
-    config.plugins.push(vue());
+    config.plugins = config.plugins || []
+    config.plugins.push(vue())
 
     // Enable dependency pre-bundling for faster rebuilds
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: [
-        'vue',
-        'primevue/config',
-        'primevue/tooltip',
-        'vee-validate'
-      ],
+      include: ['vue', 'primevue/config', 'primevue/tooltip', 'vee-validate'],
       force: false
-    };
+    }
 
     // Improve build performance
     config.build = {
@@ -55,14 +50,13 @@ const config = {
       sourcemap: false,
       minify: false,
       chunkSizeWarningLimit: 1000
-    };
+    }
 
     // Cache filesystem operations
-    config.cacheDir = 'node_modules/.vite';
+    config.cacheDir = 'node_modules/.vite'
 
-    return config;
+    return config
   }
-};
+}
 
-export default config;
-
+export default config
