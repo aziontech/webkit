@@ -1,9 +1,8 @@
 import typography from '@tailwindcss/typography'
-import { theme } from '@aziontech/theme/tailwind/tailwind-theme'
-import semanticColors from '@aziontech/theme/tailwind/semantic-colors-plugin'
-import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin'
-import semanticSpacing from '@aziontech/theme/tailwind/semantic-spacing-plugin'
-import semanticAnimations from '@aziontech/theme/tailwind/semantic-animations-plugin'
+import { theme } from '../../packages/theme/src/tokens/theme.js'
+import semanticTexts from '../../packages/theme/src/tokens/semantic/texts.js'
+import { spacingElements as semanticSpacing } from '../../packages/theme/src/tokens/semantic/spacings.js'
+import { animations as semanticAnimations } from '../../packages/theme/src/tokens/semantic/animations.js'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -80,7 +79,6 @@ export default {
   },
   plugins: [
     typography,
-    semanticColors(),
     semanticTexts(),
     semanticSpacing(),
     semanticAnimations(),
