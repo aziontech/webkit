@@ -74,10 +74,11 @@
   const normalizedCurrentPrice = computed(() => currentPrice.value || '')
 
   const currentPeriodSuffix = computed(() => {
-    if (currentPrice.value === '$0') {
+    if (normalizedCurrentPrice.value === '$0') {
       return '/forever'
     }
-    return props.currentPeriod === 'annual' ? '/yr' : '/mo'
+
+    return '/mo'
   })
 
   const isHorizontal = computed(() => props.orientation === 'horizontal')
@@ -156,7 +157,7 @@
 
     <div
       v-if="!buttonHidden"
-      class="pb-4 hidden md:flex"
+      class="pb-4 flex"
     >
       <slot name="button" />
     </div>
