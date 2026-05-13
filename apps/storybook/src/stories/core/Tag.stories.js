@@ -22,10 +22,6 @@ export default {
       control: 'text',
       description: 'Custom icon class name'
     },
-    showIcon: {
-      control: 'boolean',
-      description: 'Show default icon when icon is not provided'
-    },
     class: {
       control: 'text',
       description: 'Custom CSS class'
@@ -83,19 +79,6 @@ export const WithCustomIcon = {
         <Tag value="Info" icon="pi pi-info-circle" severity="info" />
         <Tag value="Warning" icon="pi pi-exclamation-triangle" severity="warning" />
         <Tag value="Danger" icon="pi pi-times" severity="danger" />
-      </div>
-    `
-  })
-}
-
-export const WithDefaultIcon = {
-  render: () => ({
-    components: { Tag },
-    template: `
-      <div class="flex flex-wrap gap-2">
-        <Tag value="Primary" severity="primary" :showIcon="true" />
-        <Tag value="Info" severity="info" :showIcon="true" />
-        <Tag value="Danger" severity="danger" :showIcon="true" rounded />
       </div>
     `
   })
