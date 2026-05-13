@@ -1,4 +1,5 @@
 import { brandPrimitives, primitives, surfacePrimitives } from './primitives/colors.js';
+import { semanticColors } from './semantic/colors.js';
 
 export const theme = {
   extend: {
@@ -22,6 +23,9 @@ export const theme = {
       yellow: primitives.yellow,
       blue: primitives.blue,
     },
+    textColor: semanticColors.text,
+    backgroundColor: semanticColors.background,
+    borderColor: semanticColors.border,
   },
 };
 
