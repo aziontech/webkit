@@ -1,0 +1,28 @@
+import { brandPrimitives, primitives, surfacePrimitives } from './primitives/colors.js';
+
+export const theme = {
+  extend: {
+    colors: {
+      base: {
+        white: primitives.base.white,
+        black: primitives.base.black,
+      },
+      brand: {
+        primary: brandPrimitives.primary,
+        accent: brandPrimitives.accent,
+      },
+      surface: surfacePrimitives.surface,
+      orange: primitives.orange,
+      violet: primitives.violet,
+      neutral: primitives.neutral,
+      gray: primitives.gray,
+      slate: primitives.slate,
+      red: primitives.red,
+      green: primitives.green,
+      yellow: primitives.yellow,
+      blue: primitives.blue,
+    },
+  },
+};
+
+export default { theme };
