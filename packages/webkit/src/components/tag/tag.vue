@@ -63,10 +63,6 @@
       type: String,
       default: undefined
     },
-    showIcon: {
-      type: Boolean,
-      default: false
-    },
     class: {
       type: String,
       default: ''
@@ -91,8 +87,6 @@
     () => severityStyles[normalizedSeverity.value] ?? severityStyles.primary
   )
 
-  const resolvedIcon = computed(() => props.icon || (props.showIcon ? 'pi pi-box' : ''))
-
   const rootClass = computed(() => {
     const classes = [
       'inline-flex h-6 items-center justify-center gap-1 overflow-hidden border px-2',
@@ -108,17 +102,13 @@
     return classes
   })
 
-  const iconClass = computed(() => [
-    resolvedIcon.value,
-    'shrink-0',
-    currentSeverityStyle.value.icon
-  ])
+  const iconClass = computed(() => [props.icon, 'shrink-0', currentSeverityStyle.value.icon])
 </script>
 
 <template>
   <span :class="rootClass">
     <i
-      v-if="resolvedIcon"
+      v-if="props.icon"
       :class="iconClass"
       aria-hidden="true"
     />
