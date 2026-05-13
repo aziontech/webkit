@@ -1,8 +1,8 @@
-import Tag from '@aziontech/webkit/tag';
+import PrimeTag from '@aziontech/webkit/prime-tag';
 
 export default {
-  title: 'PrimeVue/Tag',
-  component: Tag,
+  title: 'PrimeVue/PrimeTag',
+  component: PrimeTag,
   tags: ['autodocs'],
   argTypes: {
     value: {
@@ -37,16 +37,16 @@ export const Default = {
 
 export const Severities = {
   render: () => ({
-    components: { Tag },
+    components: { PrimeTag },
     template: `
       <div class="flex flex-wrap gap-2">
-        <Tag value="Primary" />
-        <Tag value="Secondary" severity="secondary" />
-        <Tag value="Success" severity="success" />
-        <Tag value="Info" severity="info" />
-        <Tag value="Warning" severity="warning" />
-        <Tag value="Danger" severity="danger" />
-        <Tag value="Contrast" severity="contrast" />
+        <PrimeTag value="Primary" />
+        <PrimeTag value="Secondary" severity="secondary" />
+        <PrimeTag value="Success" severity="success" />
+        <PrimeTag value="Info" severity="info" />
+        <PrimeTag value="Warning" severity="warning" />
+        <PrimeTag value="Danger" severity="danger" />
+        <PrimeTag value="Contrast" severity="contrast" />
       </div>
     `
   })
@@ -54,15 +54,15 @@ export const Severities = {
 
 export const Rounded = {
   render: () => ({
-    components: { Tag },
+    components: { PrimeTag },
     template: `
       <div class="flex flex-wrap gap-2">
-        <Tag value="Primary" rounded />
-        <Tag value="Secondary" severity="secondary" rounded />
-        <Tag value="Success" severity="success" rounded />
-        <Tag value="Info" severity="info" rounded />
-        <Tag value="Warning" severity="warning" rounded />
-        <Tag value="Danger" severity="danger" rounded />
+        <PrimeTag value="Primary" rounded />
+        <PrimeTag value="Secondary" severity="secondary" rounded />
+        <PrimeTag value="Success" severity="success" rounded />
+        <PrimeTag value="Info" severity="info" rounded />
+        <PrimeTag value="Warning" severity="warning" rounded />
+        <PrimeTag value="Danger" severity="danger" rounded />
       </div>
     `
   })
@@ -70,13 +70,13 @@ export const Rounded = {
 
 export const WithIcon = {
   render: () => ({
-    components: { Tag },
+    components: { PrimeTag },
     template: `
       <div class="flex flex-wrap gap-2">
-        <Tag value="Success" icon="pi pi-check" severity="success" />
-        <Tag value="Info" icon="pi pi-info-circle" severity="info" />
-        <Tag value="Warning" icon="pi pi-exclamation-triangle" severity="warning" />
-        <Tag value="Danger" icon="pi pi-times" severity="danger" />
+        <PrimeTag value="Success" icon="pi pi-check" severity="success" />
+        <PrimeTag value="Info" icon="pi pi-info-circle" severity="info" />
+        <PrimeTag value="Warning" icon="pi pi-exclamation-triangle" severity="warning" />
+        <PrimeTag value="Danger" icon="pi pi-times" severity="danger" />
       </div>
     `
   })
@@ -84,12 +84,12 @@ export const WithIcon = {
 
 export const IconOnly = {
   render: () => ({
-    components: { Tag },
+    components: { PrimeTag },
     template: `
       <div class="flex flex-wrap gap-2">
-        <Tag icon="pi pi-check" severity="success" />
-        <Tag icon="pi pi-times" severity="danger" />
-        <Tag icon="pi pi-info-circle" severity="info" />
+        <PrimeTag icon="pi pi-check" severity="success" />
+        <PrimeTag icon="pi pi-times" severity="danger" />
+        <PrimeTag icon="pi pi-info-circle" severity="info" />
       </div>
     `
   })
@@ -97,21 +97,21 @@ export const IconOnly = {
 
 export const CustomContent = {
   render: () => ({
-    components: { Tag },
+    components: { PrimeTag },
     template: `
       <div class="flex flex-wrap gap-2">
-        <Tag severity="success">
+        <PrimeTag severity="success">
           <span class="flex items-center gap-1">
             <i class="pi pi-check"></i>
             Verified
           </span>
-        </Tag>
-        <Tag severity="info" rounded>
+        </PrimeTag>
+        <PrimeTag severity="info" rounded>
           <span class="flex items-center gap-1">
             <i class="pi pi-star"></i>
             Featured
           </span>
-        </Tag>
+        </PrimeTag>
       </div>
     `
   })
@@ -119,24 +119,24 @@ export const CustomContent = {
 
 export const StatusTags = {
   render: () => ({
-    components: { Tag },
+    components: { PrimeTag },
     template: `
       <div class="flex flex-col gap-3">
         <div class="flex items-center gap-2">
           <span class="w-24">Status:</span>
-          <Tag value="Active" severity="success" />
+          <PrimeTag value="Active" severity="success" />
         </div>
         <div class="flex items-center gap-2">
           <span class="w-24">Status:</span>
-          <Tag value="Pending" severity="warning" />
+          <PrimeTag value="Pending" severity="warning" />
         </div>
         <div class="flex items-center gap-2">
           <span class="w-24">Status:</span>
-          <Tag value="Failed" severity="danger" />
+          <PrimeTag value="Failed" severity="danger" />
         </div>
         <div class="flex items-center gap-2">
           <span class="w-24">Status:</span>
-          <Tag value="Inactive" severity="secondary" />
+          <PrimeTag value="Inactive" severity="secondary" />
         </div>
       </div>
     `
