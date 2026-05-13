@@ -1,4 +1,3 @@
-// Tailwind plugin that registers semantic typography utility classes.
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
@@ -7,6 +6,10 @@ const plugin = (() => {
   }
 })();
 
+/**
+ * Generate semantic typography style components
+ * @returns {import('tailwindcss/plugin').Plugin}
+ */
 export const semanticTexts = () => {
   return plugin(({ addComponents, theme }) => {
     const deprecatedTexts = {
@@ -40,7 +43,6 @@ export const semanticTexts = () => {
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
       },
-
       '.display-1-mobile': {
         fontSize: '2.5rem',
         lineHeight: '1.15',
@@ -71,7 +73,6 @@ export const semanticTexts = () => {
         fontFamily: 'Sora',
         letterSpacing: '-.05rem',
       },
-
       '.body-1': {
         fontSize: '1rem',
         lineHeight: '1.4rem',
@@ -86,7 +87,8 @@ export const semanticTexts = () => {
       },
     };
 
-    const texts = {
+    const mobile = {
+      ...deprecatedTexts,
       '.text-big-number-md': {
         fontSize: '2.25rem',
         lineHeight: '1.20',
@@ -159,7 +161,7 @@ export const semanticTexts = () => {
       },
     };
 
-    const responsiveTexts = {
+    const medium = {
       [`@media (max-width: ${theme('screens.md', '768px')})`]: {
         '.text-big-number-md': {
           fontSize: '1.5rem',
@@ -213,6 +215,9 @@ export const semanticTexts = () => {
           fontSize: '0.625rem',
         },
       },
+    };
+
+    const large = {
       [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
         '.text-big-number-md': {
           fontSize: '1.25rem',
@@ -266,12 +271,11 @@ export const semanticTexts = () => {
           fontSize: '0.625rem',
         },
       },
-
     };
 
-    addComponents(deprecatedTexts);
-    addComponents(texts);
-    addComponents(responsiveTexts);
+    addComponents(mobile);
+    addComponents(medium);
+    addComponents(large);
   });
 };
 

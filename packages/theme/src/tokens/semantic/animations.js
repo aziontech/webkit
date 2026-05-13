@@ -1,21 +1,3 @@
-/**
- * Tailwind plugin to expose semantic animations and keyframes.
- *
- * This adds animation utilities and keyframes for common UI animations.
- *
- * Usage in tailwind.config.js:
- * ```javascript
- * import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js';
- * import semanticAnimations from '@aziontech/theme/tailwind/semantic-animations-plugin';
- *
- * export default {
- *   theme,
- *   plugins: [semanticAnimations()],
- * };
- * ```
- */
-
-// Lazy-require to avoid hard dependency for consumers
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
@@ -28,8 +10,8 @@ const plugin = (() => {
  * Generate semantic animation utilities and keyframes
  * @returns {import('tailwindcss/plugin').Plugin}
  */
-export const semanticAnimations = () => {
-  return plugin(({ addUtilities, addComponents, theme }) => {
+export const animations = () => {
+  return plugin(({ addUtilities, addComponents }) => {
     // Animation utilities
     const animations = {
       '.animate-fade-in': {
@@ -79,4 +61,4 @@ export const semanticAnimations = () => {
   });
 };
 
-export default semanticAnimations;
+export default animations;

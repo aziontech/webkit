@@ -1,21 +1,3 @@
-/**
- * Tailwind plugin to expose semantic colors at root level.
- *
- * This allows using classes like `text-muted` instead of `text-text-muted`.
- *
- * Usage in tailwind.config.js:
- * ```javascript
- * import { theme } from '@aziontech/theme/tailwind/tailwind-theme.js';
- * import semanticColors from '@aziontech/theme/tailwind/semantic-colors-plugin';
- *
- * export default {
- *   theme,
- *   plugins: [semanticColors()],
- * };
- * ```
- */
-
-// Lazy-require to avoid hard dependency for consumers
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
@@ -24,10 +6,6 @@ const plugin = (() => {
   }
 })();
 
-/**
- * Generate semantic color utilities
- * @returns {import('tailwindcss/plugin').Plugin}
- */
 export const semanticColors = () => {
   return plugin(({ addUtilities }) => {
     const textColors = {
