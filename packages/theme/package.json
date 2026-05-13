@@ -47,11 +47,14 @@
   ],
   "exports": {
     ".": "./default.js",
+    "./tokens": "./src/tokens/index.js",
     "./theme": "./src/tokens/theme.js",
     "./colors": "./src/tokens/primitives/colors.js",
+    "./semantic/colors": "./src/tokens/semantic/colors.js",
     "./semantic/animations": "./src/tokens/semantic/animations.js",
     "./semantic/texts": "./src/tokens/semantic/texts.js",
     "./semantic/spacings": "./src/tokens/semantic/spacings.js",
-    "./semantic/containers": "./src/tokens/semantic/containers.js"
+    "./semantic/containers": "./src/tokens/semantic/containers.js",
+    "./css-vars": "./src/tokens/build/css-vars.js"
   }
 }
