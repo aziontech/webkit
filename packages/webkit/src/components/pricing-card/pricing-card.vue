@@ -40,7 +40,7 @@
     },
     priceLabel: {
       type: String,
-      default: 'start at'
+      default: ''
     },
     buttonLabel: {
       type: String,
