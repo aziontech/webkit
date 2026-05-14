@@ -1,6 +1,8 @@
 <script setup>
   import { computed } from 'vue'
 
+  import Tag from '../tag/tag.vue'
+
   defineOptions({ name: 'PricingCard' })
 
   const props = defineProps({
@@ -38,7 +40,7 @@
     },
     priceLabel: {
       type: String,
-      default: 'start at'
+      default: ''
     },
     buttonLabel: {
       type: String,
@@ -97,14 +99,13 @@
     <div :class="isHorizontal ? 'md:w-1/3 md:min-w-56' : 'pb-5'">
       <div class="flex gap-4 pb-4 items-center">
         <h3 class="text-heading-lg font-sora font-bold">{{ title }}</h3>
-        <span
+        <Tag
           v-if="popular"
-          class="h-fit text-body-xs flex font-proto-mono justify-center items-center bg-violet-500 text-neutral-900 px-2 py-1 rounded"
-        >
-          {{ popularText }}
-        </span>
+          severity="primary"
+          :value="popularText"
+        />
       </div>
-      <p class="text-body-sm text-muted">{{ subtitle }}</p>
+      <p class="text-body-xs">{{ subtitle }}</p>
     </div>
 
     <div :class="isHorizontal ? 'flex-1' : 'h-[13rem]'">
@@ -118,7 +119,12 @@
             v-if="feature?.icon"
             :class="[feature.icon, 'text-primary']"
           />
-          <p class="font-sora text-body-sm">{{ feature?.label }}</p>
+          <p
+            class="text-body-sm"
+            :class="!feature.icon ? 'font-proto-mono text-muted' : 'font-sora'"
+          >
+            {{ feature?.label }}
+          </p>
         </li>
       </ul>
     </div>
