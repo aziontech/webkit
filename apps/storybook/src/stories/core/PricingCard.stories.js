@@ -28,49 +28,49 @@ export default {
   argTypes: {
     popular: {
       control: 'boolean',
-      description: 'Displays the Popular badge'
+      description: 'Shows the popular badge next to the title'
     },
     popularText: {
       control: 'text',
-      description: 'Popular badge label'
+      description: 'Text displayed inside the popular badge'
     },
     title: {
       control: 'text',
-      description: 'Main plan title'
+      description: 'Plan name displayed as the card heading'
     },
     subtitle: {
       control: 'text',
-      description: 'Plan description'
+      description: 'Short plan description under the title'
     },
     features: {
       control: 'object',
-      description: 'Feature list with icon and label'
+      description: 'List of features with optional icon and label'
     },
     monthlyPrice: {
       control: 'text',
-      description: 'Monthly billing price'
+      description: 'Price value shown for monthly billing'
     },
     annualPrice: {
       control: 'text',
-      description: 'Annual billing price'
+      description: 'Price value shown for annual billing'
     },
     currentPeriod: {
       control: 'select',
       options: ['monthly', 'annual'],
-      description: 'Current billing period'
+      description: 'Defines which billing period price is displayed'
     },
     priceLabel: {
       control: 'text',
-      description: 'Price helper text'
+      description: 'Helper text shown above the price block'
     },
     customPrice: {
       control: 'text',
-      description: 'Custom text replacing numeric price'
+      description: 'Custom text that replaces the numeric price display'
     },
     orientation: {
       control: 'select',
       options: ['vertical', 'horizontal'],
-      description: 'Card layout orientation'
+      description: 'Layout direction used to render the card'
     }
   }
 }
