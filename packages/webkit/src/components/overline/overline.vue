@@ -25,7 +25,7 @@
 
 <template>
   <div
-    class="flex items-center gap-1 relative w-fit pl-1 bg-gray-900"
+    class="flex items-center gap-1 relative w-fit pl-1"
     :class="!showCursor ? 'pr-1' : 'pr-0'"
   >
     <span
