@@ -30,7 +30,7 @@ export default {
       control: 'boolean',
       description: 'Displays the Popular badge'
     },
-    pupularText: {
+    popularText: {
       control: 'text',
       description: 'Popular badge label'
     },
@@ -78,7 +78,7 @@ export default {
 export const Default = {
   args: {
     popular: false,
-    pupularText: 'Popular',
+    popularText: 'Popular',
     title: 'Pro',
     subtitle: 'For teams scaling edge applications fast.',
     features: defaultFeatures,
