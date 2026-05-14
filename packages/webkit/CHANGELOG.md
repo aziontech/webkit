@@ -1,3 +1,19 @@
+## [2.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.28.1...@aziontech/webkit@2.0.0) (2026-05-14)
+
+### ⚠ BREAKING CHANGES
+
+- replace Toggle with SegmentedButton
+
+- feat(segmented-button)!: replace Toggle with SegmentedButton ([5f63faa](https://github.com/aziontech/webkit/commit/5f63faaa867b0e162a8fc9d769ea61724581d969))
+
+### Features
+
+- simplify tag icon api by removing showIcon ([ee1cda9](https://github.com/aziontech/webkit/commit/ee1cda98835c65c25b6418e9033f904eb3c363a7))
+
+### Bug Fixes
+
+- checks success skip !== webkit ([#552](https://github.com/aziontech/webkit/issues/552)) ([46290ab](https://github.com/aziontech/webkit/commit/46290ab38d93d532754b0afb6d583fd13bf26a51))
+
 ## [1.28.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.28.0...@aziontech/webkit@1.28.1) (2026-05-05)
 
 ### Bug Fixes
