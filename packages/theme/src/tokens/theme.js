@@ -1,4 +1,4 @@
-import { brandPrimitives, primitives, surfacePrimitives } from './primitives/colors.js';
+import { brandPrimitives, primitives, surfacePrimitives } from './primitives/colors/colors.js';
 import { semanticColors } from './semantic/colors.js';
 
 export const theme = {

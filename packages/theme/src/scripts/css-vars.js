@@ -6,8 +6,8 @@
  * `{ light, dark }` map of CSS variable names → resolved color values.
  */
 
-import { brandPrimitives,primitives, surfacePrimitives } from '../primitives/colors.js';
-import { semanticColorsData } from '../semantic/colors.js';
+import { brandPrimitives,primitives, surfacePrimitives } from '../tokens/primitives/colors/colors.js';
+import { semanticColorsData } from '../tokens/semantic/colors.js';
 import { resolveRefsToCssVars } from './resolve.js';
 
 export const createCssVars = () =>
