@@ -1,7 +1,7 @@
 <script setup>
-  import Tag from 'primevue/tag'
+  import PrimeTag from 'primevue/tag'
 
-  defineOptions({ name: 'Tag' })
+  defineOptions({ name: 'PrimeTag' })
 
   const props = defineProps({
     value: {
@@ -34,7 +34,7 @@
 </script>
 
 <template>
-  <Tag
+  <PrimeTag
     :value="props.value"
     :severity="props.severity"
     :rounded="props.rounded"
@@ -48,5 +48,5 @@
     >
       <slot />
     </template>
-  </Tag>
+  </PrimeTag>
 </template>
