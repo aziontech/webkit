@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.0...@aziontech/webkit@2.0.1) (2026-05-14)
+
+### Bug Fixes
+
+- adjust props ([4704eb8](https://github.com/aziontech/webkit/commit/4704eb89a21e29b6598127a3e1cb9889c0de99cc))
+- adjust stories ([720b495](https://github.com/aziontech/webkit/commit/720b49564f5ada7e142a8bfe443d51c8e3ba849a))
+
 ## [2.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.28.1...@aziontech/webkit@2.0.0) (2026-05-14)
 
 ### ⚠ BREAKING CHANGES
