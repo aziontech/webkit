@@ -16,6 +16,7 @@ import { ringOffset } from '../tokens/primitives/ring-offset.js';
 import { container } from '../tokens/primitives/shape/container.js';
 import { height } from '../tokens/primitives/shape/height.js';
 import { radius } from '../tokens/primitives/shape/radius.js';
+import { shape as shapeAliases } from '../tokens/primitives/shape/shape.js';
 import { size } from '../tokens/primitives/shape/size.js';
 import { spacing } from '../tokens/primitives/shape/spacing.js';
 import { width } from '../tokens/primitives/shape/width.js';
@@ -31,7 +32,7 @@ import { isTokenRef } from './refs.js';
  *   - `varsTree`: same data with the `shape` / `typography` / `effects`
  *     wrappers removed, so emitted CSS vars are flat (no group prefix).
  */
-const buildTrees = () => {
+export const buildTrees = () => {
   const { brand, ...restColors } = colorPrimitives;
   const color = {
     ...restColors,
@@ -40,7 +41,7 @@ const buildTrees = () => {
     absolute: brand.absolute,
   };
 
-  const shape = { container, height, radius, size, spacing, width };
+  const shape = { container, height, radius, size, spacing, width, ...shapeAliases };
   const typography = {
     'font-family': fontFamily,
     'font-size': fontSize,
@@ -83,7 +84,7 @@ const resolveRef = (refPath, refsTree) => {
   return null;
 };
 
-const flatten = (obj, refsTree, prefix = []) => {
+export const flatten = (obj, refsTree, prefix = []) => {
   const result = {};
   Object.entries(obj).forEach(([key, value]) => {
     const nextPath = [...prefix, key];

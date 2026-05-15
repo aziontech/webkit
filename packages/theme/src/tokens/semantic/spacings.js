@@ -1,3 +1,6 @@
+// TODO: deprecated — substituído pelos tokens declarativos em
+// `spacings.data.js` e pelo CSS gerado em `dist/globals.css` via
+// `src/scripts/build-tokens.mjs`. Remover quando consumers migrarem.
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
