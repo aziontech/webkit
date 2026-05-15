@@ -89,7 +89,7 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'inline-flex h-6 items-center justify-center gap-1 overflow-hidden border px-2',
+      'inline-flex h-6 items-center justify-center gap-2 overflow-hidden border px-2',
       'font-proto-mono text-xs font-normal leading-none',
       currentSeverityStyle.value.container,
       props.rounded ? 'rounded-full' : (currentSeverityStyle.value.roundedOff ?? 'rounded')
@@ -102,7 +102,11 @@
     return classes
   })
 
-  const iconClass = computed(() => [props.icon, 'shrink-0', currentSeverityStyle.value.icon])
+  const iconClass = computed(() => [
+    props.icon,
+    'shrink-0 flex items-center',
+    currentSeverityStyle.value.icon
+  ])
 </script>
 
 <template>
