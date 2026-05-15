@@ -1,3 +1,9 @@
+## [2.0.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.1...@aziontech/webkit@2.0.2) (2026-05-15)
+
+### Bug Fixes
+
+- adjust tag component icon alignment and spacing ([6d1d355](https://github.com/aziontech/webkit/commit/6d1d355edf9bae96afdf0904342c2c9c2259e8dd))
+
 ## [2.0.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.0...@aziontech/webkit@2.0.1) (2026-05-14)
 
 ### Bug Fixes
