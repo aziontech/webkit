@@ -12,6 +12,7 @@ export const background = {
     'bg-backdrop': tokenRef('primitives.alpha.black.700'),
     'bg-selected': tokenRef('theme.surfaces.surface-200'),
     'bg-contrast': tokenRef('theme.surfaces.surface-900'),
+    'bg-disabled': tokenRef('primitives.gray.400'),
   },
   dark: {
     'bg-canvas': tokenRef('theme.surfaces.surface-950'),
@@ -24,6 +25,7 @@ export const background = {
     'bg-backdrop': tokenRef('primitives.alpha.black.700'),
     'bg-selected': tokenRef('theme.surfaces.surface-950'),
     'bg-contrast': tokenRef('theme.surfaces.surface-50'),
+    'bg-disabled': tokenRef('primitives.gray.500'),
   },
 };
 

@@ -159,6 +159,20 @@ export const semanticTexts = () => {
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
       },
+      '.text-button-lg': {
+        fontFamily: 'Proto Mono',
+        fontSize: '0.875rem',
+        fontWeight: '600',
+        lineHeight: '1',
+        letterSpacing: '0',
+      },
+      '.text-button-md': {
+        fontFamily: 'Proto Mono',
+        fontSize: '0.75rem',
+        fontWeight: '600',
+        lineHeight: '1',
+        letterSpacing: '0',
+      },
     };
 
     const medium = {
