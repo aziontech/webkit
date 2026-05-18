@@ -157,7 +157,7 @@ export const Backgrounds = {
         <div class="flex gap-2.5 mb-8 flex-wrap">
           <TokenPreview token="background-canvas" label="bg-canvas" description="Page background" type="background" />
           <TokenPreview token="background-surface" label="bg-surface" description="Cards / panels" type="background" />
-          <TokenPreview token="background-surfaceRaised" label="bg-surfaceRaised" description="Modals / dropdowns" type="background" />
+          <TokenPreview token="background-surface-raised" label="bg-surface-raised" description="Modals / dropdowns" type="background" />
           <TokenPreview token="background-primary" label="bg-primary" description="Brand CTA" type="background" />
         </div>
 

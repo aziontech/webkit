@@ -1,12 +1,10 @@
 import typography from '@tailwindcss/typography'
-import { theme } from '../../packages/theme/src/tokens/theme.js'
-import semanticTexts from '../../packages/theme/src/tokens/semantic/texts.js'
-import { spacingElements as semanticSpacing } from '../../packages/theme/src/tokens/semantic/spacings.js'
-import { animations as semanticAnimations } from '../../packages/theme/src/tokens/semantic/animations.js'
+import themePreset from '@aziontech/theme/tailwind-preset/v3'
 
 /** @type {import('tailwindcss').Config} */
 export default {
   important: true,
+  presets: [themePreset],
   content: [
     './src/**/*.{vue,js,ts,jsx,tsx}',
     '../../packages/webkit/src/**/*.{vue,js,ts,jsx,tsx}'
@@ -14,30 +12,22 @@ export default {
   // Dark mode configuration
   // Use `.dark` on an ancestor (Storybook uses `withThemeByClassName` to toggle it)
   darkMode: ['class'],
-  // Merge base theme with primitives
   theme: {
-    ...theme,
     fontFamily: {
-      ...(theme.fontFamily ?? {}),
       sans: ['Sora'],
       mono: ['Proto Mono'],
       code: ['Roboto Mono']
     },
     listStyleType: {
-      ...(theme.listStyleType ?? {}),
       none: 'none',
       disc: 'disc',
       decimal: 'decimal',
       square: 'square',
       roman: 'upper-roman'
     },
-    // Properly merge the theme's extend with local extend
     extend: {
-      // Import colors from theme (brand, base, surface, primitives)
-      ...(theme.extend ?? {}),
-      // Storybook-specific color extensions
+      // Storybook-specific color extensions (merged on top of the theme preset)
       colors: {
-        ...(theme.extend?.colors ?? {}),
         header: '#111111',
         'header-button-enabled': '#ffffff32',
         'header-button-hover': '#f5f5f516',
@@ -77,10 +67,5 @@ export default {
       }
     }
   },
-  plugins: [
-    typography,
-    semanticTexts(),
-    semanticSpacing(),
-    semanticAnimations(),
-  ]
+  plugins: [typography]
 }
