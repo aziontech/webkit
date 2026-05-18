@@ -4,6 +4,7 @@ import Tooltip from 'primevue/tooltip'
 import { withThemeByClassName } from '@storybook/addon-themes'
 
 import 'primeflex/primeflex.css'
+import '@aziontech/theme/v3/globals.css'
 import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
