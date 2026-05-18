@@ -189,6 +189,18 @@ const treeToVars = (tree, prefix) => {
 const buildPresetData = () => {
   const { refsTree } = buildTrees();
   const colors = treeToVars(refsTree.color, '--color');
+  const fontWeight = refsTree.typography?.['font-weight']
+    ? treeToVars(refsTree.typography['font-weight'], '--font-weight')
+    : {};
+  const dropShadow = refsTree.effects?.['drop-shadow']
+    ? treeToVars(refsTree.effects['drop-shadow'], '--drop-shadow')
+    : {};
+  const lineHeight = refsTree.typography?.leading
+    ? treeToVars(refsTree.typography.leading, '--leading')
+    : {};
+  const letterSpacing = refsTree.typography?.tracking
+    ? treeToVars(refsTree.typography.tracking, '--tracking')
+    : {};
 
   const fontSize = {};
   for (const [key, bundle] of Object.entries(textsData)) {
@@ -200,7 +212,11 @@ const buildPresetData = () => {
     fontSize[key.replace(/^text-/, '')] = [`var(--${key}-font-size)`, meta];
   }
 
-  return { theme: { extend: { colors, fontSize } } };
+  return {
+    theme: {
+      extend: { colors, fontSize, fontWeight, dropShadow, lineHeight, letterSpacing },
+    },
+  };
 };
 
 const emitPresetV3 = () => {
