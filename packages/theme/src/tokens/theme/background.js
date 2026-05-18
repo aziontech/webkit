@@ -2,7 +2,7 @@ import { tokenRef } from '../../scripts/refs.js';
 
 export const background = {
   light: {
-    'bg-canvas': tokenRef('theme.surfaces.surface-100'),
+    'bg-canvas': tokenRef('theme.surfaces.surface-0'),
     'bg-surface': tokenRef('theme.surfaces.surface-0'),
     'bg-surface-raised': tokenRef('theme.surfaces.surface-0'),
     'bg-mask': tokenRef('primitives.alpha.black.50'),
