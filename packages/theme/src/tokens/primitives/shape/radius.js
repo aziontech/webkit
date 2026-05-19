@@ -1,13 +1,13 @@
 export const radius = {
-  'rounded-none': '0',
-  'rounded-sm': '2px',
-  'rounded': '4px',
-  'rounded-md': '6px',
-  'rounded-lg': '8px',
-  'rounded-xl': '12px',
-  'rounded-2xl': '16px',
-  'rounded-3xl': '24px',
-  'rounded-full': '9999px',
+  none: '0',
+  sm: '2px',
+  DEFAULT: '4px',
+  md: '6px',
+  lg: '8px',
+  xl: '12px',
+  '2xl': '16px',
+  '3xl': '24px',
+  full: '9999px',
 };
 
 export default { radius };

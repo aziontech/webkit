@@ -51,7 +51,7 @@ src/
 │   │   ├── shape/
 │   │   │   ├── container.js     # container-3xs … container-7xl
 │   │   │   ├── height.js        # h-2 … h-96
-│   │   │   ├── radius.js        # rounded-none … rounded-3xl, full
+│   │   │   ├── radius.js        # none, sm, DEFAULT, md … 3xl, full
 │   │   │   ├── size.js          # size-2 … size-96
 │   │   │   ├── spacing.js       # spacing-1 … spacing-96
 │   │   │   └── width.js         # w-3xs … w-7xl (alias → container.X)

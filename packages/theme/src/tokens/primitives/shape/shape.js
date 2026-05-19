@@ -2,10 +2,10 @@ import { radius } from './radius.js';
 import { borderWidths } from '../border-widths.js';
 
 export const shape = {
-  'shape-flat': radius['rounded-none'],
-  'shape-card': radius['rounded'],
-  'shape-button': radius['rounded'],
-  'shape-elements': radius['rounded'],
+  'shape-flat': radius.none,
+  'shape-card': radius.DEFAULT,
+  'shape-button': radius.DEFAULT,
+  'shape-elements': radius.DEFAULT,
   'border-width-default': borderWidths[1],
 };
 
