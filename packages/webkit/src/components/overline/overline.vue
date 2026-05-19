@@ -25,7 +25,7 @@
 
 <template>
   <div
-    class="flex items-center gap-1 relative w-fit pl-1 bg-gray-900"
+    class="flex items-center gap-1 relative w-fit pl-1"
     :class="!showCursor ? 'pr-1' : 'pr-0'"
   >
     <span
@@ -36,7 +36,7 @@
       {{ prefix }}
     </span>
     <span
-      class="font-proto-mono text-pretty text-brand-primary-400 font-medium leading-1 tracking-tightest uppercase text-overline-md"
+      class="font-proto-mono text-pretty text-brand-primary-500 font-medium leading-1 tracking-tightest uppercase text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >
       <slot />

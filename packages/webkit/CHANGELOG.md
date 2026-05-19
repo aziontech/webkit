@@ -1,3 +1,38 @@
+## [2.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.2...@aziontech/webkit@2.1.0) (2026-05-19)
+
+### Features
+
+- change brand primary color ([51a88f7](https://github.com/aziontech/webkit/commit/51a88f719efbe7f2681912843aee0ddf670a6ca6))
+
+## [2.0.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.1...@aziontech/webkit@2.0.2) (2026-05-15)
+
+### Bug Fixes
+
+- adjust tag component icon alignment and spacing ([6d1d355](https://github.com/aziontech/webkit/commit/6d1d355edf9bae96afdf0904342c2c9c2259e8dd))
+
+## [2.0.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.0...@aziontech/webkit@2.0.1) (2026-05-14)
+
+### Bug Fixes
+
+- adjust props ([4704eb8](https://github.com/aziontech/webkit/commit/4704eb89a21e29b6598127a3e1cb9889c0de99cc))
+- adjust stories ([720b495](https://github.com/aziontech/webkit/commit/720b49564f5ada7e142a8bfe443d51c8e3ba849a))
+
+## [2.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.28.1...@aziontech/webkit@2.0.0) (2026-05-14)
+
+### ⚠ BREAKING CHANGES
+
+- replace Toggle with SegmentedButton
+
+- feat(segmented-button)!: replace Toggle with SegmentedButton ([5f63faa](https://github.com/aziontech/webkit/commit/5f63faaa867b0e162a8fc9d769ea61724581d969))
+
+### Features
+
+- simplify tag icon api by removing showIcon ([ee1cda9](https://github.com/aziontech/webkit/commit/ee1cda98835c65c25b6418e9033f904eb3c363a7))
+
+### Bug Fixes
+
+- checks success skip !== webkit ([#552](https://github.com/aziontech/webkit/issues/552)) ([46290ab](https://github.com/aziontech/webkit/commit/46290ab38d93d532754b0afb6d583fd13bf26a51))
+
 ## [1.28.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@1.28.0...@aziontech/webkit@1.28.1) (2026-05-05)
 
 ### Bug Fixes
