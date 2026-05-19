@@ -213,7 +213,8 @@
       });
 
       // --- Font family
-      const fontFamilyEntries = entriesStartingWith('--font-family-');
+      const fontFamilyEntries = entriesStartingWith('--font-')
+        .filter(([name]) => !name.startsWith('--font-weight-'));
       const fontFamilyEl = document.getElementById('font-family');
       fontFamilyEntries.forEach(([name, value]) => {
         const row = document.createElement('div');

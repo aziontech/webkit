@@ -62,7 +62,7 @@ export const buildTrees = () => {
     ...shapeAliases,
   };
   const typography = {
-    'font-family': fontFamily,
+    font: fontFamily,
     text: fontSize,
     'font-weight': fontWeight,
     leading,
@@ -116,13 +116,20 @@ const resolveRef = (refPath, refsTree) => {
   return null;
 };
 
+// A leaf key of `DEFAULT` collapses to the parent prefix (Tailwind convention),
+// so `{ radius: { DEFAULT: '4px' } }` emits `--radius: 4px;`.
+const varNameFor = (path) => {
+  const segments = path[path.length - 1] === 'DEFAULT' ? path.slice(0, -1) : path;
+  return `--${segments.join('-')}`;
+};
+
 export const flatten = (obj, refsTree, prefix = []) => {
   const result = {};
   Object.entries(obj).forEach(([key, value]) => {
     const nextPath = [...prefix, key];
     if (isTokenRef(value)) {
       const resolved = resolveRef(value.__ref, refsTree);
-      result[`--${nextPath.join('-')}`] = resolved ?? value.__ref;
+      result[varNameFor(nextPath)] = resolved ?? value.__ref;
       return;
     }
     if (value && typeof value === 'object' && !Array.isArray(value)) {
@@ -130,7 +137,7 @@ export const flatten = (obj, refsTree, prefix = []) => {
       return;
     }
     if (typeof value === 'string' || typeof value === 'number') {
-      result[`--${nextPath.join('-')}`] = String(value);
+      result[varNameFor(nextPath)] = String(value);
     }
   });
   return result;
