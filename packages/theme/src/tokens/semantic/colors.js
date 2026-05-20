@@ -21,10 +21,10 @@ import { tokenRef } from '../../scripts/refs.js';
 export const semanticColorsData = {
   text: {
     light: {
-      default: tokenRef('primitives.neutral.900'),
-      muted: tokenRef('primitives.neutral.600'),
+      default: tokenRef('primitives.gray.900'),
+      muted: tokenRef('primitives.gray.600'),
       link: tokenRef('primitives.blue.600'),
-      code: tokenRef('primitives.neutral.600'),
+      code: tokenRef('primitives.gray.600'),
       'link-hover': tokenRef('primitives.blue.700'),
       primary: tokenRef('brand.primary.primary-500'),
       'primary-hover': tokenRef('brand.primary.primary-600'),
@@ -38,10 +38,10 @@ export const semanticColorsData = {
       warning: tokenRef('primitives.yellow.600'),
     },
     dark: {
-      default: tokenRef('primitives.neutral.50'),
-      muted: tokenRef('primitives.neutral.400'),
+      default: tokenRef('primitives.gray.50'),
+      muted: tokenRef('primitives.gray.400'),
       link: tokenRef('primitives.blue.400'),
-      code: tokenRef('primitives.neutral.400'),
+      code: tokenRef('primitives.gray.400'),
       'link-hover': tokenRef('primitives.blue.300'),
       primary: tokenRef('brand.primary.primary-500'),
       'primary-hover': tokenRef('brand.primary.primary-400'),
@@ -55,7 +55,7 @@ export const semanticColorsData = {
       warning: tokenRef('primitives.yellow.400'),
     },
   },
-  'bg': {
+  background: {
     light: {
       'surface-raised': tokenRef('brand.surfaces.surface-0'),
       'surface-overlay': tokenRef('brand.surfaces.surface-50'),
