@@ -141,7 +141,7 @@ Plain JS objects with literal values. Theme-invariant.
 export const brandPrimitives = {
   primary: { 50: '#FFF5EF', 100: '#FFE7D8', /* … */ 500: '#FE601F', /* … */ 950: '#401602' },
   accent:  { 50: '#F6F6FF', /* … */ 500: '#8A84EC', /* … */ 950: '#0B0A19' },
-  absolute: { black: '#0A0A0A', white: '#FCFCFC' },
+  absolute: { black: '#0A0A0A', white: '#FCFCFC' }
 };
 ```
 
