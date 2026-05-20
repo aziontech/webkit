@@ -164,13 +164,33 @@ Define props with `defineProps()` with proper TypeScript types and defaults:
     description: {
       type: String,
       default: ''
-    },
-    class: {
-      type: String
     }
   })
 </script>
 ```
+
+#### Webkit layer (`src/components/webkit/`)
+
+Webkit components merge consumer classes from fallthrough attributes, not from a `class` prop:
+
+```vue
+<script setup>
+  import { computed, useAttrs } from 'vue'
+
+  defineOptions({
+    name: 'Example',
+    inheritAttrs: false
+  })
+
+  const attrs = useAttrs()
+
+  const rootClass = computed(() => ['base-classes', attrs.class])
+</script>
+```
+
+- Set `inheritAttrs: false` in `defineOptions`
+- Call `useAttrs()` and append `attrs.class` to the root element class list
+- Do **not** declare `class` in `defineProps()`
 
 ### 3. Events Definition
 
@@ -515,7 +535,7 @@ If your component needs Vue Router:
 ### 3. Styling
 
 - ✅ **DO:** Use PrimeVue styling conventions
-- ✅ **DO:** Support custom classes via `class` prop
+- ✅ **DO:** Support custom classes via `attrs.class` (`useAttrs()` with `inheritAttrs: false`; do not declare `class` as a prop)
 - ✅ **DO:** Use Tailwind CSS utility classes
 - ❌ **DON'T:** Hardcode colors or spacing
 - ❌ **DON'T:** Use inline styles
