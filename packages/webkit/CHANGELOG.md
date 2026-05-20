@@ -1,3 +1,9 @@
+## [2.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.2...@aziontech/webkit@2.1.0) (2026-05-19)
+
+### Features
+
+- change brand primary color ([51a88f7](https://github.com/aziontech/webkit/commit/51a88f719efbe7f2681912843aee0ddf670a6ca6))
+
 ## [2.0.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.1...@aziontech/webkit@2.0.2) (2026-05-15)
 
 ### Bug Fixes
