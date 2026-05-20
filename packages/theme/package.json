@@ -11,7 +11,12 @@
   },
   "scripts": {
     "pack:dry": "npm pack --dry-run",
-    "format": "prettier --write scripts/ src/"
+    "format": "prettier --write scripts/ src/",
+    "build:tokens": "node src/scripts/build-tokens.mjs",
+    "build:tokens:v3": "node src/scripts/build-tokens.mjs --target=v3",
+    "build:tokens:v4": "node src/scripts/build-tokens.mjs --target=v4",
+    "build:css:v3": "npm run build:tokens:v3 && tailwindcss -c dist/v3/tailwind.config.js -i dist/v3/globals.css -o dist/v3/output.css",
+    "test:tokens:v3": "npm run build:css:v3 && open src/tests/tokens.html"
   },
   "publishConfig": {
     "access": "public"
@@ -40,30 +45,23 @@
   },
   "files": [
     "src/",
+    "dist/",
     "LICENSE",
-    "colors-brand.js",
     "default.js",
     "tokens.js",
-    "widget.js",
-    "tailwind-theme.js"
+    "widget.js"
   ],
   "exports": {
     ".": "./default.js",
-    "./widget": "./widget.js",
-    "./tokens": "./tokens.js",
-    "./tokens/primitive": "./tokens.js",
-    "./tokens/brand": "./tokens.js",
-    "./tokens/semantic/text": "./tokens.js",
-    "./tokens/semantic/backgrounds": "./tokens.js",
-    "./tokens/semantic/borders": "./tokens.js",
-    "./tokens/build/preset": "./src/tokens/build/preset.js",
-    "./tokens/build/tailwind-helper": "./src/tokens/build/tailwind-helper.js",
-    "./tokens/build/tailwind-plugin": "./src/tokens/build/tailwind-plugin",
-    "./tokens/build/css-vars.js": "./src/tokens/build/css-vars.js",
-    "./tailwind/tailwind-theme": "./src/tailwind/tailwind-theme.js",
-    "./tailwind/semantic-colors-plugin": "./src/tailwind/semantic-colors-plugin.js",
-    "./tailwind/semantic-texts-plugin": "./src/tailwind/semantic-texts-plugin.js",
-    "./tailwind/semantic-spacing-plugin": "./src/tailwind/semantic-spacing-plugin.js",
-    "./tailwind/semantic-animations-plugin": "./src/tailwind/semantic-animations-plugin.js"
+    "./scripts/compile-primitives": "./src/scripts/compile-primitives.js",
+    "./scripts/compile-theme": "./src/scripts/compile-theme.js",
+    "./tailwind-preset": "./dist/v3/tailwind-preset.js",
+    "./tailwind-preset/v3": "./dist/v3/tailwind-preset.js",
+    "./globals.css": "./dist/v3/globals.css",
+    "./globals.scss": "./dist/v3/globals.scss",
+    "./v3/globals.css": "./dist/v3/globals.css",
+    "./v3/globals.scss": "./dist/v3/globals.scss",
+    "./v4/globals.css": "./dist/v4/globals.css",
+    "./v4/globals.scss": "./dist/v4/globals.scss"
   }
 }
