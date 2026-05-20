@@ -31,10 +31,6 @@ export default {
     loading: {
       control: 'boolean',
       description: 'Shows spinner instead of dot; label uses muted color'
-    },
-    class: {
-      control: 'text',
-      description: 'Additional CSS classes'
     }
   }
 }

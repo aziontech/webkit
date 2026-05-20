@@ -59,10 +59,6 @@
     actionLabel: {
       type: String,
       default: ''
-    },
-    class: {
-      type: String,
-      default: ''
     }
   })
 
@@ -96,10 +92,6 @@
       fontSans,
       currentSeverityStyle.value.container
     ]
-
-    if (props.class) {
-      classes.push(props.class)
-    }
 
     if (attrs.class) {
       classes.push(attrs.class)

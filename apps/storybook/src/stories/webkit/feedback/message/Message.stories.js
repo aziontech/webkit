@@ -33,10 +33,6 @@ export default {
     actionLabel: {
       control: 'text',
       description: 'Action button label (hidden when empty)'
-    },
-    class: {
-      control: 'text',
-      description: 'Additional CSS classes'
     }
   }
 }

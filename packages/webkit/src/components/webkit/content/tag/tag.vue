@@ -1,7 +1,10 @@
 <script setup>
-  import { computed } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-  defineOptions({ name: 'Tag' })
+  defineOptions({
+    name: 'Tag',
+    inheritAttrs: false
+  })
 
   const fontSans = 'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]'
 
@@ -65,12 +68,10 @@
     icon: {
       type: String,
       default: undefined
-    },
-    class: {
-      type: String,
-      default: ''
     }
   })
+
+  const attrs = useAttrs()
 
   const normalizedSeverity = computed(() => {
     const severity = String(props.severity || 'primary').toLowerCase()
@@ -99,8 +100,8 @@
       props.rounded ? 'rounded-full' : shapeElements
     ]
 
-    if (props.class) {
-      classes.push(props.class)
+    if (attrs.class) {
+      classes.push(attrs.class)
     }
 
     return classes

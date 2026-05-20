@@ -21,10 +21,6 @@ export default {
     icon: {
       control: 'text',
       description: 'Custom icon class name'
-    },
-    class: {
-      control: 'text',
-      description: 'Custom CSS class'
     }
   }
 }

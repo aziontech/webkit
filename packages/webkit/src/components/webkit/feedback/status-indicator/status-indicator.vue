@@ -33,10 +33,6 @@
     label: {
       type: String,
       default: 'Status'
-    },
-    class: {
-      type: String,
-      default: ''
     }
   })
 
@@ -55,10 +51,6 @@
       'rounded-[4px]',
       fontSans
     ]
-
-    if (props.class) {
-      classes.push(props.class)
-    }
 
     if (attrs.class) {
       classes.push(attrs.class)
