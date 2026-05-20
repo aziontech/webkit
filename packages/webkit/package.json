@@ -117,6 +117,7 @@
     "./tabmenu": "./src/core/primevue/tabmenu/tabmenu.vue",
     "./tabpanel": "./src/core/primevue/tabpanel/tabpanel.vue",
     "./tabview": "./src/core/primevue/tabview/tabview.vue",
+    "./content/currency": "./src/components/webkit/content/currency/currency.vue",
     "./content/tag": "./src/components/webkit/content/tag/tag.vue",
     "./tag": "./src/components/webkit/content/tag/tag.vue",
     "./prime-tag": "./src/core/primevue/tag/tag.vue",
