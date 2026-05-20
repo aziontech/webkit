@@ -24,98 +24,103 @@
  * No external deps — node:fs/promises, node:path, node:url only.
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { mkdir, writeFile } from 'node:fs/promises'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { breakpoints } from '../tokens/primitives/breakpoints.js';
-import { buildTrees, flatten } from './compile-primitives.js';
-import { containersData } from '../tokens/semantic/containers.data.js';
-import { spacingsData } from '../tokens/semantic/spacings.data.js';
-import { textsData } from '../tokens/semantic/texts.data.js';
+import { breakpoints } from '../tokens/primitives/breakpoints.js'
+import { compileThemeCss } from './compile-theme.js'
+import { buildTrees, flatten } from './compile-primitives.js'
+import { containersData } from '../tokens/semantic/containers.data.js'
+import { spacingsData } from '../tokens/semantic/spacings.data.js'
+import { textsData } from '../tokens/semantic/texts.data.js'
 
-const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl'];
-const V3_SELECTOR = ':root, [data-theme=light], .azion.azion-light';
+const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl']
+const V3_SELECTOR = ':root, [data-theme=light], .azion.azion-light'
 
-const kebab = (s) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+const kebab = (s) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)
 
 // ─── 1. Primitives ──────────────────────────────────────────────────────────
 const flattenPrimitives = () => {
-  const { refsTree, varsTree } = buildTrees();
-  return flatten(varsTree, refsTree);
-};
+  const { refsTree, varsTree } = buildTrees()
+  return flatten(varsTree, refsTree)
+}
 
 // ─── 2. Semantic flattening ─────────────────────────────────────────────────
 const splitResponsive = (value) => {
-  if (value === null || typeof value !== 'object') return { _: String(value) };
-  const out = {};
-  for (const [bp, v] of Object.entries(value)) out[bp] = String(v);
-  return out;
-};
+  if (value === null || typeof value !== 'object') return { _: String(value) }
+  const out = {}
+  for (const [bp, v] of Object.entries(value)) out[bp] = String(v)
+  return out
+}
 
 const flattenSingleValue = (data, varNameOf) => {
-  const byBp = {};
+  const byBp = {}
   for (const [key, val] of Object.entries(data)) {
     for (const [bp, v] of Object.entries(splitResponsive(val))) {
-      (byBp[bp] ||= {})[varNameOf(key)] = v;
+      ;(byBp[bp] ||= {})[varNameOf(key)] = v
     }
   }
-  return byBp;
-};
+  return byBp
+}
 
 const flattenBundle = (data) => {
-  const byBp = {};
+  const byBp = {}
   for (const [key, bundle] of Object.entries(data)) {
     for (const [prop, val] of Object.entries(bundle)) {
-      const varName = `--${key}-${kebab(prop)}`;
+      const varName = `--${key}-${kebab(prop)}`
       for (const [bp, v] of Object.entries(splitResponsive(val))) {
-        (byBp[bp] ||= {})[varName] = v;
+        ;(byBp[bp] ||= {})[varName] = v
       }
     }
   }
-  return byBp;
-};
+  return byBp
+}
 
 const buildFlatModel = () => ({
   primitives: flattenPrimitives(),
   containers: flattenSingleValue(containersData, (k) => `--container-${k}`),
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
-  texts: flattenBundle(textsData),
-});
+  texts: flattenBundle(textsData)
+})
 
 // ─── 3. Shared formatting helpers ──────────────────────────────────────────
 const formatVars = (vars, indent) =>
   Object.entries(vars)
     .map(([k, v]) => `${indent}${k}: ${v};`)
-    .join('\n');
+    .join('\n')
 
 /** Component classes (.text-*, .gap-*, .px-container) — identical in v3/v4. */
 const emitComponentClasses = (indent = '  ') => {
-  const lines = [];
+  const lines = []
 
-  lines.push(`${indent}/* ── Containers ── */`);
-  lines.push(`${indent}.px-container { padding-left: var(--container-px); padding-right: var(--container-px); }`);
-  lines.push(`${indent}.py-container { padding-top: var(--container-py); padding-bottom: var(--container-py); }`);
-  lines.push(`${indent}.max-container-width { max-width: var(--container-max-width); }`);
+  lines.push(`${indent}/* ── Containers ── */`)
+  lines.push(
+    `${indent}.px-container { padding-left: var(--container-px); padding-right: var(--container-px); }`
+  )
+  lines.push(
+    `${indent}.py-container { padding-top: var(--container-py); padding-bottom: var(--container-py); }`
+  )
+  lines.push(`${indent}.max-container-width { max-width: var(--container-max-width); }`)
 
-  lines.push('');
-  lines.push(`${indent}/* ── Spacings ── */`);
+  lines.push('')
+  lines.push(`${indent}/* ── Spacings ── */`)
   for (const key of Object.keys(spacingsData)) {
-    lines.push(`${indent}.gap-${key} { gap: var(--${key}); }`);
-    lines.push(`${indent}.p-${key} { padding: var(--${key}); }`);
+    lines.push(`${indent}.gap-${key} { gap: var(--${key}); }`)
+    lines.push(`${indent}.p-${key} { padding: var(--${key}); }`)
   }
 
-  lines.push('');
-  lines.push(`${indent}/* ── Texts ── */`);
+  lines.push('')
+  lines.push(`${indent}/* ── Texts ── */`)
   for (const [key, bundle] of Object.entries(textsData)) {
     const decls = Object.keys(bundle)
       .map((prop) => `${kebab(prop)}: var(--${key}-${kebab(prop)});`)
-      .join(' ');
-    lines.push(`${indent}.${key} { ${decls} }`);
+      .join(' ')
+    lines.push(`${indent}.${key} { ${decls} }`)
   }
 
-  return lines.join('\n');
-};
+  return lines.join('\n')
+}
 
 // ─── 4. v3 emission (@tailwind directives + @layer) ────────────────────────
 const emitMediaBlockV3 = (bp, vars) =>
@@ -124,32 +129,32 @@ const emitMediaBlockV3 = (bp, vars) =>
     `    ${V3_SELECTOR} {`,
     formatVars(vars, '      '),
     `    }`,
-    `  }`,
-  ].join('\n');
+    `  }`
+  ].join('\n')
 
 const emitCssV3 = () => {
-  const m = buildFlatModel();
+  const m = buildFlatModel()
 
   const sections = [
     { title: 'Primitives', vars: m.primitives },
     { title: 'Containers', vars: m.containers._ || {} },
     { title: 'Spacings', vars: m.spacings._ || {} },
-    { title: 'Texts', vars: m.texts._ || {} },
-  ];
+    { title: 'Texts', vars: m.texts._ || {} }
+  ]
 
   const baseBody = sections
     .filter((s) => Object.keys(s.vars).length > 0)
     .map((s) => `    /* ── ${s.title} ── */\n${formatVars(s.vars, '    ')}`)
-    .join('\n\n');
+    .join('\n\n')
 
-  const mediaBlocks = [];
+  const mediaBlocks = []
   for (const bp of BREAKPOINT_ORDER) {
     const merged = {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
-      ...(m.texts[bp] || {}),
-    };
-    if (Object.keys(merged).length > 0) mediaBlocks.push(emitMediaBlockV3(bp, merged));
+      ...(m.texts[bp] || {})
+    }
+    if (Object.keys(merged).length > 0) mediaBlocks.push(emitMediaBlockV3(bp, merged))
   }
 
   return [
@@ -167,83 +172,86 @@ const emitCssV3 = () => {
     mediaBlocks.join('\n\n'),
     '}',
     '',
+    '/* ── Theme semantics (primary, secondary, surfaces, feedback, …) ── */',
+    compileThemeCss(),
+    '',
     '@layer components {',
     emitComponentClasses(),
     '}',
-    '',
-  ].join('\n');
-};
+    ''
+  ].join('\n')
+}
 
 const treeToVars = (tree, prefix) => {
-  const out = {};
+  const out = {}
   for (const [key, val] of Object.entries(tree)) {
     if (val && typeof val === 'object' && !Array.isArray(val)) {
-      out[key] = treeToVars(val, `${prefix}-${key}`);
+      out[key] = treeToVars(val, `${prefix}-${key}`)
     } else {
-      out[key] = `var(${prefix}-${key})`;
+      out[key] = `var(${prefix}-${key})`
     }
   }
-  return out;
-};
+  return out
+}
 
 const buildPresetData = () => {
-  const { refsTree } = buildTrees();
-  const colors = treeToVars(refsTree.color, '--color');
+  const { refsTree } = buildTrees()
+  const colors = treeToVars(refsTree.color, '--color')
   const fontWeight = refsTree.typography?.['font-weight']
     ? treeToVars(refsTree.typography['font-weight'], '--font-weight')
-    : {};
+    : {}
   const dropShadow = refsTree.effects?.['drop-shadow']
     ? treeToVars(refsTree.effects['drop-shadow'], '--drop-shadow')
-    : {};
+    : {}
   const lineHeight = refsTree.typography?.leading
     ? treeToVars(refsTree.typography.leading, '--leading')
-    : {};
+    : {}
   const letterSpacing = refsTree.typography?.tracking
     ? treeToVars(refsTree.typography.tracking, '--tracking')
-    : {};
+    : {}
 
-  const fontSize = {};
+  const fontSize = {}
   for (const [key, bundle] of Object.entries(textsData)) {
-    if (!('fontSize' in bundle)) continue;
-    const meta = {};
-    if ('lineHeight' in bundle) meta.lineHeight = `var(--${key}-line-height)`;
-    if ('letterSpacing' in bundle) meta.letterSpacing = `var(--${key}-letter-spacing)`;
-    if ('fontWeight' in bundle) meta.fontWeight = `var(--${key}-font-weight)`;
-    fontSize[key.replace(/^text-/, '')] = [`var(--${key}-font-size)`, meta];
+    if (!('fontSize' in bundle)) continue
+    const meta = {}
+    if ('lineHeight' in bundle) meta.lineHeight = `var(--${key}-line-height)`
+    if ('letterSpacing' in bundle) meta.letterSpacing = `var(--${key}-letter-spacing)`
+    if ('fontWeight' in bundle) meta.fontWeight = `var(--${key}-font-weight)`
+    fontSize[key.replace(/^text-/, '')] = [`var(--${key}-font-size)`, meta]
   }
 
   return {
     theme: {
-      extend: { colors, fontSize, fontWeight, dropShadow, lineHeight, letterSpacing },
-    },
-  };
-};
+      extend: { colors, fontSize, fontWeight, dropShadow, lineHeight, letterSpacing }
+    }
+  }
+}
 
 const emitPresetV3 = () => {
-  const data = buildPresetData();
+  const data = buildPresetData()
   return [
     '/* generated by build-tokens.mjs — target: v3 — do not edit */',
     `const preset = ${JSON.stringify(data, null, 2)};`,
     'export default preset;',
-    '',
-  ].join('\n');
-};
+    ''
+  ].join('\n')
+}
 
 const emitTailwindConfigV3 = () => {
-  const data = buildPresetData();
+  const data = buildPresetData()
   const config = {
     content: ['./src/tests/**/*.html'],
     darkMode: ['class', '[data-theme="dark"]'],
     theme: data.theme,
-    plugins: [],
-  };
+    plugins: []
+  }
   return [
     '/* generated by build-tokens.mjs — target: v3 — do not edit */',
     `/** @type {import('tailwindcss').Config} */`,
     `module.exports = ${JSON.stringify(config, null, 2)};`,
-    '',
-  ].join('\n');
-};
+    ''
+  ].join('\n')
+}
 
 // ─── 5. v4 emission (@import "tailwindcss" + @theme) ───────────────────────
 /**
@@ -259,40 +267,36 @@ const emitTailwindConfigV3 = () => {
  *     via `:root @media` overrides.
  */
 const emitCssV4 = () => {
-  const m = buildFlatModel();
-  const primitivesEntries = Object.entries(m.primitives);
+  const m = buildFlatModel()
+  const primitivesEntries = Object.entries(m.primitives)
 
   // Split primitives: color/breakpoint go in @theme; everything else (shape,
   // typography, effects, border, ring-offset) stays in :root.
-  const themeVars = {};
-  const rootPrimitiveVars = {};
+  const themeVars = {}
+  const rootPrimitiveVars = {}
   for (const [k, v] of primitivesEntries) {
-    if (k.startsWith('--color-') || k.startsWith('--breakpoint-')) themeVars[k] = v;
-    else rootPrimitiveVars[k] = v;
+    if (k.startsWith('--color-') || k.startsWith('--breakpoint-')) themeVars[k] = v
+    else rootPrimitiveVars[k] = v
   }
 
   const semanticBase = {
     ...rootPrimitiveVars,
     ...(m.containers._ || {}),
     ...(m.spacings._ || {}),
-    ...(m.texts._ || {}),
-  };
+    ...(m.texts._ || {})
+  }
 
-  const mediaBlocks = [];
+  const mediaBlocks = []
   for (const bp of BREAKPOINT_ORDER) {
     const merged = {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
-      ...(m.texts[bp] || {}),
-    };
-    if (Object.keys(merged).length === 0) continue;
+      ...(m.texts[bp] || {})
+    }
+    if (Object.keys(merged).length === 0) continue
     mediaBlocks.push(
-      [
-        `  @media (min-width: ${breakpoints[bp]}) {`,
-        formatVars(merged, '    '),
-        `  }`,
-      ].join('\n'),
-    );
+      [`  @media (min-width: ${breakpoints[bp]}) {`, formatVars(merged, '    '), `  }`].join('\n')
+    )
   }
 
   return [
@@ -313,46 +317,46 @@ const emitCssV4 = () => {
     '@layer components {',
     emitComponentClasses(),
     '}',
-    '',
-  ].join('\n');
-};
+    ''
+  ].join('\n')
+}
 
 // ─── 6. Write to disk ──────────────────────────────────────────────────────
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const distRoot = resolve(__dirname, '../../dist');
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const distRoot = resolve(__dirname, '../../dist')
 
 const writeV3 = async () => {
-  const dir = resolve(distRoot, 'v3');
-  await mkdir(dir, { recursive: true });
-  const css = emitCssV3();
-  await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
-  await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');
-  await writeFile(resolve(dir, 'tailwind-preset.js'), emitPresetV3(), 'utf8');
-  await writeFile(resolve(dir, 'tailwind.config.js'), emitTailwindConfigV3(), 'utf8');
-  console.log(`✓ v3 → ${dir}`);
-};
+  const dir = resolve(distRoot, 'v3')
+  await mkdir(dir, { recursive: true })
+  const css = emitCssV3()
+  await writeFile(resolve(dir, 'globals.css'), css, 'utf8')
+  await writeFile(resolve(dir, 'globals.scss'), css, 'utf8')
+  await writeFile(resolve(dir, 'tailwind-preset.js'), emitPresetV3(), 'utf8')
+  await writeFile(resolve(dir, 'tailwind.config.js'), emitTailwindConfigV3(), 'utf8')
+  console.log(`✓ v3 → ${dir}`)
+}
 
 const writeV4 = async () => {
-  const dir = resolve(distRoot, 'v4');
-  await mkdir(dir, { recursive: true });
-  const css = emitCssV4();
-  await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
-  await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');
-  console.log(`✓ v4 → ${dir}`);
-};
+  const dir = resolve(distRoot, 'v4')
+  await mkdir(dir, { recursive: true })
+  const css = emitCssV4()
+  await writeFile(resolve(dir, 'globals.css'), css, 'utf8')
+  await writeFile(resolve(dir, 'globals.scss'), css, 'utf8')
+  console.log(`✓ v4 → ${dir}`)
+}
 
 // ─── 7. CLI ────────────────────────────────────────────────────────────────
 const parseTarget = () => {
-  const arg = process.argv.find((a) => a.startsWith('--target='));
-  if (!arg) return 'all';
-  const value = arg.slice('--target='.length).toLowerCase();
+  const arg = process.argv.find((a) => a.startsWith('--target='))
+  if (!arg) return 'all'
+  const value = arg.slice('--target='.length).toLowerCase()
   if (!['v3', 'v4', 'all'].includes(value)) {
-    console.error(`Unknown --target=${value}. Use v3, v4, or all.`);
-    process.exit(1);
+    console.error(`Unknown --target=${value}. Use v3, v4, or all.`)
+    process.exit(1)
   }
-  return value;
-};
+  return value
+}
 
-const target = parseTarget();
-if (target === 'v3' || target === 'all') await writeV3();
-if (target === 'v4' || target === 'all') await writeV4();
+const target = parseTarget()
+if (target === 'v3' || target === 'all') await writeV3()
+if (target === 'v4' || target === 'all') await writeV4()

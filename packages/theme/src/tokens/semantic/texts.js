@@ -165,14 +165,14 @@ export const semanticTexts = () => {
       '.text-button-lg': {
         fontFamily: 'Proto Mono',
         fontSize: '0.875rem',
-        fontWeight: '600',
+        fontWeight: '500',
         lineHeight: '1',
         letterSpacing: '0',
       },
       '.text-button-md': {
         fontFamily: 'Proto Mono',
         fontSize: '0.75rem',
-        fontWeight: '600',
+        fontWeight: '500',
         lineHeight: '1',
         letterSpacing: '0',
       },

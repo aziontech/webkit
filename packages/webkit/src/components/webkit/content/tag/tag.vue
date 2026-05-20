@@ -3,34 +3,37 @@
 
   defineOptions({ name: 'Tag' })
 
+  const fontSans = 'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]'
+
+  const shapeElements = 'rounded-[var(--shape-elements)]'
+
   const severityStyles = {
     primary: {
-      container: 'bg-primary-mask text-primary border-transparent',
-      icon: 'size-3.5'
+      container: 'bg-[var(--primary-mask)] text-[var(--primary)] border-transparent',
+      icon: 'size-3'
     },
     secondary: {
-      container: 'bg-canvas text-default border-default',
-      icon: 'size-3',
-      roundedOff: 'rounded-md'
+      container: 'bg-[var(--bg-canvas)] text-[var(--text-default)] border-[var(--border-default)]',
+      icon: 'size-3'
     },
     success: {
-      container: 'bg-success text-success border-transparent',
+      container: 'bg-[var(--success)] text-[var(--success-contrast)] border-transparent',
       icon: 'size-3'
     },
     info: {
-      container: 'bg-indigo-950 text-accent border-transparent',
+      container: 'bg-[var(--info)] text-[var(--info-contrast)] border-transparent',
       icon: 'size-3'
     },
     warning: {
-      container: 'bg-warning text-warning border-transparent',
+      container: 'bg-[var(--warning)] text-[var(--warning-contrast)] border-transparent',
       icon: 'size-3'
     },
     danger: {
-      container: 'bg-danger text-danger border-transparent',
+      container: 'bg-[var(--danger)] text-[var(--danger-contrast)] border-transparent',
       icon: 'size-3'
     },
     accent: {
-      container: 'bg-violet-300 text-neutral-900 border-transparent',
+      container: 'bg-[var(--accent)] text-[var(--accent-contrast)] border-transparent',
       icon: 'size-3'
     }
   }
@@ -90,9 +93,10 @@
   const rootClass = computed(() => {
     const classes = [
       'inline-flex h-6 items-center justify-center gap-2 overflow-hidden border px-2',
-      'font-proto-mono text-xs font-normal leading-none',
+      fontSans,
+      'text-body-xs font-normal leading-none',
       currentSeverityStyle.value.container,
-      props.rounded ? 'rounded-full' : (currentSeverityStyle.value.roundedOff ?? 'rounded')
+      props.rounded ? 'rounded-full' : shapeElements
     ]
 
     if (props.class) {

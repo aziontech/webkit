@@ -1,7 +1,7 @@
-import Tag from '@aziontech/webkit/tag'
+import Tag from '@aziontech/webkit/content/tag'
 
 export default {
-  title: 'Core/Tag',
+  title: 'Webkit/Content/Tag',
   component: Tag,
   tags: ['autodocs'],
   argTypes: {

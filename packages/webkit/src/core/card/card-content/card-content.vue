@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
-  import Button from '../../../components/site/button/button.vue'
+  import Button from '../../../components/webkit/actions/button/button.vue'
 
   defineOptions({ name: 'CardContent' })
 
@@ -183,10 +183,10 @@
       v-if="link"
     >
       <Button
-        type="link"
+        kind="text"
+        size="small"
         :label="linkText || 'Learn more'"
         :href="link"
-        :size="'small'"
       />
     </div>
   </div>
