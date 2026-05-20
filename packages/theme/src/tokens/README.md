@@ -1,344 +1,302 @@
+<h1 align="center">azion-theme · tokens</h1>
 
-<h1 align="center">azion-theme</h1>
+Design tokens organized as JavaScript modules, ready to be compiled into CSS custom properties. Architecture targets **Tailwind CSS v4** (CSS-first `@theme` / single stylesheet) — tokens live in JS as the source-of-truth and are compiled to CSS variables at build time.
 
-![production](https://github.com/aziontech/azion-theme/actions/workflows/release.yml/badge.svg)
+## 📋 Table of contents
 
-<p align="center">
-    <img
-        src="./doc/cover-image.png"
-        width="1200px"
-    />
-</p>
+- [Architecture overview](#-architecture-overview)
+- [File structure](#-file-structure)
+- [Token types](#-token-types)
+- [Compile & inject](#-compile--inject)
+- [How to add a new token](#-how-to-add-a-new-token)
+- [Token references (`tokenRef`)](#-token-references-tokenref)
+- [Test pages](#-test-pages)
+- [Theme switching](#-theme-switching)
 
-The Azion Theme repository is focused on sharing our style kit across interfaces and should be used in all company projects, including Azion Console Kit, Azion Site, Landing Pages, and all user interactions with Azion.
+---
 
-## 📋 Table of Contents
+## 🏗 Architecture overview
 
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Development](#-development)
-- [Design Tokens](#-design-tokens)
-- [Links](#-links)
+Two layers:
 
-## 🚀 Installation
+1. **Primitives** — raw, theme-invariant values (color hexes, px sizes, font sizes, etc.).
+2. **Theme (semantic)** — light/dark variants that **reference** primitives via `tokenRef(...)`.
 
-To install the `azion-theme` project, you need to follow the command. Choose one of your preferences: npm or yarn:
+Compile pipeline:
 
-```bash
-npm install azion-theme --save
-# or
-yarn add azion-theme
+```
+tokens/primitives/*.js  ─┐
+                         ├─►  scripts/compile-primitives.js  ─►  :root { --color-… --size-… }
+tokens/theme/*.js       ─┘                                       (single block — values don't change)
+                         └─►  scripts/compile-theme.js       ─►  :root, [data-theme=light] { … }
+                                                                 [data-theme=dark]         { … }
 ```
 
-Alternatively, you can configure the `package.json` file by adding the dependency:
+- Primitives are **absolute** and emit one block (`:root, [data-theme=light]`).
+- Theme tokens have **light** and **dark** variants and emit two blocks. Only theme vars flip between themes.
 
-```json
-{
-  "dependencies": {
-    "azion-theme": "^1.4.0"
-  }
-}
+---
+
+## 📂 File structure
+
+```
+src/
+├── tokens/
+│   ├── primitives/
+│   │   ├── colors/
+│   │   │   ├── colors.js        # base, gray, violet, orange, slate, yellow,
+│   │   │   │                    # green, blue, neutral, red, surface (+ brand, alpha)
+│   │   │   ├── brand.js         # primary, accent, absolute (brand colors)
+│   │   │   └── alpha.js         # alpha variants for each palette
+│   │   ├── shape/
+│   │   │   ├── container.js     # container-3xs … container-7xl
+│   │   │   ├── height.js        # h-2 … h-96
+│   │   │   ├── radius.js        # none, sm, DEFAULT, md … 3xl, full
+│   │   │   ├── size.js          # size-2 … size-96
+│   │   │   ├── spacing.js       # spacing-1 … spacing-96
+│   │   │   └── width.js         # w-3xs … w-7xl (alias → container.X)
+│   │   ├── typography/
+│   │   │   ├── font-family.js   # sans, code, display
+│   │   │   ├── font-size.js     # text-xs … text-9xl
+│   │   │   └── line-height.js   # leading-none, leading-3 … leading-10
+│   │   ├── effects/
+│   │   │   ├── blur.js          # blur-xs … blur-3xl
+│   │   │   └── opacity.js       # opacity-25/50/75/100
+│   │   ├── border-widths.js     # border-0 … border-4
+│   │   ├── breakpoints.js       # sm, md, lg, xl, 2xl
+│   │   └── ring-offset.js       # ring-offset
+│   ├── theme/
+│   │   ├── primary.js           # primary, primary-mask/selected/hover/active/contrast
+│   │   ├── secondary.js         # secondary, secondary-*
+│   │   ├── accent.js            # accent, accent-*
+│   │   ├── surfaces.js          # surface-0 … surface-950 (aliases for gray)
+│   │   ├── background.js        # bg-canvas, bg-surface, bg-mask, …
+│   │   ├── border.js            # border-default, border-muted, border-strong, border-selected
+│   │   ├── text.js              # text-default, text-muted
+│   │   ├── ring.js              # ring-color
+│   │   └── feedback/
+│   │       ├── success.js       # success, success-border, success-contrast
+│   │       ├── warning.js
+│   │       ├── danger.js
+│   │       └── info.js
+│   └── semantic/                # legacy semantic colors (pre-v4 pipeline)
+│       └── colors.js
+├── scripts/
+│   ├── refs.js                  # tokenRef helper
+│   ├── resolve.js               # legacy resolver (semantic/colors.js)
+│   ├── css-vars.js              # legacy CSS-vars compiler
+│   ├── compile-primitives.js    # NEW: flattens primitives → :root
+│   └── compile-theme.js         # NEW: resolves theme refs → :root + [data-theme=dark]
+└── tests/
+    ├── primitives.html          # visual harness for all primitives
+    └── theme.html               # visual harness with light/dark toggle
 ```
 
-After updating the `package.json` file, run `npm install` in the root of your project to install the Azion Theme.
+---
 
-### 🔗 Integration with Front-End Project
+## 🎨 Token types
 
-To integrate the Azion Theme into your front-end project, you need to import the theme files in your project's entry point file (App.vue, main.js, index.js, etc.):
+### Primitives
 
-```javascript
-import 'azion-theme/dark';
-import 'azion-theme/light';
-```
+Plain JS objects with literal values. Theme-invariant.
 
-Make sure to include these imports at the top of your entry point file to ensure the styles are applied correctly throughout your application.
-
-## 💻 Development
-
-To work locally, you should clone both the `azion-theme` repository and the other repository where the theme will be used.
-
-### Example:
-
-In this example, we will use the [azion-webkit](https://github.com/aziontech/azion-webkit) repository:
-
-1. Clone the `azion-webkit` and `azion-theme` repositories:
-  
-  ```bash
-  git clone https://github.com/aziontech/azion-webkit.git
-  git clone https://github.com/aziontech/azion-theme.git
-  ```
-
-2. Install dependencies and create the link point:
-  
-  ```bash
-  cd ./azion-theme && npm i && npm link
-  ```
-
-3. Link the `azion-theme` to the `azion-webkit` project:
-  
-  ```bash
-  cd ../azion-webkit && npm i && npm link azion-theme
-  ```
-
-Any modifications made to `azion-theme` will be reflected on this development server with hot reload.
-
-## 🎨 Design Tokens
-
-This project includes **primitive color tokens** extracted directly from Figma, ready to be consumed via Tailwind CSS.
-
-### 🚀 How to Use the Tokens
-
-```javascript
-// tailwind.config.js
-import typography from '@tailwindcss/typography';
-import { tokenUtilities } from 'azion-theme/tokens/build/tailwind-plugin';
-import colors from 'azion-theme/tokens';
-
-export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx,html}'],
-  darkMode: ['class', '.dark', '.azion.azion-dark'],
-  theme: {
-    extend: {
-      colors: {
-        ...colors,
-      },
-    },
-  },
-  plugins: [tokenUtilities(), typography],
+```js
+// tokens/primitives/colors/brand.js
+export const brand = {
+  primary: { 50: '#FFF5EF', 100: '#FFE7D8', /* … */ 500: '#FE601F', /* … */ 950: '#401602' },
+  accent:  { 50: '#F6F6FF', /* … */ 500: '#8A84EC', /* … */ 950: '#0B0A19' },
+  absolute: { black: '#0A0A0A', white: '#FCFCFC' },
 };
 ```
 
-#### Token structure overview
-
-**Global/Primitive tokens** (direct values, use with `dark:` variant):
-```javascript
-// Primitive palettes (all with 50-950 shades)
-colors.orange[500];           // #fe601f
-colors.violet[500];           // #8a84ec
-colors.neutral[900];          // #171717
-
-// Brand colors
-colors.brand.black;           // #0a0a0a
-colors.brand.white;           // #fafafa
-colors.brand.orange;          // #fe601f
-
-// Brand primitives (aliases)
-colors.primary[500];          // orange palette
-colors.accent[500];           // violet palette
-
-// Surface primitives (neutral-based)
-colors.surface[950];          // #0a0a0a
+```js
+// tokens/primitives/shape/spacing.js
+export const spacing = { 1: '4px', 2: '8px', /* … */ 96: '384px' };
 ```
 
-**Semantic tokens** (theme-aware, no `dark:` variant needed):
-```javascript
-// Text colors - automatically switches between light/dark
-colors.text.base;             // neutral-900 (light) / neutral-50 (dark)
-colors.text.muted;            // neutral-600 (light) / neutral-400 (dark)
-colors.text.accent;           // accent-500 (both modes)
+### Theme (semantic)
 
-// Background colors - theme-aware layers
-colors.background.layer1;     // surface-0 (light) / surface-800 (dark)
-colors.background.layer2;     // surface-50 (light) / surface-700 (dark)
-colors.background.canvas;     // surface-100 (light) / surface-950 (dark)
+Objects with `light` / `dark` variants. Values are `tokenRef(...)` calls that point to primitives (or to other semantic tokens like `theme.surfaces.surface-X`).
 
-// Border colors - theme-aware borders
-colors.border.base;           // surface-200 (light) / surface-700 (dark)
-colors.border.primary;        // primary-500 (both modes)
-colors.border.accent;         // accent-500 (both modes)
+```js
+// tokens/theme/primary.js
+import { tokenRef } from '../../scripts/refs.js';
+
+export const primary = {
+  light: {
+    primary:           tokenRef('brand.primary.primary-500'),
+    'primary-mask':    tokenRef('primitives.alpha.orange.100'),
+    'primary-hover':   tokenRef('brand.primary.primary-600'),
+    'primary-contrast': tokenRef('primitives.base.black'),
+  },
+  dark: {
+    primary:           tokenRef('brand.primary.primary-500'),
+    'primary-mask':    tokenRef('primitives.alpha.orange.100'),
+    'primary-hover':   tokenRef('brand.primary.primary-600'),
+    'primary-contrast': tokenRef('primitives.base.white'),
+  },
+};
 ```
 
-#### Usage in HTML/Tailwind Classes
+---
 
-**Using semantic tokens** (theme-aware, no `dark:` variant needed):
-```html
-<!-- Semantic background - automatically switches theme -->
-<div class="bg-layer1">
-  Layer 1 background (white in light, dark in dark mode)
-</div>
+## 🔧 Compile & inject
 
-<!-- Semantic text colors -->
-<p class="text-base">
-  Base text color (auto-adapts to theme)
-</p>
+### In the browser
 
-<!-- Semantic borders -->
-<div class="border border-base">
-  Border adapts to current theme
-</div>
+```js
+import { injectPrimitivesCss } from '@aziontech/theme/scripts/compile-primitives.js';
+import { injectThemeCss }      from '@aziontech/theme/scripts/compile-theme.js';
 
-<!-- Semantic interactive states -->
-<button class="bg-layer1 hover:bg-layer1-hover border border-primary text-primary">
-  Themed button
-</button>
+injectPrimitivesCss();   // <style data-azion-primitives> with all primitive vars
+injectThemeCss();        // <style data-azion-theme>      with light+dark theme vars
 ```
 
-**Using global tokens** (can use `dark:` in this cases):
-```html
-<!-- Background with dark variant -->
-<div class="bg-neutral-50 dark:bg-neutral-950">
-  Adaptive background
-</div>
-
-<!-- Text colors with dark variant -->
-<p class="text-neutral-900 dark:text-neutral-100">
-  Primary text color
-</p>
-
-<!-- Border colors with dark variant -->
-<div class="border border-neutral-200 dark:border-neutral-800">
-  Card with adaptive border
-</div>
-
-<!-- Using brand colors (no dark variant needed) -->
-<button class="bg-orange-500 text-white hover:bg-orange-600">
-  Action Button
-</button>
-```
-
-**Available token classes:**
-
-*Global tokens* (use with `dark:` variant):
-- **Neutrals:** `neutral-50` → `neutral-950` (surface backgrounds, text, borders)
-- **Brand:** `orange-50` → `orange-950` (primary actions)
-- **Accent:** `violet-50` → `violet-950` (secondary highlights)
-- **Status:** `red-*`, `green-*`, `yellow-*`, `blue-*` (semantic status colors)
-
-*Semantic tokens* (theme-aware, no `dark:` needed):
-- **Text:** `text-base`, `text-muted`, `text-accent`, `text-primary`, `text-link`
-- **Background:** `bg-layer1`, `bg-layer2`, `bg-canvas`, `bg-base`
-- **Border:** `border-base`, `border-primary`, `border-accent`, `border-warning`, `border-success`, `border-danger`
-
-### Theme Switch Compatibility
-
-The CSS variable initializer targets both the Tailwind `.dark` class and the existing theme classes used by the SCSS theme:
+Then use the variables anywhere:
 
 ```css
-:root, [data-theme=light], .azion.azion-light { /* light vars */ }
-[data-theme=dark], .dark, .azion.azion-dark { /* dark vars */ }
+.btn {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+.btn:hover { background: var(--primary-hover); }
 ```
 
-### Granular Imports (Advanced)
+### As CSS strings (Node / SSR / build step)
 
-```javascript
-// Named exports for specific token types
-import { 
-  primitives, 
-  brandColors, 
-  brandPrimitives,
-  surfacePrimitives,
-  preset,
-  createTailwindConfig,
-  tokenUtilities 
-} from 'azion-theme/tokens';
+```js
+import { compilePrimitivesCss } from '@aziontech/theme/scripts/compile-primitives.js';
+import { compileThemeCss }      from '@aziontech/theme/scripts/compile-theme.js';
+
+const css = compilePrimitivesCss() + '\n' + compileThemeCss();
+fs.writeFileSync('dist/theme.css', css);
 ```
 
-### 🛠️ Sync & Maintenance (With Script)
+### As JS objects
 
-#### How to feed new and changed tokens from Figma
+```js
+import { compilePrimitivesVars } from '@aziontech/theme/scripts/compile-primitives.js';
+import { compileThemeVars }      from '@aziontech/theme/scripts/compile-theme.js';
 
-1) **Update Figma Variables**
-   - Ensure **Global** and **Semantic** variables are updated and organized correctly (naming, groups, modes, and values).
+compilePrimitivesVars();  // → { '--color-orange-500': '#FE601F', '--spacing-1': '4px', … }
+compileThemeVars();       // → { light: {…}, dark: {…} }
+```
 
-2) **Open the Tokens Studio for Figma plugin**
+---
 
-3) **Import Figma Variables into Tokens Studio**
-   - Use Tokens Studio’s import-from-variables flow to bring the current Variables state into the token sets.
+## ➕ How to add a new token
 
-4) **Export to file/folder**
-   - Export using **Multiple files**.
+### Add a new primitive
 
-5) **Copy the exported files into this repo**
-   - Place them under [`src/tokens/figma-reference-tokens-studio/`](src/tokens/figma-reference-tokens-studio:1) (replace existing contents).
+1. Open the relevant file (e.g., `tokens/primitives/shape/spacing.js`).
+2. Add the key/value:
 
-6) **Regenerate the code tokens**
-   - Run:
+   ```js
+   export const spacing = {
+     /* … */
+     128: '512px',   // new
+   };
+   ```
+
+3. Done. It is automatically picked up by `compile-primitives.js`, producing `--spacing-128: 512px`.
+
+### Add a new semantic (theme) token
+
+1. Pick the right file (`tokens/theme/*.js` or `tokens/theme/feedback/*.js`).
+2. Add the key with `tokenRef(...)` for both `light` and `dark`:
+
+   ```js
+   // tokens/theme/border.js
+   export const border = {
+     light: {
+       /* … */
+       'border-emphasis': tokenRef('primitives.gray.400'),
+     },
+     dark: {
+       /* … */
+       'border-emphasis': tokenRef('primitives.gray.500'),
+     },
+   };
+   ```
+
+3. The compile script picks it up automatically — emits `--border-emphasis` inside both blocks.
+
+### Add a new semantic group (new file)
+
+1. Create `tokens/theme/<group>.js` exporting `{ light, dark }`.
+2. Register it in `scripts/compile-theme.js`:
+
+   ```js
+   import { yourGroup } from '../tokens/theme/your-group.js';
+   /* … inside compileVariant(variant): */
+   const groups = [ /* …, */ yourGroup[variant] ];
+   ```
+
+---
+
+## 🔗 Token references (`tokenRef`)
+
+`tokenRef(path)` returns a marker object `{ __ref: path }` that the compiler resolves at build time.
+
+Supported path prefixes (handled by `scripts/compile-theme.js`):
+
+| Prefix | Looks up |
+|---|---|
+| `primitives.X.Y.Z` | `tokens/primitives/colors/colors.js` tree (e.g., `primitives.gray.900`, `primitives.alpha.orange.100`) |
+| `brand.primary.primary-N` | `brand.primary[N]` (e.g., `brand.primary.primary-500` → `#FE601F`) |
+| `brand.accent.accent-N` | `brand.accent[N]` |
+| `brand.absolute.X` | `brand.absolute.X` (`black` / `white`) |
+| `theme.surfaces.surface-N` | the semantic surface map (chain: surface → gray primitive) |
+
+Refs of unknown prefixes are left as the raw path string in the output — flag for "this needs resolver support".
+
+---
+
+## 🧪 Test pages
+
+Local visual harnesses (require a static server because of ESM imports):
 
 ```bash
-node ./scripts/figma-sync.js
+npx http-server packages/theme/src -p 8080
 ```
 
-7) **Review and commit**
-   - Inspect the diff in the generated files and validate light/dark semantics before committing.
+- `http://localhost:8080/tests/primitives.html` — all primitives rendered as swatches/scales (396 vars).
+- `http://localhost:8080/tests/theme.html` — semantic tokens with a **light/dark toggle button** (59 + 59 vars). Body, buttons, alerts, surfaces, and swatches all react to the toggle.
 
-Files affected by the script:
-- [`src/tokens/primitives/colors.js`](src/tokens/primitives/colors.js)
-- [`src/tokens/primitives/brand.js`](src/tokens/primitives/brand.js)
-- [`src/tokens/semantic/text.js`](src/tokens/semantic/text.js)
-- [`src/tokens/semantic/backgrounds.js`](src/tokens/semantic/backgrounds.js)
-- [`src/tokens/semantic/borders.js`](src/tokens/semantic/borders.js)
+---
 
-### 🧰 Manual Maintenance (Without Script)
+## 🌗 Theme switching
 
-When updating or adding tokens manually, edit the files below depending on the token type:
+The compiled CSS targets multiple hooks so the runtime can pick whichever convention the consumer uses:
 
-- **Primitive palettes:** [`src/tokens/primitives/colors.js`](src/tokens/primitives/colors.js)
-- **Brand + surface primitives:** [`src/tokens/primitives/brand.js`](src/tokens/primitives/brand.js)
-- **Semantic text (light/dark):** [`src/tokens/semantic/text.js`](src/tokens/semantic/text.js)
-- **Semantic backgrounds (light/dark):** [`src/tokens/semantic/backgrounds.js`](src/tokens/semantic/backgrounds.js)
-- **Semantic borders (light/dark):** [`src/tokens/semantic/borders.js`](src/tokens/semantic/borders.js)
-- **Brand aliases:** [`src/tokens/colors-brand.js`](src/tokens/colors-brand.js)
-- **Tailwind mappings (class names):** [`src/tokens/build/preset.js`](src/tokens/build/preset.js)
-- **CSS vars output/selectors:** [`src/tokens/build/css-vars.js`](src/tokens/build/css-vars.js)
+```css
+:root, [data-theme=light], .azion.azion-light {
+  /* light theme vars */
+}
 
-Checklist when adding a new token manually:
-1) Add/update the primitive or surface scale value (if needed).
-2) Add matching semantic entries for both `light` and `dark`.
-3) Update Tailwind mappings if you want a class for the token.
-4) Regenerate or verify CSS vars output for both themes.
-
-### 🎨 Available Colors
-
-#### Main Palette (Orange)
-- `orange-50` → `orange-950`
-- **Primary**: `orange-500` (#fe601f)
-
-#### Brand Palette
-- `brand-black` (#0a0a0a)
-- `brand-white` (#fafafa)
-- `brand-dark-gray` (#171717)
-- `brand-medium-gray` (#737373)
-
-#### Other Complete Palettes
-- **Violet, Slate, Gray, Neutral, Blue, Red, Yellow, Green**
-- All with 11 shades (50 → 950)
-
-#### Semantic Colors
-- `primary` (orange-500)
-- `success` (green-500)
-- `warning` (yellow-500)
-- `error` (red-500)
-- `info` (blue-500)
-
-### ⚠️ Troubleshooting
-
-#### If you get import errors:
-
-**ES Modules (recommended)**
-```javascript
-import colors from 'azion-theme/tokens';
-```
-
-**Named exports**
-```javascript
-import { primitives, brandColors, brandPrimitives, surfacePrimitives } from 'azion-theme/tokens';
-```
-
-**Direct file imports**
-```javascript
-import { primitives } from 'azion-theme/tokens/primitives/colors.js';
-import { brandColors } from 'azion-theme/tokens/colors-brand.js';
-```
-
-**Configure Vite (if using Vite)**
-Add to your `vite.config.js`:
-```javascript
-export default {
-  resolve: {
-    conditions: ['import', 'module', 'browser', 'default']
-  }
+[data-theme=dark], .dark, .azion.azion-dark {
+  /* dark theme vars */
 }
 ```
+
+Switching is a one-liner:
+
+```js
+document.documentElement.setAttribute('data-theme', 'dark'); // or 'light'
+```
+
+Or, if you prefer Tailwind's `dark` class strategy:
+
+```js
+document.documentElement.classList.toggle('dark');
+```
+
+Both work because the selectors cover both conventions.
+
+---
 
 ## 🔗 Links
 

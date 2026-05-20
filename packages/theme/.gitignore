@@ -8,6 +8,9 @@ pnpm-debug.log*
 # Compiled output
 dist/
 build/
+# Source-controlled token build helpers (not a build output directory)
+!src/tokens/build/
+!src/tokens/build/**
 
 # Temporary files
 *.tmp
