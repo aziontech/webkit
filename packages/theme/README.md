@@ -4,7 +4,7 @@ A comprehensive design token system and theming solution for Azion's web applica
 
 ## Features
 
-- **Design Tokens**: Primitive and semantic color tokens generated from Figma;
+- **Design Tokens**: Primitives and semantic colors tokens generated from Figma;
 - **Brand Colors**: Azion's official color palette with primary (orange), accent (violet), and surface colors;
 - **Theme Support**: Built-in light and dark mode theming;
 - **Tailwind Integration**: Plugin and preset for seamless Tailwind CSS integration;
