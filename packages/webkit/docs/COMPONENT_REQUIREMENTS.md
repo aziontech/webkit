@@ -974,28 +974,23 @@ This unlocks state-driven styling without computed class strings:
 <DialogContent class="data-[state=open]:animate-in data-[state=closed]:animate-out" />
 ```
 
-### 2.7. `cn` helper (tailwind-merge) — _pending_
+### 2.7. `cn` helper (tailwind-merge)
 
-> **Status: not yet available.** `clsx` and `tailwind-merge` are **not installed** in [`packages/webkit/package.json`](../package.json) and no `cn` helper exists in the repo. Do **not** invent the import; the `validate-references.mjs` hook will block it. Until the deps land, components keep the array pattern from [button.vue](../src/components/webkit/actions/button/button.vue) (`rootClasses = computed(() => [sharedClasses, kindClasses[kind], sizeClasses[size], attrs.class])`).
+> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../package.json). The helper lives at [`src/utils/cn.ts`](../src/utils/cn.ts) and is exported as `@aziontech/webkit/utils/cn`.
 
-When the helper ships, the rationale is: the naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
+The naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
 
-Migration plan when ready:
+Usage:
 
-1. `pnpm --filter webkit add clsx tailwind-merge`.
-2. Create the helper (proposed location: `packages/webkit/src/utils/cn.ts`):
+```ts
+import { cn } from '@aziontech/webkit/utils/cn'
 
-   ```ts
-   import { clsx, type ClassValue } from 'clsx'
-   import { twMerge } from 'tailwind-merge'
+const rootClasses = computed(() =>
+  cn(sharedClasses, kindClasses[props.kind], sizeClasses[props.size], attrs.class)
+)
+```
 
-   export function cn(...inputs: ClassValue[]): string {
-     return twMerge(clsx(inputs))
-   }
-   ```
-
-3. Add `"./utils/cn": "./src/utils/cn.ts"` to `package.json#exports`.
-4. Migrate components incrementally; update this section to "available today".
+Use `cn` whenever consumer-supplied classes may conflict with internal ones. Plain arrays are still acceptable for purely additive cases.
 
 ### 2.8. `VariantProps` exportados
 
@@ -1123,15 +1118,19 @@ Sweep these locations before implementing. Create a new utility only when nothin
 
 Every token used must work in both modes of `@aziontech/theme`. The Storybook story `LightDark` renders the component side by side in light and dark and is mandatory.
 
-### 12. Figma Code Connect — _pending_
+### 12. Figma Code Connect
 
-> **Status: not yet available.** `@figma/code-connect` is **not installed** in this repository (no entry in [`package.json`](../package.json)) and there are **no `*.figma.ts` files**. Do not generate `<name>.figma.ts` referencing the missing import — the `validate-references.mjs` hook will block it. Register the Code Connect mapping as a pending item in the report and move on.
+> **Status: available today.** `@figma/code-connect` is installed in [`packages/webkit/package.json`](../package.json) and the project config lives at [`packages/webkit/figma.config.json`](../figma.config.json) (`parser: "html"`, `include: ["src/**/*.figma.ts"]`).
 
-When the dependency lands and the Figma file enables Code Connect:
+For every new component, generate `<name>.figma.ts` next to the `.vue` mapping Figma variants (`kind`, `size`, `state`) → Vue props, Figma slots → Vue children, and the code snippet shown in the Dev Mode inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
 
-1. `pnpm --filter webkit add -D @figma/code-connect`.
-2. Generate `<name>.figma.ts` in the component directory mapping Figma variants (`kind`, `size`, `state`) to Vue props, Figma slots to Vue children, and the code snippet shown in the inspection panel.
-3. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
+CLI scripts (in `packages/webkit/package.json`):
+
+- `pnpm --filter webkit run figma:parse` — verify all `.figma.ts` files parse.
+- `pnpm --filter webkit run figma:publish` — publish mappings to Figma. **Requires `FIGMA_ACCESS_TOKEN`** in the environment.
+- `pnpm --filter webkit run figma:unpublish` — remove published mappings.
+
+Authoring the `.figma.ts` file works without the token; only publishing needs it.
 
 ### 13. Storybook (uso completo de recursos)
 
@@ -1148,7 +1147,7 @@ Stories must consume all relevant Storybook features:
   - `parameters.backgrounds` defining theme light/dark backgrounds.
   - `parameters.layout` (`'centered'` / `'fullscreen'`) chosen per component.
 - **`decorators`** when needed (theme provider, mount root, router).
-- **Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility + **Playground**. _The `play` function via `@storybook/test` is conditional — see note below._
+- **Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility (with a `play` function via `@storybook/test`) + **Playground**.
 - `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })` so controls actually drive the rendered component.
 
 ### 14. Checklist atualizado (apêndice à checklist existente)
@@ -1213,12 +1212,12 @@ Stories must consume all relevant Storybook features:
 - [ ] `parameters.actions`, `parameters.a11y`, `parameters.docs.description.*`, `parameters.backgrounds`, `parameters.layout`.
 - [ ] `decorators` when needed.
 - [ ] Stories: Default + per `kind` + per `size` + Disabled + Loading + WithSlots/WithComposition + Controlled + Uncontrolled + **LightDark** + Accessibility + **Playground**.
-- [ ] `play` function in Accessibility (or Playground) using `@storybook/test` — **only when** `@storybook/test` is installed in `apps/storybook/package.json`. Today it is **not installed**; omit the `play` and record a pending item in the report. Importing `@storybook/test` before installation is blocked by `validate-references.mjs`.
+- [ ] `play` function in Accessibility (or Playground) using `@storybook/test` (installed in `apps/storybook/package.json`). Import `userEvent`, `expect`, `within` from `@storybook/test`.
 - [ ] `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })`.
 
 #### Validação
 
-- [ ] `<name>.figma.ts` created, or pending item registered if Code Connect unavailable.
+- [ ] `<name>.figma.ts` created next to the `.vue` (Code Connect available — see § 12).
 - [ ] `pnpm webkit:lint && webkit:type-check && webkit:type-coverage && webkit:build:dts && storybook:build` all pass.
 
 ---

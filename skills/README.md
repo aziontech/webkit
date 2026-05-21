@@ -1,40 +1,38 @@
 # Skills
 
-Colecao de skills operacionais para acelerar tarefas recorrentes no monorepo.
+Operational skills that speed up recurring tasks in the monorepo.
 
-## Quando usar
+## When to use a skill
 
-- Quando uma tarefa for repetitiva e exigir as mesmas decisoes de implementacao.
-- Quando for importante padronizar formato de saida, checklist e criterio de conclusao.
-- Quando houver risco de divergencia entre PRs para o mesmo tipo de mudanca.
+- The task is repetitive and demands the same implementation decisions every time.
+- The output format, checklist, and Definition of Done must be standardized across PRs.
+- There is a real risk that different PRs for the same change diverge.
 
-## Convencoes
+## Conventions
 
-- Cada skill deve viver em um arquivo unico em `skills/*.md`.
-- Cada skill deve seguir o formato padrao descrito em `skills/_template.md`.
-- Toda nova skill ou atualizacao deve seguir `skills/CONTRIBUTING.md`.
-- Skills devem ser orientadas por escopo (diretorio/glob), nunca por arquivo fixo.
+- Each skill lives in a single Markdown file under `skills/*.md`.
+- Each skill follows the canonical structure described in `skills/_template.md`.
+- New skills and updates must follow `skills/CONTRIBUTING.md`.
+- Skills are scope-driven (directory/glob), never tied to a single fixed file.
 
-## Catalogo
+## Catalog
 
-- `migracao-azion-theme`: migra estilos legados (Tailwind padrao + HEX hardcoded) para tokens do `@aziontech/theme`, com foco em semantica, consistencia visual e suporte a light/dark mode.
-- `component-create`: cria componentes em `packages/webkit/src/components/webkit/<category>/<name>/` (TypeScript tipado com JSDoc, Composition Pattern so quando faz sentido conforme shadcn-vue) seguindo `Design.md` (typography via classes geradas, tokens semanticos) e os canonicos (button/icon-button/card-pricing). Inclui `data-testid` BEM-style, slots tipados, v-model + estados controlados/nao-controlados, story Storybook completa (argTypes/args/parameters/actions/a11y/decorators + play function), padroes shadcn-vue (`asChild`, `data-state`, `VariantProps`, `cn`) e Figma Code Connect.
+- **`migracao-azion-theme`** — migrates legacy styling (default Tailwind palette + hardcoded HEX) to `@aziontech/theme` tokens, focusing on semantic mapping, visual consistency, and light/dark mode support.
+- **`component-create`** — creates components under `packages/webkit/src/components/webkit/<category>/<name>/`. TypeScript with JSDoc on every public prop. Composition Pattern only when justified (shadcn-vue criterion). Adheres to `Design.md` (typography via generated classes, semantic tokens) and the canonical files (button / icon-button / card-pricing). Produces hierarchical BEM `data-testid`, typed slots, v-model + controlled/uncontrolled state, a complete Storybook story (argTypes / args / parameters / actions / a11y / decorators), the shadcn-vue patterns currently available (`data-state`, `VariantProps`), and a structured final report. Patterns whose dependencies are not yet installed (`asChild`, `cn`, Figma Code Connect, `play` functions) are marked as pending instead of emulated.
 
-## Atalhos via slash commands (Claude Code)
+## Slash command shortcuts (Claude Code)
 
-Para usuarios do Claude Code, ha um slash command nativo que dispara a skill:
+For Claude Code users there is a native slash command that dispatches the skill:
 
-- **`/component-create <nome> --category <categoria> [--structure monolithic|composition] [--figma <url>]`** — atalho para a skill `component-create`. Definido em [`.claude/commands/component-create.md`](../.claude/commands/component-create.md).
+- **`/component-create <name> [--category <category>] [--structure monolithic|composition] [--figma <url>]`** — shortcut for the `component-create` skill. Defined in [`.claude/commands/component-create.md`](../.claude/commands/component-create.md). If `--category` is omitted, the skill infers the best fit from the component name + Figma context and asks the user to confirm before writing files.
 
-Em outras IDEs/agentes (Cursor, Codex CLI, Continue), o comando nao existe — la o agente le `AGENTS.md` e detecta a intencao via os triggers descritos abaixo, ou o usuario mencionara a skill em linguagem natural.
+In other IDEs/agents (Cursor, Codex CLI, Continue) the slash command does not exist — there, the agent reads `AGENTS.md`, detects intent through the triggers below, or the user mentions the skill in natural language.
 
-## Roteamento de intencao -> skill
+## Intent → skill routing
 
-Tabela para agentes/AI decidirem qual skill aplicar ao detectar a intencao do usuario. Antes de escrever qualquer arquivo, verifique se o pedido cai em uma das linhas abaixo e invoque a skill correspondente automaticamente (sem esperar mencao explicita).
+This table helps agents decide which skill to dispatch when interpreting a user request. Before writing any file, check whether the request matches one of the rows below and invoke the corresponding skill automatically — without waiting for the user to mention it explicitly.
 
-| Quando o pedido envolve...                                                                                                                                                                                                                                                                  | Caminho do(s) arquivo(s)                                                                                     | Skill a invocar        |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| Criar/modificar componente UI ou story (verbos `criar`/`crie`/`gerar`/`adicionar`/`novo` + substantivo UI como `botao`/`dialog`/`drawer`/`tooltip`/`tabs`/`card`/`input`/`dropdown`/...) OU edicao de qualquer `.vue` em `packages/webkit/src/components/webkit/**` OU link Figma no pedido | `packages/webkit/src/components/webkit/<category>/<name>/` + `apps/storybook/src/stories/webkit/<category>/` | `component-create`     |
-| Migrar HEX hardcoded ou classes Tailwind legadas para tokens do `@aziontech/theme` em codigo existente                                                                                                                                                                                      | qualquer escopo informado (`packages/webkit/src/**`)                                                         | `migracao-azion-theme` |
+- **Create or modify a UI component or its Storybook story.** Triggered by a creation verb (`create`/`add`/`make`/`build`/`new`/`criar`/`crie`/`gerar`/`adicionar`/`novo`) combined with a UI noun (`button`/`dialog`/`drawer`/`tooltip`/`tabs`/`card`/`input`/`dropdown`/...), or by any `Write`/`Edit` of a `.vue` file under `packages/webkit/src/components/webkit/**`, or by a Figma link in the request. Files involved: `packages/webkit/src/components/webkit/<category>/<name>/` and `apps/storybook/src/stories/webkit/<category>/`. Skill: **`component-create`**.
+- **Migrate hardcoded HEX or legacy Tailwind classes to `@aziontech/theme` tokens** in existing code. Files involved: any scope provided by the user under `packages/webkit/src/**`. Skill: **`migracao-azion-theme`**.
 
-**Regra geral:** ao detectar a intencao, o agente sinaliza ao usuario qual skill vai aplicar antes de tocar em arquivos. Se a intencao for ambigua, perguntar antes de criar.
+**General rule:** when intent is detected, the agent should state which skill is being applied before touching any file. If intent is ambiguous, ask the user before creating anything.

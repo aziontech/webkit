@@ -101,8 +101,8 @@ When a trigger fires, the agent must announce the detection and collect missing 
 - `data-testid` hierarchical BEM: root with fallback `'<category>-<name>'`; children with `${testId}__<part>`.
 - Composition Pattern only when the consumer needs to swap order or omit parts (Dialog, Card composto, Tabs, Accordion, DropdownMenu, Sheet/Drawer, Form). When in doubt, stay monolithic. When applying it, ship the **complete shadcn-vue anatomy** (Root + Trigger + Portal + Overlay + Content + Title + Description + Close for Dialog, etc.).
 - **shadcn-vue patterns** (see [docs/COMPONENT_REQUIREMENTS.md](./docs/COMPONENT_REQUIREMENTS.md) § 2.5-2.9):
-  - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components for `data-[state=open]:...` Tailwind variants. `VariantProps` exported as named exports (`export type DialogSize = ...`).
-  - **Conditional — pending deps not yet installed** (see § 9; do NOT emulate before they land, the `validate-references.mjs` hook blocks fake imports): `asChild` (waits for a Slot helper added under `src/composables/`); `cn` helper (waits for `clsx` + `tailwind-merge`); `<name>.figma.ts` Code Connect (waits for `@figma/code-connect`); Storybook `play` functions (wait for `@storybook/test`).
+  - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components for `data-[state=open]:...` Tailwind variants. `VariantProps` exported as named exports (`export type DialogSize = ...`). `cn` helper from [`@aziontech/webkit/utils/cn`](./src/utils/cn.ts) for class merging when consumer classes may override defaults. `<name>.figma.ts` Code Connect mappings (config at [`figma.config.json`](./figma.config.json); publishing requires `FIGMA_ACCESS_TOKEN`). Storybook `play` functions via `@storybook/test`.
+  - **Pending — Slot helper missing** (do NOT emulate; `validate-references.mjs` blocks fake imports): `asChild` prop on trigger-like sub-components. Propose a Slot composable under `src/composables/` in a dedicated PR before adopting.
 - Reusable utilities (animations, classes, logic) live in [composables/](./src/composables/), [components/webkit/utils/](./src/components/webkit/utils/), or [packages/theme/src/](../theme/src/) — never inline.
 - WCAG 2.1 AA: visible focus (`focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`), full keyboard support, minimum ARIA, contrast >=4.5:1 / >=3:1 (verify disabled), `motion-reduce:*` on animated components, touch target >=40x40px.
 - New public components and sub-components each receive an entry in `packages/webkit/package.json#exports`.
@@ -153,17 +153,14 @@ If a hook blocks a Write, the agent should:
 
 The hooks **fail open** on unexpected errors — they never silently break workflows.
 
-## 9) Known dependency gaps
+## 9) Dependency status
 
-Some Storybook / Code Connect features described in `component-create` depend on packages that are **not yet installed**. Adopt them only after the deps land in [`package.json`](./package.json):
+Reference for the features described in the `component-create` skill.
 
-| Feature                                | Required dep              | Status        |
-| -------------------------------------- | ------------------------- | ------------- |
-| `play` function in Storybook stories   | `@storybook/test`         | Not installed |
-| `<name>.figma.ts` (Figma Code Connect) | `@figma/code-connect`     | Not installed |
-| `cn` helper (Tailwind class merging)   | `clsx` + `tailwind-merge` | Not installed |
-
-Until each dep is installed, the skill records the missing piece as a pending item in the report instead of generating broken code.
+- **`play` function in Storybook stories** — requires `@storybook/test`. ✅ **Installed** in `apps/storybook/package.json`. New stories can use `userEvent`/`expect`/`within` in a `play` function on Accessibility / Playground.
+- **`<name>.figma.ts` (Figma Code Connect)** — requires `@figma/code-connect`. ✅ **Installed** in `packages/webkit/package.json`. Config at [`figma.config.json`](./figma.config.json). Authoring `.figma.ts` files works locally; publishing the mapping to Figma requires `FIGMA_ACCESS_TOKEN` set in the environment.
+- **`cn` helper (Tailwind class merging)** — requires `clsx` + `tailwind-merge` + a helper file. ✅ **Installed**. Helper at [`src/utils/cn.ts`](./src/utils/cn.ts), exported as `@aziontech/webkit/utils/cn`. Use it in new components when consumer classes may need to override defaults.
+- **`asChild` prop on triggers/closes** — requires a Slot helper composable. ⚠️ **Pending**: no helper exists yet. Propose a PR adding it under `src/composables/` before adopting; until then, do not import a phantom path (the `validate-references.mjs` hook will block it).
 
 ## 10) Common pitfalls
 
