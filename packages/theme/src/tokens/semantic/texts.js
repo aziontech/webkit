@@ -3,11 +3,11 @@
 // `src/scripts/build-tokens.mjs`. Remover quando consumers migrarem.
 const plugin = (() => {
   try {
-    return require('tailwindcss/plugin');
+    return require('tailwindcss/plugin')
   } catch {
-    return (handler) => handler;
+    return (handler) => handler
   }
-})();
+})()
 
 /**
  * Generate semantic typography style components
@@ -20,280 +20,283 @@ export const semanticTexts = () => {
         fontSize: '3rem',
         lineHeight: '1.10',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-2': {
         fontSize: '2rem',
         lineHeight: '1.2',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-3': {
         fontSize: '1.75rem',
         lineHeight: '1.25',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-4': {
         fontSize: '1.5rem',
         lineHeight: '1.3',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-5': {
         fontSize: '1.25rem',
         lineHeight: '1.4',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-1-mobile': {
         fontSize: '2.5rem',
         lineHeight: '1.15',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-2-mobile': {
         fontSize: '1.875rem',
         lineHeight: '1.20',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-3-mobile': {
         fontSize: '1.375rem',
         lineHeight: '1.3',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-4-mobile': {
         fontSize: '1.25rem',
         lineHeight: '1.35',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.display-5-mobile': {
         fontSize: '1.125rem',
         lineHeight: '1.35',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.body-1': {
         fontSize: '1rem',
         lineHeight: '1.4rem',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
+        letterSpacing: '-.05rem'
       },
       '.body-2': {
         fontSize: '0.875rem',
         lineHeight: '1.4rem',
         fontFamily: 'Sora',
-        letterSpacing: '-.05rem',
-      },
-    };
+        letterSpacing: '-.05rem'
+      }
+    }
 
     const mobile = {
       ...deprecatedTexts,
       '.text-big-number-md': {
         fontSize: '2.25rem',
-        lineHeight: '1.20',
+        lineHeight: '1.20'
       },
       '.text-big-number-sm': {
         fontSize: '1.25rem',
-        lineHeight: '1.20',
+        lineHeight: '1.20'
       },
       '.text-big-number-lg': {
         fontSize: '3.75rem',
-        lineHeight: '1.20',
+        lineHeight: '1.20'
       },
       '.text-heading-2xl': {
         fontSize: '3.75rem',
-        lineHeight: '1.2',
+        lineHeight: '1.2'
       },
       '.text-heading-xl': {
         fontSize: '2.25rem',
-        lineHeight: '1.2',
+        lineHeight: '1.2'
       },
       '.text-heading-lg': {
         fontSize: '1.875rem',
-        lineHeight: '1.2',
+        lineHeight: '1.2'
       },
       '.text-heading-md': {
         fontSize: '1.5rem',
-        lineHeight: '1.2',
+        lineHeight: '1.2'
       },
       '.text-heading-sm': {
         fontSize: '1.125rem',
-        lineHeight: '1.2',
+        lineHeight: '1.2'
       },
       '.text-body-lg': {
         fontSize: '1.125rem',
-        lineHeight: '1.5',
+        lineHeight: '1.5'
       },
       '.text-body-md': {
         fontSize: '1rem',
-        lineHeight: '1.5',
+        lineHeight: '1.5'
       },
       '.text-body-sm': {
         fontSize: '0.875rem',
-        lineHeight: '1.5',
+        lineHeight: '1.5'
       },
       '.text-body-xs': {
         fontSize: '0.75rem',
-        lineHeight: '1.5',
+        lineHeight: '1.5'
       },
       '.text-body-xss': {
         fontSize: '0.625rem',
-        lineHeight: '1.5',
+        lineHeight: '1.5'
       },
       '.text-overline-md': {
+        fontFamily: 'Proto Mono',
         fontSize: '0.875rem',
         lineHeight: '1.4',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
+        textTransform: 'uppercase'
       },
       '.text-overline-sm': {
+        fontFamily: 'Proto Mono',
         fontSize: '0.75rem',
         lineHeight: '1.4',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
+        textTransform: 'uppercase'
       },
       '.text-overline-xs': {
+        fontFamily: 'Proto Mono',ç
         fontSize: '0.625rem',
         lineHeight: '1.4',
         letterSpacing: '0.08em',
-        textTransform: 'uppercase',
+        textTransform: 'uppercase'
       },
       '.text-button-lg': {
         fontFamily: 'Proto Mono',
         fontSize: '0.875rem',
         fontWeight: '500',
         lineHeight: '1',
-        letterSpacing: '0',
+        letterSpacing: '0'
       },
       '.text-button-md': {
         fontFamily: 'Proto Mono',
         fontSize: '0.75rem',
         fontWeight: '500',
         lineHeight: '1',
-        letterSpacing: '0',
-      },
-    };
+        letterSpacing: '0'
+      }
+    }
 
     const medium = {
       [`@media (max-width: ${theme('screens.md', '768px')})`]: {
         '.text-big-number-md': {
           fontSize: '1.5rem',
-          lineHeight: '1.20',
+          lineHeight: '1.20'
         },
         '.text-big-number-sm': {
           fontSize: '1.25rem',
-          lineHeight: '1.20',
+          lineHeight: '1.20'
         },
         '.text-big-number-lg': {
           fontSize: '2.25rem',
-          lineHeight: '1.20',
+          lineHeight: '1.20'
         },
         '.text-heading-2xl': {
-          fontSize: '3rem',
+          fontSize: '3rem'
         },
         '.text-heading-xl': {
-          fontSize: '1.875rem',
+          fontSize: '1.875rem'
         },
         '.text-heading-lg': {
-          fontSize: '1.125rem',
+          fontSize: '1.125rem'
         },
         '.text-heading-md': {
-          fontSize: '1.25rem',
+          fontSize: '1.25rem'
         },
         '.text-heading-sm': {
-          fontSize: '1rem',
+          fontSize: '1rem'
         },
         '.text-body-lg': {
-          fontSize: '1rem',
+          fontSize: '1rem'
         },
         '.text-body-md': {
-          fontSize: '1rem',
+          fontSize: '1rem'
         },
         '.text-body-sm': {
-          fontSize: '0.875rem',
+          fontSize: '0.875rem'
         },
         '.text-body-xs': {
-          fontSize: '0.75rem',
+          fontSize: '0.75rem'
         },
         '.text-body-xss': {
-          fontSize: '0.625rem',
+          fontSize: '0.625rem'
         },
         '.text-overline-md': {
-          fontSize: '0.875rem',
+          fontSize: '0.875rem'
         },
         '.text-overline-sm': {
-          fontSize: '0.75rem',
+          fontSize: '0.75rem'
         },
         '.text-overline-xs': {
-          fontSize: '0.625rem',
-        },
-      },
-    };
+          fontSize: '0.625rem'
+        }
+      }
+    }
 
     const large = {
       [`@media (max-width: ${theme('screens.sm', '640px')})`]: {
         '.text-big-number-md': {
           fontSize: '1.25rem',
-          lineHeight: '1.20',
+          lineHeight: '1.20'
         },
         '.text-big-number-sm': {
           fontSize: '1rem',
-          lineHeight: '1.20',
+          lineHeight: '1.20'
         },
         '.text-big-number-lg': {
           fontSize: '1.5rem',
-          lineHeight: '1.20',
+          lineHeight: '1.20'
         },
         '.text-heading-2xl': {
-          fontSize: '1.875rem',
+          fontSize: '1.875rem'
         },
         '.text-heading-xl': {
-          fontSize: '1.25rem',
+          fontSize: '1.25rem'
         },
         '.text-heading-lg': {
-          fontSize: '1.125rem',
+          fontSize: '1.125rem'
         },
         '.text-heading-md': {
-          fontSize: '1rem',
+          fontSize: '1rem'
         },
         '.text-heading-sm': {
-          fontSize: '0.875rem',
+          fontSize: '0.875rem'
         },
         '.text-body-lg': {
-          fontSize: '1rem',
+          fontSize: '1rem'
         },
         '.text-body-md': {
-          fontSize: '1rem',
+          fontSize: '1rem'
         },
         '.text-body-sm': {
-          fontSize: '0.875rem',
+          fontSize: '0.875rem'
         },
         '.text-body-xs': {
-          fontSize: '0.75rem',
+          fontSize: '0.75rem'
         },
         '.text-body-xss': {
-          fontSize: '0.625rem',
+          fontSize: '0.625rem'
         },
         '.text-overline-md': {
-          fontSize: '0.75rem',
+          fontSize: '0.75rem'
         },
         '.text-overline-sm': {
-          fontSize: '0.75rem',
+          fontSize: '0.75rem'
         },
         '.text-overline-xs': {
-          fontSize: '0.625rem',
-        },
-      },
-    };
+          fontSize: '0.625rem'
+        }
+      }
+    }
 
-    addComponents(mobile);
-    addComponents(medium);
-    addComponents(large);
-  });
-};
+    addComponents(mobile)
+    addComponents(medium)
+    addComponents(large)
+  })
+}
 
-export default semanticTexts;
+export default semanticTexts

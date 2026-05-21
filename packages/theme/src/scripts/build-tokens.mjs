@@ -217,6 +217,7 @@ const buildPresetData = () => {
     if ('lineHeight' in bundle) meta.lineHeight = `var(--${key}-line-height)`
     if ('letterSpacing' in bundle) meta.letterSpacing = `var(--${key}-letter-spacing)`
     if ('fontWeight' in bundle) meta.fontWeight = `var(--${key}-font-weight)`
+    if ('fontFamily' in bundle) meta.fontFamily = `var(--${key}-font-family)`
     fontSize[key.replace(/^text-/, '')] = [`var(--${key}-font-size)`, meta]
   }
 
