@@ -57,13 +57,10 @@
 
   const primaryTextClass = computed(() => {
     if (isLarge.value) {
-      return [
-        'text-[var(--text-default)]',
-        'text-heading-sm leading-[var(--text-heading-sm-line-height,1.4)]'
-      ]
+      return ['text-heading-md text-[var(--text-default)] leading-[1.2]']
     }
 
-    return ['text-[var(--text-default)] leading-none', 'text-[length:var(--text-label-lg,1rem)]']
+    return ['text-label-lg text-[var(--text-default)] leading-none']
   })
 
   const suffixClass = computed(() => {

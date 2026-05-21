@@ -60,3 +60,15 @@ export const Default = {
     `
   })
 }
+
+export const Sizes = {
+  render: () => ({
+    components: { Currency },
+    template: `
+      <div class="flex flex-col gap-6 font-sora">
+        <Currency value="20" prefix="$" suffix="per month" size="small" />
+        <Currency value="20" prefix="$" suffix="per month" size="large" />
+      </div>
+    `
+  })
+}
