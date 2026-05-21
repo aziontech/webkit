@@ -132,7 +132,15 @@ For onboarding content, prioritize Storybook docs pages under `Foundations`.
 
 ### 11.2) Mandatory skill: `component-create`
 
-For any new component (or significant change to an existing one) in this layer, invoke the skill at [`skills/component-create.md`](skills/component-create.md). The skill performs Figma token discovery, maps tokens to `Design.md` classes / `var(--*)`, decides monolithic vs Composition Pattern, generates the `.vue` + `package.json` + `package.json#exports` entry + `<name>.figma.ts` Code Connect + Storybook story (with `argTypes`/`args`/`parameters`/`decorators`/`play` function), and validates the a11y/UX checklist.
+For any new component (or significant change to an existing one) in this layer, invoke the skill at [`skills/component-create.md`](skills/component-create.md). The skill performs Figma token discovery, maps tokens to `Design.md` classes / `var(--*)`, decides monolithic vs Composition Pattern, generates the `.vue` + `package.json` + `package.json#exports` entry + `<name>.figma.ts` Code Connect (when its dep is installed) + Storybook story, and validates the a11y/UX checklist.
+
+**In Claude Code**, the convenient entry point is the slash command [`/component-create`](.claude/commands/component-create.md):
+
+```text
+/component-create <name> --category <category> [--structure monolithic|composition] [--figma <url>]
+```
+
+The command auto-loads the skill and the source-of-truth docs, parses the arguments, and runs the workflow. In other agents/IDEs the command does not exist — they detect the intent via the triggers in § 11.3 and load `skills/component-create.md` directly.
 
 Skipping the skill "because it is a small change" is not allowed.
 

@@ -48,9 +48,17 @@ Before touching `src/components/webkit/**`, the agent MUST read:
    - [content/card-pricing/card-pricing.vue](./src/components/webkit/content/card-pricing/card-pricing.vue) — monolithic with props + default and named `actions` slot, `data-testid` BEM (`${testId}__header`/`__title`/`__actions`), typography via generated classes (`text-heading-md`/`text-body-sm`/`text-body-xs`).
 4. **External reference for Composition Pattern decisions:** [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
-## 3) Mandatory entry point: skill `/component-create`
+## 3) Mandatory entry point: skill `component-create`
 
-For any new component (or significant change to an existing one) in `src/components/webkit/**`, **invoke the skill `/component-create`** ([../../skills/component-create.md](../../skills/component-create.md)).
+For any new component (or significant change to an existing one) in `src/components/webkit/**`, invoke the skill [`component-create`](../../skills/component-create.md).
+
+**In Claude Code**, the slash command [`/component-create`](../../.claude/commands/component-create.md) is the convenient entry point:
+
+```text
+/component-create <name> --category <category> [--structure monolithic|composition] [--figma <url>]
+```
+
+In other agents/IDEs the slash command does not exist — those agents detect intent via the triggers below and load `skills/component-create.md` directly.
 
 The skill automates:
 

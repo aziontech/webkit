@@ -20,6 +20,14 @@ Colecao de skills operacionais para acelerar tarefas recorrentes no monorepo.
 - `migracao-azion-theme`: migra estilos legados (Tailwind padrao + HEX hardcoded) para tokens do `@aziontech/theme`, com foco em semantica, consistencia visual e suporte a light/dark mode.
 - `component-create`: cria componentes em `packages/webkit/src/components/webkit/<category>/<name>/` (TypeScript tipado com JSDoc, Composition Pattern so quando faz sentido conforme shadcn-vue) seguindo `Design.md` (typography via classes geradas, tokens semanticos) e os canonicos (button/icon-button/card-pricing). Inclui `data-testid` BEM-style, slots tipados, v-model + estados controlados/nao-controlados, story Storybook completa (argTypes/args/parameters/actions/a11y/decorators + play function), padroes shadcn-vue (`asChild`, `data-state`, `VariantProps`, `cn`) e Figma Code Connect.
 
+## Atalhos via slash commands (Claude Code)
+
+Para usuarios do Claude Code, ha um slash command nativo que dispara a skill:
+
+- **`/component-create <nome> --category <categoria> [--structure monolithic|composition] [--figma <url>]`** — atalho para a skill `component-create`. Definido em [`.claude/commands/component-create.md`](../.claude/commands/component-create.md).
+
+Em outras IDEs/agentes (Cursor, Codex CLI, Continue), o comando nao existe — la o agente le `AGENTS.md` e detecta a intencao via os triggers descritos abaixo, ou o usuario mencionara a skill em linguagem natural.
+
 ## Roteamento de intencao -> skill
 
 Tabela para agentes/AI decidirem qual skill aplicar ao detectar a intencao do usuario. Antes de escrever qualquer arquivo, verifique se o pedido cai em uma das linhas abaixo e invoque a skill correspondente automaticamente (sem esperar mencao explicita).
