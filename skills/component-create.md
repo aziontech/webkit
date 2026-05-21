@@ -63,7 +63,16 @@ Criar, em uma unica execucao, o pacote completo de um componente novo na camada 
 ## Inputs
 
 - **Nome do componente** em kebab-case (ex.: `dialog`, `card-banner`, `drawer`).
-- **Categoria alvo** dentro de `packages/webkit/src/components/webkit/`: `actions`, `content`, `data`, `feedback`, `inputs`, `layout`, `navigation`, `overlay`, `utils`.
+- **Categoria alvo** dentro de `packages/webkit/src/components/webkit/`: `actions`, `content`, `data`, `feedback`, `inputs`, `layout`, `navigation`, `overlay`, `utils`. **Opcional** — se o usuario nao informar, inferir pela taxonomia abaixo e **confirmar com o usuario** antes de criar qualquer arquivo:
+  - `actions` — interativos que disparam acao (Button, IconButton, MenuItem, Link).
+  - `content` — apresentam informacao estatica/derivada (CardPricing, Currency, Tag, Badge, Avatar, Chip).
+  - `data` — exibem colecoes de dados (DataTable, List, Tree, Calendar).
+  - `feedback` — comunicam estado ao usuario (Message, Toast, StatusIndicator, Alert, Banner).
+  - `inputs` — recebem entrada do usuario (InputText, Dropdown, Checkbox, RadioButton, InputSwitch, Slider).
+  - `layout` — estruturam o espaco visual (Container, Grid, Stack, Divider, Splitter, Card vazio).
+  - `navigation` — movem o usuario entre views/estados (Breadcrumb, Tabs, Pagination, Steps, Menu, Sidebar nav).
+  - `overlay` — sobrepoem conteudo temporariamente (Dialog, Drawer, Sheet, Popover, Tooltip, ContextMenu).
+  - `utils` — primitivos reusados internamente por outros componentes (Spinner, Portal helper).
 - **Estrutura desejada:**
   - `monolithic` — 1 arquivo Vue com props + slots (padrao default; usado em atomicos e em componentes com layout fixo como `card-pricing.vue`).
   - `composition` — Composition Pattern com sub-componentes irmaos (Dialog/Card composto/Tabs/Accordion/etc.).

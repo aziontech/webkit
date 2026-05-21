@@ -1,6 +1,6 @@
 ---
 description: Create a new webkit-layer component following the project's standard (Design.md tokens, COMPONENT_REQUIREMENTS, TypeScript, BEM data-testid, full Storybook story).
-argument-hint: <name> --category <category> [--structure monolithic|composition] [--figma <url>]
+argument-hint: <name> [--category <category>] [--structure monolithic|composition] [--figma <url>]
 ---
 
 You are creating a new component for `packages/webkit/src/components/webkit/`. Follow the `component-create` skill exactly.
@@ -19,12 +19,12 @@ You are creating a new component for `packages/webkit/src/components/webkit/`. F
    - [`packages/webkit/AGENTS.md`](packages/webkit/AGENTS.md) for the package-level rules.
 
 3. **Parse the user input** (`$ARGUMENTS`). Identify:
-   - `<name>` (kebab-case)
-   - `--category <category>` (one of `actions`, `content`, `data`, `feedback`, `inputs`, `layout`, `navigation`, `overlay`, `utils`)
-   - `--structure monolithic|composition` (default `monolithic` unless the request needs sub-components per shadcn-vue criterion)
-   - `--figma <url>` (optional but strongly preferred)
+   - `<name>` (kebab-case) — **required**.
+   - `--category <category>` — optional. Valid values: `actions`, `content`, `data`, `feedback`, `inputs`, `layout`, `navigation`, `overlay`, `utils`. **If omitted**, infer the best fit from the component name and the Figma context using the taxonomy in `skills/component-create.md` § "Inputs". Then **state the inferred category and ask the user to confirm** before writing any file.
+   - `--structure monolithic|composition` — optional. Default `monolithic` unless the request needs sub-components per shadcn-vue criterion.
+   - `--figma <url>` — optional but strongly preferred.
 
-   If anything is missing, **ask the user** before writing any file.
+   If `<name>` is missing, ask for it. Never invent a name. Never create files before the category is confirmed.
 
 4. **Execute the skill workflow** (steps 1–14 in `skills/component-create.md`):
    - Figma token discovery via MCP (`/figma-use` first, then `mcp__plugin_figma_figma__get_variable_defs` + `get_design_context`).
