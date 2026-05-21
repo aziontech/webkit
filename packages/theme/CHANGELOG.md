@@ -1,3 +1,41 @@
+## [2.0.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.13.0...@aziontech/theme@2.0.0) (2026-05-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* the semanticColors() plugin export from the previous
+structure is gone. Consumers should drop it from tailwind.config plugins —
+the same classes are now produced via theme.extend.
+* replace Toggle with SegmentedButton
+
+* refactor(theme): migrate semantic colors to native tailwind theme keys ([66505d7](https://github.com/aziontech/webkit/commit/66505d7580d81d4e64f1fb314a94b5addbd7ae65))
+* feat(segmented-button)!: replace Toggle with SegmentedButton ([5f63faa](https://github.com/aziontech/webkit/commit/5f63faaa867b0e162a8fc9d769ea61724581d969))
+
+
+### Features
+
+* add tailwind configuration ([ff236d4](https://github.com/aziontech/webkit/commit/ff236d47d185a437acd2afea5db234807e3e04e0))
+* adjust text ([08cda42](https://github.com/aziontech/webkit/commit/08cda42de83989cd6fb0dd4d907de3954e2d9bfc))
+* change brand primary color ([51a88f7](https://github.com/aziontech/webkit/commit/51a88f719efbe7f2681912843aee0ddf670a6ca6))
+* simplify tag icon api by removing showIcon ([ee1cda9](https://github.com/aziontech/webkit/commit/ee1cda98835c65c25b6418e9033f904eb3c363a7))
+
+
+### Bug Fixes
+
+* adjust props ([5996d80](https://github.com/aziontech/webkit/commit/5996d80280b476f9de649080a579643c72c5a355))
+* adjust props ([4704eb8](https://github.com/aziontech/webkit/commit/4704eb89a21e29b6598127a3e1cb9889c0de99cc))
+* adjust stories ([396c245](https://github.com/aziontech/webkit/commit/396c245b9ac014a821cda0d2699f941bbfc6f89c))
+* adjust stories ([720b495](https://github.com/aziontech/webkit/commit/720b49564f5ada7e142a8bfe443d51c8e3ba849a))
+* adjust tag component icon alignment and spacing ([1e050de](https://github.com/aziontech/webkit/commit/1e050de84b5b533297e9dbc2ca1d0424a3da5e1b))
+* adjust tag component icon alignment and spacing ([6d1d355](https://github.com/aziontech/webkit/commit/6d1d355edf9bae96afdf0904342c2c9c2259e8dd))
+* checks success skip !== webkit ([#552](https://github.com/aziontech/webkit/issues/552)) ([46290ab](https://github.com/aziontech/webkit/commit/46290ab38d93d532754b0afb6d583fd13bf26a51))
+* CI and bump theme ([f29c1f5](https://github.com/aziontech/webkit/commit/f29c1f5d56493934c5098fc0b0b8a2442b0934a5))
+* ci pnpm version ([52c035b](https://github.com/aziontech/webkit/commit/52c035bddc7aa8cae9bf821deec30651211eff55))
+* corrige popularText e ajustes de tipografia/sufixo em pricing-card e toggle ([#545](https://github.com/aziontech/webkit/issues/545)) ([c5c8b66](https://github.com/aziontech/webkit/commit/c5c8b66d455d62a0502038a0d30d60c4e073609d))
+* dep minimatch 9.0.0 added to overriders ([#544](https://github.com/aziontech/webkit/issues/544)) ([d672732](https://github.com/aziontech/webkit/commit/d672732ae945fdce8fcf6c6b6a85878f02532c48))
+* remove unused docs ([664ac3e](https://github.com/aziontech/webkit/commit/664ac3e02b2954c0465c7a0afed7e453b71b18f2))
+* update suffix for zero price and adjust button visibility ([1f104bb](https://github.com/aziontech/webkit/commit/1f104bb4e32a9265a82a7687dc0df99d72db5729))
+
 ## [1.13.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.12.0...@aziontech/theme@1.13.0) (2026-04-30)
 
 
