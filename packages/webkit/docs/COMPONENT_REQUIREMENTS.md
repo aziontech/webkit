@@ -860,6 +860,253 @@ npm run build:dts
 
 ---
 
+## Webkit Layer Pattern (in-depth)
+
+This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/webkit/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../src/components/webkit/actions/button/button.vue), [icon-button.vue](../src/components/webkit/actions/icon-button/icon-button.vue), [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue). Reference for compositional decisions: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
+
+### 1. Source of truth: `Design.md`
+
+All visual rules (typography classes, spacing, max-width, shape, semantic colors) come from [Design.md](./Design.md). In any conflict, **Design.md wins**.
+
+- **Typography** is always applied via the generated class from `texts.data.js` — `text-heading-md`, `text-body-sm`, `text-label-md`, `text-button-lg`, `text-overline-md`, `text-big-number-lg`, etc. Never use `text-[length:var(--text-*)]` raw, never `leading-*`/`tracking-*`/`font-family` directly. Full catalog in [Design.md "Available text styles"](./Design.md).
+- **Semantic colors:** `var(--primary)`, `var(--primary-contrast)`, `var(--secondary)`, `var(--secondary-contrast)`, `var(--bg-hover)`, `var(--bg-active)`, `var(--bg-disabled)`, `var(--bg-surface)`, `var(--bg-canvas)`, `var(--bg-mask)`, `var(--border-default)`, `var(--border-muted)`, `var(--border-strong)`, `var(--text-default)`, `var(--text-muted)`, `var(--text-disabled)`, `var(--ring-color)`, and feedback variants (`--success`/`--warning`/`--danger`/`--info` + `-contrast`/`-border`).
+- **Shape:** `var(--shape-button)`, `var(--shape-elements)`, `var(--shape-card)`, `var(--shape-flat)`. For pseudo-element inheritance use `rounded-[inherit]`.
+- **Spacing:** `var(--spacing-1)..(--spacing-N)` applied via `px-[...]` / `py-[...]` / `gap-[...]` / `m-[...]`. For section-level responsive spacing use the semantic utilities (`gap-spacing-elements-md`, `p-spacing-elements-lg`).
+- **Max width:** `var(--container-max-width)` for layout containers, `var(--container-3xs..--container-7xl)` for fixed content (cards, modals). Utility helper: `.max-container-width`.
+- **Forbidden:** hex/rgb/hsl hardcoded; Tailwind palette names (`bg-gray-*`, `text-violet-*`); PrimeVue color utilities (`text-color`, `surface-*`); raw typography (`text-xs`/`text-sm`/`text-base`/`text-lg`).
+
+### 2. TypeScript tipado obrigatório
+
+Every new component in the webkit layer uses `<script setup lang="ts">` with:
+
+- `defineProps<{...}>()` or `withDefaults(defineProps<{...}>(), {...})`.
+- `defineEmits<{...}>()`.
+- `defineSlots<{...}>()` when the component exposes named/scoped slots.
+- `defineModel<T>('propName')` for the principal controllable prop.
+- Explicit types for variants (`type Kind = 'primary' | ...`).
+- Typed maps (`Record<Kind, string>`).
+- Zero `any`, zero `// @ts-ignore`.
+
+### 2.1. JSDoc/TSDoc em cada prop pública
+
+Every public prop must have a one-line JSDoc/TSDoc above its type — it surfaces as autocomplete and hover docs in the consumer's IDE.
+
+```ts
+interface Props {
+  /** Visible label rendered inside the component. */
+  label?: string
+  /** Visual variant. Use `primary` for primary actions, `text` for tertiary. */
+  kind?: Kind
+  /** Controlled open state. Use with `v-model:open` or `@update:open`. */
+  open?: boolean
+}
+```
+
+### 2.2. Naming conventions
+
+- **Visual variants** are always exposed as `kind` (`'primary' | 'secondary' | 'outlined' | 'text' | 'transparent'`). Never `variant`, `color`, or `appearance`.
+- **Sizes** are always exposed as `size` with values `'small' | 'medium' | 'large'`.
+- **Boolean states** are exposed without `is`/`has` prefix on the prop (`disabled`, `loading`, `open`, `selected`, `expanded`, `readonly`). Internal computeds may use `isInactive` etc.
+- **Events** are emitted in kebab-case (`update:open`, `before-close`) and typed via `defineEmits<{ 'update:open': [value: boolean] }>()`.
+- **v-model** follows Vue 3 standard via `defineModel<T>('propName')`.
+- **Refs / composables** use descriptive prefixes (`triggerRef`, `panelRef`, `useFocusTrap`).
+
+### 2.3. Estados controlados vs não-controlados (padrão shadcn)
+
+When the component owns relevant internal state (open/value/selected/expanded), expose **both** APIs:
+
+- **Controlled:** prop `open` (`boolean | undefined`) + emit `update:open` + `v-model:open` via `defineModel<boolean>('open')`.
+- **Uncontrolled:** prop `defaultOpen` (initial value), internally managed when `open === undefined`.
+- A computed `isOpen` decides between `openModel.value` (controlled) and `internalOpen.value` (uncontrolled).
+- Storybook stories `Controlled` and `Uncontrolled` document both usages.
+
+### 2.4. Slots tipados
+
+Use `defineSlots<{...}>()` when the component delegates content rendering to the consumer. Document each slot in the JSDoc of the component.
+
+```ts
+defineSlots<{
+  default(): unknown
+  icon(): unknown
+  description(props: { error: string }): unknown
+}>()
+```
+
+### 3. Composition Pattern — só quando faz sentido
+
+Reference: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
+
+- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Sibling sub-components live in the same directory; shared state goes through `provide`/`inject` typed with `InjectionKey<T>`; each public sub-component has its own entry in `packages/webkit/package.json#exports`.
+- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
+- **Atomic** (Button, IconButton, Tag, Spinner, Badge, Currency) — always monolithic, no slots.
+- **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
+
+### 3.1. `data-testid` hierárquico (BEM-style)
+
+Convention established by [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue):
+
+- **Root:** fallback derived from the component name — `const testId = computed(() => attrs['data-testid'] ?? '<category>-<name>')`. Examples: `'action-button'`, `'content-card-pricing'`, `'overlay-dialog'`.
+- **Children:** `${testId}__<part>` with **two underscores**. Common parts: `__header`, `__title`, `__description`, `__content`, `__footer`, `__actions`, `__action`, `__close`, `__loading`, `__icon`, `__panel`, `__backdrop`, `__error-message`.
+- The consumer can override the root via `data-testid="custom-id"`; all children inherit the new prefix automatically.
+- Composition Pattern sub-components inject the parent's `testId` through the context.
+
+### 4. Class structure (sharedClasses/kindClasses/sizeClasses/disabledClasses/rootClasses)
+
+For interactive components with variants (button-like), follow [button.vue](../src/components/webkit/actions/button/button.vue) with typed maps:
+
+- `sharedClasses` (array) with base layout, transitions, focus-visible, pseudo-element setup.
+- `kindClasses: Record<Kind, string>` mapping each variant to its token combination.
+- `sizeClasses: Record<Size, string>` mapping each size to spacing + typography class.
+- `disabledClasses` (string) overriding interactive state.
+- `rootClasses` computed merges all of the above with `attrs.class`.
+
+For monolithic components with variable layout (card-like), inline class arrays in the template are acceptable when the conditional is short and local — see [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue). The root element still uses a computed `rootClass` that includes `attrs.class`.
+
+### 5. Estados via pseudo-elements `before:`
+
+Hover/active overlays should be implemented via a pseudo-element so the base background never repaints during transitions:
+
+```
+before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]
+before:opacity-0 before:transition-opacity before:content-['']
+hover:before:opacity-100 active:before:opacity-100
+```
+
+And `kindClasses` sets `before:bg-[var(--bg-hover)]` / `active:before:bg-[var(--bg-active)]`. See [button.vue:65-69](../src/components/webkit/actions/button/button.vue#L65-L69).
+
+### 6. Polimorfismo `<a>` / `<button>`
+
+When the component is interactive and accepts `href`, derive `isAnchor` and render `<a>` or `<button>`. Always set `rel="noopener noreferrer"` when `target="_blank"`. Example: [button.vue:111-161](../src/components/webkit/actions/button/button.vue#L111-L161).
+
+### 7. Capturando tokens do Figma
+
+Before creating or updating a component, invoke the `/component-create` skill which automates the discovery via MCP `plugin:figma:figma` (`get_variable_defs`, `get_design_context`). Map each Figma variable to its Design.md equivalent (generated class for typography, `var(--*)` for everything else). When no equivalent exists, register a **theme gap** in the PR and use the closest primitive temporarily with `TODO: tokenizar`. Never commit hardcoded hex to close the gap.
+
+### 8. Anti-duplicação / DRY
+
+Reusable utilities never live inline:
+
+- **Logic:** composables in [packages/webkit/src/composables/](../src/composables/) (`use-toast`, `use-dialog`).
+- **Utility sub-components:** [packages/webkit/src/components/webkit/utils/](../src/components/webkit/utils/) (`spinner`, reused in button and icon-button).
+- **Global CSS / animations:** `packages/theme/src/`.
+
+Sweep these locations before implementing. Create a new utility only when nothing existing fits, and always in a shared location.
+
+### 9. Acessibilidade (WCAG 2.1 AA)
+
+- **Semantics first:** prefer native `<button>` / `<a>` / `<input>` / `<dialog>` over `role=...`.
+- **Visible focus mandatory:** `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`. Never strip outline without a substitute.
+- **Keyboard navigation:** Tab/Shift+Tab; Enter/Space on buttons; Esc closes overlays; arrows on menus/lists/radio groups; focus trap in modals; focus returns to the trigger when closing.
+- **ARIA minimum:** `aria-label`, `aria-labelledby`/`aria-describedby`, `aria-busy`, `aria-disabled`, `aria-hidden="true"` on decorative icons, `aria-current`/`aria-selected`/`aria-expanded` as appropriate, `aria-live="polite"` for dynamic feedback.
+- **Contrast:** >=4.5:1 (text) / >=3:1 (large/icons). Verify disabled, which often fails.
+- **`prefers-reduced-motion`:** components that animate must apply `motion-reduce:transition-none motion-reduce:transform-none`.
+- **Touch targets:** >=40x40px; smaller require justification.
+- **Forms:** `<label>` associated, `aria-describedby` for hint/error, `aria-invalid="true"` on error, message announced via `aria-live`.
+
+### 10. Usabilidade
+
+- States must be visually distinguishable without relying solely on color (use border, shadow, icon, pattern).
+- Feedback under 100ms on interactions; loading on operations >300ms; progress on >2s.
+- Loading is non-blocking (`cursor-loading` + `aria-busy`); the component stays visible.
+- Errors are actionable with a clear message; preserve state when possible.
+- Hit area generous (padding >=`var(--spacing-2)` around interactive content).
+- i18n-ready (texts via props, support long strings without breaking layout).
+- Consistency with sibling components in the same category.
+- Clear affordance (buttons look clickable; links are visually distinct).
+
+### 11. Light/dark obrigatório
+
+Every token used must work in both modes of `@aziontech/theme`. The Storybook story `LightDark` renders the component side by side in light and dark and is mandatory.
+
+### 12. Figma Code Connect
+
+When the project's Figma file supports Code Connect, generate `<name>.figma.ts` in the component directory mapping Figma variants (`kind`, `size`, `state`) to Vue props, Figma slots to Vue children, and the code snippet shown in the inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`. When unavailable, register a pending item in the report.
+
+### 13. Storybook (uso completo de recursos)
+
+Stories must consume all relevant Storybook features:
+
+- **Meta:** `title: 'Webkit/<Category>/<Name>'`, `component`, `subcomponents` when Composition Pattern is in play, `tags: ['autodocs']`.
+- **`argTypes`** for every public prop, with appropriate `control` (`select`/`radio` + `options`, `boolean`, `text`, `number`, `color`), `description` (derived from JSDoc), `table.defaultValue`.
+- **`argTypes`** for every event with `{ action: '<event-name>' }`.
+- **`args`** with sensible defaults for the Default story.
+- **`parameters`:**
+  - `parameters.actions = { argTypesRegex: '^on[A-Z].*', handles: [...] }`.
+  - `parameters.a11y` with WCAG rules enabled (when the addon is present).
+  - `parameters.docs.description.component` plus `parameters.docs.description.story` for EACH story.
+  - `parameters.backgrounds` defining theme light/dark backgrounds.
+  - `parameters.layout` (`'centered'` / `'fullscreen'`) chosen per component.
+- **`decorators`** when needed (theme provider, mount root, router).
+- **Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility (with a `play` function via `@storybook/test`) + **Playground**.
+- `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })` so controls actually drive the rendered component.
+
+### 14. Checklist atualizado (apêndice à checklist existente)
+
+#### Structure / TS
+
+- [ ] `<script setup lang="ts">`.
+- [ ] `defineProps<{...}>()` + `defineEmits<{...}>()` typed.
+- [ ] `defineSlots<{...}>()` when there are named/scoped slots.
+- [ ] `defineModel<T>('propName')` for the principal prop when applicable.
+- [ ] **JSDoc/TSDoc on every public prop.**
+- [ ] `defineOptions({ name, inheritAttrs: false })`.
+- [ ] `useAttrs()` and `rootClasses` includes `attrs.class`.
+- [ ] `testId = computed<string>(() => ...)`.
+- [ ] Types for variants (`type Kind = ...`) and typed maps (`Record<Kind, string>`).
+- [ ] Zero `any`, zero `// @ts-ignore`.
+- [ ] **Naming conventions** applied (`kind`/`size`/booleans without prefix, events kebab-case).
+- [ ] **Controlled / uncontrolled** states implemented when applicable.
+- [ ] Composition Pattern only when justified (sibling sub-components + typed `provide`/`inject`).
+- [ ] `<a>`/`<button>` polymorphism when applicable, with `rel="noopener noreferrer"` on `_blank`.
+
+#### Tokens
+
+- [ ] Zero hardcoded hex; everything via `var(--*)` or generated typography class.
+- [ ] CSS vars identical to the canonicals.
+- [ ] `before:` pseudo for hover/active overlays.
+- [ ] Figma tokens -> Design.md classes / CSS vars mapped; gaps registered.
+
+#### DRY
+
+- [ ] Reusable utilities extracted to `composables/`, `components/webkit/utils/`, or `packages/theme/`.
+- [ ] No inline custom animation/class when a shared alternative exists.
+
+#### Acessibilidade
+
+- [ ] Visible focus with `focus-visible:ring-*` plus `ring-offset` based on `--bg-canvas`.
+- [ ] Keyboard navigation validated.
+- [ ] ARIA applied per component type.
+- [ ] Contrast >=4.5:1 / >=3:1, including disabled.
+- [ ] `motion-reduce:*` on animated components.
+- [ ] Touch target >=40x40px or justified.
+- [ ] Tested in a screen reader.
+
+#### Usabilidade
+
+- [ ] States visually distinct without relying solely on color.
+- [ ] Loading with `cursor-loading` + `aria-busy`, non-blocking.
+- [ ] Texts via props (i18n-ready).
+- [ ] Consistency with neighbours in the category.
+
+#### Storybook (uso completo)
+
+- [ ] Meta: `title`, `component`, `subcomponents` (when composition), `tags: ['autodocs']`.
+- [ ] `argTypes` for every prop with appropriate `control`, `description`, `table.defaultValue`.
+- [ ] `argTypes` for every event with `{ action: '...' }`.
+- [ ] `args` with sensible defaults.
+- [ ] `parameters.actions`, `parameters.a11y`, `parameters.docs.description.*`, `parameters.backgrounds`, `parameters.layout`.
+- [ ] `decorators` when needed.
+- [ ] Stories: Default + per `kind` + per `size` + Disabled + Loading + WithSlots/WithComposition + Controlled + Uncontrolled + **LightDark** + Accessibility + **Playground**.
+- [ ] `play` function in Accessibility (or Playground) using `@storybook/test`.
+- [ ] `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })`.
+
+#### Validação
+
+- [ ] `<name>.figma.ts` created, or pending item registered if Code Connect unavailable.
+- [ ] `pnpm webkit:lint && webkit:type-check && webkit:type-coverage && webkit:build:dts && storybook:build` all pass.
+
+---
+
 **Last Updated:** 2026-03-18
 **Version:** 1.0.0
 **Maintainer:** Azion WebKit Team
