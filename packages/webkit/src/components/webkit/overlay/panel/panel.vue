@@ -41,7 +41,7 @@
     cn(
       'flex w-full flex-col overflow-hidden',
       'rounded-[var(--shape-card)] border border-[var(--border-default)]',
-      'bg-[var(--bg-surface)] shadow-[var(--card-shadow)]',
+      'bg-[var(--bg-surface)] shadow-[var(--shadow-md)]',
       'max-h-[min(90vh,640px)]',
       sizeClasses[props.size],
       attrs.class as string | undefined
