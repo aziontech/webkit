@@ -15,6 +15,11 @@ coverage
 *.local
 storybook-static
 
+# Secrets — keep .env files local; commit .env.example only.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -158,7 +158,10 @@ The hooks **fail open** on unexpected errors — they never silently break workf
 Reference for the features described in the `component-create` skill.
 
 - **`play` function in Storybook stories** — requires `@storybook/test`. ✅ **Installed** in `apps/storybook/package.json`. New stories can use `userEvent`/`expect`/`within` in a `play` function on Accessibility / Playground.
-- **`<name>.figma.ts` (Figma Code Connect)** — requires `@figma/code-connect`. ✅ **Installed** in `packages/webkit/package.json`. Config at [`figma.config.json`](./figma.config.json). Authoring `.figma.ts` files works locally; publishing the mapping to Figma requires `FIGMA_ACCESS_TOKEN` set in the environment.
+- **`<name>.figma.ts` (Figma Code Connect)** — requires `@figma/code-connect`. ✅ **Installed** in `packages/webkit/package.json`. Config at [`figma.config.json`](./figma.config.json). Authoring `.figma.ts` files works locally; publishing the mapping to Figma requires `FIGMA_ACCESS_TOKEN`. **Where to put the token:**
+  - **Locally:** copy [`.env.example`](./.env.example) to `.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`, or `export FIGMA_ACCESS_TOKEN=...` in your shell, or pass inline (`FIGMA_ACCESS_TOKEN=... pnpm --filter webkit run figma:publish`). Generate the token at https://www.figma.com/developers/api#access-tokens (requires a Dev Mode seat with Code Connect enabled on the Figma org).
+  - **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that runs `figma:publish`.
+  - **Never** commit the token. `.env` files are gitignored via [`/.gitignore`](../../.gitignore); only [`.env.example`](./.env.example) is versioned.
 - **`cn` helper (Tailwind class merging)** — requires `clsx` + `tailwind-merge` + a helper file. ✅ **Installed**. Helper at [`src/utils/cn.ts`](./src/utils/cn.ts), exported as `@aziontech/webkit/utils/cn`. Use it in new components when consumer classes may need to override defaults.
 - **`asChild` prop on triggers/closes** — requires a Slot helper composable. ⚠️ **Pending**: no helper exists yet. Propose a PR adding it under `src/composables/` before adopting; until then, do not import a phantom path (the `validate-references.mjs` hook will block it).
 

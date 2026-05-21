@@ -1132,23 +1132,162 @@ CLI scripts (in `packages/webkit/package.json`):
 
 Authoring the `.figma.ts` file works without the token; only publishing needs it.
 
-### 13. Storybook (uso completo de recursos)
+**Where to put `FIGMA_ACCESS_TOKEN`:**
 
-Stories must consume all relevant Storybook features:
+- **Locally:** copy [`packages/webkit/.env.example`](../.env.example) to `packages/webkit/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter webkit run figma:publish`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
+- **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that calls `figma:publish`.
+- **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../.env.example) is versioned.
 
-- **Meta:** `title: 'Webkit/<Category>/<Name>'`, `component`, `subcomponents` when Composition Pattern is in play, `tags: ['autodocs']`.
-- **`argTypes`** for every public prop, with appropriate `control` (`select`/`radio` + `options`, `boolean`, `text`, `number`, `color`), `description` (derived from JSDoc), `table.defaultValue`.
-- **`argTypes`** for every event with `{ action: '<event-name>' }`.
-- **`args`** with sensible defaults for the Default story.
-- **`parameters`:**
-  - `parameters.actions = { argTypesRegex: '^on[A-Z].*', handles: [...] }`.
-  - `parameters.a11y` with WCAG rules enabled (when the addon is present).
-  - `parameters.docs.description.component` plus `parameters.docs.description.story` for EACH story.
-  - `parameters.backgrounds` defining theme light/dark backgrounds.
-  - `parameters.layout` (`'centered'` / `'fullscreen'`) chosen per component.
-- **`decorators`** when needed (theme provider, mount root, router).
-- **Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility (with a `play` function via `@storybook/test`) + **Playground**.
-- `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })` so controls actually drive the rendered component.
+### 13. Storybook story — canonical pattern (Vue 3 + Storybook 8)
+
+Stories follow the **market-standard CSF3 pattern for Vue 3**, not whatever a local file happens to do today. The canonical template the `component-create` skill emits is reproduced below.
+
+```js
+// <Name>.stories.js
+import Component from '@aziontech/webkit/<category>/<name>'
+import { expect, userEvent, within } from '@storybook/test'
+
+/** @type {import('@storybook/vue3').Meta<typeof Component>} */
+const meta = {
+  title: 'Webkit/<Category>/<Name>',
+  component: Component,
+  // subcomponents: { ComponentTrigger, ComponentContent } // when Composition Pattern
+  tags: ['autodocs'],
+  parameters: {
+    layout: 'padded',
+    backgrounds: { default: 'dark' },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
+    docs: {
+      description: {
+        component:
+          '<one paragraph describing the component, when to use it, and any non-obvious behavior>'
+      }
+    }
+  },
+  argTypes: {
+    // --- PROPS ---
+    kind: {
+      control: { type: 'select' },
+      options: ['primary', 'secondary', 'outlined', 'text'],
+      description: 'Visual variant.',
+      table: {
+        type: { summary: 'ButtonKind' },
+        defaultValue: { summary: 'primary' },
+        category: 'props'
+      }
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Disables interaction and applies the disabled token set.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
+
+    // --- EVENTS ---
+    // CRITICAL: keys must be `on<EventName>` in camelCase. Vue 3 + `v-bind="args"`
+    // only recognizes listeners declared in that form. Kebab-case keys
+    // (e.g. `'action-click'`) silently fail — the Actions panel stays empty.
+    onClick: {
+      action: 'click',
+      description: 'Fires when the component is activated.',
+      table: { type: { summary: '(event: MouseEvent) => void' }, category: 'events' }
+    },
+    'onUpdate:open': {
+      action: 'update:open',
+      description: 'Emitted when the open state changes (works with v-model:open).',
+      table: { type: { summary: '(value: boolean) => void' }, category: 'events' }
+    },
+
+    // --- SLOTS ---
+    default: {
+      description: 'Default slot content.',
+      control: false,
+      table: { type: { summary: 'VNode | string' }, category: 'slots' }
+    }
+  },
+  args: {
+    kind: 'primary',
+    disabled: false
+  }
+}
+export default meta
+
+const Template = (args) => ({
+  components: { Component },
+  setup() {
+    return { args }
+  },
+  template: '<Component v-bind="args" />'
+})
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Component>} */
+export const Default = {
+  render: Template,
+  parameters: { docs: { description: { story: 'Default configuration.' } } }
+}
+
+export const Disabled = {
+  args: { disabled: true },
+  render: Template,
+  parameters: { docs: { description: { story: 'Disabled state.' } } }
+}
+
+export const Accessibility = {
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Keyboard: Tab focuses the control; Enter/Space activates. Screen reader announces role + name. Tested with VoiceOver.'
+      }
+    }
+  },
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement)
+    await step('Tab focuses the primary control', async () => {
+      await userEvent.tab()
+      expect(canvas.getByRole('button')).toHaveFocus()
+    })
+    await step('Enter triggers the click handler', async () => {
+      await userEvent.keyboard('{Enter}')
+      expect(args.onClick).toHaveBeenCalled()
+    })
+  }
+}
+
+export const Playground = {
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Drive every prop from the Controls panel; the Actions panel captures emitted events.'
+      }
+    }
+  }
+}
+```
+
+**Hard rules:**
+
+- **Events as `on<EventName>` camelCase** in `argTypes`, with `action: '<emitted-name>'`. Vue 3's `v-bind` ignores kebab-case keys, so `'action-click': { action: '...' }` silently breaks the Actions panel. Use `onActionClick: { action: 'action-click' }`. For v-model events, the key keeps the colon: `'onUpdate:open': { action: 'update:open' }`.
+- **Do NOT use** `parameters.actions.argTypesRegex` (deprecated in Storybook 8).
+- **Do NOT use** `parameters.actions.handles` (legacy Web Components addon, not Vue 3 emits).
+- **Use `table.category`** to group controls: `'props'` (default — may omit), `'events'`, `'slots'`.
+- **`control: false`** for slots and any non-controllable item.
+- **Single reusable `Template`** at module scope; do not redeclare the same render inline in every story.
+- **CSF3 object shape** (`export const Name = { args, render, parameters, play }`). Never CSF2 (`Name.args = {...}`).
+- **Slot demos** use a story-specific `template` with real markup inside the component — slots are not passed via `v-bind`.
+- **`tags: ['autodocs']`** on the meta.
+- **`subcomponents`** on the meta when Composition Pattern — Storybook generates Docs tabs per sub-component.
+
+**Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility (with a `play` function via `@storybook/test`) + **Playground**.
 
 ### 14. Checklist atualizado (apêndice à checklist existente)
 
@@ -1207,7 +1346,7 @@ Stories must consume all relevant Storybook features:
 
 - [ ] Meta: `title`, `component`, `subcomponents` (when composition), `tags: ['autodocs']`.
 - [ ] `argTypes` for every prop with appropriate `control`, `description`, `table.defaultValue`.
-- [ ] `argTypes` for every event with `{ action: '...' }`.
+- [ ] `argTypes` for every event with key `on<EventName>` (camelCase, e.g. `onClick`, `'onUpdate:open'`) — never kebab-case — and value `{ action: '<emitted-name>', table: { category: 'events' } }`. No `argTypesRegex`, no `actions.handles`.
 - [ ] `args` with sensible defaults.
 - [ ] `parameters.actions`, `parameters.a11y`, `parameters.docs.description.*`, `parameters.backgrounds`, `parameters.layout`.
 - [ ] `decorators` when needed.
