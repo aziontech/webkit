@@ -30,20 +30,20 @@
   >
     <span
       v-if="prefix"
-      class="font-proto-mono text-[var(--text-default)] font-medium leading-1 tracking-tightest text-overline-md"
+      class="font-proto-mono text-default font-medium leading-1 tracking-tightest text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >
       {{ prefix }}
     </span>
     <span
-      class="font-proto-mono text-pretty text-[var(--color-primary-500)] font-medium leading-1 tracking-tightest uppercase text-overline-md"
+      class="font-proto-mono text-pretty text-brand-primary-500 font-medium leading-1 tracking-tightest uppercase text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >
       <slot />
     </span>
     <span
       v-if="showCursor"
-      class="w-1 h-5 shrink-0 relative bg-var(--color-accent-400)] animate-blink"
+      class="w-1 h-5 shrink-0 relative bg-brand-accent-400 animate-blink"
     />
   </div>
 </template>

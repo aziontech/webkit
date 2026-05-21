@@ -33,9 +33,9 @@ const flattenToCssVars = (obj, prefix = []) => {
 
 export const resolveRefsToCssVars = (tokens) => {
   const baseForResolve = {
-    ...tokens.primitives,
-    ...tokens.surfacePrimitives,
-    ...tokens.brandPrimitives,
+    primitives: tokens.primitives,
+    surfacePrimitives: tokens.surfacePrimitives,
+    brandPrimitives: tokens.brandPrimitives,
   };
 
   const baseForVars = { primitives: tokens.primitives, surfacePrimitives: tokens.surfacePrimitives };

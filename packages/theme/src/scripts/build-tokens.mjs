@@ -34,6 +34,8 @@ import { buildTrees, flatten } from './compile-primitives.js'
 import { containersData } from '../tokens/semantic/containers.data.js'
 import { spacingsData } from '../tokens/semantic/spacings.data.js'
 import { textsData } from '../tokens/semantic/texts.data.js'
+import { semanticColors } from '../tokens/semantic/colors.js'
+import { createCssVars } from './css-vars.js'
 
 const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl']
 const V3_SELECTOR = ':root, [data-theme=light], .azion.azion-light'
@@ -77,11 +79,22 @@ const flattenBundle = (data) => {
   return byBp
 }
 
+const SEMANTIC_PREFIXES = ['--text-', '--background-', '--border-'];
+const isSemanticVar = (key) => SEMANTIC_PREFIXES.some((p) => key.startsWith(p));
+const pickSemantic = (vars) =>
+  Object.fromEntries(Object.entries(vars).filter(([k]) => isSemanticVar(k)));
+
+const buildSemanticColorVars = () => {
+  const { light, dark } = createCssVars();
+  return { light: pickSemantic(light), dark: pickSemantic(dark) };
+};
+
 const buildFlatModel = () => ({
   primitives: flattenPrimitives(),
   containers: flattenSingleValue(containersData, (k) => `--container-${k}`),
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
-  texts: flattenBundle(textsData)
+  texts: flattenBundle(textsData),
+  semanticColors: buildSemanticColorVars()
 })
 
 // ─── 3. Shared formatting helpers ──────────────────────────────────────────
@@ -132,6 +145,8 @@ const emitMediaBlockV3 = (bp, vars) =>
     `  }`
   ].join('\n')
 
+const V3_DARK_SELECTOR = '[data-theme=dark], .dark, .azion.azion-dark';
+
 const emitCssV3 = () => {
   const m = buildFlatModel()
 
@@ -139,7 +154,8 @@ const emitCssV3 = () => {
     { title: 'Primitives', vars: m.primitives },
     { title: 'Containers', vars: m.containers._ || {} },
     { title: 'Spacings', vars: m.spacings._ || {} },
-    { title: 'Texts', vars: m.texts._ || {} }
+    { title: 'Texts', vars: m.texts._ || {} },
+    { title: 'Semantic colors', vars: m.semanticColors.light }
   ]
 
   const baseBody = sections
@@ -170,6 +186,13 @@ const emitCssV3 = () => {
     '  }',
     '',
     mediaBlocks.join('\n\n'),
+    '}',
+    '',
+    '@layer base {',
+    `  ${V3_DARK_SELECTOR} {`,
+    '    /* ── Semantic colors (dark) ── */',
+    formatVars(m.semanticColors.dark, '    '),
+    '  }',
     '}',
     '',
     '/* ── Theme semantics (primary, secondary, surfaces, feedback, …) ── */',
@@ -223,7 +246,17 @@ const buildPresetData = () => {
 
   return {
     theme: {
-      extend: { colors, fontSize, fontWeight, dropShadow, lineHeight, letterSpacing }
+      extend: {
+        colors,
+        fontSize,
+        fontWeight,
+        dropShadow,
+        lineHeight,
+        letterSpacing,
+        textColor: semanticColors.text,
+        backgroundColor: semanticColors.background,
+        borderColor: semanticColors.border
+      }
     }
   }
 }

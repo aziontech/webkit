@@ -9,7 +9,21 @@ import {
   primitives,
   surfacePrimitives,
   brandPrimitives,
+  textSemantic,
+  backgroundSemantic,
+  borderSemantic,
+  resolveRefsToCssVars,
 } from '@aziontech/theme/tokens';
+
+// Resolve all token refs to concrete hex values for both modes
+const { light: lightVars, dark: darkVars } = resolveRefsToCssVars({
+  primitives,
+  surfacePrimitives,
+  brandPrimitives,
+  textSemantic,
+  backgroundSemantic,
+  borderSemantic,
+});
 
 // ─── Primitive Colors ─────────────────────────────────────────────────────────
 
@@ -40,6 +54,72 @@ export const primitiveColors = PRIMITIVE_FAMILIES.map(({ name, label, role }) =>
     })),
 }));
 
-export const backgroundTokens = [];
-export const textTokens = [];
-export const borderTokens = [];
+// ─── Semantic Tokens ──────────────────────────────────────────────────────────
+
+const TOKEN_DESCRIPTIONS = {
+  background: {
+    surface:        'Main content areas — cards, panels, sidebars',
+    surfaceRaised:  'Elevated surfaces — modals, dropdowns, tooltips',
+    surfaceOverlay: 'Overlay panel backgrounds',
+    canvas:         'Page / app root background',
+    primary:        'Brand primary interactive fill',
+    primaryHover:   'Primary fill hover state',
+    danger:         'Error / destructive state fill',
+    dangerHover:    'Danger hover state',
+    warning:        'Warning state fill',
+    warningHover:   'Warning hover state',
+    success:        'Success state fill',
+    successHover:   'Success hover state',
+    backdrop:       'Modal / overlay backdrop',
+  },
+  text: {
+    default:      'Primary text content',
+    muted:        'Secondary / supporting text',
+    link:         'Interactive link text',
+    linkHover:    'Link hover state',
+    code:         'Code / monospace text',
+    primary:      'Brand-colored text',
+    primaryHover: 'Brand text hover',
+    accent:       'Accent (violet) text',
+    accentHover:  'Accent hover state',
+    danger:       'Error / destructive text',
+    dangerHover:  'Danger text hover',
+    warning:      'Warning text',
+    warningHover: 'Warning hover',
+    success:      'Success text',
+    successHover: 'Success hover',
+  },
+  border: {
+    default:      'Standard borders and dividers',
+    subtle:       'Lightweight / low-contrast borders',
+    strong:       'High-contrast borders',
+    primary:      'Brand-colored borders',
+    primaryHover: 'Primary border hover',
+    accent:       'Accent-colored borders',
+    accentHover:  'Accent border hover',
+    danger:       'Error state borders',
+    dangerHover:  'Danger border hover',
+    warning:      'Warning state borders',
+    warningHover: 'Warning border hover',
+    success:      'Success state borders',
+    successHover: 'Success border hover',
+  },
+};
+
+/**
+ * Build a resolved token data array for a semantic category.
+ * Tailwind class names match the semantic-colors-plugin (no camelCase → kebab conversion).
+ */
+const buildTokens = (semanticLight, category, tailwindPrefix) =>
+  Object.keys(semanticLight).map((key) => ({
+    name:          key,
+    cssVar:        `--${category}-${key}`,
+    tailwindClass: `${tailwindPrefix}-${key}`,
+    description:   TOKEN_DESCRIPTIONS[category]?.[key] ?? '',
+    lightHex:      lightVars[`--${category}-${key}`] ?? null,
+    darkHex:       darkVars[`--${category}-${key}`]  ?? null,
+  }));
+
+export const backgroundTokens = buildTokens(backgroundSemantic.light, 'background', 'bg');
+export const textTokens        = buildTokens(textSemantic.light,       'text',       'text');
+export const borderTokens      = buildTokens(borderSemantic.light,     'border',     'border');

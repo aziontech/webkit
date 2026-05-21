@@ -151,7 +151,7 @@
       :class="contentInnerClass"
     >
       <p
-        class="font-proto-mono text-overline-sm text-brand-primary-400"
+        class="font-proto-mono text-overline-sm text-brand-primary-500"
         v-if="overline"
       >
         {{ overline }}
@@ -160,7 +160,7 @@
       <span
         v-if="icon"
         :class="icon"
-        class="text-brand-primary-400 text-heading-sm"
+        class="text-brand-primary-500 text-heading-sm"
       ></span>
 
       <h3

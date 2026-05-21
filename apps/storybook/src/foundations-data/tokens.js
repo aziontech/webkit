@@ -4,11 +4,81 @@
  */
 
 import {
+  createCssVars,
   primitives,
   brandPrimitives,
   surfacePrimitives,
+  textSemantic,
+  backgroundSemantic,
+  borderSemantic,
 } from '@aziontech/theme/tokens'
 
+const { light, dark } = createCssVars()
+
+// ─── Usage descriptions ──────────────────────────────────────────────────────
+
+const textUsage = {
+  default: 'Primary text content',
+  muted: 'Secondary / supporting text',
+  link: 'Interactive link text',
+  code: 'Code and monospace text',
+  linkHover: 'Hovered link text',
+  primary: 'Brand primary — CTAs and highlights',
+  primaryHover: 'Hovered primary text',
+  accent: 'Accent / violet highlight',
+  accentHover: 'Hovered accent text',
+  danger: 'Error and destructive states',
+  dangerHover: 'Hovered danger text',
+  warning: 'Warning / caution states',
+  warningHover: 'Hovered warning text',
+  success: 'Success and positive states',
+  successHover: 'Hovered success text',
+}
+
+const backgroundUsage = {
+  surfaceRaised: 'Elevated surface — cards, panels',
+  surfaceOverlay: 'Floating overlay — tooltips, dropdowns',
+  surface: 'Base surface — page body',
+  canvas: 'Outermost page canvas',
+  primary: 'Brand primary background',
+  primaryHover: 'Hovered primary background',
+  danger: 'Error / danger background',
+  dangerHover: 'Hovered danger background',
+  warning: 'Warning background',
+  warningHover: 'Hovered warning background',
+  success: 'Success background',
+  successHover: 'Hovered success background',
+  backdrop: 'Modal / dialog backdrop overlay',
+}
+
+const borderUsage = {
+  default: 'Standard divider border',
+  subtle: 'Subtle / low-contrast border',
+  strong: 'High-contrast border',
+  primary: 'Brand primary border',
+  primaryHover: 'Hovered primary border',
+  accent: 'Accent brand border',
+  accentHover: 'Hovered accent border',
+  danger: 'Error / destructive border',
+  dangerHover: 'Hovered danger border',
+  warning: 'Warning border',
+  warningHover: 'Hovered warning border',
+  success: 'Success border',
+  successHover: 'Hovered success border',
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function buildSemanticRows(semanticMap, cssVarPrefix, tailwindPrefix, usageMap) {
+  return Object.keys(semanticMap.light).map((key) => ({
+    name: `${tailwindPrefix}${key}`,
+    cssVar: `--${cssVarPrefix}${key}`,
+    tailwindClass: `${tailwindPrefix}${key}`,
+    lightValue: light[`--${cssVarPrefix}${key}`] ?? 'N/A',
+    darkValue: dark[`--${cssVarPrefix}${key}`] ?? 'N/A',
+    usage: usageMap[key] ?? '',
+  }))
+}
 
 // ─── Primitive color groups ───────────────────────────────────────────────────
 // Ordered for display (most commonly used first)
@@ -72,16 +142,16 @@ export const semanticColorGroups = [
   {
     group: 'Text',
     description: 'Consumed via Tailwind as `text-{name}`. Controls font color.',
-    rows: [],
+    rows: buildSemanticRows(textSemantic, 'text-', 'text-', textUsage),
   },
   {
     group: 'Background',
     description: 'Consumed via Tailwind as `bg-{name}`. Controls background color.',
-    rows: [],
+    rows: buildSemanticRows(backgroundSemantic, 'background-', 'bg-', backgroundUsage),
   },
   {
     group: 'Border',
     description: 'Consumed via Tailwind as `border-{name}`. Controls border color.',
-    rows: [],
+    rows: buildSemanticRows(borderSemantic, 'border-', 'border-', borderUsage),
   },
 ]
