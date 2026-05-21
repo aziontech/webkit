@@ -1,0 +1,6 @@
+{
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./index.ts",
+  "sideEffects": false
+}
