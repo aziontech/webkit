@@ -154,6 +154,44 @@ Do not use `rounded-md`, `rounded-lg`, or numeric radius in webkit components.
 
 ---
 
+## Shadows (elevation)
+
+Use **primitive shadow** variables from `packages/theme/src/tokens/primitives/effects/shadow.js`. They compile to `--shadow-*` on `:root` via `compile-primitives.js`.
+
+### Pattern
+
+```html
+shadow-[var(--shadow-sm)] shadow-[var(--shadow-md)] shadow-[var(--shadow-lg)]
+```
+
+Apply on the element that should cast elevation (panel shell, floating surface, popover). Pair with semantic surface tokens (`bg-[var(--bg-surface)]`, borders) — shadows do not replace surface color.
+
+### Scale
+
+| Token          | Typical use in webkit                                  |
+| -------------- | ------------------------------------------------------ |
+| `--shadow-2xs` | Hairline lift (rare; prefer border tokens when unsure) |
+| `--shadow-xs`  | Subtle chips, compact controls                         |
+| `--shadow-sm`  | Cards and inline surfaces at rest                      |
+| `--shadow-md`  | **Panels, dialogs, drawers** (overlay shells)          |
+| `--shadow-lg`  | Prominent floating UI, emphasized modals               |
+| `--shadow-xl`  | High emphasis overlays (use sparingly)                 |
+| `--shadow-2xl` | Maximum elevation (marketing hero cards, not forms)    |
+
+Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`shadow-[var(--shadow-md)]`).
+
+### Related effect primitives
+
+`drop-shadow.js` and `inset-shadow.js` emit `--drop-shadow-*` and `--inset-shadow-*`. Use those only when the design calls for filter-based or inset depth; default elevation for webkit components is `--shadow-*` from `shadow.js`.
+
+### Do not
+
+- Use legacy theme vars such as `--card-shadow` in `components/webkit/` — they are PrimeVue/Azion SCSS aliases, not the primitive scale.
+- Hardcode `box-shadow` values or Tailwind default shadows (`shadow-md`, `shadow-lg` without `var(--shadow-*)`).
+- Use `rgb(...)` / `rgba(...)` / hex in component class strings for elevation.
+
+---
+
 ## Colors
 
 Use **theme semantic** CSS variables so light/dark and brand stay consistent.
@@ -191,8 +229,9 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 2. **Spacing** — `padding` / `margin` / `gap` via `var(--spacing-*)` (or semantic spacing utilities).
 3. **Width** — `max-w-[var(--container-max-width)]` or `max-w-[var(--container-<size>)]`.
 4. **Radius** — `rounded-[var(--shape-*)]`.
-5. **Color** — `bg-[var(--…)]`, `text-[var(--…)]`, `border-[var(--…)]`.
-6. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
+5. **Shadow** — `shadow-[var(--shadow-*)]` from `primitives/effects/shadow.js` when the surface elevates.
+6. **Color** — `bg-[var(--…)]`, `text-[var(--…)]`, `border-[var(--…)]`.
+7. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
 
 ---
 
