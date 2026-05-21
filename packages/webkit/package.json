@@ -123,6 +123,7 @@
     "./tabmenu": "./src/core/primevue/tabmenu/tabmenu.vue",
     "./tabpanel": "./src/core/primevue/tabpanel/tabpanel.vue",
     "./tabview": "./src/core/primevue/tabview/tabview.vue",
+    "./content/avatar": "./src/components/webkit/content/avatar/avatar.vue",
     "./content/card-pricing": "./src/components/webkit/content/card-pricing/card-pricing.vue",
     "./content/currency": "./src/components/webkit/content/currency/currency.vue",
     "./content/tag": "./src/components/webkit/content/tag/tag.vue",
