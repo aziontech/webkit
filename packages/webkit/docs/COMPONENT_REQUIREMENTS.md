@@ -864,6 +864,8 @@ npm run build:dts
 
 This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/webkit/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../src/components/webkit/actions/button/button.vue), [icon-button.vue](../src/components/webkit/actions/icon-button/icon-button.vue), [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue). Reference for compositional decisions: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
+> **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
+
 ### 1. Source of truth: `Design.md`
 
 All visual rules (typography classes, spacing, max-width, shape, semantic colors) come from [Design.md](./Design.md). In any conflict, **Design.md wins**.
@@ -932,11 +934,114 @@ defineSlots<{
 }>()
 ```
 
+### 2.5. `as-child` / Slot pattern (shadcn-vue) — _pending_
+
+> **Status: not yet available.** A Slot helper composable does not exist in this repository today. Do **not** import a phantom path; the `validate-references.mjs` hook will block it. When a real component needs this pattern, propose adding the helper under `packages/webkit/src/composables/` in a dedicated PR (with TypeScript Slot polyfill or via `reka-ui`), then revisit this section.
+
+When the helper ships, the pattern looks like: a component exposes `asChild?: boolean`. When `asChild` is `true`, it clones the single default-slot child and forwards classes/attrs/refs/listeners into it (same as `DialogTrigger`/`TooltipTrigger`/`AccordionTrigger` in shadcn-vue).
+
+```ts
+interface Props {
+  /** Render as the child element instead of a default `<button>`. */
+  asChild?: boolean
+}
+```
+
+Use cases (when available): triggers of overlay components, link-or-button wrappers, any sub-component that primarily forwards behavior to a user-supplied element.
+
+### 2.6. `data-state` / `data-disabled` / `data-orientation` attributes
+
+Expose reactive state via `data-*` attributes on the root so consumers can style with Tailwind state variants (`data-[state=open]:bg-...`). Same approach as shadcn-vue / Reka UI.
+
+```vue
+<template>
+  <div
+    :data-state="isOpen ? 'open' : 'closed'"
+    :data-disabled="disabled || undefined"
+    :data-orientation="orientation"
+    :data-testid="testId"
+  >
+    ...
+  </div>
+</template>
+```
+
+Common state values: `open`/`closed`, `on`/`off`, `active`/`inactive`, `checked`/`unchecked`/`indeterminate`, `visible`/`hidden`. Always set the attribute even when default; omit (`|| undefined`) only for binary flags like `data-disabled`.
+
+This unlocks state-driven styling without computed class strings:
+
+```vue
+<DialogContent class="data-[state=open]:animate-in data-[state=closed]:animate-out" />
+```
+
+### 2.7. `cn` helper (tailwind-merge) — _pending_
+
+> **Status: not yet available.** `clsx` and `tailwind-merge` are **not installed** in [`packages/webkit/package.json`](../package.json) and no `cn` helper exists in the repo. Do **not** invent the import; the `validate-references.mjs` hook will block it. Until the deps land, components keep the array pattern from [button.vue](../src/components/webkit/actions/button/button.vue) (`rootClasses = computed(() => [sharedClasses, kindClasses[kind], sizeClasses[size], attrs.class])`).
+
+When the helper ships, the rationale is: the naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
+
+Migration plan when ready:
+
+1. `pnpm --filter webkit add clsx tailwind-merge`.
+2. Create the helper (proposed location: `packages/webkit/src/utils/cn.ts`):
+
+   ```ts
+   import { clsx, type ClassValue } from 'clsx'
+   import { twMerge } from 'tailwind-merge'
+
+   export function cn(...inputs: ClassValue[]): string {
+     return twMerge(clsx(inputs))
+   }
+   ```
+
+3. Add `"./utils/cn": "./src/utils/cn.ts"` to `package.json#exports`.
+4. Migrate components incrementally; update this section to "available today".
+
+### 2.8. `VariantProps` exportados
+
+Export the variant unions so consumers can type their own wrappers without re-declaring strings.
+
+```ts
+// button.vue
+export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+export type ButtonSize = 'small' | 'medium' | 'large'
+```
+
+Consumer usage:
+
+```ts
+import type { ButtonKind } from '@aziontech/webkit/actions/button'
+
+interface MyCardActionProps {
+  kind: ButtonKind
+}
+```
+
+Naming pattern: `<ComponentName><PropName>` — `ButtonKind`, `ButtonSize`, `DialogSize`, `TabsOrientation`. Each public type is re-exported through the component's entry in `package.json#exports` (Vue SFC default export covers the runtime; named exports cover the types).
+
+### 2.9. Anatomy completa em Composition Pattern (shadcn-vue style)
+
+When the component justifies Composition Pattern, ship the **complete anatomy** following the shadcn-vue/Reka UI convention. Reference anatomies:
+
+- **Dialog:** `Dialog` (root) + `DialogTrigger` (as-child) + `DialogPortal` (teleport) + `DialogOverlay` (backdrop) + `DialogContent` (panel) + `DialogTitle` + `DialogDescription` + `DialogClose` (as-child).
+- **Tabs:** `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`.
+- **Accordion:** `Accordion` + `AccordionItem` + `AccordionTrigger` + `AccordionContent`.
+- **DropdownMenu:** `DropdownMenu` + `DropdownMenuTrigger` + `DropdownMenuContent` + `DropdownMenuItem` + `DropdownMenuSeparator` + `DropdownMenuLabel`.
+- **Card:** `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`.
+
+Conventions:
+
+- Sibling files in the same directory: `dialog.vue`, `dialog-trigger.vue`, `dialog-portal.vue`, `dialog-overlay.vue`, `dialog-content.vue`, `dialog-title.vue`, `dialog-description.vue`, `dialog-close.vue`.
+- Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts` or `types.ts` to avoid circular imports.
+- Each public sub-component receives an entry in `package.json#exports` (`./overlay/dialog`, `./overlay/dialog-trigger`, …) and a Storybook story (the `WithComposition` story shows the full anatomy).
+- `as-child` enabled on `Trigger` and `Close` variants.
+- `data-state` exposed on Root + Content for state-driven styling.
+
 ### 3. Composition Pattern — só quando faz sentido
 
 Reference: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
-- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Sibling sub-components live in the same directory; shared state goes through `provide`/`inject` typed with `InjectionKey<T>`; each public sub-component has its own entry in `packages/webkit/package.json#exports`.
+- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). Sibling sub-components live in the same directory; shared state goes through `provide`/`inject` typed with `InjectionKey<T>`; each public sub-component has its own entry in `packages/webkit/package.json#exports`.
 - **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
 - **Atomic** (Button, IconButton, Tag, Spinner, Badge, Currency) — always monolithic, no slots.
 - **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
@@ -1018,9 +1123,15 @@ Sweep these locations before implementing. Create a new utility only when nothin
 
 Every token used must work in both modes of `@aziontech/theme`. The Storybook story `LightDark` renders the component side by side in light and dark and is mandatory.
 
-### 12. Figma Code Connect
+### 12. Figma Code Connect — _pending_
 
-When the project's Figma file supports Code Connect, generate `<name>.figma.ts` in the component directory mapping Figma variants (`kind`, `size`, `state`) to Vue props, Figma slots to Vue children, and the code snippet shown in the inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`. When unavailable, register a pending item in the report.
+> **Status: not yet available.** `@figma/code-connect` is **not installed** in this repository (no entry in [`package.json`](../package.json)) and there are **no `*.figma.ts` files**. Do not generate `<name>.figma.ts` referencing the missing import — the `validate-references.mjs` hook will block it. Register the Code Connect mapping as a pending item in the report and move on.
+
+When the dependency lands and the Figma file enables Code Connect:
+
+1. `pnpm --filter webkit add -D @figma/code-connect`.
+2. Generate `<name>.figma.ts` in the component directory mapping Figma variants (`kind`, `size`, `state`) to Vue props, Figma slots to Vue children, and the code snippet shown in the inspection panel.
+3. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
 
 ### 13. Storybook (uso completo de recursos)
 
@@ -1037,7 +1148,7 @@ Stories must consume all relevant Storybook features:
   - `parameters.backgrounds` defining theme light/dark backgrounds.
   - `parameters.layout` (`'centered'` / `'fullscreen'`) chosen per component.
 - **`decorators`** when needed (theme provider, mount root, router).
-- **Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility (with a `play` function via `@storybook/test`) + **Playground**.
+- **Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility + **Playground**. _The `play` function via `@storybook/test` is conditional — see note below._
 - `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })` so controls actually drive the rendered component.
 
 ### 14. Checklist atualizado (apêndice à checklist existente)
@@ -1057,6 +1168,11 @@ Stories must consume all relevant Storybook features:
 - [ ] **Naming conventions** applied (`kind`/`size`/booleans without prefix, events kebab-case).
 - [ ] **Controlled / uncontrolled** states implemented when applicable.
 - [ ] Composition Pattern only when justified (sibling sub-components + typed `provide`/`inject`).
+- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Portal/Overlay/Content/Title/Description/Close as applicable — see § 2.9).
+- [ ] **`asChild`** exposed on trigger-like sub-components (Trigger/Close/etc.) — § 2.5.
+- [ ] **`data-state`/`data-disabled`/`data-orientation`** exposed on the root and on stateful sub-components — § 2.6.
+- [ ] **`VariantProps`** (e.g. `ButtonKind`, `ButtonSize`) exported as named exports — § 2.8.
+- [ ] **`cn` helper** used for class merging when consumer classes may override defaults (once `clsx` + `tailwind-merge` are installed — § 2.7).
 - [ ] `<a>`/`<button>` polymorphism when applicable, with `rel="noopener noreferrer"` on `_blank`.
 
 #### Tokens
@@ -1097,7 +1213,7 @@ Stories must consume all relevant Storybook features:
 - [ ] `parameters.actions`, `parameters.a11y`, `parameters.docs.description.*`, `parameters.backgrounds`, `parameters.layout`.
 - [ ] `decorators` when needed.
 - [ ] Stories: Default + per `kind` + per `size` + Disabled + Loading + WithSlots/WithComposition + Controlled + Uncontrolled + **LightDark** + Accessibility + **Playground**.
-- [ ] `play` function in Accessibility (or Playground) using `@storybook/test`.
+- [ ] `play` function in Accessibility (or Playground) using `@storybook/test` — **only when** `@storybook/test` is installed in `apps/storybook/package.json`. Today it is **not installed**; omit the `play` and record a pending item in the report. Importing `@storybook/test` before installation is blocked by `validate-references.mjs`.
 - [ ] `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })`.
 
 #### Validação

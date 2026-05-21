@@ -8,6 +8,54 @@
 - `status`: `active`
 - `last_updated`: `2026-05-21`
 
+## Trigger / Auto-invoke
+
+**Esta skill DEVE ser auto-invocada pelo agente quando detectar qualquer um dos sinais abaixo, sem esperar o usuario mencionar a skill explicitamente.**
+
+### Gatilhos textuais (intent matching)
+
+A skill dispara automaticamente quando o pedido do usuario contem qualquer combinacao de:
+
+- **Verbos de criacao:** `criar`, `crie`, `gerar`, `gere`, `adicionar`, `adiciona`, `novo`, `nova`, `build`, `create`, `add`, `make`.
+- **Substantivos de componente UI:** `componente`, `component`, `button`/`botao`, `dialog`/`modal`, `drawer`/`sheet`, `tooltip`, `tabs`/`abas`, `accordion`/`acordeao`, `card`, `tag`, `badge`, `chip`, `input`, `select`/`dropdown`, `checkbox`, `radio`, `switch`, `spinner`, `toast`, `alert`/`message`, `breadcrumb`, `menu`, `popover`, `avatar`, `progress`, `skeleton`, `divider`.
+- **Categorias da pasta webkit:** `actions`, `content`, `data`, `feedback`, `inputs`, `layout`, `navigation`, `overlay`, `utils`.
+- **Mencoes a design/Figma:** `figma`, `design`, `mockup`, `frame`, `prototipo`, link `figma.com/design/...`, `figma.com/proto/...`.
+
+Exemplos de pedidos que disparam a skill:
+
+- "preciso de um drawer no webkit"
+- "cria um card-banner em feedback"
+- "adicionar tooltip seguindo o padrao"
+- "novo dialog em overlay, link Figma: ..."
+- "gerar componente de tabs"
+- "make a dropdown for the filters"
+
+### Gatilhos de contexto (file matching)
+
+A skill tambem dispara quando o agente esta prestes a criar/editar arquivos sob qualquer um destes globs:
+
+- `packages/webkit/src/components/webkit/**/*.vue` (qualquer arquivo Vue, novo ou existente)
+- `packages/webkit/src/components/webkit/**/package.json` (criacao de package.json local de componente)
+- Novo entry em `packages/webkit/package.json#exports` mapeando `./<category>/<name>` para `src/components/webkit/`
+- Nova story em `apps/storybook/src/stories/webkit/<category>/`
+
+**Regra dura:** antes de qualquer `Write` ou `Edit` em qualquer destes paths, o agente DEVE ter ido pelo Workflow desta skill — mesmo que o pedido seja "pequeno" (renomear, adicionar prop, ajustar variant).
+
+### Quando NAO disparar
+
+- Mudancas triviais de texto em comentarios.
+- Atualizacao de `Last Updated` ou metadata.
+- Migracao de tokens em componente legado fora de `src/components/webkit/` (usar `/migracao-azion-theme` em vez).
+- Edicao de docs (`Design.md`, `COMPONENT_REQUIREMENTS.md`, `PRIMEVUE_ABSTRACTION.md`) — protegidos, exigem aprovacao humana explicita.
+- Refator interno que nao toca props/emits/slots/data-testid/tokens.
+
+### Comportamento esperado do agente ao detectar gatilho
+
+1. **Sinalizar ao usuario:** "Detectei pedido de criacao de componente na camada webkit. Vou seguir a skill `component-create` (`skills/component-create.md`)."
+2. Pedir os inputs faltantes (nome, categoria, URL Figma, estrutura monolitica/composition) se nao estiverem no pedido.
+3. Executar o Workflow desta skill.
+4. Nao escrever nenhum arquivo na pasta alvo antes de completar os passos 1-5 do Workflow.
+
 ## Purpose
 
 Criar, em uma unica execucao, o pacote completo de um componente novo na camada webkit (`packages/webkit/src/components/webkit/<category>/<name>/`): arquivo Vue em TypeScript tipado + `package.json` local + entry em `packages/webkit/package.json#exports` + arquivo Code Connect Figma + story Storybook com uso completo dos recursos (argTypes/args/parameters/actions/a11y/decorators/play). Segue o padrao dos canonicos (button, icon-button, card-pricing) e adere ao `packages/webkit/docs/Design.md`. Aplica Composition Pattern (estilo shadcn-vue) apenas quando faz sentido. Skill produz codigo, nao apenas guia.
@@ -133,20 +181,32 @@ Todos os artefatos sao **criados/editados pela skill**, nao apenas planejados:
      - `defineModel<T>('propName')` para v-model da prop principal.
    - **Clean code:** nomes claros, funcoes pequenas, sem `any`, sem `// @ts-ignore`, imports ordenados (Vue -> @vueuse -> webkit interno -> relativos), sem logica complexa inline em template, sem `<style>` (preferir Tailwind + CSS vars).
 
+   - **Padroes shadcn-vue** (ver COMPONENT_REQUIREMENTS § 2.5-2.9):
+     - **Disponiveis hoje** (usar agora):
+       - **`data-state`/`data-disabled`/`data-orientation`** no root e em sub-componentes statefuis, refletindo estado para styling via Tailwind state variants (`data-[state=open]:bg-...`). Valores comuns: `open`/`closed`, `on`/`off`, `active`/`inactive`, `checked`/`unchecked`/`indeterminate`.
+       - **`VariantProps` exportados** como named exports do `.vue`: `export type ButtonKind = 'primary' | 'secondary' | ...`, `export type ButtonSize = 'small' | 'medium' | 'large'`. Naming `<ComponentName><PropName>`.
+       - **Anatomy completa** em Composition Pattern (Root + Trigger + Portal + Overlay + Content + Title + Description + Close para Dialog, etc.) seguindo a convencao shadcn-vue/Reka UI; cada sub-componente publico com entry em `package.json#exports` e story dedicada.
+     - **Pendentes — NAO INVENTAR ate as dependencias entrarem** (o hook `validate-references.mjs` bloqueia imports inexistentes):
+       - **`asChild` prop** em triggers/closes — depende de um helper Slot que ainda nao existe. Quando precisar, propor (a) criar o helper em local apropriado de `packages/webkit/src/composables/` apos confirmacao humana, ou (b) registrar a pendencia no relatorio e omitir `asChild`. **Nao** importar de path inexistente.
+       - **`cn` helper** — depende de `clsx` + `tailwind-merge` em `packages/webkit/package.json`. Hoje **nao estao instalados**. Manter o padrao array `[base, attrs.class]` ate as deps entrarem. **Nao** importar `cn` antes da instalacao.
+       - **`<name>.figma.ts` Code Connect** — depende de `@figma/code-connect`. Hoje **nao esta instalado**. Pular Code Connect e registrar pendencia ate a dep entrar.
+       - **`play` function nas stories** — depende de `@storybook/test`. Hoje **nao esta instalado**. Omitir `play` e registrar pendencia.
+
 7. **Composition Pattern (quando aplicavel)** — sub-componentes irmaos no mesmo diretorio, mesmo padrao do root (script setup lang=ts, inheritAttrs:false, useAttrs, rootClasses com attrs.class). Estado compartilhado via `provide`/`inject` tipado:
 
    ```ts
    // <name>.vue (root)
    import type { InjectionKey } from 'vue'
-   interface <Name>Context { close: () => void; testId: string }
+   interface <Name>Context { close: () => void; testId: string; isOpen: Readonly<Ref<boolean>> }
    const <Name>InjectionKey: InjectionKey<<Name>Context> = Symbol('<Name>Context')
-   provide(<Name>InjectionKey, { close, testId: testId.value })
+   provide(<Name>InjectionKey, { close, testId: testId.value, isOpen })
 
-   // <name>-header.vue (sub)
+   // <name>-trigger.vue (sub, com asChild)
    const ctx = inject(<Name>InjectionKey)
+   defineProps<{ asChild?: boolean }>()
    ```
 
-   Cada sub-componente publico recebe entry propria em `packages/webkit/package.json#exports`.
+   Cada sub-componente publico recebe entry propria em `packages/webkit/package.json#exports`. Ship the complete anatomy (Trigger/Portal/Overlay/Content/Title/Description/Close conforme aplicavel).
 
 8. **Acessibilidade (WCAG 2.1 AA)** — aplicar em root e em cada sub-componente:
    - Semantica HTML correta (`<button>`/`<a>`/`<dialog>`/`<nav>` nativo antes de `role=...`).
@@ -221,6 +281,12 @@ Todos os artefatos sao **criados/editados pela skill**, nao apenas planejados:
 
 ## Rules
 
+0. **No hallucination — so referencie o que existe.** Antes de importar qualquer modulo, chamar qualquer funcao, ou mencionar qualquer path em codigo gerado, **verificar que existe**:
+   - `@aziontech/webkit/<subpath>` precisa estar em [`packages/webkit/package.json#exports`](../packages/webkit/package.json).
+   - Imports relativos precisam apontar para arquivo existente (`.vue`/`.ts`/`.js`/`/index.*`).
+   - Pacotes npm precisam estar em algum `node_modules/`.
+   - Workspaces precisam ter `packages/<nome>/package.json`.
+   - Se algo NAO existe, **nao inventar**: propor criacao/instalacao, registrar pendencia no relatorio, ou pular a parte dependente. O hook `validate-references.mjs` bloqueia Writes com imports nao-resolvidos.
 1. **Sempre TypeScript** para novos componentes: `<script setup lang="ts">` com `defineProps<...>()`, `defineEmits<...>()`, tipos para variantes, zero `any`.
 2. **JSDoc/TSDoc obrigatorio em toda prop publica** — uma linha descrevendo o proposito.
 3. **Naming conventions estritas:**
@@ -248,6 +314,11 @@ Todos os artefatos sao **criados/editados pela skill**, nao apenas planejados:
 20. **Cumprir WCAG 2.1 AA** em contraste, foco e operabilidade por teclado.
 21. **Figma Code Connect** quando o file Figma do projeto suporta: gerar `<name>.figma.ts`.
 22. Categoria deve existir em `packages/webkit/src/components/webkit/`; nova categoria exige justificativa.
+23. **`asChild` prop** em sub-componentes trigger-like de Composition Pattern (Trigger/Close) para evitar wrapper extra (estilo shadcn-vue).
+24. **`data-state`/`data-disabled`/`data-orientation`** expostos no root e em sub-componentes statefuis para styling via Tailwind state variants (`data-[state=open]:...`).
+25. **`VariantProps` exportados** como named exports do `.vue` (`export type ButtonKind = ...`), naming `<ComponentName><PropName>`.
+26. **`cn` helper** (em `packages/webkit/src/utils/cn.ts`) usado para mergear classes apos `clsx` + `tailwind-merge` estarem instalados. Ate la, manter array `[base, attrs.class]` como hoje.
+27. **Anatomy completa** em Composition Pattern (Dialog = Root/Trigger/Portal/Overlay/Content/Title/Description/Close, etc.) seguindo shadcn-vue/Reka UI.
 
 ## Guardrails
 
@@ -286,6 +357,7 @@ Todos os artefatos foram **criados** pela skill ao final, nao apenas planejados:
 - [ ] **Naming conventions** aplicadas (`kind`/`size`/booleanos sem prefixo, eventos kebab-case, `defineModel`).
 - [ ] **Estados controlados/nao-controlados** implementados quando aplicavel.
 - [ ] **Slots tipados** com `defineSlots<...>()` quando aplicavel.
+- [ ] **Padroes shadcn-vue** aplicados quando aplicaveis: `asChild` em triggers, `data-state`/`data-disabled` no root, `VariantProps` exportados, anatomy completa em Composition Pattern. `cn` helper adotado apos `clsx`/`tailwind-merge` instalados.
 - [ ] Utilitarios reaproveitaveis extraidos para locais compartilhados.
 - [ ] `pnpm webkit:lint && pnpm webkit:type-check && pnpm webkit:type-coverage && pnpm webkit:build:dts && pnpm storybook:build` passam.
 - [ ] Story `LightDark` valida componente em ambos os modos.
@@ -294,6 +366,8 @@ Todos os artefatos foram **criados** pela skill ao final, nao apenas planejados:
 - [ ] **Checklist de usabilidade** preenchido.
 
 ## Example
+
+> **NOTA:** o exemplo abaixo descreve um caso aspiracional para ilustrar a estrutura de saidas. Nenhum dos arquivos mencionados (dialog.vue, dialog-trigger.vue, use-focus-trap, dialog.figma.ts, etc.) **existe** no repositorio hoje — todos seriam criados pela skill no momento da execucao. Os pre-requisitos pendentes (`@storybook/test`, `@figma/code-connect`) **nao estao instalados** ainda: nesse cenario real, a skill OMITE `play` function e Code Connect e registra pendencias.
 
 **Input do usuario (texto natural):**
 
@@ -309,12 +383,15 @@ Todos os artefatos foram **criados** pela skill ao final, nao apenas planejados:
 
 ```
 packages/webkit/src/components/webkit/overlay/dialog/
-  dialog.vue                    # root, defineModel('open'), provide context, focus trap
-  dialog-trigger.vue            # inject context, abre via click
-  dialog-content.vue            # inject context, panel + backdrop
+  dialog.vue                    # root, defineModel('open'), provide context, data-state="open|closed"
+  dialog-trigger.vue            # inject context, asChild prop, data-state
+  dialog-portal.vue             # Teleport para body
+  dialog-overlay.vue            # backdrop, data-state
+  dialog-content.vue            # inject context, panel + focus trap, data-state
   dialog-title.vue              # text-heading-md
   dialog-description.vue        # text-body-sm text-[var(--text-muted)]
-  dialog-close.vue              # IconButton interno, inject context.close
+  dialog-close.vue              # asChild prop, inject context.close
+  injection-key.ts              # DialogInjectionKey + types compartilhados
   dialog.figma.ts               # Code Connect: kind/size/open -> props Vue
   package.json
 
@@ -325,7 +402,16 @@ packages/webkit/src/composables/use-focus-trap/
 apps/storybook/src/stories/webkit/overlay/Dialog.stories.js
 ```
 
-**Exports adicionados (6):** `./overlay/dialog`, `./overlay/dialog-trigger`, `./overlay/dialog-content`, `./overlay/dialog-title`, `./overlay/dialog-description`, `./overlay/dialog-close`, `./use-focus-trap`.
+**Anatomy completa** (estilo shadcn-vue/Reka UI): Root + Trigger + Portal + Overlay + Content + Title + Description + Close.
+
+**Exports adicionados (9):** `./overlay/dialog`, `./overlay/dialog-trigger`, `./overlay/dialog-portal`, `./overlay/dialog-overlay`, `./overlay/dialog-content`, `./overlay/dialog-title`, `./overlay/dialog-description`, `./overlay/dialog-close`, `./use-focus-trap`.
+
+**Named type exports** (no `dialog.vue`):
+
+```ts
+export type DialogSize = 'small' | 'medium' | 'large'
+export type DialogState = 'open' | 'closed'
+```
 
 **Trecho `dialog-title.vue`:**
 
