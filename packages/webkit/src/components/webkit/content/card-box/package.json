@@ -1,6 +1,7 @@
 {
   "main": "./card-box.vue",
   "module": "./card-box.vue",
+  "types": "./card-box.vue.d.ts",
   "browser": {
     "./sfc": "./card-box.vue"
   },
