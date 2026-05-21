@@ -58,10 +58,10 @@
 
   const sharedClasses = [
     'font-medium',
-    'relative inline-flex items-center transition-all duration-150 justify-center whitespace-nowrap',
+    'relative inline-flex items-center transition-all justify-center whitespace-nowrap',
     'rounded-[var(--shape-button)]',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]',
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)]',
+    'focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--border-default)]',
     'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
     "before:opacity-0 before:transition-opacity before:content-['']",
     'hover:before:opacity-100 active:before:opacity-100',
@@ -82,12 +82,9 @@
     'pointer-events-none border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden'
 
   const sizeClasses = {
-    large:
-      'min-w-20 h-10 px-[var(--spacing-4)] text-[length:var(--text-button-lg-font-size)] leading-[var(--text-button-lg-line-height)] tracking-[var(--text-button-lg-letter-spacing)]',
-    medium:
-      'min-w-16 h-8 px-[var(--spacing-3)] text-[length:var(--text-button-md-font-size)] leading-[var(--text-button-md-line-height)] tracking-[var(--text-button-md-letter-spacing)]',
-    small:
-      'min-w-14 h-7 px-[var(--spacing-2)] text-[length:var(--text-button-md-font-size)] leading-[var(--text-button-md-line-height)] tracking-[var(--text-button-md-letter-spacing)]'
+    large: 'min-w-20 h-10 px-[var(--spacing-4)] text-button-lg',
+    medium: 'min-w-16 h-8 px-[var(--spacing-3)] text-button-md',
+    small: 'min-w-14 h-7 px-[var(--spacing-2)] text-button-md'
   }
 
   const rootClasses = computed(() => {
