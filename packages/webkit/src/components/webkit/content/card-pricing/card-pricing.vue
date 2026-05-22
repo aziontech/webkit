@@ -112,16 +112,14 @@
     return classes
   })
 
-  const titleClass =
-    'text-heading-md text-[var(--text-default)] leading-[1.3] [word-break:break-word]'
+  const titleClass = 'text-heading-md text-[var(--text-default)] [word-break:break-word]'
 
   const mutedTextClass =
-    'text-body-sm text-[var(--text-muted)] leading-[1.25] line-clamp-2 min-h-[36px] [word-break:break-word]'
+    'text-body-sm text-[var(--text-muted)]  line-clamp-2 min-h-[36px] [word-break:break-word]'
 
-  const pricingDetailsClass =
-    'text-body-xs text-[var(--text-muted)] leading-[1.25] [word-break:break-word]'
+  const pricingDetailsClass = 'text-body-xs text-[var(--text-muted)] h-8 [word-break:break-word]'
 
-  const slotWrapperClass = 'min-h-[160px] h-[176px] w-full shrink-0'
+  const slotWrapperClass = 'min-h-[160px] w-full shrink-0'
 
   const actionsClass = computed(() => {
     const classes = ['flex w-full gap-[var(--spacing-4)] items-start shrink-0']
@@ -154,7 +152,7 @@
       >
         <div
           :class="[
-            'flex shrink-0 items-center',
+            'h-6 flex shrink-0 items-center',
             isMiddle ? 'w-full gap-[var(--spacing-3)]' : 'gap-[var(--spacing-2)]'
           ]"
         >
@@ -182,7 +180,7 @@
 
       <template v-if="isMiddle">
         <div
-          class="flex w-full flex-col gap-[var(--spacing-1)] items-start min-h-[56px] shrink-0"
+          class="flex w-full flex-col gap-[var(--spacing-1)] items-start h-16 shrink-0"
           :data-testid="`${testId}__pricing`"
         >
           <Currency
@@ -214,7 +212,7 @@
 
     <div
       v-if="!isMiddle"
-      class="flex w-full flex-col gap-[var(--spacing-1)] items-start min-h-[56px] shrink-0"
+      class="flex w-full flex-col gap-[var(--spacing-1)] items-start h-16 shrink-0"
       :data-testid="`${testId}__pricing`"
     >
       <Currency
