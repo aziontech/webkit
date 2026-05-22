@@ -163,14 +163,14 @@ export function semanticTexts() {
         textTransform: 'uppercase'
       },
       '.text-button-lg': {
-        fontFamily: 'Proto Mono',
+        fontFamily: 'Sora',
         fontSize: '0.875rem',
         fontWeight: '500',
         lineHeight: '1',
         letterSpacing: '0'
       },
       '.text-button-md': {
-        fontFamily: 'Proto Mono',
+        fontFamily: 'Sora',
         fontSize: '0.75rem',
         fontWeight: '500',
         lineHeight: '1',
@@ -296,4 +296,4 @@ export function semanticTexts() {
   })
 }
 
-export default semanticTexts;
+export default semanticTexts

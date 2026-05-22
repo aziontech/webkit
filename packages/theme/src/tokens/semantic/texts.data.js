@@ -121,7 +121,7 @@ export const textsData = {
     textTransform: 'uppercase'
   },
   'text-button-lg': {
-    fontFamily: fontDisplay,
+    fontFamily: fontSans,
     fontSize: '0.875rem',
     fontWeight: '600',
     lineHeight: '1',
