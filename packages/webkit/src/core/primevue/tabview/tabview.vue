@@ -1,7 +1,10 @@
 <script setup>
   import TabView from 'primevue/tabview'
 
-  defineOptions({ name: 'TabView' })
+  defineOptions({
+    name: 'TabView',
+    inheritAttrs: false
+  })
 
   const props = defineProps({
     activeIndex: {
@@ -15,10 +18,6 @@
     scrollable: {
       type: Boolean,
       default: false
-    },
-    class: {
-      type: String,
-      default: ''
     }
   })
 
@@ -27,10 +26,10 @@
 
 <template>
   <TabView
-    :activeIndex="props.activeIndex"
+    v-bind="$attrs"
+    :active-index="props.activeIndex"
     :lazy="props.lazy"
     :scrollable="props.scrollable"
-    :class="props.class"
     @tab-change="emit('tab-change', $event)"
     @tab-click="emit('tab-click', $event)"
   >
