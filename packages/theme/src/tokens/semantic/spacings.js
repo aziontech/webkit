@@ -9,10 +9,7 @@ const plugin = (() => {
   }
 })();
 
-/**
- * Generate semantic spacing components
- * @returns {import('tailwindcss/plugin').Plugin}
- */
+/** Generate semantic spacing components */
 export const spacingElements = () => {
   return plugin(({ addComponents, theme }) => {
     const mobile = {

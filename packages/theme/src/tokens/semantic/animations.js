@@ -6,10 +6,7 @@ const plugin = (() => {
   }
 })();
 
-/**
- * Generate semantic animation utilities and keyframes
- * @returns {import('tailwindcss/plugin').Plugin}
- */
+/** Generate semantic animation utilities and keyframes */
 export const animations = () => {
   return plugin(({ addUtilities, addComponents }) => {
     // Animation utilities

@@ -9,11 +9,8 @@ const plugin = (() => {
   }
 })()
 
-/**
- * Generate semantic typography style components
- * @returns {import('tailwindcss/plugin').Plugin}
- */
-export const semanticTexts = () => {
+/** Generate semantic typography style components */
+export function semanticTexts() {
   return plugin(({ addComponents, theme }) => {
     const deprecatedTexts = {
       '.display-1': {
@@ -159,7 +156,7 @@ export const semanticTexts = () => {
         textTransform: 'uppercase'
       },
       '.text-overline-xs': {
-        fontFamily: 'Proto Mono',ç
+        fontFamily: 'Proto Mono',
         fontSize: '0.625rem',
         lineHeight: '1.4',
         letterSpacing: '0.08em',
@@ -299,4 +296,4 @@ export const semanticTexts = () => {
   })
 }
 
-export default semanticTexts
+export default semanticTexts;
