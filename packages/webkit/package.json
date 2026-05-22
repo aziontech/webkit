@@ -30,6 +30,7 @@
     "figma:unpublish": "figma connect unpublish"
   },
   "dependencies": {
+    "reka-ui": "^2.4.1",
     "@vueuse/core": "^10.11.1",
     "clsx": "^2.1.1",
     "motion-v": "^2.1.0",
@@ -159,6 +160,7 @@
     "./inputs/radio-button": "./src/components/webkit/inputs/radio-button/radio-button.vue",
     "./inputs/input-switch": "./src/components/webkit/inputs/input-switch/input-switch.vue",
     "./inputs/dropdown": "./src/components/webkit/inputs/dropdown/dropdown.vue",
+    "./layout/scroll-area": "./src/components/webkit/layout/scroll-area/scroll-area.vue",
     "./navigation/link": "./src/components/webkit/navigation/link/link.vue",
     "./overlay/dialog": "./src/components/webkit/overlay/dialog/dialog.vue",
     "./overlay/dialog-close": "./src/components/webkit/overlay/dialog/dialog-close.vue",
