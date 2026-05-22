@@ -162,6 +162,7 @@
     "./inputs/dropdown": "./src/components/webkit/inputs/dropdown/dropdown.vue",
     "./layout/scroll-area": "./src/components/webkit/layout/scroll-area/scroll-area.vue",
     "./navigation/link": "./src/components/webkit/navigation/link/link.vue",
+    "./navigation/menu-item": "./src/components/webkit/navigation/menu-item/menu-item.vue",
     "./overlay/dialog": "./src/components/webkit/overlay/dialog/dialog.vue",
     "./overlay/dialog-close": "./src/components/webkit/overlay/dialog/dialog-close.vue",
     "./overlay/dialog-content": "./src/components/webkit/overlay/dialog/dialog-content.vue",
