@@ -56,6 +56,21 @@
           {
             "type": "command",
             "command": "node .claude/hooks/enforce-component-create.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/enforce-spec-exists.mjs"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/validate-spec-compliance.mjs"
           }
         ]
       }

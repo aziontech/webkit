@@ -235,9 +235,87 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 
 ---
 
+---
+
+## Animations
+
+Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. Defined in `packages/theme/src/tokens/semantic/animations.js`.
+
+| Utility | Behavior | Duration · Easing |
+|---|---|---|
+| `animate-fade-in` | opacity 0 → 1 | 220ms · `ease-in-out` |
+| `animate-fade-out` | opacity 1 → 0 | 220ms · `ease-in-out` |
+| `animate-slide-down` | height 0 → auto | 220ms · `ease-in-out` |
+| `animate-popup-scale-in` | scale 0.95 → 1 + fade in | 150ms · `cubic-bezier(0.39, 0.57, 0.56, 1)` (origin: `var(--popup-origin, center)`) |
+| `animate-popup-scale-out` | scale 1 → 0.95 + fade out | 110ms · `cubic-bezier(0.55, 0.09, 0.68, 0.53)` |
+| `animate-blink` | opacity 1/0 cycle | 1s · `step-end` infinite |
+| `animate-highlight-fade` | row-flash highlight | `ease-in forwards` |
+
+### Easing primitives — `primitives/animations/ease.js`
+
+| Token | Curve | Use when |
+|---|---|---|
+| `ease.in` | `cubic-bezier(0.4, 0, 1, 1)` | Element accelerating out (exit) |
+| `ease.out` | `cubic-bezier(0, 0, 0.2, 1)` | Element decelerating in (enter) |
+| `ease.in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Symmetric state changes |
+
+### Transitions
+
+For state transitions (hover, focus, disabled, `data-state` changes), use Tailwind's `transition-*` utilities with explicit duration tokens. Default **150ms** for color/opacity, **220ms** for transform/layout:
+
+```html
+transition-colors duration-150 ease-out
+transition-transform duration-220 ease-in-out
+transition-opacity duration-150 motion-reduce:transition-none
+```
+
+**Reduced motion is mandatory** for every transform and motion-bearing transition:
+
+```html
+motion-reduce:transition-none motion-reduce:transform-none motion-reduce:animate-none
+```
+
+### Popup origin
+
+For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the trigger anchor (defaults to `center`):
+
+```html
+<div class="animate-popup-scale-in" style="--popup-origin: top right" />
+```
+
+### Forbidden in animations
+
+- Custom `@keyframes` declared inside a component `.vue` — keyframes live in `semantic/animations.js`.
+- Hardcoded durations (`duration-[180ms]`) that don't match the catalog above.
+- Inline easing (`ease-[cubic-bezier(...)]`) — reference `ease.in` / `ease.out` / `ease.in-out`.
+- Motion-bearing classes without a `motion-reduce:*` escape on the same class string.
+- Spinning / rotating decorative elements without `aria-hidden="true"`.
+- Animations longer than 5 seconds that are not pausable.
+- External animation libraries (`gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, etc.). Use the utilities above + Vue `<Transition>`. See `.claude/rules/dependencies.md`.
+
+---
+
+## Forbidden in components (master summary)
+
+The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hook blocks: **fix the value, do not work around it.**
+
+- **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), PrimeVue color utilities (`text-color`, `surface-50`).
+- **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-[length:var(--text-*-font-size)]` when a generated class exists.
+- **Spacing:** arbitrary `p-4` / `gap-3` when a `--spacing-*` token applies.
+- **Container:** raw `max-w-md` / `max-w-[768px]`.
+- **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
+- **Shadow:** legacy `--card-shadow` (PrimeVue alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
+- **Animations:** see § Animations § Forbidden in animations.
+- **TypeScript:** `any`, `@ts-ignore`, `class` declared in `defineProps`.
+
+---
+
 ## Related docs
 
 - Token architecture: `packages/theme/src/tokens/README.md`
-- Component structure and API: `packages/webkit/docs/COMPONENT_REQUIREMENTS.md`
+- Component structure and API: [`COMPONENT_REQUIREMENTS.md`](./COMPONENT_REQUIREMENTS.md)
+- PrimeVue wrapping: [`PRIMEVUE_ABSTRACTION.md`](./PRIMEVUE_ABSTRACTION.md)
 - Storybook foundations (typography catalog): `apps/storybook/src/foundations/data/typography.js`
-- Monorepo agent guide: `AGENTS.md`
+- Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
+- Agent rules (discipline layer): [`../rules/`](../rules/)
+- Per-component specs: [`../../.specs/`](../../.specs/)

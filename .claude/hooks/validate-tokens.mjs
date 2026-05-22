@@ -159,10 +159,10 @@ async function main() {
   }
   lines.push('')
   lines.push(
-    'Sources of truth: packages/webkit/docs/Design.md and packages/webkit/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".'
+    'Sources of truth: .claude/docs/Design.md and .claude/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".'
   )
   lines.push(
-    'Workflow: skills/component-create.md. The skill auto-discovers Figma tokens and maps them to compliant classes.'
+    'Workflow: /spec-create then /component-create. The orchestrator runs token-mapper which resolves Figma variables to Design.md classes / var(--*) tokens; the catalog mirror lives at .claude/docs/Design.md.'
   )
 
   process.stderr.write(lines.join('\n') + '\n')

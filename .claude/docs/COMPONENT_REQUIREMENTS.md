@@ -1287,7 +1287,157 @@ export const Playground = {
 - **`tags: ['autodocs']`** on the meta.
 - **`subcomponents`** on the meta when Composition Pattern — Storybook generates Docs tabs per sub-component.
 
-**Mandatory stories:** Default + one per `kind` + one per `size` + Disabled + Loading (if applicable) + WithSlots / WithComposition (if applicable) + Controlled + Uncontrolled (if applicable) + **LightDark** + Accessibility (with a `play` function via `@storybook/test`) + **Playground**.
+**Mandatory stories — minimal by default:**
+
+- `Default`
+- One per `kind` (omit if the component has only one)
+- One per `size` (omit if the component has only one)
+- `Disabled` (only if the component has a `disabled` prop)
+
+**Forbidden by default** (do **not** add unless the spec explicitly lists and justifies them): `LightDark`, `Accessibility` with `play`, `Playground`, `WithSlots`, `WithComposition`, `Controlled`, `Uncontrolled`, `Loading`. Storybook's `autodocs` + `a11y` addon + `backgrounds` already cover dark/light, axe checks, and consumer-driven exploration via Controls — adding bespoke stories duplicates work and rots over time.
+
+### 13.w Styling discipline (mandatory for new components)
+
+The webkit layer applies styles **inline on the template root element's `class` attribute**, switches variants via `data-*` attributes, and reads them with Tailwind's `data-[attr=value]:` prefix. This supersedes any older example in this document that still shows the `kindClasses` / `sizeClasses` / `sharedClasses` Record-of-strings pattern. Legacy components on the whitelist still use the old pattern; **every new component starts here**.
+
+#### Forbidden
+
+- `const sharedClasses = [...]`, `const kindClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)` whose only job is to compose classes.
+- `<style>` blocks (scoped or unscoped).
+- `.css` / `.scss` files inside a component directory.
+- CSS-in-JS, `styled()` helpers, `css\`\`` tagged templates.
+- Per-component Tailwind plugins for one-off utilities. Reusable utilities live in `@aziontech/theme`.
+- `:class="[a, b, c]"` arrays when a flat string + `data-*` variants would do.
+
+#### Required
+
+- `defineOptions({ name, inheritAttrs: false })` + `useAttrs()` on the script.
+- Root element binds `v-bind="$attrs"` so consumer-passed `class` merges into the root's `class` automatically.
+- Variants are mirrored as `data-*` attributes on the root (`data-kind`, `data-size`, `data-disabled`, `data-state`, `data-orientation`).
+- Static utility classes are listed inline on the root's `class` attribute, with Tailwind `data-[attr=value]:utility` prefixes switching styles by variant.
+- When the consumer must override an internal token choice, wrap the static class string with `cn` from `@aziontech/webkit/utils/cn`:
+
+  ```vue
+  :class="cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)]', attrs.class)"
+  ```
+
+#### Canonical example
+
+```vue
+<script setup lang="ts">
+import { computed, useAttrs } from 'vue'
+
+defineOptions({ name: 'Button', inheritAttrs: false })
+
+export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+export type ButtonSize = 'small' | 'medium' | 'large'
+
+interface Props {
+  /** Visual variant. */
+  kind?: ButtonKind
+  /** Size token. */
+  size?: ButtonSize
+  /** Disables interaction. */
+  disabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  kind: 'primary',
+  size: 'large',
+  disabled: false
+})
+
+const attrs = useAttrs()
+const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-button')
+</script>
+
+<template>
+  <button
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-kind="kind"
+    :data-size="size"
+    :data-disabled="disabled || null"
+    :disabled="disabled"
+    class="
+      relative inline-flex items-center justify-center whitespace-nowrap
+      transition-colors duration-150 ease-out motion-reduce:transition-none
+      rounded-[var(--shape-button)]
+      focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]
+      data-[kind=primary]:bg-[var(--primary)] data-[kind=primary]:text-[var(--primary-contrast)]
+      data-[kind=secondary]:bg-[var(--secondary)] data-[kind=secondary]:text-[var(--secondary-contrast)]
+      data-[kind=outlined]:border data-[kind=outlined]:border-[var(--border-default)] data-[kind=outlined]:bg-transparent
+      data-[kind=text]:bg-transparent
+      data-[size=small]:h-7 data-[size=small]:px-[var(--spacing-2)] data-[size=small]:text-button-md
+      data-[size=medium]:h-8 data-[size=medium]:px-[var(--spacing-3)] data-[size=medium]:text-button-md
+      data-[size=large]:h-10 data-[size=large]:px-[var(--spacing-4)] data-[size=large]:text-button-lg
+      data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed
+    "
+  >
+    <slot />
+  </button>
+</template>
+```
+
+#### Conditional styles
+
+Use `data-*` + Tailwind variant — never `:class="cond ? ... : ..."`:
+
+```vue
+<!-- ✅ -->
+<button :data-loading="loading || null" class="data-[loading]:cursor-wait data-[loading]:opacity-80" />
+<div :data-state="open ? 'open' : 'closed'" class="data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out" />
+
+<!-- ❌ -->
+<button :class="loading ? 'cursor-wait opacity-80' : ''" />
+```
+
+#### Sub-components (Composition Pattern)
+
+The same rule applies. Each sub-component renders its own root with its own inline `class`. No shared `*Classes` import between siblings.
+
+---
+
+### 13.x Story discipline (mandatory)
+
+The rules below apply to **every** `.stories.js` produced for the webkit layer. The `storybook-write` skill, the `storybook-writer` sub-agent, and `echo-reporter` all enforce them.
+
+#### Forbidden Storybook patterns
+
+A `.stories.js` must NEVER contain any of these. The rule is mandatory for every webkit-layer story; `echo-reporter` flags violations and `spec-validator` rejects specs whose Constraints block doesn't carry the corresponding "Do not" line.
+
+- **`parameters.actions.argTypesRegex`** — deprecated in Storybook 8 and silently misroutes Vue 3 emits. Declare every event explicitly in `argTypes` with key `on<EventName>` (camelCase, e.g. `onClick`, `'onUpdate:open'`) and value `{ action: '<emitted-name>', table: { category: 'events' } }`. Never the legacy `argTypesRegex` shortcut.
+- **`parameters.actions.handles`** — Web Components / addon-actions DOM mode, not Vue.
+- **`Name.args = {...}`** — legacy CSF2 form. Use the CSF3 object shape (`export const Name = { args, render, parameters }`).
+- **`parameters.design`**, **`parameters.figma`**, or any other `addon-designs` slot.
+- **Figma URLs in `docs.description.component` or `docs.description.story`**, in JSDoc comments at the top of the file, or anywhere else in the story.
+- **Imports from `@storybook/addon-designs` / `storybook-addon-designs`** — the addon must not be installed; if it is, do not consume it.
+- **Hardcoded Figma node IDs** as strings (e.g. `'3750:15167'`) referenced from the story for documentation purposes.
+
+The Figma ↔ code link is owned by `<name>.figma.ts` (Code Connect). Hardcoded Figma URLs in stories rot silently when the design file is renamed or restructured.
+
+#### Components with open/close state must default to **closed**
+
+For any component that exposes an open/close state (Dialog, Drawer, Sheet, Popover, Tooltip, Dropdown, NavigationMenu, ContextMenu, Accordion, Combobox, …):
+
+- The `Default` story renders the component in its **closed** state — the trigger is visible; the overlay is not.
+- The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) inside the Storybook canvas — exactly as a real consumer would.
+- Per-variant stories (one per `kind`, one per `size`) also default to closed unless the variant cannot exist closed.
+
+```js
+// Dialog.stories.js
+export const Default = {
+  args: { open: false /* or omit when uncontrolled and defaultOpen is false */ },
+  render: Template,
+  parameters: { docs: { description: { story: 'Trigger renders the dialog. Click to open.' } } }
+}
+```
+
+**Why:** consumers ship the component in its dormant state. The accessible name comes from the trigger; the focus path starts at the trigger; the keyboard shortcut targets the trigger. Defaulting to open hides those details and skews axe and keyboard checks.
+
+#### Variants: only basic ones
+
+The spec lists which `kind` / `size` stories exist. Do **not** add visual permutations the spec did not list. A "WithIcon", "WithLongLabel", "WithBadge" story belongs in the spec or it doesn't belong in the file.
 
 ### 14. Checklist atualizado (apêndice à checklist existente)
 

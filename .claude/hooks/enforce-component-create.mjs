@@ -27,20 +27,32 @@ function readStdin() {
   })
 }
 
-function skillReferencedInTranscript(transcriptPath) {
+function pipelineReferencedInTranscript(transcriptPath) {
   if (!transcriptPath || !existsSync(transcriptPath)) return false
   try {
     const content = readFileSync(transcriptPath, 'utf-8')
-    // Trigger considered satisfied when ANY of these markers appears anywhere
-    // in the transcript:
-    //  - explicit mention of the skill name `component-create`
-    //  - file path of the skill itself
-    //  - reference to AGENTS.md § 11 or packages/webkit/AGENTS.md (the skill
-    //    pointers; if the agent loaded those, it saw the trigger spec)
+    // The gate is satisfied when ANY of these markers appears in the transcript.
+    // Each marker is concrete evidence that the agent loaded the workflow:
+    //
+    //  1. New pipeline — the orchestrator command or any of its skills/agents.
+    //  2. A spec file under .specs/ was read (the agent is following the contract).
+    //  3. Cultural anchors — root or package AGENTS.md.
+    //  4. Backward-compat — the legacy skill or the literal token.
+    //
+    // The hook fails open by design; any of the markers is enough.
     return (
-      /\bcomponent-create\b/i.test(content) ||
+      // 1. New pipeline
+      /\.claude\/commands\/(component-create|spec-create|component-verify)\.md/i.test(content) ||
+      /\.claude\/skills\/(component-scaffold|spec-create|spec-validate|figma-discover|token-map|reuse-audit|structure-decide|storybook-write|code-connect-write|validate-component|echo-report)\/SKILL\.md/i.test(content) ||
+      /\.claude\/agents\/(scaffolder|spec-author|spec-validator|figma-extractor|token-mapper|reuse-auditor|structure-decider|storybook-writer|code-connect-writer|echo-reporter)\.md/i.test(content) ||
+      // 2. Spec was loaded
+      /\.specs\/[a-z][a-z0-9-]*\.md/i.test(content) ||
+      // 3. Cultural anchors
+      /packages\/webkit\/AGENTS\.md/i.test(content) ||
+      /(?:^|\/)AGENTS\.md\b/i.test(content) ||
+      // 4. Backward-compat
       /skills\/component-create\.md/i.test(content) ||
-      /packages\/webkit\/AGENTS\.md/i.test(content)
+      /\bcomponent-create\b/i.test(content)
     )
   } catch {
     return false
@@ -91,13 +103,21 @@ async function main() {
     `Component-create gate: blocked Write to ${relPath}`,
     '',
     `This file is a new webkit-layer component. Before creating it, the agent`,
-    `MUST follow the skill at skills/component-create.md (Figma token discovery,`,
-    `Design.md mapping, monolithic vs Composition Pattern decision, package.json,`,
-    `exports entry, Storybook story with full features, a11y/UX checklists).`,
+    `MUST run the spec-driven pipeline:`,
     '',
-    `Read skills/component-create.md and follow its workflow before retrying.`,
-    `See also: AGENTS.md § 11, packages/webkit/AGENTS.md,`,
-    `         packages/webkit/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".`
+    `  1. /spec-create <name>          — drafts .specs/<name>.md`,
+    `  2. /component-create <name>     — orchestrates the isolated sub-agents`,
+    '',
+    `Entry points and rules:`,
+    `  .claude/commands/component-create.md   (orchestrator)`,
+    `  .claude/commands/spec-create.md        (spec drafting)`,
+    `  .claude/skills/<phase>/SKILL.md        (focused skills)`,
+    `  .claude/rules/*.md                     (immutable rules)`,
+    `  .specs/<name>.md                       (per-component contract)`,
+    '',
+    `See also: .claude/AGENTS.md § 11.2, packages/webkit/AGENTS.md,`,
+    `         .claude/docs/Design.md (authoritative tokens),`,
+    `         .claude/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".`
   ].join('\n')
 
   process.stderr.write(msg + '\n')

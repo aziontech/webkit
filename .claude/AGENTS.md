@@ -125,24 +125,51 @@ For onboarding content, prioritize Storybook docs pages under `Foundations`.
 
 ### 11.1) Sources of truth (read first)
 
-- `packages/webkit/docs/Design.md` — typography (generated classes such as `text-heading-md`, `text-body-sm`, `text-button-lg`), spacing (`var(--spacing-*)`), max-width (`var(--container-*)`), shape (`var(--shape-*)`), semantic colors. In any visual conflict, **Design.md wins**.
-- `packages/webkit/docs/COMPONENT_REQUIREMENTS.md` § "Webkit Layer Pattern (in-depth)" — TypeScript pattern, JSDoc on props, naming conventions, controlled/uncontrolled states, typed slots, Composition Pattern criteria, `data-testid` BEM-style, class structure, ARIA, usability, light/dark, Code Connect, Storybook.
+- `.claude/docs/Design.md` — typography (generated classes such as `text-heading-md`, `text-body-sm`, `text-button-lg`), spacing (`var(--spacing-*)`), max-width (`var(--container-*)`), shape (`var(--shape-*)`), semantic colors. In any visual conflict, **Design.md wins**.
+- `.claude/docs/COMPONENT_REQUIREMENTS.md` § "Webkit Layer Pattern (in-depth)" — TypeScript pattern, JSDoc on props, naming conventions, controlled/uncontrolled states, typed slots, Composition Pattern criteria, `data-testid` BEM-style, class structure, ARIA, usability, light/dark, Code Connect, Storybook.
 - Canonical components: `packages/webkit/src/components/webkit/actions/button/button.vue`, `packages/webkit/src/components/webkit/actions/icon-button/icon-button.vue`, `packages/webkit/src/components/webkit/content/card-pricing/card-pricing.vue`.
 - External reference for Composition Pattern: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
-### 11.2) Mandatory skill: `component-create`
+### 11.2) Spec-driven workflow (mandatory)
 
-For any new component (or significant change to an existing one) in this layer, invoke the skill at [`skills/component-create.md`](skills/component-create.md). The skill performs Figma token discovery, maps tokens to `Design.md` classes / `var(--*)`, decides monolithic vs Composition Pattern, generates the `.vue` + `package.json` + `package.json#exports` entry + `<name>.figma.ts` Code Connect (when its dep is installed) + Storybook story, and validates the a11y/UX checklist.
+The legacy monolithic skill `skills/component-create.md` has been **removed**. New components follow a spec-first pipeline with isolated sub-agents per phase.
 
-**In Claude Code**, the convenient entry point is the slash command [`/component-create`](.claude/commands/component-create.md):
+**Two-step entry point:**
 
 ```text
-/component-create <name> --category <category> [--structure monolithic|composition] [--figma <url>]
+/spec-create <name> [--category <category>] [--figma <url>]
+# review .specs/<name>.md, mark status: approved (or let spec-validator do it)
+/component-create <name> [--dry-run]
 ```
 
-The command auto-loads the skill and the source-of-truth docs, parses the arguments, and runs the workflow. In other agents/IDEs the command does not exist — they detect the intent via the triggers in § 11.3 and load `skills/component-create.md` directly.
+**What lives where:**
 
-Skipping the skill "because it is a small change" is not allowed.
+| Concern | Location |
+|---|---|
+| Per-component contract | [`.specs/<name>.md`](.specs/) (one file per component, reviewed BEFORE code) |
+| Frontmatter schema | [`.specs/_schema.json`](.specs/_schema.json) |
+| Spec template | [`.specs/_template.md`](.specs/_template.md) |
+| Slash commands | [`.claude/commands/`](.claude/commands/) (`spec-create`, `component-create`, `component-verify`) |
+| Focused skills (one per phase) | [`.claude/skills/`](.claude/skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `storybook-write`, `code-connect-write`, `validate-component`, `echo-report` |
+| Isolated sub-agent prompts | [`.claude/agents/`](.claude/agents/) — one per skill, no chat history, no cross-talk |
+| Immutable rules (injected verbatim) | [`.claude/rules/`](.claude/rules/) — `no-invention`, `migration`, `dependencies` |
+| Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `Design.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + Storybook discipline), `PRIMEVUE_ABSTRACTION.md` |
+| Run logs (audit trail) | [`.claude/logs/<run-id>.jsonl`](.claude/logs/) |
+
+**How `/component-create` runs:**
+
+1. **Preflight** — resolves `.specs/<name>.md`, validates checksum (tamper detection).
+2. **spec-validator** (blocking) — schema, body, Constraints block, animation table.
+3. **Parallel discovery** — `figma-extractor`, `reuse-auditor`, then `token-mapper`.
+4. **Reconciliation** (blocking) — every token in spec exists in Design.md; every Figma region is covered by the spec.
+5. **scaffolder** — writes `.vue` + `package.json` + exports entry. Hooks fire on each Write.
+6. **storybook-writer** — minimal stories only (Default + per kind + per size + Disabled).
+7. **code-connect-writer** — skips if `@figma/code-connect` missing.
+8. **echo-reporter** (cross-check) — independent parser; disagreement with the hook marks the run degraded.
+9. **validate-component** — `pnpm webkit:lint && type-check && type-coverage && build:dts && storybook:build`.
+10. **Finalize** — `status: approved → implemented`, refresh checksum, close log.
+
+**Why this is mandatory:** the previous workflow gave a single 749-line skill creative latitude — it sometimes added props, variants, or imports the user did not request. The new pipeline removes that latitude structurally: sub-agents see only the spec + their narrow rules; two hooks (`enforce-spec-exists`, `validate-spec-compliance`) verify the `.vue` matches the spec 1-to-1.
 
 ### 11.3) Auto-invoke triggers (mandatory — do not wait for the user to mention the skill)
 
@@ -155,7 +182,7 @@ Skipping the skill "because it is a small change" is not allowed.
 
 When any trigger matches, the agent must (a) announce that the trigger fired and which skill will run; (b) collect missing inputs (name, category, Figma URL, monolithic vs composition) before writing any file; (c) execute the skill's workflow from the top.
 
-The full trigger spec lives in [skills/component-create.md](skills/component-create.md) § "Trigger / Auto-invoke" and the intent router in [skills/README.md](skills/README.md) § "Roteamento de intencao -> skill".
+The trigger logic now lives in the orchestrator command [`.claude/commands/component-create.md`](.claude/commands/component-create.md) and the focused skill prompts under [`.claude/skills/`](.claude/skills/). Auto-invocation happens whenever the agent detects intent (creation verb + UI noun, Figma URL) or is about to `Write` under `packages/webkit/src/components/webkit/**`.
 
 ### 11.4) Hard rules (non-negotiable)
 
@@ -199,21 +226,30 @@ pnpm storybook:build
 - Adding hex colors, raw typography classes, or Tailwind palette names "until the theme catches up". Register a theme gap with `TODO: tokenizar` instead.
 - Applying Composition Pattern reflexively. Use the decision rule: "does the consumer need to swap order or omit parts?"
 - Removing `focus-visible`, `aria-*`, `data-testid`, `disabled` HTML, or `<a>`/`<button>` polymorphism to simplify code.
-- Editing `packages/webkit/docs/Design.md`, `COMPONENT_REQUIREMENTS.md`, or `PRIMEVUE_ABSTRACTION.md` without explicit human approval (these are sources of truth).
+- Editing `.claude/docs/Design.md`, `COMPONENT_REQUIREMENTS.md`, or `PRIMEVUE_ABSTRACTION.md` without explicit human approval (these are sources of truth).
 
 For deeper, package-specific instructions, agents should also read [`packages/webkit/AGENTS.md`](packages/webkit/AGENTS.md) when working inside `packages/webkit/`.
 
 ## 12) Active enforcement (Claude Code hooks)
 
-Three `PreToolUse` hooks in [`.claude/hooks/`](.claude/hooks/) act as physical guard rails on top of the cultural rules above. They are wired up in [`.claude/settings.json`](.claude/settings.json) and run automatically — the agent cannot bypass them.
+Five hooks in [`.claude/hooks/`](.claude/hooks/) act as physical guard rails on top of the cultural rules above. They are wired up in [`.claude/settings.json`](.claude/settings.json) and run automatically — the agent cannot bypass them.
 
-- **[`.claude/hooks/validate-tokens.mjs`](.claude/hooks/validate-tokens.mjs)** — blocks `Write`/`Edit`/`MultiEdit` of `.vue` / `.css` / `.scss` / `.ts` under `packages/webkit/src/components/webkit/**` when the **new** content introduces hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, `font-family`), PrimeVue color utilities, `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations in the baseline file are not retroactively flagged.
-- **[`.claude/hooks/validate-references.mjs`](.claude/hooks/validate-references.mjs)** — blocks `Write`/`Edit`/`MultiEdit` of any `.vue`/`.ts`/`.js` file when the **new** content imports modules that do not resolve: `@aziontech/webkit/<subpath>` without a matching entry in `packages/webkit/package.json#exports`; relative paths that resolve to no file; bare npm packages not installed in any `node_modules/`; other `@aziontech/*` workspaces that do not exist. Prevents the agent from hallucinating paths.
-- **[`.claude/hooks/enforce-component-create.mjs`](.claude/hooks/enforce-component-create.mjs)** — blocks the first `Write` that creates a new `.vue` under `packages/webkit/src/components/webkit/<category>/<name>/` when the session transcript shows no reference to the `component-create` skill. Forces the agent to invoke the skill first.
+### 12.1) Pre-existing (unchanged)
 
-When a hook blocks a Write, the stderr message states the rule that fired and how to fix it. Replace the offending tokens, install the missing dep, create the missing file, or invoke the skill — then retry. The hooks **fail open** on unexpected errors (e.g. invalid JSON input) — they never silently break workflows.
+- **[`.claude/hooks/validate-tokens.mjs`](.claude/hooks/validate-tokens.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks new content introducing hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, `font-family`), PrimeVue color utilities, `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations are not retroactively flagged.
+- **[`.claude/hooks/validate-references.mjs`](.claude/hooks/validate-references.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks imports that don't resolve: `@aziontech/webkit/<subpath>` without a matching `package.json#exports`, relative paths to no file, uninstalled npm packages, missing workspaces.
+- **[`.claude/hooks/enforce-component-create.mjs`](.claude/hooks/enforce-component-create.mjs)** (PreToolUse `Write`) — blocks the first `Write` of a new `.vue` under `packages/webkit/src/components/webkit/<category>/<name>/` when the session transcript shows no reference to the `component-create` skill/command. Forces the agent to invoke the orchestrator first.
 
-These hooks make § 11.4 enforceable in practice, not just by convention.
+### 12.2) New — spec-driven enforcement
+
+- **[`.claude/hooks/enforce-spec-exists.mjs`](.claude/hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of a webkit-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`.claude/hooks/_lib/legacy-components.json`) bypass this hook.
+- **[`.claude/hooks/validate-spec-compliance.mjs`](.claude/hooks/validate-spec-compliance.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — re-reads the just-written `.vue`, parses `defineProps`/`defineEmits`/`defineSlots`/`defineOptions.name`/animation classes, and diffs them against `.specs/<name>.md`. Blocks on any divergence: missing prop, extra event, slot not in spec, animation class outside the Motion & Animations table, missing `motion-reduce:*` escape.
+
+Shared parser library: [`.claude/hooks/_lib/spec.mjs`](.claude/hooks/_lib/spec.mjs). Legacy whitelist: [`.claude/hooks/_lib/legacy-components.json`](.claude/hooks/_lib/legacy-components.json).
+
+When a hook blocks a Write, the stderr message states the rule that fired and how to fix it — replace the offending tokens, install the missing dep, create the missing file, fix the spec or the `.vue` so they match, or invoke the skill. The hooks **fail open** on unexpected errors (e.g. invalid JSON input) — they never silently break workflows.
+
+These hooks make § 11.2 and § 11.4 enforceable in practice, not just by convention.
 
 ---
 

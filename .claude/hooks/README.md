@@ -34,7 +34,30 @@ Prevents the agent from hallucinating paths or speculatively importing modules t
 
 ### [`enforce-component-create.mjs`](./enforce-component-create.mjs)
 
-Blocks the **first** `Write` that creates a new `.vue` under `packages/webkit/src/components/webkit/<category>/<name>/` when the session transcript shows no reference to the `component-create` skill. Forces the agent to read [`../../skills/component-create.md`](../../skills/component-create.md) and follow its workflow before creating webkit-layer components.
+Blocks the **first** `Write` that creates a new `.vue` under `packages/webkit/src/components/webkit/<category>/<name>/` when the session transcript shows no reference to the spec-driven pipeline. Forces the agent to run `/spec-create` then `/component-create`, which load the orchestrator at [`../commands/component-create.md`](../commands/component-create.md) and the focused skills under [`../skills/`](../skills/).
+
+### [`enforce-spec-exists.mjs`](./enforce-spec-exists.mjs)
+
+PreToolUse hook on `Write` of any `packages/webkit/src/components/webkit/<category>/<name>/<file>.vue`. Blocks when:
+
+- `.specs/<name>.md` is missing.
+- The spec's `status` is not `approved` or `implemented` (drafts cannot drive code generation; locked specs require a `spec_version` bump).
+- The body sha256 does not match the frontmatter `checksum` (tamper detection).
+
+Bypassed for components on the legacy whitelist ([`_lib/legacy-components.json`](./_lib/legacy-components.json)).
+
+### [`validate-spec-compliance.mjs`](./validate-spec-compliance.mjs)
+
+PostToolUse hook on `Write|Edit|MultiEdit` of the same `.vue` paths. Re-reads the file, parses `defineProps` / `defineEmits` / `defineSlots` / `defineOptions.name` / animation classes, and diffs against `.specs/<name>.md`. Blocks on any divergence:
+
+- Missing or extra prop, event, slot, sub-component.
+- Type mismatch in a union-literal prop.
+- `defineOptions.name` not equal to the spec's PascalCase name.
+- `data-testid` fallback different from `'<category>-<name>'`.
+- Animation classes in the `.vue` that aren't in the spec's "Motion & Animations" table (or vice versa).
+- Motion-bearing classes without a `motion-reduce:*` escape.
+
+Bypassed for legacy components (same whitelist). Shared parser library: [`_lib/spec.mjs`](./_lib/spec.mjs).
 
 ## Adding a new hook
 
