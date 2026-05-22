@@ -49,7 +49,7 @@
     cn(
       'flex flex-col overflow-clip',
       'bg-[var(--bg-surface)]',
-      'border border-[length:var(--border-width-default,1px)] border-[var(--border-muted)]',
+      'border border-[length:var(--border-width-default)] border-[var(--border-muted)]',
       'rounded-[var(--shape-card)]',
       attrs.class as string | undefined
     )
