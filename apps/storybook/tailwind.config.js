@@ -5,17 +5,21 @@ import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin'
 import semanticSpacing from '@aziontech/theme/tailwind/semantic-spacing-plugin'
 import semanticAnimations from '@aziontech/theme/tailwind/semantic-animations-plugin'
 
-/** @type {import('tailwindcss').Config} */
 export default {
   important: true,
   content: [
-    './src/**/*.{vue,js,ts,jsx,tsx}',
-    '../../packages/webkit/src/**/*.{vue,js,ts,jsx,tsx}'
+    './src/**/*.vue',
+    './src/**/*.js',
+    './src/**/*.ts',
+    './src/**/*.jsx',
+    './src/**/*.tsx',
+    '../../packages/webkit/src/**/*.vue',
+    '../../packages/webkit/src/**/*.js',
+    '../../packages/webkit/src/**/*.ts',
+    '../../packages/webkit/src/**/*.jsx',
+    '../../packages/webkit/src/**/*.tsx'
   ],
-  // Dark mode configuration
-  // Use `.dark` on an ancestor (Storybook uses `withThemeByClassName` to toggle it)
   darkMode: ['class'],
-  // Merge base theme with primitives
   theme: {
     ...theme,
     fontFamily: {
@@ -32,11 +36,8 @@ export default {
       square: 'square',
       roman: 'upper-roman'
     },
-    // Properly merge the theme's extend with local extend
     extend: {
-      // Import colors from theme (brand, base, surface, primitives)
       ...(theme.extend ?? {}),
-      // Storybook-specific color extensions
       colors: {
         ...(theme.extend?.colors ?? {}),
         header: '#111111',
@@ -46,6 +47,7 @@ export default {
         'orange-base': '#F3652B'
       },
       backgroundColor: {
+        ...(theme.extend?.backgroundColor ?? {}),
         'orange-bullet': '#F3652B'
       },
       borderColor: {
@@ -64,7 +66,6 @@ export default {
         slide: '384px'
       },
       height: {
-        // subtract 60px for footer and 56px for header
         'visible-area': 'calc(100vh - 60px - 56px)',
         'graph-card': '552px'
       },
@@ -74,7 +75,17 @@ export default {
         sora: ['Sora'],
         'proto-mono': ['Proto Mono'],
         protomono: ['Proto Mono'],
-        mono: ['Proto Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', 'monospace']
+        mono: [
+          'Proto Mono',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Cascadia Code',
+          'Roboto Mono',
+          'Courier New',
+          'monospace'
+        ]
       }
     }
   },
@@ -83,6 +94,6 @@ export default {
     semanticColors(),
     semanticTexts(),
     semanticSpacing(),
-    semanticAnimations(),
+    semanticAnimations()
   ]
 }

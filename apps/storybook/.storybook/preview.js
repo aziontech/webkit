@@ -2,16 +2,15 @@ import { setup } from '@storybook/vue3'
 import PrimeVue from 'primevue/config'
 import Tooltip from 'primevue/tooltip'
 import { withThemeByClassName } from '@storybook/addon-themes'
-import { injectCssVars } from '@aziontech/theme/tokens'
 
+// v3 token build: primitives, --bg-* / --text-* / --border-*, and .text-body-md etc.
+// (injectCssVars alone only emits --background-* aliases — webkit components use --bg-*)
+import '@aziontech/theme/globals.css'
 import 'primeflex/primeflex.css'
 import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
-
-// Inject semantic token CSS variables for light/dark mode
-injectCssVars()
 
 setup((app) => {
   app.use(PrimeVue, {
