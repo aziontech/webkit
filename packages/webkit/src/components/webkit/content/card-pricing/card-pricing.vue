@@ -115,7 +115,7 @@
   const titleClass = 'text-heading-md text-[var(--text-default)] [word-break:break-word]'
 
   const mutedTextClass =
-    'text-body-sm text-[var(--text-muted)]  line-clamp-2 min-h-[36px] [word-break:break-word]'
+    'text-body-sm text-[var(--text-muted)]  line-clamp-2 h-9 [word-break:break-word]'
 
   const pricingDetailsClass = 'text-body-xs text-[var(--text-muted)] h-8 [word-break:break-word]'
 
