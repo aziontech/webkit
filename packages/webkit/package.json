@@ -30,6 +30,7 @@
     "figma:unpublish": "figma connect unpublish"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.1.11",
     "@vueuse/core": "^10.11.1",
     "clsx": "^2.1.1",
     "motion-v": "^2.1.0",
@@ -189,6 +190,7 @@
     "./overlay/panel-header": "./src/components/webkit/overlay/panel/panel-header.vue",
     "./templates/sign-up-card": "./src/components/webkit/templates/sign-up-card/sign-up-card.vue",
     "./navigation/tab-view": "./src/components/webkit/navigation/tab-view/index.js",
+    "./navigation/navigation-menu": "./src/components/webkit/navigation/navigation-menu/index.js",
     "./svg/error-403": "./src/svg/error-403/error-403.vue",
     "./svg/error-404": "./src/svg/error-404/error-404.vue",
     "./svg/azion/full": "./src/svg/azion/full/full.vue",
