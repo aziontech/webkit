@@ -5,7 +5,14 @@
   import { useFocusTrap } from '../../../../composables/use-focus-trap'
   import { cn } from '../../../../utils/cn'
   import Panel from '../panel/panel.vue'
+  import { useDrawerMotionState } from './composables/use-drawer-motion-state'
   import { DrawerInjectionKey } from './injection-key'
+  import { drawerSizeClasses } from './presets/sizes'
+  import {
+    drawerPanelStateClasses,
+    drawerPanelTransitionClasses,
+    getDrawerTransitionStyle
+  } from './presets/transitions'
 
   defineOptions({
     name: 'DrawerContent',
@@ -20,6 +27,7 @@
   const ctx = inject(DrawerInjectionKey)
   const contentRef = ref<HTMLElement | null>(null)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
+  const { motionState } = useDrawerMotionState(isOpen)
 
   useScrollLock(document.body, isOpen)
   useFocusTrap(contentRef, isOpen)
@@ -38,24 +46,29 @@
   })
 
   const isLeft = computed(() => ctx?.side === 'left')
+  const sideKey = computed(() => (isLeft.value ? 'left' : 'right'))
+  const drawerSize = computed(() => ctx?.size ?? 'medium')
 
   const shellClasses = computed(() =>
     cn(
-      'fixed inset-y-0 z-[1001] flex p-0',
+      'fixed inset-y-0 z-[1001] flex h-full min-h-full w-auto p-0',
       isLeft.value ? 'left-0 justify-start' : 'right-0 justify-end',
-      'pointer-events-none motion-reduce:transition-none',
+      'pointer-events-none',
+      drawerPanelTransitionClasses,
+      drawerPanelStateClasses[sideKey.value],
       attrs.class as string | undefined
     )
   )
 
+  const shellTransitionStyle = computed(() => getDrawerTransitionStyle(motionState.value, 'panel'))
+
   const panelClasses = computed(() =>
     cn(
-      'pointer-events-auto h-full max-h-none w-full',
-      'transition-transform duration-[220ms] ease-in-out motion-reduce:transition-none motion-reduce:transform-none',
+      'pointer-events-auto flex h-full min-h-0 w-full max-h-full flex-col',
+      drawerSizeClasses[drawerSize.value],
       isLeft.value
-        ? 'rounded-r-[var(--shape-card)] rounded-l-[var(--shape-flat)] data-[state=closed]:-translate-x-full'
-        : 'rounded-l-[var(--shape-card)] rounded-r-[var(--shape-flat)] data-[state=closed]:translate-x-full',
-      'data-[state=open]:translate-x-0'
+        ? 'rounded-r-[var(--shape-card)] rounded-l-[var(--shape-flat)]'
+        : 'rounded-l-[var(--shape-card)] rounded-r-[var(--shape-flat)]'
     )
   )
 </script>
@@ -64,19 +77,18 @@
   <div
     ref="contentRef"
     :class="shellClasses"
+    :style="shellTransitionStyle"
     role="dialog"
     :aria-modal="true"
     :aria-labelledby="ctx?.titleId"
     :aria-describedby="ctx?.descriptionId"
-    :data-state="isOpen ? 'open' : 'closed'"
+    :data-state="motionState"
     :data-testid="`${ctx?.testId}__panel`"
     tabindex="-1"
   >
     <Panel
       :class="panelClasses"
-      :data-state="isOpen ? 'open' : 'closed'"
       :data-testid="`${ctx?.testId}__panel-shell`"
-      :size="ctx?.size ?? 'medium'"
     >
       <slot />
     </Panel>

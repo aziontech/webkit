@@ -45,7 +45,7 @@ export default {
     docs: {
       description: {
         component:
-          'Edge drawer using the shared Panel shell. Slides in with 220ms transform (aligned with theme animation timing) and fade backdrop via `animate-fade-in`.'
+          'Edge drawer using the shared Panel shell. Panel and backdrop use CSS transitions from theme animate presets (`moderate-*` durations, `productive-*` curves).'
       }
     }
   },
@@ -74,7 +74,8 @@ export default {
     size: {
       control: 'select',
       options: sizes,
-      description: 'Panel max-width preset',
+      description:
+        'Panel max-width preset. Drawer height is always 100% viewport (`small` 384px, `medium` 672px, `large` 1024px).',
       table: { defaultValue: { summary: 'medium' } }
     },
     'update:open': { action: 'update:open' }
@@ -139,6 +140,21 @@ export const Default = {
 
 export const LeftSide = {
   args: { side: 'left', defaultOpen: true },
+  render: Default.render
+}
+
+export const SizeSmall = {
+  args: { size: 'small', defaultOpen: true },
+  render: Default.render
+}
+
+export const SizeMedium = {
+  args: { size: 'medium', defaultOpen: true },
+  render: Default.render
+}
+
+export const SizeLarge = {
+  args: { size: 'large', defaultOpen: true },
   render: Default.render
 }
 

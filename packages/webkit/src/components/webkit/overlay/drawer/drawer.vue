@@ -23,7 +23,7 @@
       closeable?: boolean
       /** Edge the drawer panel slides from. */
       side?: DrawerSide
-      /** Panel max-width preset. */
+      /** Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. */
       size?: DrawerSize
     }>(),
     {
