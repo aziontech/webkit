@@ -8,7 +8,7 @@
  */
 
 import { primitives as colorPrimitives } from '../tokens/primitives/colors/colors.js';
-import { animate } from '../tokens/primitives/animations/animate.js';
+import { animate, curve, duration } from '../tokens/primitives/animations/animate.js';
 import { ease } from '../tokens/primitives/animations/ease.js';
 import { borderWidths } from '../tokens/primitives/border-widths.js';
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
@@ -77,7 +77,7 @@ export const buildTrees = () => {
     opacity,
     perspective,
   };
-  const animations = { ease, animate };
+  const animations = { ease, curve, duration, animate };
 
   const refsTree = {
     color,

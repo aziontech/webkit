@@ -232,6 +232,13 @@ const buildPresetData = () => {
   const letterSpacing = refsTree.typography?.tracking
     ? treeToVars(refsTree.typography.tracking, '--tracking')
     : {}
+  const transitionDuration = refsTree.animations?.duration
+    ? treeToVars(refsTree.animations.duration, '--duration')
+    : {}
+  const transitionTimingFunction = {
+    ...(refsTree.animations?.ease ? treeToVars(refsTree.animations.ease, '--ease') : {}),
+    ...(refsTree.animations?.curve ? treeToVars(refsTree.animations.curve, '--curve') : {})
+  }
 
   const fontSize = {}
   for (const [key, bundle] of Object.entries(textsData)) {
@@ -253,6 +260,8 @@ const buildPresetData = () => {
         dropShadow,
         lineHeight,
         letterSpacing,
+        transitionDuration,
+        transitionTimingFunction,
         textColor: semanticColors.text,
         backgroundColor: semanticColors.background,
         borderColor: semanticColors.border

@@ -1,3 +1,5 @@
+import { animate } from '../primitives/animations/animate.js';
+
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin');
@@ -34,6 +36,9 @@ export const animations = () => {
         animation: 'popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53)',
         transformOrigin: 'var(--popup-origin, center)',
       },
+      '.animate-spin': {
+        animation: animate.spin,
+      },
     };
 
     // Keyframes components
@@ -65,6 +70,9 @@ export const animations = () => {
       '@keyframes popupScaleOut': {
         '0%': { opacity: '1', transform: 'scale(1)' },
         '100%': { opacity: '0', transform: 'scale(0.95)' },
+      },
+      '@keyframes spin': {
+        to: { transform: 'rotate(360deg)' },
       },
     };
 

@@ -22,8 +22,8 @@ export const primitives = {
     950: '#000C1A'
   },
   gray: {
-    50: '#FCFCFC',
-    100: '#F2F2F2',
+    50: '#FAFAFA',
+    100: '#F5F5F5',
     200: '#E5E5E5',
     300: '#B2B2B2',
     400: '#999999',
@@ -44,8 +44,8 @@ export const primitives = {
     600: '#756FE5',
     700: '#625BD5',
     800: '#524BBB',
-    900: '#423F99',
-    950: '#0B0A19'
+    900: '#1F1E48',
+    950: '#100F24'
   },
   orange: {
     50: '#FFF5EF',
@@ -53,7 +53,7 @@ export const primitives = {
     200: '#FFCFB3',
     300: '#FFB180',
     400: '#FF8E4D',
-    500: '#FE601F',
+    500: '#F3652B',
     600: '#D94A03',
     700: '#B03C02',
     800: '#8A2F02',
@@ -111,7 +111,7 @@ export const primitives = {
     700: '#B91C1C',
     800: '#991B1B',
     900: '#7F1D1D',
-    950: '#240505'
+    950: '#430A0A'
   },
   brand,
   surface: {

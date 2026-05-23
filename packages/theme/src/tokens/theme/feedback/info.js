@@ -2,14 +2,14 @@ import { tokenRef } from '../../../scripts/refs.js';
 
 export const info = {
   light: {
-    info: tokenRef('brand.accent.accent-50'),
-    'info-border': tokenRef('primitives.alpha.violet.600'),
-    'info-contrast': tokenRef('brand.accent.accent-500'),
+    info: tokenRef('primitives.blue.100'),
+    'info-border': tokenRef('primitives.blue.200'),
+    'info-contrast': tokenRef('primitives.blue.500'),
   },
   dark: {
-    info: tokenRef('brand.accent.accent-950'),
-    'info-border': tokenRef('primitives.alpha.violet.400'),
-    'info-contrast': tokenRef('primitives.violet.500'),
+    info: tokenRef('primitives.blue.900'),
+    'info-border': tokenRef('primitives.alpha.blue.500'),
+    'info-contrast': tokenRef('primitives.blue.300'),
   },
 };
 

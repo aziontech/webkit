@@ -138,7 +138,7 @@ export function semanticTexts() {
         lineHeight: '1.5'
       },
       '.text-body-xss': {
-        fontSize: '0.625rem',
+        fontSize: '0.75rem',
         lineHeight: '1.5'
       },
       '.text-overline-md': {
@@ -220,7 +220,7 @@ export function semanticTexts() {
           fontSize: '0.75rem'
         },
         '.text-body-xss': {
-          fontSize: '0.625rem'
+          fontSize: '0.75rem'
         },
         '.text-overline-md': {
           fontSize: '0.875rem'
@@ -276,7 +276,7 @@ export function semanticTexts() {
           fontSize: '0.75rem'
         },
         '.text-body-xss': {
-          fontSize: '0.625rem'
+          fontSize: '0.75rem'
         },
         '.text-overline-md': {
           fontSize: '0.75rem'

@@ -79,9 +79,9 @@ export const textsData = {
     fontSize: '0.75rem',
     lineHeight: '1.5'
   },
-  'text-body-xss': {
+  'text-body-xxs': {
     fontFamily: fontSans,
-    fontSize: '0.625rem',
+    fontSize: '0.75rem',
     lineHeight: '1.5'
   },
   'text-label-sm': {
