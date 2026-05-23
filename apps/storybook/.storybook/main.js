@@ -33,7 +33,9 @@ const config = {
     }
   },
   viteFinal: async (config) => {
-    // Add Vue plugin to handle .vue SFC files from @aziontech/webkit
+    // Second @vitejs/plugin-vue for monorepo SFCs under packages/webkit (outside Storybook root).
+    // Pitfall: never put HTML-like tags (`<a>`, `<template>`, …) in script JSDoc — the second pass
+    // re-parses compiled output and throws "Element is missing end tag". See .claude/rules/styling.md.
     config.plugins = config.plugins || []
     config.plugins.push(vue())
 
