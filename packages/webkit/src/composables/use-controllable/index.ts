@@ -1,4 +1,4 @@
-import { computed, type ComputedRef, type Ref, ref } from 'vue'
+import { computed, type ComputedRef, type Ref, ref, unref } from 'vue'
 
 export interface UseControllableOptions<T> {
   /** Controlled value from props (`undefined` when uncontrolled). */
@@ -9,6 +9,10 @@ export interface UseControllableOptions<T> {
   onChange: (value: T) => void
 }
 
+export type ControllableRef<T> = ComputedRef<T> & {
+  set: (value: T) => void
+}
+
 /**
  * Controlled / uncontrolled state (shadcn pattern).
  * When `prop` is `undefined`, internal state is used.
@@ -17,22 +21,17 @@ export function useControllable<T>({
   prop,
   defaultProp,
   onChange
-}: UseControllableOptions<T>): ComputedRef<T> & { set: (value: T) => void } {
+}: UseControllableOptions<T>): ControllableRef<T> {
   const internal = ref(defaultProp) as Ref<T>
 
-  const value = computed({
-    get: () => (prop.value !== undefined ? prop.value : internal.value),
-    set: (next: T) => {
-      if (prop.value === undefined) {
-        internal.value = next
-      }
-      onChange(next)
+  const set = (next: T) => {
+    if (unref(prop) === undefined) {
+      internal.value = next
     }
-  }) as ComputedRef<T> & { set: (value: T) => void }
-
-  value.set = (next: T) => {
-    value.value = next
+    onChange(next)
   }
 
-  return value
+  const value = computed(() => (unref(prop) !== undefined ? unref(prop)! : internal.value))
+
+  return Object.assign(value, { set })
 }
