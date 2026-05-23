@@ -4,7 +4,8 @@
   import { DialogInjectionKey } from './injection-key'
 
   defineOptions({
-    name: 'DialogPortal'
+    name: 'DialogPortal',
+    inheritAttrs: false
   })
 
   defineSlots<{

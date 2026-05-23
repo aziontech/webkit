@@ -5,7 +5,8 @@
   import { DRAWER_EXIT_MS } from './presets/transitions'
 
   defineOptions({
-    name: 'DrawerPortal'
+    name: 'DrawerPortal',
+    inheritAttrs: false
   })
 
   defineSlots<{

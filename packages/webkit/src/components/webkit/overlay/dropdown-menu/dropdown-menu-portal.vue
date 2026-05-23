@@ -1,6 +1,7 @@
 <script setup lang="ts">
   defineOptions({
-    name: 'DropdownMenuPortal'
+    name: 'DropdownMenuPortal',
+    inheritAttrs: false
   })
 
   defineSlots<{

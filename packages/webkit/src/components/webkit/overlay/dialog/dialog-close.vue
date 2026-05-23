@@ -35,7 +35,7 @@
     icon="pi pi-times"
     kind="outlined"
     size="small"
-    :aria-label="props.ariaLabel"
+    :ariaLabel="props.ariaLabel"
     :disabled="isDisabled"
     :data-testid="`${ctx.testId}__close`"
     :class="attrs.class"

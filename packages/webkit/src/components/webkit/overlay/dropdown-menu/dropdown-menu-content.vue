@@ -91,7 +91,7 @@
     focusMenuItem(nextIndex)
   }
 
-  const onClickOutside = (event) => {
+  const onClickOutside = (event: globalThis.MouseEvent) => {
     if (!isOpen.value || !ctx?.closeable) return
 
     const target = event.target as Node | null
@@ -105,7 +105,7 @@
     ctx.close()
   }
 
-  const onDocumentKeydown = (event) => {
+  const onDocumentKeydown = (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || !ctx) return
 
     switch (event.key) {

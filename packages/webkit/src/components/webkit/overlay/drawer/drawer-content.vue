@@ -29,7 +29,15 @@
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const { motionState } = useDrawerMotionState(isOpen)
 
-  useScrollLock(document.body, isOpen)
+  const isScrollLocked = useScrollLock(document.body)
+
+  watch(
+    isOpen,
+    (open) => {
+      isScrollLocked.value = open
+    },
+    { immediate: true }
+  )
   useFocusTrap(contentRef, isOpen)
 
   useEventListener(document, 'keydown', (event) => {

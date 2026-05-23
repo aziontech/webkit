@@ -20,8 +20,15 @@
   const ctx = inject(DialogInjectionKey)
   const contentRef = ref<HTMLElement | null>(null)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
+  const isScrollLocked = useScrollLock(document.body)
 
-  useScrollLock(document.body, isOpen)
+  watch(
+    isOpen,
+    (open) => {
+      isScrollLocked.value = open
+    },
+    { immediate: true }
+  )
   useFocusTrap(contentRef, isOpen)
 
   useEventListener(document, 'keydown', (event) => {
