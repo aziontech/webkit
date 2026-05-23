@@ -4,8 +4,19 @@
 
   import { useFocusTrap } from '../../../../composables/use-focus-trap'
   import { cn } from '../../../../utils/cn'
+  import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import Panel from '../panel/panel.vue'
-  import { DialogInjectionKey } from './injection-key'
+  import { dialogPanelSizeClasses } from '../panel/presets/sizes'
+  import {
+    dialogPanelPositionClasses,
+    dialogPanelShapeClasses,
+    dialogShellPositionClasses
+  } from '../presets/mobile-position'
+  import { DialogInjectionKey, DialogMotionInjectionKey } from './injection-key'
+  import {
+    dialogPanelTransitionClasses,
+    getDialogResponsiveTransitionStyle
+  } from './presets/transitions'
 
   defineOptions({
     name: 'DialogContent',
@@ -20,6 +31,9 @@
   const ctx = inject(DialogInjectionKey)
   const contentRef = ref<HTMLElement | null>(null)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
+  const motionCtx = inject(DialogMotionInjectionKey)
+  const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
+  const isMobileOverlay = useOverlayMobile()
   const isScrollLocked = useScrollLock(document.body)
 
   watch(
@@ -46,17 +60,23 @@
 
   const shellClasses = computed(() =>
     cn(
-      'fixed inset-0 z-[1001] flex items-center justify-center p-[var(--spacing-4)]',
-      'pointer-events-none motion-reduce:transition-none',
+      'fixed inset-0 z-[1001] flex',
+      dialogShellPositionClasses,
+      'pointer-events-none',
       attrs.class as string | undefined
     )
   )
 
-  const panelClasses = computed(() =>
+  const panelMotionStyle = computed(() =>
+    getDialogResponsiveTransitionStyle(motionState.value, 'panel', isMobileOverlay.value)
+  )
+
+  const panelMotionClasses = computed(() =>
     cn(
-      'pointer-events-auto w-full',
-      'animate-fade-in motion-reduce:animate-none',
-      'data-[state=closed]:animate-fade-out'
+      'pointer-events-auto mx-auto w-full',
+      dialogPanelSizeClasses[ctx?.size ?? 'medium'],
+      dialogPanelPositionClasses,
+      dialogPanelTransitionClasses
     )
   )
 </script>
@@ -69,17 +89,22 @@
     :aria-modal="true"
     :aria-labelledby="ctx?.titleId"
     :aria-describedby="ctx?.descriptionId"
-    :data-state="isOpen ? 'open' : 'closed'"
     :data-testid="`${ctx?.testId}__panel`"
     tabindex="-1"
   >
-    <Panel
-      :size="ctx?.size ?? 'medium'"
-      :class="panelClasses"
-      :data-state="isOpen ? 'open' : 'closed'"
-      :data-testid="`${ctx?.testId}__panel-shell`"
+    <div
+      :class="panelMotionClasses"
+      :style="panelMotionStyle"
+      :data-state="motionState"
     >
-      <slot />
-    </Panel>
+      <Panel
+        :size="ctx?.size ?? 'medium'"
+        size-at-md
+        :class="dialogPanelShapeClasses"
+        :data-testid="`${ctx?.testId}__panel-shell`"
+      >
+        <slot />
+      </Panel>
+    </div>
   </div>
 </template>

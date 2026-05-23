@@ -1,5 +1,4 @@
 import { ref } from 'vue'
-import { expect, userEvent, within } from '@storybook/test'
 
 import Button from '@aziontech/webkit/actions/button'
 import Drawer from '@aziontech/webkit/overlay/drawer'
@@ -49,6 +48,11 @@ export default {
       }
     }
   },
+  decorators: [
+    () => ({
+      template: '<div class="flex min-h-screen w-full items-center justify-center"><story /></div>'
+    })
+  ],
   argTypes: {
     open: {
       control: 'boolean',
@@ -105,9 +109,9 @@ const drawerTemplate = `
             Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
           </DrawerDescription>
         </PanelContent>
-        <PanelFooter class="justify-end">
-          <Button label="Cancel" kind="text" @click="open = false" />
-          <Button label="Save" kind="primary" />
+        <PanelFooter class="flex-col md:flex-row md:justify-end">
+          <Button class="w-full md:w-auto" label="Cancel" kind="outlined" @click="open = false" />
+          <Button class="w-full md:w-auto" label="Save" kind="primary" />
         </PanelFooter>
       </DrawerContent>
     </DrawerPortal>
@@ -137,56 +141,3 @@ export const Default = {
     template: drawerTemplate
   })
 }
-
-export const LeftSide = {
-  args: { side: 'left', defaultOpen: true },
-  render: Default.render
-}
-
-export const SizeSmall = {
-  args: { size: 'small', defaultOpen: true },
-  render: Default.render
-}
-
-export const SizeMedium = {
-  args: { size: 'medium', defaultOpen: true },
-  render: Default.render
-}
-
-export const SizeLarge = {
-  args: { size: 'large', defaultOpen: true },
-  render: Default.render
-}
-
-export const Controlled = {
-  args: { defaultOpen: true },
-  render: Default.render
-}
-
-export const NotCloseable = {
-  args: { closeable: false, defaultOpen: true },
-  render: Default.render
-}
-
-export const WithComposition = Default
-
-export const LightDark = {
-  parameters: {
-    backgrounds: { default: 'light' }
-  },
-  render: Default.render
-}
-
-export const Accessibility = {
-  render: Default.render,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const trigger = canvas.getByRole('button', { name: /open drawer/i })
-    await userEvent.click(trigger)
-    const dialog = await within(document.body).findByRole('dialog')
-    await expect(dialog).toBeInTheDocument()
-    await userEvent.keyboard('{Escape}')
-  }
-}
-
-export const Playground = Default

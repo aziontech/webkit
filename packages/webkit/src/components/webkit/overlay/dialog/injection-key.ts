@@ -1,6 +1,15 @@
 import type { InjectionKey, Ref } from 'vue'
 
+import type { DialogMotionState } from './presets/transitions'
+
 export type DialogSize = 'small' | 'medium' | 'large'
+
+export interface DialogMotionContext {
+  motionState: Readonly<Ref<DialogMotionState>>
+}
+
+export const DialogMotionInjectionKey: InjectionKey<DialogMotionContext> =
+  Symbol('DialogMotionContext')
 
 export interface DialogContext {
   testId: string

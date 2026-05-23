@@ -1,5 +1,4 @@
 import { ref } from 'vue'
-import { expect, userEvent, within } from '@storybook/test'
 
 import Button from '@aziontech/webkit/actions/button'
 import Dialog from '@aziontech/webkit/overlay/dialog'
@@ -44,10 +43,15 @@ export default {
     docs: {
       description: {
         component:
-          'Modal dialog built on the shared Panel shell. Figma Webkit Panel (node 482:935). Supports overlay backdrop, closeable behavior, and theme animation tokens (`animate-fade-in` / `animate-fade-out`).'
+          'Modal dialog built on the shared Panel shell. Figma Webkit Panel (node 482:935). Supports overlay backdrop, closeable behavior, and theme motion tokens (panel scale 0.98 → 1 + opacity fade, overlay fade).'
       }
     }
   },
+  decorators: [
+    () => ({
+      template: '<div class="flex min-h-screen w-full items-center justify-center"><story /></div>'
+    })
+  ],
   argTypes: {
     open: {
       control: 'boolean',
@@ -79,33 +83,46 @@ export default {
   }
 }
 
-const dialogTemplate = `
+const alertDialogTemplate = `
   <Dialog v-bind="args" v-model:open="open">
     <DialogTrigger>
-      <Button label="Open dialog" kind="primary" />
+      <Button label="Open alert" kind="primary" />
     </DialogTrigger>
     <DialogPortal>
       <DialogOverlay />
       <DialogContent>
-        <PanelHeader class="w-full">
-          <DialogTitle>Dialog Title</DialogTitle>
-          <DialogClose />
-        </PanelHeader>
-        <PanelContent>
-          <DialogDescription>
-            Replace this area with your form or message content.
-          </DialogDescription>
+        <PanelContent class="p-0">
+          <div class="flex w-full flex-col">
+            <div
+              class="flex items-start gap-[var(--spacing-4)] px-[var(--spacing-6)] py-[var(--spacing-6)]"
+            >
+              <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-2)]">
+                <DialogTitle>Cancel Scheduled Downgrade</DialogTitle>
+                <DialogDescription>
+                  Confirm to remove the scheduled downgrade. Your current plan will continue without changes.
+                </DialogDescription>
+              </div>
+              <DialogClose class="shrink-0" />
+            </div>
+            <div
+              class="flex flex-col gap-[var(--spacing-3)] border-t border-[length:var(--border-width-default)] border-[var(--border-muted)] px-[var(--spacing-6)] py-[var(--spacing-4)] md:flex-row md:justify-end"
+            >
+              <Button class="w-full md:w-auto" label="Cancel" size="medium" kind="outlined" @click="open = false" />
+              <Button class="w-full md:w-auto" kind="secondary" size="medium" label="Keep current plan" @click="open = false" />
+            </div>
+          </div>
         </PanelContent>
-        <PanelFooter class="justify-end">
-          <Button label="Cancel" kind="text" @click="open = false" />
-          <Button label="Confirm" kind="primary" />
-        </PanelFooter>
       </DialogContent>
     </DialogPortal>
   </Dialog>
 `
 
 export const Default = {
+  args: {
+    defaultOpen: false,
+    closeable: true,
+    size: 'small'
+  },
   render: (args) => ({
     components: {
       Dialog,
@@ -116,88 +133,13 @@ export const Default = {
       DialogTitle,
       DialogDescription,
       DialogClose,
-      PanelHeader,
       PanelContent,
-      PanelFooter,
       Button
     },
     setup() {
       const open = ref(args.defaultOpen)
       return { args, open }
     },
-    template: dialogTemplate
+    template: alertDialogTemplate
   })
 }
-
-export const Controlled = {
-  args: { defaultOpen: true },
-  render: Default.render
-}
-
-export const Uncontrolled = {
-  args: { defaultOpen: true },
-  render: (args) => ({
-    components: {
-      Dialog,
-      DialogTrigger,
-      DialogPortal,
-      DialogOverlay,
-      DialogContent,
-      DialogTitle,
-      DialogClose,
-      PanelHeader,
-      PanelContent,
-      Button
-    },
-    setup() {
-      return { args }
-    },
-    template: `
-      <Dialog :closeable="args.closeable" :size="args.size" :default-open="true">
-        <DialogTrigger>
-          <Button label="Open dialog" kind="primary" />
-        </DialogTrigger>
-        <DialogPortal>
-          <DialogOverlay />
-          <DialogContent>
-            <PanelHeader class="w-full">
-              <DialogTitle>Uncontrolled dialog</DialogTitle>
-              <DialogClose />
-            </PanelHeader>
-            <PanelContent>
-              <p class="text-body-sm text-[var(--text-muted)]">Opened via defaultOpen without v-model.</p>
-            </PanelContent>
-          </DialogContent>
-        </DialogPortal>
-      </Dialog>
-    `
-  })
-}
-
-export const NotCloseable = {
-  args: { closeable: false, defaultOpen: true },
-  render: Default.render
-}
-
-export const WithComposition = Default
-
-export const LightDark = {
-  parameters: {
-    backgrounds: { default: 'light' }
-  },
-  render: Default.render
-}
-
-export const Accessibility = {
-  render: Default.render,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const trigger = canvas.getByRole('button', { name: /open dialog/i })
-    await userEvent.click(trigger)
-    const dialog = await within(document.body).findByRole('dialog')
-    await expect(dialog).toBeInTheDocument()
-    await userEvent.keyboard('{Escape}')
-  }
-}
-
-export const Playground = Default

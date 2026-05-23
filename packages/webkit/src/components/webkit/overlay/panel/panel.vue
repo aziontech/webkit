@@ -3,6 +3,7 @@
 
   import { cn } from '../../../../utils/cn'
   import { PanelInjectionKey, type PanelSize } from './injection-key'
+  import { dialogPanelSizeClasses, panelSizeClasses } from './presets/sizes'
 
   defineOptions({
     name: 'Panel',
@@ -17,9 +18,12 @@
     defineProps<{
       /** Max width of the panel shell. */
       size?: PanelSize
+      /** When true, `size` max-width applies from `md` up only (dialog mobile bottom sheet). */
+      sizeAtMd?: boolean
     }>(),
     {
-      size: 'medium'
+      size: 'medium',
+      sizeAtMd: false
     }
   )
 
@@ -31,19 +35,13 @@
     testId: testId.value
   })
 
-  const sizeClasses: Record<PanelSize, string> = {
-    small: 'max-w-[var(--container-sm)]',
-    medium: 'max-w-[var(--container-xl)]',
-    large: 'max-w-[var(--container-2xl)]'
-  }
-
   const rootClasses = computed(() =>
     cn(
       'flex w-full flex-col overflow-hidden',
-      'rounded-[var(--shape-card)] border border-[var(--border-default)]',
-      'bg-[var(--bg-surface)] shadow-[var(--shadow-md)]',
-      'max-h-[min(90vh,640px)]',
-      sizeClasses[props.size],
+      'rounded-[var(--shape-card)] border border-[length:var(--border-width-default)]',
+      'border-[var(--border-muted)]',
+      'bg-[var(--bg-surface)] shadow-[var(--shadow-2xl)]',
+      props.sizeAtMd ? dialogPanelSizeClasses[props.size] : panelSizeClasses[props.size],
       attrs.class as string | undefined
     )
   )

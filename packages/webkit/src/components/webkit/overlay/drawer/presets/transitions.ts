@@ -2,6 +2,10 @@ import {
   curve,
   duration
 } from '../../../../../../../theme/src/tokens/primitives/animations/animate.js'
+import {
+  bottomSheetPanelMotionClasses,
+  bottomSheetPanelStateClasses
+} from '../../presets/bottom-sheet-transitions'
 
 export type DrawerMotionState = 'open' | 'closed'
 
@@ -27,12 +31,12 @@ export const drawerMotion: Record<
   Record<DrawerMotionPhase, DrawerMotionToken>
 > = {
   panel: {
-    open: { duration: duration['moderate-02'], curve: curve['productive-entrance'] },
-    close: { duration: duration['moderate-01'], curve: curve['productive-exit'] }
+    open: { duration: duration['slow-02'], curve: curve['expressive-entrance'] },
+    close: { duration: duration['slow-01'], curve: curve['expressive-exit'] }
   },
   overlay: {
-    open: { duration: duration['moderate-01'], curve: curve['productive-entrance'] },
-    close: { duration: duration['fast-02'], curve: curve['productive-exit'] }
+    open: { duration: duration['slow-01'], curve: curve['productive-entrance'] },
+    close: { duration: duration['slow-02'], curve: curve['productive-exit'] }
   }
 }
 
@@ -72,14 +76,21 @@ export const getDrawerTransitionStyle = (
   }
 }
 
-export const drawerPanelTransitionClasses = [
-  'motion-reduce:transition-none',
-  'motion-reduce:transform-none'
-] as const
+export const drawerPanelTransitionClasses = bottomSheetPanelMotionClasses
 
 export const drawerPanelStateClasses = {
-  left: ['data-[state=closed]:-translate-x-full', 'data-[state=open]:translate-x-0'] as const,
-  right: ['data-[state=closed]:translate-x-full', 'data-[state=open]:translate-x-0'] as const
+  left: [
+    ...bottomSheetPanelStateClasses,
+    'md:data-[state=closed]:-translate-x-full',
+    'md:data-[state=open]:translate-x-0',
+    'md:translate-y-0'
+  ] as const,
+  right: [
+    ...bottomSheetPanelStateClasses,
+    'md:data-[state=closed]:translate-x-full',
+    'md:data-[state=open]:translate-x-0',
+    'md:translate-y-0'
+  ] as const
 }
 
 export const drawerOverlayTransitionClasses = [

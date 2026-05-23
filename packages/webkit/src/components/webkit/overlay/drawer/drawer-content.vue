@@ -5,6 +5,10 @@
   import { useFocusTrap } from '../../../../composables/use-focus-trap'
   import { cn } from '../../../../utils/cn'
   import Panel from '../panel/panel.vue'
+  import {
+    drawerPanelPositionClasses,
+    drawerShellPositionClasses
+  } from '../presets/mobile-position'
   import { useDrawerMotionState } from './composables/use-drawer-motion-state'
   import { DrawerInjectionKey } from './injection-key'
   import { drawerSizeClasses } from './presets/sizes'
@@ -59,8 +63,9 @@
 
   const shellClasses = computed(() =>
     cn(
-      'fixed inset-y-0 z-[1001] flex h-full min-h-full w-auto p-0',
-      isLeft.value ? 'left-0 justify-start' : 'right-0 justify-end',
+      'fixed z-[1001] flex p-0',
+      drawerShellPositionClasses,
+      isLeft.value ? 'md:left-0 md:justify-start' : 'md:right-0 md:justify-end',
       'pointer-events-none',
       drawerPanelTransitionClasses,
       drawerPanelStateClasses[sideKey.value],
@@ -72,11 +77,12 @@
 
   const panelClasses = computed(() =>
     cn(
-      'pointer-events-auto flex h-full min-h-0 w-full max-h-full flex-col',
+      'pointer-events-auto flex w-full flex-col',
       drawerSizeClasses[drawerSize.value],
+      drawerPanelPositionClasses,
       isLeft.value
-        ? 'rounded-r-[var(--shape-card)] rounded-l-[var(--shape-flat)]'
-        : 'rounded-l-[var(--shape-card)] rounded-r-[var(--shape-flat)]'
+        ? 'md:rounded-r-[var(--shape-card)] md:rounded-l-[var(--shape-flat)]'
+        : 'md:rounded-l-[var(--shape-card)] md:rounded-r-[var(--shape-flat)]'
     )
   )
 </script>

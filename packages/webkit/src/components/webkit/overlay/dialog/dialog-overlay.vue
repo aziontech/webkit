@@ -2,7 +2,12 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { cn } from '../../../../utils/cn'
-  import { DialogInjectionKey } from './injection-key'
+  import { useOverlayMobile } from '../composables/use-overlay-mobile'
+  import { DialogInjectionKey, DialogMotionInjectionKey } from './injection-key'
+  import {
+    dialogOverlayTransitionClasses,
+    getDialogResponsiveTransitionStyle
+  } from './presets/transitions'
 
   defineOptions({
     name: 'DialogOverlay',
@@ -11,17 +16,23 @@
 
   const attrs = useAttrs()
   const ctx = inject(DialogInjectionKey)
+  const motionCtx = inject(DialogMotionInjectionKey)
+  const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
+  const isMobileOverlay = useOverlayMobile()
 
   const handleClick = () => {
     if (!ctx?.closeable) return
     ctx.close()
   }
 
+  const overlayTransitionStyle = computed(() =>
+    getDialogResponsiveTransitionStyle(motionState.value, 'overlay', isMobileOverlay.value)
+  )
+
   const rootClasses = computed(() =>
     cn(
-      'fixed inset-0 z-[1000] bg-[var(--bg-mask)]',
-      'animate-fade-in motion-reduce:animate-none',
-      'data-[state=closed]:animate-fade-out',
+      'fixed inset-0 z-[1000] bg-[var(--bg-backdrop)]',
+      dialogOverlayTransitionClasses,
       attrs.class as string | undefined
     )
   )
@@ -30,7 +41,8 @@
 <template>
   <div
     :class="rootClasses"
-    :data-state="ctx?.isOpen.value ? 'open' : 'closed'"
+    :style="overlayTransitionStyle"
+    :data-state="motionState"
     :data-testid="`${ctx?.testId}__backdrop`"
     aria-hidden="true"
     @click="handleClick"

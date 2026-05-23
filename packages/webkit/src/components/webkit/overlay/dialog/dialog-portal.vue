@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject } from 'vue'
+  import { computed, inject, onBeforeUnmount, provide, ref, watch } from 'vue'
 
-  import { DialogInjectionKey } from './injection-key'
+  import { useDialogMotionState } from './composables/use-dialog-motion-state'
+  import { DialogInjectionKey, DialogMotionInjectionKey } from './injection-key'
+  import { DIALOG_EXIT_MS } from './presets/transitions'
 
   defineOptions({
     name: 'DialogPortal',
@@ -14,11 +16,40 @@
 
   const ctx = inject(DialogInjectionKey)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
+  const { motionState } = useDialogMotionState(isOpen)
+
+  provide(DialogMotionInjectionKey, { motionState })
+
+  const isPresent = ref(isOpen.value)
+  let exitTimer: ReturnType<typeof setTimeout> | undefined
+
+  watch(isOpen, (open) => {
+    if (exitTimer) {
+      clearTimeout(exitTimer)
+      exitTimer = undefined
+    }
+
+    if (open) {
+      isPresent.value = true
+      return
+    }
+
+    if (!isPresent.value) return
+
+    exitTimer = setTimeout(() => {
+      isPresent.value = false
+      exitTimer = undefined
+    }, DIALOG_EXIT_MS)
+  })
+
+  onBeforeUnmount(() => {
+    if (exitTimer) clearTimeout(exitTimer)
+  })
 </script>
 
 <template>
   <Teleport
-    v-if="isOpen"
+    v-if="isPresent"
     to="body"
   >
     <slot />
