@@ -15,7 +15,7 @@ Specs collapse that latitude. The agent stops being an author and becomes a tran
 | `_template.md` | Canonical template — copy this to start a new spec. Defines the mandatory frontmatter + 9 body sections. |
 | `_schema.json` | JSON Schema (Draft 2020-12) for the frontmatter. Validated by Ajv inside `spec-validator` and `enforce-spec-exists.mjs`. |
 | `__fixtures__/` | Intentionally invalid specs used by the hook test suite. Their presence must make `spec-validator` fail. |
-| `<name>.md` | One per component (e.g. `tooltip.md`, `card-banner.md`). Created by `/spec-create`. |
+| `<name>.md` | One per component (e.g. `button.md`, `dialog.md`). Created by `/spec-create` or bulk-migrated via `node scripts/migrate-webkit-specs.mjs`. |
 
 ## Lifecycle
 

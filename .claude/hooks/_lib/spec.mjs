@@ -15,6 +15,7 @@ export const CATEGORIES = [
   'layout',
   'navigation',
   'overlay',
+  'templates',
   'utils'
 ]
 
