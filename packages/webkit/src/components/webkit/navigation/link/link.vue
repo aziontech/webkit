@@ -54,7 +54,7 @@
 
   const ghostClasses = [
     'pointer-events-none absolute top-1/2 -translate-y-1/2',
-    '-left-[var(--spacing-2)] -right-[var(--spacing-2)] h-8',
+    '-left-[var(--spacing-elements-xs)] -right-[var(--spacing-elements-xs)] h-8',
     'rounded-[var(--shape-elements)] bg-[var(--bg-surface-raised)]',
     'opacity-0 transition-opacity motion-reduce:transition-none',
     'group-hover:opacity-100 group-focus-visible:opacity-100',
@@ -72,7 +72,7 @@
     medium: 'h-8 text-button-md'
   }
 
-  const contentClasses = 'inline-flex items-center gap-[var(--spacing-2)]'
+  const contentClasses = 'inline-flex items-center gap-spacing-elements-xs'
 
   const rootClasses = computed(() => {
     const state = props.disabled ? disabledClasses : ''
@@ -119,7 +119,7 @@
       <i
         v-if="showIcon"
         :class="icon"
-        class="size-[var(--spacing-3)] shrink-0 text-[length:inherit] leading-none"
+        class="size-[var(--spacing-elements-sm)] shrink-0 text-[length:inherit] leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       />

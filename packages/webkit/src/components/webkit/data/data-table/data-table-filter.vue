@@ -112,10 +112,10 @@
     <div
       v-if="open"
       tabindex="-1"
-      class="absolute left-0 top-full z-10 mt-[var(--spacing-2)] w-[20rem] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-3)] focus:outline-none"
+      class="absolute left-0 top-full z-10 mt-[var(--spacing-elements-xs)] w-[20rem] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-spacing-elements-sm focus:outline-none"
       :data-testid="`${testId}__panel`"
     >
-      <div class="flex flex-col gap-[var(--spacing-3)]">
+      <div class="flex flex-col gap-spacing-elements-sm">
         <Dropdown
           :modelValue="selectedField"
           :options="filterOptions"
@@ -139,7 +139,7 @@
           :data-testid="`${testId}__value`"
           @update:modelValue="(value: string) => updateFilterValue(value)"
         />
-        <div class="flex justify-end gap-[var(--spacing-2)]">
+        <div class="flex justify-end gap-spacing-elements-xs">
           <Button
             label="Cancel"
             kind="text"

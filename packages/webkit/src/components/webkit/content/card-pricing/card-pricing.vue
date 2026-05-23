@@ -82,27 +82,29 @@
   const isContained = computed(() => props.cardStyle === 'contained')
 
   const rootClass = computed(() => {
-    const classes = ['flex flex-col items-start overflow-clip w-[320px] font-sora']
+    const classes = ['flex flex-col items-start overflow-clip w-full font-sora']
 
     if (isMiddle.value) {
       classes.push('min-h-[483px] justify-between')
 
       if (isContained.value) {
         classes.push(
-          'bg-[var(--bg-surface)] border border-[length:var(--border-width-default,1px)]',
-          'border-[var(--border-default)] rounded-[var(--shape-card)] p-[var(--spacing-6)]'
+          'bg-[var(--bg-surface)] border border-[length:var(--border-width-default)]',
+          'border-[var(--border-muted)] rounded-[var(--shape-card)] p-spacing-elements-xl'
         )
       } else {
-        classes.push('px-[var(--spacing-6)] py-[var(--spacing-6)]')
+        classes.push('px-[var(--spacing-elements-xl)] py-[var(--spacing-elements-xl)]')
       }
     } else if (isContained.value) {
       classes.push(
-        'gap-[var(--spacing-6)]',
-        'bg-[var(--bg-surface)] border border-[length:var(--border-width-default,1px)]',
-        'border-[var(--border-default)] rounded-[var(--shape-card)] p-[var(--spacing-6)]'
+        'gap-spacing-elements-xl',
+        'bg-[var(--bg-surface)] border border-[length:var(--border-width-default)]',
+        'border-[var(--border-muted)] rounded-[var(--shape-card)] p-spacing-elements-xl'
       )
     } else {
-      classes.push('gap-[var(--spacing-6)] px-[var(--spacing-6)] py-[var(--spacing-6)]')
+      classes.push(
+        'gap-spacing-elements-xl px-[var(--spacing-elements-xl)] py-[var(--spacing-elements-xl)]'
+      )
     }
 
     if (attrs.class) {
@@ -122,10 +124,10 @@
   const slotWrapperClass = 'min-h-[160px] w-full shrink-0'
 
   const actionsClass = computed(() => {
-    const classes = ['flex w-full gap-[var(--spacing-4)] items-start shrink-0']
+    const classes = ['flex w-full gap-spacing-elements-md items-start shrink-0']
 
     if (isMiddle.value) {
-      classes.push('pt-[var(--spacing-4)]')
+      classes.push('pt-[var(--spacing-elements-md)]')
     }
 
     return classes
@@ -140,20 +142,22 @@
     <div
       :class="[
         'flex w-full flex-col items-start shrink-0',
-        isMiddle ? 'gap-[var(--spacing-6)]' : ''
+        isMiddle ? 'gap-spacing-elements-xl' : ''
       ]"
     >
       <div
         :class="[
           'flex w-full shrink-0 flex-col items-start',
-          isMiddle ? 'gap-[var(--spacing-2)] max-w-[256px]' : 'max-w-[256px] gap-[var(--spacing-2)]'
+          isMiddle
+            ? 'gap-spacing-elements-xs max-w-[256px]'
+            : 'max-w-[256px] gap-spacing-elements-xs'
         ]"
         :data-testid="`${testId}__header`"
       >
         <div
           :class="[
             'h-6 flex shrink-0 items-center',
-            isMiddle ? 'w-full gap-[var(--spacing-3)]' : 'gap-[var(--spacing-2)]'
+            isMiddle ? 'w-full gap-spacing-elements-sm' : 'gap-spacing-elements-xs'
           ]"
         >
           <h3
@@ -180,7 +184,7 @@
 
       <template v-if="isMiddle">
         <div
-          class="flex w-full flex-col gap-[var(--spacing-1)] items-start h-16 shrink-0"
+          class="flex w-full flex-col gap-spacing-elements-xxs items-start h-16 shrink-0"
           :data-testid="`${testId}__pricing`"
         >
           <Currency
@@ -212,7 +216,7 @@
 
     <div
       v-if="!isMiddle"
-      class="flex w-full flex-col gap-[var(--spacing-1)] items-start h-16 shrink-0"
+      class="flex w-full flex-col gap-spacing-elements-xxs items-start h-16 shrink-0"
       :data-testid="`${testId}__pricing`"
     >
       <Currency

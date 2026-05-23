@@ -52,7 +52,7 @@
       v-for="option in options"
       :key="option.value"
       type="button"
-      class="px-[var(--spacing-3)] py-[var(--spacing-2)] text-body-sm transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xs)] text-body-sm transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
       :class="
         modelValue === option.value
           ? 'bg-[var(--primary)] text-[var(--primary-contrast)]'

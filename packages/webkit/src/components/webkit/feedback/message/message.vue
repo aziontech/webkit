@@ -86,9 +86,9 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'flex min-h-[var(--h-14,3.5rem)] items-center gap-[var(--spacing-3,0.75rem)]',
+      'flex min-h-[var(--h-14,3.5rem)] items-center gap-spacing-elements-sm',
       'rounded-[var(--shape-elements)] border border-[length:var(--border-width-default,1px)]',
-      'p-[var(--spacing-3,0.75rem)] shadow-[0_1px_2px_0_rgba(0,0,0,0.04)]',
+      'p-spacing-elements-sm shadow-[0_1px_2px_0_rgba(0,0,0,0.04)]',
       fontSans,
       currentSeverityStyle.value.container
     ]

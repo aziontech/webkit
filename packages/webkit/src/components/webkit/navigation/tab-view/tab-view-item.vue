@@ -71,8 +71,8 @@
 
   const itemSharedClasses = [
     'inline-flex h-[30px] shrink-0 cursor-pointer items-center',
-    'gap-[var(--spacing-2)] rounded-[var(--shape-elements)]',
-    'px-[var(--spacing-3)] py-[var(--spacing-2)]',
+    'gap-spacing-elements-xs rounded-[var(--shape-elements)]',
+    'px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xs)]',
     'text-label-md transition-colors motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'

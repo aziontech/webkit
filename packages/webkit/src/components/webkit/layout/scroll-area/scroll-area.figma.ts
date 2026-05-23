@@ -8,7 +8,7 @@ import ScrollArea from './scroll-area.vue'
  */
 figma.connect(ScrollArea, 'https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit', {
   example: () => `
-<ScrollArea class="h-[200px] max-w-[var(--container-md)] rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-4)] text-body-sm">
+<ScrollArea class="h-[200px] max-w-[var(--container-md)] rounded-[var(--shape-elements)] border border-[var(--border-default)] p-spacing-elements-md text-body-sm">
   Long content that overflows the fixed height scrolls here with a thin themed scrollbar.
 </ScrollArea>
   `

@@ -74,7 +74,7 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'flex w-full max-w-[var(--container-sm)] flex-col items-center gap-[var(--spacing-2)]'
+      'flex w-full max-w-[var(--container-sm)] flex-col items-center gap-spacing-elements-xs'
     ]
 
     if (attrs.class) {
@@ -91,22 +91,22 @@
   ]
 
   const contentClass = [
-    'flex w-full shrink-0 flex-col items-start gap-[var(--spacing-6)]',
-    'px-[var(--spacing-6)] py-[var(--spacing-6)]'
+    'flex w-full shrink-0 flex-col items-start gap-spacing-elements-xl',
+    'px-[var(--spacing-elements-xl)] py-[var(--spacing-elements-xl)]'
   ]
 
   const headerClass = [
     'flex w-full max-w-[var(--container-sm)] shrink-0 flex-col items-start',
-    'gap-[var(--spacing-2)] [word-break:break-word]'
+    'gap-spacing-elements-xs [word-break:break-word]'
   ]
 
   const titleClass = 'text-heading-sm w-full text-[var(--text-default)] [word-break:break-word]'
 
   const subtitleClass = 'text-body-sm w-full text-[var(--text-muted)] [word-break:break-word]'
 
-  const actionsClass = ['flex w-full shrink-0 flex-col items-start gap-[var(--spacing-6)]']
+  const actionsClass = ['flex w-full shrink-0 flex-col items-start gap-spacing-elements-xl']
 
-  const socialClass = 'flex w-full shrink-0 flex-col items-start gap-[var(--spacing-3)]'
+  const socialClass = 'flex w-full shrink-0 flex-col items-start gap-spacing-elements-sm'
 
   const dividerClass = [
     'm-0 w-full shrink-0 border-0',
@@ -119,7 +119,7 @@
   const linkClass =
     'text-[var(--text-link)] transition-colors hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)] rounded-[var(--shape-button)]'
 
-  const footerClass = 'flex w-full shrink-0 items-center justify-center gap-[var(--spacing-2)]'
+  const footerClass = 'flex w-full shrink-0 items-center justify-center gap-spacing-elements-xs'
 
   const footerPromptClass =
     'text-body-sm shrink-0 text-center text-[var(--text-muted)] whitespace-nowrap'

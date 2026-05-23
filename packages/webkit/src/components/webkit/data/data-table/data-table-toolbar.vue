@@ -33,11 +33,11 @@
 <template>
   <div
     v-bind="attrs"
-    class="flex w-full flex-col gap-[var(--spacing-3)]"
+    class="flex w-full flex-col gap-spacing-elements-sm"
     :data-testid="testId"
   >
     <div
-      class="px-[var(--spacing-3)]"
+      class="px-[var(--spacing-elements-sm)]"
       :data-testid="`${testId}__first-line`"
     >
       <slot name="first-line" />
@@ -48,7 +48,7 @@
       :data-testid="`${testId}__divider`"
     />
     <div
-      class="px-[var(--spacing-3)]"
+      class="px-[var(--spacing-elements-sm)]"
       :data-testid="`${testId}__second-line`"
     >
       <slot name="second-line" />

@@ -73,17 +73,17 @@
     small: {
       wrapper: 'h-8',
       input:
-        'px-[var(--spacing-2)] text-[length:var(--text-body-sm-font-size)] leading-[var(--text-body-sm-line-height)]'
+        'px-[var(--spacing-elements-xs)] text-[length:var(--text-body-sm-font-size)] leading-[var(--text-body-sm-line-height)]'
     },
     medium: {
       wrapper: 'h-10',
       input:
-        'px-[var(--spacing-3)] text-[length:var(--text-body-md-font-size)] leading-[var(--text-body-md-line-height)]'
+        'px-[var(--spacing-elements-sm)] text-[length:var(--text-body-md-font-size)] leading-[var(--text-body-md-line-height)]'
     },
     large: {
       wrapper: 'h-12',
       input:
-        'px-[var(--spacing-4)] text-[length:var(--text-body-lg-font-size)] leading-[var(--text-body-lg-line-height)]'
+        'px-[var(--spacing-elements-md)] text-[length:var(--text-body-lg-font-size)] leading-[var(--text-body-lg-line-height)]'
     }
   }
 

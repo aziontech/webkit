@@ -283,7 +283,7 @@
   const useTeleport = computed(() => props.appendTo === 'body')
 
   const sharedTriggerClasses = [
-    'relative inline-flex w-full min-w-0 items-center gap-[var(--spacing-2)] transition-all duration-150',
+    'relative inline-flex w-full min-w-0 items-center gap-spacing-elements-xs transition-all duration-150',
     'rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]',
     'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
     "before:opacity-0 before:transition-opacity before:content-['']",
@@ -298,9 +298,9 @@
     'pointer-events-none border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden'
 
   const sizeClasses = {
-    small: 'h-8 px-[var(--spacing-2)]',
-    medium: 'h-10 px-[var(--spacing-3)]',
-    large: 'h-12 px-[var(--spacing-4)]'
+    small: 'h-8 px-[var(--spacing-elements-xs)]',
+    medium: 'h-10 px-[var(--spacing-elements-sm)]',
+    large: 'h-12 px-[var(--spacing-elements-md)]'
   }
 
   const labelSizeClasses = {
@@ -340,7 +340,7 @@
   ]
 
   const listClasses = [
-    'webkit-dropdown-list overflow-y-auto p-[var(--spacing-1)]',
+    'webkit-dropdown-list overflow-y-auto p-spacing-elements-xxs',
     'text-[var(--text-default)]'
   ]
 
@@ -515,7 +515,7 @@
     const isDisabled = isOptionDisabled(option)
 
     return [
-      'text-label-md flex w-full cursor-pointer items-center rounded-[var(--shape-elements)] px-[var(--spacing-2)] py-[var(--spacing-2)] text-left transition-colors duration-150',
+      'text-label-md flex w-full cursor-pointer items-center rounded-[var(--shape-elements)] px-[var(--spacing-elements-xs)] py-[var(--spacing-elements-xs)] text-left transition-colors duration-150',
       isDisabled && 'pointer-events-none text-[var(--text-disabled)]',
       !isDisabled &&
         !isSelected &&
@@ -564,7 +564,7 @@
       <button
         type="button"
         role="combobox"
-        class="relative z-[1] flex min-w-0 flex-1 items-center gap-[var(--spacing-2)] border-0 bg-transparent p-0 text-left outline-none disabled:cursor-not-allowed"
+        class="relative z-[1] flex min-w-0 flex-1 items-center gap-spacing-elements-xs border-0 bg-transparent p-0 text-left outline-none disabled:cursor-not-allowed"
         :disabled="disabled || loading"
         :aria-expanded="isOpen"
         aria-haspopup="listbox"
@@ -641,14 +641,14 @@
 
           <div
             v-if="filter"
-            class="border-b border-[var(--border-default)] p-[var(--spacing-2)]"
+            class="border-b border-[var(--border-default)] p-spacing-elements-xs"
             :data-testid="`${testId}__filter`"
           >
             <span class="relative flex w-full items-center">
               <i
                 :class="[
                   filterIcon,
-                  'pointer-events-none absolute left-[var(--spacing-2)] text-[var(--text-muted)]'
+                  'pointer-events-none absolute left-[var(--spacing-elements-xs)] text-[var(--text-muted)]'
                 ]"
                 aria-hidden="true"
               />
@@ -656,7 +656,7 @@
                 ref="filterInputRef"
                 :value="filterValue"
                 type="text"
-                class="h-8 w-full rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-8 pr-[var(--spacing-2)] text-[length:var(--text-body-sm-font-size)] text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus-visible:ring-1 focus-visible:ring-[var(--ring-color)]"
+                class="h-8 w-full rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-8 pr-[var(--spacing-elements-xs)] text-[length:var(--text-body-sm-font-size)] text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus-visible:ring-1 focus-visible:ring-[var(--ring-color)]"
                 :placeholder="filterPlaceholder ?? 'Search'"
                 :data-testid="`${testId}__filter-input`"
                 @input="onFilterInput"
@@ -678,7 +678,7 @@
               <li
                 v-if="item.type === 'group'"
                 role="presentation"
-                class="text-overline-sm px-[var(--spacing-2)] py-[var(--spacing-1)] text-[var(--text-muted)]"
+                class="text-overline-sm px-[var(--spacing-elements-xs)] py-[var(--spacing-elements-xxs)] text-[var(--text-muted)]"
                 :data-testid="`${testId}__group`"
               >
                 {{ item.label }}
@@ -712,7 +712,7 @@
             <li
               v-if="selectableOptions.length === 0"
               role="presentation"
-              class="text-label-md px-[var(--spacing-2)] py-[var(--spacing-3)] text-center text-[var(--text-muted)]"
+              class="text-label-md px-[var(--spacing-elements-xs)] py-[var(--spacing-elements-sm)] text-center text-[var(--text-muted)]"
               :data-testid="`${testId}__empty`"
             >
               <slot name="empty">

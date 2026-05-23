@@ -25,7 +25,7 @@
   /** TODO: tokenizar — Figma `--tabview/tabviewnavbg` (transparent nav). */
   const listClasses = computed(() =>
     cn(
-      'flex shrink-0 items-end gap-[var(--spacing-2)] bg-transparent',
+      'flex shrink-0 items-end gap-spacing-elements-xs bg-transparent',
       attrs.class as string | undefined
     )
   )

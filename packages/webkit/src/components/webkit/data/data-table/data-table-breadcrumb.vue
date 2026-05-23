@@ -37,7 +37,7 @@
 <template>
   <nav
     v-bind="attrs"
-    class="flex flex-wrap items-center gap-[var(--spacing-2)] text-body-sm text-[var(--text-muted)]"
+    class="flex flex-wrap items-center gap-spacing-elements-xs text-body-sm text-[var(--text-muted)]"
     :data-testid="testId"
     aria-label="Breadcrumb"
   >

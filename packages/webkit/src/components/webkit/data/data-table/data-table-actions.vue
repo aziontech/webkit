@@ -22,7 +22,7 @@
 <template>
   <div
     v-bind="attrs"
-    class="flex items-center gap-[var(--spacing-2)]"
+    class="flex items-center gap-spacing-elements-xs"
     :data-testid="testId"
   >
     <slot />

@@ -33,7 +33,7 @@
 <template>
   <div
     v-bind="attrs"
-    class="flex justify-center border-t border-[var(--border-default)] px-[var(--spacing-3)] py-[var(--spacing-3)]"
+    class="flex justify-center border-t border-[var(--border-default)] px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-sm)]"
     :data-testid="testId"
   >
     <Button

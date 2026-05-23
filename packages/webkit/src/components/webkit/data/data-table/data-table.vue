@@ -414,7 +414,7 @@
       >
         <div
           v-if="slots['header']"
-          class="border-b border-[var(--border-default)] px-[var(--spacing-3)] py-[var(--spacing-3)]"
+          class="border-b border-[var(--border-default)] px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-sm)]"
           :data-testid="`${testId}__header`"
         >
           <slot name="header" />
@@ -422,7 +422,7 @@
 
         <div
           v-if="loading && slots['loading']"
-          class="px-[var(--spacing-3)] py-[var(--spacing-3)]"
+          class="px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-sm)]"
           :data-testid="`${testId}__loading`"
         >
           <slot name="loading" />
@@ -446,7 +446,7 @@
                 <th
                   v-if="selectable"
                   scope="col"
-                  class="w-10 px-[var(--spacing-3)] py-[var(--spacing-3)] text-left"
+                  class="w-10 px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-sm)] text-left"
                 >
                   <input
                     type="checkbox"
@@ -459,7 +459,7 @@
                   v-for="column in visibleColumns"
                   :key="column.field"
                   scope="col"
-                  class="px-[var(--spacing-3)] py-[var(--spacing-3)] text-left text-body-sm text-[var(--text-default)]"
+                  class="px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-sm)] text-left text-body-sm text-[var(--text-default)]"
                   :aria-sort="column.sortable ? ariaSortFor(column.sortField) : undefined"
                   :style="column.style || undefined"
                   :data-testid="`${testId}__head-${column.field}`"
@@ -467,7 +467,7 @@
                   <button
                     v-if="column.sortable"
                     type="button"
-                    class="inline-flex items-center gap-[var(--spacing-2)] transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+                    class="inline-flex items-center gap-spacing-elements-xs transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
                     @click="handleSort(column.sortField)"
                   >
                     <component
@@ -502,7 +502,7 @@
               >
                 <td
                   v-if="selectable"
-                  class="w-10 px-[var(--spacing-3)] py-[var(--spacing-4)]"
+                  class="w-10 px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-md)]"
                 >
                   <input
                     type="checkbox"
@@ -515,7 +515,7 @@
                 <td
                   v-for="column in visibleColumns"
                   :key="`${rowIndex}-${column.field}`"
-                  class="px-[var(--spacing-3)] py-[var(--spacing-4)] align-middle text-body-sm text-[var(--text-default)]"
+                  class="px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-md)] align-middle text-body-sm text-[var(--text-default)]"
                   :style="column.style || undefined"
                   :data-testid="`${testId}__cell-${column.field}`"
                 >
@@ -537,7 +537,7 @@
               <tr v-if="displayRows.length === 0 && !loading">
                 <td
                   :colspan="visibleColumns.length + (selectable ? 1 : 0)"
-                  class="px-[var(--spacing-3)] py-[var(--spacing-4)] text-center text-body-sm text-[var(--text-muted)]"
+                  class="px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-md)] text-center text-body-sm text-[var(--text-muted)]"
                   :data-testid="`${testId}__empty`"
                 >
                   <slot name="empty">
@@ -551,14 +551,14 @@
 
         <div
           v-if="paginator"
-          class="flex items-center justify-between gap-[var(--spacing-3)] border-t border-[var(--border-default)] px-[var(--spacing-3)] py-[var(--spacing-3)] text-body-xs text-[var(--text-muted)]"
+          class="flex items-center justify-between gap-spacing-elements-sm border-t border-[var(--border-default)] px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-sm)] text-body-xs text-[var(--text-muted)]"
           :data-testid="`${testId}__paginator`"
         >
           <span>{{ pageReport }}</span>
-          <div class="flex items-center gap-[var(--spacing-2)]">
+          <div class="flex items-center gap-spacing-elements-xs">
             <button
               type="button"
-              class="inline-flex h-10 min-w-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-2)] transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:opacity-50"
+              class="inline-flex h-10 min-w-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-elements-xs)] transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:opacity-50"
               :disabled="!canPrevious"
               @click="previousPage"
             >
@@ -566,7 +566,7 @@
             </button>
             <button
               type="button"
-              class="inline-flex h-10 min-w-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-2)] transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:opacity-50"
+              class="inline-flex h-10 min-w-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-elements-xs)] transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:opacity-50"
               :disabled="!canNext"
               @click="nextPage"
             >
@@ -577,7 +577,7 @@
 
         <div
           v-if="slots['footer']"
-          class="border-t border-[var(--border-default)] px-[var(--spacing-3)] py-[var(--spacing-3)]"
+          class="border-t border-[var(--border-default)] px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-sm)]"
           :data-testid="`${testId}__footer`"
         >
           <slot name="footer" />

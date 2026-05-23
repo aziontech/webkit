@@ -43,7 +43,7 @@
   const rootClass = computed(() => {
     const classes = [
       'inline-flex items-center font-sora',
-      isLarge.value ? 'gap-[var(--spacing-2)]' : 'gap-[var(--spacing-1)]'
+      isLarge.value ? 'gap-spacing-elements-xs' : 'gap-spacing-elements-xxs'
     ]
 
     if (attrs.class) {
@@ -53,7 +53,7 @@
     return classes
   })
 
-  const groupClass = 'inline-flex items-center gap-[var(--spacing-1)]'
+  const groupClass = 'inline-flex items-center gap-spacing-elements-xxs'
 
   const primaryTextClass = computed(() => {
     if (isLarge.value) {

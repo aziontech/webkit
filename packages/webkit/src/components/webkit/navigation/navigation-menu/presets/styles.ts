@@ -5,8 +5,8 @@ export const navigationMenuNavSelectorVar =
   '[--webkit-nav-selector:color-mix(in_srgb,var(--bg-hover)_60%,transparent)]'
 
 const triggerBaseClasses = [
-  'relative z-[1] inline-flex cursor-pointer items-center gap-[var(--spacing-2)]',
-  'rounded-[var(--shape-elements)] bg-transparent px-[var(--spacing-3)] py-[var(--spacing-2)]',
+  'relative z-[1] inline-flex cursor-pointer items-center gap-spacing-elements-xs',
+  'rounded-[var(--shape-elements)] bg-transparent px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xs)]',
   'no-underline transition-colors duration-150 ease-in-out motion-reduce:transition-none',
   'text-label-md text-[var(--text-default)]',
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
@@ -31,8 +31,8 @@ export function getNavigationMenuRootClasses(extra?: string) {
 }
 
 export const navigationMenuEntryAnchorClasses = [
-  'group flex min-h-14 w-full items-start gap-[var(--spacing-2)]',
-  'rounded-[var(--shape-elements)] p-[var(--spacing-2)] no-underline',
+  'group flex min-h-14 w-full items-start gap-spacing-elements-xs',
+  'rounded-[var(--shape-elements)] p-spacing-elements-xs no-underline',
   'text-[var(--text-default)] transition-colors duration-150 motion-reduce:transition-none',
   'hover:bg-[var(--bg-hover)]',
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
@@ -53,10 +53,10 @@ export const navigationMenuEntryTitleClasses = [
 export const navigationMenuEntryDescriptionClasses = 'text-body-xs text-[var(--text-muted)]'
 
 export const navigationMenuListGroupClasses =
-  'm-0 flex list-none flex-col gap-[var(--spacing-2)] p-0'
+  'm-0 flex list-none flex-col gap-spacing-elements-xs p-0'
 
 export const navigationMenuListRootClasses = [
-  'relative z-[1] m-0 flex list-none items-center gap-[var(--spacing-2)] p-0'
+  'relative z-[1] m-0 flex list-none items-center gap-spacing-elements-xs p-0'
 ]
 
 /** Sliding highlight on root NavigationMenu.List (uses `--webkit-nav-selector` from root). */
@@ -95,6 +95,7 @@ export const navigationMenuPositionerLayoutClasses = [
   'max-w-[min(var(--available-width,100vw),100vw)]'
 ]
 
-export const navigationMenuContentPaddingClasses = 'p-[var(--spacing-4)]'
+export const navigationMenuContentPaddingClasses = 'p-spacing-elements-md'
 
-export const navigationMenuOverlineClasses = 'mb-[var(--spacing-3)] px-[var(--spacing-3)]'
+export const navigationMenuOverlineClasses =
+  'mb-[var(--spacing-elements-sm)] px-[var(--spacing-elements-sm)]'
