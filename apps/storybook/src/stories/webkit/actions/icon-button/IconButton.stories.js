@@ -1,10 +1,7 @@
-import { ref } from 'vue'
 import IconButton from '@aziontech/webkit/actions/icon-button'
 
-const kinds = ['primary', 'secondary', 'outlined', 'transparent']
-const sizes = ['large', 'medium', 'small']
-
-export default {
+/** @type {import('@storybook/vue3').Meta<typeof IconButton>} */
+const meta = {
   title: 'Webkit/Actions/Icon Button',
   component: IconButton,
   tags: ['autodocs'],
@@ -12,187 +9,182 @@ export default {
     layout: 'padded',
     backgrounds: {
       default: 'dark'
+    },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
+    docs: {
+      description: {
+        component:
+          'Interactive icon-only control for user actions. Requires an accessible label and supports loading state and link rendering when `href` is set.'
+      }
     }
   },
   argTypes: {
     icon: {
       control: 'text',
-      description: 'PrimeIcons class (e.g. pi pi-plus)'
+      description: 'PrimeIcons class for the leading/trailing icon.',
+      table: { category: 'props', type: { summary: 'string' } }
     },
     ariaLabel: {
       control: 'text',
-      description: 'Accessible label for the icon-only button'
+      description: 'Accessible name for icon-only controls.',
+      table: { category: 'props', type: { summary: 'string' } }
     },
     kind: {
       control: 'select',
-      options: kinds,
-      description: 'Visual variant (Figma Kind)'
+      options: ['primary', 'secondary', 'outlined', 'transparent'],
+      description: 'Visual variant.',
+      table: {
+        category: 'props',
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'transparent'" },
+        defaultValue: { summary: "'primary'" }
+      }
     },
     size: {
       control: 'select',
-      options: sizes,
-      description: 'Button size'
+      options: ['small', 'medium', 'large'],
+      description: 'Size token; affects height, padding, and typography.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'large'" }
+      }
     },
     disabled: {
       control: 'boolean',
-      description: 'Disabled state'
+      description: 'Disables interaction and applies disabled tokens.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     loading: {
       control: 'boolean',
-      description: 'Loading state (shows spinner, blocks interaction)'
+      description: 'Shows loading state and disables activation.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     href: {
       control: 'text',
-      description: 'When set, renders as an anchor'
+      description: 'When set, renders as a link (`<a>`).',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     target: {
       control: 'select',
       options: ['_self', '_blank'],
-      description: 'Link target when href is set'
+      description: 'Link target when `href` is set.',
+      table: {
+        category: 'props',
+        type: { summary: "'_blank' | '_self'" },
+        defaultValue: { summary: "'_self'" }
+      }
+    },
+    onClick: {
+      action: 'click',
+      description: 'Emitted when the button is activated.',
+      table: { category: 'events', type: { summary: 'MouseEvent' } }
     }
-  }
-}
-
-export const Default = {
+  },
   args: {
     icon: 'pi pi-plus',
     ariaLabel: 'Add',
     kind: 'primary',
     size: 'large',
-    disabled: false
-  },
-  render: (args) => ({
-    components: { IconButton },
-    setup() {
-      return { args }
-    },
-    template: `
-        <IconButton v-bind="args" />
-    `
-  })
-}
-
-export const Loading = {
-  render: () => ({
-    components: { IconButton },
-    setup() {
-      const loading = ref(false)
-
-      const handleClick = () => {
-        if (loading.value) return
-
-        loading.value = true
-        window.setTimeout(() => {
-          loading.value = false
-        }, 2000)
-      }
-
-      return { loading, handleClick }
-    },
-    template: `
-      <IconButton
-        icon="pi pi-check"
-        aria-label="Save"
-        kind="primary"
-        size="large"
-        :loading="loading"
-        @click="handleClick"
-      />
-    `
-  })
-}
-
-export const AsLink = {
-  args: {
-    icon: 'pi pi-external-link',
-    ariaLabel: 'Open link',
-    kind: 'transparent',
-    size: 'small',
-    href: '#',
+    disabled: false,
+    loading: false,
+    href: '',
     target: '_self'
+  }
+}
+
+export default meta
+
+const Template = (args) => ({
+  components: { IconButton },
+  setup() {
+    return { args }
   },
-  render: (args) => ({
-    components: { IconButton },
-    setup() {
-      return { args }
-    },
-    template: `
-        <IconButton v-bind="args" />
-    `
-  })
+  template: '<IconButton v-bind="args" />'
+})
+
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Default = {
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Default primary icon button at large size.' } }
+  }
 }
 
-export const Sizes = {
-  render: () => ({
-    components: { IconButton },
-    setup() {
-      return { sizes }
-    },
-    template: `
-      <div class="flex flex-wrap items-end gap-4">
-        <IconButton
-          v-for="size in sizes"
-          :key="size"
-          :size="size"
-          icon="pi pi-plus"
-          aria-label="Add"
-          kind="primary"
-        />
-      </div>
-    `
-  })
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Primary = {
+  args: { kind: 'primary', icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Primary kind variant.' } }
+  }
 }
 
-export const VariantMatrix = {
-  render: () => ({
-    components: { IconButton },
-    setup() {
-      return { kinds }
-    },
-    template: `
-      <div class="bg-[var(--bg-canvas)] p-8 rounded-lg flex flex-col gap-8">
-        <section>
-          <h3 class="text-[var(--text-default)] text-body-sm font-semibold mb-4">Default</h3>
-          <div class="flex flex-wrap gap-4">
-            <IconButton
-              v-for="kind in kinds"
-              :key="kind + '-default'"
-              :kind="kind"
-              size="large"
-              icon="pi pi-plus"
-              aria-label="Add"
-            />
-          </div>
-        </section>
-        <section>
-          <h3 class="text-[var(--text-default)] text-body-sm font-semibold mb-4">Disabled</h3>
-          <div class="flex flex-wrap gap-4">
-            <IconButton
-              v-for="kind in kinds"
-              :key="kind + '-disabled'"
-              :kind="kind"
-              size="large"
-              icon="pi pi-plus"
-              aria-label="Add"
-              disabled
-            />
-          </div>
-        </section>
-        <section>
-          <h3 class="text-[var(--text-default)] text-body-sm font-semibold mb-4">Loading</h3>
-          <div class="flex flex-wrap gap-4">
-            <IconButton
-              v-for="kind in kinds"
-              :key="kind + '-loading'"
-              :kind="kind"
-              size="large"
-              icon="pi pi-plus"
-              aria-label="Add"
-              loading
-            />
-          </div>
-        </section>
-      </div>
-    `
-  })
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Secondary = {
+  args: { kind: 'secondary', icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Secondary kind variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Outlined = {
+  args: { kind: 'outlined', icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Outlined kind variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Transparent = {
+  args: { kind: 'transparent', icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Transparent kind variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Small = {
+  args: { size: 'small', icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Small size variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Medium = {
+  args: { size: 'medium', icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Medium size variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Large = {
+  args: { size: 'large', icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Large size variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
+export const Disabled = {
+  args: { disabled: true, icon: 'pi pi-plus', ariaLabel: 'Add' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Disabled state.' } }
+  }
 }

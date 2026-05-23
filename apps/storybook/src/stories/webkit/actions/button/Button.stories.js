@@ -1,10 +1,7 @@
-import { ref } from 'vue'
 import Button from '@aziontech/webkit/actions/button'
 
-const kinds = ['primary', 'secondary', 'outlined', 'text']
-const sizes = ['large', 'medium', 'small']
-
-export default {
+/** @type {import('@storybook/vue3').Meta<typeof Button>} */
+const meta = {
   title: 'Webkit/Actions/Button',
   component: Button,
   tags: ['autodocs'],
@@ -12,212 +9,182 @@ export default {
     layout: 'padded',
     backgrounds: {
       default: 'dark'
+    },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
+    docs: {
+      description: {
+        component:
+          'Interactive control for user actions. Supports label text, optional icon, loading state, and link rendering when `href` is set.'
+      }
     }
   },
   argTypes: {
     label: {
       control: 'text',
-      description: 'Button label text'
+      description: 'Visible label text.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     kind: {
       control: 'select',
-      options: kinds,
-      description: 'Visual variant (Figma Kind)'
+      options: ['primary', 'secondary', 'outlined', 'text'],
+      description: 'Visual variant.',
+      table: {
+        category: 'props',
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text'" },
+        defaultValue: { summary: "'primary'" }
+      }
     },
     size: {
       control: 'select',
-      options: sizes,
-      description: 'Button size'
+      options: ['small', 'medium', 'large'],
+      description: 'Size token; affects height, padding, and typography.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'large'" }
+      }
     },
     disabled: {
       control: 'boolean',
-      description: 'Disabled state'
+      description: 'Disables interaction and applies disabled tokens.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     loading: {
       control: 'boolean',
-      description: 'Loading state (shows spinner, blocks interaction)'
+      description: 'Shows loading state and disables activation.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     icon: {
       control: 'text',
-      description: 'PrimeIcons class (e.g. pi pi-arrow-right)'
+      description: 'PrimeIcons class for the leading/trailing icon.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     href: {
       control: 'text',
-      description: 'When set, renders as an anchor'
+      description: 'When set, renders as a link (`<a>`).',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     target: {
       control: 'select',
       options: ['_self', '_blank'],
-      description: 'Link target when href is set'
+      description: 'Link target when `href` is set.',
+      table: {
+        category: 'props',
+        type: { summary: "'_blank' | '_self'" },
+        defaultValue: { summary: "'_self'" }
+      }
+    },
+    onClick: {
+      action: 'click',
+      description: 'Emitted when the button is activated.',
+      table: { category: 'events', type: { summary: 'MouseEvent' } }
     }
+  },
+  args: {
+    label: 'Button',
+    kind: 'primary',
+    size: 'large',
+    disabled: false,
+    loading: false,
+    icon: '',
+    href: '',
+    target: '_self'
   }
 }
 
+export default meta
+
+const Template = (args) => ({
+  components: { Button },
+  setup() {
+    return { args }
+  },
+  template: '<Button v-bind="args" />'
+})
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
 export const Default = {
-  args: {
-    label: 'Button',
-    kind: 'primary',
-    size: 'large',
-    disabled: false
-  },
-  render: (args) => ({
-    components: { Button },
-    setup() {
-      return { args }
-    },
-    template: `
-        <Button v-bind="args" />
-    `
-  })
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Default primary button at large size.' } }
+  }
 }
 
-export const Loading = {
-  render: () => ({
-    components: { Button },
-    setup() {
-      const loading = ref(false)
-
-      const handleClick = () => {
-        if (loading.value) return
-
-        loading.value = true
-        window.setTimeout(() => {
-          loading.value = false
-        }, 2000)
-      }
-
-      return { loading, handleClick }
-    },
-    template: `
-      <Button
-        label="Save"
-        kind="primary"
-        size="large"
-        :loading="loading"
-        @click="handleClick"
-      />
-    `
-  })
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Primary = {
+  args: { kind: 'primary', label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Primary kind variant.' } }
+  }
 }
 
-export const WithIcon = {
-  args: {
-    label: 'Button',
-    kind: 'primary',
-    size: 'large',
-    icon: 'pi pi-arrow-right'
-  },
-  render: (args) => ({
-    components: { Button },
-    setup() {
-      return { args }
-    },
-    template: `
-        <Button v-bind="args" />
-    `
-  })
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Secondary = {
+  args: { kind: 'secondary', label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Secondary kind variant.' } }
+  }
 }
 
-export const AsLink = {
-  args: {
-    label: 'Learn more',
-    kind: 'text',
-    size: 'small',
-    href: '#',
-    target: '_self'
-  },
-  render: (args) => ({
-    components: { Button },
-    setup() {
-      return { args }
-    },
-    template: `
-        <Button v-bind="args" />
-    `
-  })
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Outlined = {
+  args: { kind: 'outlined', label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Outlined kind variant.' } }
+  }
 }
 
-export const Sizes = {
-  render: () => ({
-    components: { Button },
-    setup() {
-      return { sizes }
-    },
-    template: `
-      <div class="flex flex-wrap items-end gap-4">
-        <Button
-          size="large"
-          label="Large"
-          kind="primary"
-          class="!min-w-0 w-fit"
-        />
-        <Button
-          size="medium"
-          label="Medium"
-          kind="primary"
-          class="!min-w-0 w-fit"
-        />
-        <Button
-          size="small"
-          label="Small"
-          kind="primary"
-          class="!min-w-0 w-fit"
-        />
-      </div>
-    `
-  })
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Text = {
+  args: { kind: 'text', label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Text kind variant.' } }
+  }
 }
 
-export const VariantMatrix = {
-  render: () => ({
-    components: { Button },
-    setup() {
-      return { kinds }
-    },
-    template: `
-      <div class="bg-[var(--bg-canvas)] p-8 rounded-lg flex flex-col gap-8">
-        <section>
-          <h3 class="text-[var(--text-default)] text-body-sm font-semibold mb-4">Default</h3>
-          <div class="flex flex-wrap gap-4">
-            <Button
-              v-for="kind in kinds"
-              :key="kind + '-default'"
-              :kind="kind"
-              size="large"
-              label="Button"
-              class="!min-w-0 w-fit"
-            />
-          </div>
-        </section>
-        <section>
-          <h3 class="text-[var(--text-default)] text-body-sm font-semibold mb-4">Disabled</h3>
-          <div class="flex flex-wrap gap-4">
-            <Button
-              v-for="kind in kinds"
-              :key="kind + '-disabled'"
-              :kind="kind"
-              size="large"
-              label="Button"
-              disabled
-              class="!min-w-0 w-fit"
-            />
-          </div>
-        </section>
-        <section>
-          <h3 class="text-[var(--text-default)] text-body-sm font-semibold mb-4">Loading</h3>
-          <div class="flex flex-wrap gap-4">
-            <Button
-              v-for="kind in kinds"
-              :key="kind + '-loading'"
-              :kind="kind"
-              size="large"
-              label="Button"
-              loading
-              class="!min-w-0 w-fit"
-            />
-          </div>
-        </section>
-      </div>
-    `
-  })
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Small = {
+  args: { size: 'small', label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Small size variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Medium = {
+  args: { size: 'medium', label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Medium size variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Large = {
+  args: { size: 'large', label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Large size variant.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Disabled = {
+  args: { disabled: true, label: 'Button' },
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Disabled state.' } }
+  }
 }
