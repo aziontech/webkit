@@ -7,7 +7,7 @@
 
 <template>
   <svg
-    class="webkit-spinner shrink-0"
+    class="shrink-0 animate-spin motion-reduce:transition-none motion-reduce:transform-none motion-reduce:animate-none"
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -30,15 +30,3 @@
     />
   </svg>
 </template>
-
-<style scoped>
-  .webkit-spinner {
-    animation: webkit-spinner-rotate 0.75s linear infinite;
-  }
-
-  @keyframes webkit-spinner-rotate {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-</style>

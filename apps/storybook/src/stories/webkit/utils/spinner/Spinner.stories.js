@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          'Loading indicator used by Webkit action components. Default size is 14px (`size-3.5`); color inherits `currentColor` from the parent.'
+          'Loading indicator used by Webkit action components. Size via theme `size-*` scale (e.g. `size-4` for large buttons); color inherits `currentColor` from the parent.'
       }
     }
   }
@@ -22,7 +22,7 @@ export const Sizes = {
   render: () => ({
     components: { Spinner },
     template: `
-      <Spinner class="size-3.5 text-[var(--text-default)]" />
+      <Spinner class="size-4 text-[var(--text-default)]" />
     `
   })
 }
