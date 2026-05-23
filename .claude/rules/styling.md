@@ -13,24 +13,24 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 ```vue
 <!-- DO NOT DO THIS -->
 <script setup lang="ts">
-const sharedClasses = ['flex', 'items-center', 'transition-colors', /* ... */]
-const kindClasses: Record<Kind, string> = {
-  primary: 'bg-[var(--primary)] text-[var(--primary-contrast)]',
-  secondary: 'bg-[var(--secondary)] text-[var(--secondary-contrast)]',
-  outlined: 'border border-[var(--border-default)]',
-  text: 'bg-transparent'
-}
-const sizeClasses: Record<Size, string> = {
-  small: 'h-7 px-[var(--spacing-2)] text-button-md',
-  medium: 'h-8 px-[var(--spacing-3)] text-button-md',
-  large: 'h-10 px-[var(--spacing-4)] text-button-lg'
-}
-const rootClasses = computed(() => [
-  sharedClasses,
-  kindClasses[props.kind],
-  sizeClasses[props.size],
-  attrs.class
-])
+  const sharedClasses = ['flex', 'items-center', 'transition-colors' /* ... */]
+  const kindClasses: Record<Kind, string> = {
+    primary: 'bg-[var(--primary)] text-[var(--primary-contrast)]',
+    secondary: 'bg-[var(--secondary)] text-[var(--secondary-contrast)]',
+    outlined: 'border border-[var(--border-default)]',
+    text: 'bg-transparent'
+  }
+  const sizeClasses: Record<Size, string> = {
+    small: 'h-7 px-[var(--spacing-2)] text-button-md',
+    medium: 'h-8 px-[var(--spacing-3)] text-button-md',
+    large: 'h-10 px-[var(--spacing-4)] text-button-lg'
+  }
+  const rootClasses = computed(() => [
+    sharedClasses,
+    kindClasses[props.kind],
+    sizeClasses[props.size],
+    attrs.class
+  ])
 </script>
 
 <template>
@@ -42,8 +42,12 @@ const rootClasses = computed(() => [
 
 ```vue
 <style scoped>
-.button { /* never */ }
-.button--primary { /* never */ }
+  .button {
+    /* never */
+  }
+  .button--primary {
+    /* never */
+  }
 </style>
 ```
 
@@ -55,30 +59,30 @@ const rootClasses = computed(() => [
 
 ```vue
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-defineOptions({ name: 'Button', inheritAttrs: false })
+  defineOptions({ name: 'Button', inheritAttrs: false })
 
-type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
-type ButtonSize = 'small' | 'medium' | 'large'
+  type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+  type ButtonSize = 'small' | 'medium' | 'large'
 
-interface Props {
-  /** Visual variant. */
-  kind?: ButtonKind
-  /** Size token. */
-  size?: ButtonSize
-  /** Disables interaction. */
-  disabled?: boolean
-}
+  interface Props {
+    /** Visual variant. */
+    kind?: ButtonKind
+    /** Size token. */
+    size?: ButtonSize
+    /** Disables interaction. */
+    disabled?: boolean
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  kind: 'primary',
-  size: 'large',
-  disabled: false
-})
+  const props = withDefaults(defineProps<Props>(), {
+    kind: 'primary',
+    size: 'large',
+    disabled: false
+  })
 
-const attrs = useAttrs()
-const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-button')
+  const attrs = useAttrs()
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-button')
 </script>
 
 <template>
@@ -126,17 +130,19 @@ Some components let the consumer override internal token choices (e.g. `<Card cl
 
 ```vue
 <script setup lang="ts">
-import { cn } from '@aziontech/webkit/utils/cn'
-const attrs = useAttrs()
+  import { cn } from '@aziontech/webkit/utils/cn'
+  const attrs = useAttrs()
 </script>
 
 <template>
   <div
     :data-testid="testId"
-    :class="cn(
-      'rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-4)]',
-      attrs.class as string
-    )"
+    :class="
+      cn(
+        'rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-4)]',
+        attrs.class as string
+      )
+    "
   />
 </template>
 ```
@@ -156,16 +162,79 @@ The same rule applies to each sub-component. Each renders its own root with its 
 - No utility classes declared in a `tailwind.config.*` plugin specifically for one component. Component utilities live in [`@aziontech/theme`](../../packages/theme/) (`semantic/*` if reusable across components), or as inline composition on the root.
 - No `:class="[a, b, c]"` arrays when a flat string + `data-*` would do.
 
+## Vue SFC pitfall — no backticks inside `<template>` `:class`
+
+The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline template literals from the template:
+
+```vue
+<!-- ❌ Breaks Vite / Storybook: vite:vue "Element is missing end tag" (often last line, high column) -->
+<button
+  :class="
+    cn(
+      `
+      data-[kind=primary]:bg-[var(--primary)]
+      `,
+      attrs.class
+    )
+  "
+/>
+```
+
+**Symptoms**
+
+| Signal                                | Meaning                                                 |
+| ------------------------------------- | ------------------------------------------------------- |
+| `Plugin: vite:vue`                    | SFC compile failed (not runtime)                        |
+| `Element is missing end tag`          | HTML tokenizer lost sync inside a bound attribute       |
+| Line = last line of file, column ≫ 80 | Error position is end-of-template, not the real mistake |
+
+**Fix (pick one)**
+
+1. **Plain multiline `class` on the root** (no JS quotes) + optional `:class="attrs.class"` for consumer overrides.
+2. **Single-quoted `ROOT_CLASS` in `<script setup>`** + `:class="cn(ROOT_CLASS, attrs.class)"` — one flat literal string, not a `kindClasses` / `sizeClasses` map.
+
+`pnpm webkit:lint` and `vue-tsc` may still pass; only the SFC template compiler (Storybook dev, `storybook:build`) catches this.
+
+## Vue SFC pitfall — no HTML-like tags in `<script>` comments
+
+Storybook registers **two** `@vitejs/plugin-vue` instances (`@storybook/vue3-vite` + `viteFinal` in `apps/storybook/.storybook/main.js`). The second pass may call `compiler-sfc` `parse()` on **already-compiled** module code. Any substring that looks like HTML in that output breaks the parse.
+
+```ts
+// ❌ Survives compileScript and breaks the second vite:vue pass
+/** When set, renders as a link (`<a>`). */
+
+// ✅ Plain language — no angle brackets in script comments
+/** When set, renders as an anchor link. */
+```
+
+**Symptoms:** same as above (`vite:vue` / `Element is missing end tag` on the `.vue` path, often line past EOF). `compiler-sfc` `parse()` on the raw `.vue` file succeeds; `parse(compiledJs)` fails.
+
+**Debug checklist**
+
+| Step | Command / action                                                                                                                    |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Read Storybook terminal: `Plugin: vite:vue` + `Element is missing end tag`                                                          |
+| 2    | Confirm raw SFC parses: `node -e "require('vue/compiler-sfc').parse(fs.readFileSync('…vue','utf8'),{filename:'…'})"` → `errors: []` |
+| 3    | Grep script for `` `<…>` ``, `<template`, `</…>` in comments and JSDoc                                                              |
+| 4    | Remove backtick multiline literals from `<template> :class="cn(\`…\`)"`(move class string to script`ROOT_CLASS`)                    |
+| 5    | Restart `pnpm storybook:dev` after fixing (clear stale HMR descriptor if needed)                                                    |
+
 ## When you legitimately need conditional styling
 
 Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not in JS:
 
 ```vue
 <!-- ✅ Loading state -->
-<button :data-loading="loading || null" class="data-[loading]:cursor-wait data-[loading]:opacity-80" />
+<button
+  :data-loading="loading || null"
+  class="data-[loading]:cursor-wait data-[loading]:opacity-80"
+/>
 
 <!-- ✅ Open/closed (overlays) -->
-<div :data-state="open ? 'open' : 'closed'" class="data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out" />
+<div
+  :data-state="open ? 'open' : 'closed'"
+  class="data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out"
+/>
 
 <!-- ❌ Don't do this -->
 <button :class="loading ? 'cursor-wait opacity-80' : ''" />

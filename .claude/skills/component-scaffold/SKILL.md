@@ -40,41 +40,41 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 
    ```vue
    <script setup lang="ts">
-   import { computed, useAttrs } from 'vue'
+     import { computed, useAttrs } from 'vue'
 
-   defineOptions({ name: 'PascalName', inheritAttrs: false })
+     defineOptions({ name: 'PascalName', inheritAttrs: false })
 
-   // Variant types — exported for VariantProps
-   export type PascalNameKind = 'primary' | 'secondary'
-   export type PascalNameSize = 'small' | 'medium' | 'large'
+     // Variant types — exported for VariantProps
+     export type PascalNameKind = 'primary' | 'secondary'
+     export type PascalNameSize = 'small' | 'medium' | 'large'
 
-   interface Props {
-     /** From spec */
-     kind?: PascalNameKind
-     /** From spec */
-     size?: PascalNameSize
-     /** From spec */
-     disabled?: boolean
-   }
+     interface Props {
+       /** From spec */
+       kind?: PascalNameKind
+       /** From spec */
+       size?: PascalNameSize
+       /** From spec */
+       disabled?: boolean
+     }
 
-   const props = withDefaults(defineProps<Props>(), {
-     kind: 'primary',
-     size: 'large',
-     disabled: false
-   })
+     const props = withDefaults(defineProps<Props>(), {
+       kind: 'primary',
+       size: 'large',
+       disabled: false
+     })
 
-   const emit = defineEmits<{
-     click: [event: MouseEvent]
-   }>()
+     const emit = defineEmits<{
+       click: [event: MouseEvent]
+     }>()
 
-   defineSlots<{
-     default(): unknown
-   }>()
+     defineSlots<{
+       default(): unknown
+     }>()
 
-   const attrs = useAttrs()
-   const testId = computed<string>(
-     () => (attrs['data-testid'] as string | undefined) ?? 'category-name'
-   )
+     const attrs = useAttrs()
+     const testId = computed<string>(
+       () => (attrs['data-testid'] as string | undefined) ?? 'category-name'
+     )
    </script>
 
    <template>
@@ -109,12 +109,18 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
    <template>
      <div
        :data-testid="testId"
-       :class="cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-4)]', attrs.class)"
+       :class="
+         cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-4)]', attrs.class)
+       "
      />
    </template>
    ```
 
    Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const kindClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
+
+   **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag` and Storybook/Vite fail to load the story. Put the flat class string in `<script setup>` as `const ROOT_CLASS = '...'` and bind `:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
+
+   **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — Storybook runs two `@vitejs/plugin-vue` passes; the second re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
 
 3. **(Composition only) Write each sub-component.** Each sub-component:
    - `defineOptions({ name: '<PascalRoot><PascalPart>', inheritAttrs: false })`.
@@ -182,10 +188,8 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 - `<style>` blocks are forbidden; **never** declare component-local `@keyframes`.
 - For data-state-driven animations, use Tailwind variants on the same element:
   ```html
-  data-[state=open]:animate-popup-scale-in
-  data-[state=closed]:animate-popup-scale-out
-  motion-reduce:data-[state=open]:animate-none
-  motion-reduce:data-[state=closed]:animate-none
+  data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out
+  motion-reduce:data-[state=open]:animate-none motion-reduce:data-[state=closed]:animate-none
   ```
 - Loading indicators reuse `@aziontech/webkit/utils/spinner` when present (see the reuse-audit output) and carry `aria-hidden="true"` + `motion-reduce:animate-none`.
 - Set `--popup-origin` per instance when using `animate-popup-scale-*`, anchored to the trigger:

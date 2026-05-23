@@ -42,7 +42,7 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | ------------------------------------------------------------------ | ---------------------------------------- |
 | `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                   |
 | `text-heading-2xl` … `text-heading-sm`                             | Headings                                 |
-| `text-body-lg` … `text-body-xss`                                   | Body copy                                |
+| `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in) |
 | `text-button-lg` / `text-button-md`                                | Button labels                            |
@@ -227,11 +227,14 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
 2. **Spacing** — `padding` / `margin` / `gap` via `var(--spacing-*)` (or semantic spacing utilities).
-3. **Width** — `max-w-[var(--container-max-width)]` or `max-w-[var(--container-<size>)]`.
-4. **Radius** — `rounded-[var(--shape-*)]`.
-5. **Shadow** — `shadow-[var(--shadow-*)]` from `primitives/effects/shadow.js` when the surface elevates.
-6. **Color** — `bg-[var(--…)]`, `text-[var(--…)]`, `border-[var(--…)]`.
-7. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
+3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
+4. **Container** — Page sections: `max-w-[var(--container-max-width)]` and `.px-container` / `.py-container` from `containers.data.js`. Fixed content (cards, modals, columns): `max-w-[var(--container-<size>)]` (`3xs` … `7xl` in `primitives/shape/container.js`).
+5. **Radius** — `rounded-[var(--shape-*)]`.
+6. **Shadow** — `shadow-[var(--shadow-*)]` from `primitives/effects/shadow.js` when the surface elevates.
+7. **Color** — `bg-[var(--…)]`, `text-[var(--…)]`, `border-[var(--…)]`.
+8. **Interactive states** — `::before` / `::after` ghost layers for `--bg-hover` / `--bg-active`; `focus-visible:ring-2 focus-visible:ring-offset-1`; `duration-fast-02` + `ease-productive-*` (see § Interactive states).
+9. **Motion** — `duration` / `curve` from `animate.js` only; `data-state` overlays use a `presets/transitions.ts` module (see § Motion — reference: Drawer).
+10. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
 
 ---
 
@@ -241,35 +244,139 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 
 Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. Defined in `packages/theme/src/tokens/semantic/animations.js`.
 
-| Utility | Behavior | Duration · Easing |
-|---|---|---|
-| `animate-fade-in` | opacity 0 → 1 | 220ms · `ease-in-out` |
-| `animate-fade-out` | opacity 1 → 0 | 220ms · `ease-in-out` |
-| `animate-slide-down` | height 0 → auto | 220ms · `ease-in-out` |
-| `animate-popup-scale-in` | scale 0.95 → 1 + fade in | 150ms · `cubic-bezier(0.39, 0.57, 0.56, 1)` (origin: `var(--popup-origin, center)`) |
-| `animate-popup-scale-out` | scale 1 → 0.95 + fade out | 110ms · `cubic-bezier(0.55, 0.09, 0.68, 0.53)` |
-| `animate-blink` | opacity 1/0 cycle | 1s · `step-end` infinite |
-| `animate-highlight-fade` | row-flash highlight | `ease-in forwards` |
+| Utility                   | Behavior                  | Duration · Easing                                                             |
+| ------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
+| `animate-fade-in`         | opacity 0 → 1             | 220ms · `ease-in-out`                                                         |
+| `animate-fade-out`        | opacity 1 → 0             | 220ms · `ease-in-out`                                                         |
+| `animate-slide-down`      | height 0 → auto           | 220ms · `ease-in-out`                                                         |
+| `animate-popup-scale-in`  | scale 0.95 → 1 + fade in  | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
+| `animate-popup-scale-out` | scale 1 → 0.95 + fade out | `fast-02` · `productive-exit`                                                 |
+| `animate-blink`           | opacity 1/0 cycle         | 1s · `step-end` infinite                                                      |
+| `animate-highlight-fade`  | row-flash highlight       | `ease-in forwards`                                                            |
 
 ### Easing primitives — `primitives/animations/ease.js`
 
-| Token | Curve | Use when |
-|---|---|---|
-| `ease.in` | `cubic-bezier(0.4, 0, 1, 1)` | Element accelerating out (exit) |
-| `ease.out` | `cubic-bezier(0, 0, 0.2, 1)` | Element decelerating in (enter) |
-| `ease.in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Symmetric state changes |
+Generic curves for simple Tailwind transitions when no productive/expressive pair is required:
 
-### Transitions
+| Token         | Tailwind utility | Use when                |
+| ------------- | ---------------- | ----------------------- |
+| `ease.in`     | `ease-in`        | Accelerating out (exit) |
+| `ease.out`    | `ease-out`       | Decelerating in (enter) |
+| `ease.in-out` | `ease-in-out`    | Symmetric state changes |
 
-For state transitions (hover, focus, disabled, `data-state` changes), use Tailwind's `transition-*` utilities with explicit duration tokens. Default **150ms** for color/opacity, **220ms** for transform/layout:
+Productive and expressive curves live in `animate.js` — see § Motion primitives below.
 
-```html
-transition-colors duration-150 ease-out
-transition-transform duration-220 ease-in-out
-transition-opacity duration-150 motion-reduce:transition-none
+### Motion primitives — `primitives/animations/animate.js`
+
+**Source of truth** for durations and motion curves. Compiled to `--duration-*` / `--curve-*` on `:root` and to Tailwind `duration-*` / `ease-*` utilities via `build-tokens.mjs`.
+
+**Durations**
+
+| Token         | Value   | Typical use                              |
+| ------------- | ------- | ---------------------------------------- |
+| `fast-01`     | `70ms`  | Micro-feedback                           |
+| `fast-02`     | `110ms` | Hover / active ghost layers, popup close |
+| `moderate-01` | `150ms` | Popup open, overlay open (drawer)        |
+| `moderate-02` | `240ms` | General color/layout transitions         |
+| `slow-01`     | `400ms` | Panel close (drawer), overlay open       |
+| `slow-02`     | `700ms` | Large surface enter (drawer panel open)  |
+
+**Curves**
+
+| Token                 | Tailwind utility           | Typical use                                    |
+| --------------------- | -------------------------- | ---------------------------------------------- |
+| `productive-entrance` | `ease-productive-entrance` | UI chrome entering (hover in, overlay open)    |
+| `productive-exit`     | `ease-productive-exit`     | UI chrome exiting (hover out, overlay close)   |
+| `expressive-entrance` | `ease-expressive-entrance` | Prominent surface entering (drawer panel open) |
+| `expressive-exit`     | `ease-expressive-exit`     | Prominent surface exiting (drawer panel close) |
+
+Named keyframe bundles in the same file (`popup-scale-in`, `popup-scale-out`, …) already pair these tokens — do not duplicate their duration/curve literals elsewhere.
+
+### Motion — reference: Drawer (`presets/transitions.ts`)
+
+Canonical pattern for **`data-state`** / open-close motion. Read values **only** from `animate.js`; never hardcode `110ms`, `400ms`, or raw `cubic-bezier(...)` in components.
+
+**Reference:** `packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts`
+
+1. **Import primitives** — `import { curve, duration } from '…/animate.js'`.
+2. **Declare a preset map** — per target (`panel`, `overlay`, …) and phase (`open`, `close`), pick `duration[…]` + `curve[…]`.
+3. **Expose a style helper** — build inline `transition` for the active state (Tailwind cannot emit dynamic `duration-[…]` per `data-state`).
+4. **Keep transform/opacity in classes** — only timing goes inline; always add `motion-reduce:transition-none` (and `motion-reduce:transform-none` when transforming).
+5. **Defer unmount** — export the longest **close** duration in ms (see `DRAWER_EXIT_MS`) so the portal waits for exit motion to finish.
+
+**Drawer preset map** (copy the shape for Dialog, Sheet, etc.):
+
+| Target    | Phase | Duration  | Curve                 |
+| --------- | ----- | --------- | --------------------- |
+| `panel`   | open  | `slow-02` | `expressive-entrance` |
+| `panel`   | close | `slow-01` | `expressive-exit`     |
+| `overlay` | open  | `slow-01` | `productive-entrance` |
+| `overlay` | close | `fast-02` | `productive-exit`     |
+
+```ts
+import { curve, duration } from '…/animate.js'
+
+export const getDrawerTransitionStyle = (state: 'open' | 'closed', target: 'panel' | 'overlay') => {
+  const phase = state === 'open' ? 'open' : 'close'
+  const motion = drawerMotion[target][phase] // { duration, curve } from animate.js
+  const property = target === 'panel' ? 'transform' : 'opacity'
+  return { transition: `${property} ${motion.duration} ${motion.curve}` }
+}
 ```
 
-**Reduced motion is mandatory** for every transform and motion-bearing transition:
+```html
+<!-- panel: translate classes on root; timing via :style -->
+<div
+  :style="getDrawerTransitionStyle(state, 'panel')"
+  class="data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0 motion-reduce:transition-none motion-reduce:transform-none"
+/>
+```
+
+**When to use which pattern**
+
+| Situation                                                    | Approach                                                        |
+| ------------------------------------------------------------ | --------------------------------------------------------------- |
+| Static pseudo-states (`hover:`, `active:`, `focus-visible:`) | Tailwind: `duration-fast-02`, `ease-productive-entrance`, …     |
+| `data-state` / Vue `<Transition>` / per-phase open vs close  | `presets/transitions.ts` + inline `transition` (Drawer pattern) |
+| Catalogued keyframe entrances                                | Named `animate-*` utilities (§ Animations table)                |
+
+### Interactive states (hover, active, focus-visible)
+
+Use semantic surface tokens from `theme/background.js` — never swap the root `background-color` on hover/active when the base fill must stay (brand buttons, tinted surfaces).
+
+| State             | Token          | How to apply                                       |
+| ----------------- | -------------- | -------------------------------------------------- |
+| **hover**         | `--bg-hover`   | `::before` ghost layer                             |
+| **active**        | `--bg-active`  | `::after` ghost layer                              |
+| **focus-visible** | `--ring-color` | `ring-2` + `ring-offset-1` on the interactive root |
+
+**Ghost layers** — stack overlays with pseudo-elements so you do not add wrapper `<div>`s only for state fills. Root stays `relative`; both layers are `pointer-events-none`, `absolute`, `inset-0`, `rounded-[inherit]`, start at `opacity-0`, and fade in on state.
+
+```html
+relative before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]
+before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] after:pointer-events-none
+after:absolute after:inset-0 after:rounded-[inherit] after:bg-[var(--bg-active)] after:opacity-0
+after:content-[''] hover:before:opacity-100 active:after:opacity-100 focus-visible:outline-none
+focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1
+focus-visible:ring-offset-[var(--bg-canvas)] disabled:before:hidden disabled:after:hidden
+```
+
+Set `before:transition-opacity` / `after:transition-opacity` on the pseudo-elements (not a blanket `transition-colors` on the root).
+
+**Timing** — `duration-fast-02` + `ease-productive-entrance` on both pseudo layers (§ Motion primitives). Same tokens as `popup-scale-out` / drawer overlay close.
+
+```html
+before:transition-opacity before:duration-fast-02 before:ease-productive-entrance
+hover:before:opacity-100 after:transition-opacity after:duration-fast-02
+after:ease-productive-entrance active:after:opacity-100 motion-reduce:before:transition-none
+motion-reduce:after:transition-none
+```
+
+Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
+
+### Reduced motion
+
+Mandatory on every motion-bearing surface:
 
 ```html
 motion-reduce:transition-none motion-reduce:transform-none motion-reduce:animate-none
@@ -280,14 +387,18 @@ motion-reduce:transition-none motion-reduce:transform-none motion-reduce:animate
 For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the trigger anchor (defaults to `center`):
 
 ```html
-<div class="animate-popup-scale-in" style="--popup-origin: top right" />
+<div
+  class="animate-popup-scale-in"
+  style="--popup-origin: top right"
+/>
 ```
 
 ### Forbidden in animations
 
 - Custom `@keyframes` declared inside a component `.vue` — keyframes live in `semantic/animations.js`.
-- Hardcoded durations (`duration-[180ms]`) that don't match the catalog above.
-- Inline easing (`ease-[cubic-bezier(...)]`) — reference `ease.in` / `ease.out` / `ease.in-out`.
+- Hardcoded durations (`duration-[180ms]`, `transition: opacity 200ms`) — use `duration` from `animate.js`, Tailwind `duration-*` utilities, or a `presets/transitions.ts` helper (Drawer pattern).
+- Inline easing (`ease-[cubic-bezier(...)]`) — use `curve` from `animate.js` or `ease-productive-*` / `ease-expressive-*` / `ease.in` · `ease.out` · `ease.in-out`.
+- `data-state` / overlay motion without importing `duration` / `curve` from `animate.js` (no ad-hoc ms or bezier literals in `.vue` files).
 - Motion-bearing classes without a `motion-reduce:*` escape on the same class string.
 - Spinning / rotating decorative elements without `aria-hidden="true"`.
 - Animations longer than 5 seconds that are not pausable.
@@ -319,3 +430,4 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)
 - Per-component specs: [`../../.specs/`](../../.specs/)
+- Drawer motion preset: [`../../packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts`](../../packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts)
