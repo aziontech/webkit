@@ -34,10 +34,10 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-card-box')
 
-  const hasHeaderSlot = computed(() => Boolean(slots.header))
+  const hasHeaderSlot = computed(() => Boolean(slots['header']))
   const hasHeaderActionSlot = computed(() => Boolean(slots['header-action']))
-  const hasFooterSlot = computed(() => Boolean(slots.footer))
-  const hasContentSlot = computed(() => Boolean(slots.content))
+  const hasFooterSlot = computed(() => Boolean(slots['footer']))
+  const hasContentSlot = computed(() => Boolean(slots['content']))
 
   const showHeaderRegion = computed(
     () => hasHeaderSlot.value || hasHeaderActionSlot.value || Boolean(props.title?.trim())

@@ -8,15 +8,13 @@
     inheritAttrs: false
   })
 
-  // Component-specific dot colors per Figma Status Indicator (node 395:5596).
-  // Not mapped to semantic theme tokens by design.
-  const STATUS_DOT_COLORS = {
-    positive: '#8bc249',
-    info: '#66adff',
-    neutral: '#4d4d4d',
-    warning: '#fec111',
-    alt: '#f3652b',
-    danger: '#ff4141'
+  const STATUS_DOT_CLASSES = {
+    positive: 'bg-[var(--success-contrast)]',
+    info: 'bg-[var(--info-contrast)]',
+    neutral: 'bg-[var(--text-muted)]',
+    warning: 'bg-[var(--warning-contrast)]',
+    alt: 'bg-[var(--primary)]',
+    danger: 'bg-[var(--danger-contrast)]'
   }
 
   const props = defineProps({
@@ -38,18 +36,15 @@
 
   const attrs = useAttrs()
 
-  const fontSans = 'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]'
-
   const testId = computed(() => attrs['data-testid'] ?? 'feedback-status-indicator')
 
-  const dotColor = computed(() => STATUS_DOT_COLORS[props.status] ?? STATUS_DOT_COLORS.positive)
+  const dotClass = computed(() => STATUS_DOT_CLASSES[props.status] ?? STATUS_DOT_CLASSES.positive)
 
   const rootClass = computed(() => {
     const classes = [
-      'inline-flex items-center gap-[var(--spacing-2,0.5rem)]',
-      'px-[var(--spacing-3,0.75rem)] py-[var(--spacing-1.5,0.375rem)]',
-      'rounded-[4px]',
-      fontSans
+      'inline-flex items-center gap-[var(--spacing-2)]',
+      'px-[var(--spacing-3)] py-[var(--spacing-1.5)]',
+      'rounded-[var(--shape-elements)]'
     ]
 
     if (attrs.class) {
@@ -60,8 +55,7 @@
   })
 
   const labelClass = computed(() => [
-    'leading-none tracking-[-0.02em] whitespace-nowrap',
-    'text-[length:var(--text-label-sm,0.75rem)]',
+    'text-label-sm whitespace-nowrap',
     props.loading ? 'text-[var(--text-muted)]' : 'text-[var(--text-default)]'
   ])
 </script>
@@ -81,7 +75,7 @@
     <span
       v-else
       class="size-2.5 shrink-0 rounded-full"
-      :style="{ backgroundColor: dotColor }"
+      :class="dotClass"
       aria-hidden="true"
       :data-testid="`${testId}__dot`"
     />
