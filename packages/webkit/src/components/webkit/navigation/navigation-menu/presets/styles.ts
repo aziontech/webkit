@@ -59,6 +59,10 @@ export const navigationMenuListRootClasses = [
   'relative z-[1] m-0 flex list-none items-center gap-[var(--spacing-2)] p-0'
 ]
 
+/** Sliding highlight on root NavigationMenu.List (uses `--webkit-nav-selector` from root). */
+export const navigationMenuListSelectorClasses =
+  'pointer-events-none absolute z-0 rounded-sm bg-[var(--webkit-nav-selector)] transition-[left,top,width,height,opacity] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'
+
 export const navigationMenuIconClasses = [
   'inline-flex transition-transform duration-200 motion-reduce:transition-none',
   'data-[open]:rotate-180'

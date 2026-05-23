@@ -64,11 +64,12 @@
     'before:bg-[var(--bg-hover)] group-active:before:bg-[var(--bg-active)]'
   ]
 
-  const disabledClasses = 'pointer-events-none text-[var(--text-disabled)] [&_.link-ghost]:hidden'
+  const disabledClasses =
+    'pointer-events-none cursor-not-allowed !text-[var(--text-disabled)] [&_.link-ghost]:hidden'
 
   const sizeClasses: Record<LinkSize, string> = {
     large: 'h-10 text-button-lg',
-    medium: 'h-8 text-label-sm'
+    medium: 'h-8 text-button-md'
   }
 
   const contentClasses = 'inline-flex items-center gap-[var(--spacing-2)]'

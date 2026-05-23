@@ -74,7 +74,7 @@
     root.cancelTimers()
   }
 
-  const onPointerLeave = (event) => {
+  const onPointerLeave = (event: globalThis.PointerEvent) => {
     root.scheduleClose(createChangeEventDetails('trigger-hover', event, undefined))
   }
 </script>

@@ -53,6 +53,8 @@
   const isControlled = computed(() => props.value !== undefined)
   const controlledValue = computed(() => (isControlled.value ? (props.value ?? null) : null))
 
+  const emitBridge = emit as (event: string, ...args: unknown[]) => void
+
   const rootState = useNavigationMenuRootState(
     controlledValue,
     computed(() => props.defaultValue),
@@ -64,7 +66,7 @@
       orientation: props.orientation,
       nested: false
     },
-    emit
+    emitBridge
   )
 
   provideNavigationMenuRoot(rootState)

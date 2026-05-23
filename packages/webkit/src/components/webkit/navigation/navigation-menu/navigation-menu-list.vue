@@ -6,10 +6,10 @@
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight.js'
   import { provideNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context.js'
-  import { navigationMenuListSelectorClasses } from './presets/list-selector.js'
   import {
     navigationMenuListGroupClasses,
     navigationMenuListRootClasses,
+    navigationMenuListSelectorClasses,
     navigationMenuOverlineClasses
   } from './presets/styles'
 

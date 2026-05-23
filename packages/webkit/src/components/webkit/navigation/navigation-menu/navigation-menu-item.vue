@@ -115,7 +115,7 @@
       @click="onEntryClick"
     >
       <span
-        v-if="$slots.icon"
+        v-if="$slots['icon']"
         :class="navigationMenuEntryIconClasses"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"

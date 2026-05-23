@@ -1,5 +1,14 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    type ComputedRef,
+    inject,
+    onMounted,
+    onUnmounted,
+    ref,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import { cn } from '../../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element.js'
@@ -11,6 +20,16 @@
   import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
   import { useNavigationMenuViewportSize } from './composables/use-navigation-menu-viewport-size.js'
   import { getNavigationMenuTriggerClasses } from './presets/styles'
+
+  interface NavigationMenuItemContext {
+    itemValue: ComputedRef<string | number>
+    open: ComputedRef<boolean>
+  }
+
+  interface NavigationMenuListHighlightContext {
+    setTarget: (element: HTMLElement | null) => void
+    handleTargetPointerLeave: (event: globalThis.Event, element: HTMLElement | null) => void
+  }
 
   defineOptions({ name: 'NavigationMenuTrigger', inheritAttrs: false })
 
@@ -48,14 +67,15 @@
   )
 
   const root = useNavigationMenuRoot()
-  const listHighlight = useNavigationMenuListHighlight()
-  const itemContext = inject(NAVIGATION_MENU_ITEM_KEY, null)
+  const listHighlight =
+    useNavigationMenuListHighlight() as NavigationMenuListHighlightContext | null
+  const itemContext = inject(NAVIGATION_MENU_ITEM_KEY, null) as NavigationMenuItemContext | null
   const controlRef = ref<HTMLElement | null>(null)
 
   const isLink = computed(() => props.href != null && props.href !== '')
 
   const itemOpen = computed(() => itemContext?.open.value ?? false)
-  const itemValueResolved = computed(() => itemContext?.itemValue.value)
+  const itemValueResolved = computed(() => itemContext?.itemValue.value ?? '')
 
   const componentTag = computed(() => {
     if (props.as) {
@@ -116,7 +136,7 @@
     }
   }
 
-  const onPointerEnter = (event) => {
+  const onPointerEnter = (event: globalThis.PointerEvent) => {
     listHighlight?.setTarget(resolveElement())
 
     if (isLink.value) {
@@ -131,7 +151,7 @@
     )
   }
 
-  const onPointerLeave = (event) => {
+  const onPointerLeave = (event: globalThis.PointerEvent) => {
     listHighlight?.handleTargetPointerLeave(event, resolveElement())
 
     if (isLink.value) {
@@ -143,13 +163,20 @@
     )
   }
 
-  const onClick = (event: MouseEvent) => {
+  const onClick = (event: globalThis.MouseEvent) => {
     if (isLink.value) {
       if (!props.closeOnClick) {
         return
       }
 
-      root.setValue(null, createChangeEventDetails('link-press', event, event.currentTarget))
+      root.setValue(
+        null,
+        createChangeEventDetails(
+          'link-press',
+          event,
+          resolveHostElement(event.currentTarget as HTMLElement | null) ?? undefined
+        )
+      )
       return
     }
 

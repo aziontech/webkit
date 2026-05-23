@@ -31,8 +31,8 @@
   })
 
   const emit = defineEmits<{
-    click: [event: MouseEvent]
-    close: [event: MouseEvent]
+    click: [payload: globalThis.MouseEvent]
+    close: [payload: globalThis.MouseEvent | globalThis.KeyboardEvent]
   }>()
 
   defineSlots<{
@@ -99,7 +99,7 @@
   const closeClasses =
     'flex size-3.5 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[inherit] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]'
 
-  const activate = (event: MouseEvent) => {
+  const activate = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) {
       return
     }
@@ -108,7 +108,7 @@
     emit('click', event)
   }
 
-  const onCloseClick = (event: MouseEvent) => {
+  const onCloseClick = (event: globalThis.MouseEvent | globalThis.KeyboardEvent) => {
     event.stopPropagation()
 
     if (isDisabled.value) {
