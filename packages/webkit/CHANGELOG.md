@@ -1,3 +1,28 @@
+## [3.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.1.0...@aziontech/webkit@3.0.0) (2026-05-25)
+
+### ⚠ BREAKING CHANGES
+
+- the semanticColors() plugin export from the previous
+  structure is gone. Consumers should drop it from tailwind.config plugins —
+  the same classes are now produced via theme.extend.
+
+- refactor(theme): migrate semantic colors to native tailwind theme keys ([66505d7](https://github.com/aziontech/webkit/commit/66505d7580d81d4e64f1fb314a94b5addbd7ae65))
+
+### Features
+
+- add tailwind configuration ([ff236d4](https://github.com/aziontech/webkit/commit/ff236d47d185a437acd2afea5db234807e3e04e0))
+
+### Bug Fixes
+
+- adjust props ([5996d80](https://github.com/aziontech/webkit/commit/5996d80280b476f9de649080a579643c72c5a355))
+- adjust stories ([396c245](https://github.com/aziontech/webkit/commit/396c245b9ac014a821cda0d2699f941bbfc6f89c))
+- adjust tag component icon alignment and spacing ([1e050de](https://github.com/aziontech/webkit/commit/1e050de84b5b533297e9dbc2ca1d0424a3da5e1b))
+- CI and bump theme ([f29c1f5](https://github.com/aziontech/webkit/commit/f29c1f5d56493934c5098fc0b0b8a2442b0934a5))
+- ci pnpm version ([52c035b](https://github.com/aziontech/webkit/commit/52c035bddc7aa8cae9bf821deec30651211eff55))
+- fix CI, define version with package.json ([54a3614](https://github.com/aziontech/webkit/commit/54a3614a3ba0a6c0939ff73a40d4a7f925915665))
+- remove unused docs ([664ac3e](https://github.com/aziontech/webkit/commit/664ac3e02b2954c0465c7a0afed7e453b71b18f2))
+- rename spacing-elements-_ tokens to spacing-_ ([d28e90e](https://github.com/aziontech/webkit/commit/d28e90e421e0abed24c6e42456dcf4444ded763b))
+
 ## [2.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.0.2...@aziontech/webkit@2.1.0) (2026-05-19)
 
 ### Features
