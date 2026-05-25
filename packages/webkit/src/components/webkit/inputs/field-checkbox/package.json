@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-inputs-field-checkbox",
+  "main": "./field-checkbox.vue",
+  "module": "./field-checkbox.vue",
+  "types": "./field-checkbox.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-checkbox.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
