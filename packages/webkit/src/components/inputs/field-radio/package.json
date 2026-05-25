@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-inputs-field-radio",
+  "main": "./field-radio.vue",
+  "module": "./field-radio.vue",
+  "types": "./field-radio.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-radio.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
