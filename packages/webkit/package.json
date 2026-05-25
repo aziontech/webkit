@@ -32,7 +32,6 @@
   "dependencies": {
     "@vueuse/core": "^10.11.1",
     "clsx": "^2.1.1",
-    "motion-v": "^2.1.0",
     "primevue": "3.35.0",
     "tailwind-merge": "^3.6.0",
     "vee-validate": "^4.15.1",
@@ -226,7 +225,7 @@
     "./overlay/dropdown-menu-item": "./src/components/overlay/dropdown-menu/dropdown-menu-item.vue",
     "./overlay/dropdown-menu-separator": "./src/components/overlay/dropdown-menu/dropdown-menu-separator.vue",
     "./overlay/dropdown-menu-from-model": "./src/components/overlay/dropdown-menu/dropdown-menu-from-model.vue",
-    "./overlay/dropdown-menu-factory": "./src/components/overlay/dropdown-menu/factory.js",
+    "./overlay/dropdown-menu-factory": "./src/components/overlay/dropdown-menu/factory.ts",
     "./templates/onboarding-form": "./src/components/templates/onboarding-form/onboarding-form.vue",
     "./templates/plan-success": "./src/components/templates/plan-success/plan-success.vue",
     "./templates/platform-shell": "./src/components/templates/platform-shell/platform-shell.vue",
