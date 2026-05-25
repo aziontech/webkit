@@ -1,4 +1,5 @@
 {
+  "name": "@aziontech/webkit-inputs-box-grid-selection",
   "main": "./box-grid-selection.vue",
   "module": "./box-grid-selection.vue",
   "types": "./box-grid-selection.vue.d.ts",
