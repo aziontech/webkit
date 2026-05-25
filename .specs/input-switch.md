@@ -3,32 +3,35 @@ name: input-switch
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 163a62a5324339aff69d9b7f6478af6a014d93f5044fd9efa2ad23829e8bfc32
+spec_version: 2
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
+  node_id: 2027:1247
+checksum: aa1341a65323b931b7e05f8da735f05933747534396ce03a1f29b8aaf029642b
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-23
 ---
 # Input Switch — Component Spec
 
 ## Purpose
 
-Collects or edits user input. Migrated from the existing implementation at `packages/webkit/src/components/webkit/inputs/input-switch/`.
+Control only — the pill toggle from Figma `_Switch` (36×20 px). No label or description. Use `FieldSwitch` or `FieldSwitchBlock` for labeled layouts.
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `'undefined'` | no | model Value. |
-| `trueValue` | `string` | `true` | no | true Value. |
-| `falseValue` | `string` | `false` | no | false Value. |
+| `modelValue` | `boolean` | `undefined` | no | Selected value for v-model. |
+| `trueValue` | `boolean` | `true` | no | Value emitted when toggled on. |
+| `falseValue` | `boolean` | `false` | no | Value emitted when toggled off. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `'undefined'` | no | input Id. |
+| `inputId` | `string` | `undefined` | no | id for the switch button; associate an external label via htmlFor. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:modelValue` | `unknown` | — |
+| `update:modelValue` | `boolean` | v-model. |
 
 ## Slots
 
@@ -36,24 +39,24 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `checked`
 - `data-disabled` mirrors the `disabled` prop
+- `data-checked` mirrors toggled-on state
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| handle move | `transition-transform duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
 | Region | Token (Design.md) |
 |---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
+| track (off) | `var(--bg-disabled)` |
+| track (on) | `var(--primary)` |
+| handle | `var(--bg-surface)` |
 | ring | `var(--ring-color)` |
 
 ## Theme gaps
@@ -65,8 +68,8 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- Keyboard map: `Tab` focuses; `Space` / `Enter` toggles.
+- ARIA: `role="switch"` with `aria-checked`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

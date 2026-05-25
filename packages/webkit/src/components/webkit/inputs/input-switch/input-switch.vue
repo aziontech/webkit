@@ -1,39 +1,47 @@
-<script setup>
+<script setup lang="ts">
   import { computed, useAttrs } from 'vue'
+
+  import { cn } from '../../../../utils/cn'
+  import {
+    focusSuppressHoverGhostClasses,
+    focusVisibleRingClasses,
+    ghostLayerClasses,
+    ghostLayerDisabledHideClasses
+  } from '../presets/interactive-states'
 
   defineOptions({
     name: 'InputSwitch',
     inheritAttrs: false
   })
 
-  const props = defineProps({
-    modelValue: {
-      type: null,
-      default: undefined
-    },
-    trueValue: {
-      type: null,
-      default: true
-    },
-    falseValue: {
-      type: null,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    inputId: {
-      type: String,
-      default: undefined
-    }
+  interface Props {
+    /** Selected value for v-model. */
+    modelValue?: boolean
+    /** Value emitted when toggled on. */
+    trueValue?: boolean
+    /** Value emitted when toggled off. */
+    falseValue?: boolean
+    /** Disables interaction and applies disabled tokens. */
+    disabled?: boolean
+    /** id for the switch button; associate an external label via htmlFor. */
+    inputId?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    modelValue: undefined,
+    trueValue: true,
+    falseValue: false,
+    disabled: false,
+    inputId: undefined
   })
 
-  const emit = defineEmits(['update:modelValue'])
+  const emit = defineEmits<{
+    'update:modelValue': [value: boolean]
+  }>()
 
   const attrs = useAttrs()
 
-  const testId = computed(() => attrs['data-testid'] ?? 'input-switch')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-switch')
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }
@@ -46,32 +54,7 @@
 
   const isChecked = computed(() => props.modelValue === props.trueValue)
 
-  const rootClasses = computed(() => {
-    const classes = [
-      'relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full',
-      'border border-transparent transition-colors duration-150',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
-      'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
-    ]
-
-    if (props.disabled) {
-      classes.push('pointer-events-none opacity-60')
-    }
-
-    if (isChecked.value) {
-      classes.push('bg-[var(--primary)]')
-    } else {
-      classes.push('bg-[var(--bg-disabled)]')
-    }
-
-    if (attrs.class) {
-      classes.push(attrs.class)
-    }
-
-    return classes
-  })
-
-  const handleClick = () => {
+  const handleToggle = () => {
     if (props.disabled) {
       return
     }
@@ -79,12 +62,29 @@
     emit('update:modelValue', isChecked.value ? props.falseValue : props.trueValue)
   }
 
-  const handleKeydown = (event) => {
+  const handleKeydown = (event: globalThis.KeyboardEvent) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault()
-      handleClick()
+      handleToggle()
     }
   }
+
+  const sharedClasses = [
+    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full',
+    'border border-transparent bg-[var(--bg-disabled)] data-[checked]:bg-[var(--primary)]',
+    ...ghostLayerClasses,
+    ...focusVisibleRingClasses,
+    ...focusSuppressHoverGhostClasses,
+    ...ghostLayerDisabledHideClasses
+  ]
+
+  const disabledClasses =
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
+
+  const handleClasses =
+    'pointer-events-none absolute left-0.5 top-1/2 z-[1] size-4 -translate-y-1/2 rounded-full bg-[var(--bg-surface)] shadow-[var(--shadow-xs)] transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-data-[checked]:translate-x-4'
+
+  const rootClasses = computed(() => cn(sharedClasses, disabledClasses, attrs.class))
 </script>
 
 <template>
@@ -96,13 +96,14 @@
     :disabled="disabled"
     :aria-checked="isChecked"
     :data-testid="testId"
+    :data-checked="isChecked || null"
+    :data-disabled="disabled || null"
     v-bind="passthroughAttrs"
-    @click="handleClick"
+    @click="handleToggle"
     @keydown="handleKeydown"
   >
     <span
-      class="pointer-events-none absolute left-0.5 top-1/2 size-5 -translate-y-1/2 rounded-full bg-[var(--bg-surface)] shadow-sm transition-transform duration-150"
-      :class="isChecked ? 'translate-x-5' : 'translate-x-0'"
+      :class="handleClasses"
       aria-hidden="true"
       :data-testid="`${testId}__handle`"
     />
