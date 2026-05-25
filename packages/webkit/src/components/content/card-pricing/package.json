@@ -1,0 +1,11 @@
+{
+  "main": "./card-pricing.vue",
+  "module": "./card-pricing.vue",
+  "types": "./card-pricing.vue.d.ts",
+  "browser": {
+    "./sfc": "./card-pricing.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
