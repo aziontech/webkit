@@ -1,14 +1,15 @@
 #!/usr/bin/env node
-// PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/components/webkit/**
-// when the content violates Design.md / COMPONENT_REQUIREMENTS.md rules:
-// hex/rgb/hsl colors, Tailwind palette, raw typography, PrimeVue color utils,
-// `class` in defineProps, `any`, `@ts-ignore`.
+// PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/components/**
+// (excluding the wip/ legacy zone) when the content violates Design.md /
+// COMPONENT_REQUIREMENTS.md rules: hex/rgb/hsl colors, Tailwind palette, raw
+// typography, PrimeVue color utils, `class` in defineProps, `any`, `@ts-ignore`.
 
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
 const ROOT = process.cwd()
-const TARGET_PREFIX = 'packages/webkit/src/components/webkit/'
+const TARGET_PREFIX = 'packages/webkit/src/components/'
+const WIP_PREFIX = 'packages/webkit/src/components/wip/'
 
 const VIOLATIONS = [
   {

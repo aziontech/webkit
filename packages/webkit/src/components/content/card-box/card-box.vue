@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useSlots } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
 
   defineOptions({
     name: 'CardBox',

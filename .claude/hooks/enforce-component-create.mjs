@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks the FIRST Write that creates a new component file under
-// packages/webkit/src/components/webkit/<category>/<name>/<file>.vue when the agent
+// packages/webkit/src/components/<category>/<name>/<file>.vue when the agent
 // has not yet read or invoked the `component-create` skill in this session.
 
 import { existsSync, readFileSync, statSync } from 'node:fs'
@@ -86,7 +86,7 @@ async function main() {
 
   const relPath = relative(ROOT, resolve(filePath))
   const match = relPath.match(
-    /^packages\/webkit\/src\/components\/webkit\/([^/]+)\/([^/]+)\/[^/]+\.vue$/
+    /^packages\/webkit\/src\/components\/([^/]+)\/([^/]+)\/[^/]+\.vue$/
   )
   if (!match) process.exit(0)
 

@@ -1,4 +1,4 @@
-import { cn } from '../../../../../utils/cn'
+import { cn } from '../../../../utils/cn'
 
 /** Sliding highlight on root NavigationMenu.List (overridable via CSS variable). */
 export const navigationMenuNavSelectorVar =

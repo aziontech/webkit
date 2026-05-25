@@ -1,7 +1,7 @@
 import {
   curve,
   duration
-} from '../../../../../../../theme/src/tokens/primitives/animations/animate.js'
+} from '../../../../../../theme/src/tokens/primitives/animations/animate.js'
 import { DRAWER_EXIT_MS, getDrawerTransitionStyle } from '../../drawer/presets/transitions'
 import {
   bottomSheetPanelMotionClasses,

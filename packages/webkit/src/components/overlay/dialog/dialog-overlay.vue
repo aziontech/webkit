@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import { DialogInjectionKey, DialogMotionInjectionKey } from './injection-key'
   import {

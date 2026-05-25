@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { selectableBlockCardClasses } from '../presets/interactive-states'
   import RadioButton from '../radio-button/radio-button.vue'
 

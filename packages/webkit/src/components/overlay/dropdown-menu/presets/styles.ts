@@ -1,4 +1,4 @@
-import { cn } from '../../../../../utils/cn'
+import { cn } from '../../../../utils/cn'
 
 export const dropdownMenuContentClasses = [
   'z-[1100] min-w-[12rem] overflow-hidden',

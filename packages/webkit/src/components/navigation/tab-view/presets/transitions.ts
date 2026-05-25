@@ -1,7 +1,7 @@
 import {
   curve,
   duration
-} from '../../../../../../../theme/src/tokens/primitives/animations/animate.js'
+} from '../../../../../../theme/src/tokens/primitives/animations/animate.js'
 
 export type TabViewSlideDirection = 'left' | 'right' | null
 

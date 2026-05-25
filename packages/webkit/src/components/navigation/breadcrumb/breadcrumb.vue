@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import { useOverlayMobile } from '../../overlay/composables/use-overlay-mobile'
   import DropdownMenu from '../../overlay/dropdown-menu/dropdown-menu.vue'

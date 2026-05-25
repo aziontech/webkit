@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import InputSwitch from '../input-switch/input-switch.vue'
   import { selectableBlockCardClasses } from '../presets/interactive-states'
 

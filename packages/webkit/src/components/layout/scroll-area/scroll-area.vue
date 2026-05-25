@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
 
   export type ScrollAreaOrientation = 'vertical' | 'horizontal' | 'both'
 

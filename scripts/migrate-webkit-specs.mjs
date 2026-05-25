@@ -15,7 +15,7 @@ import {
 } from '../.claude/hooks/_lib/spec.mjs'
 
 const ROOT = resolve(import.meta.dirname, '..')
-const WEBKIT = join(ROOT, 'packages/webkit/src/components/webkit')
+const WEBKIT = join(ROOT, 'packages/webkit/src/components')
 const SPECS = join(ROOT, '.specs')
 const TEMPLATE_CONSTRAINTS = readFileSync(join(SPECS, '_template.md'), 'utf-8')
   .split('## Constraints — DO NOT')[1]
@@ -327,7 +327,7 @@ function buildBody({ title, category, structure, componentDir, name, rootFile, r
 
 ## Purpose
 
-${PURPOSE[category] ?? 'Webkit component.'} Migrated from the existing implementation at \`packages/webkit/src/components/webkit/${category}/${name}/\`.
+${PURPOSE[category] ?? 'Webkit component.'} Migrated from the existing implementation at \`packages/webkit/src/components/${category}/${name}/\`.
 
 ${subSection}## Props
 

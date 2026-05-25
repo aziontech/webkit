@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { useNavigationMenuItem } from './composables/use-navigation-menu-context.js'
   import { navigationMenuIconClasses } from './presets/styles'
 

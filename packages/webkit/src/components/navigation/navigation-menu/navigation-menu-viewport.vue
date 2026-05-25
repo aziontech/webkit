@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, watch } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element.js'
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { navigationMenuTransitionClasses } from './presets/animations.js'

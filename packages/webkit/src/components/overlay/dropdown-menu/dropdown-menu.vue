@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs, useId } from 'vue'
 
-  import { useControllable } from '../../../../composables/use-controllable'
+  import { useControllable } from '../../../composables/use-controllable'
   import { DropdownMenuInjectionKey } from './injection-key'
 
   defineOptions({

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
-  import Button from '../../../components/webkit/actions/button/button.vue'
+  import Button from '../../../components/actions/button/button.vue'
 
   defineOptions({ name: 'CardContent' })
 

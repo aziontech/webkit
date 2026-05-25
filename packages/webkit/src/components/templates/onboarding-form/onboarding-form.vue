@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import Button from '../../actions/button/button.vue'
   import CardBox from '../../content/card-box/card-box.vue'
   import Item from '../../content/item/item.vue'

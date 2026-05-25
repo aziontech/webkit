@@ -1,6 +1,6 @@
 import { defineComponent, h } from 'vue'
 
-import { cn } from '../../../../utils/cn'
+import { cn } from '../../../utils/cn'
 import { mergeAsChildSlot } from './merge-as-child'
 
 export default defineComponent({

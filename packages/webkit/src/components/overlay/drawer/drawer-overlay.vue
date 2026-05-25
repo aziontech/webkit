@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { useDrawerMotionState } from './composables/use-drawer-motion-state'
   import { DrawerInjectionKey } from './injection-key'
   import { drawerOverlayTransitionClasses, getDrawerTransitionStyle } from './presets/transitions'

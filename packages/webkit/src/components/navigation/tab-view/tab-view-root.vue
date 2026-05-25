@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, provide, ref, shallowRef, useAttrs, useId } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import {
     type TabViewContext,
     TabViewInjectionKey,

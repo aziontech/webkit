@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import MenuItem from '../../navigation/menu-item/menu-item.vue'
   import ScrollArea from '../scroll-area/scroll-area.vue'
   import { SidebarInjectionKey } from './injection-key'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import Checkbox from '../checkbox/checkbox.vue'
   import { selectableBlockCardClasses } from '../presets/interactive-states'
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { navigationMenuBackdropClasses } from './presets/styles'
 

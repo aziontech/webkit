@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, type ComputedRef, inject, type Ref, ref, useAttrs, watch } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { NAVIGATION_MENU_POSITIONER_KEY } from './composables/use-navigation-menu-positioner-context.js'
   import { navigationMenuArrowClasses } from './presets/styles'
 

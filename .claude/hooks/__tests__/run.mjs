@@ -241,7 +241,7 @@ group('lib: animation extraction', () => {
 group('lib: component path resolution', () => {
   test('resolveSpecForComponentPath maps webkit-layer .vue', () => {
     const r = resolveSpecForComponentPath(
-      resolve(ROOT, 'packages/webkit/src/components/webkit/feedback/tooltip/tooltip.vue'),
+      resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue'),
       ROOT
     )
     assertEqual(r?.category, 'feedback')
@@ -275,7 +275,7 @@ group('hook: enforce-spec-exists.mjs', () => {
     const r = runHook('.claude/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/webkit/actions/button/button.vue')
+        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/button.vue')
       }
     })
     assertEqual(r.code, 0)
@@ -284,7 +284,7 @@ group('hook: enforce-spec-exists.mjs', () => {
     const r = runHook('.claude/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/webkit/feedback/tooltip/tooltip.vue')
+        file_path: resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue')
       }
     })
     assertEqual(r.code, 2)
@@ -311,7 +311,7 @@ group('hook: validate-spec-compliance.mjs', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/webkit/actions/button/button.vue')
+        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/button.vue')
       }
     })
     assertEqual(r.code, 0)
@@ -320,7 +320,7 @@ group('hook: validate-spec-compliance.mjs', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/webkit/feedback/tooltip/tooltip.vue')
+        file_path: resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue')
       }
     })
     assertEqual(r.code, 0)

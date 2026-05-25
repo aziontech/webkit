@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { DropdownMenuInjectionKey } from './injection-key'
   import { DROPDOWN_MENU_PANEL_TRANSITION } from './presets/animations'
   import { dropdownMenuContentClasses } from './presets/styles'

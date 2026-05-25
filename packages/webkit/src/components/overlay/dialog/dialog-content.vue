@@ -2,8 +2,8 @@
   import { useEventListener, useScrollLock } from '@vueuse/core'
   import { computed, inject, nextTick, ref, useAttrs, watch } from 'vue'
 
-  import { useFocusTrap } from '../../../../composables/use-focus-trap'
-  import { cn } from '../../../../utils/cn'
+  import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { cn } from '../../../utils/cn'
   import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import Panel from '../panel/panel.vue'
   import { dialogPanelSizeClasses } from '../panel/presets/sizes'

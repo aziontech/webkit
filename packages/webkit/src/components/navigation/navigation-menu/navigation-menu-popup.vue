@@ -2,7 +2,7 @@
   import { onClickOutside } from '@vueuse/core'
   import { computed, ref, useAttrs, watch } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
+  import { cn } from '../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element.js'
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'

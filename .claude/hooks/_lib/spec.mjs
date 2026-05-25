@@ -210,12 +210,12 @@ export function constraintsBlockHasCanonicalBullets(body) {
 
 /**
  * Given an absolute path to a component .vue file under
- * packages/webkit/src/components/webkit/<category>/<name>/<file>.vue,
+ * packages/webkit/src/components/<category>/<name>/<file>.vue,
  * return { category, name, specPath }. Returns null if the path doesn't match.
  */
 export function resolveSpecForComponentPath(filePath, repoRoot) {
   const rel = filePath.startsWith(repoRoot) ? filePath.slice(repoRoot.length + 1) : filePath
-  const m = rel.match(/^packages\/webkit\/src\/components\/webkit\/([^/]+)\/([^/]+)\/[^/]+\.vue$/)
+  const m = rel.match(/^packages\/webkit\/src\/components\/([^/]+)\/([^/]+)\/[^/]+\.vue$/)
   if (!m) return null
   const [, category, name] = m
   if (!CATEGORIES.includes(category)) return null
