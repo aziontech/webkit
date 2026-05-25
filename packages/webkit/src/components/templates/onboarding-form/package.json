@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-templates-onboarding-form",
+  "main": "./onboarding-form.vue",
+  "module": "./onboarding-form.vue",
+  "types": "./onboarding-form.vue.d.ts",
+  "browser": {
+    "./sfc": "./onboarding-form.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
