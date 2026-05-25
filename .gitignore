@@ -11,6 +11,14 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+# Theme dist is generated but tracked — `@aziontech/theme`'s package.json#exports
+# points at ./dist/v3/{tailwind-preset.js,globals.css,…}. Without these checked in,
+# consumers (and CI) hit "Package subpath not defined" before they get a chance
+# to run `pnpm --filter @aziontech/theme build:tokens:v3`.
+!packages/theme/dist
+!packages/theme/dist/**
+# output.css is a transient harness artifact (build:css:v3) — not exported.
+packages/theme/dist/v3/output.css
 coverage
 *.local
 storybook-static
