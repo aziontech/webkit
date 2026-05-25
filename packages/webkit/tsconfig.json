@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
@@ -16,6 +17,7 @@
     "node_modules",
     "src/**/*.d.ts",
     "src/**/*.d.ts.map",
+    "src/**/*.figma.ts",
     "src/core/list-data-table",
     "src/services/markdown"
   ]
