@@ -1,7 +1,7 @@
 <script setup>
   import { computed, ref } from 'vue'
 
-  import CopyBlock from '../../../../components/buttons/button-copy/button-copy.vue'
+  import CopyBlock from '../../../../components/wip/buttons/button-copy/button-copy.vue'
   import { usePopupPosition } from '../../composables/usePopupPosition.js'
 
   const props = defineProps({
