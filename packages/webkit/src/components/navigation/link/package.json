@@ -1,0 +1,11 @@
+{
+  "main": "./link.vue",
+  "module": "./link.vue",
+  "types": "./link.vue.d.ts",
+  "browser": {
+    "./sfc": "./link.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
