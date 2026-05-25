@@ -1,47 +1,51 @@
-<script setup>
+<script setup lang="ts">
   import { computed, useAttrs } from 'vue'
+
+  import { cn } from '../../../../utils/cn'
+  import { toggleControlClasses } from '../presets/interactive-states'
 
   defineOptions({
     name: 'Checkbox',
     inheritAttrs: false
   })
 
-  const props = defineProps({
-    modelValue: {
-      type: null,
-      default: undefined
-    },
-    value: {
-      type: null,
-      default: undefined
-    },
-    binary: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    inputId: {
-      type: String,
-      default: undefined
-    },
-    tabindex: {
-      type: Number,
-      default: undefined
-    }
+  interface Props {
+    /** model Value. */
+    modelValue?: unknown
+    /** value. */
+    value?: unknown
+    /** binary. */
+    binary?: boolean
+    /** Disables interaction and applies disabled tokens. */
+    disabled?: boolean
+    /** readonly. */
+    readonly?: boolean
+    /** input Id. */
+    inputId?: string
+    /** HTML name for form submission. */
+    name?: string
+    /** tabindex. */
+    tabindex?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    modelValue: undefined,
+    value: undefined,
+    binary: false,
+    disabled: false,
+    readonly: false,
+    inputId: undefined,
+    name: undefined,
+    tabindex: undefined
   })
 
-  const emit = defineEmits(['update:modelValue'])
+  const emit = defineEmits<{
+    'update:modelValue': [value: unknown]
+  }>()
 
   const attrs = useAttrs()
 
-  const testId = computed(() => attrs['data-testid'] ?? 'input-checkbox')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-checkbox')
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }
@@ -62,33 +66,6 @@
     }
 
     return props.modelValue === props.value
-  })
-
-  const rootClasses = computed(() => {
-    const classes = [
-      'relative inline-flex shrink-0 items-center justify-center',
-      'size-[1.125rem] rounded-[var(--shape-elements)] border transition-colors duration-150',
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)]',
-      'focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]'
-    ]
-
-    if (props.disabled) {
-      classes.push('pointer-events-none opacity-60')
-    } else if (props.readonly) {
-      classes.push('pointer-events-none')
-    }
-
-    if (isChecked.value) {
-      classes.push('border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-contrast)]')
-    } else {
-      classes.push('border-[var(--border-default)] bg-[var(--bg-surface)] text-transparent')
-    }
-
-    if (attrs.class) {
-      classes.push(attrs.class)
-    }
-
-    return classes
   })
 
   const handleChange = () => {
@@ -112,17 +89,40 @@
 
     emit('update:modelValue', current)
   }
+
+  const sharedClasses = [
+    ...toggleControlClasses,
+    'group size-[1.125rem] rounded-[var(--shape-elements)] border border-[var(--border-default)]',
+    'bg-[var(--bg-surface)] text-transparent'
+  ]
+
+  const checkedClasses =
+    'data-[checked]:border-[var(--primary)] data-[checked]:bg-[var(--primary)] data-[checked]:text-[var(--primary-contrast)] data-[checked]:before:hidden data-[checked]:after:hidden'
+
+  const disabledClasses =
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:opacity-50 data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed'
+
+  const iconClasses =
+    'size-2.5 shrink-0 stroke-[1.5] group-data-[disabled]:stroke-[var(--text-disabled)]'
+
+  const rootClasses = computed(() =>
+    cn(sharedClasses, checkedClasses, disabledClasses, attrs.class)
+  )
 </script>
 
 <template>
   <span
     :class="rootClasses"
     :data-testid="testId"
+    :data-checked="isChecked || null"
+    :data-disabled="disabled || null"
+    :data-readonly="readonly || null"
   >
     <input
       :id="inputId"
+      :name="name"
       type="checkbox"
-      class="absolute inset-0 size-full cursor-pointer opacity-0"
+      class="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
       :checked="isChecked"
       :disabled="disabled"
       :readonly="readonly"
@@ -132,11 +132,20 @@
       v-bind="passthroughAttrs"
       @change="handleChange"
     />
-    <i
+    <svg
       v-if="isChecked"
-      class="pi pi-check text-[0.625rem] leading-none"
+      :class="iconClasses"
+      viewBox="0 0 12 12"
+      fill="none"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
-    />
+    >
+      <path
+        d="M2.5 6l2.5 2.5 4.5-4.5"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   </span>
 </template>

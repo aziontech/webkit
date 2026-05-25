@@ -3,8 +3,8 @@ name: checkbox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: c91157997d213504b765b9e81e4eafc98c42af6da5f9afd05cca0e527981e261
+spec_version: 2
+checksum: d0a27b8ca2563f33c09954c4657f76af2b4edab6e87bb5367d0ab69d366a2acb
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -24,6 +24,7 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | no | readonly. |
 | `inputId` | `string` | `'undefined'` | no | input Id. |
+| `name` | `string` | `undefined` | no | HTML name for form submission. |
 | `tabindex` | `number` | `'undefined'` | no | tabindex. |
 
 ## Events
