@@ -4,7 +4,7 @@
   import Skeleton from 'primevue/skeleton'
   import { computed, provide, ref, useSlots, watch } from 'vue'
 
-  import EmptyResultsBlock from '../../../../components/empty-results-block/empty-results-block.vue'
+  import EmptyResultsBlock from '../../../../components/wip/empty-results-block/empty-results-block.vue'
   import Illustration from '../../../../svg/illustration-layers/illustration-layers.vue'
 
   const props = defineProps({
