@@ -1,44 +1,40 @@
 import typography from '@tailwindcss/typography'
-import { theme } from '@aziontech/theme/tailwind/tailwind-theme'
-import semanticColors from '@aziontech/theme/tailwind/semantic-colors-plugin'
-import semanticTexts from '@aziontech/theme/tailwind/semantic-texts-plugin'
-import semanticSpacing from '@aziontech/theme/tailwind/semantic-spacing-plugin'
-import semanticAnimations from '@aziontech/theme/tailwind/semantic-animations-plugin'
+import preset from '@aziontech/theme/tailwind-preset'
+import { spacingElements } from '@aziontech/theme/tailwind/semantic-spacings-plugin'
+import { semanticTexts } from '@aziontech/theme/tailwind/semantic-texts-plugin'
+import { animations } from '@aziontech/theme/tailwind/semantic-animations-plugin'
 
-/** @type {import('tailwindcss').Config} */
 export default {
   important: true,
+  presets: [preset],
   content: [
-    './src/**/*.{vue,js,ts,jsx,tsx}',
-    '../../packages/webkit/src/**/*.{vue,js,ts,jsx,tsx}'
+    './src/**/*.vue',
+    './src/**/*.js',
+    './src/**/*.ts',
+    './src/**/*.jsx',
+    './src/**/*.tsx',
+    '../../packages/webkit/src/**/*.vue',
+    '../../packages/webkit/src/**/*.js',
+    '../../packages/webkit/src/**/*.ts',
+    '../../packages/webkit/src/**/*.jsx',
+    '../../packages/webkit/src/**/*.tsx'
   ],
-  // Dark mode configuration
-  // Use `.dark` on an ancestor (Storybook uses `withThemeByClassName` to toggle it)
   darkMode: ['class'],
-  // Merge base theme with primitives
   theme: {
-    ...theme,
     fontFamily: {
-      ...(theme.fontFamily ?? {}),
       sans: ['Sora'],
       mono: ['Proto Mono'],
       code: ['Roboto Mono']
     },
     listStyleType: {
-      ...(theme.listStyleType ?? {}),
       none: 'none',
       disc: 'disc',
       decimal: 'decimal',
       square: 'square',
       roman: 'upper-roman'
     },
-    // Properly merge the theme's extend with local extend
     extend: {
-      // Import colors from theme (brand, base, surface, primitives)
-      ...(theme.extend ?? {}),
-      // Storybook-specific color extensions
       colors: {
-        ...(theme.extend?.colors ?? {}),
         header: '#111111',
         'header-button-enabled': '#ffffff32',
         'header-button-hover': '#f5f5f516',
@@ -64,7 +60,6 @@ export default {
         slide: '384px'
       },
       height: {
-        // subtract 60px for footer and 56px for header
         'visible-area': 'calc(100vh - 60px - 56px)',
         'graph-card': '552px'
       },
@@ -74,15 +69,19 @@ export default {
         sora: ['Sora'],
         'proto-mono': ['Proto Mono'],
         protomono: ['Proto Mono'],
-        mono: ['Proto Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', 'monospace']
+        mono: [
+          'Proto Mono',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Cascadia Code',
+          'Roboto Mono',
+          'Courier New',
+          'monospace'
+        ]
       }
     }
   },
-  plugins: [
-    typography,
-    semanticColors(),
-    semanticTexts(),
-    semanticSpacing(),
-    semanticAnimations(),
-  ]
+  plugins: [typography, spacingElements(), semanticTexts(), animations()]
 }
