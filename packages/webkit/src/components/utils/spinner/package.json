@@ -1,0 +1,11 @@
+{
+  "main": "./spinner.vue",
+  "module": "./spinner.vue",
+  "types": "./spinner.vue.d.ts",
+  "browser": {
+    "./sfc": "./spinner.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
