@@ -13,8 +13,8 @@ packages/webkit/src/
 │   │   ├── data/        (empty, ready to receive)
 │   │   ├── feedback/    message, status-indicator
 │   │   ├── inputs/      checkbox, dropdown, input-switch, input-text, radio-button
-│   │   ├── layout/      scroll-area
-│   │   ├── navigation/  link, menu-item, navigation-menu, sidebar, tab-view
+│   │   ├── layout/      global-header, scroll-area, sidebar
+│   │   ├── navigation/  link, menu-item, navigation-menu, tab-view
 │   │   ├── overlay/     dialog, drawer, panel
 │   │   └── utils/       spinner
 │   └── buttons/, pricing-card, ...  (legacy convenience components — pre-pipeline)
