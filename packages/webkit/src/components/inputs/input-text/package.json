@@ -1,0 +1,11 @@
+{
+  "main": "./input-text.vue",
+  "module": "./input-text.vue",
+  "types": "./input-text.vue.d.ts",
+  "browser": {
+    "./sfc": "./input-text.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
