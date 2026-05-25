@@ -113,7 +113,11 @@ async function main() {
   // ---- Animations cross-check (applies to both root and sub-components) ----
   const motionSection = getSection(body, 'Motion & Animations')
   if (motionSection !== null) {
-    const codeAnimClasses = new Set(extractAnimationClasses(vueText).filter((c) => c.startsWith('animate-')))
+    const codeAnimClasses = new Set(
+      extractAnimationClasses(vueText)
+        .filter((c) => c.startsWith('animate-'))
+        .filter((c) => c !== 'animate-none')
+    )
     const specAnimMatches = (motionSection.match(/animate-[a-z0-9-]+/g) ?? []).filter(
       (c) => c !== 'animate-none'
     )
