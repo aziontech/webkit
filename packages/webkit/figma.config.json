@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/figma/code-connect/main/cli/scripts/figma-config-schema.json",
+  "codeConnect": {
+    "label": "Vue / @aziontech/webkit",
+    "parser": "html",
+    "include": ["src/**/*.figma.ts"],
+    "exclude": ["**/node_modules/**", "**/dist/**"]
+  }
+}
