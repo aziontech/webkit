@@ -56,14 +56,14 @@
   )
 
   const headerClasses =
-    'group flex min-h-14 shrink-0 items-center justify-between gap-spacing-elements-xs border-b border-[var(--border-default)] px-[var(--spacing-elements-md)] py-[var(--spacing-elements-sm)]'
+    'group flex min-h-14 shrink-0 items-center justify-between gap-spacing-elements-xs border-b border-[var(--border-muted)] px-[var(--spacing-elements-md)] py-[var(--spacing-elements-sm)]'
 
   const titleClasses = 'text-body-md text-[var(--text-default)] font-medium'
 
   const contentClasses = 'flex min-h-0 flex-1 flex-col'
 
   const footerClasses =
-    'flex min-h-14 shrink-0 items-center justify-center gap-spacing-elements-sm border-t border-[var(--border-default)] px-[var(--spacing-elements-md)] py-[var(--spacing-elements-sm)]'
+    'flex min-h-14 shrink-0 items-center justify-center gap-spacing-elements-sm border-t border-[var(--border-muted)] px-[var(--spacing-elements-md)] py-[var(--spacing-elements-sm)]'
 </script>
 
 <template>

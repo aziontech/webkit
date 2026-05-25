@@ -87,7 +87,7 @@
   }
 
   const disabledClasses =
-    'pointer-events-none border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
+    'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
   const sizeClasses = {
     large: 'min-w-20 h-10 px-[var(--spacing-elements-md)] text-button-lg',
