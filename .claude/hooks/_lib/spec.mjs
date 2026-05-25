@@ -265,15 +265,27 @@ function extractDefineOptionsName(script) {
   return m ? m[1] : null
 }
 
-function extractProps(script) {
-  const interfaceMatch = script.match(/interface\s+Props\s*\{([\s\S]*?)\n\}/)
-  const block = interfaceMatch ? interfaceMatch[1] : null
-  if (!block) {
-    // Fallback: inline defineProps<{...}>()
-    const inline = script.match(/defineProps<\s*\{([\s\S]*?)\}\s*>\(/)
-    if (!inline) return []
-    return parsePropsInterface(inline[1])
+/** Extract the inner text of a `{ ... }` block immediately after `pattern` matches. */
+function extractBracedBlockAfter(script, pattern) {
+  const m = script.match(pattern)
+  if (!m) return null
+  const braceStart = m.index + m[0].length - 1
+  if (script[braceStart] !== '{') return null
+  let depth = 1
+  for (let i = braceStart + 1; i < script.length; i++) {
+    if (script[i] === '{') depth++
+    else if (script[i] === '}') {
+      depth--
+      if (depth === 0) return script.slice(braceStart + 1, i)
+    }
   }
+  return null
+}
+
+function extractProps(script) {
+  let block = extractBracedBlockAfter(script, /interface\s+Props\s*\{/)
+  if (!block) block = extractBracedBlockAfter(script, /defineProps<\s*\{/)
+  if (!block) return []
   return parsePropsInterface(block)
 }
 
@@ -300,9 +312,8 @@ function parsePropsInterface(block) {
 }
 
 function extractEmits(script) {
-  const m = script.match(/defineEmits<\s*\{([\s\S]*?)\}\s*>\(/)
-  if (!m) return []
-  const block = m[1]
+  const block = extractBracedBlockAfter(script, /defineEmits<\s*\{/)
+  if (!block) return []
   const out = []
   for (const line of block.split('\n')) {
     const t = line.trim().replace(/;$/, '')
@@ -315,10 +326,10 @@ function extractEmits(script) {
 }
 
 function extractSlots(script) {
-  const m = script.match(/defineSlots<\s*\{([\s\S]*?)\}\s*>\(/)
-  if (!m) return []
+  const block = extractBracedBlockAfter(script, /defineSlots<\s*\{/)
+  if (!block) return []
   const out = []
-  for (const line of m[1].split('\n')) {
+  for (const line of block.split('\n')) {
     const t = line.trim().replace(/;$/, '')
     if (!t) continue
     const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\(/)

@@ -138,7 +138,7 @@ Use **semantic shape** tokens only:
 ```html
 rounded-[var(--shape-button)]
 <!-- buttons -->
-rounded-[var(--shape-elements)]
+rounded-[var(--shape-button)]
 <!-- inputs, chips, small surfaces -->
 rounded-[var(--shape-card)]
 <!-- cards -->

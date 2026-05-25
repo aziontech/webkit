@@ -206,6 +206,21 @@ defineSlots<{ default(): unknown }>()
     assertEqual(r.emits.map((e) => e.name).sort(), ['hide', 'show'])
     assertEqual(r.slots.map((s) => s.name), ['default'])
   })
+  test('parseVueSfc extracts defineProps with indented closing brace', () => {
+    const sfc = `
+<script setup lang="ts">
+  interface Props {
+    /** Label text. */
+    label?: string
+    /** Disables the control. */
+    disabled?: boolean
+  }
+  const props = withDefaults(defineProps<Props>(), { label: '', disabled: false })
+</script>
+<template><div /></template>`
+    const r = parseVueSfc(sfc)
+    assertEqual(r.props.map((p) => p.name).sort(), ['disabled', 'label'])
+  })
 })
 
 group('lib: animation extraction', () => {

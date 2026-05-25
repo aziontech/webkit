@@ -102,7 +102,7 @@ async function main() {
     }
 
     // ---- BEM testid fallback ----
-    const expectedTestId = `'${info.category}-${info.name}'`
+    const expectedTestId = `'${testIdFallback(info.category, info.name)}'`
     if (!vueText.includes(expectedTestId)) {
       violations.push(
         `data-testid fallback "${expectedTestId}" not found in <script setup>. Expected: ?? ${expectedTestId}`
@@ -165,6 +165,14 @@ function toPascal(kebab) {
     .split('-')
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
     .join('')
+}
+
+/** inputs category: `input-<name>`, except when name already starts with `input-`. */
+function testIdFallback(category, name) {
+  if (category === 'inputs') {
+    return name.startsWith('input-') ? name : `input-${name}`
+  }
+  return `${category}-${name}`
 }
 
 main().catch((err) => {
