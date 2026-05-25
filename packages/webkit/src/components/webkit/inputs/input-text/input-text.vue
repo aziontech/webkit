@@ -1,6 +1,8 @@
 <script setup>
   import { computed, useAttrs } from 'vue'
 
+  import { surfaceControlWrapperClasses } from '../presets/interactive-states'
+
   defineOptions({
     name: 'InputText',
     inheritAttrs: false
@@ -53,50 +55,34 @@
     return rest
   })
 
-  const sharedWrapperClasses = [
-    'relative inline-flex w-full items-center transition-all duration-150',
-    'rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]',
-    'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
-    "before:opacity-0 before:transition-opacity before:content-['']",
-    'before:bg-[var(--bg-hover)]',
-    'hover:before:opacity-100',
-    'focus-within:before:opacity-0 active:before:opacity-0',
-    'has-[:disabled]:before:hidden has-[[readonly]]:before:hidden',
-    'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)]',
-    'focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]'
-  ]
+  const sharedClasses = [...surfaceControlWrapperClasses]
 
-  const disabledWrapperClasses =
-    'pointer-events-none border-transparent bg-[var(--bg-disabled)] has-[:disabled]:before:hidden'
+  const disabledClasses =
+    'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)]'
+
+  const invalidClasses = 'border-[var(--danger-border)] focus-within:ring-[var(--danger)]'
 
   const sizeClasses = {
-    small: {
-      wrapper: 'h-8',
-      input:
-        'px-[var(--spacing-elements-xs)] text-[length:var(--text-body-sm-font-size)] leading-[var(--text-body-sm-line-height)]'
-    },
-    medium: {
-      wrapper: 'h-10',
-      input:
-        'px-[var(--spacing-elements-sm)] text-[length:var(--text-body-md-font-size)] leading-[var(--text-body-md-line-height)]'
-    },
-    large: {
-      wrapper: 'h-12',
-      input:
-        'px-[var(--spacing-elements-md)] text-[length:var(--text-body-lg-font-size)] leading-[var(--text-body-lg-line-height)]'
-    }
+    small: 'h-8',
+    medium: 'h-10',
+    large: 'h-12'
   }
 
-  const wrapperClasses = computed(() => {
-    const size = sizeClasses[props.size] ?? sizeClasses.medium
-    const classes = [...sharedWrapperClasses, size.wrapper]
+  const inputSizeClasses = {
+    small: 'px-[var(--spacing-elements-xs)] text-body-sm',
+    medium: 'px-[var(--spacing-elements-sm)] text-body-md',
+    large: 'px-[var(--spacing-elements-md)] text-body-lg'
+  }
+
+  const rootClasses = computed(() => {
+    const classes = [...sharedClasses, sizeClasses[props.size] ?? sizeClasses.medium]
 
     if (props.disabled) {
-      classes.push(disabledWrapperClasses)
+      classes.push(disabledClasses)
     }
 
     if (props.invalid) {
-      classes.push('border-[var(--danger-border)] focus-within:ring-[var(--danger)]')
+      classes.push(invalidClasses)
     }
 
     if (attrs.class) {
@@ -106,19 +92,13 @@
     return classes
   })
 
-  const inputClasses = computed(() => {
-    const size = sizeClasses[props.size] ?? sizeClasses.medium
-    const classes = [
-      'relative z-[1] w-full min-w-0 border-0 bg-transparent outline-none',
-      'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]',
-      'text-[var(--text-default)] placeholder:text-[var(--text-muted)]',
-      'disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]',
-      'read-only:cursor-default',
-      size.input
-    ]
-
-    return classes
-  })
+  const inputClasses = computed(() => [
+    'relative z-[1] w-full min-w-0 border-0 bg-transparent outline-none',
+    'text-[var(--text-default)] placeholder:text-[var(--text-muted)]',
+    'disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]',
+    'read-only:cursor-default',
+    inputSizeClasses[props.size] ?? inputSizeClasses.medium
+  ])
 
   const handleInput = (event) => {
     emit('update:modelValue', event.target.value)
@@ -126,7 +106,7 @@
 </script>
 
 <template>
-  <span :class="wrapperClasses">
+  <span :class="rootClasses">
     <input
       :value="modelValue"
       :type="type"

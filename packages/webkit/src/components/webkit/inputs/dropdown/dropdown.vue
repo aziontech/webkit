@@ -12,6 +12,10 @@
   } from 'vue'
 
   import Spinner from '../../utils/spinner/spinner.vue'
+  import {
+    listOptionItemClasses,
+    surfaceControlWrapperClasses
+  } from '../presets/interactive-states'
 
   defineOptions({
     name: 'Dropdown',
@@ -282,20 +286,12 @@
 
   const useTeleport = computed(() => props.appendTo === 'body')
 
-  const sharedTriggerClasses = [
-    'relative inline-flex w-full min-w-0 items-center gap-spacing-elements-xs transition-all duration-150',
-    'rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]',
-    'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
-    "before:opacity-0 before:transition-opacity before:content-['']",
-    'before:bg-[var(--bg-hover)]',
-    'hover:before:opacity-100',
-    'focus-visible:before:opacity-0 active:before:opacity-0',
-    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)]',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
-  ]
+  const sharedClasses = [...surfaceControlWrapperClasses, 'w-full min-w-0 gap-spacing-elements-xs']
 
-  const disabledTriggerClasses =
-    'pointer-events-none border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden'
+  const disabledClasses =
+    'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)]'
+
+  const invalidClasses = 'border-[var(--danger-border)] focus-within:ring-[var(--danger)]'
 
   const sizeClasses = {
     small: 'h-8 px-[var(--spacing-elements-xs)]',
@@ -309,21 +305,20 @@
     large: 'text-label-lg'
   }
 
-  const triggerClasses = computed(() => {
+  const rootClasses = computed(() => {
     const classes = [
-      ...sharedTriggerClasses,
+      ...sharedClasses,
       sizeClasses[props.size] ?? sizeClasses.medium,
       labelSizeClasses[props.size] ?? labelSizeClasses.medium,
-      'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]',
       hasValue.value ? 'text-[var(--text-default)]' : 'text-[var(--text-muted)]'
     ]
 
     if (props.disabled) {
-      classes.push(disabledTriggerClasses)
+      classes.push(disabledClasses)
     }
 
     if (props.invalid) {
-      classes.push('border-[var(--danger-border)] focus-visible:ring-[var(--danger)]')
+      classes.push(invalidClasses)
     }
 
     if (attrs.class) {
@@ -335,8 +330,7 @@
 
   const panelClasses = [
     'webkit-dropdown-panel overflow-hidden rounded-[var(--shape-elements)]',
-    'border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-lg',
-    'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]'
+    'border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-[var(--shadow-md)]'
   ]
 
   const listClasses = [
@@ -515,14 +509,14 @@
     const isDisabled = isOptionDisabled(option)
 
     return [
-      'text-label-md flex w-full cursor-pointer items-center rounded-[var(--shape-elements)] px-[var(--spacing-elements-xs)] py-[var(--spacing-elements-xs)] text-left transition-colors duration-150',
-      isDisabled && 'pointer-events-none text-[var(--text-disabled)]',
+      ...listOptionItemClasses,
+      isDisabled &&
+        'pointer-events-none cursor-not-allowed text-[var(--text-disabled)] before:hidden after:hidden',
+      !isDisabled && 'text-[var(--text-default)]',
+      !isDisabled && (isHighlighted || isSelected) && 'before:opacity-100',
       !isDisabled &&
-        !isSelected &&
-        !isHighlighted &&
-        'text-[var(--text-default)] hover:bg-[var(--bg-hover)]',
-      !isDisabled && isHighlighted && 'bg-[var(--bg-hover)] text-[var(--text-default)]',
-      !isDisabled && isSelected && 'bg-[var(--bg-selected)] text-[var(--text-default)]'
+        isSelected &&
+        'bg-[var(--bg-selected)] before:opacity-0 hover:before:opacity-0 focus-visible:before:opacity-0'
     ]
   }
 
@@ -559,7 +553,7 @@
   >
     <div
       ref="triggerRef"
-      :class="triggerClasses"
+      :class="rootClasses"
     >
       <button
         type="button"
@@ -614,7 +608,7 @@
         @click="clearValue"
       >
         <i
-          class="pi pi-times text-[length:inherit]"
+          class="pi pi-times text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </button>
@@ -656,7 +650,7 @@
                 ref="filterInputRef"
                 :value="filterValue"
                 type="text"
-                class="h-8 w-full rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-8 pr-[var(--spacing-elements-xs)] text-[length:var(--text-body-sm-font-size)] text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus-visible:ring-1 focus-visible:ring-[var(--ring-color)]"
+                class="h-8 w-full rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-8 pr-[var(--spacing-elements-xs)] text-body-sm text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
                 :placeholder="filterPlaceholder ?? 'Search'"
                 :data-testid="`${testId}__filter-input`"
                 @input="onFilterInput"
