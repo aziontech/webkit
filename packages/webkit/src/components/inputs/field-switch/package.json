@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-inputs-field-switch",
+  "main": "./field-switch.vue",
+  "module": "./field-switch.vue",
+  "types": "./field-switch.vue.d.ts",
+  "browser": {
+    "./sfc": "./field-switch.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

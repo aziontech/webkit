@@ -1,0 +1,11 @@
+{
+  "main": "./drawer.vue",
+  "module": "./drawer.vue",
+  "types": "./drawer.vue.d.ts",
+  "browser": {
+    "./sfc": "./drawer.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
