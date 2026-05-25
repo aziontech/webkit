@@ -1,13 +1,13 @@
 import InputText from '@aziontech/webkit/inputs/input-text'
 import MenuItem from '@aziontech/webkit/navigation/menu-item'
-import Sidebar from '@aziontech/webkit/navigation/sidebar'
-import SidebarFooter from '@aziontech/webkit/navigation/sidebar-footer'
-import SidebarGroup from '@aziontech/webkit/navigation/sidebar-group'
+import Sidebar from '@aziontech/webkit/layout/sidebar'
+import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'
+import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
 import { expect, userEvent, within } from '@storybook/test'
 
 /** @type {import('@storybook/vue3').Meta<typeof Sidebar>} */
 const meta = {
-  title: 'Webkit/Navigation/Sidebar',
+  title: 'Webkit/Layout/Sidebar',
   component: Sidebar,
   subcomponents: { SidebarGroup, SidebarFooter, MenuItem },
   tags: ['autodocs'],

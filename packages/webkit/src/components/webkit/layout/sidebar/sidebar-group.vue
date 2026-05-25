@@ -2,8 +2,8 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { cn } from '../../../../utils/cn'
-  import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import MenuItem from '../menu-item/menu-item.vue'
+  import MenuItem from '../../navigation/menu-item/menu-item.vue'
+  import ScrollArea from '../scroll-area/scroll-area.vue'
   import { SidebarInjectionKey } from './injection-key'
 
   defineOptions({
@@ -35,8 +35,7 @@
 
   const testId = computed(
     () =>
-      (attrs['data-testid'] as string | undefined) ??
-      `${ctx?.testId ?? 'navigation-sidebar'}__group`
+      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'layout-sidebar'}__group`
   )
 
   const scrollClasses = computed(() =>

@@ -26,9 +26,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-sidebar')
 
   provide(SidebarInjectionKey, {
     testId: testId.value

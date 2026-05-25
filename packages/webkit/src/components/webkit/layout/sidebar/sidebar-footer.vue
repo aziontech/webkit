@@ -5,7 +5,7 @@
   import { SidebarInjectionKey } from './injection-key'
 
   defineOptions({
-    name: 'SidebarHeader',
+    name: 'SidebarFooter',
     inheritAttrs: false
   })
 
@@ -19,10 +19,15 @@
   const testId = computed(
     () =>
       (attrs['data-testid'] as string | undefined) ??
-      `${ctx?.testId ?? 'navigation-sidebar'}__header-region`
+      `${ctx?.testId ?? 'layout-sidebar'}__footer-region`
   )
 
-  const rootClasses = computed(() => cn('w-full shrink-0', attrs.class))
+  const rootClasses = computed(() =>
+    cn(
+      'w-full shrink-0 border-t border-[var(--border-muted)] pt-[var(--spacing-elements-md)]',
+      attrs.class
+    )
+  )
 </script>
 
 <template>

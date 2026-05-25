@@ -1,6 +1,6 @@
 ---
 name: sidebar
-category: navigation
+category: layout
 structure: composition
 status: implemented
 spec_version: 1
@@ -15,7 +15,7 @@ last_updated: 2026-05-22
 
 ## Purpose
 
-Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/sidebar/`.
+Helps users move between views or sections. Lives at `packages/webkit/src/components/webkit/layout/sidebar/`.
 
 ## Sub-components
 
