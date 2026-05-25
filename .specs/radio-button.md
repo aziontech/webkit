@@ -3,32 +3,35 @@ name: radio-button
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: f4948f9a0a1a571a80cfacbebd0aa87f71f18e958f964ca8912e5f37e96238a0
+spec_version: 3
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
+  node_id: 2027:7554
+checksum: d53778d233e5d52fb1bc04d4e12c5a45be65929cde48941c412ad4946977ce13
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-23
 ---
 # Radio Button — Component Spec
 
 ## Purpose
 
-Collects or edits user input. Migrated from the existing implementation at `packages/webkit/src/components/webkit/inputs/radio-button/`.
+Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Use `FieldRadio` or `FieldRadioBlock` for labeled layouts.
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `'undefined'` | no | model Value. |
-| `value` | `string` | `'undefined'` | no | value. |
-| `name` | `string` | `'undefined'` | no | name. |
+| `modelValue` | `string` | `undefined` | no | Selected value for v-model. |
+| `value` | `string` | `undefined` | no | Option value for this radio instance. |
+| `name` | `string` | `undefined` | no | HTML name shared across a mutually exclusive group. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `'undefined'` | no | input Id. |
+| `inputId` | `string` | `undefined` | no | id for the native input; links label to control. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:modelValue` | `unknown` | — |
+| `update:modelValue` | `string` | v-model. |
 
 ## Slots
 
@@ -38,6 +41,7 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- `data-checked` mirrors selected state
 
 ## Motion & Animations
 
@@ -49,10 +53,12 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 
 | Region | Token (Design.md) |
 |---|---|
-| typography | .text-body-sm |
 | surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
+| primary | `var(--primary)` |
+| primary contrast | `var(--primary-contrast)` |
+| disabled surface | `var(--bg-disabled)` |
+| text (disabled indicator) | `var(--text-disabled)` |
+| border | `var(--border-default)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
 
@@ -65,8 +71,8 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- Keyboard map: `Tab` focuses native input; `Space` selects within group.
+- ARIA: native `type="radio"` input with `aria-checked`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

@@ -1,4 +1,5 @@
 {
+  "name": "@aziontech/webkit-inputs-radio-button",
   "main": "./radio-button.vue",
   "module": "./radio-button.vue",
   "types": "./radio-button.vue.d.ts",

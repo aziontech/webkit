@@ -1,70 +1,67 @@
 import { ref } from 'vue'
+
 import RadioButton from '@aziontech/webkit/inputs/radio-button'
 
-export default {
+/** @type {import('@storybook/vue3').Meta<typeof RadioButton>} */
+const meta = {
   title: 'Webkit/Inputs/Radio Button',
   component: RadioButton,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    backgrounds: {
-      default: 'dark'
+    backgrounds: { default: 'dark' },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
+    docs: {
+      description: {
+        component:
+          'Control only — the circular radio input with no label or description. Pair with an external label or use FieldRadio / FieldRadioBlock for built-in text.'
+      }
     }
   },
   argTypes: {
-    disabled: { control: 'boolean', description: 'Disabled state' }
+    modelValue: {
+      control: 'text',
+      description: 'Selected value for v-model.',
+      table: { type: { summary: 'string' }, category: 'props' }
+    },
+    value: {
+      control: 'text',
+      description: 'Option value for this radio instance.',
+      table: { type: { summary: 'string' }, category: 'props' }
+    },
+    name: {
+      control: 'text',
+      description: 'HTML name shared across a mutually exclusive group.',
+      table: { type: { summary: 'string' }, category: 'props' }
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Disables interaction and applies disabled tokens.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
+    inputId: {
+      control: 'text',
+      description: 'id for the native input; associate a label via htmlFor on a separate element.',
+      table: { type: { summary: 'string' }, category: 'props' }
+    },
+    'onUpdate:modelValue': {
+      action: 'update:modelValue',
+      description: 'Emitted when the selected value changes.',
+      table: { type: { summary: 'string' }, category: 'events' }
+    }
   }
 }
 
+export default meta
+
 export const Default = {
-  render: () => ({
-    components: { RadioButton },
-    setup() {
-      const value = ref('option1')
-      return { value }
-    },
-    template: `
-      <div class="flex flex-col gap-2 text-[var(--text-default)]">
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-group" value="option1" input-id="webkit-radio-1" />
-          Option 1
-        </label>
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-group" value="option2" input-id="webkit-radio-2" />
-          Option 2
-        </label>
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-group" value="option3" input-id="webkit-radio-3" />
-          Option 3
-        </label>
-      </div>
-    `
-  })
-}
-
-export const Disabled = {
-  render: () => ({
-    components: { RadioButton },
-    setup() {
-      const value = ref('option1')
-      return { value }
-    },
-    template: `
-      <div class="flex flex-col gap-2 text-[var(--text-default)]">
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-disabled" value="option1" disabled input-id="webkit-radio-disabled-1" />
-          Disabled selected
-        </label>
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-disabled" value="option2" disabled input-id="webkit-radio-disabled-2" />
-          Disabled unselected
-        </label>
-      </div>
-    `
-  })
-}
-
-export const RadioGroup = {
   render: () => ({
     components: { RadioButton },
     setup() {
@@ -72,22 +69,73 @@ export const RadioGroup = {
       return { value }
     },
     template: `
-      <fieldset class="flex flex-col gap-2 border-0 p-0 text-[var(--text-default)]">
-        <legend class="mb-2 text-body-sm font-semibold">Choose one</legend>
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-fieldset" value="a" input-id="webkit-radio-a" />
-          Option A
-        </label>
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-fieldset" value="b" input-id="webkit-radio-b" />
-          Option B
-        </label>
-        <label class="inline-flex items-center gap-2">
-          <RadioButton v-model="value" name="webkit-radio-fieldset" value="c" input-id="webkit-radio-c" />
-          Option C
-        </label>
-        <p class="mt-2 text-body-sm text-[var(--text-muted)]">Selected: {{ value }}</p>
+      <fieldset class="flex items-center gap-[var(--spacing-4)] border-0 p-0 m-0">
+        <RadioButton
+          v-model="value"
+          name="webkit-radio-default"
+          value="a"
+          input-id="webkit-radio-a"
+          aria-label="Option A"
+        />
+        <RadioButton
+          v-model="value"
+          name="webkit-radio-default"
+          value="b"
+          input-id="webkit-radio-b"
+          aria-label="Option B"
+        />
+        <RadioButton
+          v-model="value"
+          name="webkit-radio-default"
+          value="c"
+          input-id="webkit-radio-c"
+          aria-label="Option C"
+        />
       </fieldset>
     `
-  })
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Mutually exclusive controls only — labels are supplied by the consumer (aria-label here for demo).'
+      }
+    }
+  }
+}
+
+export const Disabled = {
+  render: () => ({
+    components: { RadioButton },
+    setup() {
+      const value = ref('a')
+      return { value }
+    },
+    template: `
+      <fieldset class="flex items-center gap-[var(--spacing-4)] border-0 p-0 m-0">
+        <RadioButton
+          v-model="value"
+          name="webkit-radio-disabled"
+          value="a"
+          disabled
+          input-id="webkit-radio-disabled-a"
+          aria-label="Option A"
+        />
+        <RadioButton
+          v-model="value"
+          name="webkit-radio-disabled"
+          value="b"
+          disabled
+          input-id="webkit-radio-disabled-b"
+          aria-label="Option B"
+        />
+      </fieldset>
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Disabled selected and unselected controls without label chrome.'
+      }
+    }
+  }
 }
