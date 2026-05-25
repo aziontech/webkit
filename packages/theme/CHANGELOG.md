@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.0...@aziontech/theme@2.0.1) (2026-05-25)
+
+
+### Bug Fixes
+
+* rename spacing-elements-* tokens to spacing-* ([d28e90e](https://github.com/aziontech/webkit/commit/d28e90e421e0abed24c6e42456dcf4444ded763b))
+
 ## [2.0.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@1.13.0...@aziontech/theme@2.0.0) (2026-05-21)
 
 
