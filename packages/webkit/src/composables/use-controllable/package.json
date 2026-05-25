@@ -1,6 +1,6 @@
 {
-  "main": "./index.ts",
-  "module": "./index.ts",
-  "types": "./index.ts",
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
   "sideEffects": false
 }

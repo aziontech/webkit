@@ -15,13 +15,13 @@ export const ghostLayerClasses = [
   'after:transition-opacity after:duration-fast-02 after:ease-productive-entrance',
   'hover:before:opacity-100 active:after:opacity-100',
   'motion-reduce:before:transition-none motion-reduce:after:transition-none'
-] as const
+]
 
 /** Disabled cursor — matches field-radio-block (`data-[disabled]:cursor-not-allowed`). */
 export const disabledCursorClasses = [
   'disabled:cursor-not-allowed',
   'data-[disabled]:cursor-not-allowed'
-] as const
+]
 
 /** Hide ghost layers when the control is not interactive. */
 export const ghostLayerDisabledHideClasses = [
@@ -29,35 +29,35 @@ export const ghostLayerDisabledHideClasses = [
   'data-[disabled]:before:hidden data-[disabled]:after:hidden',
   'has-[:disabled]:before:hidden has-[:disabled]:after:hidden',
   'has-[[readonly]]:before:hidden has-[[readonly]]:after:hidden'
-] as const
+]
 
 /** Suppress hover ghost while focused (keeps active feedback). */
 export const focusSuppressHoverGhostClasses = [
   'focus-within:before:opacity-0',
   'focus-visible:before:opacity-0',
   'has-[:focus-visible]:before:opacity-0'
-] as const
+]
 
 /** Focus ring on the element that receives keyboard focus. */
 export const focusVisibleRingClasses = [
   'focus-visible:outline-none',
   'focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
   'focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]'
-] as const
+]
 
 /** Focus ring when a descendant native control is focused (checkbox, radio). */
 export const hasFocusVisibleRingClasses = [
   'has-[:focus-visible]:outline-none',
   'has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--ring-color)]',
   'has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-[var(--bg-canvas)]'
-] as const
+]
 
 /** Focus ring for bordered surface wrappers (input-text, dropdown trigger). */
 export const focusWithinRingClasses = [
   'focus-within:outline-none',
   'focus-within:ring-2 focus-within:ring-[var(--ring-color)]',
   'focus-within:ring-offset-1 focus-within:ring-offset-[var(--bg-canvas)]'
-] as const
+]
 
 /** Bordered field shell with hover/active ghosts and focus-within ring. */
 export const surfaceControlWrapperClasses = [
@@ -68,7 +68,7 @@ export const surfaceControlWrapperClasses = [
   ...focusSuppressHoverGhostClasses,
   ...ghostLayerDisabledHideClasses,
   ...disabledCursorClasses
-] as const
+]
 
 /** Small toggle visuals (checkbox, radio) with ghost layers and descendant focus ring. */
 export const toggleControlClasses = [
@@ -78,7 +78,7 @@ export const toggleControlClasses = [
   ...focusSuppressHoverGhostClasses,
   ...ghostLayerDisabledHideClasses,
   ...disabledCursorClasses
-] as const
+]
 
 /** Selectable block card shell (field-*-block). */
 export const selectableBlockCardClasses = [
@@ -89,7 +89,7 @@ export const selectableBlockCardClasses = [
   ...focusSuppressHoverGhostClasses,
   ...ghostLayerDisabledHideClasses,
   ...disabledCursorClasses
-] as const
+]
 
 /** Listbox / menu option row. */
 export const listOptionItemClasses = [
@@ -99,7 +99,7 @@ export const listOptionItemClasses = [
   ...focusVisibleRingClasses,
   'focus-visible:before:opacity-100',
   ...disabledCursorClasses
-] as const
+]
 
 /** Item row layout and kind/size tokens (wrapper or asChild target). */
 export const itemRowShellClasses = [
@@ -109,7 +109,7 @@ export const itemRowShellClasses = [
   'data-[kind=muted]:bg-[var(--bg-hover)]',
   'data-[size=medium]:gap-[var(--spacing-4)] data-[size=medium]:p-[var(--spacing-4)]',
   'data-[size=small]:gap-[var(--spacing-2)] data-[size=small]:px-[var(--spacing-4)] data-[size=small]:py-[var(--spacing-3)]'
-] as const
+]
 
 /** Item shell only — no row-level hover/focus; slotted Button/link own interaction. */
-export const itemRowClasses = [...itemRowShellClasses] as const
+export const itemRowClasses = [...itemRowShellClasses]
