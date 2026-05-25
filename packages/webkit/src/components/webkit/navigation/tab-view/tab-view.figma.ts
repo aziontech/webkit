@@ -8,16 +8,18 @@ figma.connect(
   'https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191',
   {
     example: () => `
-<TabView v-model:value="activeTab" default-value="tab-1">
+<TabView.Root v-model:value="activeTab" default-value="tab-1">
   <TabView.List>
     <TabView.Item value="tab-1" label="Tab Item" />
     <TabView.Item value="tab-2" label="Tab Item" />
     <TabView.Item value="tab-3" label="Tab Item" />
   </TabView.List>
-  <TabView.Panel value="tab-1">Panel one</TabView.Panel>
-  <TabView.Panel value="tab-2">Panel two</TabView.Panel>
-  <TabView.Panel value="tab-3">Panel three</TabView.Panel>
-</TabView>
+  <TabView.Content>
+    <TabView.Panel value="tab-1">Panel one</TabView.Panel>
+    <TabView.Panel value="tab-2">Panel two</TabView.Panel>
+    <TabView.Panel value="tab-3">Panel three</TabView.Panel>
+  </TabView.Content>
+</TabView.Root>
     `
   }
 )

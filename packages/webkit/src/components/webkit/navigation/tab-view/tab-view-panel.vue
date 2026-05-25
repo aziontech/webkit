@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../../utils/cn'
   import { type TabViewContext, TabViewInjectionKey, type TabViewValue } from './injection-key'
+  import { getTabViewPanelTransitionStyle, tabViewEnterOffsetClasses } from './presets/transitions'
 
   defineOptions({
     name: 'TabViewPanel',
@@ -31,21 +32,58 @@
 
   const isActive = computed(() => context.value.value === props.value)
 
-  /** TODO: tokenizar — Figma `--tabview/tabviewcontentborder`. */
   const panelClasses = computed(() =>
-    cn(
-      'relative w-full shrink-0',
-      'rounded-b-[var(--shape-card)]',
-      'border border-solid border-[var(--border-default)]',
-      !isActive.value && 'hidden',
-      attrs.class as string | undefined
-    )
+    cn('relative w-full shrink-0', !isActive.value && 'hidden', attrs.class as string | undefined)
   )
 
   const tabId = computed(() => context.tabId(props.value))
   const panelId = computed(() => context.panelId(props.value))
 
   const contentKey = computed(() => String(context.value.value))
+
+  const motionReady = ref(false)
+
+  const enterOffsetClass = computed(() => {
+    const direction = context.slideDirection.value
+
+    if (direction === 'right') {
+      return tabViewEnterOffsetClasses.right
+    }
+
+    if (direction === 'left') {
+      return tabViewEnterOffsetClasses.left
+    }
+
+    return tabViewEnterOffsetClasses.none
+  })
+
+  const contentMotionClasses = computed(() =>
+    cn(
+      'w-full transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
+      motionReady.value ? 'translate-x-0 opacity-100' : cn(enterOffsetClass.value, 'opacity-0')
+    )
+  )
+
+  const contentTransitionStyle = computed(() => getTabViewPanelTransitionStyle())
+
+  const runEnterMotion = () => {
+    motionReady.value = false
+    nextTick(() => {
+      globalThis.requestAnimationFrame(() => {
+        motionReady.value = true
+      })
+    })
+  }
+
+  watch(
+    () => context.value.value,
+    (activeValue) => {
+      if (activeValue === props.value) {
+        runEnterMotion()
+      }
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -62,7 +100,8 @@
     <div
       v-if="isActive"
       :key="contentKey"
-      class="animate-fade-in motion-reduce:animate-none"
+      :class="contentMotionClasses"
+      :style="contentTransitionStyle"
     >
       <slot />
     </div>

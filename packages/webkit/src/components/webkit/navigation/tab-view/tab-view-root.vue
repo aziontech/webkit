@@ -8,9 +8,10 @@
     type TabViewTabRegistration,
     type TabViewValue
   } from './injection-key'
+  import type { TabViewSlideDirection } from './presets/transitions'
 
   defineOptions({
-    name: 'TabView',
+    name: 'TabViewRoot',
     inheritAttrs: false
   })
 
@@ -67,6 +68,7 @@
   const baseId = useId()
   const internalValue = ref<TabViewValue | null>(props.defaultValue)
   const tabs = shallowRef<TabViewTabRegistration[]>([])
+  const slideDirection = ref<TabViewSlideDirection>(null)
 
   const isControlled = computed(() => valueProp.value !== undefined)
 
@@ -83,7 +85,26 @@
     }
   })
 
+  const resolveSlideDirection = (
+    current: TabViewValue | null,
+    next: TabViewValue | null
+  ): TabViewSlideDirection => {
+    if (current === null || next === null || current === next) {
+      return null
+    }
+
+    const currentIndex = tabs.value.findIndex((tab) => tab.value === current)
+    const nextIndex = tabs.value.findIndex((tab) => tab.value === next)
+
+    if (currentIndex === -1 || nextIndex === -1 || currentIndex === nextIndex) {
+      return null
+    }
+
+    return nextIndex > currentIndex ? 'right' : 'left'
+  }
+
   const setValue = (next: TabViewValue | null) => {
+    slideDirection.value = resolveSlideDirection(activeValue.value, next)
     activeValue.value = next
   }
 
@@ -151,6 +172,7 @@
     testId: testId.value,
     baseId,
     value: activeValue,
+    slideDirection,
     setValue,
     registerTab,
     unregisterTab,
@@ -176,6 +198,7 @@
   <div
     :class="rootClasses"
     :data-testid="testId"
+    data-tab-view-root=""
     data-orientation="horizontal"
   >
     <slot />

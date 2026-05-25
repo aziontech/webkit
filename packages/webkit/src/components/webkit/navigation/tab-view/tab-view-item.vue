@@ -70,7 +70,7 @@
   const panelId = computed(() => (context ? context.panelId(resolvedValue.value) : undefined))
 
   const itemSharedClasses = [
-    'inline-flex h-[30px] shrink-0 cursor-pointer items-center',
+    'relative z-[1] inline-flex h-[30px] shrink-0 cursor-pointer items-center',
     'gap-spacing-elements-xs rounded-[var(--shape-elements)]',
     'px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xs)]',
     'text-label-md transition-colors motion-reduce:transition-none',
@@ -84,11 +84,19 @@
       isDisabled.value &&
         'pointer-events-none bg-[var(--bg-disabled)] text-[var(--text-disabled)] opacity-60',
       !isDisabled.value &&
+        context &&
         !isSelected.value &&
         'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
       !isDisabled.value &&
+        context &&
+        isSelected.value &&
+        'bg-transparent text-[var(--secondary-contrast)]',
+      !context &&
         isSelected.value &&
         'bg-[var(--secondary-selected)] text-[var(--secondary-contrast)]',
+      !context &&
+        !isSelected.value &&
+        'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
       attrs.class as string | undefined
     )
   )
