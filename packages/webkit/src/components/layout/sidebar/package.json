@@ -1,0 +1,11 @@
+{
+  "main": "./sidebar.vue",
+  "module": "./sidebar.vue",
+  "types": "./sidebar.vue.d.ts",
+  "browser": {
+    "./sfc": "./sidebar.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
