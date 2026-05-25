@@ -5,8 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Compiled output
-dist/
+# Compiled output (dist is generated but tracked — see root .gitignore)
 build/
 # Source-controlled token build helpers (not a build output directory)
 !src/tokens/build/
