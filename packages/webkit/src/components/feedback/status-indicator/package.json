@@ -1,0 +1,11 @@
+{
+  "main": "./status-indicator.vue",
+  "module": "./status-indicator.vue",
+  "types": "./status-indicator.vue.d.ts",
+  "browser": {
+    "./sfc": "./status-indicator.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

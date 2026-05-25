@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-templates-plan-success",
+  "main": "./plan-success.vue",
+  "module": "./plan-success.vue",
+  "types": "./plan-success.vue.d.ts",
+  "browser": {
+    "./sfc": "./plan-success.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
