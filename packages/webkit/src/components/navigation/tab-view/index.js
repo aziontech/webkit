@@ -4,6 +4,7 @@ import TabViewList from './tab-view-list.vue'
 import TabViewPanel from './tab-view-panel.vue'
 import TabViewRoot from './tab-view-root.vue'
 
+/** @type {any} */
 const TabView = TabViewRoot
 
 TabView.Root = TabViewRoot

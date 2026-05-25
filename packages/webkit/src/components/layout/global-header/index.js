@@ -4,6 +4,7 @@ import GlobalHeaderLeft from './global-header-left.vue'
 import GlobalHeaderMiddle from './global-header-middle.vue'
 import GlobalHeaderRight from './global-header-right.vue'
 
+/** @type {any} */
 const GlobalHeader = GlobalHeaderRoot
 
 GlobalHeader.Left = GlobalHeaderLeft

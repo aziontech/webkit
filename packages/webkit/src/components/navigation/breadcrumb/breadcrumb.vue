@@ -154,6 +154,7 @@
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     aria-label="Show pages in between"
+                    ariaLabel="Show pages in between"
                     kind="transparent"
                     size="small"
                     :data-testid="`${testId}__overflow-trigger`"

@@ -260,7 +260,7 @@
       first: firstRef,
       lazy: lazyRef,
       totalRecords: totalRecordsRef,
-      onPage: (event) => {
+      onPage: (event: PageEvent) => {
         emit('update:first', event.first)
         emit('page', event)
       }
@@ -290,7 +290,7 @@
     displayRows,
     props.dataKey,
     selectionRef,
-    (value) => emit('update:selection', value),
+    (value: SelectionValue) => emit('update:selection', value),
     multipleSelection
   )
 
