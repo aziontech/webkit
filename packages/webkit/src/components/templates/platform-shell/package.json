@@ -1,0 +1,11 @@
+{
+  "main": "./platform-shell.vue",
+  "module": "./platform-shell.vue",
+  "types": "./platform-shell.vue.d.ts",
+  "browser": {
+    "./sfc": "./platform-shell.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
