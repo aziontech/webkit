@@ -1,0 +1,11 @@
+{
+  "main": "./panel.vue",
+  "module": "./panel.vue",
+  "types": "./panel.vue.d.ts",
+  "browser": {
+    "./sfc": "./panel.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
