@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.1...@aziontech/theme@2.0.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* fix CI, define version with package.json ([54a3614](https://github.com/aziontech/webkit/commit/54a3614a3ba0a6c0939ff73a40d4a7f925915665))
+
 ## [2.0.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.0...@aziontech/theme@2.0.1) (2026-05-25)
 
 
