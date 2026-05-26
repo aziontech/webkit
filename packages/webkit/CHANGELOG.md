@@ -1,3 +1,9 @@
+## [3.0.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.0...@aziontech/webkit@3.0.1) (2026-05-26)
+
+### Bug Fixes
+
+- adjust readme to bump version ([235c432](https://github.com/aziontech/webkit/commit/235c43204ee721bff4b5250f6ef26130bf1e6967))
+
 ## [3.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@2.1.0...@aziontech/webkit@3.0.0) (2026-05-25)
 
 ### ⚠ BREAKING CHANGES
