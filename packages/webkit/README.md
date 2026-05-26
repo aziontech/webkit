@@ -45,4 +45,4 @@ import ListDataTable from '@aziontech/webkit/list-data-table'
 
 ## License
 
-MIT
+Licence: MIT
