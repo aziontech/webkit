@@ -496,8 +496,8 @@
   --text-body-sm-line-height: 1.5;
   --text-body-xs-font-size: 0.75rem;
   --text-body-xs-line-height: 1.5;
-  --text-body-xss-font-size: 0.625rem;
-  --text-body-xss-line-height: 1.5;
+  --text-body-xxs-font-size: 0.625rem;
+  --text-body-xxs-line-height: 1.5;
   --text-overline-md-font-family: Proto Mono;
   --text-overline-md-font-size: 0.75rem;
   --text-overline-md-line-height: 1.4;
@@ -599,7 +599,7 @@
   .text-body-md { font-size: var(--text-body-md-font-size); line-height: var(--text-body-md-line-height); }
   .text-body-sm { font-size: var(--text-body-sm-font-size); line-height: var(--text-body-sm-line-height); }
   .text-body-xs { font-size: var(--text-body-xs-font-size); line-height: var(--text-body-xs-line-height); }
-  .text-body-xss { font-size: var(--text-body-xss-font-size); line-height: var(--text-body-xss-line-height); }
+  .text-body-xxs { font-size: var(--text-body-xxs-font-size); line-height: var(--text-body-xxs-line-height); }
   .text-overline-md { font-family: var(--text-overline-md-font-family); font-size: var(--text-overline-md-font-size); line-height: var(--text-overline-md-line-height); letter-spacing: var(--text-overline-md-letter-spacing); text-transform: var(--text-overline-md-text-transform); }
   .text-overline-sm { font-family: var(--text-overline-sm-font-family); font-size: var(--text-overline-sm-font-size); line-height: var(--text-overline-sm-line-height); letter-spacing: var(--text-overline-sm-letter-spacing); text-transform: var(--text-overline-sm-text-transform); }
   .text-overline-xs { font-family: var(--text-overline-xs-font-family); font-size: var(--text-overline-xs-font-size); line-height: var(--text-overline-xs-line-height); letter-spacing: var(--text-overline-xs-letter-spacing); text-transform: var(--text-overline-xs-text-transform); }
