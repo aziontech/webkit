@@ -352,10 +352,10 @@ const preset = {
             "lineHeight": "var(--text-body-xs-line-height)"
           }
         ],
-        "body-xss": [
-          "var(--text-body-xss-font-size)",
+        "body-xxs": [
+          "var(--text-body-xxs-font-size)",
           {
-            "lineHeight": "var(--text-body-xss-line-height)"
+            "lineHeight": "var(--text-body-xxs-line-height)"
           }
         ],
         "overline-md": [
