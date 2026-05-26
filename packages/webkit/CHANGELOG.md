@@ -1,3 +1,12 @@
+## [3.0.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.1...@aziontech/webkit@3.0.2) (2026-05-26)
+
+### Bug Fixes
+
+- bump ([574dd22](https://github.com/aziontech/webkit/commit/574dd221521ed3f54a0283cd20bed53aeb7f0de3))
+- bump version ([8a39df2](https://github.com/aziontech/webkit/commit/8a39df20d73d433512f6b5a2ccc8bef6c16285dc))
+- drop [@tailwind](https://github.com/tailwind) base + [@layer](https://github.com/layer) base from v3 globals ([5b2247b](https://github.com/aziontech/webkit/commit/5b2247b37cdc1edcbd59a4061699fc9fea579abf))
+- fix label mock ([c0694b7](https://github.com/aziontech/webkit/commit/c0694b72d97c36bdbc79552685eccce83147e334))
+
 ## [3.0.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.0...@aziontech/webkit@3.0.1) (2026-05-26)
 
 ### Bug Fixes
