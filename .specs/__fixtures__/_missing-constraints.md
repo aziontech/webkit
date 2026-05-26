@@ -38,7 +38,7 @@ Fixture: the "Constraints — DO NOT" block is absent. spec-validator must rejec
 
 ## Tokens
 
-| Region | Token (Design.md) |
+| Region | Token (DESIGN.md) |
 |---|---|
 | typography | `.text-button-lg` |
 

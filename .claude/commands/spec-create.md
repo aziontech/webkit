@@ -13,8 +13,8 @@ You are creating a new component spec for `.specs/<name>.md`. Follow the `spec-c
    - [`.claude/skills/spec-create/SKILL.md`](.claude/skills/spec-create/SKILL.md) — full workflow.
    - [`.specs/_template.md`](.specs/_template.md) — copy this body structure.
    - [`.specs/_schema.json`](.specs/_schema.json) — frontmatter contract.
-   - [`.claude/rules/no-invention.md`](.claude/rules/no-invention.md), [`naming.md`](.claude/docs/COMPONENT_REQUIREMENTS.md), [`tokens.md`](.claude/docs/Design.md), [`accessibility.md`](.claude/docs/COMPONENT_REQUIREMENTS.md), [`bem-testid.md`](.claude/docs/COMPONENT_REQUIREMENTS.md).
-   - [`.claude/docs/Design.md`](.claude/docs/Design.md) — design tokens (authoritative).
+   - [`.claude/rules/no-invention.md`](.claude/rules/no-invention.md), [`naming.md`](.claude/docs/COMPONENT_REQUIREMENTS.md), [`tokens.md`](.claude/docs/DESIGN.md), [`accessibility.md`](.claude/docs/COMPONENT_REQUIREMENTS.md), [`bem-testid.md`](.claude/docs/COMPONENT_REQUIREMENTS.md).
+   - [`.claude/docs/DESIGN.md`](.claude/docs/DESIGN.md) — design tokens (authoritative).
 
 2. **Parse the arguments.** Required: `<name>` (kebab-case). Optional: `--category`, `--figma`. If the name is missing or invalid, ask the user.
 

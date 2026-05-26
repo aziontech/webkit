@@ -866,11 +866,11 @@ This section describes the canonical pattern enforced for components living unde
 
 > **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
 
-### 1. Source of truth: `Design.md`
+### 1. Source of truth: `DESIGN.md`
 
-All visual rules (typography classes, spacing, max-width, shape, semantic colors) come from [Design.md](./Design.md). In any conflict, **Design.md wins**.
+All visual rules (typography classes, spacing, max-width, shape, semantic colors) come from [DESIGN.md](./DESIGN.md). In any conflict, **DESIGN.md wins**.
 
-- **Typography** is always applied via the generated class from `texts.data.js` — `text-heading-md`, `text-body-sm`, `text-label-md`, `text-button-lg`, `text-overline-md`, `text-big-number-lg`, etc. Never use `text-[length:var(--text-*)]` raw, never `leading-*`/`tracking-*`/`font-family` directly. Full catalog in [Design.md "Available text styles"](./Design.md).
+- **Typography** is always applied via the generated class from `texts.data.js` — `text-heading-md`, `text-body-sm`, `text-label-md`, `text-button-lg`, `text-overline-md`, `text-big-number-lg`, etc. Never use `text-[length:var(--text-*)]` raw, never `leading-*`/`tracking-*`/`font-family` directly. Full catalog in [DESIGN.md "Available text styles"](./DESIGN.md).
 - **Semantic colors:** `var(--primary)`, `var(--primary-contrast)`, `var(--secondary)`, `var(--secondary-contrast)`, `var(--bg-hover)`, `var(--bg-active)`, `var(--bg-disabled)`, `var(--bg-surface)`, `var(--bg-canvas)`, `var(--bg-mask)`, `var(--border-default)`, `var(--border-muted)`, `var(--border-strong)`, `var(--text-default)`, `var(--text-muted)`, `var(--text-disabled)`, `var(--ring-color)`, and feedback variants (`--success`/`--warning`/`--danger`/`--info` + `-contrast`/`-border`).
 - **Shape:** `var(--shape-button)`, `var(--shape-elements)`, `var(--shape-card)`, `var(--shape-flat)`. For pseudo-element inheritance use `rounded-[inherit]`.
 - **Spacing:** `var(--spacing-1)..(--spacing-N)` applied via `px-[...]` / `py-[...]` / `gap-[...]` / `m-[...]`. For section-level responsive spacing use the semantic utilities (`gap-spacing-elements-md`, `p-spacing-elements-lg`).
@@ -1080,7 +1080,7 @@ When the component is interactive and accepts `href`, derive `isAnchor` and rend
 
 ### 7. Capturando tokens do Figma
 
-Before creating or updating a component, invoke the `/component-create` skill which automates the discovery via MCP `plugin:figma:figma` (`get_variable_defs`, `get_design_context`). Map each Figma variable to its Design.md equivalent (generated class for typography, `var(--*)` for everything else). When no equivalent exists, register a **theme gap** in the PR and use the closest primitive temporarily with `TODO: tokenizar`. Never commit hardcoded hex to close the gap.
+Before creating or updating a component, invoke the `/component-create` skill which automates the discovery via MCP `plugin:figma:figma` (`get_variable_defs`, `get_design_context`). Map each Figma variable to its DESIGN.md equivalent (generated class for typography, `var(--*)` for everything else). When no equivalent exists, register a **theme gap** in the PR and use the closest primitive temporarily with `TODO: tokenizar`. Never commit hardcoded hex to close the gap.
 
 ### 8. Anti-duplicação / DRY
 
@@ -1468,7 +1468,7 @@ The spec lists which `kind` / `size` stories exist. Do **not** add visual permut
 - [ ] Zero hardcoded hex; everything via `var(--*)` or generated typography class.
 - [ ] CSS vars identical to the canonicals.
 - [ ] `before:` pseudo for hover/active overlays.
-- [ ] Figma tokens -> Design.md classes / CSS vars mapped; gaps registered.
+- [ ] Figma tokens -> DESIGN.md classes / CSS vars mapped; gaps registered.
 
 #### DRY
 

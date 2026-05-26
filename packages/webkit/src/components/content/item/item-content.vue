@@ -26,7 +26,7 @@
     v-bind="$attrs"
     data-slot="item-content"
     :data-testid="testId"
-    class="flex flex-1 flex-col gap-[var(--spacing-1)] [&+[data-slot=item-content]]:flex-none"
+    class="flex flex-1 flex-col gap-[var(--spacing-xxs)] [&+[data-slot=item-content]]:flex-none"
   >
     <slot />
   </div>

@@ -35,13 +35,13 @@
   <div
     v-if="alteredCount > 0"
     v-bind="attrs"
-    class="flex items-center justify-between gap-spacing-elements-sm rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-canvas)] px-[var(--spacing-elements-md)] py-[var(--spacing-elements-sm)]"
+    class="flex items-center justify-between gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-canvas)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
     :data-testid="testId"
   >
     <span class="text-body-sm text-[var(--text-default)]">
       {{ alteredCount }} pending {{ alteredCount === 1 ? 'change' : 'changes' }}
     </span>
-    <div class="flex gap-spacing-elements-xs">
+    <div class="flex gap-[var(--spacing-xs)]">
       <Button
         label="Discard"
         kind="text"

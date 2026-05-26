@@ -25,7 +25,7 @@
     v-bind="$attrs"
     data-slot="item-header"
     :data-testid="testId"
-    class="flex basis-full items-center justify-between gap-[var(--spacing-2)]"
+    class="flex basis-full items-center justify-between gap-[var(--spacing-xs)]"
   >
     <slot />
   </div>

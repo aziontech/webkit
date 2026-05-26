@@ -42,7 +42,7 @@ Don't write one by hand for the first time. Run:
 /spec-create <name> --figma <url>
 ```
 
-The `spec-author` sub-agent will ask focused questions (kind options, sizes, events, slots, a11y, stories), cross-reference Design.md and any Figma URL you provide, and write `.specs/<name>.md` with `status: draft`.
+The `spec-author` sub-agent will ask focused questions (kind options, sizes, events, slots, a11y, stories), cross-reference DESIGN.md and any Figma URL you provide, and write `.specs/<name>.md` with `status: draft`.
 
 Review the draft. Edit anything that's wrong. Then mark `status: approved` and re-run `/component-create` (which will call `spec-validator` and refuse to proceed if the body and the schema disagree).
 
@@ -67,5 +67,5 @@ PRs.
 
 - **Do not** delete `_template.md` or `_schema.json`.
 - **Do not** edit a spec whose `status` is `locked`. Bump `spec_version` and create a new draft instead.
-- **Do not** edit Design.md or COMPONENT_REQUIREMENTS.md to "match a spec" — the spec is wrong, fix the spec.
+- **Do not** edit DESIGN.md or COMPONENT_REQUIREMENTS.md to "match a spec" — the spec is wrong, fix the spec.
 - **Do not** commit a spec with `status: draft` to `main`. Drafts are local working state.

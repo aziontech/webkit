@@ -44,14 +44,14 @@
   <div
     v-if="appliedFilters.length > 0"
     v-bind="attrs"
-    class="flex flex-wrap gap-spacing-elements-xs"
+    class="flex flex-wrap gap-[var(--spacing-xs)]"
     :data-testid="testId"
   >
     <button
       v-for="filter in appliedFilters"
       :key="filter.field"
       type="button"
-      class="inline-flex cursor-pointer items-center gap-spacing-elements-xs rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xs)] text-body-sm text-[var(--text-default)] transition-opacity duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="inline-flex cursor-pointer items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-default)] transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
       :data-testid="`${testId}__chip-${filter.field}`"
       @click="(event) => editFilter(filter, event)"
       @keydown.enter="(event) => editFilter(filter, event)"

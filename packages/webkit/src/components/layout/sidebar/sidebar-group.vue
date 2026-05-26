@@ -39,7 +39,7 @@
   )
 
   const scrollClasses = computed(() =>
-    cn('flex h-full min-h-0 flex-1 flex-col gap-spacing-elements-md', attrs.class)
+    cn('flex h-full min-h-0 flex-1 flex-col gap-[var(--spacing-md)]', attrs.class)
   )
 
   const sectionClasses = computed(() => cn('flex w-full min-w-0 shrink-0 flex-col', attrs.class))
