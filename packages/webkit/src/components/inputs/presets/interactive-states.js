@@ -1,5 +1,5 @@
 /**
- * Hover, active, and focus-visible patterns for webkit inputs (Design.md § Interactive states).
+ * Hover, active, and focus-visible patterns for webkit inputs (DESIGN.md § Interactive states).
  *
  * Spread these into component class groups named like `button.vue`:
  * `sharedClasses`, `disabledClasses`, `rootClasses`, plus state maps (`checkedClasses`, `invalidClasses`, …).
