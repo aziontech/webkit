@@ -28,9 +28,9 @@ Add the class name as a Tailwind utility on the element or size variant:
 
 ```js
 const sizeClasses = {
-  large: 'min-w-20 h-10 px-[var(--spacing-4)] text-button-lg',
-  medium: 'min-w-16 h-8 px-[var(--spacing-3)] text-button-md',
-  small: 'min-w-14 h-7 px-[var(--spacing-2)] text-button-md'
+  large: 'min-w-20 h-10 px-[var(--spacing-md)] text-button-lg',
+  medium: 'min-w-16 h-8 px-[var(--spacing-sm)] text-button-md',
+  small: 'min-w-14 h-7 px-[var(--spacing-xs)] text-button-md'
 }
 ```
 
@@ -73,30 +73,65 @@ Font family, line height, letter spacing, and responsive font size live in `text
 
 ## Spacing
 
-Use **primitive spacing variables** for padding, margin, and gap so layout stays on the scale and can be tuned globally.
+### Source of truth
 
-### Pattern
+Use **only** the spacing tokens declared in:
+
+`packages/theme/src/tokens/semantic/spacings.data.js`
+
+Each key (for example `spacing-md`) becomes:
+
+1. A CSS variable: `--spacing-md` (mobile-first; values can change at `sm`, `xl`, etc.).
+2. Generated utilities: `.gap-spacing-md`, `.p-spacing-md` (from `build-tokens.mjs`).
+
+Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `components/webkit/`.
+
+### How to apply
+
+Reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities):
 
 ```html
-px-[var(--spacing-4)] py-[var(--spacing-2)] gap-[var(--spacing-3)] m-[var(--spacing-6)]
+p-[var(--spacing-md)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]
+gap-[var(--spacing-sm)] gap-x-[var(--spacing-md)]
+m-[var(--spacing-lg)] mt-[var(--spacing-xs)] mb-[var(--spacing-md)]
 ```
 
-Scale is defined in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1` = 4px, `--spacing-2` = 8px, …).
+When every side uses the same token, you may use the generated class instead:
 
-### Responsive layout spacing
+```html
+<p class="p-spacing-md">…</p>
+<div class="flex gap-spacing-sm">…</div>
+```
 
-For section-level spacing that should grow across breakpoints, prefer semantic spacing tokens from `spacings.data.js` (utilities `.gap-spacing-elements-md`, `.p-spacing-elements-lg`, etc.) or the same `var(--spacing-*)` pattern if you only need fixed scale steps.
+There is no generated `m-spacing-*` utility — always use `m-[var(--spacing-*)]` (or `mx-` / `my-` / `mt-` / etc.) for margin.
+
+Breakpoint growth is baked into the CSS variables; you do not duplicate responsive spacing in components.
+
+### Available spacing tokens
+
+| Token           | CSS variable      | Base (`_`) | Also at breakpoints      |
+| --------------- | ----------------- | ---------- | ------------------------ |
+| `spacing-xxl`   | `--spacing-xxl`   | `2rem`     | `sm`, `xl`               |
+| `spacing-xl`    | `--spacing-xl`    | `1.5rem`   | `sm`, `xl`               |
+| `spacing-lg`    | `--spacing-lg`    | `1rem`     | `sm`                     |
+| `spacing-md`    | `--spacing-md`    | `1rem`     | —                        |
+| `spacing-sm`    | `--spacing-sm`    | `0.75rem`  | —                        |
+| `spacing-xs`    | `--spacing-xs`    | `0.5rem`   | —                        |
+| `spacing-xxs`   | `--spacing-xxs`   | `0.25rem`  | —                        |
+
+If none of these fit the design, add a new entry in `spacings.data.js` and rebuild the theme — do not hardcode spacing in the component.
 
 ### Do not
 
-- Use arbitrary pixel/rem values (`p-4`, `gap-3`) in webkit components when a `--spacing-*` token exists.
-- Mix Tailwind default spacing scale with token spacing in the same component without a reason.
+- Use primitive `--spacing-1` … `--spacing-96` from `spacing.js`.
+- Use arbitrary pixel/rem values or Tailwind’s default scale (`p-4`, `gap-3`, `m-6`) in webkit components.
+- Use legacy `spacing-elements-*` names; map to `spacing-*` keys from `spacings.data.js`.
 
 Example from Button — horizontal padding and inner gap:
 
 ```js
-'px-[var(--spacing-4)]' // size large
-'gap-[var(--spacing-2)]' // label + icon
+'px-[var(--spacing-md)]' // size large
+'gap-[var(--spacing-xs)]' // label + icon — or `gap-spacing-xs`
 ```
 
 ---
@@ -226,7 +261,7 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 ## Checklist for new or updated components
 
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
-2. **Spacing** — `padding` / `margin` / `gap` via `var(--spacing-*)` (or semantic spacing utilities).
+2. **Spacing** — `padding` / `margin` / `gap` via `var(--spacing-*)` from `spacings.data.js` (or `.p-spacing-*` / `.gap-spacing-*` when uniform).
 3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
 4. **Container** — Page sections: `max-w-[var(--container-max-width)]` and `.px-container` / `.py-container` from `containers.data.js`. Fixed content (cards, modals, columns): `max-w-[var(--container-<size>)]` (`3xs` … `7xl` in `primitives/shape/container.js`).
 5. **Radius** — `rounded-[var(--shape-*)]`.
@@ -412,7 +447,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 
 - **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), PrimeVue color utilities (`text-color`, `surface-50`).
 - **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-[length:var(--text-*-font-size)]` when a generated class exists.
-- **Spacing:** arbitrary `p-4` / `gap-3` when a `--spacing-*` token applies.
+- **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** raw `max-w-md` / `max-w-[768px]`.
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (PrimeVue alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.

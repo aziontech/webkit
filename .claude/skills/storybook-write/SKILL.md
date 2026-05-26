@@ -19,7 +19,7 @@ Generate `apps/storybook/src/stories/webkit/<category>/<PascalName>.stories.js` 
 
 - The full text of `.specs/<name>.md`.
 - The Constraints block (verbatim).
-- [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/Design.md`](../../docs/Design.md).
+- [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
 
 ## Workflow
 
