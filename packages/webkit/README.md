@@ -41,7 +41,6 @@ import ListDataTable from '@aziontech/webkit/list-data-table'
 - PrimeVue 3.35.0
 - VeeValidate 4.x
 - @vueuse/core
-- motion-v
 
 ## License
 
