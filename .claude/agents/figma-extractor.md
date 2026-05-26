@@ -1,6 +1,6 @@
 ---
 name: figma-extractor
-description: Isolated sub-agent that runs the Figma MCP read-only verbs on the target frame and emits a structured token JSON. Never decides anything, never maps to Design.md.
+description: Isolated sub-agent that runs the Figma MCP read-only verbs on the target frame and emits a structured token JSON. Never decides anything, never maps to DESIGN.md.
 status: active
 ---
 
@@ -19,7 +19,7 @@ You are the `figma-extractor` sub-agent. You execute the `figma-discover` skill 
 
 ## What you may NOT do
 
-- Do not map Figma variables to Design.md — that's `token-mapper`.
+- Do not map Figma variables to DESIGN.md — that's `token-mapper`.
 - Do not infer the component structure (regions ≠ structure decision).
 - Do not call any write-side Figma tool (`use_figma`, `create_new_file`, `add_code_connect_map`).
 - Do not invent variables that the MCP did not return.

@@ -6,9 +6,7 @@
     inheritAttrs: false
   })
 
-  const fontSans = 'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]'
-
-  const shapeElements = 'rounded-[var(--shape-elements)]'
+  const shapeButton = 'rounded-[var(--shape-button)]'
 
   const severityStyles = {
     primary: {
@@ -93,11 +91,10 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'inline-flex h-6 items-center justify-center gap-2 overflow-hidden border px-2',
-      fontSans,
-      'text-body-xs font-normal leading-none',
+      'inline-flex h-6 items-center justify-center gap-[var(--spacing-xs)] overflow-hidden border px-[var(--spacing-xs)]',
+      'text-body-xs',
       currentSeverityStyle.value.container,
-      props.rounded ? 'rounded-full' : shapeElements
+      props.rounded ? 'rounded-full' : shapeButton
     ]
 
     if (attrs.class) {

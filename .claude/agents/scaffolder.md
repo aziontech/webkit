@@ -27,10 +27,10 @@ You are the `scaffolder` sub-agent. You execute the `component-scaffold` skill v
 - Do not declare component-local `@keyframes` or `<style>` blocks.
 - Do not omit `motion-reduce:*` on motion-bearing classes.
 - Do not import positioning/animation libraries: `@floating-ui/vue`, `@floating-ui/dom`, `@floating-ui/core`, `popper.js`, `@popperjs/core`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@motionone/vue`, `@vueuse/motion`, `@formkit/auto-animate`, `interact.js`, drag-drop runtimes, scroll virtualization libs. Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
-- Do not improvise animations. Every `animate-*` / `transition-*` class must come from the catalog in `.claude/docs/Design.md` § Animations. No inline `cubic-bezier(...)`. No hardcoded durations outside the standard 150ms / 220ms.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from the catalog in `.claude/docs/DESIGN.md` § Animations. No inline `cubic-bezier(...)`. No hardcoded durations outside the standard 150ms / 220ms.
 - Do not create class presets in JavaScript. No `const kindClasses = {...}`, no `const sharedClasses = [...]`, no `const sizeClasses = {...}`, no `const rootClasses = computed(...)` that only composes classes. Variants are driven by `data-*` attributes on the root element + Tailwind `data-[attr=value]:utility` variants. All static utility classes live inline on the root's `class` attribute. No `<style>` block. No `.css`/`.scss` file inside the component directory. See `.claude/rules/styling.md`.
 - Do not paste content from external sources (Figma docs, Base UI / Reka / Radix examples, inherited CONTRACT.md). Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not edit Design.md, COMPONENT_REQUIREMENTS.md, root `package.json` (beyond the `exports` entry), or `.github/workflows/*`.
+- Do not edit DESIGN.md, COMPONENT_REQUIREMENTS.md, root `package.json` (beyond the `exports` entry), or `.github/workflows/*`.
 - Do not edit files outside the paths your task names.
 
 ## Outputs

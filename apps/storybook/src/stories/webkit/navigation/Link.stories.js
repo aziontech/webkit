@@ -1,14 +1,15 @@
 import Link from '@aziontech/webkit/navigation/link'
 
-const sizes = ['large', 'medium']
-
-export default {
+/** @type {import('@storybook/vue3').Meta<typeof Link>} */
+const meta = {
   title: 'Webkit/Navigation/Link',
   component: Link,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    actions: { argTypesRegex: '^on[A-Z].*' },
+    backgrounds: {
+      default: 'dark'
+    },
     a11y: {
       config: {
         rules: [{ id: 'color-contrast', enabled: true }]
@@ -17,51 +18,64 @@ export default {
     docs: {
       description: {
         component:
-          'Text link with optional trailing icon and ghost hover surface. Maps to Figma Webkit Link (node 3548:578).'
+          'Text link with optional trailing icon and ghost hover surface.'
       }
     }
   },
   argTypes: {
     label: {
       control: 'text',
-      description: 'Visible label rendered inside the link',
-      table: { defaultValue: { summary: 'Learn More' } }
+      description: 'Visible label rendered inside the link.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'Learn More' } }
     },
     size: {
       control: 'select',
-      options: sizes,
-      description: 'Size token. Affects height, gap, and typography',
-      table: { defaultValue: { summary: 'large' } }
+      options: ['large', 'medium'],
+      description: 'Size token. Affects height, gap, and typography.',
+      table: {
+        category: 'props',
+        type: { summary: "'large' | 'medium'" },
+        defaultValue: { summary: "'large'" }
+      }
     },
     disabled: {
       control: 'boolean',
-      description: 'Disables interaction and applies disabled token set',
-      table: { defaultValue: { summary: false } }
+      description: 'Disables interaction and applies disabled token set.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     showIcon: {
       control: 'boolean',
-      description: 'When true, renders the trailing icon',
-      table: { defaultValue: { summary: true } }
+      description: 'When true, renders the trailing icon.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
     },
     icon: {
       control: 'text',
-      description: 'PrimeIcons class for the trailing icon',
-      table: { defaultValue: { summary: 'pi pi-external-link' } }
+      description: 'PrimeIcons class for the trailing icon.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'pi pi-external-link' }
+      }
     },
     href: {
       control: 'text',
-      description: 'Destination URL for the anchor',
-      table: { defaultValue: { summary: '#' } }
+      description: 'Destination URL for the anchor.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: '#' } }
     },
     target: {
       control: 'select',
       options: ['_self', '_blank'],
-      description: 'Link target when navigating',
-      table: { defaultValue: { summary: '_self' } }
+      description: 'Link target when navigating.',
+      table: {
+        category: 'props',
+        type: { summary: "'_self' | '_blank'" },
+        defaultValue: { summary: "'_self'" }
+      }
     },
     onClick: {
       action: 'click',
-      description: 'Emitted when the link is clicked (unless disabled)'
+      description: 'Emitted when the link is clicked (unless disabled).',
+      table: { category: 'events', type: { summary: 'MouseEvent' } }
     }
   },
   args: {
@@ -75,155 +89,49 @@ export default {
   }
 }
 
+export default meta
+
+const Template = (args) => ({
+  components: { Link },
+  setup() {
+    const { onClick, ...props } = args
+
+    return { props, onClick }
+  },
+  template: '<Link v-bind="props" @click="onClick" />'
+})
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
 export const Default = {
+  render: Template,
   parameters: {
-    backgrounds: { default: 'dark' },
-    docs: {
-      description: {
-        story: 'Default large link with external icon (Figma Size=Large, State=Default).'
-      }
-    }
-  },
-  render: (args) => ({
-    components: { Link },
-    setup() {
-      return { args }
-    },
-    template: '<Link v-bind="args" @click="args.onClick" />'
-  })
+    docs: { description: { story: 'Default large link with trailing icon.' } }
+  }
 }
 
-export const Sizes = {
+/** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
+export const Medium = {
+  args: { size: 'medium' },
+  render: Template,
   parameters: {
-    backgrounds: { default: 'dark' },
-    docs: {
-      description: {
-        story: 'Large and medium size variants side by side.'
-      }
-    }
-  },
-  render: () => ({
-    components: { Link },
-    setup() {
-      return { sizes }
-    },
-    template: `
-      <div class="flex flex-col items-start gap-6">
-        <Link
-          v-for="size in sizes"
-          :key="size"
-          :size="size"
-          :label="size === 'large' ? 'Learn More' : 'Learn More'"
-          href="#"
-        />
-      </div>
-    `
-  })
+    docs: { description: { story: 'Medium size variant.' } }
+  }
 }
 
-export const WithoutIcon = {
+/** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
+export const Large = {
+  args: { size: 'large' },
+  render: Template,
   parameters: {
-    backgrounds: { default: 'dark' },
-    docs: {
-      description: {
-        story: 'Link without trailing icon (`showIcon=false`).'
-      }
-    }
-  },
-  args: {
-    showIcon: false
-  },
-  render: (args) => ({
-    components: { Link },
-    setup() {
-      return { args }
-    },
-    template: '<Link v-bind="args" @click="args.onClick" />'
-  })
+    docs: { description: { story: 'Large size variant.' } }
+  }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
 export const Disabled = {
+  args: { disabled: true },
+  render: Template,
   parameters: {
-    backgrounds: { default: 'dark' },
-    docs: {
-      description: {
-        story: 'Disabled link — no navigation, muted text tokens.'
-      }
-    }
-  },
-  args: {
-    disabled: true
-  },
-  render: (args) => ({
-    components: { Link },
-    setup() {
-      return { args }
-    },
-    template: '<Link v-bind="args" />'
-  })
-}
-
-export const ExternalLink = {
-  parameters: {
-    backgrounds: { default: 'dark' },
-    docs: {
-      description: {
-        story: 'Opens in a new tab with `rel="noopener noreferrer"`.'
-      }
-    }
-  },
-  args: {
-    href: 'https://example.com',
-    target: '_blank',
-    label: 'Learn More'
-  },
-  render: (args) => ({
-    components: { Link },
-    setup() {
-      return { args }
-    },
-    template: '<Link v-bind="args" @click="args.onClick" />'
-  })
-}
-
-export const LightDark = {
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Link on light and dark canvas backgrounds for theme token verification.'
-      }
-    }
-  },
-  render: () => ({
-    components: { Link },
-    template: `
-      <div class="flex flex-col gap-0">
-        <section class="azion azion-light flex min-h-[12rem] items-center justify-center bg-[var(--bg-canvas)] p-8">
-          <Link label="Learn More" href="#" size="large" />
-        </section>
-        <section class="azion azion-dark flex min-h-[12rem] items-center justify-center bg-[var(--bg-canvas)] p-8">
-          <Link label="Learn More" href="#" size="large" />
-        </section>
-      </div>
-    `
-  })
-}
-
-export const Playground = {
-  parameters: {
-    backgrounds: { default: 'dark' },
-    docs: {
-      description: {
-        story: 'Interactive playground — adjust all props via controls.'
-      }
-    }
-  },
-  render: (args) => ({
-    components: { Link },
-    setup() {
-      return { args }
-    },
-    template: '<Link v-bind="args" @click="args.onClick" />'
-  })
+    docs: { description: { story: 'Disabled state.' } }
+  }
 }

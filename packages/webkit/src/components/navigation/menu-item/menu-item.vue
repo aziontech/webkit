@@ -77,8 +77,8 @@
 
   const sharedRowClasses = [
     'relative flex w-full shrink-0 items-center',
-    'rounded-[var(--shape-elements)] transition-colors motion-reduce:transition-none',
-    'pl-[var(--spacing-elements-xxs)] pr-[var(--spacing-elements-xs)] py-[var(--spacing-elements-xxs)]',
+    'rounded-[var(--shape-button)] transition-colors motion-reduce:transition-none',
+    'pl-[var(--spacing-xxs)] pr-[var(--spacing-xs)] py-[var(--spacing-xxs)]',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
   ]
@@ -86,7 +86,7 @@
   const optionRowClasses = computed(() =>
     cn(
       sharedRowClasses,
-      'h-9 gap-spacing-elements-xs',
+      'h-9 gap-[var(--spacing-xs)]',
       props.selected
         ? 'bg-[var(--bg-surface-raised)] text-[var(--text-default)]'
         : 'text-[var(--text-default)] hover:bg-[var(--bg-hover)]',
@@ -126,7 +126,7 @@
       :href="href"
       :target="target"
       :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-      class="flex min-h-9 w-full items-center gap-spacing-elements-xs"
+      class="flex min-h-9 w-full items-center gap-[var(--spacing-xs)]"
       :aria-current="selected ? 'page' : undefined"
       :aria-disabled="disabled || undefined"
       :tabindex="disabled ? -1 : undefined"
@@ -167,7 +167,7 @@
     <button
       v-else
       type="button"
-      class="flex min-h-9 w-full items-center gap-spacing-elements-xs"
+      class="flex min-h-9 w-full items-center gap-[var(--spacing-xs)]"
       :aria-current="selected ? 'page' : undefined"
       :aria-disabled="disabled || undefined"
       :disabled="disabled"
@@ -213,7 +213,7 @@
     :data-testid="testId"
   >
     <span
-      class="min-w-0 flex-1 truncate text-overline-xs uppercase"
+      class="min-w-0 flex-1 truncate text-overline-xs"
       :data-testid="`${testId}__label`"
     >
       <slot>{{ label }}</slot>

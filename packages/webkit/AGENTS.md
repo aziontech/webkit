@@ -33,7 +33,7 @@ Component creation under `components/webkit/**` is **always** driven by the pipe
 
 ## 2) Files agents must NOT edit without explicit human approval
 
-- [`../../.claude/docs/Design.md`](../../.claude/docs/Design.md)
+- [`../../.claude/docs/DESIGN.md`](../../.claude/docs/DESIGN.md)
 - [`../../.claude/docs/COMPONENT_REQUIREMENTS.md`](../../.claude/docs/COMPONENT_REQUIREMENTS.md)
 - [`../../.claude/docs/PRIMEVUE_ABSTRACTION.md`](../../.claude/docs/PRIMEVUE_ABSTRACTION.md)
 - `package.json` outside of the `exports` block (structural changes only with approval)
@@ -67,7 +67,7 @@ Type coverage threshold: **95%**.
 
 ## 6) Common pitfalls
 
-- **Tokenizing manually:** if Figma exposes a variable that has no equivalent in Design.md, register a theme gap in the spec and use the closest primitive temporarily. Do not invent a HEX or hardcode a Tailwind palette.
+- **Tokenizing manually:** if Figma exposes a variable that has no equivalent in DESIGN.md, register a theme gap in the spec and use the closest primitive temporarily. Do not invent a HEX or hardcode a Tailwind palette.
 - **Slots in the wrong layer:** monolithic components (button, icon-button, tag) do not expose slots. Card-pricing exposes `default` + named `actions` because the layout positions are fixed configuration points — not Composition Pattern.
 - **Importing PrimeVue directly in apps:** consumer apps should not import from `primevue/*`. Re-export through `@aziontech/webkit/<name>` and follow PRIMEVUE_ABSTRACTION.md.
 - **Typography raw classes leaking in:** `text-[length:var(--text-button-lg-font-size)]` and similar are legacy. New components always use the generated class (`text-button-lg`). `validate-tokens.mjs` only blocks **new** violations, so pre-existing legacy expressions are not retroactively flagged.

@@ -55,7 +55,7 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 
 | File | Purpose |
 |---|---|
-| `Design.md` | Tokens (typography, spacing, container, shape, shadow, colors), animation catalog, forbidden list |
+| `DESIGN.md` | Tokens (typography, spacing, container, shape, shadow, colors), animation catalog, forbidden list |
 | `COMPONENT_REQUIREMENTS.md` | Component pattern: TypeScript, naming, slots, BEM data-testid, ARIA, Composition Pattern, Storybook discipline, Styling discipline |
 | `PRIMEVUE_ABSTRACTION.md` | PrimeVue wrapping under `core/primevue/*` |
 

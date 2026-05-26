@@ -27,7 +27,7 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 
 - The full text of `.specs/<name>.md` (verbatim).
 - The Constraints block (verbatim).
-- [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/Design.md`](../../docs/Design.md).
+- [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
 - The canonical files for cross-reference (read-only):
   - `packages/webkit/src/components/webkit/actions/button/button.vue`
   - `packages/webkit/src/components/webkit/actions/icon-button/icon-button.vue`
@@ -170,7 +170,7 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 
 - Every prop, event, slot, and sub-component MUST come from the spec — no inventions. (`validate-spec-compliance.mjs` enforces this on Write; it will reject the run if you stray.)
 - Use the canonicals (`button.vue`, `card-pricing.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
-- All visual tokens come from [`.claude/docs/Design.md`](../../docs/Design.md). No HEX, no Tailwind palette, no raw typography.
+- All visual tokens come from [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md). No HEX, no Tailwind palette, no raw typography.
 - TypeScript only (`<script setup lang="ts">`); no `any`; no `@ts-ignore`; no `class` in `defineProps`.
 - `<script setup>` always before `<template>`.
 - BEM `data-testid` per [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md).
@@ -179,7 +179,7 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 
 ## Animations — apply the spec's Motion & Animations table verbatim
 
-- Every animation class **must** come from `packages/theme/src/tokens/semantic/animations.js` (`animate-fade-in`, `animate-fade-out`, `animate-slide-down`, `animate-popup-scale-in`, `animate-popup-scale-out`, `animate-blink`, `animate-highlight-fade`) — see [`.claude/docs/Design.md`](../../docs/Design.md#animations--semanticanimationsjs).
+- Every animation class **must** come from `packages/theme/src/tokens/semantic/animations.js` (`animate-fade-in`, `animate-fade-out`, `animate-slide-down`, `animate-popup-scale-in`, `animate-popup-scale-out`, `animate-blink`, `animate-highlight-fade`) — see [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md#animations--semanticanimationsjs).
 - Every motion-bearing class pairs with the reduced-motion escape in the same class string:
   ```
   transition-colors duration-150 ease-out motion-reduce:transition-none
@@ -200,7 +200,7 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 
 ## Fallbacks
 
-- Spec lists a token not in Design.md → stop with `BLOCKED: token <name> not in Design.md`. Do not write a fallback HEX.
+- Spec lists a token not in DESIGN.md → stop with `BLOCKED: token <name> not in DESIGN.md`. Do not write a fallback HEX.
 - Spec references an import that doesn't exist → stop with `BLOCKED: phantom import <path>`. The `validate-references.mjs` hook would block anyway.
 - Sub-component listed in spec but ambiguous purpose → stop with `BLOCKED: sub-component <name> purpose unclear`.
 

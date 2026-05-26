@@ -71,8 +71,8 @@
 
   const itemSharedClasses = [
     'relative z-[1] inline-flex h-[30px] shrink-0 cursor-pointer items-center',
-    'gap-spacing-elements-xs rounded-[var(--shape-elements)]',
-    'px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xs)]',
+    'gap-[var(--spacing-xs)] rounded-[var(--shape-button)]',
+    'px-[var(--spacing-sm)] py-[var(--spacing-xs)]',
     'text-label-md transition-colors motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
@@ -105,7 +105,7 @@
     'flex size-3.5 shrink-0 items-center justify-center text-[inherit] [&_i]:text-body-xs'
 
   const closeClasses =
-    'flex size-3.5 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[inherit] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]'
+    'flex size-3.5 shrink-0 items-center justify-center rounded-[var(--shape-button)] text-[inherit] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]'
 
   const activate = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) {

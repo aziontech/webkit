@@ -78,14 +78,14 @@
     />
     <div
       v-if="open"
-      class="absolute right-0 top-full z-10 mt-[var(--spacing-elements-xs)] min-w-[12rem] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-spacing-elements-sm"
+      class="absolute right-0 top-full z-10 mt-[var(--spacing-xs)] min-w-[12rem] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-sm)]"
       :data-testid="`${testId}__panel`"
     >
-      <p class="mb-[var(--spacing-elements-xs)] text-body-sm text-[var(--text-default)]">Columns</p>
+      <p class="mb-[var(--spacing-xs)] text-body-sm text-[var(--text-default)]">Columns</p>
       <label
         v-for="column in columns"
         :key="column.field"
-        class="flex cursor-pointer items-center gap-spacing-elements-xs py-[var(--spacing-elements-xs)] text-body-sm text-[var(--text-default)]"
+        class="flex cursor-pointer items-center gap-[var(--spacing-xs)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-default)]"
         :data-testid="`${testId}__option-${column.field}`"
       >
         <Checkbox

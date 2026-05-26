@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/components/**
-// (excluding the wip/ legacy zone) when the content violates Design.md /
+// (excluding the wip/ legacy zone) when the content violates DESIGN.md /
 // COMPONENT_REQUIREMENTS.md rules: hex/rgb/hsl colors, Tailwind palette, raw
 // typography, PrimeVue color utils, `class` in defineProps, `any`, `@ts-ignore`.
 
@@ -34,31 +34,31 @@ const VIOLATIONS = [
     id: 'typography-raw-size',
     regex: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\b(?!-)/g,
     message:
-      'Raw Tailwind text size. Use generated class from Design.md (text-heading-md, text-body-sm, text-button-lg, text-label-md, ...).'
+      'Raw Tailwind text size. Use generated class from DESIGN.md (text-heading-md, text-body-sm, text-button-lg, text-label-md, ...).'
   },
   {
     id: 'typography-raw-length',
     regex: /text-\[length:var\(--text-/g,
     message:
-      'Raw typography token. Use generated class from Design.md (text-heading-md, text-body-sm, text-button-lg, ...).'
+      'Raw typography token. Use generated class from DESIGN.md (text-heading-md, text-body-sm, text-button-lg, ...).'
   },
   {
     id: 'leading-raw',
     regex: /\bleading-(?:3|4|5|6|7|8|9|10|11|12|tight|snug|relaxed|loose|\[)/g,
     message:
-      'Raw leading-* class. Line-height is part of the generated typography class (Design.md); do not override.'
+      'Raw leading-* class. Line-height is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'tracking-raw',
     regex: /\btracking-(?:tighter|tight|wide|wider|widest|\[)/g,
     message:
-      'Raw tracking-* class. Letter-spacing is part of the generated typography class (Design.md); do not override.'
+      'Raw tracking-* class. Letter-spacing is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'font-family-raw',
     regex: /\b(?:font-(?:sans|serif|mono|sora|proto-mono)\b|font-\[family-name:)/g,
     message:
-      'Raw font-family. Font family is part of the generated typography class (Design.md); do not override.'
+      'Raw font-family. Font family is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'primevue-color',
@@ -160,10 +160,10 @@ async function main() {
   }
   lines.push('')
   lines.push(
-    'Sources of truth: .claude/docs/Design.md and .claude/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".'
+    'Sources of truth: .claude/docs/DESIGN.md and .claude/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".'
   )
   lines.push(
-    'Workflow: /spec-create then /component-create. The orchestrator runs token-mapper which resolves Figma variables to Design.md classes / var(--*) tokens; the catalog mirror lives at .claude/docs/Design.md.'
+    'Workflow: /spec-create then /component-create. The orchestrator runs token-mapper which resolves Figma variables to DESIGN.md classes / var(--*) tokens; the catalog mirror lives at .claude/docs/DESIGN.md.'
   )
 
   process.stderr.write(lines.join('\n') + '\n')

@@ -34,7 +34,7 @@ export const getTabViewIndicatorTransitionStyle = (): { transition: string } => 
 
 /** Enter offset when moving to a tab on the right (positive → 0). */
 export const tabViewEnterOffsetClasses = {
-  right: 'translate-x-[var(--spacing-4)]',
-  left: '-translate-x-[var(--spacing-4)]',
+  right: 'translate-x-[var(--spacing-md)]',
+  left: '-translate-x-[var(--spacing-md)]',
   none: 'translate-x-0'
 } as const

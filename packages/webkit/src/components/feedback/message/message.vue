@@ -10,8 +10,6 @@
 
   const emit = defineEmits(['action'])
 
-  const fontSans = 'font-[family-name:var(--font-sans),ui-sans-serif,system-ui,sans-serif]'
-
   const defaultIcons = {
     info: 'pi pi-info-circle',
     success: 'pi pi-check-circle',
@@ -86,10 +84,9 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'flex min-h-[var(--h-14,3.5rem)] items-center gap-spacing-elements-sm',
-      'rounded-[var(--shape-elements)] border border-[length:var(--border-width-default,1px)]',
-      'p-spacing-elements-sm shadow-[0_1px_2px_0_rgba(0,0,0,0.04)]',
-      fontSans,
+      'flex min-h-[var(--h-14,3.5rem)] items-center gap-[var(--spacing-sm)]',
+      'rounded-[var(--shape-button)] border border-[length:var(--border-width-default,1px)]',
+      'p-[var(--spacing-sm)] shadow-[var(--shadow-xs)]',
       currentSeverityStyle.value.container
     ]
 
@@ -106,10 +103,7 @@
     currentSeverityStyle.value.icon
   ])
 
-  const titleClass = computed(() => [
-    'font-medium leading-none tracking-[-0.02em]',
-    'text-[length:var(--text-label-sm,0.75rem)] text-[var(--text-default)]'
-  ])
+  const titleClass = computed(() => ['text-label-sm text-[var(--text-default)]'])
 
   const descriptionClass = computed(() => ['text-body-xs text-[var(--text-muted)]'])
 
@@ -130,7 +124,7 @@
         :class="iconClass"
         aria-hidden="true"
       />
-      <div class="flex min-w-0 flex-1 flex-col gap-1">
+      <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)]">
         <p
           :class="titleClass"
           :data-testid="`${testId}__title`"
