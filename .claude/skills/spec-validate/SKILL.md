@@ -21,7 +21,7 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
 
 - The full text of `.specs/<name>.md` (frontmatter + body).
 - `.specs/_schema.json` (frontmatter schema).
-- `.claude/docs/Design.md` (to verify Token references).
+- `.claude/docs/DESIGN.md` (to verify Token references).
 
 ## Workflow
 
@@ -31,9 +31,9 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
 4. **Check Events table.** Event names must be kebab-case OR `update:<prop>`. Payloads must be a TypeScript type (no `any`, no empty).
 5. **Check Slots table.** Slot names must be kebab-case. Scope must be `—` or a typed object.
 6. **Check Sub-components.** If `structure: composition`, the Sub-components section must list at least the root + one sub-component. If `structure: monolithic`, the section must be absent.
-7. **Check Tokens.** Every "Token (Design.md)" cell must match one of:
-   - A generated class starting with `.text-` and present in Design.md.
-   - A `var(--*)` that exists in Design.md.
+7. **Check Tokens.** Every "Token (DESIGN.md)" cell must match one of:
+   - A generated class starting with `.text-` and present in DESIGN.md.
+   - A `var(--*)` that exists in DESIGN.md.
    No HEX, no RGB, no Tailwind palette, no PrimeVue utility.
 8. **Check Constraints block.** The "## Constraints — DO NOT" section must be present and must contain at least the bullets from `.specs/_template.md` (verbatim text check on the canonical bullets).
 9. **Write checksum.** If all checks pass and the input had `status: draft`, compute `sha256(body)` (everything after the closing `---` of the frontmatter), write it to the `checksum` field, and flip `status: approved`. Refresh `last_updated`.
@@ -48,18 +48,18 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
 
 - **Do not** alter the spec body. Only frontmatter (`status`, `checksum`, `last_updated`) may change, and only when all checks pass.
 - **Do not** approve a spec whose status is already `approved`, `implemented`, or `locked` — leave it alone, return `OK` (or `FAIL` if body diverges from checksum).
-- **Do not** echo Design.md back to the user — just verify references.
+- **Do not** echo DESIGN.md back to the user — just verify references.
 
 ## Fallbacks
 
 - If Ajv is not available (shouldn't happen — installed via `pnpm`), exit with `FAIL: ajv missing; install dev dep`.
-- If Design.md is missing, exit with `FAIL: Design.md not found at .claude/docs/Design.md`.
+- If DESIGN.md is missing, exit with `FAIL: DESIGN.md not found at .claude/docs/DESIGN.md`.
 
 ## Definition of Done
 
 - [ ] Frontmatter passes `_schema.json`.
 - [ ] Every body section is present and non-`TBD`.
-- [ ] Every Tokens entry resolves in Design.md.
+- [ ] Every Tokens entry resolves in DESIGN.md.
 - [ ] Constraints block contains the canonical bullets.
 - [ ] On success: `status: approved` with a valid checksum.
 - [ ] On failure: nothing written; reasons printed; exit non-zero.

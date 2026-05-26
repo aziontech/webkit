@@ -125,7 +125,7 @@ For onboarding content, prioritize Storybook docs pages under `Foundations`.
 
 ### 11.1) Sources of truth (read first)
 
-- `.claude/docs/Design.md` — typography (generated classes such as `text-heading-md`, `text-body-sm`, `text-button-lg`), spacing (`var(--spacing-*)`), max-width (`var(--container-*)`), shape (`var(--shape-*)`), semantic colors. In any visual conflict, **Design.md wins**.
+- `.claude/docs/DESIGN.md` — typography (generated classes such as `text-heading-md`, `text-body-sm`, `text-button-lg`), spacing (`var(--spacing-*)` from `spacings.data.js` only), max-width (`var(--container-*)`), shape (`var(--shape-*)`), semantic colors. In any visual conflict, **DESIGN.md wins**.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § "Webkit Layer Pattern (in-depth)" — TypeScript pattern, JSDoc on props, naming conventions, controlled/uncontrolled states, typed slots, Composition Pattern criteria, `data-testid` BEM-style, class structure, ARIA, usability, light/dark, Code Connect, Storybook.
 - Canonical components: `packages/webkit/src/components/webkit/actions/button/button.vue`, `packages/webkit/src/components/webkit/actions/icon-button/icon-button.vue`, `packages/webkit/src/components/webkit/content/card-pricing/card-pricing.vue`.
 - External reference for Composition Pattern: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
@@ -153,7 +153,7 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 | Focused skills (one per phase) | [`.claude/skills/`](.claude/skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `storybook-write`, `code-connect-write`, `validate-component`, `echo-report` |
 | Isolated sub-agent prompts | [`.claude/agents/`](.claude/agents/) — one per skill, no chat history, no cross-talk |
 | Immutable rules (injected verbatim) | [`.claude/rules/`](.claude/rules/) — `no-invention`, `migration`, `dependencies` |
-| Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `Design.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + Storybook discipline), `PRIMEVUE_ABSTRACTION.md` |
+| Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + Storybook discipline), `PRIMEVUE_ABSTRACTION.md` |
 | Run logs (audit trail) | [`.claude/logs/<run-id>.jsonl`](.claude/logs/) |
 
 **How `/component-create` runs:**
@@ -161,7 +161,7 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 1. **Preflight** — resolves `.specs/<name>.md`, validates checksum (tamper detection).
 2. **spec-validator** (blocking) — schema, body, Constraints block, animation table.
 3. **Parallel discovery** — `figma-extractor`, `reuse-auditor`, then `token-mapper`.
-4. **Reconciliation** (blocking) — every token in spec exists in Design.md; every Figma region is covered by the spec.
+4. **Reconciliation** (blocking) — every token in spec exists in DESIGN.md; every Figma region is covered by the spec.
 5. **scaffolder** — writes `.vue` + `package.json` + exports entry. Hooks fire on each Write.
 6. **storybook-writer** — minimal stories only (Default + per kind + per size + Disabled).
 7. **code-connect-writer** — skips if `@figma/code-connect` missing.
@@ -194,7 +194,7 @@ The trigger logic now lives in the orchestrator command [`.claude/commands/compo
   - If a needed module does **not** exist yet, do not import it speculatively. Either (1) install it first (`pnpm --filter <ws> add ...`), (2) create the file and its `package.json` entry first, or (3) annotate the gap explicitly in the report as `TODO: create <path>` or `TODO: install <pkg>` and skip the dependent code. The `validate-references.mjs` hook physically blocks imports that resolve to nothing — see § 12.
 - New components use `<script setup lang="ts">` with `defineProps<...>()`, `defineEmits<...>()`, `defineSlots<...>()` and `defineModel<...>()` where applicable. JSDoc on every public prop. Zero `any`. Zero `// @ts-ignore`.
 - Variants are always exposed as `kind`. Sizes as `size` (`'small' | 'medium' | 'large'`). Boolean state props have no `is`/`has` prefix.
-- Typography is **always** applied via the generated class from Design.md (`text-heading-md`, `text-body-sm`, etc.). Never `text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, or `font-family` directly.
+- Typography is **always** applied via the generated class from DESIGN.md (`text-heading-md`, `text-body-sm`, etc.). Never `text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, or `font-family` directly.
 - Colors, spacing, max-width, and shape come from semantic `var(--*)` tokens. No hex, no Tailwind palette names (`bg-gray-*`), no PrimeVue color utilities (`text-color`, `surface-*`).
 - `defineOptions({ name, inheritAttrs: false })` + `useAttrs()` + `rootClasses` that merges `attrs.class`. Never declare `class` in `defineProps`.
 - `data-testid` hierarchical, BEM-style: root with fallback `'<category>-<name>'`, children with `${testId}__<part>` (two underscores).
@@ -226,7 +226,7 @@ pnpm storybook:build
 - Adding hex colors, raw typography classes, or Tailwind palette names "until the theme catches up". Register a theme gap with `TODO: tokenizar` instead.
 - Applying Composition Pattern reflexively. Use the decision rule: "does the consumer need to swap order or omit parts?"
 - Removing `focus-visible`, `aria-*`, `data-testid`, `disabled` HTML, or `<a>`/`<button>` polymorphism to simplify code.
-- Editing `.claude/docs/Design.md`, `COMPONENT_REQUIREMENTS.md`, or `PRIMEVUE_ABSTRACTION.md` without explicit human approval (these are sources of truth).
+- Editing `.claude/docs/DESIGN.md`, `COMPONENT_REQUIREMENTS.md`, or `PRIMEVUE_ABSTRACTION.md` without explicit human approval (these are sources of truth).
 
 For deeper, package-specific instructions, agents should also read [`packages/webkit/AGENTS.md`](packages/webkit/AGENTS.md) when working inside `packages/webkit/`.
 

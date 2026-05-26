@@ -32,7 +32,7 @@ The spec is **driven by Figma behavior**, not by Figma node names. The `figma-ex
 - Figma animation specs (`scale-in 150ms cubic-bezier(...)`) → match the existing semantic utility (`animate-popup-scale-in`); if no match exists, record a theme gap and use the closest primitive temporarily.
 - Figma component names (`HeaderNavigationMenuItem`) → our naming (`navigation-menu-item.vue`, `NavigationMenuItem`).
 
-When the Figma frame contradicts our conventions (e.g. uses a hex color not present in Design.md), **the spec is the contract** — record the theme gap, ship the closest primitive, and propose the token addition in a follow-up PR. **Never** introduce a hex literal "to match the Figma exactly."
+When the Figma frame contradicts our conventions (e.g. uses a hex color not present in DESIGN.md), **the spec is the contract** — record the theme gap, ship the closest primitive, and propose the token addition in a follow-up PR. **Never** introduce a hex literal "to match the Figma exactly."
 
 ### When migrating a pre-existing `.vue` (e.g. legacy component on the whitelist)
 

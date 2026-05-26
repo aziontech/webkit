@@ -29,7 +29,7 @@ BLOCKED: <one-sentence reason>
 Then exit with no writes. The orchestrator will surface the message to the user. Common reasons:
 
 - `BLOCKED: spec lists no default for prop "kind" but the type is non-optional`
-- `BLOCKED: spec references token .text-foo-md which is not in Design.md`
+- `BLOCKED: spec references token .text-foo-md which is not in DESIGN.md`
 - `BLOCKED: spec declares structure=composition but no Sub-components section`
 
 ## Why this rule exists
