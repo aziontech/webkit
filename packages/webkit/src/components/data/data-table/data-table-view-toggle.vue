@@ -44,7 +44,7 @@
 <template>
   <div
     v-bind="attrs"
-    class="inline-flex rounded-[var(--shape-elements)] border border-[var(--border-default)]"
+    class="inline-flex rounded-[var(--shape-button)] border border-[var(--border-default)]"
     role="group"
     :data-testid="testId"
   >
@@ -52,7 +52,7 @@
       v-for="option in options"
       :key="option.value"
       type="button"
-      class="px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xs)] text-body-sm transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
       :class="
         modelValue === option.value
           ? 'bg-[var(--primary)] text-[var(--primary-contrast)]'

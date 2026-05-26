@@ -11,6 +11,7 @@ checksum: 87064b25e5372edfbcc9cde6a5457e986ff36bf7ff44f0c7c501356d2a76de15
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
+
 # Field Switch Block — Component Spec
 
 ## Purpose
@@ -19,21 +20,21 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `boolean` | `undefined` | no | Selected value for v-model. |
-| `trueValue` | `boolean` | `true` | no | Value emitted when toggled on. |
-| `falseValue` | `boolean` | `false` | no | Value emitted when toggled off. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | no | id for the switch button; links label to control. |
-| `label` | `string` | `''` | no | Primary label text. |
-| `description` | `string` | `''` | no | Secondary description. |
-| `helperText` | `string` | `''` | no | Helper badge text shown when disabled. |
+| Prop          | Type      | Default     | Required | JSDoc                                             |
+| ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
+| `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
+| `trueValue`   | `boolean` | `true`      | no       | Value emitted when toggled on.                    |
+| `falseValue`  | `boolean` | `false`     | no       | Value emitted when toggled off.                   |
+| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
+| `inputId`     | `string`  | `undefined` | no       | id for the switch button; links label to control. |
+| `label`       | `string`  | `''`        | no       | Primary label text.                               |
+| `description` | `string`  | `''`        | no       | Secondary description.                            |
+| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload   | Notes    |
+| ------------------- | --------- | -------- |
 | `update:modelValue` | `boolean` | v-model. |
 
 ## Slots
@@ -49,34 +50,34 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger      | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ------------ | ----------------------------------------- | ------ | ------------------------------- |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (label) | `.text-body-sm` |
-| typography (description) | `.text-body-xs` |
-| typography (helper) | `.text-body-xss` |
-| surface | `var(--bg-surface)` |
-| surface (highlighted) | `var(--primary-selected)` |
-| text | `var(--text-default)` |
-| text (muted) | `var(--text-muted)` |
-| border (muted) | `var(--border-muted)` |
-| border (highlighted) | `var(--border-selected)` |
-| border (helper) | `var(--border-default)` |
-| spacing | `var(--spacing-3)` |
-| spacing (tight) | `var(--spacing-1)` |
-| spacing (helper gap) | `var(--spacing-2)` |
-| shape | `var(--shape-elements)` |
+| Region                   | Token (DESIGN.md)         |
+| ------------------------ | ------------------------- |
+| typography (label)       | `.text-body-sm`           |
+| typography (description) | `.text-body-xs`           |
+| typography (helper)      | `.text-body-xs`           |
+| surface                  | `var(--bg-surface)`       |
+| surface (highlighted)    | `var(--primary-selected)` |
+| text                     | `var(--text-default)`     |
+| text (muted)             | `var(--text-muted)`       |
+| border (muted)           | `var(--border-muted)`     |
+| border (highlighted)     | `var(--border-selected)`  |
+| border (helper)          | `var(--border-default)`   |
+| spacing                  | `var(--spacing-3)`        |
+| spacing (tight)          | `var(--spacing-1)`        |
+| spacing (helper gap)     | `var(--spacing-2)`        |
+| shape                    | `var(--shape-elements)`   |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

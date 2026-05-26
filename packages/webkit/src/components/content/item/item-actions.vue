@@ -26,7 +26,7 @@
     v-bind="$attrs"
     data-slot="item-actions"
     :data-testid="testId"
-    class="flex items-center gap-[var(--spacing-2)]"
+    class="flex items-center gap-[var(--spacing-xs)]"
   >
     <slot />
   </div>

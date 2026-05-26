@@ -92,7 +92,7 @@
 
   const sharedClasses = [
     ...toggleControlClasses,
-    'group size-[1.125rem] rounded-[var(--shape-elements)] border border-[var(--border-default)]',
+    'group size-[1.125rem] rounded-[var(--shape-button)] border border-[var(--border-default)]',
     'bg-[var(--bg-surface)] text-transparent'
   ]
 

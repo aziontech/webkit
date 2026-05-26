@@ -17,7 +17,7 @@
   const ctx = inject(PanelInjectionKey)
 
   const rootClasses = computed(() =>
-    cn('min-h-0 flex-1 overflow-y-auto p-spacing-elements-xl', attrs.class as string | undefined)
+    cn('min-h-0 flex-1 overflow-y-auto p-[var(--spacing-xl)]', attrs.class as string | undefined)
   )
 </script>
 

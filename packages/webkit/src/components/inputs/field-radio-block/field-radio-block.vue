@@ -64,17 +64,17 @@
 
   const cardClasses = cn(
     selectableBlockCardClasses,
-    'flex cursor-pointer items-start gap-[var(--spacing-3)] p-[var(--spacing-3)]',
+    'flex cursor-pointer items-start gap-[var(--spacing-sm)] p-[var(--spacing-sm)]',
     'data-[selected]:border-[var(--border-selected)] data-[selected]:bg-[var(--primary-selected)]',
     'data-[selected]:before:hidden data-[selected]:after:hidden',
     'data-[disabled]:opacity-50'
   )
 
   const textsClasses =
-    'flex min-w-0 flex-1 flex-col gap-[var(--spacing-1)] data-[disabled]:opacity-50'
+    'flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)] data-[disabled]:opacity-50'
 
   const helperClasses =
-    'inline-flex items-center gap-[var(--spacing-1)] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-2)] py-[var(--spacing-1)] text-body-xss text-[var(--text-muted)] w-fit'
+    'inline-flex items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-xs text-[var(--text-muted)] w-fit'
 
   const rootClasses = computed(() => cn(sharedClasses, attrs.class))
 </script>

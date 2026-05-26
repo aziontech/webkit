@@ -63,7 +63,7 @@
 <template>
   <span
     v-bind="attrs"
-    class="flex w-full max-w-[32rem] flex-row items-center gap-spacing-elements-sm"
+    class="flex w-full max-w-[32rem] flex-row items-center gap-[var(--spacing-sm)]"
     :data-testid="testId"
   >
     <InputText

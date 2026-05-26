@@ -54,7 +54,7 @@
 
   const rootClasses = computed(() =>
     cn(
-      'flex flex-wrap items-stretch gap-[var(--spacing-2)]',
+      'flex flex-wrap items-stretch gap-[var(--spacing-xs)]',
       'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
       attrs.class
     )
@@ -62,15 +62,15 @@
 
   const optionClasses = cn(
     selectableBlockCardClasses,
-    'flex shrink-0 cursor-pointer flex-col gap-[var(--spacing-1)]',
-    'px-[var(--spacing-3)] py-[var(--spacing-3)]',
-    'transition-colors duration-150 ease-out motion-reduce:transition-none',
+    'flex shrink-0 cursor-pointer flex-col gap-[var(--spacing-xxs)]',
+    'px-[var(--spacing-sm)] py-[var(--spacing-sm)]',
+    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
     'data-[selected]:border-[var(--border-selected)] data-[selected]:bg-[var(--primary-selected)]',
     'data-[selected]:before:hidden data-[selected]:after:hidden',
     'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
   )
 
-  const labelRowClasses = 'flex items-center gap-[var(--spacing-1)]'
+  const labelRowClasses = 'flex items-center gap-[var(--spacing-xxs)]'
 
   function isSelected(item: BoxGridSelectionItem): boolean {
     return props.modelValue === item.value
@@ -163,7 +163,7 @@
         :selected="isSelected(item)"
       >
         <div
-          class="flex flex-col gap-[var(--spacing-1)]"
+          class="flex flex-col gap-[var(--spacing-xxs)]"
           :data-testid="`${testId}__content`"
         >
           <div :class="labelRowClasses">

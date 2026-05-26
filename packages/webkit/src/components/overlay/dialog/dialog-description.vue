@@ -17,7 +17,7 @@
   const ctx = inject(DialogInjectionKey)
 
   const rootClasses = computed(() =>
-    cn('text-body-xxs text-[var(--text-muted)]', attrs.class as string | undefined)
+    cn('text-body-xs text-[var(--text-muted)]', attrs.class as string | undefined)
   )
 </script>
 
