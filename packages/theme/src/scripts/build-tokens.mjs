@@ -30,6 +30,7 @@ import { fileURLToPath } from 'node:url';
 
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { buildTrees, flatten } from './compile-primitives.js';
+import { compileThemeCss } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
@@ -189,6 +190,9 @@ const emitCssV3 = () => {
     formatVars(m.semanticColors.dark, '    '),
     '  }',
     '}',
+    '',
+    '/* ── Theme semantics (primary, secondary, surfaces, feedback, …) ── */',
+    compileThemeCss(),
     '',
     '@layer components {',
     emitComponentClasses(),

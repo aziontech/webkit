@@ -1,0 +1,11 @@
+{
+  "main": "./scroll-area.vue",
+  "module": "./scroll-area.vue",
+  "types": "./scroll-area.vue.d.ts",
+  "browser": {
+    "./sfc": "./scroll-area.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

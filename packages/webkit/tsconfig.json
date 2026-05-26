@@ -1,21 +1,18 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "noEmit": false,
-    "noPropertyAccessFromIndexSignature": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "noPropertyAccessFromIndexSignature": true
   },
   "include": ["src/**/*.ts", "src/**/*.vue"],
   "exclude": [
     "node_modules",
     "src/**/*.d.ts",
     "src/**/*.d.ts.map",
+    "src/**/*.figma.ts",
     "src/core/list-data-table",
     "src/services/markdown"
   ]

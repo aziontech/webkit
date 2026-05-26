@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-inputs-checkbox",
+  "main": "./checkbox.vue",
+  "module": "./checkbox.vue",
+  "types": "./checkbox.vue.d.ts",
+  "browser": {
+    "./sfc": "./checkbox.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

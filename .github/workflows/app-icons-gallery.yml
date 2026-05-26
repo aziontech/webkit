@@ -31,8 +31,7 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
+
 
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
@@ -45,12 +44,12 @@ jobs:
 
       - name: CLI version
         run: azion --version
-        
+
       - name: Configure token
         run: |
-          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}  
+          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}
           azion whoami
-      
+
       - name: Building workspace @aziontech/icons
         run: |
           npm run icons:build
@@ -58,7 +57,7 @@ jobs:
       - name: Azion Build
         run: |
           npm run icons:gallery:build:azion
-          
+
       - name: Azion Deploy
         run: |
           npm run icons:gallery:publish

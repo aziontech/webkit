@@ -11,9 +11,22 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+# Theme dist is generated but tracked — `@aziontech/theme`'s package.json#exports
+# points at ./dist/v3/{tailwind-preset.js,globals.css,…}. Without these checked in,
+# consumers (and CI) hit "Package subpath not defined" before they get a chance
+# to run `pnpm --filter @aziontech/theme build:tokens:v3`.
+!packages/theme/dist
+!packages/theme/dist/**
+# output.css is a transient harness artifact (build:css:v3) — not exported.
+packages/theme/dist/v3/output.css
 coverage
 *.local
 storybook-static
+
+# Secrets — keep .env files local; commit .env.example only.
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
@@ -35,7 +48,29 @@ yarn.lock
 *d.ts.map
 
 CLAUDE.md
-.claude
+# Claude Code — personal state and runtime caches (ignored)
+# Versioned in .claude/: settings.json, agents/, hooks/, commands/, skills/, rules/, docs/
+.claude/settings.local.json
+.claude/sessions/
+.claude/projects/
+.claude/file-history/
+.claude/cache/
+.claude/todos/
+.claude/telemetry/
+.claude/debug/
+.claude/statsig/
+.claude/session-env/
+.claude/shell-snapshots/
+.claude/tasks/
+.claude/backups/
+.claude/plans/
+.claude/ide/
+.claude/plugins/
+.claude/paste-cache/
+.claude/history.jsonl
+.claude/stats-cache.json
+.claude/mcp-needs-auth-cache.json
+.claude/.last-cleanup
 
 # packages folder to ignore
 packages/icons/tmp/
