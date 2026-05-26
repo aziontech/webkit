@@ -4,25 +4,33 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 59566411220ccfe73f67257120722e60544f8adc00570b5806881782fdbb32fb
+checksum: 1de51434b1fd172a6c0de7cd7f1c86f291a0a264bf66629d28438e926e753665
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-26
 ---
 # Link — Component Spec
 
 ## Purpose
 
-Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/link/`.
+Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`.
 
 ## Props
 
-| _none_ | — | — | — | Public API is slots-only. |
+| Prop | Type | Default | Required | JSDoc |
+|---|---|---|---|---|
+| `label` | `string` | `'Learn More'` | no | Visible label rendered inside the link. |
+| `size` | `'large' | 'medium'` | `'large'` | no | Size token; affects height, gap, and typography. |
+| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
+| `showIcon` | `boolean` | `true` | no | When true, renders the trailing icon. |
+| `icon` | `string` | `'pi pi-external-link'` | no | PrimeIcons class for the trailing icon. |
+| `href` | `string` | `'#'` | no | Destination URL for the anchor. |
+| `target` | `'_blank' | '_self'` | `'_self'` | no | Link target when navigating. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `click` | `event: MouseEvent` | — |
+| `click` | `MouseEvent` | — |
 
 ## Slots
 
@@ -31,6 +39,7 @@ Helps users move between views or sections. Migrated from the existing implement
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- `data-disabled` mirrors the `disabled` prop
 
 ## Motion & Animations
 
@@ -42,11 +51,11 @@ Helps users move between views or sections. Migrated from the existing implement
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
+| typography | .text-button-lg / .text-button-md |
+| surface | `var(--bg-surface-raised)` |
+| text | `var(--text-link)` |
+| spacing | `var(--spacing-xs)` |
+| shape | `var(--shape-button)` |
 | ring | `var(--ring-color)` |
 
 ## Theme gaps
@@ -58,15 +67,18 @@ Helps users move between views or sections. Migrated from the existing implement
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- Keyboard map: `Tab` focuses; `Enter` activates.
+- ARIA: `aria-disabled` and `tabindex="-1"` when disabled.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Stories (Storybook)
 
 - Default
+- Medium (size)
+- Large (size)
+- Disabled
 
 ## Constraints — DO NOT
 

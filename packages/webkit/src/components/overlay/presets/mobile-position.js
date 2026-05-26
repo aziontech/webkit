@@ -6,7 +6,7 @@
 export const overlayMobileFluidClasses = ['max-md:w-full', 'max-md:h-fit', 'max-md:max-h-[80vh]']
 export const dialogShellPositionClasses = [
   'max-md:items-end max-md:justify-center max-md:p-0',
-  'md:items-center md:justify-center md:p-spacing-elements-md'
+  'md:items-center md:justify-center md:p-[var(--spacing-md)]'
 ]
 export const dialogPanelPositionClasses = [...overlayMobileFluidClasses, 'max-md:overflow-y-auto']
 export const dialogPanelShapeClasses = [

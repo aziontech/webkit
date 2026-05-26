@@ -62,7 +62,7 @@ export const focusWithinRingClasses = [
 /** Bordered field shell with hover/active ghosts and focus-within ring. */
 export const surfaceControlWrapperClasses = [
   'relative inline-flex w-full items-center',
-  'rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]',
+  'rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)]',
   ...ghostLayerClasses,
   ...focusWithinRingClasses,
   ...focusSuppressHoverGhostClasses,
@@ -82,7 +82,7 @@ export const toggleControlClasses = [
 
 /** Selectable block card shell (field-*-block). */
 export const selectableBlockCardClasses = [
-  'relative rounded-[var(--shape-elements)] border',
+  'relative rounded-[var(--shape-button)] border',
   'bg-[var(--bg-surface)] border-[var(--border-muted)]',
   ...ghostLayerClasses,
   ...hasFocusVisibleRingClasses,
@@ -93,8 +93,8 @@ export const selectableBlockCardClasses = [
 
 /** Listbox / menu option row. */
 export const listOptionItemClasses = [
-  'relative flex w-full cursor-pointer items-center rounded-[var(--shape-elements)]',
-  'px-[var(--spacing-elements-xs)] py-[var(--spacing-elements-xs)] text-left text-label-md',
+  'relative flex w-full cursor-pointer items-center rounded-[var(--shape-button)]',
+  'px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left text-label-md',
   ...ghostLayerClasses,
   ...focusVisibleRingClasses,
   'focus-visible:before:opacity-100',
@@ -104,11 +104,11 @@ export const listOptionItemClasses = [
 /** Item row layout and kind/size tokens (wrapper or asChild target). */
 export const itemRowShellClasses = [
   'group/item relative flex w-full flex-wrap items-center',
-  'rounded-[var(--shape-elements)] border border-transparent text-body-sm text-[var(--text-default)]',
+  'rounded-[var(--shape-button)] border border-transparent text-body-sm text-[var(--text-default)]',
   'data-[kind=outline]:border-[var(--border-muted)] data-[kind=outline]:bg-[var(--bg-surface)]',
   'data-[kind=muted]:bg-[var(--bg-hover)]',
-  'data-[size=medium]:gap-[var(--spacing-4)] data-[size=medium]:p-[var(--spacing-4)]',
-  'data-[size=small]:gap-[var(--spacing-2)] data-[size=small]:px-[var(--spacing-4)] data-[size=small]:py-[var(--spacing-3)]'
+  'data-[size=medium]:gap-[var(--spacing-md)] data-[size=medium]:p-[var(--spacing-md)]',
+  'data-[size=small]:gap-[var(--spacing-xs)] data-[size=small]:px-[var(--spacing-md)] data-[size=small]:py-[var(--spacing-sm)]'
 ]
 
 /** Item shell only — no row-level hover/focus; slotted Button/link own interaction. */

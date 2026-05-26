@@ -69,9 +69,9 @@
   }
 
   const inputSizeClasses = {
-    small: 'px-[var(--spacing-elements-xs)] text-body-sm',
-    medium: 'px-[var(--spacing-elements-sm)] text-body-md',
-    large: 'px-[var(--spacing-elements-md)] text-body-lg'
+    small: 'px-[var(--spacing-xs)] text-body-sm',
+    medium: 'px-[var(--spacing-sm)] text-body-md',
+    large: 'px-[var(--spacing-md)] text-body-lg'
   }
 
   const rootClasses = computed(() => {

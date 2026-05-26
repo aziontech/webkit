@@ -42,20 +42,29 @@
 
   const attrs = useAttrs()
 
+  const passthroughAttrs = computed(() => {
+    const rest = { ...attrs }
+
+    delete rest.class
+    delete rest['data-testid']
+
+    return rest
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-link')
 
   const sharedClasses = [
     'group relative inline-flex shrink-0 items-center whitespace-nowrap',
     'rounded-[var(--shape-button)] text-[var(--text-link)]',
     'transition-colors motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)]',
-    'focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--border-default)]'
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
   ]
 
   const ghostClasses = [
     'pointer-events-none absolute top-1/2 -translate-y-1/2',
-    '-left-[var(--spacing-elements-xs)] -right-[var(--spacing-elements-xs)] h-8',
-    'rounded-[var(--shape-elements)] bg-[var(--bg-surface-raised)]',
+    '-left-[var(--spacing-xs)] -right-[var(--spacing-xs)] h-8',
+    'rounded-[var(--shape-button)] bg-[var(--bg-surface-raised)]',
     'opacity-0 transition-opacity motion-reduce:transition-none',
     'group-hover:opacity-100 group-focus-visible:opacity-100',
     'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
@@ -68,11 +77,11 @@
     'pointer-events-none cursor-not-allowed !text-[var(--text-disabled)] [&_.link-ghost]:hidden'
 
   const sizeClasses: Record<LinkSize, string> = {
-    large: 'h-10 text-button-lg',
-    medium: 'h-8 text-button-md'
+    large: 'min-h-10 h-10 text-button-lg',
+    medium: 'min-h-10 h-10 text-button-md'
   }
 
-  const contentClasses = 'inline-flex items-center gap-spacing-elements-xs'
+  const contentClasses = 'inline-flex items-center gap-[var(--spacing-xs)]'
 
   const rootClasses = computed(() => {
     const state = props.disabled ? disabledClasses : ''
@@ -93,6 +102,7 @@
 
 <template>
   <a
+    v-bind="passthroughAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -119,7 +129,7 @@
       <i
         v-if="showIcon"
         :class="icon"
-        class="size-[var(--spacing-elements-sm)] shrink-0 text-[length:inherit] leading-none"
+        class="size-[var(--spacing-sm)] shrink-0 text-[length:inherit] leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       />

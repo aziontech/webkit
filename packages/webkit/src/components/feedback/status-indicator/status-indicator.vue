@@ -42,9 +42,9 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'inline-flex items-center gap-spacing-elements-xs',
-      'px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xxs)]',
-      'rounded-[var(--shape-elements)]'
+      'inline-flex items-center gap-[var(--spacing-xs)]',
+      'px-[var(--spacing-sm)] py-[var(--spacing-xxs)]',
+      'rounded-[var(--shape-button)]'
     ]
 
     if (attrs.class) {

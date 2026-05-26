@@ -34,8 +34,8 @@
 
   const rootClasses = computed(() =>
     cn(
-      'flex h-full min-h-0 w-full min-w-0 flex-col gap-spacing-elements-md',
-      'border-r border-[var(--border-muted)] bg-[var(--bg-surface)] p-spacing-elements-md',
+      'flex h-full min-h-0 w-full min-w-0 flex-col gap-[var(--spacing-md)]',
+      'border-r border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-md)]',
       attrs.class
     )
   )

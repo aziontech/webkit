@@ -79,45 +79,32 @@ Use **only** the spacing tokens declared in:
 
 `packages/theme/src/tokens/semantic/spacings.data.js`
 
-Each key (for example `spacing-md`) becomes:
-
-1. A CSS variable: `--spacing-md` (mobile-first; values can change at `sm`, `xl`, etc.).
-2. Generated utilities: `.gap-spacing-md`, `.p-spacing-md` (from `build-tokens.mjs`).
+Each key (for example `spacing-md`) becomes a CSS variable: `--spacing-md` (mobile-first; values can change at `sm`, `xl`, etc.).
 
 Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `components/webkit/`.
 
 ### How to apply
 
-Reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities):
+Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `components/webkit/`:
 
 ```html
-p-[var(--spacing-md)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]
-gap-[var(--spacing-sm)] gap-x-[var(--spacing-md)]
-m-[var(--spacing-lg)] mt-[var(--spacing-xs)] mb-[var(--spacing-md)]
+p-[var(--spacing-md)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] gap-[var(--spacing-sm)]
+gap-x-[var(--spacing-md)] m-[var(--spacing-lg)] mt-[var(--spacing-xs)] mb-[var(--spacing-md)]
 ```
-
-When every side uses the same token, you may use the generated class instead:
-
-```html
-<p class="p-spacing-md">…</p>
-<div class="flex gap-spacing-sm">…</div>
-```
-
-There is no generated `m-spacing-*` utility — always use `m-[var(--spacing-*)]` (or `mx-` / `my-` / `mt-` / etc.) for margin.
 
 Breakpoint growth is baked into the CSS variables; you do not duplicate responsive spacing in components.
 
 ### Available spacing tokens
 
-| Token           | CSS variable      | Base (`_`) | Also at breakpoints      |
-| --------------- | ----------------- | ---------- | ------------------------ |
-| `spacing-xxl`   | `--spacing-xxl`   | `2rem`     | `sm`, `xl`               |
-| `spacing-xl`    | `--spacing-xl`    | `1.5rem`   | `sm`, `xl`               |
-| `spacing-lg`    | `--spacing-lg`    | `1rem`     | `sm`                     |
-| `spacing-md`    | `--spacing-md`    | `1rem`     | —                        |
-| `spacing-sm`    | `--spacing-sm`    | `0.75rem`  | —                        |
-| `spacing-xs`    | `--spacing-xs`    | `0.5rem`   | —                        |
-| `spacing-xxs`   | `--spacing-xxs`   | `0.25rem`  | —                        |
+| Token         | CSS variable    | Base (`_`) | Also at breakpoints |
+| ------------- | --------------- | ---------- | ------------------- |
+| `spacing-xxl` | `--spacing-xxl` | `2rem`     | `sm`, `xl`          |
+| `spacing-xl`  | `--spacing-xl`  | `1.5rem`   | `sm`, `xl`          |
+| `spacing-lg`  | `--spacing-lg`  | `1rem`     | `sm`                |
+| `spacing-md`  | `--spacing-md`  | `1rem`     | —                   |
+| `spacing-sm`  | `--spacing-sm`  | `0.75rem`  | —                   |
+| `spacing-xs`  | `--spacing-xs`  | `0.5rem`   | —                   |
+| `spacing-xxs` | `--spacing-xxs` | `0.25rem`  | —                   |
 
 If none of these fit the design, add a new entry in `spacings.data.js` and rebuild the theme — do not hardcode spacing in the component.
 
@@ -131,7 +118,7 @@ Example from Button — horizontal padding and inner gap:
 
 ```js
 'px-[var(--spacing-md)]' // size large
-'gap-[var(--spacing-xs)]' // label + icon — or `gap-spacing-xs`
+'gap-[var(--spacing-xs)]' // label + icon
 ```
 
 ---
@@ -140,18 +127,10 @@ Example from Button — horizontal padding and inner gap:
 
 ### Layout containers (page sections)
 
-Semantic, responsive container tokens from `containers.data.js`:
-
-| Token                   | Utility helper         |
-| ----------------------- | ---------------------- |
-| `--container-px`        | `.px-container`        |
-| `--container-py`        | `.py-container`        |
-| `--container-max-width` | `.max-container-width` |
-
-Or explicitly:
+Use primitive container width tokens with Tailwind max-width utilities:
 
 ```html
-max-w-[var(--container-max-width)]
+max-w-[var(--container-md)] max-w-[var(--container-5xl)]
 ```
 
 ### Fixed content widths
@@ -173,7 +152,7 @@ Use **semantic shape** tokens only:
 ```html
 rounded-[var(--shape-button)]
 <!-- buttons -->
-rounded-[var(--shape-button)]
+rounded-[var(--shape-elements)]
 <!-- inputs, chips, small surfaces -->
 rounded-[var(--shape-card)]
 <!-- cards -->
@@ -261,9 +240,9 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 ## Checklist for new or updated components
 
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
-2. **Spacing** — `padding` / `margin` / `gap` via `var(--spacing-*)` from `spacings.data.js` (or `.p-spacing-*` / `.gap-spacing-*` when uniform).
+2. **Spacing** — `padding` / `margin` / `gap` via `p-[var(--spacing-*)]`, `gap-[var(--spacing-*)]`, `m-[var(--spacing-*)]`, etc. from `spacings.data.js`.
 3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
-4. **Container** — Page sections: `max-w-[var(--container-max-width)]` and `.px-container` / `.py-container` from `containers.data.js`. Fixed content (cards, modals, columns): `max-w-[var(--container-<size>)]` (`3xs` … `7xl` in `primitives/shape/container.js`).
+4. **Container** — Use `max-w-[var(--container-<size>)]` for page sections and fixed content (cards, modals, columns), with sizes `3xs` … `7xl` from `primitives/shape/container.js`.
 5. **Radius** — `rounded-[var(--shape-*)]`.
 6. **Shadow** — `shadow-[var(--shadow-*)]` from `primitives/effects/shadow.js` when the surface elevates.
 7. **Color** — `bg-[var(--…)]`, `text-[var(--…)]`, `border-[var(--…)]`.
@@ -448,7 +427,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 - **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), PrimeVue color utilities (`text-color`, `surface-50`).
 - **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-[length:var(--text-*-font-size)]` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
-- **Container:** raw `max-w-md` / `max-w-[768px]`.
+- **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-[var(--container-<size>)]` only (`3xs` … `7xl` from `primitives/shape/container.js`).
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (PrimeVue alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.

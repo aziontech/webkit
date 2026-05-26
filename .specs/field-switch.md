@@ -11,6 +11,7 @@ checksum: 4e4186ce0355f5ccf2dedf95daa1efd33eeea62a8691b7e60c525bf863375831
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
+
 # Field Switch — Component Spec
 
 ## Purpose
@@ -19,21 +20,21 @@ Inline boolean toggle with switch on the leading edge, label, optional descripti
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `boolean` | `undefined` | no | Selected value for v-model. |
-| `trueValue` | `boolean` | `true` | no | Value emitted when toggled on. |
-| `falseValue` | `boolean` | `false` | no | Value emitted when toggled off. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | no | id for the switch button; links label to control. |
-| `label` | `string` | `''` | no | Primary label text. |
-| `description` | `string` | `''` | no | Secondary description. |
-| `helperText` | `string` | `''` | no | Helper badge text shown when disabled. |
+| Prop          | Type      | Default     | Required | JSDoc                                             |
+| ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
+| `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
+| `trueValue`   | `boolean` | `true`      | no       | Value emitted when toggled on.                    |
+| `falseValue`  | `boolean` | `false`     | no       | Value emitted when toggled off.                   |
+| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
+| `inputId`     | `string`  | `undefined` | no       | id for the switch button; links label to control. |
+| `label`       | `string`  | `''`        | no       | Primary label text.                               |
+| `description` | `string`  | `''`        | no       | Secondary description.                            |
+| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload   | Notes    |
+| ------------------- | --------- | -------- |
 | `update:modelValue` | `boolean` | v-model. |
 
 ## Slots
@@ -51,25 +52,25 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (label) | `.text-label-md` |
-| typography (description) | `.text-body-xs` |
-| typography (helper) | `.text-body-xss` |
-| text | `var(--text-default)` |
-| text (muted) | `var(--text-muted)` |
-| surface | `var(--bg-surface)` |
-| border | `var(--border-default)` |
-| spacing | `var(--spacing-3)` |
-| spacing (tight) | `var(--spacing-1)` |
-| spacing (helper gap) | `var(--spacing-2)` |
-| shape | `var(--shape-elements)` |
+| Region                   | Token (DESIGN.md)       |
+| ------------------------ | ----------------------- |
+| typography (label)       | `.text-label-md`        |
+| typography (description) | `.text-body-xs`         |
+| typography (helper)      | `.text-body-xs`         |
+| text                     | `var(--text-default)`   |
+| text (muted)             | `var(--text-muted)`     |
+| surface                  | `var(--bg-surface)`     |
+| border                   | `var(--border-default)` |
+| spacing                  | `var(--spacing-3)`      |
+| spacing (tight)          | `var(--spacing-1)`      |
+| spacing (helper gap)     | `var(--spacing-2)`      |
+| shape                    | `var(--shape-elements)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

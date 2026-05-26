@@ -38,7 +38,7 @@
   <div
     v-if="visible"
     v-bind="attrs"
-    class="absolute z-20 rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-spacing-elements-sm text-body-xs text-[var(--text-default)]"
+    class="absolute z-20 rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-sm)] text-body-xs text-[var(--text-default)]"
     :style="{ left: `${position}px` }"
     role="tooltip"
     :data-testid="testId"

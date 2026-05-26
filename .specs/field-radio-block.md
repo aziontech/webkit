@@ -11,6 +11,7 @@ checksum: ecbfb2b77258f4711f123ad3b0ce8c15371e8f6a84cbb89fd21a447af64141cc
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
+
 # Field Radio Block — Component Spec
 
 ## Purpose
@@ -19,21 +20,21 @@ Card-style radio option with selected border and background. Matches Figma Field
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `undefined` | no | Selected value for v-model. |
-| `value` | `string` | `undefined` | no | Option value for this radio instance. |
-| `name` | `string` | `undefined` | no | HTML name shared across a mutually exclusive group. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | no | id for the native input; links label to control. |
-| `label` | `string` | `''` | no | Primary label text. |
-| `description` | `string` | `''` | no | Secondary description. |
-| `helperText` | `string` | `''` | no | Helper badge text shown when disabled. |
+| Prop          | Type      | Default     | Required | JSDoc                                               |
+| ------------- | --------- | ----------- | -------- | --------------------------------------------------- |
+| `modelValue`  | `string`  | `undefined` | no       | Selected value for v-model.                         |
+| `value`       | `string`  | `undefined` | no       | Option value for this radio instance.               |
+| `name`        | `string`  | `undefined` | no       | HTML name shared across a mutually exclusive group. |
+| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens.   |
+| `inputId`     | `string`  | `undefined` | no       | id for the native input; links label to control.    |
+| `label`       | `string`  | `''`        | no       | Primary label text.                                 |
+| `description` | `string`  | `''`        | no       | Secondary description.                              |
+| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.              |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes    |
+| ------------------- | -------- | -------- |
 | `update:modelValue` | `string` | v-model. |
 
 ## Slots
@@ -48,33 +49,33 @@ Card-style radio option with selected border and background. Matches Figma Field
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger      | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ------------ | ----------------------------------------- | ------ | ------------------------------- |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (label) | `.text-body-sm` |
-| typography (description) | `.text-body-xs` |
-| typography (helper) | `.text-body-xss` |
-| surface | `var(--bg-surface)` |
-| surface (selected) | `var(--primary-selected)` |
-| text | `var(--text-default)` |
-| text (muted) | `var(--text-muted)` |
-| border (muted) | `var(--border-muted)` |
-| border (selected) | `var(--border-selected)` |
-| border (helper) | `var(--border-default)` |
-| spacing | `var(--spacing-3)` |
-| spacing (tight) | `var(--spacing-1)` |
-| shape | `var(--shape-elements)` |
+| Region                   | Token (DESIGN.md)         |
+| ------------------------ | ------------------------- |
+| typography (label)       | `.text-body-sm`           |
+| typography (description) | `.text-body-xs`           |
+| typography (helper)      | `.text-body-xs`           |
+| surface                  | `var(--bg-surface)`       |
+| surface (selected)       | `var(--primary-selected)` |
+| text                     | `var(--text-default)`     |
+| text (muted)             | `var(--text-muted)`       |
+| border (muted)           | `var(--border-muted)`     |
+| border (selected)        | `var(--border-selected)`  |
+| border (helper)          | `var(--border-default)`   |
+| spacing                  | `var(--spacing-3)`        |
+| spacing (tight)          | `var(--spacing-1)`        |
+| shape                    | `var(--shape-elements)`   |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -17,7 +17,7 @@
   const ctx = inject(DialogInjectionKey)
 
   const rootClasses = computed(() =>
-    cn('text-heading-xs text-[var(--text-default)]', attrs.class as string | undefined)
+    cn('text-heading-sm text-[var(--text-default)]', attrs.class as string | undefined)
   )
 </script>
 

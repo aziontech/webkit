@@ -42,8 +42,8 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'inline-flex items-center font-sora',
-      isLarge.value ? 'gap-spacing-elements-xs' : 'gap-spacing-elements-xxs'
+      'inline-flex items-center',
+      isLarge.value ? 'gap-[var(--spacing-xs)]' : 'gap-[var(--spacing-xxs)]'
     ]
 
     if (attrs.class) {
@@ -53,25 +53,22 @@
     return classes
   })
 
-  const groupClass = 'inline-flex items-center gap-spacing-elements-xxs'
+  const groupClass = 'inline-flex items-center gap-[var(--spacing-xxs)]'
 
   const primaryTextClass = computed(() => {
     if (isLarge.value) {
-      return ['text-heading-md text-[var(--text-default)] leading-[1.2]']
+      return ['text-heading-md text-[var(--text-default)]']
     }
 
-    return ['text-label-lg text-[var(--text-default)] leading-none']
+    return ['text-label-lg text-[var(--text-default)]']
   })
 
   const suffixClass = computed(() => {
     if (isLarge.value) {
-      return [
-        'text-[var(--text-muted)] leading-none',
-        'text-[length:var(--text-label-md,0.875rem)]'
-      ]
+      return ['text-label-md text-[var(--text-muted)]']
     }
 
-    return ['text-[var(--text-muted)] leading-none', 'text-[length:var(--text-label-sm,0.75rem)]']
+    return ['text-label-sm text-[var(--text-muted)]']
   })
 </script>
 

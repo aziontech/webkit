@@ -71,20 +71,20 @@
 
   const cardClasses = cn(
     selectableBlockCardClasses,
-    'p-[var(--spacing-3)]',
+    'p-[var(--spacing-sm)]',
     'data-[highlighted]:border-[var(--border-selected)] data-[highlighted]:bg-[var(--primary-selected)]',
     'data-[highlighted]:before:hidden data-[highlighted]:after:hidden',
     'data-[disabled]:opacity-50'
   )
 
   const rowClasses =
-    'flex cursor-pointer items-start gap-[var(--spacing-3)] data-[disabled]:cursor-not-allowed'
+    'flex cursor-pointer items-start gap-[var(--spacing-sm)] data-[disabled]:cursor-not-allowed'
 
   const textsClasses =
-    'flex min-w-0 flex-1 flex-col gap-[var(--spacing-1)] data-[disabled]:opacity-50'
+    'flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)] data-[disabled]:opacity-50'
 
   const helperClasses =
-    'inline-flex items-center gap-[var(--spacing-1)] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-2)] py-[var(--spacing-1)] text-body-xss text-[var(--text-muted)] w-fit'
+    'inline-flex items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-xs text-[var(--text-muted)] w-fit'
 
   const rootClasses = computed(() => cn(sharedClasses, attrs.class))
 </script>
