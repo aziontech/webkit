@@ -6,7 +6,7 @@ const meta = {
   component: Button,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: {
       default: 'dark'
     },
@@ -104,9 +104,11 @@ export default meta
 const Template = (args) => ({
   components: { Button },
   setup() {
-    return { args }
+    const { onClick, ...props } = args
+
+    return { props, onClick }
   },
-  template: '<Button v-bind="args" />'
+  template: '<Button v-bind="props" @click="onClick" />'
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
@@ -118,65 +120,46 @@ export const Default = {
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Primary = {
-  args: { kind: 'primary', label: 'Button' },
-  render: Template,
+export const Types = {
+  render: () => ({
+    components: { Button },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <Button kind="primary" label="Button" />
+        <Button kind="secondary" label="Button" />
+        <Button kind="outlined" label="Button" />
+        <Button kind="text" label="Button" />
+      </div>
+    `
+  }),
   parameters: {
-    docs: { description: { story: 'Primary kind variant.' } }
+    docs: { description: { story: 'All kind variants side by side.' } }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Secondary = {
-  args: { kind: 'secondary', label: 'Button' },
-  render: Template,
+export const Sizes = {
+  render: () => ({
+    components: { Button },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <Button size="small" label="Button" />
+        <Button size="medium" label="Button" />
+        <Button size="large" label="Button" />
+      </div>
+    `
+  }),
   parameters: {
-    docs: { description: { story: 'Secondary kind variant.' } }
+    docs: { description: { story: 'All size variants side by side.' } }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Outlined = {
-  args: { kind: 'outlined', label: 'Button' },
+export const Loading = {
+  args: { loading: true, label: 'Button' },
   render: Template,
   parameters: {
-    docs: { description: { story: 'Outlined kind variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Text = {
-  args: { kind: 'text', label: 'Button' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Text kind variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Small = {
-  args: { size: 'small', label: 'Button' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Small size variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Medium = {
-  args: { size: 'medium', label: 'Button' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Medium size variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Large = {
-  args: { size: 'large', label: 'Button' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Large size variant.' } }
+    docs: { description: { story: 'Loading state with spinner replacing the icon.' } }
   }
 }
 
