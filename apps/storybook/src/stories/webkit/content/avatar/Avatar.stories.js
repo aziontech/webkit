@@ -50,7 +50,7 @@ const meta = {
     },
     label: {
       control: 'text',
-      description: 'Initials when no image (max two characters, uppercased).',
+      description: 'Initials when no image (max two characters - uppercased).',
       table: {
         type: { summary: 'string' },
         category: 'props'
