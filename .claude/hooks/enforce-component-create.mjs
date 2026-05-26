@@ -116,7 +116,7 @@ async function main() {
     `  .specs/<name>.md                       (per-component contract)`,
     '',
     `See also: .claude/AGENTS.md § 11.2, packages/webkit/AGENTS.md,`,
-    `         .claude/docs/Design.md (authoritative tokens),`,
+    `         .claude/docs/DESIGN.md (authoritative tokens),`,
     `         .claude/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".`
   ].join('\n')
 
