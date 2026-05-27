@@ -21,15 +21,15 @@ const meta = {
     docs: {
       description: {
         component:
-          'Interactive control for user actions. Supports label text, optional icon, loading state, and link rendering when `href` is set.'
+          'Interactive control for user actions. `label` is required (use `IconButton` for icon-only controls). Supports optional icon, loading state, and link rendering when `href` is set.'
       }
     }
   },
   argTypes: {
     label: {
       control: 'text',
-      description: 'Visible label text.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+      description: 'Visible label text. Required — use `IconButton` for icon-only controls.',
+      table: { category: 'props', type: { summary: 'string', required: true } }
     },
     kind: {
       control: 'select',
@@ -160,6 +160,29 @@ export const Loading = {
   render: Template,
   parameters: {
     docs: { description: { story: 'Loading state with spinner replacing the icon.' } }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const Icon = {
+  render: () => ({
+    components: { Button },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <Button kind="primary" label="Button" icon="pi pi-arrow-right" />
+        <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
+        <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
+        <Button kind="text" label="Button" icon="pi pi-arrow-right" />
+      </div>
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Icon + label via the `icon` prop (PrimeIcons class) paired with `label`. `label` is required — for icon-only controls use `IconButton`.'
+      }
+    }
   }
 }
 

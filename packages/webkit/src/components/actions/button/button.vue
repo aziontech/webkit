@@ -13,8 +13,8 @@
   })
 
   interface Props {
-    /** Visible label text. */
-    label?: string
+    /** Visible label text. Use IconButton for icon-only controls. */
+    label: string
     /** Visual variant. */
     kind?: ButtonKind
     /** Size token; affects height, padding, and typography. */
@@ -32,7 +32,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    label: '',
     kind: 'primary',
     size: 'large',
     disabled: false,
@@ -48,16 +47,7 @@
 
   const attrs = useAttrs()
 
-  const passthroughAttrs = computed(() => {
-    const rest = { ...attrs }
-
-    delete rest.class
-    delete rest['data-testid']
-
-    return rest
-  })
-
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'action-button')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'actions-button')
 
   const isInactive = computed(() => props.disabled || props.loading)
 
@@ -112,7 +102,7 @@
     const kind = props.disabled ? disabledClasses : kindClasses[props.kind]
     const loadingClasses = props.loading && !props.disabled ? 'cursor-loading' : ''
 
-    return [sharedClasses, kind, sizeClasses[props.size], loadingClasses, attrs.class]
+    return [sharedClasses, kind, sizeClasses[props.size], loadingClasses, attrs['class']]
   })
 
   const loadingTestId = computed(() => `${testId.value}-loading`)
@@ -130,7 +120,6 @@
 <template>
   <a
     v-if="isAnchor"
-    v-bind="passthroughAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -160,7 +149,6 @@
 
   <button
     v-else
-    v-bind="passthroughAttrs"
     type="button"
     :disabled="disabled"
     :aria-disabled="isInactive || undefined"
