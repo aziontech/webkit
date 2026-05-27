@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Tag from '../../content/tag/tag.vue'
@@ -24,6 +24,31 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__header`
   )
 
+  const copied = ref(false)
+  let copiedTimer: ReturnType<typeof setTimeout> | undefined
+
+  const copyIcon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
+  const copyAriaLabel = computed(() => (copied.value ? 'Copied logs' : 'Copy logs'))
+
+  const handleCopy = async () => {
+    const didCopy = await ctx.copyLogs()
+
+    if (!didCopy) return
+
+    copied.value = true
+
+    if (copiedTimer) clearTimeout(copiedTimer)
+
+    copiedTimer = setTimeout(() => {
+      copied.value = false
+      copiedTimer = undefined
+    }, 2000)
+  }
+
+  onBeforeUnmount(() => {
+    if (copiedTimer) clearTimeout(copiedTimer)
+  })
+
   const handleWarningsKeydown = (event: globalThis.KeyboardEvent) => {
     if (ctx.disabled.value) return
 
@@ -34,11 +59,11 @@
   }
 
   const handleCopyKeydown = (event: globalThis.KeyboardEvent) => {
-    if (ctx.disabled.value) return
+    if (!ctx.canCopy.value) return
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      void ctx.copyLogs()
+      void handleCopy()
     }
   }
 </script>
@@ -58,11 +83,12 @@
           v-if="ctx.showCopy.value"
           kind="transparent"
           size="medium"
-          icon="pi pi-copy"
-          ariaLabel="Copy logs"
-          :disabled="ctx.disabled.value"
+          :icon="copyIcon"
+          :ariaLabel="copyAriaLabel"
+          :disabled="!ctx.canCopy.value"
           :data-testid="`${testId}__copy`"
-          @click="ctx.copyLogs"
+          :data-copied="copied || null"
+          @click="handleCopy"
           @keydown="handleCopyKeydown"
         />
 

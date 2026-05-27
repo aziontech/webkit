@@ -2,6 +2,8 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { copyTextToClipboard } from './composables/copy-text-to-clipboard'
+  import { formatLogLineText } from './composables/format-log-line-text'
   import type { LogViewLine } from './injection-key'
   import { LogViewInjectionKey } from './injection-key'
 
@@ -98,20 +100,11 @@
     return 'Warnings'
   })
 
-  const formatLineText = (line: LogViewLine) => {
-    const parts = [line.time, line.message]
-
-    if (line.suffix) parts.push(line.suffix)
-    if (line.folderType) parts.push(line.folderType)
-    if (line.size) parts.push(line.size)
-    if (line.gzipSize) parts.push(`gzip: ${line.gzipSize}`)
-
-    return parts.join(' ')
-  }
-
   const copyText = computed(() =>
-    filteredLines.value.map((line) => formatLineText(line)).join('\n')
+    filteredLines.value.map((line) => formatLogLineText(line)).join('\n')
   )
+
+  const canCopy = computed(() => props.showCopy && !props.disabled && copyText.value.length > 0)
 
   const setSearch = (value: string) => {
     search.value = value
@@ -123,18 +116,17 @@
     warningsOnly.value = !warningsOnly.value
   }
 
-  const copyLogs = async () => {
-    if (props.disabled || !props.showCopy) return
-
-    const text = copyText.value
-
-    try {
-      await navigator.clipboard.writeText(text)
-    } catch {
-      // Clipboard may be unavailable; still emit so consumers can handle fallback.
+  const copyLogs = async (): Promise<boolean> => {
+    if (!canCopy.value) {
+      return false
     }
 
+    const text = copyText.value
+    const copied = await copyTextToClipboard(text)
+
     emit('copy', text)
+
+    return copied
   }
 
   provide(LogViewInjectionKey, {
@@ -149,6 +141,7 @@
     warningCount,
     lineCountLabel,
     warningTagLabel,
+    canCopy,
     setSearch,
     toggleWarningsOnly,
     copyLogs
