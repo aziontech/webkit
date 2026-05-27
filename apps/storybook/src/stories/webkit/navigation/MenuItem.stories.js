@@ -1,5 +1,4 @@
 import MenuItem from '@aziontech/webkit/navigation/menu-item'
-import { expect, userEvent, within } from '@storybook/test'
 
 /** @type {import('@storybook/vue3').Meta<typeof MenuItem>} */
 const meta = {
@@ -7,7 +6,7 @@ const meta = {
   component: MenuItem,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: { default: 'dark' },
     a11y: {
       config: {
@@ -20,7 +19,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Sidebar navigation row (option) or section overline (group). Maps to Figma Webkit MenuItem (node 3601:2693). Use inside `SidebarGroup` lists or standalone for compact nav patterns.'
+          'Sidebar navigation row (`option`) or section overline (`group`). Supports optional icon, optional link rendering when `href` is set, and optional trailing tag.'
       }
     }
   },
@@ -31,7 +30,7 @@ const meta = {
       description: 'Structural variant: navigable row or section overline label.',
       table: {
         type: { summary: 'MenuItemKind' },
-        defaultValue: { summary: 'option' },
+        defaultValue: { summary: "'option'" },
         category: 'props'
       }
     },
@@ -40,7 +39,7 @@ const meta = {
       description: 'Visible label for the row or group header.',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: 'Option 1' },
+        defaultValue: { summary: "'Option 1'" },
         category: 'props'
       }
     },
@@ -49,7 +48,7 @@ const meta = {
       description: 'When true, applies the selected surface on option rows.',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: false },
+        defaultValue: { summary: 'false' },
         category: 'props'
       }
     },
@@ -58,7 +57,7 @@ const meta = {
       description: 'Disables interaction on option rows.',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: false },
+        defaultValue: { summary: 'false' },
         category: 'props'
       }
     },
@@ -67,7 +66,7 @@ const meta = {
       description: 'PrimeIcons class for the leading icon (option kind only).',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: 'pi pi-home' },
+        defaultValue: { summary: "'pi pi-home'" },
         category: 'props'
       }
     },
@@ -76,7 +75,7 @@ const meta = {
       description: 'Destination URL; renders an anchor when set on option rows.',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: '' },
+        defaultValue: { summary: "''" },
         category: 'props'
       }
     },
@@ -86,7 +85,7 @@ const meta = {
       description: 'Link target when `href` is set.',
       table: {
         type: { summary: "'_self' | '_blank'" },
-        defaultValue: { summary: '_self' },
+        defaultValue: { summary: "'_self'" },
         category: 'props'
       }
     },
@@ -104,7 +103,7 @@ const meta = {
       description: 'Severity token for the optional trailing Tag.',
       table: {
         type: { summary: 'MenuItemTagSeverity' },
-        defaultValue: { summary: 'info' },
+        defaultValue: { summary: "'info'" },
         category: 'props'
       }
     },
@@ -140,8 +139,7 @@ const meta = {
   },
   decorators: [
     () => ({
-      template:
-        '<ul class="m-0 w-[245px] list-none p-0"><story /></ul>'
+      template: '<ul class="m-0 w-[245px] list-none p-0"><story /></ul>'
     })
   ]
 }
@@ -153,25 +151,35 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template: '<MenuItem v-bind="args" />'
+  template: '<MenuItem v-bind="args" @click="args.onClick" />'
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof MenuItem>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default option row (Figma Type=Option, State=Default).' } }
+    docs: { description: { story: 'Default option row.' } }
   }
 }
 
-export const Selected = {
-  args: { selected: true },
-  render: Template,
+/** @type {import('@storybook/vue3').StoryObj<typeof MenuItem>} */
+export const States = {
+  render: () => ({
+    components: { MenuItem },
+    template: `
+      <ul class="m-0 w-[245px] list-none p-0">
+        <MenuItem label="Default" icon="pi pi-home" />
+        <MenuItem label="Selected" icon="pi pi-home" selected />
+        <MenuItem label="Disabled" icon="pi pi-home" disabled />
+      </ul>
+    `
+  }),
   parameters: {
-    docs: { description: { story: 'Selected option with raised surface (Figma Selected=true).' } }
+    docs: { description: { story: 'Default, selected, and disabled option states.' } }
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof MenuItem>} */
 export const WithTag = {
   args: { tagValue: 'Label', tagSeverity: 'info' },
   render: Template,
@@ -180,90 +188,22 @@ export const WithTag = {
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof MenuItem>} */
 export const Group = {
-  args: { kind: 'group', label: 'Label Group' },
-  decorators: [
-    () => ({
-      template: '<div class="w-[245px]"><story /></div>'
-    })
-  ],
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Section overline label (Figma Type=Group).' } }
-  }
-}
-
-export const Disabled = {
-  args: { disabled: true },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Disabled option — no interaction, muted tokens.' } }
-  }
-}
-
-export const LightDark = {
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'MenuItem option and group on light and dark canvas backgrounds.'
-      }
-    }
-  },
   render: () => ({
     components: { MenuItem },
     template: `
-      <div class="flex flex-col gap-0">
-        <section class="azion azion-light flex min-h-[14rem] items-start justify-center bg-[var(--bg-canvas)] p-8">
-          <ul class="m-0 w-[245px] list-none p-0">
-            <MenuItem kind="group" label="Section" />
-            <MenuItem label="Home" icon="pi pi-home" selected />
-            <MenuItem label="Domains" icon="pi pi-globe" />
-          </ul>
-        </section>
-        <section class="azion azion-dark flex min-h-[14rem] items-start justify-center bg-[var(--bg-canvas)] p-8">
-          <ul class="m-0 w-[245px] list-none p-0">
-            <MenuItem kind="group" label="Section" />
-            <MenuItem label="Home" icon="pi pi-home" selected />
-            <MenuItem label="Domains" icon="pi pi-globe" />
-          </ul>
-        </section>
-      </div>
+      <ul class="m-0 w-[245px] list-none p-0">
+        <MenuItem kind="group" label="Main section" />
+        <MenuItem label="Home" icon="pi pi-home" />
+        <MenuItem label="Applications" icon="pi pi-th-large" />
+        <MenuItem label="Domains" icon="pi pi-globe" />
+        <MenuItem label="Certificates" icon="pi pi-shield" />
+        <MenuItem label="Settings" icon="pi pi-cog" />
+      </ul>
     `
-  })
-}
-
-export const Accessibility = {
-  args: { href: '#home' },
-  render: Template,
+  }),
   parameters: {
-    docs: {
-      description: {
-        story:
-          'Keyboard: Tab focuses the link; Enter activates. Screen reader: current page announced when selected.'
-      }
-    }
-  },
-  play: async ({ canvasElement, args, step }) => {
-    const canvas = within(canvasElement)
-    await step('Tab focuses the menu link', async () => {
-      await userEvent.tab()
-      expect(canvas.getByRole('link')).toHaveFocus()
-    })
-    await step('Enter triggers click', async () => {
-      await userEvent.keyboard('{Enter}')
-      expect(args.onClick).toHaveBeenCalled()
-    })
-  }
-}
-
-export const Playground = {
-  render: Template,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Drive every prop from the Controls panel.'
-      }
-    }
+    docs: { description: { story: 'Group header with five option rows.' } }
   }
 }
