@@ -60,12 +60,12 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
 4. **Write the meta** following this template (substitute spec values):
 
    ```js
-   import <Component> from '@aziontech/webkit/<category>/<name>'
+   import Component from '@aziontech/webkit/<category>/<name>'
 
-   /** @type {import('@storybook/vue3').Meta<typeof <Component>>} */
+   /** @type {import('@storybook/vue3').Meta<typeof Component>} */
    const meta = {
      title: 'Webkit/<Category>/<PascalName>',
-     component: <Component>,
+     component: Component,
      // For Composition Pattern, expose subcomponents:
      // subcomponents: { <Root>Trigger, <Root>Content, ... },
      tags: ['autodocs'],
@@ -107,12 +107,12 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
 
    ```js
    const Template = (args) => ({
-     components: { <Component> },
+     components: { Component },
      setup() {
        const { onClick, ...props } = args
        return { props, onClick }
      },
-     template: '<<Component> v-bind="props" @click="onClick" />'
+     template: '<Component v-bind="props" @click="onClick" />'
    })
    ```
 
@@ -123,7 +123,7 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
    **Shape A — uses the reusable `Template` with an args delta (Default, Loading, Disabled):**
 
    ```js
-   /** @type {import('@storybook/vue3').StoryObj<typeof <Component>>} */
+   /** @type {import('@storybook/vue3').StoryObj<typeof Component>} */
    export const Default = {
      render: Template,
      parameters: {
@@ -153,13 +153,13 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
    ```js
    export const Types = {
      render: () => ({
-       components: { <Component> },
+       components: { Component },
        template: `
          <div class="flex flex-wrap items-center gap-4">
-           <<Component> kind="primary" label="Button" />
-           <<Component> kind="secondary" label="Button" />
-           <<Component> kind="outlined" label="Button" />
-           <<Component> kind="text" label="Button" />
+           <Component kind="primary" label="Button" />
+           <Component kind="secondary" label="Button" />
+           <Component kind="outlined" label="Button" />
+           <Component kind="text" label="Button" />
          </div>
        `
      }),
@@ -170,12 +170,12 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
 
    export const Sizes = {
      render: () => ({
-       components: { <Component> },
+       components: { Component },
        template: `
          <div class="flex flex-wrap items-center gap-4">
-           <<Component> size="small" label="Button" />
-           <<Component> size="medium" label="Button" />
-           <<Component> size="large" label="Button" />
+           <Component size="small" label="Button" />
+           <Component size="medium" label="Button" />
+           <Component size="large" label="Button" />
          </div>
        `
      }),
