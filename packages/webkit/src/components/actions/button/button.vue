@@ -87,8 +87,8 @@
     'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
   const sizeClasses: Record<ButtonSize, string> = {
-    large: 'min-w-20 h-10 h-10 px-[var(--spacing-md)] text-button-lg',
-    medium: 'min-w-16 h-8 h-10 px-[var(--spacing-sm)] text-button-md',
+    large: 'min-w-20 h-10 px-[var(--spacing-md)] text-button-lg',
+    medium: 'min-w-16 h-8 px-[var(--spacing-sm)] text-button-md',
     small: 'min-w-14 h-7 px-[var(--spacing-xs)] text-button-md'
   }
 
