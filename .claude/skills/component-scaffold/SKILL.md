@@ -19,7 +19,7 @@ Convert an approved `.specs/<name>.md` into:
 
 Nothing else. The story, the Code Connect file, and the validation pass live in other skills.
 
-**Folder layout — composition pattern (canonical, mirrors shadcn-vue with folder-per-part):**
+**Folder layout — composition pattern (canonical, one folder per part):**
 
 ```
 packages/webkit/src/components/webkit/overlay/dialog/
@@ -173,22 +173,22 @@ packages/webkit/src/components/webkit/actions/button/
    - `inject(<PascalRoot>InjectionKey)` to read shared state.
    - Local `testId` derived from `ctx.testId` per [`bem-testid.md`](../../docs/COMPONENT_REQUIREMENTS.md). The fallback follows BEM: `'<category>-<name>__<part>'` (e.g. `'overlay-dialog__trigger'`).
 
-4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder):
+4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
 
    ```ts
    // packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts
    import type { InjectionKey, Ref } from 'vue'
 
-   export interface <PascalName>Context {
+   export interface DialogContext {
      testId: string
      close: () => void
      isOpen: Readonly<Ref<boolean>>
    }
 
-   export const <PascalName>InjectionKey: InjectionKey<<PascalName>Context> = Symbol('<PascalName>Context')
+   export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('DialogContext')
    ```
 
-   Root `.vue` imports it via `import { <PascalName>InjectionKey, ... } from './injection-key'`. Sub-components import it via `import { <PascalName>InjectionKey, ... } from '../injection-key'`.
+   Root `.vue` imports it via `import { DialogInjectionKey } from './injection-key'`. Sub-components import it via `import { DialogInjectionKey } from '../injection-key'`.
 
 5. **Write `package.json`** for the **root** component:
 

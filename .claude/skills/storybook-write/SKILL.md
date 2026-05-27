@@ -1,6 +1,6 @@
 ---
 name: storybook-write
-description: Write a minimal `.stories.js` for a webkit component using the canonical Button.stories.js shape. The spec lists Default + Types + Sizes + Loading + Disabled (only the state stories the component's prop set supports). Inject the spec's `## Usage` block into `parameters.docs.description.component` as a shadcn-vue-style code snippet.
+description: Write a minimal `.stories.js` for a webkit component using the canonical Button.stories.js shape. The spec lists Default + Types + Sizes + Loading + Disabled (only the state stories the component's prop set supports). Inject the spec's `## Usage` block into `parameters.docs.description.component` as a code snippet.
 status: active
 last_updated: 2026-05-27
 ---
@@ -9,7 +9,7 @@ last_updated: 2026-05-27
 
 ## Purpose
 
-Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stories.js` (or `apps/storybook/src/stories/webkit/<category>/<PascalName>.stories.js` for short-form locations) covering **only** the stories listed in the spec's "Stories (Storybook)" section. The canonical shape is the existing `Button.stories.js` — composite `Types` and `Sizes` stories plus state-specific stories (`Loading`, `Disabled`). The spec's `## Usage` block (shadcn-vue style: import + minimal `<script setup>` + `<template>`) is injected verbatim into `parameters.docs.description.component`.
+Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stories.js` (or `apps/storybook/src/stories/webkit/<category>/<PascalName>.stories.js` for short-form locations) covering **only** the stories listed in the spec's "Stories (Storybook)" section. The canonical shape is the existing `Button.stories.js` — composite `Types` and `Sizes` stories plus state-specific stories (`Loading`, `Disabled`). The spec's `## Usage` block (import + minimal `<script setup>` + `<template>`) is injected verbatim into `parameters.docs.description.component`.
 
 ## When to invoke
 
@@ -55,7 +55,7 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
    }
    ````
 
-   Storybook's Docs page renders this markdown as a fenced code block under a `Usage` heading — the shadcn-vue convention. The same `Usage` block is the source of truth for both spec and Docs; never copy-paste it elsewhere in the story file.
+   Storybook's Docs page renders this markdown as a fenced code block under a `Usage` heading. The same `Usage` block is the source of truth for both spec and Docs; never copy-paste it elsewhere in the story file.
 
 4. **Write the meta** following this template (substitute spec values):
 

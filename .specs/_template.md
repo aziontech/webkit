@@ -20,7 +20,7 @@ last_updated: <YYYY-MM-DD>
 
 ## Usage
 
-<!-- shadcn-vue-style snippet. ONE fenced ```vue block with:
+<!-- ONE fenced ```vue block with:
        • the canonical import path from packages/webkit/package.json#exports
        • a minimal <script setup> that imports the component
        • a minimal <template> showing the public API
@@ -34,11 +34,11 @@ last_updated: <YYYY-MM-DD>
 
 ```vue
 <script setup>
-import <Name> from '@aziontech/webkit/<category>/<name>'
+import MyComponent from '@aziontech/webkit/<category>/<name>'
 </script>
 
 <template>
-  <<Name> label="Click me" />
+  <MyComponent label="Click me" />
 </template>
 ```
 
@@ -70,7 +70,7 @@ import DialogClose from '@aziontech/webkit/overlay/dialog-close'
 ## Sub-components
 
 <!-- Omit this section when structure: monolithic. -->
-<!-- For structure: composition, list every public sub-component AND the folder layout the scaffolder must emit. Each sub-component lives in its own folder under the root component, mirroring the shadcn-vue convention with a folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
+<!-- For structure: composition, list every public sub-component AND the folder layout the scaffolder must emit. Each sub-component lives in its own folder under the root component, one folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
 
 - `<name>-trigger/<name>-trigger.vue` — purpose
 - `<name>-portal/<name>-portal.vue` — purpose

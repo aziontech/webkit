@@ -862,7 +862,7 @@ npm run build:dts
 
 ## Webkit Layer Pattern (in-depth)
 
-This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/webkit/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../src/components/webkit/actions/button/button.vue), [icon-button.vue](../src/components/webkit/actions/icon-button/icon-button.vue), [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue). Reference for compositional decisions: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
+This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/webkit/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../src/components/webkit/actions/button/button.vue), [icon-button.vue](../src/components/webkit/actions/icon-button/icon-button.vue), [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue).
 
 > **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
 
@@ -913,7 +913,7 @@ interface Props {
 - **v-model** follows Vue 3 standard via `defineModel<T>('propName')`.
 - **Refs / composables** use descriptive prefixes (`triggerRef`, `panelRef`, `useFocusTrap`).
 
-### 2.3. Estados controlados vs não-controlados (padrão shadcn)
+### 2.3. Estados controlados vs não-controlados
 
 When the component owns relevant internal state (open/value/selected/expanded), expose **both** APIs:
 
@@ -934,11 +934,11 @@ defineSlots<{
 }>()
 ```
 
-### 2.5. `as-child` / Slot pattern (shadcn-vue) — _pending_
+### 2.5. `as-child` / Slot pattern — _pending_
 
-> **Status: not yet available.** A Slot helper composable does not exist in this repository today. Do **not** import a phantom path; the `validate-references.mjs` hook will block it. When a real component needs this pattern, propose adding the helper under `packages/webkit/src/composables/` in a dedicated PR (with TypeScript Slot polyfill or via `reka-ui`), then revisit this section.
+> **Status: not yet available.** A Slot helper composable does not exist in this repository today. Do **not** import a phantom path; the `validate-references.mjs` hook will block it. When a real component needs this pattern, propose adding the helper under `packages/webkit/src/composables/` in a dedicated PR, then revisit this section.
 
-When the helper ships, the pattern looks like: a component exposes `asChild?: boolean`. When `asChild` is `true`, it clones the single default-slot child and forwards classes/attrs/refs/listeners into it (same as `DialogTrigger`/`TooltipTrigger`/`AccordionTrigger` in shadcn-vue).
+When the helper ships, the pattern looks like: a component exposes `asChild?: boolean`. When `asChild` is `true`, it clones the single default-slot child and forwards classes/attrs/refs/listeners into it (same idea used by overlay trigger components in this codebase).
 
 ```ts
 interface Props {
@@ -951,7 +951,7 @@ Use cases (when available): triggers of overlay components, link-or-button wrapp
 
 ### 2.6. `data-state` / `data-disabled` / `data-orientation` attributes
 
-Expose reactive state via `data-*` attributes on the root so consumers can style with Tailwind state variants (`data-[state=open]:bg-...`). Same approach as shadcn-vue / Reka UI.
+Expose reactive state via `data-*` attributes on the root so consumers can style with Tailwind state variants (`data-[state=open]:bg-...`).
 
 ```vue
 <template>
@@ -1014,9 +1014,9 @@ interface MyCardActionProps {
 
 Naming pattern: `<ComponentName><PropName>` — `ButtonKind`, `ButtonSize`, `DialogSize`, `TabsOrientation`. Each public type is re-exported through the component's entry in `package.json#exports` (Vue SFC default export covers the runtime; named exports cover the types).
 
-### 2.9. Anatomy completa em Composition Pattern (shadcn-vue style)
+### 2.9. Anatomy completa em Composition Pattern
 
-When the component justifies Composition Pattern, ship the **complete anatomy** following the shadcn-vue/Reka UI convention. Reference anatomies:
+When the component justifies Composition Pattern, ship the **complete anatomy** — each meaningful part is its own public sub-component. Reference anatomies:
 
 - **Dialog:** `Dialog` (root) + `DialogTrigger` (as-child) + `DialogPortal` (teleport) + `DialogOverlay` (backdrop) + `DialogContent` (panel) + `DialogTitle` + `DialogDescription` + `DialogClose` (as-child).
 - **Tabs:** `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`.
@@ -1069,8 +1069,6 @@ Conventions:
 - Each public sub-component receives an entry in `package.json#exports` (`./overlay/dialog`, `./overlay/dialog-trigger`, …). The Storybook story for the root component covers the composition anatomy through the spec's `## Usage` block (which renders the full tree) — there is no separate `WithComposition` story by default.
 
 ### 3. Composition Pattern — só quando faz sentido
-
-Reference: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
 - **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue` + its own `package.json`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
 - **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
@@ -1179,7 +1177,7 @@ Authoring the `.figma.ts` file works without the token; only publishing needs it
 Stories follow the **market-standard CSF3 pattern for Vue 3** — concretely, the existing [`apps/storybook/src/stories/webkit/actions/button/Button.stories.js`](../../apps/storybook/src/stories/webkit/actions/button/Button.stories.js). The two distinguishing traits versus a generic CSF3 file:
 
 1. **Composite stories `Types` and `Sizes`** render every variant side-by-side in a single frame — replacing one-story-per-variant (`Primary`, `Secondary`, `Outlined`, …).
-2. **`parameters.docs.description.component` is built from the spec.** The Purpose paragraph is the lead-in; the `## Usage` fenced `vue` block (import + minimal `<script setup>` + `<template>`) is appended verbatim as a shadcn-vue-style code snippet. The same block is the single source of truth for both spec docs and Storybook Docs.
+2. **`parameters.docs.description.component` is built from the spec.** The Purpose paragraph is the lead-in; the `## Usage` fenced `vue` block (import + minimal `<script setup>` + `<template>`) is appended verbatim as a code snippet. The same block is the single source of truth for both spec docs and Storybook Docs.
 
 ```js
 // <Name>.stories.js — canonical shape (matches Button.stories.js)
@@ -1545,7 +1543,7 @@ The spec lists which `kind` / `size` stories exist. Do **not** add visual permut
 - [ ] `parameters.actions`, `parameters.a11y`, `parameters.docs.description.*`, `parameters.backgrounds`, `parameters.layout`.
 - [ ] `decorators` when needed.
 - [ ] Stories: `Default` + `Types` (composite, when more than one `kind`) + `Sizes` (composite, when more than one `size`) + `Loading` (only when the component has a `loading` prop) + `Disabled` (only when the component has a `disabled` prop). Nothing else by default — see § 13 for the forbidden list.
-- [ ] `parameters.docs.description.component` built from the spec: Purpose paragraph + the verbatim `## Usage` fenced `vue` code block (import + `<script setup>` + `<template>`). Same shadcn-vue convention used by `Button.stories.js`.
+- [ ] `parameters.docs.description.component` built from the spec: Purpose paragraph + the verbatim `## Usage` fenced `vue` code block (import + `<script setup>` + `<template>`). Same convention used by `Button.stories.js`.
 - [ ] Reusable `Template` at module scope, destructuring event handlers off `args` and forwarding via `@event="handler"` so the Actions panel works.
 
 #### Validação
