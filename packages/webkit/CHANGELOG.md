@@ -1,3 +1,9 @@
+## [3.0.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.2...@aziontech/webkit@3.0.3) (2026-05-27)
+
+### Bug Fixes
+
+- bump webkit ([#598](https://github.com/aziontech/webkit/issues/598)) ([aa77380](https://github.com/aziontech/webkit/commit/aa77380183973b02dee5cd3d9fc8828c578690d0))
+
 ## [3.0.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.1...@aziontech/webkit@3.0.2) (2026-05-26)
 
 ### Bug Fixes
