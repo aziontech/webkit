@@ -1,8 +1,8 @@
 ---
 name: component-scaffold
-description: Write the `.vue` file(s) and the local `package.json` for a component, plus the entry in `packages/webkit/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec.
+description: Write the `.vue` file(s) and the local `package.json` for a component, plus the entry in `packages/webkit/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec. For composition pattern, each sub-component lives in its own folder with its own `package.json`.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-05-27
 ---
 
 # Skill: component-scaffold
@@ -12,12 +12,52 @@ last_updated: 2026-05-22
 Convert an approved `.specs/<name>.md` into:
 
 - `packages/webkit/src/components/webkit/<category>/<name>/<name>.vue` (TypeScript, JSDoc on every public prop).
-- (Composition only) Sibling sub-component `.vue` files in the same directory.
-- (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts`.
-- `packages/webkit/src/components/webkit/<category>/<name>/package.json`.
-- New entry/entries in `packages/webkit/package.json#exports`.
+- `packages/webkit/src/components/webkit/<category>/<name>/package.json` for the root component.
+- (Composition only) **One folder per sub-component** under the root component directory — `<name>/<name>-<part>/<name>-<part>.vue` plus a sibling `<name>/<name>-<part>/package.json`. The full file name is preserved (`dialog-trigger.vue`, not `index.vue`) so error traces and editor breadcrumbs are unambiguous.
+- (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts` at the root level (shared by every sub-component).
+- New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./overlay/dialog-trigger`) regardless of the folder nesting.
 
 Nothing else. The story, the Code Connect file, and the validation pass live in other skills.
+
+**Folder layout — composition pattern (canonical, one folder per part):**
+
+```
+packages/webkit/src/components/webkit/overlay/dialog/
+├── dialog.vue                          # root
+├── package.json                        # root package
+├── injection-key.ts                    # shared InjectionKey<DialogContext>
+├── dialog-trigger/
+│   ├── dialog-trigger.vue
+│   └── package.json
+├── dialog-portal/
+│   ├── dialog-portal.vue
+│   └── package.json
+├── dialog-overlay/
+│   ├── dialog-overlay.vue
+│   └── package.json
+├── dialog-content/
+│   ├── dialog-content.vue
+│   └── package.json
+├── dialog-title/
+│   ├── dialog-title.vue
+│   └── package.json
+├── dialog-description/
+│   ├── dialog-description.vue
+│   └── package.json
+└── dialog-close/
+    ├── dialog-close.vue
+    └── package.json
+```
+
+**Folder layout — monolithic (unchanged):**
+
+```
+packages/webkit/src/components/webkit/actions/button/
+├── button.vue
+└── package.json
+```
+
+> Existing composition patterns (`dialog`, `drawer`, `navigation-menu`, `dropdown-menu`, `breadcrumb`) still use the legacy flat layout (`dialog-trigger.vue` directly under `dialog/`). Do **not** migrate them as part of a new-component scaffold. The new layout applies only to components scaffolded from a `status: approved` spec going forward.
 
 ## When to invoke
 
@@ -122,25 +162,35 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 
    **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — Storybook runs two `@vitejs/plugin-vue` passes; the second re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
 
-3. **(Composition only) Write each sub-component.** Each sub-component:
+3. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
+
+   - `packages/webkit/src/components/webkit/<category>/<name>/<name>-<part>/<name>-<part>.vue`
+   - `packages/webkit/src/components/webkit/<category>/<name>/<name>-<part>/package.json`
+
+   Inside the `.vue`:
    - `defineOptions({ name: '<PascalRoot><PascalPart>', inheritAttrs: false })`.
+   - Relative import for the shared injection key: `import { <PascalRoot>InjectionKey } from '../injection-key'` (one directory up — sibling of the root `.vue`).
    - `inject(<PascalRoot>InjectionKey)` to read shared state.
-   - Local `testId` derived from `ctx.testId` per [`bem-testid.md`](../../docs/COMPONENT_REQUIREMENTS.md).
-4. **(Composition only) Write `injection-key.ts`:**
+   - Local `testId` derived from `ctx.testId` per [`bem-testid.md`](../../docs/COMPONENT_REQUIREMENTS.md). The fallback follows BEM: `'<category>-<name>__<part>'` (e.g. `'overlay-dialog__trigger'`).
+
+4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
 
    ```ts
+   // packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts
    import type { InjectionKey, Ref } from 'vue'
 
-   export interface <PascalName>Context {
+   export interface DialogContext {
      testId: string
      close: () => void
      isOpen: Readonly<Ref<boolean>>
    }
 
-   export const <PascalName>InjectionKey: InjectionKey<<PascalName>Context> = Symbol('<PascalName>Context')
+   export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('DialogContext')
    ```
 
-5. **Write `package.json`:**
+   Root `.vue` imports it via `import { DialogInjectionKey } from './injection-key'`. Sub-components import it via `import { DialogInjectionKey } from '../injection-key'`.
+
+5. **Write `package.json`** for the **root** component:
 
    ```json
    {
@@ -153,11 +203,33 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
    }
    ```
 
-6. **Update `packages/webkit/package.json#exports`** — add one entry per public component (root + each public sub-component) preserving alphabetical order inside the category:
+   **(Composition only) Also write one `package.json` per sub-component folder** (sibling of the sub-component's `.vue`):
+
+   ```json
+   {
+     "name": "@aziontech/webkit-<category>-<name>-<part>",
+     "main": "./<name>-<part>.vue",
+     "module": "./<name>-<part>.vue",
+     "types": "./<name>-<part>.vue.d.ts",
+     "browser": { "./sfc": "./<name>-<part>.vue" },
+     "sideEffects": ["*.vue"]
+   }
+   ```
+
+6. **Update `packages/webkit/package.json#exports`** — add one entry per public component (root + each public sub-component) preserving alphabetical order inside the category. The **public export path stays flat** (`./<category>/<name>-<part>`) so consumers don't see the folder nesting; only the right-hand side changes:
 
    ```json
    "./<category>/<name>": "./src/components/webkit/<category>/<name>/<name>.vue",
-   "./<category>/<name>-trigger": "./src/components/webkit/<category>/<name>/<name>-trigger.vue"
+   "./<category>/<name>-trigger": "./src/components/webkit/<category>/<name>/<name>-trigger/<name>-trigger.vue",
+   "./<category>/<name>-content": "./src/components/webkit/<category>/<name>/<name>-content/<name>-content.vue"
+   ```
+
+   Concrete example for a new `popover` composition component:
+
+   ```json
+   "./overlay/popover": "./src/components/webkit/overlay/popover/popover.vue",
+   "./overlay/popover-trigger": "./src/components/webkit/overlay/popover/popover-trigger/popover-trigger.vue",
+   "./overlay/popover-content": "./src/components/webkit/overlay/popover/popover-content/popover-content.vue"
    ```
 
 7. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
@@ -207,10 +279,11 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 ## Definition of Done
 
 - [ ] Root `.vue` written with every spec prop/event/slot, no extras.
-- [ ] Composition: every sub-component `.vue` written + `injection-key.ts`.
-- [ ] Local `package.json` written.
-- [ ] New entries added to `packages/webkit/package.json#exports`.
+- [ ] Root `package.json` written.
+- [ ] Composition: every sub-component is **its own folder** under the component root — `<name>/<name>-<part>/<name>-<part>.vue` + `<name>/<name>-<part>/package.json`.
+- [ ] Composition: `injection-key.ts` written at the root level (sibling of `<name>.vue`), not inside any sub-component folder. Root imports it via `./injection-key`; sub-components via `../injection-key`.
+- [ ] New entries added to `packages/webkit/package.json#exports`. Public paths stay flat (`./<category>/<name>-<part>`); right-hand paths reflect the folder nesting.
 - [ ] No HEX / Tailwind palette / raw typography / `any` / `@ts-ignore`.
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
-- [ ] `data-testid` fallback equals `'<category>-<name>'` on the root.
+- [ ] `data-testid` fallback equals `'<category>-<name>'` on the root and `'<category>-<name>__<part>'` on each sub-component.
 - [ ] No story file written, no `.figma.ts` written, no pnpm command run.

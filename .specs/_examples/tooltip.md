@@ -19,6 +19,21 @@ last_updated: 2026-05-22
 
 Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `overlay/popover` instead.
 
+## Usage
+
+```vue
+<script setup>
+import Tooltip from '@aziontech/webkit/feedback/tooltip'
+import IconButton from '@aziontech/webkit/actions/icon-button'
+</script>
+
+<template>
+  <Tooltip text="Delete" placement="top">
+    <IconButton icon="pi pi-trash" aria-label="Delete" />
+  </Tooltip>
+</template>
+```
+
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
@@ -90,8 +105,10 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ## Stories (Storybook)
 
+Canonical layout. Tooltip has no `kind` and no `size`, but it has a `placement` axis — we treat `Placements` as the composite story (one frame, all four placements side-by-side), mirroring how Button uses `Types`/`Sizes`.
+
 - Default — tooltip rendered **closed**; viewer hovers/focuses the trigger to see it open.
-- One per `placement` (top/right/bottom/left) — each renders **closed** by default; only the placement target differs.
+- Placements — composite story with all four placements (top/right/bottom/left) side-by-side; each instance defaults to **closed**.
 - Disabled — trigger present, tooltip activation no-op.
 
 ## Constraints — DO NOT
@@ -106,7 +123,8 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
+- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
