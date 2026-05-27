@@ -72,7 +72,7 @@ const changePlanTemplate = `
           <SegmentedButton
             v-model="billingPeriod"
             :options="billingOptions"
-            aria-label="Billing period"
+            ariaLabel="Billing period"
           />
           <div
             class="flex w-full min-w-0 flex-col items-stretch justify-center gap-[var(--spacing-6)] lg:flex-row"
