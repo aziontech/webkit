@@ -1,4 +1,4 @@
-import { tokenRef } from '../../scripts/refs.js';
+import { tokenRef } from '../../scripts/refs.js'
 
 export const background = {
   light: {
@@ -12,7 +12,7 @@ export const background = {
     'bg-backdrop': tokenRef('primitives.alpha.black.800'),
     'bg-selected': tokenRef('theme.surfaces.surface-200'),
     'bg-contrast': tokenRef('theme.surfaces.surface-900'),
-    'bg-disabled': tokenRef('theme.surfaces.surface-200'),
+    'bg-disabled': tokenRef('theme.surfaces.surface-200')
   },
   dark: {
     'bg-canvas': tokenRef('theme.surfaces.surface-950'),
@@ -23,10 +23,10 @@ export const background = {
     'bg-hover': tokenRef('primitives.alpha.black.200'),
     'bg-active': tokenRef('primitives.alpha.black.100'),
     'bg-backdrop': tokenRef('primitives.alpha.black.800'),
-    'bg-selected': tokenRef('theme.surfaces.surface-950'),
+    'bg-selected': tokenRef('theme.surfaces.surface-800'),
     'bg-contrast': tokenRef('theme.surfaces.surface-50'),
-    'bg-disabled': tokenRef('theme.surfaces.surface-800'),
-  },
-};
+    'bg-disabled': tokenRef('theme.surfaces.surface-800')
+  }
+}
 
-export default { background };
+export default { background }
