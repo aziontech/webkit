@@ -46,15 +46,6 @@
 
   const attrs = useAttrs()
 
-  const passthroughAttrs = computed(() => {
-    const rest = { ...attrs }
-
-    delete rest.class
-    delete rest['data-testid']
-
-    return rest
-  })
-
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'action-icon-button'
   )
@@ -131,7 +122,6 @@
 <template>
   <a
     v-if="isAnchor"
-    v-bind="passthroughAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -161,7 +151,6 @@
 
   <button
     v-else
-    v-bind="passthroughAttrs"
     type="button"
     :disabled="disabled"
     :aria-label="ariaLabel"
