@@ -1,3 +1,9 @@
+## [3.0.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.3...@aziontech/webkit@3.0.4) (2026-05-27)
+
+### Bug Fixes
+
+- removing href/target props and pt function ([#600](https://github.com/aziontech/webkit/issues/600)) ([b70b6ef](https://github.com/aziontech/webkit/commit/b70b6ef8bc509244cc265ea37abd8e7ceb1aaec2))
+
 ## [3.0.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.2...@aziontech/webkit@3.0.3) (2026-05-27)
 
 ### Bug Fixes
