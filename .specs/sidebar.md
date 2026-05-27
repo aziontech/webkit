@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 3e8dacf24608d93e15664ef7d188cf85d3212c3118e11979ad6439f3800949c8
+checksum: 8c3214deb0f77fbc7d4e5ec6888f0cee4054b866cee999ce6b048f00a251be30
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-27
 ---
 # Sidebar — Component Spec
 

@@ -98,9 +98,11 @@ export default meta
 const navigationTemplate = `
   <NavSidebar aria-label="Application" class="h-full w-full">
     <template #header>
-      <InputText placeholder="Search" size="medium" />
+      <div class="p-[var(--spacing-md)] pb-0">
+        <InputText placeholder="Search" size="medium" />
+      </div>
     </template>
-    <SidebarGroup scroll>
+    <SidebarGroup scroll class="p-[var(--spacing-md)] pt-0">
     <SidebarGroup>
       <MenuItem label="Home" icon="ai ai-home" selected href="/" />
       <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />

@@ -34,11 +34,14 @@
 
   const rootClasses = computed(() =>
     cn(
-      'flex h-full min-h-0 w-full min-w-0 flex-col gap-[var(--spacing-md)]',
-      'border-r border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-md)]',
+      'flex h-full min-h-0 w-full min-w-0 flex-col',
+      'border-r border-[var(--border-muted)] bg-[var(--bg-surface)]',
       attrs.class
     )
   )
+
+  const navClasses =
+    'flex h-full min-h-0 flex-1 flex-col overflow-hidden [--menu-item-ring-offset:var(--bg-surface)]'
 </script>
 
 <template>
@@ -55,7 +58,7 @@
       <slot name="header" />
     </div>
     <nav
-      class="flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+      :class="navClasses"
       :data-testid="`${testId}__nav`"
     >
       <slot />
