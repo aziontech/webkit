@@ -1,3 +1,9 @@
+## [3.0.5](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.4...@aziontech/webkit@3.0.5) (2026-05-27)
+
+### Bug Fixes
+
+- remove duplicated/conflicting size height classes in button ([2668a29](https://github.com/aziontech/webkit/commit/2668a290fc1bb4b9f1d87dfa57af07f992384eac))
+
 ## [3.0.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.3...@aziontech/webkit@3.0.4) (2026-05-27)
 
 ### Bug Fixes
