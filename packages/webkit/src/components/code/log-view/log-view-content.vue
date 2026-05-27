@@ -2,6 +2,7 @@
   import { computed, nextTick, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
+  import { splitTextByQuery } from './composables/split-text-by-query'
   import { useLogViewContext } from './composables/use-log-view-context'
 
   defineOptions({
@@ -15,6 +16,13 @@
 
   const attrs = useAttrs()
   const ctx = useLogViewContext()
+
+  const searchQuery = computed(() => ctx.search.value.trim())
+
+  const segmentsFor = (text: string) => splitTextByQuery(text, searchQuery.value)
+
+  const highlightMarkClass =
+    'rounded-[var(--shape-elements)] bg-[var(--bg-selected)] text-inherit motion-reduce:transition-none'
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`
@@ -118,12 +126,36 @@
               :data-type="line.type"
             >
               <template v-if="line.type === 'framework-version'">
-                <span class="shrink-0 whitespace-nowrap">{{ line.message }}</span>
+                <span class="shrink-0 whitespace-nowrap">
+                  <template
+                    v-for="(segment, segmentIndex) in segmentsFor(line.message)"
+                    :key="`${line.id}-message-${segmentIndex}`"
+                  >
+                    <mark
+                      v-if="segment.match"
+                      :class="highlightMarkClass"
+                    >
+                      {{ segment.text }}
+                    </mark>
+                    <template v-else>{{ segment.text }}</template>
+                  </template>
+                </span>
                 <span
                   v-if="line.suffix"
                   class="shrink-0 whitespace-nowrap text-[var(--warning-contrast)]"
                 >
-                  {{ line.suffix }}
+                  <template
+                    v-for="(segment, segmentIndex) in segmentsFor(line.suffix)"
+                    :key="`${line.id}-suffix-${segmentIndex}`"
+                  >
+                    <mark
+                      v-if="segment.match"
+                      :class="highlightMarkClass"
+                    >
+                      {{ segment.text }}
+                    </mark>
+                    <template v-else>{{ segment.text }}</template>
+                  </template>
                 </span>
               </template>
 
@@ -138,12 +170,36 @@
                 <span
                   class="min-w-0 max-sm:whitespace-nowrap break-words whitespace-pre-wrap text-[var(--success-contrast)]"
                 >
-                  {{ line.message }}
+                  <template
+                    v-for="(segment, segmentIndex) in segmentsFor(line.message)"
+                    :key="`${line.id}-message-${segmentIndex}`"
+                  >
+                    <mark
+                      v-if="segment.match"
+                      :class="highlightMarkClass"
+                    >
+                      {{ segment.text }}
+                    </mark>
+                    <template v-else>{{ segment.text }}</template>
+                  </template>
                 </span>
               </template>
 
               <template v-else>
-                <span class="min-w-0 max-sm:whitespace-nowrap break-words">{{ line.message }}</span>
+                <span class="min-w-0 max-sm:whitespace-nowrap break-words">
+                  <template
+                    v-for="(segment, segmentIndex) in segmentsFor(line.message)"
+                    :key="`${line.id}-message-${segmentIndex}`"
+                  >
+                    <mark
+                      v-if="segment.match"
+                      :class="highlightMarkClass"
+                    >
+                      {{ segment.text }}
+                    </mark>
+                    <template v-else>{{ segment.text }}</template>
+                  </template>
+                </span>
               </template>
             </span>
 
@@ -152,12 +208,36 @@
                 :data-testid="`${ctx.testId}__line-message`"
                 class="relative z-[1] flex min-w-0 flex-1 items-center gap-[var(--spacing-xl)] text-[var(--text-default)] max-sm:whitespace-nowrap"
               >
-                <span class="w-16 shrink-0 whitespace-nowrap">{{ line.message }}</span>
+                <span class="w-16 shrink-0 whitespace-nowrap">
+                  <template
+                    v-for="(segment, segmentIndex) in segmentsFor(line.message)"
+                    :key="`${line.id}-message-${segmentIndex}`"
+                  >
+                    <mark
+                      v-if="segment.match"
+                      :class="highlightMarkClass"
+                    >
+                      {{ segment.text }}
+                    </mark>
+                    <template v-else>{{ segment.text }}</template>
+                  </template>
+                </span>
                 <span
                   v-if="line.folderType"
                   class="shrink-0 whitespace-nowrap text-[var(--warning-contrast)]"
                 >
-                  {{ line.folderType }}
+                  <template
+                    v-for="(segment, segmentIndex) in segmentsFor(line.folderType)"
+                    :key="`${line.id}-folder-type-${segmentIndex}`"
+                  >
+                    <mark
+                      v-if="segment.match"
+                      :class="highlightMarkClass"
+                    >
+                      {{ segment.text }}
+                    </mark>
+                    <template v-else>{{ segment.text }}</template>
+                  </template>
                 </span>
 
                 <span
@@ -165,14 +245,40 @@
                   :data-testid="`${ctx.testId}__line-size`"
                   class="flex shrink-0 items-center gap-[var(--spacing-sm)] whitespace-nowrap tabular-nums"
                 >
-                  <span>{{ line.size }}</span>
+                  <span>
+                    <template
+                      v-for="(segment, segmentIndex) in segmentsFor(line.size)"
+                      :key="`${line.id}-size-${segmentIndex}`"
+                    >
+                      <mark
+                        v-if="segment.match"
+                        :class="highlightMarkClass"
+                      >
+                        {{ segment.text }}
+                      </mark>
+                      <template v-else>{{ segment.text }}</template>
+                    </template>
+                  </span>
                   <span
                     class="text-[var(--text-muted)]"
                     aria-hidden="true"
                     >|</span
                   >
                   <span class="text-[var(--text-muted)]">gzip:</span>
-                  <span>{{ line.gzipSize }}</span>
+                  <span>
+                    <template
+                      v-for="(segment, segmentIndex) in segmentsFor(line.gzipSize ?? '')"
+                      :key="`${line.id}-gzip-${segmentIndex}`"
+                    >
+                      <mark
+                        v-if="segment.match"
+                        :class="highlightMarkClass"
+                      >
+                        {{ segment.text }}
+                      </mark>
+                      <template v-else>{{ segment.text }}</template>
+                    </template>
+                  </span>
                 </span>
               </span>
             </template>

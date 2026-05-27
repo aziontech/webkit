@@ -100,12 +100,15 @@
         <slot name="search">
           <span
             :data-testid="`${testId}__search`"
-            class="w-full min-w-0 sm:min-w-[12rem] sm:flex-1"
+            class="relative flex w-full min-w-0 items-center sm:min-w-[12rem] sm:flex-1"
           >
+            <i
+              class="pi pi-search pointer-events-none absolute left-[var(--spacing-xs)] z-[2] text-[length:0.875rem] leading-none text-[var(--text-muted)]"
+              aria-hidden="true"
+            />
             <InputText
-              icon="pi pi-search"
               size="small"
-              class="w-full"
+              class="w-full [&_input]:pl-[calc(var(--spacing-xs)+1.25rem)]"
               :model-value="ctx.search.value"
               :placeholder="ctx.searchPlaceholder.value"
               :disabled="ctx.disabled.value"

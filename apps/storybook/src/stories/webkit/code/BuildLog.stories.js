@@ -48,6 +48,15 @@ const meta = {
         category: 'props'
       }
     },
+    search: {
+      control: 'text',
+      description: 'Search query; filters log lines and highlights matches in LogViewContent.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" },
+        category: 'props'
+      }
+    },
     warningsOnly: {
       control: 'boolean',
       description: 'When true, shows only lines whose type is warning.',
@@ -75,6 +84,11 @@ const meta = {
         category: 'props'
       }
     },
+    'onUpdate:search': {
+      action: 'update:search',
+      description: 'Emitted when the header search field changes (v-model:search).',
+      table: { type: { summary: 'string' }, category: 'events' }
+    },
     'onUpdate:warningsOnly': {
       action: 'update:warningsOnly',
       description: 'Emitted when the warnings-only filter toggles (v-model:warnings-only).',
@@ -88,6 +102,7 @@ const meta = {
   },
   args: {
     lines: completeDeployLog,
+    search: '',
     warningsOnly: false,
     showCopy: true,
     disabled: false
@@ -101,8 +116,10 @@ export const Default = {
   render: (args) => ({
     components: composedComponents,
     setup() {
+      const search = ref(args.search ?? '')
       const warningsOnly = ref(args.warningsOnly ?? false)
       const {
+        'onUpdate:search': onUpdateSearch,
         'onUpdate:warningsOnly': onUpdateWarningsOnly,
         onCopy,
         ...props
@@ -110,7 +127,9 @@ export const Default = {
 
       return {
         props,
+        search,
         warningsOnly,
+        onUpdateSearch,
         onUpdateWarningsOnly,
         onCopy
       }
@@ -118,8 +137,10 @@ export const Default = {
     template: `
       <LogView
         v-bind="props"
+        v-model:search="search"
         v-model:warnings-only="warningsOnly"
         class="h-[640px]"
+        @update:search="onUpdateSearch"
         @update:warnings-only="onUpdateWarningsOnly"
         @copy="onCopy"
       >
@@ -132,7 +153,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'LogViewHeader + LogViewContent. Header is 48px with transparent IconButton copy control.'
+          'LogViewHeader + LogViewContent. Search filters lines and highlights matches in the log body.'
       }
     }
   }

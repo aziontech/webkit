@@ -15,10 +15,6 @@
   interface Props {
     /** Log entries (filtered in LogViewContent by search and warnings-only). */
     lines?: LogViewLine[]
-    /** Search query bound to the header field. */
-    search?: string
-    /** When true, shows only lines whose `type` is `warning`. */
-    warningsOnly?: boolean
     /** Placeholder for the default header search field. */
     searchPlaceholder?: string
     /** Shows the copy-to-clipboard control in LogViewHeader. */
@@ -29,16 +25,17 @@
 
   const props = withDefaults(defineProps<Props>(), {
     lines: () => [],
-    search: '',
-    warningsOnly: false,
     searchPlaceholder: 'Find in Logs',
     showCopy: true,
     disabled: false
   })
 
+  /** Bound to LogViewHeader search; filters LogViewContent when set. */
+  const search = defineModel<string>('search', { default: '' })
+  /** When true, shows only lines whose `type` is `warning`. */
+  const warningsOnly = defineModel<boolean>('warningsOnly', { default: false })
+
   const emit = defineEmits<{
-    'update:search': [value: string]
-    'update:warningsOnly': [value: boolean]
     copy: [value: string]
   }>()
 
@@ -62,10 +59,10 @@
   const warningCount = computed(() => props.lines.filter((line) => line.type === 'warning').length)
 
   const filteredLines = computed(() => {
-    const query = props.search.trim().toLowerCase()
+    const query = search.value.trim().toLowerCase()
     let result = props.lines
 
-    if (props.warningsOnly) {
+    if (warningsOnly.value) {
       result = result.filter((line) => line.type === 'warning')
     }
 
@@ -117,13 +114,13 @@
   )
 
   const setSearch = (value: string) => {
-    emit('update:search', value)
+    search.value = value
   }
 
   const toggleWarningsOnly = () => {
     if (props.disabled) return
 
-    emit('update:warningsOnly', !props.warningsOnly)
+    warningsOnly.value = !warningsOnly.value
   }
 
   const copyLogs = async () => {
@@ -144,8 +141,8 @@
     testId: testId.value,
     lines: computed(() => props.lines),
     filteredLines,
-    search: computed(() => props.search),
-    warningsOnly: computed(() => props.warningsOnly),
+    search: computed(() => search.value),
+    warningsOnly: computed(() => warningsOnly.value),
     disabled: computed(() => props.disabled),
     showCopy: computed(() => props.showCopy),
     searchPlaceholder: computed(() => props.searchPlaceholder),
