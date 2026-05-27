@@ -18,16 +18,85 @@ last_updated: <YYYY-MM-DD>
 
 <1–3 sentences. What the component is, when to use it, what makes it different from siblings in the same category.>
 
+## Usage
+
+<!-- shadcn-vue-style snippet. ONE fenced ```vue block with:
+       • the canonical import path from packages/webkit/package.json#exports
+       • a minimal <script setup> that imports the component
+       • a minimal <template> showing the public API
+     For structure: composition, the template MUST render the full anatomy
+     (every sub-component listed in the Sub-components section, in the order
+     the consumer would compose them). For structure: monolithic, render the
+     root with the most representative props.
+     This block is injected verbatim into the Storybook
+     parameters.docs.description.component by the storybook-write skill;
+     do NOT also paste it into the Storybook story by hand. -->
+
+```vue
+<script setup>
+import <Name> from '@aziontech/webkit/<category>/<name>'
+</script>
+
+<template>
+  <<Name> label="Click me" />
+</template>
+```
+
+<!-- Composition example (structure: composition):
+
+```vue
+<script setup>
+import Dialog from '@aziontech/webkit/overlay/dialog'
+import DialogTrigger from '@aziontech/webkit/overlay/dialog-trigger'
+import DialogContent from '@aziontech/webkit/overlay/dialog-content'
+import DialogTitle from '@aziontech/webkit/overlay/dialog-title'
+import DialogDescription from '@aziontech/webkit/overlay/dialog-description'
+import DialogClose from '@aziontech/webkit/overlay/dialog-close'
+</script>
+
+<template>
+  <Dialog>
+    <DialogTrigger>Open</DialogTrigger>
+    <DialogContent>
+      <DialogTitle>Confirm action</DialogTitle>
+      <DialogDescription>This cannot be undone.</DialogDescription>
+      <DialogClose>Cancel</DialogClose>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+-->
+
 ## Sub-components
 
 <!-- Omit this section when structure: monolithic. -->
-<!-- For structure: composition, list every public sub-component. -->
+<!-- For structure: composition, list every public sub-component AND the folder layout the scaffolder must emit. Each sub-component lives in its own folder under the root component, mirroring the shadcn-vue convention with a folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
 
-- `<name>-trigger.vue` — purpose
-- `<name>-content.vue` — purpose
-- `<name>-title.vue` — purpose
-- `<name>-description.vue` — purpose
-- `<name>-close.vue` — purpose
+- `<name>-trigger/<name>-trigger.vue` — purpose
+- `<name>-portal/<name>-portal.vue` — purpose
+- `<name>-overlay/<name>-overlay.vue` — purpose
+- `<name>-content/<name>-content.vue` — purpose
+- `<name>-title/<name>-title.vue` — purpose
+- `<name>-description/<name>-description.vue` — purpose
+- `<name>-close/<name>-close.vue` — purpose
+
+<!-- Resulting layout (composition, canonical):
+
+  packages/webkit/src/components/webkit/<category>/<name>/
+  ├── <name>.vue
+  ├── package.json
+  ├── injection-key.ts            (shared by every sub-component; one directory up from each sub-component)
+  ├── <name>-trigger/
+  │   ├── <name>-trigger.vue
+  │   └── package.json
+  ├── <name>-content/
+  │   ├── <name>-content.vue
+  │   └── package.json
+  └── ...
+
+  Public exports in packages/webkit/package.json#exports stay flat
+  (`./<category>/<name>-trigger`) regardless of the folder nesting. -->
+
 
 ## Props
 
@@ -118,18 +187,19 @@ last_updated: <YYYY-MM-DD>
 
 ## Stories (Storybook)
 
-Keep it minimal. Default lists only the essentials. Add a story only if the variant is genuinely distinct in behavior.
+Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/Button.stories.js`. Composite stories (`Types`, `Sizes`) render every variant side-by-side in a single frame; state stories use the reusable `Template` with an args delta.
 
 - Default
-- One per `kind` (when the component has more than one)
-- One per `size` (when the component has more than one)
-- Disabled (when the component has a `disabled` prop)
+- Types — composite story rendering every `kind` value side-by-side. Omit when the component has only one `kind`.
+- Sizes — composite story rendering every `size` value side-by-side. Omit when the component has only one `size`.
+- Loading — only when the component has a `loading` prop.
+- Disabled — only when the component has a `disabled` prop.
 
 <!-- Rules:
-     - DO NOT add LightDark, Accessibility play, Playground, WithSlots, WithComposition, Controlled, Uncontrolled, Loading unless the spec explicitly justifies them in writing here.
+     - DO NOT add LightDark, Accessibility (with play), Playground, WithSlots, WithComposition, Controlled, Uncontrolled stories unless the spec explicitly justifies them in writing here.
      - Storybook addons (a11y, docs autodocs, backgrounds) cover the rest automatically without a dedicated story.
-     - If `kind` has only one value, omit the per-kind story (the Default already covers it).
-     - Same for `size`. -->
+     - For each additional state story (Loading/Disabled), the args delta is the prop being demonstrated — nothing else.
+     - Do NOT replace Types/Sizes with one-story-per-variant (Primary/Secondary/...). The composite stories are the canonical pattern. -->
 
 
 ## Constraints — DO NOT
@@ -147,7 +217,8 @@ Keep it minimal. Default lists only the essentials. Add a story only if the vari
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
+- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

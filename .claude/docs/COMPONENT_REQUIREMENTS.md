@@ -1024,19 +1024,55 @@ When the component justifies Composition Pattern, ship the **complete anatomy** 
 - **DropdownMenu:** `DropdownMenu` + `DropdownMenuTrigger` + `DropdownMenuContent` + `DropdownMenuItem` + `DropdownMenuSeparator` + `DropdownMenuLabel`.
 - **Card:** `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`.
 
+#### Folder layout — canonical (applies to every new composition component)
+
+One folder per sub-component, file name preserves the full prefix, one `package.json` per folder, and the shared `injection-key.ts` lives at the root of the component (sibling of the root `.vue`).
+
+```
+packages/webkit/src/components/webkit/overlay/dialog/
+├── dialog.vue
+├── package.json
+├── injection-key.ts
+├── dialog-trigger/
+│   ├── dialog-trigger.vue
+│   └── package.json
+├── dialog-portal/
+│   ├── dialog-portal.vue
+│   └── package.json
+├── dialog-overlay/
+│   ├── dialog-overlay.vue
+│   └── package.json
+├── dialog-content/
+│   ├── dialog-content.vue
+│   └── package.json
+├── dialog-title/
+│   ├── dialog-title.vue
+│   └── package.json
+├── dialog-description/
+│   ├── dialog-description.vue
+│   └── package.json
+└── dialog-close/
+    ├── dialog-close.vue
+    └── package.json
+```
+
+> Existing composition components (`dialog`, `drawer`, `navigation-menu`, `dropdown-menu`, `breadcrumb`) still use the legacy **flat** layout, where every sub-component `.vue` sits directly under the component root. They are not migrated as part of new-component work — migration would require moving files and updating every `packages/webkit/package.json#exports` right-hand path, plus every consumer import path in console-kit, which is out of scope. The new layout above applies only to components scaffolded going forward.
+
 Conventions:
 
-- Sibling files in the same directory: `dialog.vue`, `dialog-trigger.vue`, `dialog-portal.vue`, `dialog-overlay.vue`, `dialog-content.vue`, `dialog-title.vue`, `dialog-description.vue`, `dialog-close.vue`.
-- Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts` or `types.ts` to avoid circular imports.
-- Each public sub-component receives an entry in `package.json#exports` (`./overlay/dialog`, `./overlay/dialog-trigger`, …) and a Storybook story (the `WithComposition` story shows the full anatomy).
-- `as-child` enabled on `Trigger` and `Close` variants.
-- `data-state` exposed on Root + Content for state-driven styling.
+- **Folder per sub-component, file keeps the full prefix** (`dialog-trigger/dialog-trigger.vue`, never `dialog-trigger/index.vue`). Reasons: (a) unambiguous error traces — stack frames show `dialog-trigger.vue`, not 27 different `index.vue` lines; (b) easier grep by file name; (c) editor breadcrumbs stay legible.
+- **One `package.json` per folder** (root + every sub-component). Mirrors how monolithic components like `button` already work — each sub-component is a self-contained entry point.
+- **Public export path stays flat.** `packages/webkit/package.json#exports` keeps `./overlay/dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/webkit/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
+- **Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts`** at the root level (sibling of `<name>.vue`, **not** inside any sub-component folder). Root imports `./injection-key`; sub-components import `../injection-key`.
+- **`as-child`** enabled on `Trigger` and `Close` variants.
+- **`data-state`** exposed on Root + Content for state-driven styling.
+- Each public sub-component receives an entry in `package.json#exports` (`./overlay/dialog`, `./overlay/dialog-trigger`, …). The Storybook story for the root component covers the composition anatomy through the spec's `## Usage` block (which renders the full tree) — there is no separate `WithComposition` story by default.
 
 ### 3. Composition Pattern — só quando faz sentido
 
 Reference: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
-- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). Sibling sub-components live in the same directory; shared state goes through `provide`/`inject` typed with `InjectionKey<T>`; each public sub-component has its own entry in `packages/webkit/package.json#exports`.
+- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue` + its own `package.json`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
 - **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
 - **Atomic** (Button, IconButton, Tag, Spinner, Badge, Currency) — always monolithic, no slots.
 - **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
@@ -1140,12 +1176,14 @@ Authoring the `.figma.ts` file works without the token; only publishing needs it
 
 ### 13. Storybook story — canonical pattern (Vue 3 + Storybook 8)
 
-Stories follow the **market-standard CSF3 pattern for Vue 3**, not whatever a local file happens to do today. The canonical template the `component-create` skill emits is reproduced below.
+Stories follow the **market-standard CSF3 pattern for Vue 3** — concretely, the existing [`apps/storybook/src/stories/webkit/actions/button/Button.stories.js`](../../apps/storybook/src/stories/webkit/actions/button/Button.stories.js). The two distinguishing traits versus a generic CSF3 file:
+
+1. **Composite stories `Types` and `Sizes`** render every variant side-by-side in a single frame — replacing one-story-per-variant (`Primary`, `Secondary`, `Outlined`, …).
+2. **`parameters.docs.description.component` is built from the spec.** The Purpose paragraph is the lead-in; the `## Usage` fenced `vue` block (import + minimal `<script setup>` + `<template>`) is appended verbatim as a shadcn-vue-style code snippet. The same block is the single source of truth for both spec docs and Storybook Docs.
 
 ```js
-// <Name>.stories.js
+// <Name>.stories.js — canonical shape (matches Button.stories.js)
 import Component from '@aziontech/webkit/<category>/<name>'
-import { expect, userEvent, within } from '@storybook/test'
 
 /** @type {import('@storybook/vue3').Meta<typeof Component>} */
 const meta = {
@@ -1154,7 +1192,7 @@ const meta = {
   // subcomponents: { ComponentTrigger, ComponentContent } // when Composition Pattern
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: { default: 'dark' },
     a11y: {
       config: {
@@ -1166,27 +1204,39 @@ const meta = {
     },
     docs: {
       description: {
-        component:
-          '<one paragraph describing the component, when to use it, and any non-obvious behavior>'
+        // <Purpose paragraph from .specs/<name>.md>
+        //
+        // ## Usage
+        //
+        // ```vue
+        // <script setup>
+        // import Component from '@aziontech/webkit/<category>/<name>'
+        // </script>
+        //
+        // <template>
+        //   <Component label="Click me" />
+        // </template>
+        // ```
+        component: /* the multi-line markdown built from the spec — see .claude/skills/storybook-write/SKILL.md step 3 */
       }
     }
   },
   argTypes: {
     // --- PROPS ---
     kind: {
-      control: { type: 'select' },
+      control: 'select',
       options: ['primary', 'secondary', 'outlined', 'text'],
       description: 'Visual variant.',
       table: {
-        type: { summary: 'ButtonKind' },
-        defaultValue: { summary: 'primary' },
-        category: 'props'
+        category: 'props',
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text'" },
+        defaultValue: { summary: "'primary'" }
       }
     },
     disabled: {
       control: 'boolean',
       description: 'Disables interaction and applies the disabled token set.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
 
     // --- EVENTS ---
@@ -1195,20 +1245,8 @@ const meta = {
     // (e.g. `'action-click'`) silently fail — the Actions panel stays empty.
     onClick: {
       action: 'click',
-      description: 'Fires when the component is activated.',
-      table: { type: { summary: '(event: MouseEvent) => void' }, category: 'events' }
-    },
-    'onUpdate:open': {
-      action: 'update:open',
-      description: 'Emitted when the open state changes (works with v-model:open).',
-      table: { type: { summary: '(value: boolean) => void' }, category: 'events' }
-    },
-
-    // --- SLOTS ---
-    default: {
-      description: 'Default slot content.',
-      control: false,
-      table: { type: { summary: 'VNode | string' }, category: 'slots' }
+      description: 'Emitted when the button is activated.',
+      table: { category: 'events', type: { summary: 'MouseEvent' } }
     }
   },
   args: {
@@ -1218,71 +1256,76 @@ const meta = {
 }
 export default meta
 
+// Reusable Template — destructure event handlers off args and forward via @event.
 const Template = (args) => ({
   components: { Component },
   setup() {
-    return { args }
+    const { onClick, ...props } = args
+    return { props, onClick }
   },
-  template: '<Component v-bind="args" />'
+  template: '<Component v-bind="props" @click="onClick" />'
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Component>} */
 export const Default = {
   render: Template,
-  parameters: { docs: { description: { story: 'Default configuration.' } } }
+  parameters: { docs: { description: { story: 'Default primary button at large size.' } } }
+}
+
+export const Types = {
+  render: () => ({
+    components: { Component },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <Component kind="primary" label="Button" />
+        <Component kind="secondary" label="Button" />
+        <Component kind="outlined" label="Button" />
+        <Component kind="text" label="Button" />
+      </div>
+    `
+  }),
+  parameters: { docs: { description: { story: 'All kind variants side by side.' } } }
+}
+
+export const Sizes = {
+  render: () => ({
+    components: { Component },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <Component size="small" label="Button" />
+        <Component size="medium" label="Button" />
+        <Component size="large" label="Button" />
+      </div>
+    `
+  }),
+  parameters: { docs: { description: { story: 'All size variants side by side.' } } }
+}
+
+export const Loading = {
+  args: { loading: true, label: 'Button' },
+  render: Template,
+  parameters: { docs: { description: { story: 'Loading state with spinner replacing the icon.' } } }
 }
 
 export const Disabled = {
-  args: { disabled: true },
+  args: { disabled: true, label: 'Button' },
   render: Template,
   parameters: { docs: { description: { story: 'Disabled state.' } } }
-}
-
-export const Accessibility = {
-  render: Template,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Keyboard: Tab focuses the control; Enter/Space activates. Screen reader announces role + name. Tested with VoiceOver.'
-      }
-    }
-  },
-  play: async ({ canvasElement, args, step }) => {
-    const canvas = within(canvasElement)
-    await step('Tab focuses the primary control', async () => {
-      await userEvent.tab()
-      expect(canvas.getByRole('button')).toHaveFocus()
-    })
-    await step('Enter triggers the click handler', async () => {
-      await userEvent.keyboard('{Enter}')
-      expect(args.onClick).toHaveBeenCalled()
-    })
-  }
-}
-
-export const Playground = {
-  render: Template,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Drive every prop from the Controls panel; the Actions panel captures emitted events.'
-      }
-    }
-  }
 }
 ```
 
 **Hard rules:**
 
+- **`layout: 'centered'`** by default. Override to `'padded'` only when the component is full-width (header, sidebar, drawer).
+- **`parameters.docs.description.component` is built from the spec** — Purpose paragraph + the verbatim `## Usage` fenced code block. Never hand-edit the usage example in the story. Never paste it elsewhere in the file.
+- **Composite `Types` / `Sizes` stories** are the canonical replacement for one-story-per-variant. Do not split them into `Primary`, `Secondary`, `Small`, `Medium`, etc.
 - **Events as `on<EventName>` camelCase** in `argTypes`, with `action: '<emitted-name>'`. Vue 3's `v-bind` ignores kebab-case keys, so `'action-click': { action: '...' }` silently breaks the Actions panel. Use `onActionClick: { action: 'action-click' }`. For v-model events, the key keeps the colon: `'onUpdate:open': { action: 'update:open' }`.
+- **Reusable `Template` destructures event handlers off `args`** and forwards them via `@event="handler"` in the template — exactly like `Button.stories.js`. Without that, the Actions panel cannot capture them.
 - **Do NOT use** `parameters.actions.argTypesRegex` (deprecated in Storybook 8).
 - **Do NOT use** `parameters.actions.handles` (legacy Web Components addon, not Vue 3 emits).
-- **Use `table.category`** to group controls: `'props'` (default — may omit), `'events'`, `'slots'`.
+- **Use `table.category`** to group controls: `'props'`, `'events'`, `'slots'`.
 - **`control: false`** for slots and any non-controllable item.
-- **Single reusable `Template`** at module scope; do not redeclare the same render inline in every story.
-- **CSF3 object shape** (`export const Name = { args, render, parameters, play }`). Never CSF2 (`Name.args = {...}`).
+- **CSF3 object shape** (`export const Name = { args, render, parameters }`). Never CSF2 (`Name.args = {...}`).
 - **Slot demos** use a story-specific `template` with real markup inside the component — slots are not passed via `v-bind`.
 - **`tags: ['autodocs']`** on the meta.
 - **`subcomponents`** on the meta when Composition Pattern — Storybook generates Docs tabs per sub-component.
@@ -1290,11 +1333,12 @@ export const Playground = {
 **Mandatory stories — minimal by default:**
 
 - `Default`
-- One per `kind` (omit if the component has only one)
-- One per `size` (omit if the component has only one)
+- `Types` (when the component has more than one `kind`)
+- `Sizes` (when the component has more than one `size`)
+- `Loading` (only if the component has a `loading` prop)
 - `Disabled` (only if the component has a `disabled` prop)
 
-**Forbidden by default** (do **not** add unless the spec explicitly lists and justifies them): `LightDark`, `Accessibility` with `play`, `Playground`, `WithSlots`, `WithComposition`, `Controlled`, `Uncontrolled`, `Loading`. Storybook's `autodocs` + `a11y` addon + `backgrounds` already cover dark/light, axe checks, and consumer-driven exploration via Controls — adding bespoke stories duplicates work and rots over time.
+**Forbidden by default** (do **not** add unless the spec explicitly lists and justifies them): `LightDark`, `Accessibility` with `play`, `Playground`, `WithSlots`, `WithComposition`, `Controlled`, `Uncontrolled`, one-story-per-variant (`Primary`, `Secondary`, `Small`, …). Storybook's `autodocs` + `a11y` addon + `backgrounds` already cover dark/light, axe checks, and consumer-driven exploration via Controls — adding bespoke stories duplicates work and rots over time.
 
 ### 13.w Styling discipline (mandatory for new components)
 
@@ -1456,7 +1500,7 @@ The spec lists which `kind` / `size` stories exist. Do **not** add visual permut
 - [ ] **Naming conventions** applied (`kind`/`size`/booleans without prefix, events kebab-case).
 - [ ] **Controlled / uncontrolled** states implemented when applicable.
 - [ ] Composition Pattern only when justified (sibling sub-components + typed `provide`/`inject`).
-- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Portal/Overlay/Content/Title/Description/Close as applicable — see § 2.9).
+- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Portal/Overlay/Content/Title/Description/Close as applicable — see § 2.9), with the canonical folder-per-sub-component layout (`<root>/<root>-<part>/<root>-<part>.vue` + its own `package.json`; shared `injection-key.ts` at the root level).
 - [ ] **`asChild`** exposed on trigger-like sub-components (Trigger/Close/etc.) — § 2.5.
 - [ ] **`data-state`/`data-disabled`/`data-orientation`** exposed on the root and on stateful sub-components — § 2.6.
 - [ ] **`VariantProps`** (e.g. `ButtonKind`, `ButtonSize`) exported as named exports — § 2.8.
@@ -1500,9 +1544,9 @@ The spec lists which `kind` / `size` stories exist. Do **not** add visual permut
 - [ ] `args` with sensible defaults.
 - [ ] `parameters.actions`, `parameters.a11y`, `parameters.docs.description.*`, `parameters.backgrounds`, `parameters.layout`.
 - [ ] `decorators` when needed.
-- [ ] Stories: Default + per `kind` + per `size` + Disabled + Loading + WithSlots/WithComposition + Controlled + Uncontrolled + **LightDark** + Accessibility + **Playground**.
-- [ ] `play` function in Accessibility (or Playground) using `@storybook/test` (installed in `apps/storybook/package.json`). Import `userEvent`, `expect`, `within` from `@storybook/test`.
-- [ ] `render: (args) => ({ ..., setup() { return { args } }, template: '<Comp v-bind="args" />' })`.
+- [ ] Stories: `Default` + `Types` (composite, when more than one `kind`) + `Sizes` (composite, when more than one `size`) + `Loading` (only when the component has a `loading` prop) + `Disabled` (only when the component has a `disabled` prop). Nothing else by default — see § 13 for the forbidden list.
+- [ ] `parameters.docs.description.component` built from the spec: Purpose paragraph + the verbatim `## Usage` fenced `vue` code block (import + `<script setup>` + `<template>`). Same shadcn-vue convention used by `Button.stories.js`.
+- [ ] Reusable `Template` at module scope, destructuring event handlers off `args` and forwarding via `@event="handler"` so the Actions panel works.
 
 #### Validação
 
