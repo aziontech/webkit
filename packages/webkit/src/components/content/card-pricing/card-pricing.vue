@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
@@ -10,66 +10,58 @@
     inheritAttrs: false
   })
 
-  const props = defineProps({
-    planTitle: {
-      type: String,
-      default: 'Pro'
-    },
-    description: {
-      type: String,
-      default: ''
-    },
-    pricingDetails: {
-      type: String,
-      default: ''
-    },
-    showPricingDetails: {
-      type: Boolean,
-      default: true
-    },
-    showTag: {
-      type: Boolean,
-      default: false
-    },
-    tagLabel: {
-      type: String,
-      default: 'Popular'
-    },
-    slotPosition: {
-      type: String,
-      default: 'bottom',
-      validator: (value) => ['bottom', 'middle'].includes(value)
-    },
-    cardStyle: {
-      type: String,
-      default: 'contained',
-      validator: (value) => ['contained', 'transparent'].includes(value)
-    },
-    value: {
-      type: String,
-      default: '20'
-    },
-    prefix: {
-      type: String,
-      default: '$'
-    },
-    suffix: {
-      type: String,
-      default: 'per month'
-    },
-    showPrefix: {
-      type: Boolean,
-      default: true
-    },
-    showSuffix: {
-      type: Boolean,
-      default: true
-    },
-    actionLabel: {
-      type: String,
-      default: 'Label'
-    }
+  interface CardPricingProps {
+    /** plan Title. */
+    planTitle?: string
+    /** description. */
+    description?: string
+    /** pricing Details. */
+    pricingDetails?: string
+    /** show Pricing Details. */
+    showPricingDetails?: boolean
+    /** show Tag. */
+    showTag?: boolean
+    /** tag Label. */
+    tagLabel?: string
+    /** slot Position. */
+    slotPosition?: 'bottom' | 'middle'
+    /** card Style. */
+    cardStyle?: 'contained' | 'transparent'
+    /** value. */
+    value?: string
+    /** prefix. */
+    prefix?: string
+    /** suffix. */
+    suffix?: string
+    /** show Prefix. */
+    showPrefix?: boolean
+    /** show Suffix. */
+    showSuffix?: boolean
+    /** action Label. */
+    actionLabel?: string
+  }
+
+  const props = withDefaults(defineProps<CardPricingProps>(), {
+    planTitle: 'Pro',
+    description: '',
+    pricingDetails: '',
+    showPricingDetails: true,
+    showTag: false,
+    tagLabel: 'Popular',
+    slotPosition: 'bottom',
+    cardStyle: 'contained',
+    value: '20',
+    prefix: '$',
+    suffix: 'per month',
+    showPrefix: true,
+    showSuffix: true,
+    actionLabel: 'Label'
   })
+
+  defineSlots<{
+    actions?: () => unknown
+    default?: () => unknown
+  }>()
 
   const attrs = useAttrs()
 
@@ -81,60 +73,30 @@
 
   const isContained = computed(() => props.cardStyle === 'contained')
 
-  const rootClass = computed(() => {
-    const classes = ['flex flex-col items-start overflow-clip w-full']
+  const rootClasses = computed(() => [
+    'flex w-full flex-col items-start',
+    isMiddle.value ? 'min-h-[483px] justify-between' : 'gap-[var(--spacing-xl)]',
+    isContained.value
+      ? 'bg-[var(--bg-surface)] border-[length:var(--border-width-default)] border-[var(--border-muted)] rounded-[var(--shape-card)] p-[var(--spacing-lg)]'
+      : 'p-[var(--spacing-lg)]',
+    attrs.class
+  ])
 
-    if (isMiddle.value) {
-      classes.push('min-h-[483px] justify-between')
+  const headerContainerClasses = computed(() =>
+    isMiddle.value
+      ? 'flex w-full shrink-0 flex-col items-start gap-[var(--spacing-xs)] max-w-[256px]'
+      : 'flex w-full shrink-0 flex-col items-start max-w-[256px] gap-[var(--spacing-xs)]'
+  )
 
-      if (isContained.value) {
-        classes.push(
-          'bg-[var(--bg-surface)] border border-[length:var(--border-width-default)]',
-          'border-[var(--border-muted)] rounded-[var(--shape-card)] p-[var(--spacing-xl)]'
-        )
-      } else {
-        classes.push('px-[var(--spacing-xl)] py-[var(--spacing-xl)]')
-      }
-    } else if (isContained.value) {
-      classes.push(
-        'gap-[var(--spacing-xl)]',
-        'bg-[var(--bg-surface)] border border-[length:var(--border-width-default)]',
-        'border-[var(--border-muted)] rounded-[var(--shape-card)] p-[var(--spacing-xl)]'
-      )
-    } else {
-      classes.push('gap-[var(--spacing-xl)] px-[var(--spacing-xl)] py-[var(--spacing-xl)]')
-    }
-
-    if (attrs.class) {
-      classes.push(attrs.class)
-    }
-
-    return classes
-  })
-
-  const titleClass = 'text-heading-md text-[var(--text-default)] [word-break:break-word]'
-
-  const mutedTextClass =
-    'text-body-sm text-[var(--text-muted)]  line-clamp-2 h-9 [word-break:break-word]'
-
-  const pricingDetailsClass = 'text-body-xs text-[var(--text-muted)] h-8 [word-break:break-word]'
-
-  const slotWrapperClass = 'min-h-[160px] w-full shrink-0'
-
-  const actionsClass = computed(() => {
-    const classes = ['flex w-full gap-[var(--spacing-md)] items-start shrink-0']
-
-    if (isMiddle.value) {
-      classes.push('pt-[var(--spacing-md)]')
-    }
-
-    return classes
-  })
+  const actionsClasses = computed(() => [
+    'flex w-full gap-[var(--spacing-md)] items-start shrink-0',
+    isMiddle.value ? 'pt-[var(--spacing-md)]' : ''
+  ])
 </script>
 
 <template>
   <article
-    :class="rootClass"
+    :class="rootClasses"
     :data-testid="testId"
   >
     <div
@@ -144,12 +106,7 @@
       ]"
     >
       <div
-        :class="[
-          'flex w-full shrink-0 flex-col items-start',
-          isMiddle
-            ? 'gap-[var(--spacing-xs)] max-w-[256px]'
-            : 'max-w-[256px] gap-[var(--spacing-xs)]'
-        ]"
+        :class="headerContainerClasses"
         :data-testid="`${testId}__header`"
       >
         <div
@@ -159,7 +116,7 @@
           ]"
         >
           <h3
-            :class="titleClass"
+            class="text-heading-md text-[var(--text-default)] [word-break:break-word]"
             :data-testid="`${testId}__title`"
           >
             {{ planTitle }}
@@ -173,7 +130,7 @@
         </div>
         <p
           v-if="description"
-          :class="mutedTextClass"
+          class="text-body-sm text-[var(--text-muted)] h-9 [word-break:break-word]"
           :data-testid="`${testId}__description`"
         >
           {{ description }}
@@ -196,7 +153,7 @@
           />
           <p
             v-if="showPricingDetails && pricingDetails"
-            :class="pricingDetailsClass"
+            class="text-body-xs text-[var(--text-muted)] h-8 [word-break:break-word]"
             :data-testid="`${testId}__pricing-details`"
           >
             {{ pricingDetails }}
@@ -204,7 +161,7 @@
         </div>
 
         <div
-          :class="slotWrapperClass"
+          class="min-h-[160px] w-full shrink-0"
           :data-testid="`${testId}__slot`"
         >
           <slot />
@@ -228,7 +185,7 @@
       />
       <p
         v-if="showPricingDetails && pricingDetails"
-        :class="pricingDetailsClass"
+        class="text-body-xs text-[var(--text-muted)] h-8 [word-break:break-word]"
         :data-testid="`${testId}__pricing-details`"
       >
         {{ pricingDetails }}
@@ -237,7 +194,7 @@
 
     <div
       v-if="!isMiddle"
-      :class="actionsClass"
+      :class="actionsClasses"
       :data-testid="`${testId}__actions`"
     >
       <slot name="actions">
@@ -254,7 +211,7 @@
 
     <div
       v-if="!isMiddle"
-      :class="slotWrapperClass"
+      class="min-h-[160px] w-full shrink-0"
       :data-testid="`${testId}__slot`"
     >
       <slot />
@@ -262,7 +219,7 @@
 
     <div
       v-if="isMiddle"
-      :class="actionsClass"
+      :class="actionsClasses"
       :data-testid="`${testId}__actions`"
     >
       <slot name="actions">

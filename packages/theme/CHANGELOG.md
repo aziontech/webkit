@@ -1,3 +1,12 @@
+## [2.0.4](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.3...@aziontech/theme@2.0.4) (2026-05-27)
+
+
+### Bug Fixes
+
+* bump ([574dd22](https://github.com/aziontech/webkit/commit/574dd221521ed3f54a0283cd20bed53aeb7f0de3))
+* bump webkit ([#598](https://github.com/aziontech/webkit/issues/598)) ([aa77380](https://github.com/aziontech/webkit/commit/aa77380183973b02dee5cd3d9fc8828c578690d0))
+* removing href/target props and pt function ([#600](https://github.com/aziontech/webkit/issues/600)) ([b70b6ef](https://github.com/aziontech/webkit/commit/b70b6ef8bc509244cc265ea37abd8e7ceb1aaec2))
+
 ## [2.0.3](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.2...@aziontech/theme@2.0.3) (2026-05-26)
 
 

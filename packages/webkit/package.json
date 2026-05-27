@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "3.0.2",
+  "version": "3.0.5",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -142,7 +142,8 @@
     "./listbox": "./src/core/primevue/listbox/listbox.vue",
     "./calendar": "./src/core/primevue/calendar/calendar.vue",
     "./picklist": "./src/core/primevue/picklist/picklist.vue",
-    "./segmented-button": "./src/components/wip/segmented-button/segmented-button.vue",
+    "./segmented-button": "./src/components/actions/segmented-button/segmented-button.vue",
+    "./actions/segmented-button": "./src/components/actions/segmented-button/segmented-button.vue",
     "./site/button": "./src/components/wip/site/button/button.vue",
     "./actions/button": "./src/components/actions/button/button.vue",
     "./actions/icon-button": "./src/components/actions/icon-button/icon-button.vue",

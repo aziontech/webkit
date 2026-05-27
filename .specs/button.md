@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: a29747f6adedbdd19e01f4bf5c87262ff1e5c50fabe51fe2659d7a202c7fbcc8
+checksum: 895fa26bf1897c619d919760e71be4dbd62bb9c1f95e7124fb2085f086c604b9
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-27
 ---
 # Button — Component Spec
 
@@ -18,7 +18,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Visible label text. |
+| `label` | `string` | `—` | yes | Visible label text. Use `IconButton` for icon-only controls. |
 | `kind` | `'primary' | 'secondary' | 'outlined' | 'text'` | `'primary'` | no | Visual variant. |
 | `size` | `'small' | 'medium' | 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
@@ -84,6 +84,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 - Small (size)
 - Medium (size)
 - Large (size)
+- Icon
 - Disabled
 
 ## Constraints — DO NOT

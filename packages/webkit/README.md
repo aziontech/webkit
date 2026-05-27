@@ -33,7 +33,7 @@ import ListDataTable from '@aziontech/webkit/list-data-table'
 - **Form Components**: Comprehensive form fields with validation (powered by VeeValidate)
 - **PrimeVue Wrappers**: Styled PrimeVue components with Azion design system
 - **List Data Table**: Advanced data table with filtering, sorting, and pagination
-- **Utilities**: Composables for toast notifications, dialogs, and more
+- **Utilities**: Composables for toast (notifications), dialogs, and more
 
 ## Dependencies
 

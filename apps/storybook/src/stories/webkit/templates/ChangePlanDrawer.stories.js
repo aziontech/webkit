@@ -9,7 +9,7 @@ import DrawerTitle from '@aziontech/webkit/overlay/drawer-title'
 import DrawerTrigger from '@aziontech/webkit/overlay/drawer-trigger'
 import PanelContent from '@aziontech/webkit/overlay/panel-content'
 import PanelHeader from '@aziontech/webkit/overlay/panel-header'
-import SegmentedButton from '@aziontech/webkit/segmented-button'
+import SegmentedButton from '@aziontech/webkit/actions/segmented-button'
 import { expect, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 
@@ -72,7 +72,7 @@ const changePlanTemplate = `
           <SegmentedButton
             v-model="billingPeriod"
             :options="billingOptions"
-            aria-label="Billing period"
+            ariaLabel="Billing period"
           />
           <div
             class="flex w-full min-w-0 flex-col items-stretch justify-center gap-[var(--spacing-6)] lg:flex-row"
