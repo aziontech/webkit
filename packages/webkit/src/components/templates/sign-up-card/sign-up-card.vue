@@ -1,7 +1,7 @@
 <script setup>
   import { computed, useAttrs } from 'vue'
 
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../button/button.vue'
 
   defineOptions({
     name: 'SignUpCard',

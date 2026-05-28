@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../icon-button/icon-button.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import { useDataTableContext } from './composables/use-data-table-context'
   import type { ColumnDefinition } from './injection-key'

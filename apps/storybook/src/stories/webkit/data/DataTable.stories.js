@@ -1,4 +1,4 @@
-import IconButton from '@aziontech/webkit/actions/icon-button'
+import IconButton from '@aziontech/webkit/icon-button'
 import Avatar from '@aziontech/webkit/content/avatar'
 import Tag from '@aziontech/webkit/content/tag'
 import DataTable from '@aziontech/webkit/data/data-table'

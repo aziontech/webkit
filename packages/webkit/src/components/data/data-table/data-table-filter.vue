@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../button/button.vue'
   import Dropdown from '../../inputs/dropdown/dropdown.vue'
   import InputText from '../../inputs/input-text/input-text.vue'
   import { useDataTableContext } from './composables/use-data-table-context'

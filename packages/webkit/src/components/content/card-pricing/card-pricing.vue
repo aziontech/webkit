@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../button/button.vue'
   import Currency from '../currency/currency.vue'
   import Tag from '../tag/tag.vue'
 

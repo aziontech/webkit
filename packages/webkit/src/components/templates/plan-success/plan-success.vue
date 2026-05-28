@@ -3,7 +3,7 @@
 
   import AzionDefault from '../../../svg/azion/default/default.vue'
   import { cn } from '../../../utils/cn'
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../button/button.vue'
   import CardBox from '../../content/card-box/card-box.vue'
   import GlobalHeader from '../../layout/global-header/index.js'
 

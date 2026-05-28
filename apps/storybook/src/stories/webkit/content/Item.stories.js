@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 import Avatar from '@aziontech/webkit/content/avatar'
 import Item from '@aziontech/webkit/content/item'
 
