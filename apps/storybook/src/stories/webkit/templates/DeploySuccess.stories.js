@@ -123,7 +123,7 @@ const meta = {
       description: 'Replaces the built-in app name + LogView region.',
       table: { type: { summary: 'VNode' }, category: 'slots' }
     },
-    steps: {
+    stepsSlot: {
       control: false,
       description: 'Replaces the built-in next-steps list.',
       table: { type: { summary: 'VNode' }, category: 'slots' }
