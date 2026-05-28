@@ -45,7 +45,7 @@
   const navClasses =
     'flex h-full min-h-0 flex-1 flex-col [--menu-item-ring-offset:var(--bg-surface)]'
 
-  const headerRegionClasses = 'w-full shrink-0 p-[var(--spacing-md)] pb-0'
+  const headerRegionClasses = 'w-full shrink-0 p-[var(--spacing-md)]'
 
   const footerRegionClasses = 'w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)]'
 
