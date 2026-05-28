@@ -4,12 +4,39 @@ import Sidebar from '@aziontech/webkit/layout/sidebar'
 import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'
 import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
 import MenuItem from '@aziontech/webkit/navigation/menu-item'
+import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'
+import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'
+import DropdownMenuItem from '@aziontech/webkit/overlay/dropdown-menu-item'
+import DropdownMenuPortal from '@aziontech/webkit/overlay/dropdown-menu-portal'
+import DropdownMenuSeparator from '@aziontech/webkit/overlay/dropdown-menu-separator'
+import DropdownMenuTrigger from '@aziontech/webkit/overlay/dropdown-menu-trigger'
+import { ref } from 'vue'
+
+const sampleImage =
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'
+
+const profileMenuHeaderClasses =
+  'flex flex-col gap-[var(--spacing-1)] px-[var(--spacing-2)] py-[var(--spacing-2)]'
+
+const profileMenuContentClasses = 'w-[18.625rem] min-w-[18.625rem]'
 
 /** @type {import('@storybook/vue3').Meta<typeof Sidebar>} */
 const meta = {
   title: 'Webkit/Layout/Sidebar',
   component: Sidebar,
-  subcomponents: { SidebarGroup, SidebarFooter, MenuItem, Avatar, InputText },
+  subcomponents: {
+    SidebarGroup,
+    SidebarFooter,
+    MenuItem,
+    Avatar,
+    InputText,
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuPortal,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator
+  },
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -68,14 +95,24 @@ function createDomainsItem() {
 
 function createBuildItems() {
   return [
-    { label: 'Applications', icon: 'ai ai-edge-application', to: '/applications', id: 'edge-application' },
+    {
+      label: 'Applications',
+      icon: 'ai ai-edge-application',
+      to: '/applications',
+      id: 'edge-application'
+    },
     { label: 'Variables', icon: 'ai ai-variables', to: '/variables', id: 'variables' }
   ]
 }
 
 function createSecureItems() {
   return [
-    { label: 'Connectors', icon: 'ai ai-edge-connectors', to: '/connectors', id: 'edge-connectors' },
+    {
+      label: 'Connectors',
+      icon: 'ai ai-edge-connectors',
+      to: '/connectors',
+      id: 'edge-connectors'
+    },
     { label: 'Edge DNS', icon: 'ai ai-edge-dns', to: '/edge-dns', id: 'edge-dns' },
     { label: 'Firewalls', icon: 'ai ai-edge-firewall', to: '/firewalls', id: 'edge-firewall' }
   ]
@@ -83,7 +120,12 @@ function createSecureItems() {
 
 function createStoreItems() {
   return [
-    { label: 'Object Storage', icon: 'ai ai-edge-storage', to: '/object-storage', id: 'object-storage' },
+    {
+      label: 'Object Storage',
+      icon: 'ai ai-edge-storage',
+      to: '/object-storage',
+      id: 'object-storage'
+    },
     {
       label: 'SQL Database',
       icon: 'ai ai-edge-sql',
@@ -120,7 +162,12 @@ function createObserveItems() {
 
 function createToolsItems() {
   return [
-    { label: 'Real-Time Purge', icon: 'ai ai-real-time-purge', to: '/real-time-purge', id: 'real-time-purge' }
+    {
+      label: 'Real-Time Purge',
+      icon: 'ai ai-real-time-purge',
+      to: '/real-time-purge',
+      id: 'real-time-purge'
+    }
   ]
 }
 
@@ -133,9 +180,19 @@ function createEdgeLibrariesItems() {
       id: 'digital-certificates'
     },
     { label: 'Custom Pages', icon: 'ai ai-custom-pages', to: '/custom-pages', id: 'custom-pages' },
-    { label: 'Edge Services', icon: 'ai ai-edge-services', to: '/edge-services', id: 'edge-services' },
+    {
+      label: 'Edge Services',
+      icon: 'ai ai-edge-services',
+      to: '/edge-services',
+      id: 'edge-services'
+    },
     { label: 'Functions', icon: 'ai ai-edge-functions', to: '/functions', id: 'edge-functions' },
-    { label: 'Network Lists', icon: 'ai ai-network-lists', to: '/network-lists', id: 'network-lists' },
+    {
+      label: 'Network Lists',
+      icon: 'ai ai-network-lists',
+      to: '/network-lists',
+      id: 'network-lists'
+    },
     { label: 'WAF Rules', icon: 'ai ai-waf-rules', to: '/waf', id: 'waf-rules' }
   ]
 }
@@ -180,7 +237,9 @@ function getMenuItens(showMarketplaceProductsItens = true) {
 }
 
 function splitMenuModel(showMarketplaceProductsItens = true) {
-  const visibleMenus = getMenuItens(showMarketplaceProductsItens).filter((menu) => menu.visible !== false)
+  const visibleMenus = getMenuItens(showMarketplaceProductsItens).filter(
+    (menu) => menu.visible !== false
+  )
 
   return {
     rootItems: visibleMenus.filter((menu) => !menu.items),
@@ -193,20 +252,40 @@ function splitMenuModel(showMarketplaceProductsItens = true) {
   }
 }
 
-const SidebarTemplate = ({ withHeader = false, withFooter = false } = {}) => (args) => ({
-  components: { Sidebar, SidebarGroup, SidebarFooter, MenuItem, InputText, Avatar },
-  setup() {
-    const { rootItems, sections } = splitMenuModel(true)
+const SidebarTemplate =
+  ({ withHeader = false, withFooter = false } = {}) =>
+  (args) => ({
+    components: {
+      Sidebar,
+      SidebarGroup,
+      SidebarFooter,
+      MenuItem,
+      InputText,
+      Avatar,
+      DropdownMenu,
+      DropdownMenuTrigger,
+      DropdownMenuPortal,
+      DropdownMenuContent,
+      DropdownMenuItem,
+      DropdownMenuSeparator
+    },
+    setup() {
+      const { rootItems, sections } = splitMenuModel(true)
+      const profileMenuOpen = ref(false)
 
-    return {
-      args,
-      rootItems,
-      sections,
-      withHeader,
-      withFooter
-    }
-  },
-  template: `
+      return {
+        args,
+        rootItems,
+        sections,
+        withHeader,
+        withFooter,
+        profileMenuOpen,
+        sampleImage,
+        profileMenuHeaderClasses,
+        profileMenuContentClasses
+      }
+    },
+    template: `
     <Sidebar v-bind="args" class="h-screen w-[280px]">
       <template
         v-if="withHeader"
@@ -251,31 +330,99 @@ const SidebarTemplate = ({ withHeader = false, withFooter = false } = {}) => (ar
       >
         <div class="p-[var(--spacing-md)] pt-0">
           <SidebarFooter>
-            <button
-              type="button"
-              class="flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-left transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
+            <DropdownMenu
+              v-model:open="profileMenuOpen"
+              side="top"
+              :close-on-select="true"
             >
-              <Avatar
-                kind="square"
-                size="medium"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
-                alt="Rafael Umman"
-              />
-              <span class="flex min-w-0 flex-1 flex-col justify-center gap-[var(--spacing-xxs)]">
-                <span class="truncate text-label-sm text-[var(--text-default)]">Rafael Umman</span>
-                <span class="truncate text-overline-xs text-[var(--text-muted)]">email@gmail.com</span>
-              </span>
-              <i
-                class="pi pi-sort-alt text-[var(--text-muted)]"
-                aria-hidden="true"
-              />
-            </button>
+              <DropdownMenuTrigger class="block w-full">
+                <button
+                  type="button"
+                  class="flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-left transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
+                  aria-label="Open profile menu"
+                >
+                  <Avatar
+                    kind="square"
+                    size="medium"
+                    :src="sampleImage"
+                    alt="Rafael Umman"
+                  />
+                  <span class="flex min-w-0 flex-1 flex-col justify-center">
+                    <span class="truncate text-label-sm text-[var(--text-default)]">Rafael Umman</span>
+                    <span class="truncate text-label-sm text-[var(--text-muted)]">email@gmail.com</span>
+                  </span>
+                  <i
+                    class="pi pi-sort-alt text-[var(--text-muted)]"
+                    aria-hidden="true"
+                  />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuContent :class="profileMenuContentClasses">
+                  <div
+                    :class="profileMenuHeaderClasses"
+                    role="presentation"
+                    data-testid="overlay-dropdown-menu__profile-primary"
+                  >
+                    <span class="text-label-md text-[var(--text-default)]">Rafael Umman</span>
+                    <span class="text-body-sm text-[var(--text-muted)]">email@gmail.com</span>
+                  </div>
+                  <DropdownMenuItem
+                    label="Account Settings"
+                    value="account-settings"
+                  />
+                  <DropdownMenuItem
+                    label="Users Management"
+                    value="users-management"
+                  />
+                  <DropdownMenuItem
+                    label="Billing"
+                    value="billing"
+                  />
+                  <DropdownMenuItem
+                    label="Credentials"
+                    value="credentials"
+                  />
+                  <DropdownMenuItem
+                    label="Activity History"
+                    value="activity-history"
+                  />
+                  <DropdownMenuItem
+                    label="Team Permissions"
+                    value="team-permissions"
+                  />
+                  <DropdownMenuSeparator />
+                  <div
+                    :class="profileMenuHeaderClasses"
+                    role="presentation"
+                    data-testid="overlay-dropdown-menu__profile-secondary"
+                  >
+                    <span class="text-label-md text-[var(--text-default)]">User.name</span>
+                    <span class="text-label-sm text-[var(--text-muted)]">email@gmail.com</span>
+                  </div>
+                  <DropdownMenuItem
+                    label="Your Settings"
+                    value="your-settings"
+                  />
+                  <DropdownMenuItem
+                    label="Personal Tokens"
+                    value="personal-tokens"
+                  />
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    label="Log out"
+                    value="logout"
+                    icon="pi pi-sign-out"
+                  />
+                </DropdownMenuContent>
+              </DropdownMenuPortal>
+            </DropdownMenu>
           </SidebarFooter>
         </div>
       </template>
     </Sidebar>
   `
-})
+  })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Sidebar>} */
 export const Default = {
@@ -300,7 +447,7 @@ export const WithHeaderAndProfileFooter = {
     docs: {
       description: {
         story:
-          'Adds header search and a profile footer menu layout based on Figma node `4153:15282`.'
+          'Adds header search and a profile footer (Figma `4153:15282`) with Avatar photo (`Content/Avatar` WithImage) that opens the account DropdownMenu above the trigger (`side="top"`).'
       }
     }
   }
