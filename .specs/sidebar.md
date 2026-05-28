@@ -7,15 +7,48 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 8c3214deb0f77fbc7d4e5ec6888f0cee4054b866cee999ce6b048f00a251be30
+checksum: 5a95c6bb2fa2b2444eeeaa299f570536ecaf8250012366785ecfd2b5e2fba111
 created: 2026-05-22
-last_updated: 2026-05-27
+last_updated: 2026-05-28
 ---
 # Sidebar — Component Spec
 
 ## Purpose
 
-Helps users move between views or sections. Lives at `packages/webkit/src/components/webkit/layout/sidebar/`.
+Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`.
+
+## Usage
+
+```vue
+<script setup>
+import Sidebar from '@aziontech/webkit/layout/sidebar'
+import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
+import SidebarHeader from '@aziontech/webkit/layout/sidebar-header'
+import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'
+import MenuItem from '@aziontech/webkit/navigation/menu-item'
+</script>
+
+<template>
+  <Sidebar aria-label="Application" class="h-screen w-[280px]">
+    <template #header>
+      <SidebarHeader>
+        <!-- optional header content -->
+      </SidebarHeader>
+    </template>
+    <SidebarGroup>
+      <MenuItem label="Home" icon="ai ai-home" href="/" selected />
+    </SidebarGroup>
+    <SidebarGroup label="Build">
+      <MenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />
+    </SidebarGroup>
+    <template #footer>
+      <SidebarFooter>
+        <!-- optional footer content -->
+      </SidebarFooter>
+    </template>
+  </Sidebar>
+</template>
+```
 
 ## Sub-components
 
@@ -25,7 +58,9 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 ## Props
 
-| _none_ | — | — | — | Public API is slots-only. |
+| Prop | Type | Default | Required | JSDoc |
+|---|---|---|---|---|
+| `ariaLabel` | `string` | `'Sidebar'` | no | Accessible name for the navigation landmark. |
 
 ## Events
 
@@ -77,6 +112,8 @@ _none_
 ## Stories (Storybook)
 
 - Default
+- WithHeaderSearch
+- WithHeaderAndProfileFooter
 
 ## Constraints — DO NOT
 
