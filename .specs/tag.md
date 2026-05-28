@@ -4,24 +4,40 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b50cd0931136a313cd7aecbf8bfba9f54c41577464a6948a3ad6c57684e57457
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940
+  node_id: 476:940
+checksum: 3ca98cd0944855b2f1cf8fe288908bd459affc4c70df8fdacf7d29a1ea8ac0d1
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-28
 ---
 # Tag — Component Spec
 
 ## Purpose
 
-Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/tag/`.
+Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.
+
+## Usage
+
+```vue
+<script setup>
+import Tag from '@aziontech/webkit/content/tag'
+</script>
+
+<template>
+  <Tag value="Label" severity="primary" size="medium" />
+</template>
+```
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `'undefined'` | no | value. |
-| `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | severity. |
-| `rounded` | `boolean` | `false` | no | rounded. |
-| `icon` | `string` | `'undefined'` | no | PrimeIcons class for the leading/trailing icon. |
+| `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | Color style; `contrast` maps to `accent`. |
+| `size` | `'small' | 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
+| `rounded` | `boolean` | `false` | no | Pill shape when true. |
+| `icon` | `string` | `'undefined'` | no | PrimeIcons class for the leading icon. |
 
 ## Events
 
@@ -45,18 +61,20 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
+| typography (medium) | `.text-body-xs` + `leading-none` |
+| typography (small) | `.text-body-xs` + `leading-none` |
+| spacing (medium) | `var(--spacing-xs)` horizontal, `var(--spacing-xxs)` gap |
+| spacing (small) | `var(--spacing-xxs)` horizontal and gap |
+| shape (default) | `var(--shape-elements)` |
+| shape (secondary) | `var(--radius-md)` |
+| shape (pill) | `rounded-full` |
 | ring | `var(--ring-color)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| Typography/Tag/sm (11px) | `.text-body-xs` (12px) | Add `text-tag-sm` in `texts.data.js` when typography pipeline allows |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -70,6 +88,9 @@ _none_
 ## Stories (Storybook)
 
 - Default
+- Types
+- Sizes
+- WithIcon
 
 ## Constraints — DO NOT
 
