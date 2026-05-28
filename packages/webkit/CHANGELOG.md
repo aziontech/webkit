@@ -1,3 +1,9 @@
+## [3.0.6](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.5...@aziontech/webkit@3.0.6) (2026-05-28)
+
+### Bug Fixes
+
+- use semantic primary token in overline and card-content ([456b55c](https://github.com/aziontech/webkit/commit/456b55cfe6055f653c48d73811dc3551a8f6e621))
+
 ## [3.0.5](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.4...@aziontech/webkit@3.0.5) (2026-05-27)
 
 ### Bug Fixes
