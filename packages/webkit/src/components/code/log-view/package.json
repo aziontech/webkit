@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-code-log-view",
+  "main": "./log-view.vue",
+  "module": "./log-view.vue",
+  "types": "./log-view.vue.d.ts",
+  "browser": {
+    "./sfc": "./log-view.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
