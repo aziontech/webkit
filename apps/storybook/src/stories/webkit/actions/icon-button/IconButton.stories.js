@@ -104,11 +104,9 @@ export default meta
 const Template = (args) => ({
   components: { IconButton },
   setup() {
-    const { onClick, ...props } = args
-
-    return { props, onClick }
+    return { args }
   },
-  template: '<IconButton v-bind="props" @click="onClick" />'
+  template: '<IconButton v-bind="args" @click="args.onClick" />'
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
