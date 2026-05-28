@@ -30,7 +30,7 @@ const meta = {
       description: 'Structural variant: navigable row or section overline label.',
       table: {
         type: { summary: 'MenuItemKind' },
-        defaultValue: { summary: "'option'" },
+        defaultValue: { summary: 'option' },
         category: 'props'
       }
     },
@@ -39,7 +39,7 @@ const meta = {
       description: 'Visible label for the row or group header.',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: "'Option 1'" },
+        defaultValue: { summary: 'Option 1' },
         category: 'props'
       }
     },
@@ -48,7 +48,7 @@ const meta = {
       description: 'When true, applies the selected surface on option rows.',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
+        defaultValue: { summary: false },
         category: 'props'
       }
     },
@@ -57,7 +57,7 @@ const meta = {
       description: 'Disables interaction on option rows.',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
+        defaultValue: { summary: false },
         category: 'props'
       }
     },
@@ -66,7 +66,7 @@ const meta = {
       description: 'PrimeIcons class for the leading icon (option kind only).',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: "'pi pi-home'" },
+        defaultValue: { summary: 'pi pi-home' },
         category: 'props'
       }
     },
@@ -75,7 +75,7 @@ const meta = {
       description: 'Destination URL; renders an anchor when set on option rows.',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: "''" },
+        defaultValue: { summary: '' },
         category: 'props'
       }
     },
@@ -85,7 +85,7 @@ const meta = {
       description: 'Link target when `href` is set.',
       table: {
         type: { summary: "'_self' | '_blank'" },
-        defaultValue: { summary: "'_self'" },
+        defaultValue: { summary: '_self' },
         category: 'props'
       }
     },
@@ -103,7 +103,7 @@ const meta = {
       description: 'Severity token for the optional trailing Tag.',
       table: {
         type: { summary: 'MenuItemTagSeverity' },
-        defaultValue: { summary: "'info'" },
+        defaultValue: { summary: 'info' },
         category: 'props'
       }
     },
