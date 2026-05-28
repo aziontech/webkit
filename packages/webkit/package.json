@@ -148,7 +148,6 @@
     "./content/card-box": "./src/components/content/card-box/card-box.vue",
     "./content/card-pricing": "./src/components/content/card-pricing/card-pricing.vue",
     "./content/item": "./src/components/content/item/index.js",
-    "./content/item-desciption": "./src/components/content/item-descrip",
     "./content/currency": "./src/components/content/currency/currency.vue",
     "./content/tag": "./src/components/content/tag/tag.vue",
     "./data/data-table": "./src/components/data/data-table/data-table.vue",
