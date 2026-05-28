@@ -98,11 +98,8 @@ export default meta
 const navigationTemplate = `
   <NavSidebar aria-label="Application" class="h-full w-full">
     <template #header>
-      <div class="p-[var(--spacing-md)] pb-0">
-        <InputText placeholder="Search" size="medium" />
-      </div>
+      <InputText placeholder="Search" size="medium" />
     </template>
-    <SidebarGroup scroll class="p-[var(--spacing-md)] pt-0">
     <SidebarGroup>
       <MenuItem label="Home" icon="ai ai-home" selected href="/" />
       <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />
@@ -161,7 +158,6 @@ const navigationTemplate = `
         href="https://caixa-siem.azion.com/login"
         target="_blank"
       />
-    </SidebarGroup>
     </SidebarGroup>
   </NavSidebar>
 `

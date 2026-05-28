@@ -20,6 +20,43 @@ const profileMenuHeaderClasses =
 
 const profileMenuContentClasses = 'w-[18.625rem] min-w-[18.625rem]'
 
+const componentDocsDescription = [
+  'Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`.',
+  '',
+  '## Usage',
+  '',
+  '```vue',
+  '<script setup>',
+  "import Sidebar from '@aziontech/webkit/layout/sidebar'",
+  "import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'",
+  "import SidebarHeader from '@aziontech/webkit/layout/sidebar-header'",
+  "import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'",
+  "import MenuItem from '@aziontech/webkit/navigation/menu-item'",
+  '</script>',
+  '',
+  '<template>',
+  '  <Sidebar aria-label="Application" class="h-screen w-[280px]">',
+  '    <template #header>',
+  '      <SidebarHeader>',
+  '        <!-- optional header content -->',
+  '      </SidebarHeader>',
+  '    </template>',
+  '    <SidebarGroup>',
+  '      <MenuItem label="Home" icon="ai ai-home" href="/" selected />',
+  '    </SidebarGroup>',
+  '    <SidebarGroup label="Build">',
+  '      <MenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />',
+  '    </SidebarGroup>',
+  '    <template #footer>',
+  '      <SidebarFooter>',
+  '        <!-- optional footer content -->',
+  '      </SidebarFooter>',
+  '    </template>',
+  '  </Sidebar>',
+  '</template>',
+  '```'
+].join('\n')
+
 /** @type {import('@storybook/vue3').Meta<typeof Sidebar>} */
 const meta = {
   title: 'Webkit/Layout/Sidebar',
@@ -41,10 +78,17 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
     docs: {
       description: {
-        component:
-          'Composable application sidebar with slot-driven regions. By default, only navigation content is rendered; spacing is controlled by region content.'
+        component: componentDocsDescription
       }
     }
   },
@@ -57,6 +101,21 @@ const meta = {
         defaultValue: { summary: 'Sidebar' },
         category: 'props'
       }
+    },
+    header: {
+      control: false,
+      description: 'Optional top region (search, branding).',
+      table: { type: { summary: 'VNode' }, category: 'slots' }
+    },
+    default: {
+      control: false,
+      description: 'Navigation groups and menu items; region padding and group gap are applied by `Sidebar`.',
+      table: { type: { summary: 'VNode' }, category: 'slots' }
+    },
+    footer: {
+      control: false,
+      description: 'Optional bottom region (profile, actions).',
+      table: { type: { summary: 'VNode' }, category: 'slots' }
     }
   },
   args: {
@@ -291,12 +350,9 @@ const SidebarTemplate =
         v-if="withHeader"
         #header
       >
-        <div class="p-[var(--spacing-md)] pb-0">
-          <InputText placeholder="Search" size="medium" />
-        </div>
+        <InputText placeholder="Search" size="medium" />
       </template>
-      <SidebarGroup scroll class="p-[var(--spacing-md)]">
-        <SidebarGroup>
+      <SidebarGroup>
           <MenuItem
             v-for="item in rootItems"
             :key="item.id"
@@ -323,13 +379,11 @@ const SidebarTemplate =
             :tag-severity="item.tag ? 'primary' : undefined"
           />
         </SidebarGroup>
-      </SidebarGroup>
       <template
         v-if="withFooter"
         #footer
       >
-        <div class="p-[var(--spacing-md)] pt-0">
-          <SidebarFooter>
+        <SidebarFooter>
             <DropdownMenu
               v-model:open="profileMenuOpen"
               side="top"
@@ -417,8 +471,7 @@ const SidebarTemplate =
                 </DropdownMenuContent>
               </DropdownMenuPortal>
             </DropdownMenu>
-          </SidebarFooter>
-        </div>
+        </SidebarFooter>
       </template>
     </Sidebar>
   `
@@ -447,7 +500,7 @@ export const WithHeaderAndProfileFooter = {
     docs: {
       description: {
         story:
-          'Adds header search and a profile footer (Figma `4153:15282`) with Avatar photo (`Content/Avatar` WithImage) that opens the account DropdownMenu above the trigger (`side="top"`).'
+          'Header search plus profile footer with Avatar; account DropdownMenu opens above the trigger (`side="top"`).'
       }
     }
   }
