@@ -1,3 +1,9 @@
+## [3.2.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.0...@aziontech/webkit@3.2.1) (2026-05-29)
+
+### Bug Fixes
+
+- adding button kind danger ([#617](https://github.com/aziontech/webkit/issues/617)) ([028b200](https://github.com/aziontech/webkit/commit/028b200d6516c22847f952cb985e92fcaedeb76d))
+
 ## [3.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.1.0...@aziontech/webkit@3.2.0) (2026-05-29)
 
 ### Features
