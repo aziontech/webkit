@@ -1,3 +1,17 @@
+## [2.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.4...@aziontech/theme@2.1.0) (2026-05-29)
+
+
+### Features
+
+* align Tag with Figma design system ([#609](https://github.com/aziontech/webkit/issues/609)) ([0fe2acb](https://github.com/aziontech/webkit/commit/0fe2acb09b9abd9f196f8fe95b2146ed587c96e4))
+* promote Button/IconButton/SegmentedButton/Avatar to top-level exports ([#611](https://github.com/aziontech/webkit/issues/611)) ([48e5bfc](https://github.com/aziontech/webkit/commit/48e5bfcbec00590b7fafb002ad145d1811ace56f))
+
+
+### Bug Fixes
+
+* remove duplicated/conflicting size height classes in button ([2668a29](https://github.com/aziontech/webkit/commit/2668a290fc1bb4b9f1d87dfa57af07f992384eac))
+* use semantic primary token in overline and card-content ([456b55c](https://github.com/aziontech/webkit/commit/456b55cfe6055f653c48d73811dc3551a8f6e621))
+
 ## [2.0.4](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.3...@aziontech/theme@2.0.4) (2026-05-27)
 
 
