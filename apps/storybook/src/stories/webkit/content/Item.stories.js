@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import Avatar from '@aziontech/webkit/content/avatar'
+import Avatar from '@aziontech/webkit/avatar'
 import Item from '@aziontech/webkit/content/item'
 
 const sampleAvatarSrc =
