@@ -1,3 +1,11 @@
+## [2.1.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.1.0...@aziontech/theme@2.1.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* adding button kind danger ([#617](https://github.com/aziontech/webkit/issues/617)) ([028b200](https://github.com/aziontech/webkit/commit/028b200d6516c22847f952cb985e92fcaedeb76d))
+* storybook preview build ([#618](https://github.com/aziontech/webkit/issues/618)) ([108c168](https://github.com/aziontech/webkit/commit/108c168686d3abe741c3037d650271685092e837))
+
 ## [2.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.4...@aziontech/theme@2.1.0) (2026-05-29)
 
 
