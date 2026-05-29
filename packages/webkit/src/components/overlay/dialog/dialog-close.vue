@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import IconButton from '../../icon-button/icon-button.vue'
+  import IconButton from '../../actions/icon-button/icon-button.vue'
   import { DialogInjectionKey } from './injection-key'
 
   defineOptions({
