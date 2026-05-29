@@ -112,7 +112,7 @@
     "./inlinemessage": "./src/core/primevue/inline-message/inline-message.vue",
     "./menu": "./src/core/primevue/menu/menu.vue",
     "./message": "./src/core/primevue/message/message.vue",
-    "./overlaypanel": "./src/coPre/primevue/overlaypanel/overlaypanel.vue",
+    "./overlaypanel": "./src/core/primevue/overlaypanel/overlaypanel.vue",
     "./paginator": "./src/core/primevue/paginator/paginator.vue",
     "./progressbar": "./src/core/primevue/progressbar/progressbar.vue",
     "./progressspinner": "./src/core/primevue/progressspinner/progressspinner.vue",
