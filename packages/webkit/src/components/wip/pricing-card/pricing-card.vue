@@ -1,7 +1,7 @@
 <script setup>
   import { computed } from 'vue'
 
-  import Tag from '../tag/tag.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({ name: 'PricingCard' })
 
