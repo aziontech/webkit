@@ -21,7 +21,7 @@ Compact status or category label with severity-based color coding. Supports opti
 
 ```vue
 <script setup>
-import Tag from '@aziontech/webkit/content/tag'
+import Tag from '@aziontech/webkit/tag'
 </script>
 
 <template>

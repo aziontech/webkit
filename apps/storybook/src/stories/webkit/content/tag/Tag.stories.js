@@ -1,4 +1,4 @@
-import Tag from '@aziontech/webkit/content/tag'
+import Tag from '@aziontech/webkit/tag'
 
 const severities = [
   'primary',
@@ -37,7 +37,7 @@ const meta = {
           '',
           '```vue',
           '<script setup>',
-          "import Tag from '@aziontech/webkit/content/tag'",
+          "import Tag from '@aziontech/webkit/tag'",
           '</script>',
           '',
           '<template>',
