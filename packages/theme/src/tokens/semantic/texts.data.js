@@ -65,6 +65,27 @@ export const textsData = {
     lineHeight: '1.5',
     fontWeight: '500'
   },
+  'text-label-code-sm': {
+    fontFamily: fontFamily.code,
+    fontSize: '0.75rem',
+    lineHeight: '1',
+    fontWeight: '400',
+    letterSpacing: '0'
+  },
+  'text-label-code-md': {
+    fontFamily: fontFamily.code,
+    fontSize: '0.875rem',
+    lineHeight: '1',
+    fontWeight: '400',
+    letterSpacing: '0'
+  },
+  'text-label-code-lg': {
+    fontFamily: fontFamily.code,
+    fontSize: '1rem',
+    lineHeight: '1',
+    fontWeight: '400',
+    letterSpacing: '0'
+  },
   'text-body-lg': {
     fontSize: { _: '1rem', md: '1.125rem' },
     lineHeight: '1.5'

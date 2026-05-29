@@ -328,6 +328,30 @@ const preset = {
             "fontWeight": "var(--text-label-sm-font-weight)"
           }
         ],
+        "label-code-sm": [
+          "var(--text-label-code-sm-font-size)",
+          {
+            "lineHeight": "var(--text-label-code-sm-line-height)",
+            "letterSpacing": "var(--text-label-code-sm-letter-spacing)",
+            "fontWeight": "var(--text-label-code-sm-font-weight)"
+          }
+        ],
+        "label-code-md": [
+          "var(--text-label-code-md-font-size)",
+          {
+            "lineHeight": "var(--text-label-code-md-line-height)",
+            "letterSpacing": "var(--text-label-code-md-letter-spacing)",
+            "fontWeight": "var(--text-label-code-md-font-weight)"
+          }
+        ],
+        "label-code-lg": [
+          "var(--text-label-code-lg-font-size)",
+          {
+            "lineHeight": "var(--text-label-code-lg-line-height)",
+            "letterSpacing": "var(--text-label-code-lg-letter-spacing)",
+            "fontWeight": "var(--text-label-code-lg-font-weight)"
+          }
+        ],
         "body-lg": [
           "var(--text-body-lg-font-size)",
           {

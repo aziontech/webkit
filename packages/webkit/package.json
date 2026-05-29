@@ -153,6 +153,7 @@
     "./content/item": "./src/components/content/item/index.js",
     "./content/currency": "./src/components/content/currency/currency.vue",
     "./content/tag": "./src/components/content/tag/tag.vue",
+    "./data/code-editor": "./src/components/data/code-editor/code-editor.vue",
     "./data/data-table": "./src/components/data/data-table/data-table.vue",
     "./data/data-table-actions": "./src/components/data/data-table/data-table-actions.vue",
     "./data/data-table-batch-actions": "./src/components/data/data-table/data-table-batch-actions.vue",

@@ -493,6 +493,21 @@
     --text-label-sm-font-size: 0.75rem;
     --text-label-sm-line-height: 1.5;
     --text-label-sm-font-weight: 500;
+    --text-label-code-sm-font-family: Roboto Mono;
+    --text-label-code-sm-font-size: 0.75rem;
+    --text-label-code-sm-line-height: 1;
+    --text-label-code-sm-font-weight: 400;
+    --text-label-code-sm-letter-spacing: 0;
+    --text-label-code-md-font-family: Roboto Mono;
+    --text-label-code-md-font-size: 0.875rem;
+    --text-label-code-md-line-height: 1;
+    --text-label-code-md-font-weight: 400;
+    --text-label-code-md-letter-spacing: 0;
+    --text-label-code-lg-font-family: Roboto Mono;
+    --text-label-code-lg-font-size: 1rem;
+    --text-label-code-lg-line-height: 1;
+    --text-label-code-lg-font-weight: 400;
+    --text-label-code-lg-letter-spacing: 0;
     --text-body-lg-font-size: 1rem;
     --text-body-lg-line-height: 1.5;
     --text-body-md-font-size: 1rem;
@@ -708,6 +723,13 @@
   --text-disabled: #999999;
   --text-link: #005FCC;
   --ring-color: #0A0A0A;
+  --code-sintax-identifier: #141414;
+  --code-sintax-line-number: #808080;
+  --code-sintax-keyword: #005FCC;
+  --code-sintax-punctuation: #808080;
+  --code-sintax-function: #F3652B;
+  --code-sintax-type: #947105;
+  --code-sintax-string: #005FCC;
   --success: #F0FDF4;
   --success-border: #22C55E99;
   --success-contrast: #16833F;
@@ -767,6 +789,13 @@
   --text-disabled: #4D4D4D;
   --text-link: #3392FF;
   --ring-color: #FFFFFF;
+  --code-sintax-identifier: #FAFAFA;
+  --code-sintax-line-number: #999999;
+  --code-sintax-keyword: #3392FF;
+  --code-sintax-punctuation: #999999;
+  --code-sintax-function: #F3652B;
+  --code-sintax-type: #FAD76B;
+  --code-sintax-string: #3392FF;
   --success: #03170B;
   --success-border: #22C55E66;
   --success-contrast: #26D968;
@@ -815,6 +844,9 @@
   .text-label-lg { font-size: var(--text-label-lg-font-size); line-height: var(--text-label-lg-line-height); font-weight: var(--text-label-lg-font-weight); }
   .text-label-md { font-size: var(--text-label-md-font-size); line-height: var(--text-label-md-line-height); font-weight: var(--text-label-md-font-weight); }
   .text-label-sm { font-size: var(--text-label-sm-font-size); line-height: var(--text-label-sm-line-height); font-weight: var(--text-label-sm-font-weight); }
+  .text-label-code-sm { font-family: var(--text-label-code-sm-font-family); font-size: var(--text-label-code-sm-font-size); line-height: var(--text-label-code-sm-line-height); font-weight: var(--text-label-code-sm-font-weight); letter-spacing: var(--text-label-code-sm-letter-spacing); }
+  .text-label-code-md { font-family: var(--text-label-code-md-font-family); font-size: var(--text-label-code-md-font-size); line-height: var(--text-label-code-md-line-height); font-weight: var(--text-label-code-md-font-weight); letter-spacing: var(--text-label-code-md-letter-spacing); }
+  .text-label-code-lg { font-family: var(--text-label-code-lg-font-family); font-size: var(--text-label-code-lg-font-size); line-height: var(--text-label-code-lg-line-height); font-weight: var(--text-label-code-lg-font-weight); letter-spacing: var(--text-label-code-lg-letter-spacing); }
   .text-body-lg { font-size: var(--text-body-lg-font-size); line-height: var(--text-body-lg-line-height); }
   .text-body-md { font-size: var(--text-body-md-font-size); line-height: var(--text-body-md-line-height); }
   .text-body-sm { font-size: var(--text-body-sm-font-size); line-height: var(--text-body-sm-line-height); }
