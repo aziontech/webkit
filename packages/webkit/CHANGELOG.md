@@ -1,3 +1,9 @@
+## [3.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.6...@aziontech/webkit@3.1.0) (2026-05-29)
+
+### Features
+
+- promote Button/IconButton/SegmentedButton/Avatar to top-level exports ([#611](https://github.com/aziontech/webkit/issues/611)) ([48e5bfc](https://github.com/aziontech/webkit/commit/48e5bfcbec00590b7fafb002ad145d1811ace56f))
+
 ## [3.0.6](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.5...@aziontech/webkit@3.0.6) (2026-05-28)
 
 ### Bug Fixes
