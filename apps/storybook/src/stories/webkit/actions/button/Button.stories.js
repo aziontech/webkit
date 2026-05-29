@@ -33,11 +33,11 @@ const meta = {
     },
     kind: {
       control: 'select',
-      options: ['primary', 'secondary', 'outlined', 'text'],
+      options: ['primary', 'secondary', 'outlined', 'text', 'danger'],
       description: 'Visual variant.',
       table: {
         category: 'props',
-        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text'" },
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text' | 'danger'" },
         defaultValue: { summary: "'primary'" }
       }
     },
@@ -129,6 +129,7 @@ export const Types = {
         <Button kind="secondary" label="Button" />
         <Button kind="outlined" label="Button" />
         <Button kind="text" label="Button" />
+        <Button kind="danger" label="Button" />
       </div>
     `
   }),
@@ -173,6 +174,7 @@ export const Icon = {
         <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
         <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
         <Button kind="text" label="Button" icon="pi pi-arrow-right" />
+        <Button kind="danger" label="Button" icon="pi pi-trash" />
       </div>
     `
   }),
