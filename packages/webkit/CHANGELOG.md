@@ -1,3 +1,9 @@
+## [3.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.1.0...@aziontech/webkit@3.2.0) (2026-05-29)
+
+### Features
+
+- align Tag with Figma design system ([#609](https://github.com/aziontech/webkit/issues/609)) ([0fe2acb](https://github.com/aziontech/webkit/commit/0fe2acb09b9abd9f196f8fe95b2146ed587c96e4))
+
 ## [3.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.6...@aziontech/webkit@3.1.0) (2026-05-29)
 
 ### Features
