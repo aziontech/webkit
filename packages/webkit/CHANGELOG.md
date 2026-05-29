@@ -1,3 +1,21 @@
+## [3.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.1.0...@aziontech/webkit@3.2.0) (2026-05-29)
+
+### Features
+
+- align Tag with Figma design system ([#609](https://github.com/aziontech/webkit/issues/609)) ([0fe2acb](https://github.com/aziontech/webkit/commit/0fe2acb09b9abd9f196f8fe95b2146ed587c96e4))
+
+## [3.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.6...@aziontech/webkit@3.1.0) (2026-05-29)
+
+### Features
+
+- promote Button/IconButton/SegmentedButton/Avatar to top-level exports ([#611](https://github.com/aziontech/webkit/issues/611)) ([48e5bfc](https://github.com/aziontech/webkit/commit/48e5bfcbec00590b7fafb002ad145d1811ace56f))
+
+## [3.0.6](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.5...@aziontech/webkit@3.0.6) (2026-05-28)
+
+### Bug Fixes
+
+- use semantic primary token in overline and card-content ([456b55c](https://github.com/aziontech/webkit/commit/456b55cfe6055f653c48d73811dc3551a8f6e621))
+
 ## [3.0.5](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.4...@aziontech/webkit@3.0.5) (2026-05-27)
 
 ### Bug Fixes

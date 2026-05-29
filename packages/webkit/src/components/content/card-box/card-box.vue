@@ -49,21 +49,21 @@
     cn(
       'flex flex-col overflow-clip',
       'bg-[var(--bg-surface)]',
-      'border border-[length:var(--border-width-default)] border-[var(--border-muted)]',
+      'border border-[length:var(--border-width-default)] border-[var(--border-default)]',
       'rounded-[var(--shape-card)]',
       attrs.class as string | undefined
     )
   )
 
   const headerClasses =
-    'group flex min-h-14 shrink-0 items-center justify-between gap-[var(--spacing-xs)] border-b border-[var(--border-muted)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
+    'group flex min-h-14 shrink-0 items-center justify-between gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
 
   const titleClasses = 'text-label-md text-[var(--text-default)]'
 
   const contentClasses = 'flex min-h-0 flex-1 flex-col'
 
   const footerClasses =
-    'flex min-h-14 shrink-0 items-center justify-center gap-[var(--spacing-sm)] border-t border-[var(--border-muted)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
+    'flex min-h-14 shrink-0 items-center justify-center gap-[var(--spacing-sm)] border-t border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
 </script>
 
 <template>

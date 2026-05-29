@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 import Dialog from '@aziontech/webkit/overlay/dialog'
 import DialogClose from '@aziontech/webkit/overlay/dialog-close'
 import DialogContent from '@aziontech/webkit/overlay/dialog-content'
