@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 
 /** @type {import('@storybook/vue3').Meta<typeof Button>} */
 const meta = {

@@ -1,5 +1,5 @@
-import IconButton from '@aziontech/webkit/actions/icon-button'
-import Avatar from '@aziontech/webkit/content/avatar'
+import IconButton from '@aziontech/webkit/icon-button'
+import Avatar from '@aziontech/webkit/avatar'
 import Tag from '@aziontech/webkit/content/tag'
 import DataTable from '@aziontech/webkit/data/data-table'
 import DataTableActions from '@aziontech/webkit/data/data-table-actions'
