@@ -43,7 +43,7 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
          '',
          '```vue',
          "<script setup>",
-         "import Button from '@aziontech/webkit/actions/button'",
+         "import Button from '@aziontech/webkit/button'",
          '</script>',
          '',
          '<template>',

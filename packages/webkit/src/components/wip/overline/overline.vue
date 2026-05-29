@@ -36,7 +36,7 @@
       {{ prefix }}
     </span>
     <span
-      class="font-proto-mono text-pretty text-brand-primary-500 font-medium leading-1 tracking-tightest uppercase text-overline-md"
+      class="font-proto-mono text-pretty text-primary font-medium leading-1 tracking-tightest uppercase text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >
       <slot />

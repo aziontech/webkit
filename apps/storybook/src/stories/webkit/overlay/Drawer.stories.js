@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 import Drawer from '@aziontech/webkit/overlay/drawer'
 import DrawerClose from '@aziontech/webkit/overlay/drawer-close'
 import DrawerContent from '@aziontech/webkit/overlay/drawer-content'

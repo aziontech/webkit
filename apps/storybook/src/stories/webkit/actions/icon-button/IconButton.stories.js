@@ -1,4 +1,4 @@
-import IconButton from '@aziontech/webkit/actions/icon-button'
+import IconButton from '@aziontech/webkit/icon-button'
 
 /** @type {import('@storybook/vue3').Meta<typeof IconButton>} */
 const meta = {
