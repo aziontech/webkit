@@ -9,11 +9,11 @@
   import ItemContent from '../../content/item/item-content.vue'
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemTitle from '../../content/item/item-title.vue'
-  import Tag from '../../content/tag/tag.vue'
   import type { BoxGridSelectionItem } from '../../inputs/box-grid-selection/box-grid-selection.vue'
   import BoxGridSelection from '../../inputs/box-grid-selection/box-grid-selection.vue'
   import FieldCheckbox from '../../inputs/field-checkbox/field-checkbox.vue'
   import InputText from '../../inputs/input-text/input-text.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({
     name: 'OnboardingForm',
