@@ -1,8 +1,9 @@
 <script setup>
-  import PrimeButton from 'primevue/button'
   import Listbox from 'primevue/listbox'
   import OverlayPanel from 'primevue/overlaypanel'
   import { computed, ref } from 'vue'
+
+  import IconButton from '../../../../components/actions/icon-button/icon-button.vue'
 
   const props = defineProps({
     columns: {
@@ -51,12 +52,13 @@
     class="flex justify-end"
     data-testid="data-table-actions-column-header"
   >
-    <PrimeButton
-      outlined
-      icon="ai ai-column"
-      @click="toggleColumnSelector"
+    <IconButton
       v-tooltip.top="{ value: 'Available Columns', showDelay: 200 }"
+      kind="outlined"
+      icon="ai ai-column"
+      size="small"
       data-testid="data-table-actions-column-header-toggle-columns"
+      @click="toggleColumnSelector"
     />
     <OverlayPanel
       ref="columnSelectorPanel"
