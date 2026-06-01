@@ -1,3 +1,9 @@
+## [3.2.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.2...@aziontech/webkit@3.2.3) (2026-06-01)
+
+### Bug Fixes
+
+- migration table action buttons ([#621](https://github.com/aziontech/webkit/issues/621)) ([059f99d](https://github.com/aziontech/webkit/commit/059f99dfbfc01ef8698769369f26b461cc6a88d9))
+
 ## [3.2.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.1...@aziontech/webkit@3.2.2) (2026-06-01)
 
 ### Bug Fixes
