@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 56f7cbc0511be227d09526cfd8e9afe75d39653bf5ce1009db0e2c9913c182eb
+checksum: f55dd19b92c68f040e5061fd35eb787f04bcf227baceeb3d6ffef33ac0bce1dd
 created: 2026-06-01
 last_updated: 2026-06-01
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-06-01
 
 ## Purpose
 
-Visually emphasized action trigger built on a brand-accent gradient. Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient); same prop surface as `Button` minus the `kind` axis.
+Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `kind` axis.
 
 ## Usage
 
@@ -62,7 +62,9 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| hover / focus state change | `transition-colors duration-fast-02 ease-productive-entrance` | semantic (110ms · productive-entrance) | `motion-reduce:transition-none` |
+| hover / focus state change (border, text) | `transition-colors duration-fast-02 ease-productive-entrance` | semantic (110ms · productive-entrance) | `motion-reduce:transition-none` |
+| hover surface fade (violet base + dark scrim both fade to 25% to reveal the rotating glow) | `transition-opacity duration-300 ease-out` on the base and scrim layers | built-in (300ms · ease-out) — matches the `.3s ease` from `azion-console-kit` `.special-button-content` | `motion-reduce:transition-none` |
+| ambient glow rim (decorative) | `animate-spin [animation-duration:8s]` on a blurred multicolor gradient layer behind the surface | Tailwind built-in `animate-spin` + arbitrary 8s duration | `motion-reduce:animate-none` |
 
 ## Tokens
 
@@ -77,6 +79,9 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 | gradient stop 1 | `var(--color-accent-900)` |
 | gradient stop 2 | `var(--color-accent-100)` |
 | gradient stop 3 | `var(--color-accent-600)` |
+| glow stop 1 (decorative) | `var(--color-base-white)` |
+| glow stop 2 (decorative) | `var(--color-blue-500)` |
+| glow stop 3 (decorative) | `var(--color-primary-500)` |
 | border | `var(--secondary-mask)` |
 | border width | `var(--border-width-default)` |
 | shape | `var(--shape-button)` |
