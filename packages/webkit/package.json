@@ -91,6 +91,7 @@
     "./accordion": "./src/core/primevue/accordion/accordion.vue",
     "./accordion-tab": "./src/core/primevue/accordion-tab/accordion-tab.vue",
     "./button": "./src/components/actions/button/button.vue",
+    "./button-highlight": "./src/components/actions/button-highlight/button-highlight.vue",
     "./segmented-button": "./src/components/actions/segmented-button/segmented-button.vue",
     "./icon-button": "./src/components/actions/icon-button/icon-button.vue",
     "./button-cancel": "./src/components/wip/buttons/button-cancel/button-cancel.vue",
