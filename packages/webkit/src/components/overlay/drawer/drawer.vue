@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, toRef, useAttrs, useId } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { DrawerInjectionKey, type DrawerSide, type DrawerSize } from './injection-key'
@@ -71,7 +71,7 @@
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
     closeable: props.closeable,
-    size: props.size,
+    size: toRef(props, 'size'),
     open: openDrawer,
     close: closeDrawer,
     titleId: `${uid}-title`,
