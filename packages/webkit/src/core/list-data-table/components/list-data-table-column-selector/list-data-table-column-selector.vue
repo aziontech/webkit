@@ -1,8 +1,9 @@
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
   import Listbox from 'primevue/listbox'
   import OverlayPanel from 'primevue/overlaypanel'
   import { computed, ref } from 'vue'
+
+  import IconButton from '../../../../components/actions/icon-button/icon-button.vue'
 
   const props = defineProps({
     columns: {

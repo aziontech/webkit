@@ -1,5 +1,5 @@
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
+  import IconButton from '../../../../components/actions/icon-button/icon-button.vue'
 
   defineProps({
     label: {
