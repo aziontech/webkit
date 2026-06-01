@@ -11,6 +11,7 @@ checksum: 0aece9c0160c2aeb9b5e2a6113130750eb8d9f3d5845f654478366b1785d718e
 created: 2026-06-01
 last_updated: 2026-06-01
 ---
+
 # Mini Button — Component Spec
 
 ## Purpose
@@ -21,30 +22,34 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 ```vue
 <script setup>
-import MiniButton from '@aziontech/webkit/mini-button'
+  import MiniButton from '@aziontech/webkit/mini-button'
 </script>
 
 <template>
-  <MiniButton label="Learn More" href="#" target="_blank" />
+  <MiniButton
+    label="Learn More"
+    href="#"
+    target="_blank"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `'Learn More'` | no | Visible label rendered inside the control. |
-| `size` | `'large' \| 'medium'` | `'large'` | no | Size token; affects height, gap, and typography. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean` | `true` | no | When true, renders the trailing icon. |
-| `icon` | `string` | `'pi pi-external-link'` | no | PrimeIcons class for the trailing icon. |
-| `href` | `string` | `'#'` | no | Destination URL for the anchor. |
-| `target` | `'_blank' \| '_self'` | `'_self'` | no | Link target when navigating. |
+| Prop       | Type                  | Default                 | Required | JSDoc                                             |
+| ---------- | --------------------- | ----------------------- | -------- | ------------------------------------------------- |
+| `label`    | `string`              | `'Learn More'`          | no       | Visible label rendered inside the control.        |
+| `size`     | `'large' \| 'medium'` | `'large'`               | no       | Size token; affects height, gap, and typography.  |
+| `disabled` | `boolean`             | `false`                 | no       | Disables interaction and applies disabled tokens. |
+| `showIcon` | `boolean`             | `true`                  | no       | When true, renders the trailing icon.             |
+| `icon`     | `string`              | `'pi pi-external-link'` | no       | PrimeIcons class for the trailing icon.           |
+| `href`     | `string`              | `'#'`                   | no       | Destination URL for the anchor.                   |
+| `target`   | `'_blank' \| '_self'` | `'_self'`               | no       | Link target when navigating.                      |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event   | Payload      | Notes                                            |
+| ------- | ------------ | ------------------------------------------------ |
 | `click` | `MouseEvent` | Fires on activation; suppressed when `disabled`. |
 
 ## Slots
@@ -59,34 +64,34 @@ import MiniButton from '@aziontech/webkit/mini-button'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus ghost surface | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| Trigger                     | Animation / Transition                                          | Token  | Reduced-motion fallback                |
+| --------------------------- | --------------------------------------------------------------- | ------ | -------------------------------------- |
+| hover / focus ghost surface | `transition-opacity duration-150 ease-out`                      | inline | `motion-reduce:transition-none`        |
 | hover / focus ghost overlay | `before:transition-opacity before:duration-150 before:ease-out` | inline | `motion-reduce:before:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (large) | `.text-button-lg` |
-| typography (medium) | `.text-button-md` |
-| text | `var(--text-default)` |
-| text (disabled) | `var(--text-disabled)` |
-| icon | `var(--primary)` |
-| ghost surface | `var(--bg-hover)` |
-| ghost overlay | `var(--bg-mask)` |
-| ghost active | `var(--bg-active)` |
-| spacing.gap (large) | `var(--spacing-xs)` |
-| spacing.gap (medium) | `var(--spacing-xxs)` |
-| spacing.ghost inset | `var(--spacing-xs)` |
-| shape | `var(--shape-button)` |
-| ring | `var(--ring-color)` |
-| ring offset surface | `var(--bg-canvas)` |
+| Region               | Token (DESIGN.md)      |
+| -------------------- | ---------------------- |
+| typography (large)   | `.text-button-lg`      |
+| typography (medium)  | `.text-button-md`      |
+| text                 | `var(--text-default)`  |
+| text (disabled)      | `var(--text-disabled)` |
+| icon                 | `var(--primary)`       |
+| ghost surface        | `var(--bg-hover)`      |
+| ghost overlay        | `var(--bg-mask)`       |
+| ghost active         | `var(--bg-active)`     |
+| spacing.gap (large)  | `var(--spacing-xs)`    |
+| spacing.gap (medium) | `var(--spacing-xxs)`   |
+| spacing.ghost inset  | `var(--spacing-xs)`    |
+| shape                | `var(--shape-button)`  |
+| ring                 | `var(--ring-color)`    |
+| ring offset surface  | `var(--bg-canvas)`     |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable        | Temporary primitive        | Follow-up         |
+| --------------------- | -------------------------- | ----------------- |
 | `gap/button-md` (6px) | `var(--spacing-xxs)` (4px) | `TODO: tokenizar` |
 
 ## Accessibility (WCAG 2.1 AA)
