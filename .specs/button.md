@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: a29747f6adedbdd19e01f4bf5c87262ff1e5c50fabe51fe2659d7a202c7fbcc8
+checksum: 0efc3a5b4ca3184da8c5b135eb2feb63cde2a997d8b8661c9fcd119d40e878de
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-29
 ---
 # Button — Component Spec
 
@@ -18,8 +18,8 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Visible label text. |
-| `kind` | `'primary' | 'secondary' | 'outlined' | 'text'` | `'primary'` | no | Visual variant. |
+| `label` | `string` | `—` | yes | Visible label text. Use `IconButton` for icon-only controls. |
+| `kind` | `'primary' | 'secondary' | 'outlined' | 'text' | 'danger'` | `'primary'` | no | Visual variant. |
 | `size` | `'small' | 'medium' | 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
@@ -81,9 +81,11 @@ Interactive control for user actions. Migrated from the existing implementation 
 - Secondary (kind)
 - Outlined (kind)
 - Text (kind)
+- Danger (kind)
 - Small (size)
 - Medium (size)
 - Large (size)
+- Icon
 - Disabled
 
 ## Constraints — DO NOT

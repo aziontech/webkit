@@ -3,7 +3,7 @@
 
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text' | 'danger'
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
 
@@ -13,8 +13,8 @@
   })
 
   interface Props {
-    /** Visible label text. */
-    label?: string
+    /** Visible label text. Use IconButton for icon-only controls. */
+    label: string
     /** Visual variant. */
     kind?: ButtonKind
     /** Size token; affects height, padding, and typography. */
@@ -32,7 +32,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    label: '',
     kind: 'primary',
     size: 'large',
     disabled: false,
@@ -48,16 +47,7 @@
 
   const attrs = useAttrs()
 
-  const passthroughAttrs = computed(() => {
-    const rest = { ...attrs }
-
-    delete rest.class
-    delete rest['data-testid']
-
-    return rest
-  })
-
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'action-button')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'actions-button')
 
   const isInactive = computed(() => props.disabled || props.loading)
 
@@ -89,16 +79,18 @@
     secondary:
       'bg-[var(--secondary)] text-[var(--secondary-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]',
     outlined:
-      'border border-[var(--border-muted)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
-    text: 'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]'
+      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+    text: 'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+    danger:
+      'border border-[var(--danger-border)] bg-[var(--danger)] text-[var(--danger-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]'
   }
 
   const disabledClasses =
     'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
   const sizeClasses: Record<ButtonSize, string> = {
-    large: 'min-w-20 h-10 h-10 px-[var(--spacing-md)] text-button-lg',
-    medium: 'min-w-16 h-8 h-10 px-[var(--spacing-sm)] text-button-md',
+    large: 'min-w-20 h-10 px-[var(--spacing-md)] text-button-lg',
+    medium: 'min-w-16 h-8 px-[var(--spacing-sm)] text-button-md',
     small: 'min-w-14 h-7 px-[var(--spacing-xs)] text-button-md'
   }
 
@@ -112,7 +104,7 @@
     const kind = props.disabled ? disabledClasses : kindClasses[props.kind]
     const loadingClasses = props.loading && !props.disabled ? 'cursor-loading' : ''
 
-    return [sharedClasses, kind, sizeClasses[props.size], loadingClasses, attrs.class]
+    return [sharedClasses, kind, sizeClasses[props.size], loadingClasses, attrs['class']]
   })
 
   const loadingTestId = computed(() => `${testId.value}-loading`)
@@ -130,7 +122,6 @@
 <template>
   <a
     v-if="isAnchor"
-    v-bind="passthroughAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -160,7 +151,6 @@
 
   <button
     v-else
-    v-bind="passthroughAttrs"
     type="button"
     :disabled="disabled"
     :aria-disabled="isInactive || undefined"

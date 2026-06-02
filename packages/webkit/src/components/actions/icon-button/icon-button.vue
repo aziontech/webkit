@@ -3,7 +3,7 @@
 
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent'
+  export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type IconButtonSize = 'small' | 'medium' | 'large'
   export type IconButtonTarget = '_blank' | '_self'
 
@@ -46,17 +46,8 @@
 
   const attrs = useAttrs()
 
-  const passthroughAttrs = computed(() => {
-    const rest = { ...attrs }
-
-    delete rest.class
-    delete rest['data-testid']
-
-    return rest
-  })
-
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'action-icon-button'
+    () => (attrs['data-testid'] as string | undefined) ?? 'actions-icon-button'
   )
 
   const isInactive = computed(() => props.disabled || props.loading)
@@ -91,7 +82,9 @@
     outlined:
       'border border-[var(--border-muted)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
     transparent:
-      'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]'
+      'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+    danger:
+      'border border-[var(--danger-border)] bg-[var(--danger)] text-[var(--danger-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]'
   }
 
   const disabledClasses =
@@ -131,7 +124,6 @@
 <template>
   <a
     v-if="isAnchor"
-    v-bind="passthroughAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -161,7 +153,6 @@
 
   <button
     v-else
-    v-bind="passthroughAttrs"
     type="button"
     :disabled="disabled"
     :aria-label="ariaLabel"

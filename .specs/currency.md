@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4ac5cb3f4b44bf426f50194452747807a15f10aa40560e29aa5d4d3a5a893180
+checksum: 0e0907d6d09e7ec2e866ef8704cf2db9bd3c87477cc2a7f07612465ee7747fb0
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-27
 ---
 # Currency — Component Spec
 
@@ -20,9 +20,7 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 |---|---|---|---|---|
 | `value` | `string` | `''` | no | value. |
 | `prefix` | `string` | `'$'` | no | prefix. |
-| `suffix` | `string` | `'per month'` | no | suffix. |
-| `showPrefix` | `boolean` | `true` | no | show Prefix. |
-| `showSuffix` | `boolean` | `true` | no | show Suffix. |
+| `suffix` | `string` | `''` | no | suffix. |
 | `size` | `'small' | 'large'` | `'small'` | no | Size token; affects height, padding, and typography. |
 
 ## Events

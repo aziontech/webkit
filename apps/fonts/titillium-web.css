@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.woff') format('woff'),
+    url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.ttf') format('truetype'),
+    url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}

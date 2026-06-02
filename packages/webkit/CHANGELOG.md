@@ -1,3 +1,82 @@
+## [3.3.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.2...@aziontech/webkit@3.3.3) (2026-06-02)
+
+### Bug Fixes
+
+- adjust card-pricing gap spacing for non-middle cards ([26c051a](https://github.com/aziontech/webkit/commit/26c051a71e2e5a5345c2894fd818627b794c4390))
+
+## [3.3.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.1...@aziontech/webkit@3.3.2) (2026-06-02)
+
+### Bug Fixes
+
+- tag component import ([#626](https://github.com/aziontech/webkit/issues/626)) ([7ae78a5](https://github.com/aziontech/webkit/commit/7ae78a502fa5a7887f32f3b39993b0c93d4f0538))
+
+## [3.3.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.0...@aziontech/webkit@3.3.1) (2026-06-02)
+
+### Bug Fixes
+
+- table actions IconButton sizes ([#625](https://github.com/aziontech/webkit/issues/625)) ([907b1a6](https://github.com/aziontech/webkit/commit/907b1a6c4d8c4049c7f66b1a7b657fbe9825b78e))
+
+## [3.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.3...@aziontech/webkit@3.3.0) (2026-06-01)
+
+### Features
+
+- add button highlight ([#622](https://github.com/aziontech/webkit/issues/622)) ([4c2654c](https://github.com/aziontech/webkit/commit/4c2654cce7b31c2b6349d435a871b2d046ab070e))
+
+## [3.2.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.2...@aziontech/webkit@3.2.3) (2026-06-01)
+
+### Bug Fixes
+
+- migration table action buttons ([#621](https://github.com/aziontech/webkit/issues/621)) ([059f99d](https://github.com/aziontech/webkit/commit/059f99dfbfc01ef8698769369f26b461cc6a88d9))
+
+## [3.2.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.1...@aziontech/webkit@3.2.2) (2026-06-01)
+
+### Bug Fixes
+
+- motion, sizing, scroll, and overlay story docs ([#620](https://github.com/aziontech/webkit/issues/620)) ([7e589ba](https://github.com/aziontech/webkit/commit/7e589ba869ef33d0db7abe13fc4af225f7b85e79))
+- storybook preview build ([#618](https://github.com/aziontech/webkit/issues/618)) ([108c168](https://github.com/aziontech/webkit/commit/108c168686d3abe741c3037d650271685092e837))
+
+## [3.2.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.0...@aziontech/webkit@3.2.1) (2026-05-29)
+
+### Bug Fixes
+
+- adding button kind danger ([#617](https://github.com/aziontech/webkit/issues/617)) ([028b200](https://github.com/aziontech/webkit/commit/028b200d6516c22847f952cb985e92fcaedeb76d))
+
+## [3.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.1.0...@aziontech/webkit@3.2.0) (2026-05-29)
+
+### Features
+
+- align Tag with Figma design system ([#609](https://github.com/aziontech/webkit/issues/609)) ([0fe2acb](https://github.com/aziontech/webkit/commit/0fe2acb09b9abd9f196f8fe95b2146ed587c96e4))
+
+## [3.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.6...@aziontech/webkit@3.1.0) (2026-05-29)
+
+### Features
+
+- promote Button/IconButton/SegmentedButton/Avatar to top-level exports ([#611](https://github.com/aziontech/webkit/issues/611)) ([48e5bfc](https://github.com/aziontech/webkit/commit/48e5bfcbec00590b7fafb002ad145d1811ace56f))
+
+## [3.0.6](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.5...@aziontech/webkit@3.0.6) (2026-05-28)
+
+### Bug Fixes
+
+- use semantic primary token in overline and card-content ([456b55c](https://github.com/aziontech/webkit/commit/456b55cfe6055f653c48d73811dc3551a8f6e621))
+
+## [3.0.5](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.4...@aziontech/webkit@3.0.5) (2026-05-27)
+
+### Bug Fixes
+
+- remove duplicated/conflicting size height classes in button ([2668a29](https://github.com/aziontech/webkit/commit/2668a290fc1bb4b9f1d87dfa57af07f992384eac))
+
+## [3.0.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.3...@aziontech/webkit@3.0.4) (2026-05-27)
+
+### Bug Fixes
+
+- removing href/target props and pt function ([#600](https://github.com/aziontech/webkit/issues/600)) ([b70b6ef](https://github.com/aziontech/webkit/commit/b70b6ef8bc509244cc265ea37abd8e7ceb1aaec2))
+
+## [3.0.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.2...@aziontech/webkit@3.0.3) (2026-05-27)
+
+### Bug Fixes
+
+- bump webkit ([#598](https://github.com/aziontech/webkit/issues/598)) ([aa77380](https://github.com/aziontech/webkit/commit/aa77380183973b02dee5cd3d9fc8828c578690d0))
+
 ## [3.0.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.0.1...@aziontech/webkit@3.0.2) (2026-05-26)
 
 ### Bug Fixes

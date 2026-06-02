@@ -25,14 +25,6 @@ export default {
       control: 'text',
       description: 'Secondary label after the value (e.g. billing period)'
     },
-    showPrefix: {
-      control: 'boolean',
-      description: 'Whether the prefix symbol is visible'
-    },
-    showSuffix: {
-      control: 'boolean',
-      description: 'Whether the suffix label is visible'
-    },
     size: {
       control: 'select',
       options: sizes,
@@ -46,9 +38,7 @@ export const Default = {
     value: '20',
     prefix: '$',
     suffix: 'per month',
-    size: 'small',
-    showPrefix: true,
-    showSuffix: true
+    size: 'small'
   },
   render: (args) => ({
     components: { Currency },

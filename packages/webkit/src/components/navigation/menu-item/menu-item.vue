@@ -2,7 +2,7 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import Tag from '../../content/tag/tag.vue'
+  import Tag from '../../tag/tag.vue'
 
   export type MenuItemKind = 'option' | 'group'
   export type MenuItemTagSeverity =
