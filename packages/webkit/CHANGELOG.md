@@ -1,3 +1,9 @@
+## [3.3.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.0...@aziontech/webkit@3.3.1) (2026-06-02)
+
+### Bug Fixes
+
+- table actions IconButton sizes ([#625](https://github.com/aziontech/webkit/issues/625)) ([907b1a6](https://github.com/aziontech/webkit/commit/907b1a6c4d8c4049c7f66b1a7b657fbe9825b78e))
+
 ## [3.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.3...@aziontech/webkit@3.3.0) (2026-06-01)
 
 ### Features
