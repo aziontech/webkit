@@ -4,6 +4,7 @@
   import { computed, ref } from 'vue'
 
   import Button from '../../../../components/actions/button/button.vue'
+  import IconButton from '../../../../components/actions/icon-button/icon-button.vue'
   import { filterBuilder } from '../../filters/filter-builder'
 
   const props = defineProps({
@@ -114,7 +115,7 @@
         class="flex items-center justify-between px-6 py-4 border-b border-[var(--surface-border)]"
       >
         <h3 class="text-lg font-semibold">Filter</h3>
-        <Button
+        <IconButton
           kind="outlined"
           icon="pi pi-times"
           @click="handleCancel"
@@ -159,11 +160,13 @@
         <Button
           label="Cancel"
           kind="outlined"
+          size="medium"
           @click="handleCancel"
         />
         <Button
           label="Apply"
           kind="secondary"
+          size="medium"
           @click="handleApply"
         />
       </div>
