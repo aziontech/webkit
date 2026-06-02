@@ -531,7 +531,8 @@
     --text-link-font-size: inherit;
     --text-link-line-height: inherit;
     --text-link-color: var(--text-link);
-    --text-link-transition: color 150ms ease-out;
+    --text-link-border-radius: var(--shape-elements);
+    --text-link-transition: all 110ms cubic-bezier(0.39, 0.57, 0.56, 1);
 
     /* ── Semantic colors ── */
     --text-default: #141414;
@@ -829,7 +830,7 @@
   .text-overline-xs { font-family: var(--text-overline-xs-font-family); font-size: var(--text-overline-xs-font-size); line-height: var(--text-overline-xs-line-height); letter-spacing: var(--text-overline-xs-letter-spacing); text-transform: var(--text-overline-xs-text-transform); }
   .text-button-lg { font-family: var(--text-button-lg-font-family); font-size: var(--text-button-lg-font-size); font-weight: var(--text-button-lg-font-weight); line-height: var(--text-button-lg-line-height); letter-spacing: var(--text-button-lg-letter-spacing); }
   .text-button-md { font-family: var(--text-button-md-font-family); font-size: var(--text-button-md-font-size); font-weight: var(--text-button-md-font-weight); line-height: var(--text-button-md-line-height); letter-spacing: var(--text-button-md-letter-spacing); }
-  .text-link { font-size: var(--text-link-font-size); line-height: var(--text-link-line-height); color: var(--text-link-color); transition: var(--text-link-transition); }
+  .text-link { font-size: var(--text-link-font-size); line-height: var(--text-link-line-height); color: var(--text-link-color); border-radius: var(--text-link-border-radius); transition: var(--text-link-transition); }
   .text-link:hover { color: var(--text-link-hover); text-decoration: underline; }
   .text-link:focus-visible { outline: 2px solid var(--ring-color); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) {

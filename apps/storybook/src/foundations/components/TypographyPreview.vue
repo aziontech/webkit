@@ -1,21 +1,14 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { typographyCatalog, typographyLinkDemo } from '@aziontech/theme/tokens/semantic/texts.data'
-import { useViewport } from '../composables/useViewport.js'
+import { ref } from 'vue'
 
-const { breakpoint } = useViewport()
-
-const viewportTitle = computed(() => {
-  if (breakpoint.value === 'tablet') return 'Tablet'
-  if (breakpoint.value === 'mobile') return 'Mobile'
-  return 'Desktop'
-})
+import { typographyCatalog, typographyLinkDemo } from '../data/typography.js'
 
 const copiedKey = ref(null)
 let copyTimeout = null
 
-function copyToClipboard(text, key) {
-  navigator.clipboard?.writeText(text).catch(() => {})
+function copyToClipboard(value, key) {
+  if (!value) return
+  navigator.clipboard?.writeText(value).catch(() => {})
   copiedKey.value = key
   if (copyTimeout) clearTimeout(copyTimeout)
   copyTimeout = setTimeout(() => {
@@ -30,75 +23,60 @@ function isCopied(key) {
 
 <template>
   <div
-    class="flex w-full flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] bg-[var(--bg-canvas)] p-[var(--spacing-xs)]"
+    class="flex w-full flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] bg-[var(--bg-canvas)] p-[var(--spacing-xs)]"
   >
-    <header
-      class="flex w-full items-start rounded-[var(--shape-elements)] bg-[var(--bg-canvas)] p-[var(--spacing-lg)]"
-    >
-      <p class="text-heading-xl m-0 whitespace-nowrap text-[var(--text-default)]">
-        {{ viewportTitle }}
-      </p>
-    </header>
-
-    <div
+    <article
       v-for="item in typographyCatalog"
       :key="item.className"
-      class="flex w-full shrink-0 flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] bg-[var(--bg-surface)] p-[var(--spacing-lg)]"
+      class="w-full min-w-0 cursor-pointer overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
+      role="button"
+      tabindex="0"
+      :title="isCopied(item.className) ? 'Copied!' : 'Copy class name'"
+      @click="copyToClipboard(item.className, item.className)"
+      @keydown.enter.prevent="copyToClipboard(item.className, item.className)"
+      @keydown.space.prevent="copyToClipboard(item.className, item.className)"
     >
-      <button
-        type="button"
-        class="group inline-flex w-fit cursor-pointer items-center gap-1.5 border-none bg-transparent p-0 font-inherit"
-        :title="`Copy: ${item.className}`"
-        @click="copyToClipboard(item.className, item.className)"
+      <div class="flex min-h-24 w-full items-center px-[var(--spacing-lg)] py-[var(--spacing-md)]">
+        <p :class="[item.className, 'm-0 w-full break-words text-[var(--text-default)]']">
+          {{ item.sample }}
+        </p>
+      </div>
+
+      <div
+        class="flex items-center justify-between gap-[var(--spacing-xs)] bg-[var(--bg-mask)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] font-code"
       >
-        <code
-          class="font-code w-fit rounded border border-white/15 bg-white/[0.07] px-1.5 py-0.5 text-[11px] text-code"
-        >
-          {{ item.className }}
-        </code>
-        <i
-          :class="[
-            'pi text-[10px] transition-opacity duration-100',
-            isCopied(item.className)
-              ? 'pi-check text-success'
-              : 'pi-copy opacity-0 group-hover:opacity-50'
-          ]"
-        />
-      </button>
+        <span class="truncate text-body-xs text-[var(--text-muted)]">{{
+          isCopied(item.className) ? 'Copied' : item.className
+        }}</span>
+      </div>
+    </article>
 
-      <p :class="[item.className, 'm-0 break-words text-[var(--text-default)]']">
-        {{ item.styleLabel }}
-      </p>
-    </div>
-
-    <div
-      class="flex w-full shrink-0 flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] bg-[var(--bg-surface)] p-[var(--spacing-lg)]"
+    <article
+      class="w-full min-w-0 cursor-pointer overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
+      role="button"
+      tabindex="0"
+      :title="isCopied('text-link') ? 'Copied!' : 'Copy class name'"
+      @click="copyToClipboard(typographyLinkDemo.linkClass, 'text-link')"
+      @keydown.enter.prevent="copyToClipboard(typographyLinkDemo.linkClass, 'text-link')"
+      @keydown.space.prevent="copyToClipboard(typographyLinkDemo.linkClass, 'text-link')"
     >
-      <button
-        type="button"
-        class="group inline-flex w-fit cursor-pointer items-center gap-1.5 border-none bg-transparent p-0 font-inherit"
-        :title="`Copy: ${typographyLinkDemo.linkClass}`"
-        @click="copyToClipboard(typographyLinkDemo.linkClass, typographyLinkDemo.linkClass)"
-      >
-        <code
-          class="font-code w-fit rounded border border-white/15 bg-white/[0.07] px-1.5 py-0.5 text-[11px] text-code"
+      <div class="flex min-h-24 w-full items-center px-[var(--spacing-lg)] py-[var(--spacing-md)]">
+        <p
+          :class="[typographyLinkDemo.parentClass, 'm-0 w-full break-words text-[var(--text-default)]']"
         >
-          {{ typographyLinkDemo.linkClass }}
-        </code>
-        <i
-          :class="[
-            'pi text-[10px] transition-opacity duration-100',
-            isCopied(typographyLinkDemo.linkClass)
-              ? 'pi-check text-success'
-              : 'pi-copy opacity-0 group-hover:opacity-50'
-          ]"
-        />
-      </button>
+          {{ typographyLinkDemo.beforeLink }}
+          <span :class="typographyLinkDemo.linkClass">{{ typographyLinkDemo.linkLabel }}</span
+          >{{ typographyLinkDemo.afterLink }}
+        </p>
+      </div>
 
-      <p :class="[typographyLinkDemo.parentClass, 'm-0 break-words text-[var(--text-default)]']">
-        Typography/Body/md with
-        <a href="#" class="text-link" @click.prevent>{{ typographyLinkDemo.linkLabel }}</a>
-      </p>
-    </div>
+      <div
+        class="flex items-center justify-between gap-[var(--spacing-xs)] bg-[var(--bg-mask)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] font-code"
+      >
+        <span class="truncate text-body-xs text-[var(--text-muted)]">{{
+          isCopied('text-link') ? 'Copied' : typographyLinkDemo.linkClass
+        }}</span>
+      </div>
+    </article>
   </div>
 </template>

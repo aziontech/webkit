@@ -19,8 +19,8 @@ export default {
   },
 };
 
-export const Catalog = {
-  name: 'Catalog',
+export const Overview = {
+  name: 'Overview',
   render: () => ({
     components: { PageContainer, PageHeader, TypographyPreview },
     template: /* html */ `
