@@ -143,14 +143,14 @@
           <Button
             label="Cancel"
             kind="text"
-            size="small"
+            size="medium"
             :data-testid="`${testId}__cancel`"
             @click="handleCancel"
           />
           <Button
             label="Apply"
             kind="primary"
-            size="small"
+            size="medium"
             :data-testid="`${testId}__apply`"
             @click="handleApply"
           />

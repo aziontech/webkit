@@ -7,7 +7,6 @@
     "type": "git",
     "url": "https://github.com/aziontech/webkit.git"
   },
-  "packageManager": "pnpm@9.15.9",
   "scripts": {
     "prepare": "husky",
     "icons:gallery:build": "pnpm --filter icons-gallery run build",

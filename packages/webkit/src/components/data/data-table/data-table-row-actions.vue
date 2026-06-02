@@ -88,7 +88,7 @@
       :icon="inlineAction.icon"
       :ariaLabel="inlineAction.label ?? 'Row action'"
       kind="transparent"
-      size="small"
+      size="medium"
       :disabled="resolvedInlineDisabled"
       :data-testid="`${testId}__inline`"
       @click="executeInlineAction"
@@ -102,7 +102,7 @@
           icon="pi pi-ellipsis-v"
           ariaLabel="Open row menu"
           kind="transparent"
-          size="small"
+          size="medium"
           :data-testid="`${testId}__trigger`"
         />
       </DropdownMenuTrigger>

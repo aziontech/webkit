@@ -39,7 +39,7 @@
     icon="pi pi-refresh"
     ariaLabel="Refresh table"
     kind="outlined"
-    size="small"
+    size="medium"
     :disabled="disabled"
     :loading="loading"
     :data-testid="testId"

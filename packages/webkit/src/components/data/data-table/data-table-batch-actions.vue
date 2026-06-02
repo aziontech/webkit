@@ -53,7 +53,7 @@
         :label="action.label"
         :icon="action.icon"
         kind="outlined"
-        size="small"
+        size="medium"
         :data-testid="`${testId}__action-${action.label}`"
         @click="action.command"
       />

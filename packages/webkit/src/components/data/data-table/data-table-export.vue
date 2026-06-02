@@ -46,9 +46,9 @@
 <template>
   <Button
     v-bind="attrs"
-    :label="label"
     kind="outlined"
-    size="small"
+    size="medium"
+    :label="label"
     :disabled="disabled"
     :loading="loading"
     :data-testid="testId"

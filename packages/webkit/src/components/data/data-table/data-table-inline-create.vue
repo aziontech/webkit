@@ -69,7 +69,7 @@
     <Button
       label="Save"
       kind="primary"
-      size="small"
+      size="medium"
       :disabled="disabled"
       :data-testid="`${testId}__save`"
       @click="handleSave"
@@ -77,7 +77,7 @@
     <Button
       label="Cancel"
       kind="text"
-      size="small"
+      size="medium"
       :disabled="disabled"
       :data-testid="`${testId}__cancel`"
       @click="handleCancel"

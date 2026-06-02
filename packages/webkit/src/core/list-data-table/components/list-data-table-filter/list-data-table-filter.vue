@@ -1,4 +1,5 @@
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import PrimeButton from 'primevue/button'
   import Dropdown from 'primevue/dropdown'
   import OverlayPanel from 'primevue/overlaypanel'
@@ -157,14 +158,16 @@
       </div>
 
       <div class="flex justify-end gap-2 px-6 py-4 border-t border-[var(--surface-border)]">
-        <PrimeButton
+        <Button
           label="Cancel"
-          outlined
+          kind="outlined"
+          size="medium"
           @click="handleCancel"
         />
-        <PrimeButton
+        <Button
           label="Apply"
-          severity="secondary"
+          kind="secondary"
+          size="medium"
           @click="handleApply"
         />
       </div>

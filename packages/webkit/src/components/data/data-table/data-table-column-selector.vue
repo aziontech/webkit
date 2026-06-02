@@ -72,7 +72,7 @@
       icon="pi pi-table"
       ariaLabel="Toggle columns"
       kind="outlined"
-      size="small"
+      size="medium"
       :data-testid="`${testId}__trigger`"
       @click="toggle"
     />

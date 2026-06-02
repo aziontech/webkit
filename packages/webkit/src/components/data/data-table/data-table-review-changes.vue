@@ -45,14 +45,14 @@
       <Button
         label="Discard"
         kind="text"
-        size="small"
+        size="medium"
         :data-testid="`${testId}__discard`"
         @click="emit('discard')"
       />
       <Button
         label="Review"
         kind="primary"
-        size="small"
+        size="medium"
         :data-testid="`${testId}__review`"
         @click="emit('review')"
       />

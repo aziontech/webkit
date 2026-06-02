@@ -37,9 +37,9 @@
     :data-testid="testId"
   >
     <Button
-      :label="label"
       kind="text"
-      size="small"
+      size="medium"
+      :label="label"
       :data-testid="`${testId}__button`"
       @click="emit('click', $event)"
     />
