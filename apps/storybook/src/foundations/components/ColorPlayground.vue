@@ -2,6 +2,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { playgroundColorTokens } from '../data/colors.js';
 
+const tokens = Array.isArray(playgroundColorTokens) ? playgroundColorTokens : [];
+
 const CATEGORIES = [
   { key: 'theme', label: 'Theme', filter: (t) => t.category === 'theme' },
   { key: 'background', label: 'Background', filter: (t) => t.category === 'background' },
@@ -26,7 +28,7 @@ onMounted(() => {
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-  const first = playgroundColorTokens.find((t) => t.name === 'primary') ?? playgroundColorTokens[0];
+  const first = tokens.find((t) => t.name === 'primary') ?? tokens[0];
   if (first) selectedTokenName.value = first.name;
 });
 
@@ -36,7 +38,7 @@ onUnmounted(() => {
 
 const activeTokens = computed(() => {
   const cat = CATEGORIES.find((c) => c.key === selectedCategory.value);
-  return cat ? playgroundColorTokens.filter(cat.filter) : playgroundColorTokens;
+  return cat ? tokens.filter(cat.filter) : tokens;
 });
 
 const selectedToken = computed(
