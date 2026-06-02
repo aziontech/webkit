@@ -1,9 +1,9 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
   import Dropdown from 'primevue/dropdown'
   import OverlayPanel from 'primevue/overlaypanel'
   import { computed, ref } from 'vue'
 
+  import Button from '../../../../components/actions/button/button.vue'
   import { filterBuilder } from '../../filters/filter-builder'
 
   const props = defineProps({
