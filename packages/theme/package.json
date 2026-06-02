@@ -59,6 +59,7 @@
     "./tailwind-preset/v3": "./dist/v3/tailwind-preset.js",
     "./tailwind/semantic-spacings-plugin": "./src/tokens/semantic/spacings.js",
     "./tailwind/semantic-texts-plugin": "./src/tokens/semantic/texts.js",
+    "./tokens/semantic/texts.data": "./src/tokens/semantic/texts.data.js",
     "./tailwind/semantic-animations-plugin": "./src/tokens/semantic/animations.js",
     "./globals.css": "./dist/v3/globals.css",
     "./globals.scss": "./dist/v3/globals.scss",
