@@ -1,5 +1,5 @@
 <script setup>
-  import PrimeButton from 'primevue/button'
+  import IconButton from '../../../../components/actions/icon-button/icon-button.vue'
 
   defineProps({
     label: {
@@ -36,18 +36,15 @@
 </script>
 
 <template>
-  <PrimeButton
-    @click="handleExport"
-    outlined
-    :class="buttonClass"
-    icon="pi pi-download"
-    :data-testid="testId"
+  <IconButton
     v-tooltip.bottom="{ value: tooltipText, showDelay: 200 }"
+    kind="outlined"
+    icon="pi pi-download"
+    size="medium"
+    :class="buttonClass"
+    :data-testid="testId"
     :disabled="disabled"
     :loading="loading"
-  >
-    <template v-if="label">
-      {{ label }}
-    </template>
-  </PrimeButton>
+    @click="handleExport"
+  />
 </template>

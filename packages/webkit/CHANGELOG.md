@@ -1,3 +1,34 @@
+## [3.3.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.1...@aziontech/webkit@3.3.2) (2026-06-02)
+
+### Bug Fixes
+
+- tag component import ([#626](https://github.com/aziontech/webkit/issues/626)) ([7ae78a5](https://github.com/aziontech/webkit/commit/7ae78a502fa5a7887f32f3b39993b0c93d4f0538))
+
+## [3.3.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.0...@aziontech/webkit@3.3.1) (2026-06-02)
+
+### Bug Fixes
+
+- table actions IconButton sizes ([#625](https://github.com/aziontech/webkit/issues/625)) ([907b1a6](https://github.com/aziontech/webkit/commit/907b1a6c4d8c4049c7f66b1a7b657fbe9825b78e))
+
+## [3.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.3...@aziontech/webkit@3.3.0) (2026-06-01)
+
+### Features
+
+- add button highlight ([#622](https://github.com/aziontech/webkit/issues/622)) ([4c2654c](https://github.com/aziontech/webkit/commit/4c2654cce7b31c2b6349d435a871b2d046ab070e))
+
+## [3.2.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.2...@aziontech/webkit@3.2.3) (2026-06-01)
+
+### Bug Fixes
+
+- migration table action buttons ([#621](https://github.com/aziontech/webkit/issues/621)) ([059f99d](https://github.com/aziontech/webkit/commit/059f99dfbfc01ef8698769369f26b461cc6a88d9))
+
+## [3.2.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.1...@aziontech/webkit@3.2.2) (2026-06-01)
+
+### Bug Fixes
+
+- motion, sizing, scroll, and overlay story docs ([#620](https://github.com/aziontech/webkit/issues/620)) ([7e589ba](https://github.com/aziontech/webkit/commit/7e589ba869ef33d0db7abe13fc4af225f7b85e79))
+- storybook preview build ([#618](https://github.com/aziontech/webkit/issues/618)) ([108c168](https://github.com/aziontech/webkit/commit/108c168686d3abe741c3037d650271685092e837))
+
 ## [3.2.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.0...@aziontech/webkit@3.2.1) (2026-05-29)
 
 ### Bug Fixes

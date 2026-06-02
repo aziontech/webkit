@@ -20,7 +20,7 @@
     cn(
       'flex min-h-14 shrink-0 items-center justify-between gap-[var(--spacing-xs)]',
       'border-b border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]',
-      'pl-[var(--spacing-xl)] pr-[var(--spacing-md)] py-[var(--spacing-md)]',
+      'pl-[var(--spacing-lg)] pr-[var(--spacing-md)] py-[var(--spacing-md)]',
       attrs.class as string | undefined
     )
   )

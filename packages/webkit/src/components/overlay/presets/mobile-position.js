@@ -17,12 +17,11 @@ export const drawerShellPositionClasses = [
   'max-md:inset-x-0 max-md:bottom-0 max-md:top-auto',
   'max-md:justify-center',
   ...overlayMobileFluidClasses,
-  'md:inset-y-0 md:h-full md:min-h-full md:w-auto'
+  'md:inset-y-0 md:h-full md:min-h-full md:w-full'
 ]
 export const drawerPanelPositionClasses = [
   ...overlayMobileFluidClasses,
   'max-md:max-w-none',
-  'max-md:overflow-y-auto',
   'max-md:rounded-b-[var(--shape-flat)] max-md:rounded-t-[var(--shape-card)]',
   'md:h-full md:min-h-0 md:max-h-full'
 ]

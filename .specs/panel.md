@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 45b27b09631c3ef06a0ac19b2a264aedbf06dc86dda5be9181d9eff32014280b
+checksum: 015f8188bde283cbb6e84bdd8639c3b1bea1ea95339d06bc1c518b42c7325f5f
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-29
 ---
 # Panel — Component Spec
 
