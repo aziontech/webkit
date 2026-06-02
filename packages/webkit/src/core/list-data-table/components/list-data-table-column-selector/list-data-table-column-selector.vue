@@ -56,7 +56,7 @@
       v-tooltip.top="{ value: 'Available Columns', showDelay: 200 }"
       kind="outlined"
       icon="ai ai-column"
-      size="small"
+      size="medium"
       data-testid="data-table-actions-column-header-toggle-columns"
       @click="toggleColumnSelector"
     />

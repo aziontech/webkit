@@ -40,7 +40,7 @@
     v-tooltip.bottom="{ value: tooltipText, showDelay: 200 }"
     kind="outlined"
     icon="pi pi-download"
-    size="small"
+    size="medium"
     :class="buttonClass"
     :data-testid="testId"
     :disabled="disabled"

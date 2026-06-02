@@ -1,9 +1,9 @@
 <script setup>
-  import PrimeButton from 'primevue/button'
   import Dropdown from 'primevue/dropdown'
   import OverlayPanel from 'primevue/overlaypanel'
   import { computed, ref } from 'vue'
 
+  import Button from '../../../../components/actions/button/button.vue'
   import { filterBuilder } from '../../filters/filter-builder'
 
   const props = defineProps({
@@ -114,10 +114,9 @@
         class="flex items-center justify-between px-6 py-4 border-b border-[var(--surface-border)]"
       >
         <h3 class="text-lg font-semibold">Filter</h3>
-        <PrimeButton
-          outlined
+        <Button
+          kind="outlined"
           icon="pi pi-times"
-          class="color-[var(--actionIconColor)]"
           @click="handleCancel"
         />
       </div>
@@ -157,14 +156,14 @@
       </div>
 
       <div class="flex justify-end gap-2 px-6 py-4 border-t border-[var(--surface-border)]">
-        <PrimeButton
+        <Button
           label="Cancel"
-          outlined
+          kind="outlined"
           @click="handleCancel"
         />
-        <PrimeButton
+        <Button
           label="Apply"
-          severity="secondary"
+          kind="secondary"
           @click="handleApply"
         />
       </div>
