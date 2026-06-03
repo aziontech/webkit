@@ -35,7 +35,8 @@
     "primevue": "3.35.0",
     "tailwind-merge": "^3.6.0",
     "vee-validate": "^4.15.1",
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": "^3.2.5",
+    "@aziontech/theme": "^2.2.1"
   },
   "devDependencies": {
     "@figma/code-connect": "^1.4.5",
@@ -112,7 +113,6 @@
     "./divider": "./src/core/primevue/divider/divider.vue",
     "./inlinemessage": "./src/core/primevue/inline-message/inline-message.vue",
     "./menu": "./src/core/primevue/menu/menu.vue",
-    "./message": "./src/core/primevue/message/message.vue",
     "./overlaypanel": "./src/core/primevue/overlaypanel/overlaypanel.vue",
     "./paginator": "./src/core/primevue/paginator/paginator.vue",
     "./progressbar": "./src/core/primevue/progressbar/progressbar.vue",
@@ -167,7 +167,7 @@
     "./data/data-table-toolbar": "./src/components/data/data-table/data-table-toolbar.vue",
     "./data/data-table-view-all-footer": "./src/components/data/data-table/data-table-view-all-footer.vue",
     "./data/data-table-view-toggle": "./src/components/data/data-table/data-table-view-toggle.vue",
-    "./feedback/message": "./src/components/feedback/message/message.vue",
+    "./message": "./src/components/feedback/message/message.vue",
     "./feedback/status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./inputs/input-text": "./src/components/inputs/input-text/input-text.vue",
     "./inputs/box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
