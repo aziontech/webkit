@@ -1,8 +1,5 @@
 import typography from '@tailwindcss/typography'
 import preset from '@aziontech/theme/tailwind-preset'
-import { spacingElements } from '@aziontech/theme/tailwind/semantic-spacings-plugin'
-import { semanticTexts } from '@aziontech/theme/tailwind/semantic-texts-plugin'
-import { animations } from '@aziontech/theme/tailwind/semantic-animations-plugin'
 
 export default {
   important: true,
@@ -83,5 +80,5 @@ export default {
       }
     }
   },
-  plugins: [typography, spacingElements(), semanticTexts(), animations()]
+  plugins: [typography]
 }

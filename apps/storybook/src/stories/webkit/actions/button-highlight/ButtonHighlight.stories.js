@@ -1,9 +1,9 @@
-import Button from '@aziontech/webkit/button'
+import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
-/** @type {import('@storybook/vue3').Meta<typeof Button>} */
+/** @type {import('@storybook/vue3').Meta<typeof ButtonHighlight>} */
 const meta = {
-  title: 'Webkit/Actions/Button',
-  component: Button,
+  title: 'Webkit/Actions/Button Highlight',
+  component: ButtonHighlight,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -21,7 +21,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Interactive control for user actions. `label` is required (use `IconButton` for icon-only controls). Supports optional icon, loading state, and link rendering when `href` is set.'
+          'Visually emphasized action trigger built on a brand-accent gradient. One visual treatment (the gradient); same prop surface as `Button` minus the `kind` axis. Use it to draw attention to a primary AI / highlight flow that needs to stand out.'
       }
     }
   },
@@ -30,16 +30,6 @@ const meta = {
       control: 'text',
       description: 'Visible label text. Required — use `IconButton` for icon-only controls.',
       table: { category: 'props', type: { summary: 'string', required: true } }
-    },
-    kind: {
-      control: 'select',
-      options: ['primary', 'secondary', 'outlined', 'text', 'danger'],
-      description: 'Visual variant.',
-      table: {
-        category: 'props',
-        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text' | 'danger'" },
-        defaultValue: { summary: "'primary'" }
-      }
     },
     size: {
       control: 'select',
@@ -63,12 +53,12 @@ const meta = {
     },
     icon: {
       control: 'text',
-      description: 'PrimeIcons class for the leading/trailing icon.',
+      description: 'PrimeIcons class for the leading icon.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     href: {
       control: 'text',
-      description: 'When set, renders as a link (`<a>`).',
+      description: 'When set, renders as an anchor link.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     target: {
@@ -88,12 +78,11 @@ const meta = {
     }
   },
   args: {
-    label: 'Button',
-    kind: 'primary',
+    label: 'Ask Azion',
     size: 'large',
     disabled: false,
     loading: false,
-    icon: '',
+    icon: 'pi pi-sparkles',
     href: '',
     target: '_self'
   }
@@ -102,51 +91,32 @@ const meta = {
 export default meta
 
 const Template = (args) => ({
-  components: { Button },
+  components: { ButtonHighlight },
   setup() {
     const { onClick, ...props } = args
 
     return { props, onClick }
   },
-  template: '<Button v-bind="props" @click="onClick" />'
+  template: '<ButtonHighlight v-bind="props" @click="onClick" />'
 })
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof ButtonHighlight>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default primary button at large size.' } }
+    docs: { description: { story: 'Default highlight button at large size with an icon.' } }
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
-export const Types = {
-  render: () => ({
-    components: { Button },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Button kind="primary" label="Button" />
-        <Button kind="secondary" label="Button" />
-        <Button kind="outlined" label="Button" />
-        <Button kind="text" label="Button" />
-        <Button kind="danger" label="Button" />
-      </div>
-    `
-  }),
-  parameters: {
-    docs: { description: { story: 'All kind variants side by side.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof ButtonHighlight>} */
 export const Sizes = {
   render: () => ({
-    components: { Button },
+    components: { ButtonHighlight },
     template: `
       <div class="flex flex-wrap items-center gap-4">
-        <Button size="small" label="Button" />
-        <Button size="medium" label="Button" />
-        <Button size="large" label="Button" />
+        <ButtonHighlight size="small" label="Ask Azion" icon="pi pi-sparkles" />
+        <ButtonHighlight size="medium" label="Ask Azion" icon="pi pi-sparkles" />
+        <ButtonHighlight size="large" label="Ask Azion" icon="pi pi-sparkles" />
       </div>
     `
   }),
@@ -155,26 +125,24 @@ export const Sizes = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof ButtonHighlight>} */
 export const Loading = {
-  args: { loading: true, label: 'Button' },
+  args: { loading: true, label: 'Ask Azion' },
   render: Template,
   parameters: {
     docs: { description: { story: 'Loading state with spinner replacing the icon.' } }
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof ButtonHighlight>} */
 export const Icon = {
   render: () => ({
-    components: { Button },
+    components: { ButtonHighlight },
     template: `
       <div class="flex flex-wrap items-center gap-4">
-        <Button kind="primary" label="Button" icon="pi pi-arrow-right" />
-        <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
-        <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
-        <Button kind="text" label="Button" icon="pi pi-arrow-right" />
-        <Button kind="danger" label="Button" icon="pi pi-trash" />
+        <ButtonHighlight label="Ask Azion" icon="pi pi-sparkles" />
+        <ButtonHighlight label="Generate" icon="pi pi-bolt" />
+        <ButtonHighlight label="Highlight" icon="pi pi-star" />
       </div>
     `
   }),
@@ -188,11 +156,11 @@ export const Icon = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof ButtonHighlight>} */
 export const Disabled = {
-  args: { disabled: true, label: 'Button' },
+  args: { disabled: true, label: 'Ask Azion' },
   render: Template,
   parameters: {
-    docs: { description: { story: 'Disabled state.' } }
+    docs: { description: { story: 'Disabled state with the gradient replaced by disabled tokens.' } }
   }
 }

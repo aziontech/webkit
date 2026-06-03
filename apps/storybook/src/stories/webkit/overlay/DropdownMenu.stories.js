@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'
 import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'
 import {

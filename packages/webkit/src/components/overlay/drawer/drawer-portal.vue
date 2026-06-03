@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, ref, watch } from 'vue'
+  import { computed, inject, onBeforeUnmount, provide, ref, watch } from 'vue'
 
-  import { DrawerInjectionKey } from './injection-key'
+  import { useDrawerMotionState } from './composables/use-drawer-motion-state'
+  import { DrawerInjectionKey, DrawerMotionInjectionKey } from './injection-key'
   import { DRAWER_EXIT_MS } from './presets/transitions'
 
   defineOptions({
@@ -15,6 +16,10 @@
 
   const ctx = inject(DrawerInjectionKey)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
+  const { motionState } = useDrawerMotionState(isOpen)
+
+  provide(DrawerMotionInjectionKey, { motionState })
+
   const isPresent = ref(isOpen.value)
   let exitTimer: ReturnType<typeof setTimeout> | undefined
 

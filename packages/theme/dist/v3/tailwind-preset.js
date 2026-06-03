@@ -352,6 +352,20 @@ const preset = {
             "lineHeight": "var(--text-body-xs-line-height)"
           }
         ],
+        "tag-sm": [
+          "var(--text-tag-sm-font-size)",
+          {
+            "lineHeight": "var(--text-tag-sm-line-height)",
+            "fontWeight": "var(--text-tag-sm-font-weight)"
+          }
+        ],
+        "tag-md": [
+          "var(--text-tag-md-font-size)",
+          {
+            "lineHeight": "var(--text-tag-md-line-height)",
+            "fontWeight": "var(--text-tag-md-font-weight)"
+          }
+        ],
         "body-xxs": [
           "var(--text-body-xxs-font-size)",
           {

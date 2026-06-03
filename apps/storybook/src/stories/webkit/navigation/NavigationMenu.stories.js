@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 import NavigationMenu from '@aziontech/webkit/navigation/navigation-menu'
 import { expect, userEvent, within } from '@storybook/test'
 

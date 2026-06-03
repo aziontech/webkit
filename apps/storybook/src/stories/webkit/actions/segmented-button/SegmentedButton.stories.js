@@ -1,4 +1,4 @@
-import SegmentedButton from '@aziontech/webkit/actions/segmented-button'
+import SegmentedButton from '@aziontech/webkit/segmented-button'
 import { ref, watch } from 'vue'
 
 const defaultOptions = [
