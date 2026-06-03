@@ -1,3 +1,33 @@
+## [3.3.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.3...@aziontech/webkit@3.3.4) (2026-06-03)
+
+### Bug Fixes
+
+- empty results block button migration ([#630](https://github.com/aziontech/webkit/issues/630)) ([bb255f4](https://github.com/aziontech/webkit/commit/bb255f4fd798ab524f92c7722e382141b83ce385))
+
+## [3.3.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.2...@aziontech/webkit@3.3.3) (2026-06-02)
+
+### Bug Fixes
+
+- adjust card-pricing gap spacing for non-middle cards ([26c051a](https://github.com/aziontech/webkit/commit/26c051a71e2e5a5345c2894fd818627b794c4390))
+
+## [3.3.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.1...@aziontech/webkit@3.3.2) (2026-06-02)
+
+### Bug Fixes
+
+- tag component import ([#626](https://github.com/aziontech/webkit/issues/626)) ([7ae78a5](https://github.com/aziontech/webkit/commit/7ae78a502fa5a7887f32f3b39993b0c93d4f0538))
+
+## [3.3.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.0...@aziontech/webkit@3.3.1) (2026-06-02)
+
+### Bug Fixes
+
+- table actions IconButton sizes ([#625](https://github.com/aziontech/webkit/issues/625)) ([907b1a6](https://github.com/aziontech/webkit/commit/907b1a6c4d8c4049c7f66b1a7b657fbe9825b78e))
+
+## [3.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.3...@aziontech/webkit@3.3.0) (2026-06-01)
+
+### Features
+
+- add button highlight ([#622](https://github.com/aziontech/webkit/issues/622)) ([4c2654c](https://github.com/aziontech/webkit/commit/4c2654cce7b31c2b6349d435a871b2d046ab070e))
+
 ## [3.2.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.2.2...@aziontech/webkit@3.2.3) (2026-06-01)
 
 ### Bug Fixes

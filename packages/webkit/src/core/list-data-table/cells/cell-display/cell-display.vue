@@ -1,8 +1,9 @@
 <script setup>
   import Avatar from 'primevue/avatar'
   import Button from 'primevue/button'
-  import Tag from 'primevue/tag'
   import { computed } from 'vue'
+
+  import Tag from '../../../../components/tag/tag.vue'
 
   const props = defineProps({
     text: {
