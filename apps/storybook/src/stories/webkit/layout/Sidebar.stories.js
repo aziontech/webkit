@@ -1,4 +1,4 @@
-import Avatar from '@aziontech/webkit/content/avatar'
+import Avatar from '@aziontech/webkit/avatar'
 import InputText from '@aziontech/webkit/inputs/input-text'
 import Sidebar from '@aziontech/webkit/layout/sidebar'
 import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'
