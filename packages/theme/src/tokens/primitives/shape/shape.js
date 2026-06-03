@@ -5,7 +5,7 @@ export const shape = {
   'shape-flat': radius.none,
   'shape-card': radius.DEFAULT,
   'shape-button': radius.DEFAULT,
-  'shape-elements': radius.DEFAULT,
+  'shape-elements': radius.md,
   'border-width-default': borderWidths[1],
 };
 

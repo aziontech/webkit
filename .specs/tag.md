@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
 checksum: 3ca98cd0944855b2f1cf8fe288908bd459affc4c70df8fdacf7d29a1ea8ac0d1
 created: 2026-05-22
@@ -61,8 +61,8 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography (medium) | `.text-body-xs` + `leading-none` |
-| typography (small) | `.text-body-xs` + `leading-none` |
+| typography (medium) | `.text-body-xs` + `leading-none` (Figma Typography/Tag/md, 12px) |
+| typography (small) | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px) |
 | spacing (medium) | `var(--spacing-xs)` horizontal, `var(--spacing-xxs)` gap |
 | spacing (small) | `var(--spacing-xxs)` horizontal and gap |
 | shape (all severities) | `var(--shape-elements)` |
@@ -72,9 +72,7 @@ _none_
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| Typography/Tag/sm (11px) | `.text-body-xs` (12px) | Add `text-tag-sm` in `texts.data.js` when typography pipeline allows |
+_none_
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -347,7 +347,7 @@
     --shape-flat: 0;
     --shape-card: 4px;
     --shape-button: 4px;
-    --shape-elements: 4px;
+    --shape-elements: 6px;
     --border-width-default: 0.8px;
     --font-sans: Sora;
     --font-code: Roboto Mono;
@@ -501,6 +501,9 @@
     --text-body-sm-line-height: 1.5;
     --text-body-xs-font-size: 0.75rem;
     --text-body-xs-line-height: 1.5;
+    --text-tag-sm-font-size: 0.6875rem;
+    --text-tag-sm-line-height: 1;
+    --text-tag-sm-font-weight: 500;
     --text-body-xxs-font-size: 0.625rem;
     --text-body-xxs-line-height: 1.5;
     --text-overline-md-font-family: Proto Mono;
@@ -677,8 +680,8 @@
   --surface-900: #141414;
   --surface-950: #0A0A0A;
   --primary: #F3652B;
-  --primary-mask: #FE601F1A;
-  --primary-selected: #FE601F1A;
+  --primary-mask: #FE601F33;
+  --primary-selected: #FE601F33;
   --primary-contrast: #000000;
   --secondary: #0A0A0A;
   --secondary-mask: #00000005;
@@ -737,8 +740,8 @@
   --surface-900: #141414;
   --surface-950: #0A0A0A;
   --primary: #F3652B;
-  --primary-mask: #FE601F1A;
-  --primary-selected: #FE601F1A;
+  --primary-mask: #FE601F33;
+  --primary-selected: #FE601F33;
   --primary-contrast: #FFFFFF;
   --secondary: #FFFFFF;
   --secondary-mask: #FFFFFF1A;
@@ -767,7 +770,7 @@
   --text-muted: #999999;
   --text-disabled: #4D4D4D;
   --text-link: #3392FF;
-  --text-contrast: #141414;
+  --text-contrast: #000000;
   --ring-color: #FFFFFF;
   --success: #03170B;
   --success-border: #22C55E66;
@@ -821,6 +824,7 @@
   .text-body-md { font-size: var(--text-body-md-font-size); line-height: var(--text-body-md-line-height); }
   .text-body-sm { font-size: var(--text-body-sm-font-size); line-height: var(--text-body-sm-line-height); }
   .text-body-xs { font-size: var(--text-body-xs-font-size); line-height: var(--text-body-xs-line-height); }
+  .text-tag-sm { font-size: var(--text-tag-sm-font-size); line-height: var(--text-tag-sm-line-height); font-weight: var(--text-tag-sm-font-weight); }
   .text-body-xxs { font-size: var(--text-body-xxs-font-size); line-height: var(--text-body-xxs-line-height); }
   .text-overline-md { font-family: var(--text-overline-md-font-family); font-size: var(--text-overline-md-font-size); line-height: var(--text-overline-md-line-height); letter-spacing: var(--text-overline-md-letter-spacing); text-transform: var(--text-overline-md-text-transform); }
   .text-overline-sm { font-family: var(--text-overline-sm-font-family); font-size: var(--text-overline-sm-font-size); line-height: var(--text-overline-sm-line-height); letter-spacing: var(--text-overline-sm-letter-spacing); text-transform: var(--text-overline-sm-text-transform); }

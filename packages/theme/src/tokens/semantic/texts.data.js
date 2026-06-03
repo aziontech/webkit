@@ -81,6 +81,11 @@ export const textsData = {
     fontSize: '0.75rem',
     lineHeight: '1.5'
   },
+  'text-tag-sm': {
+    fontSize: '0.6875rem',
+    lineHeight: '1',
+    fontWeight: '500'
+  },
   'text-body-xxs': {
     fontSize: '0.625rem',
     lineHeight: '1.5'

@@ -13,7 +13,7 @@ export const text = {
     'text-muted': tokenRef('primitives.gray.400'),
     'text-disabled': tokenRef('primitives.gray.700'),
     'text-link': tokenRef('primitives.blue.400'),
-    'text-contrast': tokenRef('primitives.gray.900')
+    'text-contrast': tokenRef('primitives.base.black')
   }
 }
 
