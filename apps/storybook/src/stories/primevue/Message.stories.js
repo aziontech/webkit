@@ -1,4 +1,4 @@
-import Message from '@aziontech/webkit/message';
+import Message from 'primevue/message';
 
 export default {
   title: 'PrimeVue/Message',

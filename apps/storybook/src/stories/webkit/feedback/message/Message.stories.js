@@ -1,4 +1,4 @@
-import Message from '@aziontech/webkit/feedback/message'
+import Message from '@aziontech/webkit/message'
 
 /** @type {import('@storybook/vue3').Meta<typeof Message>} */
 const meta = {
@@ -27,7 +27,7 @@ const meta = {
           '',
           '```vue',
           '<script setup>',
-          "import Message from '@aziontech/webkit/feedback/message'",
+          "import Message from '@aziontech/webkit/message'",
           '</script>',
           '',
           '<template>',
