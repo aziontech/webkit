@@ -84,7 +84,12 @@ export const textsData = {
   'text-tag-sm': {
     fontSize: '0.6875rem',
     lineHeight: '1',
-    fontWeight: '500'
+    fontWeight: '600'
+  },
+  'text-tag-md': {
+    fontSize: '0.75rem',
+    lineHeight: '1',
+    fontWeight: '600'
   },
   'text-body-xxs': {
     fontSize: '0.625rem',
