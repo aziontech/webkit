@@ -1,7 +1,4 @@
-import {
-  curve,
-  duration
-} from '../../../../../../theme/src/tokens/primitives/animations/animate.js'
+import { curve, duration } from '@aziontech/theme/animations'
 
 /**
  * Message dismiss motion — values read only from `animate.js` (`duration`, `curve`).
