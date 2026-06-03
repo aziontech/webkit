@@ -179,12 +179,37 @@ export const Placements = {
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Tooltip>} */
-export const Disabled = {
-  render: Template,
+export const LongContent = {
+  render: (args) => ({
+    components: { Tooltip, IconButton },
+    setup() {
+      return { args }
+    },
+    template: `
+      <Tooltip
+        v-bind="args"
+        @update:open="args.onUpdateOpen"
+        @show="args.onShow"
+        @hide="args.onHide"
+      >
+        <IconButton
+          icon="pi pi-info-circle"
+          aria-label="More information"
+          kind="transparent"
+          size="small"
+        />
+      </Tooltip>
+    `
+  }),
   args: {
-    disabled: true
+    text: 'This tooltip contains a longer message that wraps across multiple lines when it exceeds the maximum width of the panel.'
   },
   parameters: {
-    docs: { description: { story: 'Tooltip activation is disabled; hover and focus have no effect.' } }
+    docs: {
+      description: {
+        story:
+          'Long text wraps within the tooltip max width (`var(--container-3xs)`). Hover or focus the info icon to preview multi-line layout.'
+      }
+    }
   }
 }

@@ -289,7 +289,7 @@
         :data-placement="resolvedPlacement"
         :aria-hidden="!isOpen"
         :style="panelStyle"
-        class="pointer-events-none flex min-h-8 max-w-[var(--container-3xs)] items-center justify-center overflow-clip break-words rounded-[var(--shape-elements)] bg-[var(--bg-contrast)] p-[var(--spacing-xs)] text-center text-body-sm text-[var(--text-contrast)] [transform-origin:var(--popup-origin,center)]"
+        class="pointer-events-none flex min-h-8 max-w-[var(--container-3xs)] items-center justify-center overflow-clip break-words rounded-[var(--shape-elements)] bg-[var(--bg-contrast)] p-[var(--spacing-xs)] text-center text-body-xs text-[var(--text-contrast)] [transform-origin:var(--popup-origin,center)]"
       >
         {{ text }}
       </div>
