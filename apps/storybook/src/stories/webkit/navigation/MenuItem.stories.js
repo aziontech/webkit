@@ -75,7 +75,6 @@ const meta = {
       description: 'Destination URL; renders an anchor when set on option rows.',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: '' },
         category: 'props'
       }
     },

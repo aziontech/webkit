@@ -25,18 +25,10 @@
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const panelId = computed(() => ctx?.menuId ?? undefined)
 
-  const panelMotionClassBySide: Record<DropdownMenuResolvedSide, string | false> = {
-    bottom: false,
-    top: 'webkit-dropdown-menu-panel-motion--top',
-    left: 'webkit-dropdown-menu-panel-motion--left',
-    right: 'webkit-dropdown-menu-panel-motion--right'
-  }
-
   const panelClasses = computed(() =>
     cn(
       dropdownMenuContentClasses,
       'webkit-dropdown-menu-panel-motion',
-      panelMotionClassBySide[resolvedSide.value],
       attrs.class as string | undefined
     )
   )
@@ -229,15 +221,15 @@
     transform-origin: top center;
   }
 
-  .webkit-dropdown-menu-panel-motion--top {
+  .webkit-dropdown-menu-panel-motion[data-side='top'] {
     transform-origin: bottom center;
   }
 
-  .webkit-dropdown-menu-panel-motion--left {
+  .webkit-dropdown-menu-panel-motion[data-side='left'] {
     transform-origin: center right;
   }
 
-  .webkit-dropdown-menu-panel-motion--right {
+  .webkit-dropdown-menu-panel-motion[data-side='right'] {
     transform-origin: center left;
   }
 
