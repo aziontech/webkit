@@ -55,7 +55,7 @@ import CopyButton from '@aziontech/webkit/copy-button'
       table: {
         category: 'props',
         type: { summary: "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'" },
-        defaultValue: { summary: "'transparent'" }
+        defaultValue: { summary: "'outlined'" }
       }
     },
     size: {
@@ -83,7 +83,7 @@ import CopyButton from '@aziontech/webkit/copy-button'
     value: 'https://example.com/deploy/abc123',
     ariaLabel: 'Copy URL',
     copiedLabel: 'Copied',
-    kind: 'transparent',
+    kind: 'outlined',
     size: 'small',
     disabled: false
   }
@@ -103,6 +103,6 @@ const Template = (args) => ({
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default transparent copy button at small size.' } }
+    docs: { description: { story: 'Outlined copy button with hover/focus tooltip at small size.' } }
   }
 }

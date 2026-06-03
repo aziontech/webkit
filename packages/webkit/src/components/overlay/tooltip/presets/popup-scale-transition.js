@@ -1,8 +1,21 @@
+import {
+  curve,
+  duration
+} from '../../../../../../theme/src/tokens/primitives/animations/animate.js'
+
 /**
- * Popup scale motion (0.95 → 1, opacity 0 → 1) — timing from `animate.js`
- * (`moderate-01` / `productive-entrance` enter, `fast-02` / `productive-exit` leave).
- * Spec also lists `animate-popup-scale-in` / `animate-popup-scale-out` (semantic keyframes).
+ * Tooltip popup motion — timing from `animate.js` (`popup-scale-in` / `popup-scale-out`).
+ * Uses CSS transitions (scale 0.95 → 1, opacity 0 → 1) so Vue `<Transition>` can drive enter/leave.
+ * Matches semantic `animate-popup-scale-*` keyframes (150ms · productive-entrance / 110ms · productive-exit).
  */
+
+export const tooltipMotion = {
+  open: { duration: duration['moderate-01'], curve: curve['productive-entrance'] },
+  close: { duration: duration['fast-02'], curve: curve['productive-exit'] }
+}
+
+/** Close duration — defer unmount until exit animation finishes. */
+export const TOOLTIP_EXIT_MS = Number.parseInt(tooltipMotion.close.duration, 10)
 
 export const popupScaleTransitionEnterActiveClasses = [
   'transition-[transform,opacity]',

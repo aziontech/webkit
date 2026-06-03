@@ -6,6 +6,8 @@
     iconTransitionEnterActiveClasses,
     iconTransitionEnterFromClasses,
     iconTransitionEnterToClasses,
+    iconTransitionHostClasses,
+    iconTransitionIconClasses,
     iconTransitionLeaveActiveClasses,
     iconTransitionLeaveFromClasses,
     iconTransitionLeaveToClasses
@@ -95,7 +97,7 @@
     secondary:
       'bg-[var(--secondary)] text-[var(--secondary-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]',
     outlined:
-      'border border-[var(--border-muted)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
     transparent:
       'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
     danger:
@@ -107,7 +109,6 @@
 
   const iconClasses =
     'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none'
-  const iconHostClasses = 'relative z-[1] inline-flex size-[1em] items-center justify-center'
 
   const sizeClasses: Record<IconButtonSize, string> = {
     large: 'size-10 text-button-lg',
@@ -115,11 +116,13 @@
     small: 'size-7 text-button-md'
   }
 
-  const spinnerSizeClasses: Record<IconButtonSize, string> = {
+  const iconSlotSizeClasses: Record<IconButtonSize, string> = {
     large: 'size-4',
     medium: 'size-3',
     small: 'size-3'
   }
+
+  const spinnerSizeClasses = iconSlotSizeClasses
 
   const rootClasses = computed(() => {
     const kind = props.disabled ? disabledClasses : kindClasses[props.kind]
@@ -155,7 +158,13 @@
     :data-testid="testId"
     @click="handleClick"
   >
-    <span :class="iconHostClasses">
+    <span
+      :class="
+        iconTransition
+          ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
+          : 'relative z-[1] inline-flex items-center justify-center'
+      "
+    >
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
@@ -173,7 +182,7 @@
       >
         <i
           :key="icon"
-          :class="[icon, iconClasses, iconClass]"
+          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
           aria-hidden="true"
         />
       </Transition>
@@ -197,7 +206,13 @@
     :data-testid="testId"
     @click="handleClick"
   >
-    <span :class="iconHostClasses">
+    <span
+      :class="
+        iconTransition
+          ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
+          : 'relative z-[1] inline-flex items-center justify-center'
+      "
+    >
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
@@ -215,7 +230,7 @@
       >
         <i
           :key="icon"
-          :class="[icon, iconClasses, iconClass]"
+          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
           aria-hidden="true"
         />
       </Transition>
