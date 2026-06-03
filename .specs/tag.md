@@ -61,10 +61,10 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography (medium) | `.text-body-xs` + `leading-none` (Figma Typography/Tag/md, 12px) |
+| typography (medium) | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px) |
 | typography (small) | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px) |
-| spacing (medium) | `var(--spacing-xs)` horizontal, `var(--spacing-xxs)` gap |
-| spacing (small) | `var(--spacing-xxs)` horizontal and gap |
+| spacing (medium) | `var(--spacing-xs)` horizontal padding and icon gap |
+| spacing (small) | `var(--spacing-xxs)` horizontal padding and icon gap |
 | shape (all severities) | `var(--shape-elements)` |
 | surface (contrast) | `var(--bg-contrast)` / `var(--text-contrast)` |
 | shape (pill) | `rounded-full` |
