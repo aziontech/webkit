@@ -1,3 +1,5 @@
+## [2.2.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.0...@aziontech/theme@2.2.1) (2026-06-03)
+
 ## [2.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.1.1...@aziontech/theme@2.2.0) (2026-06-03)
 
 
