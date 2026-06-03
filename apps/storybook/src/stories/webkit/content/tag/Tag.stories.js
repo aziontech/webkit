@@ -7,7 +7,8 @@ const severities = [
   'success',
   'warning',
   'danger',
-  'info'
+  'info',
+  'contrast'
 ]
 
 /** @type {import('@storybook/vue3').Meta<typeof Tag>} */
@@ -70,7 +71,8 @@ const meta = {
         'accent',
         'contrast'
       ],
-      description: 'Color style; `contrast` maps to `accent`.',
+      description:
+        'Color style for the tag surface and label; `contrast` uses contrast surface tokens.',
       table: {
         category: 'props',
         type: {
@@ -83,7 +85,8 @@ const meta = {
     size: {
       control: 'select',
       options: ['small', 'medium'],
-      description: 'Size token; `medium` is 24px tall, `small` is 20px.',
+      description:
+        'Size token. `medium`: 24px height (`--h-6`), 8px horizontal padding and icon gap (`--spacing-xs`), 12px type (`text-tag-md`). `small`: 20px height (`--h-5`), 4px padding and gap (`--spacing-xxs`), 11px type (`text-tag-sm`).',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium'" },
@@ -152,7 +155,7 @@ export const Types = {
       return { args, severities }
     },
     template: `
-      <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
+      <div class="flex flex-wrap items-center gap-4">
         <Tag
           v-for="severity in severities"
           :key="severity"
@@ -166,7 +169,7 @@ export const Types = {
     `
   }),
   parameters: {
-    docs: { description: { story: 'All severity variants side by side (Figma row order).' } }
+    docs: { description: { story: 'All severity variants side by side.' } }
   }
 }
 
@@ -175,14 +178,29 @@ export const Sizes = {
   render: () => ({
     components: { Tag },
     template: `
-      <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
-        <Tag value="Medium" severity="primary" size="medium" />
-        <Tag value="Small" severity="primary" size="small" />
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-wrap items-center gap-4">
+          <Tag value="Label" severity="primary" size="medium" />
+          <Tag value="Label" severity="primary" size="medium" rounded />
+          <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" />
+          <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" rounded />
+        </div>
+        <div class="flex flex-wrap items-center gap-4">
+          <Tag value="Label" severity="primary" size="small" />
+          <Tag value="Label" severity="primary" size="small" rounded />
+          <Tag value="Label" severity="primary" size="small" icon="pi pi-box" />
+          <Tag value="Label" severity="primary" size="small" icon="pi pi-box" rounded />
+        </div>
       </div>
     `
   }),
   parameters: {
-    docs: { description: { story: 'Medium (24px) and small (20px) size tokens side by side.' } }
+    docs: {
+      description: {
+        story:
+          'Medium row (24px, `--spacing-xs` padding and gap) and small row (20px, `--spacing-xxs` padding and gap), each with default shape, pill, icon, and icon + pill.'
+      }
+    }
   }
 }
 
@@ -194,13 +212,13 @@ export const WithIcon = {
       return { args, severities }
     },
     template: `
-      <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
+      <div class="flex flex-wrap items-center gap-4">
         <Tag
           v-for="severity in severities"
           :key="severity"
           value="Label"
           :severity="severity"
-          icon="pi pi-check"
+          icon="pi pi-box"
           :size="args.size"
           :rounded="args.rounded"
         />
