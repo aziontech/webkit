@@ -1,7 +1,7 @@
 {
   "name": "@aziontech/theme",
   "type": "module",
-  "version": "2.1.1",
+  "version": "2.2.1",
   "author": "aziontech",
   "license": "MIT",
   "repository": {
@@ -53,6 +53,7 @@
   ],
   "exports": {
     ".": "./default.js",
+    "./animations": "./src/tokens/primitives/animations/animate.js",
     "./scripts/compile-primitives": "./src/scripts/compile-primitives.js",
     "./scripts/compile-theme": "./src/scripts/compile-theme.js",
     "./tailwind-preset": "./dist/v3/tailwind-preset.js",
