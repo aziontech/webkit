@@ -1,4 +1,4 @@
-import { tokenRef } from '../../scripts/refs.js';
+import { tokenRef } from '../../scripts/refs.js'
 
 export const text = {
   light: {
@@ -6,13 +6,15 @@ export const text = {
     'text-muted': tokenRef('primitives.gray.600'),
     'text-disabled': tokenRef('primitives.gray.400'),
     'text-link': tokenRef('primitives.blue.600'),
+    'text-contrast': tokenRef('primitives.gray.50')
   },
   dark: {
     'text-default': tokenRef('primitives.gray.50'),
     'text-muted': tokenRef('primitives.gray.400'),
     'text-disabled': tokenRef('primitives.gray.700'),
     'text-link': tokenRef('primitives.blue.400'),
-  },
-};
+    'text-contrast': tokenRef('primitives.gray.900')
+  }
+}
 
-export default { text };
+export default { text }
