@@ -34,7 +34,7 @@ import Tag from '@aziontech/webkit/tag'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
-| `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | Color style; `contrast` maps to `accent`. |
+| `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size` | `'small' | 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | no | Pill shape when true. |
 | `icon` | `string` | `'undefined'` | no | PrimeIcons class for the leading icon. |
@@ -65,8 +65,8 @@ _none_
 | typography (small) | `.text-body-xs` + `leading-none` |
 | spacing (medium) | `var(--spacing-xs)` horizontal, `var(--spacing-xxs)` gap |
 | spacing (small) | `var(--spacing-xxs)` horizontal and gap |
-| shape (default) | `var(--shape-elements)` |
-| shape (secondary) | `var(--radius-md)` |
+| shape (all severities) | `var(--shape-elements)` |
+| surface (contrast) | `var(--bg-contrast)` / `var(--text-contrast)` |
 | shape (pill) | `rounded-full` |
 | ring | `var(--ring-color)` |
 

@@ -21,7 +21,7 @@
   interface Props {
     /** Fallback text when the default slot is empty. */
     value?: string
-    /** Color style; `contrast` maps to `accent`. */
+    /** Color style for the tag surface and label. */
     severity?: TagSeverity
     /** Size token; `medium` is 24px tall, `small` is 20px. */
     size?: TagSize
@@ -47,14 +47,10 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-tag')
 
-  type ResolvedTagSeverity = Exclude<TagSeverity, 'contrast'>
+  type ResolvedTagSeverity = TagSeverity
 
   const resolvedSeverity = computed((): ResolvedTagSeverity => {
     const severity = props.severity ?? 'primary'
-
-    if (severity === 'contrast') {
-      return 'accent'
-    }
 
     if (
       severity === 'primary' ||
@@ -63,7 +59,8 @@
       severity === 'info' ||
       severity === 'warning' ||
       severity === 'danger' ||
-      severity === 'accent'
+      severity === 'accent' ||
+      severity === 'contrast'
     ) {
       return severity
     }
@@ -84,7 +81,7 @@
     :data-size="size"
     :data-rounded="rounded || null"
     :class="attrs.class"
-    class="inline-flex items-center justify-center overflow-hidden border border-transparent leading-none text-body-xs gap-[var(--spacing-xs)] data-[size=medium]:h-6 data-[size=medium]:px-[var(--spacing-xs)] data-[size=small]:h-5 data-[size=small]:px-[var(--spacing-xxs)] rounded-[var(--shape-elements)] data-[severity=secondary]:rounded-[var(--radius-md)] data-[rounded]:!rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[severity=primary]:bg-[var(--primary-mask)] data-[severity=primary]:text-[var(--primary)] data-[severity=secondary]:border-[var(--border-default)] data-[severity=secondary]:bg-[var(--bg-canvas)] data-[severity=secondary]:text-[var(--text-default)] data-[severity=accent]:bg-[var(--accent)] data-[severity=accent]:text-[var(--accent-contrast)] data-[severity=success]:bg-[var(--success)] data-[severity=success]:text-[var(--success-contrast)] data-[severity=info]:bg-[var(--info)] data-[severity=info]:text-[var(--info-contrast)] data-[severity=warning]:bg-[var(--warning)] data-[severity=warning]:text-[var(--warning-contrast)] data-[severity=danger]:bg-[var(--danger)] data-[severity=danger]:text-[var(--danger-contrast)]"
+    class="inline-flex items-center justify-center overflow-hidden border border-transparent leading-none text-body-xs gap-[var(--spacing-xxs)] data-[size=medium]:h-6 data-[size=medium]:px-[var(--spacing-xs)] data-[size=small]:h-5 data-[size=small]:px-[var(--spacing-xxs)] rounded-[var(--shape-elements)] data-[rounded]:!rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[severity=primary]:bg-[var(--primary-mask)] data-[severity=primary]:text-[var(--primary)] data-[severity=secondary]:border-[length:var(--border-width-default)] data-[severity=secondary]:border-[var(--border-default)] data-[severity=secondary]:bg-[var(--bg-canvas)] data-[severity=secondary]:text-[var(--text-default)] data-[severity=accent]:bg-[var(--accent)] data-[severity=accent]:text-[var(--accent-contrast)] data-[severity=contrast]:bg-[var(--bg-contrast)] data-[severity=contrast]:text-[var(--text-contrast)] data-[severity=success]:bg-[var(--success)] data-[severity=success]:text-[var(--success-contrast)] data-[severity=info]:bg-[var(--info)] data-[severity=info]:text-[var(--info-contrast)] data-[severity=warning]:bg-[var(--warning)] data-[severity=warning]:text-[var(--warning-contrast)] data-[severity=danger]:bg-[var(--danger)] data-[severity=danger]:text-[var(--danger-contrast)]"
   >
     <i
       v-if="icon"

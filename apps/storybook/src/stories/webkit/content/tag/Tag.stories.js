@@ -4,6 +4,7 @@ const severities = [
   'primary',
   'secondary',
   'accent',
+  'contrast',
   'success',
   'warning',
   'danger',
@@ -70,7 +71,8 @@ const meta = {
         'accent',
         'contrast'
       ],
-      description: 'Color style; `contrast` maps to `accent`.',
+      description:
+        'Color style for the tag surface and label; `contrast` uses contrast surface tokens.',
       table: {
         category: 'props',
         type: {
