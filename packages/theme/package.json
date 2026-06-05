@@ -60,8 +60,6 @@
   "exports": {
     ".": "./default.js",
     "./animations": "./src/tokens/primitives/animations/animate.js",
-    "./scripts/compile-primitives": "./src/scripts/compile-primitives.js",
-    "./scripts/compile-theme": "./src/scripts/compile-theme.js",
     "./tailwind-preset": "./dist/v3/tailwind-preset.js",
     "./tailwind-preset/v3": "./dist/v3/tailwind-preset.js",
     "./tailwind/semantic-spacings-plugin": "./src/tokens/semantic/spacings.js",
