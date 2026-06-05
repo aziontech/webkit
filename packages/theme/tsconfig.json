@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["esnext", "dom"],
+    "allowJs": true,
+    "checkJs": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "rootDir": ".",
+    "outDir": "."
+  },
+  "include": ["src/**/*.js", "default.js", "tokens.js", "widget.js"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/scripts/**",
+    "src/tests/**",
+    "src/**/*.d.ts"
+  ]
+}
