@@ -1,3 +1,17 @@
+## [2.3.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.1...@aziontech/theme@2.3.0) (2026-06-05)
+
+
+### Features
+
+* refine Message component ([#619](https://github.com/aziontech/webkit/issues/619)) ([8de1eaf](https://github.com/aziontech/webkit/commit/8de1eaf956d9f40e15559a96a993b895bd639db5))
+
+
+### Bug Fixes
+
+* @aziontech/theme generating d.ts to .js files ([#636](https://github.com/aziontech/webkit/issues/636)) ([aedf405](https://github.com/aziontech/webkit/commit/aedf405bfb9d86406889e30d61ad357d30dd996c))
+* feedback message refine ([#634](https://github.com/aziontech/webkit/issues/634)) ([c8f8aab](https://github.com/aziontech/webkit/commit/c8f8aab23cb5d9d1fd14bfd4f42ee1fce9fb228c))
+* triggger webkit ([#635](https://github.com/aziontech/webkit/issues/635)) ([fa62346](https://github.com/aziontech/webkit/commit/fa623460830c1267d989301f802f3528e48e1753))
+
 ## [2.2.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.0...@aziontech/theme@2.2.1) (2026-06-03)
 
 ## [2.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.1.1...@aziontech/theme@2.2.0) (2026-06-03)
