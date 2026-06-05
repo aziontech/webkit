@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.0...@aziontech/theme@2.3.1) (2026-06-05)
+
+
+### Bug Fixes
+
+* webkit vue-tsc check ([#637](https://github.com/aziontech/webkit/issues/637)) ([3895de7](https://github.com/aziontech/webkit/commit/3895de7d305bd11a14b148b78313ddf832330d40))
+
 ## [2.3.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.1...@aziontech/theme@2.3.0) (2026-06-05)
 
 
