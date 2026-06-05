@@ -1,3 +1,10 @@
+## [3.4.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.0...@aziontech/webkit@3.4.1) (2026-06-05)
+
+### Bug Fixes
+
+- export to import right storybook ([#638](https://github.com/aziontech/webkit/issues/638)) ([c17a8f2](https://github.com/aziontech/webkit/commit/c17a8f2dc461f020293348667f3cadaafe3179e6))
+- import theme exported primitive ([#639](https://github.com/aziontech/webkit/issues/639)) ([d5342d2](https://github.com/aziontech/webkit/commit/d5342d2b727238b6275ac831162d64840a497983))
+
 ## [3.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.4...@aziontech/webkit@3.4.0) (2026-06-05)
 
 ### Features
