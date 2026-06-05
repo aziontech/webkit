@@ -6,6 +6,9 @@
  * from the legacy `texts.js` plugin — direction inverted from desktop-first
  * (max-width) to mobile-first (min-width).
  *
+ * Optional `states` emits pseudo-class rules (e.g. `.text-link:hover`). Bundles
+ * with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` preset.
+ *
  * Mapping used during the port:
  *   old `large`  (≤640) → `_`
  *   old `medium` (≤768) → `sm` (≥640)
@@ -129,6 +132,24 @@ export const textsData = {
     fontWeight: '600',
     lineHeight: '1',
     letterSpacing: '0'
+  },
+  /** Inline `<a>` in body/heading — inherits parent size; not the navigation Link component. */
+  'text-link': {
+    fontSize: 'inherit',
+    lineHeight: 'inherit',
+    color: 'var(--text-link)',
+    borderRadius: 'var(--shape-elements)',
+    transition: 'all 110ms cubic-bezier(0.39, 0.57, 0.56, 1)',
+    states: {
+      hover: {
+        color: 'var(--text-link-hover)',
+        textDecoration: 'underline'
+      },
+      'focus-visible': {
+        outline: '2px solid var(--ring-color)',
+        outlineOffset: '2px'
+      }
+    }
   }
 }
 
