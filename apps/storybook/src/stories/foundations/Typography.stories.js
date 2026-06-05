@@ -1,5 +1,4 @@
 import TypographyPreview from '../../foundations/components/TypographyPreview.vue';
-
 import { PageContainer, PageHeader } from '../../foundations/components/layout/index.js';
 
 export default {
@@ -11,8 +10,7 @@ export default {
     docs: {
       description: {
         component: [
-          'Typography system — semantic text classes from `@aziontech/theme`',
-          '(`packages/theme/src/tokens/semantic/texts.data.js`).',
+          'Typography system — semantic text classes from `@aziontech/theme/texts`',
         ].join(' '),
       },
     },
