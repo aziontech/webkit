@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.1...@aziontech/theme@2.3.2) (2026-06-05)
+
+
+### Bug Fixes
+
+* export to import right storybook ([#638](https://github.com/aziontech/webkit/issues/638)) ([c17a8f2](https://github.com/aziontech/webkit/commit/c17a8f2dc461f020293348667f3cadaafe3179e6))
+
 ## [2.3.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.0...@aziontech/theme@2.3.1) (2026-06-05)
 
 
