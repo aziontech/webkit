@@ -1,4 +1,4 @@
-import { primitives } from '../../../../../packages/theme/src/tokens/primitives/colors/colors.js'
+import { primitives } from '@aziontech/theme/colors'
 import ColorPaletteSection from '../../foundations/components/ColorPaletteSection.vue'
 import { PageContainer, PageHeader } from '../../foundations/components/layout/index.js'
 
