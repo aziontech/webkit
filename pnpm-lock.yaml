@@ -340,8 +340,8 @@ importers:
   packages/webkit:
     dependencies:
       '@aziontech/theme':
-        specifier: ^2.2.1
-        version: 2.2.1
+        specifier: ^2.3.0
+        version: 2.3.0(typescript@6.0.3)(yaml@2.8.3)
       '@vueuse/core':
         specifier: ^10.11.1
         version: 10.11.1(vue@3.5.33(typescript@6.0.3))
@@ -407,8 +407,8 @@ packages:
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
 
-  '@aziontech/theme@2.2.1':
-    resolution: {integrity: sha512-PFE+HxW7OS7BqaYcH29Aom5ssBZ8dmTjxZv3MOKwfiYWUOyEUbtAOSz+T8bXlFNzWxl34NsL0e224yiOdE3DbA==}
+  '@aziontech/theme@2.3.0':
+    resolution: {integrity: sha512-5Lf3IK5rhwYTpnff/typ2Sd6lDfwxxLahuo4HqI9LDvVHV8gXLR2ChVgoNtB9FBdyUMbu0ihawhWNRWVm4WUfQ==}
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -7221,7 +7221,14 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.4
       lru-cache: 10.4.3
 
-  '@aziontech/theme@2.2.1': {}
+  '@aziontech/theme@2.3.0(typescript@6.0.3)(yaml@2.8.3)':
+    dependencies:
+      tailwindcss: 3.4.19(yaml@2.8.3)
+      vue-tsc: 3.2.7(typescript@6.0.3)
+    transitivePeerDependencies:
+      - tsx
+      - typescript
+      - yaml
 
   '@babel/code-frame@7.29.0':
     dependencies:
