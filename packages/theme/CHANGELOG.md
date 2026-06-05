@@ -1,3 +1,36 @@
+## [2.3.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.1...@aziontech/theme@2.3.0) (2026-06-05)
+
+
+### Features
+
+* refine Message component ([#619](https://github.com/aziontech/webkit/issues/619)) ([8de1eaf](https://github.com/aziontech/webkit/commit/8de1eaf956d9f40e15559a96a993b895bd639db5))
+
+
+### Bug Fixes
+
+* @aziontech/theme generating d.ts to .js files ([#636](https://github.com/aziontech/webkit/issues/636)) ([aedf405](https://github.com/aziontech/webkit/commit/aedf405bfb9d86406889e30d61ad357d30dd996c))
+* feedback message refine ([#634](https://github.com/aziontech/webkit/issues/634)) ([c8f8aab](https://github.com/aziontech/webkit/commit/c8f8aab23cb5d9d1fd14bfd4f42ee1fce9fb228c))
+* triggger webkit ([#635](https://github.com/aziontech/webkit/issues/635)) ([fa62346](https://github.com/aziontech/webkit/commit/fa623460830c1267d989301f802f3528e48e1753))
+
+## [2.2.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.0...@aziontech/theme@2.2.1) (2026-06-03)
+
+## [2.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.1.1...@aziontech/theme@2.2.0) (2026-06-03)
+
+
+### Features
+
+* add button highlight ([#622](https://github.com/aziontech/webkit/issues/622)) ([4c2654c](https://github.com/aziontech/webkit/commit/4c2654cce7b31c2b6349d435a871b2d046ab070e))
+
+
+### Bug Fixes
+
+* adjust card-pricing gap spacing for non-middle cards ([26c051a](https://github.com/aziontech/webkit/commit/26c051a71e2e5a5345c2894fd818627b794c4390))
+* empty results block button migration ([#630](https://github.com/aziontech/webkit/issues/630)) ([bb255f4](https://github.com/aziontech/webkit/commit/bb255f4fd798ab524f92c7722e382141b83ce385))
+* migration table action buttons ([#621](https://github.com/aziontech/webkit/issues/621)) ([059f99d](https://github.com/aziontech/webkit/commit/059f99dfbfc01ef8698769369f26b461cc6a88d9))
+* motion, sizing, scroll, and overlay story docs ([#620](https://github.com/aziontech/webkit/issues/620)) ([7e589ba](https://github.com/aziontech/webkit/commit/7e589ba869ef33d0db7abe13fc4af225f7b85e79))
+* table actions IconButton sizes ([#625](https://github.com/aziontech/webkit/issues/625)) ([907b1a6](https://github.com/aziontech/webkit/commit/907b1a6c4d8c4049c7f66b1a7b657fbe9825b78e))
+* tag component import ([#626](https://github.com/aziontech/webkit/issues/626)) ([7ae78a5](https://github.com/aziontech/webkit/commit/7ae78a502fa5a7887f32f3b39993b0c93d4f0538))
+
 ## [2.1.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.1.0...@aziontech/theme@2.1.1) (2026-05-29)
 
 

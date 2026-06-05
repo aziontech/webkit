@@ -1,3 +1,22 @@
+## [3.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.4...@aziontech/webkit@3.4.0) (2026-06-05)
+
+### Features
+
+- refine Message component ([#619](https://github.com/aziontech/webkit/issues/619)) ([8de1eaf](https://github.com/aziontech/webkit/commit/8de1eaf956d9f40e15559a96a993b895bd639db5))
+
+### Bug Fixes
+
+- @aziontech/theme generating d.ts to .js files ([#636](https://github.com/aziontech/webkit/issues/636)) ([aedf405](https://github.com/aziontech/webkit/commit/aedf405bfb9d86406889e30d61ad357d30dd996c))
+- feedback message refine ([#634](https://github.com/aziontech/webkit/issues/634)) ([c8f8aab](https://github.com/aziontech/webkit/commit/c8f8aab23cb5d9d1fd14bfd4f42ee1fce9fb228c))
+- triggger webkit ([#635](https://github.com/aziontech/webkit/issues/635)) ([fa62346](https://github.com/aziontech/webkit/commit/fa623460830c1267d989301f802f3528e48e1753))
+- webkit vue-tsc check ([#637](https://github.com/aziontech/webkit/issues/637)) ([3895de7](https://github.com/aziontech/webkit/commit/3895de7d305bd11a14b148b78313ddf832330d40))
+
+## [3.3.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.3...@aziontech/webkit@3.3.4) (2026-06-03)
+
+### Bug Fixes
+
+- empty results block button migration ([#630](https://github.com/aziontech/webkit/issues/630)) ([bb255f4](https://github.com/aziontech/webkit/commit/bb255f4fd798ab524f92c7722e382141b83ce385))
+
 ## [3.3.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.2...@aziontech/webkit@3.3.3) (2026-06-02)
 
 ### Bug Fixes
