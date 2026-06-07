@@ -1,7 +1,7 @@
 import ButtonCopy from '@aziontech/webkit/button-copy';
 
 export default {
-  title: 'Core/Buttons/ButtonCopy',
+  title: 'Core/ButtonCopy',
   component: ButtonCopy,
   tags: ['autodocs'],
   argTypes: {
