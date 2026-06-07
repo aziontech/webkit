@@ -1,3 +1,9 @@
+## [3.4.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.1...@aziontech/webkit@3.4.2) (2026-06-07)
+
+### Bug Fixes
+
+- remove redundant/unused buttons ([#640](https://github.com/aziontech/webkit/issues/640)) ([f25a4e5](https://github.com/aziontech/webkit/commit/f25a4e59fac80afc639d540dbac7ce6b691b252a))
+
 ## [3.4.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.0...@aziontech/webkit@3.4.1) (2026-06-05)
 
 ### Bug Fixes
