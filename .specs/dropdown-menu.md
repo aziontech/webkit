@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746
   node_id: 3775:16746
-checksum: 5eedb67724f3eaa8c5f656a09f363f2600cd983a23cc55ed9f93a977919c066e
+checksum: 4127c081919eccd8281c4b69251be703cd99317f3c72c7b7e89eec3c3e3f2d88
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-29
 ---
 # Dropdown Menu — Component Spec
 
@@ -35,6 +35,7 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 | `defaultOpen` | `boolean` | `undefined` | no | Initial open state when uncontrolled. |
 | `closeable` | `boolean` | `undefined` | no | When true, Escape and outside click close the menu. |
 | `closeOnSelect` | `boolean` | `undefined` | no | When true, selecting an item closes the menu. |
+| `side` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'auto'` | `'auto'` | no | Preferred panel placement. `auto` picks the side with the most viewport space; explicit sides flip to the opposite when they overflow. |
 | `sideOffset` | `number` | `undefined` | no | Gap between trigger and panel (px). |
 | `alignOffset` | `number` | `undefined` | no | Horizontal offset from trigger left edge (px). |
 

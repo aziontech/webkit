@@ -27,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Native overflow container with themed thin scrollbars and keyboard scrolling (arrow keys, Page Up/Down, Home/End). Pass height/width via `class` on the root; use inside sidebars via `SidebarGroup scroll`.'
+          'Native overflow container with themed thin scrollbars and keyboard scrolling (arrow keys, Page Up/Down, Home/End). Pass height/width via `class` on the root; `Sidebar` wraps its nav content in `ScrollArea` automatically.'
       }
     }
   },

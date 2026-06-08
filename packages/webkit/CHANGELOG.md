@@ -1,3 +1,9 @@
+## [3.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.2...@aziontech/webkit@3.5.0) (2026-06-08)
+
+### Features
+
+- refine menu-item focus states and sidebar story layouts ([#606](https://github.com/aziontech/webkit/issues/606)) ([1840945](https://github.com/aziontech/webkit/commit/1840945057ecdb23140ce9d17020ea216b5e021d))
+
 ## [3.4.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.1...@aziontech/webkit@3.4.2) (2026-06-07)
 
 ### Bug Fixes
