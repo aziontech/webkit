@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "checkJs": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": "."
+  },
+  "include": ["src/**/*.js", "tokens.js"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/scripts/**",
+    "src/tests/**",
+    "src/**/*.d.ts"
+  ]
+}

@@ -1,3 +1,41 @@
+## [3.4.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.1...@aziontech/webkit@3.4.2) (2026-06-07)
+
+### Bug Fixes
+
+- remove redundant/unused buttons ([#640](https://github.com/aziontech/webkit/issues/640)) ([f25a4e5](https://github.com/aziontech/webkit/commit/f25a4e59fac80afc639d540dbac7ce6b691b252a))
+
+## [3.4.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.0...@aziontech/webkit@3.4.1) (2026-06-05)
+
+### Bug Fixes
+
+- export to import right storybook ([#638](https://github.com/aziontech/webkit/issues/638)) ([c17a8f2](https://github.com/aziontech/webkit/commit/c17a8f2dc461f020293348667f3cadaafe3179e6))
+- import theme exported primitive ([#639](https://github.com/aziontech/webkit/issues/639)) ([d5342d2](https://github.com/aziontech/webkit/commit/d5342d2b727238b6275ac831162d64840a497983))
+
+## [3.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.4...@aziontech/webkit@3.4.0) (2026-06-05)
+
+### Features
+
+- refine Message component ([#619](https://github.com/aziontech/webkit/issues/619)) ([8de1eaf](https://github.com/aziontech/webkit/commit/8de1eaf956d9f40e15559a96a993b895bd639db5))
+
+### Bug Fixes
+
+- @aziontech/theme generating d.ts to .js files ([#636](https://github.com/aziontech/webkit/issues/636)) ([aedf405](https://github.com/aziontech/webkit/commit/aedf405bfb9d86406889e30d61ad357d30dd996c))
+- feedback message refine ([#634](https://github.com/aziontech/webkit/issues/634)) ([c8f8aab](https://github.com/aziontech/webkit/commit/c8f8aab23cb5d9d1fd14bfd4f42ee1fce9fb228c))
+- triggger webkit ([#635](https://github.com/aziontech/webkit/issues/635)) ([fa62346](https://github.com/aziontech/webkit/commit/fa623460830c1267d989301f802f3528e48e1753))
+- webkit vue-tsc check ([#637](https://github.com/aziontech/webkit/issues/637)) ([3895de7](https://github.com/aziontech/webkit/commit/3895de7d305bd11a14b148b78313ddf832330d40))
+
+## [3.3.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.3...@aziontech/webkit@3.3.4) (2026-06-03)
+
+### Bug Fixes
+
+- empty results block button migration ([#630](https://github.com/aziontech/webkit/issues/630)) ([bb255f4](https://github.com/aziontech/webkit/commit/bb255f4fd798ab524f92c7722e382141b83ce385))
+
+## [3.3.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.2...@aziontech/webkit@3.3.3) (2026-06-02)
+
+### Bug Fixes
+
+- adjust card-pricing gap spacing for non-middle cards ([26c051a](https://github.com/aziontech/webkit/commit/26c051a71e2e5a5345c2894fd818627b794c4390))
+
 ## [3.3.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.3.1...@aziontech/webkit@3.3.2) (2026-06-02)
 
 ### Bug Fixes
