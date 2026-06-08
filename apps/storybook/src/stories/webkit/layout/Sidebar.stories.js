@@ -3,7 +3,7 @@ import InputText from '@aziontech/webkit/inputs/input-text'
 import Sidebar from '@aziontech/webkit/layout/sidebar'
 import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'
 import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
-import MenuItem from '@aziontech/webkit/navigation/menu-item'
+import MenuItem from '@aziontech/webkit/menu-item'
 import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'
 import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'
 import DropdownMenuItem from '@aziontech/webkit/overlay/dropdown-menu-item'
@@ -31,7 +31,7 @@ const componentDocsDescription = [
   "import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'",
   "import SidebarHeader from '@aziontech/webkit/layout/sidebar-header'",
   "import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'",
-  "import MenuItem from '@aziontech/webkit/navigation/menu-item'",
+  "import MenuItem from '@aziontech/webkit/menu-item'",
   '</script>',
   '',
   '<template>',
