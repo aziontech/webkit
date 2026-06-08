@@ -111,9 +111,23 @@ Use semantic tokens from `@aziontech/theme` so light/dark behavior remains consi
 5. Push branch and open PR
 ```
 
-## 6. Where To Change What
+## 6. Design Tokens (Foundations)
+
+Storybook documents the token system under **Foundations → Design Tokens**:
+
+| Page | Source in `@aziontech/theme` |
+| ---- | ----------------------------- |
+| Primitive Colors | `src/tokens/primitives/colors/` |
+| Theme Colors | `src/tokens/theme/` + `semantic/colors.js` |
+| Typography | `src/tokens/semantic/texts.data.js` |
+| Spacing | `src/tokens/semantic/spacings.data.js` |
+| Responsive | `src/tokens/primitives/breakpoints.js` |
+
+Styling rules for webkit components: `.claude/docs/DESIGN.md`.
+
+## 7. Where To Change What
 
 - **Component source**: `packages/webkit/src`
 - **Story source**: `apps/storybook/src/stories`
-- **Theme and tokens**: `packages/theme/src`
+- **Theme and tokens**: `packages/theme/src/tokens`
 - **Icons and generation pipeline**: `packages/icons`
