@@ -16,7 +16,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    label: undefined
+    label: ''
   })
 
   defineSlots<{
