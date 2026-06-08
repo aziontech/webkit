@@ -1,29 +1,29 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  export type LinkSize = 'large' | 'medium'
-  export type LinkTarget = '_self' | '_blank'
+  export type MiniButtonSize = 'large' | 'medium'
+  export type MiniButtonTarget = '_self' | '_blank'
 
   defineOptions({
-    name: 'Link',
+    name: 'MiniButton',
     inheritAttrs: false
   })
 
   interface Props {
-    /** Visible label rendered inside the link. */
+    /** Visible label rendered inside the control. */
     label?: string
-    /** Size token. Affects height, gap, and typography. */
-    size?: LinkSize
-    /** Disables interaction and applies disabled token set. */
+    /** Size token; affects height, gap, and typography. */
+    size?: MiniButtonSize
+    /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
     /** When true, renders the trailing icon. */
     showIcon?: boolean
-    /** PrimeIcons class for the trailing icon (e.g. `pi pi-external-link`). */
+    /** PrimeIcons class for the trailing icon. */
     icon?: string
     /** Destination URL for the anchor. */
     href?: string
     /** Link target when navigating. */
-    target?: LinkTarget
+    target?: MiniButtonTarget
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -42,18 +42,22 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-link')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'actions-mini-button'
+  )
 
   const rootClasses = computed(() => [
     'group relative inline-flex shrink-0 items-center whitespace-nowrap',
-    'min-h-10 h-10 rounded-[var(--shape-button)] text-[var(--text-link)]',
-    'transition-colors duration-150 ease-out motion-reduce:transition-none',
+    'rounded-[var(--shape-button)] text-[var(--text-default)]',
+    'transition-opacity duration-150 ease-out motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]',
-    'data-[size=large]:text-button-lg',
+    'data-[size=large]:h-10 data-[size=large]:min-h-10 data-[size=large]:text-button-lg',
+    'data-[size=medium]:h-8 data-[size=medium]:min-h-8',
     'data-[size=medium]:text-button-md',
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed',
-    'data-[disabled]:!text-[var(--text-disabled)] data-[disabled]:[&_.link-ghost]:hidden',
+    'data-[disabled]:!text-[var(--text-disabled)] data-[disabled]:[&_.mini-button-ghost]:hidden',
+    'data-[disabled]:[&_.mini-button-icon]:!text-[var(--text-disabled)]',
     attrs['class']
   ])
 
@@ -75,18 +79,19 @@
     :class="rootClasses"
     :aria-disabled="disabled || undefined"
     :tabindex="disabled ? -1 : undefined"
-    :data-disabled="disabled || null"
+    :data-disabled="disabled ? '' : undefined"
     :data-size="size"
     :data-testid="testId"
     @click="handleClick"
   >
     <span
-      class="link-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-[var(--spacing-xs)] -right-[var(--spacing-xs)] h-8 rounded-[var(--shape-button)] bg-[var(--bg-surface-raised)] opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 before:bg-[var(--bg-hover)] group-active:before:bg-[var(--bg-active)]"
+      class="mini-button-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-[var(--spacing-xs)] -right-[var(--spacing-xs)] h-8 rounded-[var(--shape-button)] bg-[var(--bg-hover)] opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-mask)] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 group-active:before:bg-[var(--bg-active)]"
       aria-hidden="true"
       :data-testid="`${testId}__ghost`"
     />
     <span
-      class="relative z-[1] inline-flex flex-nowrap items-center gap-[var(--spacing-xs)]"
+      :data-size="size"
+      class="relative z-[1] inline-flex flex-nowrap items-center gap-[var(--spacing-xs)] data-[size=medium]:gap-[var(--spacing-sm)]"
       :data-testid="`${testId}__content`"
     >
       <span
@@ -98,7 +103,7 @@
       <i
         v-if="showIcon"
         :class="icon"
-        class="inline-flex size-[var(--spacing-sm)] shrink-0 items-center justify-center text-[length:inherit] leading-none"
+        class="mini-button-icon inline-flex size-[var(--spacing-sm)] shrink-0 items-center justify-center text-[var(--primary)] leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       />
