@@ -1,4 +1,4 @@
-import Link from '@aziontech/webkit/navigation/link'
+import Link from '@aziontech/webkit/link'
 
 /** @type {import('@storybook/vue3').Meta<typeof Link>} */
 const meta = {
