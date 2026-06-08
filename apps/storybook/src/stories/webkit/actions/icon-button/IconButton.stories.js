@@ -1,4 +1,4 @@
-import IconButton from '@aziontech/webkit/actions/icon-button'
+import IconButton from '@aziontech/webkit/icon-button'
 
 /** @type {import('@storybook/vue3').Meta<typeof IconButton>} */
 const meta = {
@@ -38,11 +38,11 @@ const meta = {
     },
     kind: {
       control: 'select',
-      options: ['primary', 'secondary', 'outlined', 'transparent'],
+      options: ['primary', 'secondary', 'outlined', 'transparent', 'danger'],
       description: 'Visual variant.',
       table: {
         category: 'props',
-        type: { summary: "'primary' | 'secondary' | 'outlined' | 'transparent'" },
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'" },
         defaultValue: { summary: "'primary'" }
       }
     },
@@ -127,6 +127,7 @@ export const Types = {
         <IconButton kind="secondary" icon="pi pi-plus" aria-label="Add" />
         <IconButton kind="outlined" icon="pi pi-plus" aria-label="Add" />
         <IconButton kind="transparent" icon="pi pi-plus" aria-label="Add" />
+        <IconButton kind="danger" icon="pi pi-trash" aria-label="Delete" />
       </div>
     `
   }),

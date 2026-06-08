@@ -2,8 +2,8 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Tag from '../../tag/tag.vue'
   import Currency from '../currency/currency.vue'
-  import Tag from '../tag/tag.vue'
 
   defineOptions({
     name: 'CardPricing',
@@ -75,7 +75,7 @@
 
   const rootClasses = computed(() => [
     'flex w-full flex-col items-start',
-    isMiddle.value ? 'min-h-[483px] justify-between' : 'gap-[var(--spacing-xl)]',
+    isMiddle.value ? 'min-h-[483px] justify-between' : 'gap-[var(--spacing-lg)]',
     isContained.value
       ? 'bg-[var(--bg-surface)] border-[length:var(--border-width-default)] border-[var(--border-muted)] rounded-[var(--shape-card)] p-[var(--spacing-lg)]'
       : 'p-[var(--spacing-lg)]',
@@ -102,7 +102,7 @@
     <div
       :class="[
         'flex w-full flex-col items-start shrink-0',
-        isMiddle ? 'gap-[var(--spacing-xl)]' : ''
+        isMiddle ? 'gap-[var(--spacing-lg)]' : ''
       ]"
     >
       <div

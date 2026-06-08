@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 import CardPricing from '@aziontech/webkit/content/card-pricing'
 
 const defaultDescription = 'Billed annually or $25/mo billed monthly.'

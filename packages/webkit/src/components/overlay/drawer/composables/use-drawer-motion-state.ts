@@ -5,7 +5,9 @@ import type { DrawerMotionState } from '../presets/transitions'
 export type { DrawerMotionState }
 
 /**
- * Drives `data-state` for CSS transitions: paints `closed` first, then flips to `open` on the next frame.
+ * Drives `data-state` for CSS transitions.
+ * Enter: paints `closed` first, then `open` on the next frame.
+ * Exit: keeps `open` for one frame, then `closed` so the browser can interpolate.
  */
 export function useDrawerMotionState(isOpen: Ref<boolean>) {
   const motionState = ref<DrawerMotionState>('closed')
@@ -21,11 +23,21 @@ export function useDrawerMotionState(isOpen: Ref<boolean>) {
     })
   }
 
+  const paintClose = async () => {
+    await nextTick()
+
+    globalThis.requestAnimationFrame(() => {
+      if (!isOpen.value) {
+        motionState.value = 'closed'
+      }
+    })
+  }
+
   watch(
     isOpen,
     (open) => {
       if (!open) {
-        motionState.value = 'closed'
+        void paintClose()
         return
       }
 

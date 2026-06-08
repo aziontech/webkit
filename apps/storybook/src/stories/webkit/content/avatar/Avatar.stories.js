@@ -1,6 +1,6 @@
 import { expect, within } from '@storybook/test'
 
-import Avatar from '@aziontech/webkit/content/avatar'
+import Avatar from '@aziontech/webkit/avatar'
 
 const kinds = ['circle', 'square']
 const sizes = ['small', 'medium', 'large']

@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: a9f24724ae467ea3db77fdf3df98b36f7237955e613913ea1bffa4118419ec6f
+checksum: 4b62c26791d88e4060e3962ebf4a29423a21b5ddf2c3b55578fe733aebc81f6a
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-29
 ---
 # Icon Button — Component Spec
 
@@ -20,7 +20,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 |---|---|---|---|---|
 | `icon` | `string` | `—` | yes | PrimeIcons class for the leading/trailing icon. |
 | `ariaLabel` | `string` | `—` | yes | Accessible name for icon-only controls. |
-| `kind` | `'primary' | 'secondary' | 'outlined' | 'transparent'` | `'primary'` | no | Visual variant. |
+| `kind` | `'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'` | `'primary'` | no | Visual variant. |
 | `size` | `'small' | 'medium' | 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
@@ -81,6 +81,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 - Secondary (kind)
 - Outlined (kind)
 - Transparent (kind)
+- Danger (kind)
 - Small (size)
 - Medium (size)
 - Large (size)

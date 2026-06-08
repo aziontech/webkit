@@ -1,4 +1,4 @@
-import Link from '@aziontech/webkit/navigation/link'
+import Link from '@aziontech/webkit/link'
 
 /** @type {import('@storybook/vue3').Meta<typeof Link>} */
 const meta = {
@@ -94,11 +94,20 @@ export default meta
 const Template = (args) => ({
   components: { Link },
   setup() {
-    const { onClick, ...props } = args
-
-    return { props, onClick }
+    return { args }
   },
-  template: '<Link v-bind="props" @click="onClick" />'
+  template: `
+    <Link
+      :label="args.label"
+      :size="args.size"
+      :disabled="args.disabled"
+      :show-icon="args.showIcon"
+      :icon="args.icon"
+      :href="args.href"
+      :target="args.target"
+      @click="args.onClick"
+    />
+  `
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
@@ -110,20 +119,18 @@ export const Default = {
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
-export const Medium = {
-  args: { size: 'medium' },
-  render: Template,
+export const Sizes = {
+  render: () => ({
+    components: { Link },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <Link size="large" label="Learn More" />
+        <Link size="medium" label="Learn More" />
+      </div>
+    `
+  }),
   parameters: {
-    docs: { description: { story: 'Medium size variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
-export const Large = {
-  args: { size: 'large' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Large size variant.' } }
+    docs: { description: { story: 'All size variants side by side.' } }
   }
 }
 

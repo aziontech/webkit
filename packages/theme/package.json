@@ -1,7 +1,7 @@
 {
   "name": "@aziontech/theme",
   "type": "module",
-  "version": "2.0.4",
+  "version": "2.3.2",
   "author": "aziontech",
   "license": "MIT",
   "repository": {
@@ -15,8 +15,11 @@
     "build:tokens": "node src/scripts/build-tokens.mjs",
     "build:tokens:v3": "node src/scripts/build-tokens.mjs --target=v3",
     "build:tokens:v4": "node src/scripts/build-tokens.mjs --target=v4",
-    "build:css:v3": "npm run build:tokens:v3 && tailwindcss -c dist/v3/tailwind.config.js -i dist/v3/globals.css -o dist/v3/output.css",
-    "test:tokens:v3": "npm run build:css:v3 && open src/tests/tokens.html"
+    "build:css:v3": "pnpm build:tokens:v3 && tailwindcss -c dist/v3/tailwind.config.js -i dist/v3/globals.css -o dist/v3/output.css",
+    "test:tokens:v3": "pnpm build:css:v3 && open src/tests/tokens.html",
+    "clean:dts": "find src -name '*.d.ts' -delete && find src -name '*.d.ts.map' -delete",
+    "build:dts": "pnpm clean:dts && vue-tsc --declaration --emitDeclarationOnly",
+    "prepack": "pnpm build:dts"
   },
   "publishConfig": {
     "access": "public"
@@ -31,8 +34,11 @@
     "ui-kit",
     "token-generator"
   ],
-  "devDependencies": {
+  "dependencies": {
     "tailwindcss": "^3.4.17",
+    "vue-tsc": "^3.2.5"
+  },
+  "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^10.0.1",
     "@semantic-release/exec": "^6.0.3",
@@ -53,8 +59,9 @@
   ],
   "exports": {
     ".": "./default.js",
-    "./scripts/compile-primitives": "./src/scripts/compile-primitives.js",
-    "./scripts/compile-theme": "./src/scripts/compile-theme.js",
+    "./animations": "./src/tokens/primitives/animations/animate.js",
+    "./colors": "./src/tokens/primitives/colors/colors.js",
+    "./texts": "./src/tokens/semantic/texts.data.js",
     "./tailwind-preset": "./dist/v3/tailwind-preset.js",
     "./tailwind-preset/v3": "./dist/v3/tailwind-preset.js",
     "./tailwind/semantic-spacings-plugin": "./src/tokens/semantic/spacings.js",

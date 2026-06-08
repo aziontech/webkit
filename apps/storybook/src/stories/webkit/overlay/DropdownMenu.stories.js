@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/actions/button'
+import Button from '@aziontech/webkit/button'
 import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'
 import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'
 import {
@@ -76,6 +76,13 @@ export default {
       control: 'boolean',
       description: 'When true, selecting an item closes the menu',
       table: { defaultValue: { summary: true } }
+    },
+    side: {
+      control: { type: 'select' },
+      options: ['auto', 'top', 'bottom', 'left', 'right'],
+      description:
+        'Preferred panel placement. `auto` picks the side with the most viewport space; explicit sides flip when they overflow.',
+      table: { defaultValue: { summary: 'auto' } }
     },
     sideOffset: {
       control: 'number',

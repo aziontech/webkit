@@ -22,7 +22,8 @@
           { "type": "chore", "release": "patch" },
           { "type": "docs", "release": "patch" },
           { "type": "style", "release": "patch" },
-          { "type": "refactor", "release": "patch" }
+          { "type": "refactor", "release": "patch" },
+          { "breaking": true, "release": "major" }
         ]
       }
     ],
@@ -46,6 +47,7 @@
     [
       "@semantic-release/exec",
       {
+        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],
