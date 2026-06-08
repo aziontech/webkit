@@ -1,4 +1,4 @@
-import MenuItem from '@aziontech/webkit/navigation/menu-item'
+import MenuItem from '@aziontech/webkit/menu-item'
 
 /** @type {import('@storybook/vue3').Meta<typeof MenuItem>} */
 const meta = {

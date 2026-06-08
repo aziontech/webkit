@@ -25,7 +25,7 @@ import Sidebar from '@aziontech/webkit/layout/sidebar'
 import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
 import SidebarHeader from '@aziontech/webkit/layout/sidebar-header'
 import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'
-import MenuItem from '@aziontech/webkit/navigation/menu-item'
+import MenuItem from '@aziontech/webkit/menu-item'
 </script>
 
 <template>
