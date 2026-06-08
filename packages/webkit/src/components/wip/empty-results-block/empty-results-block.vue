@@ -1,6 +1,8 @@
 <script setup>
   import PrimeButton from 'primevue/button'
 
+  import Button from '../../actions/button/button.vue'
+
   defineOptions({ name: 'EmptyResultsBlock' })
 
   const emit = defineEmits(['click-to-create'])
@@ -85,15 +87,14 @@
         <div class="flex flex-wrap gap-2 justify-center w-full">
           <slot name="extraActionsLeft"></slot>
           <slot name="default">
-            <PrimeButton
+            <Button
               v-if="createButtonLabel"
-              class="max-md:w-full w-fit"
-              severity="secondary"
-              :disabled="disabledList"
+              size="medium"
+              kind="secondary"
               icon="pi pi-plus"
+              :disabled="disabledList"
               :data-testid="`create_${createButtonLabel}_button`"
               :label="createButtonLabel"
-              size="small"
               @click="handleCreateClick"
             />
           </slot>

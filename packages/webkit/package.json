@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "3.3.0",
+  "version": "3.4.2",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -35,7 +35,8 @@
     "primevue": "3.35.0",
     "tailwind-merge": "^3.6.0",
     "vee-validate": "^4.15.1",
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": "^3.2.5",
+    "@aziontech/theme": "^2.3.2"
   },
   "devDependencies": {
     "@figma/code-connect": "^1.4.5",
@@ -95,12 +96,7 @@
     "./mini-button": "./src/components/actions/mini-button/mini-button.vue",
     "./segmented-button": "./src/components/actions/segmented-button/segmented-button.vue",
     "./icon-button": "./src/components/actions/icon-button/icon-button.vue",
-    "./button-cancel": "./src/components/wip/buttons/button-cancel/button-cancel.vue",
-    "./button-clone": "./src/components/wip/buttons/button-clone/button-clone.vue",
     "./button-copy": "./src/components/wip/buttons/button-copy/button-copy.vue",
-    "./button-create": "./src/components/wip/buttons/button-create/button-create.vue",
-    "./button-delete": "./src/components/wip/buttons/button-delete/button-delete.vue",
-    "./button-save": "./src/components/wip/buttons/button-save/button-save.vue",
     "./breadcrumb": "./src/core/primevue/breadcrumb/breadcrumb.vue",
     "./card": "./src/core/primevue/card/card.vue",
     "./card-box": "./src/core/card/card-box/card-box.vue",
@@ -113,7 +109,6 @@
     "./divider": "./src/core/primevue/divider/divider.vue",
     "./inlinemessage": "./src/core/primevue/inline-message/inline-message.vue",
     "./menu": "./src/core/primevue/menu/menu.vue",
-    "./message": "./src/core/primevue/message/message.vue",
     "./overlaypanel": "./src/core/primevue/overlaypanel/overlaypanel.vue",
     "./paginator": "./src/core/primevue/paginator/paginator.vue",
     "./progressbar": "./src/core/primevue/progressbar/progressbar.vue",
@@ -168,7 +163,7 @@
     "./data/data-table-toolbar": "./src/components/data/data-table/data-table-toolbar.vue",
     "./data/data-table-view-all-footer": "./src/components/data/data-table/data-table-view-all-footer.vue",
     "./data/data-table-view-toggle": "./src/components/data/data-table/data-table-view-toggle.vue",
-    "./feedback/message": "./src/components/feedback/message/message.vue",
+    "./message": "./src/components/feedback/message/message.vue",
     "./feedback/status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./inputs/input-text": "./src/components/inputs/input-text/input-text.vue",
     "./inputs/box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",

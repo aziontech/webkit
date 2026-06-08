@@ -22,7 +22,7 @@ const labelColor = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col rounded-md overflow-hidden border border-gray-500/15 flex-1 min-w-[60px] max-w-[88px] cursor-default">
+  <div class="flex flex-col rounded-md overflow-hidden border border-default flex-1 min-w-[60px] max-w-[88px] cursor-default">
     <div
       class="h-[52px] flex items-end px-1.5 py-1"
       :style="{ background: hex ?? 'transparent' }"
@@ -33,7 +33,7 @@ const labelColor = computed(() => {
       >{{ shade }}</span>
     </div>
     <div class="px-1.5 py-[5px] bg-black/25">
-      <span class="text-[9px] font-code text-gray-400 block break-all leading-tight">{{ hex }}</span>
+      <span class="text-[9px] font-code text-muted block break-all leading-tight">{{ hex }}</span>
     </div>
   </div>
 </template>
