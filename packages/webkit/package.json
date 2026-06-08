@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "3.4.2",
+  "version": "3.5.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -186,7 +186,7 @@
     "./navigation/breadcrumb": "./src/components/navigation/breadcrumb/index.js",
     "./navigation/breadcrumb-item": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
     "./navigation/link": "./src/components/navigation/link/link.vue",
-    "./navigation/menu-item": "./src/components/navigation/menu-item/menu-item.vue",
+    "./menu-item": "./src/components/navigation/menu-item/menu-item.vue",
     "./navigation/tab-view": "./src/components/navigation/tab-view/index.js",
     "./navigation/navigation-menu": "./src/components/navigation/navigation-menu/index.js",
     "./overlay/dialog": "./src/components/overlay/dialog/dialog.vue",

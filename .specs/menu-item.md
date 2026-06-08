@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3601-2693
   node_id: 3601:2693
-checksum: 9142b6a3366d26151037777ebb01398851c84803f92a1b4c79631c75b0265043
+checksum: d084e89a360fad2914c4137f7e020e00588d18792b843d811637ad01edb1d2b6
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-27
 ---
 # Menu Item — Component Spec
 

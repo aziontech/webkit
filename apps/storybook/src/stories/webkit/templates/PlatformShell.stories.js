@@ -3,7 +3,7 @@ import Button from '@aziontech/webkit/button'
 import IconButton from '@aziontech/webkit/icon-button'
 import InputText from '@aziontech/webkit/inputs/input-text'
 import GlobalHeader from '@aziontech/webkit/layout/global-header'
-import MenuItem from '@aziontech/webkit/navigation/menu-item'
+import MenuItem from '@aziontech/webkit/menu-item'
 import NavSidebar from '@aziontech/webkit/layout/sidebar'
 import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
 import TabView from '@aziontech/webkit/navigation/tab-view'
@@ -100,7 +100,6 @@ const navigationTemplate = `
     <template #header>
       <InputText placeholder="Search" size="medium" />
     </template>
-    <SidebarGroup scroll>
     <SidebarGroup>
       <MenuItem label="Home" icon="ai ai-home" selected href="/" />
       <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />
@@ -159,7 +158,6 @@ const navigationTemplate = `
         href="https://caixa-siem.azion.com/login"
         target="_blank"
       />
-    </SidebarGroup>
     </SidebarGroup>
   </NavSidebar>
 `
