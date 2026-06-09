@@ -3,60 +3,93 @@ name: code-editor
 category: data
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 4
 figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4177-15489
-  node_id: 4177:15489
-checksum: d4a6b37ffcafe4d4da021d0c43cfff23f39f1c2719275bc0bf50e9db033d9500
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
+  node_id: 4567:33761
+checksum: c5499ce156904715687418e832ea0a9555201923263b099bcaababdc0ce1cfd0
 created: 2026-05-28
-last_updated: 2026-05-28
+last_updated: 2026-06-08
 ---
+
 
 # CodeEditor — Component Spec
 
 ## Purpose
 
-Read-only code viewer with tabbed snippets, syntax highlighting using theme code tokens, an animated tab indicator, and a copy action. Use in docs, API examples, and configuration previews where users switch between related code samples.
+Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell:
+
+1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy.
+2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs.
+3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar.
+4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar.
+
+Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
 
 ## Usage
 
+Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-level `code` prop.
+
 ```vue
 <script setup>
-import { ref } from 'vue'
 import CodeEditor from '@aziontech/webkit/data/code-editor'
 
-const activeTab = ref('js')
+const code = `export default {
+  async fetch(request) {
+    return new Response('OK')
+  }
+}`
 
 const tabs = [
   {
     label: 'JavaScript',
     value: 'js',
     language: 'javascript',
-    code: "export default {\n  async fetch(request) {\n    return new Response('OK')\n  }\n}"
-  },
-  {
-    label: 'TypeScript',
-    value: 'ts',
-    language: 'typescript',
-    code: "export default {\n  async fetch(request: Request): Promise<Response> {\n    return new Response('OK')\n  }\n}"
+    fileName: 'handler.js',
+    code
   }
 ]
 </script>
 
 <template>
-  <CodeEditor v-model:value="activeTab" :tabs="tabs" show-line-numbers />
+  <CodeEditor :tabs="tabs" default-value="js" show-line-numbers />
 </template>
 ```
+
+For multiple languages, add one tab per snippet (each with its own `code`). Use `v-model:value` to control the active tab. Replace `tabs[n].code` or rebuild `tabs` when the source should update reactively.
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `tabs` | `CodeEditorTab[]` | `[]` | no | Tab definitions with label, value, code, and optional language for highlighting. |
+| `tabs` | `CodeEditorTab[]` | `[]` | no | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
 | `value` | `string` | `undefined` | no | Controlled active tab value (`v-model:value`). |
 | `defaultValue` | `string` | `undefined` | no | Initial active tab when uncontrolled. |
-| `showLineNumbers` | `boolean` | `true` | no | Shows a fixed-width gutter with line numbers before each code line. |
+| `showLineNumbers` | `boolean` | `true` | no | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
 | `copyAriaLabel` | `string` | `'Copy code'` | no | Accessible name for the copy IconButton. |
+| `animateLines` | `boolean` | `false` | no | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart. |
+
+## Type shapes
+
+### `CodeEditorTab`
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `label` | `string` | yes | Tab label (uppercase in UI via `.text-overline-sm`). |
+| `value` | `string` | yes | Stable tab id for `v-model:value`. |
+| `code` | `string` | yes | Raw source; split on `\n` for rendering. |
+| `language` | `string` | no | Drives syntax highlighting and default file icon when `fileIcon` is omitted. |
+| `fileName` | `string` | no | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden). |
+| `fileIcon` | `string` | no | Icon name for the filename bar (PrimeIcons class, e.g. `'pi pi-file'`). Falls back to a language-derived icon when omitted. |
+| `highlightedLine` | `number` | no | 1-based line index. Applies info background + leading bar on that row (Figma: Highlighted). |
+| `lineChanges` | `CodeEditorLineChange[]` | no | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff). |
+
+### `CodeEditorLineChange`
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `line` | `number` | yes | 1-based line index. |
+| `change` | `'added' \| 'removed'` | yes | `added` → success row + `+` marker; `removed` → danger row + `-` marker. |
 
 ## Events
 
@@ -74,7 +107,21 @@ const tabs = [
 
 - Visual states: `default`, `hover`, `focus-visible` on tabs and copy control
 - `data-state` on tabs: `active` | `inactive`
-- `data-disabled` not used (tabs are not disabled in v1)
+- `data-state` on code lines: `default` | `added` | `removed` | `highlighted`
+- `data-disabled` not used (tabs are not disabled in v2)
+
+### Layout rules (derived from Figma)
+
+| Region | Visible when |
+|---|---|
+| Tab header (`CodeEditorHeader`, 48 px tab height) | `tabs.length > 1` |
+| Filename bar (`FileName`, 40 px) | active tab has `fileName` |
+| Diff gutter (`+`/`-` + 8 px spacer on unchanged lines) | active tab `lineChanges.length > 0` |
+| Line highlight (info background + 2 px leading bar) | active tab `highlightedLine` is set |
+
+When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
+
+Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, 320 px height). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row. The copy IconButton is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
 
 ## Motion & Animations
 
@@ -83,18 +130,21 @@ const tabs = [
 | tab change (indicator) | sliding underline via `transform` / `width` transition | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | tab panel change | content slide + opacity | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:transition-none` |
 | tab label hover | `transition-colors duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
+| line entrance (`animateLines`) | per-line slide from `-8px` + opacity, staggered `300ms` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
 | tab typography | `.text-overline-sm` |
+| filename typography | `.text-label-code-sm` |
 | code typography | `.text-label-code-sm` |
-| surface | `var(--bg-surface)` |
+| shell surface | `var(--bg-surface)` |
+| filename bar surface | `var(--bg-surface-raised)` |
 | border | `var(--border-default)` |
 | tab indicator | `var(--border-selected)` |
 | text default / muted | `var(--text-default)` / `var(--text-muted)` |
-| spacing | `var(--spacing-xs)` / `var(--spacing-sm)` |
+| spacing | `var(--spacing-xxs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
 | shape | `var(--shape-elements)` / `var(--shape-button)` |
 | ring | `var(--ring-color)` |
 | syntax keyword | `var(--code-sintax-keyword)` |
@@ -104,26 +154,39 @@ const tabs = [
 | syntax punctuation | `var(--code-sintax-punctuation)` |
 | syntax identifier | `var(--code-sintax-identifier)` |
 | syntax line number | `var(--code-sintax-line-number)` |
+| diff removed row | `var(--danger)` |
+| diff removed leading bar | `var(--danger-border)` |
+| diff removed marker | `var(--danger-contrast)` |
+| diff added row | `var(--success)` |
+| diff added leading bar | `var(--success-border)` |
+| diff added marker | `var(--success-contrast)` |
+| highlighted row | `var(--info)` |
+| highlighted leading bar | `var(--info-border)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| `bg/surface-raised` | `var(--bg-surface-raised)` (compiled in theme) | Add to DESIGN.md Surfaces table |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on IconButton.
-- ARIA: tab list uses `role="tablist"`; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses IconButton `ariaLabel`.
-- Contrast ≥4.5:1 for code text on surface, including syntax token colors in light and dark.
+- Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on IconButton; when focus is in the code scroll region, `ArrowUp`/`ArrowDown`/`PageUp`/`PageDown`/`Home`/`End` scroll vertically and `ArrowLeft`/`ArrowRight` scroll horizontally via ScrollArea.
+- ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses IconButton `ariaLabel`; diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
+- Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark.
 - `motion-reduce:transition-none motion-reduce:transform-none` on indicator and panel motion.
+- When `animateLines` is enabled, line motion is disabled under `prefers-reduced-motion` (lines render fully visible immediately).
 - Copy control uses IconButton `size="small"` (32×32 px) per Figma.
 
 ## Stories (Storybook)
 
-- Default — multiple tabs with JavaScript sample code and copy affordance.
-- WithoutLineNumbers — same sample with `showLineNumbers={false}` to demonstrate the gutter toggle.
+- Default — language switcher: two tabs, `fileName` on each tab, JavaScript sample, copy affordance (Figma: Language Switcher).
+- WithoutLineNumbers — same Default sample with `showLineNumbers={false}`.
+- WithFileName — single tab with `fileName` and no tab header (Figma: Show filename).
+- WithDiff — single tab with `lineChanges` for added/removed rows (Figma: Diff).
+- WithHighlightedLine — single tab with `highlightedLine={6}` (Figma: Highlighted).
+- WithAnimatedLines — single tab with `animateLines={true}` for staggered website entrance.
 
 ## Constraints — DO NOT
 
