@@ -12,24 +12,41 @@
 
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
+  import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import {
     codeEditorEnterOffsetClasses,
+    codeEditorLineEnterMotion,
     type CodeEditorSlideDirection,
     getCodeEditorIndicatorTransitionStyle,
+    getCodeEditorLineTransitionStyle,
     getCodeEditorPanelTransitionStyle
   } from './presets/transitions'
+  import { resolveFileIcon } from './utils/file-icon'
   import {
     type CodeEditorHighlightToken,
     formatLineNumber,
     getHighlightTokenClass,
     highlightCode
   } from './utils/highlight-code'
+  import {
+    buildLineChangeMap,
+    type CodeEditorLineChange,
+    type CodeEditorLineState,
+    getDiffMarker,
+    resolveLineState
+  } from './utils/line-decorations'
+
+  export type { CodeEditorLineChange }
 
   export type CodeEditorTab = {
     label: string
     value: string
     code: string
     language?: string
+    fileName?: string
+    fileIcon?: string
+    highlightedLine?: number
+    lineChanges?: CodeEditorLineChange[]
   }
 
   defineOptions({
@@ -38,16 +55,18 @@
   })
 
   interface Props {
-    /** Tab definitions with label, value, code, and optional language for highlighting. */
+    /** Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. */
     tabs?: CodeEditorTab[]
     /** Controlled active tab value (`v-model:value`). */
     value?: string
     /** Initial active tab when uncontrolled. */
     defaultValue?: string
-    /** Shows a fixed-width gutter with line numbers before each code line. */
+    /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
     showLineNumbers?: boolean
     /** Accessible name for the copy IconButton. */
     copyAriaLabel?: string
+    /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
+    animateLines?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -55,7 +74,8 @@
     value: undefined,
     defaultValue: undefined,
     showLineNumbers: true,
-    copyAriaLabel: 'Copy code'
+    copyAriaLabel: 'Copy code',
+    animateLines: false
   })
 
   const emit = defineEmits<{
@@ -75,6 +95,7 @@
   const internalValue = ref('')
   const slideDirection = ref<CodeEditorSlideDirection>(null)
   const panelMotionReady = ref(true)
+  const linesMotionReady = ref(!props.animateLines)
   const copyFeedback = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-editor')
@@ -115,6 +136,18 @@
     normalizedTabs.value.findIndex((tab) => tab.value === activeValue.value)
   )
 
+  const showTabHeader = computed(() => normalizedTabs.value.length > 1)
+
+  const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
+
+  const showDiffGutter = computed(() => (activeTab.value?.lineChanges?.length ?? 0) > 0)
+
+  const activeLineChangeMap = computed(() => buildLineChangeMap(activeTab.value?.lineChanges))
+
+  const activeFileIcon = computed(() =>
+    resolveFileIcon(activeTab.value?.language, activeTab.value?.fileIcon)
+  )
+
   const highlightedLines = computed(() => {
     if (!activeTab.value) {
       return [] as CodeEditorHighlightToken[][]
@@ -122,6 +155,9 @@
 
     return highlightCode(activeTab.value.code, activeTab.value.language)
   })
+
+  const getLineState = (lineNumber: number): CodeEditorLineState =>
+    resolveLineState(lineNumber, activeLineChangeMap.value, activeTab.value?.highlightedLine)
 
   const indicatorTransitionStyle = computed(() => getCodeEditorIndicatorTransitionStyle())
 
@@ -152,6 +188,19 @@
         : cn(panelEnterOffsetClass.value, 'opacity-0')
     )
   )
+
+  const getLineMotionClasses = () =>
+    cn(
+      props.animateLines &&
+        'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
+      props.animateLines &&
+        (linesMotionReady.value
+          ? 'translate-x-0 opacity-100'
+          : cn(codeEditorLineEnterMotion.offsetClass, 'opacity-0'))
+    )
+
+  const getLineMotionStyle = (lineIndex: number) =>
+    props.animateLines ? getCodeEditorLineTransitionStyle(lineIndex) : undefined
 
   const resolveTabElement = (
     element: globalThis.Element | ComponentPublicInstance | null
@@ -202,6 +251,20 @@
     })
   }
 
+  const runLinesMotion = () => {
+    if (!props.animateLines) {
+      linesMotionReady.value = true
+      return
+    }
+
+    linesMotionReady.value = false
+    nextTick(() => {
+      globalThis.requestAnimationFrame(() => {
+        linesMotionReady.value = true
+      })
+    })
+  }
+
   const setActiveTab = (nextValue: string) => {
     if (!nextValue || nextValue === activeValue.value) {
       return
@@ -213,6 +276,7 @@
     slideDirection.value = resolveSlideDirection(currentIndex, nextIndex)
     activeValue.value = nextValue
     runPanelMotion()
+    runLinesMotion()
     scheduleIndicatorSync()
   }
 
@@ -343,6 +407,10 @@
 
     scheduleIndicatorSync()
 
+    if (props.animateLines) {
+      runLinesMotion()
+    }
+
     if (typeof ResizeObserver !== 'undefined' && tabListRef.value) {
       resizeObserver = new ResizeObserver(() => {
         syncIndicator()
@@ -378,6 +446,18 @@
   )
 
   watch(activeValue, scheduleIndicatorSync)
+
+  watch(
+    () => props.animateLines,
+    (enabled) => {
+      if (enabled) {
+        runLinesMotion()
+        return
+      }
+
+      linesMotionReady.value = true
+    }
+  )
 </script>
 
 <template>
@@ -391,6 +471,7 @@
     :data-testid="testId"
   >
     <div
+      v-if="showTabHeader"
       class="relative shrink-0 border-b border-[var(--border-default)] px-[var(--spacing-sm)]"
       :data-testid="`${testId}__header`"
     >
@@ -416,7 +497,7 @@
           :id="`${testId}-tab-${tab.value}`"
           :class="
             cn(
-              'relative z-[2] inline-flex h-10 shrink-0 items-center justify-center px-[var(--spacing-xs)] py-[var(--spacing-xs)]',
+              'relative z-[2] inline-flex h-12 shrink-0 items-center justify-center px-[var(--spacing-xs)] py-[var(--spacing-xs)]',
               'text-overline-sm uppercase transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]',
               tab.value === activeValue
@@ -438,61 +519,129 @@
     </div>
 
     <div
-      class="relative min-h-[320px] max-h-[320px] shrink-0 overflow-x-clip overflow-y-auto p-[var(--spacing-sm)]"
+      v-if="showFileNameBar && activeTab"
+      class="flex h-10 shrink-0 items-center gap-[var(--spacing-xs)] overflow-hidden border-b border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-sm)]"
+      :data-testid="`${testId}__filename`"
+    >
+      <span
+        class="flex size-4 shrink-0 items-center justify-center"
+        :data-testid="`${testId}__filename-icon`"
+      >
+        <i
+          :class="cn(activeFileIcon, 'text-label-code-sm text-[var(--text-default)]')"
+          aria-hidden="true"
+        />
+      </span>
+      <span
+        class="text-label-code-sm min-w-0 flex-1 text-[var(--text-muted)]"
+        :data-testid="`${testId}__filename-label`"
+      >
+        {{ activeTab.fileName }}
+      </span>
+    </div>
+
+    <div
+      class="relative flex h-[320px] shrink-0 flex-col"
       :data-testid="`${testId}__content`"
     >
-      <div class="absolute right-[var(--spacing-sm)] top-[var(--spacing-sm)] z-[2]">
+      <div
+        class="pointer-events-none absolute right-[var(--spacing-sm)] top-[var(--spacing-sm)] z-[2]"
+        :data-testid="`${testId}__copy-anchor`"
+      >
         <IconButton
           :icon="copyFeedback ? 'pi pi-check' : 'pi pi-copy'"
           :ariaLabel="copyAriaLabel"
           kind="outlined"
           size="small"
+          class="pointer-events-auto"
           :data-testid="`${testId}__copy`"
           @click="copyActiveCode"
         />
       </div>
 
-      <div
-        v-if="activeTab"
-        role="tabpanel"
-        :id="`${testId}-panel-${activeTab.value}`"
-        :aria-labelledby="`${testId}-tab-${activeTab.value}`"
-        :class="panelMotionClasses"
-        :style="panelTransitionStyle"
-        :data-testid="`${testId}__panel`"
+      <ScrollArea
+        orientation="both"
+        :class="
+          cn(
+            'min-h-0 min-w-0 flex-1 py-[var(--spacing-sm)]',
+            'focus-visible:ring-offset-[var(--bg-surface)]'
+          )
+        "
+        :data-testid="`${testId}__scroll`"
       >
         <div
-          class="flex flex-col gap-[var(--spacing-xs)] pr-[var(--spacing-xl)]"
-          :data-testid="`${testId}__lines`"
+          v-if="activeTab"
+          :role="showTabHeader ? 'tabpanel' : undefined"
+          :id="showTabHeader ? `${testId}-panel-${activeTab.value}` : undefined"
+          :aria-labelledby="showTabHeader ? `${testId}-tab-${activeTab.value}` : undefined"
+          :class="cn(panelMotionClasses, 'min-w-full w-max')"
+          :style="panelTransitionStyle"
+          :data-testid="`${testId}__panel`"
         >
           <div
-            v-for="(lineTokens, lineIndex) in highlightedLines"
-            :key="`${activeTab.value}-${lineIndex}`"
-            class="flex items-center gap-[var(--spacing-xs)]"
-            :data-testid="`${testId}__line`"
+            class="flex min-w-full w-max flex-col"
+            :data-testid="`${testId}__lines`"
           >
-            <span
-              v-if="showLineNumbers"
-              class="text-label-code-sm w-4 shrink-0 text-center text-[var(--code-sintax-line-number)]"
-              :data-testid="`${testId}__line-number`"
-            >
-              {{ formatLineNumber(lineIndex + 1) }}
-            </span>
-            <code
-              class="text-label-code-sm min-w-0 flex-1 whitespace-pre-wrap break-words"
-              :data-testid="`${testId}__line-content`"
+            <div
+              v-for="(lineTokens, lineIndex) in highlightedLines"
+              :key="`${activeTab.value}-${lineIndex}`"
+              :class="
+                cn(
+                  'group relative flex min-w-full w-max shrink-0 items-center gap-[var(--spacing-xs)] px-[var(--spacing-lg)] py-[var(--spacing-xxs)] text-label-code-sm',
+                  'data-[state=added]:bg-[var(--success)] data-[state=removed]:bg-[var(--danger)] data-[state=highlighted]:bg-[var(--info)]',
+                  getLineMotionClasses()
+                )
+              "
+              :style="getLineMotionStyle(lineIndex)"
+              :data-testid="`${testId}__line`"
+              :data-state="getLineState(lineIndex + 1)"
             >
               <span
-                v-for="(token, tokenIndex) in lineTokens"
-                :key="tokenIndex"
-                :class="getHighlightTokenClass(token.type)"
+                class="pointer-events-none absolute inset-0 z-0 bg-[var(--bg-hover)] opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
+                aria-hidden="true"
+              />
+              <span
+                v-if="showDiffGutter"
+                class="relative z-[1] w-2 shrink-0 text-center group-data-[state=added]:text-[var(--success-contrast)] group-data-[state=removed]:text-[var(--danger-contrast)]"
+                :data-testid="`${testId}__diff-marker`"
+                aria-hidden="true"
               >
-                {{ token.text }}
+                {{ getDiffMarker(getLineState(lineIndex + 1)) }}
               </span>
-            </code>
+              <span
+                v-if="showLineNumbers"
+                class="relative z-[1] w-4 shrink-0 text-center text-[var(--code-sintax-line-number)]"
+                :data-testid="`${testId}__line-number`"
+              >
+                {{ formatLineNumber(lineIndex + 1) }}
+              </span>
+              <code
+                class="text-label-code-sm relative z-[1] shrink-0 whitespace-pre pr-[var(--spacing-xl)]"
+                :data-testid="`${testId}__line-content`"
+              >
+                <span
+                  v-for="(token, tokenIndex) in lineTokens"
+                  :key="tokenIndex"
+                  :class="getHighlightTokenClass(token.type)"
+                >
+                  {{ token.text }}
+                </span>
+              </code>
+              <span
+                v-if="getLineState(lineIndex + 1) !== 'default'"
+                :class="
+                  cn(
+                    'pointer-events-none absolute bottom-0 left-0 top-0 z-[2] w-[2px]',
+                    'group-data-[state=added]:bg-[var(--success-border)] group-data-[state=removed]:bg-[var(--danger-border)] group-data-[state=highlighted]:bg-[var(--info-border)]'
+                  )
+                "
+                aria-hidden="true"
+                :data-testid="`${testId}__line-indicator`"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   </div>
 </template>
