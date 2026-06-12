@@ -1,5 +1,13 @@
 <h1 align="center">Azion Webkit Monorepo</h1>
 
+<p align="center">
+  <a href="https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain"><img src="https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main" alt="Governance"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/node-%3E%3D22.18-brightgreen" alt="Node >=22.18">
+  <img src="https://img.shields.io/badge/pnpm-10.x-orange" alt="pnpm 10.x">
+  <img src="https://img.shields.io/badge/Vue-3.5%2B-42b883" alt="Vue 3.5+">
+</p>
+
 The shared front-end foundation for Azion products. Webkit ships the Vue components, design tokens, and icon fonts that keep Console, Marketplace, and partner surfaces visually and behaviorally consistent.
 
 ## What is in this repository
@@ -26,6 +34,17 @@ webkit/
 └── pnpm-workspace.yaml
 ```
 
+**Internal dependencies:** `icons` is standalone. `theme` has no internal deps. `webkit` depends on `theme`. Apps depend on all three.
+
+## How to read this repo
+
+If you are new (human or AI), open these in order — together they describe the entire shape of a component:
+
+1. [`.specs/_template.md`](./.specs/_template.md) — the spec format every component conforms to.
+2. [`.specs/button.md`](./.specs/button.md) — canonical filled-in spec.
+3. [`packages/webkit/src/components/actions/button/button.vue`](./packages/webkit/src/components/actions/button/button.vue) — canonical implementation matching that spec.
+4. [`.claude/rules/`](./.claude/rules/) — the constraints every component must respect.
+
 ## Packages
 
 | Package                                                              | Description                                                    | CI                                                                                                                                                                                                                | Version                                                                                                               |
@@ -38,7 +57,7 @@ webkit/
 
 | App                                   | Description                                      | CI                                                                                                                                                                                                                         |
 | ------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. | ![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)                                                                                                                                                                                                                          |
+| [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. | [![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml?query=branch%3Amain)             |
 | [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons.   | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
 
 ## Use in your app
@@ -121,17 +140,21 @@ pnpm governance             # Lint + type-check + format + audit
 
 ## Development flow
 
-New components follow a **spec-driven pipeline**. The spec at `.specs/<name>.md` is the contract; the `.vue`, story, and exports are generated from it.
+New components follow a **spec-driven pipeline**: spec → scaffold → verify. The spec at `.specs/<name>.md` is the contract; the `.vue`, story, and exports are generated from it.
 
-1. Draft the spec with `/spec-create <name>` — sets `status: draft`. Review and flip to `status: approved`.
-2. Scaffold with `/component-create <name>` — writes the `.vue`, `package.json`, exports entry, and minimal story.
-3. Verify with `/component-verify <name>` — re-runs spec compliance and validators.
-4. Add or adjust stories under `apps/storybook/src/stories` if extra states are needed.
-5. Validate locally with `pnpm storybook:dev` and `pnpm governance`.
-6. Commit using conventional commits with a package scope: `feat(webkit): …`, `fix(theme): …`, `chore(icons): …`. Release tooling (`semantic-release`) reads these to publish.
-7. Push your branch and open a pull request.
+1. Draft the spec with `/spec-create <name>`, then flip `status: draft` → `approved`.
+2. Scaffold with `/component-create <name>`.
+3. Verify with `/component-verify <name>` and `pnpm governance`.
+4. Commit using Conventional Commits with a package scope (e.g. `feat(webkit): …`).
+5. Open a pull request.
 
-See [`.claude/rules/`](./.claude/rules/) for the non-negotiable rules: no external positioning/animation libs, no JS class presets, no invention beyond the spec.
+Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CONTRIBUTING.md). Non-negotiable rules: [`.claude/rules/`](./.claude/rules/).
+
+## For AI agents
+
+The slash commands above (`/spec-create`, `/component-create`, `/component-verify`) are [Claude Code](https://claude.com/claude-code) commands defined in [`.claude/commands/`](./.claude/commands/), which orchestrate lower-level skills in [`.claude/skills/`](./.claude/skills/) (spec-validate, component-scaffold, storybook-write, echo-report, etc.).
+
+If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with repo access), read the corresponding `.md` file under `.claude/commands/<name>.md` and follow the steps manually — each command is a documented procedure, not a black box. The constraints in [`.claude/rules/`](./.claude/rules/) apply regardless of which tool runs them; treat that directory as load-bearing context for any contribution.
 
 ## Storybook
 
@@ -145,6 +168,7 @@ See [`.claude/rules/`](./.claude/rules/) for the non-negotiable rules: no extern
 - [Theme package guide](./packages/theme/README.md)
 - [Icons package guide](./packages/icons/README.md)
 - [Webkit package guide](./packages/webkit/README.md)
+- [Contributing guide](./CONTRIBUTING.md) — workflow, commit conventions, review checklist
 - [Contribution rules](./.claude/rules/) — dependencies, migration, styling, no-invention
 - [Component specs](./.specs/) — source of truth for every component API
 
