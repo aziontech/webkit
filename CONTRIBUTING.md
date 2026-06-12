@@ -67,20 +67,53 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-r
 |---|---|---|
 | `feat` | New component, new prop/event/slot, new public export | minor |
 | `fix` | Bug fix, accessibility correction, visual regression | patch |
-| `chore` | Tooling, dependencies, internal refactors | none |
-| `docs` | README, spec body, JSDoc | none |
-| `refactor` | Internal restructure with no API change | none |
-| `BREAKING CHANGE:` (footer) | Removed/renamed prop, event, slot, or export | major |
+| `hotfix` | Urgent production fix | patch |
+| `chore` | Tooling, dependency bumps, internal cleanup | patch |
+| `docs` | README, spec body, JSDoc | patch |
+| `style` | Formatting / whitespace only | patch |
+| `refactor` | Internal restructure with no API change | patch |
+| `perf` | Performance improvement (via conventional-commits preset default) | patch |
+| `test` | Test additions or changes | none |
+| `ci` | CI/CD pipeline changes | none |
+| `revert` | Reverting a prior commit | none |
+| `!` after type or `BREAKING CHANGE:` footer | Removed/renamed prop, event, slot, or export | major |
 
-Scope is the package name without the namespace:
+### Message shape
 
-- `feat(webkit): add Dropdown component`
-- `fix(theme): correct --ring-color for dark mode`
+The commit-analyzer regex in every `.releaserc` accepts these forms:
+
+```text
+[NO-ISSUE] fix(webkit): commit message
+[ENG-1231] fix(webkit): commit message
+fix(webkit): commit message
+fix: commit message
+```
+
+- **Ticket prefix** is optional. Use `[NO-ISSUE]` when there is no tracking ticket, or `[<PROJECT-NUMBER>]` (e.g. `[ENG-1231]`) otherwise.
+- **Scope** is the package name without the namespace: `webkit`, `theme`, `icons`.
+- **Breaking changes** use either the `!` marker (`feat(webkit)!: …`) or a `BREAKING CHANGE:` footer.
+
+Examples:
+
+- `[ENG-1231] feat(webkit): add Dropdown component`
+- `[NO-ISSUE] fix(theme): correct --ring-color for dark mode`
 - `chore(icons): regenerate after source update`
-- `feat(webkit): drop deprecated tone prop on Button`
-  `BREAKING CHANGE: Button no longer accepts tone; use kind instead.`
+- `feat(webkit)!: drop deprecated tone prop on Button`
 
 Stay scoped: one package per commit when possible. Mixed-scope commits should use the broadest affected scope.
+
+> Note: the analyzer also gates by file path. A commit must touch files under `packages/<scope>/` for that package's `semantic-release` workflow to consider it. A `fix(webkit): …` commit that only edits theme files will not trigger a webkit release.
+
+### Local enforcement
+
+A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`](./commitlint.config.js), which mirrors the regex in every `.releaserc`. A malformed message is rejected at commit time with a pointer to the failing rule — you cannot accidentally land a commit that the release analyzer would silently drop.
+
+The config also enforces:
+
+- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. The first eight produce a release (per `.releaserc` rules + conventional-commits preset defaults); `test`, `ci`, `revert` are allowed for hygiene but produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
+- `type` and `scope` must be lower-case.
+- `subject` cannot be empty.
+- Header (full first line) cannot exceed 100 characters.
 
 ## Pull requests
 
