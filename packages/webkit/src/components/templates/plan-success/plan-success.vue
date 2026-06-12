@@ -69,7 +69,7 @@
   const GlobalHeaderBrand = GlobalHeader['Brand']
 
   const ROOT_CLASS =
-    'flex min-h-full w-full flex-col bg-[var(--bg-canvas)] transition-colors duration-150 ease-out motion-reduce:transition-none'
+    'flex min-h-full w-full flex-col bg-[var(--bg-canvas)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none'
 </script>
 
 <template>
@@ -93,7 +93,7 @@
     </slot>
 
     <main
-      class="flex flex-1 flex-col items-center justify-center px-[var(--spacing-8)] py-[var(--spacing-8)]"
+      class="flex flex-1 flex-col items-center justify-center px-[var(--spacing-xxl)] py-[var(--spacing-xxl)]"
       :aria-labelledby="successHeadingId"
       :data-testid="`${testId}__main`"
     >
@@ -104,7 +104,7 @@
         <template #header>
           <slot name="success">
             <div
-              class="flex w-full flex-col items-center gap-[10px] px-[var(--spacing-6)] py-[var(--spacing-5)] text-center"
+              class="flex w-full flex-col items-center gap-[var(--spacing-xs)] px-[var(--spacing-xl)] py-[var(--spacing-md)] text-center"
               :data-testid="`${testId}__success`"
             >
               <span
@@ -117,7 +117,7 @@
                 />
               </span>
               <div
-                class="flex w-full max-w-[360px] flex-col gap-[var(--spacing-1)] [word-break:break-word]"
+                class="flex w-full max-w-[360px] flex-col gap-[var(--spacing-xxs)] [word-break:break-word]"
               >
                 <h1
                   :id="successHeadingId"
@@ -140,7 +140,7 @@
         <template #content>
           <slot name="steps">
             <div
-              class="flex w-full flex-col gap-[var(--spacing-5)] px-[var(--spacing-6)] py-[var(--spacing-6)]"
+              class="flex w-full flex-col gap-[var(--spacing-md)] px-[var(--spacing-xl)] py-[var(--spacing-xl)]"
               :data-testid="`${testId}__steps`"
             >
               <p
@@ -150,24 +150,24 @@
                 {{ stepsLabel }}
               </p>
               <ol
-                class="flex w-full list-none flex-col gap-[var(--spacing-5)] p-0"
+                class="flex w-full list-none flex-col gap-[var(--spacing-md)] p-0"
                 :data-testid="`${testId}__steps-list`"
               >
                 <li
                   v-for="(step, index) in steps"
                   :key="index"
-                  class="flex w-full items-start justify-between gap-[var(--spacing-3)]"
+                  class="flex w-full items-start justify-between gap-[var(--spacing-sm)]"
                   :data-testid="`${testId}__step-${index + 1}`"
                 >
                   <div
-                    class="flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] bg-[var(--bg-hover)] px-[11px] text-button-md text-[var(--text-default)]"
+                    class="flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-button)] bg-[var(--bg-hover)] px-[var(--spacing-xs)] text-button-md text-[var(--text-default)]"
                     :data-testid="`${testId}__step-${index + 1}-badge`"
                     aria-hidden="true"
                   >
                     {{ index + 1 }}
                   </div>
                   <div
-                    class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-1)] [word-break:break-word]"
+                    class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)] [word-break:break-word]"
                     :data-testid="`${testId}__step-${index + 1}-content`"
                   >
                     <p

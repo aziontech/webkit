@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 7a70c8dfef2ecfa9a1d9bfc42dfaeaafddf7aeed69c5f5a02d05816dcc608f8c
+checksum: 1f438ae1419577fcce4f1c3fa9703c8f067a73d7c673cfc9129738c830a70ec2
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -64,7 +64,7 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Tokens
 
-| Region | Token (Design.md) |
+| Region | Token (DESIGN.md) |
 |---|---|
 | typography | .text-body-sm |
 | surface | `var(--bg-surface)` |
@@ -108,7 +108,7 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
 - Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/Design.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

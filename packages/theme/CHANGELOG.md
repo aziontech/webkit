@@ -1,3 +1,112 @@
+## [2.5.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.4.0...@aziontech/theme@2.5.0) (2026-06-12)
+
+
+### Features
+
+* adding commit lint and enabling project scope ([#642](https://github.com/aziontech/webkit/issues/642)) ([bd4eb4e](https://github.com/aziontech/webkit/commit/bd4eb4e52364a5f6b06f9756b02112b41f29a264))
+
+## [2.4.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.2...@aziontech/theme@2.4.0) (2026-06-12)
+
+
+### Features
+
+* Link Figma alignment, MiniButton, and dialog spec checksum ([#623](https://github.com/aziontech/webkit/issues/623)) ([c576bf1](https://github.com/aziontech/webkit/commit/c576bf1c8a42ea914a32de35806a0998d9fe9183))
+* refine menu-item focus states and sidebar story layouts ([#606](https://github.com/aziontech/webkit/issues/606)) ([1840945](https://github.com/aziontech/webkit/commit/1840945057ecdb23140ce9d17020ea216b5e021d))
+
+
+### Bug Fixes
+
+* import theme exported primitive ([#639](https://github.com/aziontech/webkit/issues/639)) ([d5342d2](https://github.com/aziontech/webkit/commit/d5342d2b727238b6275ac831162d64840a497983))
+* remove redundant/unused buttons ([#640](https://github.com/aziontech/webkit/issues/640)) ([f25a4e5](https://github.com/aziontech/webkit/commit/f25a4e59fac80afc639d540dbac7ce6b691b252a))
+
+## [2.3.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.1...@aziontech/theme@2.3.2) (2026-06-05)
+
+
+### Bug Fixes
+
+* export to import right storybook ([#638](https://github.com/aziontech/webkit/issues/638)) ([c17a8f2](https://github.com/aziontech/webkit/commit/c17a8f2dc461f020293348667f3cadaafe3179e6))
+
+## [2.3.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.0...@aziontech/theme@2.3.1) (2026-06-05)
+
+
+### Bug Fixes
+
+* webkit vue-tsc check ([#637](https://github.com/aziontech/webkit/issues/637)) ([3895de7](https://github.com/aziontech/webkit/commit/3895de7d305bd11a14b148b78313ddf832330d40))
+
+## [2.3.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.1...@aziontech/theme@2.3.0) (2026-06-05)
+
+
+### Features
+
+* refine Message component ([#619](https://github.com/aziontech/webkit/issues/619)) ([8de1eaf](https://github.com/aziontech/webkit/commit/8de1eaf956d9f40e15559a96a993b895bd639db5))
+
+
+### Bug Fixes
+
+* @aziontech/theme generating d.ts to .js files ([#636](https://github.com/aziontech/webkit/issues/636)) ([aedf405](https://github.com/aziontech/webkit/commit/aedf405bfb9d86406889e30d61ad357d30dd996c))
+* feedback message refine ([#634](https://github.com/aziontech/webkit/issues/634)) ([c8f8aab](https://github.com/aziontech/webkit/commit/c8f8aab23cb5d9d1fd14bfd4f42ee1fce9fb228c))
+* triggger webkit ([#635](https://github.com/aziontech/webkit/issues/635)) ([fa62346](https://github.com/aziontech/webkit/commit/fa623460830c1267d989301f802f3528e48e1753))
+
+## [2.2.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.2.0...@aziontech/theme@2.2.1) (2026-06-03)
+
+## [2.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.1.1...@aziontech/theme@2.2.0) (2026-06-03)
+
+
+### Features
+
+* add button highlight ([#622](https://github.com/aziontech/webkit/issues/622)) ([4c2654c](https://github.com/aziontech/webkit/commit/4c2654cce7b31c2b6349d435a871b2d046ab070e))
+
+
+### Bug Fixes
+
+* adjust card-pricing gap spacing for non-middle cards ([26c051a](https://github.com/aziontech/webkit/commit/26c051a71e2e5a5345c2894fd818627b794c4390))
+* empty results block button migration ([#630](https://github.com/aziontech/webkit/issues/630)) ([bb255f4](https://github.com/aziontech/webkit/commit/bb255f4fd798ab524f92c7722e382141b83ce385))
+* migration table action buttons ([#621](https://github.com/aziontech/webkit/issues/621)) ([059f99d](https://github.com/aziontech/webkit/commit/059f99dfbfc01ef8698769369f26b461cc6a88d9))
+* motion, sizing, scroll, and overlay story docs ([#620](https://github.com/aziontech/webkit/issues/620)) ([7e589ba](https://github.com/aziontech/webkit/commit/7e589ba869ef33d0db7abe13fc4af225f7b85e79))
+* table actions IconButton sizes ([#625](https://github.com/aziontech/webkit/issues/625)) ([907b1a6](https://github.com/aziontech/webkit/commit/907b1a6c4d8c4049c7f66b1a7b657fbe9825b78e))
+* tag component import ([#626](https://github.com/aziontech/webkit/issues/626)) ([7ae78a5](https://github.com/aziontech/webkit/commit/7ae78a502fa5a7887f32f3b39993b0c93d4f0538))
+
+## [2.1.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.1.0...@aziontech/theme@2.1.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* adding button kind danger ([#617](https://github.com/aziontech/webkit/issues/617)) ([028b200](https://github.com/aziontech/webkit/commit/028b200d6516c22847f952cb985e92fcaedeb76d))
+* storybook preview build ([#618](https://github.com/aziontech/webkit/issues/618)) ([108c168](https://github.com/aziontech/webkit/commit/108c168686d3abe741c3037d650271685092e837))
+
+## [2.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.4...@aziontech/theme@2.1.0) (2026-05-29)
+
+
+### Features
+
+* align Tag with Figma design system ([#609](https://github.com/aziontech/webkit/issues/609)) ([0fe2acb](https://github.com/aziontech/webkit/commit/0fe2acb09b9abd9f196f8fe95b2146ed587c96e4))
+* promote Button/IconButton/SegmentedButton/Avatar to top-level exports ([#611](https://github.com/aziontech/webkit/issues/611)) ([48e5bfc](https://github.com/aziontech/webkit/commit/48e5bfcbec00590b7fafb002ad145d1811ace56f))
+
+
+### Bug Fixes
+
+* remove duplicated/conflicting size height classes in button ([2668a29](https://github.com/aziontech/webkit/commit/2668a290fc1bb4b9f1d87dfa57af07f992384eac))
+* use semantic primary token in overline and card-content ([456b55c](https://github.com/aziontech/webkit/commit/456b55cfe6055f653c48d73811dc3551a8f6e621))
+
+## [2.0.4](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.3...@aziontech/theme@2.0.4) (2026-05-27)
+
+
+### Bug Fixes
+
+* bump ([574dd22](https://github.com/aziontech/webkit/commit/574dd221521ed3f54a0283cd20bed53aeb7f0de3))
+* bump webkit ([#598](https://github.com/aziontech/webkit/issues/598)) ([aa77380](https://github.com/aziontech/webkit/commit/aa77380183973b02dee5cd3d9fc8828c578690d0))
+* removing href/target props and pt function ([#600](https://github.com/aziontech/webkit/issues/600)) ([b70b6ef](https://github.com/aziontech/webkit/commit/b70b6ef8bc509244cc265ea37abd8e7ceb1aaec2))
+
+## [2.0.3](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.2...@aziontech/theme@2.0.3) (2026-05-26)
+
+
+### Bug Fixes
+
+* adjust readme to bump version ([235c432](https://github.com/aziontech/webkit/commit/235c43204ee721bff4b5250f6ef26130bf1e6967))
+* bump version ([8a39df2](https://github.com/aziontech/webkit/commit/8a39df20d73d433512f6b5a2ccc8bef6c16285dc))
+* drop [@tailwind](https://github.com/tailwind) base + [@layer](https://github.com/layer) base from v3 globals ([5b2247b](https://github.com/aziontech/webkit/commit/5b2247b37cdc1edcbd59a4061699fc9fea579abf))
+* fix label mock ([c0694b7](https://github.com/aziontech/webkit/commit/c0694b72d97c36bdbc79552685eccce83147e334))
+
 ## [2.0.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.0.1...@aziontech/theme@2.0.2) (2026-05-25)
 
 

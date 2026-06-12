@@ -4,15 +4,27 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4357be2ff8440a7af100ec56deb58a73b6bed168b6bdc781042241adf5257049
+checksum: 96db092d1b420a4d08f51402f3e207e60cdc68c740d841fec9def9b8a476b5c3
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-28
 ---
 # Status Indicator — Component Spec
 
 ## Purpose
 
 Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`.
+
+## Usage
+
+```vue
+<script setup>
+import StatusIndicator from '@aziontech/webkit/feedback/status-indicator'
+</script>
+
+<template>
+  <StatusIndicator status="positive" label="Status" />
+</template>
+```
 
 ## Props
 
@@ -40,7 +52,7 @@ _none_
 
 ## Tokens
 
-| Region | Token (Design.md) |
+| Region | Token (DESIGN.md) |
 |---|---|
 | typography | .text-body-sm |
 | surface | `var(--bg-surface)` |
@@ -67,6 +79,8 @@ _none_
 ## Stories (Storybook)
 
 - Default
+- Status
+- Loading
 
 ## Constraints — DO NOT
 
@@ -84,7 +98,7 @@ _none_
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
 - Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/Design.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

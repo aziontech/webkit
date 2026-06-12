@@ -1,89 +1,64 @@
-<script setup>
+<script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
   import Spinner from '../../utils/spinner/spinner.vue'
+
+  export type StatusIndicatorStatus = 'positive' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'
 
   defineOptions({
     name: 'StatusIndicator',
     inheritAttrs: false
   })
 
-  const STATUS_DOT_CLASSES = {
-    positive: 'bg-[var(--success-contrast)]',
-    info: 'bg-[var(--info-contrast)]',
-    neutral: 'bg-[var(--text-muted)]',
-    warning: 'bg-[var(--warning-contrast)]',
-    alt: 'bg-[var(--primary)]',
-    danger: 'bg-[var(--danger-contrast)]'
+  interface Props {
+    /** status. */
+    status?: StatusIndicatorStatus
+    /** Shows loading state and disables activation. */
+    loading?: boolean
+    /** Visible label text. */
+    label?: string
   }
 
-  const props = defineProps({
-    status: {
-      type: String,
-      default: 'positive',
-      validator: (value) =>
-        ['positive', 'info', 'neutral', 'warning', 'alt', 'danger'].includes(value)
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    label: {
-      type: String,
-      default: 'Status'
-    }
+  withDefaults(defineProps<Props>(), {
+    status: 'positive',
+    loading: false,
+    label: 'Status'
   })
 
   const attrs = useAttrs()
 
-  const testId = computed(() => attrs['data-testid'] ?? 'feedback-status-indicator')
-
-  const dotClass = computed(() => STATUS_DOT_CLASSES[props.status] ?? STATUS_DOT_CLASSES.positive)
-
-  const rootClass = computed(() => {
-    const classes = [
-      'inline-flex items-center gap-spacing-elements-xs',
-      'px-[var(--spacing-elements-sm)] py-[var(--spacing-elements-xxs)]',
-      'rounded-[var(--shape-elements)]'
-    ]
-
-    if (attrs.class) {
-      classes.push(attrs.class)
-    }
-
-    return classes
-  })
-
-  const labelClass = computed(() => [
-    'text-label-sm whitespace-nowrap',
-    props.loading ? 'text-[var(--text-muted)]' : 'text-[var(--text-default)]'
-  ])
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-status-indicator'
+  )
 </script>
 
 <template>
   <div
+    v-bind="attrs"
     role="status"
     :aria-busy="loading || undefined"
-    :class="rootClass"
     :data-testid="testId"
+    :data-status="status"
+    :data-loading="loading || null"
+    class="group inline-flex items-center gap-[var(--spacing-3)] rounded-[var(--shape-elements)] bg-[var(--bg-surface)] p-[var(--spacing-3)] text-body-sm text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
   >
     <Spinner
       v-if="loading"
-      class="size-2.5 shrink-0 text-[var(--text-muted)]"
+      class="size-3 shrink-0 text-[var(--text-default)]"
       :data-testid="`${testId}__spinner`"
     />
     <span
       v-else
-      class="size-2.5 shrink-0 rounded-full"
-      :class="dotClass"
       aria-hidden="true"
       :data-testid="`${testId}__dot`"
+      :data-status="status"
+      class="size-2 shrink-0 rounded-full data-[status=positive]:bg-[var(--success-contrast)] data-[status=info]:bg-[var(--info-contrast)] data-[status=neutral]:bg-[var(--text-muted)] data-[status=warning]:bg-[var(--warning-contrast)] data-[status=alt]:bg-[var(--primary)] data-[status=danger]:bg-[var(--danger-contrast)]"
     />
     <span
-      :class="labelClass"
+      class="whitespace-nowrap group-data-[loading]:text-[var(--text-muted)]"
       :data-testid="`${testId}__label`"
     >
-      {{ label }}
+      {{ loading ? `${label}...` : label }}
     </span>
   </div>
 </template>

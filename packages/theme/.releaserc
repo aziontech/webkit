@@ -12,8 +12,8 @@
           }
         },
         "parserOpts": {
-          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "subject"]
+          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
         },
         "releaseRules": [
           { "type": "feat", "release": "minor" },
@@ -22,7 +22,8 @@
           { "type": "chore", "release": "patch" },
           { "type": "docs", "release": "patch" },
           { "type": "style", "release": "patch" },
-          { "type": "refactor", "release": "patch" }
+          { "type": "refactor", "release": "patch" },
+          { "breaking": true, "release": "major" }
         ]
       }
     ],
@@ -31,8 +32,8 @@
       {
         "preset": "conventionalcommits",
         "parserOpts": {
-          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "subject"]
+          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
         }
       }
     ],
@@ -46,6 +47,7 @@
     [
       "@semantic-release/exec",
       {
+        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],

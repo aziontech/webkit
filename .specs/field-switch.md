@@ -11,6 +11,7 @@ checksum: 4e4186ce0355f5ccf2dedf95daa1efd33eeea62a8691b7e60c525bf863375831
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
+
 # Field Switch — Component Spec
 
 ## Purpose
@@ -19,21 +20,21 @@ Inline boolean toggle with switch on the leading edge, label, optional descripti
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `boolean` | `undefined` | no | Selected value for v-model. |
-| `trueValue` | `boolean` | `true` | no | Value emitted when toggled on. |
-| `falseValue` | `boolean` | `false` | no | Value emitted when toggled off. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | no | id for the switch button; links label to control. |
-| `label` | `string` | `''` | no | Primary label text. |
-| `description` | `string` | `''` | no | Secondary description. |
-| `helperText` | `string` | `''` | no | Helper badge text shown when disabled. |
+| Prop          | Type      | Default     | Required | JSDoc                                             |
+| ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
+| `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
+| `trueValue`   | `boolean` | `true`      | no       | Value emitted when toggled on.                    |
+| `falseValue`  | `boolean` | `false`     | no       | Value emitted when toggled off.                   |
+| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
+| `inputId`     | `string`  | `undefined` | no       | id for the switch button; links label to control. |
+| `label`       | `string`  | `''`        | no       | Primary label text.                               |
+| `description` | `string`  | `''`        | no       | Secondary description.                            |
+| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload   | Notes    |
+| ------------------- | --------- | -------- |
 | `update:modelValue` | `boolean` | v-model. |
 
 ## Slots
@@ -51,25 +52,25 @@ _none_
 
 ## Tokens
 
-| Region | Token (Design.md) |
-|---|---|
-| typography (label) | `.text-label-md` |
-| typography (description) | `.text-body-xs` |
-| typography (helper) | `.text-body-xss` |
-| text | `var(--text-default)` |
-| text (muted) | `var(--text-muted)` |
-| surface | `var(--bg-surface)` |
-| border | `var(--border-default)` |
-| spacing | `var(--spacing-3)` |
-| spacing (tight) | `var(--spacing-1)` |
-| spacing (helper gap) | `var(--spacing-2)` |
-| shape | `var(--shape-elements)` |
+| Region                   | Token (DESIGN.md)       |
+| ------------------------ | ----------------------- |
+| typography (label)       | `.text-label-md`        |
+| typography (description) | `.text-body-xs`         |
+| typography (helper)      | `.text-body-xs`         |
+| text                     | `var(--text-default)`   |
+| text (muted)             | `var(--text-muted)`     |
+| surface                  | `var(--bg-surface)`     |
+| border                   | `var(--border-default)` |
+| spacing                  | `var(--spacing-3)`      |
+| spacing (tight)          | `var(--spacing-1)`      |
+| spacing (helper gap)     | `var(--spacing-2)`      |
+| shape                    | `var(--shape-elements)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -100,7 +101,7 @@ _none_
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
 - Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/Design.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

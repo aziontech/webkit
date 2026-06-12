@@ -315,6 +315,39 @@ module.exports = {
             "lineHeight": "var(--text-heading-sm-line-height)"
           }
         ],
+        "heading-xs": [
+          "var(--text-heading-xs-font-size)",
+          {
+            "lineHeight": "var(--text-heading-xs-line-height)"
+          }
+        ],
+        "heading-xxs": [
+          "var(--text-heading-xxs-font-size)",
+          {
+            "lineHeight": "var(--text-heading-xxs-line-height)"
+          }
+        ],
+        "label-lg": [
+          "var(--text-label-lg-font-size)",
+          {
+            "lineHeight": "var(--text-label-lg-line-height)",
+            "fontWeight": "var(--text-label-lg-font-weight)"
+          }
+        ],
+        "label-md": [
+          "var(--text-label-md-font-size)",
+          {
+            "lineHeight": "var(--text-label-md-line-height)",
+            "fontWeight": "var(--text-label-md-font-weight)"
+          }
+        ],
+        "label-sm": [
+          "var(--text-label-sm-font-size)",
+          {
+            "lineHeight": "var(--text-label-sm-line-height)",
+            "fontWeight": "var(--text-label-sm-font-weight)"
+          }
+        ],
         "body-lg": [
           "var(--text-body-lg-font-size)",
           {
@@ -339,10 +372,24 @@ module.exports = {
             "lineHeight": "var(--text-body-xs-line-height)"
           }
         ],
-        "body-xss": [
-          "var(--text-body-xss-font-size)",
+        "tag-sm": [
+          "var(--text-tag-sm-font-size)",
           {
-            "lineHeight": "var(--text-body-xss-line-height)"
+            "lineHeight": "var(--text-tag-sm-line-height)",
+            "fontWeight": "var(--text-tag-sm-font-weight)"
+          }
+        ],
+        "tag-md": [
+          "var(--text-tag-md-font-size)",
+          {
+            "lineHeight": "var(--text-tag-md-line-height)",
+            "fontWeight": "var(--text-tag-md-font-weight)"
+          }
+        ],
+        "body-xxs": [
+          "var(--text-body-xxs-font-size)",
+          {
+            "lineHeight": "var(--text-body-xxs-line-height)"
           }
         ],
         "overline-md": [

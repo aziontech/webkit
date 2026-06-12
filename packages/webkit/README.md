@@ -1,6 +1,6 @@
 # @aziontech/webkit
 
-Reusable UI components and design system utilities for building Azion web interfaces.
+- Reusable UI components and design system utilities for building Azion web interfaces.
 
 ## Installation
 
@@ -33,7 +33,7 @@ import ListDataTable from '@aziontech/webkit/list-data-table'
 - **Form Components**: Comprehensive form fields with validation (powered by VeeValidate)
 - **PrimeVue Wrappers**: Styled PrimeVue components with Azion design system
 - **List Data Table**: Advanced data table with filtering, sorting, and pagination
-- **Utilities**: Composables for toast notifications, dialogs, and more
+- **Utilities**: Composables for toast (notifications), dialogs, and more
 
 ## Dependencies
 
@@ -41,7 +41,6 @@ import ListDataTable from '@aziontech/webkit/list-data-table'
 - PrimeVue 3.35.0
 - VeeValidate 4.x
 - @vueuse/core
-- motion-v
 
 ## License
 

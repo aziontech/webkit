@@ -286,7 +286,7 @@
 
   const useTeleport = computed(() => props.appendTo === 'body')
 
-  const sharedClasses = [...surfaceControlWrapperClasses, 'w-full min-w-0 gap-spacing-elements-xs']
+  const sharedClasses = [...surfaceControlWrapperClasses, 'w-full min-w-0 gap-[var(--spacing-xs)]']
 
   const disabledClasses =
     'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)]'
@@ -294,9 +294,9 @@
   const invalidClasses = 'border-[var(--danger-border)] focus-within:ring-[var(--danger)]'
 
   const sizeClasses = {
-    small: 'h-8 px-[var(--spacing-elements-xs)]',
-    medium: 'h-10 px-[var(--spacing-elements-sm)]',
-    large: 'h-12 px-[var(--spacing-elements-md)]'
+    small: 'h-8 px-[var(--spacing-xs)]',
+    medium: 'h-10 px-[var(--spacing-sm)]',
+    large: 'h-12 px-[var(--spacing-md)]'
   }
 
   const labelSizeClasses = {
@@ -329,12 +329,12 @@
   })
 
   const panelClasses = [
-    'webkit-dropdown-panel overflow-hidden rounded-[var(--shape-elements)]',
+    'webkit-dropdown-panel overflow-hidden rounded-[var(--shape-button)]',
     'border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-[var(--shadow-md)]'
   ]
 
   const listClasses = [
-    'webkit-dropdown-list overflow-y-auto p-spacing-elements-xxs',
+    'webkit-dropdown-list overflow-y-auto p-[var(--spacing-xxs)]',
     'text-[var(--text-default)]'
   ]
 
@@ -558,7 +558,7 @@
       <button
         type="button"
         role="combobox"
-        class="relative z-[1] flex min-w-0 flex-1 items-center gap-spacing-elements-xs border-0 bg-transparent p-0 text-left outline-none disabled:cursor-not-allowed"
+        class="relative z-[1] flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] border-0 bg-transparent p-0 text-left outline-none disabled:cursor-not-allowed"
         :disabled="disabled || loading"
         :aria-expanded="isOpen"
         aria-haspopup="listbox"
@@ -592,7 +592,7 @@
         >
           <slot name="dropdownicon">
             <i
-              class="pi pi-chevron-down text-[0.75rem] transition-transform duration-150"
+              class="pi pi-chevron-down text-[length:inherit] transition-transform duration-fast-02 ease-productive-entrance"
               :class="isOpen && 'rotate-180'"
             />
           </slot>
@@ -626,7 +626,7 @@
           :class="[
             ...panelClasses,
             'webkit-dropdown-panel-motion',
-            !useTeleport && 'absolute left-0 top-full z-10 mt-1 w-full'
+            !useTeleport && 'absolute left-0 top-full z-10 mt-[var(--spacing-xxs)] w-full'
           ]"
           :style="useTeleport ? panelStyle : undefined"
           :data-testid="`${testId}__panel`"
@@ -635,14 +635,14 @@
 
           <div
             v-if="filter"
-            class="border-b border-[var(--border-default)] p-spacing-elements-xs"
+            class="border-b border-[var(--border-default)] p-[var(--spacing-xs)]"
             :data-testid="`${testId}__filter`"
           >
             <span class="relative flex w-full items-center">
               <i
                 :class="[
                   filterIcon,
-                  'pointer-events-none absolute left-[var(--spacing-elements-xs)] text-[var(--text-muted)]'
+                  'pointer-events-none absolute left-[var(--spacing-xs)] text-[var(--text-muted)]'
                 ]"
                 aria-hidden="true"
               />
@@ -650,7 +650,7 @@
                 ref="filterInputRef"
                 :value="filterValue"
                 type="text"
-                class="h-8 w-full rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-8 pr-[var(--spacing-elements-xs)] text-body-sm text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
+                class="h-8 w-full rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-8 pr-[var(--spacing-xs)] text-body-sm text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
                 :placeholder="filterPlaceholder ?? 'Search'"
                 :data-testid="`${testId}__filter-input`"
                 @input="onFilterInput"
@@ -672,7 +672,7 @@
               <li
                 v-if="item.type === 'group'"
                 role="presentation"
-                class="text-overline-sm px-[var(--spacing-elements-xs)] py-[var(--spacing-elements-xxs)] text-[var(--text-muted)]"
+                class="text-overline-sm px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-[var(--text-muted)]"
                 :data-testid="`${testId}__group`"
               >
                 {{ item.label }}
@@ -706,7 +706,7 @@
             <li
               v-if="selectableOptions.length === 0"
               role="presentation"
-              class="text-label-md px-[var(--spacing-elements-xs)] py-[var(--spacing-elements-sm)] text-center text-[var(--text-muted)]"
+              class="text-label-md px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-center text-[var(--text-muted)]"
               :data-testid="`${testId}__empty`"
             >
               <slot name="empty">

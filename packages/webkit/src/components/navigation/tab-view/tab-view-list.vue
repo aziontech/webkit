@@ -43,14 +43,14 @@
   /** TODO: tokenizar — Figma `--tabview/tabviewnavbg` (transparent nav). */
   const listClasses = computed(() =>
     cn(
-      'relative flex shrink-0 items-end gap-spacing-elements-xs bg-transparent',
+      'relative flex shrink-0 items-end gap-[var(--spacing-xs)] bg-transparent',
       attrs.class as string | undefined
     )
   )
 
   const indicatorClasses = [
     'pointer-events-none absolute left-0 top-0 z-0',
-    'rounded-[var(--shape-elements)] bg-[var(--secondary-selected)]',
+    'rounded-[var(--shape-button)] bg-[var(--secondary-selected)]',
     'motion-reduce:transition-none'
   ]
 

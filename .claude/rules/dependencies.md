@@ -2,7 +2,7 @@
 
 The webkit layer **must not** depend on external libraries for positioning, anchoring, or animation. We control these concerns via plain CSS + the design tokens in [`packages/theme/src/tokens/`](../../packages/theme/src/tokens/). This rule is non-negotiable and exists for three reasons:
 
-1. **Predictable surface.** External positioning libs (`@floating-ui/*`, `popper.js`, `tippy.js`) ship their own behavior tree, their own classes, their own conventions. Each one fights against Design.md. We are the design system; we do not delegate.
+1. **Predictable surface.** External positioning libs (`@floating-ui/*`, `popper.js`, `tippy.js`) ship their own behavior tree, their own classes, their own conventions. Each one fights against DESIGN.md. We are the design system; we do not delegate.
 2. **Smaller bundles.** Every external positioning/animation lib adds 5–30kb of runtime that CSS already handles.
 3. **A11y owned by us.** When a third-party lib places an element, it decides focus, escape, scroll lock. We need those to follow our tokens and our patterns.
 
@@ -58,7 +58,7 @@ Use Vue `<Teleport to="body">` when the overlay must escape an `overflow: hidden
 </Transition>
 ```
 
-The catalog is in [`.claude/docs/Design.md`](./tokens.md#animations--semanticanimationsjs).
+The catalog is in [`.claude/docs/DESIGN.md`](./tokens.md#animations--semanticanimationsjs).
 
 ## Hook coverage
 

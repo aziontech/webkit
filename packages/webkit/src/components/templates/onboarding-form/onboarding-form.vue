@@ -9,11 +9,11 @@
   import ItemContent from '../../content/item/item-content.vue'
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemTitle from '../../content/item/item-title.vue'
-  import Tag from '../../content/tag/tag.vue'
   import type { BoxGridSelectionItem } from '../../inputs/box-grid-selection/box-grid-selection.vue'
   import BoxGridSelection from '../../inputs/box-grid-selection/box-grid-selection.vue'
   import FieldCheckbox from '../../inputs/field-checkbox/field-checkbox.vue'
   import InputText from '../../inputs/input-text/input-text.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({
     name: 'OnboardingForm',
@@ -155,7 +155,7 @@
     >
       <template #content>
         <div
-          class="flex w-full flex-col gap-[var(--spacing-6)] p-[var(--spacing-6)]"
+          class="flex w-full flex-col gap-[var(--spacing-xl)] p-[var(--spacing-xl)]"
           :data-testid="`${testId}__body`"
         >
           <h1
@@ -167,7 +167,7 @@
           </h1>
 
           <section
-            class="flex w-full flex-col gap-[var(--spacing-1)]"
+            class="flex w-full flex-col gap-[var(--spacing-xxs)]"
             :data-testid="`${testId}__plan-section`"
           >
             <p
@@ -184,7 +184,7 @@
                 :data-testid="`${testId}__plan-card`"
               >
                 <ItemContent>
-                  <div class="flex flex-wrap items-center gap-[var(--spacing-2)]">
+                  <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
                     <ItemTitle :data-testid="`${testId}__plan-title`">
                       {{ planTitle }}
                     </ItemTitle>
@@ -213,7 +213,7 @@
           </section>
 
           <section
-            class="flex w-full flex-col gap-[var(--spacing-1)]"
+            class="flex w-full flex-col gap-[var(--spacing-xxs)]"
             :data-testid="`${testId}__usage-section`"
           >
             <label
@@ -244,7 +244,7 @@
           </section>
 
           <section
-            class="flex w-full flex-col gap-[var(--spacing-1)]"
+            class="flex w-full flex-col gap-[var(--spacing-xxs)]"
             :data-testid="`${testId}__full-name-section`"
           >
             <label
@@ -304,7 +304,7 @@
             {{ footerPrefix }}
             <a
               :href="footerLinkHref"
-              class="text-[var(--text-link)] transition-colors duration-150 ease-out hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+              class="text-[var(--text-link)] transition-colors duration-fast-02 ease-productive-entrance hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
               :data-testid="`${testId}__footer-link`"
               @click="onFooterLinkClick"
             >

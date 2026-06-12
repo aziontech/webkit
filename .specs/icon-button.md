@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 31ce7147587d01ef9a39b0ea4f48126f99db1a1e154a14be82bc4a90e6af444e
+checksum: 4b62c26791d88e4060e3962ebf4a29423a21b5ddf2c3b55578fe733aebc81f6a
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-29
 ---
 # Icon Button — Component Spec
 
@@ -20,7 +20,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 |---|---|---|---|---|
 | `icon` | `string` | `—` | yes | PrimeIcons class for the leading/trailing icon. |
 | `ariaLabel` | `string` | `—` | yes | Accessible name for icon-only controls. |
-| `kind` | `'primary' | 'secondary' | 'outlined' | 'transparent'` | `'primary'` | no | Visual variant. |
+| `kind` | `'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'` | `'primary'` | no | Visual variant. |
 | `size` | `'small' | 'medium' | 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
@@ -50,7 +50,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 ## Tokens
 
-| Region | Token (Design.md) |
+| Region | Token (DESIGN.md) |
 |---|---|
 | typography | .text-button-lg |
 | surface | `var(--bg-surface)` |
@@ -81,6 +81,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 - Secondary (kind)
 - Outlined (kind)
 - Transparent (kind)
+- Danger (kind)
 - Small (size)
 - Medium (size)
 - Large (size)
@@ -102,7 +103,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
 - Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/Design.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

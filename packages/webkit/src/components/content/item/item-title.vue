@@ -25,7 +25,7 @@
     v-bind="$attrs"
     data-slot="item-title"
     :data-testid="testId"
-    class="flex w-fit items-center gap-[var(--spacing-2)] text-body-sm text-[var(--text-default)]"
+    class="flex w-fit items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-default)]"
   >
     <slot />
   </div>

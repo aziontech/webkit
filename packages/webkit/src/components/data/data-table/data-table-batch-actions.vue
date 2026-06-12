@@ -40,13 +40,13 @@
   <div
     v-if="selectedCount > 0"
     v-bind="attrs"
-    class="flex items-center gap-spacing-elements-sm rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-canvas)] px-[var(--spacing-elements-md)] py-[var(--spacing-elements-xs)]"
+    class="flex items-center gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-canvas)] px-[var(--spacing-md)] py-[var(--spacing-xs)]"
     :data-testid="testId"
   >
     <span class="whitespace-nowrap text-body-sm text-[var(--text-muted)]">
       {{ selectedCount }} {{ selectedCount === 1 ? 'item' : 'items' }} selected
     </span>
-    <div class="flex gap-spacing-elements-xs">
+    <div class="flex gap-[var(--spacing-xs)]">
       <Button
         v-for="action in actions"
         :key="action.label"

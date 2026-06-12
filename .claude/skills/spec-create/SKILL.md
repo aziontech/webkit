@@ -1,6 +1,6 @@
 ---
 name: spec-create
-description: Interactively draft `.specs/<name>.md` for a new webkit component. Owns the questions, the cross-reference with Design.md and Figma, and the initial `status: draft` write. Never writes component code.
+description: Interactively draft `.specs/<name>.md` for a new webkit component. Owns the questions, the cross-reference with DESIGN.md and Figma, and the initial `status: draft` write. Never writes component code.
 status: active
 last_updated: 2026-05-22
 ---
@@ -27,7 +27,7 @@ Produce a `.specs/<name>.md` that is complete enough for `spec-validator` to fli
 1. **Argument parsing.** Reject if `<name>` is missing or not kebab-case. Reject if `.specs/<name>.md` already exists with `status ∈ {approved, implemented, locked}` (the user is editing the wrong file).
 2. **Category inference.** Use the taxonomy in `.specs/_template.md` frontmatter. If a Figma URL is provided, look at the frame title and the surrounding pages for context. Always state the inferred category and ask the user to confirm.
 3. **Figma discovery (optional but preferred).** If `--figma` is set, delegate to the `figma-discover` skill via the `figma-extractor` sub-agent. Use the returned token JSON to pre-populate the Tokens section.
-4. **Token mapping.** Run the `token-map` skill against the Figma output and Design.md. Populate the Tokens table; flag Theme gaps.
+4. **Token mapping.** Run the `token-map` skill against the Figma output and DESIGN.md. Populate the Tokens table; flag Theme gaps.
 5. **Interactive questions.** Ask the user, in this order:
    - Purpose (1–3 sentences).
    - Props: name, type literal/primitive, default, required, JSDoc one-liner. Repeat until the user says done.

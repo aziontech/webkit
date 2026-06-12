@@ -1,4 +1,4 @@
-import IconButton from '@aziontech/webkit/actions/icon-button'
+import IconButton from '@aziontech/webkit/icon-button'
 
 /** @type {import('@storybook/vue3').Meta<typeof IconButton>} */
 const meta = {
@@ -6,7 +6,7 @@ const meta = {
   component: IconButton,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: {
       default: 'dark'
     },
@@ -38,11 +38,11 @@ const meta = {
     },
     kind: {
       control: 'select',
-      options: ['primary', 'secondary', 'outlined', 'transparent'],
+      options: ['primary', 'secondary', 'outlined', 'transparent', 'danger'],
       description: 'Visual variant.',
       table: {
         category: 'props',
-        type: { summary: "'primary' | 'secondary' | 'outlined' | 'transparent'" },
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'" },
         defaultValue: { summary: "'primary'" }
       }
     },
@@ -106,7 +106,7 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template: '<IconButton v-bind="args" />'
+  template: '<IconButton v-bind="args" @click="args.onClick" />'
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
@@ -118,65 +118,47 @@ export const Default = {
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
-export const Primary = {
-  args: { kind: 'primary', icon: 'pi pi-plus', ariaLabel: 'Add' },
-  render: Template,
+export const Types = {
+  render: () => ({
+    components: { IconButton },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <IconButton kind="primary" icon="pi pi-plus" aria-label="Add" />
+        <IconButton kind="secondary" icon="pi pi-plus" aria-label="Add" />
+        <IconButton kind="outlined" icon="pi pi-plus" aria-label="Add" />
+        <IconButton kind="transparent" icon="pi pi-plus" aria-label="Add" />
+        <IconButton kind="danger" icon="pi pi-trash" aria-label="Delete" />
+      </div>
+    `
+  }),
   parameters: {
-    docs: { description: { story: 'Primary kind variant.' } }
+    docs: { description: { story: 'All kind variants side by side.' } }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
-export const Secondary = {
-  args: { kind: 'secondary', icon: 'pi pi-plus', ariaLabel: 'Add' },
-  render: Template,
+export const Sizes = {
+  render: () => ({
+    components: { IconButton },
+    template: `
+      <div class="flex flex-wrap items-center gap-4">
+        <IconButton size="small" icon="pi pi-plus" aria-label="Add" />
+        <IconButton size="medium" icon="pi pi-plus" aria-label="Add" />
+        <IconButton size="large" icon="pi pi-plus" aria-label="Add" />
+      </div>
+    `
+  }),
   parameters: {
-    docs: { description: { story: 'Secondary kind variant.' } }
+    docs: { description: { story: 'All size variants side by side.' } }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
-export const Outlined = {
-  args: { kind: 'outlined', icon: 'pi pi-plus', ariaLabel: 'Add' },
+export const Loading = {
+  args: { loading: true, icon: 'pi pi-plus', ariaLabel: 'Add' },
   render: Template,
   parameters: {
-    docs: { description: { story: 'Outlined kind variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
-export const Transparent = {
-  args: { kind: 'transparent', icon: 'pi pi-plus', ariaLabel: 'Add' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Transparent kind variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
-export const Small = {
-  args: { size: 'small', icon: 'pi pi-plus', ariaLabel: 'Add' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Small size variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
-export const Medium = {
-  args: { size: 'medium', icon: 'pi pi-plus', ariaLabel: 'Add' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Medium size variant.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
-export const Large = {
-  args: { size: 'large', icon: 'pi pi-plus', ariaLabel: 'Add' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Large size variant.' } }
+    docs: { description: { story: 'Loading state with spinner replacing the icon.' } }
   }
 }
 

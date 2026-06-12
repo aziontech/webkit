@@ -189,7 +189,7 @@ const CANONICAL_CONSTRAINTS = [
   'inherit artifacts as-is',
   'Figma references to Storybook stories',
   'argTypesRegex',
-  'Design.md',
+  'DESIGN.md',
   'COMPONENT_REQUIREMENTS',
   '`structure`',
   'Do not create files outside the paths declared by your task',

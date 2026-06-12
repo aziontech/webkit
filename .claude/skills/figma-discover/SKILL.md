@@ -46,7 +46,7 @@ Convert a Figma URL or `nodeId` into a structured JSON blob: colors, typography,
 ## Rules
 
 - Do **not** decide anything (regions ≠ structure decision; that's `structure-decide`).
-- Do **not** map Figma → Design.md; that's `token-map`.
+- Do **not** map Figma → DESIGN.md; that's `token-map`.
 - Do **not** echo the user's request — only emit structured data.
 - Do **not** invoke `use_figma`, `create_new_file`, or any write-side Figma tool.
 
@@ -75,5 +75,5 @@ When the same Figma frame names a component differently from our convention (e.g
 ## Definition of Done
 
 - [ ] JSON blob emitted with `figma_node`, `variables`, `regions`, `states`.
-- [ ] No prose, no decisions, no Design.md mapping.
+- [ ] No prose, no decisions, no DESIGN.md mapping.
 - [ ] All MCP calls used the read-only verbs (`get_*`).

@@ -1,68 +1,66 @@
-<script setup>
+<script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
   import Spinner from '../../utils/spinner/spinner.vue'
+
+  export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
+  export type IconButtonSize = 'small' | 'medium' | 'large'
+  export type IconButtonTarget = '_blank' | '_self'
 
   defineOptions({
     name: 'IconButton',
     inheritAttrs: false
   })
 
-  const emit = defineEmits(['click'])
+  interface Props {
+    /** PrimeIcons class for the icon. */
+    icon: string
+    /** Accessible name for icon-only controls. */
+    ariaLabel: string
+    /** Visual variant. */
+    kind?: IconButtonKind
+    /** Size token; affects height and typography. */
+    size?: IconButtonSize
+    /** Disables interaction and applies disabled tokens. */
+    disabled?: boolean
+    /** Shows loading state and disables activation. */
+    loading?: boolean
+    /** When set, renders as an anchor link. */
+    href?: string
+    /** Link target when `href` is set. */
+    target?: IconButtonTarget
+  }
 
-  const props = defineProps({
-    icon: {
-      type: String,
-      required: true
-    },
-    ariaLabel: {
-      type: String,
-      required: true
-    },
-    kind: {
-      type: String,
-      default: 'primary',
-      validator: (value) => ['primary', 'secondary', 'outlined', 'transparent'].includes(value)
-    },
-    size: {
-      type: String,
-      default: 'large',
-      validator: (value) => ['small', 'medium', 'large'].includes(value)
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    href: {
-      type: String,
-      default: ''
-    },
-    target: {
-      type: String,
-      default: '_self',
-      validator: (value) => ['_blank', '_self'].includes(value)
-    }
+  const props = withDefaults(defineProps<Props>(), {
+    kind: 'primary',
+    size: 'large',
+    disabled: false,
+    loading: false,
+    href: '',
+    target: '_self'
   })
+
+  const emit = defineEmits<{
+    click: [event: MouseEvent]
+  }>()
 
   const attrs = useAttrs()
 
-  const testId = computed(() => attrs['data-testid'] ?? 'action-icon-button')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'actions-icon-button'
+  )
 
   const isInactive = computed(() => props.disabled || props.loading)
 
-  const isAnchor = computed(() => Boolean(props.href) && !isInactive.value)
+  const isAnchor = computed(() => Boolean(props.href))
 
   const ghostLayerClasses = [
     'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
     "before:opacity-0 before:content-['']",
-    'before:transition-opacity before:duration-150 before:ease-out',
+    'before:transition-opacity before:duration-fast-02 before:ease-productive-entrance',
     'after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]',
     "after:opacity-0 after:content-['']",
-    'after:transition-opacity after:duration-150 after:ease-out',
+    'after:transition-opacity after:duration-fast-02 after:ease-productive-entrance',
     'hover:before:opacity-100 active:after:opacity-100',
     'motion-reduce:before:transition-none motion-reduce:after:transition-none',
     'disabled:before:hidden disabled:after:hidden'
@@ -70,13 +68,13 @@
 
   const sharedClasses = [
     'relative inline-flex shrink-0 items-center justify-center',
-    'rounded-[var(--shape-elements)]',
+    'rounded-[var(--shape-button)]',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
-    'focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]',
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]',
     ...ghostLayerClasses
   ]
 
-  const kindClasses = {
+  const kindClasses: Record<IconButtonKind, string> = {
     primary:
       'bg-[var(--primary)] text-[var(--primary-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]',
     secondary:
@@ -84,19 +82,21 @@
     outlined:
       'border border-[var(--border-muted)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
     transparent:
-      'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]'
+      'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+    danger:
+      'border border-[var(--danger-border)] bg-[var(--danger)] text-[var(--danger-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]'
   }
 
   const disabledClasses =
     'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
-  const sizeClasses = {
+  const sizeClasses: Record<IconButtonSize, string> = {
     large: 'size-10 text-button-lg',
     medium: 'size-8 text-button-md',
     small: 'size-7 text-button-md'
   }
 
-  const spinnerSizeClasses = {
+  const spinnerSizeClasses: Record<IconButtonSize, string> = {
     large: 'size-4',
     medium: 'size-3',
     small: 'size-3'
@@ -111,7 +111,7 @@
 
   const loadingTestId = computed(() => `${testId.value}-loading`)
 
-  const handleClick = (event) => {
+  const handleClick = (event: MouseEvent) => {
     if (isInactive.value) {
       event.preventDefault()
       return
@@ -129,7 +129,10 @@
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     :class="rootClasses"
     :aria-label="ariaLabel"
+    :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
+    :tabindex="isInactive ? -1 : undefined"
+    :data-disabled="disabled ? '' : undefined"
     :data-testid="testId"
     @click="handleClick"
   >
@@ -155,6 +158,7 @@
     :aria-label="ariaLabel"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
+    :data-disabled="disabled ? '' : undefined"
     :class="rootClasses"
     :data-testid="testId"
     @click="handleClick"
