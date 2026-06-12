@@ -12,8 +12,8 @@
           }
         },
         "parserOpts": {
-          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "subject"]
+          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
         },
         "releaseRules": [
           { "type": "feat", "release": "minor" },
@@ -32,8 +32,8 @@
       {
         "preset": "conventionalcommits",
         "parserOpts": {
-          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "subject"]
+          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
         }
       }
     ],
