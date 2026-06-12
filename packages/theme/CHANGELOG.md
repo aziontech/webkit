@@ -1,3 +1,10 @@
+## [2.5.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.4.0...@aziontech/theme@2.5.0) (2026-06-12)
+
+
+### Features
+
+* adding commit lint and enabling project scope ([#642](https://github.com/aziontech/webkit/issues/642)) ([bd4eb4e](https://github.com/aziontech/webkit/commit/bd4eb4e52364a5f6b06f9756b02112b41f29a264))
+
 ## [2.4.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.2...@aziontech/theme@2.4.0) (2026-06-12)
 
 
