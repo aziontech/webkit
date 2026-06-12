@@ -35,11 +35,11 @@ export const textsData = {
   },
   'text-heading-2xl': {
     fontSize: { _: '1.875rem', sm: '3rem', md: '3.75rem' },
-    lineHeight: '1.2'
+    lineHeight: '1.1'
   },
   'text-heading-xl': {
     fontSize: { _: '1.25rem', sm: '1.875rem', md: '2.25rem' },
-    lineHeight: '1.2'
+    lineHeight: '1.1'
   },
   'text-heading-lg': {
     fontSize: { _: '1.125rem', md: '1.875rem' },
@@ -47,11 +47,19 @@ export const textsData = {
   },
   'text-heading-md': {
     fontSize: { _: '1rem', sm: '1.25rem', md: '1.5rem' },
-    lineHeight: '1.2'
+    lineHeight: '1.3'
   },
   'text-heading-sm': {
     fontSize: { _: '0.875rem', sm: '1rem', md: '1.125rem' },
-    lineHeight: '1.2'
+    lineHeight: '1.4'
+  },
+  'text-heading-xs': {
+    fontSize: '1rem',
+    lineHeight: '1.4'
+  },
+  'text-heading-xxs': {
+    fontSize: '0.875rem',
+    lineHeight: '1.4'
   },
   'text-label-lg': {
     fontSize: '1rem',

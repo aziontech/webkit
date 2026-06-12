@@ -475,15 +475,19 @@
     --text-big-number-lg-line-height: 1.20;
     --text-big-number-lg-font-family: Proto Mono;
     --text-heading-2xl-font-size: 1.875rem;
-    --text-heading-2xl-line-height: 1.2;
+    --text-heading-2xl-line-height: 1.1;
     --text-heading-xl-font-size: 1.25rem;
-    --text-heading-xl-line-height: 1.2;
+    --text-heading-xl-line-height: 1.1;
     --text-heading-lg-font-size: 1.125rem;
     --text-heading-lg-line-height: 1.2;
     --text-heading-md-font-size: 1rem;
-    --text-heading-md-line-height: 1.2;
+    --text-heading-md-line-height: 1.3;
     --text-heading-sm-font-size: 0.875rem;
-    --text-heading-sm-line-height: 1.2;
+    --text-heading-sm-line-height: 1.4;
+    --text-heading-xs-font-size: 1rem;
+    --text-heading-xs-line-height: 1.4;
+    --text-heading-xxs-font-size: 0.875rem;
+    --text-heading-xxs-line-height: 1.4;
     --text-label-lg-font-size: 1rem;
     --text-label-lg-line-height: 1.5;
     --text-label-lg-font-weight: 500;
@@ -825,6 +829,8 @@
   .text-heading-lg { font-size: var(--text-heading-lg-font-size); line-height: var(--text-heading-lg-line-height); }
   .text-heading-md { font-size: var(--text-heading-md-font-size); line-height: var(--text-heading-md-line-height); }
   .text-heading-sm { font-size: var(--text-heading-sm-font-size); line-height: var(--text-heading-sm-line-height); }
+  .text-heading-xs { font-size: var(--text-heading-xs-font-size); line-height: var(--text-heading-xs-line-height); }
+  .text-heading-xxs { font-size: var(--text-heading-xxs-font-size); line-height: var(--text-heading-xxs-line-height); }
   .text-label-lg { font-size: var(--text-label-lg-font-size); line-height: var(--text-label-lg-line-height); font-weight: var(--text-label-lg-font-weight); }
   .text-label-md { font-size: var(--text-label-md-font-size); line-height: var(--text-label-md-line-height); font-weight: var(--text-label-md-font-weight); }
   .text-label-sm { font-size: var(--text-label-sm-font-size); line-height: var(--text-label-sm-line-height); font-weight: var(--text-label-sm-font-weight); }
