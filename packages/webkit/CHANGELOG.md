@@ -1,3 +1,9 @@
+## [3.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.5.0...@aziontech/webkit@3.6.0) (2026-06-08)
+
+### Features
+
+- Link Figma alignment, MiniButton, and dialog spec checksum ([#623](https://github.com/aziontech/webkit/issues/623)) ([c576bf1](https://github.com/aziontech/webkit/commit/c576bf1c8a42ea914a32de35806a0998d9fe9183))
+
 ## [3.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.4.2...@aziontech/webkit@3.5.0) (2026-06-08)
 
 ### Features

@@ -315,6 +315,18 @@ module.exports = {
             "lineHeight": "var(--text-heading-sm-line-height)"
           }
         ],
+        "heading-xs": [
+          "var(--text-heading-xs-font-size)",
+          {
+            "lineHeight": "var(--text-heading-xs-line-height)"
+          }
+        ],
+        "heading-xxs": [
+          "var(--text-heading-xxs-font-size)",
+          {
+            "lineHeight": "var(--text-heading-xxs-line-height)"
+          }
+        ],
         "label-lg": [
           "var(--text-label-lg-font-size)",
           {

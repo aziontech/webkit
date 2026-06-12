@@ -1,3 +1,24 @@
+## [2.5.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.4.0...@aziontech/theme@2.5.0) (2026-06-12)
+
+
+### Features
+
+* adding commit lint and enabling project scope ([#642](https://github.com/aziontech/webkit/issues/642)) ([bd4eb4e](https://github.com/aziontech/webkit/commit/bd4eb4e52364a5f6b06f9756b02112b41f29a264))
+
+## [2.4.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.2...@aziontech/theme@2.4.0) (2026-06-12)
+
+
+### Features
+
+* Link Figma alignment, MiniButton, and dialog spec checksum ([#623](https://github.com/aziontech/webkit/issues/623)) ([c576bf1](https://github.com/aziontech/webkit/commit/c576bf1c8a42ea914a32de35806a0998d9fe9183))
+* refine menu-item focus states and sidebar story layouts ([#606](https://github.com/aziontech/webkit/issues/606)) ([1840945](https://github.com/aziontech/webkit/commit/1840945057ecdb23140ce9d17020ea216b5e021d))
+
+
+### Bug Fixes
+
+* import theme exported primitive ([#639](https://github.com/aziontech/webkit/issues/639)) ([d5342d2](https://github.com/aziontech/webkit/commit/d5342d2b727238b6275ac831162d64840a497983))
+* remove redundant/unused buttons ([#640](https://github.com/aziontech/webkit/issues/640)) ([f25a4e5](https://github.com/aziontech/webkit/commit/f25a4e59fac80afc639d540dbac7ce6b691b252a))
+
 ## [2.3.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.3.1...@aziontech/theme@2.3.2) (2026-06-05)
 
 
