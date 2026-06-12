@@ -57,8 +57,8 @@ If you are new (human or AI), open these in order — together they describe the
 
 | App                                   | Description                                      | CI                                                                                                                                                                                                                         |
 | ------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. | [![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml?query=branch%3Amain)             |
-| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons.   | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
+| [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. Live: <https://webkit.azion.app/> | [![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml?query=branch%3Amain)             |
+| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons. Live: <https://icons-gallery.azion.app/> | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
 
 ## Use in your app
 
@@ -156,11 +156,12 @@ The slash commands above (`/spec-create`, `/component-create`, `/component-verif
 
 If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with repo access), read the corresponding `.md` file under `.claude/commands/<name>.md` and follow the steps manually — each command is a documented procedure, not a black box. The constraints in [`.claude/rules/`](./.claude/rules/) apply regardless of which tool runs them; treat that directory as load-bearing context for any contribution.
 
-## Storybook
+## Live previews
 
-- Local docs app: `apps/storybook`
-- The project includes a `Foundations/Get Started` documentation page with onboarding details.
-- Use Storybook as the source of truth for component API and expected visual behavior.
+- **Component playground** — <https://webkit.azion.app/> — Storybook deployment. Source of truth for every component's API, props, and visual states. Start here to explore the design system.
+- **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the Azion + Prime icon sets used by `@aziontech/icons`.
+
+Local equivalents run via `pnpm storybook:dev` and `pnpm icons:gallery:serve`.
 
 ## Related docs
 
