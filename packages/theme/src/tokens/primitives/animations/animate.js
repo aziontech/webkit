@@ -17,10 +17,11 @@ export const duration = {
 export const animate = {
   spin: 'spin 1s linear infinite',
   ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
-  pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+  pulse: 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
   bounce: 'bounce 1s infinite',
   'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
   'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
+  'skeleton-shimmer': 'skeletonShimmer 2s linear infinite',
 };
 
 export default { animate, curve, duration };

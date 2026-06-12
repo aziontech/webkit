@@ -164,6 +164,7 @@
     "./data/data-table-view-all-footer": "./src/components/data/data-table/data-table-view-all-footer.vue",
     "./data/data-table-view-toggle": "./src/components/data/data-table/data-table-view-toggle.vue",
     "./message": "./src/components/feedback/message/message.vue",
+    "./feedback/skeleton": "./src/components/feedback/skeleton/skeleton.vue",
     "./feedback/status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./inputs/input-text": "./src/components/inputs/input-text/input-text.vue",
     "./inputs/box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
