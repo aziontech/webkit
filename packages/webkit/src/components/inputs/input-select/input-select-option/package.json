@@ -1,0 +1,11 @@
+{
+  "main": "./input-select-option.vue",
+  "module": "./input-select-option.vue",
+  "types": "./input-select-option.vue.d.ts",
+  "browser": {
+    "./sfc": "./input-select-option.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
