@@ -176,6 +176,7 @@
     "./inputs/field-radio-block": "./src/components/inputs/field-radio-block/field-radio-block.vue",
     "./inputs/field-switch": "./src/components/inputs/field-switch/field-switch.vue",
     "./inputs/field-switch-block": "./src/components/inputs/field-switch-block/field-switch-block.vue",
+    "./inputs/field-text": "./src/components/inputs/field-text/field-text.vue",
     "./inputs/radio-button": "./src/components/inputs/radio-button/radio-button.vue",
     "./inputs/input-switch": "./src/components/inputs/input-switch/input-switch.vue",
     "./inputs/dropdown": "./src/components/inputs/dropdown/dropdown.vue",
