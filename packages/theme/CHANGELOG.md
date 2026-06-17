@@ -1,3 +1,15 @@
+## [2.6.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.5.0...@aziontech/theme@2.6.0) (2026-06-17)
+
+
+### Features
+
+* dim focus ring color to reduce visual weight ([cfe9807](https://github.com/aziontech/webkit/commit/cfe98073f062e9f2b08411819b05808e8e50e9c7))
+
+
+### Bug Fixes
+
+* add delete domain dialog template and panel border fix ([#628](https://github.com/aziontech/webkit/issues/628)) ([168e8ed](https://github.com/aziontech/webkit/commit/168e8ed5796194d456cd952f4a250ad5f8cc159a))
+
 ## [2.5.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.4.0...@aziontech/theme@2.5.0) (2026-06-12)
 
 
