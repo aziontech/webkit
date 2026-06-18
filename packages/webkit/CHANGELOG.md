@@ -1,3 +1,13 @@
+## [3.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.7.0...@aziontech/webkit@3.8.0) (2026-06-18)
+
+### Features
+
+- dim focus ring color to reduce visual weight ([cfe9807](https://github.com/aziontech/webkit/commit/cfe98073f062e9f2b08411819b05808e8e50e9c7))
+
+### Bug Fixes
+
+- unblock ci on stylelint, vue-tsc and audit ([cfd1f50](https://github.com/aziontech/webkit/commit/cfd1f503ece0a170306a6bc02a4f7189acea57d5))
+
 ## [3.7.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.6.0...@aziontech/webkit@3.7.0) (2026-06-12)
 
 ### Features
