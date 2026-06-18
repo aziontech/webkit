@@ -47,6 +47,13 @@ const meta = {
           '</template>',
           '```'
         ].join('\n')
+      },
+      source: {
+        type: 'dynamic',
+        excludeDecorators: true
+      },
+      canvas: {
+        sourceState: 'shown'
       }
     }
   },
