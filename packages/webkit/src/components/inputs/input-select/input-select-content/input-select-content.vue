@@ -37,7 +37,8 @@
   const positionStyle = computed(() => ({
     top: `${position.value.top}px`,
     left: `${position.value.left}px`,
-    width: `${position.value.width}px`
+    width: `${position.value.width}px`,
+    '--popup-origin': 'top'
   }))
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
@@ -136,7 +137,7 @@
         :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
         :class="attrs.class"
         :style="positionStyle"
-        class="fixed z-50 flex max-h-[20rem] origin-top flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-xs)]"
+        class="fixed z-50 flex max-h-[20rem] flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-xs)]"
         @keydown="onKeydown"
       >
         <div

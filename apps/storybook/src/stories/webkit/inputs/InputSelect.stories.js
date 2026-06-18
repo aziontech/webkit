@@ -34,6 +34,10 @@ const meta = {
     docs: {
       description: {
         component: [
+          "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<InputSelectContent>`.",
+          '',
+          '## Usage',
+          '',
           '```vue',
           '<script setup>',
           "import InputSelect from '@aziontech/webkit/inputs/input-select'",
@@ -58,6 +62,13 @@ const meta = {
           '</template>',
           '```'
         ].join('\n')
+      },
+      source: {
+        type: 'dynamic',
+        excludeDecorators: true
+      },
+      canvas: {
+        sourceState: 'shown'
       }
     }
   },
