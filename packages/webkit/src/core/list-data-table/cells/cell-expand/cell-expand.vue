@@ -224,9 +224,8 @@
       <Teleport to="body">
         <div
           ref="popupElement"
-          class="absolute z-[9999] w-fit rounded-md py-2 px-3 bg-[var(--surface-100)] border border-[var(--surface-border)] overflow-y-auto"
+          class="absolute z-[9999] w-fit max-h-[216px] rounded-md py-2 px-3 bg-[var(--surface-100)] border border-[var(--surface-border)] overflow-y-auto"
           :style="popupStyle"
-          style="max-height: 216px"
           @mouseenter="handlePopupMouseEnter"
           @mouseleave="handlePopupMouseLeave"
         >
