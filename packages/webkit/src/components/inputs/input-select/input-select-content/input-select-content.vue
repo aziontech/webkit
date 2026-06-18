@@ -131,7 +131,7 @@
         v-bind="$attrs"
         :id="ctx.contentId"
         role="listbox"
-        :aria-multiselectable="ctx.multiple.value || null"
+        :aria-multiselectable="ctx.multiple.value || undefined"
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"
         :data-mode="ctx.multiple.value ? 'multiple' : 'single'"

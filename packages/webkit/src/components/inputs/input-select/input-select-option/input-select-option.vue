@@ -61,7 +61,7 @@
     role="option"
     tabindex="-1"
     :aria-selected="selected"
-    :aria-disabled="disabled || null"
+    :aria-disabled="disabled || undefined"
     :data-testid="testId"
     :data-selected="selected || null"
     :data-disabled="disabled || null"

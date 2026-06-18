@@ -40,7 +40,7 @@
   <button
     :ref="
       (el) => {
-        ctx.triggerRef.value = el
+        ctx.triggerRef.value = el as globalThis.HTMLElement | null
       }
     "
     v-bind="$attrs"
@@ -49,9 +49,9 @@
     :aria-haspopup="ctx.multiple.value ? 'listbox' : 'listbox'"
     :aria-expanded="ctx.open.value"
     :aria-controls="ctx.contentId"
-    :aria-invalid="ctx.invalid.value || null"
-    :aria-required="ctx.required.value || null"
-    :aria-disabled="ctx.disabled.value || null"
+    :aria-invalid="ctx.invalid.value || undefined"
+    :aria-required="ctx.required.value || undefined"
+    :aria-disabled="ctx.disabled.value || undefined"
     :disabled="ctx.disabled.value"
     :data-testid="testId"
     :data-state="ctx.open.value ? 'open' : 'closed'"

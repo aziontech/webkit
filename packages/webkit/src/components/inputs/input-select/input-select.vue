@@ -82,7 +82,7 @@
       if (props.multiple && !Array.isArray(current) && current !== undefined) {
         emit('update:modelValue', current === '' ? [] : [current])
       } else if (!props.multiple && Array.isArray(current)) {
-        emit('update:modelValue', current[0])
+        emit('update:modelValue', current[0] as InputSelectValue)
       }
     }
   )
@@ -103,7 +103,7 @@
       emit('update:modelValue', current)
       return
     }
-    emit('update:modelValue', value)
+    emit('update:modelValue', value as InputSelectValue)
     setOpen(false)
   }
 
