@@ -167,6 +167,7 @@
     "./feedback/status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./inputs/input-text": "./src/components/inputs/input-text/input-text.vue",
     "./inputs/helper-text": "./src/components/inputs/helper-text/helper-text.vue",
+    "./inputs/label": "./src/components/inputs/label/label.vue",
     "./inputs/box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
     "./inputs/checkbox": "./src/components/inputs/checkbox/checkbox.vue",
     "./inputs/field-checkbox": "./src/components/inputs/field-checkbox/field-checkbox.vue",
