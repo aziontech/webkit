@@ -1,3 +1,13 @@
+## [3.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.8.0...@aziontech/webkit@3.9.0) (2026-06-18)
+
+### Features
+
+- add Label input primitive ([b6ae7ff](https://github.com/aziontech/webkit/commit/b6ae7ff67ff87ae7683b94cc365e044a219d1a6a))
+
+### Bug Fixes
+
+- adjust documenation ([c7850b0](https://github.com/aziontech/webkit/commit/c7850b08c9517c67a06bd27bfdb825aab9a64a2f))
+
 ## [3.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.7.0...@aziontech/webkit@3.8.0) (2026-06-18)
 
 ### Features
