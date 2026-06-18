@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { onClickOutside } from '@vueuse/core'
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, type Ref, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element.js'
@@ -62,7 +62,7 @@
     { immediate: true }
   )
 
-  onClickOutside(popupHostRef, (event) => {
+  onClickOutside(popupHostRef as Ref<HTMLElement | null | undefined>, (event) => {
     if (!root.menuOpen.value) {
       return
     }
