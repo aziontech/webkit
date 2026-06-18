@@ -21,6 +21,10 @@ const meta = {
     docs: {
       description: {
         component: [
+          'Form-field label that pairs descriptive text with an optional `Required` badge. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled.',
+          '',
+          '## Usage',
+          '',
           '```vue',
           '<script setup>',
           "import Label from '@aziontech/webkit/inputs/label'",
@@ -33,6 +37,13 @@ const meta = {
           '</template>',
           '```'
         ].join('\n')
+      },
+      source: {
+        type: 'dynamic',
+        excludeDecorators: true
+      },
+      canvas: {
+        sourceState: 'shown'
       }
     }
   },
