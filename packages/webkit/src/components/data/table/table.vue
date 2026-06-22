@@ -15,6 +15,7 @@
   } from '@tanstack/vue-table'
   import { computed, provide, ref, useAttrs, useSlots, watch } from 'vue'
 
+  import EmptyIllustration from '../../../svg/illustration-layers/illustration-layers.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import PaginationButton from '../paginator/pagination-button/pagination-button.vue'
@@ -41,8 +42,10 @@
     header?: string
     /** Allow sorting on this column. */
     enableSorting?: boolean
-    /** Flex weight; the emphasized first column uses 2. */
+    /** Flex weight; the principal column uses 2 (see `principal`). */
     grow?: 1 | 2 | 3
+    /** Mark this as the principal column — it defaults to `grow: 2`. When no column sets it, the first non-checkbox column is principal. */
+    principal?: boolean
     /** Pin this column to the start or end edge. */
     frozen?: 'start' | 'end'
     /** Fixed width (px) — needed for a frozen column that precedes another frozen column on the same edge, so sticky offsets can be summed. */
@@ -66,6 +69,8 @@
     defineProps<{
       /** Max height (CSS length). Vertical scroll engages only when set smaller than the content; horizontal scroll is always automatic. */
       maxHeight?: string
+      /** Draw the outer card border around the table (off by default; the table is typically framed by a surrounding surface). */
+      border?: boolean
       /** Data-driven mode: row records. */
       data?: RowRecord[]
       /** Data-driven mode: column definitions. When set, the table renders itself via TanStack. */
@@ -107,6 +112,7 @@
     }>(),
     {
       maxHeight: '',
+      border: false,
       data: () => [],
       columns: () => [],
       rowKey: 'id',
@@ -220,6 +226,15 @@
     return typeof updater === 'function' ? (updater as (old: T) => T)(current) : updater
   }
 
+  // The principal column defaults to `grow: 2`. A column may opt in via
+  // `principal: true`; otherwise the first non-action column is principal
+  // (the checkbox column is separate, so this is the first data column).
+  const principalIndex = computed<number>(() => {
+    const flagged = props.columns.findIndex((col) => col.principal)
+    if (flagged !== -1) return flagged
+    return props.columns.findIndex((col) => col.kind !== 'action')
+  })
+
   const tableColumns = computed<ColumnDef<RowRecord>[]>(() =>
     props.columns.map((col, index) => ({
       id: col.id ?? col.accessorKey ?? col.header ?? '',
@@ -228,10 +243,10 @@
       enableSorting: col.enableSorting ?? props.enableSorting,
       size: col.width,
       meta: {
-        // Default flex weight: the first (emphasized) column gets 2, the rest 1,
-        // so the columns fill the available space proportionally unless a column
-        // sets its own `grow`. Action columns ignore weight (fixed 40px).
-        grow: col.grow ?? (index === 0 ? 2 : 1),
+        // Default flex weight: the principal column gets 2, the rest 1, so the
+        // columns fill the available space proportionally unless a column sets
+        // its own `grow`. Action columns ignore weight (fixed 40px).
+        grow: col.grow ?? (index === principalIndex.value ? 2 : 1),
         frozen: col.frozen,
         align: col.align,
         kind: col.kind,
@@ -578,8 +593,9 @@
     v-bind="$attrs"
     role="table"
     :data-testid="testId"
+    :data-border="border || null"
     :style="viewportHeightVar"
-    class="flex w-full flex-col overflow-hidden rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-solid border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)] text-body-sm"
+    class="flex w-full flex-col overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-surface)] text-[var(--text-default)] text-body-sm data-[border]:border-[length:var(--border-width-default)] data-[border]:border-solid data-[border]:border-[var(--border-default)]"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar'] || $slots['filters']"
@@ -679,7 +695,7 @@
             </TableRow>
           </TableHeader>
 
-          <TableBody>
+          <TableBody v-if="rows.length > 0">
             <TableRow
               v-for="row in rows"
               :key="row.id"
@@ -721,13 +737,26 @@
                 >
               </TableCell>
             </TableRow>
-
-            <TableRow v-if="rows.length === 0">
-              <TableCell>
-                <slot name="empty">No data</slot>
-              </TableCell>
-            </TableRow>
           </TableBody>
+
+          <!-- Empty state — a plain block, NOT a row: it has no hover/selection
+               affordance because it is not selectable data. -->
+          <div
+            v-if="rows.length === 0"
+            role="presentation"
+            :data-testid="`${testId}__empty`"
+            class="flex w-full flex-col items-center justify-center gap-[var(--spacing-6)] px-[var(--spacing-8)] py-[var(--spacing-12)] text-center"
+          >
+            <slot name="empty">
+              <EmptyIllustration class="!mb-0" />
+              <div class="flex flex-col gap-[var(--spacing-2)]">
+                <p class="text-heading-sm text-[var(--text-default)]">No results yet</p>
+                <p class="text-body-sm text-[var(--text-muted)]">
+                  Get started by creating your first resource.
+                </p>
+              </div>
+            </slot>
+          </div>
         </template>
 
         <slot v-else />

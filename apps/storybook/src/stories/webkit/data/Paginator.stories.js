@@ -1,39 +1,79 @@
-import PaginationButton from '@aziontech/webkit/data/pagination-button'
 import Paginator from '@aziontech/webkit/data/paginator'
-import PaginatorInfo from '@aziontech/webkit/data/paginator-info'
-import PaginatorPageSize from '@aziontech/webkit/data/paginator-page-size'
 import { ref, watch } from 'vue'
 
-const paginatorComponents = {
-  Paginator,
-  PaginationButton,
-  PaginatorInfo,
-  PaginatorPageSize
-}
+// Compound API — one import of the root; every part is reached via dot-notation
+// (`<Paginator.Button>`, `<Paginator.Info>`, `<Paginator.PageSize>`). The
+// standalone imports (`@aziontech/webkit/data/pagination-button`, …) remain the
+// tree-shaking path; the stories lead with the compound form per compound-api.md.
+const paginatorComponents = { Paginator }
 
 const usage = [
   '```vue',
   '<Paginator>',
   '  <template #info>',
-  '    <PaginatorInfo>Showing 1 to 10 of 20 entries</PaginatorInfo>',
+  '    <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>',
   '  </template>',
-  '  <PaginationButton kind="previous" disabled>Previous</PaginationButton>',
-  '  <PaginationButton kind="number" selected>1</PaginationButton>',
-  '  <PaginationButton kind="number">2</PaginationButton>',
-  '  <PaginationButton kind="more" />',
-  '  <PaginationButton kind="next">Next</PaginationButton>',
+  '  <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>',
+  '  <Paginator.Button kind="number" selected>1</Paginator.Button>',
+  '  <Paginator.Button kind="number">2</Paginator.Button>',
+  '  <Paginator.Button kind="more" />',
+  '  <Paginator.Button kind="next">Next</Paginator.Button>',
   '  <template #controls>',
-  '    <PaginatorPageSize :model-value="10" :options="[10, 25, 50, 100]" />',
+  '    <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />',
   '  </template>',
   '</Paginator>',
   '```'
 ].join('\n')
 
+// --- "Show code" source ----------------------------------------------------
+// Storybook's default dynamic source for a custom-template story renders the
+// internal markup (or the render function), not the authored `<Paginator>` usage.
+// Each story ships an explicit `docs.source.code` so "Show code" shows the real
+// component code in the compound dot-notation form.
+
+const DEFAULT_SOURCE = `<Paginator>
+  <template #info>
+    <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>
+  </template>
+
+  <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+  <Paginator.Button kind="number" selected>1</Paginator.Button>
+  <Paginator.Button kind="number">2</Paginator.Button>
+  <Paginator.Button kind="number">3</Paginator.Button>
+  <Paginator.Button kind="more" />
+  <Paginator.Button kind="next">Next</Paginator.Button>
+
+  <template #controls>
+    <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />
+  </template>
+</Paginator>`
+
+const BUTTONS_SOURCE = `<!-- kinds + states -->
+<Paginator.Button kind="previous">Previous</Paginator.Button>
+<Paginator.Button kind="number">1</Paginator.Button>
+<Paginator.Button kind="number" selected>2</Paginator.Button>
+<Paginator.Button kind="more" />
+<Paginator.Button kind="next">Next</Paginator.Button>
+
+<!-- disabled -->
+<Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+<Paginator.Button kind="number" disabled>1</Paginator.Button>
+<Paginator.Button kind="next" disabled>Next</Paginator.Button>`
+
+const DATA_DRIVEN_SOURCE = `<Paginator
+  v-model:page="page"
+  v-model:page-size="pageSize"
+  :total="200"
+  :page-size-options="[10, 25, 50, 100]"
+  :sibling-count="1"
+  @page-change="loadPage"
+/>`
+
 /** @type {import('@storybook/vue3').Meta<typeof Paginator>} */
 const meta = {
   title: 'Webkit/Data/Paginator',
   component: Paginator,
-  subcomponents: { PaginationButton, PaginatorInfo },
+  subcomponents: { PaginationButton: Paginator.Button, PaginatorInfo: Paginator.Info },
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -128,7 +168,7 @@ const meta = {
     },
     info: {
       control: false,
-      description: 'Left region: page-info text (typically PaginatorInfo).',
+      description: 'Left region: page-info text (typically Paginator.Info).',
       table: { type: { summary: 'VNode' }, category: 'slots' }
     },
     default: {
@@ -138,7 +178,7 @@ const meta = {
     },
     controls: {
       control: false,
-      description: 'Right region: rows-per-page selector (e.g. Dropdown).',
+      description: 'Right region: rows-per-page selector (e.g. Paginator.PageSize).',
       table: { type: { summary: 'VNode' }, category: 'slots' }
     }
   },
@@ -159,25 +199,26 @@ export const Default = {
     template: `
       <Paginator v-bind="args">
         <template #info>
-          <PaginatorInfo>Showing 1 to 10 of 20 entries</PaginatorInfo>
+          <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>
         </template>
-        <PaginationButton kind="previous" disabled>Previous</PaginationButton>
-        <PaginationButton kind="number" selected>1</PaginationButton>
-        <PaginationButton kind="number">2</PaginationButton>
-        <PaginationButton kind="number">3</PaginationButton>
-        <PaginationButton kind="more" />
-        <PaginationButton kind="next">Next</PaginationButton>
+        <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+        <Paginator.Button kind="number" selected>1</Paginator.Button>
+        <Paginator.Button kind="number">2</Paginator.Button>
+        <Paginator.Button kind="number">3</Paginator.Button>
+        <Paginator.Button kind="more" />
+        <Paginator.Button kind="next">Next</Paginator.Button>
         <template #controls>
-          <PaginatorPageSize :model-value="10" :options="[10, 25, 50, 100]" />
+          <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />
         </template>
       </Paginator>
     `
   }),
   parameters: {
     docs: {
+      source: { code: DEFAULT_SOURCE },
       description: {
         story:
-          'Full paginator: page-info text, Previous/numbers/overflow/Next, and a rows-per-page selector.'
+          'The compound **composition** form: the full paginator assembled by hand from the dot-notation sub-components — page-info text (`Paginator.Info`), Previous / numbers / overflow / Next (`Paginator.Button`), and a rows-per-page selector (`Paginator.PageSize`).'
       }
     }
   }
@@ -190,25 +231,26 @@ export const Buttons = {
     template: `
       <div class="flex flex-col gap-[var(--spacing-4)]">
         <div class="flex items-center gap-[var(--spacing-2)]">
-          <PaginationButton kind="previous">Previous</PaginationButton>
-          <PaginationButton kind="number">1</PaginationButton>
-          <PaginationButton kind="number" selected>2</PaginationButton>
-          <PaginationButton kind="more" />
-          <PaginationButton kind="next">Next</PaginationButton>
+          <Paginator.Button kind="previous">Previous</Paginator.Button>
+          <Paginator.Button kind="number">1</Paginator.Button>
+          <Paginator.Button kind="number" selected>2</Paginator.Button>
+          <Paginator.Button kind="more" />
+          <Paginator.Button kind="next">Next</Paginator.Button>
         </div>
         <div class="flex items-center gap-[var(--spacing-2)]">
-          <PaginationButton kind="previous" disabled>Previous</PaginationButton>
-          <PaginationButton kind="number" disabled>1</PaginationButton>
-          <PaginationButton kind="next" disabled>Next</PaginationButton>
+          <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+          <Paginator.Button kind="number" disabled>1</Paginator.Button>
+          <Paginator.Button kind="next" disabled>Next</Paginator.Button>
         </div>
       </div>
     `
   }),
   parameters: {
     docs: {
+      source: { code: BUTTONS_SOURCE },
       description: {
         story:
-          'PaginationButton kinds (previous / next / number / more) and states: default, selected (current page), and disabled.'
+          '`Paginator.Button` kinds (previous / next / number / more) and states: default, selected (current page), and disabled.'
       }
     }
   }
@@ -217,7 +259,7 @@ export const Buttons = {
 /** @type {import('@storybook/vue3').StoryObj<typeof Paginator>} */
 export const DataDriven = {
   render: (args) => ({
-    components: { Paginator },
+    components: paginatorComponents,
     setup() {
       const page = ref(args.page ?? 1)
       const pageSize = ref(args.pageSize ?? 10)
@@ -250,6 +292,7 @@ export const DataDriven = {
   },
   parameters: {
     docs: {
+      source: { code: DATA_DRIVEN_SOURCE },
       description: {
         story:
           'Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Paginator renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change`.'

@@ -24,8 +24,10 @@
     sortDirection?: SortDirection
     /** Text alignment. */
     align?: TableHeadCellAlign
-    /** Flex weight; the emphasized first column uses 2. */
+    /** Flex weight; the principal column uses 2 (see `principal`). */
     grow?: TableHeadCellGrow
+    /** Marks the principal column — defaults its weight to `grow: 2` when `grow` is not set. */
+    principal?: boolean
     /** Pins the column to the start or end edge of the scroll container. */
     frozen?: TableHeadCellFrozen
     /** Renders a drag-to-resize handle on the right edge. */
@@ -41,7 +43,8 @@
     sortable: false,
     sortDirection: 'none',
     align: 'start',
-    grow: 1,
+    grow: undefined,
+    principal: false,
     frozen: undefined,
     resizable: false,
     resizing: false,
@@ -69,7 +72,9 @@
   )
 
   const growAttr = computed<number | null>(() =>
-    props.kind === 'checkbox' || props.kind === 'action' ? null : props.grow
+    props.kind === 'checkbox' || props.kind === 'action'
+      ? null
+      : (props.grow ?? (props.principal ? 2 : 1))
   )
 
   const ariaSort = computed<SortDirection | undefined>(() =>

@@ -18,8 +18,10 @@
     kind?: TableCellKind
     /** Text alignment. */
     align?: TableCellAlign
-    /** Flex weight; the emphasized first column uses 2. */
+    /** Flex weight; the principal column uses 2 (see `principal`). */
     grow?: TableCellGrow
+    /** Marks the principal column — defaults its weight to `grow: 2` when `grow` is not set. */
+    principal?: boolean
     /** Pins the column to the start or end edge of the scroll container. */
     frozen?: TableCellFrozen
     /** Underlines the cell text to signal it links somewhere. */
@@ -29,7 +31,8 @@
   const props = withDefaults(defineProps<Props>(), {
     kind: 'default',
     align: 'start',
-    grow: 1,
+    grow: undefined,
+    principal: false,
     frozen: undefined,
     clickable: false
   })
@@ -47,7 +50,9 @@
       (ctx ? `${ctx.testId}__cell` : 'data-table__cell')
   )
 
-  const growAttr = computed<number | null>(() => (props.kind === 'default' ? props.grow : null))
+  const growAttr = computed<number | null>(() =>
+    props.kind === 'default' ? (props.grow ?? (props.principal ? 2 : 1)) : null
+  )
 
   const cellRef = ref<HTMLElement | null>(null)
 
