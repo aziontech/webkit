@@ -1,0 +1,11 @@
+{
+  "main": "./table-caption.vue",
+  "module": "./table-caption.vue",
+  "types": "./table-caption.vue.d.ts",
+  "browser": {
+    "./sfc": "./table-caption.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

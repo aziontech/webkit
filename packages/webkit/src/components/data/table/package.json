@@ -1,0 +1,11 @@
+{
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./index.d.ts",
+  "browser": {
+    "./sfc": "./index.ts"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

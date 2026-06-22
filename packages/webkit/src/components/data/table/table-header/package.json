@@ -1,0 +1,11 @@
+{
+  "main": "./table-header.vue",
+  "module": "./table-header.vue",
+  "types": "./table-header.vue.d.ts",
+  "browser": {
+    "./sfc": "./table-header.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

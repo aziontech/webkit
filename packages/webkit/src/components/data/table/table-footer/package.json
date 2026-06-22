@@ -1,0 +1,11 @@
+{
+  "main": "./table-footer.vue",
+  "module": "./table-footer.vue",
+  "types": "./table-footer.vue.d.ts",
+  "browser": {
+    "./sfc": "./table-footer.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

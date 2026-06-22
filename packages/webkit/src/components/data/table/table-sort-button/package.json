@@ -1,0 +1,11 @@
+{
+  "main": "./table-sort-button.vue",
+  "module": "./table-sort-button.vue",
+  "types": "./table-sort-button.vue.d.ts",
+  "browser": {
+    "./sfc": "./table-sort-button.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
