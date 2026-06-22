@@ -25,7 +25,7 @@ export default {
   storage: [
     {
       name: 'webkit-storybook-dev',
-      prefix: '20260622162358',
+      prefix: '20260622162046',
       dir: './dist',
       workloadsAccess: 'read_only'
     }
@@ -37,7 +37,7 @@ export default {
       type: 'storage',
       attributes: {
         bucket: 'webkit-storybook-dev',
-        prefix: '20260622162358'
+        prefix: '20260622162046'
       }
     }
   ],
@@ -57,6 +57,36 @@ export default {
       ],
       rules: {
         request: [
+          {
+            name: 'Redirect to index.html',
+            description:
+              'Handle all routes by rewriting to index.html for client-side routing',
+            active: true,
+            criteria: [
+              [
+                {
+                  variable: '${uri}',
+                  conditional: 'if',
+                  operator: 'matches',
+                  argument: '^\/'
+                }
+              ]
+            ],
+            behaviors: [
+              {
+                type: 'set_connector',
+                attributes: {
+                  value: 'webkit-storybook-dev'
+                }
+              },
+              {
+                type: 'rewrite_request',
+                attributes: {
+                  value: '/index.html'
+                }
+              }
+            ]
+          },
           {
             name: 'Deliver Static Assets and Set Cache Policy',
             description:
@@ -88,36 +118,6 @@ export default {
               },
               {
                 type: 'deliver'
-              }
-            ]
-          },
-          {
-            name: 'Redirect to index.html',
-            description:
-              'Handle all routes by rewriting to index.html for client-side routing',
-            active: true,
-            criteria: [
-              [
-                {
-                  variable: '${uri}',
-                  conditional: 'if',
-                  operator: 'matches',
-                  argument: '^\/'
-                }
-              ]
-            ],
-            behaviors: [
-              {
-                type: 'set_connector',
-                attributes: {
-                  value: 'webkit-storybook-dev'
-                }
-              },
-              {
-                type: 'rewrite_request',
-                attributes: {
-                  value: '/index.html'
-                }
               }
             ]
           }

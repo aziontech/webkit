@@ -25,13 +25,13 @@
     "created": false,
     "rules": [
       {
-        "id": 605360,
-        "name": "Deliver Static Assets and Set Cache Policy",
+        "id": 605361,
+        "name": "Redirect to index.html",
         "phase": "request"
       },
       {
-        "id": 605361,
-        "name": "Redirect to index.html",
+        "id": 605360,
+        "name": "Deliver Static Assets and Set Cache Policy",
         "phase": "request"
       }
     ]
