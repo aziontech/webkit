@@ -1,15 +1,14 @@
 {
-  "name": "webkit-storybook",
-  "bucket": "webkit-storybook",
-  "preset": "html",
+  "name": "webkit-storybook-dev",
+  "bucket": "",
+  "preset": "vue",
   "env": "production",
-  "prefix": "20260316141821",
+  "prefix": "",
   "rotate-prefix": true,
-  "not-first-run": true,
   "function": [],
   "application": {
-    "id": 1773684562,
-    "name": "webkit-storybook"
+    "id": 0,
+    "name": "__DEFAULT__"
   },
   "domain": {
     "id": 0,
@@ -23,41 +22,15 @@
   "origin": null,
   "rules-engine": {
     "created": false,
-    "rules": [
-      {
-        "id": 524999,
-        "name": "Deliver Static Assets and Set Cache Policy",
-        "phase": "request"
-      },
-      {
-        "id": 525000,
-        "name": "Redirect to index.html",
-        "phase": "request"
-      }
-    ]
+    "rules": null
   },
-  "cache-settings": [
-    {
-      "id": 274966,
-      "name": "webkit-storybook"
-    }
-  ],
+  "cache-settings": null,
   "workloads": {
-    "id": 1773688858,
-    "name": "webkit-storybook",
-    "domains": [],
-    "url": "https://iiirmefzrt4.map.azionedge.net",
-    "deployment_id": [
-      {
-        "id": 186821,
-        "name": "webkit-storybook"
-      }
-    ]
+    "id": 0,
+    "name": "",
+    "domains": null,
+    "url": "",
+    "deployment_id": null
   },
-  "connectors": [
-    {
-      "id": 10418,
-      "name": "webkit-storybook"
-    }
-  ]
+  "connectors": null
 }
