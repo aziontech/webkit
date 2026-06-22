@@ -43,27 +43,38 @@ import MyComponent from '@aziontech/webkit/<category>/<name>'
 ```
 
 <!-- Composition example (structure: composition):
+     LEAD with the compound dot-notation form — one import of the root, every
+     sub-component reached as `<Root.Part>`. The standalone imports remain
+     available (and are the tree-shaking path) but the docs lead with compound.
+     The root binding MUST be PascalCase (`Dialog`); a lowercase root would
+     collide with a native element and not resolve. See
+     `.claude/rules/compound-api.md`.
+
+```vue
+<script setup>
+import Dialog from '@aziontech/webkit/overlay/dialog'
+</script>
+
+<template>
+  <Dialog>
+    <Dialog.Trigger>Open</Dialog.Trigger>
+    <Dialog.Content>
+      <Dialog.Title>Confirm action</Dialog.Title>
+      <Dialog.Description>This cannot be undone.</Dialog.Description>
+      <Dialog.Close>Cancel</Dialog.Close>
+    </Dialog.Content>
+  </Dialog>
+</template>
+```
+
+Tree-shaking alternative — the same sub-components as standalone imports:
 
 ```vue
 <script setup>
 import Dialog from '@aziontech/webkit/overlay/dialog'
 import DialogTrigger from '@aziontech/webkit/overlay/dialog-trigger'
 import DialogContent from '@aziontech/webkit/overlay/dialog-content'
-import DialogTitle from '@aziontech/webkit/overlay/dialog-title'
-import DialogDescription from '@aziontech/webkit/overlay/dialog-description'
-import DialogClose from '@aziontech/webkit/overlay/dialog-close'
 </script>
-
-<template>
-  <Dialog>
-    <DialogTrigger>Open</DialogTrigger>
-    <DialogContent>
-      <DialogTitle>Confirm action</DialogTitle>
-      <DialogDescription>This cannot be undone.</DialogDescription>
-      <DialogClose>Cancel</DialogClose>
-    </DialogContent>
-  </Dialog>
-</template>
 ```
 -->
 
@@ -71,6 +82,7 @@ import DialogClose from '@aziontech/webkit/overlay/dialog-close'
 
 <!-- Omit this section when structure: monolithic. -->
 <!-- For structure: composition, list every public sub-component AND the folder layout the scaffolder must emit. Each sub-component lives in its own folder under the root component, one folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
+<!-- Composition components ship a COMPOUND API: an `index.ts` that uses `Object.assign` to attach every sub-component to the root (vue-tsc generates the adjacent `index.d.ts`, so `<Root.Part>` is typed; never hand-write the `.d.ts` — it is gitignored). Consumers reach `<Root.Part>` with one import, while the standalone sub-component imports remain for tree-shaking. Member names mirror THIS component's anatomy (`SortButton`, not a generic `Trigger`); `Trigger`/`Content` are for overlay/disclosure components only. See `.claude/rules/compound-api.md`. -->
 
 - `<name>-trigger/<name>-trigger.vue` — purpose
 - `<name>-portal/<name>-portal.vue` — purpose
@@ -84,7 +96,8 @@ import DialogClose from '@aziontech/webkit/overlay/dialog-close'
 
   packages/webkit/src/components/webkit/<category>/<name>/
   ├── <name>.vue
-  ├── package.json
+  ├── index.ts                    (compound: Object.assign attaches every sub-component; vue-tsc emits index.d.ts)
+  ├── package.json                (main/module → ./index.ts, types → ./index.d.ts)
   ├── injection-key.ts            (shared by every sub-component; one directory up from each sub-component)
   ├── <name>-trigger/
   │   ├── <name>-trigger.vue
@@ -94,8 +107,19 @@ import DialogClose from '@aziontech/webkit/overlay/dialog-close'
   │   └── package.json
   └── ...
 
-  Public exports in packages/webkit/package.json#exports stay flat
-  (`./<category>/<name>-trigger`) regardless of the folder nesting. -->
+  The root export (`./<category>/<name>`) points at `index.ts`, NOT the root
+  `.vue`. Sub-component exports stay flat (`./<category>/<name>-trigger`) and
+  point at their `.vue` regardless of the folder nesting. -->
+
+<!-- Compound API file (composition only), beside `<name>.vue` — one `.ts`; vue-tsc derives index.d.ts:
+
+```ts
+// index.ts
+import Root from './<name>.vue'
+import RootPart from './<name>-part/<name>-part.vue'
+export default Object.assign(Root, { Part: RootPart })
+```
+-->
 
 
 ## Props
@@ -221,6 +245,7 @@ Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/B
 - Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
