@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { inputSelectContextKey } from '../injection-key'
 
   defineOptions({
@@ -147,12 +148,12 @@
         >
           <slot name="search" />
         </div>
-        <div
-          class="flex max-h-60 flex-col items-stretch overflow-y-auto overflow-x-hidden p-[var(--spacing-xxs)]"
+        <ScrollArea
+          class="flex max-h-60 flex-col items-stretch p-[var(--spacing-xxs)]"
           :data-testid="`${testId}__list`"
         >
           <slot />
-        </div>
+        </ScrollArea>
         <div
           v-if="$slots['footer']"
           class="flex shrink-0 items-center justify-center p-[var(--spacing-xxs)]"

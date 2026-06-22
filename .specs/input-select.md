@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 14d4a1918e1885897c4ffb714fa74e12a5e5d1fef68e34d2830b377aa88c6992
+checksum: eaedd783abe39ab502a139e26a0a8ace856bf7ae5c28e702f9bd41696dedac4e
 created: 2026-06-15
-last_updated: 2026-06-15
+last_updated: 2026-06-22
 ---
 
 # Input Select — Component Spec
@@ -25,29 +25,27 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 ```vue
 <script setup>
 import InputSelect from '@aziontech/webkit/inputs/input-select'
-import InputSelectTrigger from '@aziontech/webkit/inputs/input-select-trigger'
-import InputSelectContent from '@aziontech/webkit/inputs/input-select-content'
-import InputSelectGroup from '@aziontech/webkit/inputs/input-select-group'
-import InputSelectOption from '@aziontech/webkit/inputs/input-select-option'
 
 const value = defineModel({ default: '' })
 </script>
 
 <template>
   <InputSelect v-model="value" size="medium" placeholder="Select an option">
-    <InputSelectTrigger />
-    <InputSelectContent>
-      <InputSelectGroup label="Group A">
-        <InputSelectOption value="opt-1">Option 1</InputSelectOption>
-        <InputSelectOption value="opt-2">Option 2</InputSelectOption>
-      </InputSelectGroup>
-      <InputSelectGroup label="Group B">
-        <InputSelectOption value="opt-3" icon="pi pi-heart">Option 3</InputSelectOption>
-      </InputSelectGroup>
-    </InputSelectContent>
+    <InputSelect.Trigger />
+    <InputSelect.Content>
+      <InputSelect.Group label="Group A">
+        <InputSelect.Option value="opt-1">Option 1</InputSelect.Option>
+        <InputSelect.Option value="opt-2">Option 2</InputSelect.Option>
+      </InputSelect.Group>
+      <InputSelect.Group label="Group B">
+        <InputSelect.Option value="opt-3" icon="pi pi-heart">Option 3</InputSelect.Option>
+      </InputSelect.Group>
+    </InputSelect.Content>
   </InputSelect>
 </template>
 ```
+
+Each sub-component is also exported individually for tree-shaking-sensitive consumers — `import InputSelectTrigger from '@aziontech/webkit/inputs/input-select-trigger'` (and `-content`, `-group`, `-option`) resolves to the same component referenced by `InputSelect.Trigger`.
 
 ## Sub-components
 
@@ -153,6 +151,7 @@ const value = defineModel({ default: '' })
 - WithGroups — justification: documents the `<InputSelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.
 - WithSearchAndFooter — justification: documents the `#search` and `#footer` slots on `<InputSelectContent>` (Top/Bottom regions in Figma `3899:29361`), which are slot-only and invisible from Default.
 - WithOptionExtras — justification: documents the `icon`, `#left`, and `#tag` slots on `<InputSelectOption>` in one composite frame.
+- LongList — justification: documents the panel's internal scroll behaviour (options list wrapped in `ScrollArea`) when the option count exceeds the `max-h-60` viewport; not reachable from any other story.
 - Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop).
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - Disabled
