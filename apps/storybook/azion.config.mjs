@@ -24,26 +24,26 @@ export default {
   },
   storage: [
     {
-      name: 'webkit-storybook',
-      prefix: '20260316141821',
+      name: 'webkit-storybook-dev',
+      prefix: '',
       dir: './dist',
       workloadsAccess: 'read_only'
     }
   ],
   connectors: [
     {
-      name: 'webkit-storybook',
+      name: 'webkit-storybook-dev',
       active: true,
       type: 'storage',
       attributes: {
-        bucket: 'webkit-storybook',
-        prefix: '20260316141821'
+        bucket: 'webkit-storybook-dev',
+        prefix: ''
       }
     }
   ],
   applications: [
     {
-      name: 'webkit-storybook',
+      name: 'webkit-storybook-dev',
       cache: [
         {
           name: 'webkit-storybook',
@@ -77,7 +77,7 @@ export default {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: 'webkit-storybook'
+                  value: 'webkit-storybook-dev'
                 }
               },
               {
@@ -128,18 +128,18 @@ export default {
   ],
   workloads: [
     {
-      name: 'webkit-storybook',
+      name: 'webkit-storybook-dev',
       active: true,
       infrastructure: 1,
       deployments: [
         {
-          name: 'webkit-storybook',
+          name: 'webkit-storybook-dev',
           current: true,
           active: true,
           strategy: {
             type: 'default',
             attributes: {
-              application: 'webkit-storybook'
+              application: 'webkit-storybook-dev'
             }
           }
         }

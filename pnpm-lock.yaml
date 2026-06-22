@@ -204,7 +204,7 @@ importers:
       '@aziontech/theme':
         specifier: workspace:*
         version: link:../../packages/theme
-      '@aziontech/webkit':
+      '@aziontech/webkit.dev':
         specifier: workspace:*
         version: link:../../packages/webkit
       '@storybook/manager-api':
