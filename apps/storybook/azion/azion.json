@@ -1,14 +1,15 @@
 {
   "name": "webkit-storybook-dev",
-  "bucket": "",
-  "preset": "vue",
+  "bucket": "webkit-storybook-dev",
+  "preset": "html",
   "env": "production",
-  "prefix": "",
+  "prefix": "20260622162358",
   "rotate-prefix": true,
+  "not-first-run": true,
   "function": [],
   "application": {
-    "id": 0,
-    "name": "__DEFAULT__"
+    "id": 1782150864,
+    "name": "webkit-storybook-dev"
   },
   "domain": {
     "id": 0,
@@ -22,15 +23,43 @@
   "origin": null,
   "rules-engine": {
     "created": false,
-    "rules": null
+    "rules": [
+      {
+        "id": 605360,
+        "name": "Deliver Static Assets and Set Cache Policy",
+        "phase": "request"
+      },
+      {
+        "id": 605361,
+        "name": "Redirect to index.html",
+        "phase": "request"
+      }
+    ]
   },
-  "cache-settings": null,
+  "cache-settings": [
+    {
+      "id": 297448,
+      "name": "webkit-storybook"
+    }
+  ],
   "workloads": {
-    "id": 0,
-    "name": "",
-    "domains": null,
-    "url": "",
-    "deployment_id": null
+    "id": 1782157441,
+    "name": "webkit-storybook-dev",
+    "domains": [
+      "dev-webkit.azion.app"
+    ],
+    "url": "https://btkatoztsbw.map.azionedge.net",
+    "deployment_id": [
+      {
+        "id": 235035,
+        "name": "webkit-storybook-dev"
+      }
+    ]
   },
-  "connectors": null
+  "connectors": [
+    {
+      "id": 48496,
+      "name": "webkit-storybook-dev"
+    }
+  ]
 }

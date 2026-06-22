@@ -25,7 +25,7 @@ export default {
   storage: [
     {
       name: 'webkit-storybook-dev',
-      prefix: '',
+      prefix: '20260622162358',
       dir: './dist',
       workloadsAccess: 'read_only'
     }
@@ -37,7 +37,7 @@ export default {
       type: 'storage',
       attributes: {
         bucket: 'webkit-storybook-dev',
-        prefix: ''
+        prefix: '20260622162358'
       }
     }
   ],
@@ -110,7 +110,7 @@ export default {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: 'webkit-storybook'
+                  value: 'webkit-storybook-dev'
                 }
               },
               {
@@ -131,6 +131,7 @@ export default {
       name: 'webkit-storybook-dev',
       active: true,
       infrastructure: 1,
+      domains: ['dev-webkit.azion.app'],
       deployments: [
         {
           name: 'webkit-storybook-dev',
