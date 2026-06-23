@@ -19,18 +19,6 @@
  */
 export const webkitViteConfig = {
   optimizeDeps: {
-    include: [
-      'primevue/toasteventbus',
-      'primevue/usetoast',
-      'primevue/toastservice',
-      'primevue/usedialog',
-      'primevue/dialogservice',
-      'primevue/dynamicdialogeventbus',
-      'primevue/config',
-      'primevue/tooltip',
-      'primevue/api',
-      'primevue/utils',
-      'vee-validate'
-    ]
+    include: ['vee-validate']
   }
 }

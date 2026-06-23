@@ -40,7 +40,6 @@ From a senior open-source design system maintainer perspective, this project has
 ### ✅ Documentation (7/10)
 
 - `COMPONENT_REQUIREMENTS.md` - Excellent component development guide
-- `PRIMEVUE_ABSTRACTION.md` - Clear abstraction strategy
 - `GOVERNANCE_IMPLEMENTATION.md` - Implementation reasoning documented
 - Semantic release with automatic changelogs
 
@@ -273,10 +272,6 @@ Component libraries must be lightweight. Without tracking bundle size, component
     {
       "path": "src/core/form/field-text/field-text.vue",
       "limit": "5 KB"
-    },
-    {
-      "path": "src/core/primevue/button/button.vue",
-      "limit": "3 KB"
     }
   ],
   "scripts": {
@@ -777,7 +772,6 @@ pnpm add -D -w vitest @vue/test-utils @vitest/coverage-v8 jsdom happy-dom
 - [ ] Write unit tests for composables (useToast, useDialog)
 - [ ] Write component tests for:
   - [ ] All form fields (field-text, field-dropdown, etc.)
-  - [ ] PrimeVue wrappers (button, dialog, toast)
   - [ ] List data table
 - [ ] Add test coverage reporting
 - [ ] Setup GitHub Actions for tests
