@@ -1,4 +1,5 @@
 /**
+ *
  * Vite configuration helper for apps consuming @aziontech/webkit.
  *
  * Ensures PrimeVue internal modules (EventBus, Symbols) are pre-bundled
@@ -16,6 +17,7 @@
  *   optimizeDeps: {
  *     include: [...webkitViteConfig.optimizeDeps.include]
  *   }
+ *
  */
 export const webkitViteConfig = {
   optimizeDeps: {
