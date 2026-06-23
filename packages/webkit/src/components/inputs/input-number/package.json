@@ -1,0 +1,11 @@
+{
+  "main": "./input-number.vue",
+  "module": "./input-number.vue",
+  "types": "./input-number.vue.d.ts",
+  "browser": {
+    "./sfc": "./input-number.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
