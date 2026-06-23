@@ -140,6 +140,7 @@
     "./calendar": "./src/core/primevue/calendar/calendar.vue",
     "./picklist": "./src/core/primevue/picklist/picklist.vue",
     "./avatar": "./src/components/avatar/avatar.vue",
+    "./content/badge": "./src/components/content/badge/badge.vue",
     "./content/card-box": "./src/components/content/card-box/card-box.vue",
     "./content/card-pricing": "./src/components/content/card-pricing/card-pricing.vue",
     "./content/item": "./src/components/content/item/index.js",
