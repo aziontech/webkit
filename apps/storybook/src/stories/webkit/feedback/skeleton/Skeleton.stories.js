@@ -17,22 +17,32 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle`.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import Skeleton from '@aziontech/webkit/feedback/skeleton'",
-          '</script>',
-          '',
-          '<template>',
-          '  <Skeleton width="240px" height="100px" />',
-          '  <Skeleton kind="circle" width="100px" height="100px" />',
-          '</template>',
-          '```'
-        ].join('\n')
+        component:
+          'A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle`.'
+      },
+      source: {
+        type: 'dynamic',
+        excludeDecorators: true,
+        transform: (code) => {
+          const body = code
+            .trim()
+            .split('\n')
+            .map((line) => (line ? `  ${line}` : line))
+            .join('\n')
+
+          return [
+            '<script setup>',
+            "import Skeleton from '@aziontech/webkit/feedback/skeleton'",
+            '</script>',
+            '',
+            '<template>',
+            body,
+            '</template>'
+          ].join('\n')
+        }
+      },
+      canvas: {
+        sourceState: 'shown'
       }
     }
   },
