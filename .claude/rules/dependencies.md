@@ -21,7 +21,6 @@ The webkit layer **must not** depend on external libraries for positioning, anch
 - **Vue 3** primitives — `<Teleport>`, `<Transition>`, `<TransitionGroup>`, `defineModel`, `provide`/`inject`.
 - **`clsx` + `tailwind-merge`** via [`@aziontech/webkit/utils/cn`](../../packages/webkit/src/utils/cn.ts) — class merging only.
 - **`@vueuse/core`** — small reactive utilities (e.g. `useElementVisibility`). **Not** `@vueuse/motion`.
-- **PrimeVue** — only as wrapped via `core/primevue/*`. New components prefer the webkit layer with no PrimeVue dependency.
 - **VeeValidate** — only inside `core/form/*` per existing pattern.
 
 ## How to anchor / position without a lib

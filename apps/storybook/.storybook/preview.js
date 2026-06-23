@@ -78,8 +78,6 @@ export const parameters = {
         'Get Started',
         'Foundations',
         ['Colors', 'Spacing', 'Typography', 'Icons'],
-        'Primevue',
-        'Primevue',
         'Components',
         'Site'
       ]

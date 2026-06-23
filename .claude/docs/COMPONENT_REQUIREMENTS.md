@@ -263,23 +263,7 @@ All interactive elements MUST have `data-testid` attributes for testing:
 - Use kebab-case for component names: `field-text.vue`, `azion-system-status.vue`
 - Directory name MUST match component filename
 
-### 7. PrimeVue Integration (Recommended)
-
-Leverage PrimeVue components as building blocks:
-
-```vue
-<script setup>
-  import InputText from 'primevue/inputtext'
-  import Button from 'primevue/button'
-  // ... component logic
-</script>
-
-<template>
-  <!-- Component template using PrimeVue -->
-</template>
-```
-
-### 8. Template Structure
+### 7. Template Structure
 
 Organize template logically:
 
