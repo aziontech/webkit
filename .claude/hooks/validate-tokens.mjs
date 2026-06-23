@@ -62,8 +62,11 @@ const VIOLATIONS = [
   },
   {
     id: 'primevue-color',
+    // The leading (?<![\w-]) excludes matches embedded in a CSS variable name
+    // (e.g. the sanctioned `var(--bg-surface-overlay)`), so only the bare
+    // PrimeFlex utility class (`surface-overlay`, `text-color`, ...) is caught.
     regex:
-      /\b(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\b/g,
+      /(?<![\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\b/g,
     message:
       'PrimeVue color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...).'
   },
