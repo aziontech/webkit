@@ -1,30 +1,27 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { cn } from '../../../utils/cn'
-  import { toggleControlClasses } from '../presets/interactive-states'
-
   defineOptions({
     name: 'Checkbox',
     inheritAttrs: false
   })
 
   interface Props {
-    /** model Value. */
+    /** Bound value: a boolean in `binary` mode, otherwise the array/value the control reflects. */
     modelValue?: unknown
-    /** value. */
+    /** This checkbox's value, added to or removed from the model array when not `binary`. */
     value?: unknown
-    /** binary. */
+    /** Toggles a single boolean instead of collecting `value` into an array. */
     binary?: boolean
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
-    /** readonly. */
+    /** Prevents changes while the control stays focusable. */
     readonly?: boolean
-    /** input Id. */
+    /** Forwarded to the native input id; pair with an external label for attribute. */
     inputId?: string
     /** HTML name for form submission. */
     name?: string
-    /** tabindex. */
+    /** Tab order for the native input. */
     tabindex?: number
   }
 
@@ -89,34 +86,16 @@
 
     emit('update:modelValue', current)
   }
-
-  const sharedClasses = [
-    ...toggleControlClasses,
-    'group size-[1.125rem] align-middle rounded-[var(--shape-button)] border border-[var(--border-default)]',
-    'bg-[var(--bg-surface)] text-transparent'
-  ]
-
-  const checkedClasses =
-    'data-[checked]:border-[var(--primary)] data-[checked]:bg-[var(--primary)] data-[checked]:text-[var(--primary-contrast)] data-[checked]:before:hidden data-[checked]:after:hidden'
-
-  const disabledClasses =
-    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:opacity-50 data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed'
-
-  const iconClasses =
-    'size-2.5 shrink-0 stroke-[1.5] group-data-[disabled]:stroke-[var(--text-disabled)]'
-
-  const rootClasses = computed(() =>
-    cn(sharedClasses, checkedClasses, disabledClasses, attrs.class)
-  )
 </script>
 
 <template>
   <span
-    :class="rootClasses"
+    :class="attrs.class"
     :data-testid="testId"
     :data-checked="isChecked || null"
     :data-disabled="disabled || null"
     :data-readonly="readonly || null"
+    class="group relative inline-flex size-[1.125rem] shrink-0 items-center justify-center align-middle rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] text-transparent before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-[var(--bg-active)] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--ring-color)] has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-[var(--bg-canvas)] focus-within:before:opacity-0 has-[:focus-visible]:before:opacity-0 data-[checked]:border-[var(--primary)] data-[checked]:bg-[var(--primary)] data-[checked]:text-[var(--primary-contrast)] data-[checked]:before:hidden data-[checked]:after:hidden data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:opacity-50 data-[disabled]:before:hidden data-[disabled]:after:hidden data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden"
   >
     <input
       :id="inputId"
@@ -134,7 +113,7 @@
     />
     <svg
       v-if="isChecked"
-      :class="iconClasses"
+      class="size-2.5 shrink-0 stroke-[1.5] group-data-[disabled]:stroke-[var(--text-disabled)]"
       viewBox="0 0 12 12"
       fill="none"
       aria-hidden="true"
