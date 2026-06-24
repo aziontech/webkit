@@ -1,6 +1,6 @@
 import Button from '@aziontech/webkit/button'
 import Avatar from '@aziontech/webkit/avatar'
-import Item from '@aziontech/webkit/content/item'
+import Item from '@aziontech/webkit/item'
 
 const sampleAvatarSrc =
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'

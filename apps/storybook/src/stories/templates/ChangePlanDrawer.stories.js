@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import CardPricing from '@aziontech/webkit/content/card-pricing'
+import CardPricing from '@aziontech/webkit/card-pricing'
 import Drawer from '@aziontech/webkit/drawer'
 import DrawerClose from '@aziontech/webkit/drawer-close'
 import DrawerContent from '@aziontech/webkit/drawer-content'

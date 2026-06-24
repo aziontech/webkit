@@ -1,4 +1,4 @@
-import CardBox from '@aziontech/webkit/content/card-box'
+import CardBox from '@aziontech/webkit/card-box'
 
 /** @type {import('@storybook/vue3').Meta<typeof CardBox>} */
 const meta = {
