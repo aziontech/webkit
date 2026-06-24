@@ -1,0 +1,11 @@
+{
+  "main": "./toast-close.vue",
+  "module": "./toast-close.vue",
+  "types": "./toast-close.vue.d.ts",
+  "browser": {
+    "./sfc": "./toast-close.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

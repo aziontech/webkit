@@ -1,0 +1,11 @@
+{
+  "main": "./toast-action.vue",
+  "module": "./toast-action.vue",
+  "types": "./toast-action.vue.d.ts",
+  "browser": {
+    "./sfc": "./toast-action.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
