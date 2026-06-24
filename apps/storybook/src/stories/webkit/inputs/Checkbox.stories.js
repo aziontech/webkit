@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import Checkbox from '@aziontech/webkit/inputs/checkbox'
 
@@ -8,7 +8,7 @@ const meta = {
   component: Checkbox,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: { default: 'dark' },
     a11y: {
       config: {
@@ -20,25 +20,44 @@ const meta = {
     },
     docs: {
       description: {
-        component:
-          'Control only — the square checkbox input with no label or description. Pair with an external label or use FieldCheckbox / FieldCheckboxBlock for built-in text.'
+        component: [
+          'Square checkbox control only — the box, the native input, and the check glyph, with no label or description chrome. Use it when you compose your own label, or reach for `FieldCheckbox` / `FieldCheckboxBlock` when you want built-in text. Supports a single boolean (`binary`) or collecting a `value` into an array model.',
+          '',
+          '## Usage',
+          '',
+          '```vue',
+          '<script setup>',
+          "import { ref } from 'vue'",
+          "import Checkbox from '@aziontech/webkit/inputs/checkbox'",
+          '',
+          'const accepted = ref(false)',
+          '</script>',
+          '',
+          '<template>',
+          '  <label class="inline-flex items-center gap-[var(--spacing-2)]">',
+          '    <Checkbox v-model="accepted" binary input-id="accept-terms" />',
+          '    Accept terms',
+          '  </label>',
+          '</template>',
+          '```'
+        ].join('\n')
       }
     }
   },
   argTypes: {
     modelValue: {
       control: 'boolean',
-      description: 'model Value.',
+      description: 'Bound value: a boolean in binary mode, otherwise the array/value the control reflects.',
       table: { type: { summary: 'unknown' }, category: 'props' }
     },
     value: {
       control: false,
-      description: 'value.',
+      description: "This checkbox's value, added to or removed from the model array when not binary.",
       table: { type: { summary: 'unknown' }, category: 'props' }
     },
     binary: {
       control: 'boolean',
-      description: 'binary.',
+      description: 'Toggles a single boolean instead of collecting value into an array.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
     disabled: {
@@ -48,12 +67,12 @@ const meta = {
     },
     readonly: {
       control: 'boolean',
-      description: 'readonly.',
+      description: 'Prevents changes while the control stays focusable.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
     inputId: {
       control: 'text',
-      description: 'input Id.',
+      description: 'Forwarded to the native input id; pair with an external label for attribute.',
       table: { type: { summary: 'string' }, category: 'props' }
     },
     name: {
@@ -63,76 +82,68 @@ const meta = {
     },
     tabindex: {
       control: 'number',
-      description: 'tabindex.',
+      description: 'Tab order for the native input.',
       table: { type: { summary: 'number' }, category: 'props' }
     },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
-      description: 'Emitted when the value changes.',
+      description: 'Emitted on toggle; payload is the next boolean (binary) or the updated value array.',
       table: { type: { summary: 'unknown' }, category: 'events' }
     }
+  },
+  args: {
+    binary: true,
+    disabled: false,
+    readonly: false
   }
 }
 
 export default meta
 
-export const Default = {
-  render: () => ({
-    components: { Checkbox },
-    setup() {
-      const value = ref(false)
-      return { value }
-    },
-    template: `
-      <Checkbox
-        v-model="value"
-        binary
-        input-id="webkit-checkbox-default"
-        aria-label="Toggle option"
-      />
-    `
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Binary control only — associate copy via an external label or FieldCheckbox.'
+const Template = (args) => ({
+  components: { Checkbox },
+  setup() {
+    const value = ref(args.modelValue ?? false)
+
+    watch(
+      () => args.modelValue,
+      (next) => {
+        value.value = next ?? false
       }
+    )
+
+    const onUpdate = (next) => {
+      value.value = next
+      args['onUpdate:modelValue']?.(next)
     }
+
+    return { args, value, onUpdate }
+  },
+  template: '<Checkbox v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
+})
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Checkbox>} */
+export const Default = {
+  render: Template,
+  parameters: {
+    docs: { description: { story: 'Binary control only — associate copy via an external label or FieldCheckbox.' } }
   }
 }
 
 export const Disabled = {
-  render: () => ({
+  render: (args) => ({
     components: { Checkbox },
     setup() {
-      const checked = ref(true)
-      const unchecked = ref(false)
-      return { checked, unchecked }
+      return { args }
     },
     template: `
       <div class="flex items-center gap-[var(--spacing-4)]">
-        <Checkbox
-          v-model="checked"
-          binary
-          disabled
-          input-id="webkit-checkbox-disabled-on"
-          aria-label="Disabled checked"
-        />
-        <Checkbox
-          v-model="unchecked"
-          binary
-          disabled
-          input-id="webkit-checkbox-disabled-off"
-          aria-label="Disabled unchecked"
-        />
+        <Checkbox v-bind="args" :model-value="true" disabled aria-label="Disabled checked" />
+        <Checkbox v-bind="args" :model-value="false" disabled aria-label="Disabled unchecked" />
       </div>
     `
   }),
   parameters: {
-    docs: {
-      description: {
-        story: 'Disabled checked and unchecked controls without label chrome.'
-      }
-    }
+    docs: { description: { story: 'Disabled control in both checked and unchecked states.' } }
   }
 }
