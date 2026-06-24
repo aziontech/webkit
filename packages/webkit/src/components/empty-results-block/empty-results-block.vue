@@ -1,7 +1,6 @@
 <script setup>
-  import PrimeButton from 'primevue/button'
-
-  import Button from '../../actions/button/button.vue'
+  import Button from '../actions/button/button.vue'
+  import Link from '../navigation/link/link.vue'
 
   defineOptions({ name: 'EmptyResultsBlock' })
 
@@ -89,7 +88,6 @@
           <slot name="default">
             <Button
               v-if="createButtonLabel"
-              size="medium"
               kind="secondary"
               icon="pi pi-plus"
               :disabled="disabledList"
@@ -100,13 +98,10 @@
           </slot>
           <slot name="extraActionsRight"></slot>
         </div>
-        <PrimeButton
+        <Link
           v-if="documentationService"
-          class="w-fit"
-          icon-pos="right"
-          icon="pi pi-external-link"
           label="View Documentation"
-          link
+          icon="pi pi-external-link"
           size="small"
           @click="openDocumentation"
         />

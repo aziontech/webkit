@@ -4,7 +4,7 @@ const FIGMA_NODE = 'https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?n
 
 figma.connect(FIGMA_NODE, {
   label: 'Link',
-  imports: ['import Link from "@aziontech/webkit/navigation/link"'],
+  imports: ['import Link from "@aziontech/webkit/link"'],
   props: {
     label: figma.string('label'),
     size: figma.enum('Size', {

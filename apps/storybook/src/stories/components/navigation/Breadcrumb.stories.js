@@ -1,4 +1,4 @@
-import Breadcrumb from '@aziontech/webkit/navigation/breadcrumb'
+import Breadcrumb from '@aziontech/webkit/breadcrumb'
 
 const breadcrumbComponents = {
   BreadcrumbRoot: Breadcrumb.Root,

@@ -1,15 +1,15 @@
 import Avatar from '@aziontech/webkit/avatar'
-import InputText from '@aziontech/webkit/inputs/input-text'
-import Sidebar from '@aziontech/webkit/layout/sidebar'
-import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'
-import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
+import InputText from '@aziontech/webkit/input-text'
+import Sidebar from '@aziontech/webkit/sidebar'
+import SidebarFooter from '@aziontech/webkit/sidebar-footer'
+import SidebarGroup from '@aziontech/webkit/sidebar-group'
 import MenuItem from '@aziontech/webkit/menu-item'
-import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'
-import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'
-import DropdownMenuItem from '@aziontech/webkit/overlay/dropdown-menu-item'
-import DropdownMenuPortal from '@aziontech/webkit/overlay/dropdown-menu-portal'
-import DropdownMenuSeparator from '@aziontech/webkit/overlay/dropdown-menu-separator'
-import DropdownMenuTrigger from '@aziontech/webkit/overlay/dropdown-menu-trigger'
+import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+import DropdownMenuContent from '@aziontech/webkit/dropdown-menu-content'
+import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+import DropdownMenuPortal from '@aziontech/webkit/dropdown-menu-portal'
+import DropdownMenuSeparator from '@aziontech/webkit/dropdown-menu-separator'
+import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
 import { ref } from 'vue'
 
 const sampleImage =
@@ -27,10 +27,10 @@ const componentDocsDescription = [
   '',
   '```vue',
   '<script setup>',
-  "import Sidebar from '@aziontech/webkit/layout/sidebar'",
-  "import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'",
-  "import SidebarHeader from '@aziontech/webkit/layout/sidebar-header'",
-  "import SidebarFooter from '@aziontech/webkit/layout/sidebar-footer'",
+  "import Sidebar from '@aziontech/webkit/sidebar'",
+  "import SidebarGroup from '@aziontech/webkit/sidebar-group'",
+  "import SidebarHeader from '@aziontech/webkit/sidebar-header'",
+  "import SidebarFooter from '@aziontech/webkit/sidebar-footer'",
   "import MenuItem from '@aziontech/webkit/menu-item'",
   '</script>',
   '',

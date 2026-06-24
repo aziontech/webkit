@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import Dropdown from '@aziontech/webkit/inputs/dropdown'
+import Dropdown from '@aziontech/webkit/dropdown'
 
 const sampleOptions = [
   { label: 'Option 1', value: 1 },

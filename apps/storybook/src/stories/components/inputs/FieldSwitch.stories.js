@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import FieldSwitch from '@aziontech/webkit/inputs/field-switch'
+import FieldSwitch from '@aziontech/webkit/field-switch'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldSwitch>} */
 const meta = {

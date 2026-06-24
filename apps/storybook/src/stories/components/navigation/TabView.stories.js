@@ -1,4 +1,4 @@
-import TabView from '@aziontech/webkit/navigation/tab-view'
+import TabView from '@aziontech/webkit/tab-view'
 
 const tabViewComponents = {
   TabViewRoot: TabView.Root,

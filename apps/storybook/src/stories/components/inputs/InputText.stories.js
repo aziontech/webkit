@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import InputText from '@aziontech/webkit/inputs/input-text'
+import InputText from '@aziontech/webkit/input-text'
 
 const sizes = ['small', 'medium', 'large']
 

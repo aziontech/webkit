@@ -80,7 +80,7 @@ For anchors **inside** body or heading copy, use the `text-link` typography clas
 </p>
 ```
 
-For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/navigation/link` — not `text-link` alone.
+For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/link` — not `text-link` alone.
 
 ---
 

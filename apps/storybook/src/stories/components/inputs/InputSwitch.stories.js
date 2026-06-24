@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import InputSwitch from '@aziontech/webkit/inputs/input-switch'
+import InputSwitch from '@aziontech/webkit/input-switch'
 
 /** @type {import('@storybook/vue3').Meta<typeof InputSwitch>} */
 const meta = {

@@ -1,5 +1,5 @@
 import AzionDefault from '@aziontech/webkit/svg/azion/default'
-import GlobalHeader from '@aziontech/webkit/layout/global-header'
+import GlobalHeader from '@aziontech/webkit/global-header'
 
 /** @type {import('@storybook/vue3').Meta<typeof GlobalHeader>} */
 const meta = {

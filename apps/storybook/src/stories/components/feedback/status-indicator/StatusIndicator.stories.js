@@ -1,4 +1,4 @@
-import StatusIndicator from '@aziontech/webkit/feedback/status-indicator'
+import StatusIndicator from '@aziontech/webkit/status-indicator'
 
 const statuses = ['positive', 'info', 'neutral', 'warning', 'alt', 'danger']
 
@@ -29,7 +29,7 @@ const meta = {
           '',
           '```vue',
           '<script setup>',
-          "import StatusIndicator from '@aziontech/webkit/feedback/status-indicator'",
+          "import StatusIndicator from '@aziontech/webkit/status-indicator'",
           '</script>',
           '',
           '<template>',

@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import NavigationMenu from '@aziontech/webkit/navigation/navigation-menu'
+import NavigationMenu from '@aziontech/webkit/navigation-menu'
 import { expect, userEvent, within } from '@storybook/test'
 
 const navigationMenuComponents = {

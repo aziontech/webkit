@@ -1,4 +1,4 @@
-import BreadcrumbItem from '@aziontech/webkit/navigation/breadcrumb-item'
+import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
 
 /** @type {import('@storybook/vue3').Meta<typeof BreadcrumbItem>} */
 const meta = {

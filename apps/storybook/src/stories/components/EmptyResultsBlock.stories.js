@@ -1,7 +1,7 @@
 import EmptyResultsBlock from '@aziontech/webkit/empty-results-block';
 
 export default {
-  title: 'Core/EmptyResultsBlock',
+  title: 'Components/EmptyResultsBlock',
   component: EmptyResultsBlock,
   tags: ['autodocs'],
   parameters: {

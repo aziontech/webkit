@@ -1,4 +1,4 @@
-import PlanSuccess from '@aziontech/webkit/templates/plan-success'
+import PlanSuccess from '@aziontech/webkit/plan-success'
 
 /** @type {import('@storybook/vue3').Meta<typeof PlanSuccess>} */
 const meta = {

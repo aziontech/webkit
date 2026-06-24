@@ -21,7 +21,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 
 ```vue
 <script setup>
-import Message from '@aziontech/webkit/feedback/message'
+import Message from '@aziontech/webkit/message'
 </script>
 
 <template>

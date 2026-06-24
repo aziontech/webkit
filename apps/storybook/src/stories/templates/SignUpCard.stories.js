@@ -1,4 +1,4 @@
-import SignUpCard from '@aziontech/webkit/templates/sign-up-card'
+import SignUpCard from '@aziontech/webkit/sign-up-card'
 
 export default {
   title: 'Templates/SignUpCard',

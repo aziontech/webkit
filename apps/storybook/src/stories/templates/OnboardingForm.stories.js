@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import OnboardingForm from '@aziontech/webkit/templates/onboarding-form'
+import OnboardingForm from '@aziontech/webkit/onboarding-form'
 
 /** @type {import('@storybook/vue3').Meta<typeof OnboardingForm>} */
 const meta = {

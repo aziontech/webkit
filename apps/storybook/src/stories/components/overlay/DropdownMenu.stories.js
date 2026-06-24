@@ -1,17 +1,17 @@
 import Button from '@aziontech/webkit/button'
-import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'
-import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'
+import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+import DropdownMenuContent from '@aziontech/webkit/dropdown-menu-content'
 import {
   buildDropdownMenuSections,
   dropdownMenuGroup,
   dropdownMenuItem
-} from '@aziontech/webkit/overlay/dropdown-menu-factory'
-import DropdownMenuFromModel from '@aziontech/webkit/overlay/dropdown-menu-from-model'
-import DropdownMenuGroup from '@aziontech/webkit/overlay/dropdown-menu-group'
-import DropdownMenuItem from '@aziontech/webkit/overlay/dropdown-menu-item'
-import DropdownMenuPortal from '@aziontech/webkit/overlay/dropdown-menu-portal'
-import DropdownMenuSeparator from '@aziontech/webkit/overlay/dropdown-menu-separator'
-import DropdownMenuTrigger from '@aziontech/webkit/overlay/dropdown-menu-trigger'
+} from '@aziontech/webkit/dropdown-menu-factory'
+import DropdownMenuFromModel from '@aziontech/webkit/dropdown-menu-from-model'
+import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+import DropdownMenuPortal from '@aziontech/webkit/dropdown-menu-portal'
+import DropdownMenuSeparator from '@aziontech/webkit/dropdown-menu-separator'
+import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
 import { expect, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 
