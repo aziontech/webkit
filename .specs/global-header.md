@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 2d707153870d71633de1da261da8c5c3cdf1d5b899c72edb1589a8328c88ca4d
+checksum: 71c9e497979cb35460c5bbc6c42d632640caefda8eb5bcf0c01888fcd7e00dc1
 created: 2026-05-23
 last_updated: 2026-06-23
 ---
@@ -19,8 +19,9 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 
 ## Sub-components
 
-- `global-header-left.vue` — Start region; flex row for menu, brand, and leading actions.
-- `global-header-middle.vue` — Center region; grows to fill space between start and end.
+- `global-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Left`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region. Optional — consumers may still place `Left`/`Brand` directly in the root.
+- `global-header-left.vue` — Start region; flex row for menu and leading actions.
+- `global-header-middle.vue` — Center region; grows to fill space between start and end. Also exposed as `GlobalHeader.Nav` (Figma `Nav` name); both names reference the same component.
 - `global-header-right.vue` — End region; trailing actions aligned to the end.
 - `global-header-brand.vue` — Brand slot wrapper sized for Azion logo SVGs (default / min).
 
@@ -38,8 +39,8 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Root: compose `Left`, `Middle`, `Right` sub-components. |
-| `default` | — | Each sub-component exposes `default` for region content. |
+| `default` | — | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
+| `default` | — | Each sub-component (incl. `Container`) exposes `default` for region content. |
 | `default` | — | `global-header-brand` exposes `default` for logo markup. |
 
 ## States
@@ -58,6 +59,7 @@ _none_
 | shell height | `h-14` (56px) |
 | shell padding-x | `var(--spacing-md)` |
 | shell region gap | `var(--spacing-md)` |
+| start cluster (container) gap | `var(--spacing-md)` |
 | start (left) region gap | `var(--spacing-xs)` |
 | end (right) region gap | `var(--spacing-sm)` |
 | brand logo height | `18px` |
