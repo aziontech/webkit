@@ -204,7 +204,7 @@ importers:
       '@aziontech/theme':
         specifier: workspace:*
         version: link:../../packages/theme
-      '@aziontech/webkit':
+      '@aziontech/webkit.dev':
         specifier: workspace:*
         version: link:../../packages/webkit
       '@storybook/manager-api':
@@ -351,9 +351,6 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      primevue:
-        specifier: 3.35.0
-        version: 3.35.0(vue@3.5.33(typescript@6.0.3))
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0
@@ -13450,10 +13447,6 @@ snapshots:
   primevue@3.35.0(vue@3.5.33(typescript@5.9.3)):
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
-
-  primevue@3.35.0(vue@3.5.33(typescript@6.0.3)):
-    dependencies:
-      vue: 3.5.33(typescript@6.0.3)
 
   primevue@3.47.2(vue@3.5.33(typescript@6.0.3)):
     dependencies:
