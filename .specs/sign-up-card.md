@@ -12,7 +12,7 @@ last_updated: 2026-05-22
 
 ## Purpose
 
-Composed template block for a product flow. Migrated from the existing implementation at `packages/webkit/src/components/webkit/templates/sign-up-card/`.
+Composed template block for a product flow. Migrated from the existing implementation at `packages/webkit/src/components/Templates/sign-up-card/`.
 
 ## Props
 

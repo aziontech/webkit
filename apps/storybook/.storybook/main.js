@@ -21,16 +21,11 @@ const config = {
     disableTelemetry: true
   },
   refs: {
-    'marketing-components': {
-      title: 'Marketing Components',
-      url: 'https://sxggon4lswe.map.azionedge.net/',
-      expanded: true
-    },
-    'platform-components': {
-      title: 'Platform Components',
-      url: 'https://storybook-console.azion.app/',
-      expanded: true
-    }
+    // 'webkit-v3': {
+    //   title: 'Webkit V3',
+    //   url: 'https://webkit.azion.app/',
+    //   expanded: true
+    // }
   },
   viteFinal: async (config) => {
     // Second @vitejs/plugin-vue for monorepo SFCs under packages/webkit (outside Storybook root).
@@ -39,10 +34,18 @@ const config = {
     config.plugins = config.plugins || []
     config.plugins.push(vue())
 
+    // Dev channel: stories still import from '@aziontech/webkit/*'; redirect to the renamed
+    // workspace package '@aziontech/webkit.dev/*' so no story file needs to change.
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@aziontech/webkit': '@aziontech/webkit.dev'
+    }
+
     // Enable dependency pre-bundling for faster rebuilds
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: ['vue', 'primevue/config', 'primevue/tooltip', 'vee-validate'],
+      include: ['vue', 'vee-validate'],
       force: false
     }
 

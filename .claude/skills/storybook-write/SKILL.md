@@ -1,8 +1,8 @@
 ---
 name: storybook-write
-description: Write a minimal `.stories.js` for a webkit component using the canonical Button.stories.js shape. The spec lists Default + Types + Sizes + Loading + Disabled (only the state stories the component's prop set supports). Inject the spec's `## Usage` block into `parameters.docs.description.component` as a code snippet.
+description: Write a minimal `.stories.js` for a webkit component using the canonical Button.stories.js shape. Stories are Default + one composite story per multi-option axis (Types / Sizes / Icons / …) + one story per mutually-exclusive state (Loading / Disabled / Filled / Invalid) — never one-story-per-variant. Inject the spec's `## Usage` block into `parameters.docs.description.component` as a code snippet.
 status: active
-last_updated: 2026-05-27
+last_updated: 2026-06-15
 ---
 
 # Skill: storybook-write
@@ -103,20 +103,73 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
    - **Events row.** Key is camelCase `on<EventName>` (e.g. `onClick`, `'onUpdate:open'`). Value is `{ action: '<emitted-name>', description, table: { type, category: 'events' } }`. **The key MUST be camelCase** — kebab-case keys silently fail in Vue 3.
    - **Slots row.** Key is the slot name. Value is `{ control: false, description, table: { type, category: 'slots' } }`.
 
-6. **Write the reusable render at module scope** — destructure event handlers off `args` so the `Template`-driven stories forward them via `@event` listeners:
+6. **Write the reusable render at module scope** — forward `args` reactively. Storybook 8's `args` is a reactive proxy; destructuring it (`const { onClick, ...props } = args`) **silently breaks Controls** because the rest-spread freezes property references at setup time, so changing a control in the panel no longer updates the rendered story. The canonical pattern returns `args` itself and binds it directly:
+
+   **Shape — stateless components (Button, Tag, etc.):**
 
    ```js
    const Template = (args) => ({
      components: { Component },
      setup() {
-       const { onClick, ...props } = args
-       return { props, onClick }
+       return { args }
      },
-     template: '<Component v-bind="props" @click="onClick" />'
+     template: '<Component v-bind="args" />'
    })
    ```
 
-   - If the spec declares more than one event, destructure each one (`onClick`, `'onUpdate:open': onUpdateOpen`, …) and forward via the matching `@event="handler"` in the template.
+   **Shape — stateful / v-model components (InputText, InputSelect, FieldText, Checkbox, RadioGroup, anything with `modelValue`):**
+
+   The story MUST hold local state and explicitly forward the update so the field actually reflects user typing/selection AND the `update:modelValue` action fires in the Actions panel. Binding `v-bind="args"` alone makes `modelValue` a one-way prop — the field appears frozen.
+
+   ```js
+   const Template = (args) => ({
+     components: { Component },
+     setup() {
+       const value = ref(args.modelValue ?? '') // or `[]` for multi-select, `false` for boolean
+       watch(
+         () => args.modelValue,
+         (next) => {
+           value.value = next ?? ''
+         }
+       )
+       const onUpdate = (next) => {
+         value.value = next
+         args['onUpdate:modelValue']?.(next)
+       }
+       return { args, value, onUpdate }
+     },
+     template: '<Component v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
+   })
+   ```
+
+   - **Events are auto-wired for stateless components.** Vue 3 treats `onClick` / `onUpdate:open` properties on `v-bind` as event listeners, so any event declared in `argTypes` with `{ action: '<name>' }` is dispatched automatically via `v-bind="args"`. Do NOT manually wire `@click="onClick"` for events without local state.
+   - **For v-model**, the auto-wiring still applies for the dispatch — but you also need a local `ref` so the field updates visually. Always call `args['onUpdate:modelValue']?.(next)` inside your update handler so the Action still fires.
+   - **Composite stories carry context too.** Whenever a composite story (`Sizes`, `Types`, `Icons`, …) renders a stateful component, each instance gets its own local `ref` (or one shared ref when the spec intends them to be linked) and forwards updates the same way:
+
+     ```js
+     export const Sizes = {
+       render: (args) => ({
+         components: { Component },
+         setup() {
+           const small = ref('')
+           const medium = ref('')
+           const large = ref('')
+           const log = (size) => (next) => args['onUpdate:modelValue']?.({ size, value: next })
+           return { args, small, medium, large, log }
+         },
+         template: `
+           <div class="flex flex-col gap-4 w-[280px]">
+             <Component v-bind="args" size="small" placeholder="Small" v-model="small" @update:model-value="log('small')" />
+             <Component v-bind="args" size="medium" placeholder="Medium" v-model="medium" @update:model-value="log('medium')" />
+             <Component v-bind="args" size="large" placeholder="Large" v-model="large" @update:model-value="log('large')" />
+           </div>
+         `
+       })
+     }
+     ```
+
+   - **Slot composites and wrappers** follow the same rule — pass `args` through, and if the component is stateful, hold a local `ref` and call `args['onUpdate:modelValue']?.(next)` in the handler.
+   - **Never** destructure `args`, spread its properties, or copy them into another reactive ref. Any indirection loses the proxy and breaks the Controls panel.
 
 7. **Write one story per item** in `spec.Stories`. The spec lists only the canonical set; do **not** add extras. For each, emit one of the two shapes:
 
@@ -185,9 +238,16 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
    }
    ```
 
-   - **Allowed:** `Default`, `Types`, `Sizes`, `Loading`, `Disabled`.
-   - **Skip** any story whose backing prop is not in `spec.Props` (e.g. no `loading` prop → no `Loading` story).
-   - **Forbidden unless explicitly listed in the spec:** `LightDark`, `Accessibility` (with play), `Playground`, `WithSlots`, `WithComposition`, `Controlled`, `Uncontrolled`, one-story-per-variant (`Primary`, `Secondary`, …). Storybook's `autodocs` + `a11y` addon + `backgrounds` already cover dark/light, axe checks, and consumer-driven exploration via Controls.
+   - **Always-composite stories.** Whenever a prop or slot has more than one meaningful option, render **one composite story** that shows every option side by side — never one story per option. Canonical composites and their backing concept:
+     - `Types` — the `kind` prop (visual variants).
+     - `Sizes` — the `size` prop.
+     - `Icons` — the `iconLeft` / `iconRight` slots (or any pair/triple of icon-like slots) shown alone and combined.
+     - `Slots` — for components with one slot whose content shape varies (long text, short, with leading content, etc.), if applicable.
+     - Project-specific composites are allowed when the spec lists them with justification (e.g. `Densities`, `Tones`, `Placements`).
+   - **One story per state** is correct only for **mutually-exclusive boolean states** that aren't variants of the same axis: `Loading`, `Disabled`, `Filled`, `Invalid`. These cannot be shown side by side because they would each need their own composite axis.
+   - **Skip** any story whose backing prop/slot is not in `spec.Props` / `spec.Slots` (e.g. no `loading` prop → no `Loading` story; no second icon slot → no `Icons` composite, prefer a single inline example inside `Default` or a state story).
+   - **Forbidden** — one story per variant value (`Small` + `Medium` + `Large`, `Primary` + `Secondary` + …) when a composite axis exists. Replace with `Sizes` / `Types`.
+   - **Forbidden unless explicitly listed in the spec:** `LightDark`, `Accessibility` (with play), `Playground`, `WithSlots` (covered by the composite `Slots`/`Icons` pattern), `WithComposition`, `Controlled`, `Uncontrolled`. Storybook's `autodocs` + `a11y` addon + `backgrounds` already cover dark/light, axe checks, and consumer-driven exploration via Controls.
 
 ## Outputs
 
@@ -221,11 +281,12 @@ Generate `apps/storybook/src/stories/webkit/<category>/<name>/<PascalName>.stori
 - [ ] Meta has `title`, `component`, `tags: ['autodocs']`, `parameters` (`layout: 'centered'`, `backgrounds`, `a11y`, `docs`), `argTypes`, `args`.
 - [ ] `parameters.docs.description.component` contains the Purpose paragraph **and** the `## Usage` heading + the `vue` fenced code block lifted verbatim from the spec.
 - [ ] Every prop, event, and slot from the spec has an `argTypes` entry.
-- [ ] Reusable `Template` declared once at module scope, destructuring event handlers off `args`.
+- [ ] Reusable `Template` declared once at module scope, forwarding `args` reactively via `setup() { return { args } }` + `v-bind="args"` — NO destructuring, NO manual `@event` listeners for stateless components (events auto-wire through `v-bind` when declared in `argTypes` with `action`).
+- [ ] **For v-model components**, every story (Default, composites, and state stories) holds a local `ref` synced from `args.modelValue` (via `watch` on `Template`, or fresh refs per instance in composites), binds it with `:model-value="value"` + `@update:model-value="onUpdate"`, and the handler calls `args['onUpdate:modelValue']?.(next)` so the Actions panel logs every change. Composite stories that render multiple stateful instances give each instance its own ref (or one shared ref if the spec links them) — never leave instances with a frozen `modelValue` from `v-bind="args"` alone.
 - [ ] Every story from spec.Stories is exported in CSF3 object form — and nothing beyond that list is exported.
-- [ ] Composite `Types` / `Sizes` stories use inline templates with side-by-side markup; state stories (`Loading`, `Disabled`) use the reusable `Template` with an args delta.
+- [ ] Composite stories (`Types`, `Sizes`, `Icons`, …) use inline templates with side-by-side markup whenever a prop or slot has multiple meaningful options; mutually-exclusive boolean state stories (`Loading`, `Disabled`, `Filled`, `Invalid`) use the reusable `Template` with an args delta.
 - [ ] No bespoke `LightDark` / `Accessibility (play)` / `Playground` / `WithSlots` / `Controlled` stories unless the spec explicitly listed them.
-- [ ] No one-story-per-variant (`Primary`, `Secondary`, …) — `Types` is the canonical replacement.
+- [ ] No one-story-per-variant (`Small`/`Medium`/`Large`, `Primary`/`Secondary`/…, `WithLeadingIcon`/`WithTrailingIcon`) — the corresponding composite (`Sizes`, `Types`, `Icons`) is the canonical replacement.
 - [ ] No `argTypesRegex`, no legacy `.args =` form.
 - [ ] No `parameters.design` / `parameters.figma`, no Figma URLs anywhere in the file, no `@storybook/addon-designs` import.
 - [ ] The `## Usage` snippet appears in exactly one place in the file (inside `docs.description.component`).

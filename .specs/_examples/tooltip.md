@@ -23,7 +23,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ```vue
 <script setup>
-import Tooltip from '@aziontech/webkit/feedback/tooltip'
+import Tooltip from '@aziontech/webkit/tooltip'
 import IconButton from '@aziontech/webkit/icon-button'
 </script>
 

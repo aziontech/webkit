@@ -723,7 +723,7 @@
   --text-disabled: #999999;
   --text-link: #005FCC;
   --text-contrast: #FAFAFA;
-  --ring-color: #0A0A0A;
+  --ring-color: #666666;
   --success: #A4F4C0;
   --success-border: #22C55E66;
   --success-contrast: #12542B;
@@ -783,7 +783,7 @@
   --text-disabled: #4D4D4D;
   --text-link: #3392FF;
   --text-contrast: #000000;
-  --ring-color: #FFFFFF;
+  --ring-color: #4D4D4D;
   --success: #0A2916;
   --success-border: #22C55E66;
   --success-contrast: #52E086;
