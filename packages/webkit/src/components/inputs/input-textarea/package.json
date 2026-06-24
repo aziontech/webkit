@@ -1,0 +1,11 @@
+{
+  "main": "./input-textarea.vue",
+  "module": "./input-textarea.vue",
+  "types": "./input-textarea.vue.d.ts",
+  "browser": {
+    "./sfc": "./input-textarea.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
