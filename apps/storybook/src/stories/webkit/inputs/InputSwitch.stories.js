@@ -2,6 +2,22 @@ import { ref } from 'vue'
 
 import InputSwitch from '@aziontech/webkit/inputs/input-switch'
 
+const CORE_IMPORT = "import InputSwitch from '@aziontech/webkit/inputs/input-switch'"
+
+const basicSource = ({ initial = 'false', bind = '' } = {}) =>
+  [
+    '<script setup>',
+    CORE_IMPORT,
+    "import { ref } from 'vue'",
+    '',
+    `const isToggled = ref(${initial})`,
+    '</script>',
+    '',
+    '<template>',
+    `  <InputSwitch v-model:isToggled="isToggled"${bind ? ' ' + bind : ''} aria-label="Toggle setting" />`,
+    '</template>'
+  ].join('\n')
+
 /** @type {import('@storybook/vue3').Meta<typeof InputSwitch>} */
 const meta = {
   title: 'Webkit/Inputs/Input Switch',
@@ -20,40 +36,58 @@ const meta = {
     },
     docs: {
       description: {
-        component:
-          'Control only — the pill toggle with no label or description. Use FieldSwitch or FieldSwitchBlock for built-in text.'
+        component: [
+          'Control-only pill toggle `InputSwitch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a lock icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts.',
+          '',
+          '## Usage',
+          '',
+          '```vue',
+          '<script setup>',
+          CORE_IMPORT,
+          "import { ref } from 'vue'",
+          '',
+          'const isToggled = ref(false)',
+          '</script>',
+          '',
+          '<template>',
+          '  <InputSwitch v-model:isToggled="isToggled" aria-label="Toggle setting" />',
+          '</template>',
+          '```'
+        ].join('\n')
+      },
+      source: {
+        type: 'dynamic',
+        excludeDecorators: true
+      },
+      canvas: {
+        sourceState: 'shown'
       }
     }
   },
   argTypes: {
-    modelValue: {
+    isToggled: {
       control: 'boolean',
-      description: 'Selected value for v-model.',
-      table: { type: { summary: 'boolean' }, category: 'props' }
-    },
-    trueValue: {
-      control: 'boolean',
-      description: 'Value emitted when toggled on.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' }, category: 'props' }
-    },
-    falseValue: {
-      control: 'boolean',
-      description: 'Value emitted when toggled off.',
+      description: 'Toggled-on state. Bind with `v-model:isToggled="value"`.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
-    disabled: {
+    type: {
+      control: 'select',
+      options: ['default', 'privacy'],
+      description: 'Visual variant. Privacy renders a lock icon inside the handle.',
+      table: {
+        type: { summary: "'default' | 'privacy'" },
+        defaultValue: { summary: "'default'" },
+        category: 'props'
+      }
+    },
+    isFocused: {
       control: 'boolean',
-      description: 'Disables interaction and applies disabled tokens.',
+      description: 'Forces the focused visual state regardless of keyboard focus.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
-    inputId: {
-      control: 'text',
-      description: 'id for the switch button; associate an external label via htmlFor.',
-      table: { type: { summary: 'string' }, category: 'props' }
-    },
-    'onUpdate:modelValue': {
-      action: 'update:modelValue',
-      description: 'Emitted when the selected value changes.',
+    'onUpdate:isToggled': {
+      action: 'update:isToggled',
+      description: 'Emitted when the user toggles the switch.',
       table: { type: { summary: 'boolean' }, category: 'events' }
     }
   }
@@ -61,46 +95,81 @@ const meta = {
 
 export default meta
 
+/** @type {import('@storybook/vue3').StoryObj<typeof InputSwitch>} */
 export const Default = {
-  render: () => ({
+  args: {
+    isToggled: false,
+    type: 'default',
+    isFocused: false
+  },
+  render: (args) => ({
     components: { InputSwitch },
     setup() {
-      const value = ref(false)
-      return { value }
+      return { args }
     },
     template: `
       <InputSwitch
-        v-model="value"
-        input-id="webkit-switch-default"
+        v-model:isToggled="args.isToggled"
+        :type="args.type"
+        :is-focused="args.isFocused"
         aria-label="Toggle setting"
       />
     `
-  })
+  }),
+  parameters: {
+    docs: {
+      description: { story: 'Default switch. Use the Controls panel to flip isToggled, type, and isFocused.' },
+      source: { code: basicSource() }
+    }
+  }
 }
 
-export const Disabled = {
+/** @type {import('@storybook/vue3').StoryObj<typeof InputSwitch>} */
+export const Types = {
   render: () => ({
     components: { InputSwitch },
     setup() {
-      const on = ref(true)
-      const off = ref(false)
-      return { on, off }
+      const defaultOff = ref(false)
+      const defaultOn = ref(true)
+      const privacyOff = ref(false)
+      const privacyOn = ref(true)
+      return { defaultOff, defaultOn, privacyOff, privacyOn }
     },
     template: `
-      <div class="flex items-center gap-[var(--spacing-4)]">
-        <InputSwitch
-          v-model="on"
-          disabled
-          input-id="webkit-switch-disabled-on"
-          aria-label="Disabled on"
-        />
-        <InputSwitch
-          v-model="off"
-          disabled
-          input-id="webkit-switch-disabled-off"
-          aria-label="Disabled off"
-        />
+      <div class="flex flex-wrap items-center gap-[var(--spacing-4)]">
+        <InputSwitch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />
+        <InputSwitch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />
+        <InputSwitch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />
+        <InputSwitch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />
       </div>
     `
-  })
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Both type variants in off and on states. Privacy adds a lock (off) / lock-open (on) icon inside the handle.'
+      },
+      source: {
+        code: [
+          '<script setup>',
+          CORE_IMPORT,
+          "import { ref } from 'vue'",
+          '',
+          'const defaultOff = ref(false)',
+          'const defaultOn = ref(true)',
+          'const privacyOff = ref(false)',
+          'const privacyOn = ref(true)',
+          '</script>',
+          '',
+          '<template>',
+          '  <InputSwitch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />',
+          '  <InputSwitch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />',
+          '  <InputSwitch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />',
+          '  <InputSwitch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />',
+          '</template>'
+        ].join('\n')
+      }
+    }
+  }
 }

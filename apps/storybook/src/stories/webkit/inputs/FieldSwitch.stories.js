@@ -2,6 +2,22 @@ import { ref } from 'vue'
 
 import FieldSwitch from '@aziontech/webkit/inputs/field-switch'
 
+const CORE_IMPORT = "import FieldSwitch from '@aziontech/webkit/inputs/field-switch'"
+
+const basicSource = ({ initial = 'false', bind = '' } = {}) =>
+  [
+    '<script setup>',
+    CORE_IMPORT,
+    "import { ref } from 'vue'",
+    '',
+    `const value = ref(${initial})`,
+    '</script>',
+    '',
+    '<template>',
+    `  <FieldSwitch v-model="value"${bind ? ' ' + bind : ''} />`,
+    '</template>'
+  ].join('\n')
+
 /** @type {import('@storybook/vue3').Meta<typeof FieldSwitch>} */
 const meta = {
   title: 'Webkit/Inputs/Field Switch',
@@ -20,8 +36,35 @@ const meta = {
     },
     docs: {
       description: {
-        component:
-          'Inline boolean toggle with switch on the leading edge, label, optional description, and optional disabled helper badge.'
+        component: [
+          'Inline boolean toggle with switch on the leading edge, label, optional description, and optional disabled helper badge.',
+          '',
+          '## Usage',
+          '',
+          '```vue',
+          '<script setup>',
+          CORE_IMPORT,
+          "import { ref } from 'vue'",
+          '',
+          'const value = ref(false)',
+          '</script>',
+          '',
+          '<template>',
+          '  <FieldSwitch',
+          '    v-model="value"',
+          '    label="Switch label"',
+          '    description="Switch description"',
+          '  />',
+          '</template>',
+          '```'
+        ].join('\n')
+      },
+      source: {
+        type: 'dynamic',
+        excludeDecorators: true
+      },
+      canvas: {
+        sourceState: 'shown'
       }
     }
   },
@@ -58,14 +101,42 @@ const meta = {
     }
   },
   args: {
+    modelValue: false,
     label: 'Switch label',
-    description: 'Switch description'
+    description: 'Switch description',
+    helperText: '',
+    disabled: false
   }
 }
 
 export default meta
 
 export const Default = {
+  render: (args) => ({
+    components: { FieldSwitch },
+    setup() {
+      const model = ref(args.modelValue)
+      return { args, model }
+    },
+    template: `
+      <FieldSwitch
+        v-bind="args"
+        v-model="model"
+      />
+    `
+  }),
+  parameters: {
+    docs: {
+      source: {
+        code: basicSource({
+          bind: 'label="Switch label" description="Switch description"'
+        })
+      }
+    }
+  }
+}
+
+export const States = {
   render: () => ({
     components: { FieldSwitch },
     setup() {
@@ -79,35 +150,72 @@ export const Default = {
           v-model="off"
           label="Switch label"
           description="Switch description"
-          input-id="webkit-field-switch-off"
         />
         <FieldSwitch
           v-model="on"
           label="Switch label"
           description="Switch description"
-          input-id="webkit-field-switch-on"
         />
       </div>
     `
-  })
+  }),
+  parameters: {
+    docs: {
+      source: {
+        code: [
+          '<script setup>',
+          CORE_IMPORT,
+          "import { ref } from 'vue'",
+          '',
+          'const off = ref(false)',
+          'const on = ref(true)',
+          '</script>',
+          '',
+          '<template>',
+          '  <FieldSwitch',
+          '    v-model="off"',
+          '    label="Switch label"',
+          '    description="Switch description"',
+          '  />',
+          '  <FieldSwitch',
+          '    v-model="on"',
+          '    label="Switch label"',
+          '    description="Switch description"',
+          '  />',
+          '</template>'
+        ].join('\n')
+      }
+    }
+  }
 }
 
 export const Disabled = {
-  render: () => ({
+  args: {
+    modelValue: true,
+    helperText: 'Helper Text',
+    disabled: true
+  },
+  render: (args) => ({
     components: { FieldSwitch },
     setup() {
-      const value = ref(true)
-      return { value }
+      const model = ref(args.modelValue)
+      return { args, model }
     },
     template: `
       <FieldSwitch
-        v-model="value"
-        label="Switch label"
-        description="Switch description"
-        helper-text="Helper Text"
-        disabled
-        input-id="webkit-field-switch-disabled"
+        v-bind="args"
+        v-model="model"
       />
     `
-  })
+  }),
+  parameters: {
+    docs: {
+      source: {
+        code: basicSource({
+          initial: 'true',
+          bind: 'label="Switch label" description="Switch description" helperText="Helper Text" disabled'
+        })
+      }
+    }
+  }
 }

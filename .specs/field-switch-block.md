@@ -3,11 +3,11 @@ name: field-switch-block
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7168
   node_id: 2027:7168
-checksum: 87064b25e5372edfbcc9cde6a5457e986ff36bf7ff44f0c7c501356d2a76de15
+checksum: 3836c2dacdd7b10a46bf71775974946bafbb088f4a1cf137545903ddfe192eea
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -23,10 +23,7 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 | Prop          | Type      | Default     | Required | JSDoc                                             |
 | ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
 | `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
-| `trueValue`   | `boolean` | `true`      | no       | Value emitted when toggled on.                    |
-| `falseValue`  | `boolean` | `false`     | no       | Value emitted when toggled off.                   |
 | `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
-| `inputId`     | `string`  | `undefined` | no       | id for the switch button; links label to control. |
 | `label`       | `string`  | `''`        | no       | Primary label text.                               |
 | `description` | `string`  | `''`        | no       | Secondary description.                            |
 | `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
@@ -83,7 +80,7 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 
 - Visible focus: delegated to nested InputSwitch.
 - Keyboard map: `Tab` focuses switch; `Space` / `Enter` toggles.
-- ARIA: label associated via `for` / `inputId`.
+- ARIA: label associated via `for` pointing to an internally generated `id` injected on the `InputSwitch` button.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - Touch target ≥40×40 px via card hit area.
 

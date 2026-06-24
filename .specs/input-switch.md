@@ -3,35 +3,49 @@ name: input-switch
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: aa1341a65323b931b7e05f8da735f05933747534396ce03a1f29b8aaf029642b
+checksum: 7ead84aaacaae84b9d90c4e3d537d104522de6858d6444ce7ea56159ff87a7af
 created: 2026-05-22
-last_updated: 2026-05-23
+last_updated: 2026-06-23
 ---
+
 # Input Switch — Component Spec
 
 ## Purpose
 
-Control only — the pill toggle from Figma `_Switch` (36×20 px). No label or description. Use `FieldSwitch` or `FieldSwitchBlock` for labeled layouts.
+Control-only pill toggle `InputSwitch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts.
+
+## Usage
+
+```vue
+<script setup>
+import InputSwitch from '@aziontech/webkit/inputs/input-switch'
+import { ref } from 'vue'
+
+const enabled = ref(false)
+</script>
+
+<template>
+  <InputSwitch v-model:isToggled="enabled" type="default" />
+</template>
+```
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `boolean` | `undefined` | no | Selected value for v-model. |
-| `trueValue` | `boolean` | `true` | no | Value emitted when toggled on. |
-| `falseValue` | `boolean` | `false` | no | Value emitted when toggled off. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | no | id for the switch button; associate an external label via htmlFor. |
+| `isToggled` | `boolean` | `false` | no | Toggled-on state. Bind with `v-model:isToggled="value"`. Mirrors the Figma `isToggled` variant. |
+| `type` | `'default' \| 'privacy'` | `'default'` | no | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
+| `isFocused` | `boolean` | `false` | no | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `isFocused` variant. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:modelValue` | `boolean` | v-model. |
+| `update:isToggled` | `boolean` | Emitted when the user toggles the switch. Paired with `v-model:isToggled`. |
 
 ## Slots
 
@@ -39,45 +53,53 @@ Control only — the pill toggle from Figma `_Switch` (36×20 px). No label or d
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `checked`
-- `data-disabled` mirrors the `disabled` prop
-- `data-checked` mirrors toggled-on state
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`
+- `data-checked` mirrors the `isToggled` prop (toggled-on state)
+- `data-focused` mirrors the `isFocused` prop and applies the same ring tokens as `:focus-visible`
+- `data-type` mirrors the `type` prop (`default` | `privacy`)
+- Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
+| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
-| handle move | `transition-transform duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| track color change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| handle slide | `transition-transform duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none motion-reduce:transform-none` |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| track (off) | `var(--bg-disabled)` |
-| track (on) | `var(--primary)` |
-| handle | `var(--bg-surface)` |
-| ring | `var(--ring-color)` |
+| track (off) — background | `var(--bg-surface)` |
+| track (off) — border | `var(--border-default)` |
+| track (on) — background | `var(--success-contrast)` |
+| track (hover) — overlay | `var(--bg-hover)` (applies to both off and on tracks) |
+| focus-visible / `data-focused` ring | `var(--ring-color)` |
+| shape | `rounded-full` (Tailwind native; pill — DESIGN.md § Shapes does not gate `rounded-full`) |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| handle fill (off) — Figma `--surface-300` (#b2b2b2) | inline `bg-[var(--text-muted)]` (closest semantic) | `TODO: introduce semantic --fg-handle (or equivalent) in DESIGN.md` |
+| handle fill (on) — dark contrast over `--success-contrast` | inline `bg-[var(--bg-canvas)]` (closest semantic) | `TODO: introduce semantic --fg-handle-on in DESIGN.md` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`. The same ring is applied when `isFocused` is `true` (`data-[focused]` mirror).
 - Keyboard map: `Tab` focuses; `Space` / `Enter` toggles.
-- ARIA: `role="switch"` with `aria-checked`.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`. The lock icon in `type="privacy"` is decorative — `aria-hidden="true"`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically via `FieldSwitch`). The component still exposes a clickable root.
 
 ## Stories (Storybook)
 
 - Default
-- Disabled
+- Types — composite story rendering `type='default'` and `type='privacy'` side-by-side, each in both off and on states.
+
+<!-- Sizes is omitted: the component has no `size` prop (Figma documents a single 36×20 size). -->
+<!-- Disabled is omitted: the component has no `disabled` prop (Figma 2027:1247 documents no disabled variant; consumers like FieldSwitch own the disabled visual at the wrapper level). -->
 
 ## Constraints — DO NOT
 
@@ -94,7 +116,8 @@ Control only — the pill toggle from Figma `_Switch` (36×20 px). No label or d
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
+- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

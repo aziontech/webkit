@@ -13,14 +13,8 @@
   interface Props {
     /** Selected value for v-model. */
     modelValue?: boolean
-    /** Value emitted when toggled on. */
-    trueValue?: boolean
-    /** Value emitted when toggled off. */
-    falseValue?: boolean
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
-    /** id for the switch button; links label to control. */
-    inputId?: string
     /** Primary label text. */
     label?: string
     /** Secondary description. */
@@ -31,10 +25,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     modelValue: undefined,
-    trueValue: true,
-    falseValue: false,
     disabled: false,
-    inputId: undefined,
     label: '',
     description: '',
     helperText: ''
@@ -51,9 +42,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-field-switch-block'
   )
 
-  const resolvedInputId = computed(() => props.inputId ?? generatedId)
-
-  const isChecked = computed(() => props.modelValue === props.trueValue)
+  const isChecked = computed(() => props.modelValue === true)
 
   const isHighlighted = computed(
     () => (isChecked.value && !props.disabled) || (!isChecked.value && props.disabled)
@@ -61,7 +50,7 @@
 
   const model = computed({
     get: () => props.modelValue,
-    set: (next) => emit('update:modelValue', next ?? props.falseValue)
+    set: (next) => emit('update:modelValue', next ?? false)
   })
 
   const sharedClasses = 'block data-[disabled]:cursor-not-allowed'
@@ -88,7 +77,7 @@
 
 <template>
   <label
-    :for="resolvedInputId"
+    :for="generatedId"
     :class="rootClasses"
     :data-testid="testId"
     :data-disabled="disabled || null"
@@ -106,11 +95,9 @@
         :data-testid="`${testId}__row`"
       >
         <InputSwitch
-          v-model="model"
-          :true-value="trueValue"
-          :false-value="falseValue"
-          :disabled="disabled"
-          :input-id="resolvedInputId"
+          :id="generatedId"
+          v-model:isToggled="model"
+          :class="disabled ? 'pointer-events-none opacity-50' : ''"
           :data-testid="`${testId}__control`"
         />
         <div

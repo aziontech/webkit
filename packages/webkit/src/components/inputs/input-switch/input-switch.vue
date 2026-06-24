@@ -1,42 +1,32 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import {
-    focusSuppressHoverGhostClasses,
-    focusVisibleRingClasses,
-    ghostLayerClasses,
-    ghostLayerDisabledHideClasses
-  } from '../presets/interactive-states'
 
   defineOptions({
     name: 'InputSwitch',
     inheritAttrs: false
   })
 
+  export type InputSwitchType = 'default' | 'privacy'
+
   interface Props {
-    /** Selected value for v-model. */
-    modelValue?: boolean
-    /** Value emitted when toggled on. */
-    trueValue?: boolean
-    /** Value emitted when toggled off. */
-    falseValue?: boolean
-    /** Disables interaction and applies disabled tokens. */
-    disabled?: boolean
-    /** id for the switch button; associate an external label via htmlFor. */
-    inputId?: string
+    /** Toggled-on state. Bind with `v-model:isToggled="value"`. */
+    isToggled?: boolean
+    /** Visual variant. Privacy renders a lock icon inside the handle. */
+    type?: InputSwitchType
+    /** Forces the focused visual state regardless of keyboard focus. */
+    isFocused?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
-    trueValue: true,
-    falseValue: false,
-    disabled: false,
-    inputId: undefined
+    isToggled: false,
+    type: 'default',
+    isFocused: false
   })
 
   const emit = defineEmits<{
-    'update:modelValue': [value: boolean]
+    'update:isToggled': [value: boolean]
   }>()
 
   const attrs = useAttrs()
@@ -45,67 +35,80 @@
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }
-
     delete rest.class
     delete rest['data-testid']
-
     return rest
   })
 
-  const isChecked = computed(() => props.modelValue === props.trueValue)
+  const isChecked = computed(() => props.isToggled === true)
 
-  const handleToggle = () => {
-    if (props.disabled) {
-      return
-    }
+  const buttonRef = ref<globalThis.HTMLButtonElement | null>(null)
 
-    emit('update:modelValue', isChecked.value ? props.falseValue : props.trueValue)
+  watch(
+    () => props.isFocused,
+    (next) => {
+      if (next) buttonRef.value?.focus()
+      else buttonRef.value?.blur()
+    },
+    { immediate: true, flush: 'post' }
+  )
+
+  function handleToggle() {
+    emit('update:isToggled', !isChecked.value)
   }
 
-  const handleKeydown = (event: globalThis.KeyboardEvent) => {
+  function handleKeydown(event: globalThis.KeyboardEvent) {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault()
       handleToggle()
     }
   }
 
-  const sharedClasses = [
-    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full',
-    'border border-transparent bg-[var(--bg-disabled)] data-[checked]:bg-[var(--primary)]',
-    ...ghostLayerClasses,
-    ...focusVisibleRingClasses,
-    ...focusSuppressHoverGhostClasses,
-    ...ghostLayerDisabledHideClasses
-  ]
+  const ROOT_CLASS =
+    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-surface)] px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[focused]:ring-2 data-[focused]:ring-[var(--ring-color)] data-[focused]:ring-offset-2 data-[focused]:ring-offset-[var(--bg-canvas)] hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-[var(--success-contrast)]'
 
-  const disabledClasses =
-    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
+  const HANDLE_CLASS =
+    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-full bg-[var(--text-muted)] transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-4 group-data-[checked]:bg-[var(--bg-canvas)]'
 
-  const handleClasses =
-    'pointer-events-none absolute left-0.5 top-1/2 z-[1] size-4 -translate-y-1/2 rounded-full bg-[var(--bg-surface)] shadow-[var(--shadow-xs)] transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-data-[checked]:translate-x-4'
+  const LOCK_OFF_CLASS =
+    'pi pi-lock text-body-xxs leading-none text-[var(--bg-surface)] group-data-[checked]:hidden'
 
-  const rootClasses = computed(() => cn(sharedClasses, disabledClasses, attrs.class))
+  const LOCK_ON_CLASS =
+    'pi pi-lock-open text-body-xxs leading-none text-[var(--success-contrast)] hidden group-data-[checked]:inline-block'
+
+  const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 </script>
 
 <template>
   <button
-    :id="inputId"
+    ref="buttonRef"
     type="button"
     role="switch"
-    :class="rootClasses"
-    :disabled="disabled"
     :aria-checked="isChecked"
     :data-testid="testId"
+    :data-type="type"
     :data-checked="isChecked || null"
-    :data-disabled="disabled || null"
+    :data-focused="isFocused || null"
+    :class="rootClass"
     v-bind="passthroughAttrs"
     @click="handleToggle"
     @keydown="handleKeydown"
   >
     <span
-      :class="handleClasses"
       aria-hidden="true"
+      :class="HANDLE_CLASS"
       :data-testid="`${testId}__handle`"
-    />
+    >
+      <i
+        v-if="type === 'privacy'"
+        aria-hidden="true"
+        :class="LOCK_OFF_CLASS"
+      />
+      <i
+        v-if="type === 'privacy'"
+        aria-hidden="true"
+        :class="LOCK_ON_CLASS"
+      />
+    </span>
   </button>
 </template>
