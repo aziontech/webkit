@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import Overline from '../../wip/overline/overline.vue'
+  import Overline from '../../overline/overline.vue'
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight.js'
   import { provideNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context.js'

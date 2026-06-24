@@ -22,7 +22,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 - `breadcrumb.vue` — Root `<nav>` with `aria-label="Breadcrumb"`.
 - `breadcrumb-list.vue` — Ordered list wrapper (`<ol>`) for segments.
-- `breadcrumb-item.vue` — Re-exported segment control (same API as `@aziontech/webkit/navigation/breadcrumb-item`).
+- `breadcrumb-item.vue` — Re-exported segment control (same API as `@aziontech/webkit/breadcrumb-item`).
 - `breadcrumb-separator.vue` — Decorative chevron between segments (`aria-hidden`).
 
 ## Props

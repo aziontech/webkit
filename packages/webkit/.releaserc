@@ -1,6 +1,6 @@
 {
-  "branches": ["main"],
-  "tagFormat": "@aziontech/webkit@${version}",
+  "branches": ["dev"],
+  "tagFormat": "@aziontech/webkit.dev@${version}",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
@@ -58,7 +58,7 @@
           "package.json",
           "CHANGELOG.md"
         ],
-        "message": "chore(release): @aziontech/webkit ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        "message": "chore(release): @aziontech/webkit.dev ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
     [
