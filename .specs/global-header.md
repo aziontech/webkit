@@ -5,17 +5,17 @@ structure: composition
 status: implemented
 spec_version: 1
 figma:
-  url: https://www.figma.com/design/76eAHzSS7et4fywMISotw6/console.azion.com?node-id=115-4826
-  node_id: 115:4826
-checksum: dc21140349b99711ebd76333627781f4a931e4936988bbb6f1136c33534407e0
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
+  node_id: 4310:19617
+checksum: 2d707153870d71633de1da261da8c5c3cdf1d5b899c72edb1589a8328c88ca4d
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-06-23
 ---
 # Global Header — Component Spec
 
 ## Purpose
 
-Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the console.azion.com GlobalHeader (Figma node 115:4826). Consumers reorder or omit regions; logo and actions are not baked in.
+Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in.
 
 ## Sub-components
 
@@ -55,12 +55,14 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| shell height | `var(--spacing-14)` |
-| shell padding-x (start) | `var(--spacing-4)` |
-| shell padding-x (end) | `var(--spacing-8)` |
-| region gap | `var(--spacing-3)` |
+| shell height | `h-14` (56px) |
+| shell padding-x | `var(--spacing-md)` |
+| shell region gap | `var(--spacing-md)` |
+| start (left) region gap | `var(--spacing-xs)` |
+| end (right) region gap | `var(--spacing-sm)` |
+| brand logo height | `18px` |
 | surface | `var(--bg-surface)` |
-| border | `var(--border-default)` |
+| border (bottom) | `var(--border-default)` |
 | ring (focus on children) | `var(--ring-color)` |
 
 ## Theme gaps
