@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import BoxGridSelection from '@aziontech/webkit/inputs/box-grid-selection'
+import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
 import Tag from '@aziontech/webkit/tag'
 
 /** @type {import('@storybook/vue3').Meta<typeof BoxGridSelection>} */

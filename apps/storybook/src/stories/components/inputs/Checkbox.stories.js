@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import Checkbox from '@aziontech/webkit/inputs/checkbox'
+import Checkbox from '@aziontech/webkit/checkbox'
 
 /** @type {import('@storybook/vue3').Meta<typeof Checkbox>} */
 const meta = {

@@ -1,4 +1,4 @@
-import Spinner from '@aziontech/webkit/utils/spinner'
+import Spinner from '@aziontech/webkit/spinner'
 
 export default {
   title: 'Utils/Spinner',

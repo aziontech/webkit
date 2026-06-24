@@ -1,15 +1,15 @@
 import Button from '@aziontech/webkit/button'
-import Drawer from '@aziontech/webkit/overlay/drawer'
-import DrawerClose from '@aziontech/webkit/overlay/drawer-close'
-import DrawerContent from '@aziontech/webkit/overlay/drawer-content'
-import DrawerDescription from '@aziontech/webkit/overlay/drawer-description'
-import DrawerOverlay from '@aziontech/webkit/overlay/drawer-overlay'
-import DrawerPortal from '@aziontech/webkit/overlay/drawer-portal'
-import DrawerTitle from '@aziontech/webkit/overlay/drawer-title'
-import DrawerTrigger from '@aziontech/webkit/overlay/drawer-trigger'
-import PanelContent from '@aziontech/webkit/overlay/panel-content'
-import PanelFooter from '@aziontech/webkit/overlay/panel-footer'
-import PanelHeader from '@aziontech/webkit/overlay/panel-header'
+import Drawer from '@aziontech/webkit/drawer'
+import DrawerClose from '@aziontech/webkit/drawer-close'
+import DrawerContent from '@aziontech/webkit/drawer-content'
+import DrawerDescription from '@aziontech/webkit/drawer-description'
+import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+import DrawerPortal from '@aziontech/webkit/drawer-portal'
+import DrawerTitle from '@aziontech/webkit/drawer-title'
+import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+import PanelContent from '@aziontech/webkit/panel-content'
+import PanelFooter from '@aziontech/webkit/panel-footer'
+import PanelHeader from '@aziontech/webkit/panel-header'
 import { reactive, ref, watch } from 'vue'
 
 const sizes = ['small', 'medium', 'large']
@@ -76,17 +76,17 @@ export default {
           '<script setup>',
           "import { ref } from 'vue'",
           "import Button from '@aziontech/webkit/button'",
-          "import Drawer from '@aziontech/webkit/overlay/drawer'",
-          "import DrawerClose from '@aziontech/webkit/overlay/drawer-close'",
-          "import DrawerContent from '@aziontech/webkit/overlay/drawer-content'",
-          "import DrawerDescription from '@aziontech/webkit/overlay/drawer-description'",
-          "import DrawerOverlay from '@aziontech/webkit/overlay/drawer-overlay'",
-          "import DrawerPortal from '@aziontech/webkit/overlay/drawer-portal'",
-          "import DrawerTitle from '@aziontech/webkit/overlay/drawer-title'",
-          "import DrawerTrigger from '@aziontech/webkit/overlay/drawer-trigger'",
-          "import PanelContent from '@aziontech/webkit/overlay/panel-content'",
-          "import PanelFooter from '@aziontech/webkit/overlay/panel-footer'",
-          "import PanelHeader from '@aziontech/webkit/overlay/panel-header'",
+          "import Drawer from '@aziontech/webkit/drawer'",
+          "import DrawerClose from '@aziontech/webkit/drawer-close'",
+          "import DrawerContent from '@aziontech/webkit/drawer-content'",
+          "import DrawerDescription from '@aziontech/webkit/drawer-description'",
+          "import DrawerOverlay from '@aziontech/webkit/drawer-overlay'",
+          "import DrawerPortal from '@aziontech/webkit/drawer-portal'",
+          "import DrawerTitle from '@aziontech/webkit/drawer-title'",
+          "import DrawerTrigger from '@aziontech/webkit/drawer-trigger'",
+          "import PanelContent from '@aziontech/webkit/panel-content'",
+          "import PanelFooter from '@aziontech/webkit/panel-footer'",
+          "import PanelHeader from '@aziontech/webkit/panel-header'",
           '',
           'const open = ref(false)',
           '</script>',

@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import FieldCheckboxBlock from '@aziontech/webkit/inputs/field-checkbox-block'
+import FieldCheckboxBlock from '@aziontech/webkit/field-checkbox-block'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldCheckboxBlock>} */
 const meta = {

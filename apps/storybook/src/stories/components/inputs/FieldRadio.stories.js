@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import FieldRadio from '@aziontech/webkit/inputs/field-radio'
+import FieldRadio from '@aziontech/webkit/field-radio'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldRadio>} */
 const meta = {

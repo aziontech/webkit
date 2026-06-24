@@ -1,13 +1,13 @@
 import AzionDefault from '@aziontech/webkit/svg/azion/default'
 import Button from '@aziontech/webkit/button'
 import IconButton from '@aziontech/webkit/icon-button'
-import InputText from '@aziontech/webkit/inputs/input-text'
-import GlobalHeader from '@aziontech/webkit/layout/global-header'
+import InputText from '@aziontech/webkit/input-text'
+import GlobalHeader from '@aziontech/webkit/global-header'
 import MenuItem from '@aziontech/webkit/menu-item'
-import NavSidebar from '@aziontech/webkit/layout/sidebar'
-import SidebarGroup from '@aziontech/webkit/layout/sidebar-group'
-import TabView from '@aziontech/webkit/navigation/tab-view'
-import PlatformShell from '@aziontech/webkit/templates/platform-shell'
+import NavSidebar from '@aziontech/webkit/sidebar'
+import SidebarGroup from '@aziontech/webkit/sidebar-group'
+import TabView from '@aziontech/webkit/tab-view'
+import PlatformShell from '@aziontech/webkit/platform-shell'
 
 /** @type {import('@storybook/vue3').Meta<typeof PlatformShell>} */
 const meta = {

@@ -1,4 +1,4 @@
-import Label from '@aziontech/webkit/inputs/label'
+import Label from '@aziontech/webkit/label'
 
 /** @type {import('@storybook/vue3').Meta<typeof Label>} */
 const meta = {
@@ -27,8 +27,8 @@ const meta = {
           '',
           '```vue',
           '<script setup>',
-          "import Label from '@aziontech/webkit/inputs/label'",
-          "import InputText from '@aziontech/webkit/inputs/input-text'",
+          "import Label from '@aziontech/webkit/label'",
+          "import InputText from '@aziontech/webkit/input-text'",
           '</script>',
           '',
           '<template>',

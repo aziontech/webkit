@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import RadioButton from '@aziontech/webkit/inputs/radio-button'
+import RadioButton from '@aziontech/webkit/radio-button'
 
 /** @type {import('@storybook/vue3').Meta<typeof RadioButton>} */
 const meta = {

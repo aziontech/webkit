@@ -1,4 +1,4 @@
-import ScrollArea from '@aziontech/webkit/layout/scroll-area'
+import ScrollArea from '@aziontech/webkit/scroll-area'
 import { expect, userEvent, within } from '@storybook/test'
 
 const longCopy = `Jokester began sneaking into the castle in the middle of the night and leaving
