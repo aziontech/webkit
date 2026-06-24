@@ -28,7 +28,7 @@ const meta = {
           '```vue',
           '<script setup>',
           "import { ref } from 'vue'",
-          "import Checkbox from '@aziontech/webkit/inputs/checkbox'",
+          "import Checkbox from '@aziontech/webkit/checkbox'",
           '',
           'const accepted = ref(false)',
           '</script>',

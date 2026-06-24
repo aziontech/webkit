@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 3
-checksum: c54742c2f1d68eb8f3808ca1b820a16f356e844ebcefab8983c6c1ed55dfb3dd
+checksum: fc610ab0930da58bac5c91f25e9e06bfaee49a4693a16f840563c0ee9dc4063a
 created: 2026-05-22
 last_updated: 2026-06-24
 ---
@@ -20,7 +20,7 @@ Square checkbox control only — the box, the native input, and the check glyph,
 ```vue
 <script setup>
 import { ref } from 'vue'
-import Checkbox from '@aziontech/webkit/inputs/checkbox'
+import Checkbox from '@aziontech/webkit/checkbox'
 
 const accepted = ref(false)
 </script>
