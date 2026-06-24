@@ -44,8 +44,8 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-textarea')
   const isFilled = computed(() => props.modelValue.length > 0)
-  const hasIconLeft = computed(() => !!slots.iconLeft)
-  const hasIconRight = computed(() => !!slots.iconRight || props.disabled)
+  const hasIconLeft = computed(() => !!slots['iconLeft'])
+  const hasIconRight = computed(() => !!slots['iconRight'] || props.disabled)
 
   // eslint-disable-next-line no-undef
   const handleInput = (event: InputEvent) => {
@@ -89,7 +89,7 @@
       <slot name="iconLeft" />
     </span>
     <span
-      v-if="$slots.iconRight && !disabled"
+      v-if="hasIconRight && !disabled"
       aria-hidden="true"
       class="absolute top-[var(--spacing-md)] right-[var(--spacing-md)] text-[var(--text-muted)] pointer-events-none"
     >
