@@ -46,12 +46,12 @@ import MyComponent from '@aziontech/webkit/<category>/<name>'
 
 ```vue
 <script setup>
-import Dialog from '@aziontech/webkit/overlay/dialog'
-import DialogTrigger from '@aziontech/webkit/overlay/dialog-trigger'
-import DialogContent from '@aziontech/webkit/overlay/dialog-content'
-import DialogTitle from '@aziontech/webkit/overlay/dialog-title'
-import DialogDescription from '@aziontech/webkit/overlay/dialog-description'
-import DialogClose from '@aziontech/webkit/overlay/dialog-close'
+import Dialog from '@aziontech/webkit/dialog'
+import DialogTrigger from '@aziontech/webkit/dialog-trigger'
+import DialogContent from '@aziontech/webkit/dialog-content'
+import DialogTitle from '@aziontech/webkit/dialog-title'
+import DialogDescription from '@aziontech/webkit/dialog-description'
+import DialogClose from '@aziontech/webkit/dialog-close'
 </script>
 
 <template>
