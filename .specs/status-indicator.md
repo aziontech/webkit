@@ -18,7 +18,7 @@ Communicates status, alerts, or progress to the user. Migrated from the existing
 
 ```vue
 <script setup>
-import StatusIndicator from '@aziontech/webkit/feedback/status-indicator'
+import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
