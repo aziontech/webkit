@@ -1,4 +1,4 @@
-import Currency from '@aziontech/webkit/content/currency'
+import Currency from '@aziontech/webkit/currency'
 
 const sizes = ['small', 'large']
 
