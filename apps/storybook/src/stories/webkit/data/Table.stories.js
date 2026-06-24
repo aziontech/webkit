@@ -1,5 +1,11 @@
 import Chip from '@aziontech/webkit/chip'
 import Table from '@aziontech/webkit/data/table'
+import TableBody from '@aziontech/webkit/data/table-body'
+import TableCell from '@aziontech/webkit/data/table-cell'
+import TableHeadCell from '@aziontech/webkit/data/table-head-cell'
+import TableHeader from '@aziontech/webkit/data/table-header'
+import TableRow from '@aziontech/webkit/data/table-row'
+import TableSearch from '@aziontech/webkit/data/table-search'
 import IconButton from '@aziontech/webkit/icon-button'
 import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'
 import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'
@@ -22,7 +28,19 @@ const components = {
   DropdownMenuTrigger,
   DropdownMenuPortal,
   DropdownMenuContent,
-  DropdownMenuFromModel
+  DropdownMenuFromModel,
+  // Compound sub-components registered under their dot-notation names so they
+  // resolve in Storybook's runtime-compiled string templates: Vue compiles
+  // `<Table.Header>` to `resolveComponent("Table.Header")`, an exact-name lookup
+  // (a bare `Table` registration does not satisfy it). In a real SFC the dotted
+  // tag resolves off the imported `Table` binding, so consumer code needs only
+  // `import Table` — these extra registrations are a Storybook-runtime concern.
+  'Table.Header': TableHeader,
+  'Table.Body': TableBody,
+  'Table.Row': TableRow,
+  'Table.HeadCell': TableHeadCell,
+  'Table.Cell': TableCell,
+  'Table.Search': TableSearch
 }
 
 // --- Generic fixtures ------------------------------------------------------
@@ -59,9 +77,6 @@ const rows = Object.freeze(
     created: `Dec ${index + 1}, 2025, 10:00 AM`
   }))
 )
-
-// A compact 5-row slice for the hand-composed Composition story.
-const compositionRows = rows.slice(0, 5)
 
 // No explicit `width` — columns distribute across the full container via their
 // `grow` flex weight, so the table fills the surface with no horizontal scroll.
@@ -104,10 +119,8 @@ const wideColumns = [
 ]
 
 // Per-column resize is opt-in via `resizable: true`. The simple set with every
-// column resizable powers the Resizable Columns story; the wide set with every
-// column resizable powers Full Example (frozen Name + action ignore the flag).
+// column resizable powers the Resizable Columns story.
 const resizableColumns = columns.map((col) => ({ ...col, resizable: true }))
-const fullColumns = wideColumns.map((col) => ({ ...col, resizable: true }))
 
 // One shared, immutable action list — built once, reused by every row's menu.
 const rowActionNodes = [
@@ -202,10 +215,10 @@ const makeOnLink = (args) => (event, row) => {
 // --- "Show code" source ----------------------------------------------------
 // Storybook's default dynamic source for a custom-template story renders the
 // internal markup (or the render function), not the authored `<Table>` usage.
-// Each story therefore ships an explicit `docs.source.code` built from its
-// resolved args, so "Show code" shows the real component code. The args are
-// known at module load (meta defaults + per-story overrides), so the snippet is
-// computed up front rather than from a runtime transform.
+// Each story therefore ships an explicit `docs.source.code` holding a complete,
+// copy-pasteable SFC — the imports it needs, the `rows`/`columns` data, the cell
+// handlers, and the `<template>` — built from its resolved args at module load
+// (meta defaults + per-story overrides) rather than from a runtime transform.
 
 const baseArgs = {
   maxHeight: '',
@@ -271,26 +284,137 @@ const dataDrivenSource = (args, { columnsName = 'columns', toolbar = false } = {
   return `${open.join('\n')}\n${inner}\n</Table>`
 }
 
-const COMPOSITION_SOURCE = `<!-- Composition gives full control of each cell — here, a card-style row -->
-<Table border>
+// Indent every non-empty line by `spaces`, so a fragment nests under a parent.
+const indent = (text, spaces = 2) =>
+  text
+    .split('\n')
+    .map((line) => (line ? ' '.repeat(spaces) + line : line))
+    .join('\n')
+
+// Assemble a complete, copy-pasteable SFC. `</script>` is kept as a discrete
+// string (never inside a template literal) per the SFC-parser pitfall in
+// .claude/rules/styling.md.
+const sfc = (imports, script, template) =>
+  [
+    '<script setup>',
+    imports,
+    '',
+    script,
+    '</script>',
+    '',
+    '<template>',
+    indent(template),
+    '</template>'
+  ].join('\n')
+
+// Serialize a column array to a readable `const columns = [...]` JS literal, so
+// each snippet shows the exact column config it renders (width / frozen / …).
+const serializeColumns = (cols) => {
+  const body = cols
+    .map((col) => {
+      const entries = Object.entries(col).map(
+        ([key, value]) => `${key}: ${typeof value === 'string' ? `'${value}'` : value}`
+      )
+      return `  { ${entries.join(', ')} }`
+    })
+    .join(',\n')
+  return `const columns = [\n${body}\n]`
+}
+
+// A small, complete sample dataset (every field any column reads).
+const SOURCE_ROWS = `const rows = [
+  { id: '1001', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com', modified: 'Jan 1, 2026, 09:00 AM', protocol: 'HTTP & HTTPS', domains: 2, origins: 1, created: 'Dec 1, 2025, 10:00 AM' },
+  { id: '1002', name: 'Workload Bravo', status: 'Inactive', editor: 'user2@example.com', modified: 'Jan 2, 2026, 09:00 AM', protocol: 'HTTP', domains: 1, origins: 2, created: 'Dec 2, 2025, 10:00 AM' },
+  { id: '1003', name: 'Workload Charlie', status: 'Degraded', editor: 'user3@example.com', modified: 'Jan 3, 2026, 09:00 AM', protocol: 'gRPC', domains: 3, origins: 1, created: 'Dec 3, 2025, 10:00 AM' }
+]`
+
+const SOURCE_ACTION_NODES = `const rowActionNodes = [
+  dropdownMenuItem('View details', { value: 'view', icon: 'pi pi-eye' }),
+  dropdownMenuItem('Edit', { value: 'edit', icon: 'pi pi-pencil' }),
+  dropdownMenuItem('Duplicate', { value: 'duplicate', icon: 'pi pi-copy' }),
+  dropdownMenuSeparator(),
+  dropdownMenuItem('Delete', { value: 'delete', icon: 'pi pi-trash' })
+]`
+
+const SOURCE_STATUS_SEVERITY = `const statusSeverity = (status) =>
+  status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'`
+
+// A data-driven story's resolved args -> a complete SFC: the imports it needs,
+// the data + columns + handlers, and the `<template>` (the same open tag the
+// live render uses, via dataDrivenSource).
+const dataDrivenSnippet = (args, { cols, toolbar = false } = {}) => {
+  const imports = [
+    "import { ref } from 'vue'",
+    "import Table from '@aziontech/webkit/data/table'",
+    "import Tag from '@aziontech/webkit/tag'",
+    "import IconButton from '@aziontech/webkit/icon-button'",
+    ...(toolbar ? ["import Chip from '@aziontech/webkit/chip'"] : []),
+    "import DropdownMenu from '@aziontech/webkit/overlay/dropdown-menu'",
+    "import DropdownMenuTrigger from '@aziontech/webkit/overlay/dropdown-menu-trigger'",
+    "import DropdownMenuPortal from '@aziontech/webkit/overlay/dropdown-menu-portal'",
+    "import DropdownMenuContent from '@aziontech/webkit/overlay/dropdown-menu-content'",
+    "import DropdownMenuFromModel from '@aziontech/webkit/overlay/dropdown-menu-from-model'",
+    "import { dropdownMenuItem, dropdownMenuSeparator } from '@aziontech/webkit/overlay/dropdown-menu-factory'"
+  ].join('\n')
+
+  const script = [
+    SOURCE_ROWS,
+    '',
+    serializeColumns(cols),
+    '',
+    'const sorting = ref([])',
+    ...(args.enableRowSelection ? ['const rowSelection = ref({})'] : []),
+    '',
+    SOURCE_ACTION_NODES,
+    '',
+    SOURCE_STATUS_SEVERITY,
+    '',
+    'const onRowClick = (row) => {}',
+    'const onRowAction = ({ action }) => {}'
+  ].join('\n')
+
+  return sfc(imports, script, dataDrivenSource(args, { toolbar }))
+}
+
+const COMPOSITION_SOURCE = sfc(
+  "import Table from '@aziontech/webkit/data/table'",
+  `const items = [
+  { id: '1001', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com' },
+  { id: '1002', name: 'Workload Bravo', status: 'Inactive', editor: 'user2@example.com' },
+  { id: '1003', name: 'Workload Charlie', status: 'Degraded', editor: 'user3@example.com' }
+]`,
+  `<Table border>
+  <Table.Header>
+    <Table.Row>
+      <Table.HeadCell principal>Name</Table.HeadCell>
+      <Table.HeadCell>Status</Table.HeadCell>
+      <Table.HeadCell>Last Editor</Table.HeadCell>
+    </Table.Row>
+  </Table.Header>
   <Table.Body>
     <Table.Row v-for="item in items" :key="item.id">
-      <Table.Cell>
-        <div class="flex w-full items-center gap-[var(--spacing-3)] py-[var(--spacing-3)]">
-          <span class="flex h-10 w-10 items-center justify-center rounded-[var(--shape-elements)] bg-[var(--bg-canvas)]">
-            <i class="pi pi-box text-[var(--text-muted)]" />
-          </span>
-          <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-1)]">
-            <span class="truncate text-[var(--text-default)]">{{ item.name }}</span>
-            <span class="truncate text-body-xs text-[var(--text-muted)]">{{ item.editor }}</span>
-          </div>
-          <Tag :severity="severity(item.status)">{{ item.status }}</Tag>
-          <IconButton icon="pi pi-ellipsis-v" aria-label="Row actions" kind="transparent" size="small" />
-        </div>
-      </Table.Cell>
+      <Table.Cell principal><span class="min-w-0 flex-1 truncate">{{ item.name }}</span></Table.Cell>
+      <Table.Cell><span class="min-w-0 flex-1 truncate">{{ item.status }}</span></Table.Cell>
+      <Table.Cell><span class="min-w-0 flex-1 truncate">{{ item.editor }}</span></Table.Cell>
     </Table.Row>
   </Table.Body>
 </Table>`
+)
+
+const EMPTY_SOURCE = sfc(
+  "import Table from '@aziontech/webkit/data/table'",
+  `const columns = [
+  { accessorKey: 'name', header: 'Name' },
+  { accessorKey: 'status', header: 'Status' }
+]`,
+  `<!-- No rows -> the default empty state renders in the #empty slot -->
+<Table :data="[]" :columns="columns" border>
+  <!-- Override the default to supply your own copy + actions: -->
+  <template #empty>
+    <!-- illustration / title / description / Create button / docs link -->
+  </template>
+</Table>`
+)
 
 // Render factory (data-driven): every story is the same data-driven <Table> wired
 // to the controls; only the data set, the column set, the pre-seeded selection,
@@ -303,7 +427,16 @@ const makeStory =
       const sorting = ref([])
       const rowSelection = ref({ ...selection })
       const onLink = makeOnLink(args)
-      return { args, rows: data, cols, rowActionNodes, sorting, rowSelection, statusSeverity, onLink }
+      return {
+        args,
+        rows: data,
+        cols,
+        rowActionNodes,
+        sorting,
+        rowSelection,
+        statusSeverity,
+        onLink
+      }
     },
     template: `
       <Table
@@ -344,55 +477,8 @@ const docs = [
   'One import of the root; every part is reached via dot-notation. The root binding',
   'must be PascalCase (`Table`) — `table` lowercase collides with the native element.',
   '',
-  '```vue',
-  '<script setup>',
-  "import Table from '@aziontech/webkit/data/table'",
-  '</script>',
-  '',
-  '<template>',
-  '  <Table border>',
-  '    <Table.Header frozen>',
-  '      <Table.Row>',
-  '        <Table.HeadCell principal sortable>Name</Table.HeadCell>',
-  '        <Table.HeadCell>Status</Table.HeadCell>',
-  '      </Table.Row>',
-  '    </Table.Header>',
-  '    <Table.Body>',
-  '      <Table.Row>',
-  '        <Table.Cell principal>acme-prod</Table.Cell>',
-  '        <Table.Cell>Active</Table.Cell>',
-  '      </Table.Row>',
-  '    </Table.Body>',
-  '  </Table>',
-  '</template>',
-  '```',
-  '',
   'Each sub-component is also a standalone import (`@aziontech/webkit/data/table-row`, …)',
   '— the tree-shaking path when only a few parts are used.',
-  '',
-  '### Data-driven mode',
-  '',
-  '```vue',
-  '<script setup>',
-  "import { ref } from 'vue'",
-  "import Table from '@aziontech/webkit/data/table'",
-  "import Tag from '@aziontech/webkit/tag'",
-  '',
-  "const data = ref([{ id: '1', name: 'acme-prod', status: 'Active' }])",
-  'const columns = [',
-  "  { accessorKey: 'name', header: 'Name', grow: 2 },",
-  "  { accessorKey: 'status', header: 'Status' },",
-  "  { id: 'actions', header: '', kind: 'action' }",
-  ']',
-  '</script>',
-  '',
-  '<template>',
-  '  <Table :data="data" :columns="columns" row-key="id" enable-sorting paginated>',
-  '    <template #cell-status="{ value }"><Tag>{{ value }}</Tag></template>',
-  '    <template #cell-actions="{ row }"><!-- row menu --></template>',
-  '  </Table>',
-  '</template>',
-  '```',
   '',
   '### Column options',
   '',
@@ -408,14 +494,7 @@ const docs = [
   '',
   'Add `enable-row-selection` for a leading checkbox column (with select-all), `enable-sorting`',
   'for sortable headers, and `paginated` to render a Paginator in the footer. State is exposed',
-  'through v-model (`sorting`, `row-selection`, `pagination`, `global-filter`).',
-  '',
-  '### Border & toolbar',
-  '',
-  'The table is **borderless by default** (it usually sits inside a surface that frames it); set',
-  'the `border` prop to draw the outer card border. The optional `toolbar` / `filters` slots add',
-  'an action band above the viewport, scoped with the TanStack `table` instance — a context-aware',
-  '`Table.Search` drives the global filter and a removable `Chip` clears it (see **Full Example**).'
+  'through v-model (`sorting`, `row-selection`, `pagination`, `global-filter`).'
 ].join('\n')
 
 /** @type {import('@storybook/vue3').Meta<typeof Table>} */
@@ -498,33 +577,43 @@ const meta = {
 export default meta
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Table>} */
+export const Default = {
+  name: 'Default',
+  render: makeStory({ rows, columns }),
+  args: {
+    border: true
+  },
+  parameters: {
+    docs: {
+      source: { code: dataDrivenSnippet({ ...baseArgs, border: true }, { cols: columns }) },
+      description: {
+        story:
+          'A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s, per-row action menus, and pagination. The outer card border is drawn via the `border` prop — the table is borderless by default (it usually sits inside a surface that already frames it), so set `border` to draw the `var(--border-default)` outline; the internal row dividers are unaffected either way.'
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Table>} */
 export const Composition = {
   name: 'Composition',
   render: (args) => ({
     components,
-    // Static rows — composition is hand-authored; iterating a small fixture is
-    // usage, not feature logic.
-    setup: () => ({ args, items: compositionRows, statusSeverity }),
+    setup: () => ({ args, items: rows.slice(0, 5) }),
     template: `
       <Table :border="args.border">
+        <Table.Header>
+          <Table.Row>
+            <Table.HeadCell principal>Name</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Last Editor</Table.HeadCell>
+          </Table.Row>
+        </Table.Header>
         <Table.Body>
-          <Table.Row
-            v-for="item in items"
-            :key="item.id"
-          >
-            <Table.Cell>
-              <div class="flex w-full items-center gap-[var(--spacing-3)] py-[var(--spacing-3)]">
-                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] bg-[var(--bg-canvas)]">
-                  <i class="pi pi-box text-[var(--text-muted)]" />
-                </span>
-                <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-1)]">
-                  <span class="truncate text-[var(--text-default)]">{{ item.name }}</span>
-                  <span class="truncate text-body-xs text-[var(--text-muted)]">{{ item.editor }}</span>
-                </div>
-                <Tag :severity="statusSeverity(item.status)">{{ item.status }}</Tag>
-                <IconButton icon="pi pi-ellipsis-v" aria-label="Row actions" kind="transparent" size="small" />
-              </div>
-            </Table.Cell>
+          <Table.Row v-for="item in items" :key="item.id">
+            <Table.Cell principal><span class="min-w-0 flex-1 truncate">{{ item.name }}</span></Table.Cell>
+            <Table.Cell><span class="min-w-0 flex-1 truncate">{{ item.status }}</span></Table.Cell>
+            <Table.Cell><span class="min-w-0 flex-1 truncate">{{ item.editor }}</span></Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>
@@ -538,7 +627,7 @@ export const Composition = {
       source: { code: COMPOSITION_SOURCE },
       description: {
         story:
-          'Why composition exists: full control of every cell. Here each `<Table.Row>` holds a single `<Table.Cell>` rendered as a **card-style row** — an icon, a stacked name + editor, a status `Tag`, and a row-action button — instead of fixed columns. Compose whatever you need inside the cell. For ordinary columnar data, prefer the data-driven API (`:data` + `:columns`), which renders through these same sub-components and wires sorting / selection / pagination for you.'
+          'The compound API: build the table by hand from `<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Cell>`. The result is an ordinary table — the same as the data-driven API — but you control every cell. Reach for it when a cell needs custom content; otherwise prefer `:data` + `:columns`.'
       }
     }
   }
@@ -554,7 +643,7 @@ export const WithCheckboxes = {
   parameters: {
     docs: {
       source: {
-        code: dataDrivenSource({ ...baseArgs, enableRowSelection: true })
+        code: dataDrivenSnippet({ ...baseArgs, enableRowSelection: true }, { cols: columns })
       },
       description: {
         story:
@@ -575,31 +664,14 @@ export const CompactHeader = {
   parameters: {
     docs: {
       source: {
-        code: dataDrivenSource({ ...baseArgs, paginated: false, headerVariant: 'compact' })
+        code: dataDrivenSnippet(
+          { ...baseArgs, paginated: false, headerVariant: 'compact' },
+          { cols: columns }
+        )
       },
       description: {
         story:
           'A denser header via `header-variant="compact"` (forwarded to `Table.Header`): the column-header row uses a reduced height and padding. No toolbar band, so the table opens straight onto that header row.'
-      }
-    }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Table>} */
-export const Bordered = {
-  name: 'Bordered',
-  render: makeStory({ rows, columns }),
-  args: {
-    border: true
-  },
-  parameters: {
-    docs: {
-      source: {
-        code: dataDrivenSource({ ...baseArgs, border: true })
-      },
-      description: {
-        story:
-          'The outer card border drawn via the `border` prop. The table is **borderless by default** (it usually sits inside a surface that already frames it); set `border` (or `:border="…"`) to draw the `var(--border-default)` outline. The internal row dividers are unaffected either way.'
       }
     }
   }
@@ -620,11 +692,10 @@ export const SelectedRow = {
   parameters: {
     docs: {
       source: {
-        code: dataDrivenSource({
-          ...baseArgs,
-          enableRowSelection: true,
-          selectOnRowClick: true
-        })
+        code: dataDrivenSnippet(
+          { ...baseArgs, enableRowSelection: true, selectOnRowClick: true },
+          { cols: columns }
+        )
       },
       description: {
         story:
@@ -640,7 +711,7 @@ export const FixedLayoutWithColumnSizes = {
   render: makeStory({ rows, columns: sizedColumns }),
   parameters: {
     docs: {
-      source: { code: dataDrivenSource({ ...baseArgs }) },
+      source: { code: dataDrivenSnippet({ ...baseArgs }, { cols: sizedColumns }) },
       description: {
         story:
           'Every column declares an explicit pixel `width`, so the layout is fixed: columns keep their declared size instead of distributing to fill the surface, and the viewport scrolls horizontally if the widths sum past it.'
@@ -655,7 +726,7 @@ export const ResizableColumns = {
   render: makeStory({ rows, columns: resizableColumns }),
   parameters: {
     docs: {
-      source: { code: dataDrivenSource({ ...baseArgs }) },
+      source: { code: dataDrivenSnippet({ ...baseArgs }, { cols: resizableColumns }) },
       description: {
         story:
           'A simple table whose columns opt into drag-to-resize via per-column `resizable: true`. Drag a header divider: only that column resizes (the others freeze at their current width) and the table grows with horizontal scroll. A column can shrink only down to its own content width. Frozen and action columns ignore `resizable`.'
@@ -670,7 +741,7 @@ export const StickyColumn = {
   render: makeStory({ rows, columns: wideColumns }),
   parameters: {
     docs: {
-      source: { code: dataDrivenSource({ ...baseArgs }) },
+      source: { code: dataDrivenSnippet({ ...baseArgs }, { cols: wideColumns }) },
       description: {
         story:
           'Extra columns (Protocol, Domains, Origins, Created) push the rows past the surface. The **Name** column is pinned to the start edge (`frozen: "start"`) and the **actions** menu to the end edge (`frozen: "end"`): both stay put while the middle columns scroll horizontally underneath, with a CSS-only edge fade dissolving the scrolling content under each pinned column.'
@@ -690,7 +761,10 @@ export const CompactHeaderWithStickyColumn = {
   parameters: {
     docs: {
       source: {
-        code: dataDrivenSource({ ...baseArgs, paginated: false, headerVariant: 'compact' })
+        code: dataDrivenSnippet(
+          { ...baseArgs, paginated: false, headerVariant: 'compact' },
+          { cols: wideColumns }
+        )
       },
       description: {
         story:
@@ -705,7 +779,7 @@ export const FullExample = {
   name: 'Full Example',
   render: makeStory({
     rows,
-    columns: fullColumns,
+    columns,
     toolbar: FULL_TOOLBAR
   }),
   args: {
@@ -716,14 +790,14 @@ export const FullExample = {
   parameters: {
     docs: {
       source: {
-        code: dataDrivenSource(
+        code: dataDrivenSnippet(
           { ...baseArgs, border: true, enableRowSelection: true },
-          { toolbar: true }
+          { cols: columns, toolbar: true }
         )
       },
       description: {
         story:
-          'The complete data table over the generic ≤10-row dataset, paginated with a small `page-size` so the paginator spans a couple of pages: the only story with the toolbar band — a composed toolbar (filter / context-aware search / refresh / export / column-selector) wired through the scoped `#toolbar="{ table }"` / `#filters="{ table }"` slots — the search drives `table.setGlobalFilter` and the removable chip clears it — plus select-all + sortable headers, status Tags, per-row actions, frozen Name + actions columns, every other column `resizable`, the `border` prop, and a paginator.'
+          'The complete data table over the generic ≤10-row dataset, paginated with a small `page-size` so the paginator spans a couple of pages: the only story with the toolbar band — a composed toolbar (filter / context-aware search / refresh / export / column-selector) wired through the scoped `#toolbar="{ table }"` / `#filters="{ table }"` slots — the search drives `table.setGlobalFilter` and the removable chip clears it — plus select-all + sortable headers, status Tags, per-row action menus, the `border` prop, and a paginator, over the same clean column layout as the other data-driven stories.'
       }
     }
   }
@@ -740,13 +814,7 @@ export const Empty = {
   parameters: {
     docs: {
       source: {
-        code: `<!-- No rows -> the default empty state renders in the #empty slot -->
-<Table :data="[]" :columns="columns" border>
-  <!-- Override the default to supply your own copy + actions: -->
-  <template #empty>
-    <!-- illustration / title / description / Create button / docs link -->
-  </template>
-</Table>`
+        code: EMPTY_SOURCE
       },
       description: {
         story:

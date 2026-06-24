@@ -7,24 +7,6 @@ import { ref, watch } from 'vue'
 // tree-shaking path; the stories lead with the compound form per compound-api.md.
 const paginatorComponents = { Paginator }
 
-const usage = [
-  '```vue',
-  '<Paginator>',
-  '  <template #info>',
-  '    <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>',
-  '  </template>',
-  '  <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>',
-  '  <Paginator.Button kind="number" selected>1</Paginator.Button>',
-  '  <Paginator.Button kind="number">2</Paginator.Button>',
-  '  <Paginator.Button kind="more" />',
-  '  <Paginator.Button kind="next">Next</Paginator.Button>',
-  '  <template #controls>',
-  '    <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />',
-  '  </template>',
-  '</Paginator>',
-  '```'
-].join('\n')
-
 // --- "Show code" source ----------------------------------------------------
 // Storybook's default dynamic source for a custom-template story renders the
 // internal markup (or the render function), not the authored `<Paginator>` usage.
@@ -89,8 +71,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Pagination controls — a three-region landmark (page-info text, navigation buttons, rows-per-page selector). No data engine; wire current page and page-size through your own state.\n\n' +
-          usage
+          'Pagination controls — a three-region landmark (page-info text, navigation buttons, rows-per-page selector). No data engine; wire current page and page-size through your own state.'
       }
     }
   },
