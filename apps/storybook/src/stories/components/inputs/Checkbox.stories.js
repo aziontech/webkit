@@ -1,10 +1,9 @@
-import { ref, watch } from 'vue'
-
 import Checkbox from '@aziontech/webkit/checkbox'
+import { ref, watch } from 'vue'
 
 /** @type {import('@storybook/vue3').Meta<typeof Checkbox>} */
 const meta = {
- title: 'Components/Inputs/Checkbox',
+  title: 'Components/Inputs/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
   parameters: {
