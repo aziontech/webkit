@@ -1,4 +1,5 @@
 /**
+ *
  * Vite configuration helper for apps consuming @aziontech/webkit.
  *
  * Ensures PrimeVue internal modules (EventBus, Symbols) are pre-bundled
@@ -16,21 +17,10 @@
  *   optimizeDeps: {
  *     include: [...webkitViteConfig.optimizeDeps.include]
  *   }
+ *
  */
 export const webkitViteConfig = {
   optimizeDeps: {
-    include: [
-      'primevue/toasteventbus',
-      'primevue/usetoast',
-      'primevue/toastservice',
-      'primevue/usedialog',
-      'primevue/dialogservice',
-      'primevue/dynamicdialogeventbus',
-      'primevue/config',
-      'primevue/tooltip',
-      'primevue/api',
-      'primevue/utils',
-      'vee-validate'
-    ]
+    include: ['vee-validate']
   }
 }

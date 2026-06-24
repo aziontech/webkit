@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, shallowRef, useAttrs, useSlots, watch } from 'vue'
 
-  import EmptyResultsBlock from '../../wip/empty-results-block/empty-results-block.vue'
+  import EmptyResultsBlock from '../../empty-results-block/empty-results-block.vue'
   import { useDataTableFilter } from './composables/use-data-table-filter'
   import { useDataTablePagination } from './composables/use-data-table-pagination'
   import { useDataTableSelection } from './composables/use-data-table-selection'
