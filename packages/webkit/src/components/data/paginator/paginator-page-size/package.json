@@ -1,0 +1,11 @@
+{
+  "main": "./paginator-page-size.vue",
+  "module": "./paginator-page-size.vue",
+  "types": "./paginator-page-size.vue.d.ts",
+  "browser": {
+    "./sfc": "./paginator-page-size.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

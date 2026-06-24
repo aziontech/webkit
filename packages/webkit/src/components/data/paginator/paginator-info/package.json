@@ -1,0 +1,11 @@
+{
+  "main": "./paginator-info.vue",
+  "module": "./paginator-info.vue",
+  "types": "./paginator-info.vue.d.ts",
+  "browser": {
+    "./sfc": "./paginator-info.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "main": "./table-cell.vue",
+  "module": "./table-cell.vue",
+  "types": "./table-cell.vue.d.ts",
+  "browser": {
+    "./sfc": "./table-cell.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
