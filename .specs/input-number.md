@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: c98ee5d85377eff25bfb68299760bb8d5256b5eb10f6d1133d070a421a1a2138
+checksum: 8449ce81cf99775068ba3af50021f6da330a39244f31afaf9bd2c578f546aa14
 created: 2026-06-22
 last_updated: 2026-06-22
 ---
@@ -23,7 +23,7 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 ```vue
 <script setup>
 import { ref } from 'vue'
-import InputNumber from '@aziontech/webkit/inputs/input-number'
+import InputNumber from '@aziontech/webkit/input-number'
 
 const value = ref(1)
 </script>

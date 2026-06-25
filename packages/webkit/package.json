@@ -89,6 +89,7 @@
     "./message": "./src/components/feedback/message/message.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./input-text": "./src/components/inputs/input-text/input-text.vue",
+    "./input-number": "./src/components/inputs/input-number/input-number.vue",
     "./label": "./src/components/inputs/label/label.vue",
     "./box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
     "./checkbox": "./src/components/inputs/checkbox/checkbox.vue",

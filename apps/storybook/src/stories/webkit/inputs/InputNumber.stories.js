@@ -1,7 +1,7 @@
 import { ref } from 'vue'
-import InputNumber from '@aziontech/webkit/inputs/input-number'
+import InputNumber from '@aziontech/webkit/input-number'
 
-const CORE_IMPORT = "import InputNumber from '@aziontech/webkit/inputs/input-number'"
+const CORE_IMPORT = "import InputNumber from '@aziontech/webkit/input-number'"
 
 /** @type {import('@storybook/vue3').Meta<typeof InputNumber>} */
 const meta = {
