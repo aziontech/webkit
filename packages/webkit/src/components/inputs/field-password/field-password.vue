@@ -22,7 +22,7 @@
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
     /** Native maxlength forwarded to the InputPassword. */
-    maxLength?: number | null
+    maxLength?: number
     /** Disables the input and switches the helper to kind=disabled (lock icon). */
     disabled?: boolean
     /** Marks the input read-only; value is visible but not editable. Native pass-through. */
@@ -46,7 +46,7 @@
     label: '',
     placeholder: '',
     helperText: '',
-    maxLength: null,
+    maxLength: undefined,
     disabled: false,
     readonly: false,
     required: false,

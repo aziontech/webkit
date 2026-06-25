@@ -47,7 +47,7 @@ const password = ref('')
 | `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
 | `placeholder` | `string` | `''` | no | Placeholder forwarded to the `InputPassword`. |
 | `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
-| `maxLength` | `number \| null` | `null` | no | Native `maxlength` forwarded to the `InputPassword`. |
+| `maxLength` | `number` | `undefined` | no | Native `maxlength` forwarded to the `InputPassword`. |
 | `disabled` | `boolean` | `false` | no | Disables the input and switches the helper to `kind="disabled"` (lock icon). |
 | `readonly` | `boolean` | `false` | no | Marks the input read-only; value is visible but not editable. Native pass-through. |
 | `required` | `boolean` | `false` | no | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input. |

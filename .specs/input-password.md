@@ -45,7 +45,7 @@ const password = ref('')
 |---|---|---|---|---|
 | `modelValue` | `string` | `''` | no | Two-way bound value of the field. |
 | `placeholder` | `string` | `''` | no | Placeholder shown when the field is empty. |
-| `maxLength` | `number \| null` | `null` | no | Native `maxlength` — maximum number of characters allowed. |
+| `maxLength` | `number` | `undefined` | no | Native `maxlength` — maximum number of characters allowed. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state. |
 | `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but not editable. Toggle button stays operable. |
 | `required` | `boolean` | `false` | no | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
