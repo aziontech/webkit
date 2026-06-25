@@ -32,23 +32,23 @@
     /** Switches the helper to kind=invalid and applies invalid border/ring tokens on the input. */
     invalid?: boolean
     /** id for the native input; consumed by Label via for and by aria-describedby wiring. */
-    inputId?: string
+    inputId?: string | null
     /** HTML name for the underlying input (form + vee-validate integration). */
-    name?: string
+    name?: string | null
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
+    modelValue: '',
     label: '',
-    placeholder: undefined,
+    placeholder: '',
     helperText: '',
     size: 'medium',
     disabled: false,
     readonly: false,
     required: false,
     invalid: false,
-    inputId: undefined,
-    name: undefined
+    inputId: null,
+    name: null
   })
 
   const emit = defineEmits<{

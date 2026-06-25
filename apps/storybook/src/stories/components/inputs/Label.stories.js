@@ -2,7 +2,7 @@ import Label from '@aziontech/webkit/label'
 
 /** @type {import('@storybook/vue3').Meta<typeof Label>} */
 const meta = {
-  title: 'Webkit/Inputs/Label',
+  title: 'Components/Inputs/Label',
   component: Label,
   tags: ['autodocs'],
   parameters: {
