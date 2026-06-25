@@ -45,7 +45,7 @@ const meta = {
     label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'undefined' } }
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     size: {
       control: 'inline-radio',

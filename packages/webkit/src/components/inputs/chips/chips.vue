@@ -18,7 +18,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    label: undefined,
+    label: '',
     size: 'medium',
     removable: false
   })

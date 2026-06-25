@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 77ea605007a81a26ff8c043a54f35472e4920fd792e76ca92ff969ddf0de46af
+checksum: 3324fa389a5dc1f03ed9c44c51dae49efd157e05d433dde67d14e4c6bcac1189
 created: 2026-06-23
-last_updated: 2026-06-24
+last_updated: 2026-06-25
 ---
 
 # Chips — Component Spec
@@ -34,7 +34,7 @@ import Chip from '@aziontech/webkit/chips'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `size` | `'small' \| 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
 | `removable` | `boolean` | `false` | no | When true, renders a trailing remove button that emits `remove`. |
 
