@@ -1,0 +1,11 @@
+{
+  "main": "./flow.vue",
+  "module": "./flow.vue",
+  "types": "./flow.vue.d.ts",
+  "browser": {
+    "./sfc": "./flow.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
