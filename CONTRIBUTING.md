@@ -72,7 +72,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-r
 | `docs` | README, spec body, JSDoc | patch |
 | `style` | Formatting / whitespace only | patch |
 | `refactor` | Internal restructure with no API change | patch |
-| `perf` | Performance improvement (via conventional-commits preset default) | patch |
+| `perf` | Performance improvement | patch |
 | `test` | Test additions or changes | none |
 | `ci` | CI/CD pipeline changes | none |
 | `revert` | Reverting a prior commit | none |
@@ -110,7 +110,7 @@ A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`
 
 The config also enforces:
 
-- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. The first eight produce a release (per `.releaserc` rules + conventional-commits preset defaults); `test`, `ci`, `revert` are allowed for hygiene but produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
+- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Every type is enumerated in each `.releaserc` `releaseRules`: the first eight produce a release (`feat` → minor, the rest → patch); `test`, `ci`, `revert` carry `release: false` for hygiene and produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
 - `type` and `scope` must be lower-case.
 - `subject` cannot be empty.
 - Header (full first line) cannot exceed 100 characters.
