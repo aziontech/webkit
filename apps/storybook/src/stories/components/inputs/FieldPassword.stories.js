@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import FieldPassword from '@aziontech/webkit/inputs/field-password'
+import FieldPassword from '@aziontech/webkit/field-password'
 import { ref, watch } from 'vue'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldPassword>} */
@@ -30,7 +30,7 @@ const meta = {
           '```vue',
           '<script setup>',
           "import { ref } from 'vue'",
-          "import FieldPassword from '@aziontech/webkit/inputs/field-password'",
+          "import FieldPassword from '@aziontech/webkit/field-password'",
           '',
           "const password = ref('')",
           '</script>',

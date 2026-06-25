@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
 
-import InputPassword from '@aziontech/webkit/inputs/input-password'
+import InputPassword from '@aziontech/webkit/input-password'
 
 /** @type {import('@storybook/vue3').Meta<typeof InputPassword>} */
 const meta = {
@@ -29,7 +29,7 @@ const meta = {
           '',
           '```vue',
           '<script setup>',
-          "import InputPassword from '@aziontech/webkit/inputs/input-password'",
+          "import InputPassword from '@aziontech/webkit/input-password'",
           "import { ref } from 'vue'",
           '',
           "const password = ref('')",

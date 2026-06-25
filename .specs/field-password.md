@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: e33144161486ffa278b2aaaf920772d8cb43c8caa536db15447661d0345124e4
+checksum: 332459d05ce3a734004e344565297cd88d42388129ea19ba6223149162e1cae0
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
@@ -22,7 +22,7 @@ Form field for password input that composes `Label`, `InputPassword`, and `Helpe
 ```vue
 <script setup>
 import { ref } from 'vue'
-import FieldPassword from '@aziontech/webkit/inputs/field-password'
+import FieldPassword from '@aziontech/webkit/field-password'
 
 const password = ref('')
 </script>

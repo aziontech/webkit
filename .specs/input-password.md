@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 1d3c90da9350a44450dbd0ca74a8296a0dae01cfeb55acff1203e685358ccc76
+checksum: 2ab1423f2ed35e8bccd96238c5762b8ff4e026f5c21d58984fcaa8ce9875fe2d
 created: 2026-06-16
 last_updated: 2026-06-16
 ---
@@ -24,7 +24,7 @@ Aligned with Figma frame `3714:10788` (Webkit / InputPassword). Token mapping in
 
 ```vue
 <script setup>
-import InputPassword from '@aziontech/webkit/inputs/input-password'
+import InputPassword from '@aziontech/webkit/input-password'
 import { ref } from 'vue'
 
 const password = ref('')

@@ -4,7 +4,7 @@ const FIGMA_NODE = 'https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?n
 
 figma.connect(FIGMA_NODE, {
   label: 'InputPassword',
-  imports: ['import InputPassword from "@aziontech/webkit/inputs/input-password"'],
+  imports: ['import InputPassword from "@aziontech/webkit/input-password"'],
   props: {
     placeholder: figma.string('placeholder'),
     disabled: figma.boolean('disabled'),
