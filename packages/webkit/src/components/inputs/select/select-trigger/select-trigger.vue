@@ -1,22 +1,22 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { inputSelectContextKey } from '../injection-key'
+  import { selectContextKey } from '../injection-key'
 
   defineOptions({
-    name: 'InputSelectTrigger',
+    name: 'SelectTrigger',
     inheritAttrs: false
   })
 
-  const ctx = inject(inputSelectContextKey)
+  const ctx = inject(selectContextKey)
   if (!ctx) {
-    throw new Error('InputSelectTrigger must be used inside <InputSelect>.')
+    throw new Error('SelectTrigger must be used inside <Select>.')
   }
 
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-trigger'
+    () => (attrs['data-testid'] as string | undefined) ?? 'select-trigger'
   )
 
   const onClick = () => {

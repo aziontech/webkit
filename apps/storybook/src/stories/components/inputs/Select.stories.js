@@ -1,31 +1,31 @@
 import Button from '@aziontech/webkit/button'
 import Tag from '@aziontech/webkit/tag'
-import InputSelect, {
-  InputSelectContent,
-  InputSelectGroup,
-  InputSelectOption,
-  InputSelectTrigger
-} from '@aziontech/webkit/inputs/input-select'
-import InputText from '@aziontech/webkit/inputs/input-text'
+import Select, {
+  SelectContent,
+  SelectGroup,
+  SelectOption,
+  SelectTrigger
+} from '@aziontech/webkit/select'
+import InputText from '@aziontech/webkit/input-text'
 import { computed, ref } from 'vue'
 
 const components = {
   Button,
   Tag,
-  InputSelect,
-  InputSelectTrigger,
-  InputSelectContent,
-  InputSelectGroup,
-  InputSelectOption,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectGroup,
+  SelectOption,
   InputText
 }
 
-const CORE_IMPORT = "import InputSelect from '@aziontech/webkit/inputs/input-select'"
+const CORE_IMPORT = "import Select from '@aziontech/webkit/select'"
 
-/** @type {import('@storybook/vue3').Meta<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').Meta<typeof Select>} */
 const meta = {
-  title: 'Webkit/Inputs/InputSelect',
-  component: InputSelect,
+  title: 'Components/Inputs/Select',
+  component: Select,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -41,7 +41,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<InputSelect.Content>`.",
+          "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<Select.Content>`.",
           '',
           '## Usage',
           '',
@@ -60,16 +60,16 @@ const meta = {
           '</script>',
           '',
           '<template>',
-          '  <InputSelect v-model="value" size="medium" placeholder="Select an option">',
-          '    <InputSelect.Trigger />',
-          '    <InputSelect.Content>',
-          '      <InputSelect.Option',
+          '  <Select v-model="value" size="medium" placeholder="Select an option">',
+          '    <Select.Trigger />',
+          '    <Select.Content>',
+          '      <Select.Option',
           '        v-for="o in options"',
           '        :key="o.value"',
           '        :value="o.value"',
-          '      >{{ o.label }}</InputSelect.Option>',
-          '    </InputSelect.Content>',
-          '  </InputSelect>',
+          '      >{{ o.label }}</Select.Option>',
+          '    </Select.Content>',
+          '  </Select>',
           '</template>',
           '```'
         ].join('\n')
@@ -157,16 +157,16 @@ const basicSource = ({
     '</script>',
     '',
     '<template>',
-    `  <InputSelect v-model="value" placeholder="Select an option"${bind ? ' ' + bind : ''}>`,
-    '    <InputSelect.Trigger />',
-    '    <InputSelect.Content>',
-    '      <InputSelect.Option',
+    `  <Select v-model="value" placeholder="Select an option"${bind ? ' ' + bind : ''}>`,
+    '    <Select.Trigger />',
+    '    <Select.Content>',
+    '      <Select.Option',
     '        v-for="o in options"',
     '        :key="o.value"',
     '        :value="o.value"',
-    '      >{{ o.label }}</InputSelect.Option>',
-    '    </InputSelect.Content>',
-    '  </InputSelect>',
+    '      >{{ o.label }}</Select.Option>',
+    '    </Select.Content>',
+    '  </Select>',
     '</template>'
   )
   return lines.join('\n')
@@ -181,21 +181,21 @@ const BasicTemplate = (args) => ({
   },
   template: `
     <div style="width: 280px;">
-      <InputSelect v-bind="args" v-model="value">
-        <InputSelectTrigger />
-        <InputSelectContent>
-          <InputSelectOption
+      <Select v-bind="args" v-model="value">
+        <SelectTrigger />
+        <SelectContent>
+          <SelectOption
             v-for="o in options"
             :key="o.value"
             :value="o.value"
-          >{{ o.label }}</InputSelectOption>
-        </InputSelectContent>
-      </InputSelect>
+          >{{ o.label }}</SelectOption>
+        </SelectContent>
+      </Select>
     </div>
   `
 })
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const Default = {
   args: {
     size: 'large'
@@ -212,7 +212,7 @@ export const Default = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const Sizes = {
   render: (args) => ({
     components,
@@ -227,7 +227,7 @@ export const Sizes = {
     },
     template: `
       <div class="flex flex-col gap-4" style="width: 280px;">
-        <InputSelect
+        <Select
           v-for="s in sizes"
           :key="s"
           v-bind="args"
@@ -235,15 +235,15 @@ export const Sizes = {
           :size="s"
           :placeholder="s.charAt(0).toUpperCase() + s.slice(1)"
         >
-          <InputSelectTrigger />
-          <InputSelectContent>
-            <InputSelectOption
+          <SelectTrigger />
+          <SelectContent>
+            <SelectOption
               v-for="o in options"
               :key="o.value"
               :value="o.value"
-            >{{ o.label }}</InputSelectOption>
-          </InputSelectContent>
-        </InputSelect>
+            >{{ o.label }}</SelectOption>
+          </SelectContent>
+        </Select>
       </div>
     `
   }),
@@ -265,22 +265,22 @@ export const Sizes = {
           '</script>',
           '',
           '<template>',
-          '  <InputSelect',
+          '  <Select',
           '    v-for="s in sizes"',
           '    :key="s"',
           '    v-model="value"',
           '    :size="s"',
           '    :placeholder="s.charAt(0).toUpperCase() + s.slice(1)"',
           '  >',
-          '    <InputSelect.Trigger />',
-          '    <InputSelect.Content>',
-          '      <InputSelect.Option',
+          '    <Select.Trigger />',
+          '    <Select.Content>',
+          '      <Select.Option',
           '        v-for="o in options"',
           '        :key="o.value"',
           '        :value="o.value"',
-          '      >{{ o.label }}</InputSelect.Option>',
-          '    </InputSelect.Content>',
-          '  </InputSelect>',
+          '      >{{ o.label }}</Select.Option>',
+          '    </Select.Content>',
+          '  </Select>',
           '</template>'
         ].join('\n')
       }
@@ -288,7 +288,7 @@ export const Sizes = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const Multiple = {
   args: { multiple: true, modelValue: [] },
   render: BasicTemplate,
@@ -302,7 +302,7 @@ export const Multiple = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const WithGroups = {
   render: (args) => ({
     components,
@@ -328,22 +328,22 @@ export const WithGroups = {
     },
     template: `
       <div style="width: 280px;">
-        <InputSelect v-bind="args" v-model="value">
-          <InputSelectTrigger />
-          <InputSelectContent>
-            <InputSelectGroup
+        <Select v-bind="args" v-model="value">
+          <SelectTrigger />
+          <SelectContent>
+            <SelectGroup
               v-for="g in groups"
               :key="g.label"
               :label="g.label"
             >
-              <InputSelectOption
+              <SelectOption
                 v-for="o in g.options"
                 :key="o.value"
                 :value="o.value"
-              >{{ o.label }}</InputSelectOption>
-            </InputSelectGroup>
-          </InputSelectContent>
-        </InputSelect>
+              >{{ o.label }}</SelectOption>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
     `
   }),
@@ -376,22 +376,22 @@ export const WithGroups = {
           '</script>',
           '',
           '<template>',
-          '  <InputSelect v-model="value">',
-          '    <InputSelect.Trigger />',
-          '    <InputSelect.Content>',
-          '      <InputSelect.Group',
+          '  <Select v-model="value">',
+          '    <Select.Trigger />',
+          '    <Select.Content>',
+          '      <Select.Group',
           '        v-for="g in groups"',
           '        :key="g.label"',
           '        :label="g.label"',
           '      >',
-          '        <InputSelect.Option',
+          '        <Select.Option',
           '          v-for="o in g.options"',
           '          :key="o.value"',
           '          :value="o.value"',
-          '        >{{ o.label }}</InputSelect.Option>',
-          '      </InputSelect.Group>',
-          '    </InputSelect.Content>',
-          '  </InputSelect>',
+          '        >{{ o.label }}</Select.Option>',
+          '      </Select.Group>',
+          '    </Select.Content>',
+          '  </Select>',
           '</template>'
         ].join('\n')
       }
@@ -399,7 +399,7 @@ export const WithGroups = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const WithSearchAndFooter = {
   render: (args) => ({
     components,
@@ -425,9 +425,9 @@ export const WithSearchAndFooter = {
     },
     template: `
       <div style="width: 280px;">
-        <InputSelect v-bind="args" v-model="value">
-          <InputSelectTrigger />
-          <InputSelectContent>
+        <Select v-bind="args" v-model="value">
+          <SelectTrigger />
+          <SelectContent>
             <template #search>
               <InputText v-model="search" size="small" placeholder="Search">
                 <template #iconLeft>
@@ -435,11 +435,11 @@ export const WithSearchAndFooter = {
                 </template>
               </InputText>
             </template>
-            <InputSelectOption
+            <SelectOption
               v-for="o in filtered"
               :key="o.value"
               :value="o.value"
-            >{{ o.label }}</InputSelectOption>
+            >{{ o.label }}</SelectOption>
             <template #footer>
               <Button
                 label="Create new item"
@@ -450,8 +450,8 @@ export const WithSearchAndFooter = {
                 @click="onCreate"
               />
             </template>
-          </InputSelectContent>
-        </InputSelect>
+          </SelectContent>
+        </Select>
       </div>
     `
   }),
@@ -471,7 +471,7 @@ export const WithSearchAndFooter = {
           '<script setup>',
           CORE_IMPORT,
           "import Button from '@aziontech/webkit/button'",
-          "import InputText from '@aziontech/webkit/inputs/input-text'",
+          "import InputText from '@aziontech/webkit/input-text'",
           "import { computed, ref } from 'vue'",
           '',
           'const emit = defineEmits([\'create\'])',
@@ -501,9 +501,9 @@ export const WithSearchAndFooter = {
           '</script>',
           '',
           '<template>',
-          '  <InputSelect v-model="value">',
-          '    <InputSelect.Trigger />',
-          '    <InputSelect.Content>',
+          '  <Select v-model="value">',
+          '    <Select.Trigger />',
+          '    <Select.Content>',
           '      <template #search>',
           '        <InputText v-model="search" size="small" placeholder="Search">',
           '          <template #iconLeft>',
@@ -511,11 +511,11 @@ export const WithSearchAndFooter = {
           '          </template>',
           '        </InputText>',
           '      </template>',
-          '      <InputSelect.Option',
+          '      <Select.Option',
           '        v-for="o in filtered"',
           '        :key="o.value"',
           '        :value="o.value"',
-          '      >{{ o.label }}</InputSelect.Option>',
+          '      >{{ o.label }}</Select.Option>',
           '      <template #footer>',
           '        <Button',
           '          label="Create new item"',
@@ -526,8 +526,8 @@ export const WithSearchAndFooter = {
           '          @click="onCreate"',
           '        />',
           '      </template>',
-          '    </InputSelect.Content>',
-          '  </InputSelect>',
+          '    </Select.Content>',
+          '  </Select>',
           '</template>'
         ].join('\n')
       }
@@ -535,7 +535,7 @@ export const WithSearchAndFooter = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const WithOptionExtras = {
   render: (args) => ({
     components,
@@ -550,10 +550,10 @@ export const WithOptionExtras = {
     },
     template: `
       <div style="width: 280px;">
-        <InputSelect v-bind="args" v-model="value">
-          <InputSelectTrigger />
-          <InputSelectContent>
-            <InputSelectOption
+        <Select v-bind="args" v-model="value">
+          <SelectTrigger />
+          <SelectContent>
+            <SelectOption
               v-for="o in options"
               :key="o.value"
               :value="o.value"
@@ -566,9 +566,9 @@ export const WithOptionExtras = {
               <template v-if="o.tag" #tag>
                 <Tag :value="o.tag" severity="info" size="small" />
               </template>
-            </InputSelectOption>
-          </InputSelectContent>
-        </InputSelect>
+            </SelectOption>
+          </SelectContent>
+        </Select>
       </div>
     `
   }),
@@ -591,10 +591,10 @@ export const WithOptionExtras = {
           '</script>',
           '',
           '<template>',
-          '  <InputSelect v-model="value">',
-          '    <InputSelect.Trigger />',
-          '    <InputSelect.Content>',
-          '      <InputSelect.Option',
+          '  <Select v-model="value">',
+          '    <Select.Trigger />',
+          '    <Select.Content>',
+          '      <Select.Option',
           '        v-for="o in options"',
           '        :key="o.value"',
           '        :value="o.value"',
@@ -607,9 +607,9 @@ export const WithOptionExtras = {
           '        <template v-if="o.tag" #tag>',
           '          <Tag :value="o.tag" severity="info" size="small" />',
           '        </template>',
-          '      </InputSelect.Option>',
-          '    </InputSelect.Content>',
-          '  </InputSelect>',
+          '      </Select.Option>',
+          '    </Select.Content>',
+          '  </Select>',
           '</template>'
         ].join('\n')
       }
@@ -617,7 +617,7 @@ export const WithOptionExtras = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const LongList = {
   render: (args) => ({
     components,
@@ -633,16 +633,16 @@ export const LongList = {
     },
     template: `
       <div style="width: 280px;">
-        <InputSelect v-bind="args" v-model="value" placeholder="Pick one of many">
-          <InputSelectTrigger />
-          <InputSelectContent>
-            <InputSelectOption
+        <Select v-bind="args" v-model="value" placeholder="Pick one of many">
+          <SelectTrigger />
+          <SelectContent>
+            <SelectOption
               v-for="o in options"
               :key="o.value"
               :value="o.value"
-            >{{ o.label }}</InputSelectOption>
-          </InputSelectContent>
-        </InputSelect>
+            >{{ o.label }}</SelectOption>
+          </SelectContent>
+        </Select>
       </div>
     `
   }),
@@ -663,16 +663,16 @@ export const LongList = {
           '</script>',
           '',
           '<template>',
-          '  <InputSelect v-model="value" placeholder="Pick one of many">',
-          '    <InputSelect.Trigger />',
-          '    <InputSelect.Content>',
-          '      <InputSelect.Option',
+          '  <Select v-model="value" placeholder="Pick one of many">',
+          '    <Select.Trigger />',
+          '    <Select.Content>',
+          '      <Select.Option',
           '        v-for="o in options"',
           '        :key="o.value"',
           '        :value="o.value"',
-          '      >{{ o.label }}</InputSelect.Option>',
-          '    </InputSelect.Content>',
-          '  </InputSelect>',
+          '      >{{ o.label }}</Select.Option>',
+          '    </Select.Content>',
+          '  </Select>',
           '</template>'
         ].join('\n')
       }
@@ -680,7 +680,7 @@ export const LongList = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const Filled = {
   args: { modelValue: 'opt-1' },
   render: BasicTemplate,
@@ -694,7 +694,7 @@ export const Filled = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const Invalid = {
   render: (args) => ({
     components,
@@ -706,16 +706,16 @@ export const Invalid = {
     },
     template: `
       <div style="width: 280px;">
-        <InputSelect v-bind="args" v-model="value" :invalid="invalid" placeholder="Select an option">
-          <InputSelectTrigger />
-          <InputSelectContent>
-            <InputSelectOption
+        <Select v-bind="args" v-model="value" :invalid="invalid" placeholder="Select an option">
+          <SelectTrigger />
+          <SelectContent>
+            <SelectOption
               v-for="o in options"
               :key="o.value"
               :value="o.value"
-            >{{ o.label }}</InputSelectOption>
-          </InputSelectContent>
-        </InputSelect>
+            >{{ o.label }}</SelectOption>
+          </SelectContent>
+        </Select>
       </div>
     `
   }),
@@ -733,7 +733,7 @@ export const Invalid = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSelect>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
 export const Disabled = {
   args: { disabled: true },
   render: BasicTemplate,

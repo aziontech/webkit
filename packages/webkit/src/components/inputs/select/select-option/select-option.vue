@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { inputSelectContextKey } from '../injection-key'
+  import { selectContextKey } from '../injection-key'
 
   defineOptions({
-    name: 'InputSelectOption',
+    name: 'SelectOption',
     inheritAttrs: false
   })
 
@@ -28,15 +28,15 @@
     tag(): unknown
   }>()
 
-  const ctx = inject(inputSelectContextKey)
+  const ctx = inject(selectContextKey)
   if (!ctx) {
-    throw new Error('InputSelectOption must be used inside <InputSelect>.')
+    throw new Error('SelectOption must be used inside <Select>.')
   }
 
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-option'
+    () => (attrs['data-testid'] as string | undefined) ?? 'select-option'
   )
 
   const selected = computed(() => ctx.isSelected(props.value))

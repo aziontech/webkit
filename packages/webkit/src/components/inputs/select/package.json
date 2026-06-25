@@ -3,7 +3,7 @@
   "module": "./index.ts",
   "types": "./index.d.ts",
   "browser": {
-    "./sfc": "./input-select.vue"
+    "./sfc": "./select.vue"
   },
   "sideEffects": [
     "*.vue"

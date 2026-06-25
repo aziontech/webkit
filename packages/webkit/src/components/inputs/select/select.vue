@@ -2,19 +2,19 @@
   import { computed, provide, ref, toRef, useAttrs, useId, watch } from 'vue'
 
   import {
-    inputSelectContextKey,
-    type InputSelectSize,
-    type InputSelectValue
+    selectContextKey,
+    type SelectSize,
+    type SelectValue
   } from './injection-key'
 
   defineOptions({
-    name: 'InputSelect',
+    name: 'Select',
     inheritAttrs: false
   })
 
   interface Props {
     /** Two-way bound selection. Scalar in single mode; array in multi mode. */
-    modelValue?: InputSelectValue
+    modelValue?: SelectValue
     /** When true, switches the component to multi-select. */
     multiple?: boolean
     /** Controlled open state for the dropdown. */
@@ -24,7 +24,7 @@
     /** Trigger placeholder shown when no option is selected. */
     placeholder?: string
     /** Size token; affects trigger height. */
-    size?: InputSelectSize
+    size?: SelectSize
     /** Disables the trigger and prevents opening. */
     disabled?: boolean
     /** Marks the field read-only; selection visible, dropdown locked. */
@@ -52,7 +52,7 @@
   })
 
   const emit = defineEmits<{
-    'update:modelValue': [value: InputSelectValue]
+    'update:modelValue': [value: SelectValue]
     'update:open': [value: boolean]
   }>()
 
@@ -62,7 +62,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-select')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select')
 
   const uncontrolledOpen = ref(props.defaultOpen)
   const openState = computed(() => (props.open !== undefined ? props.open : uncontrolledOpen.value))
@@ -82,7 +82,7 @@
       if (props.multiple && !Array.isArray(current) && current !== undefined) {
         emit('update:modelValue', current === '' ? [] : [current])
       } else if (!props.multiple && Array.isArray(current)) {
-        emit('update:modelValue', current[0] as InputSelectValue)
+        emit('update:modelValue', current[0] as SelectValue)
       }
     }
   )
@@ -103,7 +103,7 @@
       emit('update:modelValue', current)
       return
     }
-    emit('update:modelValue', value as InputSelectValue)
+    emit('update:modelValue', value as SelectValue)
     setOpen(false)
   }
 
@@ -121,8 +121,8 @@
     return String(current)
   })
 
-  provide(inputSelectContextKey, {
-    contentId: `input-select-${useId()}`,
+  provide(selectContextKey, {
+    contentId: `select-${useId()}`,
     triggerRef: ref<globalThis.HTMLElement | null>(null),
     open: openState,
     setOpen,

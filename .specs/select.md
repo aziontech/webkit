@@ -1,5 +1,5 @@
 ---
-name: input-select
+name: select
 category: inputs
 structure: composition
 status: implemented
@@ -12,11 +12,11 @@ created: 2026-06-15
 last_updated: 2026-06-22
 ---
 
-# Input Select — Component Spec
+# Select — Component Spec
 
 ## Purpose
 
-Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<InputSelectContent>`.
+Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
 
 Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
 
@@ -24,35 +24,35 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 ```vue
 <script setup>
-import InputSelect from '@aziontech/webkit/inputs/input-select'
+import Select from '@aziontech/webkit/select'
 
 const value = defineModel({ default: '' })
 </script>
 
 <template>
-  <InputSelect v-model="value" size="medium" placeholder="Select an option">
-    <InputSelect.Trigger />
-    <InputSelect.Content>
-      <InputSelect.Group label="Group A">
-        <InputSelect.Option value="opt-1">Option 1</InputSelect.Option>
-        <InputSelect.Option value="opt-2">Option 2</InputSelect.Option>
-      </InputSelect.Group>
-      <InputSelect.Group label="Group B">
-        <InputSelect.Option value="opt-3" icon="pi pi-heart">Option 3</InputSelect.Option>
-      </InputSelect.Group>
-    </InputSelect.Content>
-  </InputSelect>
+  <Select v-model="value" size="medium" placeholder="Select an option">
+    <Select.Trigger />
+    <Select.Content>
+      <Select.Group label="Group A">
+        <Select.Option value="opt-1">Option 1</Select.Option>
+        <Select.Option value="opt-2">Option 2</Select.Option>
+      </Select.Group>
+      <Select.Group label="Group B">
+        <Select.Option value="opt-3" icon="pi pi-heart">Option 3</Select.Option>
+      </Select.Group>
+    </Select.Content>
+  </Select>
 </template>
 ```
 
-Each sub-component is also exported individually for tree-shaking-sensitive consumers — `import InputSelectTrigger from '@aziontech/webkit/inputs/input-select-trigger'` (and `-content`, `-group`, `-option`) resolves to the same component referenced by `InputSelect.Trigger`.
+Each sub-component is also exported individually for tree-shaking-sensitive consumers — `import SelectTrigger from '@aziontech/webkit/select-trigger'` (and `-content`, `-group`, `-option`) resolves to the same component referenced by `Select.Trigger`.
 
 ## Sub-components
 
-- `input-select-trigger/input-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `InputText` size/state visuals.
-- `input-select-content/input-select-content.vue` — Popover panel rendered via the native Popover API + CSS anchor positioning; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
-- `input-select-group/input-select-group.vue` — Section wrapper for a labelled group of options; renders an overline-style heading when `label` is set.
-- `input-select-option/input-select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot.
+- `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `InputText` size/state visuals.
+- `select-content/select-content.vue` — Popover panel rendered via the native Popover API + CSS anchor positioning; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
+- `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders an overline-style heading when `label` is set.
+- `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot.
 
 ## Props
 
@@ -81,7 +81,7 @@ Each sub-component is also exported individually for tree-shaking-sensitive cons
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Composition slot; receives `<InputSelectTrigger>` and `<InputSelectContent>` (and the option tree inside it). |
+| `default` | — | Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it). |
 
 ## States
 
@@ -90,13 +90,13 @@ Each sub-component is also exported individually for tree-shaking-sensitive cons
 - `data-size` on the trigger mirrors the `size` prop
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-mode` on the root: `single` | `multiple`
-- `data-selected` on `<InputSelectOption>` when the option's value is part of the current selection
+- `data-selected` on `<SelectOption>` when the option's value is part of the current selection
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| dropdown open / close (on `InputSelectContent` only) | popup scale-in / scale-out semantic utilities from `animations.js` | semantic (150ms in / 110ms out · cubic-bezier) | reduced-motion fallback via the matching `motion-reduce` utility |
+| dropdown open / close (on `SelectContent` only) | popup scale-in / scale-out semantic utilities from `animations.js` | semantic (150ms in / 110ms out · cubic-bezier) | reduced-motion fallback via the matching `motion-reduce` utility |
 | trigger state change (border/ring/bg) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
 ## Tokens
@@ -148,9 +148,9 @@ Each sub-component is also exported individually for tree-shaking-sensitive cons
 - Sizes — composite story rendering all three sizes side by side (canonical composite per `storybook-write` skill).
 - Single — justification: documents the radio-style indicator and scalar `modelValue` shape (the default mode); pairs with `Multiple` to make the two modes browseable in one click.
 - Multiple — justification: documents the checkbox-style indicator and array `modelValue` shape that the `multiple` prop unlocks.
-- WithGroups — justification: documents the `<InputSelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.
-- WithSearchAndFooter — justification: documents the `#search` and `#footer` slots on `<InputSelectContent>` (Top/Bottom regions in Figma `3899:29361`), which are slot-only and invisible from Default.
-- WithOptionExtras — justification: documents the `icon`, `#left`, and `#tag` slots on `<InputSelectOption>` in one composite frame.
+- WithGroups — justification: documents the `<SelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.
+- WithSearchAndFooter — justification: documents the `#search` and `#footer` slots on `<SelectContent>` (Top/Bottom regions in Figma `3899:29361`), which are slot-only and invisible from Default.
+- WithOptionExtras — justification: documents the `icon`, `#left`, and `#tag` slots on `<SelectOption>` in one composite frame.
 - LongList — justification: documents the panel's internal scroll behaviour (options list wrapped in `ScrollArea`) when the option count exceeds the `max-h-60` viewport; not reachable from any other story.
 - Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop).
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.

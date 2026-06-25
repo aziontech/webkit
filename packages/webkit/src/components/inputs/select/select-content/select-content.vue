@@ -2,22 +2,22 @@
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
-  import { inputSelectContextKey } from '../injection-key'
+  import { selectContextKey } from '../injection-key'
 
   defineOptions({
-    name: 'InputSelectContent',
+    name: 'SelectContent',
     inheritAttrs: false
   })
 
-  const ctx = inject(inputSelectContextKey)
+  const ctx = inject(selectContextKey)
   if (!ctx) {
-    throw new Error('InputSelectContent must be used inside <InputSelect>.')
+    throw new Error('SelectContent must be used inside <Select>.')
   }
 
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-content'
+    () => (attrs['data-testid'] as string | undefined) ?? 'select-content'
   )
 
   const root = ref<globalThis.HTMLDivElement | null>(null)

@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   defineOptions({
-    name: 'InputSelectGroup',
+    name: 'SelectGroup',
     inheritAttrs: false
   })
 
@@ -22,7 +22,7 @@
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-group'
+    () => (attrs['data-testid'] as string | undefined) ?? 'select-group'
   )
 </script>
 

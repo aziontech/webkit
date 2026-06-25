@@ -1,10 +1,10 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
-export type InputSelectSize = 'small' | 'medium' | 'large'
+export type SelectSize = 'small' | 'medium' | 'large'
 
-export type InputSelectValue = string | number | unknown[] | undefined
+export type SelectValue = string | number | unknown[] | undefined
 
-export interface InputSelectContext {
+export interface SelectContext {
   /** Stable id used to wire trigger `aria-controls` and content element id. */
   contentId: string
   /** Trigger element ref; the content reads it to anchor below. */
@@ -13,13 +13,13 @@ export interface InputSelectContext {
   open: Ref<boolean>
   setOpen: (value: boolean) => void
   /** Current selection. */
-  modelValue: Ref<InputSelectValue>
+  modelValue: Ref<SelectValue>
   toggleValue: (value: unknown) => void
   isSelected: (value: unknown) => boolean
   /** Computed selection mode. */
   multiple: ComputedRef<boolean>
   /** Static state flags. */
-  size: ComputedRef<InputSelectSize>
+  size: ComputedRef<SelectSize>
   disabled: ComputedRef<boolean>
   readonly: ComputedRef<boolean>
   invalid: ComputedRef<boolean>
@@ -31,4 +31,4 @@ export interface InputSelectContext {
   filled: ComputedRef<boolean>
 }
 
-export const inputSelectContextKey: InjectionKey<InputSelectContext> = Symbol('InputSelectContext')
+export const selectContextKey: InjectionKey<SelectContext> = Symbol('SelectContext')
