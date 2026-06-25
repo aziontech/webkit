@@ -15,9 +15,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'select-trigger'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-trigger')
 
   const onClick = () => {
     if (ctx.disabled.value || ctx.readonly.value) return

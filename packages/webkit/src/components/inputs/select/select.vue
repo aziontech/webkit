@@ -1,11 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, toRef, useAttrs, useId, watch } from 'vue'
 
-  import {
-    selectContextKey,
-    type SelectSize,
-    type SelectValue
-  } from './injection-key'
+  import { selectContextKey, type SelectSize, type SelectValue } from './injection-key'
 
   defineOptions({
     name: 'Select',

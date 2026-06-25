@@ -21,9 +21,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'select-group'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-group')
 </script>
 
 <template>
