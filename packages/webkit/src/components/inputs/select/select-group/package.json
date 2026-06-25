@@ -1,0 +1,11 @@
+{
+  "main": "./select-group.vue",
+  "module": "./select-group.vue",
+  "types": "./select-group.vue.d.ts",
+  "browser": {
+    "./sfc": "./select-group.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

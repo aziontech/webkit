@@ -106,6 +106,7 @@
     "./textarea": "./src/components/inputs/textarea/textarea.vue",
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
     "./dropdown": "./src/components/inputs/dropdown/dropdown.vue",
+    "./select": "./src/components/inputs/select/index.ts",
     "./scroll-area": "./src/components/layout/scroll-area/scroll-area.vue",
     "./global-header": "./src/components/layout/global-header/index.js",
     "./sidebar": "./src/components/layout/sidebar/sidebar.vue",

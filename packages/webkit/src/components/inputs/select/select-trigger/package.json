@@ -1,0 +1,11 @@
+{
+  "main": "./select-trigger.vue",
+  "module": "./select-trigger.vue",
+  "types": "./select-trigger.vue.d.ts",
+  "browser": {
+    "./sfc": "./select-trigger.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "main": "./select-content.vue",
+  "module": "./select-content.vue",
+  "types": "./select-content.vue.d.ts",
+  "browser": {
+    "./sfc": "./select-content.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
