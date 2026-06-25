@@ -1,0 +1,11 @@
+{
+  "main": "./skeleton.vue",
+  "module": "./skeleton.vue",
+  "types": "./skeleton.vue.d.ts",
+  "browser": {
+    "./sfc": "./skeleton.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
