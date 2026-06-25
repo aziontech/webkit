@@ -88,6 +88,7 @@
     "./data-table-view-toggle": "./src/components/data/data-table/data-table-view-toggle.vue",
     "./message": "./src/components/feedback/message/message.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
+    "./skeleton": "./src/components/feedback/skeleton/skeleton.vue",
     "./input-text": "./src/components/inputs/input-text/input-text.vue",
     "./label": "./src/components/inputs/label/label.vue",
     "./box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
