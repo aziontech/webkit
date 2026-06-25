@@ -5,7 +5,7 @@ const CORE_IMPORT = "import InputNumber from '@aziontech/webkit/input-number'"
 
 /** @type {import('@storybook/vue3').Meta<typeof InputNumber>} */
 const meta = {
-  title: 'Webkit/Inputs/InputNumber',
+  title: 'Components/Inputs/InputNumber',
   component: InputNumber,
   tags: ['autodocs'],
   parameters: {

@@ -24,9 +24,9 @@
     /** Marks the field as required for assistive tech. */
     required?: boolean
     /** Minimum allowed value; spinner stops at this bound. */
-    min?: number
+    min?: number | null
     /** Maximum allowed value; spinner stops at this bound. */
-    max?: number
+    max?: number | null
     /** Increment used by the spinner buttons and arrow keys. */
     step?: number
     /** Renders the chevron-up/chevron-down spinner controls. */
@@ -41,8 +41,8 @@
     readonly: false,
     invalid: false,
     required: false,
-    min: undefined,
-    max: undefined,
+    min: null,
+    max: null,
     step: 1,
     showButtons: true
   })
