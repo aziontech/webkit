@@ -1,8 +1,8 @@
 import { ref } from 'vue'
 
-import InputTextarea from '@aziontech/webkit/inputs/input-textarea'
+import InputTextarea from '@aziontech/webkit/input-textarea'
 
-const CORE_IMPORT = "import InputTextarea from '@aziontech/webkit/inputs/input-textarea'"
+const CORE_IMPORT = "import InputTextarea from '@aziontech/webkit/input-textarea'"
 
 const basicSource = ({ initial = "''", bind = '' } = {}) =>
   [

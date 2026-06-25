@@ -22,7 +22,7 @@ Collects multi-line free-form text from the user. Sibling of `input-text` in the
 
 ```vue
 <script setup>
-import InputTextarea from '@aziontech/webkit/inputs/input-textarea'
+import InputTextarea from '@aziontech/webkit/input-textarea'
 import { ref } from 'vue'
 
 const value = ref('')

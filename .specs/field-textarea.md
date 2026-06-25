@@ -22,7 +22,7 @@ Labeled multi-line text field — composes `Label`, `InputTextarea`, and `Helper
 
 ```vue
 <script setup>
-import FieldTextarea from '@aziontech/webkit/inputs/field-textarea'
+import FieldTextarea from '@aziontech/webkit/field-textarea'
 import { ref } from 'vue'
 
 const value = ref('')
