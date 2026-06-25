@@ -44,8 +44,8 @@ const value = ref(1)
 | `readonly` | `boolean` | `false` | no | Marks the field as read-only; spinner buttons are inert. |
 | `invalid` | `boolean` | `false` | no | Applies the invalid border/ring tokens. |
 | `required` | `boolean` | `false` | no | Marks the field as required for assistive tech. |
-| `min` | `number \| null` | `null` | no | Minimum allowed value; spinner stops at this bound. |
-| `max` | `number \| null` | `null` | no | Maximum allowed value; spinner stops at this bound. |
+| `min` | `number` | `undefined` | no | Minimum allowed value; spinner stops at this bound. |
+| `max` | `number` | `undefined` | no | Maximum allowed value; spinner stops at this bound. |
 | `step` | `number` | `1` | no | Increment used by the spinner buttons and arrow keys. |
 | `showButtons` | `boolean` | `true` | no | Renders the chevron-up/chevron-down spinner controls. |
 
