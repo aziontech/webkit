@@ -18,16 +18,16 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `'undefined'` | no | model Value. |
+| `modelValue` | `string` | `''` | no | model Value. |
 | `options` | `unknown[]` | `'() => []'` | no | options. |
-| `optionLabel` | `string` | `'undefined'` | no | option Label. |
-| `optionValue` | `string` | `'undefined'` | no | option Value. |
-| `optionDisabled` | `string` | `'undefined'` | no | option Disabled. |
-| `optionGroupLabel` | `string` | `'undefined'` | no | option Group Label. |
-| `optionGroupChildren` | `string` | `'undefined'` | no | option Group Children. |
-| `placeholder` | `string` | `'undefined'` | no | placeholder. |
+| `optionLabel` | `string` | `''` | no | option Label. |
+| `optionValue` | `string` | `''` | no | option Value. |
+| `optionDisabled` | `string` | `''` | no | option Disabled. |
+| `optionGroupLabel` | `string` | `''` | no | option Group Label. |
+| `optionGroupChildren` | `string` | `''` | no | option Group Children. |
+| `placeholder` | `string` | `''` | no | placeholder. |
 | `filter` | `boolean` | `false` | no | filter. |
-| `filterPlaceholder` | `string` | `'undefined'` | no | filter Placeholder. |
+| `filterPlaceholder` | `string` | `''` | no | filter Placeholder. |
 | `showClear` | `boolean` | `false` | no | show Clear. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |

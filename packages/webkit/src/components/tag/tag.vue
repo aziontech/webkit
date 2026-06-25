@@ -32,7 +32,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    value: undefined,
+    value: '',
     severity: 'primary',
     size: 'medium',
     rounded: false,

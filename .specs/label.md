@@ -36,7 +36,7 @@ import InputText from '@aziontech/webkit/inputs/input-text'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `required` | `boolean` | `false` | no | Appends a `Required` tag next to the label text. |
 
 ## Events

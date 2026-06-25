@@ -18,8 +18,8 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `'undefined'` | no | model Value. |
-| `placeholder` | `string` | `'undefined'` | no | placeholder. |
+| `modelValue` | `string` | `''` | no | model Value. |
+| `placeholder` | `string` | `''` | no | placeholder. |
 | `type` | `string` | `'text'` | no | type. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | no | readonly. |

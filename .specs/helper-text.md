@@ -36,7 +36,7 @@ import InputText from '@aziontech/webkit/input-text'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | no | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
 
 ## Events
