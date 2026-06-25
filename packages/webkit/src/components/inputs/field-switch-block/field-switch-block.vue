@@ -24,7 +24,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
+    modelValue: false,
     disabled: false,
     label: '',
     description: '',

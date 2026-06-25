@@ -22,7 +22,7 @@ Inline boolean toggle with switch on the leading edge, label, optional descripti
 
 | Prop          | Type      | Default     | Required | JSDoc                                             |
 | ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
-| `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
+| `modelValue`  | `boolean` | `false`     | no       | Selected value for v-model.                       |
 | `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
 | `label`       | `string`  | `''`        | no       | Primary label text.                               |
 | `description` | `string`  | `''`        | no       | Secondary description.                            |

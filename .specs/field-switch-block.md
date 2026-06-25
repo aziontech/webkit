@@ -22,7 +22,7 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 
 | Prop          | Type      | Default     | Required | JSDoc                                             |
 | ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
-| `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
+| `modelValue`  | `boolean` | `false`     | no       | Selected value for v-model.                       |
 | `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
 | `label`       | `string`  | `''`        | no       | Primary label text.                               |
 | `description` | `string`  | `''`        | no       | Secondary description.                            |
