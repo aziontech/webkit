@@ -2,7 +2,7 @@ import HelperText from '@aziontech/webkit/helper-text'
 
 /** @type {import('@storybook/vue3').Meta<typeof HelperText>} */
 const meta = {
-  title: 'Webkit/Inputs/HelperText',
+  title: 'Components/Inputs/HelperText',
   component: HelperText,
   tags: ['autodocs'],
   parameters: {

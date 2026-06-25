@@ -32,7 +32,7 @@
 
   withDefaults(defineProps<Props>(), {
     modelValue: undefined,
-    placeholder: undefined,
+    placeholder: '',
     size: 'medium',
     disabled: false,
     readonly: false,
