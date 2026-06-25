@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 
+  import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
@@ -27,7 +28,7 @@
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: 'Copy',
     copiedLabel: 'Copied',
-    kind: 'transparent',
+    kind: 'outlined',
     size: 'small',
     disabled: false
   })
@@ -39,6 +40,7 @@
   const attrs = useAttrs()
 
   const copied = ref(false)
+  const tooltipOpen = ref<boolean | undefined>(undefined)
   let copiedTimeoutId: ReturnType<typeof setTimeout> | null = null
 
   const testId = computed(
@@ -55,6 +57,7 @@
     try {
       await globalThis.navigator.clipboard.writeText(props.value)
       copied.value = true
+      tooltipOpen.value = true
       emit('copy', props.value)
 
       if (copiedTimeoutId) {
@@ -63,6 +66,7 @@
 
       copiedTimeoutId = setTimeout(() => {
         copied.value = false
+        tooltipOpen.value = false
         copiedTimeoutId = null
       }, 2000)
     } catch {
@@ -80,17 +84,24 @@
 </script>
 
 <template>
-  <IconButton
-    v-bind="attrs"
-    :icon="icon"
-    :iconClass="iconClass"
-    :ariaLabel="label"
-    :kind="kind"
-    :size="size"
+  <Tooltip
+    v-model:open="tooltipOpen"
+    :text="label"
     :disabled="disabled"
-    iconTransition
-    :data-state="copied ? 'copied' : 'default'"
-    :data-testid="testId"
-    @click="handleCopy"
-  />
+    :data-testid="`${testId}__tooltip`"
+  >
+    <IconButton
+      v-bind="attrs"
+      :icon="icon"
+      :iconClass="iconClass"
+      :ariaLabel="label"
+      :kind="kind"
+      :size="size"
+      :disabled="disabled"
+      iconTransition
+      :data-state="copied ? 'copied' : 'default'"
+      :data-testid="testId"
+      @click="handleCopy"
+    />
+  </Tooltip>
 </template>

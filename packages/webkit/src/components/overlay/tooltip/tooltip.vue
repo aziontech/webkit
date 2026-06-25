@@ -11,8 +11,6 @@
     popupScaleTransitionLeaveToClasses
   } from './presets/popup-scale-transition.js'
 
-  // Motion utilities (spec): animate-popup-scale-in, animate-popup-scale-out
-
   export type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'
 
   defineOptions({
@@ -229,6 +227,15 @@
     }
   )
 
+  watch(
+    () => props.text,
+    () => {
+      if (isOpen.value) {
+        nextTick(() => updatePosition())
+      }
+    }
+  )
+
   onMounted(() => {
     globalThis.document?.addEventListener('keydown', onDocumentKeydown)
     globalThis.window?.addEventListener('resize', onScrollOrResize)
@@ -247,7 +254,7 @@
   <span
     ref="triggerRef"
     v-bind="attrs"
-    class="inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+    class="inline-flex w-fit shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="disabled || null"
@@ -282,7 +289,7 @@
         :data-placement="resolvedPlacement"
         :aria-hidden="!isOpen"
         :style="panelStyle"
-        class="pointer-events-none flex min-h-8 max-w-[var(--container-3xs)] items-center justify-center overflow-clip break-words rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-contrast)] p-[var(--spacing-xs)] text-center text-body-sm text-[var(--text-contrast)] [transform-origin:var(--popup-origin,center)] will-change-[transform,opacity]"
+        class="pointer-events-none flex min-h-8 max-w-[var(--container-3xs)] items-center justify-center overflow-clip break-words rounded-[var(--shape-elements)] bg-[var(--bg-contrast)] p-[var(--spacing-xs)] text-center text-body-sm text-[var(--text-contrast)] [transform-origin:var(--popup-origin,center)]"
       >
         {{ text }}
       </div>
