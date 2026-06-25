@@ -4,7 +4,7 @@ Every webkit component is published under a **flat, single-segment public name**
 
 ## The rule
 
-> O export é **direto**: `@aziontech/webkit/<name>`. **Nunca** com prefixo de categoria (`@aziontech/webkit/feedback/skeleton`). A categoria vive na pasta (`src/components/<category>/<name>/`) e no título da story (`Components/<Category>/<Name>`), não no nome público.
+> The export is **flat**: `@aziontech/webkit/<name>`. **Never** with a category prefix (`@aziontech/webkit/feedback/skeleton`). The category lives in the folder (`src/components/<category>/<name>/`) and in the story title (`Components/<Category>/<Name>`), not in the public name.
 
 | Concern | Correct | Forbidden |
 |---|---|---|
