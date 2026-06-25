@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: e442507589e220c43ae14c309598545a9041a919150ecd065d8058caf6e12dc1
+checksum: 7adf7ca0da71f4a1ccb5fa254306fbee7d8813ff0b8ec60a1168a8d9c9a1e719
 created: 2026-06-23
-last_updated: 2026-06-24
+last_updated: 2026-06-25
 ---
 # Badge — Component Spec
 
@@ -33,7 +33,7 @@ import Badge from '@aziontech/webkit/badge'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | no | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. |
 
