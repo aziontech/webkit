@@ -4,7 +4,7 @@ import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldSwitchBlock>} */
 const meta = {
- title: 'Components/Inputs/Field Switch Block',
+ title: 'Components/Inputs/FieldSwitchBlock',
   component: FieldSwitchBlock,
   tags: ['autodocs'],
   parameters: {
