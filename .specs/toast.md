@@ -4,9 +4,9 @@ category: feedback
 structure: composition
 status: approved
 spec_version: 1
-checksum: 1cee55e34847f668b59124a1160de1096a2b1dc6aa1f27fc7d6aec3802516d92
+checksum: 26970718ebd115910057301bb67b954b6473a88707d3411a60c27cb44ed487a9
 created: 2026-06-23
-last_updated: 2026-06-24
+last_updated: 2026-06-25
 ---
 
 # Toast — Component Spec
@@ -143,7 +143,7 @@ The imperative API is backed by a small reactive store composable, declared here
 |---|---|---|---|---|
 | `position` | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `'bottom-right'` | no | Corner (or edge-center) the stack is anchored to. |
 | `duration` | `number` | `4000` | no | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
-| `max` | `number` | `undefined` | no | Maximum simultaneously visible toasts; when exceeded the oldest are dropped. Unlimited when unset. |
+| `max` | `number` | `3` | no | Maximum simultaneously visible toasts per corner before the rest queue behind. |
 | `expand` | `boolean` | `false` | no | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek. |
 
 ## Events
@@ -165,7 +165,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 - `data-type` on `ToastItem` (and mirrored on the `Toaster`'s items): `default` | `success` | `info` | `warning` | `error` | `loading`. Drives the leading icon and the severity surface tokens.
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `left`/`center`/`right`) and the enter/leave translate direction.
-- `data-expand` on the `Toaster` container mirrors the `expand` prop (`true` when expanded).
+- `data-expanded` on the `Toaster` container mirrors the `expand` prop (`true` when expanded).
 - `aria-live` on the region: `polite` by default, `assertive` while an `error` toast is present; `role="status"` per item, `role="alert"` for `error`/`warning`. Focus is never stolen (the region is not focused on mount).
 - Visual states on interactive controls (`ToastAction`, `ToastClose`): `default`, `hover`, `focus-visible`, `active` (inherited from `Button` / `IconButton`).
 
@@ -191,7 +191,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | toast border | `var(--border-default)` |
 | elevation | `var(--shadow-md)` |
 | shape | `var(--shape-button)` |
-| title typography | `.text-body-xs` |
+| title typography | `.text-label-sm` |
 | description typography | `.text-body-xs` |
 | title text | `var(--text-default)` |
 | description text | `var(--text-muted)` |

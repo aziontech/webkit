@@ -157,26 +157,25 @@ export const Types = {
   }
 }
 
-const STACK_TEMPLATE = `<Toaster position="bottom-right" />
-<Button label="Show 4 toasts" @click="burst" />`
+const WITH_DESCRIPTION_TEMPLATE = `<Toaster position="bottom-right" />
+<Button label="Show toast" @click="show" />`
 
-export const Stacking = {
+export const WithDescription = {
   render: () => ({
     components,
     setup() {
-      const burst = () =>
-        ['Queued', 'Building', 'Deploying', 'Live'].forEach((message, i) =>
-          setTimeout(() => toast(message), i * 140)
-        )
-      return { burst }
+      const show = () =>
+        toast('Event has been created', {
+          description: 'Sunday, December 03, 2023 at 9:00 AM'
+        })
+      return { show }
     },
-    template: STACK_TEMPLATE
+    template: WITH_DESCRIPTION_TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
-        story:
-          'Multiple toasts group into a collapsed stack (3 visible). Hover to expand the group and pause the auto-dismiss; move away to collapse and resume.'
+        story: 'A two-line body — a title plus a supporting `description` line — raised with a single `toast()` call.'
       },
       source: {
         code: [
@@ -184,14 +183,15 @@ export const Stacking = {
           "import { Toaster, toast } from '@aziontech/webkit/toast'",
           "import Button from '@aziontech/webkit/button'",
           '',
-          'const burst = () =>',
-          "  ['Queued', 'Building', 'Deploying', 'Live'].forEach((message, i) =>",
-          '    setTimeout(() => toast(message), i * 140)',
-          '  )',
+          'const show = () =>',
+          "  toast('Event has been created', {",
+          "    description: 'Sunday, December 03, 2023 at 9:00 AM'",
+          '  })',
           '</script>',
           '',
           '<template>',
-          indent(STACK_TEMPLATE),
+          '  <Toaster position="bottom-right" />',
+          '  <Button label="Show toast" @click="show" />',
           '</template>'
         ].join('\n')
       }
@@ -199,7 +199,49 @@ export const Stacking = {
   }
 }
 
-const POSITIONS = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']
+const WITH_ACTION_TEMPLATE = `<Toaster position="bottom-right" />
+<Button label="Show toast" @click="show" />`
+
+export const WithAction = {
+  render: () => ({
+    components,
+    setup() {
+      const show = () =>
+        toast('Event has been created', {
+          action: { label: 'Undo', onClick: () => console.log('Undo') }
+        })
+      return { show }
+    },
+    template: WITH_ACTION_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: 'An inline "Undo" action — a label plus an `onClick` handler — raised with a single `toast()` call.'
+      },
+      source: {
+        code: [
+          '<script setup>',
+          "import { Toaster, toast } from '@aziontech/webkit/toast'",
+          "import Button from '@aziontech/webkit/button'",
+          '',
+          'const show = () =>',
+          "  toast('Event has been created', {",
+          "    action: { label: 'Undo', onClick: () => console.log('Undo') }",
+          '  })',
+          '</script>',
+          '',
+          '<template>',
+          '  <Toaster position="bottom-right" />',
+          '  <Button label="Show toast" @click="show" />',
+          '</template>'
+        ].join('\n')
+      }
+    }
+  }
+}
+
+const POSITIONS =['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']
 
 const POSITIONS_TEMPLATE = `<Toaster />
 <div class="flex flex-wrap justify-center gap-2">
