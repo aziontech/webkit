@@ -42,7 +42,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          'Labeled multi-line text field — composes Label, InputTextarea, and HelperText into a single form-ready control. Sibling of FieldText; hosts InputTextarea (fixed large size, vertical resize, 80px min-height).',
+          'Labeled multi-line text field — composes Label, Textarea, and HelperText into a single form-ready control. Sibling of FieldText; hosts Textarea (fixed large size, vertical resize, 80px min-height).',
           '',
           '## Usage',
           '',
@@ -78,7 +78,7 @@ const meta = {
   argTypes: {
     modelValue: {
       control: 'text',
-      description: 'Two-way bound value of the underlying InputTextarea.',
+      description: 'Two-way bound value of the underlying Textarea.',
       table: { type: { summary: 'string' }, category: 'props' }
     },
     name: {
@@ -93,7 +93,7 @@ const meta = {
     },
     placeholder: {
       control: 'text',
-      description: 'Placeholder forwarded to the InputTextarea.',
+      description: 'Placeholder forwarded to the Textarea.',
       table: { type: { summary: 'string' }, category: 'props' }
     },
     helperText: {

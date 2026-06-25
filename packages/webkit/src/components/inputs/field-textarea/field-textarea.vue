@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import InputTextarea from '../input-textarea/input-textarea.vue'
   import Label from '../label/label.vue'
+  import Textarea from '../textarea/textarea.vue'
 
   defineOptions({
     name: 'FieldTextarea',
@@ -10,13 +10,13 @@
   })
 
   interface Props {
-    /** Two-way bound value of the underlying InputTextarea. */
+    /** Two-way bound value of the underlying Textarea. */
     modelValue?: string
     /** HTML name for the underlying textarea (form integration). */
     name?: string
     /** Text rendered inside the Label. When empty, the label row is omitted. */
     label?: string
-    /** Placeholder forwarded to the InputTextarea. */
+    /** Placeholder forwarded to the Textarea. */
     placeholder?: string
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
@@ -82,7 +82,7 @@
       :class="disabled ? 'opacity-50' : ''"
       :data-testid="`${testId}__label`"
     />
-    <InputTextarea
+    <Textarea
       :id="resolvedId"
       v-model="model"
       :name="name || undefined"

@@ -2,7 +2,7 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   defineOptions({
-    name: 'InputTextarea',
+    name: 'Textarea',
     inheritAttrs: false
   })
 

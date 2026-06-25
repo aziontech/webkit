@@ -1,5 +1,5 @@
 ---
-name: input-textarea
+name: textarea
 category: inputs
 structure: monolithic
 status: implemented
@@ -7,12 +7,12 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 6702d64fbb97ede40e019df0e45f773a847217ac9f4fb2b064e83f89f84f1afc
+checksum: 699e929fbb5555adc5a66129fcda688db4c754488189c6194e54376f0afd5b38
 created: 2026-06-23
 last_updated: 2026-06-23
 ---
 
-# Input Textarea — Component Spec
+# Textarea — Component Spec
 
 ## Purpose
 
@@ -22,20 +22,20 @@ Collects multi-line free-form text from the user. Sibling of `input-text` in the
 
 ```vue
 <script setup>
-import InputTextarea from '@aziontech/webkit/input-textarea'
+import Textarea from '@aziontech/webkit/textarea'
 import { ref } from 'vue'
 
 const value = ref('')
 </script>
 
 <template>
-  <InputTextarea v-model="value" placeholder="Write your message" />
+  <Textarea v-model="value" placeholder="Write your message" />
 
   <!-- With leading and trailing icons -->
-  <InputTextarea v-model="value" placeholder="Write your message">
+  <Textarea v-model="value" placeholder="Write your message">
     <template #iconLeft><i class="pi pi-pencil" /></template>
     <template #iconRight><i class="pi pi-info-circle" /></template>
-  </InputTextarea>
+  </Textarea>
 </template>
 ```
 

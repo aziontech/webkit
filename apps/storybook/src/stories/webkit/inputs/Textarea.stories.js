@@ -1,8 +1,8 @@
 import { ref } from 'vue'
 
-import InputTextarea from '@aziontech/webkit/input-textarea'
+import Textarea from '@aziontech/webkit/textarea'
 
-const CORE_IMPORT = "import InputTextarea from '@aziontech/webkit/input-textarea'"
+const CORE_IMPORT = "import Textarea from '@aziontech/webkit/textarea'"
 
 const basicSource = ({ initial = "''", bind = '' } = {}) =>
   [
@@ -14,14 +14,14 @@ const basicSource = ({ initial = "''", bind = '' } = {}) =>
     '</script>',
     '',
     '<template>',
-    `  <InputTextarea v-model="value"${bind ? ' ' + bind : ''} />`,
+    `  <Textarea v-model="value"${bind ? ' ' + bind : ''} />`,
     '</template>'
   ].join('\n')
 
-/** @type {import('@storybook/vue3').Meta<typeof InputTextarea>} */
+/** @type {import('@storybook/vue3').Meta<typeof Textarea>} */
 const meta = {
   title: 'Webkit/Inputs/Textarea',
-  component: InputTextarea,
+  component: Textarea,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -50,7 +50,7 @@ const meta = {
           '</script>',
           '',
           '<template>',
-          '  <InputTextarea v-model="value" placeholder="Write your message" />',
+          '  <Textarea v-model="value" placeholder="Write your message" />',
           '</template>',
           '```'
         ].join('\n')
@@ -117,14 +117,14 @@ const meta = {
 export default meta
 
 const Template = (args) => ({
-  components: { InputTextarea },
+  components: { Textarea },
   setup() {
     const value = ref(args.modelValue ?? '')
     return { args, value }
   },
   template: `
     <div class="max-w-sm">
-      <InputTextarea v-model="value" v-bind="args" />
+      <Textarea v-model="value" v-bind="args" />
     </div>
   `
 })
@@ -143,14 +143,14 @@ export const Default = {
 
 export const Disabled = {
   render: () => ({
-    components: { InputTextarea },
+    components: { Textarea },
     setup() {
       const value = ref('')
       return { value }
     },
     template: `
       <div class="max-w-sm">
-        <InputTextarea v-model="value" placeholder="Placeholder" disabled />
+        <Textarea v-model="value" placeholder="Placeholder" disabled />
       </div>
     `
   }),
@@ -165,14 +165,14 @@ export const Disabled = {
 
 export const Invalid = {
   render: () => ({
-    components: { InputTextarea },
+    components: { Textarea },
     setup() {
       const value = ref('Text Filled')
       return { value }
     },
     template: `
       <div class="max-w-sm">
-        <InputTextarea v-model="value" invalid />
+        <Textarea v-model="value" invalid />
       </div>
     `
   }),
@@ -187,14 +187,14 @@ export const Invalid = {
 
 export const Required = {
   render: () => ({
-    components: { InputTextarea },
+    components: { Textarea },
     setup() {
       const value = ref('')
       return { value }
     },
     template: `
       <div class="max-w-sm">
-        <InputTextarea v-model="value" required placeholder="Required field" />
+        <Textarea v-model="value" required placeholder="Required field" />
       </div>
     `
   }),
@@ -209,23 +209,23 @@ export const Required = {
 
 export const WithIcons = {
   render: () => ({
-    components: { InputTextarea },
+    components: { Textarea },
     setup() {
       const value = ref('')
       return { value }
     },
     template: `
       <div class="max-w-sm flex flex-col gap-[var(--spacing-md)]">
-        <InputTextarea v-model="value" placeholder="Leading icon">
+        <Textarea v-model="value" placeholder="Leading icon">
           <template #iconLeft><i class="pi pi-pencil" /></template>
-        </InputTextarea>
-        <InputTextarea v-model="value" placeholder="Trailing icon">
+        </Textarea>
+        <Textarea v-model="value" placeholder="Trailing icon">
           <template #iconRight><i class="pi pi-info-circle" /></template>
-        </InputTextarea>
-        <InputTextarea v-model="value" placeholder="Both icons">
+        </Textarea>
+        <Textarea v-model="value" placeholder="Both icons">
           <template #iconLeft><i class="pi pi-pencil" /></template>
           <template #iconRight><i class="pi pi-info-circle" /></template>
-        </InputTextarea>
+        </Textarea>
       </div>
     `
   }),
@@ -241,18 +241,18 @@ export const WithIcons = {
           '</script>',
           '',
           '<template>',
-          '  <InputTextarea v-model="value" placeholder="Leading icon">',
+          '  <Textarea v-model="value" placeholder="Leading icon">',
           '    <template #iconLeft><i class="pi pi-pencil" /></template>',
-          '  </InputTextarea>',
+          '  </Textarea>',
           '',
-          '  <InputTextarea v-model="value" placeholder="Trailing icon">',
+          '  <Textarea v-model="value" placeholder="Trailing icon">',
           '    <template #iconRight><i class="pi pi-info-circle" /></template>',
-          '  </InputTextarea>',
+          '  </Textarea>',
           '',
-          '  <InputTextarea v-model="value" placeholder="Both icons">',
+          '  <Textarea v-model="value" placeholder="Both icons">',
           '    <template #iconLeft><i class="pi pi-pencil" /></template>',
           '    <template #iconRight><i class="pi pi-info-circle" /></template>',
-          '  </InputTextarea>',
+          '  </Textarea>',
           '</template>'
         ].join('\n')
       }

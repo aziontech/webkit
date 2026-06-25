@@ -16,7 +16,7 @@ last_updated: 2026-06-23
 
 ## Purpose
 
-Labeled multi-line text field — composes `Label`, `InputTextarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `InputTextarea` (fixed `large` size, vertical resize, 80px min-height) instead of `InputText`.
+Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, vertical resize, 80px min-height) instead of `InputText`.
 
 ## Usage
 
@@ -43,10 +43,10 @@ const value = ref('')
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the underlying InputTextarea. |
+| `modelValue` | `string` | `''` | no | Two-way bound value of the underlying Textarea. |
 | `name` | `string` | `''` | no | HTML name for the underlying textarea (form integration). |
 | `label` | `string` | `''` | no | Text rendered inside the Label. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | no | Placeholder forwarded to the InputTextarea. |
+| `placeholder` | `string` | `''` | no | Placeholder forwarded to the Textarea. |
 | `helperText` | `string` | `''` | no | Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. |
 | `disabled` | `boolean` | `false` | no | Disables the textarea and switches the helper to `kind=disabled` (lock icon). |
 | `readonly` | `boolean` | `false` | no | Marks the textarea read-only; value is visible but not editable. Native pass-through. |
@@ -103,11 +103,11 @@ const value = ref('')
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: delegated to nested `InputTextarea` (border-color swap to `var(--ring-color)` on `:focus-within`).
+- Visible focus: delegated to nested `Textarea` (border-color swap to `var(--ring-color)` on `:focus-within`).
 - Keyboard map: `Tab` focuses the textarea; typing inserts text; `Enter` inserts a newline; `Shift+Tab` moves focus back.
 - ARIA: label associated via `for` / `inputId`; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; helper text is associated to the textarea via `aria-describedby` when present.
 - Contrast ≥4.5:1 (text) / ≥3:1 (border + icons), including the disabled state.
-- `motion-reduce:transition-none` on animated state transitions inherited from `InputTextarea`.
+- `motion-reduce:transition-none` on animated state transitions inherited from `Textarea`.
 - Touch target: field min-height ≥80px ensures adequate hit area.
 
 ## Stories (Storybook)
