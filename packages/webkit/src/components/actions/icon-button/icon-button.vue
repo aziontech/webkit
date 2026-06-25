@@ -1,7 +1,15 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, Transition, useAttrs } from 'vue'
 
   import Spinner from '../../utils/spinner/spinner.vue'
+  import {
+    iconTransitionEnterActiveClasses,
+    iconTransitionEnterFromClasses,
+    iconTransitionEnterToClasses,
+    iconTransitionLeaveActiveClasses,
+    iconTransitionLeaveFromClasses,
+    iconTransitionLeaveToClasses
+  } from './presets/icon-transition.js'
 
   export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type IconButtonSize = 'small' | 'medium' | 'large'
@@ -9,7 +17,8 @@
 
   defineOptions({
     name: 'IconButton',
-    inheritAttrs: false
+    inheritAttrs: false,
+    components: { Transition }
   })
 
   interface Props {
@@ -29,6 +38,10 @@
     href?: string
     /** Link target when `href` is set. */
     target?: IconButtonTarget
+    /** Animates icon swaps with enter/leave transitions. */
+    iconTransition?: boolean
+    /** Extra classes applied to the icon glyph. */
+    iconClass?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -37,7 +50,9 @@
     disabled: false,
     loading: false,
     href: '',
-    target: '_self'
+    target: '_self',
+    iconTransition: false,
+    iconClass: ''
   })
 
   const emit = defineEmits<{
@@ -90,6 +105,10 @@
   const disabledClasses =
     'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
+  const iconClasses =
+    'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none'
+  const iconHostClasses = 'relative z-[1] inline-flex size-[1em] items-center justify-center'
+
   const sizeClasses: Record<IconButtonSize, string> = {
     large: 'size-10 text-button-lg',
     medium: 'size-8 text-button-md',
@@ -136,16 +155,31 @@
     :data-testid="testId"
     @click="handleClick"
   >
-    <span class="relative z-[1] inline-flex items-center justify-center">
+    <span :class="iconHostClasses">
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
         :data-testid="loadingTestId"
       />
+      <Transition
+        v-else-if="iconTransition"
+        mode="out-in"
+        :enter-active-class="iconTransitionEnterActiveClasses"
+        :enter-from-class="iconTransitionEnterFromClasses"
+        :enter-to-class="iconTransitionEnterToClasses"
+        :leave-active-class="iconTransitionLeaveActiveClasses"
+        :leave-from-class="iconTransitionLeaveFromClasses"
+        :leave-to-class="iconTransitionLeaveToClasses"
+      >
+        <i
+          :key="icon"
+          :class="[icon, iconClasses, iconClass]"
+          aria-hidden="true"
+        />
+      </Transition>
       <i
         v-else
-        :class="icon"
-        class="shrink-0 text-[length:inherit] leading-none"
+        :class="[icon, iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>
@@ -163,16 +197,31 @@
     :data-testid="testId"
     @click="handleClick"
   >
-    <span class="relative z-[1] inline-flex items-center justify-center">
+    <span :class="iconHostClasses">
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
         :data-testid="loadingTestId"
       />
+      <Transition
+        v-else-if="iconTransition"
+        mode="out-in"
+        :enter-active-class="iconTransitionEnterActiveClasses"
+        :enter-from-class="iconTransitionEnterFromClasses"
+        :enter-to-class="iconTransitionEnterToClasses"
+        :leave-active-class="iconTransitionLeaveActiveClasses"
+        :leave-from-class="iconTransitionLeaveFromClasses"
+        :leave-to-class="iconTransitionLeaveToClasses"
+      >
+        <i
+          :key="icon"
+          :class="[icon, iconClasses, iconClass]"
+          aria-hidden="true"
+        />
+      </Transition>
       <i
         v-else
-        :class="icon"
-        class="shrink-0 text-[length:inherit] leading-none"
+        :class="[icon, iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>
