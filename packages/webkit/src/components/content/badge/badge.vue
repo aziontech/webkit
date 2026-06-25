@@ -34,20 +34,17 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-badge')
 
   const resolvedSeverity = computed((): BadgeSeverity => {
+    const validSeverities: BadgeSeverity[] = [
+      'primary',
+      'secondary',
+      'success',
+      'warning',
+      'danger',
+      'default'
+    ]
     const severity = props.severity ?? 'primary'
 
-    if (
-      severity === 'primary' ||
-      severity === 'secondary' ||
-      severity === 'success' ||
-      severity === 'warning' ||
-      severity === 'danger' ||
-      severity === 'default'
-    ) {
-      return severity
-    }
-
-    return 'primary'
+    return validSeverities.includes(severity) ? severity : validSeverities[0]
   })
 </script>
 
