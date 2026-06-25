@@ -1,0 +1,11 @@
+{
+  "main": "./divider.vue",
+  "module": "./divider.vue",
+  "types": "./divider.vue.d.ts",
+  "browser": {
+    "./sfc": "./divider.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
