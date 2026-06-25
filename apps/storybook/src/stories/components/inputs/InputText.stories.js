@@ -1,7 +1,7 @@
 import { ref, watch } from 'vue'
 
 import Button from '@aziontech/webkit/button'
-import InputText from '@aziontech/webkit/inputs/input-text'
+import InputText from '@aziontech/webkit/input-text'
 
 /** @type {import('@storybook/vue3').Meta<typeof InputText>} */
 const meta = {
@@ -31,7 +31,7 @@ const meta = {
           '```vue',
           '<script setup>',
           "import { ref } from 'vue'",
-          "import InputText from '@aziontech/webkit/inputs/input-text'",
+          "import InputText from '@aziontech/webkit/input-text'",
           '',
           "const value = ref('')",
           '</script>',

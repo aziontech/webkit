@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import FieldText from '@aziontech/webkit/inputs/field-text'
+import FieldText from '@aziontech/webkit/field-text'
 import { ref } from 'vue'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldText>} */
@@ -30,7 +30,7 @@ const meta = {
           '```vue',
           '<script setup>',
           "import { ref } from 'vue'",
-          "import FieldText from '@aziontech/webkit/inputs/field-text'",
+          "import FieldText from '@aziontech/webkit/field-text'",
           '',
           "const email = ref('')",
           '</script>',
