@@ -12,7 +12,7 @@ Esses commands são a **fonte da verdade** do processo. Esta regra existe só pa
 ## Convenções (já embutidas nos fluxos — repetidas aqui porque são inegociáveis)
 
 - **Base sempre `dev`.** Branch sai de `origin/dev`, PR aponta para `dev`. **Nunca** `main`, nunca branch a partir de `main`.
-- **Nome da branch:** kebab-case `<type>/<ISSUE>-<slug>` (ou `<type>/<slug>` sem issue). `type` vem do mesmo enum do Conventional Commits ([`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention / [`commitlint.config.js`](../../commitlint.config.js)).
+- **Nome da branch:** kebab-case `<type>/<ISSUE>-<slug>` (ou `<type>/<slug>` sem issue). `type` vem do mesmo enum do Conventional Commits ([`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention / [`commitlint.config.js`](../../commitlint.config.js)). Esse enum precisa bater com todo `packages/*/.releaserc` — ver [`release-types.md`](./release-types.md).
 - **Commit:** Conventional Commits, header commitlint-válido. **Nunca** adicionar `Co-Authored-By` nem rodapé de atribuição ("Generated with Claude"). **Nunca** `--no-verify` para pular o commitlint.
 - **Commitar/push só como parte do `/open-pr`** — rodar o command é a autorização. Não commitar mudanças não relacionadas.
 - **Docs/rules compartilhados em PR separado de código.** Se o diff misturar código com `.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md` etc., separar em outro PR. O `.specs/<name>.md` do próprio componente fica junto do componente.
