@@ -5,7 +5,7 @@ import InputText from '@aziontech/webkit/input-text'
 
 /** @type {import('@storybook/vue3').Meta<typeof InputText>} */
 const meta = {
-  title: 'Webkit/Inputs/InputText',
+  title: 'Components/Inputs/InputText',
   component: InputText,
   tags: ['autodocs'],
   parameters: {
