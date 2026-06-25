@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 2
-checksum: 70f887fdc6932b1f79b79148688ae417dc3090513fd7d6607c77075ecdf5a898
+checksum: 6d1689408dbe6242d29ae1f86d70bddf927863546f8bbe6a2fdb7cc0f86d1a4c
 created: 2026-05-22
 last_updated: 2026-06-16
 ---
@@ -22,7 +22,7 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 |---|---|---|---|---|
 | `modelValue` | `string` | `undefined` | no | Two-way bound value of the field. |
 | `placeholder` | `string` | `undefined` | no | Placeholder shown when the field is empty. |
-| `type` | `'text' \| 'email' \| 'number'` | `'text'` | no | Native input type. Restricted to single-line variants the field treats identically. |
+| `type` | `'text' \| 'email'` | `'text'` | no | Native input type. Restricted to plain-text variants the field treats identically. |
 | `maxLength` | `number` | `undefined` | no | Native `maxlength` — maximum number of characters allowed. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
