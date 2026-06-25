@@ -565,8 +565,8 @@ const meta = {
       }
     },
     onRowClick: { action: 'row-click', table: { category: 'events' } },
-    onRowAction: { action: 'row-action', table: { category: 'events' } },
-    onCellClick: { action: 'cell-click', table: { category: 'events (cell)' } },
+    onRowAction: { action: 'row-action', table: { category: 'slot interactions (story only)' } },
+    onCellClick: { action: 'cell-click', table: { category: 'slot interactions (story only)' } },
     onUpdateSorting: { action: 'update:sorting', table: { category: 'events' } },
     onUpdateRowSelection: { action: 'update:rowSelection', table: { category: 'events' } },
     onUpdatePagination: { action: 'update:pagination', table: { category: 'events' } }
