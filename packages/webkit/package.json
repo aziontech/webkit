@@ -97,6 +97,7 @@
     "./checkbox": "./src/components/inputs/checkbox/checkbox.vue",
     "./field-checkbox": "./src/components/inputs/field-checkbox/field-checkbox.vue",
     "./field-checkbox-block": "./src/components/inputs/field-checkbox-block/field-checkbox-block.vue",
+    "./field-input-group": "./src/components/inputs/field-input-group/field-input-group.vue",
     "./field-radio": "./src/components/inputs/field-radio/field-radio.vue",
     "./field-radio-block": "./src/components/inputs/field-radio-block/field-radio-block.vue",
     "./field-switch": "./src/components/inputs/field-switch/field-switch.vue",
