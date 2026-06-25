@@ -15,6 +15,7 @@ import {
   validateFrontmatter,
   getSection,
   parseTable,
+  defaultCellIsStringUndefined,
   bodyChecksum,
   constraintsBlockHasCanonicalBullets,
   parseVueSfc,
@@ -148,6 +149,13 @@ group('lib: body parsing', () => {
     assertTrue(propNames.includes('kind'), 'kind missing')
     assertTrue(propNames.includes('size'), 'size missing')
     assertTrue(propNames.includes('disabled'), 'disabled missing')
+  })
+  test('defaultCellIsStringUndefined flags quoted undefined/null only', () => {
+    assertTrue(defaultCellIsStringUndefined("`'undefined'`") === true, "quoted 'undefined' should flag")
+    assertTrue(defaultCellIsStringUndefined("`'null'`") === true, "quoted 'null' should flag")
+    assertTrue(defaultCellIsStringUndefined('`undefined`') === false, 'unquoted undefined is legitimate')
+    assertTrue(defaultCellIsStringUndefined("`''`") === false, 'empty string is legitimate')
+    assertTrue(defaultCellIsStringUndefined("`'medium'`") === false, 'real string default is legitimate')
   })
 })
 

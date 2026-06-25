@@ -22,6 +22,7 @@ You are the `scaffolder` sub-agent. You execute the `component-scaffold` skill v
 ## What you may NOT do
 
 - Do not add props/events/slots/sub-components beyond what the spec lists.
+- Do not default an optional text-bearing string prop to `undefined`. Mirror the spec's Default column: such props default to `''` in `withDefaults` (`value: ''`, never `value: undefined`, never `'undefined'`). `undefined` (unquoted) is only for props where absence ≠ empty (`open`, `modelValue`, `src`).
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve.
 - Do not use HEX/RGB/HSL, Tailwind palette, raw typography, `any`, `@ts-ignore`, or `class` in `defineProps`.
 - Do not declare component-local `@keyframes` or `<style>` blocks.
