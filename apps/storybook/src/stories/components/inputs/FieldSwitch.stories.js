@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 import FieldSwitch from '@aziontech/webkit/field-switch'
 
-const CORE_IMPORT = "import FieldSwitch from '@aziontech/webkit/inputs/field-switch'"
+const CORE_IMPORT = "import FieldSwitch from '@aziontech/webkit/field-switch'"
 
 const basicSource = ({ initial = 'false', bind = '' } = {}) =>
   [
