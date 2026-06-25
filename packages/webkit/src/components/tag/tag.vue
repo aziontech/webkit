@@ -32,11 +32,11 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    value: '',
+    value: undefined,
     severity: 'primary',
     size: 'medium',
     rounded: false,
-    icon: ''
+    icon: undefined
   })
 
   defineSlots<{

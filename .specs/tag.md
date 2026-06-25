@@ -33,11 +33,11 @@ import Tag from '@aziontech/webkit/tag'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
+| `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
 | `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size` | `'small' | 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | no | Pill shape when true. |
-| `icon` | `string` | `''` | no | PrimeIcons class for the leading icon. |
+| `icon` | `string` | `'undefined'` | no | PrimeIcons class for the leading icon. |
 
 ## Events
 

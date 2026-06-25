@@ -18,14 +18,14 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | model Value. |
-| `value` | `string` | `''` | no | value. |
+| `modelValue` | `string` | `'undefined'` | no | model Value. |
+| `value` | `string` | `'undefined'` | no | value. |
 | `binary` | `boolean` | `false` | no | binary. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | no | readonly. |
-| `inputId` | `string` | `''` | no | input Id. |
+| `inputId` | `string` | `'undefined'` | no | input Id. |
 | `name` | `string` | `undefined` | no | HTML name for form submission. |
-| `tabindex` | `number` | `''` | no | tabindex. |
+| `tabindex` | `number` | `'undefined'` | no | tabindex. |
 
 ## Events
 
