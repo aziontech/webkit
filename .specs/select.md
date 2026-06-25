@@ -2,7 +2,7 @@
 name: select
 category: inputs
 structure: composition
-status: implemented
+status: draft
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
@@ -44,8 +44,6 @@ const value = defineModel({ default: '' })
   </Select>
 </template>
 ```
-
-Each sub-component is also exported individually for tree-shaking-sensitive consumers — `import SelectTrigger from '@aziontech/webkit/select-trigger'` (and `-content`, `-group`, `-option`) resolves to the same component referenced by `Select.Trigger`.
 
 ## Sub-components
 
