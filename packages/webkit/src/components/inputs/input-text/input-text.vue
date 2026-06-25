@@ -2,7 +2,7 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   export type InputTextSize = 'small' | 'medium' | 'large'
-  export type InputTextType = 'text' | 'email'
+  export type InputTextType = 'text' | 'email' | 'number'
 
   defineOptions({
     name: 'InputText',
