@@ -20,7 +20,7 @@ const basicSource = ({ initial = "''", bind = '' } = {}) =>
 
 /** @type {import('@storybook/vue3').Meta<typeof InputTextarea>} */
 const meta = {
-  title: 'Webkit/Inputs/Input Textarea',
+  title: 'Webkit/Inputs/Textarea',
   component: InputTextarea,
   tags: ['autodocs'],
   parameters: {
