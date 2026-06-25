@@ -43,19 +43,19 @@ const password = ref('')
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `undefined` | no | Two-way bound value of the underlying `InputPassword`. |
-| `label` | `string` | `undefined` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
-| `placeholder` | `string` | `undefined` | no | Placeholder forwarded to the `InputPassword`. |
-| `helperText` | `string` | `undefined` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
-| `maxLength` | `number` | `undefined` | no | Native `maxlength` forwarded to the `InputPassword`. |
+| `modelValue` | `string` | `''` | no | Two-way bound value of the underlying `InputPassword`. |
+| `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
+| `placeholder` | `string` | `''` | no | Placeholder forwarded to the `InputPassword`. |
+| `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
+| `maxLength` | `number \| null` | `null` | no | Native `maxlength` forwarded to the `InputPassword`. |
 | `disabled` | `boolean` | `false` | no | Disables the input and switches the helper to `kind="disabled"` (lock icon). |
 | `readonly` | `boolean` | `false` | no | Marks the input read-only; value is visible but not editable. Native pass-through. |
 | `required` | `boolean` | `false` | no | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input. |
 | `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input. |
 | `toggleable` | `boolean` | `true` | no | Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input. |
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows. |
-| `inputId` | `string` | `undefined` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
-| `name` | `string` | `undefined` | no | HTML name for the underlying input (form + vee-validate integration). |
+| `inputId` | `string \| null` | `null` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
+| `name` | `string \| null` | `null` | no | HTML name for the underlying input (form + vee-validate integration). |
 
 ## Events
 

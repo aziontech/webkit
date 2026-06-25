@@ -16,7 +16,7 @@
     /** Placeholder shown when the field is empty. */
     placeholder?: string
     /** Native maxlength — maximum number of characters allowed. */
-    maxLength?: number
+    maxLength?: number | null
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
     /** Marks the field read-only; value is visible but not editable. */
@@ -32,9 +32,9 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
-    placeholder: undefined,
-    maxLength: undefined,
+    modelValue: '',
+    placeholder: '',
+    maxLength: null,
     disabled: false,
     readonly: false,
     required: false,

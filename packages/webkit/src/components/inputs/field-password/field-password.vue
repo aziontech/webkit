@@ -22,7 +22,7 @@
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
     /** Native maxlength forwarded to the InputPassword. */
-    maxLength?: number
+    maxLength?: number | null
     /** Disables the input and switches the helper to kind=disabled (lock icon). */
     disabled?: boolean
     /** Marks the input read-only; value is visible but not editable. Native pass-through. */
@@ -36,25 +36,25 @@
     /** Forwarded to InputPassword for password-manager hints. */
     autocomplete?: InputPasswordAutocomplete
     /** id for the native input; consumed by Label via for and by aria-describedby wiring. */
-    inputId?: string
+    inputId?: string | null
     /** HTML name for the underlying input (form + vee-validate integration). */
-    name?: string
+    name?: string | null
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
+    modelValue: '',
     label: '',
-    placeholder: undefined,
+    placeholder: '',
     helperText: '',
-    maxLength: undefined,
+    maxLength: null,
     disabled: false,
     readonly: false,
     required: false,
     invalid: false,
     toggleable: true,
     autocomplete: 'current-password',
-    inputId: undefined,
-    name: undefined
+    inputId: null,
+    name: null
   })
 
   const emit = defineEmits<{

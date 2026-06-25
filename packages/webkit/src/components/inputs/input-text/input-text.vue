@@ -17,7 +17,7 @@
     /** Native input type. Restricted to plain-text variants the field treats identically. */
     type?: InputTextType
     /** Native maxlength — maximum number of characters allowed. */
-    maxLength?: number
+    maxLength?: number | null
     /** Size token; affects height only. Heights: small=28px, medium=32px, large=40px. */
     size?: InputTextSize
     /** Disables interaction and applies disabled tokens. */
@@ -31,15 +31,15 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
-    placeholder: undefined,
+    modelValue: '',
+    placeholder: '',
     size: 'medium',
     disabled: false,
     readonly: false,
     required: false,
     invalid: false,
     type: 'text',
-    maxLength: undefined
+    maxLength: null
   })
 
   const emit = defineEmits<{

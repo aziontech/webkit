@@ -20,10 +20,10 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `undefined` | no | Two-way bound value of the field. |
-| `placeholder` | `string` | `undefined` | no | Placeholder shown when the field is empty. |
+| `modelValue` | `string` | `''` | no | Two-way bound value of the field. |
+| `placeholder` | `string` | `''` | no | Placeholder shown when the field is empty. |
 | `type` | `'text' \| 'email' \| 'number'` | `'text'` | no | Native input type. Restricted to single-line variants the field treats identically. |
-| `maxLength` | `number` | `undefined` | no | Native `maxlength` — maximum number of characters allowed. |
+| `maxLength` | `number \| null` | `null` | no | Native `maxlength` — maximum number of characters allowed. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but not editable. Native pass-through. |

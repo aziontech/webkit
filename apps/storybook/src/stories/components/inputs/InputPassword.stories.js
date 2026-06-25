@@ -4,7 +4,7 @@ import InputPassword from '@aziontech/webkit/input-password'
 
 /** @type {import('@storybook/vue3').Meta<typeof InputPassword>} */
 const meta = {
-  title: 'Webkit/Inputs/InputPassword',
+  title: 'Components/Inputs/InputPassword',
   component: InputPassword,
   tags: ['autodocs'],
   parameters: {

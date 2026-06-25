@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldPassword>} */
 const meta = {
-  title: 'Webkit/Inputs/FieldPassword',
+  title: 'Components/Inputs/FieldPassword',
   component: FieldPassword,
   tags: ['autodocs'],
   parameters: {

@@ -42,17 +42,17 @@ const email = ref('')
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `undefined` | no | Two-way bound value of the underlying `InputText`. |
-| `label` | `string` | `undefined` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
-| `placeholder` | `string` | `undefined` | no | Placeholder forwarded to the `InputText`. |
-| `helperText` | `string` | `undefined` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
+| `modelValue` | `string` | `''` | no | Two-way bound value of the underlying `InputText`. |
+| `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
+| `placeholder` | `string` | `''` | no | Placeholder forwarded to the `InputText`. |
+| `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | no | Disables the input and switches the helper to `kind="disabled"` (lock icon). |
 | `readonly` | `boolean` | `false` | no | Marks the input read-only; value is visible but not editable. Native pass-through. |
 | `required` | `boolean` | `false` | no | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input. |
 | `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input. |
-| `inputId` | `string` | `undefined` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
-| `name` | `string` | `undefined` | no | HTML name for the underlying input (form + vee-validate integration). |
+| `inputId` | `string \| null` | `null` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
+| `name` | `string \| null` | `null` | no | HTML name for the underlying input (form + vee-validate integration). |
 
 ## Events
 
