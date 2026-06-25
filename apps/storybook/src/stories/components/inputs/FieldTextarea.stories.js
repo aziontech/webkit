@@ -25,7 +25,7 @@ const basicSource = ({ initial = "''", bind = '' } = {}) =>
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldTextarea>} */
 const meta = {
-  title: 'Webkit/Inputs/Field Textarea',
+  title: 'Components/Inputs/FieldTextarea',
   component: FieldTextarea,
   tags: ['autodocs'],
   parameters: {
