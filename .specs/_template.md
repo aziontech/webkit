@@ -131,6 +131,7 @@ export default Object.assign(Root, { Part: RootPart })
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
+| `label` | `string` | `''` | no | Text content rendered inside the component. |
 | `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'primary'` | no | Visual variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height, padding, typography. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
@@ -139,7 +140,17 @@ export default Object.assign(Root, { Part: RootPart })
      - kebab-case prop names; no `is`/`has` prefix on booleans.
      - Visual variants always named `kind`. Sizes always named `size`.
      - Every prop has a JSDoc one-liner; no empty cells.
-     - Types are union literals or primitives; no `any`. -->
+     - Types are union literals or primitives; no `any`.
+     - Defaults — pick the value that makes rendering predictable, never the word "undefined":
+         • An optional string holding renderable text (`label`, `value`, `placeholder`,
+           `description`, `icon`, `href`) defaults to `''` (empty string).
+         • An optional boolean defaults to `false`; an optional number to its neutral value.
+         • Reserve `undefined` — written UNQUOTED — only for props where absence ≠ empty:
+           controlled state (`open`, `modelValue`) or an optional resource whose presence
+           toggles rendering (`src`).
+         • NEVER write the literal `` `'undefined'` `` (quoted) in the Default column — that is the
+           string "undefined", not the absence of a value. The matching `.vue` must use the same
+           value in `withDefaults` (`label: ''`, never `label: undefined`). -->
 
 ## Events
 
