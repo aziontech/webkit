@@ -36,7 +36,7 @@
     severity: 'primary',
     size: 'medium',
     rounded: false,
-    icon: undefined
+    icon: ''
   })
 
   defineSlots<{
