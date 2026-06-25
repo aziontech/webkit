@@ -1,10 +1,10 @@
 import Button from '@aziontech/webkit/button'
 import IconButton from '@aziontech/webkit/icon-button'
-import Tooltip from '@aziontech/webkit/overlay/tooltip'
+import Tooltip from '@aziontech/webkit/tooltip'
 
 /** @type {import('@storybook/vue3').Meta<typeof Tooltip>} */
 const meta = {
-  title: 'Webkit/Overlay/Tooltip',
+  title: 'Components/Overlay/Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
   parameters: {
