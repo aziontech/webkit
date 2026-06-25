@@ -1,0 +1,11 @@
+{
+  "main": "./tooltip.vue",
+  "module": "./tooltip.vue",
+  "types": "./tooltip.vue.d.ts",
+  "browser": {
+    "./sfc": "./tooltip.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

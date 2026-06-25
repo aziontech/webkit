@@ -1,7 +1,17 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, Transition, useAttrs } from 'vue'
 
   import Spinner from '../../utils/spinner/spinner.vue'
+  import {
+    iconTransitionEnterActiveClasses,
+    iconTransitionEnterFromClasses,
+    iconTransitionEnterToClasses,
+    iconTransitionHostClasses,
+    iconTransitionIconClasses,
+    iconTransitionLeaveActiveClasses,
+    iconTransitionLeaveFromClasses,
+    iconTransitionLeaveToClasses
+  } from './presets/icon-transition.js'
 
   export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type IconButtonSize = 'small' | 'medium' | 'large'
@@ -9,7 +19,8 @@
 
   defineOptions({
     name: 'IconButton',
-    inheritAttrs: false
+    inheritAttrs: false,
+    components: { Transition }
   })
 
   interface Props {
@@ -29,6 +40,10 @@
     href?: string
     /** Link target when `href` is set. */
     target?: IconButtonTarget
+    /** Animates icon swaps with enter/leave transitions. */
+    iconTransition?: boolean
+    /** Extra classes applied to the icon glyph. */
+    iconClass?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -37,7 +52,9 @@
     disabled: false,
     loading: false,
     href: '',
-    target: '_self'
+    target: '_self',
+    iconTransition: false,
+    iconClass: ''
   })
 
   const emit = defineEmits<{
@@ -80,7 +97,7 @@
     secondary:
       'bg-[var(--secondary)] text-[var(--secondary-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]',
     outlined:
-      'border border-[var(--border-muted)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
     transparent:
       'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
     danger:
@@ -90,17 +107,22 @@
   const disabledClasses =
     'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
+  const iconClasses =
+    'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none'
+
   const sizeClasses: Record<IconButtonSize, string> = {
     large: 'size-10 text-button-lg',
     medium: 'size-8 text-button-md',
     small: 'size-7 text-button-md'
   }
 
-  const spinnerSizeClasses: Record<IconButtonSize, string> = {
+  const iconSlotSizeClasses: Record<IconButtonSize, string> = {
     large: 'size-4',
     medium: 'size-3',
     small: 'size-3'
   }
+
+  const spinnerSizeClasses = iconSlotSizeClasses
 
   const rootClasses = computed(() => {
     const kind = props.disabled ? disabledClasses : kindClasses[props.kind]
@@ -136,16 +158,37 @@
     :data-testid="testId"
     @click="handleClick"
   >
-    <span class="relative z-[1] inline-flex items-center justify-center">
+    <span
+      :class="
+        iconTransition
+          ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
+          : 'relative z-[1] inline-flex items-center justify-center'
+      "
+    >
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
         :data-testid="loadingTestId"
       />
+      <Transition
+        v-else-if="iconTransition"
+        mode="out-in"
+        :enter-active-class="iconTransitionEnterActiveClasses"
+        :enter-from-class="iconTransitionEnterFromClasses"
+        :enter-to-class="iconTransitionEnterToClasses"
+        :leave-active-class="iconTransitionLeaveActiveClasses"
+        :leave-from-class="iconTransitionLeaveFromClasses"
+        :leave-to-class="iconTransitionLeaveToClasses"
+      >
+        <i
+          :key="icon"
+          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
+          aria-hidden="true"
+        />
+      </Transition>
       <i
         v-else
-        :class="icon"
-        class="shrink-0 text-[length:inherit] leading-none"
+        :class="[icon, iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>
@@ -163,16 +206,37 @@
     :data-testid="testId"
     @click="handleClick"
   >
-    <span class="relative z-[1] inline-flex items-center justify-center">
+    <span
+      :class="
+        iconTransition
+          ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
+          : 'relative z-[1] inline-flex items-center justify-center'
+      "
+    >
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
         :data-testid="loadingTestId"
       />
+      <Transition
+        v-else-if="iconTransition"
+        mode="out-in"
+        :enter-active-class="iconTransitionEnterActiveClasses"
+        :enter-from-class="iconTransitionEnterFromClasses"
+        :enter-to-class="iconTransitionEnterToClasses"
+        :leave-active-class="iconTransitionLeaveActiveClasses"
+        :leave-from-class="iconTransitionLeaveFromClasses"
+        :leave-to-class="iconTransitionLeaveToClasses"
+      >
+        <i
+          :key="icon"
+          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
+          aria-hidden="true"
+        />
+      </Transition>
       <i
         v-else
-        :class="icon"
-        class="shrink-0 text-[length:inherit] leading-none"
+        :class="[icon, iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>
