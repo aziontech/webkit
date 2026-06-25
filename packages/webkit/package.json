@@ -88,6 +88,7 @@
     "./data-table-toolbar": "./src/components/data/data-table/data-table-toolbar.vue",
     "./data-table-view-all-footer": "./src/components/data/data-table/data-table-view-all-footer.vue",
     "./data-table-view-toggle": "./src/components/data/data-table/data-table-view-toggle.vue",
+    "./pick-list": "./src/components/data/pick-list/pick-list.vue",
     "./message": "./src/components/feedback/message/message.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./skeleton": "./src/components/feedback/skeleton/skeleton.vue",

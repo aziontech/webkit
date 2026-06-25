@@ -1,0 +1,12 @@
+{
+  "name": "@aziontech/webkit-data-pick-list",
+  "main": "./pick-list.vue",
+  "module": "./pick-list.vue",
+  "types": "./pick-list.vue.d.ts",
+  "browser": {
+    "./sfc": "./pick-list.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
