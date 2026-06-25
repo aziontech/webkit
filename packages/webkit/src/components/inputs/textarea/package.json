@@ -1,0 +1,11 @@
+{
+  "main": "./textarea.vue",
+  "module": "./textarea.vue",
+  "types": "./textarea.vue.d.ts",
+  "browser": {
+    "./sfc": "./textarea.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
