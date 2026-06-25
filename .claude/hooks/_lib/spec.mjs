@@ -165,6 +165,19 @@ function splitRow(line) {
   return trimmed.split(/\s*\|\s*/).map((c) => c.trim())
 }
 
+/**
+ * True when a Props-table Default cell is the STRING LITERAL 'undefined' or 'null'
+ * (the quoted text, not the JS value `undefined`). The cell text may be wrapped in
+ * backticks, e.g. "`'undefined'`". Used by spec-validate to reject the empty-string
+ * default anti-pattern. Legitimate unquoted `undefined` (e.g. `open`, `modelValue`,
+ * `src`) does NOT match and stays valid.
+ */
+export function defaultCellIsStringUndefined(cell) {
+  if (!cell) return false
+  const inner = String(cell).trim().replace(/^`|`$/g, '').trim()
+  return /^'(undefined|null)'$/.test(inner)
+}
+
 // ---- Checksum ----
 
 export function sha256(text) {
