@@ -1,4 +1,4 @@
-import HelperText from '@aziontech/webkit/inputs/helper-text'
+import HelperText from '@aziontech/webkit/helper-text'
 
 /** @type {import('@storybook/vue3').Meta<typeof HelperText>} */
 const meta = {
@@ -24,8 +24,8 @@ const meta = {
           '',
           '```vue',
           '<script setup>',
-          "import HelperText from '@aziontech/webkit/inputs/helper-text'",
-          "import InputText from '@aziontech/webkit/inputs/input-text'",
+          "import HelperText from '@aziontech/webkit/helper-text'",
+          "import InputText from '@aziontech/webkit/input-text'",
           '</script>',
           '',
           '<template>',
