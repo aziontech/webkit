@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=542-105
   node_id: 542:105
-checksum: 05fd4e71e09aa76a93643985f33870adddf259c3367ce6640b8f3923f5fb6ec4
+checksum: 0160b5d891f05729ce6c642d05b2dc662c675387306a4c6679bbde1b9fdffb3a
 created: 2026-05-23
 last_updated: 2026-06-23
 ---
@@ -71,7 +71,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: delegated to nested InputSwitch.
+- Visible focus: delegated to nested Switch.
 - Keyboard map: `Tab` focuses switch; `Space` / `Enter` toggles.
 - ARIA: label associated to the switch via `for` bound to an internally generated id (`useId`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

@@ -4,17 +4,17 @@
   import { cn } from '../../../utils/cn'
 
   defineOptions({
-    name: 'InputSwitch',
+    name: 'Switch',
     inheritAttrs: false
   })
 
-  export type InputSwitchType = 'default' | 'privacy'
+  export type SwitchType = 'default' | 'privacy'
 
   interface Props {
     /** Toggled-on state. Bind with `v-model:isToggled="value"`. */
     isToggled?: boolean
     /** Visual variant. Privacy renders a lock icon inside the handle. */
-    type?: InputSwitchType
+    type?: SwitchType
     /** Forces the focused visual state regardless of keyboard focus. */
     isFocused?: boolean
   }

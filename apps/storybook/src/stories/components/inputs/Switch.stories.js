@@ -1,8 +1,8 @@
 import { ref } from 'vue'
 
-import InputSwitch from '@aziontech/webkit/input-switch'
+import Switch from '@aziontech/webkit/switch'
 
-const CORE_IMPORT = "import InputSwitch from '@aziontech/webkit/inputs/input-switch'"
+const CORE_IMPORT = "import Switch from '@aziontech/webkit/switch'"
 
 const basicSource = ({ initial = 'false', bind = '' } = {}) =>
   [
@@ -14,14 +14,14 @@ const basicSource = ({ initial = 'false', bind = '' } = {}) =>
     '</script>',
     '',
     '<template>',
-    `  <InputSwitch v-model:isToggled="isToggled"${bind ? ' ' + bind : ''} aria-label="Toggle setting" />`,
+    `  <Switch v-model:isToggled="isToggled"${bind ? ' ' + bind : ''} aria-label="Toggle setting" />`,
     '</template>'
   ].join('\n')
 
-/** @type {import('@storybook/vue3').Meta<typeof InputSwitch>} */
+/** @type {import('@storybook/vue3').Meta<typeof Switch>} */
 const meta = {
- title: 'Components/Inputs/Input Switch',
-  component: InputSwitch,
+ title: 'Components/Inputs/Switch',
+  component: Switch,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -37,7 +37,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          'Control-only pill toggle `InputSwitch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a lock icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts.',
+          'Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a lock icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts.',
           '',
           '## Usage',
           '',
@@ -50,7 +50,7 @@ const meta = {
           '</script>',
           '',
           '<template>',
-          '  <InputSwitch v-model:isToggled="isToggled" aria-label="Toggle setting" />',
+          '  <Switch v-model:isToggled="isToggled" aria-label="Toggle setting" />',
           '</template>',
           '```'
         ].join('\n')
@@ -95,7 +95,7 @@ const meta = {
 
 export default meta
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSwitch>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Switch>} */
 export const Default = {
   args: {
     isToggled: false,
@@ -103,12 +103,12 @@ export const Default = {
     isFocused: false
   },
   render: (args) => ({
-    components: { InputSwitch },
+    components: { Switch },
     setup() {
       return { args }
     },
     template: `
-      <InputSwitch
+      <Switch
         v-model:isToggled="args.isToggled"
         :type="args.type"
         :is-focused="args.isFocused"
@@ -124,10 +124,10 @@ export const Default = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof InputSwitch>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Switch>} */
 export const Types = {
   render: () => ({
-    components: { InputSwitch },
+    components: { Switch },
     setup() {
       const defaultOff = ref(false)
       const defaultOn = ref(true)
@@ -137,10 +137,10 @@ export const Types = {
     },
     template: `
       <div class="flex flex-wrap items-center gap-[var(--spacing-4)]">
-        <InputSwitch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />
-        <InputSwitch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />
-        <InputSwitch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />
-        <InputSwitch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />
+        <Switch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />
+        <Switch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />
+        <Switch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />
+        <Switch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />
       </div>
     `
   }),
@@ -163,10 +163,10 @@ export const Types = {
           '</script>',
           '',
           '<template>',
-          '  <InputSwitch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />',
-          '  <InputSwitch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />',
-          '  <InputSwitch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />',
-          '  <InputSwitch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />',
+          '  <Switch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />',
+          '  <Switch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />',
+          '  <Switch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />',
+          '  <Switch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />',
           '</template>'
         ].join('\n')
       }

@@ -99,7 +99,7 @@
     "./field-switch": "./src/components/inputs/field-switch/field-switch.vue",
     "./field-switch-block": "./src/components/inputs/field-switch-block/field-switch-block.vue",
     "./radio-button": "./src/components/inputs/radio-button/radio-button.vue",
-    "./input-switch": "./src/components/inputs/input-switch/input-switch.vue",
+    "./switch": "./src/components/inputs/switch/switch.vue",
     "./dropdown": "./src/components/inputs/dropdown/dropdown.vue",
     "./scroll-area": "./src/components/layout/scroll-area/scroll-area.vue",
     "./global-header": "./src/components/layout/global-header/index.js",

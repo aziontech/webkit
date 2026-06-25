@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import InputSwitch from '../input-switch/input-switch.vue'
+  import Switch from '../switch/switch.vue'
 
   defineOptions({
     name: 'FieldSwitch',
@@ -66,7 +66,7 @@
     :data-testid="testId"
     :data-disabled="disabled || null"
   >
-    <InputSwitch
+    <Switch
       :id="generatedId"
       v-model:isToggled="model"
       :disabled="disabled"

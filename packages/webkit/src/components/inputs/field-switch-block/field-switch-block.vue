@@ -2,8 +2,8 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import InputSwitch from '../input-switch/input-switch.vue'
   import { selectableBlockCardClasses } from '../presets/interactive-states'
+  import Switch from '../switch/switch.vue'
 
   defineOptions({
     name: 'FieldSwitchBlock',
@@ -94,7 +94,7 @@
         :data-disabled="disabled || null"
         :data-testid="`${testId}__row`"
       >
-        <InputSwitch
+        <Switch
           :id="generatedId"
           v-model:isToggled="model"
           :class="disabled ? 'pointer-events-none opacity-50' : ''"

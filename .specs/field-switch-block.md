@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7168
   node_id: 2027:7168
-checksum: 3836c2dacdd7b10a46bf71775974946bafbb088f4a1cf137545903ddfe192eea
+checksum: 965dc1e0cd016509d084cecf490f39571beb3adc7a1dfe2d8b15553d0e6bf51e
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -78,9 +78,9 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: delegated to nested InputSwitch.
+- Visible focus: delegated to nested Switch.
 - Keyboard map: `Tab` focuses switch; `Space` / `Enter` toggles.
-- ARIA: label associated via `for` pointing to an internally generated `id` injected on the `InputSwitch` button.
+- ARIA: label associated via `for` pointing to an internally generated `id` injected on the `Switch` button.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - Touch target ≥40×40 px via card hit area.
 

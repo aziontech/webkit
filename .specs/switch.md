@@ -1,5 +1,5 @@
 ---
-name: input-switch
+name: switch
 category: inputs
 structure: monolithic
 status: implemented
@@ -7,29 +7,29 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 7ead84aaacaae84b9d90c4e3d537d104522de6858d6444ce7ea56159ff87a7af
+checksum: f3a6b7a531a51f6488909ebd407d38f712555152c9290529608f41b6b038cecb
 created: 2026-05-22
 last_updated: 2026-06-23
 ---
 
-# Input Switch — Component Spec
+# Switch — Component Spec
 
 ## Purpose
 
-Control-only pill toggle `InputSwitch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts.
+Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts.
 
 ## Usage
 
 ```vue
 <script setup>
-import InputSwitch from '@aziontech/webkit/inputs/input-switch'
+import Switch from '@aziontech/webkit/switch'
 import { ref } from 'vue'
 
 const enabled = ref(false)
 </script>
 
 <template>
-  <InputSwitch v-model:isToggled="enabled" type="default" />
+  <Switch v-model:isToggled="enabled" type="default" />
 </template>
 ```
 
