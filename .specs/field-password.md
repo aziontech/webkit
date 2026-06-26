@@ -54,8 +54,8 @@ const password = ref('')
 | `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input. |
 | `toggleable` | `boolean` | `true` | no | Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input. |
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows. |
-| `inputId` | `string \| null` | `null` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
-| `name` | `string \| null` | `null` | no | HTML name for the underlying input (form + vee-validate integration). |
+| `inputId` | `string` | `''` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
+| `name` | `string` | `''` | no | HTML name for the underlying input (form + vee-validate integration). |
 
 ## Events
 

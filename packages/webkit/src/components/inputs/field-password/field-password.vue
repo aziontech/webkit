@@ -36,9 +36,9 @@
     /** Forwarded to InputPassword for password-manager hints. */
     autocomplete?: InputPasswordAutocomplete
     /** id for the native input; consumed by Label via for and by aria-describedby wiring. */
-    inputId?: string | null
+    inputId?: string
     /** HTML name for the underlying input (form + vee-validate integration). */
-    name?: string | null
+    name?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -53,8 +53,8 @@
     invalid: false,
     toggleable: true,
     autocomplete: 'current-password',
-    inputId: null,
-    name: null
+    inputId: '',
+    name: ''
   })
 
   const emit = defineEmits<{
