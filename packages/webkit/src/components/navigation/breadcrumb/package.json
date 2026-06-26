@@ -1,8 +1,0 @@
-{
-  "main": "./index.js",
-  "module": "./index.js",
-  "exports": {
-    ".": "./index.js",
-    "./sfc": "./breadcrumb.vue"
-  }
-}
