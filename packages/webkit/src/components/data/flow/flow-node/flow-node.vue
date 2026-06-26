@@ -9,13 +9,16 @@
     inheritAttrs: false
   })
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       /** Marks the step as disabled; adjacent connectors render at reduced opacity. */
       disabled?: boolean
+      /** Drops the default node box so the slot content defines the node's appearance. */
+      unstyled?: boolean
     }>(),
     {
-      disabled: false
+      disabled: false,
+      unstyled: false
     }
   )
 
@@ -32,7 +35,7 @@
 
   const rootClasses = computed(() =>
     cn(
-      'relative z-[1] inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-md)] py-[var(--spacing-sm)] text-label-md text-[var(--text-default)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:opacity-60',
+      'relative z-[1] text-label-md text-[var(--text-default)] data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-[var(--shape-button)] data-[styled]:border data-[styled]:border-[var(--border-default)] data-[styled]:bg-[var(--bg-surface-raised)] data-[styled]:px-[var(--spacing-md)] data-[styled]:py-[var(--spacing-sm)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:opacity-60',
       attrs.class as string | undefined
     )
   )
@@ -44,6 +47,7 @@
     data-flow-kind="node"
     :data-flow-disabled="disabled ? 'true' : null"
     :data-disabled="disabled || null"
+    :data-styled="props.unstyled ? null : ''"
     :aria-disabled="disabled || undefined"
     :data-testid="testId"
     :class="rootClasses"

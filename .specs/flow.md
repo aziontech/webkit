@@ -3,66 +3,66 @@ name: flow
 category: data
 structure: composition
 status: approved
-spec_version: 1
+spec_version: 2
 figma:
   url:
   node_id:
-checksum: 1639b821be408187cef9eb07bd4b08f9cf22f7b3e802b85f44f28f50284ba0d5
+checksum: bdd033850866837b20760c9154820d48ff57a1d28da13c2bb527b020235ab84f
 created: 2026-06-25
-last_updated: 2026-06-25
+last_updated: 2026-06-26
 ---
 
 # Flow — Component Spec
 
 ## Purpose
 
-Flow renders a directed flow diagram: a vertical sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Design source (rewritten to our conventions, never inherited as-is): the kumo "Flow" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). There is no Figma frame for this component; tokens are inferred from intent and recorded in the Theme gaps table.
+Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Design source (rewritten to our conventions, never inherited as-is): the kumo "Flow" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). There is no Figma frame for this component; tokens are inferred from intent and recorded in the Theme gaps table.
 
 ## Usage
 
 ```vue
 <script setup>
 import Flow from '@aziontech/webkit/flow'
-import FlowList from '@aziontech/webkit/flow-list'
-import FlowNode from '@aziontech/webkit/flow-node'
-import FlowParallel from '@aziontech/webkit/flow-parallel'
-import FlowAnchor from '@aziontech/webkit/flow-anchor'
 </script>
 
 <template>
   <Flow align="center">
-    <FlowList>
-      <FlowNode>Source</FlowNode>
-      <FlowNode>
-        Transform
-        <FlowAnchor type="end" />
-      </FlowNode>
-      <FlowParallel align="start">
-        <FlowList>
-          <FlowNode>Cache</FlowNode>
-          <FlowNode disabled>Archive</FlowNode>
-        </FlowList>
-        <FlowList>
-          <FlowNode>Deliver</FlowNode>
-        </FlowList>
-      </FlowParallel>
-    </FlowList>
+    <Flow.Node>Load balancer</Flow.Node>
+    <Flow.Node unstyled>
+      <div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)]">
+        <Flow.Anchor type="end">
+          <div class="flex h-10 items-center px-[var(--spacing-sm)] text-label-md text-[var(--text-muted)]">
+            my-worker
+          </div>
+        </Flow.Anchor>
+        <Flow.Anchor type="start">
+          <div class="m-[var(--spacing-xxs)] mt-0 rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-md text-[var(--text-default)]">
+            Bindings
+          </div>
+        </Flow.Anchor>
+      </div>
+    </Flow.Node>
+    <Flow.Parallel>
+      <Flow.Node>DATABASE</Flow.Node>
+      <Flow.Node>OTHER_SERVICE</Flow.Node>
+    </Flow.Parallel>
   </Flow>
 </template>
 ```
 
 ## Sub-components
 
-- `flow-node/flow-node.vue` — A single step in the flow. Connectors that touch a disabled node render at reduced opacity (mirrored by `data-disabled`). Content via the `default` slot.
-- `flow-anchor/flow-anchor.vue` — Marks a custom connector attachment point inside a node. `type` restricts the anchor to the incoming (`start`) or outgoing (`end`) connector; omitted means both. Content via the `default` slot.
-- `flow-parallel/flow-parallel.vue` — Container that lays out parallel branches side by side with junction connectors. `align` controls the horizontal alignment of the branches.
-- `flow-list/flow-list.vue` — Container for a sequence of `flow-node` with automatic connectors drawn between consecutive nodes. Content via the `default` slot.
+- `flow-node/flow-node.vue` — A single step in the flow. Renders the default node box; `unstyled` drops the box so the `default` slot defines the node's appearance (a dot, a card, a tall node). `disabled` marks the step disabled, rendering adjacent connectors at reduced opacity (mirrored by `data-disabled`). Content via the `default` slot.
+- `flow-anchor/flow-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch. `type="end"` is the incoming endpoint, `type="start"` the outgoing origin; omitted marks both. Content via the `default` slot.
+- `flow-parallel/flow-parallel.vue` — Container whose direct `flow-node` children are laid out as parallel branches stacked vertically; the `flow` root draws the fan-out/fan-in junction connectors. `align` controls the horizontal alignment of the branches.
 
 <!-- Resulting layout (composition):
 
   packages/webkit/src/components/data/flow/
   ├── flow.vue
+  ├── index.ts                    (entry: attaches Flow.Node / Flow.Parallel / Flow.Anchor)
   ├── package.json
+  ├── connectors.ts               (connector geometry composable, used by flow.vue)
   ├── injection-key.ts            (shared by every sub-component; one directory up from each sub-component)
   ├── flow-node/
   │   ├── flow-node.vue
@@ -70,15 +70,14 @@ import FlowAnchor from '@aziontech/webkit/flow-anchor'
   ├── flow-anchor/
   │   ├── flow-anchor.vue
   │   └── package.json
-  ├── flow-parallel/
-  │   ├── flow-parallel.vue
-  │   └── package.json
-  └── flow-list/
-      ├── flow-list.vue
+  └── flow-parallel/
+      ├── flow-parallel.vue
       └── package.json
 
-  Public exports in packages/webkit/package.json#exports stay flat
-  (`./flow`, `./flow-node`, `./flow-anchor`, `./flow-parallel`, `./flow-list`). -->
+  Public export is a single `./flow` entry (index.ts) that attaches the
+  sub-components for dot-notation (`Flow.Node`, `Flow.Parallel`, `Flow.Anchor`);
+  the same sub-components are also re-exported as named bindings from
+  `@aziontech/webkit/flow`. -->
 
 ## Props
 
@@ -94,14 +93,15 @@ import FlowAnchor from '@aziontech/webkit/flow-anchor'
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Diagram content: `flow-list`, `flow-node`, `flow-parallel`. |
+| `default` | — | Diagram content: `flow-node` and `flow-parallel`, in flow order. |
 
 ## States
 
 - Visual states: `default`, `focus-visible`, `disabled`
 - `data-disabled` mirrors the `disabled` prop on `flow-node`
+- `data-styled` is present on `flow-node` unless `unstyled` (gates the default box utilities)
 - `data-align` mirrors the `align` prop on `flow` and `flow-parallel`
-- `data-type` mirrors the `type` prop on `flow-anchor`
+- `data-flow-anchor` mirrors the `type` prop on `flow-anchor` (`start` / `end` / `both`)
 
 ## Motion & Animations
 
@@ -111,14 +111,13 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography (node label) | `.text-body-md` |
-| typography (compact label) | `.text-label-md` |
-| node surface | `var(--bg-surface)` |
+| typography (node label) | `.text-label-md` |
+| node surface | `var(--bg-surface-raised)` |
 | node border | `var(--border-default)` |
 | node text | `var(--text-default)` |
 | connector stroke | `var(--border-default)` |
 | disabled text | `var(--text-disabled)` |
-| spacing | `var(--spacing-md)` |
+| spacing | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xl)` |
 | shape | `var(--shape-button)` |
 | ring | `var(--ring-color)` |
 
@@ -126,13 +125,13 @@ _none_
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| raised node surface (`bg-surface-raised`) | `var(--bg-surface)` | TODO: tokenizar `--bg-surface-raised` |
+| raised node surface (`bg-surface-raised`) | `var(--bg-surface-raised)` | TODO: confirm `--bg-surface-raised` is the canonical raised token |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
 - Keyboard map: `Tab` moves focus through focusable nodes in document order; no arrow-key roving (the diagram is a static list/group).
-- ARIA: root `flow` is `role="list"`; each `flow-node` is `role="listitem"` with accessible text content; `flow-parallel` is `role="group"`; connectors and anchors are decorative and carry `aria-hidden="true"`.
+- ARIA: root `flow` is `role="list"`; each `flow-node` is `role="listitem"` with accessible text content; `flow-parallel` is `role="group"`; the connector SVG is decorative and carries `aria-hidden="true"`. A `flow-anchor` wraps meaningful node content and is therefore not hidden.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` not required — the component is static (no motion).
 - Touch target ≥40×40 px where a node is interactive.
@@ -141,8 +140,10 @@ _none_
 
 Composite stories are justified below because Flow is a composition component whose value is in how parts compose, not in a single `kind`/`size` axis:
 
-- Default — a sequential `flow-list` of `flow-node` joined by connectors.
-- Parallel — a `flow-parallel` rendering parallel branches with junction connectors (demonstrates the composition that a single `kind`/`size` axis cannot).
+- Default — a sequential flow of `flow-node` joined by connectors.
+- Parallel — a `flow-parallel` fanning out and back in between two nodes (demonstrates the composition that a single `kind`/`size` axis cannot).
+- Branches — leading and trailing `flow-parallel` (fan-in then fan-out), proving connectors route correctly at the edges of the sequence.
+- CustomNodes — `unstyled` nodes whose slot content defines the appearance (a start dot, a tall node, a multi-row card with `flow-anchor` attachment points).
 - Disabled — a `flow-node` with the `disabled` prop, showing the reduced-opacity connectors.
 
 ## Constraints — DO NOT
@@ -168,5 +169,3 @@ Composite stories are justified below because Flow is a composition component wh
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
 - If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.
-</content>
-</invoke>

@@ -1,7 +1,7 @@
 {
-  "main": "./flow.vue",
-  "module": "./flow.vue",
-  "types": "./flow.vue.d.ts",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./index.d.ts",
   "browser": {
     "./sfc": "./flow.vue"
   },

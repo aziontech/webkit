@@ -29,7 +29,7 @@
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'data-flow')
 
   const containerRef = ref<HTMLElement | null>(null)
-  const { paths, viewBox } = useFlowConnectors(containerRef, 'sequence')
+  const { paths, viewBox } = useFlowConnectors(containerRef)
 
   provide(FlowInjectionKey, {
     testId: testId.value,

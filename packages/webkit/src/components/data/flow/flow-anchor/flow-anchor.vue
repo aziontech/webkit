@@ -9,8 +9,8 @@
     inheritAttrs: false
   })
 
-  defineProps<{
-    /** Restricts the anchor to the incoming or outgoing connector; omitted marks both. */
+  const props = defineProps<{
+    /** Which connector attaches here: `end` is the incoming endpoint, `start` the outgoing origin; omitted marks both. */
     type?: 'start' | 'end'
   }>()
 
@@ -25,21 +25,15 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'data-flow'}__anchor`
   )
 
-  const rootClasses = computed(() =>
-    cn(
-      'inline-flex size-2 items-center justify-center rounded-[var(--shape-button)] bg-[var(--border-default)]',
-      attrs.class as string | undefined
-    )
-  )
+  const rootClasses = computed(() => cn('block', attrs.class as string | undefined))
 </script>
 
 <template>
-  <span
-    aria-hidden="true"
-    :data-type="type || null"
+  <div
+    :data-flow-anchor="props.type ?? 'both'"
     :data-testid="testId"
     :class="rootClasses"
   >
     <slot />
-  </span>
+  </div>
 </template>
