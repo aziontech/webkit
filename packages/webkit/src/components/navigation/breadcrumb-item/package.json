@@ -1,7 +1,0 @@
-{
-  "main": "./breadcrumb-item.vue",
-  "module": "./breadcrumb-item.vue",
-  "exports": {
-    "./sfc": "./breadcrumb-item.vue"
-  }
-}
