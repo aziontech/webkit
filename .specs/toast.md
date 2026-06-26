@@ -4,7 +4,7 @@ category: feedback
 structure: composition
 status: approved
 spec_version: 1
-checksum: 26970718ebd115910057301bb67b954b6473a88707d3411a60c27cb44ed487a9
+checksum: e3ce436c416e8aa7c30b08b2ed48f38c0f12ae408f40e5164e64371d7e5e451d
 created: 2026-06-23
 last_updated: 2026-06-25
 ---
@@ -171,17 +171,21 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| toast enters the stack | `transition-all duration-300 ease-out` on the `<TransitionGroup>` enter-active class: slides in from the anchored edge (`translate-y-3` / `-translate-y-3` → `translate-y-0`) while fading in | inline (transition utilities + tokens) | `motion-reduce:transition-none` (instant) |
-| toast leaves the stack | `transition-all duration-200 ease-in` on the leave-active class: fades and shrinks (`opacity-0 scale-95`) | inline (transition utilities) | `motion-reduce:transition-none` (instant) |
-| stack reflows when a toast is removed | `transition-transform duration-300 ease-out` on the `<TransitionGroup>` move class | inline (matches catalog) | `motion-reduce:transition-none` |
-| close control reveal on hover | `transition-opacity duration-150 ease-out` on the close affordance (`group-hover` / `focus-within`) | inline (matches catalog) | `motion-reduce:transition-none` |
+Toast motion reads its **speeds and curves only from the foundation** (`duration` / `curve` in `packages/theme/src/tokens/primitives/animations/animate.js`, imported as `@aziontech/theme/animations`) through `toast/presets/transitions.ts`, and applies them as **inline `transition` styles** — the same pattern the sibling [`Message`](./message.md) and the overlay `Dialog` / `Drawer` use, because Tailwind does not emit dynamic `duration-[…]` / curve classes. No ad-hoc `duration-300` / `ease-out` utilities, no component-local `@keyframes`.
 
-<!-- Enter/leave/move use Tailwind transition utilities (translate + opacity + scale) rather than a bespoke
-     @keyframes, so the directional slide reads correctly from any of the six anchor positions and every
-     motion-bearing class pairs with motion-reduce:*. The loading-type toast renders the webkit `Spinner`
-     component (a continuous rotation with its own reduced-motion fallback) inside the `toast-item` sub-component. -->
+| Trigger | Animation / Transition | Token (foundation, via `presets/transitions.ts`) | Reduced-motion fallback |
+|---|---|---|---|
+| toast enters the stack | inline `transition` on `transform` + `opacity` + `height`: slides in from the anchored edge (off-edge `translateY` → `0`) while fading in | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none` (instant) |
+| toast leaves the stack | inline `transition` on `transform` + `opacity` + `height`: slides back off the anchored edge while fading out; DOM unmount deferred (`TOAST_UNMOUNT_MS`) until the exit finishes | `duration['slow-01']` + `curve['productive-exit']` | `motion-reduce:transition-none` (instant) |
+| stack reflows when a toast is added / removed / expanded | inline `transition` on the region container (`height`) and each resting card (`transform` / `height`) | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none` |
+| close control reveal on hover | inline `transition` on `opacity` for the close affordance (`group-hover` / `focus-within`) | `duration['moderate-01']` + `curve['productive-entrance']` | `motion-reduce:transition-none` |
+
+<!-- Enter/leave/reflow apply the foundation `duration`/`curve` tokens as inline `transition` styles (the
+     geometry — directional translate + scale + height — is computed inline so the slide reads correctly from
+     any of the six anchor positions); every motion-bearing element pairs with `motion-reduce:transition-none`
+     on its class string (Tailwind's `important: true` lets the reduced-motion class override the inline
+     transition). The loading-type toast renders the webkit `Spinner` component (a continuous rotation with its
+     own reduced-motion fallback) inside the `toast-item` sub-component. -->
 
 ## Tokens
 
@@ -208,7 +212,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| directional slide-in/out for toasts (no `slide-up`/`slide-left`/`slide-right` in the semantic catalogue) | Tailwind `transition-all` + `translate-y-*` / `opacity` / `scale` utilities (enter, leave, move) | `TODO: add directional toast slide utilities to packages/theme/src/tokens/semantic/animations.js` |
+| directional slide-in/out for toasts (no `slide-up`/`slide-left`/`slide-right` in the semantic catalogue) | inline `transform` (computed geometry) + inline `transition` bound to the foundation `duration` / `curve` tokens via `presets/transitions.ts` (enter / leave / reflow) | `TODO: add directional toast slide utilities to packages/theme/src/tokens/semantic/animations.js` |
 
 ## Accessibility (WCAG 2.1 AA)
 

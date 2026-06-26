@@ -1,8 +1,23 @@
 <script setup lang="ts">
   import type { CSSProperties } from 'vue'
-  import { computed, nextTick, onBeforeUnmount, onMounted, provide, ref, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    provide,
+    ref,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import { ToastInjectionKey } from './injection-key'
+  import {
+    getCloseRevealTransitionStyle,
+    getRegionTransitionStyle,
+    getToastTransitionStyle,
+    TOAST_UNMOUNT_MS
+  } from './presets/transitions'
   import ToastAction from './toast-action/toast-action.vue'
   import ToastClose from './toast-close/toast-close.vue'
   import ToastDescription from './toast-description/toast-description.vue'
@@ -53,7 +68,6 @@
 
   const GAP = 14
   const PEEK = 14
-  const UNMOUNT_MS = 400
 
   const visibleCount = computed(() => Math.max(1, props.max))
 
@@ -114,7 +128,10 @@
           item.removing = false
         } else {
           const id = entry.id
-          items.value = [{ entry: entry as ToastEntry, mounted: false, removing: false }, ...items.value]
+          items.value = [
+            { entry: entry as ToastEntry, mounted: false, removing: false },
+            ...items.value
+          ]
           // Flip to mounted next frame so the enter transition runs.
           nextTick(() => {
             const fresh = items.value.find((i) => i.entry.id === id)
@@ -133,7 +150,7 @@
               items.value = items.value.filter((i) => i.entry.id !== id)
               removalTimers.delete(id)
               nextTick(measure)
-            }, UNMOUNT_MS)
+            }, TOAST_UNMOUNT_MS)
           )
         }
       })
@@ -217,7 +234,8 @@
       left: center ? '50%' : pos.endsWith('left') ? 'var(--spacing-md)' : 'auto',
       right: pos.endsWith('right') ? 'var(--spacing-md)' : 'auto',
       transform: center ? 'translateX(-50%)' : 'none',
-      height
+      height,
+      ...getRegionTransitionStyle()
     }
   }
 
@@ -241,7 +259,13 @@
 
     // Enter-from and exit-to: parked off the anchored edge, faded out.
     if (!item.mounted || item.removing) {
-      return { ...base, transform: `${offEdge} scale(1)`, opacity: '0', pointerEvents: 'none' }
+      return {
+        ...base,
+        transform: `${offEdge} scale(1)`,
+        opacity: '0',
+        pointerEvents: 'none',
+        ...getToastTransitionStyle(item.removing)
+      }
     }
 
     const li = region.live.indexOf(item)
@@ -279,9 +303,12 @@
       height,
       overflow,
       opacity: hidden ? '0' : '1',
-      pointerEvents: hidden ? 'none' : 'auto'
+      pointerEvents: hidden ? 'none' : 'auto',
+      ...getToastTransitionStyle(false)
     }
   }
+
+  const closeRevealTransitionStyle = getCloseRevealTransitionStyle()
 </script>
 
 <template>
@@ -296,7 +323,7 @@
         :aria-live="region.all.some((i) => i.entry.type === 'error') ? 'assertive' : 'polite'"
         aria-atomic="false"
         :style="regionStyle(region)"
-        class="transition-all duration-300 ease-out motion-reduce:transition-none"
+        class="motion-reduce:transition-none"
         @mouseenter="onEnter(region.position)"
         @mouseleave="onLeave"
       >
@@ -306,7 +333,7 @@
           :data-front="region.live.indexOf(item) === 0 || null"
           :data-type="item.entry.type"
           :style="toastStyle(region, item, indexInAll)"
-          class="transition-all duration-300 ease-out will-change-transform motion-reduce:transition-none"
+          class="will-change-transform motion-reduce:transition-none"
         >
           <div :ref="(el) => setCardEl(item.entry.id, el)">
             <slot
@@ -325,7 +352,8 @@
                     @click="(event) => item.entry.action?.onClick(event)"
                   />
                   <span
-                    class="opacity-0 transition-opacity duration-150 ease-out group-hover:opacity-100 focus-within:opacity-100 motion-reduce:transition-none"
+                    :style="closeRevealTransitionStyle"
+                    class="opacity-0 group-hover:opacity-100 focus-within:opacity-100 motion-reduce:transition-none"
                   >
                     <ToastClose @click="() => dismiss(item.entry.id)" />
                   </span>
