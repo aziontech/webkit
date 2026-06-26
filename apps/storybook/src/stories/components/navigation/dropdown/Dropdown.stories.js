@@ -1,5 +1,11 @@
-import Dropdown from '@aziontech/webkit/dropdown'
+import Dropdown, {
+  DropdownGroup,
+  DropdownOption,
+  DropdownTrigger
+} from '@aziontech/webkit/dropdown'
 import Button from '@aziontech/webkit/button'
+
+const components = { Dropdown, DropdownTrigger, DropdownGroup, DropdownOption, Button }
 
 /** @type {import('@storybook/vue3').Meta<typeof Dropdown>} */
 const meta = {
@@ -93,24 +99,24 @@ const meta = {
 export default meta
 
 const Template = (args) => ({
-  components: { Dropdown, Button },
+  components,
   setup() {
     const { onUpdateOpen, onSelect, ...props } = args
     return { props, onUpdateOpen, onSelect }
   },
   template: `
     <Dropdown v-bind="props" @update:open="onUpdateOpen" @select="onSelect">
-      <Dropdown.Trigger>
+      <DropdownTrigger>
         <Button kind="outlined" label="Open menu" />
-      </Dropdown.Trigger>
-      <Dropdown.Group>
-        <Dropdown.Option value="profile" label="Profile" />
-        <Dropdown.Option value="settings" label="Settings" />
-        <Dropdown.Option value="billing" label="Billing" />
-        <Dropdown.Option value="invite" label="Invite members" />
-        <Dropdown.Option value="logs" label="Audit log" />
-        <Dropdown.Option value="signout" label="Sign out" />
-      </Dropdown.Group>
+      </DropdownTrigger>
+      <DropdownGroup>
+        <DropdownOption value="profile" label="Profile" />
+        <DropdownOption value="settings" label="Settings" />
+        <DropdownOption value="billing" label="Billing" />
+        <DropdownOption value="invite" label="Invite members" />
+        <DropdownOption value="logs" label="Audit log" />
+        <DropdownOption value="signout" label="Sign out" />
+      </DropdownGroup>
     </Dropdown>
   `
 })
@@ -131,24 +137,24 @@ export const Default = {
 /** @type {import('@storybook/vue3').StoryObj<typeof Dropdown>} */
 export const Groups = {
   render: (args) => ({
-    components: { Dropdown, Button },
+    components,
     setup() {
       const { onUpdateOpen, onSelect, ...props } = args
       return { props, onUpdateOpen, onSelect }
     },
     template: `
       <Dropdown v-bind="props" @update:open="onUpdateOpen" @select="onSelect">
-        <Dropdown.Trigger>
+        <DropdownTrigger>
           <Button kind="outlined" label="Open menu" />
-        </Dropdown.Trigger>
-        <Dropdown.Group label="Account">
-          <Dropdown.Option value="profile" label="Profile" command="⌘P" />
-          <Dropdown.Option value="settings" label="Settings" />
-        </Dropdown.Group>
-        <Dropdown.Group label="Workspace">
-          <Dropdown.Option value="invite" label="Invite members" />
-          <Dropdown.Option value="logs" label="Audit log" selected />
-        </Dropdown.Group>
+        </DropdownTrigger>
+        <DropdownGroup label="Account">
+          <DropdownOption value="profile" label="Profile" command="⌘P" />
+          <DropdownOption value="settings" label="Settings" />
+        </DropdownGroup>
+        <DropdownGroup label="Workspace">
+          <DropdownOption value="invite" label="Invite members" />
+          <DropdownOption value="logs" label="Audit log" selected />
+        </DropdownGroup>
       </Dropdown>
     `
   }),
@@ -165,21 +171,21 @@ export const Groups = {
 /** @type {import('@storybook/vue3').StoryObj<typeof Dropdown>} */
 export const States = {
   render: (args) => ({
-    components: { Dropdown, Button },
+    components,
     setup() {
       const { onUpdateOpen, onSelect, ...props } = args
       return { props, onUpdateOpen, onSelect }
     },
     template: `
       <Dropdown v-bind="props" :open="true" @update:open="onUpdateOpen" @select="onSelect">
-        <Dropdown.Trigger>
+        <DropdownTrigger>
           <Button kind="outlined" label="Open menu" />
-        </Dropdown.Trigger>
-        <Dropdown.Group label="Option states">
-          <Dropdown.Option value="default" label="Default" />
-          <Dropdown.Option value="selected" label="Selected" selected />
-          <Dropdown.Option value="disabled" label="Disabled" disabled />
-        </Dropdown.Group>
+        </DropdownTrigger>
+        <DropdownGroup label="Option states">
+          <DropdownOption value="default" label="Default" />
+          <DropdownOption value="selected" label="Selected" selected />
+          <DropdownOption value="disabled" label="Disabled" disabled />
+        </DropdownGroup>
       </Dropdown>
     `
   }),
