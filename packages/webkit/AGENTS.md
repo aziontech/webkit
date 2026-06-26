@@ -43,7 +43,7 @@ Component creation under `components/webkit/**` is **always** driven by the pipe
 
 - **`core/form/*`** — VeeValidate-based form fields. Follow the existing pattern documented in [`../../.claude/docs/COMPONENT_REQUIREMENTS.md`](../../.claude/docs/COMPONENT_REQUIREMENTS.md) § Form Components. Do not migrate these to the webkit-layer pattern in the same change.
 - **`core/primevue/*`** — thin PrimeVue wrappers. Read [`../../.claude/docs/PRIMEVUE_ABSTRACTION.md`](../../.claude/docs/PRIMEVUE_ABSTRACTION.md) before touching.
-- **`composables/*`** — pure functions or Vue composables; document the API in TSDoc; export through a `package.json` per composable.
+- **`composables/*`** — pure functions or Vue composables; document the API in TSDoc; export through the root `packages/webkit/package.json#exports` (one entry per public composable).
 - **`directives/*`** — Vue directives re-exported (see [tooltip/](./src/directives/tooltip/)).
 
 ## 4) Validation gate (must pass before reporting done)
@@ -52,7 +52,6 @@ Component creation under `components/webkit/**` is **always** driven by the pipe
 pnpm webkit:lint
 pnpm webkit:type-check
 pnpm webkit:type-coverage
-pnpm webkit:build:dts
 pnpm storybook:build
 ```
 

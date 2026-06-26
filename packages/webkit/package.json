@@ -14,8 +14,6 @@
   },
   "scripts": {
     "clean": "rm -rf dist/",
-    "clean:dts": "rm -rf src/**/*.d.js src/**/*.d.js.map",
-    "build:dts": "vue-tsc --declaration --emitDeclarationOnly",
     "pack:dry": "npm pack --dry-run",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
@@ -53,6 +51,10 @@
     "src",
     "package.json"
   ],
+  "sideEffects": [
+    "**/*.vue",
+    "**/*.css"
+  ],
   "exports": {
     "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
     "./overline": "./src/components/overline/overline.vue",
@@ -89,6 +91,7 @@
     "./data-table-view-all-footer": "./src/components/data/data-table/data-table-view-all-footer.vue",
     "./data-table-view-toggle": "./src/components/data/data-table/data-table-view-toggle.vue",
     "./message": "./src/components/feedback/message/message.vue",
+    "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./skeleton": "./src/components/feedback/skeleton/skeleton.vue",
     "./input-text": "./src/components/inputs/input-text/input-text.vue",
