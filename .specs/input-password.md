@@ -1,20 +1,43 @@
 ---
-name: input-text
+name: input-password
 category: inputs
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 2
-checksum: 70f887fdc6932b1f79b79148688ae417dc3090513fd7d6607c77075ecdf5a898
-created: 2026-05-22
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
+  node_id: 3714:10788
+checksum: 2ab1423f2ed35e8bccd96238c5762b8ff4e026f5c21d58984fcaa8ce9875fe2d
+created: 2026-06-16
 last_updated: 2026-06-16
 ---
-# Input Text — Component Spec
+
+# Input Password — Component Spec
 
 ## Purpose
 
-Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer.
+Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `InputText` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer.
 
-Aligned with Figma frame `562:6774` (Webkit / InputText).
+Aligned with Figma frame `3714:10788` (Webkit / InputPassword). Token mapping inferred from the `input-text` sibling because the Figma MCP read tools were unreachable during spec authoring; reconciliation must verify against the frame at scaffold time.
+
+## Usage
+
+```vue
+<script setup>
+import InputPassword from '@aziontech/webkit/input-password'
+import { ref } from 'vue'
+
+const password = ref('')
+</script>
+
+<template>
+  <InputPassword
+    v-model="password"
+    placeholder="Enter your password"
+    autocomplete="current-password"
+  />
+</template>
+```
 
 ## Props
 
@@ -22,13 +45,13 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 |---|---|---|---|---|
 | `modelValue` | `string` | `''` | no | Two-way bound value of the field. |
 | `placeholder` | `string` | `''` | no | Placeholder shown when the field is empty. |
-| `type` | `'text' \| 'email' \| 'number'` | `'text'` | no | Native input type. Restricted to single-line variants the field treats identically. |
 | `maxLength` | `number \| undefined` | `undefined` | no | Native `maxlength` — maximum number of characters allowed. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but not editable. Native pass-through. |
+| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state. |
+| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but not editable. Toggle button stays operable. |
 | `required` | `boolean` | `false` | no | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | no | Applies the invalid border + ring tokens and sets `aria-invalid`. |
+| `toggleable` | `boolean` | `true` | no | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
+| `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows. |
 
 ## Events
 
@@ -38,19 +61,22 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 ## Slots
 
-| Slot | Purpose | Notes |
+| Slot | Scope | Notes |
 |---|---|---|
-| `iconLeft` | Leading icon rendered inside the field, before the input. | Hidden from assistive tech (`aria-hidden="true"`). |
-| `iconRight` | Trailing icon rendered inside the field, after the input. | Hidden from assistive tech (`aria-hidden="true"`). |
+| `iconLeft` | — | Leading icon rendered inside the field, before the input. Hidden from assistive tech (`aria-hidden="true"`). |
+| `iconRight` | — | Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`
-- `data-size` mirrors the `size` prop
+- Single fixed height: 40px (large only)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`)
+- `data-has-icon-left` mirrors `$slots.iconLeft` presence
+- `data-has-icon-right` mirrors `$slots.iconRight` presence (only relevant when `toggleable=false`)
+- `data-toggleable` mirrors the `toggleable` prop
+- `data-visible` on the root mirrors the internal visibility state (`true` when the password is revealed as plain text)
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Motion & Animations
@@ -58,6 +84,7 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
 | state change (border/ring/bg) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| toggle icon swap (visible ↔ hidden) | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -74,7 +101,8 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 | border (invalid) | `var(--danger-border)` |
 | border (required) | `var(--warning-border)` |
 | ring (focus) | `var(--ring-color)` |
-| spacing (horizontal padding) | `var(--spacing-sm)` |
+| spacing (padding-left) | `var(--spacing-md)` |
+| spacing (padding-right) | `var(--spacing-xxs)` |
 | spacing (gap between icon and input) | `var(--spacing-xs)` |
 | shape | `var(--shape-elements)` |
 
@@ -86,21 +114,21 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots.
-- Keyboard map: `Tab` focuses the input; standard text-editing keys apply.
-- ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
+- Keyboard map: `Tab` focuses the input, then the visibility toggle button (when `toggleable=true`); `Enter` / `Space` on the toggle flips visibility; standard text-editing keys apply to the input.
+- ARIA: the visibility toggle is a `<button type="button">` with `aria-pressed` reflecting the current visible state and an `aria-label` that switches between "Show password" and "Hide password"; `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; decorative icon slots and the eye glyph are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are intended for dense layouts where the wrapping label area extends the hit zone.
+- Touch target ≥40×40 px for both the input and the toggle button (the component renders at a single fixed height of 40px).
+- The toggle button never submits the surrounding form (`type="button"`).
 
 ## Stories (Storybook)
 
 - Default
-- Sizes — composite story rendering all three sizes side by side (canonical composite per `storybook-write` skill).
-- Icons — composite story showing the `iconLeft` slot, the `iconRight` slot, and both combined. Justification: documents the slot API surface from the Figma component (`hasIconLeft`/`iconLeft`, `hasIconRight`/`iconRight`) in a single browsable view.
-- Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop) and not visible from the Default story.
+- Toggle — justification: composite story rendering `toggleable=true` (default) and `toggleable=false` side by side; documents the built-in toggle behavior, which is the defining feature of this component vs `InputText`.
+- IconLeft — justification: documents the `iconLeft` slot, which is the only icon slot honored when `toggleable=true`.
+- Filled — justification: pre-populated `modelValue` shows the filled visual state and the masked rendering; not visible from the Default story.
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
-- Email — justification: documents `type="email"` (native browser keyboard / validation surface) since the `type` prop is restricted and only two values matter visually.
 - MaxLength — justification: documents `maxLength` as a hard character cap; behavior is invisible from props alone and only observable while typing.
 - Disabled
 
