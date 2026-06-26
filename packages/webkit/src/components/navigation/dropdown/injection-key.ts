@@ -19,6 +19,8 @@ export interface DropdownContext {
   /** Mutable refs the sub-components attach DOM elements to. */
   triggerRef: Ref<globalThis.HTMLElement | null>
   panelRef: Ref<globalThis.HTMLElement | null>
+  /** Teleport target inside the open panel; groups portal their content here. */
+  panelBodyRef: Ref<globalThis.HTMLElement | null>
   /** Drives open state. Sub-components never call defineEmits directly. */
   setOpen: (value: boolean) => void
   /** Activates an option — emits select and closes the panel. */

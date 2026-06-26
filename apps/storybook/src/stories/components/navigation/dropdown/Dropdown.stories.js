@@ -101,7 +101,7 @@ const Template = (args) => ({
   template: `
     <Dropdown v-bind="props" @update:open="onUpdateOpen" @select="onSelect">
       <Dropdown.Trigger>
-        <Button kind="secondary">Open menu</Button>
+        <Button kind="outlined" label="Open menu" />
       </Dropdown.Trigger>
       <Dropdown.Group>
         <Dropdown.Option value="profile" label="Profile" />
@@ -139,7 +139,7 @@ export const Groups = {
     template: `
       <Dropdown v-bind="props" @update:open="onUpdateOpen" @select="onSelect">
         <Dropdown.Trigger>
-          <Button kind="secondary">Open menu</Button>
+          <Button kind="outlined" label="Open menu" />
         </Dropdown.Trigger>
         <Dropdown.Group label="Account">
           <Dropdown.Option value="profile" label="Profile" command="⌘P" />
@@ -173,7 +173,7 @@ export const States = {
     template: `
       <Dropdown v-bind="props" :open="true" @update:open="onUpdateOpen" @select="onSelect">
         <Dropdown.Trigger>
-          <Button kind="secondary">Open menu</Button>
+          <Button kind="outlined" label="Open menu" />
         </Dropdown.Trigger>
         <Dropdown.Group label="Option states">
           <Dropdown.Option value="default" label="Default" />

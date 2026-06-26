@@ -61,6 +61,7 @@
 
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
   const panelRef = ref<globalThis.HTMLElement | null>(null)
+  const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
   const panelStyle = ref<Record<string, string>>({})
   const groupCount = ref(0)
 
@@ -287,6 +288,7 @@
     panelId,
     triggerRef,
     panelRef,
+    panelBodyRef,
     setOpen,
     selectOption,
     registerGroup,
@@ -337,11 +339,10 @@
           </div>
 
           <div
+            ref="panelBodyRef"
             :data-testid="`${testId}__body`"
             class="flex flex-1 flex-col overflow-y-auto"
-          >
-            <slot />
-          </div>
+          />
 
           <div
             v-if="$slots['bottom']"
