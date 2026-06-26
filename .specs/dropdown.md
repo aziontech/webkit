@@ -3,11 +3,11 @@ name: dropdown
 category: navigation
 structure: composition
 status: implemented
-checksum: d4a4800a9b22604f363b08f55b24559f05750e841b32608de54f4423229a95fd
 spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
+checksum: 9ced434dd668ba03609d2a2fa6932edd8abb17ad07e1e7d46e9f2428f8d973f8
 created: 2026-06-26
 last_updated: 2026-06-26
 ---
@@ -165,6 +165,11 @@ Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/B
 - Groups — composite story rendering two `<Dropdown.Group>` with labels and a divider between them; required because grouping is the central anatomy of this component and is not covered by `Default`.
 - States — composite story rendering one panel with options in each option state side-by-side: `default`, `hover` (simulated via `data-state`), `selected`, `disabled`. Required because `Dropdown.Option` has no `kind` / `size` axis but a state axis that is the component's visual identity.
 - Disabled — root `disabled` prop demo; trigger refuses to open.
+- Placements — composite story rendering all four `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a 4-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
+- OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `leading` + `trailing` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
+- WithTopAndBottomSlots — single panel forced open showing the root `top` and `bottom` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
+- CustomTriggers — composite story showing the abstract `<Dropdown.Trigger>` wrapping different elements (Button, IconButton, plain text). Required because the spec mandates the trigger is abstract and the consumer chooses the inner element; the existing stories only show a `Button`.
+- Playground — controls-driven story exposing every root arg (`open`, `placement`, `offset`, `disabled`) so QA can exercise the full prop surface from Storybook controls. Required because none of the named-state stories above expose all props at once.
 
 ## Constraints — DO NOT
 
