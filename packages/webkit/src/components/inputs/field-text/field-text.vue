@@ -32,9 +32,9 @@
     /** Switches the helper to kind=invalid and applies invalid border/ring tokens on the input. */
     invalid?: boolean
     /** id for the native input; consumed by Label via for and by aria-describedby wiring. */
-    inputId?: string | null
+    inputId?: string
     /** HTML name for the underlying input (form + vee-validate integration). */
-    name?: string | null
+    name?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -47,8 +47,8 @@
     readonly: false,
     required: false,
     invalid: false,
-    inputId: null,
-    name: null
+    inputId: '',
+    name: ''
   })
 
   const emit = defineEmits<{
@@ -65,7 +65,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-field-text')
 
-  const resolvedInputId = computed(() => props.inputId ?? generatedId)
+  const resolvedInputId = computed(() => props.inputId || generatedId)
   const helperId = computed(() => `${resolvedInputId.value}-helper`)
 
   const helperKind = computed<HelperTextKind>(() => {

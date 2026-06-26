@@ -22,7 +22,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 ```vue
 <script setup>
 import { ref } from 'vue'
-import FieldText from '@aziontech/webkit/inputs/field-text'
+import FieldText from '@aziontech/webkit/field-text'
 
 const email = ref('')
 </script>
@@ -51,8 +51,8 @@ const email = ref('')
 | `readonly` | `boolean` | `false` | no | Marks the input read-only; value is visible but not editable. Native pass-through. |
 | `required` | `boolean` | `false` | no | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input. |
 | `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input. |
-| `inputId` | `string \| null` | `null` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
-| `name` | `string \| null` | `null` | no | HTML name for the underlying input (form + vee-validate integration). |
+| `inputId` | `string` | `''` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`. |
+| `name` | `string` | `''` | no | HTML name for the underlying input (form + vee-validate integration). |
 
 ## Events
 
