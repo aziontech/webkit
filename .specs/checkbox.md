@@ -3,80 +3,108 @@ name: checkbox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: d0a27b8ca2563f33c09954c4657f76af2b4edab6e87bb5367d0ab69d366a2acb
+spec_version: 3
+checksum: b85ea39c250c1b4be764b637097684e6055cba30118a75d6ce0fc96619cbde98
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-06-25
 ---
 # Checkbox — Component Spec
 
 ## Purpose
 
-Collects or edits user input. Migrated from the existing implementation at `packages/webkit/src/components/webkit/inputs/checkbox/`.
+Binary selection control. Supports single boolean (`binary: true`), single-value selection (matches `value` against `modelValue`), and array-based multi-select (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) without flipping `aria-checked` — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
+
+## Usage
+
+```vue
+<script setup>
+import Checkbox from '@aziontech/webkit/checkbox'
+
+const checked = defineModel({ default: false })
+</script>
+
+<template>
+  <Checkbox v-model="checked" binary aria-label="Subscribe to newsletter" />
+</template>
+```
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `'undefined'` | no | model Value. |
-| `value` | `string` | `'undefined'` | no | value. |
-| `binary` | `boolean` | `false` | no | binary. |
+| `modelValue` | `unknown` | `undefined` | no | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
+| `value` | `unknown` | `undefined` | no | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
+| `binary` | `boolean` | `false` | no | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
+| `indeterminate` | `boolean` | `false` | no | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | readonly. |
-| `inputId` | `string` | `'undefined'` | no | input Id. |
+| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but cannot change via interaction. |
+| `inputId` | `string` | `undefined` | no | Forwarded to the inner `<input id>` for label association. |
 | `name` | `string` | `undefined` | no | HTML name for form submission. |
-| `tabindex` | `number` | `'undefined'` | no | tabindex. |
+| `tabindex` | `number` | `undefined` | no | Forwarded to the inner `<input tabindex>`. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:modelValue` | `unknown` | — |
+| `update:modelValue` | `unknown` | Fires on activation. Payload is the next boolean (binary mode) or the next array (multi mode) or the matched value (single-value mode). |
 
 ## Slots
 
-| _none_ | — | — |
+The checkbox is a leaf primitive — no slots. Label/description live in `FieldCheckbox` wrappers.
+
+| Slot | Scope | Notes |
+|---|---|---|
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `indeterminate`, `disabled`, `readonly`
+- `data-state` on the root: `unchecked` | `checked` | `indeterminate`
+- `data-checked` mirrors `isChecked` (legacy; kept for backwards compatibility with existing `data-[checked]:` styling)
+- `data-indeterminate` mirrors the `indeterminate` prop
 - `data-disabled` mirrors the `disabled` prop
+- `data-readonly` mirrors the `readonly` prop
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| state change (border / bg / color) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
+| surface (unchecked) | `var(--bg-surface)` |
+| surface (checked) | `var(--primary)` |
+| surface (indeterminate) | `var(--primary)` |
+| surface (disabled) | `var(--bg-disabled)` |
+| icon (checked / indeterminate) | `var(--primary-contrast)` |
+| icon (disabled) | `var(--text-disabled)` |
+| border (default) | `var(--border-default)` |
+| border (checked) | `var(--primary)` |
+| ring (focus) | `var(--ring-color)` |
+| ring offset (focus) | `var(--bg-canvas)` |
 | shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| `--border-width-default` (0.8 px) | `border-[0.8px]` (Tailwind arbitrary) | TODO: catalog `--border-width-default` in DESIGN.md as a semantic primitive shared with Select / MultiSelect / Checkbox. |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Keyboard map: `Tab` focuses; `Space` toggles. (The native `<input type="checkbox">` carries the semantics.)
+- ARIA: native `<input type="checkbox">` is the source of truth. `aria-checked` is set to `'mixed'` when `indeterminate` is true (with `indeterminate` DOM property also set on the input). The wrapping `<span>` is decorative.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
+- `motion-reduce:transition-none` on every transition-bearing class.
+- Touch target — the `1.125rem` size is below 40×40 px; consumers should wrap with `FieldCheckbox` or expand the parent click area when the control sits on its own.
 
 ## Stories (Storybook)
 
 - Default
+- Indeterminate — justification: documents the tri-state visual (horizontal bar) and the `aria-checked="mixed"` semantics added in `spec_version: 3`. Not reachable from any other story.
 - Disabled
 
 ## Constraints — DO NOT
