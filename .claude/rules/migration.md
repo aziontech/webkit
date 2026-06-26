@@ -4,7 +4,7 @@ When importing a component, pattern, or any artifact from **outside** this codeb
 
 ## The rule
 
-> **NUNCA criar nada fora do padrão.** Every artifact you produce — spec, `.vue`, `package.json`, `.figma.ts`, `.stories.js`, rule update — must conform to our patterns. No exceptions, no "temporary" deviations, no "to make migration easier."
+> **NEVER create anything outside the standard.** Every artifact you produce — spec, `.vue`, `package.json`, `.figma.ts`, `.stories.js`, rule update — must conform to our patterns. No exceptions, no "temporary" deviations, no "to make migration easier."
 
 ## What this means in practice
 
