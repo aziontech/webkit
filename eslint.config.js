@@ -35,7 +35,9 @@ export default [
         clearInterval: 'readonly',
         ResizeObserver: 'readonly',
         HTMLElement: 'readonly',
+        HTMLInputElement: 'readonly',
         MouseEvent: 'readonly',
+        Event: 'readonly',
         Node: 'readonly',
         // Node globals
         process: 'readonly',
