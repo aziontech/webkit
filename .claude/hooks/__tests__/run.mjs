@@ -335,6 +335,75 @@ group('hook: validate-spec-compliance.mjs', () => {
   })
 })
 
+group('hook: validate-story-source.mjs', () => {
+  const story = (content) => ({ tool_name: 'Write', tool_input: { file_path: resolve(ROOT, 'x.stories.js'), content } })
+
+  test('non-story path passes through (exit 0)', () => {
+    const r = runHook('.claude/hooks/validate-story-source.mjs', {
+      tool_name: 'Write',
+      tool_input: { file_path: resolve(ROOT, 'random/file.vue'), content: '<foo />' }
+    })
+    assertEqual(r.code, 0)
+  })
+  test('new story via runnableDocs + PascalCase passes (exit 0)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Foo from '@aziontech/webkit/foo'",
+          "import { runnableDocs } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<Foo bar="1" />`',
+          "docs: runnableDocs({ imports: IMPORT, components: ['Foo'] })"
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 0)
+  })
+  test('lowercase/kebab component tag blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import EmptyState from '@aziontech/webkit/empty-state'",
+          "import { runnableDocs } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<empty-state title="x" />`',
+          "docs: runnableDocs({ imports: IMPORT, components: ['EmptyState'] })"
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/lowercase-tag/.test(r.stderr), 'should flag lowercase tag')
+  })
+  test('new story with hand-rolled transform + no helper blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        ["import Foo from '@aziontech/webkit/foo'", "tags: ['autodocs']", 'docs: { source: { transform: (code) => code } }'].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/handrolled-transform|missing-helper/.test(r.stderr), 'should flag hand-rolled / missing helper')
+  })
+  test('nested <template> blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Foo from '@aziontech/webkit/foo'",
+          "import { runnableDocs } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<template>\n  <template>\n    <Foo />\n  </template>\n</template>`',
+          "docs: runnableDocs({ imports: IMPORT, components: ['Foo'] })"
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/nested-template/.test(r.stderr), 'should flag nested template')
+  })
+})
+
 // ---- summary ----
 
 const failed = results.filter((r) => !r.ok)

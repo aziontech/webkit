@@ -1,16 +1,8 @@
 import Chip from '@aziontech/webkit/chips'
 
+import { runnableDocs, toSfc } from '../../../_shared/story-source'
+
 const IMPORT = "import Chip from '@aziontech/webkit/chips'"
-
-/** Indent a `<template>` body and wrap it in a runnable `<script setup>` SFC. */
-const indent = (code) =>
-  code
-    .trim()
-    .split('\n')
-    .map((line) => (line ? `  ${line}` : line))
-    .join('\n')
-
-const sfc = (body) => ['<script setup>', IMPORT, '</script>', '', '<template>', indent(body), '</template>'].join('\n')
 
 const meta = {
   title: 'Components/Inputs/Chip',
@@ -18,28 +10,12 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component:
-          'A compact, dismissible token that labels a user-applied value, such as a removable filter on a data view. When `removable` is set, it renders a trailing button that emits the `remove` event.'
-      },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true,
-        // Composite stories supply their own full-SFC `source.code` (Storybook's
-        // dynamic source can't introspect a multi-element render template); pass
-        // those through untouched. Arg-driven stories get bare markup (sometimes
-        // already wrapped in <template>) — unwrap once, then wrap in a runnable SFC.
-        transform: (code) => {
-          let src = String(code).trim()
-          if (/<script[\s>]/i.test(src)) return src
-          const wrapped = src.match(/^<template>\s*([\s\S]*?)\s*<\/template>$/)
-          if (wrapped) src = wrapped[1].trim()
-          return sfc(src)
-        }
-      },
-      canvas: { sourceState: 'shown' }
-    }
+    docs: runnableDocs({
+      component:
+        'A compact, dismissible token that labels a user-applied value, such as a removable filter on a data view. When `removable` is set, it renders a trailing button that emits the `remove` event.',
+      imports: IMPORT,
+      components: ['Chip']
+    })
   },
   argTypes: {
     label: {
@@ -97,7 +73,7 @@ export const Sizes = {
     docs: {
       controls: { disable: true },
       description: { story: 'Both sizes side by side.' },
-      source: { code: sfc(SIZES_TEMPLATE) }
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }
   }
 }

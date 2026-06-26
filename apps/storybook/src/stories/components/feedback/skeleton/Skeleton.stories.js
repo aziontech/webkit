@@ -1,5 +1,9 @@
 import Skeleton from '@aziontech/webkit/skeleton'
 
+import { runnableDocs, toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Skeleton from '@aziontech/webkit/skeleton'"
+
 /** @type {import('@storybook/vue3').Meta<typeof Skeleton>} */
 const meta = {
   title: 'Components/Feedback/Skeleton',
@@ -15,36 +19,12 @@ const meta = {
         rules: [{ id: 'color-contrast', enabled: true }]
       }
     },
-    docs: {
-      description: {
-        component:
-          'A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle`.'
-      },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true,
-        transform: (code) => {
-          const body = code
-            .trim()
-            .split('\n')
-            .map((line) => (line ? `  ${line}` : line))
-            .join('\n')
-
-          return [
-            '<script setup>',
-            "import Skeleton from '@aziontech/webkit/skeleton'",
-            '</script>',
-            '',
-            '<template>',
-            body,
-            '</template>'
-          ].join('\n')
-        }
-      },
-      canvas: {
-        sourceState: 'shown'
-      }
-    }
+    docs: runnableDocs({
+      component:
+        'A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle`.',
+      imports: IMPORT,
+      components: ['Skeleton']
+    })
   },
   argTypes: {
     kind: {
@@ -111,21 +91,22 @@ export const Default = {
   }
 }
 
+const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
+  <Skeleton kind="shape" width="240px" height="100px" />
+  <Skeleton kind="circle" width="100px" height="100px" />
+</div>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */
 export const Types = {
   render: () => ({
     components: { Skeleton },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Skeleton kind="shape" width="240px" height="100px" />
-        <Skeleton kind="circle" width="100px" height="100px" />
-      </div>
-    `
+    template: TYPES_TEMPLATE
   }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'Both geometries side by side: a rectangular `shape` and a `circle`.' }
+      description: { story: 'Both geometries side by side: a rectangular `shape` and a `circle`.' },
+      source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
     }
   }
 }

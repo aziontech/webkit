@@ -46,6 +46,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/validate-references.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/validate-story-source.mjs"
           }
         ]
       },

@@ -1096,10 +1096,12 @@ Authoring the `.figma.ts` file works without the token; only publishing needs it
 
 ### 13. Storybook story — canonical pattern (Vue 3 + Storybook 8)
 
+> **"Show code" is governed by [`.claude/rules/storybook-source.md`](../rules/storybook-source.md).** The Docs panel must emit a **single runnable SFC with PascalCase tags** that match the import; route it through the shared `runnableDocs` / `toSfc` helpers in `apps/storybook/src/stories/_shared/story-source.js` and never hand-roll a `source.transform`. `parameters.docs.description.component` is a **short prose lead** from `## Purpose` — the `## Usage` block is NOT appended into it (older guidance below is superseded on this point). Enforced by `validate-story-source.mjs`.
+
 Stories follow the **market-standard CSF3 pattern for Vue 3** — concretely, the existing [`apps/storybook/src/stories/webkit/actions/button/Button.stories.js`](../../apps/storybook/src/stories/webkit/actions/button/Button.stories.js). The two distinguishing traits versus a generic CSF3 file:
 
 1. **Composite stories `Types` and `Sizes`** render every variant side-by-side in a single frame — replacing one-story-per-variant (`Primary`, `Secondary`, `Outlined`, …).
-2. **`parameters.docs.description.component` is built from the spec.** The Purpose paragraph is the lead-in; the `## Usage` fenced `vue` block (import + minimal `<script setup>` + `<template>`) is appended verbatim as a code snippet. The same block is the single source of truth for both spec docs and Storybook Docs.
+2. **`parameters.docs.description.component` is the short Purpose prose lead** (see the rule callout above); the runnable usage is surfaced by the "Show code" panel via `runnableDocs` / `toSfc`, not by pasting the `## Usage` block into the description.
 
 ```js
 // <Name>.stories.js — canonical shape (matches Button.stories.js)
