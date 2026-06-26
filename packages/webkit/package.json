@@ -93,6 +93,7 @@
     "./skeleton": "./src/components/feedback/skeleton/skeleton.vue",
     "./input-text": "./src/components/inputs/input-text/input-text.vue",
     "./label": "./src/components/inputs/label/label.vue",
+    "./helper-text": "./src/components/inputs/helper-text/helper-text.vue",
     "./box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
     "./chips": "./src/components/inputs/chips/chips.vue",
     "./checkbox": "./src/components/inputs/checkbox/checkbox.vue",
