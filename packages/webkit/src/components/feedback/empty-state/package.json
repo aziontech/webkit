@@ -1,0 +1,11 @@
+{
+  "main": "./empty-state.vue",
+  "module": "./empty-state.vue",
+  "types": "./empty-state.vue.d.ts",
+  "browser": {
+    "./sfc": "./empty-state.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
