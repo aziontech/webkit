@@ -39,7 +39,7 @@
     readonly: false,
     inputId: '',
     name: '',
-    tabindex: undefined
+    tabindex: 0
   })
 
   const emit = defineEmits<{

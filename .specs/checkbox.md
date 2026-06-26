@@ -40,7 +40,7 @@ const checked = defineModel({ default: false })
 | `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but cannot change via interaction. |
 | `inputId` | `string` | `''` | no | Forwarded to the inner `<input id>` for label association. |
 | `name` | `string` | `''` | no | HTML name for form submission. |
-| `tabindex` | `number` | `undefined` | no | Forwarded to the inner `<input tabindex>`. |
+| `tabindex` | `number` | `0` | no | Forwarded to the inner `<input tabindex>`. |
 
 ## Events
 
