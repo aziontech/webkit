@@ -1,35 +1,43 @@
 ---
-name: global-header
-category: layout
-structure: composition
+name: helper-text
+category: inputs
+structure: monolithic
 status: implemented
 spec_version: 1
 figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
-  node_id: 4310:19617
-checksum: 71c9e497979cb35460c5bbc6c42d632640caefda8eb5bcf0c01888fcd7e00dc1
-created: 2026-05-23
-last_updated: 2026-06-23
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
+  node_id: 600:5603
+checksum: 60c3e601c3c8980940290cb81cb9499e2e2be12d7bb702fa96547257b0a2541e
+created: 2026-06-15
+last_updated: 2026-06-15
 ---
-# Global Header — Component Spec
+
+# HelperText — Component Spec
 
 ## Purpose
 
-Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in.
+Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it.
 
-## Sub-components
+## Usage
 
-- `global-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Left`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region. Optional — consumers may still place `Left`/`Brand` directly in the root.
-- `global-header-left.vue` — Start region; flex row for menu and leading actions.
-- `global-header-middle.vue` — Center region; grows to fill space between start and end. Also exposed as `GlobalHeader.Nav` (Figma `Nav` name); both names reference the same component.
-- `global-header-right.vue` — End region; trailing actions aligned to the end.
-- `global-header-brand.vue` — Brand slot wrapper sized for Azion logo SVGs (default / min).
+```vue
+<script setup>
+import HelperText from '@aziontech/webkit/helper-text'
+import InputText from '@aziontech/webkit/input-text'
+</script>
+
+<template>
+  <InputText id="email" />
+  <HelperText kind="invalid" value="Enter a valid email address." />
+</template>
+```
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `ariaLabel` | `string` | `'Global header'` | no | Accessible name for the header landmark. |
+| `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
+| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | no | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
 
 ## Events
 
@@ -39,14 +47,12 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
-| `default` | — | Each sub-component (incl. `Container`) exposes `default` for region content. |
-| `default` | — | `global-header-brand` exposes `default` for logo markup. |
+| `default` | — | Helper text; falls back to `value` prop when empty. |
 
 ## States
 
-- Visual states: `default`
-- No interactive states on the shell; children own focus/hover/disabled.
+- Visual states: `helper`, `invalid`, `required`, `disabled`
+- `data-kind` mirrors the `kind` prop
 
 ## Motion & Animations
 
@@ -56,35 +62,31 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| shell height | `h-14` (56px) |
-| shell padding-x | `var(--spacing-md)` |
-| shell region gap | `var(--spacing-md)` |
-| start cluster (container) gap | `var(--spacing-md)` |
-| start (left) region gap | `var(--spacing-xs)` |
-| end (right) region gap | `var(--spacing-sm)` |
-| brand logo height | `18px` |
-| surface | `var(--bg-surface)` |
-| border (bottom) | `var(--border-default)` |
-| ring (focus on children) | `var(--ring-color)` |
+| typography | `.text-label-sm` |
+| color (helper, disabled) | `var(--text-muted)` |
+| color (invalid) | `var(--danger-contrast)` |
+| color (required) | `var(--warning-contrast)` |
+| gap (disabled icon) | `var(--spacing-xxs)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| `Components/Form Field/Helper` (Sora 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-helper semantic class to match Figma weight 400 + lh 1.3` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Root renders as `<header role="banner">` with `aria-label` from `ariaLabel`.
-- Keyboard map: none on the shell; interactive children supply Tab order.
-- ARIA: landmark only on root; brand slot should include an accessible name on the logo link or `aria-label` on the SVG parent.
-- Contrast ≥4.5:1 for text and icons in slotted content.
-- `motion-reduce:*` on any animated slotted controls (owned by children).
-- Touch target ≥40×40 px on slotted buttons (owned by children).
+- Root is a `<p>` element so the text is part of the document flow; consumers wire the input with `aria-describedby="<helper-id>"` to expose the helper text to assistive tech.
+- Keyboard map: not focusable (descriptive text); the lock icon for `kind="disabled"` is decorative and marked `aria-hidden="true"`.
+- ARIA: when `kind="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
+- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified by Storybook a11y addon).
+- `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
+- Touch target: text is non-interactive; not subject to the 40×40 px rule.
 
 ## Stories (Storybook)
 
 - Default
+- Types — composite story rendering every `kind` value side-by-side.
 
 ## Constraints — DO NOT
 
@@ -101,7 +103,8 @@ _none_
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
+- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

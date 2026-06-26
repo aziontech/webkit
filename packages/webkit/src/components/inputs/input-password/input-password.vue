@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useSlots } from 'vue'
+  import { computed, ref, useAttrs, useSlots } from 'vue'
 
-  export type InputTextSize = 'small' | 'medium' | 'large'
-  export type InputTextType = 'text' | 'email' | 'number'
+  import IconButton from '../../actions/icon-button/icon-button.vue'
+
+  export type InputPasswordAutocomplete = 'current-password' | 'new-password' | 'off'
 
   defineOptions({
-    name: 'InputText',
+    name: 'InputPassword',
     inheritAttrs: false
   })
 
@@ -14,12 +15,8 @@
     modelValue?: string
     /** Placeholder shown when the field is empty. */
     placeholder?: string
-    /** Native input type. Restricted to plain-text variants the field treats identically. */
-    type?: InputTextType
     /** Native maxlength — maximum number of characters allowed. */
     maxLength?: number
-    /** Size token; affects height only. Heights: small=28px, medium=32px, large=40px. */
-    size?: InputTextSize
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
     /** Marks the field read-only; value is visible but not editable. */
@@ -28,18 +25,22 @@
     required?: boolean
     /** Applies the invalid border + ring tokens and sets aria-invalid. */
     invalid?: boolean
+    /** Renders the visibility toggle on the trailing edge of the field. */
+    toggleable?: boolean
+    /** Native autocomplete hint for password managers. */
+    autocomplete?: InputPasswordAutocomplete
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     modelValue: '',
     placeholder: '',
-    size: 'medium',
+    maxLength: undefined,
     disabled: false,
     readonly: false,
     required: false,
     invalid: false,
-    type: 'text',
-    maxLength: undefined
+    toggleable: true,
+    autocomplete: 'current-password'
   })
 
   const emit = defineEmits<{
@@ -54,7 +55,9 @@
   const attrs = useAttrs()
   const slots = useSlots()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-text')
+  const visible = ref(false)
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-password')
 
   const passthroughAttrs = computed(() => {
     const rest: Record<string, unknown> = { ...attrs }
@@ -64,31 +67,38 @@
   })
 
   const hasIconLeft = computed(() => Boolean(slots['iconLeft']))
-  const hasIconRight = computed(() => Boolean(slots['iconRight']))
+  const hasIconRight = computed(() => !props.toggleable && Boolean(slots['iconRight']))
+
+  const toggleLabel = computed(() => (visible.value ? 'Hide password' : 'Show password'))
+  const toggleIcon = computed(() => (visible.value ? 'pi pi-eye-slash' : 'pi pi-eye'))
 
   const handleInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
     emit('update:modelValue', target.value)
   }
+
+  const toggleVisible = () => {
+    visible.value = !visible.value
+  }
 </script>
 
 <template>
   <span
-    :data-size="size"
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
     :data-has-icon-left="hasIconLeft || null"
     :data-has-icon-right="hasIconRight || null"
+    :data-toggleable="toggleable || null"
+    :data-visible="visible || null"
     :class="[
-      'relative inline-flex items-center w-full',
-      'gap-[var(--spacing-xs)] px-[var(--spacing-sm)]',
+      'relative inline-flex items-center w-full h-10',
+      'gap-[var(--spacing-xs)] pl-[var(--spacing-md)] pr-[var(--spacing-xxs)]',
       'rounded-[var(--shape-elements)]',
       'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
       '[&:not(:focus-within):not([data-disabled])]:hover:border-[var(--border-strong)]',
       'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]',
-      'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[invalid]:border-[var(--danger-border)]',
       'data-[required]:border-[var(--warning-border)]',
       'data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-[var(--border-default)] data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
@@ -104,17 +114,18 @@
     </span>
 
     <input
-      :type="type"
+      :type="visible ? 'text' : 'password'"
       :value="modelValue"
       :placeholder="placeholder"
       :maxlength="maxLength"
+      :autocomplete="autocomplete"
       :disabled="disabled"
       :readonly="readonly"
       :required="required"
       :aria-invalid="invalid || undefined"
       :aria-required="required || undefined"
       :data-testid="testId"
-      class="relative z-[1] w-full min-w-0 border-0 bg-transparent p-0 outline-none text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default"
+      class="relative z-[1] w-full min-w-0 border-0 bg-transparent p-0 outline-none text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
       @input="handleInput"
     />
@@ -126,5 +137,17 @@
     >
       <slot name="iconRight" />
     </span>
+
+    <IconButton
+      v-if="toggleable"
+      kind="transparent"
+      size="medium"
+      :icon="toggleIcon"
+      :ariaLabel="toggleLabel"
+      :aria-pressed="visible"
+      :disabled="disabled"
+      type="button"
+      @click="toggleVisible"
+    />
   </span>
 </template>
