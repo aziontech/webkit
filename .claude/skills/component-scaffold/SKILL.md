@@ -1,6 +1,6 @@
 ---
 name: component-scaffold
-description: Write the `.vue` file(s) and the local `package.json` for a component, plus the entry in `packages/webkit/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec. For composition pattern, each sub-component lives in its own folder with its own `package.json`.
+description: Write the `.vue` file(s) for a component, plus the entry in `packages/webkit/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec. For composition pattern, each sub-component lives in its own folder.
 status: active
 last_updated: 2026-05-27
 ---
@@ -12,10 +12,10 @@ last_updated: 2026-05-27
 Convert an approved `.specs/<name>.md` into:
 
 - `packages/webkit/src/components/webkit/<category>/<name>/<name>.vue` (TypeScript, JSDoc on every public prop).
-- `packages/webkit/src/components/webkit/<category>/<name>/package.json` for the root component.
-- (Composition only) **One folder per sub-component** under the root component directory — `<name>/<name>-<part>/<name>-<part>.vue` plus a sibling `<name>/<name>-<part>/package.json`. The full file name is preserved (`dialog-trigger.vue`, not `index.vue`) so error traces and editor breadcrumbs are unambiguous.
+- (Composition only) **One folder per sub-component** under the root component directory — `<name>/<name>-<part>/<name>-<part>.vue`. The full file name is preserved (`dialog-trigger.vue`, not `index.vue`) so error traces and editor breadcrumbs are unambiguous.
 - (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts` at the root level (shared by every sub-component).
-- New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./overlay/dialog-trigger`) regardless of the folder nesting.
+- (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
+- New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./overlay/dialog-trigger`) regardless of the folder nesting. For composition, the **root** export points at `index.ts`, not the root `.vue`.
 
 Nothing else. The story, the Code Connect file, and the validation pass live in other skills.
 
@@ -24,37 +24,29 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 ```
 packages/webkit/src/components/webkit/overlay/dialog/
 ├── dialog.vue                          # root
-├── package.json                        # root package
+├── index.ts                            # compound (Object.assign → Dialog.Trigger, ...); vue-tsc emits index.d.ts at publish
 ├── injection-key.ts                    # shared InjectionKey<DialogContext>
 ├── dialog-trigger/
-│   ├── dialog-trigger.vue
-│   └── package.json
+│   └── dialog-trigger.vue
 ├── dialog-portal/
-│   ├── dialog-portal.vue
-│   └── package.json
+│   └── dialog-portal.vue
 ├── dialog-overlay/
-│   ├── dialog-overlay.vue
-│   └── package.json
+│   └── dialog-overlay.vue
 ├── dialog-content/
-│   ├── dialog-content.vue
-│   └── package.json
+│   └── dialog-content.vue
 ├── dialog-title/
-│   ├── dialog-title.vue
-│   └── package.json
+│   └── dialog-title.vue
 ├── dialog-description/
-│   ├── dialog-description.vue
-│   └── package.json
+│   └── dialog-description.vue
 └── dialog-close/
-    ├── dialog-close.vue
-    └── package.json
+    └── dialog-close.vue
 ```
 
 **Folder layout — monolithic (unchanged):**
 
 ```
 packages/webkit/src/components/webkit/actions/button/
-├── button.vue
-└── package.json
+└── button.vue
 ```
 
 > Existing composition patterns (`dialog`, `drawer`, `navigation-menu`, `dropdown-menu`, `breadcrumb`) still use the legacy flat layout (`dialog-trigger.vue` directly under `dialog/`). Do **not** migrate them as part of a new-component scaffold. The new layout applies only to components scaffolded from a `status: approved` spec going forward.
@@ -67,7 +59,7 @@ packages/webkit/src/components/webkit/actions/button/
 
 - The full text of `.specs/<name>.md` (verbatim).
 - The Constraints block (verbatim).
-- [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
+- [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/rules/compound-api.md`](../../rules/compound-api.md) (composition only), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
 - The canonical files for cross-reference (read-only):
   - `packages/webkit/src/components/webkit/actions/button/button.vue`
   - `packages/webkit/src/components/webkit/actions/icon-button/icon-button.vue`
@@ -165,7 +157,6 @@ packages/webkit/src/components/webkit/actions/button/
 3. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
 
    - `packages/webkit/src/components/webkit/<category>/<name>/<name>-<part>/<name>-<part>.vue`
-   - `packages/webkit/src/components/webkit/<category>/<name>/<name>-<part>/package.json`
 
    Inside the `.vue`:
    - `defineOptions({ name: '<PascalRoot><PascalPart>', inheritAttrs: false })`.
@@ -190,49 +181,41 @@ packages/webkit/src/components/webkit/actions/button/
 
    Root `.vue` imports it via `import { DialogInjectionKey } from './injection-key'`. Sub-components import it via `import { DialogInjectionKey } from '../injection-key'`.
 
-5. **Write `package.json`** for the **root** component:
+4b. **(Composition only) Write the compound `index.ts`** at the root level (sibling of `<name>.vue`). The root is the default export with every public sub-component attached via `Object.assign`. Member names mirror the spec's Sub-components section — strip the `<name>-` prefix and PascalCase (`dialog-trigger` → `Trigger`). Use a generic name only when the spec does (`SortButton`, not `Trigger`, when the part opens no `Content`). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 
-   ```json
-   {
-     "name": "@aziontech/webkit-<category>-<name>",
-     "main": "./<name>.vue",
-     "module": "./<name>.vue",
-     "types": "./<name>.vue.d.ts",
-     "browser": { "./sfc": "./<name>.vue" },
-     "sideEffects": ["*.vue"]
-   }
+   ```ts
+   // index.ts — one source of truth; vue-tsc derives index.d.ts from it.
+   import Dialog from './dialog.vue'
+   import DialogTrigger from './dialog-trigger/dialog-trigger.vue'
+   import DialogContent from './dialog-content/dialog-content.vue'
+
+   export default Object.assign(Dialog, {
+     Trigger: DialogTrigger,
+     Content: DialogContent
+   })
    ```
 
-   **(Composition only) Also write one `package.json` per sub-component folder** (sibling of the sub-component's `.vue`):
+   **The index is `.ts`, not `.js`** — `vue-tsc` cannot derive declarations from a plain `.js` (no `allowJs`), so `<Dialog.Trigger>` would be untyped. **Do not hand-write `index.d.ts`** — it is gitignored and generated at publish time (via `.releaserc`), not in dev. The package is consumed as source (the exports map points at `./src/...`, and `.vue` files already import `.ts` like `injection-key.ts`), so the consumer transpiles `index.ts` the same way.
+
+5. **Update `packages/webkit/package.json#exports`** — add one entry per public component (root + each public sub-component) preserving alphabetical order inside the category. The **public export path stays flat** (`./<name>-<part>`) so consumers don't see the folder nesting; only the right-hand side changes:
+
+   The **composition root** points at `index.ts` (the compound); monolithic roots point at `<name>.vue`:
 
    ```json
-   {
-     "name": "@aziontech/webkit-<category>-<name>-<part>",
-     "main": "./<name>-<part>.vue",
-     "module": "./<name>-<part>.vue",
-     "types": "./<name>-<part>.vue.d.ts",
-     "browser": { "./sfc": "./<name>-<part>.vue" },
-     "sideEffects": ["*.vue"]
-   }
-   ```
-
-6. **Update `packages/webkit/package.json#exports`** — add one entry per public component (root + each public sub-component) preserving alphabetical order inside the category. The **public export path stays flat** (`./<category>/<name>-<part>`) so consumers don't see the folder nesting; only the right-hand side changes:
-
-   ```json
-   "./<category>/<name>": "./src/components/webkit/<category>/<name>/<name>.vue",
-   "./<category>/<name>-trigger": "./src/components/webkit/<category>/<name>/<name>-trigger/<name>-trigger.vue",
-   "./<category>/<name>-content": "./src/components/webkit/<category>/<name>/<name>-content/<name>-content.vue"
+   "./<name>": "./src/components/webkit/<category>/<name>/index.ts",
+   "./<name>-trigger": "./src/components/webkit/<category>/<name>/<name>-trigger/<name>-trigger.vue",
+   "./<name>-content": "./src/components/webkit/<category>/<name>/<name>-content/<name>-content.vue"
    ```
 
    Concrete example for a new `popover` composition component:
 
    ```json
-   "./overlay/popover": "./src/components/webkit/overlay/popover/popover.vue",
+   "./overlay/popover": "./src/components/webkit/overlay/popover/index.ts",
    "./overlay/popover-trigger": "./src/components/webkit/overlay/popover/popover-trigger/popover-trigger.vue",
    "./overlay/popover-content": "./src/components/webkit/overlay/popover/popover-content/popover-content.vue"
    ```
 
-7. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
+6. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
 
 ## Outputs
 
@@ -241,7 +224,9 @@ packages/webkit/src/components/webkit/actions/button/
 ## Rules
 
 - Every prop, event, slot, and sub-component MUST come from the spec — no inventions. (`validate-spec-compliance.mjs` enforces this on Write; it will reject the run if you stray.)
+- (Composition only) Emit the compound `index.ts` (vue-tsc generates `index.d.ts` at publish; never hand-write it) and point the root export → `index.ts`; member names mirror the component's anatomy. Never invent overlay part names (`Trigger`/`Content`) on a component with no open/closed state. See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 - Use the canonicals (`button.vue`, `card-pricing.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
+- `withDefaults` mirrors the spec's Default column **exactly**. An optional string prop that holds renderable text defaults to `''` (`value: ''`, `label: ''`) — never `value: undefined`, never the literal `'undefined'`. Reserve `undefined` (unquoted) for props where absence ≠ empty: controlled state (`open`, `modelValue`) or an optional resource whose presence toggles rendering (`src`). When the spec's Default cell is wrong on this point, stop with `BLOCKED: prop <name> defaults to 'undefined' — should be '' (empty string)`; do not silently copy it.
 - All visual tokens come from [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md). No HEX, no Tailwind palette, no raw typography.
 - TypeScript only (`<script setup lang="ts">`); no `any`; no `@ts-ignore`; no `class` in `defineProps`.
 - `<script setup>` always before `<template>`.
@@ -279,10 +264,10 @@ packages/webkit/src/components/webkit/actions/button/
 ## Definition of Done
 
 - [ ] Root `.vue` written with every spec prop/event/slot, no extras.
-- [ ] Root `package.json` written.
-- [ ] Composition: every sub-component is **its own folder** under the component root — `<name>/<name>-<part>/<name>-<part>.vue` + `<name>/<name>-<part>/package.json`.
+- [ ] Composition: every sub-component is **its own folder** under the component root — `<name>/<name>-<part>/<name>-<part>.vue`.
 - [ ] Composition: `injection-key.ts` written at the root level (sibling of `<name>.vue`), not inside any sub-component folder. Root imports it via `./injection-key`; sub-components via `../injection-key`.
-- [ ] New entries added to `packages/webkit/package.json#exports`. Public paths stay flat (`./<category>/<name>-<part>`); right-hand paths reflect the folder nesting.
+- [ ] Composition: `index.ts` written at the root level (sibling of `<name>.vue`), attaching every sub-component to the root via `Object.assign` (no hand-written `index.d.ts` — vue-tsc generates it at publish). Member names mirror the spec's anatomy (no invented `Trigger`/`Content` on a non-overlay component).
+- [ ] New entries added to `packages/webkit/package.json#exports`. Public paths stay flat (`./<name>-<part>`); right-hand paths reflect the folder nesting. The composition root export points at `index.ts`.
 - [ ] No HEX / Tailwind palette / raw typography / `any` / `@ts-ignore`.
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
 - [ ] `data-testid` fallback equals `'<category>-<name>'` on the root and `'<category>-<name>__<part>'` on each sub-component.

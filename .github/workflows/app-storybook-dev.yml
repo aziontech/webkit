@@ -21,7 +21,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GIT_PKG }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -54,7 +53,6 @@ jobs:
         working-directory: apps/storybook
         run: |
           pnpm --filter @aziontech/icons build
-          pnpm --filter @aziontech/webkit.dev build:dts
           pnpm build
 
       - name: Azion Build

@@ -2,9 +2,9 @@ name: Governance Pipeline
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   push:
-    branches: [main]
+    branches: [main, dev]
 
 permissions:
   contents: read
@@ -148,10 +148,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build type declarations
-        run: pnpm build:dts
-        working-directory: packages/webkit
 
       - name: Pack dry run
         run: pnpm pack:dry
