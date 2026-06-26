@@ -38,8 +38,8 @@ const checked = defineModel({ default: false })
 | `indeterminate` | `boolean` | `false` | no | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but cannot change via interaction. |
-| `inputId` | `string` | `undefined` | no | Forwarded to the inner `<input id>` for label association. |
-| `name` | `string` | `undefined` | no | HTML name for form submission. |
+| `inputId` | `string` | `''` | no | Forwarded to the inner `<input id>` for label association. |
+| `name` | `string` | `''` | no | HTML name for form submission. |
 | `tabindex` | `number` | `undefined` | no | Forwarded to the inner `<input tabindex>`. |
 
 ## Events
