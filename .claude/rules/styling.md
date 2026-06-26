@@ -4,7 +4,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 
 ## The rule
 
-> **Não crie presets de classe CSS** (objetos `kindClasses` / `sizeClasses` / `sharedClasses` no script). **Não crie classes dentro do componente** (sem `<style>` block, sem CSS local, sem utility custom). Tudo vai inline no `class` do root, usando `data-*` para alternar variantes.
+> **Do not create CSS class presets** (`kindClasses` / `sizeClasses` / `sharedClasses` objects in the script). **Do not create classes inside the component** (no `<style>` block, no local CSS, no custom utility). Everything goes inline on the root's `class`, using `data-*` to switch variants.
 
 ## What this means in practice
 

@@ -16,7 +16,7 @@ You are a transcriber, not an author. The spec at `.specs/<name>.md` is the cont
 10. **Do not improvise animations.** Every `animate-*` / `transition-*` class comes from the catalog. Every motion-bearing class pairs with `motion-reduce:*`. No component-local `@keyframes`. See [`tokens.md`](./tokens.md#animations--semanticanimationsjs).
 11. **Do not add Figma references to Storybook stories.** No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.component`, no addon-designs links. The story documents the **component API and behavior**; the Figma file documents the design. They stay separate. See [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../docs/COMPONENT_REQUIREMENTS.md) § 13.x.
 12. **Do not create CSS class presets in JavaScript** (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)` that only composes classes). Variants live on `data-*` attributes; styles live as Tailwind utilities on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See [`styling.md`](./styling.md).
-13. **NUNCA criar nada fora do padrão.** If the only way to satisfy a request is to deviate from our patterns, that's a spec problem — emit `BLOCKED:` and stop.
+13. **NEVER create anything outside the standard.** If the only way to satisfy a request is to deviate from our patterns, that's a spec problem — emit `BLOCKED:` and stop.
 
 ## What to do when the spec is incomplete
 

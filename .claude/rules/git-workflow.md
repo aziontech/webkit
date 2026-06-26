@@ -1,24 +1,24 @@
-# Rule: git workflow — branches e PRs sempre via `/create-branch` e `/open-pr`
+# Rule: git workflow — branches and PRs always via `/create-branch` and `/open-pr`
 
-Quando o usuário pedir para **criar uma branch** ou **abrir/fazer um PR** — em qualquer frase, slash command ou linguagem natural ("abre um PR", "manda pro PR", "cria uma branch pra isso") — siga os fluxos canônicos. **Não improvise** os passos de git/PR.
+When the user asks to **create a branch** or **open/make a PR** — in any phrasing, slash command, or natural language ("open a PR", "send it to a PR", "create a branch for this") — follow the canonical flows. **Do not improvise** the git/PR steps.
 
-| Intenção do usuário | Fluxo a seguir |
+| User intent | Flow to follow |
 |---|---|
-| Criar branch nova | [`/create-branch`](../commands/create-branch.md) |
-| Commitar + push + abrir PR | [`/open-pr`](../commands/open-pr.md) |
+| Create a new branch | [`/create-branch`](../commands/create-branch.md) |
+| Commit + push + open PR | [`/open-pr`](../commands/open-pr.md) |
 
-Esses commands são a **fonte da verdade** do processo. Esta regra existe só para garantir que eles sejam acionados mesmo quando o usuário não digita a slash explicitamente.
+These commands are the **source of truth** for the process. This rule exists only to ensure they are triggered even when the user does not type the slash explicitly.
 
-## Convenções (já embutidas nos fluxos — repetidas aqui porque são inegociáveis)
+## Conventions (already embedded in the flows — repeated here because they are non-negotiable)
 
-- **Base sempre `dev`.** Branch sai de `origin/dev`, PR aponta para `dev`. **Nunca** `main`, nunca branch a partir de `main`.
-- **Nome da branch:** kebab-case `<type>/<ISSUE>-<slug>` (ou `<type>/<slug>` sem issue). `type` vem do mesmo enum do Conventional Commits ([`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention / [`commitlint.config.js`](../../commitlint.config.js)). Esse enum precisa bater com todo `packages/*/.releaserc` — ver [`release-types.md`](./release-types.md).
-- **Commit:** Conventional Commits, header commitlint-válido. **Nunca** adicionar `Co-Authored-By` nem rodapé de atribuição ("Generated with Claude"). **Nunca** `--no-verify` para pular o commitlint.
-- **Commitar/push só como parte do `/open-pr`** — rodar o command é a autorização. Não commitar mudanças não relacionadas.
-- **Docs/rules compartilhados em PR separado de código.** Se o diff misturar código com `.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md` etc., separar em outro PR. O `.specs/<name>.md` do próprio componente fica junto do componente.
+- **Always base on `dev`.** The branch comes off `origin/dev`, the PR targets `dev`. **Never** `main`, never branch from `main`.
+- **Branch name:** kebab-case `<type>/<ISSUE>-<slug>` (or `<type>/<slug>` without an issue). `type` comes from the same Conventional Commits enum ([`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention / [`commitlint.config.js`](../../commitlint.config.js)). That enum must match every `packages/*/.releaserc` — see [`release-types.md`](./release-types.md).
+- **Commit:** Conventional Commits, commitlint-valid header. **Never** add `Co-Authored-By` or an attribution footer ("Generated with Claude"). **Never** `--no-verify` to skip commitlint.
+- **Commit/push only as part of `/open-pr`** — running the command is the authorization. Do not commit unrelated changes.
+- **Shared docs/rules in a separate PR from code.** If the diff mixes code with `.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md`, etc., split them into another PR. A component's own `.specs/<name>.md` stays with the component.
 
-## O que não fazer
+## What not to do
 
-- Não rodar `git checkout -b`, `git commit`, `git push` ou `gh pr create` "na mão" fora desses fluxos quando o pedido for criar branch / abrir PR.
-- Não abrir PR direto de `main` ou `dev`.
-- Não marcar uma mudança como breaking sem confirmar com o usuário antes.
+- Don't run `git checkout -b`, `git commit`, `git push`, or `gh pr create` "by hand" outside these flows when the request is to create a branch / open a PR.
+- Don't open a PR directly from `main` or `dev`.
+- Don't mark a change as breaking without confirming with the user first.

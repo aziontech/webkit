@@ -1,52 +1,52 @@
-# Rule: release types — um único conjunto de tipos em commitlint, `.releaserc`, CONTRIBUTING e commands
+# Rule: release types — one single set of types across commitlint, `.releaserc`, CONTRIBUTING and commands
 
-O conjunto de `type`s de Conventional Commit e o **bump de versão** de cada um são versionados em quatro lugares. Eles **têm que ser idênticos**. Quando divergem, o commitlint aceita um commit que o `semantic-release` silenciosamente ignora (ou vice-versa), e os fluxos `/open-pr` / `/create-branch` passam a oferecer um type que não gera o release esperado. Esta regra é o que o reviewer cobra em PR: _"should match release and commit lint"_.
+The set of Conventional Commit `type`s and the **version bump** of each one are versioned in four places. They **must be identical**. When they diverge, commitlint accepts a commit that `semantic-release` silently ignores (or vice versa), and the `/open-pr` / `/create-branch` flows start offering a type that does not produce the expected release. This rule is what the reviewer enforces in a PR: _"should match release and commit lint"_.
 
-## A regra (invariante)
+## The rule (invariant)
 
-A lista de types aceitos e o type→bump devem ser **iguais** nestes quatro pontos:
+The list of accepted types and the type→bump must be **identical** at these four points:
 
-| Arquivo | O que define |
+| File | What it defines |
 |---|---|
-| [`commitlint.config.js`](../../commitlint.config.js) (`type-enum`) | quais types passam no `commit-msg` |
-| `packages/*/.releaserc` (`releaseRules`) | o bump de cada type — em **todos** os pacotes: [`webkit`](../../packages/webkit/.releaserc), [`theme`](../../packages/theme/.releaserc), [`icons`](../../packages/icons/.releaserc) |
-| [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention | a tabela type → bump, documentada para humanos |
-| [`open-pr.md`](../commands/open-pr.md) + [`create-branch.md`](../commands/create-branch.md) | a lista de types que os fluxos inferem/oferecem |
+| [`commitlint.config.js`](../../commitlint.config.js) (`type-enum`) | which types pass `commit-msg` |
+| `packages/*/.releaserc` (`releaseRules`) | the bump of each type — in **all** packages: [`webkit`](../../packages/webkit/.releaserc), [`theme`](../../packages/theme/.releaserc), [`icons`](../../packages/icons/.releaserc) |
+| [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention | the type → bump table, documented for humans |
+| [`open-pr.md`](../commands/open-pr.md) + [`create-branch.md`](../commands/create-branch.md) | the list of types the flows infer/offer |
 
-## Conjunto canônico (hoje)
+## Canonical set (today)
 
 - `feat` → **minor**
 - `fix` / `hotfix` / `chore` / `docs` / `style` / `refactor` / `perf` → **patch**
-- `test` / `ci` / `revert` → `release: false` (sem bump; permitidos para higiene)
-- `!` após o type ou rodapé `BREAKING CHANGE:` → **major**
+- `test` / `ci` / `revert` → `release: false` (no bump; allowed for hygiene)
+- `!` after the type or a `BREAKING CHANGE:` footer → **major**
 
-Cada type é listado **explicitamente** no `releaseRules` de cada `.releaserc` — não dependa do default implícito do preset `conventionalcommits`. Um type sem regra explícita é uma divergência esperando para acontecer.
+Each type is listed **explicitly** in the `releaseRules` of every `.releaserc` — do not rely on the implicit default of the `conventionalcommits` preset. A type without an explicit rule is a divergence waiting to happen.
 
-## Ao adicionar, remover ou re-mapear um type
+## When adding, removing, or re-mapping a type
 
-Faça as quatro edições **no mesmo PR**:
+Make the four edits **in the same PR**:
 
 1. `commitlint.config.js` → `type-enum`.
-2. **Todos** os `packages/*/.releaserc` → `releaseRules` (webkit, theme, icons). Não esqueça nenhum pacote.
-3. `CONTRIBUTING.md` → a tabela type → bump e a nota de enforcement.
-4. `open-pr.md` + `create-branch.md` → a lista de types e o mapeamento de bump.
+2. **Every** `packages/*/.releaserc` → `releaseRules` (webkit, theme, icons). Don't forget any package.
+3. `CONTRIBUTING.md` → the type → bump table and the enforcement note.
+4. `open-pr.md` + `create-branch.md` → the list of types and the bump mapping.
 
-Sem release? Use `{ "type": "<x>", "release": false }` no `releaseRules` (não omita o type).
+No release? Use `{ "type": "<x>", "release": false }` in `releaseRules` (do not omit the type).
 
-## Detalhes do `@semantic-release/commit-analyzer` que importam
+## `@semantic-release/commit-analyzer` details that matter
 
-- O `releaseRules` custom é avaliado **antes** do `DEFAULT_RELEASE_RULES`; o default só entra quando **nenhuma** regra custom casa (`isUndefined`).
-- Uma regra custom com `release: false` retorna `false` (não `undefined`), então **suprime** o default. É assim que `revert` fica sem release, em vez de cair no default `{ revert: true } → patch`.
-- A regra `{ "breaking": true, "release": "major" }` fica **sempre por último** no array. Por causa do `compareReleaseTypes`, uma regra `release: false` anterior não rebaixa um commit breaking — `major` ainda vence.
-- O analyzer também filtra por path: um commit só conta para o release de um pacote se tocar arquivos sob `packages/<scope>/`.
+- The custom `releaseRules` is evaluated **before** `DEFAULT_RELEASE_RULES`; the default only kicks in when **no** custom rule matches (`isUndefined`).
+- A custom rule with `release: false` returns `false` (not `undefined`), so it **suppresses** the default. This is how `revert` ends up with no release, instead of falling into the default `{ revert: true } → patch`.
+- The rule `{ "breaking": true, "release": "major" }` is **always last** in the array. Because of `compareReleaseTypes`, an earlier `release: false` rule does not downgrade a breaking commit — `major` still wins.
+- The analyzer also filters by path: a commit only counts toward a package's release if it touches files under `packages/<scope>/`.
 
-## O que não fazer
+## What not to do
 
-- Não adicionar um type ao comando ou ao commitlint sem adicioná-lo aos três `.releaserc`.
-- Não mexer só no `.releaserc` do `webkit` e esquecer `theme` / `icons`.
-- Não confiar no default do preset para um type — liste-o explicitamente.
-- Não deixar `CONTRIBUTING.md` descrevendo um bump diferente do que o `releaseRules` produz.
+- Don't add a type to the command or to commitlint without adding it to the three `.releaserc` files.
+- Don't touch only `webkit`'s `.releaserc` and forget `theme` / `icons`.
+- Don't rely on the preset default for a type — list it explicitly.
+- Don't let `CONTRIBUTING.md` describe a different bump than the one `releaseRules` produces.
 
-## Por que essa regra existe
+## Why this rule exists
 
-O `/open-pr` e o `/create-branch` listavam `perf` / `test` / `ci` / `revert`, e o `commitlint` os aceitava, mas os `.releaserc` só enumeravam sete types + breaking. `perf` só dava patch pelo default do preset e `test`/`ci`/`revert` não apareciam — uma divergência que rendeu `CHANGES_REQUESTED`. Tornar os quatro pontos idênticos e explícitos elimina a classe inteira de bug.
+`/open-pr` and `/create-branch` listed `perf` / `test` / `ci` / `revert`, and `commitlint` accepted them, but the `.releaserc` files only enumerated seven types + breaking. `perf` only got a patch from the preset default and `test`/`ci`/`revert` did not appear — a divergence that earned a `CHANGES_REQUESTED`. Making the four points identical and explicit eliminates the entire class of bug.
