@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import IconButton from '../../actions/icon-button/icon-button.vue'
-
   defineOptions({
     name: 'PickList',
     inheritAttrs: false
@@ -220,42 +218,96 @@
       class="flex flex-col items-center justify-center gap-[var(--spacing-xs)]"
       :data-testid="`${testId}__controls`"
     >
-      <IconButton
-        kind="outlined"
-        size="medium"
-        icon="pi pi-angle-right"
-        ariaLabel="Move selected to target"
+      <button
+        type="button"
         :disabled="disabled || !hasSelection('source')"
+        aria-label="Move selected to target"
         :data-testid="`${testId}__move-to-target`"
+        class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
         @click="moveBetween('to-target')"
-      />
-      <IconButton
-        kind="outlined"
-        size="medium"
-        icon="pi pi-angle-double-right"
-        ariaLabel="Move all to target"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="size-4"
+        >
+          <path d="M4 12h13" />
+          <path d="M11 6l6 6-6 6" />
+        </svg>
+      </button>
+      <button
+        type="button"
         :disabled="disabled || sourceItems.length === 0"
+        aria-label="Move all to target"
         :data-testid="`${testId}__move-all-to-target`"
+        class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
         @click="moveAll('to-target')"
-      />
-      <IconButton
-        kind="outlined"
-        size="medium"
-        icon="pi pi-angle-left"
-        ariaLabel="Move selected to source"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="size-4"
+        >
+          <path d="M3 12h11" />
+          <path d="M9 7l5 5-5 5" />
+          <path d="M20 5v14" />
+        </svg>
+      </button>
+      <button
+        type="button"
         :disabled="disabled || !hasSelection('target')"
+        aria-label="Move selected to source"
         :data-testid="`${testId}__move-to-source`"
+        class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
         @click="moveBetween('to-source')"
-      />
-      <IconButton
-        kind="outlined"
-        size="medium"
-        icon="pi pi-angle-double-left"
-        ariaLabel="Move all to source"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="size-4"
+        >
+          <path d="M20 12H7" />
+          <path d="M13 6l-6 6 6 6" />
+        </svg>
+      </button>
+      <button
+        type="button"
         :disabled="disabled || targetItems.length === 0"
+        aria-label="Move all to source"
         :data-testid="`${testId}__move-all-to-source`"
+        class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
         @click="moveAll('to-source')"
-      />
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="size-4"
+        >
+          <path d="M21 12H10" />
+          <path d="M15 7l-5 5 5 5" />
+          <path d="M4 5v14" />
+        </svg>
+      </button>
     </div>
 
     <section class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
@@ -271,24 +323,50 @@
           class="flex items-center gap-[var(--spacing-xxs)]"
           :data-testid="`${testId}__reorder`"
         >
-          <IconButton
-            kind="transparent"
-            size="small"
-            icon="pi pi-angle-up"
-            ariaLabel="Move selected up"
+          <button
+            type="button"
             :disabled="disabled || !hasSelection('target')"
+            aria-label="Move selected up"
             :data-testid="`${testId}__reorder-up`"
+            class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
             @click="reorder('target', -1)"
-          />
-          <IconButton
-            kind="transparent"
-            size="small"
-            icon="pi pi-angle-down"
-            ariaLabel="Move selected down"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              class="size-4"
+            >
+              <path d="M12 20V7" />
+              <path d="M6 13l6-6 6 6" />
+            </svg>
+          </button>
+          <button
+            type="button"
             :disabled="disabled || !hasSelection('target')"
+            aria-label="Move selected down"
             :data-testid="`${testId}__reorder-down`"
+            class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
             @click="reorder('target', 1)"
-          />
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              class="size-4"
+            >
+              <path d="M12 4v13" />
+              <path d="M6 11l6 6 6-6" />
+            </svg>
+          </button>
         </div>
       </div>
       <ul
