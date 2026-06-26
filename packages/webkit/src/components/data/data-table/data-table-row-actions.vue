@@ -2,11 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import DropdownMenu from '../../overlay/dropdown-menu/dropdown-menu.vue'
-  import DropdownMenuContent from '../../overlay/dropdown-menu/dropdown-menu-content.vue'
-  import DropdownMenuItem from '../../overlay/dropdown-menu/dropdown-menu-item.vue'
-  import DropdownMenuSeparator from '../../overlay/dropdown-menu/dropdown-menu-separator.vue'
-  import DropdownMenuTrigger from '../../overlay/dropdown-menu/dropdown-menu-trigger.vue'
+  import Dropdown from '../../navigation/dropdown'
   import { useDataTableContext } from './composables/use-data-table-context'
 
   defineOptions({
@@ -55,6 +51,18 @@
     return props.actions ?? []
   })
 
+  const menuActionGroups = computed<RowActionItem[][]>(() => {
+    const groups: RowActionItem[][] = [[]]
+    for (const action of menuActions.value) {
+      if (action.separator) {
+        if (groups[groups.length - 1].length > 0) groups.push([])
+        continue
+      }
+      groups[groups.length - 1].push(action)
+    }
+    return groups.filter((group) => group.length > 0)
+  })
+
   const resolvedInlineDisabled = computed(() => {
     if (!props.inlineAction) return false
     if (typeof props.inlineAction.disabled === 'function') {
@@ -93,11 +101,11 @@
       :data-testid="`${testId}__inline`"
       @click="executeInlineAction"
     />
-    <DropdownMenu
+    <Dropdown
       v-else
       :data-testid="`${testId}__menu`"
     >
-      <DropdownMenuTrigger>
+      <Dropdown.Trigger>
         <IconButton
           icon="pi pi-ellipsis-v"
           ariaLabel="Open row menu"
@@ -105,22 +113,27 @@
           size="small"
           :data-testid="`${testId}__trigger`"
         />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <template
-          v-for="(action, index) in menuActions"
-          :key="`${action.label}-${index}`"
+      </Dropdown.Trigger>
+      <Dropdown.Group
+        v-for="(group, groupIndex) in menuActionGroups"
+        :key="`group-${groupIndex}`"
+      >
+        <Dropdown.Option
+          v-for="(action, index) in group"
+          :key="`${action.label}-${groupIndex}-${index}`"
+          :value="`${groupIndex}-${index}`"
+          :label="action.label"
+          :disabled="isDisabled(action)"
+          @select="runAction(action)"
         >
-          <DropdownMenuSeparator v-if="action.separator" />
-          <DropdownMenuItem
-            v-else
-            :label="action.label"
-            :icon="action.icon"
-            :disabled="isDisabled(action)"
-            @select="runAction(action)"
-          />
-        </template>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <template
+            v-if="action.icon"
+            #leading
+          >
+            <i :class="action.icon" />
+          </template>
+        </Dropdown.Option>
+      </Dropdown.Group>
+    </Dropdown>
   </div>
 </template>

@@ -1,0 +1,11 @@
+{
+  "main": "./dropdown-trigger.vue",
+  "module": "./dropdown-trigger.vue",
+  "types": "./dropdown-trigger.vue.d.ts",
+  "browser": {
+    "./sfc": "./dropdown-trigger.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

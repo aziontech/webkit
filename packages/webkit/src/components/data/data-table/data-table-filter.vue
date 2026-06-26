@@ -2,8 +2,9 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Dropdown from '../../inputs/dropdown/dropdown.vue'
   import InputText from '../../inputs/input-text/input-text.vue'
+  import Select from '../../inputs/select'
+  import type { SelectValue } from '../../inputs/select/injection-key'
   import { useDataTableContext } from './composables/use-data-table-context'
   import type { ColumnDefinition } from './injection-key'
 
@@ -62,8 +63,8 @@
     open.value = !open.value
   }
 
-  function handleFieldChange(value: string) {
-    selectedField.value = value
+  function handleFieldChange(value: SelectValue) {
+    selectedField.value = typeof value === 'string' ? value : ''
     filterValue.value = ''
   }
 
@@ -116,15 +117,23 @@
       :data-testid="`${testId}__panel`"
     >
       <div class="flex flex-col gap-[var(--spacing-sm)]">
-        <Dropdown
-          :modelValue="selectedField"
-          :options="filterOptions"
-          optionLabel="label"
-          optionValue="value"
+        <Select
+          :modelValue="selectedField ?? ''"
           placeholder="Select field"
           :data-testid="`${testId}__field`"
           @update:modelValue="handleFieldChange"
-        />
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Option
+              v-for="option in filterOptions"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
         <slot
           v-if="selectedField && $slots['filter-field']"
           name="filter-field"

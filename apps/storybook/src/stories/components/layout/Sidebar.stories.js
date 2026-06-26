@@ -4,12 +4,7 @@ import Sidebar from '@aziontech/webkit/sidebar'
 import SidebarFooter from '@aziontech/webkit/sidebar-footer'
 import SidebarGroup from '@aziontech/webkit/sidebar-group'
 import MenuItem from '@aziontech/webkit/menu-item'
-import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-import DropdownMenuContent from '@aziontech/webkit/dropdown-menu-content'
-import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-import DropdownMenuPortal from '@aziontech/webkit/dropdown-menu-portal'
-import DropdownMenuSeparator from '@aziontech/webkit/dropdown-menu-separator'
-import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+import Dropdown from '@aziontech/webkit/dropdown'
 import { ref } from 'vue'
 
 const sampleImage =
@@ -17,8 +12,6 @@ const sampleImage =
 
 const profileMenuHeaderClasses =
   'flex flex-col gap-[var(--spacing-1)] px-[var(--spacing-2)] py-[var(--spacing-2)]'
-
-const profileMenuContentClasses = 'w-[18.625rem] min-w-[18.625rem]'
 
 const componentDocsDescription = [
   'Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`.',
@@ -67,12 +60,7 @@ const meta = {
     MenuItem,
     Avatar,
     InputText,
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuPortal,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator
+    Dropdown
   },
   tags: ['autodocs'],
   parameters: {
@@ -321,12 +309,7 @@ const SidebarTemplate =
       MenuItem,
       InputText,
       Avatar,
-      DropdownMenu,
-      DropdownMenuTrigger,
-      DropdownMenuPortal,
-      DropdownMenuContent,
-      DropdownMenuItem,
-      DropdownMenuSeparator
+      Dropdown
     },
     setup() {
       const { rootItems, sections } = splitMenuModel(true)
@@ -340,8 +323,7 @@ const SidebarTemplate =
         withFooter,
         profileMenuOpen,
         sampleImage,
-        profileMenuHeaderClasses,
-        profileMenuContentClasses
+        profileMenuHeaderClasses
       }
     },
     template: `
@@ -384,12 +366,12 @@ const SidebarTemplate =
         #footer
       >
         <SidebarFooter>
-            <DropdownMenu
+            <Dropdown
               v-model:open="profileMenuOpen"
               side="top"
               :close-on-select="true"
             >
-              <DropdownMenuTrigger class="block w-full">
+              <Dropdown.Trigger class="block w-full">
                 <button
                   type="button"
                   class="flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-left transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
@@ -410,67 +392,39 @@ const SidebarTemplate =
                     aria-hidden="true"
                   />
                 </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuContent :class="profileMenuContentClasses">
-                  <div
-                    :class="profileMenuHeaderClasses"
-                    role="presentation"
-                    data-testid="overlay-dropdown-menu__profile-primary"
-                  >
-                    <span class="text-label-md text-[var(--text-default)]">Rafael Umman</span>
-                    <span class="text-body-sm text-[var(--text-muted)]">email@gmail.com</span>
-                  </div>
-                  <DropdownMenuItem
-                    label="Account Settings"
-                    value="account-settings"
-                  />
-                  <DropdownMenuItem
-                    label="Users Management"
-                    value="users-management"
-                  />
-                  <DropdownMenuItem
-                    label="Billing"
-                    value="billing"
-                  />
-                  <DropdownMenuItem
-                    label="Credentials"
-                    value="credentials"
-                  />
-                  <DropdownMenuItem
-                    label="Activity History"
-                    value="activity-history"
-                  />
-                  <DropdownMenuItem
-                    label="Team Permissions"
-                    value="team-permissions"
-                  />
-                  <DropdownMenuSeparator />
-                  <div
-                    :class="profileMenuHeaderClasses"
-                    role="presentation"
-                    data-testid="overlay-dropdown-menu__profile-secondary"
-                  >
-                    <span class="text-label-md text-[var(--text-default)]">User.name</span>
-                    <span class="text-label-sm text-[var(--text-muted)]">email@gmail.com</span>
-                  </div>
-                  <DropdownMenuItem
-                    label="Your Settings"
-                    value="your-settings"
-                  />
-                  <DropdownMenuItem
-                    label="Personal Tokens"
-                    value="personal-tokens"
-                  />
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    label="Log out"
-                    value="logout"
-                    icon="pi pi-sign-out"
-                  />
-                </DropdownMenuContent>
-              </DropdownMenuPortal>
-            </DropdownMenu>
+              </Dropdown.Trigger>
+              <Dropdown.Group>
+                <div
+                  :class="profileMenuHeaderClasses"
+                  role="presentation"
+                  data-testid="overlay-dropdown__profile-primary"
+                >
+                  <span class="text-label-md text-[var(--text-default)]">Rafael Umman</span>
+                  <span class="text-body-sm text-[var(--text-muted)]">email@gmail.com</span>
+                </div>
+                <Dropdown.Option value="account-settings" label="Account Settings" />
+                <Dropdown.Option value="users-management" label="Users Management" />
+                <Dropdown.Option value="billing" label="Billing" />
+                <Dropdown.Option value="credentials" label="Credentials" />
+                <Dropdown.Option value="activity-history" label="Activity History" />
+                <Dropdown.Option value="team-permissions" label="Team Permissions" />
+              </Dropdown.Group>
+              <Dropdown.Group>
+                <div
+                  :class="profileMenuHeaderClasses"
+                  role="presentation"
+                  data-testid="overlay-dropdown__profile-secondary"
+                >
+                  <span class="text-label-md text-[var(--text-default)]">User.name</span>
+                  <span class="text-label-sm text-[var(--text-muted)]">email@gmail.com</span>
+                </div>
+                <Dropdown.Option value="your-settings" label="Your Settings" />
+                <Dropdown.Option value="personal-tokens" label="Personal Tokens" />
+              </Dropdown.Group>
+              <Dropdown.Group>
+                <Dropdown.Option value="logout" label="Log out" icon="pi pi-sign-out" />
+              </Dropdown.Group>
+            </Dropdown>
         </SidebarFooter>
       </template>
     </Sidebar>
@@ -500,7 +454,7 @@ export const WithHeaderAndProfileFooter = {
     docs: {
       description: {
         story:
-          'Header search plus profile footer with Avatar; account DropdownMenu opens above the trigger (`side="top"`).'
+          'Header search plus profile footer with Avatar; account Dropdown opens above the trigger (`side="top"`).'
       }
     }
   }

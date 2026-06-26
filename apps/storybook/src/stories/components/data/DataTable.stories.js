@@ -11,10 +11,7 @@ import DataTableRowActions from '@aziontech/webkit/data-table-row-actions'
 import DataTableSearch from '@aziontech/webkit/data-table-search'
 import DataTableToolbar from '@aziontech/webkit/data-table-toolbar'
 import StatusIndicator from '@aziontech/webkit/status-indicator'
-import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-import DropdownMenuContent from '@aziontech/webkit/dropdown-menu-content'
-import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+import Dropdown from '@aziontech/webkit/dropdown'
 import { ref } from 'vue'
 
 const workloads = [
@@ -190,10 +187,7 @@ export const WithFilters = {
       StatusIndicator,
       Tag,
       Avatar,
-      DropdownMenu,
-      DropdownMenuTrigger,
-      DropdownMenuContent,
-      DropdownMenuItem
+      Dropdown
     },
     setup() {
       const items = ref([...workloads])
@@ -275,15 +269,15 @@ export const WithFilters = {
                 </span>
                 <DataTableActions>
                   <DataTableExport />
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
+                  <Dropdown>
+                    <Dropdown.Trigger>
                       <IconButton icon="pi pi-ellipsis-h" ariaLabel="Table actions" kind="outlined" size="small" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem label="Refresh" />
-                      <DropdownMenuItem label="Settings" />
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    </Dropdown.Trigger>
+                    <Dropdown.Group>
+                      <Dropdown.Option value="refresh" label="Refresh" />
+                      <Dropdown.Option value="settings" label="Settings" />
+                    </Dropdown.Group>
+                  </Dropdown>
                 </DataTableActions>
               </div>
             </template>
