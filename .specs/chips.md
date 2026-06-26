@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 3324fa389a5dc1f03ed9c44c51dae49efd157e05d433dde67d14e4c6bcac1189
+checksum: 4595a20809f894c0605ca0655da74214f8768456087d7bf5cafdf19064284a3c
 created: 2026-06-23
-last_updated: 2026-06-25
+last_updated: 2026-06-26
 ---
 
 # Chips — Component Spec
@@ -42,7 +42,7 @@ import Chip from '@aziontech/webkit/chips'
 
 | Event | Payload | Notes |
 |---|---|---|
-| `remove` | `MouseEvent` | Fires when `removable` is true and the remove button is activated (click / Enter / Space). |
+| `remove` | `MouseEvent` | Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out. |
 
 ## Slots
 
@@ -61,6 +61,7 @@ import Chip from '@aziontech/webkit/chips'
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
+| remove (chip dismiss) | inline `opacity` transition (fade-out), matching the `Message` dismiss | `duration['fast-02']` · `curve['productive-exit']` (animations.js) | `motion-reduce:transition-none` |
 | remove button hover/focus state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
 ## Tokens
@@ -93,7 +94,7 @@ import Chip from '@aziontech/webkit/chips'
 - Keyboard map: the root is not focusable; `Tab` focuses the remove button (when `removable`), `Enter`/`Space` activates it and emits `remove`.
 - ARIA: the root is a non-interactive `<span>` container; the remove control is a real `<button type="button">` with `aria-label="Remove"`; the `pi pi-times` glyph is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
-- `motion-reduce:transition-none` on the remove button's color transition.
+- `motion-reduce:transition-none` on the remove button's color transition and on the chip's dismiss fade-out (the exit transition collapses to instant under reduced motion).
 - Touch target: justified deviation — the chip height is 20–24px, so the remove button's touch target is below 40×40 px. This matches the design (the Chip is a compact inline token, not a primary action), and the larger surrounding chip remains the visible affordance.
 
 ## Stories (Storybook)
