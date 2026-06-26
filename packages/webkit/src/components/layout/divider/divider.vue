@@ -29,7 +29,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-divider')
 
-  const hasContent = computed<boolean>(() => Boolean(slots.default) || props.label.length > 0)
+  const hasContent = computed<boolean>(() => Boolean(slots['default']) || props.label.length > 0)
 </script>
 
 <template>
@@ -46,7 +46,7 @@
       v-if="hasContent"
       :data-testid="`${testId}__label`"
     >
-      <slot v-if="slots.default" />
+      <slot v-if="slots['default']" />
       <template v-else>{{ label }}</template>
     </span>
   </div>

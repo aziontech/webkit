@@ -1,5 +1,17 @@
 import Divider from '@aziontech/webkit/divider'
 
+const IMPORT = "import Divider from '@aziontech/webkit/divider'"
+
+/** Indent a `<template>` body and wrap it in a runnable `<script setup>` SFC. */
+const indent = (code) =>
+  code
+    .trim()
+    .split('\n')
+    .map((line) => (line ? `  ${line}` : line))
+    .join('\n')
+
+const sfc = (body) => ['<script setup>', IMPORT, '</script>', '', '<template>', indent(body), '</template>'].join('\n')
+
 /** @type {import('@storybook/vue3').Meta<typeof Divider>} */
 const meta = {
   title: 'Components/Layout/Divider',
@@ -18,24 +30,29 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an "Or"-style label) when the default slot or `label` prop is set.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import Divider from '@aziontech/webkit/divider'",
-          '</script>',
-          '',
-          '<template>',
-          '  <Divider />',
-          '  <Divider orientation="vertical" />',
-          '  <Divider label="Or" />',
-          '</template>',
-          '```'
-        ].join('\n')
-      }
+        component:
+          'Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an "Or"-style label) when the default slot or `label` prop is set.'
+      },
+      source: {
+        type: 'dynamic',
+        excludeDecorators: true,
+        // Composite stories supply their own full-SFC `source.code` (Storybook's
+        // dynamic source can't introspect a multi-element render template); pass
+        // those through untouched. For arg-driven stories Storybook emits bare
+        // markup (sometimes already wrapped in <template>) — unwrap once, then
+        // wrap in a runnable SFC so "Show code" matches the canvas exactly.
+        transform: (code) => {
+          let src = String(code).trim()
+          if (/<script[\s>]/i.test(src)) return src
+          const wrapped = src.match(/^<template>\s*([\s\S]*?)\s*<\/template>$/)
+          if (wrapped) src = wrapped[1].trim()
+          // Storybook's dynamic snippet lowercases the tag; restore the
+          // PascalCase name so the snippet matches the import and runs as-is.
+          src = src.replace(/(<\/?)divider(?=[\s/>])/g, '$1Divider')
+          return sfc(src)
+        }
+      },
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -75,12 +92,11 @@ export default meta
 const Template = (args) => ({
   components: { Divider },
   setup() {
-    return { args }
+    return { props: args }
   },
-  template: '<Divider v-bind="args" />'
+  template: '<Divider v-bind="props" />'
 })
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Divider>} */
 export const Default = {
   render: Template,
   parameters: {
@@ -88,30 +104,32 @@ export const Default = {
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Divider>} */
+const ORIENTATIONS_TEMPLATE = `<div class="flex items-stretch gap-[var(--spacing-md)] h-[120px] w-full">
+  <div class="flex-1 flex flex-col justify-center gap-[var(--spacing-sm)]">
+    <span class="text-body-sm text-[var(--text-default)]">Above</span>
+    <Divider orientation="horizontal" />
+    <span class="text-body-sm text-[var(--text-default)]">Below</span>
+  </div>
+  <Divider orientation="vertical" />
+  <div class="flex-1 flex items-center justify-center text-body-sm text-[var(--text-default)]">
+    Beside the vertical divider
+  </div>
+</div>`
+
 export const Orientations = {
   render: () => ({
     components: { Divider },
-    template: `
-      <div class="flex items-stretch gap-[var(--spacing-md)] h-[120px] w-full">
-        <div class="flex-1 flex flex-col justify-center gap-[var(--spacing-sm)]">
-          <span class="text-body-sm text-[var(--text-default)]">Above</span>
-          <Divider orientation="horizontal" />
-          <span class="text-body-sm text-[var(--text-default)]">Below</span>
-        </div>
-        <Divider orientation="vertical" />
-        <div class="flex-1 flex items-center justify-center text-body-sm text-[var(--text-default)]">
-          Beside the vertical divider
-        </div>
-      </div>
-    `
+    template: ORIENTATIONS_TEMPLATE
   }),
   parameters: {
-    docs: { description: { story: 'Horizontal and vertical orientations side by side.' } }
+    docs: {
+      controls: { disable: true },
+      description: { story: 'Horizontal and vertical orientations side by side.' },
+      source: { code: sfc(ORIENTATIONS_TEMPLATE) }
+    }
   }
 }
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Divider>} */
 export const WithLabel = {
   render: Template,
   args: { label: 'Or' },
