@@ -110,7 +110,7 @@
     "./field-switch": "./src/components/inputs/field-switch/field-switch.vue",
     "./field-switch-block": "./src/components/inputs/field-switch-block/field-switch-block.vue",
     "./radio-button": "./src/components/inputs/radio-button/radio-button.vue",
-    "./input-switch": "./src/components/inputs/input-switch/input-switch.vue",
+    "./switch": "./src/components/inputs/switch/switch.vue",
     "./textarea": "./src/components/inputs/textarea/textarea.vue",
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
     "./dropdown": "./src/components/inputs/dropdown/dropdown.vue",

@@ -3,13 +3,13 @@ name: field-switch
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=542-105
   node_id: 542:105
-checksum: 4e4186ce0355f5ccf2dedf95daa1efd33eeea62a8691b7e60c525bf863375831
+checksum: 0160b5d891f05729ce6c642d05b2dc662c675387306a4c6679bbde1b9fdffb3a
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-06-23
 ---
 
 # Field Switch — Component Spec
@@ -22,11 +22,8 @@ Inline boolean toggle with switch on the leading edge, label, optional descripti
 
 | Prop          | Type      | Default     | Required | JSDoc                                             |
 | ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
-| `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
-| `trueValue`   | `boolean` | `true`      | no       | Value emitted when toggled on.                    |
-| `falseValue`  | `boolean` | `false`     | no       | Value emitted when toggled off.                   |
+| `modelValue`  | `boolean` | `false`     | no       | Selected value for v-model.                       |
 | `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
-| `inputId`     | `string`  | `undefined` | no       | id for the switch button; links label to control. |
 | `label`       | `string`  | `''`        | no       | Primary label text.                               |
 | `description` | `string`  | `''`        | no       | Secondary description.                            |
 | `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
@@ -74,15 +71,16 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: delegated to nested InputSwitch.
+- Visible focus: delegated to nested Switch.
 - Keyboard map: `Tab` focuses switch; `Space` / `Enter` toggles.
-- ARIA: label associated via `for` / `inputId`.
+- ARIA: label associated to the switch via `for` bound to an internally generated id (`useId`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - Touch target ≥40×40 px via label hit area.
 
 ## Stories (Storybook)
 
 - Default
+- States
 - Disabled
 
 ## Constraints — DO NOT

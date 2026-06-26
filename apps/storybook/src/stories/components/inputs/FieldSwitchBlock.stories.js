@@ -79,13 +79,11 @@ export const Default = {
           v-model="off"
           label="Switch label"
           description="Switch description"
-          input-id="webkit-field-switch-block-off"
         />
         <FieldSwitchBlock
           v-model="on"
           label="Switch label"
           description="Switch description"
-          input-id="webkit-field-switch-block-on"
         />
       </div>
     `
@@ -106,7 +104,6 @@ export const Disabled = {
         description="Switch description"
         helper-text="Helper Text"
         disabled
-        input-id="webkit-field-switch-block-disabled"
       />
     `
   })
