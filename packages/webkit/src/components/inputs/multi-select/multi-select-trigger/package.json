@@ -1,0 +1,11 @@
+{
+  "main": "./multi-select-trigger.vue",
+  "module": "./multi-select-trigger.vue",
+  "types": "./multi-select-trigger.vue.d.ts",
+  "browser": {
+    "./sfc": "./multi-select-trigger.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}
