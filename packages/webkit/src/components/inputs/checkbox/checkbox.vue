@@ -37,8 +37,8 @@
     indeterminate: false,
     disabled: false,
     readonly: false,
-    inputId: undefined,
-    name: undefined,
+    inputId: '',
+    name: '',
     tabindex: undefined
   })
 
@@ -146,9 +146,9 @@
     :data-readonly="readonly || null"
   >
     <input
-      :id="inputId"
+      :id="inputId || ''"
       ref="inputRef"
-      :name="name"
+      :name="name || ''"
       type="checkbox"
       class="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
       :checked="isChecked"
