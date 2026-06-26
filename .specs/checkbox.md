@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 3
-checksum: fc610ab0930da58bac5c91f25e9e06bfaee49a4693a16f840563c0ee9dc4063a
+checksum: 2fd0e74289221cb07d676ea9cecad5c547ffedc51452a69e0e9e552b05ab2cb3
 created: 2026-05-22
 last_updated: 2026-06-24
 ---
@@ -44,7 +44,7 @@ const accepted = ref(false)
 | `readonly` | `boolean` | `false` | no | Prevents changes while the control stays focusable. |
 | `inputId` | `string` | `undefined` | no | Forwarded to the native input `id`; pair with an external label's `for`. |
 | `name` | `string` | `undefined` | no | HTML name for form submission. |
-| `tabindex` | `number` | `undefined` | no | Tab order for the native input. |
+| `tabindex` | `number \| undefined` | `undefined` | no | Tab order for the native input. |
 
 ## Events
 

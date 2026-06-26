@@ -82,7 +82,7 @@ const meta = {
     tabindex: {
       control: 'number',
       description: 'Tab order for the native input.',
-      table: { type: { summary: 'number' }, category: 'props' }
+      table: { type: { summary: 'number | undefined' }, category: 'props' }
     },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
