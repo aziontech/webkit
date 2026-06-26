@@ -94,6 +94,7 @@
     "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
     "./skeleton": "./src/components/feedback/skeleton/skeleton.vue",
+    "./progress-bar": "./src/components/feedback/progress-bar/progress-bar.vue",
     "./input-text": "./src/components/inputs/input-text/input-text.vue",
     "./field-text": "./src/components/inputs/field-text/field-text.vue",
     "./helper-text": "./src/components/inputs/helper-text/helper-text.vue",
