@@ -64,8 +64,7 @@ Regular components are higher-level, more complex components that may include bu
 src/core/<category>/<component-name>/
 ├── <component-name>.vue          # Main component file
 ├── <component-name>.vue.d.ts     # Generated TypeScript declarations
-├── <component-name>.vue.d.ts.map # Generated source map
-└── package.json                  # Package configuration
+└── <component-name>.vue.d.ts.map # Generated source map
 ```
 
 **Example:**
@@ -74,8 +73,7 @@ src/core/<category>/<component-name>/
 src/core/form/field-text/
 ├── field-text.vue
 ├── field-text.vue.d.ts
-├── field-text.vue.d.ts.map
-└── package.json
+└── field-text.vue.d.ts.map
 ```
 
 ### Regular Component Structure
@@ -84,8 +82,7 @@ src/core/form/field-text/
 src/components/<component-name>/
 ├── <component-name>.vue          # Main component file
 ├── <component-name>.vue.d.ts     # Generated TypeScript declarations
-├── <component-name>.vue.d.ts.map # Generated source map
-└── package.json                  # Package configuration
+└── <component-name>.vue.d.ts.map # Generated source map
 ```
 
 **Example:**
@@ -94,8 +91,7 @@ src/components/<component-name>/
 src/components/azion-system-status/
 ├── azion-system-status.vue
 ├── azion-system-status.vue.d.ts
-├── azion-system-status.vue.d.ts.map
-└── package.json
+└── azion-system-status.vue.d.ts.map
 ```
 
 ---
@@ -296,53 +292,15 @@ Organize template logically:
 
 ---
 
-## Package.json Requirements
+## Package Configuration
 
-Each component directory MUST have a `package.json` file with the following structure:
-
-```json
-{
-  "main": "./<component-name>.vue",
-  "module": "./<component-name>.vue",
-  "types": "./<component-name>.vue.d.ts",
-  "browser": {
-    "./sfc": "./<component-name>.vue"
-  },
-  "sideEffects": ["*.vue"]
-}
-```
-
-**Example for `field-text`:**
-
-```json
-{
-  "main": "./field-text.vue",
-  "module": "./field-text.vue",
-  "types": "./field-text.vue.d.ts",
-  "browser": {
-    "./sfc": "./field-text.vue"
-  },
-  "sideEffects": ["*.vue"]
-}
-```
+Components do **not** have a per-folder `package.json`. Module resolution goes through the root [`packages/webkit/package.json#exports`](../package.json) map, which points every public path directly at a source file (`.vue`/`.ts`/`.js`). The root `package.json` also declares `"sideEffects": ["**/*.vue", "**/*.css"]` once for the whole package. To publish a component, add its export entry (see [Export Configuration](#export-configuration) below).
 
 ---
 
 ## TypeScript Declarations
 
-TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC.
-
-### Generation Commands
-
-Run from the webkit package root:
-
-```bash
-# Clean existing declarations
-npm run clean:dts
-
-# Generate new declarations
-npm run build:dts
-```
+TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by `packages/webkit/.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
 
 **DO NOT manually edit `.d.ts` or `.d.ts.map` files.**
 
@@ -566,9 +524,7 @@ When creating a new component, ensure you've completed all requirements:
 - [ ] Define events with `defineEmits()`
 - [ ] Integrate VeeValidate (for form components)
 - [ ] Add `data-testid` attributes
-- [ ] Create `package.json` in component directory
 - [ ] Add export to main `package.json`
-- [ ] Run `npm run build:dts` to generate TypeScript declarations
 - [ ] Test component in consuming application
 
 ### Regular Components
@@ -579,9 +535,7 @@ When creating a new component, ensure you've completed all requirements:
 - [ ] Define props with types and defaults
 - [ ] Define events with `defineEmits()`
 - [ ] Add `data-testid` attributes
-- [ ] Create `package.json` in component directory
 - [ ] Add export to main `package.json`
-- [ ] Run `npm run build:dts` to generate TypeScript declarations
 - [ ] Test component in consuming application
 
 ### Vue Router Components (Additional)
@@ -787,12 +741,7 @@ When creating a new component, ensure you've completed all requirements:
 
 **Problem:** `.d.ts` files are missing or outdated
 
-**Solution:**
-
-```bash
-npm run clean:dts
-npm run build:dts
-```
+**Solution:** Declarations are generated at publish time by `packages/webkit/.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm webkit:type-check` to surface declaration errors.
 
 ### Export Not Found
 
@@ -802,8 +751,6 @@ npm run build:dts
 
 1. Verify component exists in correct directory
 2. Check `package.json` export in main package.json
-3. Ensure component `package.json` has correct paths
-4. Rebuild declarations
 
 ### Vue Router Not Available
 

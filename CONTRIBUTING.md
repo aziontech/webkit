@@ -24,7 +24,7 @@ pnpm storybook:dev
 Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, story, and exports are derived from it.
 
 1. **Draft the spec** — `/spec-create <name>` writes `.specs/<name>.md` with `status: draft`. Review and flip to `status: approved`.
-2. **Scaffold** — `/component-create <name>` writes the `.vue`, its local `package.json`, the `packages/webkit/package.json#exports` entry, and a minimal `.stories.js`. It will refuse to add props, events, or slots that are not in the spec.
+2. **Scaffold** — `/component-create <name>` writes the `.vue`, the `packages/webkit/package.json#exports` entry, and a minimal `.stories.js`. It will refuse to add props, events, or slots that are not in the spec.
 3. **Verify** — `/component-verify <name>` re-runs spec compliance and validators without touching files.
 
 The spec template lives at [`.specs/_template.md`](./.specs/_template.md). The Constraints block is verbatim by design — do not edit it.
@@ -72,7 +72,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-r
 | `docs` | README, spec body, JSDoc | patch |
 | `style` | Formatting / whitespace only | patch |
 | `refactor` | Internal restructure with no API change | patch |
-| `perf` | Performance improvement (via conventional-commits preset default) | patch |
+| `perf` | Performance improvement | patch |
 | `test` | Test additions or changes | none |
 | `ci` | CI/CD pipeline changes | none |
 | `revert` | Reverting a prior commit | none |
@@ -110,7 +110,7 @@ A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`
 
 The config also enforces:
 
-- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. The first eight produce a release (per `.releaserc` rules + conventional-commits preset defaults); `test`, `ci`, `revert` are allowed for hygiene but produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
+- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Every type is enumerated in each `.releaserc` `releaseRules`: the first eight produce a release (`feat` → minor, the rest → patch); `test`, `ci`, `revert` carry `release: false` for hygiene and produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
 - `type` and `scope` must be lower-case.
 - `subject` cannot be empty.
 - Header (full first line) cannot exceed 100 characters.
