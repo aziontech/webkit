@@ -53,7 +53,6 @@ jobs:
         working-directory: apps/storybook
         run: |
           pnpm --filter @aziontech/icons build
-          pnpm --filter @aziontech/webkit.dev build:dts
           pnpm build
 
       - name: Azion Build

@@ -252,7 +252,7 @@ Comprehensive CI/CD pipeline with parallel job execution.
 | **security** | Dependency audit, secret detection, unused deps | ✅ Yes |
 | **lint** | ESLint, Stylelint, Prettier checks | ✅ Yes |
 | **types** | TypeScript check, type coverage | ✅ Yes |
-| **build** | Type declarations, pack dry run | ❌ After lint+types |
+| **build** | Pack dry run | ❌ After lint+types |
 | **storybook** | Storybook build verification | ❌ After lint+types |
 | **governance-check** | Summary gate ensuring all jobs passed | ❌ After all |
 
@@ -284,8 +284,7 @@ Comprehensive CI/CD pipeline with parallel job execution.
 | Step | Reason |
 |------|--------|
 | **Depends on lint + types** | Only builds if linting and type checking pass. Prevents wasting CI time on broken code. |
-| **Build type declarations** | `vue-tsc --declaration --emitDeclarationOnly`. Generates `.d.ts` files for TypeScript consumers. |
-| **Pack dry run** | Validates package can be published. Catches packaging issues early. |
+| **Pack dry run** | Validates package can be published. Catches packaging issues early. `.d.ts` declarations are generated at publish time by `vue-tsc --declaration --emitDeclarationOnly` via the package's `.releaserc` `prepareCmd`, not in this CI job. |
 
 #### Storybook Job Details
 

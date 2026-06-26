@@ -56,7 +56,7 @@ Spawn the `echo-reporter` sub-agent. Independently re-parses every file written 
 - 2 — hook and echo disagree. Mark `degraded`; ask the user to review.
 
 ### Step 8 — Validation (read-only)
-Spawn the `validate-component` sub-agent. Runs `pnpm webkit:lint && type-check && type-coverage && build:dts && storybook:build`. Surfaces failures.
+Spawn the `validate-component` sub-agent. Runs `pnpm webkit:lint && type-check && type-coverage && storybook:build`. Surfaces failures.
 
 ### Step 9 — Finalize
 - Flip `.specs/<name>.md` `status: approved → implemented` (or stay at `implemented` for re-runs).

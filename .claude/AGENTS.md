@@ -42,7 +42,6 @@ pnpm storybook:dev
 pnpm storybook:build
 pnpm storybook:preview
 pnpm icons:build
-pnpm webkit:build:dts
 ```
 
 ## 4) Where to change what
@@ -96,10 +95,7 @@ Run the minimum relevant validations for the scope of your change.
   - `pnpm webkit:lint`
   - `pnpm webkit:type-check`
   - `pnpm webkit:type-coverage`
-  - `pnpm webkit:build:dts`
   - `pnpm storybook:build`
-- Other webkit typings/API surface change:
-  - `pnpm webkit:build:dts`
 
 If a full validation is too expensive, run targeted checks and document what was/was not validated.
 
@@ -166,7 +162,7 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 6. **storybook-writer** — minimal stories only (Default + per kind + per size + Disabled).
 7. **code-connect-writer** — skips if `@figma/code-connect` missing.
 8. **echo-reporter** (cross-check) — independent parser; disagreement with the hook marks the run degraded.
-9. **validate-component** — `pnpm webkit:lint && type-check && type-coverage && build:dts && storybook:build`.
+9. **validate-component** — `pnpm webkit:lint && type-check && type-coverage && storybook:build`.
 10. **Finalize** — `status: approved → implemented`, refresh checksum, close log.
 
 **Why this is mandatory:** the previous workflow gave a single 749-line skill creative latitude — it sometimes added props, variants, or imports the user did not request. The new pipeline removes that latitude structurally: sub-agents see only the spec + their narrow rules; two hooks (`enforce-spec-exists`, `validate-spec-compliance`) verify the `.vue` matches the spec 1-to-1.
@@ -216,7 +212,6 @@ Uses Storybook features fully: `argTypes` (with `control`, `description`, `table
 pnpm webkit:lint
 pnpm webkit:type-check
 pnpm webkit:type-coverage
-pnpm webkit:build:dts
 pnpm storybook:build
 ```
 

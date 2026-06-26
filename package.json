@@ -25,7 +25,6 @@
     "theme:build:dts": "pnpm --filter theme run build:dts",
     "theme:clean:dts": "pnpm --filter theme run clean:dts",
     "theme:format": "pnpm --filter theme run format",
-    "webkit:build:dts": "pnpm --filter webkit run build:dts",
     "webkit:lint": "pnpm --filter webkit lint",
     "webkit:lint:fix": "pnpm --filter webkit lint:fix",
     "webkit:lint:style": "pnpm --filter webkit lint:style",

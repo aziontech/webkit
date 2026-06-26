@@ -8,7 +8,6 @@
       "Bash(pnpm webkit:lint:*)",
       "Bash(pnpm webkit:type-check)",
       "Bash(pnpm webkit:type-coverage)",
-      "Bash(pnpm webkit:build:dts)",
       "Bash(pnpm webkit:format)",
       "Bash(pnpm webkit:format:check)",
       "Bash(pnpm storybook:build)",
