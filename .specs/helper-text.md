@@ -1,34 +1,34 @@
 ---
-name: label
+name: helper-text
 category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
 figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
-  node_id: 562:6660
-checksum: ece9d2e9709b3d49abc00122991f5409b5e98e3dfe85fc8c1bfcbb0f1add5dfd
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
+  node_id: 600:5603
+checksum: 60c3e601c3c8980940290cb81cb9499e2e2be12d7bb702fa96547257b0a2541e
 created: 2026-06-15
 last_updated: 2026-06-15
 ---
 
-# Label — Component Spec
+# HelperText — Component Spec
 
 ## Purpose
 
-Form-field label that pairs descriptive text with an optional `Required` badge. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled.
+Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it.
 
 ## Usage
 
 ```vue
 <script setup>
-import Label from '@aziontech/webkit/inputs/label'
-import InputText from '@aziontech/webkit/inputs/input-text'
+import HelperText from '@aziontech/webkit/helper-text'
+import InputText from '@aziontech/webkit/input-text'
 </script>
 
 <template>
-  <Label for="email" value="Email" required />
   <InputText id="email" />
+  <HelperText kind="invalid" value="Enter a valid email address." />
 </template>
 ```
 
@@ -37,7 +37,7 @@ import InputText from '@aziontech/webkit/inputs/input-text'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `required` | `boolean` | `false` | no | Appends a `Required` tag next to the label text. |
+| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | no | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
 
 ## Events
 
@@ -47,12 +47,12 @@ import InputText from '@aziontech/webkit/inputs/input-text'
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Label text; falls back to `value` prop when empty. |
+| `default` | — | Helper text; falls back to `value` prop when empty. |
 
 ## States
 
-- Visual states: `default`, `required`
-- `data-required` mirrors the `required` prop
+- Visual states: `helper`, `invalid`, `required`, `disabled`
+- `data-kind` mirrors the `kind` prop
 
 ## Motion & Animations
 
@@ -63,28 +63,30 @@ _none_
 | Region | Token (DESIGN.md) |
 |---|---|
 | typography | `.text-label-sm` |
-| color (text) | `var(--text-default)` |
-| gap (required variant) | `var(--spacing-xxs)` |
+| color (helper, disabled) | `var(--text-muted)` |
+| color (invalid) | `var(--danger-contrast)` |
+| color (required) | `var(--warning-contrast)` |
+| gap (disabled icon) | `var(--spacing-xxs)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `Components/Form Field/Label` (Sora 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-label semantic class to match Figma weight 400 + lh 1.3` |
+| `Components/Form Field/Helper` (Sora 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-helper semantic class to match Figma weight 400 + lh 1.3` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Root is a native `<label>` element; consumers pass `for="<input-id>"` via attrs to associate it with the corresponding control.
-- Keyboard map: not focusable (decorative wrapper for native `<label>` semantics); clicking the label focuses the associated input via native browser behavior.
-- ARIA: the `Required` indicator is the existing `Tag` component (`severity="warning"`, `size="small"`, content `"Required"`) and is visible text — no extra ARIA needed; consumers that wire the input with `aria-required="true"` keep the programmatic state in sync.
-- Contrast ≥4.5:1 between `var(--text-default)` and `var(--bg-canvas)`; the warning tag inherits its own contrast guarantees.
+- Root is a `<p>` element so the text is part of the document flow; consumers wire the input with `aria-describedby="<helper-id>"` to expose the helper text to assistive tech.
+- Keyboard map: not focusable (descriptive text); the lock icon for `kind="disabled"` is decorative and marked `aria-hidden="true"`.
+- ARIA: when `kind="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
+- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified by Storybook a11y addon).
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
-- Touch target: label itself is non-interactive; the associated input owns the ≥40×40 px target.
+- Touch target: text is non-interactive; not subject to the 40×40 px rule.
 
 ## Stories (Storybook)
 
 - Default
-- Required — args delta is `{ required: true }`; justified because the `required` prop is the only variant axis (the spec declares no `kind` and no `size`) and the Default vs Required side-by-side comparison is the component's primary documentation surface.
+- Types — composite story rendering every `kind` value side-by-side.
 
 ## Constraints — DO NOT
 

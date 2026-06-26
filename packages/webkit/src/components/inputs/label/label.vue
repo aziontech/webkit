@@ -16,7 +16,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    value: undefined,
+    value: '',
     required: false
   })
 
