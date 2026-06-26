@@ -31,6 +31,7 @@ Produce a `.specs/<name>.md` that is complete enough for `spec-validator` to fli
 5. **Interactive questions.** Ask the user, in this order:
    - Purpose (1–3 sentences).
    - Props: name, type literal/primitive, default, required, JSDoc one-liner. Repeat until the user says done.
+     - **Defaults:** an optional string that holds renderable text defaults to `''` (empty string), not `undefined`. Reserve `undefined` (written **unquoted**) for props where absence ≠ empty (`open`, `modelValue`, `src`). **Never** record the literal `'undefined'` (quoted) in the Default column — that is the string "undefined". See the Props rules comment in `.specs/_template.md`.
    - Events.
    - Slots.
    - Sub-components (only if `structure: composition`).
