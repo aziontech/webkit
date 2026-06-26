@@ -2,7 +2,7 @@ import Label from '@aziontech/webkit/label'
 
 /** @type {import('@storybook/vue3').Meta<typeof Label>} */
 const meta = {
- title: 'Components/Inputs/Label',
+  title: 'Components/Inputs/Label',
   component: Label,
   tags: ['autodocs'],
   parameters: {
@@ -21,10 +21,6 @@ const meta = {
     docs: {
       description: {
         component: [
-          'Form-field label that pairs descriptive text with an optional `Required` badge. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled.',
-          '',
-          '## Usage',
-          '',
           '```vue',
           '<script setup>',
           "import Label from '@aziontech/webkit/label'",
@@ -37,13 +33,6 @@ const meta = {
           '</template>',
           '```'
         ].join('\n')
-      },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true
-      },
-      canvas: {
-        sourceState: 'shown'
       }
     }
   },
