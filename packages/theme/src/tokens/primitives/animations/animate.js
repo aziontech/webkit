@@ -12,6 +12,8 @@ export const duration = {
   'moderate-02': '240ms',
   'slow-01': '400ms',
   'slow-02': '700ms',
+  'slow-03': '1100ms',
+  'slow-04': '2100ms',
 };
 
 export const animate = {
@@ -21,6 +23,8 @@ export const animate = {
   bounce: 'bounce 1s infinite',
   'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
   'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
+  'progress-indeterminate': `progressIndeterminate ${duration['slow-04']} ${curve['productive-entrance']} infinite`,
+  'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
 };
 
 export default { animate, curve, duration };

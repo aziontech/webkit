@@ -37,6 +37,12 @@ export const animations = () => {
         animation: 'popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53)',
         transformOrigin: 'var(--popup-origin, center)',
       },
+      '.animate-progress-indeterminate': {
+        animation: 'progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite',
+      },
+      '.animate-progress-indeterminate-short': {
+        animation: 'progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite',
+      },
     };
 
     // Keyframes components
@@ -68,6 +74,16 @@ export const animations = () => {
       '@keyframes popupScaleOut': {
         '0%': { opacity: '1', transform: 'scale(1)' },
         '100%': { opacity: '0', transform: 'scale(0.95)' },
+      },
+      '@keyframes progressIndeterminate': {
+        '0%': { 'inset-inline-start': '-35%', 'inset-inline-end': '100%' },
+        '60%': { 'inset-inline-start': '100%', 'inset-inline-end': '-90%' },
+        '100%': { 'inset-inline-start': '100%', 'inset-inline-end': '-90%' },
+      },
+      '@keyframes progressIndeterminateShort': {
+        '0%': { 'inset-inline-start': '-200%', 'inset-inline-end': '100%' },
+        '60%': { 'inset-inline-start': '107%', 'inset-inline-end': '-8%' },
+        '100%': { 'inset-inline-start': '107%', 'inset-inline-end': '-8%' },
       },
     };
 

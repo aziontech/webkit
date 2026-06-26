@@ -449,6 +449,8 @@
   --animate-bounce: bounce 1s infinite;
   --animate-popup-scale-in: popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1);
   --animate-popup-scale-out: popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
+  --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
+  --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --ring-offset: 0.5px;
   --container-px: 1rem;
   --container-py: 4rem;
