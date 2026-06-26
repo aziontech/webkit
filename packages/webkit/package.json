@@ -95,6 +95,7 @@
     "./label": "./src/components/inputs/label/label.vue",
     "./helper-text": "./src/components/inputs/helper-text/helper-text.vue",
     "./box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
+    "./chips": "./src/components/inputs/chips/chips.vue",
     "./checkbox": "./src/components/inputs/checkbox/checkbox.vue",
     "./field-checkbox": "./src/components/inputs/field-checkbox/field-checkbox.vue",
     "./field-checkbox-block": "./src/components/inputs/field-checkbox-block/field-checkbox-block.vue",
