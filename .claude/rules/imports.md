@@ -25,7 +25,7 @@ Every webkit component is published under a **flat, single-segment public name**
 
 When adding or migrating a component named `<name>` in category `<category>`:
 
-1. **Source** lives at `packages/webkit/src/components/<category>/<name>/<name>.vue` with its local `package.json`.
+1. **Source** lives at `packages/webkit/src/components/<category>/<name>/<name>.vue`.
 2. **Export** in `packages/webkit/package.json#exports` is the flat key:
    ```jsonc
    "./<name>": "./src/components/<category>/<name>/<name>.vue"
