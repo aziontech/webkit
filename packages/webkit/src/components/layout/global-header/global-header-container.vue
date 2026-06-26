@@ -4,7 +4,7 @@
   import { GlobalHeaderInjectionKey } from './injection-key'
 
   defineOptions({
-    name: 'GlobalHeaderLeft',
+    name: 'GlobalHeaderContainer',
     inheritAttrs: false
   })
 
@@ -18,7 +18,7 @@
   const testId = computed(
     () =>
       (attrs['data-testid'] as string | undefined) ??
-      `${ctx?.testId ?? 'layout-global-header'}__left`
+      `${ctx?.testId ?? 'layout-global-header'}__container`
   )
 </script>
 
@@ -26,7 +26,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex min-w-0 shrink-0 items-center justify-end gap-[var(--spacing-xs)]"
+    class="flex min-w-0 shrink-0 items-center gap-[var(--spacing-md)]"
   >
     <slot />
   </div>
