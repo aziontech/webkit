@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
   node_id: 479:886
-checksum: ff0815c792a7f4d4f347be1866a997253631ba6ea439af4bc38e2e8b3b20d791
+checksum: abadc01cd4dc1c015b0b91cd69604d389744f3f06fcd52eb00dc2e7fbad08570
 created: 2026-06-25
 last_updated: 2026-06-26
 ---
@@ -84,11 +84,11 @@ _none_
 
 ## Stories (Storybook)
 
-Canonical layout — matches `apps/storybook/src/stories/components/layout/ScrollArea.stories.js`.
+All stories share one reactive render that binds both `orientation` and `label`, so every control updates the canvas live.
 
-- Default — the horizontal hairline at its most representative state.
-- Orientations — composite story rendering `horizontal` and `vertical` side by side in a single frame; the two values are the component's only variant axis, so they are shown together rather than one story per value.
-- WithLabel — demonstrates the centered `label` (and, by extension, the default slot) splitting the line, which neither Default nor Orientations exercises.
+- Default — reactive playground; the `orientation` and `label` controls drive a single divider.
+- WithLabel — horizontal divider with a centered `label` ("OR") in the middle. Exercises the `label` prop / default slot.
+- Vertical — vertical divider with a centered `label` ("OR") in the middle (the parent supplies the height); covers the `vertical` orientation with a label.
 
 ## Constraints — DO NOT
 

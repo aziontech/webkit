@@ -44,7 +44,7 @@ const meta = {
   },
   argTypes: {
     orientation: {
-      control: { type: 'select' },
+      control: { type: 'inline-radio' },
       options: ['horizontal', 'vertical'],
       description: 'Layout axis of the separator line.',
       table: {
@@ -76,57 +76,51 @@ const meta = {
 
 export default meta
 
+// One reactive render for every story. It binds BOTH props (`:orientation` +
+// `:label`) and the wrapper gives the divider a definite width AND height, so a
+// horizontal line fills the width and a vertical line fills the height — every
+// control works on every story (proven Storybook 8 vue3 pattern: return { args }
+// and reference args.* in the template).
 const Template = (args) => ({
   components: { Divider },
   setup() {
-    return { props: args }
+    return { args }
   },
-  template: '<Divider v-bind="props" />'
+  template: `
+    <div class="flex items-center justify-center w-full max-w-[360px] h-[80px]">
+      <Divider :orientation="args.orientation" :label="args.label" />
+    </div>
+  `
 })
 
 export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Horizontal hairline separating stacked content.' },
-      source: { code: sfc('<Divider />') }
-    }
-  }
-}
-
-const ORIENTATIONS_TEMPLATE = `<div class="flex items-stretch gap-[var(--spacing-md)] h-[120px] w-full">
-  <div class="flex-1 flex flex-col justify-center gap-[var(--spacing-sm)]">
-    <span class="text-body-sm text-[var(--text-default)]">Above</span>
-    <Divider orientation="horizontal" />
-    <span class="text-body-sm text-[var(--text-default)]">Below</span>
-  </div>
-  <Divider orientation="vertical" />
-  <div class="flex-1 flex items-center justify-center text-body-sm text-[var(--text-default)]">
-    Beside the vertical divider
-  </div>
-</div>`
-
-export const Orientations = {
-  render: () => ({
-    components: { Divider },
-    template: ORIENTATIONS_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      controls: { disable: true },
-      description: { story: 'Horizontal and vertical orientations side by side.' },
-      source: { code: sfc(ORIENTATIONS_TEMPLATE) }
+      description: { story: 'Reactive playground — switch `orientation` and type a `label` to see it update live.' },
+      source: { code: sfc('<Divider orientation="horizontal" />') }
     }
   }
 }
 
 export const WithLabel = {
   render: Template,
-  args: { label: 'Or' },
+  args: { orientation: 'horizontal', label: 'OR' },
   parameters: {
     docs: {
-      description: { story: 'Centered label splitting the line; the default slot overrides it when provided.' },
-      source: { code: sfc('<Divider label="Or" />') }
+      description: { story: 'Horizontal divider with a centered label ("OR") in the middle. Both `orientation` and `label` controls are live.' },
+      source: { code: sfc('<Divider orientation="horizontal" label="OR" />') }
+    }
+  }
+}
+
+export const Vertical = {
+  render: Template,
+  args: { orientation: 'vertical', label: 'OR' },
+  parameters: {
+    docs: {
+      description: { story: 'Vertical divider with a centered label ("OR") in the middle; the parent provides the height. Both controls are live.' },
+      source: { code: sfc('<Divider orientation="vertical" label="OR" />') }
     }
   }
 }
