@@ -6,38 +6,28 @@ A story that ships a "Show code" snippet the consumer cannot paste-and-run is a 
 
 ## The rule
 
-> Every story routes its `docs.source` through the shared helpers in [`apps/storybook/src/stories/_shared/story-source.js`](../../apps/storybook/src/stories/_shared/story-source.js). The emitted snippet is always a **single** runnable SFC: one `<script setup>` with the real `@aziontech/webkit/*` import(s), then one `<template>` whose tags are **PascalCase** and match those imports exactly. Never hand-roll a `docs.source.transform`.
+> Every story declares an **explicit** `parameters.docs.source.code`, built with `toSfc` from [`apps/storybook/src/stories/_shared/story-source.js`](../../apps/storybook/src/stories/_shared/story-source.js). `parameters.docs` is a plain **object literal**. The snippet is a single runnable SFC: one `<script setup>` with the real `@aziontech/webkit/*` import(s), then one `<template>` whose tags are **PascalCase** and match those imports exactly. Do **not** rely on Storybook's dynamic source (`source.transform` / `source.type: 'dynamic'`).
 
 ## Why this rule exists
 
-Storybook's dynamic Vue snippet has two defects that silently break copy-paste:
+Storybook's *dynamic* Vue source is unreliable for our components, in three independent ways:
 
-1. **It lowercases / kebab-cases the tag.** A `<Skeleton>` in the canvas is emitted as `<skeleton>`. Pasted into a consumer app, `<skeleton>` does not resolve to the imported component — it renders nothing (or a stray custom element).
-2. **It already wraps the markup in `<template>`.** A naive `transform` that wraps again produces a nested `<template><template>…</template></template>` — invalid SFC structure.
+1. **It lowercases / kebab-cases the tag.** Storybook reads the tag from the component's `__name`, which is the **.vue file name** (`skeleton.vue` → `<skeleton>`, `chips.vue` → `<chips>`), not the PascalCase import binding (`Skeleton`, `Chip`). A pasted `<skeleton>` / `<chips>` does not resolve.
+2. **It double-wraps `<template>`.** Storybook already wraps the markup in `<template>`; a transform that wraps again yields a nested `<template><template>…</template></template>`.
+3. **It silently falls back to the raw CSF object.** When `parameters.docs` is anything other than a plain object literal (e.g. a helper *call* like `someHelper({...})`), Storybook stops emitting the dynamic snippet and prints the **story object** verbatim:
 
-Observed before this rule (a real story's "Show code"):
+   ```js
+   { render: Template, parameters: { docs: { description: { story: '…' } } } }
+   ```
 
-```vue
-<script setup>
-import Skeleton from '@aziontech/webkit/skeleton'
-</script>
-
-<template>
-  <template>
-    <skeleton animated height="100px" kind="shape" width="240px" />
-  </template>
-</template>
-```
-
-Two bugs in four lines: the duplicated `<template>` and the lowercase `<skeleton>` that does not match the `Skeleton` import. The shared helper exists so this is impossible to emit.
+An explicit `source.code` sidesteps all three: it is what the panel shows, verbatim, every time.
 
 ## The canonical pattern
 
-> Import the helper relative to the story's own folder — `../../_shared/story-source` from `stories/components/<Category>/X.stories.js`, `../../../_shared/story-source` from `stories/components/<category>/<comp>/X.stories.js`. The enforcement hook matches the `_shared/story-source` suffix, so any correct depth passes.
-
 ```js
 import Skeleton from '@aziontech/webkit/skeleton'
-import { runnableDocs, toSfc } from '../../../_shared/story-source'
+
+import { toSfc } from '../../../_shared/story-source' // adjust ../ to the story's depth
 
 const IMPORT = "import Skeleton from '@aziontech/webkit/skeleton'"
 
@@ -47,18 +37,16 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    docs: runnableDocs({
-      component: 'A loading placeholder that reserves the space of content while it loads.',
-      imports: IMPORT,
-      components: ['Skeleton']
-    })
+    // docs is a plain OBJECT LITERAL — never a function call.
+    docs: {
+      description: { component: 'A loading placeholder that reserves space while content loads.' },
+      canvas: { sourceState: 'shown' }
+    }
   },
   argTypes: {
     /* ... */
   },
-  args: {
-    /* ... */
-  }
+  args: { kind: 'shape', width: '240px', height: '100px', animated: true }
 }
 
 export default meta
@@ -69,50 +57,60 @@ const Template = (args) => ({
   template: '<Skeleton v-bind="props" />'
 })
 
-// Arg-driven story: the transform inside runnableDocs restores the snippet.
-export const Default = { render: Template }
+// Arg-driven story: controls drive the canvas; source.code shows canonical usage.
+const DEFAULT_MARKUP = '<Skeleton kind="shape" width="240px" height="100px" animated />'
 
-// Composite story: supply the full SFC yourself with toSfc — PascalCase tags,
-// no <template> in the body (toSfc adds the one wrapper).
-const TYPES = `<div class="flex items-center gap-4">
+export const Default = {
+  render: Template,
+  parameters: {
+    docs: {
+      description: { story: 'Default rectangular placeholder with a pulse.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+// Composite story: render the const, show the SAME const — zero drift.
+const TYPES_TEMPLATE = `<div class="flex items-center gap-4">
   <Skeleton kind="shape" width="160px" height="20px" />
   <Skeleton kind="circle" width="40px" height="40px" />
 </div>`
 
 export const Types = {
-  render: () => ({ components: { Skeleton }, template: TYPES }),
+  render: () => ({ components: { Skeleton }, template: TYPES_TEMPLATE }),
   parameters: {
-    docs: { controls: { disable: true }, source: { code: toSfc(IMPORT, TYPES) } }
+    docs: { controls: { disable: true }, source: { code: toSfc(IMPORT, TYPES_TEMPLATE) } }
   }
 }
 ```
 
-- **`runnableDocs({ component, imports, components })`** sets `description.component`, `source.transform` (built from the shared `sfcTransform`), and `canvas.sourceState: 'shown'` in one call. Spread it into `parameters.docs`.
-- **`toSfc(imports, body)`** wraps a `<template>` body in a runnable SFC. Use it for every composite story's `source.code`. The `body` must use **PascalCase** tags and must **not** contain its own `<template>` (one wrapper is added for you).
-- **`components`** lists every PascalCase component name that appears in the markup, so the transform can restore each tag (`['Skeleton']`, `['EmptyState', 'Button', 'MiniButton']`, …).
+- **`toSfc(imports, body)`** wraps a `<template>` body in a runnable SFC. `imports` is the import line (or an array of lines). `body` uses **PascalCase** tags and contains **no** `<template>` (one wrapper is added for you).
+- **Composite / state stories**: define the markup as a `const`, render it, and pass the same const to `toSfc` — the canvas and the snippet can never drift.
+- **Arg-driven stories** (the interactive `Default`): keep `render: Template` so Controls drive the canvas, and set `source.code` to the canonical default usage. The default args are stable; if you change a default, update the markup too.
+- **`canvas.sourceState: 'shown'`** (meta-level) opens the panel by default.
 
 ## Hard prohibitions
 
-1. **No hand-rolled `docs.source.transform`.** The only transform is the one `runnableDocs` / `sfcTransform` produces. A bespoke arrow risks re-introducing the double-`<template>` and lowercase-tag defects.
-2. **No lowercase / kebab component tags in any `source.code` or template literal.** A tag must match its PascalCase import (`<Skeleton>`, never `<skeleton>` or `<skeleton-loader>`).
-3. **No nested `<template>`.** `toSfc` adds exactly one wrapper; the body you pass must not contain `<template>`.
-4. **No `v-bind="args"` / `v-bind="props"` leaking into the snippet.** The snippet shows concrete props, not the harness binding. (The dynamic transform expands args to attributes; composite `source.code` is written with concrete props.)
-5. **`canvas.sourceState: 'shown'` is required** so the panel is open by default (`runnableDocs` sets it).
-6. **The snippet must be complete and self-contained** — a `<script setup>` that imports every component used, and a `<template>` a consumer can paste without edits. No `// ...`, no placeholder identifiers, no missing imports.
-7. **The snippet must match the canvas 1-to-1.** If the canvas renders a slot's content, the snippet shows that slot's content. "Show code" never shows less than what is rendered.
+1. **`parameters.docs` is a plain object literal.** Never `docs: someHelper({...})` — Storybook then prints the raw story object instead of the snippet.
+2. **No `docs.source.transform` / `source.type: 'dynamic'`.** The snippet comes from an explicit `source.code`.
+3. **No lowercase / kebab component tags.** A tag matches its PascalCase import (`<Skeleton>`, never `<skeleton>`; `<Chip>`, never `<chips>`).
+4. **No nested `<template>`.** `toSfc` adds exactly one wrapper; the body you pass must not contain `<template>`.
+5. **No `v-bind="args"` / `v-bind="props"` in the snippet.** Show concrete props.
+6. **Complete and self-contained.** A `<script setup>` that imports every component used, and a `<template>` a consumer can paste without edits. No `// ...`, no placeholders, no missing imports.
+7. **Matches the canvas 1-to-1.** If the canvas renders a slot's content, the snippet shows that slot's content. "Show code" never shows less than what is rendered.
 
 ## Enforcement
 
-[`validate-story-source.mjs`](../hooks/validate-story-source.mjs) (PostToolUse on `Write|Edit|MultiEdit`) blocks any `*.stories.@(js|jsx|ts|tsx)` write that:
+[`validate-story-source.mjs`](../hooks/validate-story-source.mjs) (PreToolUse on `Write|Edit|MultiEdit`) blocks any `*.stories.@(js|jsx|ts|tsx)` write that:
 
-- declares `docs` source config without importing the shared `story-source` helper;
-- hand-rolls a `transform:` instead of using `sfcTransform` / `runnableDocs`;
+- sets `parameters.docs` to a function call instead of an object literal;
+- declares a `docs.source.transform`;
 - contains a lowercase/kebab tag of a component it imports PascalCase;
 - contains a nested `<template>`;
-- is missing `sourceState: 'shown'`.
+- (new files) omits the shared `story-source` import, `toSfc(...)`, or `sourceState: 'shown'`.
 
-On a violation the hook emits `BLOCKED:` with the offending lines and exits non-zero. As with the other validators, it only blocks **newly introduced** violations, so legacy stories are migrated as they are touched.
+It only blocks **newly introduced** violations, so legacy stories are migrated as they are touched.
 
 ## Relationship to the storybook-write skill
 
-[`.claude/skills/storybook-write/SKILL.md`](../skills/storybook-write/SKILL.md) is the authoring path; it emits stories already wired to `runnableDocs` / `toSfc`. This rule is the invariant the skill satisfies and the hook guards. When the two ever disagree, **this rule wins** — fix the skill.
+[`.claude/skills/storybook-write/SKILL.md`](../skills/storybook-write/SKILL.md) is the authoring path; it emits stories already wired to `toSfc`. This rule is the invariant the skill satisfies and the hook guards. When the two ever disagree, **this rule wins** — fix the skill.

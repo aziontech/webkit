@@ -2,10 +2,12 @@
 // PreToolUse hook: blocks Write/Edit/MultiEdit on Storybook *.stories.* files
 // whose Docs "Show code" output would not be a single, runnable, PascalCase SFC.
 // Enforces .claude/rules/storybook-source.md:
-//   - new stories must route docs.source through apps/.../_shared/story-source
-//     (runnableDocs / sfcTransform / toSfc) and set sourceState: 'shown';
-//   - no hand-rolled transform, no lowercase/kebab tag of an imported component,
-//     no nested <template>.
+//   - `parameters.docs` is a plain OBJECT LITERAL (a function call there makes
+//     Storybook print the raw CSF story object instead of the snippet);
+//   - the snippet comes from an explicit `source.code` built with `toSfc`
+//     (no dynamic `source.transform`);
+//   - no lowercase/kebab tag of an imported component, no nested <template>;
+//   - new stories import the shared helper and set `sourceState: 'shown'`.
 // Only NEWLY introduced violations block; pre-existing legacy is left alone.
 
 import { readFileSync } from 'node:fs'
@@ -30,8 +32,8 @@ function readExistingFile(filePath) {
   }
 }
 
-// Reconstruct the file content that the Write/Edit/MultiEdit would produce, so
-// whole-file checks (import present, sourceState present) see the real result.
+// Reconstruct the content the Write/Edit/MultiEdit would produce, so whole-file
+// checks (import present, sourceState present) see the real result.
 function computeResult(tool, ti, baseline) {
   if (tool === 'Write') return ti.content ?? ''
   if (tool === 'Edit') {
@@ -63,7 +65,7 @@ function importedComponents(content) {
 function lowercaseTagHits(content, components) {
   const hits = []
   for (const name of components) {
-    if (name === name.toLowerCase()) continue // single-letter / already-lowercase: nothing to restore
+    if (name === name.toLowerCase()) continue
     for (const tag of new Set([name.toLowerCase(), toKebab(name)])) {
       const re = new RegExp(`<\\/?${tag}(?=[\\s/>])`, 'g')
       if (re.test(content)) hits.push({ tag, expected: name })
@@ -77,11 +79,29 @@ function checks(result, baseline, isNew) {
   const has = (s, str) => s.includes(str)
 
   const usesHelper = has(result, '_shared/story-source')
-  const usesRunnable = has(result, 'runnableDocs(')
-  const usesTransform = has(result, 'sfcTransform(')
-  const hasDocsConfig = has(result, 'autodocs') || /docs\s*:/.test(result)
+  const usesToSfc = has(result, 'toSfc(')
+  const hasDocsConfig = has(result, 'autodocs') || /\bdocs\s*:/.test(result)
 
   // ---- anti-patterns (block when newly introduced) ----
+
+  // `docs:` set to a function call rather than a plain object literal. Storybook
+  // then prints the raw CSF story object instead of the runnable snippet.
+  const docsCall = /\bdocs:\s*[A-Za-z_$][\w$]*\s*\(/
+  if (docsCall.test(result) && !docsCall.test(baseline)) {
+    violations.push({
+      id: 'docs-not-literal',
+      message: 'parameters.docs is a function call. It must be a plain object literal; build the snippet with source.code: toSfc(...).'
+    })
+  }
+
+  // Dynamic source transform — we use explicit source.code, never a transform.
+  const transform = /\btransform:\s*(\(|async|function)/
+  if (transform.test(result) && !transform.test(baseline)) {
+    violations.push({
+      id: 'handrolled-transform',
+      message: 'docs.source.transform is forbidden. Set an explicit source.code: toSfc(IMPORT, TEMPLATE) instead.'
+    })
+  }
 
   // Nested <template>.
   if (/<template>\s*<template>/.test(result) && !/<template>\s*<template>/.test(baseline)) {
@@ -91,20 +111,8 @@ function checks(result, baseline, isNew) {
     })
   }
 
-  // Hand-rolled transform (a `transform:` key not produced by the helper).
-  if (/transform\s*:/.test(result) && !usesTransform && !usesRunnable) {
-    const newlyAdded = !/transform\s*:/.test(baseline)
-    if (newlyAdded) {
-      violations.push({
-        id: 'handrolled-transform',
-        message: 'Hand-rolled docs.source.transform. Use runnableDocs / sfcTransform from _shared/story-source instead.'
-      })
-    }
-  }
-
   // Lowercase/kebab tag of an imported component.
-  const components = importedComponents(result)
-  const hits = lowercaseTagHits(result, components)
+  const hits = lowercaseTagHits(result, importedComponents(result))
   const baseHits = new Set(lowercaseTagHits(baseline, importedComponents(baseline)).map((h) => h.tag))
   const newHits = hits.filter((h) => !baseHits.has(h.tag))
   if (newHits.length) {
@@ -124,16 +132,16 @@ function checks(result, baseline, isNew) {
         message: 'New story emits docs but does not import the shared helper (_shared/story-source).'
       })
     }
-    if (!usesRunnable && !usesTransform) {
+    if (!usesToSfc) {
       violations.push({
-        id: 'missing-runnable-source',
-        message: 'New story does not route docs.source through runnableDocs / sfcTransform.'
+        id: 'missing-source-code',
+        message: 'New story does not build its Show code with source.code: toSfc(IMPORT, TEMPLATE).'
       })
     }
-    if (usesTransform && !usesRunnable && !has(result, 'sourceState')) {
+    if (!has(result, 'sourceState')) {
       violations.push({
         id: 'missing-sourcestate',
-        message: "Missing canvas.sourceState: 'shown' (use runnableDocs, which sets it)."
+        message: "Missing canvas.sourceState: 'shown' in the meta docs block."
       })
     }
   }
@@ -157,7 +165,7 @@ async function main() {
   if (!filePath || !STORY_RE.test(filePath)) process.exit(0)
 
   const relPath = relative(ROOT, resolve(filePath))
-  const baseline = tool === 'Write' && !readExistingFile(filePath) ? '' : readExistingFile(filePath)
+  const baseline = readExistingFile(filePath)
   const isNew = baseline === ''
   const result = computeResult(tool, input.tool_input ?? {}, baseline)
 
@@ -167,7 +175,7 @@ async function main() {
   const lines = [`BLOCKED: Storybook "Show code" validation failed on ${relPath}.`, '']
   for (const v of violations) lines.push(`  [${v.id}] ${v.message}`)
   lines.push('')
-  lines.push('Route docs.source through apps/storybook/src/stories/_shared/story-source.js.')
+  lines.push('Build the snippet with toSfc from apps/storybook/src/stories/_shared/story-source.js.')
   lines.push('Rule: .claude/rules/storybook-source.md')
 
   process.stderr.write(lines.join('\n') + '\n')

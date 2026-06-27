@@ -1,6 +1,6 @@
 import Skeleton from '@aziontech/webkit/skeleton'
 
-import { runnableDocs, toSfc } from '../../../_shared/story-source'
+import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Skeleton from '@aziontech/webkit/skeleton'"
 
@@ -19,12 +19,13 @@ const meta = {
         rules: [{ id: 'color-contrast', enabled: true }]
       }
     },
-    docs: runnableDocs({
-      component:
-        'A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle`.',
-      imports: IMPORT,
-      components: ['Skeleton']
-    })
+    docs: {
+      description: {
+        component:
+          'A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle`.'
+      },
+      canvas: { sourceState: 'shown' }
+    }
   },
   argTypes: {
     kind: {
@@ -83,11 +84,16 @@ const Template = (args) => ({
   template: '<Skeleton v-bind="props" />'
 })
 
+const DEFAULT_MARKUP = '<Skeleton kind="shape" width="240px" height="100px" animated />'
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default rectangular placeholder with a pulse.' } }
+    docs: {
+      description: { story: 'Default rectangular placeholder with a pulse.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
 
@@ -111,6 +117,8 @@ export const Types = {
   }
 }
 
+const STATIC_MARKUP = '<Skeleton kind="shape" width="240px" height="100px" :animated="false" />'
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */
 export const Static = {
   args: { animated: false },
@@ -119,7 +127,8 @@ export const Static = {
     docs: {
       description: {
         story: 'Non-pulsing placeholder when `animated: false` (also the reduced-motion fallback).'
-      }
+      },
+      source: { code: toSfc(IMPORT, STATIC_MARKUP) }
     }
   }
 }

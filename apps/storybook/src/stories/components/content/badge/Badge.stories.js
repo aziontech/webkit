@@ -1,6 +1,6 @@
 import Badge from '@aziontech/webkit/badge'
 
-import { runnableDocs, toSfc } from '../../../_shared/story-source'
+import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Badge from '@aziontech/webkit/badge'"
 
@@ -10,12 +10,13 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    docs: runnableDocs({
-      component:
-        'Compact, non-interactive indicator that surfaces a numeric count or short status value with severity-based color coding. Commonly overlaid on icons, avatars, or buttons.',
-      imports: IMPORT,
-      components: ['Badge']
-    })
+    docs: {
+      description: {
+        component:
+          'Compact, non-interactive indicator that surfaces a numeric count or short status value with severity-based color coding. Commonly overlaid on icons, avatars, or buttons.'
+      },
+      canvas: { sourceState: 'shown' }
+    }
   },
   argTypes: {
     value: {
@@ -61,10 +62,15 @@ const Template = (args) => ({
   template: '<Badge v-bind="props" />'
 })
 
+const DEFAULT_MARKUP = '<Badge value="99" severity="primary" size="medium" />'
+
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'A single badge driven by the controls.' } }
+    docs: {
+      description: { story: 'A single badge driven by the controls.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
 

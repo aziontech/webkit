@@ -1,6 +1,6 @@
 import Chip from '@aziontech/webkit/chips'
 
-import { runnableDocs, toSfc } from '../../../_shared/story-source'
+import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Chip from '@aziontech/webkit/chips'"
 
@@ -10,12 +10,13 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    docs: runnableDocs({
-      component:
-        'A compact, dismissible token that labels a user-applied value, such as a removable filter on a data view. When `removable` is set, it renders a trailing button that emits the `remove` event.',
-      imports: IMPORT,
-      components: ['Chip']
-    })
+    docs: {
+      description: {
+        component:
+          'A compact, dismissible token that labels a user-applied value, such as a removable filter on a data view. When `removable` is set, it renders a trailing button that emits the `remove` event.'
+      },
+      canvas: { sourceState: 'shown' }
+    }
   },
   argTypes: {
     label: {
@@ -52,10 +53,15 @@ const Template = (args) => ({
   template: '<Chip v-bind="props" />'
 })
 
+const DEFAULT_MARKUP = '<Chip label="Label" size="medium" />'
+
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'The baseline Chip rendering its `label`.' } }
+    docs: {
+      description: { story: 'The baseline Chip rendering its `label`.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
 
@@ -78,11 +84,16 @@ export const Sizes = {
   }
 }
 
+const REMOVABLE_MARKUP = '<Chip label="Label" size="medium" removable />'
+
 export const Removable = {
   args: { removable: true },
   render: Template,
   argTypes: { onRemove: { action: 'remove' } },
   parameters: {
-    docs: { description: { story: 'Removable chip; the × button emits `remove`.' } }
+    docs: {
+      description: { story: 'Removable chip; the × button emits `remove`.' },
+      source: { code: toSfc(IMPORT, REMOVABLE_MARKUP) }
+    }
   }
 }

@@ -345,20 +345,35 @@ group('hook: validate-story-source.mjs', () => {
     })
     assertEqual(r.code, 0)
   })
-  test('new story via runnableDocs + PascalCase passes (exit 0)', () => {
+  test('new story with literal docs + toSfc + PascalCase passes (exit 0)', () => {
     const r = runHook(
       '.claude/hooks/validate-story-source.mjs',
       story(
         [
           "import Foo from '@aziontech/webkit/foo'",
-          "import { runnableDocs } from '../../_shared/story-source'",
+          "import { toSfc } from '../../_shared/story-source'",
           "tags: ['autodocs']",
           'const T = `<Foo bar="1" />`',
-          "docs: runnableDocs({ imports: IMPORT, components: ['Foo'] })"
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
         ].join('\n')
       )
     )
     assertEqual(r.code, 0)
+  })
+  test('docs as a function call blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Foo from '@aziontech/webkit/foo'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          "docs: runnableDocs({ imports: IMPORT })"
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/docs-not-literal/.test(r.stderr), 'should flag docs function call')
   })
   test('lowercase/kebab component tag blocks (exit 2)', () => {
     const r = runHook(
@@ -366,17 +381,17 @@ group('hook: validate-story-source.mjs', () => {
       story(
         [
           "import EmptyState from '@aziontech/webkit/empty-state'",
-          "import { runnableDocs } from '../../_shared/story-source'",
+          "import { toSfc } from '../../_shared/story-source'",
           "tags: ['autodocs']",
           'const T = `<empty-state title="x" />`',
-          "docs: runnableDocs({ imports: IMPORT, components: ['EmptyState'] })"
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
         ].join('\n')
       )
     )
     assertEqual(r.code, 2)
     assertTrue(/lowercase-tag/.test(r.stderr), 'should flag lowercase tag')
   })
-  test('new story with hand-rolled transform + no helper blocks (exit 2)', () => {
+  test('hand-rolled transform blocks (exit 2)', () => {
     const r = runHook(
       '.claude/hooks/validate-story-source.mjs',
       story(
@@ -392,10 +407,10 @@ group('hook: validate-story-source.mjs', () => {
       story(
         [
           "import Foo from '@aziontech/webkit/foo'",
-          "import { runnableDocs } from '../../_shared/story-source'",
+          "import { toSfc } from '../../_shared/story-source'",
           "tags: ['autodocs']",
           'const T = `<template>\n  <template>\n    <Foo />\n  </template>\n</template>`',
-          "docs: runnableDocs({ imports: IMPORT, components: ['Foo'] })"
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
         ].join('\n')
       )
     )
