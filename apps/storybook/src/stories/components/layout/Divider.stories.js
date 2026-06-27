@@ -2,15 +2,21 @@ import Divider from '@aziontech/webkit/divider'
 
 const IMPORT = "import Divider from '@aziontech/webkit/divider'"
 
-/** Indent a `<template>` body and wrap it in a runnable `<script setup>` SFC. */
-const indent = (code) =>
-  code
-    .trim()
-    .split('\n')
-    .map((line) => (line ? `  ${line}` : line))
-    .join('\n')
-
-const sfc = (body) => ['<script setup>', IMPORT, '</script>', '', '<template>', indent(body), '</template>'].join('\n')
+/** Wrap a `<template>` body in a runnable `<script setup>` SFC for "Show code". */
+const sfc = (body) =>
+  [
+    '<script setup>',
+    IMPORT,
+    '</script>',
+    '',
+    '<template>',
+    body
+      .trim()
+      .split('\n')
+      .map((line) => (line ? `  ${line}` : line))
+      .join('\n'),
+    '</template>'
+  ].join('\n')
 
 /** @type {import('@storybook/vue3').Meta<typeof Divider>} */
 const meta = {
@@ -32,25 +38,6 @@ const meta = {
       description: {
         component:
           'Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an "Or"-style label) when the default slot or `label` prop is set.'
-      },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true,
-        // Composite stories supply their own full-SFC `source.code` (Storybook's
-        // dynamic source can't introspect a multi-element render template); pass
-        // those through untouched. For arg-driven stories Storybook emits bare
-        // markup (sometimes already wrapped in <template>) — unwrap once, then
-        // wrap in a runnable SFC so "Show code" matches the canvas exactly.
-        transform: (code) => {
-          let src = String(code).trim()
-          if (/<script[\s>]/i.test(src)) return src
-          const wrapped = src.match(/^<template>\s*([\s\S]*?)\s*<\/template>$/)
-          if (wrapped) src = wrapped[1].trim()
-          // Storybook's dynamic snippet lowercases the tag; restore the
-          // PascalCase name so the snippet matches the import and runs as-is.
-          src = src.replace(/(<\/?)divider(?=[\s/>])/g, '$1Divider')
-          return sfc(src)
-        }
       },
       canvas: { sourceState: 'shown' }
     }
@@ -100,7 +87,10 @@ const Template = (args) => ({
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Horizontal hairline separating stacked content.' } }
+    docs: {
+      description: { story: 'Horizontal hairline separating stacked content.' },
+      source: { code: sfc('<Divider />') }
+    }
   }
 }
 
@@ -134,6 +124,9 @@ export const WithLabel = {
   render: Template,
   args: { label: 'Or' },
   parameters: {
-    docs: { description: { story: 'Centered label splitting the line; the default slot overrides it when provided.' } }
+    docs: {
+      description: { story: 'Centered label splitting the line; the default slot overrides it when provided.' },
+      source: { code: sfc('<Divider label="Or" />') }
+    }
   }
 }
