@@ -131,7 +131,6 @@ pnpm webkit:lint            # ESLint (max-warnings 0)
 pnpm webkit:lint:style      # Stylelint
 pnpm webkit:type-check      # vue-tsc --noEmit
 pnpm webkit:type-coverage   # type-coverage >= 95%
-pnpm webkit:build:dts       # Emit .d.ts files
 pnpm webkit:format:check    # Prettier check
 
 # Aggregate
