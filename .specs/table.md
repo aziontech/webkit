@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: c5e6172697f7120109ffde7383de87990cf4582a433c9f6826f1411d1175108a
+checksum: bdaf317d729786764edfc08d114c9ecc6a9fb4c0df40444745c06a11af346c63
 created: 2026-06-16
-last_updated: 2026-06-24
+last_updated: 2026-06-27
 ---
 
 # Table — Component Spec
@@ -110,13 +110,14 @@ const columns = [
 
 ## Sub-components
 
-<!-- Each sub-component lives in its own folder under the root, with its own package.json.
+<!-- Each sub-component lives in its own folder under the root.
      The shared injection-key.ts sits one directory up from each sub-component.
      Per-sub-component props/events are listed here (the root Props/Events/Slots tables
      below describe ONLY the root Table element).
-     Compound API: index.ts (Object.assign; vue-tsc emits index.d.ts) attaches every sub-component
+     Compound API: index.ts (Object.assign; vue-tsc emits the adjacent index.d.ts at publish time) attaches every sub-component
      to the root as `Table.Header` / `Table.Row` / `Table.Cell` / … (PascalCase root required).
-     See `.claude/rules/compound-api.md`. -->
+     No per-component package.json — the root packages/webkit/package.json#exports map points each
+     public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
 - `table-header/table-header.vue` — `role="rowgroup"` header band. Props `frozen?: boolean` → sticky top within the scroll container; `variant?: 'default' | 'compact'` → `compact` shrinks the header cells' height and padding (published to the head cells through the row-group context, so the consumer sets it once on the header).
 - `table-body/table-body.vue` — `role="rowgroup"` body band.
@@ -131,21 +132,22 @@ const columns = [
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/webkit/data/table/
+  packages/webkit/src/components/data/table/
   ├── table.vue
-  ├── index.ts              (compound: Object.assign attaches sub-components; vue-tsc emits index.d.ts)
-  ├── package.json          (main/module → ./index.ts, types → ./index.d.ts)
+  ├── index.ts              (compound: Object.assign attaches sub-components; vue-tsc emits index.d.ts at publish)
   ├── injection-key.ts
-  ├── table-header/         { table-header.vue, package.json }
-  ├── table-body/           { table-body.vue, package.json }
-  ├── table-footer/         { table-footer.vue, package.json }
-  ├── table-caption/        { table-caption.vue, package.json }
-  ├── table-row/            { table-row.vue, package.json }
-  ├── table-head-cell/      { table-head-cell.vue, package.json }
-  ├── table-cell/           { table-cell.vue, package.json }
-  └── table-sort-button/    { table-sort-button.vue, package.json }
+  ├── table-header/         { table-header.vue }
+  ├── table-body/           { table-body.vue }
+  ├── table-footer/         { table-footer.vue }
+  ├── table-caption/        { table-caption.vue }
+  ├── table-row/            { table-row.vue }
+  ├── table-head-cell/      { table-head-cell.vue }
+  ├── table-cell/           { table-cell.vue }
+  ├── table-sort-button/    { table-sort-button.vue }
+  ├── table-toolbar/        { table-toolbar.vue }
+  └── table-search/         { table-search.vue }
 
-  Public exports stay flat: ./data/table (→ index.ts), ./data/table-header, … ./data/table-sort-button -->
+  No per-component package.json. Public exports stay flat: ./table (→ index.ts), ./table-header, … ./table-search -->
 
 ## Props
 

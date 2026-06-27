@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 6d1f76b81dfa29640a5a91bec36348ef0e075850ce0aab3d590d211dc75145f4
+checksum: 2de3ad1dae37c796f0a2ed5b42313390495ed52de9b4f72639504e017c303332
 created: 2026-06-16
-last_updated: 2026-06-24
+last_updated: 2026-06-27
 ---
 
 # Paginator — Component Spec
@@ -73,13 +73,14 @@ const pageSize = ref(10)
 
 ## Sub-components
 
-<!-- Each sub-component lives in its own folder under the root, with its own package.json.
+<!-- Each sub-component lives in its own folder under the root.
      The shared injection-key.ts sits one directory up from each sub-component.
      Per-sub-component props/events are listed here (the root Props/Events/Slots tables
      below describe ONLY the root Paginator element).
-     Compound API: index.ts (Object.assign; vue-tsc emits index.d.ts) attaches the sub-components
+     Compound API: index.ts (Object.assign; vue-tsc emits the adjacent index.d.ts at publish time) attaches the sub-components
      to the root as `Paginator.Button` (PaginationButton) / `Paginator.Info` / `Paginator.PageSize`
-     (PascalCase root required). See `.claude/rules/compound-api.md`. -->
+     (PascalCase root required). No per-component package.json — the root packages/webkit/package.json#exports
+     map points each public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
 - `pagination-button/pagination-button.vue` — a single pagination control, height 28px, `var(--shape-button)` radius. Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `selected?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `pi pi-chevron-left` + the default slot; `next` renders the default slot + `pi pi-chevron-right`; `more` renders `pi pi-ellipsis-h`; `number` renders the default slot. Hover/active use the DESIGN.md ghost-layer surfaces; `selected` uses `var(--bg-selected)` + border; `disabled` uses `var(--bg-disabled)` + `var(--text-disabled)`.
 - `paginator-info/paginator-info.vue` — muted page-info text container (default slot), `.text-label-sm` / `var(--text-muted)`.
@@ -87,16 +88,15 @@ const pageSize = ref(10)
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/webkit/data/paginator/
+  packages/webkit/src/components/data/paginator/
   ├── paginator.vue
-  ├── index.ts              (compound: Object.assign attaches sub-components; vue-tsc emits index.d.ts)
-  ├── package.json          (main/module → ./index.ts, types → ./index.d.ts)
+  ├── index.ts              (compound: Object.assign attaches sub-components; vue-tsc emits index.d.ts at publish)
   ├── injection-key.ts
-  ├── pagination-button/    { pagination-button.vue, package.json }
-  ├── paginator-info/       { paginator-info.vue, package.json }
-  └── paginator-page-size/  { paginator-page-size.vue, package.json }
+  ├── pagination-button/    { pagination-button.vue }
+  ├── paginator-info/       { paginator-info.vue }
+  └── paginator-page-size/  { paginator-page-size.vue }
 
-  Public exports stay flat: ./data/paginator (→ index.ts), ./data/pagination-button, ./data/paginator-info, ./data/paginator-page-size -->
+  No per-component package.json. Public exports stay flat: ./paginator (→ index.ts), ./pagination-button, ./paginator-info, ./paginator-page-size -->
 
 ## Props
 
