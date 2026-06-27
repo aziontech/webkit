@@ -1,12 +1,3 @@
-import Chip from '@aziontech/webkit/chip'
-import Table from '@aziontech/webkit/table'
-import TableBody from '@aziontech/webkit/table-body'
-import TableCell from '@aziontech/webkit/table-cell'
-import TableHeadCell from '@aziontech/webkit/table-head-cell'
-import TableHeader from '@aziontech/webkit/table-header'
-import TableRow from '@aziontech/webkit/table-row'
-import TableSearch from '@aziontech/webkit/table-search'
-import IconButton from '@aziontech/webkit/icon-button'
 import DropdownMenu from '@aziontech/webkit/dropdown-menu'
 import DropdownMenuContent from '@aziontech/webkit/dropdown-menu-content'
 import {
@@ -16,13 +7,19 @@ import {
 import DropdownMenuFromModel from '@aziontech/webkit/dropdown-menu-from-model'
 import DropdownMenuPortal from '@aziontech/webkit/dropdown-menu-portal'
 import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+import IconButton from '@aziontech/webkit/icon-button'
+import Table from '@aziontech/webkit/table'
+import TableBody from '@aziontech/webkit/table-body'
+import TableCell from '@aziontech/webkit/table-cell'
+import TableHeadCell from '@aziontech/webkit/table-head-cell'
+import TableHeader from '@aziontech/webkit/table-header'
+import TableRow from '@aziontech/webkit/table-row'
 import Tag from '@aziontech/webkit/tag'
 import { ref } from 'vue'
 
 const components = {
   Table,
   Tag,
-  Chip,
   IconButton,
   DropdownMenu,
   DropdownMenuTrigger,
@@ -39,8 +36,7 @@ const components = {
   'Table.Body': TableBody,
   'Table.Row': TableRow,
   'Table.HeadCell': TableHeadCell,
-  'Table.Cell': TableCell,
-  'Table.Search': TableSearch
+  'Table.Cell': TableCell
 }
 
 // --- Generic fixtures ------------------------------------------------------
@@ -172,36 +168,6 @@ const CELL_SLOTS = `
         </template>
 `
 
-// The complete toolbar band — ONLY the Full Example uses it. A filter trigger, a
-// context-aware Table.Search (drives the TanStack global filter through inject),
-// and refresh / export / column-selector actions; the #filters slot renders a
-// removable Chip mirroring the active search, clearing it via the scoped table.
-const FULL_TOOLBAR = `
-        <template #toolbar>
-          <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
-            <span class="flex items-center gap-[var(--spacing-xs)]">
-              <IconButton icon="pi pi-filter" aria-label="Filter" kind="transparent" size="small" />
-              <span class="w-[260px]">
-                <Table.Search placeholder="Search keywords..." />
-              </span>
-            </span>
-            <span class="flex items-center gap-[var(--spacing-xs)]">
-              <IconButton icon="pi pi-refresh" aria-label="Refresh" kind="transparent" size="small" />
-              <IconButton icon="pi pi-download" aria-label="Export" kind="transparent" size="small" />
-              <IconButton icon="pi pi-objects-column" aria-label="Columns" kind="transparent" size="small" />
-            </span>
-          </div>
-        </template>
-        <template #filters="{ table }">
-          <Chip
-            v-if="table.getState().globalFilter"
-            :label="'Search: ' + table.getState().globalFilter"
-            removable
-            @remove="() => table.setGlobalFilter('')"
-          />
-        </template>
-`
-
 // Link cell handler: a plain click is a cell action carrying the SAME payload as
 // row-click (the full row record); a modified click (⌘/Ctrl/Shift) keeps the
 // anchor's native open-in-new-tab behaviour.
@@ -231,7 +197,7 @@ const baseArgs = {
   headerVariant: 'default'
 }
 
-// Clean, readable equivalents of CELL_SLOTS / FULL_TOOLBAR for the code snippet.
+// Clean, readable equivalent of CELL_SLOTS for the code snippet.
 const SOURCE_CELL_SLOTS = `  <template #cell-name="{ row, value }">
     <a :href="'/workloads/' + row.id">{{ value }}</a>
   </template>
@@ -251,20 +217,7 @@ const SOURCE_CELL_SLOTS = `  <template #cell-name="{ row, value }">
     </DropdownMenu>
   </template>`
 
-const SOURCE_TOOLBAR = `  <template #toolbar>
-    <IconButton icon="pi pi-filter" aria-label="Filter" kind="transparent" size="small" />
-    <Table.Search placeholder="Search keywords..." />
-  </template>
-  <template #filters="{ table }">
-    <Chip
-      v-if="table.getState().globalFilter"
-      :label="'Search: ' + table.getState().globalFilter"
-      removable
-      @remove="() => table.setGlobalFilter('')"
-    />
-  </template>`
-
-const dataDrivenSource = (args, { columnsName = 'columns', toolbar = false } = {}) => {
+const dataDrivenSource = (args, { columnsName = 'columns' } = {}) => {
   const open = ['<Table', '  :data="rows"', `  :columns="${columnsName}"`, '  row-key="id"']
   if (args.enableSorting) open.push('  enable-sorting')
   if (args.enableRowSelection) open.push('  enable-row-selection')
@@ -280,8 +233,7 @@ const dataDrivenSource = (args, { columnsName = 'columns', toolbar = false } = {
   open.push('  v-model:sorting="sorting"')
   open.push('  @row-click="onRowClick"')
   open.push('>')
-  const inner = [toolbar ? SOURCE_TOOLBAR : '', SOURCE_CELL_SLOTS].filter(Boolean).join('\n')
-  return `${open.join('\n')}\n${inner}\n</Table>`
+  return `${open.join('\n')}\n${SOURCE_CELL_SLOTS}\n</Table>`
 }
 
 // Indent every non-empty line by `spaces`, so a fragment nests under a parent.
@@ -342,13 +294,12 @@ const SOURCE_STATUS_SEVERITY = `const statusSeverity = (status) =>
 // A data-driven story's resolved args -> a complete SFC: the imports it needs,
 // the data + columns + handlers, and the `<template>` (the same open tag the
 // live render uses, via dataDrivenSource).
-const dataDrivenSnippet = (args, { cols, toolbar = false } = {}) => {
+const dataDrivenSnippet = (args, { cols } = {}) => {
   const imports = [
     "import { ref } from 'vue'",
     "import Table from '@aziontech/webkit/table'",
     "import Tag from '@aziontech/webkit/tag'",
     "import IconButton from '@aziontech/webkit/icon-button'",
-    ...(toolbar ? ["import Chip from '@aziontech/webkit/chip'"] : []),
     "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
     "import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'",
     "import DropdownMenuPortal from '@aziontech/webkit/dropdown-menu-portal'",
@@ -373,7 +324,7 @@ const dataDrivenSnippet = (args, { cols, toolbar = false } = {}) => {
     'const onRowAction = ({ action }) => {}'
   ].join('\n')
 
-  return sfc(imports, script, dataDrivenSource(args, { toolbar }))
+  return sfc(imports, script, dataDrivenSource(args))
 }
 
 const COMPOSITION_SOURCE = sfc(
@@ -417,10 +368,10 @@ const EMPTY_SOURCE = sfc(
 )
 
 // Render factory (data-driven): every story is the same data-driven <Table> wired
-// to the controls; only the data set, the column set, the pre-seeded selection,
-// and (Full only) the toolbar differ.
+// to the controls; only the data set, the column set, and the pre-seeded
+// selection differ.
 const makeStory =
-  ({ rows: data, columns: cols, selection = {}, toolbar = '' }) =>
+  ({ rows: data, columns: cols, selection = {} }) =>
   (args) => ({
     components,
     setup() {
@@ -458,7 +409,7 @@ const makeStory =
         @update:row-selection="args.onUpdateRowSelection"
         @update:pagination="args.onUpdatePagination"
       >
-        ${toolbar}${CELL_SLOTS}
+        ${CELL_SLOTS}
       </Table>
     `
   })
@@ -671,7 +622,7 @@ export const CompactHeader = {
       },
       description: {
         story:
-          'A denser header via `header-variant="compact"` (forwarded to `Table.Header`): the column-header row uses a reduced height and padding. No toolbar band, so the table opens straight onto that header row.'
+          'A denser header via `header-variant="compact"` (forwarded to `Table.Header`): the column-header row uses a reduced height and padding, so the table opens straight onto that header row.'
       }
     }
   }
@@ -768,36 +719,7 @@ export const CompactHeaderWithStickyColumn = {
       },
       description: {
         story:
-          'A compact header (`header-variant="compact"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No toolbar or paginator.'
-      }
-    }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Table>} */
-export const FullExample = {
-  name: 'Full Example',
-  render: makeStory({
-    rows,
-    columns,
-    toolbar: FULL_TOOLBAR
-  }),
-  args: {
-    border: true,
-    enableRowSelection: true,
-    selectOnRowClick: false
-  },
-  parameters: {
-    docs: {
-      source: {
-        code: dataDrivenSnippet(
-          { ...baseArgs, border: true, enableRowSelection: true },
-          { cols: columns, toolbar: true }
-        )
-      },
-      description: {
-        story:
-          'The complete data table over the generic ≤10-row dataset, paginated with a small `page-size` so the paginator spans a couple of pages: the only story with the toolbar band — a composed toolbar (filter / context-aware search / refresh / export / column-selector) wired through the scoped `#toolbar="{ table }"` / `#filters="{ table }"` slots — the search drives `table.setGlobalFilter` and the removable chip clears it — plus select-all + sortable headers, status Tags, per-row action menus, the `border` prop, and a paginator, over the same clean column layout as the other data-driven stories.'
+          'A compact header (`header-variant="compact"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No paginator.'
       }
     }
   }
