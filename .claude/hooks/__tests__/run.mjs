@@ -391,6 +391,22 @@ group('hook: validate-story-source.mjs', () => {
     assertEqual(r.code, 2)
     assertTrue(/lowercase-tag/.test(r.stderr), 'should flag lowercase tag')
   })
+  test('import binding not matching export subpath blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Chip from '@aziontech/webkit/chips'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<Chip label="x" />`',
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/import-binding-mismatch/.test(r.stderr), 'should flag binding/subpath mismatch')
+  })
   test('hand-rolled transform blocks (exit 2)', () => {
     const r = runHook(
       '.claude/hooks/validate-story-source.mjs',

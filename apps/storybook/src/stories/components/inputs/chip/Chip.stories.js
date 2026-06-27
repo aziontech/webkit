@@ -1,8 +1,8 @@
-import Chip from '@aziontech/webkit/chips'
+import Chip from '@aziontech/webkit/chip'
 
 import { toSfc } from '../../../_shared/story-source'
 
-const IMPORT = "import Chip from '@aziontech/webkit/chips'"
+const IMPORT = "import Chip from '@aziontech/webkit/chip'"
 
 const meta = {
   title: 'Components/Inputs/Chip',

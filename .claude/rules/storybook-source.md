@@ -107,6 +107,7 @@ export const Types = {
 - declares a `docs.source.transform`;
 - contains a lowercase/kebab tag of a component it imports PascalCase;
 - contains a nested `<template>`;
+- imports a webkit component under a binding that does not match its export subpath (`import Chip from '@aziontech/webkit/chips'`) — see [`naming.md`](./naming.md);
 - (new files) omits the shared `story-source` import, `toSfc(...)`, or `sourceState: 'shown'`.
 
 It only blocks **newly introduced** violations, so legacy stories are migrated as they are touched.

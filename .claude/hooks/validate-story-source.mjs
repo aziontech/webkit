@@ -51,6 +51,12 @@ function computeResult(tool, ti, baseline) {
 }
 
 const toKebab = (name) => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+const toPascal = (kebab) =>
+  kebab
+    .split(/[-/]/)
+    .filter(Boolean)
+    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+    .join('')
 
 // PascalCase components imported from the webkit package.
 function importedComponents(content) {
@@ -59,6 +65,24 @@ function importedComponents(content) {
   let m
   while ((m = re.exec(content))) names.add(m[1])
   return [...names]
+}
+
+// Default imports of webkit components whose binding does not match the export
+// subpath. `import Chip from '@aziontech/webkit/chips'` is wrong — the binding
+// must be PascalCase(last segment of the subpath), i.e. `Chips`. This keeps the
+// snippet, the component name, and the export path in lockstep.
+function importBindingMismatches(content) {
+  const out = []
+  const re = /import\s+([A-Za-z_$][\w$]*)\s+from\s+['"]@aziontech\/webkit\/([^'"]+)['"]/g
+  let m
+  while ((m = re.exec(content))) {
+    const binding = m[1]
+    const subpath = m[2]
+    if (subpath.startsWith('utils/')) continue // non-component helpers (e.g. utils/cn)
+    const expected = toPascal(subpath.split('/').pop())
+    if (binding !== expected) out.push({ binding, subpath, expected })
+  }
+  return out
 }
 
 // Lowercase/kebab tags of imported PascalCase components present as real tags.
@@ -121,6 +145,20 @@ function checks(result, baseline, isNew) {
       message: `Lowercase/kebab component tag(s): ${newHits
         .map((h) => `<${h.tag}> → <${h.expected}>`)
         .join(', ')}. Tags must match the PascalCase import.`
+    })
+  }
+
+  // Import binding must match the export subpath (PascalCase). Catches
+  // `import Chip from '@aziontech/webkit/chips'` (binding Chip vs subpath chips).
+  const bindHits = importBindingMismatches(result)
+  const baseBinds = new Set(importBindingMismatches(baseline).map((h) => `${h.binding}:${h.subpath}`))
+  const newBinds = bindHits.filter((h) => !baseBinds.has(`${h.binding}:${h.subpath}`))
+  if (newBinds.length) {
+    violations.push({
+      id: 'import-binding-mismatch',
+      message: `Import binding(s) do not match the export subpath: ${newBinds
+        .map((h) => `import ${h.binding} from '@aziontech/webkit/${h.subpath}' → expected '${h.expected}'`)
+        .join('; ')}. Rename the binding, or the component/export, so file ↔ export ↔ name ↔ binding all agree.`
     })
   }
 
