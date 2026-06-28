@@ -1,6 +1,6 @@
 # Rule: compound API — composition first, props for data, names from anatomy
 
-Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every public sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Paginator.Button>`). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
+Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every public sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Paginator.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/webkit/table`, every sub-component attached) and as a **standalone, tree-shakeable root** (`@aziontech/webkit/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
 
 It rests on three decisions, in priority order:
 
@@ -28,12 +28,13 @@ export default Object.assign(Table, {
 
 `Object.assign` returns `typeof Table & { Row: ..., Cell: ... }`, so the generated `index.d.ts` types `<Table.Row>` / `<Table.Cell>` with no manual annotation. **Do not hand-write `index.d.ts`** — `.d.ts` is gitignored (a build artifact); a hand-written one is never committed, and `vue-tsc` cannot derive types from a plain `index.js` (the package does not enable `allowJs`). The index must be `.ts`.
 
-Both forms stay available to the consumer:
+All forms stay available to the consumer:
 
 ```vue
 <script setup>
-import Table from '@aziontech/webkit/table'        // compound — leads the docs
-import TableRow from '@aziontech/webkit/table-row'  // standalone — for tree-shaking
+import Table from '@aziontech/webkit/table'           // compound — leads the docs, dot-notation
+import TableRoot from '@aziontech/webkit/table-root'   // standalone root — tree-shaking (no sub-components attached)
+import TableRow from '@aziontech/webkit/table-row'     // standalone sub-component — tree-shaking
 </script>
 
 <template>
@@ -52,6 +53,11 @@ The dot-notation **must** use a PascalCase root binding (`Table`). `table` (lowe
   ```json
   "./data/table": "./src/components/data/table/index.ts"
   ```
+- **Standalone root export (tree-shaking)** — alongside the compound, add a flat `<name>-root` key pointing **directly at the root `.vue`**, bypassing `index.ts`:
+  ```json
+  "./data/table-root": "./src/components/data/table/table.vue"
+  ```
+  The compound path cannot be tree-shaken: `Object.assign(Table, { Row, Cell, ... })` in `index.ts` references every sub-component, so a bundler retains them all even when the consumer only renders `<Table>`. The `-root` key resolves straight to the root `.vue`, so a root-only import pulls in nothing else. Sub-components are already individually importable; this gives the **root** the same tree-shakeable path. The compound (`./table` → `index.ts`) still leads the docs — the `-root` key is the opt-in for consumers who want only the root.
 - **Sub-component exports stay flat and unchanged** — one entry per public sub-component pointing at its `.vue` (`"./data/table-row": ".../table-row/table-row.vue"`).
 - **The package ships source and is consumed as source** (the exports map points at `./src/...`, and `.vue` files already import `.ts` such as `injection-key.ts`). A `.ts` index is therefore safe — the consumer's build transpiles it the same way it transpiles every `.vue` and the shared `injection-key.ts`. `.d.ts` files are gitignored and generated at publish time by `.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`), not in dev or CI.
 
@@ -91,6 +97,7 @@ Interactivity alone does not justify a sub-component. A clickable row is `@click
 ## Hard prohibitions
 
 - Do not export composition sub-components without also attaching them to the root compound (`index.ts` via `Object.assign`).
+- Do not ship the compound `index.ts` root export without **also** adding the standalone `<name>-root` export pointing at the root `.vue`. The compound path retains every sub-component (`Object.assign`), so a root-only consumer has no tree-shakeable way in without the `-root` key.
 - Do not make the index a plain `index.js` — `vue-tsc` cannot derive types from it (no `allowJs`), so `<Root.Part>` ends up untyped. It must be `index.ts`.
 - Do not hand-write `index.d.ts` — it is gitignored and generated at publish time (via `.releaserc`'s `prepareCmd`) from `index.ts`, not committed or built in dev.
 - Do not invent a `Trigger` (or any overlay part name) on a component that has no `data-state="open|closed"`.
@@ -99,7 +106,7 @@ Interactivity alone does not justify a sub-component. A clickable row is `@click
 
 ## Enforcement
 
-- `scaffolder` emits `index.ts` for every `structure: composition` component (the exports target plus the `Object.assign` compound) and adds its entry to `packages/webkit/package.json#exports`; it writes no per-component `package.json` (see [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md)).
+- `scaffolder` emits `index.ts` for every `structure: composition` component (the exports target plus the `Object.assign` compound), adds **both** the compound root entry (`./<name>` → `index.ts`) **and** the standalone `./<name>-root` entry (→ root `.vue`) to `packages/webkit/package.json#exports`, and writes no per-component `package.json` (see [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md)).
 - The spec's `## Usage` block (composition) **leads with the compound dot-notation** form; the standalone imports are documented as the tree-shaking alternative. See [`.specs/_template.md`](../../.specs/_template.md).
 - `validate-references.mjs` blocks any phantom `@aziontech/webkit/*` import; the standalone sub-component paths must exist in `packages/webkit/package.json#exports`.
 - Sub-agent prompts inject this rule alongside [`no-invention.md`](./no-invention.md), [`styling.md`](./styling.md), [`dependencies.md`](./dependencies.md), and [`migration.md`](./migration.md). Any deviation surfaces as `BLOCKED:` and stops the run.
