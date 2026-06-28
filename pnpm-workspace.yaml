@@ -3,12 +3,12 @@ packages:
   - "packages/*"
 
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  es5-ext: set this to true or false
-  esbuild: set this to true or false
-  ttf2woff2: set this to true or false
-  unrs-resolver: set this to true or false
-  vue-demi: set this to true or false
+  '@parcel/watcher': false
+  es5-ext: false
+  esbuild: false
+  ttf2woff2: false
+  unrs-resolver: false
+  vue-demi: false
 
 overrides:
   handlebars: ">=4.7.9"
