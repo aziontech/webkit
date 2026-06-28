@@ -45,7 +45,8 @@ import MyComponent from '@aziontech/webkit/<name>'
 <!-- Composition example (structure: composition):
      LEAD with the compound dot-notation form — one import of the root, every
      sub-component reached as `<Root.Part>`. The standalone imports remain
-     available (and are the tree-shaking path) but the docs lead with compound.
+     available (and are the tree-shaking path) — the root via `<name>-root`,
+     each sub-component via `<name>-<part>` — but the docs lead with compound.
      The root binding MUST be PascalCase (`Dialog`); a lowercase root would
      collide with a native element and not resolve. See
      `.claude/rules/compound-api.md`.
@@ -72,11 +73,12 @@ import DialogClose from '@aziontech/webkit/dialog-close'
 </template>
 ```
 
-Tree-shaking alternative — the same sub-components as standalone imports:
+Tree-shaking alternative — the standalone root + each sub-component from its own
+entry (no `Object.assign` compound pulled in):
 
 ```vue
 <script setup>
-import Dialog from '@aziontech/webkit/dialog'
+import Dialog from '@aziontech/webkit/dialog-root'
 import DialogTrigger from '@aziontech/webkit/dialog-trigger'
 import DialogContent from '@aziontech/webkit/dialog-content'
 </script>
@@ -261,7 +263,7 @@ Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/B
 - Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
