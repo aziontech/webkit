@@ -122,6 +122,7 @@
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
     "./dropdown": "./src/components/inputs/dropdown/dropdown.vue",
     "./select": "./src/components/inputs/select/index.ts",
+    "./divider": "./src/components/layout/divider/divider.vue",
     "./scroll-area": "./src/components/layout/scroll-area/scroll-area.vue",
     "./global-header": "./src/components/layout/global-header/index.js",
     "./sidebar": "./src/components/layout/sidebar/sidebar.vue",
