@@ -19,6 +19,7 @@ export const animate = {
   ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
   pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
   bounce: 'bounce 1s infinite',
+  shimmer: 'shimmer 1.6s linear infinite',
   'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
   'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
 };
