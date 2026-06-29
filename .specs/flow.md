@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url:
   node_id:
-checksum: bdd033850866837b20760c9154820d48ff57a1d28da13c2bb527b020235ab84f
+checksum: b1cbfb6ab455f58a2b30233c41d6583505a5bb979021a93e3147e30cd07b700c
 created: 2026-06-25
-last_updated: 2026-06-26
+last_updated: 2026-06-29
 ---
 
 # Flow — Component Spec
@@ -19,6 +19,8 @@ last_updated: 2026-06-26
 Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Design source (rewritten to our conventions, never inherited as-is): the kumo "Flow" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). There is no Figma frame for this component; tokens are inferred from intent and recorded in the Theme gaps table.
 
 ## Usage
+
+Composition mode — one import of the root; every part is reached via dot-notation (`<Flow.Node>`, `<Flow.Parallel>`, `<Flow.Anchor>`). The root binding must be PascalCase (`Flow`); `flow` lowercase would not resolve to the component.
 
 ```vue
 <script setup>
@@ -50,6 +52,8 @@ import Flow from '@aziontech/webkit/flow'
 </template>
 ```
 
+Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/flow-node'`, …), and the root is published standalone (tree-shakeable) as `@aziontech/webkit/flow-root` — the path to use when only a few parts are needed.
+
 ## Sub-components
 
 - `flow-node/flow-node.vue` — A single step in the flow. Renders the default node box; `unstyled` drops the box so the `default` slot defines the node's appearance (a dot, a card, a tall node). `disabled` marks the step disabled, rendering adjacent connectors at reduced opacity (mirrored by `data-disabled`). Content via the `default` slot.
@@ -61,23 +65,22 @@ import Flow from '@aziontech/webkit/flow'
   packages/webkit/src/components/data/flow/
   ├── flow.vue
   ├── index.ts                    (entry: attaches Flow.Node / Flow.Parallel / Flow.Anchor)
-  ├── package.json
   ├── connectors.ts               (connector geometry composable, used by flow.vue)
   ├── injection-key.ts            (shared by every sub-component; one directory up from each sub-component)
   ├── flow-node/
-  │   ├── flow-node.vue
-  │   └── package.json
+  │   └── flow-node.vue
   ├── flow-anchor/
-  │   ├── flow-anchor.vue
-  │   └── package.json
+  │   └── flow-anchor.vue
   └── flow-parallel/
-      ├── flow-parallel.vue
-      └── package.json
+      └── flow-parallel.vue
 
-  Public export is a single `./flow` entry (index.ts) that attaches the
-  sub-components for dot-notation (`Flow.Node`, `Flow.Parallel`, `Flow.Anchor`);
-  the same sub-components are also re-exported as named bindings from
-  `@aziontech/webkit/flow`. -->
+  The compound `./flow` entry (index.ts) attaches the sub-components for
+  dot-notation (`Flow.Node`, `Flow.Parallel`, `Flow.Anchor`) and re-exports them
+  as named bindings from `@aziontech/webkit/flow`. The root is also published
+  standalone (tree-shakeable) as `./flow-root`, and each sub-component as a flat
+  export (`./flow-node`, `./flow-parallel`, `./flow-anchor`). There is no
+  per-component `package.json` — the root `packages/webkit/package.json#exports`
+  points every public path directly at source. -->
 
 ## Props
 

@@ -4,7 +4,7 @@ import Checkbox from '@aziontech/webkit/checkbox'
 
 /** @type {import('@storybook/vue3').Meta<typeof Checkbox>} */
 const meta = {
- title: 'Components/Inputs/Checkbox',
+  title: 'Components/Inputs/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
   parameters: {
@@ -28,17 +28,22 @@ const meta = {
   argTypes: {
     modelValue: {
       control: 'boolean',
-      description: 'model Value.',
+      description: 'Two-way bound value.',
       table: { type: { summary: 'unknown' }, category: 'props' }
     },
     value: {
       control: false,
-      description: 'value.',
+      description: 'Identifier for this checkbox in non-binary mode.',
       table: { type: { summary: 'unknown' }, category: 'props' }
     },
     binary: {
       control: 'boolean',
-      description: 'binary.',
+      description: 'When true, the checkbox toggles modelValue as a boolean.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Renders the indeterminate visual (horizontal bar). Does not affect modelValue.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
     disabled: {
@@ -48,12 +53,12 @@ const meta = {
     },
     readonly: {
       control: 'boolean',
-      description: 'readonly.',
+      description: 'Marks the field read-only.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
     inputId: {
       control: 'text',
-      description: 'input Id.',
+      description: 'Forwarded to the inner input id for label association.',
       table: { type: { summary: 'string' }, category: 'props' }
     },
     name: {
@@ -63,7 +68,7 @@ const meta = {
     },
     tabindex: {
       control: 'number',
-      description: 'tabindex.',
+      description: 'Forwarded to the inner input tabindex.',
       table: { type: { summary: 'number' }, category: 'props' }
     },
     'onUpdate:modelValue': {
@@ -77,16 +82,22 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
+  args: {
+    binary: true,
+    indeterminate: false,
+    disabled: false,
+    readonly: false
+  },
+  render: (args) => ({
     components: { Checkbox },
     setup() {
       const value = ref(false)
-      return { value }
+      return { args, value }
     },
     template: `
       <Checkbox
+        v-bind="args"
         v-model="value"
-        binary
         input-id="webkit-checkbox-default"
         aria-label="Toggle option"
       />
@@ -101,27 +112,63 @@ export const Default = {
   }
 }
 
+export const Indeterminate = {
+  args: {
+    binary: true,
+    indeterminate: true,
+    disabled: false,
+    readonly: false
+  },
+  render: (args) => ({
+    components: { Checkbox },
+    setup() {
+      const value = ref(false)
+      return { args, value }
+    },
+    template: `
+      <Checkbox
+        v-bind="args"
+        v-model="value"
+        input-id="webkit-checkbox-indeterminate"
+        aria-label="Some options selected"
+      />
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Tri-state visual. The parent owns the indeterminate logic (typical pattern: "select all" header when some rows are selected). Sets `aria-checked="mixed"` and the native input.indeterminate DOM property.'
+      }
+    }
+  }
+}
+
 export const Disabled = {
-  render: () => ({
+  args: {
+    binary: true,
+    indeterminate: false,
+    disabled: true,
+    readonly: false
+  },
+  render: (args) => ({
     components: { Checkbox },
     setup() {
       const checked = ref(true)
       const unchecked = ref(false)
-      return { checked, unchecked }
+      return { args, checked, unchecked }
     },
     template: `
       <div class="flex items-center gap-[var(--spacing-4)]">
         <Checkbox
+          v-bind="args"
           v-model="checked"
-          binary
-          disabled
           input-id="webkit-checkbox-disabled-on"
           aria-label="Disabled checked"
         />
         <Checkbox
+          v-bind="args"
           v-model="unchecked"
-          binary
-          disabled
           input-id="webkit-checkbox-disabled-off"
           aria-label="Disabled unchecked"
         />
