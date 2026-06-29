@@ -65,7 +65,7 @@
   const cardClasses = cn(
     selectableBlockCardClasses,
     'flex cursor-pointer items-start gap-[var(--spacing-sm)] p-[var(--spacing-sm)]',
-    'data-[selected]:border-[var(--border-selected)] data-[selected]:bg-[var(--primary-selected)]',
+    'data-[selected]:border-[var(--border-selected)] data-[selected]:bg-[var(--bg-selected)]',
     'data-[selected]:before:hidden data-[selected]:after:hidden',
     'data-[disabled]:opacity-50'
   )
@@ -92,6 +92,14 @@
       :data-disabled="disabled || null"
       :data-testid="`${testId}__card`"
     >
+      <RadioButton
+        v-model="model"
+        :value="value"
+        :name="name"
+        :disabled="disabled"
+        :input-id="resolvedInputId"
+        :data-testid="`${testId}__control`"
+      />
       <div
         :class="textsClasses"
         :data-disabled="disabled || null"
@@ -124,14 +132,6 @@
           <span :data-testid="`${testId}__helper-text`">{{ helperText }}</span>
         </div>
       </div>
-      <RadioButton
-        v-model="model"
-        :value="value"
-        :name="name"
-        :disabled="disabled"
-        :input-id="resolvedInputId"
-        :data-testid="`${testId}__control`"
-      />
     </div>
   </label>
 </template>
