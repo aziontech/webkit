@@ -37,7 +37,7 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 | `token-mapper.md` | `token-map` | tokens | stdout Markdown only |
 | `reuse-auditor.md` | `reuse-audit` | dependencies | stdout JSON only |
 | `structure-decider.md` | `structure-decide` | naming | stdout 2 lines only |
-| `scaffolder.md` | `component-scaffold` | **no-invention, naming, bem-testid, tokens, accessibility, dependencies, migration** | `<name>.vue`, sub-components, `injection-key.ts`, local `package.json`, root `package.json#exports` |
+| `scaffolder.md` | `component-scaffold` | **no-invention, naming, bem-testid, tokens, accessibility, dependencies, migration** | `<name>.vue`, sub-components, `injection-key.ts`, root `package.json#exports` |
 | `storybook-writer.md` | `storybook-write` | naming, tokens, **storybook**, no-invention | `apps/storybook/src/stories/webkit/<category>/<Name>.stories.js` |
 | `code-connect-writer.md` | `code-connect-write` | naming, migration | `<name>.figma.ts` |
 | `echo-reporter.md` | `echo-report` | naming, tokens, storybook | stdout report only |
