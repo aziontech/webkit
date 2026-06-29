@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: a3ba11ff0d67cde98427376c7f4f5e8d958933bcaced577819fc26e721e03fe5
+checksum: 5ebe624103f06c4dcdc3fac32789b74cc7fd48142bd277515151e8c6d44e5423
 created: 2026-06-23
-last_updated: 2026-06-24
+last_updated: 2026-06-26
 ---
 
 # Skeleton — Component Spec
@@ -38,7 +38,7 @@ import Skeleton from '@aziontech/webkit/skeleton'
 | `kind` | `'shape' \| 'circle'` | `'shape'` | no | Geometry: a rounded rectangular block (`shape`) or a circle. |
 | `width` | `string` | `'100%'` | no | CSS width (any length). |
 | `height` | `string` | `'1rem'` | no | CSS height (any length); for a circle, set equal to `width`. |
-| `animated` | `boolean` | `true` | no | Pulse while loading; suppressed under reduced motion. |
+| `animated` | `boolean` | `true` | no | Shimmer while loading; suppressed under reduced motion. |
 
 ## Events
 
@@ -52,13 +52,13 @@ import Skeleton from '@aziontech/webkit/skeleton'
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
 - `data-kind` mirrors the `kind` prop (`shape` | `circle`)
-- `data-animated` is present when `animated` is true (drives the pulse)
+- `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| while loading (`animated`) | `animate-pulse` | theme gap (see Theme gaps) — closest looping opacity primitive | `motion-reduce:animate-none` (static) |
+| while loading (`animated`) | `animate-shimmer` (linear gradient sweep over the fill) | `--animate-shimmer` (`animate.js`) + `@keyframes shimmer` (`semantic/animations.js`) | gated behind `motion-safe:` (no sweep) + `motion-reduce:animate-none` (static) |
 
 ## Tokens
 
@@ -71,13 +71,13 @@ import Skeleton from '@aziontech/webkit/skeleton'
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
 | `--bg-surface-overlay` (skeleton fill, #4D4D4D dark / #FAFAFA light) | `bg-[var(--bg-surface-overlay)]` (real token, not yet in DESIGN.md) | `TODO: document --bg-surface-overlay in DESIGN.md` |
-| pulse animation | `animate-pulse` (Tailwind primitive, present in the compiled theme) | `TODO: add a semantic skeleton/pulse animation to semantic/animations.js` |
+| shimmer animation | `animate-shimmer` (`--animate-shimmer` preset in `animate.js` + `@keyframes shimmer` in `semantic/animations.js`) | `TODO: document --animate-shimmer in DESIGN.md § Animations` |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - The skeleton is decorative: `aria-hidden="true"` so assistive tech skips it. The loading status is conveyed by the surrounding region (e.g. `aria-busy="true"` on the container the consumer owns), not by the placeholder itself.
 - Not focusable, not interactive: no keyboard map, no focus ring.
-- `motion-reduce:animate-none` suppresses the pulse for users who prefer reduced motion.
+- The shimmer is gated behind `motion-safe:` and `motion-reduce:animate-none` suppresses it for users who prefer reduced motion (static flat fill).
 
 ## Stories (Storybook)
 
@@ -85,7 +85,7 @@ This component has no `size` axis, so the canonical Sizes story does not apply.
 
 - Default
 - Types — composite story rendering both `kind` values (`shape`, `circle`) side-by-side.
-- Static — `animated: false`; demonstrates the non-pulsing placeholder. Justified because `animated` is a distinct state of the component and the pulse cannot be seen in a static screenshot.
+- Static — `animated: false`; demonstrates the non-shimmering placeholder. Justified because `animated` is a distinct state of the component and the shimmer cannot be seen in a static screenshot.
 
 ## Constraints — DO NOT
 
