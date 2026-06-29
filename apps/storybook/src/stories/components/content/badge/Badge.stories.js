@@ -1,16 +1,8 @@
 import Badge from '@aziontech/webkit/badge'
 
+import { toSfc } from '../../../_shared/story-source'
+
 const IMPORT = "import Badge from '@aziontech/webkit/badge'"
-
-/** Indent a `<template>` body and wrap it in a runnable `<script setup>` SFC. */
-const indent = (code) =>
-  code
-    .trim()
-    .split('\n')
-    .map((line) => (line ? `  ${line}` : line))
-    .join('\n')
-
-const sfc = (body) => ['<script setup>', IMPORT, '</script>', '', '<template>', indent(body), '</template>'].join('\n')
 
 const meta = {
   title: 'Components/Content/Badge',
@@ -22,22 +14,6 @@ const meta = {
       description: {
         component:
           'Compact, non-interactive indicator that surfaces a numeric count or short status value with severity-based color coding. Commonly overlaid on icons, avatars, or buttons.'
-      },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true,
-        // Composite stories supply their own full-SFC `source.code` (Storybook's
-        // dynamic source can't introspect a multi-element render template); pass
-        // those through untouched. For arg-driven stories Storybook emits bare
-        // markup (sometimes already wrapped in <template>) — unwrap once, then
-        // wrap in a runnable SFC so "Show code" matches the canvas exactly.
-        transform: (code) => {
-          let src = String(code).trim()
-          if (/<script[\s>]/i.test(src)) return src
-          const wrapped = src.match(/^<template>\s*([\s\S]*?)\s*<\/template>$/)
-          if (wrapped) src = wrapped[1].trim()
-          return sfc(src)
-        }
       },
       canvas: { sourceState: 'shown' }
     }
@@ -86,10 +62,15 @@ const Template = (args) => ({
   template: '<Badge v-bind="props" />'
 })
 
+const DEFAULT_MARKUP = '<Badge value="99" severity="primary" size="medium" />'
+
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'A single badge driven by the controls.' } }
+    docs: {
+      description: { story: 'A single badge driven by the controls.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
 
@@ -111,7 +92,7 @@ export const Types = {
     docs: {
       controls: { disable: true },
       description: { story: 'All severities side by side.' },
-      source: { code: sfc(TYPES_TEMPLATE) }
+      source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
     }
   }
 }
@@ -131,7 +112,7 @@ export const Sizes = {
     docs: {
       controls: { disable: true },
       description: { story: 'All sizes side by side.' },
-      source: { code: sfc(SIZES_TEMPLATE) }
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }
   }
 }
