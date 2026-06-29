@@ -2,34 +2,29 @@
 name: checkbox
 category: inputs
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 3
-checksum: 2fd0e74289221cb07d676ea9cecad5c547ffedc51452a69e0e9e552b05ab2cb3
+checksum: 1f6e19b3c0419970b778bd61a4316627e13e43607aea53264f41d45acce8642f
 created: 2026-05-22
-last_updated: 2026-06-24
+last_updated: 2026-06-25
 ---
-
 # Checkbox — Component Spec
 
 ## Purpose
 
-Square checkbox control only — the box, the native input, and the check glyph, with no label or description chrome. Use it when you compose your own label, or reach for `FieldCheckbox` / `FieldCheckboxBlock` when you want built-in text. Supports a single boolean (`binary`) or collecting a `value` into an array model.
+Binary selection control. Supports single boolean (`binary: true`), single-value selection (matches `value` against `modelValue`), and array-based multi-select (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) without flipping `aria-checked` — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
 
 ## Usage
 
 ```vue
 <script setup>
-import { ref } from 'vue'
 import Checkbox from '@aziontech/webkit/checkbox'
 
-const accepted = ref(false)
+const checked = defineModel({ default: false })
 </script>
 
 <template>
-  <label class="inline-flex items-center gap-[var(--spacing-2)]">
-    <Checkbox v-model="accepted" binary input-id="accept-terms" />
-    Accept terms
-  </label>
+  <Checkbox v-model="checked" binary aria-label="Subscribe to newsletter" />
 </template>
 ```
 
@@ -37,73 +32,80 @@ const accepted = ref(false)
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `unknown` | `undefined` | no | Bound value: a boolean in `binary` mode, otherwise the array/value the control reflects. |
-| `value` | `unknown` | `undefined` | no | This checkbox's value, added to or removed from the model array when not `binary`. |
-| `binary` | `boolean` | `false` | no | Toggles a single boolean instead of collecting `value` into an array. |
+| `modelValue` | `unknown` | `undefined` | no | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
+| `value` | `unknown` | `undefined` | no | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
+| `binary` | `boolean` | `false` | no | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
+| `indeterminate` | `boolean` | `false` | no | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Prevents changes while the control stays focusable. |
-| `inputId` | `string` | `undefined` | no | Forwarded to the native input `id`; pair with an external label's `for`. |
-| `name` | `string` | `undefined` | no | HTML name for form submission. |
-| `tabindex` | `number \| undefined` | `undefined` | no | Tab order for the native input. |
+| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but cannot change via interaction. |
+| `inputId` | `string` | `''` | no | Forwarded to the inner `<input id>` for label association. |
+| `name` | `string` | `''` | no | HTML name for form submission. |
+| `tabindex` | `number` | `0` | no | Forwarded to the inner `<input tabindex>`. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:modelValue` | `unknown` | Emitted on toggle; payload is the next boolean (`binary`) or the updated value array. |
+| `update:modelValue` | `unknown` | Fires on activation. Payload is the next boolean (binary mode) or the next array (multi mode) or the matched value (single-value mode). |
 
 ## Slots
 
-| _none_ | — | — |
+The checkbox is a leaf primitive — no slots. Label/description live in `FieldCheckbox` wrappers.
+
+| Slot | Scope | Notes |
+|---|---|---|
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `readonly`, `checked`
-- `data-checked` mirrors the checked state
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `indeterminate`, `disabled`, `readonly`
+- `data-state` on the root: `unchecked` | `checked` | `indeterminate`
+- `data-checked` mirrors `isChecked` (legacy; kept for backwards compatibility with existing `data-[checked]:` styling)
+- `data-indeterminate` mirrors the `indeterminate` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-readonly` mirrors the `readonly` prop
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
+| Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| hover / active state change | `transition-opacity duration-fast-02 ease-productive-entrance` on the hover/active ghost overlays | semantic (matches catalog) | `motion-reduce:transition-none` |
+| state change (border / bg / color) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| surface | `var(--bg-surface)` |
-| border | `var(--border-default)` |
-| checked surface | `var(--primary)` |
-| checked glyph | `var(--primary-contrast)` |
-| shape | `var(--shape-button)` |
-| hover overlay | `var(--bg-hover)` |
-| active overlay | `var(--bg-active)` |
-| disabled surface | `var(--bg-disabled)` |
-| disabled glyph | `var(--text-disabled)` |
-| ring | `var(--ring-color)` |
-| ring offset | `var(--bg-canvas)` |
+| surface (unchecked) | `var(--bg-surface)` |
+| surface (checked) | `var(--primary)` |
+| surface (indeterminate) | `var(--primary)` |
+| surface (disabled) | `var(--bg-disabled)` |
+| icon (checked / indeterminate) | `var(--primary-contrast)` |
+| icon (disabled) | `var(--text-disabled)` |
+| border (default) | `var(--border-default)` |
+| border (checked) | `var(--primary)` |
+| ring (focus) | `var(--ring-color)` |
+| ring offset (focus) | `var(--bg-canvas)` |
+| shape | `var(--shape-elements)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| `--border-width-default` (0.8 px) | `border-[0.8px]` (Tailwind arbitrary) | TODO: catalog `--border-width-default` in DESIGN.md as a semantic primitive shared with Select / MultiSelect / Checkbox. |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: descendant native input drives the ring — `has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--ring-color)] has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses the native input; `Space` toggles checked state (native checkbox behavior).
-- ARIA: renders a real `<input type="checkbox">` with `aria-checked`; control-only, so associate copy via `inputId` + an external label `for`, or use `FieldCheckbox`.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
-- `motion-reduce:transition-none` on the animated ghost overlays.
-- Touch target: the box is 1.125rem (18px) — justified deviation for a control-only primitive; the larger ≥40×40 px hit area is provided by the field wrappers (`FieldCheckbox` / `FieldCheckboxBlock`) or the consumer's label.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Keyboard map: `Tab` focuses; `Space` toggles. (The native `<input type="checkbox">` carries the semantics.)
+- ARIA: native `<input type="checkbox">` is the source of truth. `aria-checked` is set to `'mixed'` when `indeterminate` is true (with `indeterminate` DOM property also set on the input). The wrapping `<span>` is decorative.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
+- `motion-reduce:transition-none` on every transition-bearing class.
+- Touch target — the `1.125rem` size is below 40×40 px; consumers should wrap with `FieldCheckbox` or expand the parent click area when the control sits on its own.
 
 ## Stories (Storybook)
 
 - Default
-- Disabled — demonstrates the `disabled` prop (checked and unchecked).
+- Indeterminate — justification: documents the tri-state visual (horizontal bar) and the `aria-checked="mixed"` semantics added in `spec_version: 3`. Not reachable from any other story.
+- Disabled
 
 ## Constraints — DO NOT
 
@@ -120,8 +122,7 @@ const accepted = ref(false)
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
