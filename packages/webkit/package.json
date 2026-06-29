@@ -99,6 +99,7 @@
     "./toast-action": "./src/components/feedback/toast/toast-action/toast-action.vue",
     "./toast-close": "./src/components/feedback/toast/toast-close/toast-close.vue",
     "./skeleton": "./src/components/feedback/skeleton/skeleton.vue",
+    "./progress-bar": "./src/components/feedback/progress-bar/progress-bar.vue",
     "./calendar": "./src/components/inputs/calendar/calendar.vue",
     "./input-text": "./src/components/inputs/input-text/input-text.vue",
     "./input-number": "./src/components/inputs/input-number/input-number.vue",
