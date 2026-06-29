@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import Spinner from '../../utils/spinner/spinner.vue'
+
   defineOptions({
     name: 'PickList',
     inheritAttrs: false
@@ -9,6 +11,7 @@
   type PickListItems = unknown[]
   export type PickListValue = [PickListItems, PickListItems]
   type PickListSide = 'source' | 'target'
+  type PickListLoading = boolean | PickListSide
   type MoveDirection = 'to-target' | 'to-source'
 
   interface Props {
@@ -24,6 +27,8 @@
     disabled?: boolean
     /** Shows up/down reorder controls that move selected items within their own list. */
     reorderable?: boolean
+    /** Shows a spinner in place of a list's items and locks moves while data loads. `true` loads both lists; `'source'` or `'target'` loads only that side. */
+    loading?: PickListLoading
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -32,7 +37,8 @@
     sourceHeader: '',
     targetHeader: '',
     disabled: false,
-    reorderable: false
+    reorderable: false,
+    loading: false
   })
 
   const emit = defineEmits<{
@@ -56,6 +62,19 @@
   const sourceItems = computed<PickListItems>(() => props.modelValue?.[0] ?? [])
   const targetItems = computed<PickListItems>(() => props.modelValue?.[1] ?? [])
 
+  const sourceLoading = computed<boolean>(
+    () => props.loading === true || props.loading === 'source'
+  )
+  const targetLoading = computed<boolean>(
+    () => props.loading === true || props.loading === 'target'
+  )
+  const anyLoading = computed<boolean>(() => sourceLoading.value || targetLoading.value)
+  const loadingState = computed<PickListSide | 'both' | null>(() =>
+    props.loading === true ? 'both' : props.loading || null
+  )
+  const isListLoading = (list: PickListSide): boolean =>
+    list === 'source' ? sourceLoading.value : targetLoading.value
+
   const selectedSource = ref<Set<number>>(new Set())
   const selectedTarget = ref<Set<number>>(new Set())
 
@@ -73,7 +92,7 @@
     selectionFor(list).value.has(index)
 
   const toggleSelection = (list: PickListSide, index: number): void => {
-    if (props.disabled) return
+    if (props.disabled || isListLoading(list)) return
     const selection = selectionFor(list)
     const next = new Set(selection.value)
     if (next.has(index)) next.delete(index)
@@ -100,7 +119,7 @@
     [...selectionFor(list).value].sort((a, b) => a - b)
 
   const moveBetween = (direction: MoveDirection): void => {
-    if (props.disabled) return
+    if (props.disabled || anyLoading.value) return
     const fromSide: PickListSide = direction === 'to-target' ? 'source' : 'target'
     const indexes = pickSelectedIndexes(fromSide)
     if (indexes.length === 0) return
@@ -123,7 +142,7 @@
   }
 
   const moveAll = (direction: MoveDirection): void => {
-    if (props.disabled) return
+    if (props.disabled || anyLoading.value) return
     const fromSide: PickListSide = direction === 'to-target' ? 'source' : 'target'
     const from = direction === 'to-target' ? [...sourceItems.value] : [...targetItems.value]
     if (from.length === 0) return
@@ -138,7 +157,7 @@
   }
 
   const reorder = (list: PickListSide, offset: -1 | 1): void => {
-    if (props.disabled || !props.reorderable) return
+    if (props.disabled || !props.reorderable || isListLoading(list)) return
     const indexes = pickSelectedIndexes(list)
     if (indexes.length === 0) return
 
@@ -174,7 +193,8 @@
     :data-testid="testId"
     :data-disabled="disabled || null"
     :data-reorderable="reorderable || null"
-    class="grid items-stretch gap-[var(--spacing-sm)] grid-cols-[1fr_auto_1fr] data-[disabled]:opacity-60"
+    :data-loading="loadingState"
+    class="grid items-stretch gap-[var(--spacing-sm)] grid-cols-1 md:grid-cols-[1fr_auto_1fr] data-[disabled]:opacity-60"
   >
     <section class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
       <h3
@@ -188,12 +208,23 @@
         aria-multiselectable="true"
         :aria-label="sourceHeader || undefined"
         :aria-disabled="disabled || undefined"
+        :aria-busy="sourceLoading || undefined"
         :data-testid="`${testId}__source-list`"
         class="m-0 flex min-h-[14rem] list-none flex-col gap-[var(--spacing-xxs)] overflow-auto rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xs)] data-[disabled]:bg-[var(--bg-disabled)]"
         :data-disabled="disabled || null"
+        :data-loading="sourceLoading || null"
       >
         <li
+          v-if="sourceLoading"
+          role="presentation"
+          :data-testid="`${testId}__source-loading`"
+          class="flex flex-1 items-center justify-center py-[var(--spacing-md)]"
+        >
+          <Spinner class="size-6 text-[var(--text-muted)]" />
+        </li>
+        <li
           v-for="(item, index) in sourceItems"
+          v-else
           :key="itemKey(item, index)"
           role="option"
           :aria-selected="isSelected('source', index)"
@@ -215,12 +246,12 @@
     </section>
 
     <div
-      class="flex flex-col items-center justify-center gap-[var(--spacing-xs)]"
+      class="flex flex-row items-center justify-center gap-[var(--spacing-xs)] md:flex-col"
       :data-testid="`${testId}__controls`"
     >
       <button
         type="button"
-        :disabled="disabled || !hasSelection('source')"
+        :disabled="disabled || anyLoading || !hasSelection('source')"
         aria-label="Move selected to target"
         :data-testid="`${testId}__move-to-target`"
         class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
@@ -242,7 +273,7 @@
       </button>
       <button
         type="button"
-        :disabled="disabled || sourceItems.length === 0"
+        :disabled="disabled || anyLoading || sourceItems.length === 0"
         aria-label="Move all to target"
         :data-testid="`${testId}__move-all-to-target`"
         class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
@@ -265,7 +296,7 @@
       </button>
       <button
         type="button"
-        :disabled="disabled || !hasSelection('target')"
+        :disabled="disabled || anyLoading || !hasSelection('target')"
         aria-label="Move selected to source"
         :data-testid="`${testId}__move-to-source`"
         class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
@@ -287,7 +318,7 @@
       </button>
       <button
         type="button"
-        :disabled="disabled || targetItems.length === 0"
+        :disabled="disabled || anyLoading || targetItems.length === 0"
         aria-label="Move all to source"
         :data-testid="`${testId}__move-all-to-source`"
         class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
@@ -325,7 +356,7 @@
         >
           <button
             type="button"
-            :disabled="disabled || !hasSelection('target')"
+            :disabled="disabled || targetLoading || !hasSelection('target')"
             aria-label="Move selected up"
             :data-testid="`${testId}__reorder-up`"
             class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
@@ -347,7 +378,7 @@
           </button>
           <button
             type="button"
-            :disabled="disabled || !hasSelection('target')"
+            :disabled="disabled || targetLoading || !hasSelection('target')"
             aria-label="Move selected down"
             :data-testid="`${testId}__reorder-down`"
             class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
@@ -374,12 +405,23 @@
         aria-multiselectable="true"
         :aria-label="targetHeader || undefined"
         :aria-disabled="disabled || undefined"
+        :aria-busy="targetLoading || undefined"
         :data-testid="`${testId}__target-list`"
         class="m-0 flex min-h-[14rem] list-none flex-col gap-[var(--spacing-xxs)] overflow-auto rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xs)] data-[disabled]:bg-[var(--bg-disabled)]"
         :data-disabled="disabled || null"
+        :data-loading="targetLoading || null"
       >
         <li
+          v-if="targetLoading"
+          role="presentation"
+          :data-testid="`${testId}__target-loading`"
+          class="flex flex-1 items-center justify-center py-[var(--spacing-md)]"
+        >
+          <Spinner class="size-6 text-[var(--text-muted)]" />
+        </li>
+        <li
           v-for="(item, index) in targetItems"
+          v-else
           :key="itemKey(item, index)"
           role="option"
           :aria-selected="isSelected('target', index)"

@@ -4,16 +4,16 @@ category: data
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 99e777f34e83355b73625e5cecba7c8ac182a1b3e972993e812cf3052a906117
+checksum: 29e207903b7b842bfd320df17353dbba199bbf60c3ff44628f725197ffa0021f
 created: 2026-06-25
-last_updated: 2026-06-25
+last_updated: 2026-06-27
 ---
 
 # Pick List — Component Spec
 
 ## Purpose
 
-Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with controls to move items between them and (optionally) reorder items within a list. Use it when the consumer needs to build an ordered subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate.
+Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with controls to move items between them and (optionally) reorder items within a list. Use it when the consumer needs to build an ordered subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones.
 
 ## Usage
 
@@ -54,6 +54,7 @@ const model = ref([
 | `targetHeader` | `string` | `''` | no | Heading text for the target list; also its accessible name. |
 | `disabled` | `boolean` | `false` | no | Disables all selection and move controls and applies disabled tokens. |
 | `reorderable` | `boolean` | `false` | no | Shows up/down reorder controls that move selected items within their own list. |
+| `loading` | `boolean \| 'source' \| 'target'` | `false` | no | Shows a spinner in place of a list's items and locks the move controls while data loads. `true` loads both lists; `'source'` or `'target'` loads only that side. |
 
 ## Events
 
@@ -73,14 +74,19 @@ const model = ref([
 
 ## States
 
-- Visual states: `default`, `hover` (option), `focus-visible` (option / control), `selected` (option), `disabled`
+- Visual states: `default`, `hover` (option), `focus-visible` (option / control), `selected` (option), `disabled`, `loading`
 - `data-disabled` mirrors the `disabled` prop
 - `data-reorderable` mirrors the `reorderable` prop
+- `data-loading` on the root reflects the loading prop (`source` | `target` | `both`)
+- A loading list renders a centered spinner instead of its options, sets `aria-busy="true"`, and its move/reorder controls are disabled
 - Each option carries `data-selected` mirroring its selection and `aria-selected`
 
 ## Motion & Animations
 
-_none_
+| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
+|---|---|---|---|
+| control hover/focus | `transition-colors duration-150 ease-out` on move/reorder buttons | inline (matches catalog) | `motion-reduce:transition-none` |
+| loading | the composed `Spinner` component rotates continuously inside a loading list | semantic (owned by `Spinner`) | the `Spinner` carries its own reduced-motion fallback |
 
 ## Tokens
 
@@ -115,13 +121,14 @@ _none_
 - Keyboard map: `Tab` moves between the two listboxes and the control column; within a listbox `ArrowUp`/`ArrowDown` move the active option, `Space`/`Enter` toggle its selection; move and reorder controls are activated with `Enter`/`Space`.
 - ARIA: each list is `role="listbox"` with `aria-label` from its header text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move/reorder control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
-- No motion in this component, so no `motion-reduce:*` is required.
+- A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
 - Touch target ≥40×40 px for every move/reorder control (medium icon-button height).
 
 ## Stories (Storybook)
 
 - Default
 - Disabled
+- Loading — justified: the `loading` prop swaps a list's items for a spinner and locks the move controls; the story documents both-sides and single-side loading, which no other story exercises.
 - WithReorder — justified: the `reorderable` prop adds an extra control column (up/down) that is hidden by default; the story documents the reorder controls and within-list ordering behavior in isolation.
 
 ## Constraints — DO NOT
