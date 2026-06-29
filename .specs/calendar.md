@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: f0d02b0e7f80a2351f94e3a7a83447c1e3e0f6c01ec9c76d8468c94941f25970
+checksum: b12599fa9619bc2e9b19e5e6011c7620099b2be7d92b9ff60e2ce8771bc425b1
 created: 2026-06-25
 last_updated: 2026-06-25
 ---
@@ -40,8 +40,8 @@ const selected = ref(new Date(2026, 9, 8))
 |---|---|---|---|---|
 | `modelValue` | `Date \| null \| CalendarRange` | `null` | no | Selected value for v-model. A `Date` (or null) in single mode; a `{ start, end }` range object in range mode. |
 | `mode` | `'single' \| 'range'` | `'single'` | no | Selection mode. Single picks one date; range picks a start and end date. |
-| `min` | `Date` | `undefined` | no | Earliest selectable date; earlier days render disabled. |
-| `max` | `Date` | `undefined` | no | Latest selectable date; later days render disabled. |
+| `min` | `Date \| undefined` | `undefined` | no | Earliest selectable date; earlier days render disabled. |
+| `max` | `Date \| undefined` | `undefined` | no | Latest selectable date; later days render disabled. |
 | `disabled` | `boolean` | `false` | no | Disables the whole grid and navigation, applying disabled tokens. |
 | `showHeader` | `boolean` | `true` | no | Shows the month/year label and previous/next month navigation. |
 
