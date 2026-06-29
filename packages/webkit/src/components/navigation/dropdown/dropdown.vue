@@ -249,7 +249,8 @@
       await nextTick()
       updatePosition()
       focusFirstOption()
-    }
+    },
+    { immediate: true }
   )
 
   watch(

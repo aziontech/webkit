@@ -87,7 +87,7 @@ const meta = {
     default: { control: false, table: { category: 'slots' } },
     top: { control: false, table: { category: 'slots' } },
     bottom: { control: false, table: { category: 'slots' } },
-    onUpdateOpen: {
+    'onUpdate:open': {
       action: 'update:open',
       description: 'Fires on every open/closed transition; supports `v-model:open`.',
       table: { category: 'events', type: { summary: 'boolean' } }
@@ -113,11 +113,10 @@ export default meta
 const Template = (args) => ({
   components,
   setup() {
-    const { onUpdateOpen, onSelect, ...props } = args
-    return { props, onUpdateOpen, onSelect }
+    return { args }
   },
   template: `
-    <Dropdown v-bind="props" @update:open="onUpdateOpen" @select="onSelect">
+    <Dropdown v-bind="args">
       <DropdownTrigger>
         <Button kind="outlined" label="Open menu" />
       </DropdownTrigger>
@@ -173,11 +172,10 @@ export const Groups = {
   render: (args) => ({
     components,
     setup() {
-      const { onUpdateOpen, onSelect, ...props } = args
-      return { props, onUpdateOpen, onSelect }
+      return { args }
     },
     template: `
-      <Dropdown v-bind="props" @update:open="onUpdateOpen" @select="onSelect">
+      <Dropdown v-bind="args">
         <DropdownTrigger>
           <Button kind="outlined" label="Open menu" />
         </DropdownTrigger>
@@ -229,11 +227,10 @@ export const States = {
   render: (args) => ({
     components,
     setup() {
-      const { onUpdateOpen, onSelect, ...props } = args
-      return { props, onUpdateOpen, onSelect }
+      return { args }
     },
     template: `
-      <Dropdown v-bind="props" :open="true" @update:open="onUpdateOpen" @select="onSelect">
+      <Dropdown v-bind="args" :open="true">
         <DropdownTrigger>
           <Button kind="outlined" label="Open menu" />
         </DropdownTrigger>
