@@ -1,5 +1,6 @@
+import { ref } from 'vue'
+
 import Checkbox from '@aziontech/webkit/checkbox'
-import { ref, watch } from 'vue'
 
 /** @type {import('@storybook/vue3').Meta<typeof Checkbox>} */
 const meta = {
@@ -7,7 +8,7 @@ const meta = {
   component: Checkbox,
   tags: ['autodocs'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     backgrounds: { default: 'dark' },
     a11y: {
       config: {
@@ -19,44 +20,30 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Square checkbox control only — the box, the native input, and the check glyph, with no label or description chrome. Use it when you compose your own label, or reach for `FieldCheckbox` / `FieldCheckboxBlock` when you want built-in text. Supports a single boolean (`binary`) or collecting a `value` into an array model.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import { ref } from 'vue'",
-          "import Checkbox from '@aziontech/webkit/checkbox'",
-          '',
-          'const accepted = ref(false)',
-          '</script>',
-          '',
-          '<template>',
-          '  <label class="inline-flex items-center gap-[var(--spacing-2)]">',
-          '    <Checkbox v-model="accepted" binary input-id="accept-terms" />',
-          '    Accept terms',
-          '  </label>',
-          '</template>',
-          '```'
-        ].join('\n')
+        component:
+          'Control only — the square checkbox input with no label or description. Pair with an external label or use FieldCheckbox / FieldCheckboxBlock for built-in text.'
       }
     }
   },
   argTypes: {
     modelValue: {
       control: 'boolean',
-      description: 'Bound value: a boolean in binary mode, otherwise the array/value the control reflects.',
+      description: 'Two-way bound value.',
       table: { type: { summary: 'unknown' }, category: 'props' }
     },
     value: {
       control: false,
-      description: "This checkbox's value, added to or removed from the model array when not binary.",
+      description: 'Identifier for this checkbox in non-binary mode.',
       table: { type: { summary: 'unknown' }, category: 'props' }
     },
     binary: {
       control: 'boolean',
-      description: 'Toggles a single boolean instead of collecting value into an array.',
+      description: 'When true, the checkbox toggles modelValue as a boolean.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Renders the indeterminate visual (horizontal bar). Does not affect modelValue.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
     disabled: {
@@ -66,12 +53,12 @@ const meta = {
     },
     readonly: {
       control: 'boolean',
-      description: 'Prevents changes while the control stays focusable.',
+      description: 'Marks the field read-only.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
     inputId: {
       control: 'text',
-      description: 'Forwarded to the native input id; pair with an external label for attribute.',
+      description: 'Forwarded to the inner input id for label association.',
       table: { type: { summary: 'string' }, category: 'props' }
     },
     name: {
@@ -81,68 +68,118 @@ const meta = {
     },
     tabindex: {
       control: 'number',
-      description: 'Tab order for the native input.',
-      table: { type: { summary: 'number | undefined' }, category: 'props' }
+      description: 'Forwarded to the inner input tabindex.',
+      table: { type: { summary: 'number' }, category: 'props' }
     },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
-      description: 'Emitted on toggle; payload is the next boolean (binary) or the updated value array.',
+      description: 'Emitted when the value changes.',
       table: { type: { summary: 'unknown' }, category: 'events' }
     }
-  },
-  args: {
-    binary: true,
-    disabled: false,
-    readonly: false
   }
 }
 
 export default meta
 
-const Template = (args) => ({
-  components: { Checkbox },
-  setup() {
-    const value = ref(args.modelValue ?? false)
-
-    watch(
-      () => args.modelValue,
-      (next) => {
-        value.value = next ?? false
-      }
-    )
-
-    const onUpdate = (next) => {
-      value.value = next
-      args['onUpdate:modelValue']?.(next)
-    }
-
-    return { args, value, onUpdate }
-  },
-  template: '<Checkbox v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
-})
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Checkbox>} */
 export const Default = {
-  render: Template,
+  args: {
+    binary: true,
+    indeterminate: false,
+    disabled: false,
+    readonly: false
+  },
+  render: (args) => ({
+    components: { Checkbox },
+    setup() {
+      const value = ref(false)
+      return { args, value }
+    },
+    template: `
+      <Checkbox
+        v-bind="args"
+        v-model="value"
+        input-id="webkit-checkbox-default"
+        aria-label="Toggle option"
+      />
+    `
+  }),
   parameters: {
-    docs: { description: { story: 'Binary control only — associate copy via an external label or FieldCheckbox.' } }
+    docs: {
+      description: {
+        story: 'Binary control only — associate copy via an external label or FieldCheckbox.'
+      }
+    }
+  }
+}
+
+export const Indeterminate = {
+  args: {
+    binary: true,
+    indeterminate: true,
+    disabled: false,
+    readonly: false
+  },
+  render: (args) => ({
+    components: { Checkbox },
+    setup() {
+      const value = ref(false)
+      return { args, value }
+    },
+    template: `
+      <Checkbox
+        v-bind="args"
+        v-model="value"
+        input-id="webkit-checkbox-indeterminate"
+        aria-label="Some options selected"
+      />
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Tri-state visual. The parent owns the indeterminate logic (typical pattern: "select all" header when some rows are selected). Sets `aria-checked="mixed"` and the native input.indeterminate DOM property.'
+      }
+    }
   }
 }
 
 export const Disabled = {
+  args: {
+    binary: true,
+    indeterminate: false,
+    disabled: true,
+    readonly: false
+  },
   render: (args) => ({
     components: { Checkbox },
     setup() {
-      return { args }
+      const checked = ref(true)
+      const unchecked = ref(false)
+      return { args, checked, unchecked }
     },
     template: `
       <div class="flex items-center gap-[var(--spacing-4)]">
-        <Checkbox v-bind="args" :model-value="true" disabled aria-label="Disabled checked" />
-        <Checkbox v-bind="args" :model-value="false" disabled aria-label="Disabled unchecked" />
+        <Checkbox
+          v-bind="args"
+          v-model="checked"
+          input-id="webkit-checkbox-disabled-on"
+          aria-label="Disabled checked"
+        />
+        <Checkbox
+          v-bind="args"
+          v-model="unchecked"
+          input-id="webkit-checkbox-disabled-off"
+          aria-label="Disabled unchecked"
+        />
       </div>
     `
   }),
   parameters: {
-    docs: { description: { story: 'Disabled control in both checked and unchecked states.' } }
+    docs: {
+      description: {
+        story: 'Disabled checked and unchecked controls without label chrome.'
+      }
+    }
   }
 }
