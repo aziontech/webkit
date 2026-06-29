@@ -1,5 +1,5 @@
 ---
-name: chips
+name: chip
 category: inputs
 structure: monolithic
 status: approved
@@ -7,12 +7,12 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 4595a20809f894c0605ca0655da74214f8768456087d7bf5cafdf19064284a3c
+checksum: 7ad0a091cf8128450ec31f287c8ca500d949583d475198d1a113775b24879375
 created: 2026-06-23
 last_updated: 2026-06-26
 ---
 
-# Chips — Component Spec
+# Chip — Component Spec
 
 ## Purpose
 
@@ -22,7 +22,7 @@ A Chip is a compact, self-contained token that labels a discrete value the user 
 
 ```vue
 <script setup>
-import Chip from '@aziontech/webkit/chips'
+import Chip from '@aziontech/webkit/chip'
 </script>
 
 <template>
