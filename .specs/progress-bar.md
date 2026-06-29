@@ -1,33 +1,36 @@
 ---
-name: skeleton
+name: progress-bar
 category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
+checksum: 1a7bc9bdc211ad0591a48082474922afe6e508a9b620c45ac30fe79ca782c6d7
 figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
-  node_id: 479:881
-checksum: 5ebe624103f06c4dcdc3fac32789b74cc7fd48142bd277515151e8c6d44e5423
-created: 2026-06-23
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
+  node_id: 479:870
+created: 2026-06-26
 last_updated: 2026-06-26
 ---
 
-# Skeleton — Component Spec
+# Progress Bar — Component Spec
 
 ## Purpose
 
-A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons).
+Communicates the progress of an ongoing task as a horizontal bar. Use it for a
+determinate value within a range (`value` / `max`) or, when progress can't be
+measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder
+geometry) or `status-indicator` (discrete state), it expresses a continuous
+quantity.
 
 ## Usage
 
 ```vue
 <script setup>
-import Skeleton from '@aziontech/webkit/skeleton'
+import ProgressBar from '@aziontech/webkit/progress-bar'
 </script>
 
 <template>
-  <Skeleton width="240px" height="100px" />
-  <Skeleton kind="circle" width="100px" height="100px" />
+  <ProgressBar :value="60" />
 </template>
 ```
 
@@ -35,10 +38,11 @@ import Skeleton from '@aziontech/webkit/skeleton'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `'shape' \| 'circle'` | `'shape'` | no | Geometry: a rounded rectangular block (`shape`) or a circle. |
-| `width` | `string` | `'100%'` | no | CSS width (any length). |
-| `height` | `string` | `'1rem'` | no | CSS height (any length); for a circle, set equal to `width`. |
-| `animated` | `boolean` | `true` | no | Shimmer while loading; suppressed under reduced motion. |
+| `value` | `number` | `0` | no | Current progress, relative to `max`. |
+| `max` | `number` | `100` | no | Upper bound; percentage = `value / max * 100`. |
+| `shape` | `'rounded' \| 'flat'` | `'rounded'` | no | Track and fill corner-radius variant. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Bar height token. |
+| `indeterminate` | `boolean` | `false` | no | Loading state; animates a sliding segment and ignores `value`. |
 
 ## Events
 
@@ -46,46 +50,56 @@ import Skeleton from '@aziontech/webkit/skeleton'
 
 ## Slots
 
-| _none_ | — | Leaf placeholder; renders no content. |
+| _none_ | — | — |
 
 ## States
 
-- Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors the `kind` prop (`shape` | `circle`)
-- `data-animated` is present when `animated` is true (drives the shimmer)
+- Visual states: `default`, `indeterminate`
+- `data-shape` mirrors the `shape` prop: `rounded` | `flat`
+- `data-size` mirrors the `size` prop: `small` | `medium` | `large`
+- `data-indeterminate` is present while `indeterminate` is `true`
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| while loading (`animated`) | `animate-shimmer` (linear gradient sweep over the fill) | `--animate-shimmer` (`animate.js`) + `@keyframes shimmer` (`semantic/animations.js`) | gated behind `motion-safe:` (no sweep) + `motion-reduce:animate-none` (static) |
+| `value` change (determinate) | `transition-[width] duration-moderate-02 ease-productive-entrance` (width morph) | duration/curve aliases from `animate.js` (240ms · productive-entrance) | `motion-reduce:transition-none` |
+| `indeterminate` (loading sweep) | `animate-progress-indeterminate` + `animate-progress-indeterminate-short` (two offset bars sweeping across the track via `inset-inline-start`/`inset-inline-end`) | semantic (2.1s · infinite) | `motion-reduce:animate-none` (static fill) |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| shape radius (`shape`) | `var(--shape-elements)` |
+| fill | `var(--primary)` |
+| shape (rounded) | `var(--shape-elements)` |
+| shape (flat) | `var(--shape-flat)` |
+
+<!-- Height is a sizing utility, not a DESIGN.md token: small/medium/large → `h-2`/`h-3`/`h-4`
+     (8/12/16px from `height.js`), per DESIGN.md § Sizing. The track surface is recorded in Theme gaps. -->
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `--bg-surface-overlay` (skeleton fill, #4D4D4D dark / #FAFAFA light) | `bg-[var(--bg-surface-overlay)]` (real token, not yet in DESIGN.md) | `TODO: document --bg-surface-overlay in DESIGN.md` |
-| shimmer animation | `animate-shimmer` (`--animate-shimmer` preset in `animate.js` + `@keyframes shimmer` in `semantic/animations.js`) | `TODO: document --animate-shimmer in DESIGN.md § Animations` |
+| `--bg-surface-raised` (track) | `var(--bg-surface-raised)` | `TODO: document --bg-surface-raised in .claude/docs/DESIGN.md § Colors` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The skeleton is decorative: `aria-hidden="true"` so assistive tech skips it. The loading status is conveyed by the surrounding region (e.g. `aria-busy="true"` on the container the consumer owns), not by the placeholder itself.
-- Not focusable, not interactive: no keyboard map, no focus ring.
-- The shimmer is gated behind `motion-safe:` and `motion-reduce:animate-none` suppresses it for users who prefer reduced motion (static flat fill).
+- Non-interactive: the bar is not focusable and takes no keyboard input.
+- ARIA: root uses `role="progressbar"`. Determinate sets `aria-valuemin="0"`, `aria-valuemax="<max>"`, `aria-valuenow="<value>"`; indeterminate omits `aria-valuenow` and sets `aria-busy="true"`.
+- Contrast ≥3:1 between the fill (`var(--primary)`) and the track (`var(--bg-surface-raised)`).
+- `motion-reduce:transition-none` on the determinate width morph and `motion-reduce:animate-none` on the indeterminate animation (it falls back to a static fill under reduced motion).
 
 ## Stories (Storybook)
 
-This component has no `size` axis, so the canonical Sizes story does not apply.
+Composite stories render every variant of an axis side-by-side in a single frame;
+the `Indeterminate` story is the state story for the `indeterminate` boolean.
 
 - Default
-- Types — composite story rendering both `kind` values (`shape`, `circle`) side-by-side.
-- Static — `animated: false`; demonstrates the non-shimmering placeholder. Justified because `animated` is a distinct state of the component and the shimmer cannot be seen in a static screenshot.
+- Shapes — composite story rendering `rounded` and `flat` side-by-side (the component's variant axis; stands in for `Types`).
+- Sizes — composite story rendering `small`, `medium`, `large` side-by-side.
+- Indeterminate — state story for the `indeterminate` prop.
+- Simulation — interactive story: a button advances `value` in steps so the reviewer can see the fill's width transition animate on each `value` change. Justified because this motion (the determinate `transition-[width]`) only manifests on a live value change and cannot be shown by a static frame.
 
 ## Constraints — DO NOT
 
