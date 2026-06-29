@@ -38,7 +38,7 @@
     role="banner"
     :aria-label="ariaLabel"
     :data-testid="testId"
-    class="flex h-14 w-full min-w-0 shrink-0 items-center gap-[var(--spacing-sm)] border-b border-[var(--border-muted)] bg-[var(--bg-surface)] pl-[var(--spacing-md)] pr-[var(--spacing-xxl)]"
+    class="flex h-14 w-full min-w-0 shrink-0 items-center gap-[var(--spacing-md)] border-b border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)]"
   >
     <slot />
   </header>

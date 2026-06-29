@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: b85ea39c250c1b4be764b637097684e6055cba30118a75d6ce0fc96619cbde98
+checksum: 1f6e19b3c0419970b778bd61a4316627e13e43607aea53264f41d45acce8642f
 created: 2026-05-22
 last_updated: 2026-06-25
 ---
