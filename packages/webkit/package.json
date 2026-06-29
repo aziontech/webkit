@@ -124,6 +124,7 @@
     "./dropdown": "./src/components/inputs/dropdown/dropdown.vue",
     "./select": "./src/components/inputs/select/index.ts",
     "./multi-select": "./src/components/inputs/multi-select/index.ts",
+    "./multi-select-root": "./src/components/inputs/multi-select/multi-select.vue",
     "./multi-select-trigger": "./src/components/inputs/multi-select/multi-select-trigger/multi-select-trigger.vue",
     "./multi-select-content": "./src/components/inputs/multi-select/multi-select-content/multi-select-content.vue",
     "./multi-select-group": "./src/components/inputs/multi-select/multi-select-group/multi-select-group.vue",
