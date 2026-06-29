@@ -12,7 +12,7 @@ packages/webkit/src/
 │   │   ├── content/     avatar, card-box, card-pricing, currency, tag
 │   │   ├── data/        (empty, ready to receive)
 │   │   ├── feedback/    message, status-indicator
-│   │   ├── inputs/      checkbox, dropdown, input-switch, input-text, radio-button
+│   │   ├── inputs/      checkbox, dropdown, switch, input-text, radio-button
 │   │   ├── layout/      global-header, scroll-area, sidebar
 │   │   ├── navigation/  link, menu-item, navigation-menu, tab-view
 │   │   ├── overlay/     dialog, drawer, panel
