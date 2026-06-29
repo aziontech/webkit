@@ -7,16 +7,16 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 9ced434dd668ba03609d2a2fa6932edd8abb17ad07e1e7d46e9f2428f8d973f8
+checksum: 29f3a5abd7a8e37062a7624b0a0f70f49f3fdbe1b1f7b1ddd97bf03baf2c2bd3
 created: 2026-06-26
-last_updated: 2026-06-26
+last_updated: 2026-06-29
 ---
 
 # Dropdown — Component Spec
 
 ## Purpose
 
-Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with leading/trailing/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`.
+Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`.
 
 ## Usage
 
@@ -66,23 +66,23 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 - `dropdown-group/dropdown-group.vue` — labeled section. Renders an uppercase `label` row (`text-overline-sm`) above its default slot and a top divider when it is not the first group inside the panel.
   - Props: `label: string` default `''` — uppercase section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
-  - Slots: `default` — one or more `<Dropdown.Option>`.
-- `dropdown-option/dropdown-option.vue` — selectable row. Renders the leading slot, the label, the trailing slot, and an optional `command` hint. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`.
+  - Slots: `default` — one or more `<Dropdown.Option>`; `top` — inline region rendered between the group label and the options (e.g. a per-section search or description); `bottom` — inline region rendered after the options (e.g. a "see all" link).
+- `dropdown-option/dropdown-option.vue` — selectable row. Renders the left slot, the label, the right slot, and an optional `command` hint. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`.
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
-    - `command: string` default `''` — optional keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`). Mutually exclusive with the `trailing` slot.
+    - `command: string` default `''` — keyboard-shortcut hint rendered on the right side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). While the panel is open the root listens for `window` `keydown`, matches the shortcut against every mounted option, and emits `select` for the matching option (preventing the browser default). Shortcuts are active only while the panel is open, since options are only mounted then. Mutually exclusive with the `right` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as currently selected (background + checkmark).
   - Events: _none_ (root emits `select`).
-  - Slots: `default` (override of the `label` prop, for rich label content), `leading` (leading icon / avatar), `trailing` (trailing icon / badge; mutually exclusive with `command`).
+  - Slots: `default` (override of the `label` prop, for rich label content), `left` (left icon / avatar), `right` (right icon / badge; mutually exclusive with `command`).
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
-| `placement` | `'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | no | Where the panel opens relative to the trigger. |
+| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | no | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
 | `offset` | `number` | `4` | no | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | no | Prevents the trigger from opening the panel and applies disabled tokens. |
 
@@ -91,7 +91,7 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 | Event | Payload | Notes |
 |---|---|---|
 | `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. |
-| `select` | `{ value: string \| number; event: MouseEvent \| KeyboardEvent }` | Fires when an enabled option is activated. The panel closes automatically. |
+| `select` | `{ value: string \| number; event: MouseEvent \| KeyboardEvent }` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
 
 ## Slots
 
@@ -107,7 +107,8 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 - `data-state` values (root + trigger): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
-- `data-placement` on the panel mirrors the `placement` prop
+- `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
+- `data-placement` on the panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 
 ## Motion & Animations
 
@@ -161,15 +162,15 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 
 Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/Button.stories.js`. Composite stories render every variant of one axis side-by-side in a single frame; state stories use the reusable `Template` with an args delta.
 
-- Default — one trigger, one group, six options, no leading/trailing affordances.
+- Default — one trigger, one group, six options, no left/right affordances.
 - Groups — composite story rendering two `<Dropdown.Group>` with labels and a divider between them; required because grouping is the central anatomy of this component and is not covered by `Default`.
 - States — composite story rendering one panel with options in each option state side-by-side: `default`, `hover` (simulated via `data-state`), `selected`, `disabled`. Required because `Dropdown.Option` has no `kind` / `size` axis but a state axis that is the component's visual identity.
-- Disabled — root `disabled` prop demo; trigger refuses to open.
-- Placements — composite story rendering all four `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a 4-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
-- OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `leading` + `trailing` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
+- Placements — composite story rendering all four explicit `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
+- AutoPlacement — composite story demonstrating `placement="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the corner with the most available space. Required because `'auto'` is the only `placement` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
+- OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `left` + `right` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
 - WithTopAndBottomSlots — single panel forced open showing the root `top` and `bottom` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
+- GroupsWithTopAndBottomSlots — panel forced open with two `<Dropdown.Group>` each using its own `top` (per-section caption) and `bottom` (per-section action) slots. Required because the group-level `top`/`bottom` are public API on `Dropdown.Group` and behave differently from the root slots (inline, per-section — not sticky).
 - CustomTriggers — composite story showing the abstract `<Dropdown.Trigger>` wrapping different elements (Button, IconButton, plain text). Required because the spec mandates the trigger is abstract and the consumer chooses the inner element; the existing stories only show a `Button`.
-- Playground — controls-driven story exposing every root arg (`open`, `placement`, `offset`, `disabled`) so QA can exercise the full prop surface from Storybook controls. Required because none of the named-state stories above expose all props at once.
 
 ## Constraints — DO NOT
 

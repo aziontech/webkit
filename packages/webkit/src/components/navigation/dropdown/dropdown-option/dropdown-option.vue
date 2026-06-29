@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, onBeforeUnmount, useAttrs, watch } from 'vue'
 
   import { useDropdownContext } from '../injection-key'
 
@@ -10,8 +10,8 @@
 
   defineSlots<{
     default(): unknown
-    leading(): unknown
-    trailing(): unknown
+    left(): unknown
+    right(): unknown
   }>()
 
   interface Props {
@@ -19,7 +19,11 @@
     value: string | number
     /** Plain-text label; falls back to the default slot when omitted. */
     label?: string
-    /** Optional keyboard-shortcut hint rendered on the trailing side. Mutually exclusive with the trailing slot. */
+    /**
+     * Keyboard-shortcut hint rendered on the right side. The root dropdown
+     * registers a window listener that matches the shortcut and emits
+     * `select` for this option. Mutually exclusive with the right slot.
+     */
     command?: string
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
@@ -58,6 +62,24 @@
       activate(event)
     }
   }
+
+  let unregisterCommand: (() => void) | null = null
+
+  watch(
+    () => [props.command, props.disabled] as const,
+    ([command, disabled]) => {
+      unregisterCommand?.()
+      unregisterCommand = null
+      if (command && !disabled) {
+        unregisterCommand = ctx.registerCommand(command, (event) => activate(event))
+      }
+    },
+    { immediate: true }
+  )
+
+  onBeforeUnmount(() => {
+    unregisterCommand?.()
+  })
 </script>
 
 <template>
@@ -75,11 +97,11 @@
     @keydown="onKeydown"
   >
     <span
-      v-if="$slots['leading']"
-      :data-testid="`${testId}__leading`"
+      v-if="$slots['left']"
+      :data-testid="`${testId}__left`"
       class="flex shrink-0 items-center"
     >
-      <slot name="leading" />
+      <slot name="left" />
     </span>
 
     <span class="flex-1 truncate text-left">
@@ -87,11 +109,11 @@
     </span>
 
     <span
-      v-if="$slots['trailing'] && !hasCommand"
-      :data-testid="`${testId}__trailing`"
+      v-if="$slots['right'] && !hasCommand"
+      :data-testid="`${testId}__right`"
       class="flex shrink-0 items-center"
     >
-      <slot name="trailing" />
+      <slot name="right" />
     </span>
 
     <span

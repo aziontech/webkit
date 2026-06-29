@@ -12,7 +12,12 @@
   } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
-  import type { DropdownOptionValue, DropdownPlacement } from './injection-key'
+  import { usePlacement } from '../../../composables/use-placement'
+  import type {
+    DropdownOptionValue,
+    DropdownPlacement,
+    DropdownPlacementInput
+  } from './injection-key'
   import { DropdownInjectionKey } from './injection-key'
 
   defineOptions({
@@ -29,8 +34,8 @@
   interface Props {
     /** Controlled open state. Use with v-model:open or update:open. When omitted, the component is uncontrolled. */
     open?: boolean
-    /** Where the panel opens relative to the trigger. */
-    placement?: DropdownPlacement
+    /** Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time. */
+    placement?: DropdownPlacementInput
     /** Pixel gap between the trigger and the panel. */
     offset?: number
     /** Prevents the trigger from opening the panel and applies disabled tokens. */
@@ -62,7 +67,6 @@
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
   const panelRef = ref<globalThis.HTMLElement | null>(null)
   const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
-  const panelStyle = ref<Record<string, string>>({})
   const groupCount = ref(0)
 
   const testId = computed(
@@ -79,73 +83,28 @@
     defaultProp: false,
     onChange: (value) => {
       openModel.value = value
-      emit('update:open', value)
     }
   })
 
   const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
   const placementRef = computed(() => props.placement)
+  const offsetRef = computed(() => props.offset)
+
+  const { resolvedPlacement, panelStyle } = usePlacement({
+    triggerRef,
+    panelRef,
+    isOpen: isOpenRef,
+    placement: placementRef,
+    offset: offsetRef,
+    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
+  })
+
+  const resolvedPlacementRef = computed(() => resolvedPlacement.value as DropdownPlacement)
 
   function setOpen(value: boolean) {
     if (value && props.disabled) return
     isOpenState.set(value)
-  }
-
-  function getPopupOrigin(side: DropdownPlacement): string {
-    if (side === 'top-start') return 'bottom left'
-    if (side === 'top-end') return 'bottom right'
-    if (side === 'bottom-end') return 'top right'
-    return 'top left'
-  }
-
-  function updatePosition() {
-    const trigger = triggerRef.value
-    const panel = panelRef.value
-    if (!trigger || !panel) {
-      panelStyle.value = {}
-      return
-    }
-
-    const triggerRect = trigger.getBoundingClientRect()
-    const panelRect = panel.getBoundingClientRect()
-    const gap = props.offset
-    const collisionPadding = 8
-    const viewport = {
-      width: globalThis.innerWidth ?? 0,
-      height: globalThis.innerHeight ?? 0
-    }
-
-    let top = 0
-    let left = 0
-    const side = props.placement
-
-    if (side === 'bottom-start') {
-      top = triggerRect.bottom + gap
-      left = triggerRect.left
-    } else if (side === 'bottom-end') {
-      top = triggerRect.bottom + gap
-      left = triggerRect.right - panelRect.width
-    } else if (side === 'top-start') {
-      top = triggerRect.top - panelRect.height - gap
-      left = triggerRect.left
-    } else {
-      top = triggerRect.top - panelRect.height - gap
-      left = triggerRect.right - panelRect.width
-    }
-
-    const maxLeft = viewport.width - panelRect.width - collisionPadding
-    const maxTop = viewport.height - panelRect.height - collisionPadding
-    left = Math.min(Math.max(left, collisionPadding), Math.max(collisionPadding, maxLeft))
-    top = Math.min(Math.max(top, collisionPadding), Math.max(collisionPadding, maxTop))
-
-    panelStyle.value = {
-      position: 'fixed',
-      top: `${top}px`,
-      left: `${left}px`,
-      zIndex: '1100',
-      '--popup-origin': getPopupOrigin(side)
-    }
   }
 
   /** Returns the list of focusable, enabled option elements inside the panel, in DOM order. */
@@ -160,12 +119,12 @@
 
   function focusFirstOption() {
     const options = getEnabledOptions()
-    if (options.length > 0) options[0].focus()
+    if (options.length > 0) options[0].focus({ preventScroll: true })
   }
 
   function focusLastOption() {
     const options = getEnabledOptions()
-    if (options.length > 0) options[options.length - 1].focus()
+    if (options.length > 0) options[options.length - 1].focus({ preventScroll: true })
   }
 
   function focusNextOption() {
@@ -174,7 +133,7 @@
     const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
     const index = active ? options.indexOf(active) : -1
     const next = options[(index + 1) % options.length]
-    next.focus()
+    next.focus({ preventScroll: true })
   }
 
   function focusPrevOption() {
@@ -183,20 +142,23 @@
     const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
     const index = active ? options.indexOf(active) : -1
     const prev = options[(index <= 0 ? options.length : index) - 1]
-    prev.focus()
+    prev.focus({ preventScroll: true })
   }
 
   function focusTrigger() {
-    triggerRef.value?.focus()
+    triggerRef.value?.focus({ preventScroll: true })
   }
 
   function selectOption(
     value: DropdownOptionValue,
     event: globalThis.MouseEvent | globalThis.KeyboardEvent
   ) {
+    const wasOpen = isOpenState.value
     emit('select', { value, event })
-    setOpen(false)
-    focusTrigger()
+    if (wasOpen) {
+      setOpen(false)
+      focusTrigger()
+    }
   }
 
   function onPanelKeydown(event: globalThis.KeyboardEvent) {
@@ -221,6 +183,74 @@
     }
   }
 
+  interface ParsedShortcut {
+    meta: boolean
+    ctrl: boolean
+    shift: boolean
+    alt: boolean
+    key: string
+  }
+
+  function parseCommand(command: string): ParsedShortcut | null {
+    let meta = false
+    let ctrl = false
+    let shift = false
+    let alt = false
+    let key = ''
+    const tokens = command.split(/\s*\+\s*/).flatMap((part) => Array.from(part))
+    for (const token of tokens) {
+      const lower = token.toLowerCase()
+      if (token === '⌘' || lower === 'cmd' || lower === 'meta') meta = true
+      else if (token === '⌃' || lower === 'ctrl' || lower === 'control') ctrl = true
+      else if (token === '⇧' || lower === 'shift') shift = true
+      else if (token === '⌥' || lower === 'alt' || lower === 'option' || lower === 'opt') alt = true
+      else key += token
+    }
+    if (!key) return null
+    return { meta, ctrl, shift, alt, key: key.toLowerCase() }
+  }
+
+  function matchesShortcut(event: globalThis.KeyboardEvent, parsed: ParsedShortcut): boolean {
+    return (
+      event.metaKey === parsed.meta &&
+      event.ctrlKey === parsed.ctrl &&
+      event.shiftKey === parsed.shift &&
+      event.altKey === parsed.alt &&
+      event.key.toLowerCase() === parsed.key
+    )
+  }
+
+  interface CommandEntry {
+    parsed: ParsedShortcut
+    activate: (event: globalThis.KeyboardEvent) => void
+  }
+
+  const commands = new Set<CommandEntry>()
+
+  function registerCommand(
+    command: string,
+    activate: (event: globalThis.KeyboardEvent) => void
+  ): () => void {
+    const parsed = parseCommand(command)
+    if (!parsed) return () => {}
+    const entry: CommandEntry = { parsed, activate }
+    commands.add(entry)
+    return () => {
+      commands.delete(entry)
+    }
+  }
+
+  function onWindowKeydown(event: globalThis.KeyboardEvent) {
+    if (props.disabled) return
+    for (const { parsed, activate } of commands) {
+      if (matchesShortcut(event, parsed)) {
+        event.preventDefault()
+        activate(event)
+        return
+      }
+    }
+  }
+
   function onDocumentMousedown(event: globalThis.MouseEvent) {
     if (!isOpenState.value) return
     const target = event.target as globalThis.Node | null
@@ -230,48 +260,23 @@
     setOpen(false)
   }
 
-  function onWindowResize() {
-    if (!isOpenState.value) return
-    updatePosition()
-  }
-
-  function onDocumentScroll() {
-    if (!isOpenState.value) return
-    updatePosition()
-  }
-
   watch(
     () => isOpenState.value,
     async (open) => {
       if (!open) return
       await nextTick()
-      updatePosition()
-      await nextTick()
-      updatePosition()
       focusFirstOption()
-    },
-    { immediate: true }
-  )
-
-  watch(
-    () => props.placement,
-    () => {
-      if (isOpenState.value) {
-        nextTick(() => updatePosition())
-      }
     }
   )
 
   onMounted(() => {
     globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-    globalThis.window?.addEventListener('resize', onWindowResize)
-    globalThis.document?.addEventListener('scroll', onDocumentScroll, true)
+    globalThis.window?.addEventListener('keydown', onWindowKeydown)
   })
 
   onBeforeUnmount(() => {
     globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-    globalThis.window?.removeEventListener('resize', onWindowResize)
-    globalThis.document?.removeEventListener('scroll', onDocumentScroll, true)
+    globalThis.window?.removeEventListener('keydown', onWindowKeydown)
   })
 
   function registerGroup(): number {
@@ -284,7 +289,7 @@
     testId: testId.value,
     isOpen: isOpenRef,
     disabled: disabledRef,
-    placement: placementRef,
+    placement: resolvedPlacementRef,
     triggerId,
     panelId,
     triggerRef,
@@ -293,6 +298,7 @@
     setOpen,
     selectOption,
     registerGroup,
+    registerCommand,
     focusFirstOption,
     focusLastOption,
     focusNextOption,
@@ -324,9 +330,10 @@
           role="menu"
           tabindex="-1"
           :aria-labelledby="triggerId"
+          :aria-hidden="!isOpenRef || undefined"
           :data-testid="`${testId}__panel`"
           :data-state="isOpenRef ? 'open' : 'closed'"
-          :data-placement="placement"
+          :data-placement="resolvedPlacementRef"
           :style="panelStyle"
           class="flex min-w-[var(--container-3xs)] max-w-[var(--container-2xs)] flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xxs)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"

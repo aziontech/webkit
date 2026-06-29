@@ -10,6 +10,8 @@
 
   defineSlots<{
     default(): unknown
+    top(): unknown
+    bottom(): unknown
   }>()
 
   interface Props {
@@ -58,7 +60,23 @@
         {{ label }}
       </div>
 
+      <div
+        v-if="$slots['top']"
+        :data-testid="`${testId}__top`"
+        class="px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
+      >
+        <slot name="top" />
+      </div>
+
       <slot />
+
+      <div
+        v-if="$slots['bottom']"
+        :data-testid="`${testId}__bottom`"
+        class="px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
+      >
+        <slot name="bottom" />
+      </div>
     </div>
   </Teleport>
 </template>

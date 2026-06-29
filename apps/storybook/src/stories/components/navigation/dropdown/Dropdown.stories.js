@@ -3,6 +3,7 @@ import Dropdown, {
   DropdownOption,
   DropdownTrigger
 } from '@aziontech/webkit/dropdown'
+import Avatar from '@aziontech/webkit/avatar'
 import Button from '@aziontech/webkit/button'
 import IconButton from '@aziontech/webkit/icon-button'
 import InputText from '@aziontech/webkit/input-text'
@@ -13,6 +14,7 @@ const components = {
   DropdownTrigger,
   DropdownGroup,
   DropdownOption,
+  Avatar,
   Button,
   IconButton,
   InputText,
@@ -41,7 +43,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires aria-haspopup/aria-expanded/aria-controls; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with leading/trailing/command affordances.'
+          'Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires aria-haspopup/aria-expanded/aria-controls; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances.'
       }
     }
   },
@@ -58,11 +60,12 @@ const meta = {
     },
     placement: {
       control: 'select',
-      options: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
-      description: 'Where the panel opens relative to the trigger.',
+      options: ['bottom-start', 'bottom-end', 'top-start', 'top-end', 'auto'],
+      description:
+        "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time.",
       table: {
         category: 'props',
-        type: { summary: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'" },
+        type: { summary: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' | 'auto'" },
         defaultValue: { summary: "'bottom-start'" }
       }
     },
@@ -118,7 +121,7 @@ const Template = (args) => ({
   template: `
     <Dropdown v-bind="args">
       <DropdownTrigger>
-        <Button kind="outlined" label="Open menu" />
+        <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
       </DropdownTrigger>
       <DropdownGroup>
         <DropdownOption value="profile" label="Profile" />
@@ -139,18 +142,18 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Default dropdown with a single unlabeled group of six options and no leading/trailing affordances.'
+          'Default dropdown with a single unlabeled group of six options and no left/right affordances.'
       },
       source: {
         code: `<script setup>
 import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
-import Button from '@aziontech/webkit/button'
+import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
   <Dropdown>
     <DropdownTrigger>
-      <Button kind="outlined" label="Open menu" />
+      <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
     </DropdownTrigger>
     <DropdownGroup>
       <DropdownOption value="profile" label="Profile" />
@@ -177,7 +180,7 @@ export const Groups = {
     template: `
       <Dropdown v-bind="args">
         <DropdownTrigger>
-          <Button kind="outlined" label="Open menu" />
+          <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
         </DropdownTrigger>
         <DropdownGroup label="Account">
           <DropdownOption value="profile" label="Profile" command="⌘P" />
@@ -199,13 +202,13 @@ export const Groups = {
       source: {
         code: `<script setup>
 import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
-import Button from '@aziontech/webkit/button'
+import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
   <Dropdown>
     <DropdownTrigger>
-      <Button kind="outlined" label="Open menu" />
+      <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
     </DropdownTrigger>
     <DropdownGroup label="Account">
       <DropdownOption value="profile" label="Profile" command="⌘P" />
@@ -232,7 +235,7 @@ export const States = {
     template: `
       <Dropdown v-bind="args" :open="true">
         <DropdownTrigger>
-          <Button kind="outlined" label="Open menu" />
+          <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
         </DropdownTrigger>
         <DropdownGroup label="Option states">
           <DropdownOption value="default" label="Default" />
@@ -244,6 +247,7 @@ export const States = {
   }),
   parameters: {
     docs: {
+      story: { inline: false, iframeHeight: '320px' },
       description: {
         story:
           'Panel forced open (`open="true"`) showing each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.'
@@ -251,53 +255,18 @@ export const States = {
       source: {
         code: `<script setup>
 import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
-import Button from '@aziontech/webkit/button'
+import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
   <Dropdown :open="true">
     <DropdownTrigger>
-      <Button kind="outlined" label="Open menu" />
+      <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
     </DropdownTrigger>
     <DropdownGroup label="Option states">
       <DropdownOption value="default" label="Default" />
       <DropdownOption value="selected" label="Selected" selected />
       <DropdownOption value="disabled" label="Disabled" disabled />
-    </DropdownGroup>
-  </Dropdown>
-</template>`
-      }
-    }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Dropdown>} */
-export const Disabled = {
-  args: { disabled: true },
-  render: Template,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Root `disabled` — the trigger refuses to open the panel and applies disabled tokens.'
-      },
-      source: {
-        code: `<script setup>
-import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
-import Button from '@aziontech/webkit/button'
-</script>
-
-<template>
-  <Dropdown disabled>
-    <DropdownTrigger>
-      <Button kind="outlined" label="Open menu" />
-    </DropdownTrigger>
-    <DropdownGroup>
-      <DropdownOption value="profile" label="Profile" />
-      <DropdownOption value="settings" label="Settings" />
-      <DropdownOption value="billing" label="Billing" />
-      <DropdownOption value="invite" label="Invite members" />
-      <DropdownOption value="logs" label="Audit log" />
-      <DropdownOption value="signout" label="Sign out" />
     </DropdownGroup>
   </Dropdown>
 </template>`
@@ -359,6 +328,146 @@ export const Placements = {
       description: {
         story:
           "All four `placement` values side-by-side. Click each trigger to see how the panel anchors against it. Panels are teleported to `body` and positioned with `position: fixed` against the trigger's bounding rect — no `@floating-ui` runtime."
+      },
+      source: {
+        code: `<script setup>
+import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
+import Button from '@aziontech/webkit/button'
+</script>
+
+<template>
+  <div class="grid grid-cols-2 gap-[var(--spacing-xl)] place-items-center min-h-[24rem]">
+    <Dropdown placement="bottom-start">
+      <DropdownTrigger>
+        <Button kind="outlined" label="bottom-start" />
+      </DropdownTrigger>
+      <DropdownGroup>
+        <DropdownOption value="a" label="Option A" />
+        <DropdownOption value="b" label="Option B" />
+      </DropdownGroup>
+    </Dropdown>
+
+    <Dropdown placement="bottom-end">
+      <DropdownTrigger>
+        <Button kind="outlined" label="bottom-end" />
+      </DropdownTrigger>
+      <DropdownGroup>
+        <DropdownOption value="a" label="Option A" />
+        <DropdownOption value="b" label="Option B" />
+      </DropdownGroup>
+    </Dropdown>
+
+    <Dropdown placement="top-start">
+      <DropdownTrigger>
+        <Button kind="outlined" label="top-start" />
+      </DropdownTrigger>
+      <DropdownGroup>
+        <DropdownOption value="a" label="Option A" />
+        <DropdownOption value="b" label="Option B" />
+      </DropdownGroup>
+    </Dropdown>
+
+    <Dropdown placement="top-end">
+      <DropdownTrigger>
+        <Button kind="outlined" label="top-end" />
+      </DropdownTrigger>
+      <DropdownGroup>
+        <DropdownOption value="a" label="Option A" />
+        <DropdownOption value="b" label="Option B" />
+      </DropdownGroup>
+    </Dropdown>
+  </div>
+</template>`
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Dropdown>} */
+export const AutoPlacement = {
+  render: () => ({
+    components,
+    template: `
+      <div class="relative h-[28rem] w-full border border-dashed border-[var(--border-muted)]">
+        <p class="absolute top-[var(--spacing-md)] left-1/2 -translate-x-1/2 text-body-sm text-[var(--text-muted)] text-center max-w-md">
+          All four triggers use <code>placement="auto"</code>.<br />
+          Each panel resolves to the best-fitting corner based on its position in the viewport.
+        </p>
+
+        <div class="absolute top-[var(--spacing-md)] left-[var(--spacing-md)]">
+          <Dropdown placement="auto">
+            <DropdownTrigger>
+              <Button kind="outlined" label="top-left trigger" />
+            </DropdownTrigger>
+            <DropdownGroup>
+              <DropdownOption value="a" label="Option A" />
+              <DropdownOption value="b" label="Option B" />
+            </DropdownGroup>
+          </Dropdown>
+        </div>
+
+        <div class="absolute top-[var(--spacing-md)] right-[var(--spacing-md)]">
+          <Dropdown placement="auto">
+            <DropdownTrigger>
+              <Button kind="outlined" label="top-right trigger" />
+            </DropdownTrigger>
+            <DropdownGroup>
+              <DropdownOption value="a" label="Option A" />
+              <DropdownOption value="b" label="Option B" />
+            </DropdownGroup>
+          </Dropdown>
+        </div>
+
+        <div class="absolute bottom-[var(--spacing-md)] left-[var(--spacing-md)]">
+          <Dropdown placement="auto">
+            <DropdownTrigger>
+              <Button kind="outlined" label="bottom-left trigger" />
+            </DropdownTrigger>
+            <DropdownGroup>
+              <DropdownOption value="a" label="Option A" />
+              <DropdownOption value="b" label="Option B" />
+            </DropdownGroup>
+          </Dropdown>
+        </div>
+
+        <div class="absolute bottom-[var(--spacing-md)] right-[var(--spacing-md)]">
+          <Dropdown placement="auto">
+            <DropdownTrigger>
+              <Button kind="outlined" label="bottom-right trigger" />
+            </DropdownTrigger>
+            <DropdownGroup>
+              <DropdownOption value="a" label="Option A" />
+              <DropdownOption value="b" label="Option B" />
+            </DropdownGroup>
+          </Dropdown>
+        </div>
+      </div>
+    `
+  }),
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          "`placement=\"auto\"` lets the dropdown choose the best-fitting corner at open time. The four triggers below all use the same prop value — each resolves to a different placement based on the available space around them. The resolved value is reflected in `data-placement` on the open panel. Backed by the shared `@aziontech/webkit/use-placement` composable."
+      },
+      source: {
+        code: `<script setup>
+import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
+import Button from '@aziontech/webkit/button'
+</script>
+
+<template>
+  <Dropdown placement="auto">
+    <DropdownTrigger>
+      <Button kind="outlined" label="Open menu" />
+    </DropdownTrigger>
+    <DropdownGroup>
+      <DropdownOption value="a" label="Option A" />
+      <DropdownOption value="b" label="Option B" />
+    </DropdownGroup>
+  </Dropdown>
+</template>`
       }
     }
   }
@@ -371,19 +480,19 @@ export const OptionAffordances = {
     template: `
       <Dropdown :open="true">
         <DropdownTrigger>
-          <Button kind="outlined" label="Open menu" />
+          <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
         </DropdownTrigger>
         <DropdownGroup label="Affordances">
           <DropdownOption value="plain" label="Plain label" />
           <DropdownOption value="command" label="With command hint" command="⌘P" />
-          <DropdownOption value="leading">
-            <template #leading>
+          <DropdownOption value="left">
+            <template #left>
               <i class="pi pi-user" aria-hidden="true" />
             </template>
-            Leading icon
+            Left icon
           </DropdownOption>
-          <DropdownOption value="trailing" label="Trailing slot">
-            <template #trailing>
+          <DropdownOption value="right" label="Right slot">
+            <template #right>
               <Tag label="New" />
             </template>
           </DropdownOption>
@@ -395,9 +504,42 @@ export const OptionAffordances = {
   }),
   parameters: {
     docs: {
+      story: { inline: false, iframeHeight: '360px' },
       description: {
         story:
-          'Panel forced open showing every `<DropdownOption>` affordance: plain label, `command` keyboard hint, `#leading` icon slot, `#trailing` content slot (with a `<Tag>`), `selected` state, and `disabled` state. The `command` prop and the `#trailing` slot are mutually exclusive — pick one per option.'
+          'Panel forced open showing every `<DropdownOption>` affordance: plain label, `command` keyboard hint, `#left` icon slot, `#right` content slot (with a `<Tag>`), `selected` state, and `disabled` state. The `command` prop and the `#right` slot are mutually exclusive — pick one per option.'
+      },
+      source: {
+        code: `<script setup>
+import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
+import IconButton from '@aziontech/webkit/icon-button'
+import Tag from '@aziontech/webkit/tag'
+</script>
+
+<template>
+  <Dropdown :open="true">
+    <DropdownTrigger>
+      <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
+    </DropdownTrigger>
+    <DropdownGroup label="Affordances">
+      <DropdownOption value="plain" label="Plain label" />
+      <DropdownOption value="command" label="With command hint" command="⌘P" />
+      <DropdownOption value="left">
+        <template #left>
+          <i class="pi pi-user" aria-hidden="true" />
+        </template>
+        Left icon
+      </DropdownOption>
+      <DropdownOption value="right" label="Right slot">
+        <template #right>
+          <Tag label="New" />
+        </template>
+      </DropdownOption>
+      <DropdownOption value="selected" label="Selected" selected />
+      <DropdownOption value="disabled" label="Disabled" disabled />
+    </DropdownGroup>
+  </Dropdown>
+</template>`
       }
     }
   }
@@ -410,7 +552,7 @@ export const WithTopAndBottomSlots = {
     template: `
       <Dropdown :open="true">
         <DropdownTrigger>
-          <Button kind="outlined" label="Open menu" />
+          <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
         </DropdownTrigger>
 
         <template #top>
@@ -435,9 +577,134 @@ export const WithTopAndBottomSlots = {
   }),
   parameters: {
     docs: {
+      story: { inline: false, iframeHeight: '360px' },
       description: {
         story:
           'Root `top` and `bottom` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.'
+      },
+      source: {
+        code: `<script setup>
+import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
+import Button from '@aziontech/webkit/button'
+import IconButton from '@aziontech/webkit/icon-button'
+import InputText from '@aziontech/webkit/input-text'
+</script>
+
+<template>
+  <Dropdown :open="true">
+    <DropdownTrigger>
+      <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
+    </DropdownTrigger>
+
+    <template #top>
+      <div class="p-[var(--spacing-xxs)]">
+        <InputText placeholder="Search options…" size="small" />
+      </div>
+    </template>
+
+    <DropdownGroup label="Suggestions">
+      <DropdownOption value="profile" label="Profile" />
+      <DropdownOption value="settings" label="Settings" />
+      <DropdownOption value="billing" label="Billing" />
+    </DropdownGroup>
+
+    <template #bottom>
+      <div class="flex justify-end p-[var(--spacing-xxs)]">
+        <Button kind="text" size="small" label="View all" />
+      </div>
+    </template>
+  </Dropdown>
+</template>`
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Dropdown>} */
+export const GroupsWithTopAndBottomSlots = {
+  render: () => ({
+    components,
+    template: `
+      <Dropdown :open="true">
+        <DropdownTrigger>
+          <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
+        </DropdownTrigger>
+
+        <DropdownGroup label="Account">
+          <template #top>
+            <span class="text-label-sm text-[var(--text-muted)]">Signed in as ib@azion.com</span>
+          </template>
+
+          <DropdownOption value="profile" label="Profile" command="⌘P" />
+          <DropdownOption value="settings" label="Settings" />
+
+          <template #bottom>
+            <Button kind="text" size="small" label="Manage account" class="w-full" />
+          </template>
+        </DropdownGroup>
+
+        <DropdownGroup label="Workspace">
+          <template #top>
+            <span class="text-label-sm text-[var(--text-muted)]">Azion · 12 members</span>
+          </template>
+
+          <DropdownOption value="invite" label="Invite members" />
+          <DropdownOption value="logs" label="Audit log" />
+
+          <template #bottom>
+            <Button kind="text" size="small" label="Workspace settings" class="w-full" />
+          </template>
+        </DropdownGroup>
+      </Dropdown>
+    `
+  }),
+  parameters: {
+    docs: {
+      story: { inline: false, iframeHeight: '420px' },
+      description: {
+        story:
+          'Two `<Dropdown.Group>` each using the `top` and `bottom` slots — a per-section caption above the options and a footer action below. Different from the root `top`/`bottom` (which are sticky outside the scroll area), group-level slots render inline within the section.'
+      },
+      source: {
+        code: `<script setup>
+import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
+import Button from '@aziontech/webkit/button'
+import IconButton from '@aziontech/webkit/icon-button'
+</script>
+
+<template>
+  <Dropdown :open="true">
+    <DropdownTrigger>
+      <IconButton kind="outlined" icon="pi pi-plus" aria-label="Open menu" />
+    </DropdownTrigger>
+
+    <DropdownGroup label="Account">
+      <template #top>
+        <span class="text-label-sm text-[var(--text-muted)]">Signed in as ib@azion.com</span>
+      </template>
+
+      <DropdownOption value="profile" label="Profile" command="⌘P" />
+      <DropdownOption value="settings" label="Settings" />
+
+      <template #bottom>
+        <Button kind="text" size="small" label="Manage account" class="w-full" />
+      </template>
+    </DropdownGroup>
+
+    <DropdownGroup label="Workspace">
+      <template #top>
+        <span class="text-label-sm text-[var(--text-muted)]">Azion · 12 members</span>
+      </template>
+
+      <DropdownOption value="invite" label="Invite members" />
+      <DropdownOption value="logs" label="Audit log" />
+
+      <template #bottom>
+        <Button kind="text" size="small" label="Workspace settings" class="w-full" />
+      </template>
+    </DropdownGroup>
+  </Dropdown>
+</template>`
       }
     }
   }
@@ -451,16 +718,6 @@ export const CustomTriggers = {
       <div class="flex flex-wrap gap-[var(--spacing-lg)] items-center">
         <Dropdown>
           <DropdownTrigger>
-            <Button kind="primary" label="Primary button" />
-          </DropdownTrigger>
-          <DropdownGroup>
-            <DropdownOption value="a" label="Option A" />
-            <DropdownOption value="b" label="Option B" />
-          </DropdownGroup>
-        </Dropdown>
-
-        <Dropdown>
-          <DropdownTrigger>
             <IconButton icon="pi pi-ellipsis-h" aria-label="More actions" />
           </DropdownTrigger>
           <DropdownGroup>
@@ -472,13 +729,12 @@ export const CustomTriggers = {
 
         <Dropdown>
           <DropdownTrigger>
-            <span class="cursor-pointer text-label-md underline-offset-2 hover:underline text-[var(--text-default)]">
-              Plain text trigger
-            </span>
+            <Avatar label="IB" aria-label="Account menu" class="cursor-pointer" />
           </DropdownTrigger>
-          <DropdownGroup>
-            <DropdownOption value="a" label="Option A" />
-            <DropdownOption value="b" label="Option B" />
+          <DropdownGroup label="Account">
+            <DropdownOption value="profile" label="Profile" />
+            <DropdownOption value="settings" label="Settings" />
+            <DropdownOption value="signout" label="Sign out" />
           </DropdownGroup>
         </Dropdown>
       </div>
@@ -486,41 +742,43 @@ export const CustomTriggers = {
   }),
   parameters: {
     docs: {
+      story: { inline: false, iframeHeight: '320px' },
       description: {
         story:
-          '`<DropdownTrigger>` is abstract — it wires `aria-haspopup`/`aria-expanded`/`aria-controls` and the open/close click onto whatever element you put inside its default slot. Here it wraps a primary `Button`, an `IconButton`, and a plain `<span>`.'
-      }
-    }
-  }
-}
+          '`<DropdownTrigger>` is abstract — it wires `aria-haspopup`/`aria-expanded`/`aria-controls` and the open/close click onto whatever element you put inside its default slot. Here it wraps an `IconButton` (row actions) and an `Avatar` (account menu).'
+      },
+      source: {
+        code: `<script setup>
+import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'
+import Avatar from '@aziontech/webkit/avatar'
+import IconButton from '@aziontech/webkit/icon-button'
+</script>
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Dropdown>} */
-export const Playground = {
-  render: (args) => ({
-    components,
-    setup() {
-      const { onUpdateOpen, onSelect, ...props } = args
-      return { props, onUpdateOpen, onSelect }
-    },
-    template: `
-      <Dropdown v-bind="props" @update:open="onUpdateOpen" @select="onSelect">
-        <DropdownTrigger>
-          <Button kind="outlined" label="Open menu" />
-        </DropdownTrigger>
-        <DropdownGroup label="Playground">
-          <DropdownOption value="plain" label="Plain option" />
-          <DropdownOption value="command" label="With command" command="⌘K" />
-          <DropdownOption value="selected" label="Selected" selected />
-          <DropdownOption value="disabled" label="Disabled" disabled />
-        </DropdownGroup>
-      </Dropdown>
-    `
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Controls-driven story: toggle `open`, `placement`, `offset`, and `disabled` from the Storybook Controls panel to exercise every root arg without leaving the page.'
+<template>
+  <div class="flex flex-wrap gap-[var(--spacing-lg)] items-center">
+    <Dropdown>
+      <DropdownTrigger>
+        <IconButton icon="pi pi-ellipsis-h" aria-label="More actions" />
+      </DropdownTrigger>
+      <DropdownGroup>
+        <DropdownOption value="edit" label="Edit" />
+        <DropdownOption value="duplicate" label="Duplicate" />
+        <DropdownOption value="delete" label="Delete" />
+      </DropdownGroup>
+    </Dropdown>
+
+    <Dropdown>
+      <DropdownTrigger>
+        <Avatar label="IB" aria-label="Account menu" class="cursor-pointer" />
+      </DropdownTrigger>
+      <DropdownGroup label="Account">
+        <DropdownOption value="profile" label="Profile" />
+        <DropdownOption value="settings" label="Settings" />
+        <DropdownOption value="signout" label="Sign out" />
+      </DropdownGroup>
+    </Dropdown>
+  </div>
+</template>`
       }
     }
   }

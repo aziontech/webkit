@@ -2,6 +2,9 @@ import { inject, type InjectionKey, type Ref } from 'vue'
 
 export type DropdownPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
 
+/** Prop-level placement; `'auto'` lets the dropdown pick the best fit at open time. */
+export type DropdownPlacementInput = DropdownPlacement | 'auto'
+
 export type DropdownOptionValue = string | number
 
 export interface DropdownContext {
@@ -33,6 +36,16 @@ export interface DropdownContext {
    * so the group can render a top divider when it is not the first.
    */
   registerGroup: () => number
+  /**
+   * Registers a global keyboard shortcut for an option's `command` hint.
+   * The root dropdown listens at the window level and invokes `activate`
+   * with the original event when the shortcut matches. Returns an
+   * unregister function callers must invoke on unmount.
+   */
+  registerCommand: (
+    command: string,
+    activate: (event: globalThis.KeyboardEvent) => void
+  ) => () => void
   /** Focus helpers driven by the root keyboard handler. */
   focusFirstOption: () => void
   focusLastOption: () => void

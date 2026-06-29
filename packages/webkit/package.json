@@ -182,6 +182,7 @@
     "./styles/country-flags": "./src/styles/country-flags.css",
     "./use-controllable": "./src/composables/use-controllable/index.js",
     "./use-focus-trap": "./src/composables/use-focus-trap/index.js",
+    "./use-placement": "./src/composables/use-placement/index.js",
     "./vite": "./src/vite/index.js"
   }
 }
