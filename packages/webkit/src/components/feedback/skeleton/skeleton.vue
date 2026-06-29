@@ -15,7 +15,7 @@
     width?: string
     /** CSS height (any length); for a circle, set equal to `width`. */
     height?: string
-    /** Pulse while loading; suppressed under reduced motion. */
+    /** Shimmer while loading; suppressed under reduced motion. */
     animated?: boolean
   }
 
@@ -40,6 +40,6 @@
     :data-kind="kind"
     :data-animated="animated || null"
     :style="{ width, height }"
-    class="block bg-[var(--bg-surface-overlay)] data-[kind=shape]:rounded-[var(--shape-elements)] data-[kind=circle]:rounded-full data-[animated]:animate-pulse motion-reduce:animate-none"
+    class="block bg-[var(--bg-surface-overlay)] data-[kind=shape]:rounded-[var(--shape-elements)] data-[kind=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,var(--bg-surface-raised)_0%,var(--bg-surface)_35%,var(--bg-surface-raised)_50%,var(--bg-surface-raised)_65%,var(--bg-surface-raised)_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-[var(--animate-shimmer)] motion-reduce:animate-none"
   />
 </template>
