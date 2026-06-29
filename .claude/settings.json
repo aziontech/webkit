@@ -25,7 +25,8 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git show:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(npm run *)"
     ],
     "deny": [
       "Bash(git push --force:*)",
@@ -46,6 +47,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/validate-references.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/validate-story-source.mjs"
           }
         ]
       },
