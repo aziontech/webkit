@@ -5,7 +5,7 @@
   export type ChipSize = 'small' | 'medium'
 
   defineOptions({
-    name: 'Chips',
+    name: 'Chip',
     inheritAttrs: false
   })
 
@@ -34,7 +34,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-chips')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-chip')
 
   // Dismiss motion — same opacity fade-out as the Message component (animations.js tokens).
   const REMOVE_MS = Number.parseInt(duration['fast-02'], 10)

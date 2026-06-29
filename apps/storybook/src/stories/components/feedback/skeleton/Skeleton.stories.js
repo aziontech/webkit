@@ -1,5 +1,9 @@
 import Skeleton from '@aziontech/webkit/skeleton'
 
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Skeleton from '@aziontech/webkit/skeleton'"
+
 /** @type {import('@storybook/vue3').Meta<typeof Skeleton>} */
 const meta = {
   title: 'Components/Feedback/Skeleton',
@@ -20,30 +24,7 @@ const meta = {
         component:
           'A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle`.'
       },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true,
-        transform: (code) => {
-          const body = code
-            .trim()
-            .split('\n')
-            .map((line) => (line ? `  ${line}` : line))
-            .join('\n')
-
-          return [
-            '<script setup>',
-            "import Skeleton from '@aziontech/webkit/skeleton'",
-            '</script>',
-            '',
-            '<template>',
-            body,
-            '</template>'
-          ].join('\n')
-        }
-      },
-      canvas: {
-        sourceState: 'shown'
-      }
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -103,32 +84,40 @@ const Template = (args) => ({
   template: '<Skeleton v-bind="props" />'
 })
 
+const DEFAULT_MARKUP = '<Skeleton kind="shape" width="240px" height="100px" animated />'
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default rectangular placeholder with a pulse.' } }
+    docs: {
+      description: { story: 'Default rectangular placeholder with a pulse.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
+
+const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
+  <Skeleton kind="shape" width="240px" height="100px" />
+  <Skeleton kind="circle" width="100px" height="100px" />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */
 export const Types = {
   render: () => ({
     components: { Skeleton },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Skeleton kind="shape" width="240px" height="100px" />
-        <Skeleton kind="circle" width="100px" height="100px" />
-      </div>
-    `
+    template: TYPES_TEMPLATE
   }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'Both geometries side by side: a rectangular `shape` and a `circle`.' }
+      description: { story: 'Both geometries side by side: a rectangular `shape` and a `circle`.' },
+      source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
     }
   }
 }
+
+const STATIC_MARKUP = '<Skeleton kind="shape" width="240px" height="100px" :animated="false" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */
 export const Static = {
@@ -138,7 +127,8 @@ export const Static = {
     docs: {
       description: {
         story: 'Non-pulsing placeholder when `animated: false` (also the reduced-motion fallback).'
-      }
+      },
+      source: { code: toSfc(IMPORT, STATIC_MARKUP) }
     }
   }
 }
