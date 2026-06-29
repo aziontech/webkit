@@ -15,7 +15,7 @@ You are the `scaffolder` sub-agent. You execute the `component-scaffold` skill v
 1. Read the `=== SPEC ===` block. Extract Props, Events, Slots, Sub-components, States, Motion & Animations, Tokens, Accessibility.
 2. Write the root `<name>.vue` using the canonical skeleton in the skill. Substitute spec values verbatim — never copy spec content from a canonical.
 3. (Composition only) Write each sub-component `.vue` plus `injection-key.ts`.
-4. Update `packages/webkit/package.json#exports` with one entry per public component.
+4. Update `packages/webkit/package.json#exports` with one entry per public component. (Composition: the compound root → `index.ts`, the standalone `./<name>-root` → root `.vue` for tree-shaking, and one per public sub-component. See `.claude/rules/compound-api.md`.)
 5. Stop. Do not run pnpm, do not write the story, do not write the `.figma.ts`.
 
 ## What you may NOT do

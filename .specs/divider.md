@@ -1,35 +1,34 @@
 ---
-name: checkbox
-category: inputs
+name: divider
+category: layout
 structure: monolithic
 status: approved
-spec_version: 3
-checksum: 2fd0e74289221cb07d676ea9cecad5c547ffedc51452a69e0e9e552b05ab2cb3
-created: 2026-05-22
-last_updated: 2026-06-24
+spec_version: 1
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
+  node_id: 479:886
+checksum: abadc01cd4dc1c015b0b91cd69604d389744f3f06fcd52eb00dc2e7fbad08570
+created: 2026-06-25
+last_updated: 2026-06-26
 ---
 
-# Checkbox — Component Spec
+# Divider — Component Spec
 
 ## Purpose
 
-Square checkbox control only — the box, the native input, and the check glyph, with no label or description chrome. Use it when you compose your own label, or reach for `FieldCheckbox` / `FieldCheckboxBlock` when you want built-in text. Supports a single boolean (`binary`) or collecting a `value` into an array model.
+Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an "Or"-style label) when the default slot or `label` prop is set. Unlike `ScrollArea` it adds no scrolling behaviour; it is a purely decorative-yet-semantic boundary exposing `role="separator"`.
 
 ## Usage
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import Checkbox from '@aziontech/webkit/checkbox'
-
-const accepted = ref(false)
+import Divider from '@aziontech/webkit/divider'
 </script>
 
 <template>
-  <label class="inline-flex items-center gap-[var(--spacing-2)]">
-    <Checkbox v-model="accepted" binary input-id="accept-terms" />
-    Accept terms
-  </label>
+  <Divider />
+  <Divider orientation="vertical" />
+  <Divider label="Or" />
 </template>
 ```
 
@@ -37,53 +36,36 @@ const accepted = ref(false)
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `unknown` | `undefined` | no | Bound value: a boolean in `binary` mode, otherwise the array/value the control reflects. |
-| `value` | `unknown` | `undefined` | no | This checkbox's value, added to or removed from the model array when not `binary`. |
-| `binary` | `boolean` | `false` | no | Toggles a single boolean instead of collecting `value` into an array. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Prevents changes while the control stays focusable. |
-| `inputId` | `string` | `undefined` | no | Forwarded to the native input `id`; pair with an external label's `for`. |
-| `name` | `string` | `undefined` | no | HTML name for form submission. |
-| `tabindex` | `number \| undefined` | `undefined` | no | Tab order for the native input. |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | no | Layout axis of the separator line. |
+| `label` | `string` | `''` | no | Fallback centered text shown when the default slot is empty. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:modelValue` | `unknown` | Emitted on toggle; payload is the next boolean (`binary`) or the updated value array. |
+| _none_ | — | — |
 
 ## Slots
 
-| _none_ | — | — |
+| Slot | Scope | Notes |
+|---|---|---|
+| `default` | — | Centered content; overrides `label` when provided. |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `readonly`, `checked`
-- `data-checked` mirrors the checked state
-- `data-disabled` mirrors the `disabled` prop
-- `data-readonly` mirrors the `readonly` prop
+- Visual states: `default`
+- `data-orientation` mirrors the `orientation` prop: `horizontal` | `vertical`
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / active state change | `transition-opacity duration-fast-02 ease-productive-entrance` on the hover/active ghost overlays | semantic (matches catalog) | `motion-reduce:transition-none` |
+_none_
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| surface | `var(--bg-surface)` |
-| border | `var(--border-default)` |
-| checked surface | `var(--primary)` |
-| checked glyph | `var(--primary-contrast)` |
-| shape | `var(--shape-button)` |
-| hover overlay | `var(--bg-hover)` |
-| active overlay | `var(--bg-active)` |
-| disabled surface | `var(--bg-disabled)` |
-| disabled glyph | `var(--text-disabled)` |
-| ring | `var(--ring-color)` |
-| ring offset | `var(--bg-canvas)` |
+| line | `var(--border-default)` |
+| typography (label) | `.text-label-sm` |
+| text (label) | `var(--text-muted)` |
+| spacing (gap around label) | `var(--spacing-sm)` |
 
 ## Theme gaps
 
@@ -93,17 +75,20 @@ const accepted = ref(false)
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: descendant native input drives the ring — `has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--ring-color)] has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses the native input; `Space` toggles checked state (native checkbox behavior).
-- ARIA: renders a real `<input type="checkbox">` with `aria-checked`; control-only, so associate copy via `inputId` + an external label `for`, or use `FieldCheckbox`.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
-- `motion-reduce:transition-none` on the animated ghost overlays.
-- Touch target: the box is 1.125rem (18px) — justified deviation for a control-only primitive; the larger ≥40×40 px hit area is provided by the field wrappers (`FieldCheckbox` / `FieldCheckboxBlock`) or the consumer's label.
+- Visible focus: not applicable — the separator is non-interactive and not in the tab order.
+- Keyboard map: not applicable — no interactive controls.
+- ARIA: root carries `role="separator"` and `aria-orientation="{orientation}"`. A labelled divider keeps the `separator` role; the label is exposed as the separator's accessible content.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state — the muted label text meets the body-text ratio against canvas/surface.
+- `motion-reduce:transition-none motion-reduce:transform-none` on animated states — not applicable; the component declares no motion.
+- Touch target ≥40×40 px — not applicable; the component is non-interactive.
 
 ## Stories (Storybook)
 
-- Default
-- Disabled — demonstrates the `disabled` prop (checked and unchecked).
+All stories share one reactive render that binds both `orientation` and `label`, so every control updates the canvas live.
+
+- Default — reactive playground; the `orientation` and `label` controls drive a single divider.
+- WithLabel — horizontal divider with a centered `label` ("OR") in the middle. Exercises the `label` prop / default slot.
+- Vertical — vertical divider with a centered `label` ("OR") in the middle (the parent supplies the height); covers the `vertical` orientation with a label.
 
 ## Constraints — DO NOT
 
