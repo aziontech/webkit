@@ -64,8 +64,7 @@ Regular components are higher-level, more complex components that may include bu
 src/core/<category>/<component-name>/
 ├── <component-name>.vue          # Main component file
 ├── <component-name>.vue.d.ts     # Generated TypeScript declarations
-├── <component-name>.vue.d.ts.map # Generated source map
-└── package.json                  # Package configuration
+└── <component-name>.vue.d.ts.map # Generated source map
 ```
 
 **Example:**
@@ -74,8 +73,7 @@ src/core/<category>/<component-name>/
 src/core/form/field-text/
 ├── field-text.vue
 ├── field-text.vue.d.ts
-├── field-text.vue.d.ts.map
-└── package.json
+└── field-text.vue.d.ts.map
 ```
 
 ### Regular Component Structure
@@ -84,8 +82,7 @@ src/core/form/field-text/
 src/components/<component-name>/
 ├── <component-name>.vue          # Main component file
 ├── <component-name>.vue.d.ts     # Generated TypeScript declarations
-├── <component-name>.vue.d.ts.map # Generated source map
-└── package.json                  # Package configuration
+└── <component-name>.vue.d.ts.map # Generated source map
 ```
 
 **Example:**
@@ -94,8 +91,7 @@ src/components/<component-name>/
 src/components/azion-system-status/
 ├── azion-system-status.vue
 ├── azion-system-status.vue.d.ts
-├── azion-system-status.vue.d.ts.map
-└── package.json
+└── azion-system-status.vue.d.ts.map
 ```
 
 ---
@@ -300,53 +296,15 @@ Organize template logically:
 
 ---
 
-## Package.json Requirements
+## Package Configuration
 
-Each component directory MUST have a `package.json` file with the following structure:
-
-```json
-{
-  "main": "./<component-name>.vue",
-  "module": "./<component-name>.vue",
-  "types": "./<component-name>.vue.d.ts",
-  "browser": {
-    "./sfc": "./<component-name>.vue"
-  },
-  "sideEffects": ["*.vue"]
-}
-```
-
-**Example for `field-text`:**
-
-```json
-{
-  "main": "./field-text.vue",
-  "module": "./field-text.vue",
-  "types": "./field-text.vue.d.ts",
-  "browser": {
-    "./sfc": "./field-text.vue"
-  },
-  "sideEffects": ["*.vue"]
-}
-```
+Components do **not** have a per-folder `package.json`. Module resolution goes through the root [`packages/webkit/package.json#exports`](../package.json) map, which points every public path directly at a source file (`.vue`/`.ts`/`.js`). The root `package.json` also declares `"sideEffects": ["**/*.vue", "**/*.css"]` once for the whole package. To publish a component, add its export entry (see [Export Configuration](#export-configuration) below).
 
 ---
 
 ## TypeScript Declarations
 
-TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC.
-
-### Generation Commands
-
-Run from the webkit package root:
-
-```bash
-# Clean existing declarations
-npm run clean:dts
-
-# Generate new declarations
-npm run build:dts
-```
+TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by `packages/webkit/.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
 
 **DO NOT manually edit `.d.ts` or `.d.ts.map` files.**
 
@@ -570,9 +528,7 @@ When creating a new component, ensure you've completed all requirements:
 - [ ] Define events with `defineEmits()`
 - [ ] Integrate VeeValidate (for form components)
 - [ ] Add `data-testid` attributes
-- [ ] Create `package.json` in component directory
 - [ ] Add export to main `package.json`
-- [ ] Run `npm run build:dts` to generate TypeScript declarations
 - [ ] Test component in consuming application
 
 ### Regular Components
@@ -583,9 +539,7 @@ When creating a new component, ensure you've completed all requirements:
 - [ ] Define props with types and defaults
 - [ ] Define events with `defineEmits()`
 - [ ] Add `data-testid` attributes
-- [ ] Create `package.json` in component directory
 - [ ] Add export to main `package.json`
-- [ ] Run `npm run build:dts` to generate TypeScript declarations
 - [ ] Test component in consuming application
 
 ### Vue Router Components (Additional)
@@ -791,12 +745,7 @@ When creating a new component, ensure you've completed all requirements:
 
 **Problem:** `.d.ts` files are missing or outdated
 
-**Solution:**
-
-```bash
-npm run clean:dts
-npm run build:dts
-```
+**Solution:** Declarations are generated at publish time by `packages/webkit/.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm webkit:type-check` to surface declaration errors.
 
 ### Export Not Found
 
@@ -806,8 +755,6 @@ npm run build:dts
 
 1. Verify component exists in correct directory
 2. Check `package.json` export in main package.json
-3. Ensure component `package.json` has correct paths
-4. Rebuild declarations
 
 ### Vue Router Not Available
 
@@ -1010,34 +957,26 @@ When the component justifies Composition Pattern, ship the **complete anatomy** 
 
 #### Folder layout — canonical (applies to every new composition component)
 
-One folder per sub-component, file name preserves the full prefix, one `package.json` per folder, and the shared `injection-key.ts` lives at the root of the component (sibling of the root `.vue`).
+One folder per sub-component, file name preserves the full prefix, and the shared `injection-key.ts` lives at the root of the component (sibling of the root `.vue`).
 
 ```
 packages/webkit/src/components/webkit/overlay/dialog/
 ├── dialog.vue
-├── package.json
 ├── injection-key.ts
 ├── dialog-trigger/
-│   ├── dialog-trigger.vue
-│   └── package.json
+│   └── dialog-trigger.vue
 ├── dialog-portal/
-│   ├── dialog-portal.vue
-│   └── package.json
+│   └── dialog-portal.vue
 ├── dialog-overlay/
-│   ├── dialog-overlay.vue
-│   └── package.json
+│   └── dialog-overlay.vue
 ├── dialog-content/
-│   ├── dialog-content.vue
-│   └── package.json
+│   └── dialog-content.vue
 ├── dialog-title/
-│   ├── dialog-title.vue
-│   └── package.json
+│   └── dialog-title.vue
 ├── dialog-description/
-│   ├── dialog-description.vue
-│   └── package.json
+│   └── dialog-description.vue
 └── dialog-close/
-    ├── dialog-close.vue
-    └── package.json
+    └── dialog-close.vue
 ```
 
 > Existing composition components (`dialog`, `drawer`, `navigation-menu`, `dropdown-menu`, `breadcrumb`) still use the legacy **flat** layout, where every sub-component `.vue` sits directly under the component root. They are not migrated as part of new-component work — migration would require moving files and updating every `packages/webkit/package.json#exports` right-hand path, plus every consumer import path in console-kit, which is out of scope. The new layout above applies only to components scaffolded going forward.
@@ -1045,7 +984,6 @@ packages/webkit/src/components/webkit/overlay/dialog/
 Conventions:
 
 - **Folder per sub-component, file keeps the full prefix** (`dialog-trigger/dialog-trigger.vue`, never `dialog-trigger/index.vue`). Reasons: (a) unambiguous error traces — stack frames show `dialog-trigger.vue`, not 27 different `index.vue` lines; (b) easier grep by file name; (c) editor breadcrumbs stay legible.
-- **One `package.json` per folder** (root + every sub-component). Mirrors how monolithic components like `button` already work — each sub-component is a self-contained entry point.
 - **Public export path stays flat.** `packages/webkit/package.json#exports` keeps `./overlay/dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/webkit/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
 - **Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts`** at the root level (sibling of `<name>.vue`, **not** inside any sub-component folder). Root imports `./injection-key`; sub-components import `../injection-key`.
 - **`as-child`** enabled on `Trigger` and `Close` variants.
@@ -1054,7 +992,7 @@ Conventions:
 
 ### 3. Composition Pattern — só quando faz sentido
 
-- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue` + its own `package.json`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
+- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
 - **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
 - **Atomic** (Button, IconButton, Tag, Spinner, Badge, Currency) — always monolithic, no slots.
 - **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
@@ -1482,7 +1420,7 @@ The spec lists which `kind` / `size` stories exist. Do **not** add visual permut
 - [ ] **Naming conventions** applied (`kind`/`size`/booleans without prefix, events kebab-case).
 - [ ] **Controlled / uncontrolled** states implemented when applicable.
 - [ ] Composition Pattern only when justified (sibling sub-components + typed `provide`/`inject`).
-- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Portal/Overlay/Content/Title/Description/Close as applicable — see § 2.9), with the canonical folder-per-sub-component layout (`<root>/<root>-<part>/<root>-<part>.vue` + its own `package.json`; shared `injection-key.ts` at the root level).
+- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Portal/Overlay/Content/Title/Description/Close as applicable — see § 2.9), with the canonical folder-per-sub-component layout (`<root>/<root>-<part>/<root>-<part>.vue`; shared `injection-key.ts` at the root level).
 - [ ] **`asChild`** exposed on trigger-like sub-components (Trigger/Close/etc.) — § 2.5.
 - [ ] **`data-state`/`data-disabled`/`data-orientation`** exposed on the root and on stateful sub-components — § 2.6.
 - [ ] **`VariantProps`** (e.g. `ButtonKind`, `ButtonSize`) exported as named exports — § 2.8.
@@ -1533,7 +1471,7 @@ The spec lists which `kind` / `size` stories exist. Do **not** add visual permut
 #### Validação
 
 - [ ] `<name>.figma.ts` created next to the `.vue` (Code Connect available — see § 12).
-- [ ] `pnpm webkit:lint && webkit:type-check && webkit:type-coverage && webkit:build:dts && storybook:build` all pass.
+- [ ] `pnpm webkit:lint && webkit:type-check && webkit:type-coverage && storybook:build` all pass.
 
 ---
 

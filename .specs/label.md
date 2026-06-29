@@ -22,8 +22,8 @@ Form-field label that pairs descriptive text with an optional `Required` badge. 
 
 ```vue
 <script setup>
-import Label from '@aziontech/webkit/inputs/label'
-import InputText from '@aziontech/webkit/inputs/input-text'
+import Label from '@aziontech/webkit/label'
+import InputText from '@aziontech/webkit/input-text'
 </script>
 
 <template>
@@ -36,7 +36,7 @@ import InputText from '@aziontech/webkit/inputs/input-text'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `required` | `boolean` | `false` | no | Appends a `Required` tag next to the label text. |
 
 ## Events
