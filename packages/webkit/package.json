@@ -14,8 +14,6 @@
   },
   "scripts": {
     "clean": "rm -rf dist/",
-    "clean:dts": "rm -rf src/**/*.d.js src/**/*.d.js.map",
-    "build:dts": "vue-tsc --declaration --emitDeclarationOnly",
     "pack:dry": "npm pack --dry-run",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
@@ -52,6 +50,10 @@
   "files": [
     "src",
     "package.json"
+  ],
+  "sideEffects": [
+    "**/*.vue",
+    "**/*.css"
   ],
   "exports": {
     "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
@@ -91,8 +93,16 @@
     "./message": "./src/components/feedback/message/message.vue",
     "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
+    "./toast": "./src/components/feedback/toast/index.ts",
+    "./toast-root": "./src/components/feedback/toast/toaster.vue",
+    "./toast-item": "./src/components/feedback/toast/toast-item/toast-item.vue",
+    "./toast-title": "./src/components/feedback/toast/toast-title/toast-title.vue",
+    "./toast-description": "./src/components/feedback/toast/toast-description/toast-description.vue",
+    "./toast-action": "./src/components/feedback/toast/toast-action/toast-action.vue",
+    "./toast-close": "./src/components/feedback/toast/toast-close/toast-close.vue",
     "./skeleton": "./src/components/feedback/skeleton/skeleton.vue",
     "./input-text": "./src/components/inputs/input-text/input-text.vue",
+    "./input-number": "./src/components/inputs/input-number/input-number.vue",
     "./field-text": "./src/components/inputs/field-text/field-text.vue",
     "./helper-text": "./src/components/inputs/helper-text/helper-text.vue",
     "./label": "./src/components/inputs/label/label.vue",
@@ -108,7 +118,7 @@
     "./field-switch": "./src/components/inputs/field-switch/field-switch.vue",
     "./field-switch-block": "./src/components/inputs/field-switch-block/field-switch-block.vue",
     "./radio-button": "./src/components/inputs/radio-button/radio-button.vue",
-    "./input-switch": "./src/components/inputs/input-switch/input-switch.vue",
+    "./switch": "./src/components/inputs/switch/switch.vue",
     "./textarea": "./src/components/inputs/textarea/textarea.vue",
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
     "./dropdown": "./src/components/navigation/dropdown/index.ts",
@@ -116,6 +126,12 @@
     "./dropdown-group": "./src/components/navigation/dropdown/dropdown-group/dropdown-group.vue",
     "./dropdown-option": "./src/components/navigation/dropdown/dropdown-option/dropdown-option.vue",
     "./select": "./src/components/inputs/select/index.ts",
+    "./select-root": "./src/components/inputs/select/select.vue",
+    "./select-trigger": "./src/components/inputs/select/select-trigger/select-trigger.vue",
+    "./select-content": "./src/components/inputs/select/select-content/select-content.vue",
+    "./select-group": "./src/components/inputs/select/select-group/select-group.vue",
+    "./select-option": "./src/components/inputs/select/select-option/select-option.vue",
+    "./divider": "./src/components/layout/divider/divider.vue",
     "./scroll-area": "./src/components/layout/scroll-area/scroll-area.vue",
     "./global-header": "./src/components/layout/global-header/index.js",
     "./sidebar": "./src/components/layout/sidebar/sidebar.vue",
