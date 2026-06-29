@@ -74,6 +74,14 @@
     :data-testid="testId"
     :data-disabled="disabled || null"
   >
+    <RadioButton
+      v-model="model"
+      :value="value"
+      :name="name"
+      :disabled="disabled"
+      :input-id="resolvedInputId"
+      :data-testid="`${testId}__control`"
+    />
     <div
       :class="textsClasses"
       :data-disabled="disabled || null"
@@ -106,13 +114,5 @@
         <span :data-testid="`${testId}__helper-text`">{{ helperText }}</span>
       </div>
     </div>
-    <RadioButton
-      v-model="model"
-      :value="value"
-      :name="name"
-      :disabled="disabled"
-      :input-id="resolvedInputId"
-      :data-testid="`${testId}__control`"
-    />
   </label>
 </template>
