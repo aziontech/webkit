@@ -108,12 +108,12 @@ export const textsData = {
   'text-tag-sm': {
     fontSize: fontSize.xs,
     lineHeight: leading.tight,
-    fontWeight: fontWeight.semibold
+    fontWeight: fontWeight.normal
   },
   'text-tag-md': {
     fontSize: fontSize.xs,
     lineHeight: leading.tight,
-    fontWeight: fontWeight.semibold
+    fontWeight: fontWeight.normal
   },
   'text-body-xxs': {
     fontSize: fontSize.xs,
