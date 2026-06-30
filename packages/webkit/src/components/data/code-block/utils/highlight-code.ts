@@ -1,4 +1,4 @@
-export type CodeEditorHighlightTokenType =
+export type CodeBlockHighlightTokenType =
   | 'keyword'
   | 'string'
   | 'function'
@@ -7,12 +7,12 @@ export type CodeEditorHighlightTokenType =
   | 'identifier'
   | 'comment'
 
-export type CodeEditorHighlightToken = {
+export type CodeBlockHighlightToken = {
   text: string
-  type: CodeEditorHighlightTokenType
+  type: CodeBlockHighlightTokenType
 }
 
-const TOKEN_CLASS: Record<CodeEditorHighlightTokenType, string> = {
+const TOKEN_CLASS: Record<CodeBlockHighlightTokenType, string> = {
   keyword: 'text-[var(--code-sintax-keyword)]',
   string: 'text-[var(--code-sintax-string)]',
   function: 'text-[var(--code-sintax-function)]',
@@ -22,7 +22,7 @@ const TOKEN_CLASS: Record<CodeEditorHighlightTokenType, string> = {
   comment: 'text-[var(--code-sintax-punctuation)]'
 }
 
-export const getHighlightTokenClass = (type: CodeEditorHighlightTokenType): string =>
+export const getHighlightTokenClass = (type: CodeBlockHighlightTokenType): string =>
   TOKEN_CLASS[type] ?? TOKEN_CLASS.identifier
 
 const JS_KEYWORDS = [
@@ -57,9 +57,9 @@ const JS_KEYWORDS = [
 ] as const
 
 const pushToken = (
-  tokens: CodeEditorHighlightToken[],
+  tokens: CodeBlockHighlightToken[],
   text: string,
-  type: CodeEditorHighlightTokenType
+  type: CodeBlockHighlightTokenType
 ) => {
   if (!text) {
     return
@@ -75,8 +75,8 @@ const pushToken = (
   tokens.push({ text, type })
 }
 
-const highlightJavaScriptLine = (line: string): CodeEditorHighlightToken[] => {
-  const tokens: CodeEditorHighlightToken[] = []
+const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
+  const tokens: CodeBlockHighlightToken[] = []
   const keywordRegex = new RegExp(
     `\\b(?:${JS_KEYWORDS.join('|')})\\b|[{}\\[\\]().,:;=<>]|'(?:\\\\'|[^'])*'|"(?:\\\\"|[^"])*"|\\b[A-Z][A-Za-z0-9_]*\\b|\\b[a-zA-Z_$][\\w$]*\\b|\\s+|[^\\s]+`,
     'g'
@@ -153,7 +153,7 @@ const highlightJavaScriptLine = (line: string): CodeEditorHighlightToken[] => {
 export const highlightCodeLine = (
   language: string | undefined,
   line: string
-): CodeEditorHighlightToken[] => {
+): CodeBlockHighlightToken[] => {
   const lang = (language ?? 'javascript').toLowerCase()
 
   if (lang === 'javascript' || lang === 'typescript' || lang === 'js' || lang === 'ts') {
@@ -166,6 +166,6 @@ export const highlightCodeLine = (
 export const highlightCode = (
   code: string,
   language: string | undefined
-): CodeEditorHighlightToken[][] => code.split('\n').map((line) => highlightCodeLine(language, line))
+): CodeBlockHighlightToken[][] => code.split('\n').map((line) => highlightCodeLine(language, line))
 
 export const formatLineNumber = (lineNumber: number): string => String(lineNumber).padStart(2, '0')

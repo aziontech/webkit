@@ -1,14 +1,14 @@
-export type CodeEditorLineChange = {
+export type CodeBlockLineChange = {
   line: number
   change: 'added' | 'removed'
 }
 
-export type CodeEditorLineState = 'default' | 'added' | 'removed' | 'highlighted'
+export type CodeBlockLineState = 'default' | 'added' | 'removed' | 'highlighted'
 
 export const buildLineChangeMap = (
-  lineChanges: CodeEditorLineChange[] | undefined
-): Map<number, CodeEditorLineChange['change']> => {
-  const map = new Map<number, CodeEditorLineChange['change']>()
+  lineChanges: CodeBlockLineChange[] | undefined
+): Map<number, CodeBlockLineChange['change']> => {
+  const map = new Map<number, CodeBlockLineChange['change']>()
 
   for (const entry of lineChanges ?? []) {
     map.set(entry.line, entry.change)
@@ -19,9 +19,9 @@ export const buildLineChangeMap = (
 
 export const resolveLineState = (
   lineNumber: number,
-  changeMap: Map<number, CodeEditorLineChange['change']>,
+  changeMap: Map<number, CodeBlockLineChange['change']>,
   highlightedLine?: number
-): CodeEditorLineState => {
+): CodeBlockLineState => {
   const change = changeMap.get(lineNumber)
 
   if (change === 'added') {
@@ -39,7 +39,7 @@ export const resolveLineState = (
   return 'default'
 }
 
-export const getDiffMarker = (lineState: CodeEditorLineState): string => {
+export const getDiffMarker = (lineState: CodeBlockLineState): string => {
   if (lineState === 'added') {
     return '+'
   }

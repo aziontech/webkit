@@ -1,5 +1,5 @@
 ---
-name: code-editor
+name: code-block
 category: data
 structure: monolithic
 status: implemented
@@ -7,13 +7,13 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: c5499ce156904715687418e832ea0a9555201923263b099bcaababdc0ce1cfd0
+checksum: 96c39bdcfa0b0471abfd4a03aea5796f5e25d2f465a38dae1142a3236c60f3b2
 created: 2026-05-28
-last_updated: 2026-06-08
+last_updated: 2026-06-30
 ---
 
 
-# CodeEditor — Component Spec
+# CodeBlock — Component Spec
 
 ## Purpose
 
@@ -32,7 +32,7 @@ Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-
 
 ```vue
 <script setup>
-import CodeEditor from '@aziontech/webkit/code-editor'
+import CodeBlock from '@aziontech/webkit/code-block'
 
 const code = `export default {
   async fetch(request) {
@@ -52,7 +52,7 @@ const tabs = [
 </script>
 
 <template>
-  <CodeEditor :tabs="tabs" default-value="js" show-line-numbers />
+  <CodeBlock :tabs="tabs" default-value="js" show-line-numbers />
 </template>
 ```
 
@@ -62,7 +62,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `tabs` | `CodeEditorTab[]` | `[]` | no | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
+| `tabs` | `CodeBlockTab[]` | `[]` | no | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
 | `value` | `string` | `undefined` | no | Controlled active tab value (`v-model:value`). |
 | `defaultValue` | `string` | `undefined` | no | Initial active tab when uncontrolled. |
 | `showLineNumbers` | `boolean` | `true` | no | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
@@ -71,7 +71,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 ## Type shapes
 
-### `CodeEditorTab`
+### `CodeBlockTab`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
@@ -82,9 +82,9 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | `fileName` | `string` | no | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden). |
 | `fileIcon` | `string` | no | Icon name for the filename bar (PrimeIcons class, e.g. `'pi pi-file'`). Falls back to a language-derived icon when omitted. |
 | `highlightedLine` | `number` | no | 1-based line index. Applies info background + leading bar on that row (Figma: Highlighted). |
-| `lineChanges` | `CodeEditorLineChange[]` | no | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff). |
+| `lineChanges` | `CodeBlockLineChange[]` | no | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff). |
 
-### `CodeEditorLineChange`
+### `CodeBlockLineChange`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
@@ -114,7 +114,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 | Region | Visible when |
 |---|---|
-| Tab header (`CodeEditorHeader`, 48 px tab height) | `tabs.length > 1` |
+| Tab header (`CodeBlockHeader`, 48 px tab height) | `tabs.length > 1` |
 | Filename bar (`FileName`, 40 px) | active tab has `fileName` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines) | active tab `lineChanges.length > 0` |
 | Line highlight (info background + 2 px leading bar) | active tab `highlightedLine` is set |
@@ -127,9 +127,10 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| tab change (indicator) | sliding underline via `transform` / `width` transition | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| tab panel change | content slide + opacity | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:transition-none` |
-| tab label hover | `transition-colors duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
+| tab change (indicator) | sliding underline via `transform` / `width` transition | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transition-none` |
+| tab panel change | content slide + opacity | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:transition-none` |
+| tab label hover | `transition-colors duration-fast-02 ease-productive-entrance` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| code line hover | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`) | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:transition-none` |
 | line entrance (`animateLines`) | per-line slide from `-8px` + opacity, staggered `300ms` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
 
 ## Tokens
@@ -165,9 +166,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `bg/surface-raised` | `var(--bg-surface-raised)` (compiled in theme) | Add to DESIGN.md Surfaces table |
+| _none_ | — | — |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -207,6 +206,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 - Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

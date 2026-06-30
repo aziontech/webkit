@@ -14,31 +14,31 @@
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import {
-    codeEditorEnterOffsetClasses,
-    codeEditorLineEnterMotion,
-    type CodeEditorSlideDirection,
-    getCodeEditorIndicatorTransitionStyle,
-    getCodeEditorLineTransitionStyle,
-    getCodeEditorPanelTransitionStyle
+    codeBlockEnterOffsetClasses,
+    codeBlockLineEnterMotion,
+    type CodeBlockSlideDirection,
+    getCodeBlockIndicatorTransitionStyle,
+    getCodeBlockLineTransitionStyle,
+    getCodeBlockPanelTransitionStyle
   } from './presets/transitions'
   import { resolveFileIcon } from './utils/file-icon'
   import {
-    type CodeEditorHighlightToken,
+    type CodeBlockHighlightToken,
     formatLineNumber,
     getHighlightTokenClass,
     highlightCode
   } from './utils/highlight-code'
   import {
     buildLineChangeMap,
-    type CodeEditorLineChange,
-    type CodeEditorLineState,
+    type CodeBlockLineChange,
+    type CodeBlockLineState,
     getDiffMarker,
     resolveLineState
   } from './utils/line-decorations'
 
-  export type { CodeEditorLineChange }
+  export type { CodeBlockLineChange }
 
-  export type CodeEditorTab = {
+  export type CodeBlockTab = {
     label: string
     value: string
     code: string
@@ -46,17 +46,17 @@
     fileName?: string
     fileIcon?: string
     highlightedLine?: number
-    lineChanges?: CodeEditorLineChange[]
+    lineChanges?: CodeBlockLineChange[]
   }
 
   defineOptions({
-    name: 'CodeEditor',
+    name: 'CodeBlock',
     inheritAttrs: false
   })
 
   interface Props {
     /** Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. */
-    tabs?: CodeEditorTab[]
+    tabs?: CodeBlockTab[]
     /** Controlled active tab value (`v-model:value`). */
     value?: string
     /** Initial active tab when uncontrolled. */
@@ -93,15 +93,15 @@
   const indicatorWidth = ref(0)
   const indicatorOffsetX = ref(0)
   const internalValue = ref('')
-  const slideDirection = ref<CodeEditorSlideDirection>(null)
+  const slideDirection = ref<CodeBlockSlideDirection>(null)
   const panelMotionReady = ref(true)
   const linesMotionReady = ref(!props.animateLines)
   const copyFeedback = ref(false)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-editor')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-block')
 
   const normalizedTabs = computed(() =>
-    props.tabs.filter((tab): tab is CodeEditorTab => Boolean(tab && tab.value && tab.code))
+    props.tabs.filter((tab): tab is CodeBlockTab => Boolean(tab && tab.value && tab.code))
   )
 
   const isControlled = computed(() => valueModel.value !== undefined || props.value !== undefined)
@@ -150,34 +150,34 @@
 
   const highlightedLines = computed(() => {
     if (!activeTab.value) {
-      return [] as CodeEditorHighlightToken[][]
+      return [] as CodeBlockHighlightToken[][]
     }
 
     return highlightCode(activeTab.value.code, activeTab.value.language)
   })
 
-  const getLineState = (lineNumber: number): CodeEditorLineState =>
+  const getLineState = (lineNumber: number): CodeBlockLineState =>
     resolveLineState(lineNumber, activeLineChangeMap.value, activeTab.value?.highlightedLine)
 
-  const indicatorTransitionStyle = computed(() => getCodeEditorIndicatorTransitionStyle())
+  const indicatorTransitionStyle = computed(() => getCodeBlockIndicatorTransitionStyle())
 
   const indicatorTransformStyle = computed(() => ({
     width: `${indicatorWidth.value}px`,
     transform: `translate3d(${indicatorOffsetX.value}px, 0, 0)`
   }))
 
-  const panelTransitionStyle = computed(() => getCodeEditorPanelTransitionStyle())
+  const panelTransitionStyle = computed(() => getCodeBlockPanelTransitionStyle())
 
   const panelEnterOffsetClass = computed(() => {
     if (slideDirection.value === 'right') {
-      return codeEditorEnterOffsetClasses.right
+      return codeBlockEnterOffsetClasses.right
     }
 
     if (slideDirection.value === 'left') {
-      return codeEditorEnterOffsetClasses.left
+      return codeBlockEnterOffsetClasses.left
     }
 
-    return codeEditorEnterOffsetClasses.none
+    return codeBlockEnterOffsetClasses.none
   })
 
   const panelMotionClasses = computed(() =>
@@ -196,11 +196,11 @@
       props.animateLines &&
         (linesMotionReady.value
           ? 'translate-x-0 opacity-100'
-          : cn(codeEditorLineEnterMotion.offsetClass, 'opacity-0'))
+          : cn(codeBlockLineEnterMotion.offsetClass, 'opacity-0'))
     )
 
   const getLineMotionStyle = (lineIndex: number) =>
-    props.animateLines ? getCodeEditorLineTransitionStyle(lineIndex) : undefined
+    props.animateLines ? getCodeBlockLineTransitionStyle(lineIndex) : undefined
 
   const resolveTabElement = (
     element: globalThis.Element | ComponentPublicInstance | null
@@ -234,7 +234,7 @@
   const resolveSlideDirection = (
     currentIndex: number,
     nextIndex: number
-  ): CodeEditorSlideDirection => {
+  ): CodeBlockSlideDirection => {
     if (currentIndex === -1 || nextIndex === -1 || currentIndex === nextIndex) {
       return null
     }

@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import CodeEditor from '@aziontech/webkit/code-editor'
+import CodeBlock from '@aziontech/webkit/code-block'
 
 const sampleCode = `export default {
   async fetch(request) {
@@ -86,7 +86,7 @@ const componentDocsDescription = [
   '',
   '```vue',
   '<script setup>',
-  "import CodeEditor from '@aziontech/webkit/code-editor'",
+  "import CodeBlock from '@aziontech/webkit/code-block'",
   '',
   'const code = `export default {',
   '  async fetch(request) {',
@@ -106,7 +106,7 @@ const componentDocsDescription = [
   '</script>',
   '',
   '<template>',
-  '  <CodeEditor :tabs="tabs" default-value="js" show-line-numbers />',
+  '  <CodeBlock :tabs="tabs" default-value="js" show-line-numbers />',
   '</template>',
   '```',
   '',
@@ -117,7 +117,7 @@ const componentDocsDescription = [
   '```vue',
   '<script setup>',
   "import { ref } from 'vue'",
-  "import CodeEditor from '@aziontech/webkit/code-editor'",
+  "import CodeBlock from '@aziontech/webkit/code-block'",
   '',
   'const activeTab = ref(\'js\')',
   '',
@@ -128,18 +128,18 @@ const componentDocsDescription = [
   '</script>',
   '',
   '<template>',
-  '  <CodeEditor v-model:value="activeTab" :tabs="tabs" show-line-numbers />',
+  '  <CodeBlock v-model:value="activeTab" :tabs="tabs" show-line-numbers />',
   '</template>',
   '```',
   '',
   '### Reactive updates',
   '',
-  'Replace `tabs[n].code` or rebuild `tabs` when the source changes — the editor re-renders and re-highlights automatically:',
+  'Replace `tabs[n].code` or rebuild `tabs` when the source changes — the block re-renders and re-highlights automatically:',
   '',
   '```vue',
   '<script setup>',
   "import { computed, ref } from 'vue'",
-  "import CodeEditor from '@aziontech/webkit/code-editor'",
+  "import CodeBlock from '@aziontech/webkit/code-block'",
   '',
   'const source = ref(\'console.log("hello")\\n\')',
   '',
@@ -154,11 +154,11 @@ const componentDocsDescription = [
   '</script>',
   '',
   '<template>',
-  '  <CodeEditor :tabs="tabs" default-value="console" />',
+  '  <CodeBlock :tabs="tabs" default-value="console" />',
   '</template>',
   '```',
   '',
-  '### `CodeEditorTab` shape',
+  '### `CodeBlockTab` shape',
   '',
   '| Field | Required | Notes |',
   '| --- | --- | --- |',
@@ -172,10 +172,10 @@ const componentDocsDescription = [
   '| `lineChanges` | no | Diff markers (`{ line, change: \'added\' \\| \'removed\' }[]`) |'
 ].join('\n')
 
-/** @type {import('@storybook/vue3').Meta<typeof CodeEditor>} */
+/** @type {import('@storybook/vue3').Meta<typeof CodeBlock>} */
 const meta = {
-  title: 'Webkit/Data/Code Editor',
-  component: CodeEditor,
+  title: 'Components/Code/CodeBlock',
+  component: CodeBlock,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -195,7 +195,7 @@ const meta = {
         'Tab definitions. Pass source on each tab’s `code` field (required). See Docs → Passing code for single-snippet, multi-language, and reactive examples.',
       table: {
         category: 'props',
-        type: { summary: 'CodeEditorTab[]' },
+        type: { summary: 'CodeBlockTab[]' },
         detail: '{ label, value, code, language?, fileName?, fileIcon?, highlightedLine?, lineChanges? }'
       }
     },
@@ -254,8 +254,8 @@ const meta = {
 
 export default meta
 
-const renderCodeEditor = (args) => ({
-  components: { CodeEditor },
+const renderCodeBlock = (args) => ({
+  components: { CodeBlock },
   setup() {
     const value = ref(args.defaultValue ?? args.value ?? args.tabs?.[0]?.value ?? '')
 
@@ -263,7 +263,7 @@ const renderCodeEditor = (args) => ({
   },
   template: `
     <div class="max-w-[692px]">
-      <CodeEditor
+      <CodeBlock
         v-model:value="value"
         :tabs="args.tabs"
         :show-line-numbers="args.showLineNumbers"
@@ -283,7 +283,7 @@ export const Default = {
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeEditor
+  render: renderCodeBlock
 }
 
 export const WithoutLineNumbers = {
@@ -293,7 +293,7 @@ export const WithoutLineNumbers = {
     showLineNumbers: false,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeEditor
+  render: renderCodeBlock
 }
 
 export const WithFileName = {
@@ -311,7 +311,7 @@ export const WithFileName = {
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeEditor
+  render: renderCodeBlock
 }
 
 export const WithDiff = {
@@ -329,7 +329,7 @@ export const WithDiff = {
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeEditor
+  render: renderCodeBlock
 }
 
 export const WithHighlightedLine = {
@@ -347,7 +347,7 @@ export const WithHighlightedLine = {
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeEditor
+  render: renderCodeBlock
 }
 
 export const WithAnimatedLines = {
@@ -366,5 +366,5 @@ export const WithAnimatedLines = {
     animateLines: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeEditor
+  render: renderCodeBlock
 }
