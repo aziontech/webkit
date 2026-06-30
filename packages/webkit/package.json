@@ -23,6 +23,8 @@
     "lint:style:fix": "stylelint \"src/**/*.{css,scss,vue}\" --fix",
     "type-check": "vue-tsc --noEmit",
     "type-coverage": "type-coverage -p . --at-least 95 --detail",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
     "figma:parse": "figma connect parse",
     "figma:publish": "figma connect publish",
     "figma:unpublish": "figma connect unpublish"
@@ -37,6 +39,7 @@
     "@aziontech/theme": "workspace:*"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
     "@figma/code-connect": "^1.4.5",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^10.0.1",
@@ -45,8 +48,15 @@
     "@semantic-release/github": "^9.2.6",
     "@semantic-release/npm": "^11.0.0",
     "@semantic-release/release-notes-generator": "^12.1.0",
+    "@testing-library/vue": "^8.1.0",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitest/browser": "^2.1.9",
+    "@vue/test-utils": "^2.4.6",
     "conventional-changelog-conventionalcommits": "^7.0.0",
-    "semantic-release": "^23.0.0"
+    "playwright": "^1.49.0",
+    "semantic-release": "^23.0.0",
+    "vitest": "^2.1.9",
+    "vitest-axe": "^0.1.0"
   },
   "files": [
     "src",
