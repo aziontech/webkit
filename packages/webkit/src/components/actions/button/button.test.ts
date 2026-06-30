@@ -1,8 +1,12 @@
+import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import axe from 'axe-core'
 import { describe, expect, it } from 'vitest'
 
+import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/button/Button.stories'
 import Button from './button.vue'
+
+const composed = composeStories(stories)
 
 const expectNoA11yViolations = async (container: Element) => {
   const results = await axe.run(container)
@@ -115,6 +119,18 @@ describe('Button', () => {
         props: { label: 'Docs', href: 'https://example.com' }
       })
       await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('via composeStories (runs the stories play() in vitest)', () => {
+    it('Default play(): click + keyboard activate emit click', async () => {
+      const { Default } = composed
+      await Default.run()
+    })
+
+    it('Disabled play(): click does not emit; aria-disabled is set', async () => {
+      const { Disabled } = composed
+      await Disabled.run()
     })
   })
 })

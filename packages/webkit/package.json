@@ -49,6 +49,8 @@
     "@semantic-release/github": "^9.2.6",
     "@semantic-release/npm": "^11.0.0",
     "@semantic-release/release-notes-generator": "^12.1.0",
+    "@storybook/test": "^8.6.15",
+    "@storybook/vue3": "^8.6.15",
     "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vitest/browser": "^2.1.9",
