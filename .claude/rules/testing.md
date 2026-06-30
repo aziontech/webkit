@@ -2,7 +2,7 @@
 
 Each webkit component must ship with a minimum automated safety net: a `*.test.ts` co-located with the `.vue` (smoke + a11y) and, for components with interactive flows, a `play()` function on the relevant story. This rule fixes the **floor** — not the ceiling. The story is the fixture, and `composeStories` is the glue between docs, visual regression, interactions, and unit tests.
 
-The reasoning behind the four-layer strategy (Vitest browser mode, Portable Stories, Chromatic, axe via Vitest browser) lives in [`.claude/docs/TESTING_STRATEGY.md`](../docs/TESTING_STRATEGY.md). This file is the **non-negotiable contract** the hooks and skills enforce.
+The reasoning behind the layered strategy (Vitest browser mode, Portable Stories, axe via Vitest browser, governance hook) lives in [`.claude/docs/TESTING_STRATEGY.md`](../docs/TESTING_STRATEGY.md). This file is the **non-negotiable contract** the hooks and skills enforce.
 
 ## The rule
 
@@ -16,12 +16,12 @@ The minimum bar (mirrors `packages/webkit/src/components/actions/button/button.t
 |---|---|---|
 | 1 | Default render → root tag, `data-testid` fallback, key props on `data-*` | Confirms the spec ↔ markup contract: the variant attribute the consumer reads (`data-kind`, `data-size`, …) is actually emitted. |
 | 2 | Consumer `data-testid` is honored (`attrs['data-testid']` wins over the fallback) | Catches accidental `:data-testid="someConstant"` regressions. |
-| 3 | `it.each` over every value of each variant prop (`kind`, `size`, …) → mounts without throwing | Cheapest possible matrix coverage. The visual side is Chromatic; this is "compiles + renders". |
+| 3 | `it.each` over every value of each variant prop (`kind`, `size`, …) → mounts without throwing | Cheapest possible matrix coverage. This is "compiles + renders"; the visual side is reviewed in Storybook by hand. |
 | 4 | Disabled / loading / readonly behavior, when present in the spec | Native attribute set, `aria-*` set, click suppressed. These are the most-broken edges. |
 | 5 | Event emission for every event in the spec's Events table | If the spec promises `update:value`, the test calls the user action and asserts `emitted('update:value')`. |
 | 6 | `axe-core` over `Default` + every variant where a11y semantics differ (`Disabled`, `Anchor`, `Loading`, …) | a11y bar. Until **Wave 7** of the rollout finishes, axe violations log a warning only — the test does not fail on regressions. Wave 7 flips this to a hard failure. |
 
-The smoke test does **not** assert: pixel positions, CSS class strings, Tailwind variants, animation timing — Chromatic handles visual regression, and asserting on class strings traps refactors. If the test would only pass when the implementation is written one specific way, delete the assertion.
+The smoke test does **not** assert: pixel positions, CSS class strings, Tailwind variants, animation timing — those belong to manual Storybook review, and asserting on class strings traps refactors. If the test would only pass when the implementation is written one specific way, delete the assertion.
 
 ## What every interactive story must cover
 
@@ -56,7 +56,7 @@ Each public sub-component is a separate consumer-facing import (see [`compound-a
 - Don't disable axe rules without a comment on the story's `parameters.a11y.config.rules` explaining **why** (same pattern as `Button.stories.js`). A rule muted with no justification is a regression waiting to be merged.
 - Don't put `play()` on a non-interactive story for the sake of "having a play". The `<Default>` render is the test for static stories.
 - Don't write a `*.test.ts` that asserts on Tailwind class strings or component-internal CSS.
-- Don't introduce a separate test runner alongside Vitest. Visual regression is Chromatic; everything else is `pnpm webkit:test`.
+- Don't introduce a separate test runner alongside Vitest. Everything runs under `pnpm webkit:test`.
 
 ## Legacy components
 

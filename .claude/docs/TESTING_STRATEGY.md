@@ -33,17 +33,7 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 
 **Valor.** A11y comportamental. Story vira demo guiada do componente no painel Interactions — quando o fluxo quebra, o painel mostra vermelho. Doc é o teste.
 
-### Camada 3 — Visual regression (Chromatic)
-
-**O que testa.** Como o componente aparece em pixel, em cada story, em viewports e temas.
-
-**Ferramentas.** Chromatic (build de Storybook + diff visual) acionado pelo workflow `.github/workflows/chromatic.yml` em cada PR.
-
-**Bug que impede.** Mexer em `--shape-button` no theme e quebrar o `border-radius` de 30 componentes sem querer. Upgrade de Tailwind muda comportamento de uma utility.
-
-**Valor.** Confiança para mexer em tokens. Code review visual incorporado ao PR (Chromatic comenta com antes/depois). 77 stories existentes viram baseline automática.
-
-### Camada 4 — Acessibilidade (axe-core)
+### Camada 3 — Acessibilidade (axe-core)
 
 **O que testa.** Violações WCAG 2.1 AA estáticas no HTML renderizado: contraste, `<button>` sem nome acessível, `<img>` sem alt, `aria-*` inválido.
 
@@ -53,7 +43,7 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 
 **Valor.** Risco regulatório controlado. Engineer sem experiência em a11y consegue acertar — o teste diz o que está errado e por quê.
 
-### Camada 5 — Governance (gate em PreToolUse)
+### Camada 4 — Governance (gate em PreToolUse)
 
 **O que testa.** Que componente novo não nasce sem teste — `Write` de `<name>.vue` sem `<name>.test.ts` ao lado é bloqueado antes do arquivo existir.
 
@@ -70,6 +60,5 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 | Prop renomeada, evento removido, default mudado | Camada 1 |
 | `disabled` deixa de suprimir click | Camada 1 |
 | `Escape` não fecha overlay, `Tab` escapa do Modal | Camada 2 |
-| `border-radius` de 30 componentes mudou sem querer | Camada 3 |
-| Contraste insuficiente, `aria-*` inválido | Camada 4 |
-| Componente novo entra no repo sem teste | Camada 5 |
+| Contraste insuficiente, `aria-*` inválido | Camada 3 |
+| Componente novo entra no repo sem teste | Camada 4 |
