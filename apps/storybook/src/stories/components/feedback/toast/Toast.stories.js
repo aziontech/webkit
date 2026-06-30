@@ -20,6 +20,19 @@ const sfc = (body) => [...IMPORTS, '', '<template>', indent(body), '</template>'
 
 const components = { Toaster, Button }
 
+// The canvas binds the Toaster's own props from `args` so the Controls panel
+// (position / duration / max / expand / closable) drives the mounted region live.
+// `live()` swaps the clean `<Toaster>` tag for that binding at render time only —
+// the `*_TEMPLATE` constants stay consumer-clean for the "Show code" snippets.
+// (Only the Toaster props are bound — action args like `onUndo` are used in the
+// `toast()` calls, never passed to the Toaster.)
+const LIVE_TOASTER =
+  '<Toaster :position="args.position" :duration="args.duration" :max="args.max" :expand="args.expand" :closable="args.closable" />'
+const live = (template) =>
+  template
+    .replace('<Toaster position="bottom-right" />', LIVE_TOASTER)
+    .replace('<Toaster />', LIVE_TOASTER)
+
 const meta = {
   title: 'Components/Feedback/Toast',
   component: Toaster,
@@ -84,6 +97,57 @@ const meta = {
         sourceState: 'shown'
       }
     }
+  },
+  argTypes: {
+    position: {
+      control: 'inline-radio',
+      options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'],
+      description: 'Corner (or edge-center) the stack is anchored to; a per-toast `position` overrides it.',
+      table: {
+        category: 'props',
+        type: { summary: 'ToastPosition' },
+        defaultValue: { summary: "'bottom-right'" }
+      }
+    },
+    duration: {
+      control: { type: 'number' },
+      description: 'Default auto-dismiss time in ms each toast inherits; `0` keeps it until dismissed.',
+      table: { category: 'props', type: { summary: 'number' }, defaultValue: { summary: '4000' } }
+    },
+    max: {
+      control: { type: 'number' },
+      description: 'Maximum simultaneously visible toasts per corner before the rest queue behind.',
+      table: { category: 'props', type: { summary: 'number' }, defaultValue: { summary: '3' } }
+    },
+    expand: {
+      control: 'boolean',
+      description:
+        'Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    closable: {
+      control: 'boolean',
+      description:
+        'Show an always-visible close control on every toast; a per-toast `closable` option overrides it.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    onUndo: {
+      action: 'undo',
+      description: 'Fires when the toast\'s inline "Undo" action is clicked (Default / WithAction stories).',
+      table: { category: 'events' }
+    },
+    onClose: {
+      action: 'close',
+      description: 'Fires when a toast is dismissed via the `onClose` option (Closable story).',
+      table: { category: 'events' }
+    }
+  },
+  args: {
+    position: 'bottom-right',
+    duration: 4000,
+    max: 3,
+    expand: false,
+    closable: false
   }
 }
 
@@ -93,17 +157,17 @@ const DEFAULT_TEMPLATE = `<Toaster position="bottom-right" />
 <Button label="Show toast" @click="show" />`
 
 export const Default = {
-  render: () => ({
+  render: (args) => ({
     components,
     setup() {
       const show = () =>
         toast('Event has been created', {
           description: 'Sunday, December 03, 2023 at 9:00 AM',
-          action: { label: 'Undo', onClick: () => console.log('Undo') }
+          action: { label: 'Undo', onClick: args.onUndo }
         })
-      return { show }
+      return { args, show }
     },
-    template: DEFAULT_TEMPLATE
+    template: live(DEFAULT_TEMPLATE)
   }),
   parameters: {
     docs: {
@@ -131,26 +195,28 @@ export const Default = {
   }
 }
 
+// Each type raised as a two-line toast (title + timestamp), matching the Figma set.
 const TYPES_TEMPLATE = `<Toaster position="bottom-right" />
 <div class="flex flex-wrap justify-center gap-2">
-  <Button label="Default" kind="secondary" @click="() => toast('Notification')" />
-  <Button label="Success" kind="primary" @click="() => toast.success('Deployed')" />
-  <Button label="Info" kind="outlined" @click="() => toast.info('Heads up')" />
-  <Button label="Warning" kind="outlined" @click="() => toast.warning('Check this')" />
-  <Button label="Error" kind="danger" @click="() => toast.error('Failed')" />
-  <Button label="Loading" kind="text" @click="() => toast.loading('Uploading…')" />
+  <Button label="Default" kind="secondary" @click="() => toast('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
+  <Button label="Success" kind="primary" @click="() => toast.success('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
+  <Button label="Info" kind="outlined" @click="() => toast.info('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
+  <Button label="Warning" kind="outlined" @click="() => toast.warning('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
+  <Button label="Error" kind="danger" @click="() => toast.error('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
+  <Button label="Loading" kind="text" @click="() => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
 </div>`
 
 export const Types = {
-  render: () => ({
+  render: (args) => ({
     components,
-    setup: () => ({ toast }),
-    template: TYPES_TEMPLATE
+    setup: () => ({ args, toast }),
+    template: live(TYPES_TEMPLATE)
   }),
   parameters: {
     docs: {
       description: {
-        story: 'Each type (default, success, info, warning, error, loading) with its own icon. Loading spins.'
+        story:
+          'Each type (default, success, info, warning, error, loading) with its own icon, as a two-line toast (title + timestamp) matching the Figma. Loading spins.'
       },
       source: { code: sfc(TYPES_TEMPLATE) }
     }
@@ -161,16 +227,16 @@ const WITH_DESCRIPTION_TEMPLATE = `<Toaster position="bottom-right" />
 <Button label="Show toast" @click="show" />`
 
 export const WithDescription = {
-  render: () => ({
+  render: (args) => ({
     components,
     setup() {
       const show = () =>
         toast('Event has been created', {
           description: 'Sunday, December 03, 2023 at 9:00 AM'
         })
-      return { show }
+      return { args, show }
     },
-    template: WITH_DESCRIPTION_TEMPLATE
+    template: live(WITH_DESCRIPTION_TEMPLATE)
   }),
   parameters: {
     docs: {
@@ -203,16 +269,16 @@ const WITH_ACTION_TEMPLATE = `<Toaster position="bottom-right" />
 <Button label="Show toast" @click="show" />`
 
 export const WithAction = {
-  render: () => ({
+  render: (args) => ({
     components,
     setup() {
       const show = () =>
         toast('Event has been created', {
-          action: { label: 'Undo', onClick: () => console.log('Undo') }
+          action: { label: 'Undo', onClick: args.onUndo }
         })
-      return { show }
+      return { args, show }
     },
-    template: WITH_ACTION_TEMPLATE
+    template: live(WITH_ACTION_TEMPLATE)
   }),
   parameters: {
     docs: {
@@ -241,7 +307,52 @@ export const WithAction = {
   }
 }
 
-const POSITIONS =['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']
+const CLOSABLE_TEMPLATE = `<Toaster position="bottom-right" />
+<Button label="Show toast" @click="show" />`
+
+export const Closable = {
+  args: { closable: true, duration: 0 },
+  render: (args) => ({
+    components,
+    setup() {
+      const show = () =>
+        toast('Event has been created', {
+          description: 'Sunday, December 03, 2023 at 9:00 AM',
+          onClose: args.onClose
+        })
+      return { args, show }
+    },
+    template: live(CLOSABLE_TEMPLATE)
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An always-visible close control — the `<Toaster closable>` prop adds a dismiss control to every toast (a per-toast `closable` option overrides it). Off by default.'
+      },
+      source: {
+        code: [
+          '<script setup>',
+          "import { Toaster, toast } from '@aziontech/webkit/toast'",
+          "import Button from '@aziontech/webkit/button'",
+          '',
+          'const show = () =>',
+          "  toast('Event has been created', {",
+          "    description: 'Sunday, December 03, 2023 at 9:00 AM'",
+          '  })',
+          '</script>',
+          '',
+          '<template>',
+          '  <Toaster position="bottom-right" closable />',
+          '  <Button label="Show toast" @click="show" />',
+          '</template>'
+        ].join('\n')
+      }
+    }
+  }
+}
+
+const POSITIONS = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']
 
 const POSITIONS_TEMPLATE = `<Toaster />
 <div class="flex flex-wrap justify-center gap-2">
@@ -249,10 +360,10 @@ const POSITIONS_TEMPLATE = `<Toaster />
 </div>`
 
 export const Positions = {
-  render: () => ({
+  render: (args) => ({
     components,
-    setup: () => ({ toast, positions: POSITIONS }),
-    template: POSITIONS_TEMPLATE
+    setup: () => ({ args, toast, positions: POSITIONS }),
+    template: live(POSITIONS_TEMPLATE)
   }),
   parameters: {
     docs: {
