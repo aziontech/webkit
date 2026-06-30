@@ -22,6 +22,8 @@
 
 Icons are distributed as **woff2 icon fonts** with matching CSS class utilities, making them framework-agnostic — usable in plain HTML, Vue, React, or any web project.
 
+In addition, a set of **colored brand icons** (`ai-*-cor`) ships separately. Because an icon-font glyph is single-color, multicolor logos (gradients, multiple fills) cannot live in the woff2 font — they are delivered both as `background-image` CSS classes (usable like a font icon: `<i class="ai ai-google-cor"></i>`) and as a manifest of inline SVG strings. See [Colored icons](#colored-icons).
+
 ---
 
 ## Installation
@@ -75,9 +77,12 @@ import '@aziontech/icons/primeicons'
 The package exposes the following named exports (defined in the generated `dist/package.json`):
 
 ```js
-import '@aziontech/icons'                              // → dist/index.css (both sets)
+import '@aziontech/icons'                              // → dist/index.css (all sets + colored classes)
 import '@aziontech/icons/azionicons'                   // → dist/azionicons.css
+import '@aziontech/icons/azionicons-color'             // → dist/azionicons-color.css (colored .ai-*-cor classes)
 import '@aziontech/icons/primeicons'                   // → dist/primeicons.css
+import catalog from '@aziontech/icons/catalog'         // → dist/catalog.json (font icon list)
+import colorIcons from '@aziontech/icons/color-catalog' // → dist/color-catalog.json (colored SVGs)
 ```
 
 ---
@@ -132,6 +137,43 @@ A comprehensive general-purpose UI icon set. All use the `.pi` base class:
 <i class="pi pi-search"></i>
 <i class="pi pi-user"></i>
 ```
+
+---
+
+## Colored icons
+
+Some icons — third-party brand and framework logos — are inherently multicolor (gradients, multiple fills). An icon **font** glyph is single-color, so these cannot ship in the woff2 fonts above. They are delivered two ways instead, named with a `-cor` suffix (`ai-react-cor`, `ai-vue-cor`, `ai-next-cor`, …).
+
+### 1. As a CSS class (recommended — use it like a font icon)
+
+Importing `@aziontech/icons` (or `@aziontech/icons/azionicons-color`) registers a `.ai-<name>-cor` class for each colored icon. It paints the SVG as a `background-image` and sizes to `1em`, so it drops into the same `<i>` markup as a font icon:
+
+```html
+<i class="ai ai-google-cor"></i>
+<i class="ai ai-react-cor" style="font-size: 32px;"></i>
+```
+
+The `font-size` controls the box (1em); the icon keeps its own palette regardless of `color`.
+
+### 2. As inline SVG (when you need the raw markup)
+
+The same icons are also available as inline SVG strings at [`@aziontech/icons/color-catalog`](#package-exports) — useful when you can't load the CSS, or want to manipulate the markup directly:
+
+```vue
+<template>
+  <!-- size via a wrapper; the SVG keeps its own brand palette -->
+  <span style="width: 32px; height: 32px" v-html="reactIcon.svg" />
+</template>
+
+<script setup>
+  import colorIcons from '@aziontech/icons/color-catalog'
+  const reactIcon = colorIcons.find((i) => i.name === 'ai-react-cor')
+</script>
+```
+
+> Colored icons are **not** recolored by `color` / `currentColor` — that is the whole point. For a themeable, single-color version of a framework logo, use the monochrome font icon instead (`ai-react`, `ai-vue`, `ai-next`, …).
+
+Available colored icons: `ai-angular-cor`, `ai-astro-cor`, `ai-azuredevops-cor`, `ai-bitbucket-cor`, `ai-flutter-cor`, `ai-gitlab-cor`, `ai-google-cor`, `ai-js-cor`, `ai-kotlin-cor`, `ai-next-cor`, `ai-nuxt-cor`, `ai-react-cor`, `ai-redwood-cor`, `ai-solidjs-cor`, `ai-svelte-cor`, `ai-ts-cor`, `ai-vue-cor`.
 
 ---
 
@@ -230,21 +272,28 @@ Here's how that your SVG needs to looks in code:
 @aziontech/icons/
 ├── dist/                     # npm publishable output (gitignored)
 │   ├── azionicons.css
+│   ├── azionicons-color.css  # colored .ai-*-cor classes (background-image)
 │   ├── azionicons.woff2
 │   ├── primeicons.css
 │   ├── primeicons.woff2
 │   ├── index.css
+│   ├── catalog.json          # font icon list (ai + pi)
+│   ├── color-catalog.json    # colored icons as inline SVG (ai-*-cor)
 │   ├── package.json          # generated for npm publish
 │   ├── LICENSE
 │   └── README.md
 ├── src/
 │   └── svg-raw/
-│       ├── ai/               # Azion SVG source files (87 icons)
-│       └── pi/               # PrimeIcons SVG source files (315 icons)
+│       ├── ai/               # Azion SVG source files (87 icons, monochrome → font)
+│       ├── ai-cor/           # Azion colored brand icons (inline SVG, NOT fonted)
+│       └── pi/               # PrimeIcons SVG source files (315 icons → font)
 ├── scripts/
-│   ├── build-package.mjs     # Build orchestrator: validate → generate → assemble
-│   ├── build.mjs             # Font generation via fantasticon
-│   └── validate.mjs          # SVG validation script
+│   ├── build.mjs             # Build orchestrator: validate → fonts → catalogs → assemble
+│   ├── build-woff2.mjs       # Font generation via fantasticon
+│   ├── build-catalog.mjs     # Generates dist/catalog.json (font icons only)
+│   ├── build-color-catalog.mjs # Generates dist/color-catalog.json (colored SVGs)
+│   ├── build-color-css.mjs   # Generates dist/azionicons-color.css (colored classes)
+│   └── validate-svg.mjs      # SVG validation script
 ├── fantasticon.config.mjs    # Font generation configuration (two font configs)
 ├── templates/
 │   └── css.hbs               # Handlebars CSS template for generated font files
@@ -272,6 +321,15 @@ Here's how that your SVG needs to looks in code:
 ### Adding a new PrimeIcon
 
 Follow the same steps above but place the SVG in [`src/svg-raw/pi/`](src/svg-raw/pi/) using the `pi-` prefix.
+
+### Adding a new colored Azion icon
+
+Colored brand icons bypass the font (a glyph is single-color) and ship as a `.ai-*-cor` CSS class (`dist/azionicons-color.css`) plus an inline-SVG manifest (`dist/color-catalog.json`).
+
+1. Place the **multicolor** SVG in [`src/svg-raw/ai-cor/`](src/svg-raw/ai-cor/) using the naming convention `ai-<icon-name>-cor.svg` (kebab-case, no spaces or dots — e.g. `ai-next-cor.svg`).
+2. Keep a square `viewBox` (`0 0 14 14`). **Do not** convert fills to `currentColor` — the colors are the point.
+3. Run `npm run build`. The icon is picked up by `build-color-catalog.mjs` (→ `dist/color-catalog.json`) and `build-color-css.mjs` (→ a `.ai-<name>-cor` class in `dist/azionicons-color.css`, also imported by the `index.css` barrel). It is intentionally **excluded** from the woff2 font and from `dist/catalog.json`.
+4. Verify `<i class="ai ai-<name>-cor"></i>` renders in color, and that it appears in the icons gallery (`apps/icons-gallery`).
 
 ### Validate the SVG
 
@@ -318,15 +376,15 @@ npm run build
 
 ### Build pipeline (`build`)
 
-The [`scripts/build-package.mjs`](scripts/build-package.mjs) orchestrator runs 7 steps:
+The [`scripts/build.mjs`](scripts/build.mjs) orchestrator runs 7 steps:
 
-1. **Validate SVGs** — runs `scripts/validate.mjs` (blocks on errors)
+1. **Validate SVGs** — runs `scripts/validate-svg.mjs` (blocks on errors)
 2. **Clean `dist/`** — removes and recreates the output directory
-3. **Generate fonts** — runs `scripts/build.mjs` (fantasticon for both `ai` and `pi`)
-4. **Create `index.css`** — barrel file importing both `azionicons.css` and `primeicons.css`
+3. **Generate fonts** — runs `scripts/build-woff2.mjs` (fantasticon for both `ai` and `pi`; the colored `ai-cor` folder is not a font input)
+4. **Create `index.css`** — barrel file importing `azionicons.css`, `azionicons-color.css`, and `primeicons.css`
 5. **Generate `dist/package.json`** — creates a clean package manifest with exports for npm
 6. **Copy LICENSE & README.md** — into `dist/` for npm
-7. **Generate to `dist/catalog.json/`** — create file to consume to display the available icons
+7. **Generate catalogs & colored CSS** — `dist/catalog.json` (font icons, via `build-catalog.mjs`), `dist/color-catalog.json` (colored SVGs, via `build-color-catalog.mjs`), and `dist/azionicons-color.css` (colored `.ai-*-cor` classes, via `build-color-css.mjs`)
 
 ### Publishing
 

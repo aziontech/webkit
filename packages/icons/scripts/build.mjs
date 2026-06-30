@@ -63,6 +63,7 @@ try {
 
 console.log('\n📦 Step 4/7 — Creating dist/index.css barrel file...\n')
 const barrelContent = `@import './azionicons.css';
+@import './azionicons-color.css';
 @import './primeicons.css';
 `
 writeFileSync(join(DIST_DIR, 'index.css'), barrelContent, CHARSET)
@@ -85,8 +86,10 @@ const distPkg = {
   exports: {
     '.': './index.css',
     './azionicons': './azionicons.css',
+    './azionicons-color': './azionicons-color.css',
     './primeicons': './primeicons.css',
-    './catalog': './catalog.json'
+    './catalog': './catalog.json',
+    './color-catalog': './color-catalog.json'
   }
 }
 writeFileSync(join(DIST_DIR, 'package.json'), JSON.stringify(distPkg, null, 2) + '\n', CHARSET)
@@ -110,13 +113,15 @@ if (existsSync('./README.md')) {
   console.log('  ⚠ README.md not found — skipped')
 }
 
-// ─── Step 7: Generate dist/catalog.json ─────────────────────────────────
+// ─── Step 7: Generate catalogs (font + colored) ─────────────────────────────
 
-console.log('\n📦 Step 7/7 — Generating dist/catalog.json...\n')
+console.log('\n📦 Step 7/7 — Generating dist/catalog.json + dist/color-catalog.json...\n')
 
 try {
   execSync('node scripts/build-catalog.mjs', { stdio: 'inherit' })
   console.log('  ✔ dist/catalog.json created')
+  execSync('node scripts/build-color-catalog.mjs', { stdio: 'inherit' })
+  execSync('node scripts/build-color-css.mjs', { stdio: 'inherit' })
 } catch {
   console.error('\n🔴 Icons catalog generation failed. Fix the errors above before building.\n')
   process.exit(1)
