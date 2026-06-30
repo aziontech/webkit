@@ -17,7 +17,7 @@ export const fontSize = {
   '4xl--line-height': 'calc(2.5 / 2.25)',
   '5xl': '3rem',
   '5xl--line-height': '1',
-  '6xl': '3.75rem',
+  '6xl': '3.5rem',
   '6xl--line-height': '1',
   '7xl': '4.5rem',
   '7xl--line-height': '1',
