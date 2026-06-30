@@ -39,7 +39,14 @@
   }>()
 
   defineSlots<{
-    default(): unknown
+    default(props: {
+      move: (direction: MoveDirection) => void
+      moveAll: (direction: MoveDirection) => void
+      hasSelection: (side: PickListSide) => boolean
+      count: (side: PickListSide) => number
+      disabled: boolean
+      loading: boolean
+    }): unknown
   }>()
 
   const attrs = useAttrs()
@@ -181,6 +188,10 @@
     isLoading,
     setLoading
   })
+
+  // Imperative API for controls rendered outside the root (via a template ref):
+  // `<button @click="pl.move('to-target')" />` + `<PickList ref="pl" />`.
+  defineExpose({ move, moveAll, hasSelection, count })
 </script>
 
 <template>
@@ -190,6 +201,13 @@
     :data-disabled="disabled || null"
     class="grid grid-cols-1 items-stretch gap-[var(--spacing-sm)] data-[disabled]:opacity-60 md:grid-cols-[1fr_auto_1fr]"
   >
-    <slot />
+    <slot
+      :move="move"
+      :move-all="moveAll"
+      :has-selection="hasSelection"
+      :count="count"
+      :disabled="disabled"
+      :loading="anyLoading"
+    />
   </div>
 </template>

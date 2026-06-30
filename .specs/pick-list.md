@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: approved
 spec_version: 2
-checksum: f8ae29b4f0448534e5f225adb9ad517c7fe90f6df5de06ea0ca1a74ad8e3a059
+checksum: eb0f5ea0b57b4022a6e412dae18f8382fa2b6eb489d36adace794d7649582179
 created: 2026-06-25
 last_updated: 2026-06-30
 ---
@@ -51,6 +51,8 @@ const model = ref([
 ```
 
 Each part is also a standalone import (`import PickListSource from '@aziontech/webkit/pick-list-source'`, …), and the root is published standalone (tree-shakeable) as `@aziontech/webkit/pick-list-root` — the path to use when only a few parts are needed.
+
+**Custom controls** — to replace `<PickList.Controls>` with your own buttons, use either: (a) the default-slot scope, for controls placed **inside** the root — `<PickList v-slot="{ move, moveAll, hasSelection, count, disabled, loading }">`; or (b) a template ref, for controls **outside** the root — the root exposes `move` / `moveAll` / `hasSelection` / `count`, so `<button @click="pl.move('to-target')" />` works with `<PickList ref="pl" />`. Both paths reuse the same move actions and internal selection state — no context import is needed.
 
 ## Sub-components
 
@@ -102,7 +104,9 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. |
+| `default` | `{ move, moveAll, hasSelection, count, disabled, loading }` | Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>` (`<PickList v-slot="{ move, hasSelection }">`). |
+
+The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its instance (via `defineExpose`), so controls rendered **outside** the root can drive it through a template ref — `<button @click="pl.move('to-target')" />` with `<PickList ref="pl" />`. The signatures match the slot scope above.
 
 ## States
 
@@ -161,6 +165,7 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 - Default — also documents double-click-to-move (on by default); the `moveOnDoubleClick` control toggles the auto-move while `item-double-click` keeps firing.
 - Disabled
 - Loading — justified: the list `loading` prop swaps a list's items for a spinner and locks the move controls; the story documents both-sides and single-side loading, which no other story exercises.
+- CustomControls — justified: documents replacing `<PickList.Controls>` with consumer-built buttons rendered **outside** the root, wired through the exposed `move` / `moveAll` / `hasSelection` / `count` via a template ref — a path no other story exercises.
 
 ## Constraints — DO NOT
 
