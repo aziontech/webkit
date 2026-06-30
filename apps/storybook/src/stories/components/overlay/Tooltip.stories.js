@@ -48,11 +48,12 @@ const meta = {
     },
     placement: {
       control: 'select',
-      options: ['top', 'right', 'bottom', 'left'],
-      description: 'Anchor side relative to the trigger.',
+      options: ['top', 'right', 'bottom', 'left', 'auto'],
+      description:
+        "Anchor side relative to the trigger. `'auto'` picks the side with the most room at open time.",
       table: {
         category: 'props',
-        type: { summary: "'top' | 'right' | 'bottom' | 'left'" },
+        type: { summary: "'top' | 'right' | 'bottom' | 'left' | 'auto'" },
         defaultValue: { summary: "'top'" }
       }
     },
@@ -173,6 +174,54 @@ export const Placements = {
     docs: {
       description: {
         story: 'All four anchor sides with directional arrow triggers. Hover or focus each icon button to compare placement.'
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Tooltip>} */
+export const AutoPlacement = {
+  render: () => ({
+    components: { Tooltip, IconButton },
+    template: `
+      <div class="relative h-[28rem] w-full border border-dashed border-[var(--border-muted)]">
+        <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-body-sm text-[var(--text-muted)] text-center max-w-md">
+          All four triggers use <code>placement="auto"</code>.<br />
+          Each tooltip resolves to the side with the most available space.
+        </p>
+
+        <div class="absolute top-[var(--spacing-md)] left-1/2 -translate-x-1/2">
+          <Tooltip text="auto placement" placement="auto" :default-open="true">
+            <IconButton icon="pi pi-arrow-up" aria-label="top-edge trigger" kind="outlined" size="medium" />
+          </Tooltip>
+        </div>
+
+        <div class="absolute bottom-[var(--spacing-md)] left-1/2 -translate-x-1/2">
+          <Tooltip text="auto placement" placement="auto" :default-open="true">
+            <IconButton icon="pi pi-arrow-down" aria-label="bottom-edge trigger" kind="outlined" size="medium" />
+          </Tooltip>
+        </div>
+
+        <div class="absolute left-[var(--spacing-md)] top-1/2 -translate-y-1/2">
+          <Tooltip text="auto placement" placement="auto" :default-open="true">
+            <IconButton icon="pi pi-arrow-left" aria-label="left-edge trigger" kind="outlined" size="medium" />
+          </Tooltip>
+        </div>
+
+        <div class="absolute right-[var(--spacing-md)] top-1/2 -translate-y-1/2">
+          <Tooltip text="auto placement" placement="auto" :default-open="true">
+            <IconButton icon="pi pi-arrow-right" aria-label="right-edge trigger" kind="outlined" size="medium" />
+          </Tooltip>
+        </div>
+      </div>
+    `
+  }),
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          '`placement="auto"` lets the tooltip pick the side with the most available space at open time. The four edge-positioned triggers below all share the same prop value — each resolves to the side that fits best. The resolved value is reflected in `data-placement`. Backed by the shared `@aziontech/webkit/use-placement` composable.'
       }
     }
   }
