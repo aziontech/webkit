@@ -1,23 +1,14 @@
 #!/usr/bin/env node
+
 // PreToolUse hook: blocks the FIRST Write that creates a new component file under
 // packages/webkit/src/components/<category>/<name>/<file>.vue when the agent
 // has not yet read or invoked the `component-create` skill in this session.
 
 import { existsSync, readFileSync, statSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
+import { COMPONENT_CATEGORIES } from './component-categories.mjs'
 
 const ROOT = process.cwd()
-const CATEGORIES = [
-  'actions',
-  'content',
-  'data',
-  'feedback',
-  'inputs',
-  'layout',
-  'navigation',
-  'overlay',
-  'utils'
-]
 
 function readStdin() {
   return new Promise((res) => {
@@ -91,7 +82,7 @@ async function main() {
   if (!match) process.exit(0)
 
   const [, category] = match
-  if (!CATEGORIES.includes(category)) process.exit(0)
+  if (!COMPONENT_CATEGORIES.includes(category)) process.exit(0)
 
   // If the .vue already exists and is not a brand-new creation, this is an
   // edit-via-Write — let it pass (validate-tokens.mjs still applies).

@@ -120,7 +120,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: TypeScript check
-        run: pnpm vue-tsc --noEmit
+        run: pnpm type-check
         working-directory: packages/webkit
 
       - name: Type coverage (enforce 95% threshold)
