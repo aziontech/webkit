@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 7ad0a091cf8128450ec31f287c8ca500d949583d475198d1a113775b24879375
+checksum: ce8bbd525f8b0bb96f953edaea0b45aee7aa00cd15abacc129fc744cbf8fa5ff
 created: 2026-06-23
-last_updated: 2026-06-26
+last_updated: 2026-06-30
 ---
 
 # Chip — Component Spec
@@ -26,7 +26,7 @@ import Chip from '@aziontech/webkit/chip'
 </script>
 
 <template>
-  <Chip label="Active" size="medium" removable @remove="onRemove" />
+  <Chip label="Active" size="medium" clickable removable @click="onEdit" @remove="onRemove" />
 </template>
 ```
 
@@ -37,12 +37,14 @@ import Chip from '@aziontech/webkit/chip'
 | `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `size` | `'small' \| 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
 | `removable` | `boolean` | `false` | no | When true, renders a trailing remove button that emits `remove`. |
+| `clickable` | `boolean` | `false` | no | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
 | `remove` | `MouseEvent` | Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out. |
+| `click` | `MouseEvent \| KeyboardEvent` | Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`. |
 
 ## Slots
 
@@ -52,10 +54,12 @@ import Chip from '@aziontech/webkit/chip'
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible` (on the remove button), `active`
+- Visual states: `default`, `hover`, `focus-visible`, `active`
 - `data-size` mirrors the `size` prop (`small` | `medium`)
 - `data-removable` is present when the `removable` prop is true
-- The root is a non-interactive container; only the remove button is focusable, and it shows a visible focus ring on `focus-visible`.
+- `data-clickable` is present when the `clickable` prop is true
+- When `clickable`, the root is an interactive `role="button"` with `tabindex="0"`: it shows `cursor-pointer`, a `::before` / `::after` ghost-layer hover/active overlay, and a visible focus ring on `focus-visible`. When not clickable, the root stays a non-interactive container.
+- The remove button (when `removable`) is always independently focusable and shows its own focus ring on `focus-visible`.
 
 ## Motion & Animations
 
@@ -63,6 +67,7 @@ import Chip from '@aziontech/webkit/chip'
 |---|---|---|---|
 | remove (chip dismiss) | inline `opacity` transition (fade-out), matching the `Message` dismiss | `duration['fast-02']` · `curve['productive-exit']` (animations.js) | `motion-reduce:transition-none` |
 | remove button hover/focus state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| clickable hover / active (chip body) | `::before` / `::after` ghost-layer `opacity` overlays (`--bg-hover` / `--bg-active`), active only when `clickable` | `before:duration-fast-02 before:ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:before:transition-none` / `motion-reduce:after:transition-none` |
 
 ## Tokens
 
@@ -79,6 +84,7 @@ import Chip from '@aziontech/webkit/chip'
 | spacing (small padding) | `var(--spacing-xs)` / `var(--spacing-xxs)` |
 | spacing (label↔icon gap) | `var(--spacing-xxs)` |
 | ring | `var(--ring-color)` |
+| interactive overlay (clickable hover / active) | `var(--bg-hover)` / `var(--bg-active)` (ghost layers) |
 
 ## Theme gaps
 
@@ -90,9 +96,9 @@ import Chip from '@aziontech/webkit/chip'
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the remove button uses `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`.
-- Keyboard map: the root is not focusable; `Tab` focuses the remove button (when `removable`), `Enter`/`Space` activates it and emits `remove`.
-- ARIA: the root is a non-interactive `<span>` container; the remove control is a real `<button type="button">` with `aria-label="Remove"`; the `pi pi-times` glyph is `aria-hidden="true"`.
+- Visible focus: both the clickable root (when `clickable`) and the remove button use `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`.
+- Keyboard map: when `clickable`, the root is focusable (`tabindex="0"`) and `Enter` / `Space` emit `click` (`Space` is `preventDefault`ed to avoid scrolling). When `removable`, `Tab` reaches the remove button and `Enter` / `Space` activate it and emit `remove`. Keystrokes that originate on the remove button do not bubble to the root activation (the handler ignores events whose `target` is not the root itself).
+- ARIA: when not `clickable`, the root is a non-interactive `<span>` container; when `clickable`, it is `role="button"` with `tabindex="0"`. The remove control is a real `<button type="button">` with `aria-label="Remove"`; the `pi pi-times` glyph is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on the remove button's color transition and on the chip's dismiss fade-out (the exit transition collapses to instant under reduced motion).
 - Touch target: justified deviation — the chip height is 20–24px, so the remove button's touch target is below 40×40 px. This matches the design (the Chip is a compact inline token, not a primary action), and the larger surrounding chip remains the visible affordance.
@@ -102,6 +108,7 @@ import Chip from '@aziontech/webkit/chip'
 - Default — the baseline Chip with `label`.
 - Sizes — composite story rendering `small` and `medium` side by side, justified because `size` is a real axis with two values.
 - Removable — args delta `removable: true`, wiring the `remove` event to the Actions panel; justified because `removable` is a real boolean state that changes the rendered anatomy (adds the trailing remove button) and the emitted event.
+- Clickable — args delta `clickable: true`, wiring the `click` event to the Actions panel; justified because `clickable` is a real boolean state that turns the chip body into an interactive `role="button"` and emits a distinct event.
 
 Types/Sizes canonical note: there is no `kind`/`severity` axis on Chip, so the `Types` story is omitted.
 
