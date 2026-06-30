@@ -5,19 +5,7 @@
 import { createHash } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-
-export const CATEGORIES = [
-  'actions',
-  'content',
-  'data',
-  'feedback',
-  'inputs',
-  'layout',
-  'navigation',
-  'overlay',
-  'templates',
-  'utils'
-]
+import { COMPONENT_CATEGORIES } from '../component-categories.mjs'
 
 export const STRUCTURES = ['monolithic', 'composition']
 export const STATUSES = ['draft', 'approved', 'implemented', 'locked']
@@ -83,7 +71,7 @@ export function validateFrontmatter(fm) {
   const errors = []
   if (!fm) return ['frontmatter missing or unparseable']
   if (!fm.name || !KEBAB_RE.test(fm.name)) errors.push('name: must be kebab-case')
-  if (!CATEGORIES.includes(fm.category)) errors.push(`category: must be one of ${CATEGORIES.join('|')}`)
+  if (!COMPONENT_CATEGORIES.includes(fm.category)) errors.push(`category: must be one of ${COMPONENT_CATEGORIES.join('|')}`)
   if (!STRUCTURES.includes(fm.structure)) errors.push(`structure: must be one of ${STRUCTURES.join('|')}`)
   if (!STATUSES.includes(fm.status)) errors.push(`status: must be one of ${STATUSES.join('|')}`)
   if (typeof fm.spec_version !== 'number' || fm.spec_version < 1) errors.push('spec_version: must be integer >= 1')
@@ -231,7 +219,7 @@ export function resolveSpecForComponentPath(filePath, repoRoot) {
   const m = rel.match(/^packages\/webkit\/src\/components\/([^/]+)\/([^/]+)\/[^/]+\.vue$/)
   if (!m) return null
   const [, category, name] = m
-  if (!CATEGORIES.includes(category)) return null
+  if (!COMPONENT_CATEGORIES.includes(category)) return null
   const specPath = resolve(repoRoot, '.specs', `${name}.md`)
   return { category, name, specPath }
 }

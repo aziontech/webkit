@@ -30,6 +30,10 @@ export interface ToastOptions {
   duration?: number
   /** Anchor this single toast to a specific corner, overriding the Toaster's `position`. */
   position?: ToastPosition
+  /** When true, show an always-visible close control; falls back to the Toaster's `closable`. */
+  closable?: boolean
+  /** Called when the toast is dismissed — by the close control, auto-dismiss, or programmatically. */
+  onClose?: () => void
   /** Stable id; pass an existing id to update a toast in place. */
   id?: string
 }
@@ -60,6 +64,10 @@ export interface ToastEntry {
   duration: number
   /** Per-toast anchor override (falls back to the Toaster's `position`). */
   position?: ToastPosition
+  /** Per-toast close override (falls back to the Toaster's `closable`). */
+  closable?: boolean
+  /** Called when the toast is dismissed (close control, auto-dismiss, or programmatic). */
+  onClose?: () => void
 }
 
 /** Patch applied by `update()` (every field optional except identity, which is positional). */
@@ -79,9 +87,16 @@ export interface ToastStore {
   pause: () => void
   /** Resume the paused timers, each with its remaining time. */
   resume: () => void
+  /** Set the default auto-dismiss time (ms) new toasts inherit (driven by the active Toaster's `duration`). */
+  setDefaultDuration: (ms: number) => void
 }
 
 const DEFAULT_DURATION = 4000
+
+// The active Toaster's `duration` prop sets this, so its control changes the
+// auto-dismiss time new toasts inherit; a per-toast `duration` still overrides
+// it, and `0` keeps a toast until it is dismissed.
+const defaultDuration = ref(DEFAULT_DURATION)
 
 const entries = reactive<ToastEntry[]>([])
 const timers = new Map<string, ReturnType<typeof setTimeout>>()
@@ -104,6 +119,7 @@ const remove = (id?: string) => {
     timers.forEach((timer) => clearTimeout(timer))
     timers.clear()
     expiry.clear()
+    entries.forEach((entry) => entry.onClose?.())
     entries.splice(0, entries.length)
     return
   }
@@ -111,6 +127,7 @@ const remove = (id?: string) => {
   expiry.delete(id)
   const index = entries.findIndex((entry) => entry.id === id)
   if (index !== -1) {
+    entries[index].onClose?.()
     entries.splice(index, 1)
   }
 }
@@ -154,7 +171,7 @@ const resumeAll = () => {
 }
 
 const add: ToastStore['add'] = (entry) => {
-  const duration = entry.duration ?? DEFAULT_DURATION
+  const duration = entry.duration ?? defaultDuration.value
   const next: ToastEntry = { ...entry, duration }
   const existing = entries.findIndex((item) => item.id === next.id)
   if (existing !== -1) {
@@ -189,7 +206,10 @@ export const toastStore: ToastStore = {
   update,
   dismiss: remove,
   pause: pauseAll,
-  resume: resumeAll
+  resume: resumeAll,
+  setDefaultDuration: (ms) => {
+    defaultDuration.value = ms
+  }
 }
 
 /**
@@ -207,7 +227,9 @@ const raise = (type: ToastType, message: string, options: ToastOptions = {}): st
     description: options.description,
     action: options.action,
     duration: options.duration,
-    position: options.position
+    position: options.position,
+    closable: options.closable,
+    onClose: options.onClose
   })
 
 interface ToastFn {
@@ -241,11 +263,11 @@ toastFn.promise = (promise, messages, options) => {
     (value) => {
       const text =
         typeof messages.success === 'function' ? messages.success(value) : messages.success
-      toastStore.update(id, { type: 'success', message: text, duration: DEFAULT_DURATION })
+      toastStore.update(id, { type: 'success', message: text, duration: defaultDuration.value })
     },
     (reason) => {
       const text = typeof messages.error === 'function' ? messages.error(reason) : messages.error
-      toastStore.update(id, { type: 'error', message: text, duration: DEFAULT_DURATION })
+      toastStore.update(id, { type: 'error', message: text, duration: defaultDuration.value })
     }
   )
   return id
