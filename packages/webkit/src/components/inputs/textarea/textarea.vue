@@ -44,31 +44,54 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-textarea')
   const isFilled = computed(() => props.modelValue.length > 0)
-  const hasIconLeft = computed(() => !!slots['iconLeft'])
-  const hasIconRight = computed(() => !!slots['iconRight'] || props.disabled)
+  const hasIconLeft = computed(() => Boolean(slots['iconLeft']))
+  const hasIconRight = computed(() => Boolean(slots['iconRight']) || props.disabled)
 
-  // eslint-disable-next-line no-undef
-  const handleInput = (event: InputEvent) => {
-    const target = event.target as HTMLElement & { value: string }
+  const passthroughAttrs = computed(() => {
+    const rest: Record<string, unknown> = { ...attrs }
+    delete rest['class']
+    delete rest['data-testid']
+    return rest
+  })
+
+  const handleInput = (event: globalThis.Event) => {
+    const target = event.target as globalThis.HTMLTextAreaElement
     emit('update:modelValue', target.value)
   }
 </script>
 
 <template>
-  <div
-    :data-testid="testId"
+  <span
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
-    :data-filled="isFilled || null"
     :data-readonly="readonly || null"
+    :data-filled="isFilled || null"
     :data-has-icon-left="hasIconLeft || null"
     :data-has-icon-right="hasIconRight || null"
-    :class="attrs.class as string"
-    class="group relative isolate w-full rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-solid border-[var(--border-default)] bg-[var(--bg-surface)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-[var(--border-strong)] hover:bg-[var(--bg-surface-raised)] data-[filled]:hover:bg-[var(--bg-surface)] focus-within:border-[var(--ring-color)] focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-1 focus-within:ring-offset-[var(--bg-canvas)] data-[required]:border-[var(--warning-border)] data-[required]:focus-within:border-[var(--warning-border)] data-[required]:focus-within:ring-[var(--warning)] data-[invalid]:border-[var(--danger-border)] data-[invalid]:focus-within:border-[var(--danger-border)] data-[invalid]:focus-within:ring-[var(--danger)] data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:hover:bg-[var(--bg-disabled)] data-[disabled]:hover:border-[var(--border-default)]"
+    :class="[
+      'relative inline-flex items-start w-full',
+      'gap-[var(--spacing-xs)] px-[var(--spacing-sm)] py-[var(--spacing-sm)]',
+      'rounded-[var(--shape-elements)]',
+      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
+      'transition-colors duration-150 ease-out motion-reduce:transition-none',
+      '[&:not(:focus-within):not([data-disabled])]:hover:border-[var(--border-strong)]',
+      'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]',
+      'data-[invalid]:border-[var(--danger-border)]',
+      'data-[required]:border-[var(--warning-border)]',
+      'data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-[var(--border-default)] data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      attrs.class
+    ]"
   >
+    <span
+      v-if="hasIconLeft"
+      class="inline-flex shrink-0 items-center justify-center text-[var(--text-muted)]"
+      aria-hidden="true"
+    >
+      <slot name="iconLeft" />
+    </span>
+
     <textarea
-      v-bind="$attrs"
       :value="modelValue"
       :placeholder="placeholder"
       :disabled="disabled"
@@ -77,28 +100,24 @@
       :aria-invalid="invalid || undefined"
       :aria-required="required || undefined"
       :aria-disabled="disabled || undefined"
-      :data-testid="`${testId}__control`"
-      class="block w-full min-h-[80px] resize-y rounded-[var(--shape-elements)] border-0 bg-transparent outline-none text-body-xs text-[var(--text-default)] placeholder:text-[var(--text-muted)] p-[var(--spacing-sm)] group-data-[has-icon-left]:pl-[calc(var(--spacing-sm)+var(--spacing-md)+1rem)] group-data-[has-icon-right]:pr-[calc(var(--spacing-sm)+var(--spacing-md)+1rem)] transition-[padding] duration-150 ease-out motion-reduce:transition-none focus:p-[var(--spacing-md)] focus:group-data-[has-icon-left]:pl-[calc(var(--spacing-md)+var(--spacing-md)+1rem)] focus:group-data-[has-icon-right]:pr-[calc(var(--spacing-md)+var(--spacing-md)+1rem)] disabled:cursor-not-allowed disabled:p-[var(--spacing-md)] disabled:text-[var(--text-disabled)] disabled:placeholder:text-[var(--text-disabled)] read-only:cursor-default"
+      :data-testid="testId"
+      class="relative z-[1] w-full min-w-0 min-h-[80px] resize-y border-0 bg-transparent p-0 outline-none text-body-xs text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] disabled:placeholder:text-[var(--text-disabled)] read-only:cursor-default"
+      v-bind="passthroughAttrs"
       @input="handleInput"
     />
-    <span
-      v-if="hasIconLeft"
-      aria-hidden="true"
-      class="absolute top-[var(--spacing-md)] left-[var(--spacing-md)] text-[var(--text-muted)] pointer-events-none"
-    >
-      <slot name="iconLeft" />
-    </span>
+
     <span
       v-if="hasIconRight && !disabled"
+      class="inline-flex shrink-0 items-center justify-center text-[var(--text-muted)]"
       aria-hidden="true"
-      class="absolute top-[var(--spacing-md)] right-[var(--spacing-md)] text-[var(--text-muted)] pointer-events-none"
     >
       <slot name="iconRight" />
     </span>
+
     <i
       v-if="disabled"
       aria-hidden="true"
-      class="pi pi-lock absolute top-[var(--spacing-md)] right-[var(--spacing-md)] text-[var(--text-disabled)] pointer-events-none"
+      class="pi pi-lock inline-flex shrink-0 items-center justify-center text-[var(--text-disabled)]"
     />
-  </div>
+  </span>
 </template>
