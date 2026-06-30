@@ -1,6 +1,9 @@
+import CodeBlock from '@aziontech/webkit/code-block'
 import { ref } from 'vue'
 
-import CodeBlock from '@aziontech/webkit/code-block'
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import CodeBlock from '@aziontech/webkit/code-block'"
 
 const sampleCode = `export default {
   async fetch(request) {
@@ -73,104 +76,53 @@ const diffLineChanges = [
   { line: 11, change: 'added' }
 ]
 
-const componentDocsDescription = [
-  'Read-only code viewer for docs, API examples, and configuration previews. Supports tabbed language switching, filename bars, diff markers, and highlighted lines.',
-  '',
-  '## Passing code',
-  '',
-  'There is no standalone `code` prop. Pass the source string on each tab’s **`code`** field inside **`tabs`**. The active tab’s value (via `v-model:value` or `defaultValue`) selects which snippet renders.',
-  '',
-  '### Single snippet (recommended)',
-  '',
-  'Use a template literal for multiline source, then reference it on one tab:',
-  '',
-  '```vue',
-  '<script setup>',
-  "import CodeBlock from '@aziontech/webkit/code-block'",
-  '',
-  'const code = `export default {',
-  '  async fetch(request) {',
-  "    return new Response('OK')",
-  '  }',
-  '}`',
-  '',
-  'const tabs = [',
-  '  {',
-  "    label: 'JavaScript',",
-  "    value: 'js',",
-  "    language: 'javascript',",
-  "    fileName: 'handler.js',",
-  '    code',
-  '  }',
-  ']',
-  '</script>',
-  '',
-  '<template>',
-  '  <CodeBlock :tabs="tabs" default-value="js" show-line-numbers />',
-  '</template>',
-  '```',
-  '',
-  '### Multiple languages',
-  '',
-  'Add one tab per snippet. Each tab carries its own `code`, `language`, and optional `fileName`:',
-  '',
-  '```vue',
-  '<script setup>',
-  "import { ref } from 'vue'",
-  "import CodeBlock from '@aziontech/webkit/code-block'",
-  '',
-  'const activeTab = ref(\'js\')',
-  '',
-  'const tabs = [',
-  '  { label: \'JavaScript\', value: \'js\', language: \'javascript\', code: jsSource },',
-  '  { label: \'TypeScript\', value: \'ts\', language: \'typescript\', code: tsSource }',
-  ']',
-  '</script>',
-  '',
-  '<template>',
-  '  <CodeBlock v-model:value="activeTab" :tabs="tabs" show-line-numbers />',
-  '</template>',
-  '```',
-  '',
-  '### Reactive updates',
-  '',
-  'Replace `tabs[n].code` or rebuild `tabs` when the source changes — the block re-renders and re-highlights automatically:',
-  '',
-  '```vue',
-  '<script setup>',
-  "import { computed, ref } from 'vue'",
-  "import CodeBlock from '@aziontech/webkit/code-block'",
-  '',
-  'const source = ref(\'console.log("hello")\\n\')',
-  '',
-  'const tabs = computed(() => [',
-  '  {',
-  "    label: 'Console',",
-  "    value: 'console',",
-  "    language: 'javascript',",
-  '    code: source.value',
-  '  }',
-  '])',
-  '</script>',
-  '',
-  '<template>',
-  '  <CodeBlock :tabs="tabs" default-value="console" />',
-  '</template>',
-  '```',
-  '',
-  '### `CodeBlockTab` shape',
-  '',
-  '| Field | Required | Notes |',
-  '| --- | --- | --- |',
-  '| `label` | yes | Tab label in the header |',
-  '| `value` | yes | Stable id for `v-model:value` |',
-  '| **`code`** | **yes** | **Raw source string (`\\n` line breaks)** |',
-  '| `language` | no | Syntax highlighting (e.g. `javascript`, `typescript`) |',
-  '| `fileName` | no | Shows the filename bar when set |',
-  '| `fileIcon` | no | PrimeIcons class for the filename bar |',
-  '| `highlightedLine` | no | 1-based line to highlight |',
-  '| `lineChanges` | no | Diff markers (`{ line, change: \'added\' \\| \'removed\' }[]`) |'
-].join('\n')
+const fileNameTabs = [
+  {
+    label: 'Javascript',
+    value: 'js',
+    language: 'javascript',
+    fileName: 'file name.js',
+    code: sampleCode
+  }
+]
+
+const diffTabs = [
+  {
+    label: 'Diff',
+    value: 'diff',
+    language: 'typescript',
+    code: diffSampleCode,
+    lineChanges: diffLineChanges
+  }
+]
+
+const highlightedTabs = [
+  {
+    label: 'Highlighted',
+    value: 'highlighted',
+    language: 'typescript',
+    code: sampleCode,
+    highlightedLine: 6
+  }
+]
+
+const animatedTabs = [
+  {
+    label: 'Javascript',
+    value: 'js',
+    language: 'javascript',
+    fileName: 'handler.js',
+    code: sampleCode
+  }
+]
+
+// Serialize a tabs array into a runnable `const tabs = …` script line so the
+// "Show code" snippet carries the exact data the canvas renders (zero drift).
+const tabsConst = (tabs) => `const tabs = ${JSON.stringify(tabs, null, 2)}`
+
+// Each story's snippet is a single runnable SFC: the real import + the tab data
+// + the same props the canvas uses. PascalCase tag, no nested <template>.
+const snippet = (tabs, attrs) => toSfc([IMPORT, '', tabsConst(tabs)], `<CodeBlock :tabs="tabs" ${attrs} />`)
 
 /** @type {import('@storybook/vue3').Meta<typeof CodeBlock>} */
 const meta = {
@@ -184,15 +136,17 @@ const meta = {
     },
     docs: {
       description: {
-        component: componentDocsDescription
-      }
+        component:
+          'Read-only code viewer for docs, API examples, and configuration previews. Four layouts share one monolithic shell — a tabbed language switcher, a raised filename bar, per-line diff markers, and a highlighted line — all rendered conditionally from the active tab’s data.'
+      },
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
     tabs: {
       control: 'object',
       description:
-        'Tab definitions. Pass source on each tab’s `code` field (required). See Docs → Passing code for single-snippet, multi-language, and reactive examples.',
+        'Tab definitions. Pass source on each tab’s `code` field (required), plus optional `language`, `fileName`, `fileIcon`, `highlightedLine`, or `lineChanges`.',
       table: {
         category: 'props',
         type: { summary: 'CodeBlockTab[]' },
@@ -254,7 +208,7 @@ const meta = {
 
 export default meta
 
-const renderCodeBlock = (args) => ({
+const Template = (args) => ({
   components: { CodeBlock },
   setup() {
     const value = ref(args.defaultValue ?? args.value ?? args.tabs?.[0]?.value ?? '')
@@ -276,6 +230,7 @@ const renderCodeBlock = (args) => ({
   `
 })
 
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const Default = {
   args: {
     tabs: languageSwitcherTabs,
@@ -283,7 +238,13 @@ export const Default = {
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeBlock
+  render: Template,
+  parameters: {
+    docs: {
+      description: { story: 'Language switcher: two tabs with a filename bar, syntax highlighting, and copy.' },
+      source: { code: snippet(languageSwitcherTabs, 'default-value="js" show-line-numbers') }
+    }
+  }
 }
 
 export const WithoutLineNumbers = {
@@ -293,78 +254,76 @@ export const WithoutLineNumbers = {
     showLineNumbers: false,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeBlock
+  render: Template,
+  parameters: {
+    docs: {
+      description: { story: 'Same language switcher with the line-number gutter hidden.' },
+      source: { code: snippet(languageSwitcherTabs, 'default-value="js" :show-line-numbers="false"') }
+    }
+  }
 }
 
 export const WithFileName = {
   args: {
-    tabs: [
-      {
-        label: 'Javascript',
-        value: 'js',
-        language: 'javascript',
-        fileName: 'file name.js',
-        code: sampleCode
-      }
-    ],
+    tabs: fileNameTabs,
     defaultValue: 'js',
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeBlock
+  render: Template,
+  parameters: {
+    docs: {
+      description: { story: 'Single snippet with a raised filename bar and no tab header.' },
+      source: { code: snippet(fileNameTabs, 'default-value="js" show-line-numbers') }
+    }
+  }
 }
 
 export const WithDiff = {
   args: {
-    tabs: [
-      {
-        label: 'Diff',
-        value: 'diff',
-        language: 'typescript',
-        code: diffSampleCode,
-        lineChanges: diffLineChanges
-      }
-    ],
+    tabs: diffTabs,
     defaultValue: 'diff',
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeBlock
+  render: Template,
+  parameters: {
+    docs: {
+      description: { story: 'Per-line added/removed markers driven by the active tab’s `lineChanges`.' },
+      source: { code: snippet(diffTabs, 'default-value="diff" show-line-numbers') }
+    }
+  }
 }
 
 export const WithHighlightedLine = {
   args: {
-    tabs: [
-      {
-        label: 'Highlighted',
-        value: 'highlighted',
-        language: 'typescript',
-        code: sampleCode,
-        highlightedLine: 6
-      }
-    ],
+    tabs: highlightedTabs,
     defaultValue: 'highlighted',
     showLineNumbers: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeBlock
+  render: Template,
+  parameters: {
+    docs: {
+      description: { story: 'One active line with an info background and leading bar via `highlightedLine`.' },
+      source: { code: snippet(highlightedTabs, 'default-value="highlighted" show-line-numbers') }
+    }
+  }
 }
 
 export const WithAnimatedLines = {
   args: {
-    tabs: [
-      {
-        label: 'Javascript',
-        value: 'js',
-        language: 'javascript',
-        fileName: 'handler.js',
-        code: sampleCode
-      }
-    ],
+    tabs: animatedTabs,
     defaultValue: 'js',
     showLineNumbers: true,
     animateLines: true,
     copyAriaLabel: 'Copy code'
   },
-  render: renderCodeBlock
+  render: Template,
+  parameters: {
+    docs: {
+      description: { story: 'Staggered line entrance for website layouts via `animateLines`.' },
+      source: { code: snippet(animatedTabs, 'default-value="js" show-line-numbers animate-lines') }
+    }
+  }
 }
