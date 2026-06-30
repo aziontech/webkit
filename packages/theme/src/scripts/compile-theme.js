@@ -2,13 +2,15 @@
  * Compile semantic theme tokens into a light/dark CSS variables stylesheet.
  *
  * Resolves `tokenRef(...)` aliases from `tokens/theme/*` (primary, secondary,
- * accent, surfaces, background, border, text, ring, feedback/*) against the
+ * accent, surfaces, background, border, text, ring, code-sintax, feedback/*)
+ * against the
  * primitives + brand + (pre-resolved) surfaces. Emits two blocks (light + dark).
  */
 
 import { brandPrimitives, primitives as colorPrimitives } from '../tokens/primitives/colors/colors.js';
 import { accent } from '../tokens/theme/accent.js';
 import { background } from '../tokens/theme/background.js';
+import { codeSintax } from '../tokens/theme/code-sintax.js';
 import { border } from '../tokens/theme/border.js';
 import { danger } from '../tokens/theme/feedback/danger.js';
 import { info } from '../tokens/theme/feedback/info.js';
@@ -85,6 +87,7 @@ const compileVariant = (variant) => {
     border[variant],
     text[variant],
     ring[variant],
+    codeSintax[variant],
     success[variant],
     warning[variant],
     danger[variant],
