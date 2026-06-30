@@ -1,7 +1,8 @@
-# Proposta — Estratégia de testes para `packages/webkit`
+# Estratégia de testes para `packages/webkit`
 
-> **Status:** proposta (draft) — pendente de aprovação antes da Fase 0.
-> **Escopo:** apenas `packages/webkit`. `packages/theme` e `packages/icons` ficam de fora desta proposta.
+> **Status:** em execução — Fase 0 sendo entregue em waves na PR [#703](https://github.com/aziontech/webkit/pull/703) (branch `docs/testing-strategy-proposal`).
+> **Escopo:** apenas `packages/webkit`. `packages/theme` e `packages/icons` ficam de fora.
+> **Histórico:** começou como proposta (draft) → aprovada → execução em waves. As decisões da seção 6 estão fixadas; as seções 9 (progresso) e 10 (benefícios por ferramenta) refletem o estado atual.
 
 ## 1. Contexto
 
@@ -126,12 +127,12 @@ Arquivos de **referência** (consulta apenas):
 
 Cada fase é **mergível e revertível**. Fase 0 é a única que precisa de aprovação cuidadosa — fixa as escolhas de stack.
 
-## 6. Decisões pendentes (antes da Fase 0)
+## 6. Decisões fixadas
 
-1. **Vitest browser mode (Playwright provider) vs jsdom puro.** Recomendação: **browser mode**. Sem ele, componentes com `getBoundingClientRect`, foco, CSS anchor positioning e `<Teleport>` precisam de mocks frágeis. Custo: ~30 s a mais por job CI e dependência do Playwright instalado.
-2. **Test ao lado do `.vue` vs `__tests__/`.** Recomendação: **ao lado**. Segue o padrão de specs (um por componente) e facilita o `component-scaffold` emitir tudo junto.
-3. **Chromatic em workflow próprio vs dentro do `governance.yml`.** Recomendação: **workflow próprio**. Chromatic tem cota mensal e budget de tempo independente; manter isolado evita travar PRs urgentes se a cota estourar.
-4. **a11y bloqueante desde Fase 0 ou só na Fase 4.** Recomendação: **warning até Fase 3, falha bloqueante na Fase 4**. Evita travar o backfill em violações pré-existentes.
+1. **Vitest browser mode (Playwright provider) — fixada.** Sem ele, componentes com `getBoundingClientRect`, foco, CSS anchor positioning e `<Teleport>` precisam de mocks frágeis. Custo aceito: ~30 s a mais por job CI e dependência do Playwright instalado.
+2. **Test ao lado do `.vue` — fixada.** Segue o padrão de specs (um por componente) e facilita o `component-scaffold` emitir tudo junto.
+3. **Chromatic em workflow próprio — fixada.** Chromatic tem cota mensal e budget de tempo independente; manter isolado evita travar PRs urgentes se a cota estourar.
+4. **a11y bloqueante só na Fase 4 — fixada.** Warning até a Fase 3, falha bloqueante na Fase 4. Evita travar o backfill em violações pré-existentes.
 
 ## 7. Verificação da Fase 0 (quando for executada)
 
@@ -156,4 +157,89 @@ pnpm chromatic --project-token=... --only-changed   # confirma snapshot da basel
 
 ## 8. Próximo passo
 
-Se a proposta for aprovada como está: abrir uma branch `feat/<issue>-testing-strategy-phase-0` com **apenas a Fase 0** (infra + piloto Button + `testing.md` + dois workflows novos). Sem tocar nos outros 156 componentes. PR pequeno, mergível, reversível — e a partir dele a Fase 1 (gate em componentes novos) entra como hook na PR seguinte.
+A Fase 0 está sendo entregue na PR [#703](https://github.com/aziontech/webkit/pull/703), em waves pequenas e mergíveis (ver seção 9). Após o merge, a Fase 1 (gate em componentes novos via `enforce-test-exists.mjs`) já estará ativa — Fase 2 (backfill prioritário) abre como branch nova.
+
+## 9. Progresso (Fases 0 + 1, execução em waves)
+
+A entrega vem em **7 waves** sequenciais na PR #703. Cada wave é um commit isolado, mergível em teoria, com verificação verde local antes de prosseguir.
+
+| Wave | Escopo | Status | Commit | Tipo |
+|------|--------|--------|--------|------|
+| 1 | Infra Vitest — `vitest`/`@vitest/browser`/`playwright`/`@testing-library/vue`/`@vue/test-utils` em devDeps; `vitest.config.ts` com browser mode (Chromium headless) + alias `@aziontech/webkit` → `@aziontech/webkit.dev`; `src/test/setup.ts`; scripts `test`/`test:watch` em webkit; aliases no root. | ✅ mergeada | `130ebf36` | `chore` |
+| 2 | Button pilot — `button.test.ts` com 19 testes: render (button/anchor/data-testid/5 kinds/3 sizes), disabled (atributo nativo + `aria-disabled` + `data-disabled` + click suprimido), loading (`aria-busy` + spinner testid + click suprimido), click handler (`MouseEvent`), e a11y via `axe-core` direto em Default/Disabled/Anchor. | ✅ mergeada | `ebea0c25` | `test` |
+| 3 | Button pilot — `play()` em Default (click + Tab + Enter/Space, asserting `onClick` chamado 3x) e Disabled (click suprimido + `aria-disabled`); teste roda essas stories via `composeStories(...).run()`. Deps `@storybook/test` + `@storybook/vue3` em webkit. | ✅ mergeada | `811c424a` | `test` |
+| 3.5 | Fix fora do plano original — `@storybook/addon-interactions` instalado em `apps/storybook` e registrado em `.storybook/main.js` (em SB 8 não vem mais embutido no `addon-essentials`). Painel **Interactions** passa a aparecer no canvas. | ✅ mergeada | `8804806a` | `chore` |
+| 4 | CI workflow `test.yml` — roda `pnpm webkit:test` em PRs/push para `dev`/`main`, com setup pnpm + Node + `npx playwright install --with-deps chromium`. Paralelo ao `governance.yml`. | ⏸️ próxima | — | `ci` |
+| 5 | CI workflow `chromatic.yml` — visual regression em workflow próprio. Pré-requisito: secret `CHROMATIC_PROJECT_TOKEN` no repo (ação humana). | ⏸️ a fazer | — | `ci` |
+| 6 | Regra `.claude/rules/testing.md` + atualização das skills `validate-component` (passa a rodar `pnpm webkit:test --filter <name>` no `/component-verify`) e `component-scaffold` (gera `<name>.test.ts` mínimo) + nota em `CONTRIBUTING.md`. | ⏸️ a fazer | — | `docs` |
+| 7 | Hook `enforce-test-exists.mjs` — gate PreToolUse bloqueando `.vue` novo sem `<name>.test.ts` ao lado; modelado em `enforce-spec-exists.mjs`; whitelist `legacy-components.json`; registro em `.claude/settings.json`. | ⏸️ a fazer | — | `chore` |
+
+**Verificação local atual:** `cd packages/webkit && ./node_modules/.bin/vitest run` → `21 passed (21)` em ~1.5–3 s.
+
+### Ajustes que apareceram durante a execução (não estavam no plano original)
+
+| Ajuste | Por quê |
+|---|---|
+| `vitest-axe` removido, substituído por `axe-core` direto + helper local `expectNoA11yViolations` | `vitest-axe@0.1.0` usa `createRequire` do `node:module`, que não existe no browser env do Vitest |
+| `define: { 'process.env.NODE_ENV': "'test'" }` em `vitest.config.ts` | `@testing-library/vue` lê `process.env.NODE_ENV` e quebra no browser sem polyfill |
+| `afterEach(cleanup)` registrado em `src/test/setup.ts` | Em browser mode o cleanup automático do testing-library não dispara; sem isso, DOM acumula entre testes |
+| Alias `@aziontech/webkit` → `@aziontech/webkit.dev` (não para `./src`) | Mantém a mesma resolução do Storybook, permitindo que `composeStories` resolva o subpath `@aziontech/webkit/button` consistentemente |
+| Globals do ESLint estendidos no root (`Element`, `HTMLButtonElement`, `KeyboardEvent`, etc.) | Flat config não aceita `/* eslint-env browser */`; sem isso o `lint-staged` quebra no commit |
+| `**/__screenshots__/` no `.gitignore` | Vitest browser mode escreve screenshots em failures; regeneráveis, não devem ser commitadas |
+| `@storybook/addon-interactions` adicionado explicitamente | `addon-essentials@8.6.x` não inclui mais o `addon-interactions` (separado no SB 8) — painel Interactions não aparecia |
+
+## 10. Benefícios por ferramenta
+
+Cada peça do stack ganhou lugar pela **razão específica** abaixo — não por hype, e nem por familiaridade.
+
+### Runner — `vitest@^2.1.9`
+
+- **Vite-nativo:** mesma resolução, alias e plugins do Storybook (que também é vite). Zero divergência de build entre "como vejo no navegador" e "como o teste vê".
+- **API estável (Vitest 2.x):** browser mode estável, compatível com `@vitest/browser` e o ecossistema `@vue/test-utils` 2.4.
+- **Watch mode rápido:** rebuild incremental via HMR do Vite — typing-cycle de teste fica abaixo de 1 s.
+- **`it.each` + `describe` aninhados:** matriz de variantes (`kind` × `size`) cabe em poucas linhas — ver seção `rendering` do `button.test.ts`.
+
+### Ambiente — `@vitest/browser` + `playwright` (Chromium headless)
+
+- **Render real:** CSS de verdade, layout real, `getBoundingClientRect` honesto, focus nativo. Indispensável para componentes que dependem de CSS anchor positioning, `<Teleport>`, foco visível e medidas computadas — coisas que jsdom mente sobre.
+- **Coerente com a regra de dependências:** a [`dependencies.md`](../rules/dependencies.md) proíbe `floating-ui`/`popper`; o que mantém a integridade dessa proibição é **testar no DOM real**. Mocks para `getBoundingClientRect` em jsdom escondem o problema.
+- **Mesma plataforma da Camada 3 (Chromatic):** baseline visual e teste comportamental rodam no mesmo motor — divergência improvável.
+- **Custo bem definido:** ~30 s extra por job CI + um download Chromium de ~150 MB cacheado pelo runner.
+
+### Mount — `@testing-library/vue` + `@vue/test-utils`
+
+- **Queries por papel (`getByRole`, `getByLabelText`):** força o teste a olhar para a árvore acessível, não para classes/internals. Se o teste passa, screen reader também vê.
+- **`emitted()`:** asserções de evento Vue idiomáticas, sem mock de função no callsite.
+- **`@vue/test-utils` quando preciso:** acesso ao vm/`.props()` quando uma asserção comportamental simplesmente não cabe (raro, mas existe).
+
+### Stories como fixture — `@storybook/vue3` + `@storybook/test` + `composeStories`
+
+- **Uma única fonte de verdade:** props/args/render moram em `*.stories.js` e são consumidos por docs, Chromatic, painel Interactions **e** unit test. Sem duplicação.
+- **`play()` documenta e testa ao mesmo tempo:** o fluxo de uso aparece no painel Interactions (revisor visualiza) e roda em vitest via `Story.run()` (CI valida). Mesmo `expect`, mesmo `userEvent`, mesma asserção.
+- **`fn()` (mock instrumentado do `@storybook/test`):** captura chamadas e aparece no painel Actions/Interactions — sem reinventar spies.
+- **Migração barata:** stories que já existem só ganham um `play()` quando o fluxo justificar.
+
+### A11y — `axe-core` direto (com `@storybook/addon-a11y` no Storybook)
+
+- **`axe-core` standalone funciona no browser e no jsdom:** roda dentro da suite Vitest sem wrapper de Node. Custo zero de setup.
+- **`@storybook/addon-a11y` (já instalado) entrega painel visual no Storybook:** autor de componente vê violações em tempo real enquanto desenvolve, antes mesmo de escrever o teste.
+- **Regras desabilitadas precisam de comentário na story:** mesmo padrão que `Button.stories.js` já segue (`parameters.a11y.config.rules` enumera regras com flag explícita). Auditável.
+- **Por que **não** `vitest-axe`:** quebra em browser mode (`createRequire` é Node-only). Helper local de 4 linhas resolve sem dependência transitiva frágil.
+
+### Visual regression — `@chromatic-com/storybook` (em workflow próprio)
+
+- **Sem snapshot local:** baseline mora no serviço, não no repo. Sem PRs gigantes para revisar diff de pixel.
+- **Stories são a unidade de baseline:** cada story vira um snapshot — `Default`, `Types`, `Sizes`, `Loading`, `Icon`, `Disabled` no Button são 6 baselines sem esforço extra.
+- **TurboSnap (`--only-changed`):** só renderiza stories afetadas pelo diff — corta ~80 % do custo na maior parte das PRs.
+- **Worflow isolado:** se a cota mensal estoura, PRs urgentes (lint/types) continuam mergeando — só Chromatic falha.
+
+### Painel Interactions — `@storybook/addon-interactions`
+
+- **Replay step-by-step do `play()`:** revisor pode "rebobinar" até qualquer step, vendo o canvas no estado intermediário. Bug em `Tab → Enter` fica visível.
+- **Mesmas asserções da CI:** o `expect(args.onClick).toHaveBeenCalledTimes(3)` que falha no painel também falha no vitest. Sem dois mundos.
+
+### Hooks de governance — `enforce-spec-exists.mjs` (modelo) → `enforce-test-exists.mjs` (Wave 7)
+
+- **Gate no PreToolUse:** uma vez ativo, `Write` de `.vue` novo sem `.test.ts` ao lado é bloqueado antes de o arquivo ser criado. Não precisa esperar CI.
+- **Whitelist em `_lib/legacy-components.json`:** componentes legados ficam isentos até serem migrados — sem big-bang.
+- **Determinístico e local:** mesma lógica que já garante spec-compliance. Sem novo runtime, sem novo serviço.
