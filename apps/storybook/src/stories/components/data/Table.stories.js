@@ -1,12 +1,7 @@
-import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-import DropdownMenuContent from '@aziontech/webkit/dropdown-menu-content'
-import {
-  dropdownMenuItem,
-  dropdownMenuSeparator
-} from '@aziontech/webkit/dropdown-menu-factory'
-import DropdownMenuFromModel from '@aziontech/webkit/dropdown-menu-from-model'
-import DropdownMenuPortal from '@aziontech/webkit/dropdown-menu-portal'
-import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+import Dropdown from '@aziontech/webkit/dropdown'
+import DropdownGroup from '@aziontech/webkit/dropdown-group'
+import DropdownOption from '@aziontech/webkit/dropdown-option'
+import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
 import IconButton from '@aziontech/webkit/icon-button'
 import Table from '@aziontech/webkit/table'
 import TableBody from '@aziontech/webkit/table-body'
@@ -21,11 +16,10 @@ const components = {
   Table,
   Tag,
   IconButton,
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuPortal,
-  DropdownMenuContent,
-  DropdownMenuFromModel,
+  Dropdown,
+  DropdownTrigger,
+  DropdownGroup,
+  DropdownOption,
   // Compound sub-components registered under their dot-notation names so they
   // resolve in Storybook's runtime-compiled string templates: Vue compiles
   // `<Table.Header>` to `resolveComponent("Table.Header")`, an exact-name lookup
@@ -119,12 +113,15 @@ const wideColumns = [
 const resizableColumns = columns.map((col) => ({ ...col, resizable: true }))
 
 // One shared, immutable action list — built once, reused by every row's menu.
-const rowActionNodes = [
-  dropdownMenuItem('View details', { value: 'view', icon: 'pi pi-eye' }),
-  dropdownMenuItem('Edit', { value: 'edit', icon: 'pi pi-pencil' }),
-  dropdownMenuItem('Duplicate', { value: 'duplicate', icon: 'pi pi-copy' }),
-  dropdownMenuSeparator(),
-  dropdownMenuItem('Delete', { value: 'delete', icon: 'pi pi-trash' })
+// Split into two groups so the navigation `<Dropdown>` renders the divider
+// between the safe actions and the destructive `Delete`.
+const rowActionGroups = [
+  [
+    { value: 'view', label: 'View details', icon: 'pi pi-eye' },
+    { value: 'edit', label: 'Edit', icon: 'pi pi-pencil' },
+    { value: 'duplicate', label: 'Duplicate', icon: 'pi pi-copy' }
+  ],
+  [{ value: 'delete', label: 'Delete', icon: 'pi pi-trash' }]
 ]
 
 const statusSeverity = (status) =>
@@ -152,19 +149,21 @@ const CELL_SLOTS = `
           <span class="sr-only">Actions</span>
         </template>
         <template #cell-actions="{ row }">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
+          <Dropdown @select="({ value }) => args.onRowAction({ id: row.id, action: { value } })">
+            <DropdownTrigger>
               <IconButton icon="pi pi-ellipsis-v" aria-label="Row actions" kind="transparent" size="small" />
-            </DropdownMenuTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuContent>
-                <DropdownMenuFromModel
-                  :nodes="rowActionNodes"
-                  @select="(action) => args.onRowAction({ id: row.id, action })"
-                />
-              </DropdownMenuContent>
-            </DropdownMenuPortal>
-          </DropdownMenu>
+            </DropdownTrigger>
+            <DropdownGroup v-for="(group, gi) in rowActionGroups" :key="gi">
+              <DropdownOption
+                v-for="option in group"
+                :key="option.value"
+                :value="option.value"
+                :label="option.label"
+              >
+                <template #left><i :class="option.icon" aria-hidden="true" /></template>
+              </DropdownOption>
+            </DropdownGroup>
+          </Dropdown>
         </template>
 `
 
@@ -205,16 +204,16 @@ const SOURCE_CELL_SLOTS = `  <template #cell-name="{ row, value }">
     <Tag :severity="statusSeverity(value)">{{ value }}</Tag>
   </template>
   <template #cell-actions="{ row }">
-    <DropdownMenu>
-      <DropdownMenuTrigger>
+    <Dropdown @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
+      <DropdownTrigger>
         <IconButton icon="pi pi-ellipsis-v" aria-label="Row actions" kind="transparent" size="small" />
-      </DropdownMenuTrigger>
-      <DropdownMenuPortal>
-        <DropdownMenuContent>
-          <DropdownMenuFromModel :nodes="rowActionNodes" @select="onRowAction" />
-        </DropdownMenuContent>
-      </DropdownMenuPortal>
-    </DropdownMenu>
+      </DropdownTrigger>
+      <DropdownGroup v-for="(group, gi) in rowActionGroups" :key="gi">
+        <DropdownOption v-for="option in group" :key="option.value" :value="option.value" :label="option.label">
+          <template #left><i :class="option.icon" aria-hidden="true" /></template>
+        </DropdownOption>
+      </DropdownGroup>
+    </Dropdown>
   </template>`
 
 const dataDrivenSource = (args, { columnsName = 'columns' } = {}) => {
@@ -280,12 +279,13 @@ const SOURCE_ROWS = `const rows = [
   { id: '1003', name: 'Workload Charlie', status: 'Degraded', editor: 'user3@example.com', modified: 'Jan 3, 2026, 09:00 AM', protocol: 'gRPC', domains: 3, origins: 1, created: 'Dec 3, 2025, 10:00 AM' }
 ]`
 
-const SOURCE_ACTION_NODES = `const rowActionNodes = [
-  dropdownMenuItem('View details', { value: 'view', icon: 'pi pi-eye' }),
-  dropdownMenuItem('Edit', { value: 'edit', icon: 'pi pi-pencil' }),
-  dropdownMenuItem('Duplicate', { value: 'duplicate', icon: 'pi pi-copy' }),
-  dropdownMenuSeparator(),
-  dropdownMenuItem('Delete', { value: 'delete', icon: 'pi pi-trash' })
+const SOURCE_ACTION_NODES = `const rowActionGroups = [
+  [
+    { value: 'view', label: 'View details', icon: 'pi pi-eye' },
+    { value: 'edit', label: 'Edit', icon: 'pi pi-pencil' },
+    { value: 'duplicate', label: 'Duplicate', icon: 'pi pi-copy' }
+  ],
+  [{ value: 'delete', label: 'Delete', icon: 'pi pi-trash' }]
 ]`
 
 const SOURCE_STATUS_SEVERITY = `const statusSeverity = (status) =>
@@ -300,12 +300,10 @@ const dataDrivenSnippet = (args, { cols } = {}) => {
     "import Table from '@aziontech/webkit/table'",
     "import Tag from '@aziontech/webkit/tag'",
     "import IconButton from '@aziontech/webkit/icon-button'",
-    "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
-    "import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'",
-    "import DropdownMenuPortal from '@aziontech/webkit/dropdown-menu-portal'",
-    "import DropdownMenuContent from '@aziontech/webkit/dropdown-menu-content'",
-    "import DropdownMenuFromModel from '@aziontech/webkit/dropdown-menu-from-model'",
-    "import { dropdownMenuItem, dropdownMenuSeparator } from '@aziontech/webkit/dropdown-menu-factory'"
+    "import Dropdown from '@aziontech/webkit/dropdown'",
+    "import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'",
+    "import DropdownGroup from '@aziontech/webkit/dropdown-group'",
+    "import DropdownOption from '@aziontech/webkit/dropdown-option'"
   ].join('\n')
 
   const script = [
@@ -382,7 +380,7 @@ const makeStory =
         args,
         rows: data,
         cols,
-        rowActionNodes,
+        rowActionGroups,
         sorting,
         rowSelection,
         statusSeverity,
