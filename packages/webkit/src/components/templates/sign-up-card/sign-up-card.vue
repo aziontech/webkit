@@ -196,7 +196,7 @@
               :label="googleLabel"
               kind="outlined"
               size="large"
-              icon="pi pi-google"
+              icon="ai ai-google-cor"
               class="w-full"
               :data-testid="`${testId}__google`"
               @click="onGoogleClick"
