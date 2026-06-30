@@ -74,10 +74,10 @@ A entrega vem em waves pequenas e mergíveis na PR #703. Cada wave verde local a
 | 2 | Button pilot — 19 testes cobrindo render/disabled/loading/click + axe (Camadas 1 + 4) | ✅ mergeada (`ebea0c25`) |
 | 3 | `play()` no Default e Disabled do Button + teste via `composeStories` (Camada 2) | ✅ mergeada (`811c424a`) |
 | 3.5 | `@storybook/addon-interactions` registrado (painel Interactions) | ✅ mergeada (`8804806a`) |
-| 4 | Workflow `test.yml` rodando `pnpm webkit:test` em PRs | ⏸️ próxima |
-| 5 | Workflow `chromatic.yml` (Camada 3) — requer secret `CHROMATIC_PROJECT_TOKEN` | ⏸️ a fazer |
-| 6 | `.claude/rules/testing.md` + skill updates + nota em `CONTRIBUTING.md` | ⏸️ a fazer |
-| 7 | Hook `enforce-test-exists.mjs` (Camada 5 ativa) | ⏸️ a fazer |
+| 4 | Workflow `test.yml` rodando `pnpm webkit:test` em PRs | ✅ mergeada (`e4d4cc91`) |
+| 5 | Workflow `chromatic.yml` (Camada 3) — requer secret `CHROMATIC_PROJECT_TOKEN` | ✅ mergeada (`a983cffd`) |
+| 6 | `.claude/rules/testing.md` + skill updates + nota em `CONTRIBUTING.md` | ✅ mergeada (`c0076252`) |
+| 7 | Hook `enforce-test-exists.mjs` (Camada 5 ativa) | 🚧 nesta wave |
 
 **Verificação local atual:** `cd packages/webkit && ./node_modules/.bin/vitest run` → `21 passed (21)` em ~1.5–3 s.
 

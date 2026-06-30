@@ -64,6 +64,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/enforce-spec-exists.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/enforce-test-exists.mjs"
           }
         ]
       }

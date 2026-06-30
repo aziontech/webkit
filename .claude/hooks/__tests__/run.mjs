@@ -307,6 +307,59 @@ group('hook: enforce-spec-exists.mjs', () => {
   })
 })
 
+group('hook: enforce-test-exists.mjs', () => {
+  test('non-target path passes through (exit 0)', () => {
+    const r = runHook('.claude/hooks/enforce-test-exists.mjs', {
+      tool_name: 'Write',
+      tool_input: { file_path: resolve(ROOT, 'random/file.vue') }
+    })
+    assertEqual(r.code, 0)
+  })
+  test('sub-component .vue passes through (exit 0)', () => {
+    // The hook only fires for the root <name>.vue (filename === directory name).
+    const r = runHook('.claude/hooks/enforce-test-exists.mjs', {
+      tool_name: 'Write',
+      tool_input: {
+        file_path: resolve(
+          ROOT,
+          'packages/webkit/src/components/overlay/dialog/dialog-trigger/dialog-trigger.vue'
+        )
+      }
+    })
+    assertEqual(r.code, 0)
+  })
+  test('root .vue with sibling .test.ts passes (exit 0)', () => {
+    // Button has button.test.ts next to button.vue.
+    const r = runHook('.claude/hooks/enforce-test-exists.mjs', {
+      tool_name: 'Write',
+      tool_input: {
+        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/button.vue')
+      }
+    })
+    assertEqual(r.code, 0)
+  })
+  test('root .vue without sibling .test.ts blocks (exit 2)', () => {
+    const r = runHook('.claude/hooks/enforce-test-exists.mjs', {
+      tool_name: 'Write',
+      tool_input: {
+        file_path: resolve(
+          ROOT,
+          'packages/webkit/src/components/feedback/tooltip/tooltip.vue'
+        )
+      }
+    })
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('Test file missing'), 'stderr mentions missing test file')
+  })
+  test('non-Write tool name skipped (exit 0)', () => {
+    const r = runHook('.claude/hooks/enforce-test-exists.mjs', {
+      tool_name: 'Edit',
+      tool_input: { file_path: resolve(ROOT, 'random.vue') }
+    })
+    assertEqual(r.code, 0)
+  })
+})
+
 group('hook: validate-spec-compliance.mjs', () => {
   test('non-target path passes through (exit 0)', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
