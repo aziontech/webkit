@@ -1,5 +1,24 @@
 import PickList from '@aziontech/webkit/pick-list'
+import PickListControls from '@aziontech/webkit/pick-list-controls'
+import PickListSource from '@aziontech/webkit/pick-list-source'
+import PickListTarget from '@aziontech/webkit/pick-list-target'
 import { ref } from 'vue'
+
+import { toSfc } from '../../_shared/story-source'
+
+// Compound sub-components registered under their dot-notation names so they
+// resolve in Storybook's runtime-compiled string templates: Vue compiles
+// `<PickList.Source>` to `resolveComponent("PickList.Source")`, an exact-name
+// lookup (a bare `PickList` registration does not satisfy it). In a real SFC the
+// dotted tag resolves off the imported `PickList` binding, so consumer code
+// needs only `import PickList` — these extra registrations are a Storybook
+// runtime concern.
+const components = {
+  PickList,
+  'PickList.Source': PickListSource,
+  'PickList.Target': PickListTarget,
+  'PickList.Controls': PickListControls
+}
 
 const sampleModel = () => [
   [
@@ -10,11 +29,10 @@ const sampleModel = () => [
   [{ id: 4, label: 'Cache' }]
 ]
 
-// "Show code" source. The render is multi-element (a wrapper, the v-model
-// wiring, and the #item slot), which Storybook's dynamic source can't
-// introspect — so each story sets an explicit, runnable `docs.source.code`.
-// One builder keeps the SFCs in sync; each story passes only the extra
-// PickList attributes it sets on top of the shared base.
+// "Show code" source. The render composes the root with three sub-components and
+// an #item slot, which Storybook's dynamic source cannot introspect — so each
+// story sets an explicit, runnable `source.code` built with `toSfc`. One builder
+// keeps the SFCs in sync; each story passes only the extra attributes it sets.
 const SOURCE_MODEL = `const model = ref([
   [
     { id: 1, label: 'Edge Functions' },
@@ -24,27 +42,38 @@ const SOURCE_MODEL = `const model = ref([
   [{ id: 4, label: 'Cache' }]
 ])`
 
-const sourceFor = (extraAttrs = []) =>
-  [
-    '<script setup>',
-    "import PickList from '@aziontech/webkit/pick-list'",
-    "import { ref } from 'vue'",
-    '',
-    SOURCE_MODEL,
-    '</script>',
-    '',
-    '<template>',
-    '  <PickList',
-    '    v-model="model"',
-    '    data-key="id"',
-    '    source-header="Available"',
-    '    target-header="Selected"',
-    ...extraAttrs.map((attr) => `    ${attr}`),
-    '  >',
-    '    <template #item="{ item }">{{ item.label }}</template>',
-    '  </PickList>',
-    '</template>'
-  ].join('\n')
+const sourceFor = ({ root = [], source = [], target = [] } = {}) =>
+  toSfc(
+    [
+      "import PickList from '@aziontech/webkit/pick-list'",
+      "import { ref } from 'vue'",
+      '',
+      SOURCE_MODEL
+    ],
+    [
+      '<PickList',
+      '  v-model="model"',
+      '  data-key="id"',
+      ...root.map((attr) => `  ${attr}`),
+      '>',
+      '  <PickList.Source',
+      '    header="Available"',
+      ...source.map((attr) => `    ${attr}`),
+      '  >',
+      '    <template #item="{ item }">{{ item.label }}</template>',
+      '  </PickList.Source>',
+      '',
+      '  <PickList.Controls />',
+      '',
+      '  <PickList.Target',
+      '    header="Selected"',
+      ...target.map((attr) => `    ${attr}`),
+      '  >',
+      '    <template #item="{ item }">{{ item.label }}</template>',
+      '  </PickList.Target>',
+      '</PickList>'
+    ].join('\n')
+  )
 
 /** @type {import('@storybook/vue3').Meta<typeof PickList>} */
 const meta = {
@@ -65,7 +94,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Dual-list transfer control: a labelled source listbox and a labelled target listbox with controls to move items between them and (optionally) reorder items within a list. Use it when the consumer needs to build an ordered subset from a pool of options where both the chosen set and the remaining pool stay visible.'
+          'Dual-list transfer control with a compound API: the root `<PickList>` owns the bound `[source, target]` pair and the shared selection/move/reorder state, and the consumer composes `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>`. The context-aware `<PickList.Controls>` wires the move buttons with no props. Use it to build an ordered subset from a pool where both the chosen set and the remaining pool stay visible.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -81,34 +110,35 @@ const meta = {
       description: 'Item field that uniquely identifies a record.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" }, category: 'props' }
     },
-    sourceHeader: {
-      control: 'text',
-      description: 'Heading text for the source list; also its accessible name.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: "''" }, category: 'props' }
-    },
-    targetHeader: {
-      control: 'text',
-      description: 'Heading text for the target list; also its accessible name.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: "''" }, category: 'props' }
-    },
     disabled: {
       control: 'boolean',
       description: 'Disables all selection and move controls and applies disabled tokens.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
+    sourceHeader: {
+      control: 'text',
+      description: 'Heading text for the source list (the `header` prop of `<PickList.Source>`).',
+      table: { type: { summary: 'string' }, category: 'sub-component props (story control)' }
+    },
+    targetHeader: {
+      control: 'text',
+      description: 'Heading text for the target list (the `header` prop of `<PickList.Target>`).',
+      table: { type: { summary: 'string' }, category: 'sub-component props (story control)' }
+    },
     reorderable: {
       control: 'boolean',
-      description: 'Shows up/down reorder controls that move selected items within their own list.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+      description:
+        'Shows up/down reorder controls on the target list (the `reorderable` prop of `<PickList.Target>`).',
+      table: { type: { summary: 'boolean' }, category: 'sub-component props (story control)' }
     },
     loading: {
       control: { type: 'select' },
       options: [false, 'source', 'target', true],
-      description: "Shows a spinner in place of a list's items and locks moves. true = both lists; 'source'/'target' = one side.",
+      description:
+        "Drives the `loading` prop of each list. true = both lists; 'source'/'target' = one side. A loading list shows a spinner and locks moves.",
       table: {
         type: { summary: "boolean | 'source' | 'target'" },
-        defaultValue: { summary: 'false' },
-        category: 'props'
+        category: 'sub-component props (story control)'
       }
     },
     'onUpdate:modelValue': {
@@ -131,23 +161,6 @@ const meta = {
         type: { summary: "{ list: 'source' | 'target'; items: unknown[] }" },
         category: 'events'
       }
-    },
-    item: {
-      control: false,
-      description: 'Renders a single row; receives the item, its index, and which list it belongs to.',
-      table: { type: { summary: 'slot' }, category: 'slots' }
-    },
-    sourceHeaderSlot: {
-      control: false,
-      name: 'sourceHeader',
-      description: 'Overrides the source heading content.',
-      table: { type: { summary: 'slot' }, category: 'slots' }
-    },
-    targetHeaderSlot: {
-      control: false,
-      name: 'targetHeader',
-      description: 'Overrides the target heading content.',
-      table: { type: { summary: 'slot' }, category: 'slots' }
     }
   },
   args: {
@@ -163,7 +176,7 @@ const meta = {
 export default meta
 
 const Template = (args) => ({
-  components: { PickList },
+  components,
   setup() {
     const value = ref(args.modelValue ?? sampleModel())
     const onUpdate = (next) => {
@@ -175,13 +188,29 @@ const Template = (args) => ({
   template: `
     <div class="max-w-[var(--container-xl)]">
       <PickList
-        v-bind="args"
         :model-value="value"
+        :data-key="args.dataKey"
+        :disabled="args.disabled"
         @update:model-value="onUpdate"
         @move="args.onMove"
         @reorder="args.onReorder"
       >
-        <template #item="{ item }">{{ item.label }}</template>
+        <PickList.Source
+          :header="args.sourceHeader"
+          :loading="args.loading === true || args.loading === 'source'"
+        >
+          <template #item="{ item }">{{ item.label }}</template>
+        </PickList.Source>
+
+        <PickList.Controls />
+
+        <PickList.Target
+          :header="args.targetHeader"
+          :loading="args.loading === true || args.loading === 'target'"
+          :reorderable="args.reorderable"
+        >
+          <template #item="{ item }">{{ item.label }}</template>
+        </PickList.Target>
       </PickList>
     </div>
   `
@@ -203,7 +232,7 @@ export const Disabled = {
   render: Template,
   parameters: {
     docs: {
-      source: { code: sourceFor(['disabled']) },
+      source: { code: sourceFor({ root: ['disabled'] }) },
       description: { story: 'Disabled state: selection and all move controls are inert.' }
     }
   }
@@ -214,7 +243,7 @@ export const Loading = {
   render: Template,
   parameters: {
     docs: {
-      source: { code: sourceFor(['loading="source"']) },
+      source: { code: sourceFor({ source: ['loading'] }) },
       description: {
         story:
           "One side loading: the source shows a spinner and its moves are locked while the target stays interactive. Set the `loading` control to `true` for both sides, or `'target'` for the other side."
@@ -228,10 +257,10 @@ export const WithReorder = {
   render: Template,
   parameters: {
     docs: {
-      source: { code: sourceFor(['reorderable']) },
+      source: { code: sourceFor({ target: ['reorderable'] }) },
       description: {
         story:
-          'Reorder controls (up/down) appear above the target list and move the selected items within their own list.'
+          'Reorder controls (up/down) appear next to the target heading and move the selected items within their own list.'
       }
     }
   }
