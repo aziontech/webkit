@@ -4,11 +4,8 @@
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import { useOverlayMobile } from '../../overlay/composables/use-overlay-mobile'
-  import DropdownMenu from '../../overlay/dropdown-menu/dropdown-menu.vue'
-  import DropdownMenuContent from '../../overlay/dropdown-menu/dropdown-menu-content.vue'
-  import DropdownMenuItem from '../../overlay/dropdown-menu/dropdown-menu-item.vue'
-  import DropdownMenuTrigger from '../../overlay/dropdown-menu/dropdown-menu-trigger.vue'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
+  import Dropdown from '../dropdown'
   import BreadcrumbList from './breadcrumb-list.vue'
   import BreadcrumbSeparator from './breadcrumb-separator.vue'
 
@@ -78,7 +75,8 @@
     emit('navigate', href)
   }
 
-  const onOverflowSelect = (href: string | undefined) => {
+  const onOverflowSelect = (payload: { value: string | number }) => {
+    const href = typeof payload?.value === 'string' ? payload.value : undefined
     if (href) {
       handleItemClick(href)
     }
@@ -149,8 +147,8 @@
               class="inline-flex items-center"
               :data-testid="`${testId}__segment-overflow`"
             >
-              <DropdownMenu :data-testid="`${testId}__overflow-menu`">
-                <DropdownMenuTrigger>
+              <Dropdown :data-testid="`${testId}__overflow-menu`">
+                <Dropdown.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     aria-label="Show pages in between"
@@ -159,20 +157,25 @@
                     size="small"
                     :data-testid="`${testId}__overflow-trigger`"
                   />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
+                </Dropdown.Trigger>
+                <Dropdown.Group>
+                  <Dropdown.Option
                     v-for="(item, index) in middleItems"
                     :key="`${item.label}-${index}`"
+                    :value="item.href ?? '#'"
                     :label="item.label"
-                    :value="item.href"
-                    :href="item.href"
-                    :icon="item.showIcon ? item.icon : undefined"
                     :data-testid="`${testId}__overflow-item-${index}`"
                     @select="onOverflowSelect"
-                  />
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  >
+                    <template
+                      v-if="item.showIcon && item.icon"
+                      #leading
+                    >
+                      <i :class="item.icon" />
+                    </template>
+                  </Dropdown.Option>
+                </Dropdown.Group>
+              </Dropdown>
             </li>
           </template>
 
