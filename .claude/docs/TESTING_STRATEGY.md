@@ -77,7 +77,7 @@ A entrega vem em waves pequenas e mergíveis na PR #703. Cada wave verde local a
 | 4 | Workflow `test.yml` rodando `pnpm webkit:test` em PRs | ✅ mergeada (`e4d4cc91`) |
 | 5 | Workflow `chromatic.yml` (Camada 3) — requer secret `CHROMATIC_PROJECT_TOKEN` | ✅ mergeada (`a983cffd`) |
 | 6 | `.claude/rules/testing.md` + skill updates + nota em `CONTRIBUTING.md` | ✅ mergeada (`c0076252`) |
-| 7 | Hook `enforce-test-exists.mjs` (Camada 5 ativa) | 🚧 nesta wave |
+| 7 | Hook `enforce-test-exists.mjs` (Camada 5 ativa) | ✅ mergeada (`b1bd804d`) |
 
 **Verificação local atual:** `cd packages/webkit && ./node_modules/.bin/vitest run` → `21 passed (21)` em ~1.5–3 s.
 
