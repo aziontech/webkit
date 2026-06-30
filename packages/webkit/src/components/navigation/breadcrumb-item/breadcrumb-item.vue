@@ -73,9 +73,9 @@
     :class="
       cn(
         [
-          'group/breadcrumb-item relative inline-flex min-h-10 shrink-0 items-center justify-center',
+          'group/breadcrumb-item relative inline-flex min-h-6 shrink-0 items-center justify-center',
           'gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]',
-          'text-label-lg transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
+          'text-label-md transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
           'text-[var(--text-muted)] hover:text-[var(--text-default)]',
           'aria-[current=page]:text-[var(--text-default)] aria-[current=page]:hover:text-[var(--text-default)]',
           'data-[current=true]:text-[var(--text-default)] data-[current=true]:hover:text-[var(--text-default)]',
