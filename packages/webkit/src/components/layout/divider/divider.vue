@@ -40,7 +40,7 @@
     :data-testid="testId"
     :data-orientation="orientation"
     :data-labelled="hasContent || null"
-    class="flex shrink-0 items-center justify-center text-label-sm text-[var(--text-muted)] data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:h-full data-[orientation=vertical]:flex-col data-[labelled]:gap-[var(--spacing-sm)] before:content-[''] before:flex-1 before:self-center before:border-[var(--border-default)] after:content-[''] after:flex-1 after:self-center after:border-[var(--border-default)] data-[orientation=horizontal]:before:border-t data-[orientation=horizontal]:after:border-t data-[orientation=vertical]:before:border-l data-[orientation=vertical]:after:border-l"
+    class="flex shrink-0 items-center justify-center text-overline-sm text-[var(--text-muted)] data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:h-full data-[orientation=vertical]:flex-col data-[labelled]:gap-[var(--spacing-xs)] before:content-[''] before:flex-1 before:self-center before:border-[var(--border-default)] after:content-[''] after:flex-1 after:self-center after:border-[var(--border-default)] data-[orientation=horizontal]:before:border-t data-[orientation=horizontal]:after:border-t data-[orientation=vertical]:before:border-l data-[orientation=vertical]:after:border-l"
   >
     <span
       v-if="hasContent"
