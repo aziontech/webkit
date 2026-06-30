@@ -28,8 +28,8 @@ export interface PickListContext {
   move: (direction: MoveDirection) => void
   /** Moves every item of the originating list across. */
   moveAll: (direction: MoveDirection) => void
-  /** Reorders the current selection within `side` by `offset` (-1 up, 1 down). */
-  reorder: (side: PickListSide, offset: -1 | 1) => void
+  /** Handles a double-click on the option at `index` in `side`: emits `item-double-click` and, unless cancelled, moves that item to the opposite list. */
+  itemDoubleClick: (side: PickListSide, index: number) => void
   /** Reads the loading flag a list reported. */
   isLoading: (side: PickListSide) => boolean
   /** A list reports its own loading flag so the controls can lock. */

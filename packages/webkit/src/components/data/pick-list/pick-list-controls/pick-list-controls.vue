@@ -42,7 +42,7 @@
         stroke-linecap="round"
         stroke-linejoin="round"
         aria-hidden="true"
-        class="size-4"
+        class="size-4 rotate-90 md:rotate-0"
       >
         <path d="M4 12h13" />
         <path d="M11 6l6 6-6 6" />
@@ -64,7 +64,7 @@
         stroke-linecap="round"
         stroke-linejoin="round"
         aria-hidden="true"
-        class="size-4"
+        class="size-4 rotate-90 md:rotate-0"
       >
         <path d="M3 12h11" />
         <path d="M9 7l5 5-5 5" />
@@ -87,7 +87,7 @@
         stroke-linecap="round"
         stroke-linejoin="round"
         aria-hidden="true"
-        class="size-4"
+        class="size-4 rotate-90 md:rotate-0"
       >
         <path d="M20 12H7" />
         <path d="M13 6l-6 6 6 6" />
@@ -109,7 +109,7 @@
         stroke-linecap="round"
         stroke-linejoin="round"
         aria-hidden="true"
-        class="size-4"
+        class="size-4 rotate-90 md:rotate-0"
       >
         <path d="M21 12H10" />
         <path d="M15 7l-5 5 5 5" />

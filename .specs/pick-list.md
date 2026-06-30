@@ -4,18 +4,18 @@ category: data
 structure: composition
 status: approved
 spec_version: 2
-checksum: 4c6973fbac2b5e68315f88176f1589f05d89c3d5d88906d5f78a2813001d8f7a
+checksum: f8ae29b4f0448534e5f225adb9ad517c7fe90f6df5de06ea0ca1a74ad8e3a059
 created: 2026-06-25
-last_updated: 2026-06-29
+last_updated: 2026-06-30
 ---
 
 # Pick List — Component Spec
 
 ## Purpose
 
-Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them and (optionally) reorder items within a list. Use it when the consumer needs to build an ordered subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate.
+Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate.
 
-Compound, composition API: the root (`<PickList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move/reorder state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<PickList.Source>`, `<PickList.Controls>`, `<PickList.Target>` — and the context-aware `<PickList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones.
+Compound, composition API: the root (`<PickList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<PickList.Source>`, `<PickList.Controls>`, `<PickList.Target>` — and the context-aware `<PickList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). Double-clicking an option moves it to the opposite list (emitting `item-double-click`); this auto-move can be turned off with `move-on-double-click`. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones; the move arrows point left/right side-by-side and up/down when stacked.
 
 ## Usage
 
@@ -43,7 +43,7 @@ const model = ref([
 
     <PickList.Controls />
 
-    <PickList.Target header="Selected" reorderable>
+    <PickList.Target header="Selected">
       <template #item="{ item }">{{ item.label }}</template>
     </PickList.Target>
   </PickList>
@@ -54,16 +54,18 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 
 ## Sub-components
 
-- `pick-list-source/pick-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `header` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls), `reorderable` (shows up/down controls that reorder its own selected items). Slots: `item` (`{ item, index, list }`) renders one option row; `header` overrides the heading content.
-- `pick-list-target/pick-list-target.vue` — The target listbox (the right/bottom list). Same anatomy, props, and slots as `pick-list-source`, bound to the target side of the pair.
-- `pick-list-controls/pick-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as icon-only buttons; reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props.
+- `pick-list-source/pick-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `header` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls). Slots: `item` (`{ item, index, list }`) renders one option row; `header` overrides the heading content. Double-clicking an option moves it to the target (driven by the root via the injected context).
+- `pick-list-target/pick-list-target.vue` — The target listbox (the right/bottom list). Same anatomy, props, and slots as `pick-list-source`, bound to the target side of the pair; double-clicking an option moves it back to the source.
+- `pick-list-controls/pick-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as icon-only buttons; reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point left/right when the lists are side by side and rotate to up/down when they stack on narrow viewports.
 
 <!-- Resulting layout (composition):
 
   packages/webkit/src/components/data/pick-list/
   ├── pick-list.vue
   ├── index.ts                    (entry: attaches PickList.Source / PickList.Target / PickList.Controls)
-  ├── injection-key.ts            (shared context: items, selection, move/reorder, loading)
+  ├── injection-key.ts            (shared context: items, selection, move, double-click, loading)
+  ├── presets/
+  │   └── transitions.ts          (item fade motion: duration/curve from @aziontech/theme/animations)
   ├── pick-list-source/
   │   └── pick-list-source.vue
   ├── pick-list-target/
@@ -86,6 +88,7 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 | `modelValue` | `[unknown[], unknown[]]` | `() => [[], []]` | no | Bound pair of lists as `[sourceItems, targetItems]` (v-model). |
 | `dataKey` | `string` | `''` | no | Item field that uniquely identifies a record; enables selection tracking and stable keys. |
 | `disabled` | `boolean` | `false` | no | Disables all selection and move controls and applies disabled tokens. |
+| `moveOnDoubleClick` | `boolean` | `true` | no | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
 
 ## Events
 
@@ -93,7 +96,7 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 |---|---|---|
 | `update:modelValue` | `[unknown[], unknown[]]` | v-model update with the new `[sourceItems, targetItems]` pair. |
 | `move` | `{ direction: 'to-target' \| 'to-source'; items: unknown[] }` | Fired after items move between lists, with the moved items. |
-| `reorder` | `{ list: 'source' \| 'target'; items: unknown[] }` | Fired after a reorder, with the items in the affected list. |
+| `item-double-click` | `{ list: 'source' \| 'target'; item: unknown; index: number }` | Fired when an option is double-clicked, with the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
 
 ## Slots
 
@@ -106,15 +109,15 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 - Visual states: `default`, `hover` (option), `focus-visible` (option / control), `selected` (option), `disabled`, `loading`
 - `data-disabled` on the root mirrors the `disabled` prop
 - `data-loading` on a list (`pick-list-source` / `pick-list-target`) mirrors that list's `loading` prop
-- `data-reorderable` on a list mirrors that list's `reorderable` prop
-- A loading list renders a centered spinner instead of its options, sets `aria-busy="true"`, and its move/reorder controls are disabled
+- A loading list renders a centered spinner instead of its options and sets `aria-busy="true"`; while any list is loading, both the move controls and double-click-to-move are disabled until loading clears
 - Each option carries `data-selected` mirroring its selection and `aria-selected`
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| control hover/focus | `transition-colors duration-150 ease-out` on move/reorder buttons | inline (matches catalog) | `motion-reduce:transition-none` |
+| control hover/focus | `transition-colors duration-150 ease-out` on move buttons | inline (matches catalog) | `motion-reduce:transition-none` |
+| item moved between lists | each list (`pick-list-source` / `pick-list-target`) is a `TransitionGroup`; an arriving item fades in (`opacity-0` → `opacity-100`) and a departing item fades out, via an inline `transition: opacity` built from the `duration` / `curve` primitives in `@aziontech/theme/animations` (centralized in `presets/transitions.ts`, mirroring `message` / `toast`). The same swap covers the loading spinner toggling in/out. | semantic (`duration` / `curve` from animate.js) | `motion-reduce:transition-none` on the enter/leave active class |
 | loading | the composed `Spinner` component rotates continuously inside a loading list | semantic (owned by `Spinner`) | the `Spinner` carries its own reduced-motion fallback |
 
 ## Tokens
@@ -146,19 +149,18 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on each option and on every move/reorder control.
-- Keyboard map: `Tab` moves between the two listboxes and the control column; within a listbox `Space`/`Enter` toggle the focused option's selection; move and reorder controls are activated with `Enter`/`Space`.
-- ARIA: each list is `role="listbox"` with `aria-label` from its header text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move/reorder control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled`.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on each option and on every move control.
+- Keyboard map: `Tab` moves between the two listboxes and the control column; within a listbox `Space`/`Enter` toggle the focused option's selection; the move controls are activated with `Enter`/`Space`. Double-click on an option is a pointer affordance for moving it to the opposite list; the same move is reachable via select + the move controls (no keyboard-only feature is double-click-only).
+- ARIA: each list is `role="listbox"` with `aria-label` from its header text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
 - A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
-- Touch target ≥40×40 px for every move/reorder control (medium icon-button height).
+- Touch target ≥40×40 px for every move control (medium icon-button height).
 
 ## Stories (Storybook)
 
-- Default
+- Default — also documents double-click-to-move (on by default); the `moveOnDoubleClick` control toggles the auto-move while `item-double-click` keeps firing.
 - Disabled
 - Loading — justified: the list `loading` prop swaps a list's items for a spinner and locks the move controls; the story documents both-sides and single-side loading, which no other story exercises.
-- WithReorder — justified: the `reorderable` prop on a list adds an extra control (up/down) that is hidden by default; the story documents the reorder controls and within-list ordering behavior in isolation.
 
 ## Constraints — DO NOT
 

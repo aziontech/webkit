@@ -3,6 +3,7 @@
 
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { pickListContextKey, type PickListSide } from '../injection-key'
+  import { getItemTransitionStyle, pickListItemTransitionClasses } from '../presets/transitions'
 
   defineOptions({
     name: 'PickListSource',
@@ -14,14 +15,11 @@
     header?: string
     /** Shows a spinner in place of options and locks this list's controls while data loads. */
     loading?: boolean
-    /** Shows up/down controls that reorder this list's selected items. */
-    reorderable?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     header: '',
-    loading: false,
-    reorderable: false
+    loading: false
   })
 
   defineSlots<{
@@ -42,6 +40,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'pick-list-source'
   )
 
+  const itemTransitionStyle = getItemTransitionStyle()
+  const itemTransitionActive = pickListItemTransitionClasses.join(' ')
+
   watch(
     () => props.loading,
     (value) => ctx.setLoading(side, value),
@@ -60,69 +61,17 @@
   <section
     v-bind="$attrs"
     :data-testid="testId"
-    :data-reorderable="reorderable || null"
     :data-loading="loading || null"
     class="flex min-w-0 flex-col gap-[var(--spacing-xs)]"
   >
-    <div class="flex items-center justify-between gap-[var(--spacing-xs)]">
-      <h3
-        :data-testid="`${testId}__header`"
-        class="text-label-lg text-[var(--text-muted)]"
-      >
-        <slot name="header">{{ header }}</slot>
-      </h3>
-      <div
-        v-if="reorderable"
-        class="flex items-center gap-[var(--spacing-xxs)]"
-        :data-testid="`${testId}__reorder`"
-      >
-        <button
-          type="button"
-          :disabled="ctx.disabled.value || loading || !ctx.hasSelection(side)"
-          aria-label="Move selected up"
-          :data-testid="`${testId}__reorder-up`"
-          class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
-          @click="ctx.reorder(side, -1)"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            class="size-4"
-          >
-            <path d="M12 20V7" />
-            <path d="M6 13l6-6 6 6" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          :disabled="ctx.disabled.value || loading || !ctx.hasSelection(side)"
-          aria-label="Move selected down"
-          :data-testid="`${testId}__reorder-down`"
-          class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
-          @click="ctx.reorder(side, 1)"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            class="size-4"
-          >
-            <path d="M12 4v13" />
-            <path d="M6 11l6 6 6-6" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <ul
+    <h3
+      :data-testid="`${testId}__header`"
+      class="text-label-lg text-[var(--text-muted)]"
+    >
+      <slot name="header">{{ header }}</slot>
+    </h3>
+    <TransitionGroup
+      tag="ul"
       role="listbox"
       aria-multiselectable="true"
       :aria-label="header || undefined"
@@ -131,12 +80,20 @@
       :data-testid="`${testId}__list`"
       :data-disabled="ctx.disabled.value || null"
       :data-loading="loading || null"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      :enter-active-class="itemTransitionActive"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+      :leave-active-class="itemTransitionActive"
       class="m-0 flex min-h-[14rem] list-none flex-col gap-[var(--spacing-xxs)] overflow-auto rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xs)] data-[disabled]:bg-[var(--bg-disabled)]"
     >
       <li
         v-if="loading"
+        key="__pick-list-loading"
         role="presentation"
         :data-testid="`${testId}__loading`"
+        :style="itemTransitionStyle"
         class="flex flex-1 items-center justify-center py-[var(--spacing-md)]"
       >
         <Spinner class="size-6 text-[var(--text-muted)]" />
@@ -150,8 +107,10 @@
         :tabindex="ctx.disabled.value ? -1 : 0"
         :data-selected="ctx.isSelected(side, index) || null"
         :data-testid="`${testId}__option`"
+        :style="itemTransitionStyle"
         class="cursor-pointer select-none rounded-[var(--shape-elements)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-md text-[var(--text-default)] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[selected]:bg-[var(--bg-selected)] aria-disabled:cursor-not-allowed"
         @click="ctx.toggleSelection(side, index)"
+        @dblclick="ctx.itemDoubleClick(side, index)"
         @keydown="onOptionKeydown(index, $event)"
       >
         <slot
@@ -161,6 +120,6 @@
           :list="side"
         />
       </li>
-    </ul>
+    </TransitionGroup>
   </section>
 </template>

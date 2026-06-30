@@ -94,7 +94,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Dual-list transfer control with a compound API: the root `<PickList>` owns the bound `[source, target]` pair and the shared selection/move/reorder state, and the consumer composes `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>`. The context-aware `<PickList.Controls>` wires the move buttons with no props. Use it to build an ordered subset from a pool where both the chosen set and the remaining pool stay visible.'
+          'Dual-list transfer control with a compound API: the root `<PickList>` owns the bound `[source, target]` pair and the shared selection/move state, and the consumer composes `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>`. The context-aware `<PickList.Controls>` wires the move buttons with no props; double-clicking an item moves it to the opposite list. Use it to build a subset from a pool where both the chosen set and the remaining pool stay visible.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -125,11 +125,11 @@ const meta = {
       description: 'Heading text for the target list (the `header` prop of `<PickList.Target>`).',
       table: { type: { summary: 'string' }, category: 'sub-component props (story control)' }
     },
-    reorderable: {
+    moveOnDoubleClick: {
       control: 'boolean',
       description:
-        'Shows up/down reorder controls on the target list (the `reorderable` prop of `<PickList.Target>`).',
-      table: { type: { summary: 'boolean' }, category: 'sub-component props (story control)' }
+        'When true (default), double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' }, category: 'props' }
     },
     loading: {
       control: { type: 'select' },
@@ -154,11 +154,12 @@ const meta = {
         category: 'events'
       }
     },
-    onReorder: {
-      action: 'reorder',
-      description: 'Fired after a reorder, with the items in the affected list.',
+    onItemDoubleClick: {
+      action: 'item-double-click',
+      description:
+        'Fired when an option is double-clicked, with the item, its index, and which list it was in.',
       table: {
-        type: { summary: "{ list: 'source' | 'target'; items: unknown[] }" },
+        type: { summary: "{ list: 'source' | 'target'; item: unknown; index: number }" },
         category: 'events'
       }
     }
@@ -168,7 +169,7 @@ const meta = {
     sourceHeader: 'Available',
     targetHeader: 'Selected',
     disabled: false,
-    reorderable: false,
+    moveOnDoubleClick: true,
     loading: false
   }
 }
@@ -191,9 +192,10 @@ const Template = (args) => ({
         :model-value="value"
         :data-key="args.dataKey"
         :disabled="args.disabled"
+        :move-on-double-click="args.moveOnDoubleClick"
         @update:model-value="onUpdate"
         @move="args.onMove"
-        @reorder="args.onReorder"
+        @item-double-click="args.onItemDoubleClick"
       >
         <PickList.Source
           :header="args.sourceHeader"
@@ -207,7 +209,6 @@ const Template = (args) => ({
         <PickList.Target
           :header="args.targetHeader"
           :loading="args.loading === true || args.loading === 'target'"
-          :reorderable="args.reorderable"
         >
           <template #item="{ item }">{{ item.label }}</template>
         </PickList.Target>
@@ -222,7 +223,10 @@ export const Default = {
   parameters: {
     docs: {
       source: { code: sourceFor() },
-      description: { story: 'Two lists with select-and-move and move-all controls.' }
+      description: {
+        story:
+          'Two lists with select-and-move and move-all controls. Double-clicking an item moves it to the opposite list (and fires `item-double-click`); toggle the `moveOnDoubleClick` control to cancel the auto-move.'
+      }
     }
   }
 }
@@ -247,20 +251,6 @@ export const Loading = {
       description: {
         story:
           "One side loading: the source shows a spinner and its moves are locked while the target stays interactive. Set the `loading` control to `true` for both sides, or `'target'` for the other side."
-      }
-    }
-  }
-}
-
-export const WithReorder = {
-  args: { reorderable: true },
-  render: Template,
-  parameters: {
-    docs: {
-      source: { code: sourceFor({ target: ['reorderable'] }) },
-      description: {
-        story:
-          'Reorder controls (up/down) appear next to the target heading and move the selected items within their own list.'
       }
     }
   }

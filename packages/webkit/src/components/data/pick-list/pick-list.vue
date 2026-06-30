@@ -21,18 +21,21 @@
     dataKey?: string
     /** Disables all selection and move controls and applies disabled tokens. */
     disabled?: boolean
+    /** When true (default), double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. */
+    moveOnDoubleClick?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     modelValue: () => [[], []],
     dataKey: '',
-    disabled: false
+    disabled: false,
+    moveOnDoubleClick: true
   })
 
   const emit = defineEmits<{
     'update:modelValue': [value: PickListValue]
     move: [payload: { direction: MoveDirection; items: PickListItems }]
-    reorder: [payload: { list: PickListSide; items: PickListItems }]
+    'item-double-click': [payload: { list: PickListSide; item: unknown; index: number }]
   }>()
 
   defineSlots<{
@@ -134,32 +137,32 @@
     emit('move', { direction, items: from })
   }
 
-  const reorder = (side: PickListSide, offset: -1 | 1): void => {
-    if (props.disabled || isLoading(side)) return
-    const indexes = pickSelectedIndexes(side)
-    if (indexes.length === 0) return
+  const moveItem = (fromSide: PickListSide, index: number): void => {
+    if (props.disabled || anyLoading.value) return
+    const fromItems = fromSide === 'source' ? [...sourceItems.value] : [...targetItems.value]
+    if (index < 0 || index >= fromItems.length) return
 
-    const list = side === 'source' ? [...sourceItems.value] : [...targetItems.value]
-    const ordered = offset === -1 ? indexes : [...indexes].reverse()
-    const nextSelection = new Set<number>()
+    const moved = fromItems[index]
+    const remaining = fromItems.filter((_, i) => i !== index)
+    const toItems = fromSide === 'source' ? [...targetItems.value] : [...sourceItems.value]
+    toItems.push(moved)
 
-    for (const index of ordered) {
-      const swap = index + offset
-      if (swap < 0 || swap >= list.length) {
-        nextSelection.add(index)
-        continue
-      }
-      const temp = list[swap]
-      list[swap] = list[index]
-      list[index] = temp
-      nextSelection.add(swap)
-    }
+    if (fromSide === 'source') emitModel([remaining, toItems])
+    else emitModel([toItems, remaining])
 
-    if (side === 'source') emitModel([list, [...targetItems.value]])
-    else emitModel([[...sourceItems.value], list])
+    selectionFor(fromSide).value = new Set()
+    emit('move', {
+      direction: fromSide === 'source' ? 'to-target' : 'to-source',
+      items: [moved]
+    })
+  }
 
-    selectionFor(side).value = nextSelection
-    emit('reorder', { list: side, items: list })
+  const itemDoubleClick = (side: PickListSide, index: number): void => {
+    if (props.disabled || anyLoading.value) return
+    const item = items(side)[index]
+    emit('item-double-click', { list: side, item, index })
+    if (!props.moveOnDoubleClick) return
+    moveItem(side, index)
   }
 
   provide(pickListContextKey, {
@@ -174,7 +177,7 @@
     hasSelection,
     move,
     moveAll,
-    reorder,
+    itemDoubleClick,
     isLoading,
     setLoading
   })
