@@ -170,7 +170,7 @@ A entrega vem em **7 waves** sequenciais na PR #703. Cada wave é um commit isol
 | 3 | Button pilot — `play()` em Default (click + Tab + Enter/Space, asserting `onClick` chamado 3x) e Disabled (click suprimido + `aria-disabled`); teste roda essas stories via `composeStories(...).run()`. Deps `@storybook/test` + `@storybook/vue3` em webkit. | ✅ mergeada | `811c424a` | `test` |
 | 3.5 | Fix fora do plano original — `@storybook/addon-interactions` instalado em `apps/storybook` e registrado em `.storybook/main.js` (em SB 8 não vem mais embutido no `addon-essentials`). Painel **Interactions** passa a aparecer no canvas. | ✅ mergeada | `8804806a` | `chore` |
 | 4 | CI workflow `test.yml` — roda `pnpm webkit:test` em PRs/push para `dev`/`main`, com setup pnpm + Node + `npx playwright install --with-deps chromium`. Paralelo ao `governance.yml`. | ✅ mergeada | `e4d4cc91` | `ci` |
-| 5 | CI workflow `chromatic.yml` — visual regression em workflow próprio. Pré-requisito: secret `CHROMATIC_PROJECT_TOKEN` no repo (ação humana). | 🚧 nesta wave | — | `ci` |
+| 5 | CI workflow `chromatic.yml` — visual regression em workflow próprio. Pré-requisito: secret `CHROMATIC_PROJECT_TOKEN` no repo (ação humana). | ✅ mergeada | `a983cffd` | `ci` |
 | 6 | Regra `.claude/rules/testing.md` + atualização das skills `validate-component` (passa a rodar `pnpm webkit:test --filter <name>` no `/component-verify`) e `component-scaffold` (gera `<name>.test.ts` mínimo) + nota em `CONTRIBUTING.md`. | ⏸️ a fazer | — | `docs` |
 | 7 | Hook `enforce-test-exists.mjs` — gate PreToolUse bloqueando `.vue` novo sem `<name>.test.ts` ao lado; modelado em `enforce-spec-exists.mjs`; whitelist `legacy-components.json`; registro em `.claude/settings.json`. | ⏸️ a fazer | — | `chore` |
 
@@ -188,58 +188,78 @@ A entrega vem em **7 waves** sequenciais na PR #703. Cada wave é um commit isol
 | `**/__screenshots__/` no `.gitignore` | Vitest browser mode escreve screenshots em failures; regeneráveis, não devem ser commitadas |
 | `@storybook/addon-interactions` adicionado explicitamente | `addon-essentials@8.6.x` não inclui mais o `addon-interactions` (separado no SB 8) — painel Interactions não aparecia |
 
-## 10. Benefícios por ferramenta
+## 10. O que cada camada testa e o valor que entrega
 
-Cada peça do stack ganhou lugar pela **razão específica** abaixo — não por hype, e nem por familiaridade.
+A pergunta certa para cada peça do stack não é "o que ela é" — é **"o que ela testa do produto"** e **"que tipo de bug ela impede de chegar no usuário"**. Cada camada cobre uma classe distinta de regressão. Juntas, elas fecham o cerco.
 
-### Runner — `vitest@^2.1.9`
+### Camada 1 — Unit (Vitest + browser real)
 
-- **Vite-nativo:** mesma resolução, alias e plugins do Storybook (que também é vite). Zero divergência de build entre "como vejo no navegador" e "como o teste vê".
-- **API estável (Vitest 2.x):** browser mode estável, compatível com `@vitest/browser` e o ecossistema `@vue/test-utils` 2.4.
-- **Watch mode rápido:** rebuild incremental via HMR do Vite — typing-cycle de teste fica abaixo de 1 s.
-- **`it.each` + `describe` aninhados:** matriz de variantes (`kind` × `size`) cabe em poucas linhas — ver seção `rendering` do `button.test.ts`.
+**O que testa.** O **contrato do componente** quando usado isoladamente: as props que o consumidor envia, os eventos que o componente emite, os slots que renderiza, os atributos ARIA que expõe, o que acontece quando o usuário clica num botão `disabled` ou `loading`.
 
-### Ambiente — `@vitest/browser` + `playwright` (Chromium headless)
+**O bug que impede.** Uma mudança no `button.vue` deixa o `disabled` passando o clique mesmo assim, ou um refactor renomeia o evento `click` para `pressed`. Hoje isso passaria para produção e quebraria silenciosamente todas as 200+ telas que importam o Button. A camada unit faz a CI vermelha no PR — antes de chegar no Console.
 
-- **Render real:** CSS de verdade, layout real, `getBoundingClientRect` honesto, focus nativo. Indispensável para componentes que dependem de CSS anchor positioning, `<Teleport>`, foco visível e medidas computadas — coisas que jsdom mente sobre.
-- **Coerente com a regra de dependências:** a [`dependencies.md`](../rules/dependencies.md) proíbe `floating-ui`/`popper`; o que mantém a integridade dessa proibição é **testar no DOM real**. Mocks para `getBoundingClientRect` em jsdom escondem o problema.
-- **Mesma plataforma da Camada 3 (Chromatic):** baseline visual e teste comportamental rodam no mesmo motor — divergência improvável.
-- **Custo bem definido:** ~30 s extra por job CI + um download Chromium de ~150 MB cacheado pelo runner.
+**O valor para o time.**
 
-### Mount — `@testing-library/vue` + `@vue/test-utils`
+- **Refactor seguro.** Migrar `kindClasses` → `data-*` em qualquer componente da webkit deixa de ser uma operação assustadora — se o contrato visível não muda, o teste segura.
+- **Documentação executável.** O autor de uma feature nova no Console abre `button.test.ts` e vê exatamente o que acontece em cada combinação de prop. Sem precisar perguntar no Slack.
+- **Tempo de incidente menor.** Bug em produção vira "1 `it()` reproduzindo, fix, merge" em vez de "abrir DevTools no staging, tentar reproduzir, descobrir o que mudou".
 
-- **Queries por papel (`getByRole`, `getByLabelText`):** força o teste a olhar para a árvore acessível, não para classes/internals. Se o teste passa, screen reader também vê.
-- **`emitted()`:** asserções de evento Vue idiomáticas, sem mock de função no callsite.
-- **`@vue/test-utils` quando preciso:** acesso ao vm/`.props()` quando uma asserção comportamental simplesmente não cabe (raro, mas existe).
+### Camada 2 — Integração (`play()` no Storybook + Vitest browser)
 
-### Stories como fixture — `@storybook/vue3` + `@storybook/test` + `composeStories`
+**O que testa.** **Fluxos de interação do usuário** que envolvem mais de um passo: abrir um dropdown e fechar com `Escape`, navegar com `Tab` por um form, ativar um botão com `Enter`/`Space`, focus trap dentro de um Dialog, scroll lock quando um Drawer abre.
 
-- **Uma única fonte de verdade:** props/args/render moram em `*.stories.js` e são consumidos por docs, Chromatic, painel Interactions **e** unit test. Sem duplicação.
-- **`play()` documenta e testa ao mesmo tempo:** o fluxo de uso aparece no painel Interactions (revisor visualiza) e roda em vitest via `Story.run()` (CI valida). Mesmo `expect`, mesmo `userEvent`, mesma asserção.
-- **`fn()` (mock instrumentado do `@storybook/test`):** captura chamadas e aparece no painel Actions/Interactions — sem reinventar spies.
-- **Migração barata:** stories que já existem só ganham um `play()` quando o fluxo justificar.
+**O bug que impede.** Um Dropdown que abre mas não fecha no `Escape`. Um Modal onde o `Tab` "vaza" para o body atrás. Um Switch que reage ao clique mas não ao teclado. Esses bugs raramente aparecem em screenshot — só em uso real, e tipicamente são descobertos por usuários com teclado ou leitor de tela.
 
-### A11y — `axe-core` direto (com `@storybook/addon-a11y` no Storybook)
+**O valor para o time.**
 
-- **`axe-core` standalone funciona no browser e no jsdom:** roda dentro da suite Vitest sem wrapper de Node. Custo zero de setup.
-- **`@storybook/addon-a11y` (já instalado) entrega painel visual no Storybook:** autor de componente vê violações em tempo real enquanto desenvolve, antes mesmo de escrever o teste.
-- **Regras desabilitadas precisam de comentário na story:** mesmo padrão que `Button.stories.js` já segue (`parameters.a11y.config.rules` enumera regras com flag explícita). Auditável.
-- **Por que **não** `vitest-axe`:** quebra em browser mode (`createRequire` é Node-only). Helper local de 4 linhas resolve sem dependência transitiva frágil.
+- **Acessibilidade comportamental.** Vai além de "tem `aria-*` correto" (isso é axe na Camada 4) — testa que o componente **se comporta** acessivelmente: ordem de foco, escape, ativação por teclado.
+- **Documentação que não mente.** O `play()` aparece no painel Interactions do Storybook como uma demo guiada do componente. Designer/PM clica em "Default" e vê o fluxo. Se o fluxo quebrar, o painel mostra vermelho — a doc é o teste.
+- **Custo zero de duplicação.** A mesma story que documenta o componente roda como teste. Sem manter dois mundos.
 
-### Visual regression — `@chromatic-com/storybook` (em workflow próprio)
+### Camada 3 — Visual regression (Chromatic)
 
-- **Sem snapshot local:** baseline mora no serviço, não no repo. Sem PRs gigantes para revisar diff de pixel.
-- **Stories são a unidade de baseline:** cada story vira um snapshot — `Default`, `Types`, `Sizes`, `Loading`, `Icon`, `Disabled` no Button são 6 baselines sem esforço extra.
-- **TurboSnap (`--only-changed`):** só renderiza stories afetadas pelo diff — corta ~80 % do custo na maior parte das PRs.
-- **Worflow isolado:** se a cota mensal estoura, PRs urgentes (lint/types) continuam mergeando — só Chromatic falha.
+**O que testa.** **Como o componente aparece** em pixel — em todas as stories existentes, em viewports diferentes, em modo claro/escuro. Captura o snapshot atual e compara com a baseline em `dev`.
 
-### Painel Interactions — `@storybook/addon-interactions`
+**O bug que impede.** Alguém ajusta `--shape-button` no theme e sem querer mexe no `border-radius` de 30 componentes. Ou troca o token `--bg-disabled` e o disabled deixa de ter contraste. Ou um upgrade de Tailwind muda o behavior de uma utility. Esses bugs **só aparecem visualmente** — nenhum teste comportamental pega.
 
-- **Replay step-by-step do `play()`:** revisor pode "rebobinar" até qualquer step, vendo o canvas no estado intermediário. Bug em `Tab → Enter` fica visível.
-- **Mesmas asserções da CI:** o `expect(args.onClick).toHaveBeenCalledTimes(3)` que falha no painel também falha no vitest. Sem dois mundos.
+**O valor para o time.**
 
-### Hooks de governance — `enforce-spec-exists.mjs` (modelo) → `enforce-test-exists.mjs` (Wave 7)
+- **Confiança para mexer em theme/tokens.** Hoje, mudar um token global é apavorante porque não há feedback rápido sobre o impacto. Com Chromatic, você abre a PR e o serviço comenta com "47 stories afetadas, revisa essas screenshots" — você aprova as intencionais, e a CI reprova as não-intencionais.
+- **Code review visual incorporado ao fluxo.** Reviewer não precisa rodar Storybook local pra ver o que mudou. O comentário do Chromatic na PR mostra antes/depois lado a lado.
+- **Cobertura natural sem trabalho extra.** As 77 stories existentes já entregam a primeira baseline na hora que o workflow for ligado. Componentes novos entram automaticamente.
 
-- **Gate no PreToolUse:** uma vez ativo, `Write` de `.vue` novo sem `.test.ts` ao lado é bloqueado antes de o arquivo ser criado. Não precisa esperar CI.
-- **Whitelist em `_lib/legacy-components.json`:** componentes legados ficam isentos até serem migrados — sem big-bang.
-- **Determinístico e local:** mesma lógica que já garante spec-compliance. Sem novo runtime, sem novo serviço.
+### Camada 4 — Acessibilidade (axe-core)
+
+**O que testa.** **Violações de WCAG 2.1 AA estáticas** no HTML renderizado por cada story: contraste insuficiente, `<button>` sem nome acessível, `<img>` sem alt, `aria-*` inválido, ordem de heading quebrada, role redundante.
+
+**O bug que impede.** Um IconButton que renderiza só um `<i class="pi pi-trash">` sem `aria-label`. Um Modal com `<div>` clicável em vez de `<button>`. Um link com texto "clique aqui". Esses são problemas que **bloqueariam um audit de a11y** se o produto fosse vendido para setor público, agência regulada ou enterprise com requisitos de inclusão.
+
+**O valor para o time/produto.**
+
+- **Risco regulatório controlado.** Compliance de acessibilidade está virando requisito comercial em muitos contratos enterprise. Ter `axe-core` rodando em CI documenta diligência — não é só "tentamos", é "a CI proíbe".
+- **Inclusão real, não declarada.** Engineer sem experiência em a11y consegue mesmo assim acertar — o teste diz o que está errado e por quê (ex.: `color-contrast: 2.8:1 vs required 4.5:1`).
+- **Sem custo recorrente.** Não precisa de auditoria manual a cada release. Axe roda em todo PR.
+
+### Camada de governance — Hooks PreToolUse (Wave 7)
+
+**O que testa.** Que **componente novo não nasce sem teste**. No momento em que o Claude/dev tenta criar `<name>.vue` sem `<name>.test.ts` ao lado, o hook bloqueia o `Write` antes do arquivo existir.
+
+**O bug que impede.** A erosão típica de qualquer iniciativa de testing: a barra cai com o tempo, gente cria componente sem teste "só dessa vez", e seis meses depois a cobertura virou 30 %. Esse é o mecanismo que mantém a Fase 1 viva sem precisar de policiamento humano.
+
+**O valor para o time/produto.**
+
+- **Disciplina sem fricção humana.** Não tem code reviewer pedindo "cadê o teste?" — o sistema pede sozinho, antes do PR existir.
+- **Compatível com legacy.** Whitelist `legacy-components.json` permite que os 156 componentes existentes fiquem isentos até serem migrados. Sem big-bang.
+
+### Resumo — quem cobre o quê
+
+| Tipo de regressão | Quem pega |
+|---|---|
+| Prop renomeada, evento removido, default mudado | **Camada 1 (unit)** |
+| `disabled` deixa de suprimir click | **Camada 1 (unit)** |
+| `Escape` não fecha overlay, `Tab` escapa do Modal, ativação por teclado quebra | **Camada 2 (`play()`)** |
+| `border-radius` de 30 componentes mudou sem querer | **Camada 3 (Chromatic)** |
+| Contraste insuficiente, `<button>` sem nome acessível, `aria-*` inválido | **Camada 4 (axe)** |
+| Componente novo entra no repo sem teste | **Governance (hook PreToolUse)** |
+
+Sem qualquer dessas camadas, há uma classe inteira de bug que **chega no usuário**. Com todas as cinco, as únicas regressões que escapam para produção são as que ninguém pensou em escrever — e mesmo essas geram um teste novo no post-mortem.
