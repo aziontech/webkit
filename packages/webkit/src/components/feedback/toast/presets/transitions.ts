@@ -7,7 +7,7 @@ import { curve, duration } from '@aziontech/theme/animations'
  * ad-hoc Tailwind timing utilities.
  */
 
-export type ToastMotionPhase = 'enter' | 'exit' | 'reveal'
+export type ToastMotionPhase = 'enter' | 'exit'
 
 export type ToastMotionToken = {
   duration: string
@@ -17,13 +17,11 @@ export type ToastMotionToken = {
 /**
  * Stack motion mapped to `duration` / `curve` primitives from animate.js.
  * `enter` settles a new card in (and drives the resting-stack reflow);
- * `exit` slides a dismissed card back off the anchored edge;
- * `reveal` fades the hover/focus close affordance in.
+ * `exit` slides a dismissed card back off the anchored edge.
  */
 export const toastMotion: Record<ToastMotionPhase, ToastMotionToken> = {
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] },
-  exit: { duration: duration['slow-01'], curve: curve['productive-exit'] },
-  reveal: { duration: duration['moderate-01'], curve: curve['productive-entrance'] }
+  exit: { duration: duration['slow-01'], curve: curve['productive-exit'] }
 }
 
 /** Defers DOM unmount one paint past the exit transition so it never clips. */
@@ -45,8 +43,3 @@ export const getToastTransitionStyle = (removing: boolean): { transition: string
     transition: `transform ${d} ${c}, opacity ${d} ${c}, height ${d} ${c}`
   }
 }
-
-/** Inline transition for the close affordance reveal (hover / focus-within). */
-export const getCloseRevealTransitionStyle = (): { transition: string } => ({
-  transition: `opacity ${toastMotion.reveal.duration} ${toastMotion.reveal.curve}`
-})

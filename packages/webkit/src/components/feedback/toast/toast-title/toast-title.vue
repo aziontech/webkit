@@ -20,7 +20,7 @@
   <p
     v-bind="$attrs"
     :data-testid="testId"
-    class="text-label-sm text-[var(--text-default)]"
+    class="text-label-md leading-none text-[var(--text-default)]"
   >
     <slot />
   </p>

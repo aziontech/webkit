@@ -4,9 +4,12 @@ category: feedback
 structure: composition
 status: approved
 spec_version: 1
-checksum: e3ce436c416e8aa7c30b08b2ed48f38c0f12ae408f40e5164e64371d7e5e451d
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
+  node_id: 478:938
+checksum: c68746e63dc5815cf542ed26f75b33bbec3b7749fb196ea5e8d78ac605ce5689
 created: 2026-06-23
-last_updated: 2026-06-25
+last_updated: 2026-06-29
 ---
 
 # Toast — Component Spec
@@ -15,7 +18,7 @@ last_updated: 2026-06-25
 
 A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own.
 
-There is **no Figma source** for this component. The visual and interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built from scratch on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Severity surfaces reuse the same feedback tokens as `Message` (`var(--success)` / `var(--warning)` / `var(--danger)` / `var(--info)` and their `-border` / `-contrast` companions).
+The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.
 
 ## Usage
 
@@ -65,6 +68,8 @@ toast.success('Deployed', { description: 'edge-01 live' }) // typed shortcut
 toast.error('Failed', { action: { label: 'Retry', onClick: () => retry() } })
 toast.loading('Uploading…', { duration: 0 })               // persists until dismissed
 toast('Heads up', { position: 'top-center' })              // anchor this toast to a corner (overrides Toaster)
+toast('Saved', { closable: true })                         // always-visible close control (overrides Toaster)
+toast('Saved', { onClose: () => track('dismissed') })      // callback fired when the toast is dismissed
 toast.promise(deploy(), { loading: 'Deploying…', success: 'Deployed', error: 'Failed' })
 toast.dismiss(id)                                          // dismiss one; toast.dismiss() clears all
 ```
@@ -105,8 +110,8 @@ import Toast from '@aziontech/webkit/toast'
      There is NO `Trigger` / `Content`: a toast has no disclosure open/closed state — its lifecycle
      is presence in the stack, expressed via `data-type` and enter/leave transitions. -->
 
-- `toaster/toaster.vue` — the mount-once region. `<Teleport to="body">` + a fixed-positioned, `position`-anchored container that renders the live `<TransitionGroup>` stack of `ToastItem`s from the injected store, with `aria-live` (`polite`, or `assertive` when an `error` toast is present) and `aria-atomic="false"`. Props `position?: ToastPosition` (default `'bottom-right'`), `duration?: number` (default `4000`, ms — the stack-wide default each toast inherits unless its own `duration` overrides), `max?: number` (cap the number of simultaneously visible toasts; older ones drop when exceeded), `expand?: boolean` (when `false`, the default, stacked toasts overlap into a peek; when `true`, they lay out fully expanded with a gap). Exposes a scoped `default` slot (`{ toast, dismiss }`) for a bespoke body; falls back to composing `ToastItem` from the store entry. This is the public root attached to the compound as `Toast.Toaster`.
-- `toast-item/toast-item.vue` — a single notification card (flex row, vertically centered): an optional leading severity icon (PrimeIcons, by `type`; the neutral `default` type has **no** icon), a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned, vertically-centered `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `error`/`warning`). Props `type?: ToastType` (default `'default'`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-type`.
+- `toaster/toaster.vue` — the mount-once region. `<Teleport to="body">` + a fixed-positioned, `position`-anchored container that renders the live `<TransitionGroup>` stack of `ToastItem`s from the injected store, with `aria-live` (`polite`, or `assertive` when an `error` toast is present) and `aria-atomic="false"`. Props `position?: ToastPosition` (default `'bottom-right'`), `duration?: number` (default `4000`, ms — the stack-wide default each toast inherits unless its own `duration` overrides), `max?: number` (cap the number of simultaneously visible toasts; older ones drop when exceeded), `expand?: boolean` (when `false`, the default, stacked toasts overlap into a peek; when `true`, they lay out fully expanded with a gap), `closable?: boolean` (default `false`; when `true`, every toast shows an always-visible close control unless its own `closable` option overrides). Exposes a scoped `default` slot (`{ toast, dismiss }`) for a bespoke body; falls back to composing `ToastItem` from the store entry. This is the public root attached to the compound as `Toast.Toaster`.
+- `toast-item/toast-item.vue` — a single notification card (flex row, `items-center` so a single-line toast and its `trailing` action/close share one centered line; the typed leading icon takes `self-start` so on a multi-line toast it rises to the title's first line instead of centering on the block, while the `loading` `Spinner` stays centered; height adapts to content). All typography and spacing come from tokens (`text-label-md` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — a PrimeIcons glyph by `type` sized with the `text-label-md` token to match the title (`pi pi-check` / `pi pi-info-circle` / `pi pi-exclamation-triangle` / `pi pi-exclamation-circle`); the neutral `default` type has **no** icon, and `loading` renders a `Spinner`. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `error`/`warning`). Props `type?: ToastType` (default `'default'`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-type`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
 - `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`kind="text"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
@@ -145,6 +150,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `duration` | `number` | `4000` | no | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
 | `max` | `number` | `3` | no | Maximum simultaneously visible toasts per corner before the rest queue behind. |
 | `expand` | `boolean` | `false` | no | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek. |
+| `closable` | `boolean` | `false` | no | Show an always-visible close control on every toast; a per-toast `closable` option overrides it. |
 
 ## Events
 
@@ -163,9 +169,10 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ## States
 
-- `data-type` on `ToastItem` (and mirrored on the `Toaster`'s items): `default` | `success` | `info` | `warning` | `error` | `loading`. Drives the leading icon and the severity surface tokens.
+- `data-type` on `ToastItem` (and mirrored on the `Toaster`'s items): `default` | `success` | `info` | `warning` | `error` | `loading`. Drives the leading icon and its severity color (the `-contrast` icon token).
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `left`/`center`/`right`) and the enter/leave translate direction.
 - `data-expanded` on the `Toaster` container mirrors the `expand` prop (`true` when expanded).
+- The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
 - `aria-live` on the region: `polite` by default, `assertive` while an `error` toast is present; `role="status"` per item, `role="alert"` for `error`/`warning`. Focus is never stolen (the region is not focused on mount).
 - Visual states on interactive controls (`ToastAction`, `ToastClose`): `default`, `hover`, `focus-visible`, `active` (inherited from `Button` / `IconButton`).
 
@@ -178,7 +185,6 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 | toast enters the stack | inline `transition` on `transform` + `opacity` + `height`: slides in from the anchored edge (off-edge `translateY` → `0`) while fading in | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none` (instant) |
 | toast leaves the stack | inline `transition` on `transform` + `opacity` + `height`: slides back off the anchored edge while fading out; DOM unmount deferred (`TOAST_UNMOUNT_MS`) until the exit finishes | `duration['slow-01']` + `curve['productive-exit']` | `motion-reduce:transition-none` (instant) |
 | stack reflows when a toast is added / removed / expanded | inline `transition` on the region container (`height`) and each resting card (`transform` / `height`) | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none` |
-| close control reveal on hover | inline `transition` on `opacity` for the close affordance (`group-hover` / `focus-within`) | `duration['moderate-01']` + `curve['productive-entrance']` | `motion-reduce:transition-none` |
 
 <!-- Enter/leave/reflow apply the foundation `duration`/`curve` tokens as inline `transition` styles (the
      geometry — directional translate + scale + height — is computed inline so the slide reads correctly from
@@ -191,18 +197,19 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| toast surface | `var(--bg-surface)` |
+| toast surface | `var(--bg-surface-raised)` |
 | toast border | `var(--border-default)` |
-| elevation | `var(--shadow-md)` |
-| shape | `var(--shape-button)` |
-| title typography | `.text-label-sm` |
+| border width | `var(--border-width-default)` |
+| elevation | `var(--shadow-sm)` |
+| shape | `var(--shape-elements)` |
+| title typography | `.text-label-md` |
 | description typography | `.text-body-xs` |
 | title text | `var(--text-default)` |
 | description text | `var(--text-muted)` |
-| success surface / border / icon | `var(--success)` · `var(--success-border)` · `var(--success-contrast)` |
-| info surface / border / icon | `var(--info)` · `var(--info-border)` · `var(--info-contrast)` |
-| warning surface / border / icon | `var(--warning)` · `var(--warning-border)` · `var(--warning-contrast)` |
-| error surface / border / icon | `var(--danger)` · `var(--danger-border)` · `var(--danger-contrast)` |
+| success icon | `var(--success-contrast)` |
+| info icon | `var(--info-contrast)` |
+| warning icon | `var(--warning-contrast)` |
+| error icon | `var(--danger-contrast)` |
 | padding | `var(--spacing-sm)` |
 | gap | `var(--spacing-xs)` |
 | stack inset (viewport edge) | `var(--spacing-md)` |
@@ -228,9 +235,10 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 This component has no `kind`/`size` on its root, and it is driven imperatively rather than by props, so the canonical Types/Sizes/state stories do not apply to the root. Each story renders `<Toast.Toaster />` once plus button(s) that call `toast(…)`, so the docs "Show code" is copy-paste runnable. Every story justifies its existence below.
 
 - Default — a single `<Toast.Toaster />` plus a button calling `toast('…')`; justified because it documents the minimal mount-once + imperative-call usage that is the component's whole point.
-- Types — buttons triggering each `type` (`toast.success` / `toast.info` / `toast.warning` / `toast.error` / `toast.loading` / default); justified because the severity surfaces + icons are a distinct axis (the equivalent of a composite Types story for an imperative API).
+- Types — buttons triggering each `type` (`toast.success` / `toast.info` / `toast.warning` / `toast.error` / `toast.loading` / default); justified because the severity icons are a distinct axis (the equivalent of a composite Types story for an imperative API).
 - WithDescription — a button raising a toast with the `description` option; justified because the two-line body (title + description) is a distinct layout the API explicitly supports.
 - WithAction — a button raising a toast with the `action` option (label + `onClick`); justified because the inline action affordance (`ToastAction`) is a distinct behavior the API explicitly supports.
+- Closable — a button raising a toast with the `closable` option; justified because the always-visible dismiss control (`ToastClose`) is a distinct affordance the API exposes (off by default).
 - Positions — buttons that mount the stack at each of the six `position` values; justified because the anchoring is a distinct presentation axis (six mutually-exclusive corners) that the `position` prop exposes.
 
 ## Constraints — DO NOT
