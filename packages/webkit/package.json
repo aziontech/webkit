@@ -135,7 +135,10 @@
     "./switch": "./src/components/inputs/switch/switch.vue",
     "./textarea": "./src/components/inputs/textarea/textarea.vue",
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
-    "./dropdown": "./src/components/inputs/dropdown/dropdown.vue",
+    "./dropdown": "./src/components/navigation/dropdown/index.ts",
+    "./dropdown-trigger": "./src/components/navigation/dropdown/dropdown-trigger/dropdown-trigger.vue",
+    "./dropdown-group": "./src/components/navigation/dropdown/dropdown-group/dropdown-group.vue",
+    "./dropdown-option": "./src/components/navigation/dropdown/dropdown-option/dropdown-option.vue",
     "./multi-select": "./src/components/inputs/multi-select/index.ts",
     "./multi-select-root": "./src/components/inputs/multi-select/multi-select.vue",
     "./multi-select-trigger": "./src/components/inputs/multi-select/multi-select-trigger/multi-select-trigger.vue",
@@ -209,6 +212,7 @@
     "./styles/country-flags": "./src/styles/country-flags.css",
     "./use-controllable": "./src/composables/use-controllable/index.js",
     "./use-focus-trap": "./src/composables/use-focus-trap/index.js",
+    "./use-placement": "./src/composables/use-placement/index.js",
     "./vite": "./src/vite/index.js"
   }
 }

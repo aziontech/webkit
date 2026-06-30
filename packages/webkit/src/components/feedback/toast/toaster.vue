@@ -13,7 +13,6 @@
 
   import { ToastInjectionKey } from './injection-key'
   import {
-    getCloseRevealTransitionStyle,
     getRegionTransitionStyle,
     getToastTransitionStyle,
     TOAST_UNMOUNT_MS
@@ -43,12 +42,15 @@
       max?: number
       /** Keep the stack permanently expanded (otherwise it expands on hover). */
       expand?: boolean
+      /** Show an always-visible close control on every toast; a per-toast `closable` option overrides it. */
+      closable?: boolean
     }>(),
     {
       position: 'bottom-right',
       duration: 4000,
       max: 3,
-      expand: false
+      expand: false,
+      closable: false
     }
   )
 
@@ -58,6 +60,14 @@
 
   const store = useToastStore()
   provide(ToastInjectionKey, store)
+
+  // The `duration` prop is the default auto-dismiss time new toasts inherit
+  // (a per-toast `duration` overrides it; `0` keeps a toast until dismissed).
+  watch(
+    () => props.duration,
+    (ms: number) => store.setDefaultDuration(ms),
+    { immediate: true }
+  )
 
   // Only one mounted Toaster renders the regions (the stack is a global singleton).
   const toasterReg = registerToaster()
@@ -307,8 +317,6 @@
       ...getToastTransitionStyle(false)
     }
   }
-
-  const closeRevealTransitionStyle = getCloseRevealTransitionStyle()
 </script>
 
 <template>
@@ -351,12 +359,10 @@
                     :label="item.entry.action.label"
                     @click="(event) => item.entry.action?.onClick(event)"
                   />
-                  <span
-                    :style="closeRevealTransitionStyle"
-                    class="opacity-0 group-hover:opacity-100 focus-within:opacity-100 motion-reduce:transition-none"
-                  >
-                    <ToastClose @click="() => dismiss(item.entry.id)" />
-                  </span>
+                  <ToastClose
+                    v-if="item.entry.closable ?? closable"
+                    @click="() => dismiss(item.entry.id)"
+                  />
                 </template>
               </ToastItem>
             </slot>
