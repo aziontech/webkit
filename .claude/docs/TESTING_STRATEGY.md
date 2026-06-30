@@ -171,7 +171,7 @@ A entrega vem em **7 waves** sequenciais na PR #703. Cada wave é um commit isol
 | 3.5 | Fix fora do plano original — `@storybook/addon-interactions` instalado em `apps/storybook` e registrado em `.storybook/main.js` (em SB 8 não vem mais embutido no `addon-essentials`). Painel **Interactions** passa a aparecer no canvas. | ✅ mergeada | `8804806a` | `chore` |
 | 4 | CI workflow `test.yml` — roda `pnpm webkit:test` em PRs/push para `dev`/`main`, com setup pnpm + Node + `npx playwright install --with-deps chromium`. Paralelo ao `governance.yml`. | ✅ mergeada | `e4d4cc91` | `ci` |
 | 5 | CI workflow `chromatic.yml` — visual regression em workflow próprio. Pré-requisito: secret `CHROMATIC_PROJECT_TOKEN` no repo (ação humana). | ✅ mergeada | `a983cffd` | `ci` |
-| 6 | Regra `.claude/rules/testing.md` + atualização das skills `validate-component` (passa a rodar `pnpm webkit:test --filter <name>` no `/component-verify`) e `component-scaffold` (gera `<name>.test.ts` mínimo) + nota em `CONTRIBUTING.md`. | ⏸️ a fazer | — | `docs` |
+| 6 | Regra `.claude/rules/testing.md` + atualização das skills `validate-component` (passa a rodar `pnpm webkit:test --filter <name>` no `/component-verify`) e `component-scaffold` (gera `<name>.test.ts` mínimo) + nota em `CONTRIBUTING.md`. | 🚧 nesta wave | — | `docs` |
 | 7 | Hook `enforce-test-exists.mjs` — gate PreToolUse bloqueando `.vue` novo sem `<name>.test.ts` ao lado; modelado em `enforce-spec-exists.mjs`; whitelist `legacy-components.json`; registro em `.claude/settings.json`. | ⏸️ a fazer | — | `chore` |
 
 **Verificação local atual:** `cd packages/webkit && ./node_modules/.bin/vitest run` → `21 passed (21)` em ~1.5–3 s.
