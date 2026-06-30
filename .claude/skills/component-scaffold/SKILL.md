@@ -2,7 +2,7 @@
 name: component-scaffold
 description: Write the `.vue` file(s) for a component, plus the entry in `packages/webkit/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec. For composition pattern, each sub-component lives in its own folder.
 status: active
-last_updated: 2026-05-27
+last_updated: 2026-06-30
 ---
 
 # Skill: component-scaffold
@@ -16,8 +16,9 @@ Convert an approved `.specs/<name>.md` into:
 - (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts` at the root level (shared by every sub-component).
 - (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 - New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./overlay/dialog-trigger`) regardless of the folder nesting. For composition, the **root** export points at `index.ts` (the compound), **plus** a standalone `./<name>-root` export pointing at the root `.vue` for tree-shaking — see [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
+- `packages/webkit/src/components/webkit/<category>/<name>/<name>.test.ts` (TypeScript) — the smoke + a11y test mandated by [`.claude/rules/testing.md`](../../rules/testing.md). Imports `composeStories` from the matching story file (written by `storybook-write`), renders `Default`, asserts the root tag + `data-testid` fallback + variant `data-*` from the spec's Props table, and runs `axe-core` over the `Default` render.
 
-Nothing else. The story, the Code Connect file, and the validation pass live in other skills.
+Nothing else. The story and the Code Connect file live in other skills; the validation pass (running this test) lives in `validate-component`.
 
 **Folder layout — composition pattern (canonical, one folder per part):**
 
@@ -68,7 +69,64 @@ packages/webkit/src/components/webkit/actions/button/
 ## Workflow
 
 1. **Read the spec.** Extract Props / Events / Slots / Sub-components / States / Tokens / Accessibility tables.
-2. **Write the root `.vue`.** Follow this skeleton verbatim and substitute spec values. Classes live inline on the root `class` attribute; variants are switched via `data-*` attributes consumed by Tailwind's `data-[attr=value]:` prefix. **No `kindClasses` / `sizeClasses` / `sharedClasses` JS presets, no `<style>` block, no `.css` file inside the component.** Full rationale: [styling.md](../../rules/styling.md).
+2. **Write `<name>.test.ts` first** next to where the root `.vue` will land — the smoke + a11y floor from [`.claude/rules/testing.md`](../../rules/testing.md). The PreToolUse hook `enforce-test-exists.mjs` blocks the root `.vue` Write if this sibling test is missing, so the test lands **before** the component. The skeleton imports the story file by relative path (the `storybook-write` skill writes the story under `apps/storybook/src/stories/components/<category>/<name>/<PascalName>.stories.@(js|ts)` — same shape as the pilot in `packages/webkit/src/components/actions/button/button.test.ts`). Substitute `<PascalName>` / `<name>` / `<category>` and the spec's Props table values:
+
+   ```ts
+   // packages/webkit/src/components/webkit/<category>/<name>/<name>.test.ts
+   import { composeStories } from '@storybook/vue3'
+   import { render } from '@testing-library/vue'
+   import axe from 'axe-core'
+   import { describe, expect, it } from 'vitest'
+
+   import * as stories from '../../../../../../apps/storybook/src/stories/components/<category>/<name>/<PascalName>.stories'
+   import <PascalName> from './<name>.vue'
+
+   const composed = composeStories(stories)
+
+   const expectNoA11yViolations = async (container: Element) => {
+     const results = await axe.run(container)
+     expect(results.violations).toEqual([])
+   }
+
+   describe('<PascalName>', () => {
+     describe('rendering', () => {
+       it('renders with the spec default tag and data-testid fallback', () => {
+         const { getByTestId } = render(<PascalName>)
+         const root = getByTestId('<category>-<name>')
+         expect(root).toBeTruthy()
+       })
+
+       it('honors a consumer-provided data-testid', () => {
+         const { getByTestId } = render(<PascalName>, {
+           attrs: { 'data-testid': 'custom-id' }
+         })
+         expect(getByTestId('custom-id')).toBeTruthy()
+       })
+
+       // One it.each per variant prop in the spec's Props table.
+       // Example for `kind`:
+       // it.each(['primary', 'secondary'] as const)('mounts kind=%s without throwing', (kind) => {
+       //   const { getByTestId } = render(<PascalName>, { props: { kind } })
+       //   expect(getByTestId('<category>-<name>').getAttribute('data-kind')).toBe(kind)
+       // })
+     })
+
+     describe('a11y', () => {
+       it('Default has no axe violations', async () => {
+         const { container } = render(composed.Default())
+         await expectNoA11yViolations(container)
+       })
+     })
+   })
+   ```
+
+   - `composeStories` from `@storybook/vue3` (runtime export). **Never** `@storybook/vue3-vite`.
+   - One `it.each` per variant prop in the spec's Props table — `kind`, `size`, `tone`, `state`, etc. Each iteration asserts the corresponding `data-*` attribute on the root.
+   - One axe assertion per a11y-divergent variant (`Default`, plus `Disabled` / `Anchor` / `Loading` when the spec promises distinct semantics). The composed-stories pattern wins over re-rendering with raw props because Storybook's args reflect the documented default.
+   - Add `play()`-driven assertions **only** when the spec has interactive flows and the matching story ships a `play()` (Tabs, NavigationMenu, Accordion, overlays): `await composed.<Story>.run({ canvasElement: container })` inside the test.
+   - **Never** import `vitest-axe` — it breaks in browser mode. Use `axe-core` directly with the local helper as shown.
+   - **Never** assert on Tailwind class strings. Use roles, ARIA, `data-*`, focus state.
+3. **Write the root `.vue`.** Follow this skeleton verbatim and substitute spec values. Classes live inline on the root `class` attribute; variants are switched via `data-*` attributes consumed by Tailwind's `data-[attr=value]:` prefix. **No `kindClasses` / `sizeClasses` / `sharedClasses` JS presets, no `<style>` block, no `.css` file inside the component.** Full rationale: [styling.md](../../rules/styling.md).
 
    ```vue
    <script setup lang="ts">
@@ -154,7 +212,7 @@ packages/webkit/src/components/webkit/actions/button/
 
    **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — Storybook runs two `@vitejs/plugin-vue` passes; the second re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
 
-3. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
+4. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
 
    - `packages/webkit/src/components/webkit/<category>/<name>/<name>-<part>/<name>-<part>.vue`
 
@@ -164,7 +222,7 @@ packages/webkit/src/components/webkit/actions/button/
    - `inject(<PascalRoot>InjectionKey)` to read shared state.
    - Local `testId` derived from `ctx.testId` per [`bem-testid.md`](../../docs/COMPONENT_REQUIREMENTS.md). The fallback follows BEM: `'<category>-<name>__<part>'` (e.g. `'overlay-dialog__trigger'`).
 
-4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
+5. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
 
    ```ts
    // packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts
@@ -181,7 +239,7 @@ packages/webkit/src/components/webkit/actions/button/
 
    Root `.vue` imports it via `import { DialogInjectionKey } from './injection-key'`. Sub-components import it via `import { DialogInjectionKey } from '../injection-key'`.
 
-4b. **(Composition only) Write the compound `index.ts`** at the root level (sibling of `<name>.vue`). The root is the default export with every public sub-component attached via `Object.assign`. Member names mirror the spec's Sub-components section — strip the `<name>-` prefix and PascalCase (`dialog-trigger` → `Trigger`). Use a generic name only when the spec does (`SortButton`, not `Trigger`, when the part opens no `Content`). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
+5b. **(Composition only) Write the compound `index.ts`** at the root level (sibling of `<name>.vue`). The root is the default export with every public sub-component attached via `Object.assign`. Member names mirror the spec's Sub-components section — strip the `<name>-` prefix and PascalCase (`dialog-trigger` → `Trigger`). Use a generic name only when the spec does (`SortButton`, not `Trigger`, when the part opens no `Content`). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 
    ```ts
    // index.ts — one source of truth; vue-tsc derives index.d.ts from it.
@@ -197,7 +255,7 @@ packages/webkit/src/components/webkit/actions/button/
 
    **The index is `.ts`, not `.js`** — `vue-tsc` cannot derive declarations from a plain `.js` (no `allowJs`), so `<Dialog.Trigger>` would be untyped. **Do not hand-write `index.d.ts`** — it is gitignored and generated at publish time (via `.releaserc`), not in dev. The package is consumed as source (the exports map points at `./src/...`, and `.vue` files already import `.ts` like `injection-key.ts`), so the consumer transpiles `index.ts` the same way.
 
-5. **Update `packages/webkit/package.json#exports`** — add one entry per public component (the compound root, the standalone root, and each public sub-component) preserving alphabetical order inside the category. The **public export path stays flat** (`./<name>-<part>`) so consumers don't see the folder nesting; only the right-hand side changes:
+6. **Update `packages/webkit/package.json#exports`** — add one entry per public component (the compound root, the standalone root, and each public sub-component) preserving alphabetical order inside the category. The **public export path stays flat** (`./<name>-<part>`) so consumers don't see the folder nesting; only the right-hand side changes:
 
    The **composition root** points at `index.ts` (the compound); monolithic roots point at `<name>.vue`. Composition also gets a **standalone `./<name>-root`** key pointing straight at the root `.vue` — the tree-shaking path, since the compound `index.ts` retains every sub-component through `Object.assign` (see [`.claude/rules/compound-api.md`](../../rules/compound-api.md)):
 
@@ -217,7 +275,7 @@ packages/webkit/src/components/webkit/actions/button/
    "./overlay/popover-content": "./src/components/webkit/overlay/popover/popover-content/popover-content.vue"
    ```
 
-6. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
+7. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
 
 ## Outputs
 
@@ -273,4 +331,5 @@ packages/webkit/src/components/webkit/actions/button/
 - [ ] No HEX / Tailwind palette / raw typography / `any` / `@ts-ignore`.
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
 - [ ] `data-testid` fallback equals `'<category>-<name>'` on the root and `'<category>-<name>__<part>'` on each sub-component.
+- [ ] `<name>.test.ts` written next to the root `.vue`, importing `composeStories` from the matching story file, asserting the smoke surface from [`.claude/rules/testing.md`](../../rules/testing.md), and running `axe-core` over `Default`.
 - [ ] No story file written, no `.figma.ts` written, no pnpm command run.

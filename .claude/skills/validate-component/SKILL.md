@@ -2,7 +2,7 @@
 name: validate-component
 description: Run the project's pnpm checks (lint, type-check, type-coverage, storybook build) on the freshly-written component. Pure runner; never edits code.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-06-30
 ---
 
 # Skill: validate-component
@@ -22,14 +22,15 @@ Confirm the scaffolded component compiles, lints, types, and builds. Surfaces fa
 
 ## Workflow
 
-Run the four checks in this fixed order; stop on the first failure and surface it:
+Run the five checks in this fixed order; stop on the first failure and surface it:
 
 | # | Command | Failure means |
 |---|---|---|
 | 1 | `pnpm webkit:lint` | ESLint reports an error or warning that crosses the project threshold. |
 | 2 | `pnpm webkit:type-check` | `vue-tsc` reports a TypeScript error in the component, its sub-components, or the consuming exports. |
 | 3 | `pnpm webkit:type-coverage` | Type coverage below the threshold (project default: 95%). |
-| 4 | `pnpm storybook:build` | The new `.stories.js` breaks the Storybook build. |
+| 4 | `pnpm webkit:test -- --reporter=verbose <name>.test.ts` | The component's smoke / `play()` / a11y suite is failing — see [`.claude/rules/testing.md`](../../rules/testing.md). Filter is by file path so Vitest runs only the just-scaffolded test. |
+| 5 | `pnpm storybook:build` | The new `.stories.js` breaks the Storybook build. |
 
 For each command, capture the exit code and the last 40 lines of stdout/stderr. Emit a table:
 
@@ -39,6 +40,7 @@ For each command, capture the exit code and the last 40 lines of stdout/stderr. 
 | `pnpm webkit:lint` | ✅ pass | 0 warnings |
 | `pnpm webkit:type-check` | ✅ pass | — |
 | `pnpm webkit:type-coverage` | ✅ pass | 97.2% (threshold 95%) |
+| `pnpm webkit:test` | ✅ pass | 12 tests passed |
 | `pnpm storybook:build` | ✅ pass | build output OK |
 ```
 
@@ -61,7 +63,7 @@ If any row is ❌, include the last 40 lines of the tool's output below the tabl
 
 ## Definition of Done
 
-- [ ] Five rows in the table, each with ✅ or ❌.
+- [ ] Six rows in the table (one per check above), each with ✅ or ❌.
 - [ ] On failure, the failing command's tail is shown.
 - [ ] No edits to the codebase.
 - [ ] Exit code mirrors the result (0 = all pass, non-zero on any failure).

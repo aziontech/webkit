@@ -25,6 +25,9 @@ coverage
 *.local
 storybook-static
 
+# Vitest browser-mode screenshots from failed runs (re-generated on demand)
+**/__screenshots__/
+
 # Secrets — keep .env files local; commit .env.example only.
 .env
 .env.*

@@ -10,6 +10,7 @@ Thanks for working on Webkit. This document covers how to propose changes that p
   - [`styling.md`](./.claude/rules/styling.md) — classes on the root, no JS class presets.
   - [`migration.md`](./.claude/rules/migration.md) — never inherit, always rewrite.
   - [`no-invention.md`](./.claude/rules/no-invention.md) — the spec is the contract.
+  - [`testing.md`](./.claude/rules/testing.md) — every component ships `<name>.test.ts`; every interactive story ships `play()`.
 
 ## Local setup
 
@@ -48,6 +49,7 @@ pnpm webkit:lint:style      # Stylelint
 pnpm webkit:type-check      # vue-tsc --noEmit
 pnpm webkit:type-coverage   # type-coverage >= 95%
 pnpm webkit:format:check    # Prettier
+pnpm webkit:test            # Vitest browser mode (smoke + a11y); see .claude/rules/testing.md
 pnpm storybook:build        # Catches SFC compile errors invisible to vue-tsc
 ```
 

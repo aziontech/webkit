@@ -1,3 +1,5 @@
+import { expect, fn, userEvent, within } from '@storybook/test'
+
 import Button from '@aziontech/webkit/button'
 
 /** @type {import('@storybook/vue3').Meta<typeof Button>} */
@@ -113,9 +115,26 @@ const Template = (args) => ({
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
 export const Default = {
+  args: { onClick: fn() },
   render: Template,
   parameters: {
     docs: { description: { story: 'Default primary button at large size.' } }
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: 'Button' })
+
+    await userEvent.click(button)
+    await expect(args.onClick).toHaveBeenCalledTimes(1)
+
+    button.focus()
+    await expect(button).toHaveFocus()
+
+    await userEvent.keyboard('{Enter}')
+    await expect(args.onClick).toHaveBeenCalledTimes(2)
+
+    await userEvent.keyboard(' ')
+    await expect(args.onClick).toHaveBeenCalledTimes(3)
   }
 }
 
@@ -190,9 +209,17 @@ export const Icon = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
 export const Disabled = {
-  args: { disabled: true, label: 'Button' },
+  args: { disabled: true, label: 'Button', onClick: fn() },
   render: Template,
   parameters: {
     docs: { description: { story: 'Disabled state.' } }
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: 'Button' })
+
+    await userEvent.click(button)
+    await expect(args.onClick).not.toHaveBeenCalled()
+    await expect(button).toHaveAttribute('aria-disabled', 'true')
   }
 }

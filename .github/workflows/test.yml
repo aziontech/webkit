@@ -1,0 +1,69 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      webkit: ${{ steps.filter.outputs.webkit }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            webkit:
+              - 'packages/webkit/**'
+
+  test:
+    name: Vitest (browser mode)
+    needs: changes
+    if: needs.changes.outputs.webkit == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright (chromium)
+        run: npx playwright install --with-deps chromium
+        working-directory: packages/webkit
+
+      - name: Run webkit tests
+        run: pnpm webkit:test
+
+  test-check:
+    name: Tests Gate
+    runs-on: ubuntu-latest
+    needs: [changes, test]
+    if: always()
+    steps:
+      - name: Check test job result
+        run: |
+          result="${{ needs.test.result }}"
+          if [[ "$result" != "success" && "$result" != "skipped" ]]; then
+            echo "❌ test: $result"
+            exit 1
+          fi
+          echo "✅ test: $result"
