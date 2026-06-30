@@ -1,4 +1,9 @@
 // Vitest global setup for @aziontech/webkit.
-// Wave 2 will extend this file with vitest-axe matchers when the first
-// component test that asserts a11y lands.
-export {}
+// Component a11y assertions use axe-core directly (see helpers in test files);
+// no global matchers are registered.
+import { cleanup } from '@testing-library/vue'
+import { afterEach } from 'vitest'
+
+afterEach(() => {
+  cleanup()
+})

@@ -1,13 +1,14 @@
-import { fileURLToPath, URL } from 'node:url'
-
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [vue()],
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('test')
+  },
   resolve: {
     alias: {
-      '@aziontech/webkit': fileURLToPath(new URL('./src', import.meta.url))
+      '@aziontech/webkit': '@aziontech/webkit.dev'
     }
   },
   test: {
