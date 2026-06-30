@@ -49,7 +49,7 @@ const lines = [
 | `appName` | `string` | `'myappname'` | no | Deployed application name above the build log. |
 | `lines` | `LogViewLine[]` | `[]` | no | Build log entries passed to LogView. |
 | `stepsLabel` | `string` | `'Next Steps'` | no | Section label above the next-steps list. |
-| `steps` | `DeploySuccessStep[]` | `undefined` | yes | Ordered next-step entries (title, description, icon per row). |
+| `steps` | `DeploySuccessStep[]` | `[]` | yes | Ordered next-step entries (title, description, icon per row). |
 | `actionLabel` | `string` | `'Manage'` | no | Primary footer button label. |
 | `visitLabel` | `string` | `'Visit'` | no | Visit link label in the card header. |
 | `visitHref` | `string` | `'#'` | no | Visit link destination URL. |
