@@ -1,3 +1,34 @@
+## [3.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.8.0...@aziontech/webkit@3.9.0) (2026-06-18)
+
+### Features
+
+- add Label input primitive ([b6ae7ff](https://github.com/aziontech/webkit/commit/b6ae7ff67ff87ae7683b94cc365e044a219d1a6a))
+
+### Bug Fixes
+
+- adjust documenation ([c7850b0](https://github.com/aziontech/webkit/commit/c7850b08c9517c67a06bd27bfdb825aab9a64a2f))
+
+## [3.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.7.0...@aziontech/webkit@3.8.0) (2026-06-18)
+
+### Features
+
+- dim focus ring color to reduce visual weight ([cfe9807](https://github.com/aziontech/webkit/commit/cfe98073f062e9f2b08411819b05808e8e50e9c7))
+
+### Bug Fixes
+
+- unblock ci on stylelint, vue-tsc and audit ([cfd1f50](https://github.com/aziontech/webkit/commit/cfd1f503ece0a170306a6bc02a4f7189acea57d5))
+
+## [3.7.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.6.0...@aziontech/webkit@3.7.0) (2026-06-12)
+
+### Features
+
+- adding commit lint and enabling project scope ([#642](https://github.com/aziontech/webkit/issues/642)) ([bd4eb4e](https://github.com/aziontech/webkit/commit/bd4eb4e52364a5f6b06f9756b02112b41f29a264))
+
+### Bug Fixes
+
+- add delete domain dialog template and panel border fix ([#628](https://github.com/aziontech/webkit/issues/628)) ([168e8ed](https://github.com/aziontech/webkit/commit/168e8ed5796194d456cd952f4a250ad5f8cc159a))
+- **theme:** use fixed rem sizes for heading-xs and heading-xxs ([#641](https://github.com/aziontech/webkit/issues/641)) ([f4867cb](https://github.com/aziontech/webkit/commit/f4867cb94ef3fc4d5e6c8681080ec0574471f632))
+
 ## [3.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.5.0...@aziontech/webkit@3.6.0) (2026-06-08)
 
 ### Features

@@ -26,7 +26,7 @@
 
   const contentClasses = computed(() =>
     cn(
-      'p-[var(--spacing-xl)]',
+      'p-[var(--spacing-lg)]',
       !drawerScrollHost ? 'min-h-0 flex-1 overflow-y-auto' : undefined,
       !drawerScrollHost ? (attrs.class as string | undefined) : undefined
     )

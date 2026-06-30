@@ -1,6 +1,6 @@
 {
-  "branches": ["main"],
-  "tagFormat": "@aziontech/webkit@${version}",
+  "branches": ["dev"],
+  "tagFormat": "@aziontech/webkit.dev@${version}",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
@@ -12,8 +12,8 @@
           }
         },
         "parserOpts": {
-          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "subject"]
+          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
         },
         "releaseRules": [
           { "type": "feat", "release": "minor" },
@@ -23,6 +23,10 @@
           { "type": "docs", "release": "patch" },
           { "type": "style", "release": "patch" },
           { "type": "refactor", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "test", "release": false },
+          { "type": "ci", "release": false },
+          { "type": "revert", "release": false },
           { "breaking": true, "release": "major" }
         ]
       }
@@ -32,8 +36,8 @@
       {
         "preset": "conventionalcommits",
         "parserOpts": {
-          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "subject"]
+          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
         }
       }
     ],
@@ -58,7 +62,7 @@
           "package.json",
           "CHANGELOG.md"
         ],
-        "message": "chore(release): @aziontech/webkit ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        "message": "chore(release): @aziontech/webkit.dev ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
     [

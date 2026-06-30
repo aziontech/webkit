@@ -32,7 +32,7 @@ Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-
 
 ```vue
 <script setup>
-import CodeEditor from '@aziontech/webkit/data/code-editor'
+import CodeEditor from '@aziontech/webkit/code-editor'
 
 const code = `export default {
   async fetch(request) {

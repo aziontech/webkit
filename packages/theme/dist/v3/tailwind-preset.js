@@ -262,49 +262,71 @@ const preset = {
         "big-number-md": [
           "var(--text-big-number-md-font-size)",
           {
-            "lineHeight": "var(--text-big-number-md-line-height)"
+            "lineHeight": "var(--text-big-number-md-line-height)",
+            "fontWeight": "var(--text-big-number-md-font-weight)"
           }
         ],
         "big-number-sm": [
           "var(--text-big-number-sm-font-size)",
           {
-            "lineHeight": "var(--text-big-number-sm-line-height)"
+            "lineHeight": "var(--text-big-number-sm-line-height)",
+            "fontWeight": "var(--text-big-number-sm-font-weight)"
           }
         ],
         "big-number-lg": [
           "var(--text-big-number-lg-font-size)",
           {
-            "lineHeight": "var(--text-big-number-lg-line-height)"
+            "lineHeight": "var(--text-big-number-lg-line-height)",
+            "fontWeight": "var(--text-big-number-lg-font-weight)"
           }
         ],
         "heading-2xl": [
           "var(--text-heading-2xl-font-size)",
           {
-            "lineHeight": "var(--text-heading-2xl-line-height)"
+            "lineHeight": "var(--text-heading-2xl-line-height)",
+            "fontWeight": "var(--text-heading-2xl-font-weight)"
           }
         ],
         "heading-xl": [
           "var(--text-heading-xl-font-size)",
           {
-            "lineHeight": "var(--text-heading-xl-line-height)"
+            "lineHeight": "var(--text-heading-xl-line-height)",
+            "fontWeight": "var(--text-heading-xl-font-weight)"
           }
         ],
         "heading-lg": [
           "var(--text-heading-lg-font-size)",
           {
-            "lineHeight": "var(--text-heading-lg-line-height)"
+            "lineHeight": "var(--text-heading-lg-line-height)",
+            "fontWeight": "var(--text-heading-lg-font-weight)"
           }
         ],
         "heading-md": [
           "var(--text-heading-md-font-size)",
           {
-            "lineHeight": "var(--text-heading-md-line-height)"
+            "lineHeight": "var(--text-heading-md-line-height)",
+            "fontWeight": "var(--text-heading-md-font-weight)"
           }
         ],
         "heading-sm": [
           "var(--text-heading-sm-font-size)",
           {
-            "lineHeight": "var(--text-heading-sm-line-height)"
+            "lineHeight": "var(--text-heading-sm-line-height)",
+            "fontWeight": "var(--text-heading-sm-font-weight)"
+          }
+        ],
+        "heading-xs": [
+          "var(--text-heading-xs-font-size)",
+          {
+            "lineHeight": "var(--text-heading-xs-line-height)",
+            "fontWeight": "var(--text-heading-xs-font-weight)"
+          }
+        ],
+        "heading-xxs": [
+          "var(--text-heading-xxs-font-size)",
+          {
+            "lineHeight": "var(--text-heading-xxs-line-height)",
+            "fontWeight": "var(--text-heading-xxs-font-weight)"
           }
         ],
         "label-lg": [

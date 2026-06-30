@@ -16,57 +16,78 @@
  */
 
 import { fontFamily } from '../primitives/typography/font-family.js'
+import { fontSize } from '../primitives/typography/font-size.js'
+import { fontWeight } from '../primitives/typography/font-weight.js'
+import { leading } from '../primitives/typography/leading.js'
 
 export const textsData = {
   'text-big-number-md': {
-    fontSize: { _: '1.25rem', sm: '1.5rem', md: '2.25rem' },
-    lineHeight: '1.20',
+    fontSize: { _: fontSize.xl, sm: fontSize['2xl'], md: fontSize['4xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
   'text-big-number-sm': {
-    fontSize: { _: '1rem', sm: '1.25rem' },
-    lineHeight: '1.20',
+    fontSize: { _: fontSize.base, sm: fontSize.xl },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
   'text-big-number-lg': {
-    fontSize: { _: '1.5rem', sm: '2.25rem', md: '3.75rem' },
-    lineHeight: '1.20',
+    fontSize: { _: fontSize['2xl'], sm: fontSize['4xl'], md: fontSize['6xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
   'text-heading-2xl': {
-    fontSize: { _: '1.875rem', sm: '3rem', md: '3.75rem' },
-    lineHeight: '1.2'
+    fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal
   },
   'text-heading-xl': {
-    fontSize: { _: '1.25rem', sm: '1.875rem', md: '2.25rem' },
-    lineHeight: '1.2'
+    fontSize: { _: fontSize.xl, sm: fontSize['3xl'], md: fontSize['4xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal
   },
   'text-heading-lg': {
-    fontSize: { _: '1.125rem', md: '1.875rem' },
-    lineHeight: '1.2'
+    fontSize: { _: fontSize.lg, md: fontSize['3xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal
   },
   'text-heading-md': {
-    fontSize: { _: '1rem', sm: '1.25rem', md: '1.5rem' },
-    lineHeight: '1.2'
+    fontSize: { _: fontSize.base, sm: fontSize.xl, md: fontSize['2xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal
   },
   'text-heading-sm': {
-    fontSize: { _: '0.875rem', sm: '1rem', md: '1.125rem' },
-    lineHeight: '1.2'
+    fontSize: { _: fontSize.sm, sm: fontSize.base, md: fontSize.lg },
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.normal
+  },
+  'text-heading-xs': {
+    fontSize: fontSize.base,
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.normal
+  },
+  'text-heading-xxs': {
+    fontSize: fontSize.sm,
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.normal
   },
   'text-label-lg': {
-    fontSize: '1rem',
-    lineHeight: '1.5',
-    fontWeight: '500'
+    fontSize: fontSize.base,
+    lineHeight: leading.normal,
+    fontWeight: fontWeight.medium
   },
   'text-label-md': {
-    fontSize: '0.875rem',
-    lineHeight: '1.5',
-    fontWeight: '500'
+    fontSize: fontSize.sm,
+    lineHeight: leading.normal,
+    fontWeight: fontWeight.medium
   },
   'text-label-sm': {
-    fontSize: '0.75rem',
-    lineHeight: '1.5',
-    fontWeight: '500'
+    fontSize: fontSize.xs,
+    lineHeight: leading.normal,
+    fontWeight: fontWeight.medium
   },
   'text-label-code-sm': {
     fontFamily: fontFamily.code,
@@ -90,68 +111,68 @@ export const textsData = {
     letterSpacing: '0'
   },
   'text-body-lg': {
-    fontSize: { _: '1rem', md: '1.125rem' },
-    lineHeight: '1.5'
+    fontSize: { _: fontSize.base, md: fontSize.lg },
+    lineHeight: leading.normal
   },
   'text-body-md': {
-    fontSize: '1rem',
-    lineHeight: '1.5'
+    fontSize: fontSize.base,
+    lineHeight: leading.normal
   },
   'text-body-sm': {
-    fontSize: '0.875rem',
-    lineHeight: '1.5'
+    fontSize: fontSize.sm,
+    lineHeight: leading.normal
   },
   'text-body-xs': {
-    fontSize: '0.75rem',
-    lineHeight: '1.5'
+    fontSize: fontSize.xs,
+    lineHeight: leading.normal
   },
   'text-tag-sm': {
-    fontSize: '0.6875rem',
-    lineHeight: '1',
-    fontWeight: '600'
+    fontSize: fontSize.xs,
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.semibold
   },
   'text-tag-md': {
-    fontSize: '0.75rem',
-    lineHeight: '1',
-    fontWeight: '600'
+    fontSize: fontSize.xs,
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.semibold
   },
   'text-body-xxs': {
-    fontSize: '0.625rem',
-    lineHeight: '1.5'
+    fontSize: fontSize.xs,
+    lineHeight: leading.normal
   },
   'text-overline-md': {
     fontFamily: fontFamily.display,
-    fontSize: { _: '0.75rem', sm: '0.875rem' },
-    lineHeight: '1.4',
+    fontSize: { _: fontSize.xs, sm: fontSize.sm },
+    lineHeight: leading.snug,
     letterSpacing: '0.08em',
     textTransform: 'uppercase'
   },
   'text-overline-sm': {
     fontFamily: fontFamily.display,
-    fontSize: '0.75rem',
-    lineHeight: '1.4',
+    fontSize: fontSize.xs,
+    lineHeight: leading.snug,
     letterSpacing: '0.08em',
     textTransform: 'uppercase'
   },
   'text-overline-xs': {
     fontFamily: fontFamily.display,
-    fontSize: '0.625rem',
-    lineHeight: '1.4',
+    fontSize: fontSize.xs,
+    lineHeight: leading.snug,
     letterSpacing: '0.08em',
     textTransform: 'uppercase'
   },
   'text-button-lg': {
     fontFamily: fontFamily.sans,
-    fontSize: '0.875rem',
-    fontWeight: '600',
-    lineHeight: '1',
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.normal,
+    lineHeight: leading.tight,
     letterSpacing: '0'
   },
   'text-button-md': {
     fontFamily: fontFamily.sans,
-    fontSize: '0.75rem',
-    fontWeight: '600',
-    lineHeight: '1',
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.normal,
+    lineHeight: leading.tight,
     letterSpacing: '0'
   },
   /** Inline `<a>` in body/heading — inherits parent size; not the navigation Link component. */

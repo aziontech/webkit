@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import CodeEditor from '@aziontech/webkit/data/code-editor'
+import CodeEditor from '@aziontech/webkit/code-editor'
 
 const sampleCode = `export default {
   async fetch(request) {
@@ -86,7 +86,7 @@ const componentDocsDescription = [
   '',
   '```vue',
   '<script setup>',
-  "import CodeEditor from '@aziontech/webkit/data/code-editor'",
+  "import CodeEditor from '@aziontech/webkit/code-editor'",
   '',
   'const code = `export default {',
   '  async fetch(request) {',
@@ -117,7 +117,7 @@ const componentDocsDescription = [
   '```vue',
   '<script setup>',
   "import { ref } from 'vue'",
-  "import CodeEditor from '@aziontech/webkit/data/code-editor'",
+  "import CodeEditor from '@aziontech/webkit/code-editor'",
   '',
   'const activeTab = ref(\'js\')',
   '',
@@ -139,7 +139,7 @@ const componentDocsDescription = [
   '```vue',
   '<script setup>',
   "import { computed, ref } from 'vue'",
-  "import CodeEditor from '@aziontech/webkit/data/code-editor'",
+  "import CodeEditor from '@aziontech/webkit/code-editor'",
   '',
   'const source = ref(\'console.log("hello")\\n\')',
   '',

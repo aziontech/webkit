@@ -21,28 +21,42 @@ const config = {
     disableTelemetry: true
   },
   refs: {
-    'marketing-components': {
-      title: 'Marketing Components',
-      url: 'https://sxggon4lswe.map.azionedge.net/',
-      expanded: true
-    },
-    'platform-components': {
-      title: 'Platform Components',
-      url: 'https://storybook-console.azion.app/',
-      expanded: true
-    }
+    // 'webkit-v3': {
+    //   title: 'Webkit V3',
+    //   url: 'https://webkit.azion.app/',
+    //   expanded: true
+    // }
   },
   viteFinal: async (config) => {
-    // Second @vitejs/plugin-vue for monorepo SFCs under packages/webkit (outside Storybook root).
-    // Pitfall: never put HTML-like tags (`<a>`, `<template>`, …) in script JSDoc — the second pass
-    // re-parses compiled output and throws "Element is missing end tag". See .claude/rules/styling.md.
+    // @vitejs/plugin-vue compiles the monorepo SFCs under packages/webkit (the framework only
+    // ships template-compilation, not the vue plugin). It MUST run before Storybook's docgen
+    // plugin: docgen appends `_sfc_main.__docgenInfo = …`, which only survives if the SFC has
+    // already compiled to JS. Pushed after docgen, the append lands in raw SFC source and the
+    // compiler discards it — leaving every subcomponent prop tab in autodocs empty.
+    // Pitfall: never put HTML-like tags (`<a>`, `<template>`, …) in script JSDoc — docgen
+    // re-parses the SFC and throws "Element is missing end tag". See .claude/rules/styling.md.
     config.plugins = config.plugins || []
-    config.plugins.push(vue())
+    const docgenIdx = config.plugins.findIndex(
+      (p) => p && (p.name === 'storybook:vue-docgen-plugin' || p.name === 'storybook:vue-component-meta-plugin')
+    )
+    if (docgenIdx === -1) {
+      config.plugins.push(vue())
+    } else {
+      config.plugins.splice(docgenIdx, 0, vue())
+    }
+
+    // Dev channel: stories still import from '@aziontech/webkit/*'; redirect to the renamed
+    // workspace package '@aziontech/webkit.dev/*' so no story file needs to change.
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@aziontech/webkit': '@aziontech/webkit.dev'
+    }
 
     // Enable dependency pre-bundling for faster rebuilds
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: ['vue', 'primevue/config', 'primevue/tooltip', 'vee-validate'],
+      include: ['vue', 'vee-validate'],
       force: false
     }
 
