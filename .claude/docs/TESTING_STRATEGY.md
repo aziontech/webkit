@@ -17,6 +17,8 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 
 **O que testa.** O contrato do componente em isolamento: props, eventos emitidos, slots renderizados, atributos ARIA, comportamento quando `disabled`/`loading`.
 
+**Ferramentas.** Vitest (browser mode) + `@vitest/browser` com provider Playwright Chromium + `@testing-library/vue` + `composeStories` do `@storybook/vue3`.
+
 **Bug que impede.** `disabled` deixa passar o click. Evento `click` renomeado para `pressed` quebra silenciosamente todas as telas que importam o componente.
 
 **Valor.** Refactor seguro, doc executável, MTTR menor em incidente (1 `it()` reproduzindo, fix, merge).
@@ -24,6 +26,8 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 ### Camada 2 — Integração (`play()`)
 
 **O que testa.** Fluxos multi-passo: abrir/fechar overlay com `Escape`, navegar com `Tab`, ativar com `Enter`/`Space`, focus trap em Modal, scroll lock em Drawer.
+
+**Ferramentas.** `play()` nas stories com `userEvent` + `expect` de `@storybook/test` + `@storybook/addon-interactions` (painel Interactions) + `composeStories(...).run()` para execução em CI via Vitest.
 
 **Bug que impede.** Dropdown não fecha no `Escape`. `Tab` vaza do Modal. Switch reage ao clique mas não ao teclado. Tipicamente descoberto por usuários com teclado/leitor de tela, não em screenshot.
 
@@ -33,6 +37,8 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 
 **O que testa.** Como o componente aparece em pixel, em cada story, em viewports e temas.
 
+**Ferramentas.** Chromatic (build de Storybook + diff visual) acionado pelo workflow `.github/workflows/chromatic.yml` em cada PR.
+
 **Bug que impede.** Mexer em `--shape-button` no theme e quebrar o `border-radius` de 30 componentes sem querer. Upgrade de Tailwind muda comportamento de uma utility.
 
 **Valor.** Confiança para mexer em tokens. Code review visual incorporado ao PR (Chromatic comenta com antes/depois). 77 stories existentes viram baseline automática.
@@ -41,6 +47,8 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 
 **O que testa.** Violações WCAG 2.1 AA estáticas no HTML renderizado: contraste, `<button>` sem nome acessível, `<img>` sem alt, `aria-*` inválido.
 
+**Ferramentas.** `axe-core` rodando dentro do Vitest browser mode + helper local `expectNoA11yViolations` + `@storybook/addon-a11y` (mesmas regras visíveis no painel A11y do Storybook).
+
 **Bug que impede.** IconButton sem `aria-label`. `<div>` clicável em vez de `<button>`. Link com texto "clique aqui". Problemas que bloqueariam audit em contrato enterprise/setor público.
 
 **Valor.** Risco regulatório controlado. Engineer sem experiência em a11y consegue acertar — o teste diz o que está errado e por quê.
@@ -48,6 +56,8 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 ### Camada 5 — Governance (gate em PreToolUse)
 
 **O que testa.** Que componente novo não nasce sem teste — `Write` de `<name>.vue` sem `<name>.test.ts` ao lado é bloqueado antes do arquivo existir.
+
+**Ferramentas.** Hook `enforce-test-exists.mjs` (PreToolUse em `Write|Edit|MultiEdit`) + whitelist `.claude/hooks/_lib/legacy-components.json` + skill `component-scaffold` (emite `.test.ts` ao gerar `.vue`).
 
 **Bug que impede.** Erosão da barra ao longo do tempo. "Só dessa vez sem teste" repetido 50 vezes vira cobertura de 30 %.
 
@@ -63,26 +73,3 @@ Cada `*.stories.js` é a fonte única: a mesma story serve para documentação, 
 | `border-radius` de 30 componentes mudou sem querer | Camada 3 |
 | Contraste insuficiente, `aria-*` inválido | Camada 4 |
 | Componente novo entra no repo sem teste | Camada 5 |
-
-## 4. Progresso
-
-A entrega vem em waves pequenas e mergíveis na PR #703. Cada wave verde local antes de prosseguir.
-
-| Wave | Escopo | Status |
-|------|--------|--------|
-| 1 | Infra Vitest browser mode + setup + scripts | ✅ mergeada (`130ebf36`) |
-| 2 | Button pilot — 19 testes cobrindo render/disabled/loading/click + axe (Camadas 1 + 4) | ✅ mergeada (`ebea0c25`) |
-| 3 | `play()` no Default e Disabled do Button + teste via `composeStories` (Camada 2) | ✅ mergeada (`811c424a`) |
-| 3.5 | `@storybook/addon-interactions` registrado (painel Interactions) | ✅ mergeada (`8804806a`) |
-| 4 | Workflow `test.yml` rodando `pnpm webkit:test` em PRs | ✅ mergeada (`e4d4cc91`) |
-| 5 | Workflow `chromatic.yml` (Camada 3) — requer secret `CHROMATIC_PROJECT_TOKEN` | ✅ mergeada (`a983cffd`) |
-| 6 | `.claude/rules/testing.md` + skill updates + nota em `CONTRIBUTING.md` | ✅ mergeada (`c0076252`) |
-| 7 | Hook `enforce-test-exists.mjs` (Camada 5 ativa) | ✅ mergeada (`b1bd804d`) |
-
-**Verificação local atual:** `cd packages/webkit && ./node_modules/.bin/vitest run` → `21 passed (21)` em ~1.5–3 s.
-
-## 5. Depois desta PR
-
-- `test/backfill-priority-top-20` — top 20 componentes mais usados ganham suite mínima.
-- `test/backfill-batch-NN` — backfill dos restantes em PRs de ~5 componentes.
-- `chore/a11y-violations-block` — axe vira erro bloqueante (hoje é warning).
