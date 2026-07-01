@@ -48,7 +48,8 @@
         aria-hidden="true"
         class="text-[var(--primary)]"
         >*</span
-      >Required
+      >
+      (Required)
     </span>
   </label>
 </template>
