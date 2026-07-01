@@ -54,7 +54,7 @@
   })
 
   const emit = defineEmits<{
-    click: [event: MouseEvent]
+    click: [event: MouseEvent, item: SplitButtonItem | null]
     'item-click': [item: SplitButtonItem]
   }>()
 
@@ -100,7 +100,7 @@
       return
     }
 
-    emit('click', event)
+    emit('click', event, selectedItem.value)
   }
 
   function onSelect(payload: { value: string | number }) {

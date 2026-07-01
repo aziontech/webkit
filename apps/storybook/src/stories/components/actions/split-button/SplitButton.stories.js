@@ -103,8 +103,12 @@ const meta = {
     },
     onClick: {
       action: 'click',
-      description: 'Fired by the primary command button on activation.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
+      description:
+        'Fired by the primary command button on activation; the second argument is the action currently mirrored on the primary (when updateLabelOnSelect is on), otherwise null.',
+      table: {
+        category: 'events',
+        type: { summary: '(event: MouseEvent, item: SplitButtonItem | null)' }
+      }
     },
     onItemClick: {
       action: 'item-click',
