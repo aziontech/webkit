@@ -112,7 +112,7 @@
   // Loading reuses the disabled visual tokens (per design) but keeps the loading cursor
   // and the spinner. Interaction stays blocked via handleClick.
   const loadingClasses =
-    'cursor-loading border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
+    'cursor-wait border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
   const iconClasses =
     'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none'

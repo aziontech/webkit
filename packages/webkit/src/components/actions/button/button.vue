@@ -93,7 +93,7 @@
   // Loading reuses the disabled visual tokens (per design) but keeps the loading cursor
   // and the spinner. Interaction stays blocked via handleClick.
   const loadingClasses =
-    'cursor-loading border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
+    'cursor-wait border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
   const sizeClasses: Record<ButtonSize, string> = {
     large: 'min-w-20 h-10 px-[var(--spacing-md)] text-button-lg',

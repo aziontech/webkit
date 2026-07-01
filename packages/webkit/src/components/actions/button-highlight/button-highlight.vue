@@ -64,7 +64,7 @@
     'data-[size=large]:min-w-20 data-[size=large]:h-10 ' +
     'data-[size=medium]:min-w-16 data-[size=medium]:h-8 ' +
     'data-[size=small]:min-w-14 data-[size=small]:h-7 ' +
-    'data-[loading]:cursor-loading ' +
+    'data-[loading]:cursor-wait ' +
     'data-[disabled]:cursor-not-allowed ' +
     'data-[inactive]:border-transparent data-[inactive]:bg-[var(--bg-disabled)]'
 
