@@ -61,6 +61,16 @@ const meta = {
       description: 'Disables toolbar controls (copy, filter).',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
+    loading: {
+      control: 'boolean',
+      description: 'Replaces the log body with a centered spinner and label.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    loadingLabel: {
+      control: 'text',
+      description: 'Label shown beneath the spinner while loading.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Loading...'" } }
+    },
     search: {
       control: 'text',
       description: 'v-model:search — query that filters lines and highlights matches.',
@@ -91,6 +101,8 @@ const meta = {
     searchPlaceholder: 'Find in Logs',
     showCopy: true,
     disabled: false,
+    loading: false,
+    loadingLabel: 'Loading...',
     search: '',
     warningsOnly: false
   }
@@ -117,6 +129,8 @@ export const Default = {
         :search-placeholder="args.searchPlaceholder"
         :show-copy="args.showCopy"
         :disabled="args.disabled"
+        :loading="args.loading"
+        :loading-label="args.loadingLabel"
         v-model:search="search"
         v-model:warnings-only="warningsOnly"
         class="h-[640px]"
@@ -134,6 +148,43 @@ export const Default = {
           'LogViewHeader + LogViewContent over a realistic deploy log. Search filters lines and highlights matches in the body.'
       },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const LOADING_MARKUP = `<LogView :lines="lines" loading v-model:search="search" v-model:warnings-only="warningsOnly" class="h-[640px]">
+  <LogViewHeader />
+  <LogViewContent />
+</LogView>`
+
+export const Loading = {
+  render: () => ({
+    components,
+    setup() {
+      const search = ref('')
+      const warningsOnly = ref(false)
+      return { lines: completeDeployLog, search, warningsOnly }
+    },
+    template: `
+      <LogView
+        :lines="lines"
+        loading
+        v-model:search="search"
+        v-model:warnings-only="warningsOnly"
+        class="h-[640px]"
+      >
+        <LogViewHeader />
+        <LogViewContent />
+      </LogView>
+    `
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story: 'While `loading` is set, LogViewContent replaces the log body with a centered spinner and the `loadingLabel` text.'
+      },
+      source: { code: toSfc(IMPORT, LOADING_MARKUP) }
     }
   }
 }
