@@ -32,11 +32,18 @@ const meta = {
       control: 'boolean',
       description: 'Renders the required (warning) border and sets `aria-required="true"` on the root.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    disabled: {
+      control: 'boolean',
+      description:
+        'Renders the disabled visual (muted fill, not-allowed cursor, no focus ring) and sets `aria-disabled="true"` on the root.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     }
   },
   args: {
     invalid: false,
-    required: false
+    required: false,
+    disabled: false
   }
 }
 
@@ -47,7 +54,7 @@ const Template = (args) => ({
   setup() {
     return { props: args }
   },
-  template: `<InputGroup :invalid="props.invalid" :required="props.required">${MIDDLE_INPUT}</InputGroup>`
+  template: `<InputGroup :invalid="props.invalid" :required="props.required" :disabled="props.disabled">${MIDDLE_INPUT}</InputGroup>`
 })
 
 const DEFAULT_MARKUP = `<InputGroup>
@@ -126,6 +133,30 @@ export const BothSlots = {
   }
 }
 
+const WITH_ICON_MARKUP = `<InputGroup>
+  <template #left><i class="pi pi-globe" aria-hidden="true" /></template>
+  ${MIDDLE_INPUT}
+  <template #right><i class="pi pi-times" aria-hidden="true" /></template>
+</InputGroup>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
+export const WithIcon = {
+  render: () => ({
+    components: { InputGroup },
+    template: WITH_ICON_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'PrimeIcons in the side slots. Icons inherit the slot text tokens (12px, muted color) — same visual treatment as text content.'
+      },
+      source: { code: toSfc(IMPORT, WITH_ICON_MARKUP) }
+    }
+  }
+}
+
 const INVALID_MARKUP = `<InputGroup :invalid="true">
   <template #left>https://</template>
   ${MIDDLE_INPUT}
@@ -164,6 +195,30 @@ export const Required = {
       controls: { disable: true },
       description: { story: 'Required state — root shows the warning border.' },
       source: { code: toSfc(IMPORT, REQUIRED_MARKUP) }
+    }
+  }
+}
+
+const DISABLED_MARKUP = `<InputGroup :disabled="true">
+  <template #left>https://</template>
+  ${MIDDLE_INPUT}
+  <template #right>.com</template>
+</InputGroup>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
+export const Disabled = {
+  render: () => ({
+    components: { InputGroup },
+    template: DISABLED_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Disabled state — muted fill, not-allowed cursor, focus-within ring suppressed. Note: the consumer must also set `disabled` on their middle `<input>`; InputGroup does not propagate it.'
+      },
+      source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
     }
   }
 }

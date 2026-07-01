@@ -3,11 +3,11 @@ name: input-group
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: a875eb1aece68c1dbf57ccaea61e9801d8b1e010ffc6b4075e12e1b9bb8055f9
+checksum: 0ede3c42dbd778be429c8e91192d35cbc9b09f42154ae6a9ae6f064a2b6a74d7
 created: 2026-07-01
 last_updated: 2026-07-01
 ---
@@ -46,6 +46,7 @@ const value = ref('')
 |---|---|---|---|---|
 | `invalid` | `boolean` | `false` | no | Renders the error border and sets `aria-invalid="true"` on the root. |
 | `required` | `boolean` | `false` | no | Renders the required (warning) border and sets `aria-required="true"` on the root. |
+| `disabled` | `boolean` | `false` | no | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the middle `<input>` — the consumer is responsible for the inner input's own `disabled` attribute (mirrors how `FieldText` disables `InputText`). |
 
 ## Events
 
@@ -61,14 +62,16 @@ const value = ref('')
 
 ## States
 
-- Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`
+- Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`
 - `data-invalid` mirrors the `invalid` prop; sets `aria-invalid="true"`
 - `data-required` mirrors the `required` prop; sets `aria-required="true"`
+- `data-disabled` mirrors the `disabled` prop; sets `aria-disabled="true"`
 - Border semantics mirror `input-text` (independent, not compound):
   - `data-invalid` → `var(--danger-border)`
   - `data-required` → `var(--warning-border)`
-- Hover (only when not focus-within and neither invalid nor required): `border-[var(--border-strong)]`
-- Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset
+- Hover (only when not focus-within, not invalid, not required, not disabled): `border-[var(--border-strong)]`
+- Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
+- Disabled: `bg-[var(--bg-disabled)]`, `text-[var(--text-disabled)]`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
 
 ## Motion & Animations
 
@@ -85,6 +88,8 @@ const value = ref('')
 | root border (hover) | `var(--border-strong)` |
 | root border (invalid) | `var(--danger-border)` |
 | root border (required) | `var(--warning-border)` |
+| root surface (disabled) | `var(--bg-disabled)` |
+| root text (disabled) | `var(--text-disabled)` |
 | root border width | `border` (Tailwind utility) |
 | root shape | `var(--shape-elements)` |
 | root height | `h-8` (Tailwind utility) |
@@ -105,7 +110,7 @@ const value = ref('')
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-[var(--ring-color)] ring-offset-2 ring-offset-[var(--bg-canvas)]`) whenever any descendant (side-slot control or middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator.
+- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-[var(--ring-color)] ring-offset-2 ring-offset-[var(--bg-canvas)]`) whenever any descendant (side-slot control or middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator. Suppressed when `data-disabled` is present.
 - Keyboard map: `Tab` moves through the side-slot interactive content (if any) and the middle input in DOM order. No custom keybindings on the group.
 - ARIA: root uses `role="group"`; `aria-invalid` and `aria-required` reflect the props. The inner input keeps its own `aria-*` — the group does not duplicate.
 - Contrast ≥4.5:1 for side-slot text against `var(--bg-canvas)`; ≥3:1 for the border in every state.
@@ -118,10 +123,12 @@ const value = ref('')
 - WithSlotLeft — `#left` slot filled (e.g. `https://`).
 - WithSlotRight — `#right` slot filled (e.g. `.com`).
 - BothSlots — both `#left` and `#right` filled.
+- WithIcon — `#left` filled with `<i class="pi pi-globe" aria-hidden="true" />`, showing how PrimeIcons inhabit the side slots at the same size as text content.
 - Invalid — `invalid=true` (danger border).
 - Required — `required=true` (warning border).
+- Disabled — `disabled=true` (muted fill, not-allowed cursor, no focus ring).
 
-Justification for six stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. The four slot-composition stories (Default, WithSlotLeft, WithSlotRight, BothSlots) document each named-slot position individually and combined — the primary API surface. The two state stories exercise the invalid and required border colors — the only two non-default visual signals the component can emit.
+Justification for eight stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. Four slot-composition stories (Default, WithSlotLeft, WithSlotRight, BothSlots) document each named-slot position individually and combined. `WithIcon` demonstrates that side slots accept `<i>` icons at the same size/color as text content (parallel to `FieldText`'s Icons story). Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.
 
 ## Constraints — DO NOT
 
