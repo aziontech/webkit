@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Container that flanks an input primitive with optional slots on either side, joined by vertical borders, and reflects validation state on its border. Composed as `<InputGroup>` (root) plus `<InputGroup.SlotLeft>` and `<InputGroup.SlotRight>` sub-components — the middle input goes in the root's default slot."
+          "Monolithic container that flanks an input primitive with optional `#left` and `#right` named slots, joined by vertical seams, and reflects validation state on its border. The middle input goes in the root's `default` slot."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -25,14 +25,12 @@ const meta = {
   argTypes: {
     invalid: {
       control: 'boolean',
-      description:
-        'Renders the error border. When `required` is also `true`, the border uses the warning color instead of danger. Also sets `aria-invalid="true"` on the root.',
+      description: 'Renders the error border and sets `aria-invalid="true"` on the root.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     required: {
       control: 'boolean',
-      description:
-        'Semantic marker for a required field. Combined with `invalid=true`, switches the border color to warning. Sets `aria-required="true"` on the root.',
+      description: 'Renders the required (warning) border and sets `aria-required="true"` on the root.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     }
   },
@@ -61,14 +59,14 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Root with only a raw `<input>` in the middle slot and no addons.' },
+      description: { story: 'Root with only a raw `<input>` in the middle slot and no side slots.' },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
 }
 
 const WITH_SLOT_LEFT_MARKUP = `<InputGroup>
-  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
+  <template #left>https://</template>
   ${MIDDLE_INPUT}
 </InputGroup>`
 
@@ -81,7 +79,7 @@ export const WithSlotLeft = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'A single `<InputGroup.SlotLeft>` before the middle input.' },
+      description: { story: 'The `#left` named slot filled with static text before the middle input.' },
       source: { code: toSfc(IMPORT, WITH_SLOT_LEFT_MARKUP) }
     }
   }
@@ -89,7 +87,7 @@ export const WithSlotLeft = {
 
 const WITH_SLOT_RIGHT_MARKUP = `<InputGroup>
   ${MIDDLE_INPUT}
-  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
+  <template #right>.com</template>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
@@ -101,16 +99,16 @@ export const WithSlotRight = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'A single `<InputGroup.SlotRight>` after the middle input.' },
+      description: { story: 'The `#right` named slot filled with static text after the middle input.' },
       source: { code: toSfc(IMPORT, WITH_SLOT_RIGHT_MARKUP) }
     }
   }
 }
 
 const BOTH_SLOTS_MARKUP = `<InputGroup>
-  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
+  <template #left>https://</template>
   ${MIDDLE_INPUT}
-  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
+  <template #right>.com</template>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
@@ -122,16 +120,16 @@ export const BothSlots = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'A `SlotLeft` and a `SlotRight` flanking the middle input.' },
+      description: { story: 'Both `#left` and `#right` slots filled, flanking the middle input.' },
       source: { code: toSfc(IMPORT, BOTH_SLOTS_MARKUP) }
     }
   }
 }
 
 const INVALID_MARKUP = `<InputGroup :invalid="true">
-  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
+  <template #left>https://</template>
   ${MIDDLE_INPUT}
-  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
+  <template #right>.com</template>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
@@ -149,23 +147,23 @@ export const Invalid = {
   }
 }
 
-const INVALID_REQUIRED_MARKUP = `<InputGroup :invalid="true" :required="true">
-  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
+const REQUIRED_MARKUP = `<InputGroup :required="true">
+  <template #left>https://</template>
   ${MIDDLE_INPUT}
-  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
+  <template #right>.com</template>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
-export const InvalidRequired = {
+export const Required = {
   render: () => ({
     components: { InputGroup },
-    template: INVALID_REQUIRED_MARKUP
+    template: REQUIRED_MARKUP
   }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'Invalid + required — root shows the warning border instead of danger.' },
-      source: { code: toSfc(IMPORT, INVALID_REQUIRED_MARKUP) }
+      description: { story: 'Required state — root shows the warning border.' },
+      source: { code: toSfc(IMPORT, REQUIRED_MARKUP) }
     }
   }
 }
