@@ -15,7 +15,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex items-center self-stretch shrink-0 bg-[var(--bg-canvas)] px-[var(--spacing-md)] text-label-sm text-[color:var(--text-muted)] [&:not(:last-child)]:border-r [&:not(:first-child)]:border-l border-[var(--border-default)]"
+    class="flex items-center self-stretch shrink-0 bg-[var(--bg-canvas)] px-[var(--spacing-md)] text-label-sm text-[color:var(--text-muted)] first:border-r last:border-l border-[color:var(--border-default)]"
   >
     <slot />
   </div>

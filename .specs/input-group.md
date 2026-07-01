@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: eddb1e3029c0f6c5f8e9b6adcc19476a812f4f0f392fb6dc8220e1b9c5eadc2c
+checksum: 07c3bcfa12057e71fecb2b6061043fa7e26cf57e996233b2d843e8ebb97ed2f2
 created: 2026-07-01
 last_updated: 2026-07-01
 ---
@@ -66,7 +66,7 @@ const value = ref('')
 
 ## Sub-components
 
-- `input-group-addon/input-group-addon.vue` — Left/right addon slot. Position is determined by source order relative to the middle input, not by a prop. Exposes a `default` slot (scope: none) for the addon content (icon, static text, or a `<Button>`). Renders with `bg-[var(--bg-canvas)]` surface distinct from the middle field, `px-[var(--spacing-md)]`, `text-label-sm`, `text-[color:var(--text-muted)]`. The vertical seam between an addon and its neighbour is drawn by a CSS pseudo-border on the addon itself (`[&:not(:last-child)]:border-r [&:not(:first-child)]:border-l border-[var(--border-default)]`) — no `<Divider>` element or v-node inspection needed.
+- `input-group-addon/input-group-addon.vue` — Left/right addon slot. Position is determined by source order relative to the middle input, not by a prop. Exposes a `default` slot (scope: none) for the addon content (icon, static text, or a `<Button>`). Renders with `bg-[var(--bg-canvas)]` surface distinct from the middle field, `px-[var(--spacing-md)]`, `text-label-sm`, `text-[color:var(--text-muted)]`. The vertical seam between an addon and its neighbour is drawn by a CSS pseudo-border on the addon itself (`first:border-r last:border-l border-[color:var(--border-default)]`) — first-child addon (left) gets a right border toward the input; last-child addon (right) gets a left border toward the input. No `<Divider>` element or v-node inspection needed.
 
 Resulting layout:
 
@@ -143,7 +143,7 @@ Sub-component (`InputGroup.Addon`) has no props.
 | addon text | `var(--text-muted)` |
 | addon padding.x | `var(--spacing-md)` |
 | addon typography | `.text-label-sm` |
-| addon seam (vertical border) | `var(--border-default)` (as `border-r`/`border-l` on the addon) |
+| addon seam (vertical border) | `border-[color:var(--border-default)]` (as `first:border-r` / `last:border-l` on the addon) |
 
 ## Theme gaps
 
