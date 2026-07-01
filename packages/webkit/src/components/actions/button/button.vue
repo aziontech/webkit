@@ -85,8 +85,15 @@
       'border border-[var(--danger-border)] bg-[var(--danger)] text-[var(--danger-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]'
   }
 
+  // Disabled shows the not-allowed cursor. Interaction is blocked natively (`<button :disabled>`)
+  // and via the handleClick guard (anchor), so pointer-events stay on for the cursor to render.
   const disabledClasses =
-    'pointer-events-none cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
+    'cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
+
+  // Loading reuses the disabled visual tokens (per design) but keeps the loading cursor
+  // and the spinner. Interaction stays blocked via handleClick.
+  const loadingClasses =
+    'cursor-loading border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
 
   const sizeClasses: Record<ButtonSize, string> = {
     large: 'min-w-20 h-10 px-[var(--spacing-md)] text-button-lg',
@@ -101,10 +108,13 @@
   }
 
   const rootClasses = computed(() => {
-    const kind = props.disabled ? disabledClasses : kindClasses[props.kind]
-    const loadingClasses = props.loading && !props.disabled ? 'cursor-loading' : ''
+    const stateClasses = props.disabled
+      ? disabledClasses
+      : props.loading
+        ? loadingClasses
+        : kindClasses[props.kind]
 
-    return [sharedClasses, kind, sizeClasses[props.size], loadingClasses, attrs['class']]
+    return [sharedClasses, stateClasses, sizeClasses[props.size], attrs['class']]
   })
 
   const loadingTestId = computed(() => `${testId.value}-loading`)
