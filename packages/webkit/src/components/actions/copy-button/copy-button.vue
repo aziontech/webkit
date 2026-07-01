@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 
-  import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
@@ -28,7 +27,7 @@
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: 'Copy',
     copiedLabel: 'Copied',
-    kind: 'outlined',
+    kind: 'transparent',
     size: 'small',
     disabled: false
   })
@@ -40,7 +39,6 @@
   const attrs = useAttrs()
 
   const copied = ref(false)
-  const tooltipOpen = ref<boolean | undefined>(undefined)
   let copiedTimeoutId: ReturnType<typeof setTimeout> | null = null
 
   const testId = computed(
@@ -49,31 +47,30 @@
 
   const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
   const label = computed(() => (copied.value ? props.copiedLabel : props.ariaLabel))
-  const iconClass = computed(() => (copied.value ? 'text-[var(--success-contrast)]' : undefined))
 
   async function handleCopy(event: MouseEvent) {
+    event.stopPropagation()
+
     if (props.disabled || !props.value || typeof globalThis.navigator === 'undefined') return
 
     try {
       await globalThis.navigator.clipboard.writeText(props.value)
-      copied.value = true
-      tooltipOpen.value = true
-      emit('copy', props.value)
-
-      if (copiedTimeoutId) {
-        clearTimeout(copiedTimeoutId)
-      }
-
-      copiedTimeoutId = setTimeout(() => {
-        copied.value = false
-        tooltipOpen.value = false
-        copiedTimeoutId = null
-      }, 2000)
     } catch {
       // Clipboard access may be denied; keep the idle state.
+      return
     }
 
-    event.stopPropagation()
+    copied.value = true
+    emit('copy', props.value)
+
+    if (copiedTimeoutId) {
+      clearTimeout(copiedTimeoutId)
+    }
+
+    copiedTimeoutId = setTimeout(() => {
+      copied.value = false
+      copiedTimeoutId = null
+    }, 2000)
   }
 
   onBeforeUnmount(() => {
@@ -84,24 +81,20 @@
 </script>
 
 <template>
-  <Tooltip
-    v-model:open="tooltipOpen"
-    :text="label"
-    :disabled="disabled"
-    :data-testid="`${testId}__tooltip`"
+  <span
+    class="inline-flex"
+    :data-state="copied ? 'copied' : 'default'"
+    :data-disabled="disabled ? '' : undefined"
+    :data-testid="testId"
   >
     <IconButton
-      v-bind="attrs"
       :icon="icon"
-      :iconClass="iconClass"
       :ariaLabel="label"
       :kind="kind"
       :size="size"
       :disabled="disabled"
       iconTransition
-      :data-state="copied ? 'copied' : 'default'"
-      :data-testid="testId"
       @click="handleCopy"
     />
-  </Tooltip>
+  </span>
 </template>
