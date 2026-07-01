@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-  import IconButton from '../../actions/icon-button/icon-button.vue'
   import InputText from '../../inputs/input-text/input-text.vue'
   import Tag from '../../tag/tag.vue'
   import { useLogViewContext } from './composables/use-log-view-context'
@@ -24,46 +23,12 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__header`
   )
 
-  const copied = ref(false)
-  let copiedTimer: ReturnType<typeof setTimeout> | undefined
-
-  const copyIcon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
-  const copyAriaLabel = computed(() => (copied.value ? 'Copied logs' : 'Copy logs'))
-
-  const handleCopy = async () => {
-    const didCopy = await ctx.copyLogs()
-
-    if (!didCopy) return
-
-    copied.value = true
-
-    if (copiedTimer) clearTimeout(copiedTimer)
-
-    copiedTimer = setTimeout(() => {
-      copied.value = false
-      copiedTimer = undefined
-    }, 2000)
-  }
-
-  onBeforeUnmount(() => {
-    if (copiedTimer) clearTimeout(copiedTimer)
-  })
-
   const handleWarningsKeydown = (event: globalThis.KeyboardEvent) => {
     if (ctx.disabled.value) return
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       ctx.toggleWarningsOnly()
-    }
-  }
-
-  const handleCopyKeydown = (event: globalThis.KeyboardEvent) => {
-    if (!ctx.canCopy.value) return
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      void handleCopy()
     }
   }
 </script>
@@ -79,19 +44,6 @@
       class="flex w-full min-w-0 items-center gap-[var(--spacing-sm)] sm:w-auto"
     >
       <slot name="left">
-        <IconButton
-          v-if="ctx.showCopy.value"
-          kind="transparent"
-          size="medium"
-          :icon="copyIcon"
-          :ariaLabel="copyAriaLabel"
-          :disabled="!ctx.canCopy.value"
-          :data-testid="`${testId}__copy`"
-          :data-copied="copied || null"
-          @click="handleCopy"
-          @keydown="handleCopyKeydown"
-        />
-
         <span
           :data-testid="`${testId}__line-count`"
           class="font-code text-label-sm text-[var(--text-muted)]"
@@ -124,25 +76,22 @@
     >
       <slot name="right">
         <slot name="search">
-          <span
+          <InputText
+            size="small"
+            :model-value="ctx.search.value"
+            :placeholder="ctx.searchPlaceholder.value"
+            :disabled="ctx.disabled.value"
+            aria-label="Search logs"
             :data-testid="`${testId}__search`"
-            class="relative flex w-full min-w-0 items-center sm:min-w-[12rem] sm:flex-1"
+            @update:model-value="ctx.setSearch"
           >
-            <i
-              class="pi pi-search pointer-events-none absolute left-[var(--spacing-xs)] z-[2] text-[length:0.875rem] leading-none text-[var(--text-muted)]"
-              aria-hidden="true"
-            />
-            <InputText
-              size="small"
-              class="w-full [&_input]:pl-[calc(var(--spacing-xs)+1.25rem)]"
-              :model-value="ctx.search.value"
-              :placeholder="ctx.searchPlaceholder.value"
-              :disabled="ctx.disabled.value"
-              aria-label="Search logs"
-              :data-testid="`${testId}__search-input`"
-              @update:model-value="ctx.setSearch"
-            />
-          </span>
+            <template #iconLeft>
+              <i
+                class="pi pi-search"
+                aria-hidden="true"
+              />
+            </template>
+          </InputText>
         </slot>
       </slot>
     </div>

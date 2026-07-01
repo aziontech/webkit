@@ -21,14 +21,17 @@ export interface LogViewContext {
   warningsOnly: ComputedRef<boolean>
   disabled: ComputedRef<boolean>
   showCopy: ComputedRef<boolean>
+  loading: ComputedRef<boolean>
+  loadingLabel: ComputedRef<string>
   searchPlaceholder: ComputedRef<string>
   warningCount: ComputedRef<number>
   lineCountLabel: ComputedRef<string>
   warningTagLabel: ComputedRef<string>
   canCopy: ComputedRef<boolean>
+  copyText: ComputedRef<string>
   setSearch: (value: string) => void
   toggleWarningsOnly: () => void
-  copyLogs: () => Promise<boolean>
+  emitCopy: (value: string) => void
 }
 
 export const LogViewInjectionKey: InjectionKey<LogViewContext> = Symbol('LogViewContext')

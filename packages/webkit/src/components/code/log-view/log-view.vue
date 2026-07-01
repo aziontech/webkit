@@ -2,7 +2,6 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { copyTextToClipboard } from './composables/copy-text-to-clipboard'
   import { formatLogLineText } from './composables/format-log-line-text'
   import type { LogViewLine } from './injection-key'
   import { LogViewInjectionKey } from './injection-key'
@@ -19,17 +18,23 @@
     lines?: LogViewLine[]
     /** Placeholder for the default header search field. */
     searchPlaceholder?: string
-    /** Shows the copy-to-clipboard control in LogViewHeader. */
+    /** Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). */
     showCopy?: boolean
     /** Disables toolbar controls in LogViewHeader. */
     disabled?: boolean
+    /** Replaces the LogViewContent log body with a centered spinner and label. */
+    loading?: boolean
+    /** Label shown beneath the spinner while `loading`. */
+    loadingLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     lines: () => [],
     searchPlaceholder: 'Find in Logs',
     showCopy: true,
-    disabled: false
+    disabled: false,
+    loading: false,
+    loadingLabel: 'Loading...'
   })
 
   /** Bound to LogViewHeader search; filters LogViewContent when set. */
@@ -104,7 +109,9 @@
     filteredLines.value.map((line) => formatLogLineText(line)).join('\n')
   )
 
-  const canCopy = computed(() => props.showCopy && !props.disabled && copyText.value.length > 0)
+  const canCopy = computed(
+    () => props.showCopy && !props.disabled && !props.loading && copyText.value.length > 0
+  )
 
   const setSearch = (value: string) => {
     search.value = value
@@ -116,17 +123,8 @@
     warningsOnly.value = !warningsOnly.value
   }
 
-  const copyLogs = async (): Promise<boolean> => {
-    if (!canCopy.value) {
-      return false
-    }
-
-    const text = copyText.value
-    const copied = await copyTextToClipboard(text)
-
-    emit('copy', text)
-
-    return copied
+  const emitCopy = (value: string) => {
+    emit('copy', value)
   }
 
   provide(LogViewInjectionKey, {
@@ -137,14 +135,17 @@
     warningsOnly: computed(() => warningsOnly.value),
     disabled: computed(() => props.disabled),
     showCopy: computed(() => props.showCopy),
+    loading: computed(() => props.loading),
+    loadingLabel: computed(() => props.loadingLabel),
     searchPlaceholder: computed(() => props.searchPlaceholder),
     warningCount,
     lineCountLabel,
     warningTagLabel,
     canCopy,
+    copyText,
     setSearch,
     toggleWarningsOnly,
-    copyLogs
+    emitCopy
   })
 </script>
 
@@ -153,6 +154,7 @@
     v-bind="passthroughAttrs"
     :data-testid="testId"
     :data-disabled="disabled || null"
+    :data-loading="loading || null"
     :data-warnings-only="warningsOnly || null"
     :class="
       cn(
