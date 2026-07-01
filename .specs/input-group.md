@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 07c3bcfa12057e71fecb2b6061043fa7e26cf57e996233b2d843e8ebb97ed2f2
+checksum: aefeab873440e20a00aef247dce731761b70679ac67e1dfacacaad56f04851eb
 created: 2026-07-01
 last_updated: 2026-07-01
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-07-01
 
 ## Purpose
 
-Container that flanks an input primitive with optional addons on either side (icon, static text, button), joined by vertical dividers, and reflects validation state on its border. Composed as `<InputGroup>` (root) plus `<InputGroup.Addon>` sub-components on the left, right, or both — the middle input goes in the root's default slot. Distinct from `field-*` components: `InputGroup` styles the input's *edges*; `field-*` wraps label + helper text.
+Container that flanks an input primitive with optional slots on either side (icon, static text, button), joined by vertical dividers, and reflects validation state on its border. Composed as `<InputGroup>` (root) plus `<InputGroup.SlotLeft>` and `<InputGroup.SlotRight>` sub-components — the middle input goes in the root's default slot. Each side sub-component owns its own seam (`SlotLeft` renders `border-r`, `SlotRight` renders `border-l`) so there is no ambiguity in the CSS selectors and consumers cannot accidentally swap positions. Distinct from `field-*` components: `InputGroup` styles the input's *edges*; `field-*` wraps label + helper text.
 
 The root **provides** an injection key (`InputGroupContextKey`) that future revisions of `input-text` (and other input primitives) will `inject` to render borderless inside the group. Until that lands, the middle slot expects a raw `<input>` element styled to inherit the root's surface — `bg-[var(--bg-surface)]`, `text-label-sm`, `text-[var(--text-default)]`, `placeholder:text-[var(--text-muted)]` — so the middle blends with the group's own background while the addons stand out as darker `--bg-canvas` islands on either side (matches the Figma layout). This is the canonical middle-slot markup shown in Usage and stories.
 
@@ -31,42 +31,45 @@ const value = ref('')
 
 <template>
   <InputGroup :invalid="false">
-    <InputGroup.Addon>https://</InputGroup.Addon>
+    <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
     <input
       v-model="value"
       placeholder="domain"
       class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
     />
-    <InputGroup.Addon>.com</InputGroup.Addon>
+    <InputGroup.SlotRight>.com</InputGroup.SlotRight>
   </InputGroup>
 </template>
 ```
 
-Tree-shaking alternative — standalone root + sub-component, no compound `Object.assign` pulled in:
+Tree-shaking alternative — standalone root + sub-components, no compound `Object.assign` pulled in:
 
 ```vue
 <script setup>
 import { ref } from 'vue'
 import InputGroup from '@aziontech/webkit/input-group-root'
-import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+import InputGroupSlotLeft from '@aziontech/webkit/input-group-slot-left'
+import InputGroupSlotRight from '@aziontech/webkit/input-group-slot-right'
 const value = ref('')
 </script>
 
 <template>
   <InputGroup>
-    <InputGroupAddon>https://</InputGroupAddon>
+    <InputGroupSlotLeft>https://</InputGroupSlotLeft>
     <input
       v-model="value"
       placeholder="domain"
       class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
     />
+    <InputGroupSlotRight>.com</InputGroupSlotRight>
   </InputGroup>
 </template>
 ```
 
 ## Sub-components
 
-- `input-group-addon/input-group-addon.vue` — Left/right addon slot. Position is determined by source order relative to the middle input, not by a prop. Exposes a `default` slot (scope: none) for the addon content (icon, static text, or a `<Button>`). Renders with `bg-[var(--bg-canvas)]` surface distinct from the middle field, `px-[var(--spacing-md)]`, `text-label-sm`, `text-[color:var(--text-muted)]`. The vertical seam between an addon and its neighbour is drawn by a CSS pseudo-border on the addon itself (`first:border-r last:border-l border-[color:var(--border-default)]`) — first-child addon (left) gets a right border toward the input; last-child addon (right) gets a left border toward the input. No `<Divider>` element or v-node inspection needed.
+- `input-group-slot-left/input-group-slot-left.vue` — Left-side slot. Exposes a `default` slot (scope: none) for the content (icon, static text, or a `<Button>`). Renders with `bg-[var(--bg-canvas)]`, `px-[var(--spacing-md)]`, `text-label-sm`, `text-[color:var(--text-muted)]`, and a hardcoded `border-r border-[color:var(--border-default)]` — the vertical seam toward the middle input.
+- `input-group-slot-right/input-group-slot-right.vue` — Right-side slot. Same styling as `SlotLeft` but with a hardcoded `border-l border-[color:var(--border-default)]` seam toward the middle input on the opposite side.
 
 Resulting layout:
 
@@ -74,17 +77,23 @@ Resulting layout:
 packages/webkit/src/components/inputs/input-group/
 ├── input-group.vue
 ├── injection-key.ts                    (exports InputGroupContextKey symbol; future primitives inject to detect nesting)
-├── index.ts                            (Object.assign(InputGroup, { Addon: InputGroupAddon }))
-└── input-group-addon/
-    └── input-group-addon.vue
+├── index.ts                            (Object.assign(InputGroup, { SlotLeft, SlotRight }))
+├── input-group-slot-left/
+│   └── input-group-slot-left.vue
+└── input-group-slot-right/
+    └── input-group-slot-right.vue
 ```
 
 Compound file (`index.ts`):
 
 ```ts
 import InputGroup from './input-group.vue'
-import InputGroupAddon from './input-group-addon/input-group-addon.vue'
-export default Object.assign(InputGroup, { Addon: InputGroupAddon })
+import InputGroupSlotLeft from './input-group-slot-left/input-group-slot-left.vue'
+import InputGroupSlotRight from './input-group-slot-right/input-group-slot-right.vue'
+export default Object.assign(InputGroup, {
+  SlotLeft: InputGroupSlotLeft,
+  SlotRight: InputGroupSlotRight
+})
 ```
 
 ## Props
@@ -96,7 +105,7 @@ Root (`InputGroup`):
 | `invalid` | `boolean` | `false` | no | Renders the error border. When `required` is also `true`, the border uses the warning color instead of danger. Also sets `aria-invalid="true"` on the root. |
 | `required` | `boolean` | `false` | no | Semantic marker for a required field. Combined with `invalid=true`, switches the border color to warning. Sets `aria-required="true"` on the root. |
 
-Sub-component (`InputGroup.Addon`) has no props.
+Sub-components (`InputGroup.SlotLeft`, `InputGroup.SlotRight`) have no props.
 
 ## Events
 
@@ -106,7 +115,7 @@ Sub-component (`InputGroup.Addon`) has no props.
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Middle content — a raw `<input>` element in source order, optionally flanked by `<InputGroup.Addon>` siblings. `InputGroup.Addon` itself exposes a `default` slot that receives the addon content (icon, static text, or a `<Button>`); it is documented in the Sub-components section, not here. |
+| `default` | — | Middle content — a raw `<input>` element in source order, optionally preceded by `<InputGroup.SlotLeft>` and/or followed by `<InputGroup.SlotRight>`. Each side sub-component exposes its own `default` slot for the addon content (icon, static text, or a `<Button>`); those are documented in the Sub-components section, not here. |
 
 ## States
 
@@ -139,11 +148,12 @@ Sub-component (`InputGroup.Addon`) has no props.
 | root height | `h-8` (Tailwind utility) |
 | focus ring | `var(--ring-color)` |
 | focus ring offset | `var(--bg-canvas)` |
-| addon surface | `var(--bg-canvas)` |
-| addon text | `var(--text-muted)` |
-| addon padding.x | `var(--spacing-md)` |
-| addon typography | `.text-label-sm` |
-| addon seam (vertical border) | `border-[color:var(--border-default)]` (as `first:border-r` / `last:border-l` on the addon) |
+| SlotLeft / SlotRight surface | `var(--bg-canvas)` |
+| SlotLeft / SlotRight text | `var(--text-muted)` |
+| SlotLeft / SlotRight padding.x | `var(--spacing-md)` |
+| SlotLeft / SlotRight typography | `.text-label-sm` |
+| SlotLeft seam (vertical border) | `border-r border-[color:var(--border-default)]` |
+| SlotRight seam (vertical border) | `border-l border-[color:var(--border-default)]` |
 
 ## Theme gaps
 
@@ -162,14 +172,14 @@ Sub-component (`InputGroup.Addon`) has no props.
 
 ## Stories (Storybook)
 
-- Default — root with a middle `<InputText>` and no addons.
-- WithLeftAddon — one `<InputGroup.Addon>` before the input (e.g. `https://`).
-- WithRightAddon — one `<InputGroup.Addon>` after the input (e.g. `.com`).
-- BothAddons — an addon on each side.
+- Default — root with a middle input and no side slots.
+- WithSlotLeft — one `<InputGroup.SlotLeft>` before the input (e.g. `https://`).
+- WithSlotRight — one `<InputGroup.SlotRight>` after the input (e.g. `.com`).
+- BothSlots — a `SlotLeft` before and a `SlotRight` after the input.
 - Invalid — `invalid=true`, no `required` (danger border).
 - InvalidRequired — `invalid=true` and `required=true` (warning border).
 
-Justification for six stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. The four composition stories (Default, WithLeftAddon, WithRightAddon, BothAddons) document the sub-component's positional flexibility, which is the primary API surface. The two state stories exercise the two visually distinct border colors that hinge on the `invalid + required` combination — a non-obvious interaction that would otherwise be hidden.
+Justification for six stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. The four composition stories (Default, WithSlotLeft, WithSlotRight, BothSlots) document each side sub-component individually and combined — the primary API surface. The two state stories exercise the invalid and invalid+required border colors, which are the only non-obvious visual signals.
 
 ## Constraints — DO NOT
 

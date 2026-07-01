@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Container that flanks an input primitive with optional addons on either side, joined by vertical dividers, and reflects validation state on its border. Composed as `<InputGroup>` (root) plus `<InputGroup.Addon>` sub-components on the left, right, or both — the middle input goes in the root's default slot."
+          "Container that flanks an input primitive with optional slots on either side, joined by vertical borders, and reflects validation state on its border. Composed as `<InputGroup>` (root) plus `<InputGroup.SlotLeft>` and `<InputGroup.SlotRight>` sub-components — the middle input goes in the root's default slot."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -67,71 +67,71 @@ export const Default = {
   }
 }
 
-const WITH_LEFT_ADDON_MARKUP = `<InputGroup>
-  <InputGroup.Addon>https://</InputGroup.Addon>
+const WITH_SLOT_LEFT_MARKUP = `<InputGroup>
+  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
   ${MIDDLE_INPUT}
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
-export const WithLeftAddon = {
+export const WithSlotLeft = {
   render: () => ({
     components: { InputGroup },
-    template: WITH_LEFT_ADDON_MARKUP
+    template: WITH_SLOT_LEFT_MARKUP
   }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'A single addon placed before the middle input.' },
-      source: { code: toSfc(IMPORT, WITH_LEFT_ADDON_MARKUP) }
+      description: { story: 'A single `<InputGroup.SlotLeft>` before the middle input.' },
+      source: { code: toSfc(IMPORT, WITH_SLOT_LEFT_MARKUP) }
     }
   }
 }
 
-const WITH_RIGHT_ADDON_MARKUP = `<InputGroup>
+const WITH_SLOT_RIGHT_MARKUP = `<InputGroup>
   ${MIDDLE_INPUT}
-  <InputGroup.Addon>.com</InputGroup.Addon>
+  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
-export const WithRightAddon = {
+export const WithSlotRight = {
   render: () => ({
     components: { InputGroup },
-    template: WITH_RIGHT_ADDON_MARKUP
+    template: WITH_SLOT_RIGHT_MARKUP
   }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'A single addon placed after the middle input.' },
-      source: { code: toSfc(IMPORT, WITH_RIGHT_ADDON_MARKUP) }
+      description: { story: 'A single `<InputGroup.SlotRight>` after the middle input.' },
+      source: { code: toSfc(IMPORT, WITH_SLOT_RIGHT_MARKUP) }
     }
   }
 }
 
-const BOTH_ADDONS_MARKUP = `<InputGroup>
-  <InputGroup.Addon>https://</InputGroup.Addon>
+const BOTH_SLOTS_MARKUP = `<InputGroup>
+  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
   ${MIDDLE_INPUT}
-  <InputGroup.Addon>.com</InputGroup.Addon>
+  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
-export const BothAddons = {
+export const BothSlots = {
   render: () => ({
     components: { InputGroup },
-    template: BOTH_ADDONS_MARKUP
+    template: BOTH_SLOTS_MARKUP
   }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'An addon on each side of the middle input.' },
-      source: { code: toSfc(IMPORT, BOTH_ADDONS_MARKUP) }
+      description: { story: 'A `SlotLeft` and a `SlotRight` flanking the middle input.' },
+      source: { code: toSfc(IMPORT, BOTH_SLOTS_MARKUP) }
     }
   }
 }
 
 const INVALID_MARKUP = `<InputGroup :invalid="true">
-  <InputGroup.Addon>https://</InputGroup.Addon>
+  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
   ${MIDDLE_INPUT}
-  <InputGroup.Addon>.com</InputGroup.Addon>
+  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
@@ -150,9 +150,9 @@ export const Invalid = {
 }
 
 const INVALID_REQUIRED_MARKUP = `<InputGroup :invalid="true" :required="true">
-  <InputGroup.Addon>https://</InputGroup.Addon>
+  <InputGroup.SlotLeft>https://</InputGroup.SlotLeft>
   ${MIDDLE_INPUT}
-  <InputGroup.Addon>.com</InputGroup.Addon>
+  <InputGroup.SlotRight>.com</InputGroup.SlotRight>
 </InputGroup>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
