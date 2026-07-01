@@ -1,449 +1,547 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    onBeforeUnmount,
+    onMounted,
+    provide,
+    ref,
+    useAttrs,
+    useSlots,
+    watch
+  } from 'vue'
+
+  import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { usePlacement } from '../../../composables/use-placement'
+  import Button from '../../actions/button/button.vue'
+  import CalendarFields from './calendar-fields/calendar-fields.vue'
+  import CalendarGrid from './calendar-grid/calendar-grid.vue'
+  import CalendarPeriod from './calendar-period/calendar-period.vue'
+  import CalendarPreset from './calendar-preset/calendar-preset.vue'
+  import CalendarTimezone from './calendar-timezone/calendar-timezone.vue'
+  import { asRange, asSingle, formatValueLabel, startOfDay, withTime } from './format'
+  import {
+    CalendarInjectionKey,
+    type CalendarMode,
+    type CalendarMonth,
+    type CalendarPresetItem,
+    type CalendarRange,
+    type CalendarSize,
+    type CalendarValue
+  } from './injection-key'
 
   defineOptions({
     name: 'Calendar',
     inheritAttrs: false
   })
 
-  /** Selection mode for the calendar grid. */
-  export type CalendarMode = 'single' | 'range'
-
-  /** Range value emitted and accepted in range mode. */
-  export interface CalendarRange {
-    start: Date | null
-    end: Date | null
-  }
-
-  /** Visible month payload emitted on navigation. month is 0-indexed. */
-  export interface CalendarMonth {
-    year: number
-    month: number
-  }
-
-  /** v-model value: a Date (or null) in single mode, a range object in range mode. */
-  export type CalendarValue = Date | null | CalendarRange
-
   interface Props {
-    /** Selected value for v-model. A Date (or null) in single mode; a range object in range mode. */
+    /** Committed selection for v-model. A Date (or null) in single mode; a range in range mode. Only updated on Apply (or immediately when showApply is false). */
     modelValue?: CalendarValue
     /** Selection mode. Single picks one date; range picks a start and end date. */
     mode?: CalendarMode
+    /** Number of month grids rendered side-by-side; one shared prev/next pages the whole view by a month. */
+    numberOfMonths?: number
+    /** Size token; affects the trigger, day-cell hit-area, and typography. */
+    size?: CalendarSize
     /** Earliest selectable date; earlier days render disabled. */
     min?: Date
     /** Latest selectable date; later days render disabled. */
     max?: Date
-    /** Disables the whole grid and navigation, applying disabled tokens. */
+    /** Disables the trigger, grid, and all controls, applying disabled tokens. */
     disabled?: boolean
-    /** Shows the month/year label and previous/next month navigation. */
-    showHeader?: boolean
+    /** Controlled open state of the popover (v-model:open); omit for uncontrolled. */
+    open?: boolean
+    /** Trigger text shown when there is no selection. */
+    placeholder?: string
+    /** Data-driven shortcuts rendered in the presets rail; each is { label, value }. */
+    presets?: CalendarPresetItem[]
+    /** Shows Start/End time fields alongside the date fields. */
+    showTime?: boolean
+    /** Shows the timezone selector below the fields. */
+    showTimezone?: boolean
+    /** Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone. */
+    timezone?: string
+    /** Timezone options for the selector; empty falls back to a curated list derived from Intl. */
+    timezones?: string[]
+    /** Lays the fields/apply column beside the calendar instead of below it. */
+    horizontal?: boolean
+    /** Shows a clear control on the trigger that empties the committed selection. */
+    clearable?: boolean
+    /** Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. */
+    showApply?: boolean
+    /** Enables the Select Period relative-time mode (relative-preset list + parsed text input). */
+    period?: boolean
+    /** Renders the trigger as a split control with a separate chevron affordance. */
+    split?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     modelValue: null,
-    mode: 'single',
+    mode: 'range',
+    numberOfMonths: 1,
+    size: 'medium',
     min: undefined,
     max: undefined,
     disabled: false,
-    showHeader: true
+    open: undefined,
+    placeholder: 'Select a Date Range',
+    presets: () => [],
+    showTime: false,
+    showTimezone: false,
+    timezone: '',
+    timezones: () => [],
+    horizontal: false,
+    clearable: false,
+    showApply: true,
+    period: false,
+    split: false
   })
 
   const emit = defineEmits<{
     'update:modelValue': [value: CalendarValue]
+    'update:open': [value: boolean]
+    'update:timezone': [value: string]
     'month-change': [value: CalendarMonth]
+    apply: [value: CalendarValue]
+  }>()
+
+  defineSlots<{
+    trigger(props: { open: boolean; value: CalendarValue; displayValue: string }): unknown
+    presets(): unknown
+    footer(): unknown
   }>()
 
   const attrs = useAttrs()
+  const slots = useSlots()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-calendar')
 
-  const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const
-  const MS_PER_DAY = 86_400_000
+  const triggerRef = ref<globalThis.HTMLElement | null>(null)
+  const panelRef = ref<globalThis.HTMLElement | null>(null)
 
-  const startOfDay = (date: Date): Date =>
-    new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  /* ---- open state (controlled / uncontrolled) ---- */
+  const internalOpen = ref(false)
+  const isOpen = computed(() => (props.open !== undefined ? props.open : internalOpen.value))
+  const isOpenRef = computed(() => isOpen.value)
 
-  const sameDay = (a: Date | null | undefined, b: Date | null | undefined): boolean => {
-    if (!a || !b) {
-      return false
+  const setOpen = (value: boolean) => {
+    if (value && props.disabled) {
+      return
     }
-
-    return (
-      a.getFullYear() === b.getFullYear() &&
-      a.getMonth() === b.getMonth() &&
-      a.getDate() === b.getDate()
-    )
+    if (props.open === undefined) {
+      internalOpen.value = value
+    }
+    emit('update:open', value)
   }
 
-  const asRange = (value: CalendarValue): CalendarRange => {
-    if (value && !(value instanceof Date)) {
-      return value
-    }
+  const toggleOpen = () => setOpen(!isOpen.value)
 
-    return { start: null, end: null }
+  /* ---- timezone state (controlled / uncontrolled) ---- */
+  const internalTimezone = ref(props.timezone)
+  const timezoneValue = computed(() => props.timezone || internalTimezone.value)
+  const setTimezone = (value: string) => {
+    internalTimezone.value = value
+    emit('update:timezone', value)
+  }
+  watch(
+    () => props.timezone,
+    (value) => {
+      if (value) {
+        internalTimezone.value = value
+      }
+    }
+  )
+
+  /* ---- draft (staged selection) ---- */
+  const emptyValue = (): CalendarValue =>
+    props.mode === 'range' ? { start: null, end: null } : null
+
+  const cloneValue = (value: CalendarValue): CalendarValue => {
+    if (value instanceof Date) {
+      return new Date(value.getTime())
+    }
+    if (value && typeof value === 'object') {
+      return {
+        start: value.start ? new Date(value.start.getTime()) : null,
+        end: value.end ? new Date(value.end.getTime()) : null
+      }
+    }
+    return emptyValue()
   }
 
-  const asSingle = (value: CalendarValue): Date | null => (value instanceof Date ? value : null)
+  const draft = ref<CalendarValue>(cloneValue(props.modelValue))
+  const draftRef = computed(() => draft.value)
 
-  /** Anchor date that drives the visible month; seeded from the model value or today. */
-  const seedDate = (): Date => {
+  const resetDraft = () => {
+    draft.value = cloneValue(props.modelValue)
+  }
+
+  watch(isOpen, (open) => {
+    if (open) {
+      resetDraft()
+    }
+  })
+
+  const isComplete = (value: CalendarValue): boolean => {
     if (props.mode === 'range') {
-      const range = asRange(props.modelValue)
+      const range = asRange(value)
+      return Boolean(range.start && range.end)
+    }
+    return asSingle(value) !== null
+  }
 
-      if (range.start) {
-        return range.start
+  const commitIfImmediate = () => {
+    if (props.showApply) {
+      return
+    }
+    emit('update:modelValue', cloneValue(draft.value))
+    if (isComplete(draft.value)) {
+      setOpen(false)
+    }
+  }
+
+  const selectDay = (date: Date) => {
+    if (props.disabled) {
+      return
+    }
+    if (props.mode === 'range') {
+      const range = asRange(draft.value)
+      if (!range.start || range.end) {
+        draft.value = { start: withTime(date, null, false), end: null }
+      } else if (startOfDay(date) < startOfDay(range.start)) {
+        draft.value = {
+          start: withTime(date, null, false),
+          end: withTime(range.start, range.start, true)
+        }
+      } else {
+        draft.value = { start: range.start, end: withTime(date, null, true) }
       }
     } else {
-      const single = asSingle(props.modelValue)
-
-      if (single) {
-        return single
-      }
+      draft.value = withTime(date, asSingle(draft.value), false)
     }
-
-    return new Date()
+    commitIfImmediate()
   }
 
-  const viewDate = ref<Date>(startOfDay(seedDate()))
-
-  watch(
-    () => props.modelValue,
-    () => {
-      viewDate.value = startOfDay(seedDate())
-    }
-  )
-
-  const viewYear = computed(() => viewDate.value.getFullYear())
-  const viewMonth = computed(() => viewDate.value.getMonth())
-
-  const monthLabel = computed(() =>
-    viewDate.value.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-  )
-
-  const focusedTime = ref<number | null>(null)
-
-  const today = startOfDay(new Date())
-
-  const isBeforeMin = (date: Date): boolean => Boolean(props.min && date < startOfDay(props.min))
-  const isAfterMax = (date: Date): boolean => Boolean(props.max && date > startOfDay(props.max))
-  const isOutOfBounds = (date: Date): boolean => isBeforeMin(date) || isAfterMax(date)
-
-  /** Range-band classification used to render the connected range highlight. */
-  type CalendarDayBand = 'none' | 'single' | 'start' | 'middle' | 'end'
-
-  interface CalendarDay {
-    date: Date
-    time: number
-    label: number
-    outside: boolean
-    disabled: boolean
-    today: boolean
-    selected: boolean
-    band: CalendarDayBand
-  }
-
-  /** Classifies a day for the range band: the lone selection (`single`), a range
-      endpoint (`start`/`end`), an in-between day (`middle`), or `none`. */
-  const dayBand = (date: Date): CalendarDayBand => {
-    if (props.mode !== 'range') {
-      return sameDay(date, asSingle(props.modelValue)) ? 'single' : 'none'
-    }
-
-    const range = asRange(props.modelValue)
-    const time = startOfDay(date).getTime()
-    const start = range.start ? startOfDay(range.start).getTime() : null
-    const end = range.end ? startOfDay(range.end).getTime() : null
-
-    if (start !== null && end !== null) {
-      const lo = Math.min(start, end)
-      const hi = Math.max(start, end)
-
-      if (lo === hi) {
-        return time === lo ? 'single' : 'none'
-      }
-      if (time === lo) {
-        return 'start'
-      }
-      if (time === hi) {
-        return 'end'
-      }
-
-      return time > lo && time < hi ? 'middle' : 'none'
-    }
-
-    if ((start !== null && time === start) || (end !== null && time === end)) {
-      return 'single'
-    }
-
-    return 'none'
-  }
-
-  /** 6 rows of 7 days, leading/trailing adjacent-month cells, week starting Sunday. */
-  const weeks = computed<CalendarDay[][]>(() => {
-    const firstOfMonth = new Date(viewYear.value, viewMonth.value, 1)
-    const gridStart = new Date(viewYear.value, viewMonth.value, 1 - firstOfMonth.getDay())
-    const rows: CalendarDay[][] = []
-
-    for (let row = 0; row < 6; row += 1) {
-      const cells: CalendarDay[] = []
-
-      for (let col = 0; col < 7; col += 1) {
-        const date = new Date(
-          gridStart.getFullYear(),
-          gridStart.getMonth(),
-          gridStart.getDate() + row * 7 + col
-        )
-        const outside = date.getMonth() !== viewMonth.value
-
-        const band = dayBand(date)
-
-        cells.push({
-          date,
-          time: date.getTime(),
-          label: date.getDate(),
-          outside,
-          disabled: props.disabled || isOutOfBounds(date),
-          today: sameDay(date, today),
-          selected: band === 'single' || band === 'start' || band === 'end',
-          band
-        })
-      }
-
-      rows.push(cells)
-    }
-
-    return rows
-  })
-
-  /** Day that owns the roving tabindex: tracked focus, else selection, else today, else first enabled. */
-  const activeTime = computed<number | null>(() => {
-    const flat: CalendarDay[] = weeks.value.flat()
-
-    if (focusedTime.value !== null && flat.some((day) => day.time === focusedTime.value)) {
-      return focusedTime.value
-    }
-
-    const selected = flat.find((day) => day.selected && !day.disabled)
-
-    if (selected) {
-      return selected.time
-    }
-
-    const current = flat.find((day) => day.today && !day.outside && !day.disabled)
-
-    if (current) {
-      return current.time
-    }
-
-    const firstEnabled = flat.find((day) => !day.outside && !day.disabled)
-
-    return firstEnabled ? firstEnabled.time : null
-  })
-
-  const goToMonth = (year: number, month: number) => {
-    viewDate.value = new Date(year, month, 1)
-    emit('month-change', { year: viewDate.value.getFullYear(), month: viewDate.value.getMonth() })
-  }
-
-  const goToPreviousMonth = () => {
+  const selectValue = (value: Date | CalendarRange) => {
     if (props.disabled) {
       return
     }
-
-    goToMonth(viewYear.value, viewMonth.value - 1)
-  }
-
-  const goToNextMonth = () => {
-    if (props.disabled) {
-      return
-    }
-
-    goToMonth(viewYear.value, viewMonth.value + 1)
-  }
-
-  const selectDay = (day: CalendarDay) => {
-    if (day.disabled) {
-      return
-    }
-
-    focusedTime.value = day.time
-
-    if (day.outside) {
-      viewDate.value = new Date(day.date.getFullYear(), day.date.getMonth(), 1)
-      emit('month-change', { year: day.date.getFullYear(), month: day.date.getMonth() })
-    }
-
     if (props.mode === 'range') {
-      const range = asRange(props.modelValue)
-
-      if (!range.start || range.end) {
-        emit('update:modelValue', { start: day.date, end: null })
-        return
+      const range = value instanceof Date ? { start: value, end: value } : value
+      draft.value = {
+        start: range.start ? new Date(range.start.getTime()) : null,
+        end: range.end ? new Date(range.end.getTime()) : null
       }
-
-      if (day.date < range.start) {
-        emit('update:modelValue', { start: day.date, end: range.start })
-        return
-      }
-
-      emit('update:modelValue', { start: range.start, end: day.date })
+    } else {
+      const date = value instanceof Date ? value : (value.start ?? value.end ?? null)
+      draft.value = date ? new Date(date.getTime()) : null
+    }
+    // Period selections are complete ranges — commit and close immediately.
+    if (props.period) {
+      emit('update:modelValue', cloneValue(draft.value))
+      emit('apply', cloneValue(draft.value))
+      setOpen(false)
       return
     }
-
-    emit('update:modelValue', day.date)
+    commitIfImmediate()
   }
 
-  const moveFocus = (fromTime: number, deltaDays: number) => {
-    const next = new Date(fromTime + deltaDays * MS_PER_DAY)
-    const normalized = startOfDay(next)
-    focusedTime.value = normalized.getTime()
+  const setEndpoint = (which: 'start' | 'end', date: Date | null) => {
+    if (props.disabled) {
+      return
+    }
+    if (props.mode === 'range') {
+      const range = asRange(draft.value)
+      draft.value =
+        which === 'start' ? { start: date, end: range.end } : { start: range.start, end: date }
+    } else {
+      draft.value = date
+    }
+    commitIfImmediate()
+  }
 
-    if (normalized.getMonth() !== viewMonth.value || normalized.getFullYear() !== viewYear.value) {
-      goToMonth(normalized.getFullYear(), normalized.getMonth())
+  const clearDraft = () => {
+    if (props.disabled) {
+      return
+    }
+    draft.value = emptyValue()
+    commitIfImmediate()
+  }
+
+  const changeMonth = (month: CalendarMonth) => {
+    emit('month-change', month)
+  }
+
+  const hasSelection = computed<boolean>(
+    () => isComplete(draft.value) || hasAnyEndpoint(draft.value)
+  )
+
+  function hasAnyEndpoint(value: CalendarValue): boolean {
+    if (props.mode === 'range') {
+      const range = asRange(value)
+      return Boolean(range.start || range.end)
+    }
+    return asSingle(value) !== null
+  }
+
+  const applySelection = () => {
+    if (props.disabled) {
+      return
+    }
+    emit('update:modelValue', cloneValue(draft.value))
+    emit('apply', cloneValue(draft.value))
+    setOpen(false)
+  }
+
+  const clearCommitted = () => {
+    if (props.disabled) {
+      return
+    }
+    emit('update:modelValue', emptyValue())
+    draft.value = emptyValue()
+  }
+
+  /* ---- trigger display ---- */
+  const displayValue = computed(() =>
+    formatValueLabel(props.modelValue, props.mode, timezoneValue.value)
+  )
+  const hasCommitted = computed(() => displayValue.value !== '')
+  const triggerIcon = computed(() => (props.period ? 'pi pi-clock' : 'pi pi-calendar'))
+  const triggerText = computed(
+    () => displayValue.value || (props.period ? 'Period' : props.placeholder)
+  )
+
+  const hasPresets = computed(() => props.presets.length > 0 || Boolean(slots['presets']))
+
+  /* ---- positioning + focus + dismissal ---- */
+  const { resolvedPlacement, panelStyle } = usePlacement({
+    triggerRef,
+    panelRef,
+    isOpen: isOpenRef,
+    placement: 'bottom-start',
+    offset: 6,
+    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
+  })
+
+  useFocusTrap(panelRef, isOpenRef)
+
+  const onDocumentMousedown = (event: globalThis.MouseEvent) => {
+    if (!isOpen.value) {
+      return
+    }
+    const target = event.target as globalThis.Node | null
+    if (!target) {
+      return
+    }
+    if (triggerRef.value?.contains(target)) {
+      return
+    }
+    if (panelRef.value?.contains(target)) {
+      return
+    }
+    setOpen(false)
+  }
+
+  const onPanelKeydown = (event: globalThis.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      setOpen(false)
+      triggerRef.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
     }
   }
 
-  const onDayKeydown = (event: globalThis.KeyboardEvent, day: CalendarDay) => {
-    switch (event.key) {
-      case 'ArrowLeft':
-        event.preventDefault()
-        moveFocus(day.time, -1)
-        break
-      case 'ArrowRight':
-        event.preventDefault()
-        moveFocus(day.time, 1)
-        break
-      case 'ArrowUp':
-        event.preventDefault()
-        moveFocus(day.time, -7)
-        break
-      case 'ArrowDown':
-        event.preventDefault()
-        moveFocus(day.time, 7)
-        break
-      case 'PageUp':
-        event.preventDefault()
-        goToPreviousMonth()
-        break
-      case 'PageDown':
-        event.preventDefault()
-        goToNextMonth()
-        break
-      case 'Enter':
-      case ' ':
-        event.preventDefault()
-        selectDay(day)
-        break
-      default:
-        break
-    }
-  }
+  onMounted(() => {
+    globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
+  })
+
+  onBeforeUnmount(() => {
+    globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
+  })
+
+  provide(CalendarInjectionKey, {
+    testId: testId.value,
+    mode: computed(() => props.mode),
+    size: computed(() => props.size),
+    disabled: computed(() => props.disabled),
+    numberOfMonths: computed(() => props.numberOfMonths),
+    min: computed(() => props.min),
+    max: computed(() => props.max),
+    showTime: computed(() => props.showTime),
+    horizontal: computed(() => props.horizontal),
+    draft: draftRef,
+    hasSelection,
+    timezone: timezoneValue,
+    timezones: computed(() => props.timezones),
+    selectDay,
+    selectValue,
+    setEndpoint,
+    clear: clearDraft,
+    setTimezone,
+    changeMonth
+  })
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     :data-testid="testId"
+    :data-state="isOpen ? 'open' : 'closed'"
+    :data-size="size"
     :data-disabled="disabled || null"
-    class="inline-flex max-w-full flex-col items-start overflow-hidden rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] data-[disabled]:opacity-60"
+    class="inline-flex"
   >
-    <div
-      v-if="showHeader"
-      class="flex w-full items-center justify-between py-[var(--spacing-xs)] pl-[var(--spacing-md)] pr-[var(--spacing-sm)]"
-      :data-testid="`${testId}__header`"
+    <span
+      ref="triggerRef"
+      class="inline-flex max-w-full"
     >
-      <span
-        class="text-body-sm text-[var(--text-default)]"
-        :data-testid="`${testId}__label`"
-      >
-        {{ monthLabel }}
-      </span>
-
-      <div class="flex items-center gap-[var(--spacing-xxs)]">
-        <button
-          type="button"
-          :disabled="disabled"
-          aria-label="Previous month"
-          :data-testid="`${testId}__prev`"
-          class="inline-flex size-7 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
-          @click="goToPreviousMonth"
-        >
-          <i
-            class="pi pi-chevron-left text-[length:inherit] leading-none"
-            aria-hidden="true"
-          />
-        </button>
-
-        <button
-          type="button"
-          :disabled="disabled"
-          aria-label="Next month"
-          :data-testid="`${testId}__next`"
-          class="inline-flex size-7 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
-          @click="goToNextMonth"
-        >
-          <i
-            class="pi pi-chevron-right text-[length:inherit] leading-none"
-            aria-hidden="true"
-          />
-        </button>
-      </div>
-    </div>
-
-    <div
-      class="flex flex-col items-start gap-[var(--spacing-md)] p-[var(--spacing-sm)]"
-      role="grid"
-      :aria-label="monthLabel"
-      :data-testid="`${testId}__grid`"
-    >
-      <div
-        role="row"
-        class="flex items-start"
+      <slot
+        name="trigger"
+        :open="isOpen"
+        :value="modelValue"
+        :display-value="displayValue"
       >
         <span
-          v-for="(weekday, index) in WEEKDAY_LABELS"
-          :key="`weekday-${index}`"
-          role="columnheader"
-          class="text-label-sm flex w-9 items-start justify-center text-[var(--text-muted)]"
+          :data-size="size"
+          :data-state="isOpen ? 'open' : 'closed'"
+          :data-disabled="disabled || null"
+          class="inline-flex max-w-full items-stretch overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] data-[disabled]:opacity-60"
         >
-          {{ weekday }}
-        </span>
-      </div>
-
-      <div class="flex flex-col items-start gap-[var(--spacing-xxs)]">
-        <div
-          v-for="(week, weekIndex) in weeks"
-          :key="`week-${weekIndex}`"
-          role="row"
-          class="flex items-start"
-        >
-          <div
-            v-for="day in week"
-            :key="day.time"
-            role="gridcell"
-            :aria-selected="day.selected || undefined"
-            :aria-current="day.today ? 'date' : undefined"
-            class="size-9"
+          <button
+            type="button"
+            :disabled="disabled"
+            :data-size="size"
+            :data-empty="!hasCommitted || null"
+            :data-testid="`${testId}__trigger`"
+            aria-haspopup="dialog"
+            :aria-expanded="isOpen"
+            class="text-body-sm inline-flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] px-[var(--spacing-sm)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-[var(--text-muted)] motion-reduce:transition-none"
+            @click="toggleOpen"
           >
-            <button
-              type="button"
-              :disabled="day.disabled"
-              :data-band="day.band"
-              :data-selected="day.selected || null"
-              :data-today="day.today || null"
-              :data-outside="day.outside || null"
-              :data-disabled="day.disabled || null"
-              :data-testid="`${testId}__day`"
-              :tabindex="day.time === activeTime ? 0 : -1"
-              class="text-body-sm flex size-full items-center justify-center text-[var(--text-default)] transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[band=none]:rounded-[var(--shape-elements)] data-[band=none]:hover:bg-[var(--bg-hover)] data-[band=single]:rounded-[var(--shape-elements)] data-[band=single]:bg-[var(--secondary)] data-[band=single]:text-[var(--secondary-contrast)] data-[band=start]:rounded-l-[var(--shape-elements)] data-[band=start]:bg-[var(--secondary)] data-[band=start]:text-[var(--secondary-contrast)] data-[band=end]:rounded-r-[var(--shape-elements)] data-[band=end]:bg-[var(--secondary)] data-[band=end]:text-[var(--secondary-contrast)] data-[band=middle]:bg-[var(--bg-mask)] data-[outside]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)] motion-reduce:transition-none"
-              @click="selectDay(day)"
-              @keydown="onDayKeydown($event, day)"
+            <i
+              :class="triggerIcon"
+              class="shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+              aria-hidden="true"
+            />
+            <span class="min-w-0 flex-1 truncate text-left">{{ triggerText }}</span>
+            <i
+              v-if="!split && !(clearable && hasCommitted)"
+              class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+              aria-hidden="true"
+            />
+          </button>
+
+          <button
+            v-if="clearable && hasCommitted"
+            type="button"
+            :disabled="disabled"
+            aria-label="Clear selection"
+            :data-testid="`${testId}__clear-trigger`"
+            class="inline-flex shrink-0 items-center justify-center px-[var(--spacing-xs)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+            @click="clearCommitted"
+          >
+            <i
+              class="pi pi-times text-[length:inherit] leading-none"
+              aria-hidden="true"
+            />
+          </button>
+
+          <button
+            v-if="split"
+            type="button"
+            :disabled="disabled"
+            aria-label="Open calendar"
+            :aria-expanded="isOpen"
+            :data-testid="`${testId}__split`"
+            class="inline-flex shrink-0 items-center justify-center border-l border-[var(--border-default)] px-[var(--spacing-xs)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+            @click="toggleOpen"
+          >
+            <i
+              class="pi pi-chevron-down text-[length:inherit] leading-none"
+              aria-hidden="true"
+            />
+          </button>
+        </span>
+      </slot>
+    </span>
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
+        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+      >
+        <div
+          v-if="isOpen"
+          ref="panelRef"
+          role="dialog"
+          aria-label="Choose date"
+          :data-testid="`${testId}__popover`"
+          :data-state="isOpen ? 'open' : 'closed'"
+          :data-placement="resolvedPlacement"
+          :style="panelStyle"
+          class="flex flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
+          @keydown="onPanelKeydown"
+        >
+          <div class="flex items-stretch">
+            <div
+              v-if="hasPresets && !period"
+              :data-testid="`${testId}__presets`"
+              class="flex min-w-[var(--container-4xs)] flex-col gap-[var(--spacing-xxs)] border-r border-[var(--border-default)] p-[var(--spacing-sm)]"
             >
-              {{ day.label }}
-            </button>
+              <slot name="presets">
+                <CalendarPreset
+                  v-for="preset in presets"
+                  :key="preset.label"
+                  :value="preset.value"
+                >
+                  {{ preset.label }}
+                </CalendarPreset>
+              </slot>
+            </div>
+
+            <div
+              class="flex gap-[var(--spacing-md)] p-[var(--spacing-sm)]"
+              :data-horizontal="horizontal || null"
+              :class="horizontal ? 'flex-row items-start' : 'flex-col items-stretch'"
+            >
+              <CalendarPeriod v-if="period" />
+              <CalendarGrid v-else />
+
+              <div
+                v-if="!period"
+                class="flex flex-col gap-[var(--spacing-sm)]"
+                :class="
+                  horizontal
+                    ? 'min-w-[var(--container-3xs)] border-l border-[var(--border-default)] pl-[var(--spacing-md)]'
+                    : 'border-t border-[var(--border-default)] pt-[var(--spacing-sm)]'
+                "
+              >
+                <CalendarFields />
+
+                <span
+                  v-if="$slots['footer']"
+                  class="inline-flex items-center gap-[var(--spacing-xs)]"
+                >
+                  <slot name="footer" />
+                </span>
+
+                <Button
+                  v-if="showApply"
+                  label="Apply Range"
+                  kind="outlined"
+                  :size="size"
+                  :disabled="disabled"
+                  icon="pi pi-arrow-down-left"
+                  class="w-full justify-center"
+                  :data-testid="`${testId}__apply`"
+                  @click="applySelection"
+                />
+
+                <CalendarTimezone v-if="showTimezone" />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
