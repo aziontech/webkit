@@ -57,7 +57,6 @@
     "**/*.css"
   ],
   "exports": {
-    "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
     "./overline": "./src/components/overline/overline.vue",
     "./button": "./src/components/actions/button/button.vue",
     "./button-highlight": "./src/components/actions/button-highlight/button-highlight.vue",
@@ -196,6 +195,15 @@
     "./panel-content": "./src/components/overlay/panel/panel-content.vue",
     "./panel-footer": "./src/components/overlay/panel/panel-footer.vue",
     "./panel-header": "./src/components/overlay/panel/panel-header.vue",
+    "./popover": "./src/components/overlay/popover/index.ts",
+    "./popover-root": "./src/components/overlay/popover/popover.vue",
+    "./popover-trigger": "./src/components/overlay/popover/popover-trigger/popover-trigger.vue",
+    "./popover-content": "./src/components/overlay/popover/popover-content/popover-content.vue",
+    "./popover-header": "./src/components/overlay/popover/popover-header/popover-header.vue",
+    "./popover-title": "./src/components/overlay/popover/popover-title/popover-title.vue",
+    "./popover-description": "./src/components/overlay/popover/popover-description/popover-description.vue",
+    "./popover-close": "./src/components/overlay/popover/popover-close/popover-close.vue",
+    "./popover-footer": "./src/components/overlay/popover/popover-footer/popover-footer.vue",
     "./dropdown-menu": "./src/components/overlay/dropdown-menu/dropdown-menu.vue",
     "./dropdown-menu-trigger": "./src/components/overlay/dropdown-menu/dropdown-menu-trigger.vue",
     "./dropdown-menu-portal": "./src/components/overlay/dropdown-menu/dropdown-menu-portal.vue",
