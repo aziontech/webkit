@@ -665,9 +665,10 @@
               >
                 <Checkbox
                   binary
-                  :model-value="table.getIsAllRowsSelected()"
+                  :model-value="table.getIsAllPageRowsSelected()"
+                  :indeterminate="table.getIsSomePageRowsSelected()"
                   aria-label="Select all rows"
-                  @update:model-value="(v) => table.toggleAllRowsSelected(!!v)"
+                  @update:model-value="(v) => table.toggleAllPageRowsSelected(!!v)"
                 />
               </TableHeadCell>
               <TableHeadCell
