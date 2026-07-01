@@ -89,6 +89,27 @@ export const textsData = {
     lineHeight: leading.normal,
     fontWeight: fontWeight.medium
   },
+  'text-label-code-sm': {
+    fontFamily: fontFamily.code,
+    fontSize: '0.75rem',
+    lineHeight: '1',
+    fontWeight: '400',
+    letterSpacing: '0'
+  },
+  'text-label-code-md': {
+    fontFamily: fontFamily.code,
+    fontSize: '0.875rem',
+    lineHeight: '1',
+    fontWeight: '400',
+    letterSpacing: '0'
+  },
+  'text-label-code-lg': {
+    fontFamily: fontFamily.code,
+    fontSize: '1rem',
+    lineHeight: '1',
+    fontWeight: '400',
+    letterSpacing: '0'
+  },
   'text-body-lg': {
     fontSize: { _: fontSize.base, md: fontSize.lg },
     lineHeight: leading.normal

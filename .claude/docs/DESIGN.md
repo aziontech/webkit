@@ -44,6 +44,7 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | `text-heading-2xl` … `text-heading-sm`                             | Headings                                 |
 | `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
+| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers) |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in) |
 | `text-button-lg` / `text-button-md`                                | Button labels                            |
 | `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline) |
@@ -235,10 +236,11 @@ bg-[var(--bg-surface)] text-[var(--text-default)] text-[var(--text-muted)] ring-
 | Role          | Examples                                                                                                  |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
 | Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                  |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
 | Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                       |
 | Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                              |
-| Feedback      | `--success`, `--warning`, `--danger`, `--info` (+ `-border`, `-contrast` where defined)                   |
+| Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
+| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation` |
 
 ### Do not
 

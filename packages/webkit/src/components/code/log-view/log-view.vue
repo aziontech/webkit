@@ -1,0 +1,166 @@
+<script setup lang="ts">
+  import { computed, provide, useAttrs } from 'vue'
+
+  import { cn } from '../../../utils/cn'
+  import { copyTextToClipboard } from './composables/copy-text-to-clipboard'
+  import { formatLogLineText } from './composables/format-log-line-text'
+  import type { LogViewLine } from './injection-key'
+  import { LogViewInjectionKey } from './injection-key'
+
+  export type { LogViewLine, LogViewLineType } from './injection-key'
+
+  defineOptions({
+    name: 'LogView',
+    inheritAttrs: false
+  })
+
+  interface Props {
+    /** Log entries (filtered in LogViewContent by search and warnings-only). */
+    lines?: LogViewLine[]
+    /** Placeholder for the default header search field. */
+    searchPlaceholder?: string
+    /** Shows the copy-to-clipboard control in LogViewHeader. */
+    showCopy?: boolean
+    /** Disables toolbar controls in LogViewHeader. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    lines: () => [],
+    searchPlaceholder: 'Find in Logs',
+    showCopy: true,
+    disabled: false
+  })
+
+  /** Bound to LogViewHeader search; filters LogViewContent when set. */
+  const search = defineModel<string>('search', { default: '' })
+  /** When true, shows only lines whose `type` is `warning`. */
+  const warningsOnly = defineModel<boolean>('warningsOnly', { default: false })
+
+  const emit = defineEmits<{
+    copy: [value: string]
+  }>()
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const passthroughAttrs = computed(() => {
+    const rest = { ...attrs }
+
+    delete rest.class
+    delete rest['data-testid']
+
+    return rest
+  })
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-log-view')
+
+  const warningCount = computed(() => props.lines.filter((line) => line.type === 'warning').length)
+
+  const filteredLines = computed(() => {
+    const query = search.value.trim().toLowerCase()
+    let result = props.lines
+
+    if (warningsOnly.value) {
+      result = result.filter((line) => line.type === 'warning')
+    }
+
+    if (query) {
+      result = result.filter((line) => {
+        const haystack = [
+          line.time,
+          line.message,
+          line.folderType,
+          line.size,
+          line.gzipSize,
+          line.suffix
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+
+        return haystack.includes(query)
+      })
+    }
+
+    return result
+  })
+
+  const lineCountLabel = computed(() => `${filteredLines.value.length} lines`)
+
+  const warningTagLabel = computed(() => {
+    const count = warningCount.value
+
+    if (count === 1) return '1 Warning'
+    if (count > 1) return `${count} Warnings`
+
+    return 'Warnings'
+  })
+
+  const copyText = computed(() =>
+    filteredLines.value.map((line) => formatLogLineText(line)).join('\n')
+  )
+
+  const canCopy = computed(() => props.showCopy && !props.disabled && copyText.value.length > 0)
+
+  const setSearch = (value: string) => {
+    search.value = value
+  }
+
+  const toggleWarningsOnly = () => {
+    if (props.disabled) return
+
+    warningsOnly.value = !warningsOnly.value
+  }
+
+  const copyLogs = async (): Promise<boolean> => {
+    if (!canCopy.value) {
+      return false
+    }
+
+    const text = copyText.value
+    const copied = await copyTextToClipboard(text)
+
+    emit('copy', text)
+
+    return copied
+  }
+
+  provide(LogViewInjectionKey, {
+    testId: testId.value,
+    lines: computed(() => props.lines),
+    filteredLines,
+    search: computed(() => search.value),
+    warningsOnly: computed(() => warningsOnly.value),
+    disabled: computed(() => props.disabled),
+    showCopy: computed(() => props.showCopy),
+    searchPlaceholder: computed(() => props.searchPlaceholder),
+    warningCount,
+    lineCountLabel,
+    warningTagLabel,
+    canCopy,
+    setSearch,
+    toggleWarningsOnly,
+    copyLogs
+  })
+</script>
+
+<template>
+  <div
+    v-bind="passthroughAttrs"
+    :data-testid="testId"
+    :data-disabled="disabled || null"
+    :data-warnings-only="warningsOnly || null"
+    :class="
+      cn(
+        'flex min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-muted)]',
+        attrs.class
+      )
+    "
+  >
+    <slot />
+  </div>
+</template>

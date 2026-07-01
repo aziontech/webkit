@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
   node_id: 479:886
-checksum: abadc01cd4dc1c015b0b91cd69604d389744f3f06fcd52eb00dc2e7fbad08570
+checksum: 1c3b7ce48e64152edaa8661b91bbc11a6c04e7b6d4e0d8ee44d5f2918f8b7d90
 created: 2026-06-25
-last_updated: 2026-06-26
+last_updated: 2026-06-30
 ---
 
 # Divider — Component Spec
@@ -63,9 +63,9 @@ _none_
 | Region | Token (DESIGN.md) |
 |---|---|
 | line | `var(--border-default)` |
-| typography (label) | `.text-label-sm` |
+| typography (label) | `.text-overline-sm` |
 | text (label) | `var(--text-muted)` |
-| spacing (gap around label) | `var(--spacing-sm)` |
+| spacing (gap around label) | `var(--spacing-xs)` |
 
 ## Theme gaps
 
