@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 96c39bdcfa0b0471abfd4a03aea5796f5e25d2f465a38dae1142a3236c60f3b2
+checksum: d6468c8f3aadfd54ee13d5ca4a436d1eb9c24a419b85cf539c2dd8a587907889
 created: 2026-05-28
-last_updated: 2026-06-30
+last_updated: 2026-07-01
 ---
 
 
@@ -66,7 +66,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | `value` | `string` | `undefined` | no | Controlled active tab value (`v-model:value`). |
 | `defaultValue` | `string` | `undefined` | no | Initial active tab when uncontrolled. |
 | `showLineNumbers` | `boolean` | `true` | no | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
-| `copyAriaLabel` | `string` | `'Copy code'` | no | Accessible name for the copy IconButton. |
+| `copyAriaLabel` | `string` | `'Copy code'` | no | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
 | `animateLines` | `boolean` | `false` | no | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart. |
 
 ## Type shapes
@@ -121,7 +121,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
 
-Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, 320 px height). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row. The copy IconButton is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
+Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, 320 px height). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
 
 ## Motion & Animations
 
@@ -171,12 +171,12 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on IconButton; when focus is in the code scroll region, `ArrowUp`/`ArrowDown`/`PageUp`/`PageDown`/`Home`/`End` scroll vertically and `ArrowLeft`/`ArrowRight` scroll horizontally via ScrollArea.
-- ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses IconButton `ariaLabel`; diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
+- Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on the CopyButton (native `<button>`); when focus is in the code scroll region, `ArrowUp`/`ArrowDown`/`PageUp`/`PageDown`/`Home`/`End` scroll vertically and `ArrowLeft`/`ArrowRight` scroll horizontally via ScrollArea.
+- ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses CopyButton `ariaLabel` (forwarded to its inner IconButton); diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
 - Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark.
 - `motion-reduce:transition-none motion-reduce:transform-none` on indicator and panel motion.
 - When `animateLines` is enabled, line motion is disabled under `prefers-reduced-motion` (lines render fully visible immediately).
-- Copy control uses IconButton `size="small"` (32×32 px) per Figma.
+- Copy control uses CopyButton `size="small"` (28×28 px).
 
 ## Stories (Storybook)
 

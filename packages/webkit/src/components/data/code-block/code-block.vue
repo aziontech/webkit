@@ -11,7 +11,7 @@
   } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import {
     codeBlockEnterOffsetClasses,
@@ -63,7 +63,7 @@
     defaultValue?: string
     /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
     showLineNumbers?: boolean
-    /** Accessible name for the copy IconButton. */
+    /** Accessible name for the copy control (forwarded to CopyButton's aria-label). */
     copyAriaLabel?: string
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
@@ -96,7 +96,6 @@
   const slideDirection = ref<CodeBlockSlideDirection>(null)
   const panelMotionReady = ref(true)
   const linesMotionReady = ref(!props.animateLines)
-  const copyFeedback = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-block')
 
@@ -375,23 +374,8 @@
     })
   }
 
-  const copyActiveCode = async () => {
-    const code = activeTab.value?.code ?? ''
-
-    if (!code) {
-      return
-    }
-
-    try {
-      await globalThis.navigator.clipboard.writeText(code)
-      copyFeedback.value = true
-      emit('copy', code)
-      globalThis.setTimeout(() => {
-        copyFeedback.value = false
-      }, 1200)
-    } catch {
-      /* clipboard may be unavailable */
-    }
+  const handleCopy = (code: string) => {
+    emit('copy', code)
   }
 
   let resizeObserver: ResizeObserver | null = null
@@ -545,17 +529,16 @@
       :data-testid="`${testId}__content`"
     >
       <div
-        class="pointer-events-none absolute right-[var(--spacing-sm)] top-[var(--spacing-sm)] z-[2]"
+        class="absolute right-[var(--spacing-sm)] top-[var(--spacing-sm)] z-[2]"
         :data-testid="`${testId}__copy-anchor`"
       >
-        <IconButton
-          :icon="copyFeedback ? 'pi pi-check' : 'pi pi-copy'"
+        <CopyButton
+          :value="activeTab?.code ?? ''"
           :ariaLabel="copyAriaLabel"
           kind="outlined"
           size="small"
-          class="pointer-events-auto"
           :data-testid="`${testId}__copy`"
-          @click="copyActiveCode"
+          @copy="handleCopy"
         />
       </div>
 
