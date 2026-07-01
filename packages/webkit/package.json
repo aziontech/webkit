@@ -57,7 +57,6 @@
     "**/*.css"
   ],
   "exports": {
-    "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
     "./overline": "./src/components/overline/overline.vue",
     "./button": "./src/components/actions/button/button.vue",
     "./button-highlight": "./src/components/actions/button-highlight/button-highlight.vue",
