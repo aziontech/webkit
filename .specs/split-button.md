@@ -7,16 +7,16 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 6b61f92b038653ea137a7415a14a338a88cf1d41ed4a7bc72a247d94d881e7d1
+checksum: 4162365b1f49b5ebfe633845da1eefc8989afdaccf753ec755e11a184e18b4d5
 created: 2026-06-30
-last_updated: 2026-06-30
+last_updated: 2026-07-01
 ---
 
 # Split Button — Component Spec
 
 ## Purpose
 
-A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`.
+A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern while leaving the event contract untouched. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`.
 
 ## Usage
 
@@ -52,6 +52,7 @@ const items = [
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | no | Disables both segments and prevents the menu from opening. |
 | `loading` | `boolean` | `false` | no | Shows a spinner on the primary button and disables its activation. |
+| `updateLabelOnSelect` | `boolean` | `false` | no | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the `click`/`item-click` contract is unchanged, so the consumer decides what each segment does. |
 
 `SplitButtonItem` is the menu-action shape: `{ label: string; value?: string; icon?: string; disabled?: boolean }`. When `value` is omitted, `label` identifies the action.
 
@@ -130,6 +131,7 @@ Canonical layout — matches `apps/storybook/src/stories/components/actions/butt
 - Sizes — composite story rendering every `size` value side-by-side.
 - Loading — `loading` prop demonstrated.
 - Disabled — `disabled` prop demonstrated.
+- UpdateLabelOnSelect — `updateLabelOnSelect` prop demonstrated: selecting a menu action swaps the primary button's label/icon and marks the row selected. Justified as a distinct interactive behavior not covered by the default story.
 
 ## Constraints — DO NOT
 

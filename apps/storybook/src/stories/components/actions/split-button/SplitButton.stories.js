@@ -95,6 +95,12 @@ const meta = {
       description: 'Shows a spinner on the primary button and disables its activation.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
+    updateLabelOnSelect: {
+      control: 'boolean',
+      description:
+        "When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu.",
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
     onClick: {
       action: 'click',
       description: 'Fired by the primary command button on activation.',
@@ -113,7 +119,8 @@ const meta = {
     kind: 'primary',
     size: 'large',
     disabled: false,
-    loading: false
+    loading: false,
+    updateLabelOnSelect: false
   }
 }
 
@@ -227,6 +234,28 @@ export const Disabled = {
     docs: {
       description: { story: 'Disabled state: both segments are inert and the menu cannot open.' },
       source: { code: toSfc(SNIPPET_IMPORTS, DISABLED_MARKUP) }
+    }
+  }
+}
+
+const UPDATE_LABEL_MARKUP = `<SplitButton
+  label="Save"
+  icon="pi pi-check"
+  :model="items"
+  update-label-on-select
+  @item-click="onAction"
+/>`
+
+export const UpdateLabelOnSelect = {
+  args: { updateLabelOnSelect: true },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Opt-in: choosing a menu action swaps the primary button's label and icon to that action and marks the row selected. Open the menu and pick an action to see the primary segment update."
+      },
+      source: { code: toSfc(SNIPPET_IMPORTS, UPDATE_LABEL_MARKUP) }
     }
   }
 }

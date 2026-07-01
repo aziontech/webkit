@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
   import Dropdown from '../../navigation/dropdown'
   import Spinner from '../../utils/spinner/spinner.vue'
@@ -38,6 +38,8 @@
     disabled?: boolean
     /** Shows a spinner on the primary button and disables its activation. */
     loading?: boolean
+    /** When true, selecting a menu action updates the primary button label and icon to mirror that action and marks it as selected in the menu. */
+    updateLabelOnSelect?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -47,7 +49,8 @@
     kind: 'primary',
     size: 'large',
     disabled: false,
-    loading: false
+    loading: false,
+    updateLabelOnSelect: false
   })
 
   const emit = defineEmits<{
@@ -65,13 +68,31 @@
 
   const spinnerSizeClass = computed(() => (props.size === 'large' ? 'size-4' : 'size-3'))
 
-  const toggleAriaLabel = computed(() =>
-    props.label ? `${props.label} — more actions` : 'More actions'
-  )
-
   function optionValue(item: SplitButtonItem): string {
     return item.value ?? item.label
   }
+
+  /** Value of the menu action mirrored by the primary segment; only set while updateLabelOnSelect is on. */
+  const selectedValue = ref<string | null>(null)
+
+  const selectedItem = computed(() => {
+    if (!props.updateLabelOnSelect || selectedValue.value === null) return null
+    return props.model.find((entry) => optionValue(entry) === selectedValue.value) ?? null
+  })
+
+  const displayLabel = computed(() => selectedItem.value?.label ?? props.label)
+
+  const displayIcon = computed(() =>
+    selectedItem.value ? (selectedItem.value.icon ?? '') : props.icon
+  )
+
+  function isItemSelected(item: SplitButtonItem): boolean {
+    return props.updateLabelOnSelect && optionValue(item) === selectedValue.value
+  }
+
+  const toggleAriaLabel = computed(() =>
+    displayLabel.value ? `${displayLabel.value} — more actions` : 'More actions'
+  )
 
   function onPrimaryClick(event: MouseEvent) {
     if (isInactive.value) {
@@ -86,6 +107,9 @@
     const item = props.model.find((entry) => optionValue(entry) === String(payload.value))
 
     if (item) {
+      if (props.updateLabelOnSelect) {
+        selectedValue.value = optionValue(item)
+      }
       emit('item-click', item)
     }
   }
@@ -127,12 +151,12 @@
               :data-testid="`${testId}__loading`"
             />
             <i
-              v-else-if="icon"
-              :class="icon"
+              v-else-if="displayIcon"
+              :class="displayIcon"
               class="shrink-0 text-[length:inherit] leading-none"
               aria-hidden="true"
             />
-            <span v-if="label">{{ label }}</span>
+            <span v-if="displayLabel">{{ displayLabel }}</span>
           </span>
         </button>
 
@@ -157,6 +181,7 @@
           :value="optionValue(item)"
           :label="item.label"
           :disabled="item.disabled"
+          :selected="isItemSelected(item)"
           :data-testid="`${testId}__item-${index}`"
         >
           <template
