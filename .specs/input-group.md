@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: e848fa74bfc0ed378b64c4e9d59672d2a9c6d2b800bafe95fb2b7ea0f74308f8
+checksum: 793c77a1aead7abe65b9521b3c8eec6df432f2ffe5a3ee2fd98d57f12eb0aec8
 created: 2026-07-01
 last_updated: 2026-07-01
 ---
@@ -110,16 +110,20 @@ Sub-component (`InputGroup.Addon`) has no props.
 
 ## States
 
-- Visual states on root: `default`, `invalid`, `invalid + required`
-- `data-invalid` mirrors the `invalid` prop
-- `data-required` mirrors the `required` prop
-- `aria-invalid="true"` when `invalid`
-- `aria-required="true"` when `required`
-- Focus and hover states belong to the inner input primitive (not the group), which retains its own focus ring inside the middle slot
+- Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`
+- `data-invalid` mirrors the `invalid` prop; sets `aria-invalid="true"`
+- `data-required` mirrors the `required` prop; sets `aria-required="true"`
+- Border semantics mirror `input-text` (independent, not compound):
+  - `data-invalid` → `var(--danger-border)`
+  - `data-required` → `var(--warning-border)`
+- Hover (only when not focus-within and neither invalid nor required): `border-[var(--border-strong)]`
+- Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset
 
 ## Motion & Animations
 
-_none_
+| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
+|---|---|---|---|
+| hover / focus-within / invalid / required state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -127,11 +131,14 @@ _none_
 |---|---|
 | root surface | `var(--bg-surface)` |
 | root border (default) | `var(--border-default)` |
-| root border (invalid, not required) | `var(--danger-border)` |
-| root border (invalid + required) | `var(--warning-border)` |
+| root border (hover) | `var(--border-strong)` |
+| root border (invalid) | `var(--danger-border)` |
+| root border (required) | `var(--warning-border)` |
 | root border width | `border` (Tailwind utility) |
 | root shape | `var(--shape-elements)` |
 | root height | `h-8` (Tailwind utility) |
+| focus ring | `var(--ring-color)` |
+| focus ring offset | `var(--bg-canvas)` |
 | addon surface | `var(--bg-canvas)` |
 | addon text | `var(--text-muted)` |
 | addon padding.x | `var(--spacing-md)` |
@@ -146,12 +153,12 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: not on the group root — the wrapped input primitive owns its own `focus-visible:ring-*`. The group does not steal focus, does not add `tabindex`.
-- Keyboard map: `Tab` moves through the addon interactive content (if any) and the middle input, in DOM order. No custom keybindings on the group.
+- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-[var(--ring-color)] ring-offset-2 ring-offset-[var(--bg-canvas)]`) whenever any descendant (addon control or middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator.
+- Keyboard map: `Tab` moves through the addon interactive content (if any) and the middle input in DOM order. No custom keybindings on the group.
 - ARIA: root uses `role="group"`; `aria-invalid` and `aria-required` reflect the props. The inner input keeps its own `aria-*` — the group does not duplicate.
 - Contrast ≥4.5:1 for addon text against `var(--bg-canvas)`; ≥3:1 for the border in every state.
-- No motion introduced by the group — `motion-reduce` is a non-concern here.
-- Touch target ≥32×32 px for interactive addon content (matches root height `var(--h-8)`).
+- Motion: color transitions on state changes are `duration-150 ease-out` and pair with `motion-reduce:transition-none`.
+- Touch target ≥32×32 px for interactive addon content (matches root height `h-8`).
 
 ## Stories (Storybook)
 
