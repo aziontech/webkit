@@ -87,6 +87,7 @@
     "./log-view-content": "./src/components/code/log-view/log-view-content.vue",
     "./log-view-footer": "./src/components/code/log-view/log-view-footer.vue",
     "./log-view-header": "./src/components/code/log-view/log-view-header.vue",
+    "./code-block": "./src/components/data/code-block/code-block.vue",
     "./table": "./src/components/data/table/index.ts",
     "./table-root": "./src/components/data/table/table.vue",
     "./table-header": "./src/components/data/table/table-header/table-header.vue",

@@ -2,11 +2,11 @@
 name: copy-button
 category: actions
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: f3173c1d9c26f7a94e7c053f1a5fca826724244384859ff48fe263badbf6b0f0
 created: 2026-06-02
-last_updated: 2026-06-02
+last_updated: 2026-06-30
 ---
 # Copy Button — Component Spec
 
