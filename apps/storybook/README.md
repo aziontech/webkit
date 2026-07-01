@@ -130,7 +130,7 @@ The Storybook sidebar is organized into **Foundations**, **Components** (by cate
 
 **Data** — DataTable
 
-**Feedback** — Message, Skeleton, Status Indicator
+**Feedback** — EmptyState, Message, Skeleton, Status Indicator
 
 **Inputs** — Box Grid Selection, Checkbox, Dropdown, Field Checkbox, Field Checkbox Block, Field Radio, Field Radio Block, Field Switch, FieldSwitchBlock, FieldTextarea, Input Switch, Input Text, Label, Radio Button, Select, Textarea
 
@@ -141,8 +141,6 @@ The Storybook sidebar is organized into **Foundations**, **Components** (by cate
 **Overlay** — Dialog, Drawer, DropdownMenu, Tooltip
 
 **Azion** — MoveToTheEdge, Technologies
-
-Plus the standalone `EmptyResultsBlock` story.
 
 ### Templates
 
