@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 793c77a1aead7abe65b9521b3c8eec6df432f2ffe5a3ee2fd98d57f12eb0aec8
+checksum: ee0699730149ef04727ebf10b4c6bd8ef6d93f157a3fab533524a0c741e3d873
 created: 2026-07-01
 last_updated: 2026-07-01
 ---
@@ -18,7 +18,7 @@ last_updated: 2026-07-01
 
 Container that flanks an input primitive with optional addons on either side (icon, static text, button), joined by vertical dividers, and reflects validation state on its border. Composed as `<InputGroup>` (root) plus `<InputGroup.Addon>` sub-components on the left, right, or both — the middle input goes in the root's default slot. Distinct from `field-*` components: `InputGroup` styles the input's *edges*; `field-*` wraps label + helper text.
 
-The root **provides** an injection key (`InputGroupContextKey`) that future revisions of `input-text` (and other input primitives) will `inject` to render borderless inside the group. Until that lands, the middle slot expects a raw `<input>` element styled with `w-full bg-transparent border-0 outline-none focus:ring-0 h-full px-[var(--spacing-md)] text-[color:var(--text-default)]` — this is the canonical middle-slot markup shown in Usage and stories.
+The root **provides** an injection key (`InputGroupContextKey`) that future revisions of `input-text` (and other input primitives) will `inject` to render borderless inside the group. Until that lands, the middle slot expects a raw `<input>` element styled with `w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]` — matching `input-text`'s inner font size (12px) and placeholder color. This is the canonical middle-slot markup shown in Usage and stories.
 
 ## Usage
 
@@ -35,7 +35,7 @@ const value = ref('')
     <input
       v-model="value"
       placeholder="domain"
-      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-[color:var(--text-default)]"
+      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
     />
     <InputGroup.Addon>.com</InputGroup.Addon>
   </InputGroup>
@@ -58,7 +58,7 @@ const value = ref('')
     <input
       v-model="value"
       placeholder="domain"
-      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-[color:var(--text-default)]"
+      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
     />
   </InputGroup>
 </template>

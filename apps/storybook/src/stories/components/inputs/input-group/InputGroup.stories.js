@@ -5,7 +5,7 @@ import { toSfc } from '../../../_shared/story-source'
 const IMPORT = "import InputGroup from '@aziontech/webkit/input-group'"
 
 const MIDDLE_INPUT =
-  '<input placeholder="domain" class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-[color:var(--text-default)]" />'
+  '<input placeholder="domain" class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]" />'
 
 /** @type {import('@storybook/vue3').Meta<typeof InputGroup>} */
 const meta = {
