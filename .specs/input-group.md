@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: c659dbf1908636653f07361fde5af863079c8f03e0dba0f81b707cdb26bff9bc
+checksum: eddb1e3029c0f6c5f8e9b6adcc19476a812f4f0f392fb6dc8220e1b9c5eadc2c
 created: 2026-07-01
 last_updated: 2026-07-01
 ---
@@ -18,7 +18,7 @@ last_updated: 2026-07-01
 
 Container that flanks an input primitive with optional addons on either side (icon, static text, button), joined by vertical dividers, and reflects validation state on its border. Composed as `<InputGroup>` (root) plus `<InputGroup.Addon>` sub-components on the left, right, or both — the middle input goes in the root's default slot. Distinct from `field-*` components: `InputGroup` styles the input's *edges*; `field-*` wraps label + helper text.
 
-The root **provides** an injection key (`InputGroupContextKey`) that future revisions of `input-text` (and other input primitives) will `inject` to render borderless inside the group. Until that lands, the middle slot expects a raw `<input>` element styled to visually match the addons — `bg-[var(--bg-canvas)]`, `text-label-sm`, `text-[var(--text-muted)]`, `placeholder:text-[var(--text-muted)]` — so left addon, middle input, and right addon read as one continuous dark surface with a single border and vertical seam. This is the canonical middle-slot markup shown in Usage and stories.
+The root **provides** an injection key (`InputGroupContextKey`) that future revisions of `input-text` (and other input primitives) will `inject` to render borderless inside the group. Until that lands, the middle slot expects a raw `<input>` element styled to inherit the root's surface — `bg-[var(--bg-surface)]`, `text-label-sm`, `text-[var(--text-default)]`, `placeholder:text-[var(--text-muted)]` — so the middle blends with the group's own background while the addons stand out as darker `--bg-canvas` islands on either side (matches the Figma layout). This is the canonical middle-slot markup shown in Usage and stories.
 
 ## Usage
 
@@ -35,7 +35,7 @@ const value = ref('')
     <input
       v-model="value"
       placeholder="domain"
-      class="w-full h-full bg-[var(--bg-canvas)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-muted)] placeholder:text-[var(--text-muted)]"
+      class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
     />
     <InputGroup.Addon>.com</InputGroup.Addon>
   </InputGroup>
@@ -58,7 +58,7 @@ const value = ref('')
     <input
       v-model="value"
       placeholder="domain"
-      class="w-full h-full bg-[var(--bg-canvas)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-muted)] placeholder:text-[var(--text-muted)]"
+      class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
     />
   </InputGroup>
 </template>
