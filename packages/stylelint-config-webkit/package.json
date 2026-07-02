@@ -1,0 +1,36 @@
+{
+  "name": "@aziontech/stylelint-config-webkit",
+  "version": "0.0.0",
+  "description": "Shareable Stylelint config that forbids hardcoded colors in CSS/SCSS and Vue <style> blocks, steering authors to @aziontech/theme design tokens (var(--*)). Styles-side complement to @aziontech/eslint-plugin-webkit.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aziontech/webkit.git",
+    "directory": "packages/stylelint-config-webkit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "stylelint": ">=15"
+  },
+  "keywords": [
+    "stylelint",
+    "stylelint-config",
+    "aziontech",
+    "webkit",
+    "design-system",
+    "design-tokens"
+  ]
+}
