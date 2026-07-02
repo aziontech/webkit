@@ -40,7 +40,7 @@
     :data-state="itemCtx.open.value ? 'open' : 'closed'"
     :data-size="ctx.size.value"
     :class="attrs.class"
-    class="animate-fade-in text-[var(--text-muted)] motion-reduce:animate-none data-[size=medium]:p-[var(--spacing-md)] data-[size=medium]:text-body-xs data-[size=large]:p-[var(--spacing-xl)] data-[size=large]:text-body-sm"
+    class="animate-fade-in text-[var(--text-muted)] motion-reduce:animate-none data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
   >
     <slot />
   </div>

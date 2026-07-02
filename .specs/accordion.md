@@ -3,13 +3,13 @@ name: accordion
 category: content
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: "480:876"
-checksum: 9622e5553d34740b37547c94095a517c81bec07e36ed29a7e03766753336a2f4
+checksum: 228238eb66de5c316dc42923e807a87ac550d3b351134e5ae64deb356827f793
 created: 2026-06-26
-last_updated: 2026-06-26
+last_updated: 2026-07-02
 ---
 
 # Accordion — Component Spec
@@ -70,7 +70,7 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
 - `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `pi pi-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
   - Props: `level?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{level}>` for correct document outline).
   - Slot: `default` — header title content.
-- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`.
+- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The container applies no padding — the slotted content owns its own spacing.
   - Slot: `default` — panel body content.
 
 Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/webkit/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):
@@ -155,7 +155,6 @@ Events below are emitted by the root `Accordion`.
 | item divider when closed | `var(--border-muted)` |
 | header padding-x | `var(--spacing-md)` |
 | header gap (arrow right / left) | `var(--spacing-sm)` / `var(--spacing-xs)` |
-| content padding (large / medium) | `var(--spacing-xl)` / `var(--spacing-md)` |
 | focus ring / ring offset | `var(--ring-color)` / `var(--bg-canvas)` |
 
 ## Theme gaps
