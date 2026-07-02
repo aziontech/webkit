@@ -1,29 +1,15 @@
 import Accordion from '@aziontech/webkit/accordion'
 
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Accordion from '@aziontech/webkit/accordion'"
+
 const components = {
   Accordion,
   AccordionItem: Accordion.Item,
   AccordionTrigger: Accordion.Trigger,
   AccordionContent: Accordion.Content
 }
-
-const ITEMS = [
-  {
-    value: 'overview',
-    title: 'What is Azion?',
-    body: 'Azion runs your code at the edge, close to users.'
-  },
-  {
-    value: 'pricing',
-    title: 'How does pricing work?',
-    body: 'Pay only for what you use, with no upfront cost.'
-  },
-  {
-    value: 'support',
-    title: 'Enterprise support',
-    body: 'Available on Business and Enterprise plans.'
-  }
-]
 
 /** @type {import('@storybook/vue3').Meta<typeof Accordion>} */
 const meta = {
@@ -48,48 +34,10 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tab-view` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import Accordion from '@aziontech/webkit/accordion'",
-          '</script>',
-          '',
-          '<template>',
-          '  <Accordion',
-          '    type="single"',
-          '    collapsible',
-          '    default-value="overview"',
-          '    size="medium"',
-          '    arrow-position="right"',
-          '  >',
-          '    <Accordion.Item value="overview">',
-          '      <Accordion.Trigger>What is Azion?</Accordion.Trigger>',
-          '      <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>',
-          '    </Accordion.Item>',
-          '    <Accordion.Item value="pricing">',
-          '      <Accordion.Trigger>How does pricing work?</Accordion.Trigger>',
-          '      <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>',
-          '    </Accordion.Item>',
-          '    <Accordion.Item value="support" disabled>',
-          '      <Accordion.Trigger>Enterprise support</Accordion.Trigger>',
-          '      <Accordion.Content>Available on Business and Enterprise plans.</Accordion.Content>',
-          '    </Accordion.Item>',
-          '  </Accordion>',
-          '</template>',
-          '```'
-        ].join('\n')
+        component:
+          'A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tab-view` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.'
       },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true
-      },
-      canvas: {
-        sourceState: 'shown'
-      }
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -126,7 +74,7 @@ const meta = {
     size: {
       control: 'select',
       options: ['medium', 'large'],
-      description: 'Size token; affects header height, padding, and typography.',
+      description: 'Size token; affects header height and typography.',
       table: {
         category: 'props',
         type: { summary: "'medium' | 'large'" },
@@ -169,11 +117,26 @@ const meta = {
 
 export default meta
 
+const DEFAULT_MARKUP = `<Accordion type="single" collapsible default-value="overview" size="medium" arrow-position="right" class="w-full max-w-[40rem]">
+  <Accordion.Item value="overview">
+    <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+    <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="pricing">
+    <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+    <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="support">
+    <Accordion.Trigger>Enterprise support</Accordion.Trigger>
+    <Accordion.Content>Available on Business and Enterprise plans.</Accordion.Content>
+  </Accordion.Item>
+</Accordion>`
+
 const Template = (args) => ({
   components,
   setup() {
     const { onUpdateValue, onValueChange, ...props } = args
-    return { props, items: ITEMS, onUpdateValue, onValueChange }
+    return { props, onUpdateValue, onValueChange }
   },
   template: `
     <Accordion
@@ -182,9 +145,17 @@ const Template = (args) => ({
       @update:value="onUpdateValue"
       @value-change="onValueChange"
     >
-      <AccordionItem v-for="item in items" :key="item.value" :value="item.value">
-        <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-        <AccordionContent>{{ item.body }}</AccordionContent>
+      <AccordionItem value="overview">
+        <AccordionTrigger>What is Azion?</AccordionTrigger>
+        <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="pricing">
+        <AccordionTrigger>How does pricing work?</AccordionTrigger>
+        <AccordionContent>Pay only for what you use, with no upfront cost.</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="support">
+        <AccordionTrigger>Enterprise support</AccordionTrigger>
+        <AccordionContent>Available on Business and Enterprise plans.</AccordionContent>
       </AccordionItem>
     </Accordion>
   `
@@ -198,30 +169,59 @@ export const Default = {
     docs: {
       description: {
         story: 'Single-mode accordion with one item open via `default-value`.'
-      }
+      },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
 }
+
+const SIZES_MARKUP = `<div class="flex flex-col gap-8 w-full max-w-[40rem]">
+  <Accordion type="single" collapsible default-value="overview" size="medium">
+    <Accordion.Item value="overview">
+      <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+      <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item value="pricing">
+      <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+      <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>
+    </Accordion.Item>
+  </Accordion>
+  <Accordion type="single" collapsible default-value="overview" size="large">
+    <Accordion.Item value="overview">
+      <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+      <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item value="pricing">
+      <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+      <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>
+    </Accordion.Item>
+  </Accordion>
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Accordion>} */
 export const Sizes = {
   render: () => ({
     components,
-    setup() {
-      return { items: ITEMS }
-    },
     template: `
       <div class="flex flex-col gap-8 w-full max-w-[40rem]">
         <Accordion type="single" collapsible default-value="overview" size="medium">
-          <AccordionItem v-for="item in items" :key="item.value" :value="item.value">
-            <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-            <AccordionContent>{{ item.body }}</AccordionContent>
+          <AccordionItem value="overview">
+            <AccordionTrigger>What is Azion?</AccordionTrigger>
+            <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="pricing">
+            <AccordionTrigger>How does pricing work?</AccordionTrigger>
+            <AccordionContent>Pay only for what you use, with no upfront cost.</AccordionContent>
           </AccordionItem>
         </Accordion>
         <Accordion type="single" collapsible default-value="overview" size="large">
-          <AccordionItem v-for="item in items" :key="item.value" :value="item.value">
-            <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-            <AccordionContent>{{ item.body }}</AccordionContent>
+          <AccordionItem value="overview">
+            <AccordionTrigger>What is Azion?</AccordionTrigger>
+            <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="pricing">
+            <AccordionTrigger>How does pricing work?</AccordionTrigger>
+            <AccordionContent>Pay only for what you use, with no upfront cost.</AccordionContent>
           </AccordionItem>
         </Accordion>
       </div>
@@ -229,30 +229,60 @@ export const Sizes = {
   }),
   parameters: {
     docs: {
-      description: { story: '`medium` and `large` sizes side by side.' }
+      description: { story: '`medium` and `large` sizes side by side.' },
+      controls: { disable: true },
+      source: { code: toSfc(IMPORT, SIZES_MARKUP) }
     }
   }
 }
+
+const ARROW_MARKUP = `<div class="flex flex-col gap-8 w-full max-w-[40rem]">
+  <Accordion type="single" collapsible default-value="overview" arrow-position="right">
+    <Accordion.Item value="overview">
+      <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+      <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item value="pricing">
+      <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+      <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>
+    </Accordion.Item>
+  </Accordion>
+  <Accordion type="single" collapsible default-value="overview" arrow-position="left">
+    <Accordion.Item value="overview">
+      <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+      <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item value="pricing">
+      <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+      <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>
+    </Accordion.Item>
+  </Accordion>
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Accordion>} */
 export const ArrowPosition = {
   render: () => ({
     components,
-    setup() {
-      return { items: ITEMS }
-    },
     template: `
       <div class="flex flex-col gap-8 w-full max-w-[40rem]">
         <Accordion type="single" collapsible default-value="overview" arrow-position="right">
-          <AccordionItem v-for="item in items" :key="item.value" :value="item.value">
-            <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-            <AccordionContent>{{ item.body }}</AccordionContent>
+          <AccordionItem value="overview">
+            <AccordionTrigger>What is Azion?</AccordionTrigger>
+            <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="pricing">
+            <AccordionTrigger>How does pricing work?</AccordionTrigger>
+            <AccordionContent>Pay only for what you use, with no upfront cost.</AccordionContent>
           </AccordionItem>
         </Accordion>
         <Accordion type="single" collapsible default-value="overview" arrow-position="left">
-          <AccordionItem v-for="item in items" :key="item.value" :value="item.value">
-            <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-            <AccordionContent>{{ item.body }}</AccordionContent>
+          <AccordionItem value="overview">
+            <AccordionTrigger>What is Azion?</AccordionTrigger>
+            <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="pricing">
+            <AccordionTrigger>How does pricing work?</AccordionTrigger>
+            <AccordionContent>Pay only for what you use, with no upfront cost.</AccordionContent>
           </AccordionItem>
         </Accordion>
       </div>
@@ -260,51 +290,95 @@ export const ArrowPosition = {
   }),
   parameters: {
     docs: {
-      description: { story: '`right` and `left` chevron placement side by side.' }
+      description: { story: '`right` and `left` chevron placement side by side.' },
+      controls: { disable: true },
+      source: { code: toSfc(IMPORT, ARROW_MARKUP) }
     }
   }
 }
+
+const DISABLED_MARKUP = `<Accordion type="single" collapsible default-value="overview" class="w-full max-w-[40rem]">
+  <Accordion.Item value="overview">
+    <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+    <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="pricing" disabled>
+    <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+    <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="support">
+    <Accordion.Trigger>Enterprise support</Accordion.Trigger>
+    <Accordion.Content>Available on Business and Enterprise plans.</Accordion.Content>
+  </Accordion.Item>
+</Accordion>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Accordion>} */
 export const Disabled = {
   render: () => ({
     components,
-    setup() {
-      return { items: ITEMS }
-    },
     template: `
       <Accordion type="single" collapsible default-value="overview" class="w-full max-w-[40rem]">
-        <AccordionItem
-          v-for="item in items"
-          :key="item.value"
-          :value="item.value"
-          :disabled="item.value === 'pricing'"
-        >
-          <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-          <AccordionContent>{{ item.body }}</AccordionContent>
+        <AccordionItem value="overview">
+          <AccordionTrigger>What is Azion?</AccordionTrigger>
+          <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="pricing" disabled>
+          <AccordionTrigger>How does pricing work?</AccordionTrigger>
+          <AccordionContent>Pay only for what you use, with no upfront cost.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="support">
+          <AccordionTrigger>Enterprise support</AccordionTrigger>
+          <AccordionContent>Available on Business and Enterprise plans.</AccordionContent>
         </AccordionItem>
       </Accordion>
     `
   }),
   parameters: {
     docs: {
-      description: { story: 'The middle item carries the per-item `disabled` prop and cannot toggle.' }
+      description: {
+        story: 'The middle item carries the per-item `disabled` prop and cannot toggle.'
+      },
+      controls: { disable: true },
+      source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
     }
   }
 }
+
+const MULTIPLE_MARKUP = `<Accordion type="multiple" :default-value="['overview', 'pricing']" class="w-full max-w-[40rem]">
+  <Accordion.Item value="overview">
+    <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+    <Accordion.Content>Azion runs your code at the edge, close to users.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="pricing">
+    <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+    <Accordion.Content>Pay only for what you use, with no upfront cost.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="support">
+    <Accordion.Trigger>Enterprise support</Accordion.Trigger>
+    <Accordion.Content>Available on Business and Enterprise plans.</Accordion.Content>
+  </Accordion.Item>
+</Accordion>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Accordion>} */
 export const Multiple = {
   render: () => ({
     components,
     setup() {
-      return { items: ITEMS, openValues: ['overview', 'pricing'] }
+      return { openValues: ['overview', 'pricing'] }
     },
     template: `
       <Accordion type="multiple" :default-value="openValues" class="w-full max-w-[40rem]">
-        <AccordionItem v-for="item in items" :key="item.value" :value="item.value">
-          <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-          <AccordionContent>{{ item.body }}</AccordionContent>
+        <AccordionItem value="overview">
+          <AccordionTrigger>What is Azion?</AccordionTrigger>
+          <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="pricing">
+          <AccordionTrigger>How does pricing work?</AccordionTrigger>
+          <AccordionContent>Pay only for what you use, with no upfront cost.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="support">
+          <AccordionTrigger>Enterprise support</AccordionTrigger>
+          <AccordionContent>Available on Business and Enterprise plans.</AccordionContent>
         </AccordionItem>
       </Accordion>
     `
@@ -313,7 +387,9 @@ export const Multiple = {
     docs: {
       description: {
         story: '`type="multiple"` with two items open at once via an array `default-value`.'
-      }
+      },
+      controls: { disable: true },
+      source: { code: toSfc(IMPORT, MULTIPLE_MARKUP) }
     }
   }
 }
