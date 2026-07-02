@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4b62c26791d88e4060e3962ebf4a29423a21b5ddf2c3b55578fe733aebc81f6a
+checksum: f521a35330afd65396e0a0a355fa04f2eb9074619b1ad9dd2d474722e421de0a
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-07-01
 ---
 # Icon Button — Component Spec
 
@@ -26,6 +26,8 @@ Interactive control for user actions. Migrated from the existing implementation 
 | `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
 | `href` | `string` | `''` | no | When set, renders as a link (`<a>`). |
 | `target` | `'_blank' | '_self'` | `'_self'` | no | Link target when `href` is set. |
+| `iconTransition` | `boolean` | `false` | no | Animates icon swaps with enter/leave transitions. |
+| `iconClass` | `string` | `''` | no | Extra classes applied to the icon glyph. |
 
 ## Events
 
