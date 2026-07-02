@@ -24,7 +24,10 @@ describe('CopyButton', () => {
       })
       const node = getByRole('button', { name: 'Copy' })
       expect(node.tagName).toBe('BUTTON')
-      expect(getByTestId('actions-copy-button')).toBe(node)
+      // CopyButton wraps IconButton in a <span> that carries the testid; the button is inside it.
+      const root = getByTestId('actions-copy-button')
+      expect(root.tagName).toBe('SPAN')
+      expect(root.contains(node)).toBe(true)
     })
 
     it('is in the idle state before any interaction (no copied label present)', () => {
@@ -45,7 +48,9 @@ describe('CopyButton', () => {
         props: { value: 'token' },
         attrs: { 'data-testid': 'copy-token' }
       })
-      expect(getByTestId('copy-token').tagName).toBe('BUTTON')
+      const root = getByTestId('copy-token')
+      expect(root.tagName).toBe('SPAN')
+      expect(root.querySelector('button')).toBeTruthy()
     })
   })
 
