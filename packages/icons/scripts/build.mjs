@@ -34,8 +34,7 @@ const DIST_DIR = './dist'
 
 // ─── Step 1: Validate SVGs ──────────────────────────────────────────────────
 
-console.log('\n🔍 Step 1/7 — Validating SVG files...\n')
-
+console.log('\n🔍 Step 1/9 — Validating SVG files...\n')
 try {
   execSync('node scripts/validate-svg.mjs', { stdio: 'inherit' })
 } catch {
@@ -45,13 +44,13 @@ try {
 
 // ─── Step 2: Clean dist/ ────────────────────────────────────────────────────
 
-console.log('\n🧹 Step 2/7 — Cleaning dist/ directory...\n')
+console.log('\n🧹 Step 2/9 — Cleaning dist/ directory...\n')
 rmSync(DIST_DIR, { recursive: true, force: true })
 mkdirSync(DIST_DIR, { recursive: true })
 
 // ─── Step 3: Generate fonts ─────────────────────────────────────────────────
 
-console.log('⚙️  Step 3/7 — Generating icon fonts via fantasticon...\n')
+console.log('⚙️  Step 3/9 — Generating icon fonts via fantasticon...\n')
 try {
   execSync('node scripts/build-woff2.mjs', { stdio: 'inherit' })
 } catch {
@@ -61,8 +60,9 @@ try {
 
 // ─── Step 4: Create index.css barrel ────────────────────────────────────────
 
-console.log('\n📦 Step 4/7 — Creating dist/index.css barrel file...\n')
+console.log('\n📦 Step 4/9 — Creating dist/index.css barrel file...\n')
 const barrelContent = `@import './azionicons.css';
+@import './azionicons-color.css';
 @import './primeicons.css';
 `
 writeFileSync(join(DIST_DIR, 'index.css'), barrelContent, CHARSET)
@@ -70,7 +70,7 @@ console.log('  ✔ dist/index.css created')
 
 // ─── Step 5: Generate dist/package.json ─────────────────────────────────────
 
-console.log('\n📋 Step 5/7 — Generating dist/package.json...\n')
+console.log('\n📋 Step 5/9 — Generating dist/package.json...\n')
 const rootPkg = JSON.parse(readFileSync('./package.json', CHARSET))
 const distPkg = {
   name: rootPkg.name,
@@ -85,8 +85,10 @@ const distPkg = {
   exports: {
     '.': './index.css',
     './azionicons': './azionicons.css',
+    './azionicons-color': './azionicons-color.css',
     './primeicons': './primeicons.css',
-    './catalog': './catalog.json'
+    './catalog': './catalog.json',
+    './color-catalog': './color-catalog.json'
   }
 }
 writeFileSync(join(DIST_DIR, 'package.json'), JSON.stringify(distPkg, null, 2) + '\n', CHARSET)
@@ -94,7 +96,7 @@ console.log('  ✔ dist/package.json created')
 
 // ─── Step 6: Copy LICENSE and README.md ─────────────────────────────────────
 
-console.log('\n📄 Step 6/7 — Copying LICENSE and README.md into dist/...\n')
+console.log('\n📄 Step 6/9 — Copying LICENSE and README.md into dist/...\n')
 
 if (existsSync('./LICENSE')) {
   copyFileSync('./LICENSE', join(DIST_DIR, 'LICENSE'))
@@ -110,15 +112,36 @@ if (existsSync('./README.md')) {
   console.log('  ⚠ README.md not found — skipped')
 }
 
-// ─── Step 7: Generate dist/catalog.json ─────────────────────────────────
+// ─── Step 7: Generate catalogs ─────────────────────────────
 
-console.log('\n📦 Step 7/7 — Generating dist/catalog.json...\n')
-
+console.log('\n📦 Step 7/9 — Generating dist/catalog.json + dist/color-catalog.json...\n')
 try {
   execSync('node scripts/build-catalog.mjs', { stdio: 'inherit' })
   console.log('  ✔ dist/catalog.json created')
 } catch {
   console.error('\n🔴 Icons catalog generation failed. Fix the errors above before building.\n')
+  process.exit(1)
+}
+
+// ─── Step 8: Generate colored catalogs ─────────────────────────────
+
+console.log('\n📦 Step 8/9 — Generating dist/catalog.json + dist/color-catalog.json...\n')
+try {
+  execSync('node scripts/build-color-catalog.mjs', { stdio: 'inherit' })
+  console.log('  ✔ dist/color-catalog.json created')
+} catch {
+  console.error('\n🔴 Icons colored catalog generation failed. Fix the errors above before building.\n')
+  process.exit(1)
+}
+
+// ─── Step 8: Generate colored catalogs ─────────────────────────────
+
+console.log('\n📦 Step 9/9 — Generating dist/azionicons.css ...\n')
+try {
+  execSync('node scripts/build-color-css.mjs', { stdio: 'inherit' })
+  console.log('  ✔ dist/azionicons-color.css created')
+} catch {
+  console.error('\n🔴 CSS Icons colored catalog generation failed. Fix the errors above before building.\n')
   process.exit(1)
 }
 
@@ -130,5 +153,3 @@ console.log(`\n✅ Package built successfully! dist/ contains ${distFiles.length
 for (const f of distFiles) {
   console.log(`   ${f}`)
 }
-console.log('\nPreview:  npm run pack:dry')
-console.log('Publish:  npm run publish:package\n')
