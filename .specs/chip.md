@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: ce8bbd525f8b0bb96f953edaea0b45aee7aa00cd15abacc129fc744cbf8fa5ff
+checksum: e72ea0f7d1667d07fcf47f47426ebff36d92cf86724ed0f89fc16f8e4ccd24c2
 created: 2026-06-23
-last_updated: 2026-06-30
+last_updated: 2026-07-02
 ---
 
 # Chip — Component Spec
@@ -35,7 +35,7 @@ import Chip from '@aziontech/webkit/chip'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `size` | `'small' \| 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
+| `size` | `'small' \| 'medium'` | `'medium'` | no | Size token; `small` is a fixed 20px, `medium`'s height is driven by its vertical padding (~30px). |
 | `removable` | `boolean` | `false` | no | When true, renders a trailing remove button that emits `remove`. |
 | `clickable` | `boolean` | `false` | no | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
 
@@ -58,7 +58,7 @@ import Chip from '@aziontech/webkit/chip'
 - `data-size` mirrors the `size` prop (`small` | `medium`)
 - `data-removable` is present when the `removable` prop is true
 - `data-clickable` is present when the `clickable` prop is true
-- When `clickable`, the root is an interactive `role="button"` with `tabindex="0"`: it shows `cursor-pointer`, a `::before` / `::after` ghost-layer hover/active overlay, and a visible focus ring on `focus-visible`. When not clickable, the root stays a non-interactive container.
+- When `clickable`, the root is an interactive `role="button"` with `tabindex="0"`: it shows `cursor-pointer`, a `::before` ghost-layer darkening overlay (`--bg-hover`) on `hover` and `active`, a `--border-strong` border on `active` (the pressed state, per Figma), and a visible focus ring on `focus-visible`. When not clickable, the root stays a non-interactive container.
 - The remove button (when `removable`) is always independently focusable and shows its own focus ring on `focus-visible`.
 
 ## Motion & Animations
@@ -67,7 +67,7 @@ import Chip from '@aziontech/webkit/chip'
 |---|---|---|---|
 | remove (chip dismiss) | inline `opacity` transition (fade-out), matching the `Message` dismiss | `duration['fast-02']` · `curve['productive-exit']` (animations.js) | `motion-reduce:transition-none` |
 | remove button hover/focus state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| clickable hover / active (chip body) | `::before` / `::after` ghost-layer `opacity` overlays (`--bg-hover` / `--bg-active`), active only when `clickable` | `before:duration-fast-02 before:ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:before:transition-none` / `motion-reduce:after:transition-none` |
+| clickable hover / active (chip body) | `::before` ghost-layer `opacity` overlay (`--bg-hover`) shown on `hover` and `active`, only when `clickable`; `active` also flips the border to `--border-strong` | `before:duration-fast-02 before:ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:before:transition-none` |
 
 ## Tokens
 
@@ -84,7 +84,8 @@ import Chip from '@aziontech/webkit/chip'
 | spacing (small padding) | `var(--spacing-xs)` / `var(--spacing-xxs)` |
 | spacing (label↔icon gap) | `var(--spacing-xxs)` |
 | ring | `var(--ring-color)` |
-| interactive overlay (clickable hover / active) | `var(--bg-hover)` / `var(--bg-active)` (ghost layers) |
+| interactive overlay (clickable hover / active) | `var(--bg-hover)` (ghost layer) |
+| border (clickable active) | `var(--border-strong)` |
 
 ## Theme gaps
 
@@ -101,7 +102,7 @@ import Chip from '@aziontech/webkit/chip'
 - ARIA: when not `clickable`, the root is a non-interactive `<span>` container; when `clickable`, it is `role="button"` with `tabindex="0"`. The remove control is a real `<button type="button">` with `aria-label="Remove"`; the `pi pi-times` glyph is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on the remove button's color transition and on the chip's dismiss fade-out (the exit transition collapses to instant under reduced motion).
-- Touch target: justified deviation — the chip height is 20–24px, so the remove button's touch target is below 40×40 px. This matches the design (the Chip is a compact inline token, not a primary action), and the larger surrounding chip remains the visible affordance.
+- Touch target: justified deviation — the chip height is 20–30px, so the remove button's touch target is below 40×40 px. This matches the design (the Chip is a compact inline token, not a primary action), and the larger surrounding chip remains the visible affordance.
 
 ## Stories (Storybook)
 

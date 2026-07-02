@@ -12,7 +12,7 @@
   interface Props {
     /** Fallback text when the default slot is empty. */
     label?: string
-    /** Size token; `medium` is 24px tall, `small` is 20px. */
+    /** Size token; `small` is a fixed 20px, `medium`'s height is driven by its vertical padding (~30px). */
     size?: ChipSize
     /** When true, renders a trailing remove button that emits remove. */
     removable?: boolean
@@ -105,7 +105,7 @@
       :tabindex="clickable ? 0 : undefined"
       :style="removeTransitionStyle"
       :class="attrs.class"
-      class="relative inline-flex items-center justify-center overflow-hidden border border-[var(--border-default)] border-[length:var(--border-width-default)] bg-[var(--bg-surface-raised)] text-[var(--text-default)] shadow-[var(--shadow-sm)] leading-none rounded-[var(--shape-elements)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-[var(--bg-active)] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance motion-reduce:before:transition-none motion-reduce:after:transition-none data-[size=medium]:text-label-md data-[size=small]:text-label-sm data-[size=medium]:h-6 data-[size=small]:h-5 data-[size=medium]:py-[var(--spacing-xs)] data-[size=medium]:px-[var(--spacing-sm)] data-[size=small]:p-[var(--spacing-xs)] data-[size=medium]:data-[removable]:pr-[var(--spacing-xs)] data-[size=small]:data-[removable]:pr-[var(--spacing-xxs)] data-[clickable]:cursor-pointer data-[clickable]:hover:before:opacity-100 data-[clickable]:active:after:opacity-100 data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-[var(--ring-color)] data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="relative inline-flex items-center justify-center overflow-hidden border border-[var(--border-default)] border-[length:var(--border-width-default)] bg-[var(--bg-surface-raised)] text-[var(--text-default)] shadow-[var(--shadow-sm)] leading-none rounded-[var(--shape-elements)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[size=medium]:text-label-md data-[size=small]:text-label-sm data-[size=medium]:leading-none data-[size=small]:leading-none data-[size=small]:h-5 data-[size=medium]:py-[var(--spacing-xs)] data-[size=medium]:px-[var(--spacing-sm)] data-[size=small]:p-[var(--spacing-xs)] data-[size=medium]:data-[removable]:pr-[var(--spacing-xs)] data-[size=small]:data-[removable]:pr-[var(--spacing-xxs)] data-[clickable]:cursor-pointer data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-[var(--border-strong)] data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-[var(--ring-color)] data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-[var(--bg-canvas)]"
       @click="onClick"
       @keydown="onKeydown"
     >
