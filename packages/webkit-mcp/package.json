@@ -1,0 +1,36 @@
+{
+  "name": "@aziontech/webkit-mcp",
+  "version": "0.0.0",
+  "description": "Model Context Protocol server for the @aziontech/webkit design system. Reads the installed webkit catalog.json (version-locked) and exposes tools so an AI in any project generates correct + performant webkit code.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "webkit-mcp": "./src/server.js"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aziontech/webkit.git",
+    "directory": "packages/webkit-mcp"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "aziontech",
+    "webkit",
+    "design-system",
+    "ai"
+  ]
+}
