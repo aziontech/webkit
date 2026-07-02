@@ -41,10 +41,10 @@
   // not a glyph — so both map to an empty glyph here.
   const icons: Record<ToastType, string> = {
     default: '',
-    success: 'pi pi-check-circle',
+    success: 'pi pi-check',
     info: 'pi pi-info-circle',
     warning: 'pi pi-exclamation-triangle',
-    error: 'pi pi-times-circle',
+    error: 'pi pi-exclamation-circle',
     loading: ''
   }
   const icon = computed(() => icons[props.type])
@@ -56,7 +56,7 @@
     :role="role"
     :data-testid="testId"
     :data-type="type"
-    class="group pointer-events-auto relative flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] py-[var(--spacing-sm)] pl-[var(--spacing-sm)] pr-[var(--spacing-md)] text-[var(--text-default)] shadow-[var(--shadow-md)]"
+    class="group pointer-events-auto relative flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border-solid border-[length:var(--border-width-default,1px)] border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-sm)] text-[var(--text-default)] shadow-[var(--shadow-sm)]"
   >
     <Spinner
       v-if="type === 'loading'"
@@ -66,7 +66,7 @@
       v-else-if="icon"
       :class="icon"
       :data-type="type"
-      class="size-4 shrink-0 leading-none text-[var(--text-muted)] data-[type=success]:text-[var(--success-contrast)] data-[type=info]:text-[var(--info-contrast)] data-[type=warning]:text-[var(--warning-contrast)] data-[type=error]:text-[var(--danger-contrast)]"
+      class="shrink-0 self-start text-label-md leading-none text-[var(--text-muted)] data-[type=success]:text-[var(--success-contrast)] data-[type=info]:text-[var(--info-contrast)] data-[type=warning]:text-[var(--warning-contrast)] data-[type=error]:text-[var(--danger-contrast)]"
       aria-hidden="true"
     />
     <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)]">
