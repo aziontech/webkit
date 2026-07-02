@@ -13,7 +13,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A compact, dismissible token that labels a user-applied value, such as a removable filter on a data view. When `removable` is set, it renders a trailing button that emits the `remove` event.'
+          'A compact, dismissible token that labels a user-applied value, such as a removable filter on a data view. When `removable` is set, it renders a trailing button that emits the `remove` event; when `clickable` is set, the chip body becomes interactive and emits the `click` event.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -38,9 +38,15 @@ const meta = {
       control: 'boolean',
       description: 'When true, renders a trailing remove button that emits remove.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    clickable: {
+      control: 'boolean',
+      description:
+        'When true, the chip body becomes interactive (role=button, focusable) and emits click on activation (click / Enter / Space).',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     }
   },
-  args: { label: 'Label', size: 'medium', removable: false }
+  args: { label: 'Label', size: 'medium', removable: false, clickable: false }
 }
 
 export default meta
@@ -94,6 +100,23 @@ export const Removable = {
     docs: {
       description: { story: 'Removable chip; the × button emits `remove`.' },
       source: { code: toSfc(IMPORT, REMOVABLE_MARKUP) }
+    }
+  }
+}
+
+const CLICKABLE_MARKUP = '<Chip label="Label" size="medium" clickable />'
+
+export const Clickable = {
+  args: { clickable: true },
+  render: Template,
+  argTypes: { onClick: { action: 'click' } },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Clickable chip; the interactive body emits `click` on pointer or keyboard (Enter / Space).'
+      },
+      source: { code: toSfc(IMPORT, CLICKABLE_MARKUP) }
     }
   }
 }
