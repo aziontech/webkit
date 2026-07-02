@@ -28,9 +28,12 @@ const data = files.map((file) => {
   const name = file.replace('.svg', '')
 
   return {
-    // No font class exists for colored icons — `icon` mirrors `name` so the
-    // gallery list shape stays parallel to catalog.json.
-    icon: name,
+    // A colored icon paints via the paired CSS selector `.ai-cor.<name>` (see
+    // build-color-css.mjs), so its class string needs BOTH the shared box class
+    // `ai-cor` and the per-icon class — exactly what a consumer pastes:
+    // `<i class="ai-cor ai-google"></i>`. This parallels catalog.json's
+    // font-family + glyph pair (`ai ai-google`).
+    icon: `ai-cor ${name}`,
     keywords: '',
     name,
     colored: true,

@@ -50,8 +50,9 @@ const files = readdirSync(COLOR_DIR)
 const names = files.map((f) => f.replace('.svg', ''))
 
 // Shared box for every colored icon — one selector list keeps it DRY.
-const sharedSelector = names.map((n) => `.${n}`).join(',\n')
-const sharedRule = `${sharedSelector} {
+// const sharedSelector = names.map((n) => `.${n}`).join(',\n')
+const sharedSelector = 'ai-cor'
+const sharedRule = `.${sharedSelector} {
   display: inline-block;
   width: 1em;
   height: 1em;
@@ -65,7 +66,7 @@ const perIconRules = files
   .map((file) => {
     const name = file.replace('.svg', '')
     const svg = readFileSync(join(COLOR_DIR, file), CHARSET)
-    return `.${name} {\n  background-image: url("${svgToDataUri(svg)}");\n}`
+    return `.${sharedSelector}.${name} {\n  background-image: url("${svgToDataUri(svg)}");\n}`
   })
   .join('\n\n')
 
