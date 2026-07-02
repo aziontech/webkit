@@ -1,0 +1,34 @@
+{
+  "name": "@aziontech/webkit-cli",
+  "version": "0.0.0",
+  "description": "One-command adopter for the @aziontech/webkit design system. `npx @aziontech/webkit init` wires deps, lint configs, pre-commit, the webkit MCP, and the Claude Code bundle into any existing project.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "webkit": "./src/cli.js"
+  },
+  "files": [
+    "src",
+    "templates"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aziontech/webkit.git",
+    "directory": "packages/webkit-cli"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "aziontech",
+    "webkit",
+    "design-system",
+    "cli",
+    "init",
+    "scaffold",
+    "adoption"
+  ]
+}
