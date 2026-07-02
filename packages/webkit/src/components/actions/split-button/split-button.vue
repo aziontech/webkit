@@ -2,7 +2,8 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Dropdown from '../../navigation/dropdown'
-  import Spinner from '../../utils/spinner/spinner.vue'
+  import Button from '../button/button.vue'
+  import IconButton from '../icon-button/icon-button.vue'
 
   export type SplitButtonKind = 'primary' | 'secondary' | 'outlined'
   export type SplitButtonSize = 'small' | 'medium' | 'large'
@@ -64,10 +65,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-split-button'
   )
 
-  const isInactive = computed(() => props.disabled || props.loading)
-
-  const spinnerSizeClass = computed(() => (props.size === 'large' ? 'size-4' : 'size-3'))
-
   function optionValue(item: SplitButtonItem): string {
     return item.value ?? item.label
   }
@@ -95,11 +92,8 @@
   )
 
   function onPrimaryClick(event: MouseEvent) {
-    if (isInactive.value) {
-      event.preventDefault()
-      return
-    }
-
+    // Button already suppresses activation while disabled/loading, so the
+    // event only reaches here when the primary segment is actionable.
     emit('click', event, selectedItem.value)
   }
 
@@ -132,44 +126,27 @@
       @select="onSelect"
     >
       <div class="inline-flex w-fit items-stretch">
-        <button
-          type="button"
+        <Button
+          :label="displayLabel"
+          :icon="displayIcon"
+          :kind="kind"
+          :size="size"
           :disabled="disabled"
-          :aria-busy="loading || undefined"
-          :aria-disabled="isInactive || undefined"
-          :data-kind="disabled ? null : kind"
-          :data-size="size"
-          :data-loading="loading || null"
+          :loading="loading"
           :data-testid="`${testId}__primary`"
-          class="relative inline-flex items-center justify-center whitespace-nowrap rounded-l-[var(--shape-button)] transition-colors duration-150 ease-out motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none focus-visible:z-[1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[kind=primary]:bg-[var(--primary)] data-[kind=primary]:text-[var(--primary-contrast)] data-[kind=primary]:before:bg-[var(--bg-hover)] data-[kind=primary]:after:bg-[var(--bg-active)] data-[kind=secondary]:bg-[var(--secondary)] data-[kind=secondary]:text-[var(--secondary-contrast)] data-[kind=secondary]:before:bg-[var(--bg-hover)] data-[kind=secondary]:after:bg-[var(--bg-active)] data-[kind=outlined]:border data-[kind=outlined]:border-r-0 data-[kind=outlined]:border-[var(--border-default)] data-[kind=outlined]:bg-[var(--bg-surface)] data-[kind=outlined]:text-[var(--text-default)] data-[kind=outlined]:before:bg-[var(--bg-mask)] data-[kind=outlined]:after:bg-[var(--bg-active)] data-[size=large]:h-10 data-[size=large]:px-[var(--spacing-md)] data-[size=large]:text-button-lg data-[size=medium]:h-8 data-[size=medium]:px-[var(--spacing-sm)] data-[size=medium]:text-button-md data-[size=small]:h-7 data-[size=small]:px-[var(--spacing-xs)] data-[size=small]:text-button-md data-[loading]:cursor-loading disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-transparent disabled:bg-[var(--bg-disabled)] disabled:text-[var(--text-disabled)] disabled:before:hidden disabled:after:hidden"
+          class="!rounded-r-none focus-visible:z-[1]"
           @click="onPrimaryClick"
-        >
-          <span class="relative z-[1] inline-flex items-center gap-[var(--spacing-xs)]">
-            <Spinner
-              v-if="loading"
-              :class="spinnerSizeClass"
-              :data-testid="`${testId}__loading`"
-            />
-            <i
-              v-else-if="displayIcon"
-              :class="displayIcon"
-              class="shrink-0 text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-            <span v-if="displayLabel">{{ displayLabel }}</span>
-          </span>
-        </button>
+        />
 
-        <Dropdown.Trigger
-          :data-kind="disabled ? null : kind"
-          :data-size="size"
-          :aria-label="toggleAriaLabel"
-          :data-testid="`${testId}__toggle`"
-          class="relative items-center justify-center -ml-px rounded-r-[var(--shape-button)] border-l border-[var(--border-default)] transition-colors duration-150 ease-out motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 data-[state=open]:before:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none focus-visible:z-[1] data-[kind=primary]:bg-[var(--primary)] data-[kind=primary]:text-[var(--primary-contrast)] data-[kind=primary]:before:bg-[var(--bg-hover)] data-[kind=primary]:after:bg-[var(--bg-active)] data-[kind=secondary]:bg-[var(--secondary)] data-[kind=secondary]:text-[var(--secondary-contrast)] data-[kind=secondary]:before:bg-[var(--bg-hover)] data-[kind=secondary]:after:bg-[var(--bg-active)] data-[kind=outlined]:border data-[kind=outlined]:border-[var(--border-default)] data-[kind=outlined]:bg-[var(--bg-surface)] data-[kind=outlined]:text-[var(--text-default)] data-[kind=outlined]:before:bg-[var(--bg-mask)] data-[kind=outlined]:after:bg-[var(--bg-active)] data-[size=large]:px-[var(--spacing-sm)] data-[size=large]:text-button-lg data-[size=medium]:px-[var(--spacing-xs)] data-[size=medium]:text-button-md data-[size=small]:px-[var(--spacing-xs)] data-[size=small]:text-button-md data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:opacity-100 data-[disabled]:before:hidden data-[disabled]:after:hidden"
-        >
-          <i
-            class="pi pi-chevron-down relative z-[1] shrink-0 text-[length:inherit] leading-none"
-            aria-hidden="true"
+        <Dropdown.Trigger :data-testid="`${testId}__toggle`">
+          <IconButton
+            icon="pi pi-chevron-down"
+            :ariaLabel="toggleAriaLabel"
+            :kind="kind"
+            :size="size"
+            :disabled="disabled"
+            :data-testid="`${testId}__toggle-button`"
+            class="!rounded-l-none -ml-px border-l border-[var(--border-default)] focus-visible:z-[1]"
           />
         </Dropdown.Trigger>
       </div>
