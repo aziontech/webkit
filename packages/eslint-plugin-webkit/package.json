@@ -1,0 +1,34 @@
+{
+  "name": "@aziontech/eslint-plugin-webkit",
+  "version": "0.0.0",
+  "description": "ESLint rules that force correct and performant usage of the @aziontech/webkit design system. Reads the installed webkit catalog.json (version-locked).",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aziontech/webkit.git",
+    "directory": "packages/eslint-plugin-webkit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "eslint": ">=8"
+  },
+  "peerDependenciesMeta": {
+    "vue-eslint-parser": {
+      "optional": true
+    }
+  },
+  "keywords": ["eslint", "eslintplugin", "aziontech", "webkit", "design-system"]
+}
