@@ -1,0 +1,5839 @@
+{
+  "package": "@aziontech/webkit",
+  "webkitVersion": "0.0.0",
+  "deniedPrefixes": [
+    "@aziontech/webkit/src/"
+  ],
+  "tokenRules": [
+    {
+      "id": "hex-color",
+      "pattern": "#[0-9a-fA-F]{3,8}\\b",
+      "flags": "g",
+      "message": "Hex color hardcoded. Use semantic tokens (var(--primary), var(--bg-surface), var(--text-default), ...)."
+    },
+    {
+      "id": "rgb-hsl",
+      "pattern": "\\b(rgba?|hsla?)\\s*\\(",
+      "flags": "g",
+      "message": "RGB/HSL hardcoded. Use semantic tokens via var(--*)."
+    },
+    {
+      "id": "tailwind-palette",
+      "pattern": "\\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent)-(?:gray|slate|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\\d{2,3}\\b",
+      "flags": "g",
+      "message": "Tailwind palette color. Use semantic webkit tokens (var(--primary), var(--text-default), var(--bg-surface), ...)."
+    },
+    {
+      "id": "typography-raw-size",
+      "pattern": "\\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\\b(?!-)",
+      "flags": "g",
+      "message": "Raw Tailwind text size. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, ...)."
+    },
+    {
+      "id": "primevue-color",
+      "pattern": "(?<![\\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\\b",
+      "flags": "g",
+      "message": "PrimeVue/PrimeFlex color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...)."
+    }
+  ],
+  "imports": {
+    "catalog.json": {
+      "import": "@aziontech/webkit/catalog.json",
+      "target": "./catalog.json",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/catalog.json"
+    },
+    "package.json": {
+      "import": "@aziontech/webkit/package.json",
+      "target": "./package.json",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/package.json"
+    },
+    "empty-results-block": {
+      "import": "@aziontech/webkit/empty-results-block",
+      "target": "./src/components/empty-results-block/empty-results-block.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/empty-results-block",
+      "category": null
+    },
+    "overline": {
+      "import": "@aziontech/webkit/overline",
+      "target": "./src/components/overline/overline.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/overline",
+      "category": null
+    },
+    "button": {
+      "import": "@aziontech/webkit/button",
+      "target": "./src/components/actions/button/button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/button",
+      "category": "actions",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "required": "yes",
+          "doc": "Visible label text. Use `IconButton` for icon-only controls."
+        },
+        {
+          "name": "kind",
+          "type": "'primary' | 'secondary' | 'outlined' | 'text' | 'danger'",
+          "default": "'primary'",
+          "required": "no",
+          "doc": "Visual variant."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'large'",
+          "required": "no",
+          "doc": "Size token; affects height, padding, and typography."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows loading state and disables activation."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "PrimeIcons class for the leading/trailing icon."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "When set, renders as a link (`<a>`)."
+        },
+        {
+          "name": "target",
+          "type": "'_blank' | '_self'",
+          "default": "'_self'",
+          "required": "no",
+          "doc": "Link target when `href` is set."
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "payload": "MouseEvent",
+          "notes": "—"
+        }
+      ]
+    },
+    "button-highlight": {
+      "import": "@aziontech/webkit/button-highlight",
+      "target": "./src/components/actions/button-highlight/button-highlight.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/button-highlight",
+      "category": "actions",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "required": "yes",
+          "doc": "Visible label text. Required — use `IconButton` for icon-only controls."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'large'",
+          "required": "no",
+          "doc": "Size token; affects height, padding, and typography."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows loading state and disables activation."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "PrimeIcons class for the leading icon."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "When set, renders as an anchor link."
+        },
+        {
+          "name": "target",
+          "type": "'_blank' | '_self'",
+          "default": "'_self'",
+          "required": "no",
+          "doc": "Link target when `href` is set."
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "payload": "MouseEvent",
+          "notes": "Fires on activation; suppressed when `disabled` or `loading`."
+        }
+      ]
+    },
+    "mini-button": {
+      "import": "@aziontech/webkit/mini-button",
+      "target": "./src/components/actions/mini-button/mini-button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/mini-button",
+      "category": "actions",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "'Learn More'",
+          "required": "no",
+          "doc": "Visible label rendered inside the control."
+        },
+        {
+          "name": "size",
+          "type": "'large' | 'medium'",
+          "default": "'large'",
+          "required": "no",
+          "doc": "Size token; affects height, gap, and typography."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "showIcon",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, renders the trailing icon."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "'pi pi-external-link'",
+          "required": "no",
+          "doc": "PrimeIcons class for the trailing icon."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "Destination URL for the anchor."
+        },
+        {
+          "name": "target",
+          "type": "'_blank' | '_self'",
+          "default": "'_self'",
+          "required": "no",
+          "doc": "Link target when navigating."
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "payload": "MouseEvent",
+          "notes": "Fires on activation; suppressed when `disabled`."
+        }
+      ]
+    },
+    "copy-button": {
+      "import": "@aziontech/webkit/copy-button",
+      "target": "./src/components/actions/copy-button/copy-button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/copy-button",
+      "category": "actions",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "—",
+          "required": "yes",
+          "doc": "Text copied to the clipboard on activation."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Copy'",
+          "required": "no",
+          "doc": "Accessible name while idle."
+        },
+        {
+          "name": "copiedLabel",
+          "type": "string",
+          "default": "'Copied'",
+          "required": "no",
+          "doc": "Accessible name while the copied state is shown."
+        },
+        {
+          "name": "kind",
+          "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
+          "default": "'transparent'",
+          "required": "no",
+          "doc": "Visual variant forwarded to `IconButton`."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'small'",
+          "required": "no",
+          "doc": "Size token forwarded to `IconButton`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        }
+      ],
+      "events": [
+        {
+          "name": "copy",
+          "payload": "string",
+          "notes": "Emitted after a successful clipboard write with the copied value."
+        }
+      ]
+    },
+    "segmented-button": {
+      "import": "@aziontech/webkit/segmented-button",
+      "target": "./src/components/actions/segmented-button/segmented-button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/segmented-button",
+      "category": "actions"
+    },
+    "icon-button": {
+      "import": "@aziontech/webkit/icon-button",
+      "target": "./src/components/actions/icon-button/icon-button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/icon-button",
+      "category": "actions",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "—",
+          "required": "yes",
+          "doc": "PrimeIcons class for the leading/trailing icon."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "—",
+          "required": "yes",
+          "doc": "Accessible name for icon-only controls."
+        },
+        {
+          "name": "kind",
+          "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
+          "default": "'primary'",
+          "required": "no",
+          "doc": "Visual variant."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'large'",
+          "required": "no",
+          "doc": "Size token; affects height, padding, and typography."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows loading state and disables activation."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "When set, renders as a link (`<a>`)."
+        },
+        {
+          "name": "target",
+          "type": "'_blank' | '_self'",
+          "default": "'_self'",
+          "required": "no",
+          "doc": "Link target when `href` is set."
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "payload": "MouseEvent",
+          "notes": "—"
+        }
+      ]
+    },
+    "tag": {
+      "import": "@aziontech/webkit/tag",
+      "target": "./src/components/tag/tag.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/tag",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "'undefined'",
+          "required": "no",
+          "doc": "Fallback text when the default slot is empty."
+        },
+        {
+          "name": "severity",
+          "type": "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'",
+          "default": "'primary'",
+          "required": "no",
+          "doc": "Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+        },
+        {
+          "name": "rounded",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Pill shape when true."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "'undefined'",
+          "required": "no",
+          "doc": "PrimeIcons class for the leading icon."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "avatar": {
+      "import": "@aziontech/webkit/avatar",
+      "target": "./src/components/avatar/avatar.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/avatar",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Image URL. When set, renders a photo and takes precedence over label and icon."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Accessible description for the image. Use when `src` is set."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Initials shown when no image (normalized to two uppercase characters)."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Icon class for the fallback when no image or label (PrimeIcons class)."
+        },
+        {
+          "name": "kind",
+          "type": "AvatarKind",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Visual shape of the avatar container."
+        },
+        {
+          "name": "size",
+          "type": "AvatarSize",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Size preset matching Figma sm / md / lg (24 / 32 / 48 px)."
+        }
+      ]
+    },
+    "badge": {
+      "import": "@aziontech/webkit/badge",
+      "target": "./src/components/content/badge/badge.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/badge",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Fallback text when the default slot is empty."
+        },
+        {
+          "name": "severity",
+          "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'default'",
+          "default": "'primary'",
+          "required": "no",
+          "doc": "Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "card-box": {
+      "import": "@aziontech/webkit/card-box",
+      "target": "./src/components/content/card-box/card-box.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/card-box",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Heading rendered in the header when the `header` slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "notes": "—"
+        },
+        {
+          "name": "content",
+          "notes": "—"
+        },
+        {
+          "name": "footer",
+          "notes": "—"
+        },
+        {
+          "name": "header-action",
+          "notes": "—"
+        },
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "card-pricing": {
+      "import": "@aziontech/webkit/card-pricing",
+      "target": "./src/components/content/card-pricing/card-pricing.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/card-pricing",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "planTitle",
+          "type": "string",
+          "default": "'Pro'",
+          "required": "no",
+          "doc": "plan Title."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "description."
+        },
+        {
+          "name": "pricingDetails",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "pricing Details."
+        },
+        {
+          "name": "showPricingDetails",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "show Pricing Details."
+        },
+        {
+          "name": "showTag",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "show Tag."
+        },
+        {
+          "name": "tagLabel",
+          "type": "string",
+          "default": "'Popular'",
+          "required": "no",
+          "doc": "tag Label."
+        },
+        {
+          "name": "slotPosition",
+          "type": "'bottom' | 'middle'",
+          "default": "'bottom'",
+          "required": "no",
+          "doc": "slot Position."
+        },
+        {
+          "name": "cardStyle",
+          "type": "'contained' | 'transparent'",
+          "default": "'contained'",
+          "required": "no",
+          "doc": "card Style."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "'20'",
+          "required": "no",
+          "doc": "value."
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "default": "'$'",
+          "required": "no",
+          "doc": "prefix."
+        },
+        {
+          "name": "suffix",
+          "type": "string",
+          "default": "'per month'",
+          "required": "no",
+          "doc": "suffix."
+        },
+        {
+          "name": "showPrefix",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "show Prefix."
+        },
+        {
+          "name": "showSuffix",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "show Suffix."
+        },
+        {
+          "name": "actionLabel",
+          "type": "string",
+          "default": "'Label'",
+          "required": "no",
+          "doc": "action Label."
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "notes": "—"
+        },
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "item": {
+      "import": "@aziontech/webkit/item",
+      "target": "./src/components/content/item/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/item-root",
+      "subcomponents": [
+        "@aziontech/webkit/item-group",
+        "@aziontech/webkit/item-separator",
+        "@aziontech/webkit/item-media",
+        "@aziontech/webkit/item-content",
+        "@aziontech/webkit/item-title",
+        "@aziontech/webkit/item-description",
+        "@aziontech/webkit/item-actions",
+        "@aziontech/webkit/item-header",
+        "@aziontech/webkit/item-footer"
+      ],
+      "category": "content",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'default' | 'outline' | 'muted'",
+          "default": "'default'",
+          "required": "no",
+          "doc": "Item root surface variant."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Item root density (padding and gap)."
+        },
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
+        },
+        {
+          "name": "mediaKind",
+          "type": "'default' | 'icon' | 'image'",
+          "default": "'default'",
+          "required": "no",
+          "doc": "ItemMedia region variant (icon frame, image frame)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "item-root": {
+      "import": "@aziontech/webkit/item-root",
+      "target": "./src/components/content/item/item.vue",
+      "kind": "root",
+      "rootOf": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-root",
+      "category": "content",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'default' | 'outline' | 'muted'",
+          "default": "'default'",
+          "required": "no",
+          "doc": "Item root surface variant."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Item root density (padding and gap)."
+        },
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
+        },
+        {
+          "name": "mediaKind",
+          "type": "'default' | 'icon' | 'image'",
+          "default": "'default'",
+          "required": "no",
+          "doc": "ItemMedia region variant (icon frame, image frame)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "item-group": {
+      "import": "@aziontech/webkit/item-group",
+      "target": "./src/components/content/item/item-group.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-group"
+    },
+    "item-separator": {
+      "import": "@aziontech/webkit/item-separator",
+      "target": "./src/components/content/item/item-separator.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-separator"
+    },
+    "item-media": {
+      "import": "@aziontech/webkit/item-media",
+      "target": "./src/components/content/item/item-media.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-media"
+    },
+    "item-content": {
+      "import": "@aziontech/webkit/item-content",
+      "target": "./src/components/content/item/item-content.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-content"
+    },
+    "item-title": {
+      "import": "@aziontech/webkit/item-title",
+      "target": "./src/components/content/item/item-title.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-title"
+    },
+    "item-description": {
+      "import": "@aziontech/webkit/item-description",
+      "target": "./src/components/content/item/item-description.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-description"
+    },
+    "item-actions": {
+      "import": "@aziontech/webkit/item-actions",
+      "target": "./src/components/content/item/item-actions.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-actions"
+    },
+    "item-header": {
+      "import": "@aziontech/webkit/item-header",
+      "target": "./src/components/content/item/item-header.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-header"
+    },
+    "item-footer": {
+      "import": "@aziontech/webkit/item-footer",
+      "target": "./src/components/content/item/item-footer.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-footer"
+    },
+    "currency": {
+      "import": "@aziontech/webkit/currency",
+      "target": "./src/components/content/currency/currency.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/currency",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "value."
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "default": "'$'",
+          "required": "no",
+          "doc": "prefix."
+        },
+        {
+          "name": "suffix",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "suffix."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'large'",
+          "default": "'small'",
+          "required": "no",
+          "doc": "Size token; affects height, padding, and typography."
+        }
+      ]
+    },
+    "log-view": {
+      "import": "@aziontech/webkit/log-view",
+      "target": "./src/components/code/log-view/log-view.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/log-view",
+      "category": "code",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "lines",
+          "type": "LogViewLine[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Log entries; filtered in LogViewContent by search and warnings-only."
+        },
+        {
+          "name": "searchPlaceholder",
+          "type": "string",
+          "default": "'Find in Logs'",
+          "required": "no",
+          "doc": "Placeholder for the default header search field."
+        },
+        {
+          "name": "showCopy",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shows the copy-to-clipboard control in LogViewHeader."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables toolbar controls in LogViewHeader."
+        }
+      ],
+      "events": [
+        {
+          "name": "copy",
+          "payload": "string",
+          "notes": "Fires after a successful copy; payload is the copied plain text."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "log-view-content": {
+      "import": "@aziontech/webkit/log-view-content",
+      "target": "./src/components/code/log-view/log-view-content.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/log-view-content",
+      "category": "code"
+    },
+    "log-view-footer": {
+      "import": "@aziontech/webkit/log-view-footer",
+      "target": "./src/components/code/log-view/log-view-footer.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/log-view-footer",
+      "category": "code"
+    },
+    "log-view-header": {
+      "import": "@aziontech/webkit/log-view-header",
+      "target": "./src/components/code/log-view/log-view-header.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/log-view-header",
+      "category": "code"
+    },
+    "code-block": {
+      "import": "@aziontech/webkit/code-block",
+      "target": "./src/components/data/code-block/code-block.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/code-block",
+      "category": "data",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "tabs",
+          "type": "CodeBlockTab[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled active tab value (`v-model:value`)."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Initial active tab when uncontrolled."
+        },
+        {
+          "name": "showLineNumbers",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shows a fixed-width gutter with zero-padded line numbers before each code line."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "'Copy code'",
+          "required": "no",
+          "doc": "Accessible name for the copy IconButton."
+        },
+        {
+          "name": "animateLines",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:value",
+          "payload": "string",
+          "notes": "v-model:value."
+        },
+        {
+          "name": "value-change",
+          "payload": "string",
+          "notes": "Fires when the active tab changes."
+        },
+        {
+          "name": "copy",
+          "payload": "string",
+          "notes": "Fires after the active tab code is copied to the clipboard."
+        }
+      ]
+    },
+    "table": {
+      "import": "@aziontech/webkit/table",
+      "target": "./src/components/data/table/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/table-root",
+      "subcomponents": [
+        "@aziontech/webkit/table-header",
+        "@aziontech/webkit/table-body",
+        "@aziontech/webkit/table-footer",
+        "@aziontech/webkit/table-caption",
+        "@aziontech/webkit/table-row",
+        "@aziontech/webkit/table-head-cell",
+        "@aziontech/webkit/table-cell",
+        "@aziontech/webkit/table-sort-button",
+        "@aziontech/webkit/table-toolbar",
+        "@aziontech/webkit/table-search"
+      ],
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "maxHeight",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under the sticky header)."
+        },
+        {
+          "name": "border",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `border` / `:border=\"…\"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected."
+        },
+        {
+          "name": "data",
+          "type": "Record<string, unknown>[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Data-driven mode: row records."
+        },
+        {
+          "name": "columns",
+          "type": "TableColumn[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. When non-empty, the table renders itself via TanStack."
+        },
+        {
+          "name": "rowKey",
+          "type": "string",
+          "default": "'id'",
+          "required": "no",
+          "doc": "Field used as the stable row id (for selection)."
+        },
+        {
+          "name": "enableSorting",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Enable sorting globally; per-column `enableSorting` overrides."
+        },
+        {
+          "name": "enableRowSelection",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Add a leading selection-checkbox column."
+        },
+        {
+          "name": "selectOnRowClick",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
+        },
+        {
+          "name": "headerVariant",
+          "type": "'default' | 'compact'",
+          "default": "'default'",
+          "required": "no",
+          "doc": "Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `variant`."
+        },
+        {
+          "name": "paginated",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Render a Paginator in the footer."
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "default": "10",
+          "required": "no",
+          "doc": "Rows per page when paginated."
+        },
+        {
+          "name": "sorting",
+          "type": "SortingState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:sorting (TanStack SortingState)."
+        },
+        {
+          "name": "rowSelection",
+          "type": "RowSelectionState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:rowSelection (TanStack RowSelectionState)."
+        },
+        {
+          "name": "columnVisibility",
+          "type": "VisibilityState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:columnVisibility (TanStack VisibilityState)."
+        },
+        {
+          "name": "globalFilter",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:globalFilter text."
+        },
+        {
+          "name": "pagination",
+          "type": "PaginationState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:pagination (TanStack PaginationState)."
+        },
+        {
+          "name": "manualSorting",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Server-side sorting: emit events, do not sort locally."
+        },
+        {
+          "name": "manualPagination",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Server-side pagination: emit events, do not slice locally."
+        },
+        {
+          "name": "manualFiltering",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Server-side filtering: emit events, do not filter locally."
+        },
+        {
+          "name": "rowCount",
+          "type": "number",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Total row count for manual pagination."
+        },
+        {
+          "name": "rowsPerPageOptions",
+          "type": "number[]",
+          "default": "[10, 25, 50, 100]",
+          "required": "no",
+          "doc": "Rows-per-page options shown in the footer selector."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:sorting",
+          "payload": "value: SortingState",
+          "notes": "v-model:sorting."
+        },
+        {
+          "name": "update:rowSelection",
+          "payload": "value: RowSelectionState",
+          "notes": "v-model:rowSelection."
+        },
+        {
+          "name": "update:columnVisibility",
+          "payload": "value: VisibilityState",
+          "notes": "v-model:columnVisibility."
+        },
+        {
+          "name": "update:globalFilter",
+          "payload": "value: string",
+          "notes": "v-model:globalFilter."
+        },
+        {
+          "name": "update:pagination",
+          "payload": "value: PaginationState",
+          "notes": "v-model:pagination."
+        },
+        {
+          "name": "row-click",
+          "payload": "row: Record<string, unknown>",
+          "notes": "Fires when a rendered row is clicked (data-driven mode)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "footer",
+          "notes": "—"
+        },
+        {
+          "name": "caption",
+          "notes": "—"
+        },
+        {
+          "name": "title",
+          "notes": "—"
+        },
+        {
+          "name": "toolbar",
+          "notes": "{ table }"
+        },
+        {
+          "name": "filters",
+          "notes": "{ table }"
+        },
+        {
+          "name": "empty",
+          "notes": "—"
+        }
+      ]
+    },
+    "table-root": {
+      "import": "@aziontech/webkit/table-root",
+      "target": "./src/components/data/table/table.vue",
+      "kind": "root",
+      "rootOf": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-root",
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "maxHeight",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under the sticky header)."
+        },
+        {
+          "name": "border",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `border` / `:border=\"…\"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected."
+        },
+        {
+          "name": "data",
+          "type": "Record<string, unknown>[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Data-driven mode: row records."
+        },
+        {
+          "name": "columns",
+          "type": "TableColumn[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. When non-empty, the table renders itself via TanStack."
+        },
+        {
+          "name": "rowKey",
+          "type": "string",
+          "default": "'id'",
+          "required": "no",
+          "doc": "Field used as the stable row id (for selection)."
+        },
+        {
+          "name": "enableSorting",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Enable sorting globally; per-column `enableSorting` overrides."
+        },
+        {
+          "name": "enableRowSelection",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Add a leading selection-checkbox column."
+        },
+        {
+          "name": "selectOnRowClick",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
+        },
+        {
+          "name": "headerVariant",
+          "type": "'default' | 'compact'",
+          "default": "'default'",
+          "required": "no",
+          "doc": "Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `variant`."
+        },
+        {
+          "name": "paginated",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Render a Paginator in the footer."
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "default": "10",
+          "required": "no",
+          "doc": "Rows per page when paginated."
+        },
+        {
+          "name": "sorting",
+          "type": "SortingState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:sorting (TanStack SortingState)."
+        },
+        {
+          "name": "rowSelection",
+          "type": "RowSelectionState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:rowSelection (TanStack RowSelectionState)."
+        },
+        {
+          "name": "columnVisibility",
+          "type": "VisibilityState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:columnVisibility (TanStack VisibilityState)."
+        },
+        {
+          "name": "globalFilter",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:globalFilter text."
+        },
+        {
+          "name": "pagination",
+          "type": "PaginationState",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:pagination (TanStack PaginationState)."
+        },
+        {
+          "name": "manualSorting",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Server-side sorting: emit events, do not sort locally."
+        },
+        {
+          "name": "manualPagination",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Server-side pagination: emit events, do not slice locally."
+        },
+        {
+          "name": "manualFiltering",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Server-side filtering: emit events, do not filter locally."
+        },
+        {
+          "name": "rowCount",
+          "type": "number",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Total row count for manual pagination."
+        },
+        {
+          "name": "rowsPerPageOptions",
+          "type": "number[]",
+          "default": "[10, 25, 50, 100]",
+          "required": "no",
+          "doc": "Rows-per-page options shown in the footer selector."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:sorting",
+          "payload": "value: SortingState",
+          "notes": "v-model:sorting."
+        },
+        {
+          "name": "update:rowSelection",
+          "payload": "value: RowSelectionState",
+          "notes": "v-model:rowSelection."
+        },
+        {
+          "name": "update:columnVisibility",
+          "payload": "value: VisibilityState",
+          "notes": "v-model:columnVisibility."
+        },
+        {
+          "name": "update:globalFilter",
+          "payload": "value: string",
+          "notes": "v-model:globalFilter."
+        },
+        {
+          "name": "update:pagination",
+          "payload": "value: PaginationState",
+          "notes": "v-model:pagination."
+        },
+        {
+          "name": "row-click",
+          "payload": "row: Record<string, unknown>",
+          "notes": "Fires when a rendered row is clicked (data-driven mode)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "footer",
+          "notes": "—"
+        },
+        {
+          "name": "caption",
+          "notes": "—"
+        },
+        {
+          "name": "title",
+          "notes": "—"
+        },
+        {
+          "name": "toolbar",
+          "notes": "{ table }"
+        },
+        {
+          "name": "filters",
+          "notes": "{ table }"
+        },
+        {
+          "name": "empty",
+          "notes": "—"
+        }
+      ]
+    },
+    "table-header": {
+      "import": "@aziontech/webkit/table-header",
+      "target": "./src/components/data/table/table-header/table-header.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-header"
+    },
+    "table-body": {
+      "import": "@aziontech/webkit/table-body",
+      "target": "./src/components/data/table/table-body/table-body.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-body"
+    },
+    "table-footer": {
+      "import": "@aziontech/webkit/table-footer",
+      "target": "./src/components/data/table/table-footer/table-footer.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-footer"
+    },
+    "table-caption": {
+      "import": "@aziontech/webkit/table-caption",
+      "target": "./src/components/data/table/table-caption/table-caption.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-caption"
+    },
+    "table-row": {
+      "import": "@aziontech/webkit/table-row",
+      "target": "./src/components/data/table/table-row/table-row.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-row"
+    },
+    "table-head-cell": {
+      "import": "@aziontech/webkit/table-head-cell",
+      "target": "./src/components/data/table/table-head-cell/table-head-cell.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-head-cell"
+    },
+    "table-cell": {
+      "import": "@aziontech/webkit/table-cell",
+      "target": "./src/components/data/table/table-cell/table-cell.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-cell"
+    },
+    "table-sort-button": {
+      "import": "@aziontech/webkit/table-sort-button",
+      "target": "./src/components/data/table/table-sort-button/table-sort-button.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-sort-button"
+    },
+    "table-toolbar": {
+      "import": "@aziontech/webkit/table-toolbar",
+      "target": "./src/components/data/table/table-toolbar/table-toolbar.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-toolbar"
+    },
+    "table-search": {
+      "import": "@aziontech/webkit/table-search",
+      "target": "./src/components/data/table/table-search/table-search.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-search"
+    },
+    "paginator": {
+      "import": "@aziontech/webkit/paginator",
+      "target": "./src/components/data/paginator/index.ts",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/paginator",
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "default": "1",
+          "required": "no",
+          "doc": "Current page, 1-based (data-driven mode). Supports `v-model:page`."
+        },
+        {
+          "name": "total",
+          "type": "number",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Total item count. When set, the Paginator runs in data-driven mode and renders its own controls."
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "default": "10",
+          "required": "no",
+          "doc": "Rows per page (data-driven mode). Supports `v-model:page-size`."
+        },
+        {
+          "name": "pageSizeOptions",
+          "type": "number[]",
+          "default": "[10, 25, 50, 100]",
+          "required": "no",
+          "doc": "Page-size options offered in the rows-per-page selector."
+        },
+        {
+          "name": "siblingCount",
+          "type": "number",
+          "default": "1",
+          "required": "no",
+          "doc": "Page numbers shown on each side of the current page before collapsing into an overflow ellipsis."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Pagination'",
+          "required": "no",
+          "doc": "Accessible name for the navigation landmark."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:page",
+          "payload": "[page: number]",
+          "notes": "Current page changed in data-driven mode (Previous / Next / page number). Supports `v-model:page`."
+        },
+        {
+          "name": "update:pageSize",
+          "payload": "[pageSize: number]",
+          "notes": "Rows-per-page changed via the internal selector. Supports `v-model:page-size`."
+        },
+        {
+          "name": "page-change",
+          "payload": "[page: number]",
+          "notes": "Convenience action event fired alongside `update:page` whenever the page changes."
+        }
+      ],
+      "slots": [
+        {
+          "name": "info",
+          "notes": "—"
+        },
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "controls",
+          "notes": "—"
+        }
+      ]
+    },
+    "pagination-button": {
+      "import": "@aziontech/webkit/pagination-button",
+      "target": "./src/components/data/paginator/pagination-button/pagination-button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/pagination-button",
+      "category": "data"
+    },
+    "paginator-info": {
+      "import": "@aziontech/webkit/paginator-info",
+      "target": "./src/components/data/paginator/paginator-info/paginator-info.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/paginator-info",
+      "category": "data"
+    },
+    "paginator-page-size": {
+      "import": "@aziontech/webkit/paginator-page-size",
+      "target": "./src/components/data/paginator/paginator-page-size/paginator-page-size.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/paginator-page-size",
+      "category": "data"
+    },
+    "flow": {
+      "import": "@aziontech/webkit/flow",
+      "target": "./src/components/data/flow/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/flow-root",
+      "subcomponents": [
+        "@aziontech/webkit/flow-node",
+        "@aziontech/webkit/flow-parallel",
+        "@aziontech/webkit/flow-anchor"
+      ],
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "align",
+          "type": "'start' \\ | 'center'",
+          "default": "'start'",
+          "required": "no",
+          "doc": "Vertical alignment of nodes within the diagram."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "flow-root": {
+      "import": "@aziontech/webkit/flow-root",
+      "target": "./src/components/data/flow/flow.vue",
+      "kind": "root",
+      "rootOf": "flow",
+      "treeShakeableImport": "@aziontech/webkit/flow-root",
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "align",
+          "type": "'start' \\ | 'center'",
+          "default": "'start'",
+          "required": "no",
+          "doc": "Vertical alignment of nodes within the diagram."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "flow-node": {
+      "import": "@aziontech/webkit/flow-node",
+      "target": "./src/components/data/flow/flow-node/flow-node.vue",
+      "kind": "subcomponent",
+      "parent": "flow",
+      "treeShakeableImport": "@aziontech/webkit/flow-node"
+    },
+    "flow-parallel": {
+      "import": "@aziontech/webkit/flow-parallel",
+      "target": "./src/components/data/flow/flow-parallel/flow-parallel.vue",
+      "kind": "subcomponent",
+      "parent": "flow",
+      "treeShakeableImport": "@aziontech/webkit/flow-parallel"
+    },
+    "flow-anchor": {
+      "import": "@aziontech/webkit/flow-anchor",
+      "target": "./src/components/data/flow/flow-anchor/flow-anchor.vue",
+      "kind": "subcomponent",
+      "parent": "flow",
+      "treeShakeableImport": "@aziontech/webkit/flow-anchor"
+    },
+    "pick-list": {
+      "import": "@aziontech/webkit/pick-list",
+      "target": "./src/components/data/pick-list/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/pick-list-root",
+      "subcomponents": [
+        "@aziontech/webkit/pick-list-source",
+        "@aziontech/webkit/pick-list-target",
+        "@aziontech/webkit/pick-list-controls"
+      ],
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "[unknown[], unknown[]]",
+          "default": "() => [[], []]",
+          "required": "no",
+          "doc": "Bound pair of lists as `[sourceItems, targetItems]` (v-model)."
+        },
+        {
+          "name": "dataKey",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Item field that uniquely identifies a record; enables selection tracking and stable keys."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables all selection and move controls and applies disabled tokens."
+        },
+        {
+          "name": "moveOnDoubleClick",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "[unknown[], unknown[]]",
+          "notes": "v-model update with the new `[sourceItems, targetItems]` pair."
+        },
+        {
+          "name": "move",
+          "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",
+          "notes": "Fired after items move between lists, with the moved items."
+        },
+        {
+          "name": "item-double-click",
+          "payload": "{ list: 'source' | 'target'; item: unknown; index: number }",
+          "notes": "Fired when an option is double-clicked, with the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "{ move, moveAll, hasSelection, count, disabled, loading }"
+        }
+      ]
+    },
+    "pick-list-root": {
+      "import": "@aziontech/webkit/pick-list-root",
+      "target": "./src/components/data/pick-list/pick-list.vue",
+      "kind": "root",
+      "rootOf": "pick-list",
+      "treeShakeableImport": "@aziontech/webkit/pick-list-root",
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "[unknown[], unknown[]]",
+          "default": "() => [[], []]",
+          "required": "no",
+          "doc": "Bound pair of lists as `[sourceItems, targetItems]` (v-model)."
+        },
+        {
+          "name": "dataKey",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Item field that uniquely identifies a record; enables selection tracking and stable keys."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables all selection and move controls and applies disabled tokens."
+        },
+        {
+          "name": "moveOnDoubleClick",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "[unknown[], unknown[]]",
+          "notes": "v-model update with the new `[sourceItems, targetItems]` pair."
+        },
+        {
+          "name": "move",
+          "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",
+          "notes": "Fired after items move between lists, with the moved items."
+        },
+        {
+          "name": "item-double-click",
+          "payload": "{ list: 'source' | 'target'; item: unknown; index: number }",
+          "notes": "Fired when an option is double-clicked, with the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "{ move, moveAll, hasSelection, count, disabled, loading }"
+        }
+      ]
+    },
+    "pick-list-source": {
+      "import": "@aziontech/webkit/pick-list-source",
+      "target": "./src/components/data/pick-list/pick-list-source/pick-list-source.vue",
+      "kind": "subcomponent",
+      "parent": "pick-list",
+      "treeShakeableImport": "@aziontech/webkit/pick-list-source"
+    },
+    "pick-list-target": {
+      "import": "@aziontech/webkit/pick-list-target",
+      "target": "./src/components/data/pick-list/pick-list-target/pick-list-target.vue",
+      "kind": "subcomponent",
+      "parent": "pick-list",
+      "treeShakeableImport": "@aziontech/webkit/pick-list-target"
+    },
+    "pick-list-controls": {
+      "import": "@aziontech/webkit/pick-list-controls",
+      "target": "./src/components/data/pick-list/pick-list-controls/pick-list-controls.vue",
+      "kind": "subcomponent",
+      "parent": "pick-list",
+      "treeShakeableImport": "@aziontech/webkit/pick-list-controls"
+    },
+    "message": {
+      "import": "@aziontech/webkit/message",
+      "target": "./src/components/feedback/message/message.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/message",
+      "category": "feedback",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "severity",
+          "type": "'info' | 'success' | 'warning' | 'danger' | 'error'",
+          "default": "'info'",
+          "required": "no",
+          "doc": "Visual severity variant (maps Error to danger)."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "yes",
+          "doc": "Primary message heading."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Supporting body copy below the title."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "PrimeIcons class override for the leading icon."
+        },
+        {
+          "name": "actionLabel",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Label for the built-in text action button; hidden when empty."
+        },
+        {
+          "name": "closable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, shows a close control that dismisses the message."
+        },
+        {
+          "name": "life",
+          "type": "number",
+          "default": "0",
+          "required": "no",
+          "doc": "Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss."
+        }
+      ],
+      "events": [
+        {
+          "name": "action",
+          "payload": "MouseEvent",
+          "notes": "Emitted when the built-in action button is clicked."
+        },
+        {
+          "name": "close",
+          "payload": "void",
+          "notes": "Emitted when the message is dismissed manually or after `life` expires."
+        }
+      ],
+      "slots": [
+        {
+          "name": "action",
+          "notes": "—"
+        },
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "empty-state": {
+      "import": "@aziontech/webkit/empty-state",
+      "target": "./src/components/feedback/empty-state/empty-state.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/empty-state",
+      "category": "feedback",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "yes",
+          "doc": "Primary heading announcing the empty resource."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Supporting body copy below the title."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the illustration size, the surrounding padding, and the gaps between illustration, text, and actions."
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, wraps the content in a bordered surface card; otherwise renders on a transparent background."
+        }
+      ],
+      "slots": [
+        {
+          "name": "icon",
+          "notes": "—"
+        },
+        {
+          "name": "actions",
+          "notes": "—"
+        }
+      ]
+    },
+    "status-indicator": {
+      "import": "@aziontech/webkit/status-indicator",
+      "target": "./src/components/feedback/status-indicator/status-indicator.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/status-indicator",
+      "category": "feedback",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "status",
+          "type": "'positive' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'",
+          "default": "'positive'",
+          "required": "no",
+          "doc": "status."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows loading state and disables activation."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "'Status'",
+          "required": "no",
+          "doc": "Visible label text."
+        }
+      ]
+    },
+    "toast": {
+      "import": "@aziontech/webkit/toast",
+      "target": "./src/components/feedback/toast/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/toast-root",
+      "subcomponents": [
+        "@aziontech/webkit/toast-item",
+        "@aziontech/webkit/toast-title",
+        "@aziontech/webkit/toast-description",
+        "@aziontech/webkit/toast-action",
+        "@aziontech/webkit/toast-close"
+      ],
+      "category": "feedback",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "position",
+          "type": "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
+          "default": "'bottom-right'",
+          "required": "no",
+          "doc": "Corner (or edge-center) the stack is anchored to."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "4000",
+          "required": "no",
+          "doc": "Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "3",
+          "required": "no",
+          "doc": "Maximum simultaneously visible toasts per corner before the rest queue behind."
+        },
+        {
+          "name": "expand",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek."
+        },
+        {
+          "name": "closable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Show an always-visible close control on every toast; a per-toast `closable` option overrides it."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "{ toast, dismiss }"
+        }
+      ]
+    },
+    "toast-root": {
+      "import": "@aziontech/webkit/toast-root",
+      "target": "./src/components/feedback/toast/toaster.vue",
+      "kind": "root",
+      "rootOf": "toast",
+      "treeShakeableImport": "@aziontech/webkit/toast-root",
+      "category": "feedback",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "position",
+          "type": "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
+          "default": "'bottom-right'",
+          "required": "no",
+          "doc": "Corner (or edge-center) the stack is anchored to."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "4000",
+          "required": "no",
+          "doc": "Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "3",
+          "required": "no",
+          "doc": "Maximum simultaneously visible toasts per corner before the rest queue behind."
+        },
+        {
+          "name": "expand",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek."
+        },
+        {
+          "name": "closable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Show an always-visible close control on every toast; a per-toast `closable` option overrides it."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "{ toast, dismiss }"
+        }
+      ]
+    },
+    "toast-item": {
+      "import": "@aziontech/webkit/toast-item",
+      "target": "./src/components/feedback/toast/toast-item/toast-item.vue",
+      "kind": "subcomponent",
+      "parent": "toast",
+      "treeShakeableImport": "@aziontech/webkit/toast-item"
+    },
+    "toast-title": {
+      "import": "@aziontech/webkit/toast-title",
+      "target": "./src/components/feedback/toast/toast-title/toast-title.vue",
+      "kind": "subcomponent",
+      "parent": "toast",
+      "treeShakeableImport": "@aziontech/webkit/toast-title"
+    },
+    "toast-description": {
+      "import": "@aziontech/webkit/toast-description",
+      "target": "./src/components/feedback/toast/toast-description/toast-description.vue",
+      "kind": "subcomponent",
+      "parent": "toast",
+      "treeShakeableImport": "@aziontech/webkit/toast-description"
+    },
+    "toast-action": {
+      "import": "@aziontech/webkit/toast-action",
+      "target": "./src/components/feedback/toast/toast-action/toast-action.vue",
+      "kind": "subcomponent",
+      "parent": "toast",
+      "treeShakeableImport": "@aziontech/webkit/toast-action"
+    },
+    "toast-close": {
+      "import": "@aziontech/webkit/toast-close",
+      "target": "./src/components/feedback/toast/toast-close/toast-close.vue",
+      "kind": "subcomponent",
+      "parent": "toast",
+      "treeShakeableImport": "@aziontech/webkit/toast-close"
+    },
+    "skeleton": {
+      "import": "@aziontech/webkit/skeleton",
+      "target": "./src/components/feedback/skeleton/skeleton.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/skeleton",
+      "category": "feedback",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'shape' | 'circle'",
+          "default": "'shape'",
+          "required": "no",
+          "doc": "Geometry: a rounded rectangular block (`shape`) or a circle."
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "default": "'100%'",
+          "required": "no",
+          "doc": "CSS width (any length)."
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "default": "'1rem'",
+          "required": "no",
+          "doc": "CSS height (any length); for a circle, set equal to `width`."
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shimmer while loading; suppressed under reduced motion."
+        }
+      ]
+    },
+    "progress-bar": {
+      "import": "@aziontech/webkit/progress-bar",
+      "target": "./src/components/feedback/progress-bar/progress-bar.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/progress-bar",
+      "category": "feedback",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "default": "0",
+          "required": "no",
+          "doc": "Current progress, relative to `max`."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "100",
+          "required": "no",
+          "doc": "Upper bound; percentage = `value / max * 100`."
+        },
+        {
+          "name": "shape",
+          "type": "'rounded' | 'flat'",
+          "default": "'rounded'",
+          "required": "no",
+          "doc": "Track and fill corner-radius variant."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Bar height token."
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Loading state; animates a sliding segment and ignores `value`."
+        }
+      ]
+    },
+    "calendar": {
+      "import": "@aziontech/webkit/calendar",
+      "target": "./src/components/inputs/calendar/calendar.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/calendar",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "Date | null | CalendarRange",
+          "default": "null",
+          "required": "no",
+          "doc": "Selected value for v-model. A `Date` (or null) in single mode; a `{ start, end }` range object in range mode."
+        },
+        {
+          "name": "mode",
+          "type": "'single' | 'range'",
+          "default": "'single'",
+          "required": "no",
+          "doc": "Selection mode. Single picks one date; range picks a start and end date."
+        },
+        {
+          "name": "min",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Earliest selectable date; earlier days render disabled."
+        },
+        {
+          "name": "max",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Latest selectable date; later days render disabled."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the whole grid and navigation, applying disabled tokens."
+        },
+        {
+          "name": "showHeader",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shows the month/year label and previous/next month navigation."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "Date | null | CalendarRange",
+          "notes": "v-model. The selected `Date` (single) or `{ start, end }` (range)."
+        },
+        {
+          "name": "month-change",
+          "payload": "CalendarMonth",
+          "notes": "Emitted when the visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
+        }
+      ]
+    },
+    "input-text": {
+      "import": "@aziontech/webkit/input-text",
+      "target": "./src/components/inputs/input-text/input-text.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/input-text",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound value of the field."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder shown when the field is empty."
+        },
+        {
+          "name": "type",
+          "type": "'text' | 'email' | 'number'",
+          "default": "'text'",
+          "required": "no",
+          "doc": "Native input type. Restricted to single-line variants the field treats identically."
+        },
+        {
+          "name": "maxLength",
+          "type": "number | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Native `maxlength` — maximum number of characters allowed."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field read-only; value is visible but not editable. Native pass-through."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies the invalid border + ring tokens and sets `aria-invalid`."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "Emitted on native `input` event with the new value."
+        }
+      ],
+      "slots": [
+        {
+          "name": "iconLeft",
+          "notes": "Leading icon rendered inside the field, before the input."
+        },
+        {
+          "name": "iconRight",
+          "notes": "Trailing icon rendered inside the field, after the input."
+        }
+      ]
+    },
+    "input-number": {
+      "import": "@aziontech/webkit/input-number",
+      "target": "./src/components/inputs/input-number/input-number.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/input-number",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "number",
+          "default": "0",
+          "required": "no",
+          "doc": "v-model value (always numeric; cleared input falls back to `min ?? 0`)."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text shown when the input is empty."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects height, padding, and typography."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as read-only; spinner buttons are inert."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies the invalid border/ring tokens."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required for assistive tech."
+        },
+        {
+          "name": "min",
+          "type": "number | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Minimum allowed value; spinner stops at this bound."
+        },
+        {
+          "name": "max",
+          "type": "number | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Maximum allowed value; spinner stops at this bound."
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "default": "1",
+          "required": "no",
+          "doc": "Increment used by the spinner buttons and arrow keys."
+        },
+        {
+          "name": "showButtons",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Renders the chevron-up/chevron-down spinner controls."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "number",
+          "notes": "Emitted on every value change (typing or spinner)."
+        },
+        {
+          "name": "change",
+          "payload": "number",
+          "notes": "Emitted when the user commits the value (blur or Enter)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "prefix",
+          "notes": "—"
+        },
+        {
+          "name": "suffix",
+          "notes": "—"
+        }
+      ]
+    },
+    "field-text": {
+      "import": "@aziontech/webkit/field-text",
+      "target": "./src/components/inputs/field-text/field-text.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-text",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound value of the underlying `InputText`."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder forwarded to the `InputText`."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the input and switches the helper to `kind=\"disabled\"` (lock icon)."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the input read-only; value is visible but not editable. Native pass-through."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Switches the helper to `kind=\"invalid\"` and applies invalid border/ring tokens on the input."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "HTML name for the underlying input (form + vee-validate integration)."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "Re-emitted from the underlying `InputText` on every input event."
+        }
+      ],
+      "slots": [
+        {
+          "name": "iconLeft",
+          "notes": "—"
+        },
+        {
+          "name": "iconRight",
+          "notes": "—"
+        }
+      ]
+    },
+    "helper-text": {
+      "import": "@aziontech/webkit/helper-text",
+      "target": "./src/components/inputs/helper-text/helper-text.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/helper-text",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Fallback text when the default slot is empty."
+        },
+        {
+          "name": "kind",
+          "type": "'helper' | 'invalid' | 'required' | 'disabled'",
+          "default": "'helper'",
+          "required": "no",
+          "doc": "Visual variant; `disabled` also prepends a `pi pi-lock` icon."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "label": {
+      "import": "@aziontech/webkit/label",
+      "target": "./src/components/inputs/label/label.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/label",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Fallback text when the default slot is empty."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Appends a `Required` tag next to the label text."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "input-password": {
+      "import": "@aziontech/webkit/input-password",
+      "target": "./src/components/inputs/input-password/input-password.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/input-password",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound value of the field."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder shown when the field is empty."
+        },
+        {
+          "name": "maxLength",
+          "type": "number | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Native `maxlength` — maximum number of characters allowed."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens. The toggle button inherits the disabled state."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field read-only; value is visible but not editable. Toggle button stays operable."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies the invalid border + ring tokens and sets `aria-invalid`."
+        },
+        {
+          "name": "toggleable",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available."
+        },
+        {
+          "name": "autocomplete",
+          "type": "'current-password' | 'new-password' | 'off'",
+          "default": "'current-password'",
+          "required": "no",
+          "doc": "Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "Emitted on native `input` event with the new value."
+        }
+      ],
+      "slots": [
+        {
+          "name": "iconLeft",
+          "notes": "—"
+        },
+        {
+          "name": "iconRight",
+          "notes": "—"
+        }
+      ]
+    },
+    "field-password": {
+      "import": "@aziontech/webkit/field-password",
+      "target": "./src/components/inputs/field-password/field-password.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-password",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound value of the underlying `InputPassword`."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder forwarded to the `InputPassword`."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+        },
+        {
+          "name": "maxLength",
+          "type": "number | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Native `maxlength` forwarded to the `InputPassword`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the input and switches the helper to `kind=\"disabled\"` (lock icon)."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the input read-only; value is visible but not editable. Native pass-through."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Switches the helper to `kind=\"invalid\"` and applies invalid border/ring tokens on the input."
+        },
+        {
+          "name": "toggleable",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input."
+        },
+        {
+          "name": "autocomplete",
+          "type": "'current-password' | 'new-password' | 'off'",
+          "default": "'current-password'",
+          "required": "no",
+          "doc": "Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "HTML name for the underlying input (form + vee-validate integration)."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "Re-emitted from the underlying `InputPassword` on every input event."
+        }
+      ],
+      "slots": [
+        {
+          "name": "iconLeft",
+          "notes": "—"
+        },
+        {
+          "name": "iconRight",
+          "notes": "—"
+        }
+      ]
+    },
+    "box-grid-selection": {
+      "import": "@aziontech/webkit/box-grid-selection",
+      "target": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/box-grid-selection",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string | number | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Currently selected item value (v-model)."
+        },
+        {
+          "name": "items",
+          "type": "BoxGridSelectionItem[]",
+          "default": "undefined",
+          "required": "yes",
+          "doc": "Options rendered as selectable cards; each entry must include `value` and `label`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables all options and applies disabled tokens."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string | number",
+          "notes": "v-model when the user selects an option."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "{ item: BoxGridSelectionItem; selected: boolean }"
+        },
+        {
+          "name": "tag",
+          "notes": "{ item: BoxGridSelectionItem; selected: boolean }"
+        }
+      ]
+    },
+    "chip": {
+      "import": "@aziontech/webkit/chip",
+      "target": "./src/components/inputs/chip/chip.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/chip",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Fallback text when the default slot is empty."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+        },
+        {
+          "name": "removable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, renders a trailing remove button that emits `remove`."
+        }
+      ],
+      "events": [
+        {
+          "name": "remove",
+          "payload": "MouseEvent",
+          "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "checkbox": {
+      "import": "@aziontech/webkit/checkbox",
+      "target": "./src/components/inputs/checkbox/checkbox.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/checkbox",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "unknown",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting."
+        },
+        {
+          "name": "value",
+          "type": "unknown",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array)."
+        },
+        {
+          "name": "binary",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing)."
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field read-only; value is visible but cannot change via interaction."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Forwarded to the inner `<input id>` for label association."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "HTML name for form submission."
+        },
+        {
+          "name": "tabindex",
+          "type": "number",
+          "default": "0",
+          "required": "no",
+          "doc": "Forwarded to the inner `<input tabindex>`."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "unknown",
+          "notes": "Fires on activation. Payload is the next boolean (binary mode) or the next array (multi mode) or the matched value (single-value mode)."
+        }
+      ]
+    },
+    "field-checkbox": {
+      "import": "@aziontech/webkit/field-checkbox",
+      "target": "./src/components/inputs/field-checkbox/field-checkbox.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-checkbox",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Selected value for v-model."
+        },
+        {
+          "name": "trueValue",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Value emitted when checked."
+        },
+        {
+          "name": "falseValue",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Value emitted when unchecked."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "HTML name for form and vee-validate integration."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "id for the native input; links label to control."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Primary label text."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Secondary description."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Helper badge text shown when disabled."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "boolean",
+          "notes": "v-model."
+        }
+      ]
+    },
+    "field-checkbox-block": {
+      "import": "@aziontech/webkit/field-checkbox-block",
+      "target": "./src/components/inputs/field-checkbox-block/field-checkbox-block.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-checkbox-block",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Selected value for v-model."
+        },
+        {
+          "name": "trueValue",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Value emitted when checked."
+        },
+        {
+          "name": "falseValue",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Value emitted when unchecked."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "HTML name for form and vee-validate integration."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "id for the native input; links label to control."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Primary label text."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Secondary description."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Helper badge text shown when disabled."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "boolean",
+          "notes": "v-model."
+        }
+      ]
+    },
+    "field-radio": {
+      "import": "@aziontech/webkit/field-radio",
+      "target": "./src/components/inputs/field-radio/field-radio.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-radio",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Selected value for v-model."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Option value for this radio instance."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "HTML name shared across a mutually exclusive group."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "id for the native input; links label to control."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Primary label text."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Secondary description."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Helper badge text shown when disabled."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "v-model."
+        }
+      ]
+    },
+    "field-radio-block": {
+      "import": "@aziontech/webkit/field-radio-block",
+      "target": "./src/components/inputs/field-radio-block/field-radio-block.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-radio-block",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Selected value for v-model."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Option value for this radio instance."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "HTML name shared across a mutually exclusive group."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "id for the native input; links label to control."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Primary label text."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Secondary description."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Helper badge text shown when disabled."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "v-model."
+        }
+      ]
+    },
+    "field-switch": {
+      "import": "@aziontech/webkit/field-switch",
+      "target": "./src/components/inputs/field-switch/field-switch.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-switch",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Selected value for v-model."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Primary label text."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Secondary description."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Helper badge text shown when disabled."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "boolean",
+          "notes": "v-model."
+        }
+      ]
+    },
+    "field-switch-block": {
+      "import": "@aziontech/webkit/field-switch-block",
+      "target": "./src/components/inputs/field-switch-block/field-switch-block.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-switch-block",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Selected value for v-model."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Primary label text."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Secondary description."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Helper badge text shown when disabled."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "boolean",
+          "notes": "v-model."
+        }
+      ]
+    },
+    "radio-button": {
+      "import": "@aziontech/webkit/radio-button",
+      "target": "./src/components/inputs/radio-button/radio-button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/radio-button",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Selected value for v-model."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Option value for this radio instance."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "HTML name shared across a mutually exclusive group."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "id for the native input; links label to control."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "v-model."
+        }
+      ]
+    },
+    "switch": {
+      "import": "@aziontech/webkit/switch",
+      "target": "./src/components/inputs/switch/switch.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/switch",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "isToggled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Toggled-on state. Bind with `v-model:isToggled=\"value\"`. Mirrors the Figma `isToggled` variant."
+        },
+        {
+          "name": "type",
+          "type": "'default' | 'privacy'",
+          "default": "'default'",
+          "required": "no",
+          "doc": "Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on)."
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `isFocused` variant."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:isToggled",
+          "payload": "boolean",
+          "notes": "Emitted when the user toggles the switch. Paired with `v-model:isToggled`."
+        }
+      ]
+    },
+    "textarea": {
+      "import": "@aziontech/webkit/textarea",
+      "target": "./src/components/inputs/textarea/textarea.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/textarea",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Bound value (v-model)."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder shown when the field is empty."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as read-only; keeps focus styling, blocks edits."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required and sets `aria-required`."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "v-model update."
+        }
+      ],
+      "slots": [
+        {
+          "name": "iconLeft",
+          "notes": "Optional leading icon, rendered at top-left inside the field."
+        },
+        {
+          "name": "iconRight",
+          "notes": "Optional trailing icon, rendered at top-right. Suppressed when `disabled` (the lock icon takes over)."
+        }
+      ]
+    },
+    "field-textarea": {
+      "import": "@aziontech/webkit/field-textarea",
+      "target": "./src/components/inputs/field-textarea/field-textarea.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-textarea",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound value of the underlying Textarea."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "HTML name for the underlying textarea (form integration)."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the Label. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder forwarded to the Textarea."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside HelperText. When empty, the helper row is omitted."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the textarea and switches the helper to `kind=disabled` (lock icon)."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the textarea read-only; value is visible but not editable. Native pass-through."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the Required tag to the Label and sets native required + aria-required on the textarea."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Switches the helper to `kind=invalid` and applies invalid border tokens on the textarea."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id for the native textarea; consumed by Label via `for` and by `aria-describedby` wiring."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "v-model update."
+        }
+      ]
+    },
+    "dropdown": {
+      "import": "@aziontech/webkit/dropdown",
+      "target": "./src/components/navigation/dropdown/index.ts",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown",
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
+        },
+        {
+          "name": "placement",
+          "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+          "default": "'bottom-start'",
+          "required": "no",
+          "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space."
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "default": "4",
+          "required": "no",
+          "doc": "Pixel gap between the trigger and the panel."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires on every open/closed transition; supports `v-model:open`."
+        },
+        {
+          "name": "select",
+          "payload": "{ value: string | number; event: MouseEvent | KeyboardEvent }",
+          "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "top",
+          "notes": "—"
+        },
+        {
+          "name": "bottom",
+          "notes": "—"
+        }
+      ]
+    },
+    "dropdown-trigger": {
+      "import": "@aziontech/webkit/dropdown-trigger",
+      "target": "./src/components/navigation/dropdown/dropdown-trigger/dropdown-trigger.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-trigger",
+      "category": "navigation"
+    },
+    "dropdown-group": {
+      "import": "@aziontech/webkit/dropdown-group",
+      "target": "./src/components/navigation/dropdown/dropdown-group/dropdown-group.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-group",
+      "category": "navigation"
+    },
+    "dropdown-option": {
+      "import": "@aziontech/webkit/dropdown-option",
+      "target": "./src/components/navigation/dropdown/dropdown-option/dropdown-option.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-option",
+      "category": "navigation"
+    },
+    "multi-select": {
+      "import": "@aziontech/webkit/multi-select",
+      "target": "./src/components/inputs/multi-select/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/multi-select-root",
+      "subcomponents": [
+        "@aziontech/webkit/multi-select-trigger",
+        "@aziontech/webkit/multi-select-content",
+        "@aziontech/webkit/multi-select-group",
+        "@aziontech/webkit/multi-select-option"
+      ],
+      "category": "inputs",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "unknown[]",
+          "default": "() => []",
+          "required": "no",
+          "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Trigger placeholder shown when no option is selected."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the trigger and prevents opening; applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field read-only; the current selection is visible but the dropdown cannot open."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger."
+        },
+        {
+          "name": "displayValue",
+          "type": "(value: unknown[]) => string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "unknown[]",
+          "notes": "Fires when an option is toggled; payload is the next selection array."
+        },
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires when the dropdown opens or closes."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "multi-select-root": {
+      "import": "@aziontech/webkit/multi-select-root",
+      "target": "./src/components/inputs/multi-select/multi-select.vue",
+      "kind": "root",
+      "rootOf": "multi-select",
+      "treeShakeableImport": "@aziontech/webkit/multi-select-root",
+      "category": "inputs",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "unknown[]",
+          "default": "() => []",
+          "required": "no",
+          "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Trigger placeholder shown when no option is selected."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the trigger and prevents opening; applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field read-only; the current selection is visible but the dropdown cannot open."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger."
+        },
+        {
+          "name": "displayValue",
+          "type": "(value: unknown[]) => string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "unknown[]",
+          "notes": "Fires when an option is toggled; payload is the next selection array."
+        },
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires when the dropdown opens or closes."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "multi-select-trigger": {
+      "import": "@aziontech/webkit/multi-select-trigger",
+      "target": "./src/components/inputs/multi-select/multi-select-trigger/multi-select-trigger.vue",
+      "kind": "subcomponent",
+      "parent": "multi-select",
+      "treeShakeableImport": "@aziontech/webkit/multi-select-trigger"
+    },
+    "multi-select-content": {
+      "import": "@aziontech/webkit/multi-select-content",
+      "target": "./src/components/inputs/multi-select/multi-select-content/multi-select-content.vue",
+      "kind": "subcomponent",
+      "parent": "multi-select",
+      "treeShakeableImport": "@aziontech/webkit/multi-select-content"
+    },
+    "multi-select-group": {
+      "import": "@aziontech/webkit/multi-select-group",
+      "target": "./src/components/inputs/multi-select/multi-select-group/multi-select-group.vue",
+      "kind": "subcomponent",
+      "parent": "multi-select",
+      "treeShakeableImport": "@aziontech/webkit/multi-select-group"
+    },
+    "multi-select-option": {
+      "import": "@aziontech/webkit/multi-select-option",
+      "target": "./src/components/inputs/multi-select/multi-select-option/multi-select-option.vue",
+      "kind": "subcomponent",
+      "parent": "multi-select",
+      "treeShakeableImport": "@aziontech/webkit/multi-select-option"
+    },
+    "select": {
+      "import": "@aziontech/webkit/select",
+      "target": "./src/components/inputs/select/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/select-root",
+      "subcomponents": [
+        "@aziontech/webkit/select-trigger",
+        "@aziontech/webkit/select-content",
+        "@aziontech/webkit/select-group",
+        "@aziontech/webkit/select-option"
+      ],
+      "category": "inputs",
+      "structure": "composition",
+      "status": "draft",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string | number | unknown[]",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Two-way bound selection. Scalar in single mode; array in multi mode."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Trigger placeholder shown when no option is selected."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the trigger and prevents opening; applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field read-only; the current selection is visible but the dropdown cannot open."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger."
+        },
+        {
+          "name": "displayValue",
+          "type": "(value: unknown) => string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "unknown",
+          "notes": "Fires when an option is selected (single) or toggled (multi)."
+        },
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires when the dropdown opens or closes."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "select-root": {
+      "import": "@aziontech/webkit/select-root",
+      "target": "./src/components/inputs/select/select.vue",
+      "kind": "root",
+      "rootOf": "select",
+      "treeShakeableImport": "@aziontech/webkit/select-root",
+      "category": "inputs",
+      "structure": "composition",
+      "status": "draft",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string | number | unknown[]",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Two-way bound selection. Scalar in single mode; array in multi mode."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Trigger placeholder shown when no option is selected."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the trigger and prevents opening; applies disabled tokens."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field read-only; the current selection is visible but the dropdown cannot open."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger."
+        },
+        {
+          "name": "displayValue",
+          "type": "(value: unknown) => string",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "unknown",
+          "notes": "Fires when an option is selected (single) or toggled (multi)."
+        },
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires when the dropdown opens or closes."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "select-trigger": {
+      "import": "@aziontech/webkit/select-trigger",
+      "target": "./src/components/inputs/select/select-trigger/select-trigger.vue",
+      "kind": "subcomponent",
+      "parent": "select",
+      "treeShakeableImport": "@aziontech/webkit/select-trigger"
+    },
+    "select-content": {
+      "import": "@aziontech/webkit/select-content",
+      "target": "./src/components/inputs/select/select-content/select-content.vue",
+      "kind": "subcomponent",
+      "parent": "select",
+      "treeShakeableImport": "@aziontech/webkit/select-content"
+    },
+    "select-group": {
+      "import": "@aziontech/webkit/select-group",
+      "target": "./src/components/inputs/select/select-group/select-group.vue",
+      "kind": "subcomponent",
+      "parent": "select",
+      "treeShakeableImport": "@aziontech/webkit/select-group"
+    },
+    "select-option": {
+      "import": "@aziontech/webkit/select-option",
+      "target": "./src/components/inputs/select/select-option/select-option.vue",
+      "kind": "subcomponent",
+      "parent": "select",
+      "treeShakeableImport": "@aziontech/webkit/select-option"
+    },
+    "divider": {
+      "import": "@aziontech/webkit/divider",
+      "target": "./src/components/layout/divider/divider.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/divider",
+      "category": "layout",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "required": "no",
+          "doc": "Layout axis of the separator line."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Fallback centered text shown when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "scroll-area": {
+      "import": "@aziontech/webkit/scroll-area",
+      "target": "./src/components/layout/scroll-area/scroll-area.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/scroll-area",
+      "category": "layout",
+      "structure": "monolithic",
+      "status": "implemented",
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "global-header": {
+      "import": "@aziontech/webkit/global-header",
+      "target": "./src/components/layout/global-header/index.js",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/global-header",
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Global header'",
+          "required": "no",
+          "doc": "Accessible name for the header landmark."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "sidebar": {
+      "import": "@aziontech/webkit/sidebar",
+      "target": "./src/components/layout/sidebar/sidebar.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sidebar",
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Sidebar'",
+          "required": "no",
+          "doc": "Accessible name for the navigation landmark."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "header",
+          "notes": "—"
+        },
+        {
+          "name": "footer",
+          "notes": "—"
+        }
+      ]
+    },
+    "sidebar-group": {
+      "import": "@aziontech/webkit/sidebar-group",
+      "target": "./src/components/layout/sidebar/sidebar-group.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sidebar-group",
+      "category": "layout"
+    },
+    "sidebar-header": {
+      "import": "@aziontech/webkit/sidebar-header",
+      "target": "./src/components/layout/sidebar/sidebar-header.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sidebar-header",
+      "category": "layout"
+    },
+    "sidebar-footer": {
+      "import": "@aziontech/webkit/sidebar-footer",
+      "target": "./src/components/layout/sidebar/sidebar-footer.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sidebar-footer",
+      "category": "layout"
+    },
+    "breadcrumb": {
+      "import": "@aziontech/webkit/breadcrumb",
+      "target": "./src/components/navigation/breadcrumb/index.js",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/breadcrumb",
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "BreadcrumbItemData[]",
+          "default": "() => []",
+          "required": "no",
+          "doc": "Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry."
+        }
+      ],
+      "events": [
+        {
+          "name": "navigate",
+          "payload": "href: string",
+          "notes": "Fires when an ancestor segment is activated."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "breadcrumb-item": {
+      "import": "@aziontech/webkit/breadcrumb-item",
+      "target": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/breadcrumb-item",
+      "category": "navigation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "'Page Name'",
+          "required": "no",
+          "doc": "Visible segment label."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "Destination when the segment is a link (ignored when `current` is true)."
+        },
+        {
+          "name": "current",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the current page (last segment); renders as span with `aria-current=\"page\"`."
+        },
+        {
+          "name": "showIcon",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, renders a leading PrimeIcons icon before the label."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "'pi pi-box'",
+          "required": "no",
+          "doc": "PrimeIcons class for the leading icon when `showIcon` is true."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "payload": "MouseEvent",
+          "notes": "Fires when the segment is activated (link or button)."
+        }
+      ]
+    },
+    "link": {
+      "import": "@aziontech/webkit/link",
+      "target": "./src/components/navigation/link/link.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/link",
+      "category": "navigation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "'Learn More'",
+          "required": "no",
+          "doc": "Visible label rendered inside the link."
+        },
+        {
+          "name": "size",
+          "type": "'large' | 'medium'",
+          "default": "'large'",
+          "required": "no",
+          "doc": "Size token; affects height, gap, and typography."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies disabled tokens."
+        },
+        {
+          "name": "showIcon",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, renders the trailing icon."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "'pi pi-external-link'",
+          "required": "no",
+          "doc": "PrimeIcons class for the trailing icon."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "Destination URL for the anchor."
+        },
+        {
+          "name": "target",
+          "type": "'_blank' | '_self'",
+          "default": "'_self'",
+          "required": "no",
+          "doc": "Link target when navigating."
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "payload": "MouseEvent",
+          "notes": "—"
+        }
+      ]
+    },
+    "menu-item": {
+      "import": "@aziontech/webkit/menu-item",
+      "target": "./src/components/navigation/menu-item/menu-item.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/menu-item",
+      "category": "navigation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "events": [
+        {
+          "name": "click",
+          "payload": "event: MouseEvent",
+          "notes": "—"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        },
+        {
+          "name": "tag",
+          "notes": "—"
+        }
+      ]
+    },
+    "tab-view": {
+      "import": "@aziontech/webkit/tab-view",
+      "target": "./src/components/navigation/tab-view/index.js",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/tab-view",
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "events": [
+        {
+          "name": "update:value",
+          "payload": "value: TabViewValue | null",
+          "notes": "v-model:value."
+        },
+        {
+          "name": "value-change",
+          "payload": "value: TabViewValue | null",
+          "notes": "—"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "navigation-menu": {
+      "import": "@aziontech/webkit/navigation-menu",
+      "target": "./src/components/navigation/navigation-menu/index.js",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/navigation-menu",
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "events": [
+        {
+          "name": "update:value",
+          "payload": "value: NavigationMenuValue, eventDetails: unknown",
+          "notes": "v-model:value."
+        },
+        {
+          "name": "value-change",
+          "payload": "value: NavigationMenuValue, eventDetails: unknown",
+          "notes": "—"
+        },
+        {
+          "name": "open-change-complete",
+          "payload": "open: boolean",
+          "notes": "—"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "tooltip": {
+      "import": "@aziontech/webkit/tooltip",
+      "target": "./src/components/overlay/tooltip/tooltip.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/tooltip",
+      "category": "overlay",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "''",
+          "required": "yes",
+          "doc": "Plain text shown inside the tooltip."
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'right' | 'bottom' | 'left'",
+          "default": "'top'",
+          "required": "no",
+          "doc": "Anchor side relative to the trigger."
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "default": "200",
+          "required": "no",
+          "doc": "Hover-open delay in milliseconds."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables tooltip activation."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "v-model:open. Fires on open and close."
+        },
+        {
+          "name": "show",
+          "payload": "void",
+          "notes": "Emitted right after the open transition starts."
+        },
+        {
+          "name": "hide",
+          "payload": "void",
+          "notes": "Emitted right after the close transition starts."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "dialog": {
+      "import": "@aziontech/webkit/dialog",
+      "target": "./src/components/overlay/dialog/dialog.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog",
+      "category": "overlay",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "closeable",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "When true, overlay click and Escape close the dialog."
+        },
+        {
+          "name": "size",
+          "type": "DialogSize",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Panel max-width preset passed to the inner Panel."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "value: boolean",
+          "notes": "v-model:open."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "dialog-close": {
+      "import": "@aziontech/webkit/dialog-close",
+      "target": "./src/components/overlay/dialog/dialog-close.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog-close",
+      "category": "overlay"
+    },
+    "dialog-content": {
+      "import": "@aziontech/webkit/dialog-content",
+      "target": "./src/components/overlay/dialog/dialog-content.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog-content",
+      "category": "overlay"
+    },
+    "dialog-description": {
+      "import": "@aziontech/webkit/dialog-description",
+      "target": "./src/components/overlay/dialog/dialog-description.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog-description",
+      "category": "overlay"
+    },
+    "dialog-overlay": {
+      "import": "@aziontech/webkit/dialog-overlay",
+      "target": "./src/components/overlay/dialog/dialog-overlay.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog-overlay",
+      "category": "overlay"
+    },
+    "dialog-portal": {
+      "import": "@aziontech/webkit/dialog-portal",
+      "target": "./src/components/overlay/dialog/dialog-portal.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog-portal",
+      "category": "overlay"
+    },
+    "dialog-title": {
+      "import": "@aziontech/webkit/dialog-title",
+      "target": "./src/components/overlay/dialog/dialog-title.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog-title",
+      "category": "overlay"
+    },
+    "dialog-trigger": {
+      "import": "@aziontech/webkit/dialog-trigger",
+      "target": "./src/components/overlay/dialog/dialog-trigger.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dialog-trigger",
+      "category": "overlay"
+    },
+    "drawer": {
+      "import": "@aziontech/webkit/drawer",
+      "target": "./src/components/overlay/drawer/drawer.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer",
+      "category": "overlay",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "closeable",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "When true, overlay click and Escape close the drawer."
+        },
+        {
+          "name": "side",
+          "type": "DrawerSide",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Edge the drawer panel slides from."
+        },
+        {
+          "name": "size",
+          "type": "DrawerSize",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "value: boolean",
+          "notes": "v-model:open."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "drawer-close": {
+      "import": "@aziontech/webkit/drawer-close",
+      "target": "./src/components/overlay/drawer/drawer-close.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer-close",
+      "category": "overlay"
+    },
+    "drawer-content": {
+      "import": "@aziontech/webkit/drawer-content",
+      "target": "./src/components/overlay/drawer/drawer-content.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer-content",
+      "category": "overlay"
+    },
+    "drawer-description": {
+      "import": "@aziontech/webkit/drawer-description",
+      "target": "./src/components/overlay/drawer/drawer-description.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer-description",
+      "category": "overlay"
+    },
+    "drawer-overlay": {
+      "import": "@aziontech/webkit/drawer-overlay",
+      "target": "./src/components/overlay/drawer/drawer-overlay.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer-overlay",
+      "category": "overlay"
+    },
+    "drawer-portal": {
+      "import": "@aziontech/webkit/drawer-portal",
+      "target": "./src/components/overlay/drawer/drawer-portal.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer-portal",
+      "category": "overlay"
+    },
+    "drawer-title": {
+      "import": "@aziontech/webkit/drawer-title",
+      "target": "./src/components/overlay/drawer/drawer-title.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer-title",
+      "category": "overlay"
+    },
+    "drawer-trigger": {
+      "import": "@aziontech/webkit/drawer-trigger",
+      "target": "./src/components/overlay/drawer/drawer-trigger.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/drawer-trigger",
+      "category": "overlay"
+    },
+    "panel": {
+      "import": "@aziontech/webkit/panel",
+      "target": "./src/components/overlay/panel/panel.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/panel",
+      "category": "overlay",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "size",
+          "type": "PanelSize",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Max width of the panel shell."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "panel-content": {
+      "import": "@aziontech/webkit/panel-content",
+      "target": "./src/components/overlay/panel/panel-content.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/panel-content",
+      "category": "overlay"
+    },
+    "panel-footer": {
+      "import": "@aziontech/webkit/panel-footer",
+      "target": "./src/components/overlay/panel/panel-footer.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/panel-footer",
+      "category": "overlay"
+    },
+    "panel-header": {
+      "import": "@aziontech/webkit/panel-header",
+      "target": "./src/components/overlay/panel/panel-header.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/panel-header",
+      "category": "overlay"
+    },
+    "dropdown-menu": {
+      "import": "@aziontech/webkit/dropdown-menu",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu",
+      "category": "overlay"
+    },
+    "dropdown-menu-trigger": {
+      "import": "@aziontech/webkit/dropdown-menu-trigger",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-trigger.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-trigger",
+      "category": "overlay"
+    },
+    "dropdown-menu-portal": {
+      "import": "@aziontech/webkit/dropdown-menu-portal",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-portal.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-portal",
+      "category": "overlay"
+    },
+    "dropdown-menu-content": {
+      "import": "@aziontech/webkit/dropdown-menu-content",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-content.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-content",
+      "category": "overlay"
+    },
+    "dropdown-menu-group": {
+      "import": "@aziontech/webkit/dropdown-menu-group",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-group.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-group",
+      "category": "overlay"
+    },
+    "dropdown-menu-item": {
+      "import": "@aziontech/webkit/dropdown-menu-item",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-item.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-item",
+      "category": "overlay"
+    },
+    "dropdown-menu-separator": {
+      "import": "@aziontech/webkit/dropdown-menu-separator",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-separator.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-separator",
+      "category": "overlay"
+    },
+    "dropdown-menu-from-model": {
+      "import": "@aziontech/webkit/dropdown-menu-from-model",
+      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-from-model.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-from-model",
+      "category": "overlay"
+    },
+    "dropdown-menu-factory": {
+      "import": "@aziontech/webkit/dropdown-menu-factory",
+      "target": "./src/components/overlay/dropdown-menu/factory.ts",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-factory",
+      "category": "overlay"
+    },
+    "deploy-success": {
+      "import": "@aziontech/webkit/deploy-success",
+      "target": "./src/components/templates/deploy-success/deploy-success.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/deploy-success",
+      "category": "templates",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "'Congratulations!'",
+          "required": "no",
+          "doc": "Main success heading in the card header region."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "'You just deployed a new application into'",
+          "required": "no",
+          "doc": "Supporting copy before the scope tag."
+        },
+        {
+          "name": "scope",
+          "type": "string",
+          "default": "'mygithub-scope'",
+          "required": "no",
+          "doc": "Scope label rendered in the header tag."
+        },
+        {
+          "name": "appName",
+          "type": "string",
+          "default": "'myappname'",
+          "required": "no",
+          "doc": "Deployed application name above the build log."
+        },
+        {
+          "name": "lines",
+          "type": "LogViewLine[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Build log entries passed to LogView."
+        },
+        {
+          "name": "stepsLabel",
+          "type": "string",
+          "default": "'Next Steps'",
+          "required": "no",
+          "doc": "Section label above the next-steps list."
+        },
+        {
+          "name": "steps",
+          "type": "DeploySuccessStep[]",
+          "default": "[]",
+          "required": "yes",
+          "doc": "Ordered next-step entries (title, description, icon per row)."
+        },
+        {
+          "name": "actionLabel",
+          "type": "string",
+          "default": "'Manage'",
+          "required": "no",
+          "doc": "Primary footer button label."
+        },
+        {
+          "name": "visitLabel",
+          "type": "string",
+          "default": "'Visit'",
+          "required": "no",
+          "doc": "Visit link label in the card header."
+        },
+        {
+          "name": "visitHref",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "Visit link destination URL."
+        },
+        {
+          "name": "showHeader",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, renders the top GlobalHeader bar with the brand slot."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables toolbar controls and the primary action button."
+        }
+      ],
+      "events": [
+        {
+          "name": "action-click",
+          "payload": "MouseEvent",
+          "notes": "Fires when the primary footer button is activated."
+        },
+        {
+          "name": "visit-click",
+          "payload": "MouseEvent",
+          "notes": "Fires when the visit link is activated."
+        },
+        {
+          "name": "step-click",
+          "payload": "[index: number, event: MouseEvent]",
+          "notes": "Fires when a next-step row is activated."
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "notes": "—"
+        },
+        {
+          "name": "success",
+          "notes": "—"
+        },
+        {
+          "name": "logs",
+          "notes": "—"
+        },
+        {
+          "name": "steps",
+          "notes": "—"
+        },
+        {
+          "name": "actions",
+          "notes": "—"
+        }
+      ]
+    },
+    "onboarding-form": {
+      "import": "@aziontech/webkit/onboarding-form",
+      "target": "./src/components/templates/onboarding-form/onboarding-form.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/onboarding-form",
+      "category": "templates",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "heading",
+          "type": "string",
+          "default": "'Your first global deployment is seconds away'",
+          "required": "no",
+          "doc": "Page title above the form sections."
+        },
+        {
+          "name": "planLabel",
+          "type": "string",
+          "default": "'Plan Selected'",
+          "required": "no",
+          "doc": "Label above the plan summary card."
+        },
+        {
+          "name": "planTitle",
+          "type": "string",
+          "default": "'Pro Plan'",
+          "required": "no",
+          "doc": "Selected plan name in the summary card."
+        },
+        {
+          "name": "planPrice",
+          "type": "string",
+          "default": "'$20/MO'",
+          "required": "no",
+          "doc": "Price badge text beside the plan title."
+        },
+        {
+          "name": "planDescription",
+          "type": "string",
+          "default": "'For professional or commercial workloads.'",
+          "required": "no",
+          "doc": "Supporting copy under the plan title."
+        },
+        {
+          "name": "changeLabel",
+          "type": "string",
+          "default": "'CHANGE'",
+          "required": "no",
+          "doc": "Label for the plan change action button."
+        },
+        {
+          "name": "usageLabel",
+          "type": "string",
+          "default": "'How are you planning to use Azion?'",
+          "required": "no",
+          "doc": "Label for the usage intent grid."
+        },
+        {
+          "name": "usageRequired",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, appends a required indicator to the usage label."
+        },
+        {
+          "name": "usageValue",
+          "type": "string | number | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Selected usage option (v-model)."
+        },
+        {
+          "name": "usageItems",
+          "type": "BoxGridSelectionItem[]",
+          "default": "undefined",
+          "required": "yes",
+          "doc": "Options for `BoxGridSelection`."
+        },
+        {
+          "name": "fullNameLabel",
+          "type": "string",
+          "default": "'Your Full Name'",
+          "required": "no",
+          "doc": "Label for the full name field."
+        },
+        {
+          "name": "fullNameRequired",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, appends a required indicator to the full name label."
+        },
+        {
+          "name": "fullName",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Full name value (v-model)."
+        },
+        {
+          "name": "fullNamePlaceholder",
+          "type": "string",
+          "default": "'John Doe'",
+          "required": "no",
+          "doc": "Placeholder for the full name input."
+        },
+        {
+          "name": "scheduleLabel",
+          "type": "string",
+          "default": "'Schedule an onboarding session with an Azion expert'",
+          "required": "no",
+          "doc": "Label for the scheduling checkbox."
+        },
+        {
+          "name": "scheduleOnboarding",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Whether the scheduling checkbox is checked (v-model)."
+        },
+        {
+          "name": "continueLabel",
+          "type": "string",
+          "default": "'CONTINUE'",
+          "required": "no",
+          "doc": "Primary submit button label."
+        },
+        {
+          "name": "continueDisabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the continue button."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables all interactive fields in the template."
+        },
+        {
+          "name": "footerPrefix",
+          "type": "string",
+          "default": "'Have enterprise requirements?'",
+          "required": "no",
+          "doc": "Footer prompt before the contact link."
+        },
+        {
+          "name": "footerLinkLabel",
+          "type": "string",
+          "default": "'Get in touch'",
+          "required": "no",
+          "doc": "Footer contact link label."
+        },
+        {
+          "name": "footerLinkHref",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "Footer contact link URL."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:usageValue",
+          "payload": "string | number",
+          "notes": "v-model for usage selection."
+        },
+        {
+          "name": "update:fullName",
+          "payload": "string",
+          "notes": "v-model for full name."
+        },
+        {
+          "name": "update:scheduleOnboarding",
+          "payload": "boolean",
+          "notes": "v-model for scheduling checkbox."
+        },
+        {
+          "name": "change-click",
+          "payload": "MouseEvent",
+          "notes": "Fires when the plan change button is activated."
+        },
+        {
+          "name": "continue-click",
+          "payload": "MouseEvent",
+          "notes": "Fires when the continue button is activated."
+        },
+        {
+          "name": "footer-link-click",
+          "payload": "MouseEvent",
+          "notes": "Fires when the footer contact link is activated."
+        }
+      ],
+      "slots": [
+        {
+          "name": "plan",
+          "notes": "—"
+        },
+        {
+          "name": "footer",
+          "notes": "—"
+        }
+      ]
+    },
+    "plan-success": {
+      "import": "@aziontech/webkit/plan-success",
+      "target": "./src/components/templates/plan-success/plan-success.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/plan-success",
+      "category": "templates",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "'Your Pro Plan is now Active'",
+          "required": "no",
+          "doc": "Main success heading in the card header region."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "'A receipt has been sent to your email for your records.'",
+          "required": "no",
+          "doc": "Supporting copy under the success heading."
+        },
+        {
+          "name": "stepsLabel",
+          "type": "string",
+          "default": "'Next Steps'",
+          "required": "no",
+          "doc": "Section label above the numbered steps list."
+        },
+        {
+          "name": "steps",
+          "type": "PlanSuccessStep[]",
+          "default": "undefined",
+          "required": "yes",
+          "doc": "Ordered next-step entries (title + description per row)."
+        },
+        {
+          "name": "actionLabel",
+          "type": "string",
+          "default": "'Start deploying'",
+          "required": "no",
+          "doc": "Primary footer button label."
+        },
+        {
+          "name": "showHeader",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, renders the top `GlobalHeader` bar with the brand slot."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the primary action button."
+        }
+      ],
+      "events": [
+        {
+          "name": "action-click",
+          "payload": "MouseEvent",
+          "notes": "Fires when the primary footer button is activated."
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "notes": "—"
+        },
+        {
+          "name": "success",
+          "notes": "—"
+        },
+        {
+          "name": "steps",
+          "notes": "—"
+        },
+        {
+          "name": "actions",
+          "notes": "—"
+        }
+      ]
+    },
+    "platform-shell": {
+      "import": "@aziontech/webkit/platform-shell",
+      "target": "./src/components/templates/platform-shell/platform-shell.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/platform-shell",
+      "category": "templates",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "headerAriaLabel",
+          "type": "string",
+          "default": "'Global header'",
+          "required": "no",
+          "doc": "Accessible name for the header landmark."
+        },
+        {
+          "name": "tabDefaultValue",
+          "type": "string | number | null",
+          "default": "'tab-1'",
+          "required": "no",
+          "doc": "Initial active tab when the `tabs` slot is used (uncontrolled)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "header-left",
+          "notes": "—"
+        },
+        {
+          "name": "header-middle",
+          "notes": "—"
+        },
+        {
+          "name": "header-right",
+          "notes": "—"
+        },
+        {
+          "name": "sidebar",
+          "notes": "—"
+        },
+        {
+          "name": "page-header",
+          "notes": "—"
+        },
+        {
+          "name": "tabs",
+          "notes": "—"
+        },
+        {
+          "name": "default",
+          "notes": "—"
+        }
+      ]
+    },
+    "sign-up-card": {
+      "import": "@aziontech/webkit/sign-up-card",
+      "target": "./src/components/templates/sign-up-card/sign-up-card.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sign-up-card",
+      "category": "templates",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "'Sign Up for a Free Account'",
+          "required": "no",
+          "doc": "title."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "default": "'US$ 300 credit to use over 12 months",
+          "required": "no",
+          "doc": "subtitle."
+        },
+        {
+          "name": "githubLabel",
+          "type": "string",
+          "default": "'Continue with Github'",
+          "required": "no",
+          "doc": "github Label."
+        },
+        {
+          "name": "googleLabel",
+          "type": "string",
+          "default": "'Continue with Google'",
+          "required": "no",
+          "doc": "google Label."
+        },
+        {
+          "name": "emailLabel",
+          "type": "string",
+          "default": "'Sign Up with Work Email'",
+          "required": "no",
+          "doc": "email Label."
+        },
+        {
+          "name": "signInPrompt",
+          "type": "string",
+          "default": "'Already have an account?'",
+          "required": "no",
+          "doc": "sign In Prompt."
+        },
+        {
+          "name": "signInLabel",
+          "type": "string",
+          "default": "'Sign in'",
+          "required": "no",
+          "doc": "sign In Label."
+        },
+        {
+          "name": "termsHref",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "terms Href."
+        },
+        {
+          "name": "privacyHref",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "privacy Href."
+        },
+        {
+          "name": "signInHref",
+          "type": "string",
+          "default": "'#'",
+          "required": "no",
+          "doc": "sign In Href."
+        },
+        {
+          "name": "showGithub",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "show Github."
+        },
+        {
+          "name": "showGoogle",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "show Google."
+        }
+      ],
+      "events": [
+        {
+          "name": "github-click",
+          "payload": "unknown",
+          "notes": "—"
+        },
+        {
+          "name": "google-click",
+          "payload": "unknown",
+          "notes": "—"
+        },
+        {
+          "name": "email-click",
+          "payload": "unknown",
+          "notes": "—"
+        },
+        {
+          "name": "sign-in-click",
+          "payload": "unknown",
+          "notes": "—"
+        },
+        {
+          "name": "terms-click",
+          "payload": "unknown",
+          "notes": "—"
+        },
+        {
+          "name": "privacy-click",
+          "payload": "unknown",
+          "notes": "—"
+        }
+      ]
+    },
+    "spinner": {
+      "import": "@aziontech/webkit/spinner",
+      "target": "./src/components/utils/spinner/spinner.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/spinner",
+      "category": "utils",
+      "structure": "monolithic",
+      "status": "implemented"
+    },
+    "svg/error-403": {
+      "import": "@aziontech/webkit/svg/error-403",
+      "target": "./src/svg/error-403/error-403.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/error-403"
+    },
+    "svg/error-404": {
+      "import": "@aziontech/webkit/svg/error-404",
+      "target": "./src/svg/error-404/error-404.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/error-404"
+    },
+    "svg/azion/full": {
+      "import": "@aziontech/webkit/svg/azion/full",
+      "target": "./src/svg/azion/full/full.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/azion/full"
+    },
+    "svg/azion/move-to-the-edge": {
+      "import": "@aziontech/webkit/svg/azion/move-to-the-edge",
+      "target": "./src/svg/azion/move-to-the-edge/move-to-the-edge.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/azion/move-to-the-edge"
+    },
+    "svg/azion/technologies": {
+      "import": "@aziontech/webkit/svg/azion/technologies",
+      "target": "./src/svg/azion/technologies/technologies.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/azion/technologies"
+    },
+    "svg/azion/default": {
+      "import": "@aziontech/webkit/svg/azion/default",
+      "target": "./src/svg/azion/default/default.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/azion/default"
+    },
+    "svg/azion/min": {
+      "import": "@aziontech/webkit/svg/azion/min",
+      "target": "./src/svg/azion/min/min.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/azion/min"
+    },
+    "svg/illustration-layers": {
+      "import": "@aziontech/webkit/svg/illustration-layers",
+      "target": "./src/svg/illustration-layers/illustration-layers.vue",
+      "kind": "svg",
+      "treeShakeableImport": "@aziontech/webkit/svg/illustration-layers"
+    },
+    "utils/cn": {
+      "import": "@aziontech/webkit/utils/cn",
+      "target": "./src/utils/cn.js",
+      "kind": "util",
+      "treeShakeableImport": "@aziontech/webkit/utils/cn"
+    },
+    "styles/country-flags": {
+      "import": "@aziontech/webkit/styles/country-flags",
+      "target": "./src/styles/country-flags.css",
+      "kind": "style",
+      "treeShakeableImport": "@aziontech/webkit/styles/country-flags"
+    },
+    "use-controllable": {
+      "import": "@aziontech/webkit/use-controllable",
+      "target": "./src/composables/use-controllable/index.js",
+      "kind": "composable",
+      "treeShakeableImport": "@aziontech/webkit/use-controllable"
+    },
+    "use-focus-trap": {
+      "import": "@aziontech/webkit/use-focus-trap",
+      "target": "./src/composables/use-focus-trap/index.js",
+      "kind": "composable",
+      "treeShakeableImport": "@aziontech/webkit/use-focus-trap"
+    },
+    "use-placement": {
+      "import": "@aziontech/webkit/use-placement",
+      "target": "./src/composables/use-placement/index.js",
+      "kind": "composable",
+      "treeShakeableImport": "@aziontech/webkit/use-placement"
+    },
+    "vite": {
+      "import": "@aziontech/webkit/vite",
+      "target": "./src/vite/index.js",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/vite"
+    }
+  }
+}

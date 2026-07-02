@@ -51,7 +51,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
+        "prepareCmd": "node scripts/build-catalog.mjs && vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],
