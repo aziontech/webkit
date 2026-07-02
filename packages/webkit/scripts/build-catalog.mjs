@@ -11,7 +11,7 @@
 //
 // No external deps — Node built-ins + the repo's own spec parser.
 
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
