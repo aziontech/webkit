@@ -1,19 +1,23 @@
 <script setup>
+  import catalog from '@aziontech/icons/catalog'
+  import colorCatalog from '@aziontech/icons/color-catalog'
   import { ref } from 'vue'
-  import icons from '@aziontech/icons/catalog'
 
-  let input = ref('')
+  // Same order as App.vue's iconsList so index i maps to the i-th <li>.
+  const icons = [...catalog, ...colorCatalog]
+
+  const input = ref('')
 
   function searchIcons() {
-    let filter = input.value.toUpperCase()
+    const filter = input.value.toUpperCase()
 
-    let ul = document.getElementById('myUL')
-    let li = ul.getElementsByTagName('li')
+    const ul = document.getElementById('myUL')
+    const li = ul.getElementsByTagName('li')
 
     for (let i = 0; i < li.length; i++) {
-      let icon = icons[i]
-      let nameMatch = icon.name.toUpperCase().indexOf(filter) > -1
-      let keywordMatch = icon.keywords.toUpperCase().indexOf(filter) > -1
+      const icon = icons[i]
+      const nameMatch = icon.name.toUpperCase().indexOf(filter) > -1
+      const keywordMatch = icon.keywords.toUpperCase().indexOf(filter) > -1
 
       if (nameMatch || keywordMatch) {
         li[i].style.display = ''

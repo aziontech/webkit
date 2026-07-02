@@ -1,5 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
+
+import ColoredIconPreview from './ColoredIconPreview.vue';
 
 const props = defineProps({
   /**
@@ -7,6 +9,12 @@ const props = defineProps({
    * [{ icon: 'ai ai-azion', name: 'ai-azion', keywords: '' }, ...]
    */
   icons: { type: Array, required: true },
+  /**
+   * Colored brand icons from @aziontech/icons/color-catalog
+   * [{ name: 'ai-react-cor', svg: '<svg ...>', keywords: '', colored: true }, ...]
+   * Delivered as inline SVG — multicolor logos can't live in the icon font.
+   */
+  colorIcons: { type: Array, default: () => [] },
   initialSize: { type: Number, default: 24 },
 });
 
@@ -17,30 +25,41 @@ const iconSize = ref(props.initialSize);
 const copiedKey = ref(null);
 let copyTimeout = null;
 
+function matchesQuery(icon, query) {
+  const name = icon.name.toLowerCase();
+  const keywords = (icon.keywords || '').toLowerCase();
+  return name.includes(query) || keywords.includes(query);
+}
+
 // Filter icons based on search query
 const filteredIcons = computed(() => {
   const query = searchQuery.value.toLowerCase().trim();
   if (!query) return props.icons;
-  
-  return props.icons.filter((icon) => {
-    const name = icon.name.toLowerCase();
-    const keywords = (icon.keywords || '').toLowerCase();
-    return name.includes(query) || keywords.includes(query);
-  });
+  return props.icons.filter((icon) => matchesQuery(icon, query));
+});
+
+const filteredColorIcons = computed(() => {
+  const query = searchQuery.value.toLowerCase().trim();
+  if (!query) return props.colorIcons;
+  return props.colorIcons.filter((icon) => matchesQuery(icon, query));
 });
 
 // Split into Azion icons (ai prefix) and PrimeIcons (pi prefix)
-const azionIcons = computed(() => 
+const azionIcons = computed(() =>
   filteredIcons.value.filter((icon) => icon.name.startsWith('ai-'))
 );
 
-const primeIcons = computed(() => 
+const primeIcons = computed(() =>
   filteredIcons.value.filter((icon) => icon.name.startsWith('pi-'))
 );
 
 // Stats
 const totalAzion = computed(() => props.icons.filter((i) => i.name.startsWith('ai-')).length);
 const totalPrime = computed(() => props.icons.filter((i) => i.name.startsWith('pi-')).length);
+
+const totalCount = computed(() => props.icons.length + props.colorIcons.length);
+const filteredCount = computed(() => filteredIcons.value.length + filteredColorIcons.value.length);
+const noResults = computed(() => filteredCount.value === 0);
 
 // Copy icon code to clipboard
 function copyIconCode(icon) {
@@ -74,7 +93,7 @@ function isCopied(name) {
           v-if="searchQuery"
           class="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-muted font-code"
         >
-          {{ filteredIcons.length }} / {{ icons.length }}
+          {{ filteredCount }} / {{ totalCount }}
         </span>
       </div>
       
@@ -120,6 +139,34 @@ function isCopied(name) {
       </div>
     </div>
 
+    <!-- Colored Icons (brand) -->
+    <div v-if="filteredColorIcons.length > 0" class="flex flex-col gap-3">
+      <div class="flex items-baseline gap-3">
+        <h3 class="text-base font-semibold text-default m-0">Colored Icons</h3>
+        <span class="text-[11px] font-code text-muted">{{ filteredColorIcons.length }} / {{ colorIcons.length }}</span>
+      </div>
+      <p class="text-[13px] text-muted m-0 mb-2">
+        Multicolor brand &amp; framework logos, delivered as inline SVG (not part of the icon font, so not recolorable).
+      </p>
+
+      <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
+        <button
+          v-for="icon in filteredColorIcons"
+          :key="icon.name"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-subtle bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
+          :title="'Click to copy: ' + icon.icon"
+          @click="copyIconCode(icon)"
+        >
+          <ColoredIconPreview :svg="icon.svg" :size="iconSize" />
+          <span class="text-[9px] font-code text-muted text-center leading-tight w-full px-1 truncate max-w-20">{{ icon.name.replace('ai-', '') }}</span>
+          <i :class="[
+            'absolute top-1.5 right-1.5 text-[10px] transition-opacity duration-100',
+            isCopied(icon.name) ? 'pi pi-check !opacity-100 text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
+          ]" />
+        </button>
+      </div>
+    </div>
+
     <!-- PrimeIcons -->
     <div v-if="primeIcons.length > 0" class="flex flex-col gap-3">
       <div class="flex items-baseline gap-3">
@@ -149,7 +196,7 @@ function isCopied(name) {
     </div>
 
     <!-- Empty state -->
-    <div v-if="filteredIcons.length === 0" class="flex flex-col items-center justify-center px-5 py-[60px] border border-dashed border-default rounded-lg">
+    <div v-if="noResults" class="flex flex-col items-center justify-center px-5 py-[60px] border border-dashed border-default rounded-lg">
       <i class="pi pi-search text-5xl opacity-30" />
       <p class="text-body-md text-muted mt-4 mb-1">No icons found</p>
       <p class="text-body-sm text-muted m-0">Try a different search term</p>
