@@ -78,3 +78,6 @@ CLAUDE.md
 packages/icons/tmp/
 tmp
 .tmp
+
+# Vitest browser-mode failure screenshots (regenerated on demand)
+**/__screenshots__/

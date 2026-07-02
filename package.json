@@ -31,6 +31,8 @@
     "webkit:lint:style:fix": "pnpm --filter webkit lint:style:fix",
     "webkit:type-check": "pnpm --filter webkit type-check",
     "webkit:type-coverage": "pnpm --filter webkit type-coverage",
+    "webkit:test": "pnpm --filter webkit test",
+    "webkit:test:watch": "pnpm --filter webkit test:watch",
     "webkit:format": "prettier --write packages/webkit/**/*.{js,ts,vue,css,json,md}",
     "webkit:format:check": "prettier --check packages/webkit/**/*.{js,ts,vue,css,json,md}",
     "security:audit": "pnpm audit --audit-level=high",
