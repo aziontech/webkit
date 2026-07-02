@@ -40,7 +40,7 @@
 
 <template>
   <Teleport
-    v-if="ctx.isOpen.value && ctx.panelBodyRef.value"
+    v-if="ctx.panelBodyRef.value"
     :to="ctx.panelBodyRef.value"
   >
     <div

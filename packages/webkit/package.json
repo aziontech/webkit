@@ -64,6 +64,7 @@
     "./copy-button": "./src/components/actions/copy-button/copy-button.vue",
     "./segmented-button": "./src/components/actions/segmented-button/segmented-button.vue",
     "./icon-button": "./src/components/actions/icon-button/icon-button.vue",
+    "./split-button": "./src/components/actions/split-button/split-button.vue",
     "./tag": "./src/components/tag/tag.vue",
     "./avatar": "./src/components/avatar/avatar.vue",
     "./badge": "./src/components/content/badge/badge.vue",
