@@ -339,6 +339,10 @@ describe('Paginator (composition)', () => {
     // SFC compiler (the string-template Default/Buttons stories register only
     // `Paginator`, so `<Paginator.Button>` there stays an unresolved custom
     // element — see notes; those two story fixtures are omitted for that reason).
+    // Prev/Next are icon-only: PaginationButton renders its default slot only for
+    // `kind="number"` (the chevron shows for previous/next), so their accessible
+    // name comes from `aria-label` — the same pattern the data-driven root uses
+    // (`aria-label="Previous page"` / `"Next page"`), flowed through v-bind="$attrs".
     const Composed = {
       components: { Paginator, PaginationButton, PaginatorInfo, PaginatorPageSize },
       template: `
@@ -346,10 +350,10 @@ describe('Paginator (composition)', () => {
           <template #info>
             <PaginatorInfo>Showing 1 to 10 of 20 entries</PaginatorInfo>
           </template>
-          <PaginationButton kind="previous" disabled>Previous</PaginationButton>
+          <PaginationButton kind="previous" aria-label="Previous page" disabled />
           <PaginationButton kind="number" selected>1</PaginationButton>
           <PaginationButton kind="number">2</PaginationButton>
-          <PaginationButton kind="next">Next</PaginationButton>
+          <PaginationButton kind="next" aria-label="Next page" />
           <template #controls>
             <PaginatorPageSize :model-value="10" :options="[10, 25, 50, 100]" />
           </template>
@@ -403,6 +407,9 @@ describe('Paginator (composition)', () => {
     })
 
     it('the hand-composed compound tree has no violations', async () => {
+      // Icon-only prev/next must carry an `aria-label` (their slot text is not
+      // rendered — only `kind="number"` shows the slot); without it axe trips
+      // button-name. This mirrors the data-driven root's own aria-labels.
       const Composed = {
         components: { Paginator, PaginationButton, PaginatorInfo, PaginatorPageSize },
         template: `
@@ -410,10 +417,10 @@ describe('Paginator (composition)', () => {
             <template #info>
               <PaginatorInfo>Showing 1 to 10 of 20 entries</PaginatorInfo>
             </template>
-            <PaginationButton kind="previous">Previous</PaginationButton>
+            <PaginationButton kind="previous" aria-label="Previous page" />
             <PaginationButton kind="number" selected>1</PaginationButton>
             <PaginationButton kind="number">2</PaginationButton>
-            <PaginationButton kind="next">Next</PaginationButton>
+            <PaginationButton kind="next" aria-label="Next page" />
             <template #controls>
               <PaginatorPageSize :model-value="10" :options="[10, 25, 50, 100]" />
             </template>

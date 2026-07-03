@@ -3,7 +3,6 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/Sidebar.stories'
-
 import { expectNoA11yViolations } from '../../../test/axe'
 import { SidebarInjectionKey } from './injection-key'
 import SidebarFooter from './sidebar-footer.vue'
@@ -73,9 +72,9 @@ describe('SidebarFooter', () => {
         attrs: { class: 'my-custom-class' }
       })
 
-      expect(getByTestId('layout-sidebar__footer-region').classList.contains('my-custom-class')).toBe(
-        true
-      )
+      expect(
+        getByTestId('layout-sidebar__footer-region').classList.contains('my-custom-class')
+      ).toBe(true)
     })
   })
 

@@ -3,7 +3,6 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/Sidebar.stories'
-
 import { expectNoA11yViolations } from '../../../test/axe'
 import Sidebar from './sidebar.vue'
 
@@ -52,7 +51,9 @@ describe('Sidebar', () => {
       const { getByTestId, getByRole } = render(Sidebar, { props: { ariaLabel: 'Application' } })
       expect(getByTestId('layout-sidebar').getAttribute('aria-label')).toBe('Application')
       // The <aside> root carries aria-label -> it is a complementary landmark named "Application".
-      expect(getByRole('complementary', { name: 'Application' })).toBe(getByTestId('layout-sidebar'))
+      expect(getByRole('complementary', { name: 'Application' })).toBe(
+        getByTestId('layout-sidebar')
+      )
     })
   })
 

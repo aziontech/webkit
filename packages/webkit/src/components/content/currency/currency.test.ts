@@ -2,8 +2,8 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoA11yViolations } from '../../../test/axe'
 import * as stories from '../../../../../../apps/storybook/src/stories/components/content/currency/Currency.stories'
+import { expectNoA11yViolations } from '../../../test/axe'
 import Currency from './currency.vue'
 
 const { Default, Sizes } = composeStories(stories)
@@ -46,9 +46,7 @@ describe('Currency', () => {
     expect(queryByTestId('content-currency__suffix')).toBeNull()
 
     const withSuffix = render(Currency, { props: { value: '20', suffix: 'per month' } })
-    expect(
-      withSuffix.getByTestId('content-currency__suffix').textContent?.trim()
-    ).toBe('per month')
+    expect(withSuffix.getByTestId('content-currency__suffix').textContent?.trim()).toBe('per month')
   })
 
   it('honors a consumer-provided data-testid on the root and derives the part ids from it', () => {

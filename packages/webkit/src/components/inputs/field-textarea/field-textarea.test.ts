@@ -8,12 +8,13 @@ import FieldTextarea from './field-textarea.vue'
 
 const { Required, Invalid } = composeStories(stories)
 
-// The root fallback testid is `input-field-textarea`. The composed Textarea's root
-// div receives `${root}__control`, and the native <textarea> inside it receives that
-// value + `__control` again — so the editable element is `…__control__control`.
+// The root fallback testid is `input-field-textarea`. FieldTextarea passes
+// `${root}__control` to the composed <Textarea>, whose root element IS the native
+// <textarea> (post inline-flex refactor) — so the editable element carries
+// `…__control` directly (no doubled suffix, no wrapping div).
 const ROOT = 'input-field-textarea'
-const CONTROL = `${ROOT}__control` // the Textarea sub-component root (a <div>)
-const NATIVE = `${CONTROL}__control` // the native <textarea>
+const CONTROL = `${ROOT}__control` // the native <textarea> (Textarea's root)
+const NATIVE = CONTROL // same element: the native <textarea>
 
 describe('FieldTextarea', () => {
   it('renders the root with the default data-testid and stacks its parts', () => {
@@ -23,10 +24,9 @@ describe('FieldTextarea', () => {
 
     expect(getByTestId(ROOT)).toBeTruthy()
     expect(getByTestId(`${ROOT}__label`)).toBeTruthy()
-    expect(getByTestId(CONTROL)).toBeTruthy()
     expect(getByTestId(`${ROOT}__helper`)).toBeTruthy()
-    // The editable element is a real <textarea>.
-    expect((getByTestId(NATIVE) as HTMLElement).tagName).toBe('TEXTAREA')
+    // The composed Textarea's root IS the editable <textarea>, carrying `…__control`.
+    expect((getByTestId(CONTROL) as HTMLElement).tagName).toBe('TEXTAREA')
   })
 
   it('honors a consumer-provided data-testid on the root and its suffixed parts', () => {
@@ -256,7 +256,7 @@ describe('FieldTextarea', () => {
     it('composes the Invalid story with invalid semantics and a seeded value', () => {
       const { getByTestId } = render(Invalid())
       expect(getByTestId(ROOT).getAttribute('data-invalid')).toBe('true')
-      expect(getByTestId(NATIVE)).toHaveValue('Text Filled')
+      expect(getByTestId(NATIVE)).toHaveValue('Text filled')
       expect(getByTestId(NATIVE).getAttribute('aria-invalid')).toBe('true')
     })
   })

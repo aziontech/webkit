@@ -9,14 +9,14 @@ import FieldRadio from './field-radio.vue'
 const { Default, Disabled } = composeStories(stories)
 
 describe('FieldRadio', () => {
-  it('renders the root label with the default testid and wires the label for/input id', () => {
+  it('renders the div root with the default testid and wires the label for/input id', () => {
     const { getByTestId } = render(FieldRadio, {
       props: { value: 'a', inputId: 'radio-a', label: 'Option A' }
     })
 
     const root = getByTestId('input-field-radio')
-    expect(root.tagName).toBe('LABEL')
-    expect(root.getAttribute('for')).toBe('radio-a')
+    expect(root.tagName).toBe('DIV')
+    expect(getByTestId('input-field-radio__label').getAttribute('for')).toBe('radio-a')
 
     const input = getByTestId('input-field-radio__control__input') as HTMLInputElement
     expect(input.tagName).toBe('INPUT')
@@ -30,7 +30,7 @@ describe('FieldRadio', () => {
       attrs: { 'data-testid': 'my-field' }
     })
 
-    expect(getByTestId('my-field').tagName).toBe('LABEL')
+    expect(getByTestId('my-field').tagName).toBe('DIV')
     expect(getByTestId('my-field__control').tagName).toBe('SPAN')
     expect(getByTestId('my-field__texts')).toBeTruthy()
     expect(getByTestId('my-field__label').textContent).toContain('Option A')
@@ -69,7 +69,9 @@ describe('FieldRadio', () => {
     const checked = render(FieldRadio, {
       props: { modelValue: 'a', value: 'a', label: 'A' }
     })
-    const checkedInput = checked.getByTestId('input-field-radio__control__input') as HTMLInputElement
+    const checkedInput = checked.getByTestId(
+      'input-field-radio__control__input'
+    ) as HTMLInputElement
     expect(checkedInput.checked).toBe(true)
     expect(checkedInput.getAttribute('aria-checked')).toBe('true')
     checked.unmount()
@@ -157,7 +159,7 @@ describe('FieldRadio', () => {
     )
   })
 
-  it('merges a consumer-supplied class onto the root label', () => {
+  it('merges a consumer-supplied class onto the root', () => {
     const { getByTestId } = render(FieldRadio, {
       props: { value: 'a' },
       attrs: { class: 'consumer-class' }

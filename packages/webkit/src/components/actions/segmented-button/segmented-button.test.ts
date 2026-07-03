@@ -194,7 +194,7 @@ describe('SegmentedButton', () => {
       props: { options: OPTIONS, modelValue: 'two' }
     })
 
-    let [first, second] = getAllByTestId('actions-segmented-button__option')
+    const [first, second] = getAllByTestId('actions-segmented-button__option')
     expect(second.getAttribute('aria-checked')).toBe('true')
     expect(first.getAttribute('aria-checked')).toBe('false')
 
