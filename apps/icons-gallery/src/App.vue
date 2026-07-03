@@ -1,6 +1,9 @@
 <script setup>
-  import { ref, watch } from 'vue'
   import icons from '@aziontech/icons/catalog'
+  import colorIcons from '@aziontech/icons/color-catalog'
+  import { ref, watch } from 'vue'
+
+  import ColoredIcon from './components/ColoredIcon.vue'
   import IconCard from './components/IconCard.vue'
   import SearchBar from './components/SearchBar.vue'
   import { getThemeIcon, toggleTheme } from './theme'
@@ -16,7 +19,9 @@
   const selectedFontSize = ref(20)
   const sliderValue = ref(2)
   const fontSizeValues = [8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 320]
-  const iconsList = icons
+  // Font glyphs (mono, recolorable) followed by colored brand SVGs. SearchBar
+  // builds the same combined list so its index → <li> mapping stays aligned.
+  const iconsList = [...icons, ...colorIcons]
   const pureColor = ref('rgb(133, 133, 133)')
   const downloadFormat = ref('png')
   const openBottombar = ref(false)
@@ -95,7 +100,7 @@
             class="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-3 gap-2 md:gap-4"
             id="myUL"
           >
-            <icon-card
+            <IconCard
               v-for="icon in iconsList"
               :key="icon.name"
               :name="icon.name"
@@ -105,14 +110,22 @@
               :size="`${selectedFontSize}px`"
               :download-format="downloadFormat"
             >
+              <!-- Colored brand icons carry their own palette: rendered inline,
+                   sized but never recolored. -->
+              <ColoredIcon
+                v-if="icon.colored"
+                :svg="icon.svg"
+                :size="selectedFontSize"
+              />
               <i
+                v-else
                 :class="'' + icon.icon"
                 :style="{
                   fontSize: selectedFontSize + 'px',
                   color: IconsColor
                 }"
               ></i>
-            </icon-card>
+            </IconCard>
           </ul>
           <div
             class="text-neutral-700 dark:text-neutral-200 opacity-40 gap-2 w-full text-center justify-center items-center min-h-28 border border-neutral-200 dark:border-neutral-700 bg-neutral-100/60 dark:bg-neutral-800/60 rounded-md text-xs flex px-4 py-8"

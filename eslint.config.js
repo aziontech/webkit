@@ -38,6 +38,7 @@ export default [
         HTMLSelectElement: 'readonly',
         HTMLInputElement: 'readonly',
         MouseEvent: 'readonly',
+        KeyboardEvent: 'readonly',
         Event: 'readonly',
         Node: 'readonly',
         // Node globals
