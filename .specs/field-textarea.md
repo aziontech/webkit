@@ -3,20 +3,20 @@ name: field-textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=602-890
   node_id: 602:890
-checksum: af3a88985b0b6f200b0c4b0d3f3bc8078df5874c69941bb9a07e8650a7182f25
+checksum: b68a18e14032ad6caf2e151303a0ce9b54e22d062f2f145e82535ed835a1ffdf
 created: 2026-06-23
-last_updated: 2026-06-23
+last_updated: 2026-07-03
 ---
 
 # Field Textarea — Component Spec
 
 ## Purpose
 
-Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, vertical resize, 80px min-height) instead of `InputText`.
+Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, 80px min-height, configurable resize axis via `resizable`) instead of `InputText`.
 
 ## Usage
 
@@ -52,6 +52,7 @@ const value = ref('')
 | `readonly` | `boolean` | `false` | no | Marks the textarea read-only; value is visible but not editable. Native pass-through. |
 | `required` | `boolean` | `false` | no | Adds the Required tag to the Label and sets native required + aria-required on the textarea. |
 | `invalid` | `boolean` | `false` | no | Switches the helper to `kind=invalid` and applies invalid border tokens on the textarea. |
+| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | no | Forwarded to the underlying `Textarea`; controls which axes the user can drag to resize the field. |
 | `inputId` | `string` | `''` | no | id for the native textarea; consumed by Label via `for` and by `aria-describedby` wiring. |
 
 ## Events
