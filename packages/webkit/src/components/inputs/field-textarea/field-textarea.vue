@@ -101,7 +101,7 @@
       :data-disabled="disabled || null"
       :data-invalid="invalid || null"
       :data-required="required || null"
-      class="inline-flex items-center gap-[var(--spacing-xxs)] w-fit text-body-xs text-[var(--text-muted)] data-[required]:text-[var(--warning)] data-[invalid]:text-[var(--danger)] data-[disabled]:rounded-[var(--shape-button)] data-[disabled]:border data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-surface)] data-[disabled]:px-[var(--spacing-xs)] data-[disabled]:py-[var(--spacing-xxs)] data-[disabled]:text-[var(--text-muted)]"
+      class="inline-flex items-center gap-[var(--spacing-xxs)] w-fit text-body-xs text-[var(--text-muted)] data-[required]:text-[var(--warning-contrast)] data-[invalid]:text-[var(--danger-contrast)] data-[disabled]:rounded-[var(--shape-button)] data-[disabled]:border data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-surface)] data-[disabled]:px-[var(--spacing-xs)] data-[disabled]:py-[var(--spacing-xxs)] data-[disabled]:text-[var(--text-muted)]"
     >
       <i
         v-if="disabled"
