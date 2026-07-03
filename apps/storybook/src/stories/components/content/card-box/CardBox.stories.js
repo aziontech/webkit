@@ -61,7 +61,7 @@ const Template = (args) => ({
   template: `
     <CardBox v-bind="args" class="w-full max-w-[512px]">
       <template #content>
-        <p class="text-body-md text-[var(--text-default)] p-[var(--spacing-4)]">
+        <p class="text-body-md text-[var(--text-default)]">
           Card body content. Place forms, tables, or any markup in the content slot.
         </p>
       </template>
@@ -72,4 +72,30 @@ const Template = (args) => ({
 /** @type {import('@storybook/vue3').StoryObj<typeof CardBox>} */
 export const Default = {
   render: Template
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CardBox>} */
+export const Flush = {
+  render: (args) => ({
+    components: { CardBox },
+    setup() {
+      return { args }
+    },
+    template: `
+      <CardBox v-bind="args" :padded="false" class="w-full max-w-[512px]">
+        <template #content>
+          <p class="text-body-md text-[var(--text-default)] p-[var(--spacing-4)]">
+            With padded=false the content sits flush to the card edges; the content owns its own padding (or renders an ItemList with full-width dividers).
+          </p>
+        </template>
+      </CardBox>
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Set `padded=false` for edge-to-edge content such as an ItemList with full-width dividers.'
+      }
+    }
+  }
 }

@@ -73,6 +73,7 @@
     "./item": "./src/components/content/item/index.ts",
     "./item-root": "./src/components/content/item/item.vue",
     "./item-group": "./src/components/content/item/item-group.vue",
+    "./item-list": "./src/components/content/item/item-list.vue",
     "./item-separator": "./src/components/content/item/item-separator.vue",
     "./item-media": "./src/components/content/item/item-media.vue",
     "./item-content": "./src/components/content/item/item-content.vue",
