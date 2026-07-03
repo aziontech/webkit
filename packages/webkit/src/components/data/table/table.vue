@@ -24,10 +24,7 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import PaginationButton from '../paginator/pagination-button/pagination-button.vue'
   import Paginator from '../paginator/paginator.vue'
-  import PaginatorInfo from '../paginator/paginator-info/paginator-info.vue'
-  import PaginatorPageSize from '../paginator/paginator-page-size/paginator-page-size.vue'
   import {
     type AppliedFilter,
     type FilterField,
@@ -650,12 +647,6 @@
       : props.data.length || props.pageSize
     return Math.max(displayed, 1)
   })
-  const rangeStart = computed<number>(() =>
-    totalRows.value === 0 ? 0 : pageIndex.value * currentPageSize.value + 1
-  )
-  const rangeEnd = computed<number>(() =>
-    Math.min((pageIndex.value + 1) * currentPageSize.value, totalRows.value)
-  )
 
   type ColumnLike = { columnDef: { meta?: unknown } }
   // An action column is always pinned to the trailing (right) edge so the row's
@@ -1158,43 +1149,15 @@
 
     <TableFooter v-if="dataDriven && paginated">
       <div class="flex items-center px-[var(--spacing-sm)] py-[var(--spacing-xs)]">
-        <Paginator class="w-full">
-          <template #info>
-            <PaginatorInfo>
-              Showing {{ rangeStart }} to {{ rangeEnd }} of {{ totalRows }} entries
-            </PaginatorInfo>
-          </template>
-          <PaginationButton
-            kind="previous"
-            :disabled="!table.getCanPreviousPage()"
-            @click="table.previousPage()"
-          >
-            Previous
-          </PaginationButton>
-          <PaginationButton
-            v-for="n in table.getPageCount()"
-            :key="n"
-            kind="number"
-            :selected="pageIndex === n - 1"
-            @click="table.setPageIndex(n - 1)"
-          >
-            {{ n }}
-          </PaginationButton>
-          <PaginationButton
-            kind="next"
-            :disabled="!table.getCanNextPage()"
-            @click="table.nextPage()"
-          >
-            Next
-          </PaginationButton>
-          <template #controls>
-            <PaginatorPageSize
-              :model-value="currentPageSize"
-              :options="rowsPerPageOptions"
-              @update:model-value="(value) => table.setPageSize(value)"
-            />
-          </template>
-        </Paginator>
+        <Paginator
+          class="w-full"
+          :page="pageIndex + 1"
+          :total="totalRows"
+          :page-size="currentPageSize"
+          :page-size-options="rowsPerPageOptions"
+          @update:page="(page) => table.setPageIndex(page - 1)"
+          @update:page-size="(size) => table.setPageSize(size)"
+        />
       </div>
     </TableFooter>
     <slot

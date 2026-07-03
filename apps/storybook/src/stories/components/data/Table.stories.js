@@ -881,11 +881,14 @@ export const FullExample = {
         :data="rows"
         :columns="cols"
         row-key="id"
-        :border="true"
-        :paginated="true"
-        :page-size="5"
-        :enable-sorting="true"
-        :enable-row-selection="true"
+        :border="args.border"
+        :max-height="args.maxHeight"
+        :paginated="args.paginated"
+        :page-size="args.pageSize"
+        :enable-sorting="args.enableSorting"
+        :enable-row-selection="args.enableRowSelection"
+        :select-on-row-click="args.selectOnRowClick"
+        :header-variant="args.headerVariant"
         :filter-fields="filterFields"
         :loading="loading"
         export-filename="workloads.csv"
@@ -910,7 +913,13 @@ export const FullExample = {
       </Table>
     `
   }),
-  args: { paginated: true, pageSize: 5, enableSorting: true, enableRowSelection: true },
+  args: {
+    border: true,
+    paginated: true,
+    pageSize: 5,
+    enableSorting: true,
+    enableRowSelection: true
+  },
   parameters: {
     docs: {
       source: { code: FULL_SOURCE },

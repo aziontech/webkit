@@ -5,7 +5,18 @@ import { ref, watch } from 'vue'
 // (`<Paginator.Button>`, `<Paginator.Info>`, `<Paginator.PageSize>`). The
 // standalone imports (`@aziontech/webkit/pagination-button`, …) remain the
 // tree-shaking path; the stories lead with the compound form per compound-api.md.
-const paginatorComponents = { Paginator }
+const paginatorComponents = {
+  Paginator,
+  // Sub-components registered under their dot-notation names so Storybook's
+  // runtime-compiled string templates resolve `<Paginator.Button>` etc. Vue
+  // compiles the dotted tag to an exact-name `resolveComponent` lookup, which a
+  // bare `Paginator` registration does not satisfy. In a real SFC the dotted tag
+  // resolves off the imported `Paginator` binding — consumer code needs only the
+  // single `import Paginator`.
+  'Paginator.Button': Paginator.Button,
+  'Paginator.Info': Paginator.Info,
+  'Paginator.PageSize': Paginator.PageSize
+}
 
 // --- "Show code" source ----------------------------------------------------
 // Storybook's default dynamic source for a custom-template story renders the
@@ -18,12 +29,12 @@ const DEFAULT_SOURCE = `<Paginator>
     <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>
   </template>
 
-  <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+  <Paginator.Button kind="previous" aria-label="Previous page" disabled />
   <Paginator.Button kind="number" selected>1</Paginator.Button>
   <Paginator.Button kind="number">2</Paginator.Button>
   <Paginator.Button kind="number">3</Paginator.Button>
   <Paginator.Button kind="more" />
-  <Paginator.Button kind="next">Next</Paginator.Button>
+  <Paginator.Button kind="next" aria-label="Next page" />
 
   <template #controls>
     <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />
@@ -31,16 +42,16 @@ const DEFAULT_SOURCE = `<Paginator>
 </Paginator>`
 
 const BUTTONS_SOURCE = `<!-- kinds + states -->
-<Paginator.Button kind="previous">Previous</Paginator.Button>
+<Paginator.Button kind="previous" aria-label="Previous page" />
 <Paginator.Button kind="number">1</Paginator.Button>
 <Paginator.Button kind="number" selected>2</Paginator.Button>
 <Paginator.Button kind="more" />
-<Paginator.Button kind="next">Next</Paginator.Button>
+<Paginator.Button kind="next" aria-label="Next page" />
 
 <!-- disabled -->
-<Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+<Paginator.Button kind="previous" aria-label="Previous page" disabled />
 <Paginator.Button kind="number" disabled>1</Paginator.Button>
-<Paginator.Button kind="next" disabled>Next</Paginator.Button>`
+<Paginator.Button kind="next" aria-label="Next page" disabled />`
 
 const DATA_DRIVEN_SOURCE = `<Paginator
   v-model:page="page"
@@ -182,12 +193,12 @@ export const Default = {
         <template #info>
           <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>
         </template>
-        <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+        <Paginator.Button kind="previous" aria-label="Previous page" disabled />
         <Paginator.Button kind="number" selected>1</Paginator.Button>
         <Paginator.Button kind="number">2</Paginator.Button>
         <Paginator.Button kind="number">3</Paginator.Button>
         <Paginator.Button kind="more" />
-        <Paginator.Button kind="next">Next</Paginator.Button>
+        <Paginator.Button kind="next" aria-label="Next page" />
         <template #controls>
           <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />
         </template>
@@ -212,16 +223,16 @@ export const Buttons = {
     template: `
       <div class="flex flex-col gap-[var(--spacing-4)]">
         <div class="flex items-center gap-[var(--spacing-2)]">
-          <Paginator.Button kind="previous">Previous</Paginator.Button>
+          <Paginator.Button kind="previous" aria-label="Previous page" />
           <Paginator.Button kind="number">1</Paginator.Button>
           <Paginator.Button kind="number" selected>2</Paginator.Button>
           <Paginator.Button kind="more" />
-          <Paginator.Button kind="next">Next</Paginator.Button>
+          <Paginator.Button kind="next" aria-label="Next page" />
         </div>
         <div class="flex items-center gap-[var(--spacing-2)]">
-          <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+          <Paginator.Button kind="previous" aria-label="Previous page" disabled />
           <Paginator.Button kind="number" disabled>1</Paginator.Button>
-          <Paginator.Button kind="next" disabled>Next</Paginator.Button>
+          <Paginator.Button kind="next" aria-label="Next page" disabled />
         </div>
       </div>
     `
@@ -239,6 +250,7 @@ export const Buttons = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Paginator>} */
 export const DataDriven = {
+  name: 'Full Example',
   render: (args) => ({
     components: paginatorComponents,
     setup() {
