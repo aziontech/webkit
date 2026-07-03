@@ -84,6 +84,16 @@
   const handleSort = (direction: 'ascending' | 'descending') => {
     emit('sort', direction)
   }
+
+  // The whole sortable header is the sort control: a pointer click anywhere on
+  // it, or Enter/Space while it is focused, toggles the sort — mirroring the
+  // sort button's own toggle (none/descending → ascending, ascending → descending).
+  // The sort button stops its own click/keydown from bubbling here, so activating
+  // the button never double-toggles via this handler.
+  const toggleSort = () => {
+    if (!props.sortable) return
+    handleSort(props.sortDirection === 'ascending' ? 'descending' : 'ascending')
+  }
 </script>
 
 <template>
@@ -99,14 +109,20 @@
     :data-frozen="frozen ?? null"
     :data-compact="compact || null"
     :aria-sort="ariaSort"
-    class="group/head relative flex h-11 min-w-0 items-center gap-[var(--spacing-xs)] px-[var(--spacing-sm)] data-[compact]:h-9 data-[compact]:px-[var(--spacing-xs)] text-label-sm text-[var(--text-muted)] data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ml-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:left-0 data-[frozen=end]:sticky data-[frozen=end]:right-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-right-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] data-[frozen=start]:after:bg-gradient-to-l data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-left-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] data-[frozen=end]:before:bg-gradient-to-r data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
+    :tabindex="sortable ? 0 : undefined"
+    @click="toggleSort"
+    @keydown.enter.prevent="toggleSort"
+    @keydown.space.prevent="toggleSort"
+    class="group/head relative flex h-11 min-w-0 items-center gap-[var(--spacing-xs)] px-[var(--spacing-sm)] data-[sortable]:cursor-pointer data-[sortable]:select-none data-[sortable]:focus-visible:outline-none data-[sortable]:focus-visible:ring-2 data-[sortable]:focus-visible:ring-inset data-[sortable]:focus-visible:ring-[var(--ring-color)] data-[compact]:h-9 data-[compact]:px-[var(--spacing-xs)] text-label-sm text-[var(--text-muted)] data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ml-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:left-0 data-[frozen=end]:sticky data-[frozen=end]:right-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-right-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] data-[frozen=start]:after:bg-gradient-to-l data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-left-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] data-[frozen=end]:before:bg-gradient-to-r data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
   >
     <slot v-if="kind === 'checkbox' || kind === 'action'" />
     <template v-else>
       <span class="min-w-0 flex-1 truncate text-[length:inherit]"><slot /></span>
       <span
         v-if="sortable"
-        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100"
+        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 group-focus-visible/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100"
+        @click.stop
+        @keydown.stop
       >
         <TableSortButton
           :direction="sortDirection"
