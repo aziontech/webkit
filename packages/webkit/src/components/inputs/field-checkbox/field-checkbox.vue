@@ -3,6 +3,7 @@
 
   import { cn } from '../../../utils/cn'
   import Checkbox from '../checkbox/checkbox.vue'
+  import Label from '../label/label.vue'
 
   defineOptions({
     name: 'FieldCheckbox',
@@ -28,6 +29,8 @@
     description?: string
     /** Helper badge text shown when disabled. */
     helperText?: string
+    /** Adds the Required tag to the Label and sets native required + aria-required on the input. */
+    required?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -39,7 +42,8 @@
     inputId: undefined,
     label: '',
     description: '',
-    helperText: ''
+    helperText: '',
+    required: false
   })
 
   const emit = defineEmits<{
@@ -73,17 +77,19 @@
 </script>
 
 <template>
-  <label
-    :for="resolvedInputId"
+  <div
     :class="rootClasses"
     :data-testid="testId"
     :data-disabled="disabled || null"
+    :data-required="required || null"
   >
     <Checkbox
       v-model="model"
       binary
       :name="name"
       :disabled="disabled"
+      :required="required"
+      :aria-required="required || undefined"
       :input-id="resolvedInputId"
       :data-testid="`${testId}__control`"
     />
@@ -92,13 +98,13 @@
       :data-disabled="disabled || null"
       :data-testid="`${testId}__texts`"
     >
-      <span
+      <Label
         v-if="label"
-        class="text-body-sm text-[var(--text-default)]"
+        :value="label"
+        :required="required"
+        :for="resolvedInputId"
         :data-testid="`${testId}__label`"
-      >
-        {{ label }}
-      </span>
+      />
       <span
         v-if="description"
         class="text-body-xs text-[var(--text-muted)]"
@@ -119,5 +125,5 @@
         <span :data-testid="`${testId}__helper-text`">{{ helperText }}</span>
       </div>
     </div>
-  </label>
+  </div>
 </template>

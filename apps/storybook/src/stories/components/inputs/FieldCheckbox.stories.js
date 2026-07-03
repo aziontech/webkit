@@ -51,6 +51,12 @@ const meta = {
       description: 'Helper badge text shown when disabled.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" }, category: 'props' }
     },
+    required: {
+      control: 'boolean',
+      description:
+        'Adds the Required tag to the Label and sets native required + aria-required on the input.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Emitted when the selected value changes.',
@@ -110,4 +116,31 @@ export const Disabled = {
       />
     `
   })
+}
+
+export const Required = {
+  render: () => ({
+    components: { FieldCheckbox },
+    setup() {
+      const value = ref(false)
+      return { value }
+    },
+    template: `
+      <FieldCheckbox
+        v-model="value"
+        label="I agree to the terms"
+        description="Required to continue."
+        required
+        input-id="webkit-field-checkbox-required"
+      />
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When \`required\` is \`true\`, the Label shows the \`*(Required)\` indicator and the native input receives \`required\` + \`aria-required="true"\`.'
+      }
+    }
+  }
 }

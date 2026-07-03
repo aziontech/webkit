@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: ece9d2e9709b3d49abc00122991f5409b5e98e3dfe85fc8c1bfcbb0f1add5dfd
+checksum: 744bbcf186cef0f22e6259417644544988325d4d720b62a0ab2acd7ea2e6b6b7
 created: 2026-06-15
 last_updated: 2026-06-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-06-15
 
 ## Purpose
 
-Form-field label that pairs descriptive text with an optional `Required` badge. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled.
+Form-field label that pairs descriptive text with an optional required indicator. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word "(Required)" in muted text — replacing the older `Tag` badge for a lighter typographic signal.
 
 ## Usage
 
@@ -37,7 +37,7 @@ import InputText from '@aziontech/webkit/input-text'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `required` | `boolean` | `false` | no | Appends a `Required` tag next to the label text. |
+| `required` | `boolean` | `false` | no | Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; "(Required)" inherits `var(--text-muted)`. |
 
 ## Events
 
@@ -64,6 +64,8 @@ _none_
 |---|---|
 | typography | `.text-label-sm` |
 | color (text) | `var(--text-default)` |
+| color (required indicator "(Required)") | `var(--text-muted)` |
+| color (required indicator "*") | `var(--primary)` |
 | gap (required variant) | `var(--spacing-xxs)` |
 
 ## Theme gaps
@@ -76,7 +78,7 @@ _none_
 
 - Root is a native `<label>` element; consumers pass `for="<input-id>"` via attrs to associate it with the corresponding control.
 - Keyboard map: not focusable (decorative wrapper for native `<label>` semantics); clicking the label focuses the associated input via native browser behavior.
-- ARIA: the `Required` indicator is the existing `Tag` component (`severity="warning"`, `size="small"`, content `"Required"`) and is visible text — no extra ARIA needed; consumers that wire the input with `aria-required="true"` keep the programmatic state in sync.
+- ARIA: the required indicator is inline text (`* (Required)`). The `*` character is decorative and marked `aria-hidden="true"` so screen readers announce only "(Required)" together with the label text. Consumers that wire the input with `aria-required="true"` keep the programmatic state in sync.
 - Contrast ≥4.5:1 between `var(--text-default)` and `var(--bg-canvas)`; the warning tag inherits its own contrast guarantees.
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
 - Touch target: label itself is non-interactive; the associated input owns the ≥40×40 px target.
