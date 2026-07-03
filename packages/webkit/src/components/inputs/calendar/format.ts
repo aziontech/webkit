@@ -110,6 +110,38 @@ export const formatValueLabel = (
   return `${formatDate(s, timezone)} – ${formatDate(e, timezone)}`
 }
 
+/** `14:44` (24h clock) — used for the resolved-window line of the period trigger. */
+const formatClock = (date: Date, timezone = ''): string =>
+  new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: tzOption(timezone)
+  }).format(date)
+
+/**
+ * The concrete window a period selection resolves to, shown beneath the relative
+ * token on the trigger. A same-day span reads as a clock range (`14:44 – 23:59`);
+ * a multi-day span falls back to the compact date label.
+ */
+export const formatWindowLabel = (
+  value: CalendarValue,
+  mode: CalendarMode,
+  timezone = ''
+): string => {
+  if (mode !== 'range') {
+    const single = asSingle(value)
+    return single ? `${formatDate(single, timezone)}, ${formatClock(single, timezone)}` : ''
+  }
+
+  const { start, end } = asRange(value)
+  if (start && end && sameDay(start, end)) {
+    return `${formatClock(start, timezone)} – ${formatClock(end, timezone)}`
+  }
+
+  return formatValueLabel(value, mode, timezone)
+}
+
 /** The host's local IANA timezone (e.g. `America/Sao_Paulo`). */
 export const localTimezone = (): string => {
   try {

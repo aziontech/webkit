@@ -16,9 +16,15 @@
   import CalendarFields from './calendar-fields/calendar-fields.vue'
   import CalendarGrid from './calendar-grid/calendar-grid.vue'
   import CalendarPeriod from './calendar-period/calendar-period.vue'
-  import CalendarPreset from './calendar-preset/calendar-preset.vue'
   import CalendarTimezone from './calendar-timezone/calendar-timezone.vue'
-  import { asRange, asSingle, formatValueLabel, startOfDay, withTime } from './format'
+  import {
+    asRange,
+    asSingle,
+    formatValueLabel,
+    formatWindowLabel,
+    startOfDay,
+    withTime
+  } from './format'
   import {
     CalendarInjectionKey,
     type CalendarMode,
@@ -39,8 +45,6 @@
     modelValue?: CalendarValue
     /** Selection mode. Single picks one date; range picks a start and end date. */
     mode?: CalendarMode
-    /** Number of month grids rendered side-by-side; one shared prev/next pages the whole view by a month. */
-    numberOfMonths?: number
     /** Size token; affects the trigger, day-cell hit-area, and typography. */
     size?: CalendarSize
     /** Earliest selectable date; earlier days render disabled. */
@@ -78,7 +82,6 @@
   const props = withDefaults(defineProps<Props>(), {
     modelValue: null,
     mode: 'range',
-    numberOfMonths: 1,
     size: 'medium',
     min: undefined,
     max: undefined,
@@ -118,15 +121,22 @@
 
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
   const panelRef = ref<globalThis.HTMLElement | null>(null)
+  const presetsTriggerRef = ref<globalThis.HTMLElement | null>(null)
+  const presetsPanelRef = ref<globalThis.HTMLElement | null>(null)
 
   /* ---- open state (controlled / uncontrolled) ---- */
   const internalOpen = ref(false)
+  const internalPresetsOpen = ref(false)
   const isOpen = computed(() => (props.open !== undefined ? props.open : internalOpen.value))
   const isOpenRef = computed(() => isOpen.value)
 
   const setOpen = (value: boolean) => {
     if (value && props.disabled) {
       return
+    }
+    // The two-part trigger's dropdowns are mutually exclusive.
+    if (value) {
+      internalPresetsOpen.value = false
     }
     if (props.open === undefined) {
       internalOpen.value = value
@@ -135,6 +145,22 @@
   }
 
   const toggleOpen = () => setOpen(!isOpen.value)
+
+  /* ---- presets menu (left segment of the two-part trigger) ---- */
+  const isPresetsOpen = computed(() => internalPresetsOpen.value)
+  const isPresetsOpenRef = computed(() => isPresetsOpen.value)
+
+  const setPresetsOpen = (value: boolean) => {
+    if (value && props.disabled) {
+      return
+    }
+    if (value) {
+      setOpen(false)
+    }
+    internalPresetsOpen.value = value
+  }
+
+  const togglePresets = () => setPresetsOpen(!isPresetsOpen.value)
 
   /* ---- timezone state (controlled / uncontrolled) ---- */
   const internalTimezone = ref(props.timezone)
@@ -171,6 +197,11 @@
 
   const draft = ref<CalendarValue>(cloneValue(props.modelValue))
   const draftRef = computed(() => draft.value)
+
+  /* The relative token of the committed period (e.g. `45m`). Set when a period is
+     applied, cleared on any non-period commit or clear, so the trigger only shows
+     the two-line period display while a period selection is actually live. */
+  const committedPeriodLabel = ref('')
 
   const resetDraft = () => {
     draft.value = cloneValue(props.modelValue)
@@ -222,7 +253,7 @@
     commitIfImmediate()
   }
 
-  const selectValue = (value: Date | CalendarRange) => {
+  const selectValue = (value: Date | CalendarRange, periodLabel?: string) => {
     if (props.disabled) {
       return
     }
@@ -238,12 +269,36 @@
     }
     // Period selections are complete ranges — commit and close immediately.
     if (props.period) {
+      committedPeriodLabel.value = periodLabel ?? ''
       emit('update:modelValue', cloneValue(draft.value))
       emit('apply', cloneValue(draft.value))
       setOpen(false)
       return
     }
+    committedPeriodLabel.value = ''
     commitIfImmediate()
+  }
+
+  /* Left-segment preset selection: applies the consumer-provided range immediately
+     (no separate Apply), records its label for the trigger, and closes the menu. */
+  const applyPreset = (value: Date | CalendarRange, label: string) => {
+    if (props.disabled) {
+      return
+    }
+    if (props.mode === 'range') {
+      const range = value instanceof Date ? { start: value, end: value } : value
+      draft.value = {
+        start: range.start ? new Date(range.start.getTime()) : null,
+        end: range.end ? new Date(range.end.getTime()) : null
+      }
+    } else {
+      const date = value instanceof Date ? value : (value.start ?? value.end ?? null)
+      draft.value = date ? new Date(date.getTime()) : null
+    }
+    committedPeriodLabel.value = label
+    emit('update:modelValue', cloneValue(draft.value))
+    emit('apply', cloneValue(draft.value))
+    setPresetsOpen(false)
   }
 
   const setEndpoint = (which: 'start' | 'end', date: Date | null) => {
@@ -288,6 +343,7 @@
     if (props.disabled) {
       return
     }
+    committedPeriodLabel.value = ''
     emit('update:modelValue', cloneValue(draft.value))
     emit('apply', cloneValue(draft.value))
     setOpen(false)
@@ -297,6 +353,7 @@
     if (props.disabled) {
       return
     }
+    committedPeriodLabel.value = ''
     emit('update:modelValue', emptyValue())
     draft.value = emptyValue()
   }
@@ -311,7 +368,22 @@
     () => displayValue.value || (props.period ? 'Period' : props.placeholder)
   )
 
+  /* A committed period selects a time interval, not whole days: the trigger stacks the
+     relative token (`45m`) over the concrete window it resolves to (`14:44 – 23:59`). */
+  const isPeriodDisplay = computed(
+    () => props.period && committedPeriodLabel.value !== '' && hasCommitted.value
+  )
+  const windowLabel = computed(() =>
+    formatWindowLabel(props.modelValue, props.mode, timezoneValue.value)
+  )
+
   const hasPresets = computed(() => props.presets.length > 0 || Boolean(slots['presets']))
+
+  /* When presets are configured, the trigger splits into two segments: a preset
+     dropdown (left) and the calendar (right) — the Vercel-style two-part control. */
+  const isTwoPart = computed(() => hasPresets.value && !props.period)
+  const presetLabel = computed(() => committedPeriodLabel.value || 'Select Period')
+  const rangeText = computed(() => windowLabel.value || props.placeholder)
 
   /* ---- positioning + focus + dismissal ---- */
   const { resolvedPlacement, panelStyle } = usePlacement({
@@ -320,26 +392,36 @@
     isOpen: isOpenRef,
     placement: 'bottom-start',
     offset: 6,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
+    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+    onDismiss: () => setOpen(false)
   })
 
   useFocusTrap(panelRef, isOpenRef)
 
+  const { resolvedPlacement: presetsPlacement, panelStyle: presetsPanelStyle } = usePlacement({
+    triggerRef: presetsTriggerRef,
+    panelRef: presetsPanelRef,
+    isOpen: isPresetsOpenRef,
+    placement: 'bottom-start',
+    offset: 6,
+    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+    onDismiss: () => setPresetsOpen(false)
+  })
+
+  useFocusTrap(presetsPanelRef, isPresetsOpenRef)
+
   const onDocumentMousedown = (event: globalThis.MouseEvent) => {
-    if (!isOpen.value) {
-      return
-    }
     const target = event.target as globalThis.Node | null
     if (!target) {
       return
     }
-    if (triggerRef.value?.contains(target)) {
-      return
+    const insideTrigger = triggerRef.value?.contains(target)
+    if (isOpen.value && !insideTrigger && !panelRef.value?.contains(target)) {
+      setOpen(false)
     }
-    if (panelRef.value?.contains(target)) {
-      return
+    if (isPresetsOpen.value && !insideTrigger && !presetsPanelRef.value?.contains(target)) {
+      setPresetsOpen(false)
     }
-    setOpen(false)
   }
 
   const onPanelKeydown = (event: globalThis.KeyboardEvent) => {
@@ -347,6 +429,14 @@
       event.preventDefault()
       setOpen(false)
       triggerRef.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
+    }
+  }
+
+  const onPresetsKeydown = (event: globalThis.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      setPresetsOpen(false)
+      presetsTriggerRef.value?.focus()
     }
   }
 
@@ -363,7 +453,6 @@
     mode: computed(() => props.mode),
     size: computed(() => props.size),
     disabled: computed(() => props.disabled),
-    numberOfMonths: computed(() => props.numberOfMonths),
     min: computed(() => props.min),
     max: computed(() => props.max),
     showTime: computed(() => props.showTime),
@@ -406,60 +495,140 @@
           :data-disabled="disabled || null"
           class="inline-flex max-w-full items-stretch overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] data-[disabled]:opacity-60"
         >
-          <button
-            type="button"
-            :disabled="disabled"
-            :data-size="size"
-            :data-empty="!hasCommitted || null"
-            :data-testid="`${testId}__trigger`"
-            aria-haspopup="dialog"
-            :aria-expanded="isOpen"
-            class="text-body-sm inline-flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] px-[var(--spacing-sm)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-[var(--text-muted)] motion-reduce:transition-none"
-            @click="toggleOpen"
-          >
-            <i
-              :class="triggerIcon"
-              class="shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
-              aria-hidden="true"
-            />
-            <span class="min-w-0 flex-1 truncate text-left">{{ triggerText }}</span>
-            <i
-              v-if="!split && !(clearable && hasCommitted)"
-              class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
-              aria-hidden="true"
-            />
-          </button>
+          <template v-if="isTwoPart">
+            <button
+              ref="presetsTriggerRef"
+              type="button"
+              :disabled="disabled"
+              :data-size="size"
+              :data-testid="`${testId}__presets-trigger`"
+              aria-haspopup="menu"
+              :aria-expanded="isPresetsOpen"
+              class="text-body-sm inline-flex min-w-0 items-center gap-[var(--spacing-xs)] px-[var(--spacing-sm)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+              @click="togglePresets"
+            >
+              <i
+                class="pi pi-clock shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+              <span class="min-w-0 truncate text-left">{{ presetLabel }}</span>
+              <i
+                class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+            </button>
 
-          <button
-            v-if="clearable && hasCommitted"
-            type="button"
-            :disabled="disabled"
-            aria-label="Clear selection"
-            :data-testid="`${testId}__clear-trigger`"
-            class="inline-flex shrink-0 items-center justify-center px-[var(--spacing-xs)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
-            @click="clearCommitted"
-          >
-            <i
-              class="pi pi-times text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-          </button>
+            <button
+              type="button"
+              :disabled="disabled"
+              :data-size="size"
+              :data-empty="!hasCommitted || null"
+              :data-testid="`${testId}__trigger`"
+              aria-haspopup="dialog"
+              :aria-expanded="isOpen"
+              class="text-body-sm inline-flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] border-l border-[var(--border-default)] px-[var(--spacing-sm)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-[var(--text-muted)] motion-reduce:transition-none"
+              @click="toggleOpen"
+            >
+              <i
+                class="pi pi-calendar shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+              <span class="min-w-0 flex-1 truncate text-left">{{ rangeText }}</span>
+            </button>
+          </template>
 
-          <button
-            v-if="split"
-            type="button"
-            :disabled="disabled"
-            aria-label="Open calendar"
-            :aria-expanded="isOpen"
-            :data-testid="`${testId}__split`"
-            class="inline-flex shrink-0 items-center justify-center border-l border-[var(--border-default)] px-[var(--spacing-xs)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
-            @click="toggleOpen"
-          >
-            <i
-              class="pi pi-chevron-down text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-          </button>
+          <template v-else>
+            <button
+              v-if="isPeriodDisplay"
+              type="button"
+              :disabled="disabled"
+              :data-size="size"
+              :data-testid="`${testId}__trigger`"
+              aria-haspopup="dialog"
+              :aria-expanded="isOpen"
+              class="text-body-sm inline-flex min-w-0 flex-1 items-stretch text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+              @click="toggleOpen"
+            >
+              <span
+                class="flex min-w-0 items-center gap-[var(--spacing-xs)] px-[var(--spacing-sm)]"
+              >
+                <i
+                  class="pi pi-clock shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                  aria-hidden="true"
+                />
+                <span class="min-w-0 truncate text-left">{{ committedPeriodLabel }}</span>
+                <i
+                  class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                  aria-hidden="true"
+                />
+              </span>
+              <span
+                class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] border-l border-[var(--border-default)] px-[var(--spacing-sm)]"
+              >
+                <i
+                  class="pi pi-calendar shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                  aria-hidden="true"
+                />
+                <span class="min-w-0 flex-1 truncate text-left">{{ windowLabel }}</span>
+              </span>
+            </button>
+
+            <button
+              v-else
+              type="button"
+              :disabled="disabled"
+              :data-size="size"
+              :data-empty="!hasCommitted || null"
+              :data-testid="`${testId}__trigger`"
+              aria-haspopup="dialog"
+              :aria-expanded="isOpen"
+              class="text-body-sm inline-flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] px-[var(--spacing-sm)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-[var(--text-muted)] motion-reduce:transition-none"
+              @click="toggleOpen"
+            >
+              <i
+                :class="triggerIcon"
+                class="shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+              <span class="min-w-0 flex-1 truncate text-left">{{ triggerText }}</span>
+              <i
+                v-if="!split && !(clearable && hasCommitted)"
+                class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+            </button>
+
+            <button
+              v-if="clearable && hasCommitted"
+              type="button"
+              :disabled="disabled"
+              aria-label="Clear selection"
+              :data-testid="`${testId}__clear-trigger`"
+              class="inline-flex shrink-0 items-center justify-center px-[var(--spacing-xs)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+              @click="clearCommitted"
+            >
+              <i
+                class="pi pi-times text-[length:inherit] leading-none"
+                aria-hidden="true"
+              />
+            </button>
+
+            <button
+              v-if="split"
+              type="button"
+              :disabled="disabled"
+              aria-label="Open calendar"
+              :aria-expanded="isOpen"
+              :data-testid="`${testId}__split`"
+              class="inline-flex shrink-0 items-center justify-center border-l border-[var(--border-default)] px-[var(--spacing-xs)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+              @click="toggleOpen"
+            >
+              <i
+                class="pi pi-chevron-down text-[length:inherit] leading-none"
+                aria-hidden="true"
+              />
+            </button>
+          </template>
         </span>
       </slot>
     </span>
@@ -481,65 +650,90 @@
           class="flex flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"
         >
-          <div class="flex items-stretch">
-            <div
-              v-if="hasPresets && !period"
-              :data-testid="`${testId}__presets`"
-              class="flex min-w-[var(--container-4xs)] flex-col gap-[var(--spacing-xxs)] border-r border-[var(--border-default)] p-[var(--spacing-sm)]"
-            >
-              <slot name="presets">
-                <CalendarPreset
-                  v-for="preset in presets"
-                  :key="preset.label"
-                  :value="preset.value"
-                >
-                  {{ preset.label }}
-                </CalendarPreset>
-              </slot>
-            </div>
-
-            <div
-              class="flex gap-[var(--spacing-md)] p-[var(--spacing-sm)]"
-              :data-horizontal="horizontal || null"
-              :class="horizontal ? 'flex-row items-start' : 'flex-col items-stretch'"
-            >
+          <div
+            class="flex items-stretch"
+            :data-horizontal="horizontal || null"
+            :class="horizontal ? 'flex-row' : 'flex-col'"
+          >
+            <div class="p-[var(--spacing-sm)]">
               <CalendarPeriod v-if="period" />
               <CalendarGrid v-else />
+            </div>
 
-              <div
-                v-if="!period"
-                class="flex flex-col gap-[var(--spacing-sm)]"
-                :class="
-                  horizontal
-                    ? 'min-w-[var(--container-3xs)] border-l border-[var(--border-default)] pl-[var(--spacing-md)]'
-                    : 'border-t border-[var(--border-default)] pt-[var(--spacing-sm)]'
-                "
+            <div
+              v-if="!period"
+              class="flex flex-col gap-[var(--spacing-sm)] p-[var(--spacing-sm)]"
+              :class="
+                horizontal
+                  ? 'min-w-[var(--container-3xs)] border-l border-[var(--border-default)]'
+                  : 'border-t border-[var(--border-default)]'
+              "
+            >
+              <CalendarFields />
+
+              <span
+                v-if="$slots['footer']"
+                class="inline-flex items-center gap-[var(--spacing-xs)]"
               >
-                <CalendarFields />
+                <slot name="footer" />
+              </span>
 
-                <span
-                  v-if="$slots['footer']"
-                  class="inline-flex items-center gap-[var(--spacing-xs)]"
-                >
-                  <slot name="footer" />
-                </span>
+              <Button
+                v-if="showApply"
+                label="Apply Range"
+                kind="outlined"
+                :size="size"
+                :disabled="disabled"
+                icon="pi pi-arrow-down-left"
+                class="w-full justify-center"
+                :data-testid="`${testId}__apply`"
+                @click="applySelection"
+              />
 
-                <Button
-                  v-if="showApply"
-                  label="Apply Range"
-                  kind="outlined"
-                  :size="size"
-                  :disabled="disabled"
-                  icon="pi pi-arrow-down-left"
-                  class="w-full justify-center"
-                  :data-testid="`${testId}__apply`"
-                  @click="applySelection"
-                />
-
-                <CalendarTimezone v-if="showTimezone" />
-              </div>
+              <CalendarTimezone v-if="showTimezone" />
             </div>
           </div>
+        </div>
+      </Transition>
+    </Teleport>
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
+        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+      >
+        <div
+          v-if="isPresetsOpen"
+          ref="presetsPanelRef"
+          role="menu"
+          aria-label="Presets"
+          :data-testid="`${testId}__presets-menu`"
+          :data-state="isPresetsOpen ? 'open' : 'closed'"
+          :data-placement="presetsPlacement"
+          :style="presetsPanelStyle"
+          class="flex min-w-[var(--container-4xs)] flex-col gap-[var(--spacing-xxs)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-sm)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
+          @keydown="onPresetsKeydown"
+        >
+          <slot name="presets">
+            <button
+              v-for="preset in presets"
+              :key="preset.label"
+              type="button"
+              role="menuitem"
+              :disabled="disabled"
+              :data-selected="preset.label === committedPeriodLabel || null"
+              :data-testid="`${testId}__preset`"
+              class="text-body-sm inline-flex w-full items-center justify-between gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-left text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[selected]:bg-[var(--bg-selected)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+              @click="applyPreset(preset.value, preset.label)"
+            >
+              <span class="min-w-0 truncate">{{ preset.label }}</span>
+              <i
+                v-if="preset.label === committedPeriodLabel"
+                class="pi pi-check shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+            </button>
+          </slot>
         </div>
       </Transition>
     </Teleport>

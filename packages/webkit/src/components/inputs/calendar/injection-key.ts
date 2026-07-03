@@ -40,8 +40,6 @@ export interface CalendarContext {
   size: ComputedRef<CalendarSize>
   /** Whether the whole picker is disabled. */
   disabled: ComputedRef<boolean>
-  /** Number of month grids rendered side-by-side. */
-  numberOfMonths: ComputedRef<number>
   /** Earliest selectable date (or undefined). */
   min: ComputedRef<Date | undefined>
   /** Latest selectable date (or undefined). */
@@ -60,8 +58,9 @@ export interface CalendarContext {
   timezones: ComputedRef<string[]>
   /** Grid day click — range-building / single select on the draft. */
   selectDay: (date: Date) => void
-  /** Apply a full value (preset / period) to the draft. */
-  selectValue: (value: Date | CalendarRange) => void
+  /** Apply a full value (preset / period) to the draft; `periodLabel` records the
+   * relative token (e.g. `45m`) so the trigger can show it above the resolved window. */
+  selectValue: (value: Date | CalendarRange, periodLabel?: string) => void
   /** Set a range endpoint (or the single value) from the date/time fields. */
   setEndpoint: (which: 'start' | 'end', date: Date | null) => void
   /** Clear the draft selection. */

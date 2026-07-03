@@ -2,29 +2,82 @@ import { ref } from 'vue'
 
 import Calendar from '@aziontech/webkit/calendar'
 
-const sfc = (body) =>
-  ['<script setup>', "import Calendar from '@aziontech/webkit/calendar'", '</script>', '', '<template>', body, '</template>'].join(
-    '\n'
-  )
+import { toSfc } from '../../../_shared/story-source'
 
-const DEFAULT_SOURCE = sfc('  <Calendar v-model="range" mode="range" />')
-const SIZES_SOURCE = sfc(
-  [
-    '  <div class="flex items-start gap-4">',
-    '    <Calendar v-model="range" mode="range" size="small" />',
-    '    <Calendar v-model="range" mode="range" size="medium" />',
-    '    <Calendar v-model="range" mode="range" size="large" />',
-    '  </div>'
-  ].join('\n')
+const IMPORT = "import Calendar from '@aziontech/webkit/calendar'"
+
+// Runnable snippet scripts: real imports + the reactive state each canvas uses, so
+// "Show code" is copy-paste-ready and matches the canvas exactly.
+const sfcScript = (...decls) => [
+  "import { ref } from 'vue'",
+  '',
+  IMPORT,
+  ...(decls.length ? ['', ...decls] : [])
+]
+
+const DEFAULT_SOURCE = toSfc(
+  sfcScript('const range = ref(null)'),
+  '<Calendar v-model="range" mode="range" clearable show-time show-timezone />'
 )
-const SINGLE_SOURCE = sfc('  <Calendar v-model="date" mode="single" placeholder="Select date" />')
-const MULTI_MONTH_SOURCE = sfc('  <Calendar v-model="range" mode="range" :number-of-months="2" />')
-const HORIZONTAL_SOURCE = sfc('  <Calendar v-model="range" mode="range" horizontal show-time />')
-const PRESETS_SOURCE = sfc('  <Calendar v-model="range" mode="range" :presets="presets" />')
-const TIME_SOURCE = sfc('  <Calendar v-model="range" mode="range" show-time />')
-const TIMEZONE_SOURCE = sfc('  <Calendar v-model="range" mode="range" show-time show-timezone />')
-const PERIOD_SOURCE = sfc('  <Calendar v-model="range" mode="range" period placeholder="Select period" />')
-const CLEARABLE_SOURCE = sfc('  <Calendar v-model="range" mode="range" clearable />')
+const SIZES_SOURCE = toSfc(
+  sfcScript('const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })'),
+  `<div class="flex items-start gap-4">
+  <Calendar v-model="range" mode="range" size="small" />
+  <Calendar v-model="range" mode="range" size="medium" />
+  <Calendar v-model="range" mode="range" size="large" />
+</div>`
+)
+const SINGLE_SOURCE = toSfc(
+  sfcScript('const date = ref(null)'),
+  '<Calendar v-model="date" mode="single" placeholder="Select date" />'
+)
+const HORIZONTAL_SOURCE = toSfc(
+  sfcScript('const range = ref(null)'),
+  '<Calendar v-model="range" mode="range" horizontal clearable show-time />'
+)
+const PRESETS_SOURCE = toSfc(
+  sfcScript(
+    'const now = new Date()',
+    'const daysAgo = (n) => new Date(now.getFullYear(), now.getMonth(), now.getDate() - n)',
+    'const range = ref(null)',
+    'const presets = [',
+    "  { label: 'Last 3 Days', value: { start: daysAgo(3), end: now } },",
+    "  { label: 'Last 7 Days', value: { start: daysAgo(7), end: now } },",
+    "  { label: 'Last 14 Days', value: { start: daysAgo(14), end: now } },",
+    "  { label: 'Last Month', value: { start: daysAgo(30), end: now } }",
+    ']'
+  ),
+  '<Calendar v-model="range" mode="range" :presets="presets" />'
+)
+const MIN_MAX_SOURCE = toSfc(
+  sfcScript(
+    'const now = new Date()',
+    'const range = ref(null)',
+    'const min = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate())',
+    'const max = new Date(now.getFullYear(), now.getMonth() + 2, now.getDate())'
+  ),
+  '<Calendar v-model="range" mode="range" :min="min" :max="max" clearable />'
+)
+const TIME_SOURCE = toSfc(
+  sfcScript(
+    'const range = ref({ start: new Date(2026, 9, 8, 0, 0), end: new Date(2026, 9, 19, 23, 59) })'
+  ),
+  '<Calendar v-model="range" mode="range" show-time />'
+)
+const TIMEZONE_SOURCE = toSfc(
+  sfcScript(
+    'const range = ref({ start: new Date(2026, 9, 8, 0, 0), end: new Date(2026, 9, 19, 23, 59) })'
+  ),
+  '<Calendar v-model="range" mode="range" show-time show-timezone />'
+)
+const PERIOD_SOURCE = toSfc(
+  sfcScript('const range = ref(null)'),
+  '<Calendar v-model="range" mode="range" period placeholder="Select period" />'
+)
+const CLEARABLE_SOURCE = toSfc(
+  sfcScript('const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })'),
+  '<Calendar v-model="range" mode="range" clearable />'
+)
 
 /** @type {import('@storybook/vue3').Meta<typeof Calendar>} */
 const meta = {
@@ -45,7 +98,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Date-range picker. A trigger button opens a popover that holds a one-click presets rail, one or more month grids, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false). Date math uses the native `Date` API only — no date library.'
+          'Date-range picker. A trigger opens a popover with a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action. When `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 label ⌄`) and the calendar (right, `📅 range`). It also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`); a committed period shows the same two-segment trigger (token beside the resolved window). Date math uses the native `Date` API only — no date library.'
       },
       canvas: {
         sourceState: 'shown'
@@ -67,11 +120,6 @@ const meta = {
         type: { summary: "'single' | 'range'" },
         defaultValue: { summary: "'range'" }
       }
-    },
-    numberOfMonths: {
-      control: { type: 'number', min: 1, max: 3 },
-      description: 'Number of month grids rendered side-by-side.',
-      table: { category: 'props', type: { summary: 'number' }, defaultValue: { summary: '1' } }
     },
     size: {
       control: 'inline-radio',
@@ -109,12 +157,12 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: "'Select date range'" }
+        defaultValue: { summary: "'Select a Date Range'" }
       }
     },
     presets: {
       control: false,
-      description: 'Data-driven shortcuts rendered in the presets rail.',
+      description: 'Consumer-provided shortcuts; when present the trigger becomes a two-part control.',
       table: { category: 'props', type: { summary: 'CalendarPresetItem[]' } }
     },
     showTime: {
@@ -129,7 +177,7 @@ const meta = {
     },
     timezone: {
       control: 'text',
-      description: 'Selected IANA timezone for display formatting (v-model:timezone).',
+      description: 'Selected IANA timezone (v-model:timezone). Empty resolves to the user local zone; set a specific IANA name to pin it.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     timezones: {
@@ -190,7 +238,6 @@ const meta = {
   },
   args: {
     mode: 'range',
-    numberOfMonths: 1,
     size: 'medium',
     disabled: false,
     showTime: false,
@@ -205,35 +252,36 @@ const meta = {
 
 export default meta
 
-const handlers = (args) => {
-  const { onUpdateModelValue, onUpdateOpen, onUpdateTimezone, onMonthChange, onApply, ...props } =
-    args
-  return { props, onUpdateModelValue, onUpdateOpen, onUpdateTimezone, onMonthChange, onApply }
-}
-
-const LISTENERS =
-  '@update:modelValue="onUpdateModelValue" @update:open="onUpdateOpen" @update:timezone="onUpdateTimezone" @month-change="onMonthChange" @apply="onApply"'
-
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Default = {
+  args: { clearable: true, showTime: true, showTimezone: true },
   render: (args) => ({
     components: { Calendar },
     setup() {
-      const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })
-      return { ...handlers(args), range }
+      const range = ref(null)
+      return { args, range }
     },
-    template: `<Calendar v-model="range" v-bind="props" ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="range" />'
   }),
   parameters: {
     docs: {
       source: { code: DEFAULT_SOURCE },
-      description: { story: 'Range picker — the trigger opens a popover with the calendar grid and Apply.' }
+      description: {
+        story: 'Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; set `timezone` to pin a specific IANA zone).'
+      }
     }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Sizes = {
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      source: { code: SIZES_SOURCE },
+      description: { story: 'The three trigger sizes — `small`, `medium`, and `large`.' }
+    }
+  },
   render: () => ({
     components: { Calendar },
     setup() {
@@ -245,25 +293,19 @@ export const Sizes = {
       <Calendar v-model="range" mode="range" size="medium" />
       <Calendar v-model="range" mode="range" size="large" />
     </div>`
-  }),
-  parameters: {
-    docs: {
-      controls: { disable: true },
-      source: { code: SIZES_SOURCE },
-      description: { story: 'The three trigger sizes — `small`, `medium`, and `large`.' }
-    }
-  }
+  })
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Single = {
+  args: { mode: 'single', placeholder: 'Select date' },
   render: (args) => ({
     components: { Calendar },
     setup() {
-      const date = ref(new Date(2026, 9, 8))
-      return { ...handlers(args), date }
+      const date = ref(null)
+      return { args, date }
     },
-    template: `<Calendar v-model="date" v-bind="props" mode="single" placeholder="Select date" ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="date" />'
   }),
   parameters: {
     docs: {
@@ -274,39 +316,22 @@ export const Single = {
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
-export const MultiMonth = {
-  render: (args) => ({
-    components: { Calendar },
-    setup() {
-      const range = ref({ start: new Date(2026, 9, 26), end: new Date(2026, 10, 8) })
-      return { ...handlers(args), range }
-    },
-    template: `<Calendar v-model="range" v-bind="props" mode="range" :number-of-months="2" ${LISTENERS} />`
-  }),
-  parameters: {
-    docs: {
-      source: { code: MULTI_MONTH_SOURCE },
-      description: {
-        story: 'Two months side-by-side; one shared nav pages both and the range band spans the boundary.'
-      }
-    }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Horizontal = {
+  args: { horizontal: true, clearable: true, showTime: true },
   render: (args) => ({
     components: { Calendar },
     setup() {
-      const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })
-      return { ...handlers(args), range }
+      const range = ref(null)
+      return { args, range }
     },
-    template: `<Calendar v-model="range" v-bind="props" mode="range" horizontal show-time ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="range" />'
   }),
   parameters: {
     docs: {
       source: { code: HORIZONTAL_SOURCE },
-      description: { story: 'Horizontal layout places the Start/End fields and Apply beside the calendar.' }
+      description: {
+        story: 'Horizontal layout places the Start/End fields and Apply beside the calendar, with a full-height divider.'
+      }
     }
   }
 }
@@ -316,25 +341,56 @@ export const WithPresets = {
   render: (args) => ({
     components: { Calendar },
     setup() {
-      const range = ref({ start: new Date(2026, 9, 13), end: new Date(2026, 9, 19) })
+      const now = new Date()
+      const daysAgo = (n) => new Date(now.getFullYear(), now.getMonth(), now.getDate() - n)
+      const range = ref(null)
       const presets = [
-        { label: 'Last 7 days', value: { start: new Date(2026, 9, 13), end: new Date(2026, 9, 19) } },
-        { label: 'Last 30 days', value: { start: new Date(2026, 8, 20), end: new Date(2026, 9, 19) } }
+        { label: 'Last 3 Days', value: { start: daysAgo(3), end: now } },
+        { label: 'Last 7 Days', value: { start: daysAgo(7), end: now } },
+        { label: 'Last 14 Days', value: { start: daysAgo(14), end: now } },
+        { label: 'Last Month', value: { start: daysAgo(30), end: now } }
       ]
-      return { ...handlers(args), range, presets }
+      return { args, range, presets }
     },
-    template: `<Calendar v-model="range" v-bind="props" mode="range" :presets="presets" ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="range" :presets="presets" />'
   }),
   parameters: {
     docs: {
       source: { code: PRESETS_SOURCE },
-      description: { story: 'A presets rail of one-click shortcuts that stage the range in the draft.' }
+      description: {
+        story: 'Consumer presets drive the two-part trigger: the left dropdown applies a range in one click; the right calendar fine-tunes it.'
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
+export const MinMax = {
+  args: { clearable: true },
+  render: (args) => ({
+    components: { Calendar },
+    setup() {
+      const now = new Date()
+      const range = ref(null)
+      const min = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate())
+      const max = new Date(now.getFullYear(), now.getMonth() + 2, now.getDate())
+      return { args, range, min, max }
+    },
+    template: '<Calendar v-bind="args" v-model="range" :min="min" :max="max" />'
+  }),
+  parameters: {
+    docs: {
+      source: { code: MIN_MAX_SOURCE },
+      description: {
+        story: 'The `min` and `max` bounds (±2 months) disable days outside the allowed window and clamp navigation.'
+      }
     }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const WithTime = {
+  args: { showTime: true },
   render: (args) => ({
     components: { Calendar },
     setup() {
@@ -342,9 +398,9 @@ export const WithTime = {
         start: new Date(2026, 9, 8, 0, 0),
         end: new Date(2026, 9, 19, 23, 59)
       })
-      return { ...handlers(args), range }
+      return { args, range }
     },
-    template: `<Calendar v-model="range" v-bind="props" mode="range" show-time ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="range" />'
   }),
   parameters: {
     docs: {
@@ -356,6 +412,7 @@ export const WithTime = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const WithTimezone = {
+  args: { showTime: true, showTimezone: true },
   render: (args) => ({
     components: { Calendar },
     setup() {
@@ -363,9 +420,9 @@ export const WithTimezone = {
         start: new Date(2026, 9, 8, 0, 0),
         end: new Date(2026, 9, 19, 23, 59)
       })
-      return { ...handlers(args), range }
+      return { args, range }
     },
-    template: `<Calendar v-model="range" v-bind="props" mode="range" show-time show-timezone ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="range" />'
   }),
   parameters: {
     docs: {
@@ -377,19 +434,20 @@ export const WithTimezone = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const SelectPeriod = {
+  args: { period: true, placeholder: 'Select period' },
   render: (args) => ({
     components: { Calendar },
     setup() {
       const range = ref(null)
-      return { ...handlers(args), range }
+      return { args, range }
     },
-    template: `<Calendar v-model="range" v-bind="props" mode="range" period placeholder="Select period" ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="range" />'
   }),
   parameters: {
     docs: {
       source: { code: PERIOD_SOURCE },
       description: {
-        story: 'Select Period mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`.'
+        story: 'Select Period mode: pick a relative span (`45m`, `last month`) and the trigger shows the token beside the resolved window (`14:44 – 23:59`).'
       }
     }
   }
@@ -397,13 +455,14 @@ export const SelectPeriod = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Clearable = {
+  args: { clearable: true },
   render: (args) => ({
     components: { Calendar },
     setup() {
       const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })
-      return { ...handlers(args), range }
+      return { args, range }
     },
-    template: `<Calendar v-model="range" v-bind="props" mode="range" clearable ${LISTENERS} />`
+    template: '<Calendar v-bind="args" v-model="range" />'
   }),
   parameters: {
     docs: {

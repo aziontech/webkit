@@ -7,16 +7,16 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: b1d756030feb2361958413f5d39fbddfebb9a8f652a8e5a98e7074eaf06d2894
+checksum: bc6f6c9d9c59a6b729676a7b2ba8932cac7407d67d25fb2cd43da9e8e61b2018
 created: 2026-06-25
-last_updated: 2026-06-30
+last_updated: 2026-07-02
 ---
 
 # Calendar — Component Spec
 
 ## Purpose
 
-Date-range picker. A trigger button opens a popover that holds a one-click presets rail, one or more month grids, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false). Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).
+Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).
 
 ## Usage
 
@@ -38,7 +38,6 @@ const presets = [
   <Calendar
     v-model="range"
     mode="range"
-    :number-of-months="2"
     :presets="presets"
     show-time
     show-timezone
@@ -78,7 +77,7 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 
 ## Sub-components
 
-- `calendar-preset/calendar-preset.vue` — context-aware shortcut button; applies its `value` (a `Date` in single mode or a `{ start, end }` range) to the popover's draft selection through injected context and reflects a `data-selected` state when its value matches. Placed in the `presets` slot.
+- `calendar-preset/calendar-preset.vue` — context-aware shortcut button; applies its `value` (a `Date` in single mode or a `{ start, end }` range) to the popover's draft selection through injected context and reflects a `data-selected` state when its value matches. Placed in the `presets` slot (the preset dropdown).
 - `calendar-clear/calendar-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
 
 ## Props
@@ -87,14 +86,13 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 |---|---|---|---|---|
 | `modelValue` | `Date \| null \| CalendarRange` | `null` | no | Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false). |
 | `mode` | `'single' \| 'range'` | `'range'` | no | Selection mode. Single picks one date; range picks a start and end date. |
-| `numberOfMonths` | `number` | `1` | no | Number of month grids rendered side-by-side; one shared previous/next pair pages the whole view by a month. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects the trigger, day-cell hit-area, and typography. |
 | `min` | `Date \| undefined` | `undefined` | no | Earliest selectable date; earlier days render disabled. |
 | `max` | `Date \| undefined` | `undefined` | no | Latest selectable date; later days render disabled. |
 | `disabled` | `boolean` | `false` | no | Disables the trigger, grid, and all controls, applying disabled tokens. |
 | `open` | `boolean \| undefined` | `undefined` | no | Controlled open state of the popover. Use with v-model:open; omit for uncontrolled. |
 | `placeholder` | `string` | `'Select a Date Range'` | no | Trigger text shown when there is no selection. |
-| `presets` | `CalendarPresetItem[]` | `[]` | no | Data-driven shortcuts rendered in the presets rail; each is `{ label, value }` where value is a `Date` or range. |
+| `presets` | `CalendarPresetItem[]` | `[]` | no | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
 | `showTime` | `boolean` | `false` | no | Shows Start/End time fields alongside the date fields. |
 | `showTimezone` | `boolean` | `false` | no | Shows the timezone selector below the fields. |
 | `timezone` | `string` | `''` | no | Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone. |
@@ -120,7 +118,7 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 | Slot | Scope | Notes |
 |---|---|---|
 | `trigger` | `{ open, value, displayValue }` | Replaces the default trigger button; scope exposes the open state, raw value, and formatted label. |
-| `presets` | — | Custom presets rail content (e.g. `<Calendar.Preset>`); overrides the `presets` prop rendering. |
+| `presets` | — | Custom preset dropdown content (e.g. `<Calendar.Preset>`); overrides the `presets` prop rendering. |
 | `footer` | — | Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply. |
 
 ## States
@@ -132,6 +130,8 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 - `data-band` on each day cell drives the connected range highlight: `none` | `single` | `start` | `middle` | `end`
 - `data-today` marks the current date; `data-outside` marks an adjacent-month day cell
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
+- When `presets` are supplied, the trigger is a two-part control: a left preset button (`aria-haspopup="menu"`, clock glyph, `data-testid` `…__presets-trigger`) opening the preset dropdown, and a right calendar button (`aria-haspopup="dialog"`, calendar glyph) opening the popover; the two dropdowns are mutually exclusive, and each preset menu item sets `data-selected` when it is the active preset
+- In period mode, a committed selection renders the trigger as two side-by-side segments: the relative token (e.g. `45m`, with a clock glyph) beside the resolved concrete window (e.g. `14:44 – 23:59`, with a calendar glyph), separated by a divider
 
 ## Motion & Animations
 
@@ -188,15 +188,15 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 
 ## Stories (Storybook)
 
-- Default — range picker with a preselected range (trigger + popover). Justified: shows the baseline trigger→popover→grid flow.
+- Default — baseline range picker (empty; opens on the current month) with `clearable`. Justified: shows the baseline trigger→popover→grid flow.
 - Sizes — composite story rendering every `size` value side-by-side (canonical, the component declares a `size` prop).
 - Single — single-date mode (`mode="single"`). Justified: single is a distinct, mutually-exclusive mode the range default cannot show.
-- MultiMonth — two months side-by-side (`number-of-months="2"`). Justified: a structural layout axis (shared nav, band across a month boundary) no other story exercises.
 - Horizontal — `horizontal` layout with fields beside the calendar. Justified: a distinct layout the default vertical story cannot show.
-- WithPresets — a `presets` rail of shortcuts. Justified: the data-driven preset behavior (one-click range + active state) cannot be shown without it.
+- WithPresets — consumer `presets` (Last 3/7/14 Days, Last Month) driving the two-part trigger (preset dropdown + calendar). Justified: the two-part trigger and one-click preset behavior cannot be shown without it.
+- MinMax — `min`/`max` bounds that disable out-of-range days. Justified: the date-constraint behavior (disabled cells, clamped navigation) cannot be shown without it.
 - WithTime — `show-time` Start/End time fields. Justified: the time-field round-trip is a distinct capability.
 - WithTimezone — `show-timezone` selector. Justified: the timezone control is a distinct capability.
-- SelectPeriod — `period` relative-time mode (preset list + parsed text input). Justified: the relative-time parsing mode is mutually exclusive with the absolute calendar flow.
+- SelectPeriod — `period` relative-time mode (preset list + parsed text input); the committed period renders as the two-segment trigger (relative token beside the resolved window). Justified: the relative-time parsing mode is mutually exclusive with the absolute calendar flow.
 - Clearable — `clearable` trigger that empties the committed selection. Justified: the clear affordance and disabled-when-empty behavior cannot be shown without it.
 
 ## Constraints — DO NOT

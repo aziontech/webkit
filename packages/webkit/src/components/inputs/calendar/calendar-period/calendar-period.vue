@@ -27,11 +27,11 @@
 
   const activeExpr = ref('')
 
-  const apply = (expr: string) => {
+  const apply = (expr: string, label: string) => {
     const range = parsePeriod(expr)
     if (range) {
       activeExpr.value = expr
-      ctx?.selectValue(range)
+      ctx?.selectValue(range, label)
     }
   }
 </script>
@@ -53,7 +53,7 @@
         :disabled="disabled"
         :data-active="activeExpr === preset.expr || null"
         class="text-body-sm inline-flex w-full items-center justify-between gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-left text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[active]:bg-[var(--bg-selected)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
-        @click="apply(preset.expr)"
+        @click="apply(preset.expr, preset.label)"
       >
         <span>{{ preset.label }}</span>
         <i
@@ -74,7 +74,7 @@
             type="button"
             :disabled="disabled"
             class="text-label-sm inline-flex items-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
-            @click="apply(hint)"
+            @click="apply(hint, hint)"
           >
             {{ hint }}
           </button>
@@ -90,7 +90,7 @@
             type="button"
             :disabled="disabled"
             class="text-label-sm inline-flex items-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
-            @click="apply(hint)"
+            @click="apply(hint, hint)"
           >
             {{ hint }}
           </button>

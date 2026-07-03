@@ -105,25 +105,29 @@
         {{ mode === 'range' ? 'Start' : 'Date' }}
       </span>
       <div class="flex items-center gap-[var(--spacing-xs)]">
-        <InputText
-          :model-value="startDateText"
-          :size="size"
-          :disabled="disabled"
-          placeholder="Jun 1, 2026"
-          class="flex-1"
-          @update:model-value="startDateText = $event"
-          @change="commitDate('start', startDateText)"
-        />
-        <InputText
+        <div class="min-w-0 flex-1">
+          <InputText
+            :model-value="startDateText"
+            :size="size"
+            :disabled="disabled"
+            placeholder="Jun 1, 2026"
+            @update:model-value="startDateText = $event"
+            @change="commitDate('start', startDateText)"
+          />
+        </div>
+        <div
           v-if="showTime"
-          :model-value="startTimeText"
-          :size="size"
-          :disabled="disabled"
-          placeholder="09:00 AM"
           class="w-24 shrink-0"
-          @update:model-value="startTimeText = $event"
-          @change="commitTime('start', startTimeText)"
-        />
+        >
+          <InputText
+            :model-value="startTimeText"
+            :size="size"
+            :disabled="disabled"
+            placeholder="09:00 AM"
+            @update:model-value="startTimeText = $event"
+            @change="commitTime('start', startTimeText)"
+          />
+        </div>
       </div>
     </div>
 
@@ -133,25 +137,29 @@
     >
       <span class="text-label-sm text-[var(--text-muted)]"> End </span>
       <div class="flex items-center gap-[var(--spacing-xs)]">
-        <InputText
-          :model-value="endDateText"
-          :size="size"
-          :disabled="disabled"
-          placeholder="Jun 30, 2026"
-          class="flex-1"
-          @update:model-value="endDateText = $event"
-          @change="commitDate('end', endDateText)"
-        />
-        <InputText
+        <div class="min-w-0 flex-1">
+          <InputText
+            :model-value="endDateText"
+            :size="size"
+            :disabled="disabled"
+            placeholder="Jun 30, 2026"
+            @update:model-value="endDateText = $event"
+            @change="commitDate('end', endDateText)"
+          />
+        </div>
+        <div
           v-if="showTime"
-          :model-value="endTimeText"
-          :size="size"
-          :disabled="disabled"
-          placeholder="05:00 PM"
           class="w-24 shrink-0"
-          @update:model-value="endTimeText = $event"
-          @change="commitTime('end', endTimeText)"
-        />
+        >
+          <InputText
+            :model-value="endTimeText"
+            :size="size"
+            :disabled="disabled"
+            placeholder="05:00 PM"
+            @update:model-value="endTimeText = $event"
+            @change="commitTime('end', endTimeText)"
+          />
+        </div>
       </div>
     </div>
   </div>
