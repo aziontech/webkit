@@ -93,7 +93,7 @@
         aria-label="Remove"
         :data-testid="`${testId}__remove`"
         class="inline-flex shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
-        @click="onRemove"
+        @click.stop="onRemove"
       >
         <i
           class="pi pi-times flex shrink-0 items-center size-[14px]"

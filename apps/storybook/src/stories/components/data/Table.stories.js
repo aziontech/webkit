@@ -1,20 +1,28 @@
+import Button from '@aziontech/webkit/button'
 import Dropdown from '@aziontech/webkit/dropdown'
 import DropdownGroup from '@aziontech/webkit/dropdown-group'
 import DropdownOption from '@aziontech/webkit/dropdown-option'
 import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
 import IconButton from '@aziontech/webkit/icon-button'
 import Table from '@aziontech/webkit/table'
+import TableAppliedFilters from '@aziontech/webkit/table-applied-filters'
 import TableBody from '@aziontech/webkit/table-body'
 import TableCell from '@aziontech/webkit/table-cell'
+import TableColumnSelector from '@aziontech/webkit/table-column-selector'
+import TableExport from '@aziontech/webkit/table-export'
+import TableFilter from '@aziontech/webkit/table-filter'
 import TableHeadCell from '@aziontech/webkit/table-head-cell'
 import TableHeader from '@aziontech/webkit/table-header'
+import TableRefreshButton from '@aziontech/webkit/table-refresh-button'
 import TableRow from '@aziontech/webkit/table-row'
+import TableSearch from '@aziontech/webkit/table-search'
 import Tag from '@aziontech/webkit/tag'
 import { ref } from 'vue'
 
 const components = {
   Table,
   Tag,
+  Button,
   IconButton,
   Dropdown,
   DropdownTrigger,
@@ -30,7 +38,13 @@ const components = {
   'Table.Body': TableBody,
   'Table.Row': TableRow,
   'Table.HeadCell': TableHeadCell,
-  'Table.Cell': TableCell
+  'Table.Cell': TableCell,
+  'Table.Search': TableSearch,
+  'Table.Filter': TableFilter,
+  'Table.AppliedFilters': TableAppliedFilters,
+  'Table.ColumnSelector': TableColumnSelector,
+  'Table.Export': TableExport,
+  'Table.RefreshButton': TableRefreshButton
 }
 
 // --- Generic fixtures ------------------------------------------------------
@@ -111,6 +125,19 @@ const wideColumns = [
 // Per-column resize is opt-in via `resizable: true`. The simple set with every
 // column resizable powers the Resizable Columns story.
 const resizableColumns = columns.map((col) => ({ ...col, resizable: true }))
+
+// Field catalog for the built-in advanced-filter builder (Table.Filter). The
+// built-in value input is a text field; typed editors would use the escape slot.
+const filterFields = [
+  { id: 'name', label: 'Name', type: 'text' },
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'select',
+    options: STATUSES.map((status) => ({ label: status, value: status }))
+  },
+  { id: 'editor', label: 'Last Editor', type: 'text' }
+]
 
 // One shared, immutable action list — built once, reused by every row's menu.
 // Split into two groups so the navigation `<Dropdown>` renders the divider
@@ -518,7 +545,13 @@ const meta = {
     onCellClick: { action: 'cell-click', table: { category: 'slot interactions (story only)' } },
     onUpdateSorting: { action: 'update:sorting', table: { category: 'events' } },
     onUpdateRowSelection: { action: 'update:rowSelection', table: { category: 'events' } },
-    onUpdatePagination: { action: 'update:pagination', table: { category: 'events' } }
+    onUpdatePagination: { action: 'update:pagination', table: { category: 'events' } },
+    onUpdateFilters: { action: 'update:filters', table: { category: 'events' } },
+    onUpdateState: { action: 'update:state', table: { category: 'events' } },
+    onFilterApply: { action: 'filter-apply', table: { category: 'events' } },
+    onFilterRemove: { action: 'filter-remove', table: { category: 'events' } },
+    onRefresh: { action: 'refresh', table: { category: 'events' } },
+    onExport: { action: 'export', table: { category: 'events' } }
   },
   args: { ...baseArgs }
 }
@@ -739,6 +772,596 @@ export const Empty = {
       description: {
         story:
           'When `data` is empty, the table renders a default empty state in the `#empty` slot — an illustration, a title, and a short description, following Figma. Override the `#empty` slot to supply your own copy and call-to-action (e.g. a Create button or a documentation link).'
+      }
+    }
+  }
+}
+
+// --- New DataTable capability stories --------------------------------------
+
+const FULL_SOURCE = `<script setup>
+import Table from '@aziontech/webkit/table'
+import Tag from '@aziontech/webkit/tag'
+import { ref } from 'vue'
+
+const rows = ref([
+  { id: '1', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com' },
+  { id: '2', name: 'Workload Bravo', status: 'Inactive', editor: 'user2@example.com' }
+])
+const columns = [
+  { accessorKey: 'name', header: 'Name' },
+  { accessorKey: 'status', header: 'Status' },
+  { accessorKey: 'editor', header: 'Last Editor' },
+  { id: 'actions', header: '', kind: 'action' }
+]
+const filterFields = [
+  { id: 'name', label: 'Name', type: 'text' },
+  { id: 'status', label: 'Status', type: 'select', options: [
+    { label: 'Active', value: 'Active' },
+    { label: 'Inactive', value: 'Inactive' }
+  ] }
+]
+const filters = ref([])
+const loading = ref(false)
+const statusSeverity = (value) =>
+  value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'danger'
+
+// Reload signals a refetch; toggle loading to show skeleton rows while it resolves.
+const reload = () => {
+  loading.value = true
+  setTimeout(() => { loading.value = false }, 700)
+}
+<\/script>
+
+<template>
+  <Table
+    :data="rows"
+    :columns="columns"
+    :filter-fields="filterFields"
+    border
+    paginated
+    :page-size="5"
+    enable-sorting
+    enable-row-selection
+    :loading="loading"
+    export-filename="workloads.csv"
+    v-model:filters="filters"
+    @refresh="reload"
+  >
+    <template #toolbar>
+      <Table.Filter :fields="filterFields" />
+      <Table.Search placeholder="Search" />
+      <Table.RefreshButton />
+      <Table.Export />
+      <Table.ColumnSelector />
+    </template>
+    <template #filters>
+      <Table.AppliedFilters />
+    </template>
+    <template #cell-status="{ value }">
+      <Tag :severity="statusSeverity(value)">{{ value }}</Tag>
+    </template>
+  </Table>
+</template>`
+
+export const FullExample = {
+  name: 'Full Example',
+  render: (args) => ({
+    components,
+    setup() {
+      const sorting = ref([])
+      const rowSelection = ref({})
+      const filters = ref([])
+      const loading = ref(false)
+      const onLink = makeOnLink(args)
+      const reload = () => {
+        loading.value = true
+        args.onRefresh?.()
+        setTimeout(() => {
+          loading.value = false
+        }, 700)
+      }
+      return {
+        args,
+        rows,
+        cols: columns,
+        filterFields,
+        rowActionGroups,
+        sorting,
+        rowSelection,
+        filters,
+        loading,
+        statusSeverity,
+        onLink,
+        reload
+      }
+    },
+    template: `
+      <Table
+        :data="rows"
+        :columns="cols"
+        row-key="id"
+        :border="true"
+        :paginated="true"
+        :page-size="5"
+        :enable-sorting="true"
+        :enable-row-selection="true"
+        :filter-fields="filterFields"
+        :loading="loading"
+        export-filename="workloads.csv"
+        v-model:sorting="sorting"
+        v-model:row-selection="rowSelection"
+        v-model:filters="filters"
+        @filter-apply="args.onFilterApply"
+        @filter-remove="args.onFilterRemove"
+        @refresh="reload"
+      >
+        <template #toolbar>
+          <Table.Filter :fields="filterFields" />
+          <Table.Search placeholder="Search" />
+          <Table.RefreshButton />
+          <Table.Export />
+          <Table.ColumnSelector />
+        </template>
+        <template #filters>
+          <Table.AppliedFilters />
+        </template>
+        ${CELL_SLOTS}
+      </Table>
+    `
+  }),
+  args: { paginated: true, pageSize: 5, enableSorting: true, enableRowSelection: true },
+  parameters: {
+    docs: {
+      source: { code: FULL_SOURCE },
+      description: {
+        story:
+          'The assembled DataTable: a `#toolbar` band composing context-aware `Table.Search`, `Table.Filter` (built-in field/operator/value builder), `Table.ColumnSelector`, `Table.Export` (CSV), and `Table.RefreshButton`, with a `#filters` row of removable `Table.AppliedFilters` chips. Every control reads the table through the injected context, so the consumer wires nothing. Structured filters are a first-class `v-model:filters`; the search box drives the separate global filter. Export downloads the visible, ordered, filtered rows as CSV.'
+      }
+    }
+  }
+}
+
+const LOADING_SOURCE = `<script setup>
+import Table from '@aziontech/webkit/table'
+import { ref } from 'vue'
+
+const rows = ref([])
+const columns = [
+  { accessorKey: 'name', header: 'Name' },
+  { accessorKey: 'status', header: 'Status' },
+  { accessorKey: 'editor', header: 'Last Editor' }
+]
+<\/script>
+
+<template>
+  <Table
+    :data="rows"
+    :columns="columns"
+    paginated
+    :page-size="5"
+    enable-sorting
+    loading
+  />
+</template>`
+
+export const Loading = {
+  name: 'Loading',
+  render: (args) => ({
+    components,
+    setup() {
+      const onLink = makeOnLink(args)
+      return {
+        args,
+        rows,
+        cols: columns,
+        rowActionGroups,
+        sorting: ref([]),
+        rowSelection: ref({}),
+        statusSeverity,
+        onLink
+      }
+    },
+    template: `
+      <Table
+        :data="rows"
+        :columns="cols"
+        row-key="id"
+        :paginated="true"
+        :page-size="5"
+        :enable-sorting="true"
+        loading
+      >
+        ${CELL_SLOTS}
+      </Table>
+    `
+  }),
+  args: { paginated: true, pageSize: 5, enableSorting: true },
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      source: { code: LOADING_SOURCE },
+      description: {
+        story:
+          'Dynamic (server-side) mode shows skeleton rows while `loading` is true — aligned to the columns and setting `aria-busy` on the table. Loading takes precedence over both the data rows and the empty state, so the empty illustration never flashes before the first fetch resolves.'
+      }
+    }
+  }
+}
+
+const STATE_SOURCE = `<script setup>
+import Table from '@aziontech/webkit/table'
+import Button from '@aziontech/webkit/button'
+import { ref } from 'vue'
+
+const tableRef = ref(null)
+const state = ref()
+const saved = ref(null)
+const rows = ref([
+  { id: '1', name: 'Workload Alpha', status: 'Active' },
+  { id: '2', name: 'Workload Bravo', status: 'Inactive' }
+])
+const columns = [
+  { accessorKey: 'name', header: 'Name' },
+  { accessorKey: 'status', header: 'Status' }
+]
+
+// The app owns persistence — e.g. encode getState() into the URL:
+//   router.replace({ query: { s: btoa(JSON.stringify(tableRef.value.getState())) } })
+// and restore on mount with tableRef.value.setState(JSON.parse(atob(route.query.s))).
+const save = () => (saved.value = tableRef.value?.getState())
+const restore = () => saved.value && tableRef.value?.setState(saved.value)
+<\/script>
+
+<template>
+  <div>
+    <Button label="Save state" size="small" @click="save" />
+    <Button label="Restore state" kind="outlined" size="small" :disabled="!saved" @click="restore" />
+    <Table
+      ref="tableRef"
+      :data="rows"
+      :columns="columns"
+      paginated
+      :page-size="5"
+      enable-sorting
+      v-model:state="state"
+    />
+  </div>
+</template>`
+
+export const SerializableState = {
+  name: 'Serializable State',
+  render: (args) => ({
+    components,
+    setup() {
+      const tableRef = ref(null)
+      const state = ref()
+      const saved = ref(null)
+      const onLink = makeOnLink(args)
+      const save = () => (saved.value = tableRef.value?.getState())
+      const restore = () => saved.value && tableRef.value?.setState(saved.value)
+      return {
+        args,
+        rows,
+        cols: columns,
+        rowActionGroups,
+        state,
+        saved,
+        tableRef,
+        save,
+        restore,
+        statusSeverity,
+        onLink
+      }
+    },
+    template: `
+      <div class="flex flex-col gap-[var(--spacing-sm)]">
+        <div class="flex items-center gap-[var(--spacing-xs)]">
+          <Button label="Save state" size="small" @click="save" />
+          <Button label="Restore state" kind="outlined" size="small" :disabled="!saved" @click="restore" />
+        </div>
+        <Table
+          ref="tableRef"
+          :data="rows"
+          :columns="cols"
+          row-key="id"
+          :paginated="true"
+          :page-size="5"
+          :enable-sorting="true"
+          v-model:state="state"
+          @update:state="args.onUpdateState"
+        >
+          ${CELL_SLOTS}
+        </Table>
+        <pre class="max-h-40 overflow-auto rounded-[var(--shape-elements)] bg-[var(--bg-canvas)] p-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]">{{ JSON.stringify(state, null, 2) }}</pre>
+      </div>
+    `
+  }),
+  args: { paginated: true, pageSize: 5, enableSorting: true },
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      source: { code: STATE_SOURCE },
+      description: {
+        story:
+          'The table exposes a JSON-serializable `TableStateSnapshot` via `v-model:state` + `getState()` / `setState()` (reach the methods through a template ref). Sort or paginate, then Save and Restore to round-trip the snapshot. The component stays router-agnostic — the app decides where to persist it (URL, localStorage, backend); the live snapshot is shown below.'
+      }
+    }
+  }
+}
+
+const SERVER_SOURCE = `<script setup>
+import Table from '@aziontech/webkit/table'
+import { ref } from 'vue'
+
+// Stand-in for your API/service.
+const ALL = Array.from({ length: 23 }, (_, i) => ({
+  id: String(i + 1),
+  name: 'Workload ' + (i + 1),
+  status: i % 3 === 0 ? 'Active' : 'Inactive'
+}))
+async function listService({ page, pageSize, search, ordering }) {
+  await new Promise((resolve) => setTimeout(resolve, 600))
+  let items = ALL.filter((row) => row.name.toLowerCase().includes(search.toLowerCase()))
+  if (ordering) {
+    const desc = ordering.startsWith('-')
+    const key = ordering.replace('-', '')
+    items = [...items].sort((a, b) => String(a[key]).localeCompare(String(b[key])) * (desc ? -1 : 1))
+  }
+  const start = (page - 1) * pageSize
+  return { items: items.slice(start, start + pageSize), total: items.length }
+}
+
+const columns = [
+  { accessorKey: 'name', header: 'Name', enableSorting: true },
+  { accessorKey: 'status', header: 'Status' }
+]
+const rows = ref([])
+const loading = ref(false)
+const rowCount = ref(0)
+const pagination = ref({ pageIndex: 0, pageSize: 5 })
+const sorting = ref([])
+const globalFilter = ref('')
+
+async function reload() {
+  loading.value = true
+  const sort = sorting.value[0]
+  const ordering = sort ? (sort.desc ? '-' : '') + sort.id : ''
+  const result = await listService({
+    page: pagination.value.pageIndex + 1,
+    pageSize: pagination.value.pageSize,
+    search: globalFilter.value,
+    ordering
+  })
+  rows.value = result.items
+  rowCount.value = result.total
+  loading.value = false
+}
+const onSearch = () => {
+  pagination.value = { ...pagination.value, pageIndex: 0 }
+  reload()
+}
+reload()
+<\/script>
+
+<template>
+  <Table
+    :data="rows"
+    :columns="columns"
+    :loading="loading"
+    manual-pagination
+    manual-sorting
+    manual-filtering
+    :row-count="rowCount"
+    paginated
+    enable-sorting
+    v-model:pagination="pagination"
+    v-model:sorting="sorting"
+    v-model:global-filter="globalFilter"
+    @update:pagination="reload"
+    @update:sorting="reload"
+    @update:global-filter="onSearch"
+    @refresh="reload"
+  />
+</template>`
+
+export const ServerSide = {
+  name: 'Server-Side (lazy)',
+  render: () => ({
+    components,
+    setup() {
+      const ALL = Array.from({ length: 23 }, (_, i) => ({
+        id: String(i + 1),
+        name: 'Workload ' + (i + 1),
+        status: i % 3 === 0 ? 'Active' : 'Inactive'
+      }))
+      const cols = [
+        { accessorKey: 'name', header: 'Name', enableSorting: true },
+        { accessorKey: 'status', header: 'Status' }
+      ]
+      const rows = ref([])
+      const loading = ref(false)
+      const rowCount = ref(0)
+      const pagination = ref({ pageIndex: 0, pageSize: 5 })
+      const sorting = ref([])
+      const globalFilter = ref('')
+      const listService = async ({ page, pageSize, search, ordering }) => {
+        await new Promise((resolve) => setTimeout(resolve, 600))
+        let items = ALL.filter((row) => row.name.toLowerCase().includes(search.toLowerCase()))
+        if (ordering) {
+          const desc = ordering.startsWith('-')
+          const key = ordering.replace('-', '')
+          items = [...items].sort(
+            (a, b) => String(a[key]).localeCompare(String(b[key])) * (desc ? -1 : 1)
+          )
+        }
+        const start = (page - 1) * pageSize
+        return { items: items.slice(start, start + pageSize), total: items.length }
+      }
+      const reload = async () => {
+        loading.value = true
+        const sort = sorting.value[0]
+        const ordering = sort ? (sort.desc ? '-' : '') + sort.id : ''
+        const result = await listService({
+          page: pagination.value.pageIndex + 1,
+          pageSize: pagination.value.pageSize,
+          search: globalFilter.value,
+          ordering
+        })
+        rows.value = result.items
+        rowCount.value = result.total
+        loading.value = false
+      }
+      const onSearch = () => {
+        pagination.value = { ...pagination.value, pageIndex: 0 }
+        reload()
+      }
+      reload()
+      return { rows, cols, loading, rowCount, pagination, sorting, globalFilter, reload, onSearch }
+    },
+    template: `
+      <Table
+        :data="rows"
+        :columns="cols"
+        :loading="loading"
+        :manual-pagination="true"
+        :manual-sorting="true"
+        :manual-filtering="true"
+        :row-count="rowCount"
+        :paginated="true"
+        :enable-sorting="true"
+        v-model:pagination="pagination"
+        v-model:sorting="sorting"
+        v-model:global-filter="globalFilter"
+        @update:pagination="reload"
+        @update:sorting="reload"
+        @update:global-filter="onSearch"
+        @refresh="reload"
+      />
+    `
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      source: { code: SERVER_SOURCE },
+      description: {
+        story:
+          'Server-side (lazy) data: `manual-pagination` / `manual-sorting` / `manual-filtering` + `:row-count` delegate to a service. Page and sort changes call `listService` and show skeleton rows via `loading` while it resolves (the exposed `reload()` re-runs the fetch). The component owns no data source — the app performs the fetch.'
+      }
+    }
+  }
+}
+
+// --- Reload Transition -----------------------------------------------------
+// Toggling `loading` off → on → off replays the body's enter transition
+// (an 8px translate-y + fade), so the data slides in each time it comes back.
+// This isolates the "load and return" animation with a single Reload button.
+
+const RELOAD_SOURCE = sfc(
+  [
+    "import { ref } from 'vue'",
+    "import Table from '@aziontech/webkit/table'",
+    "import Button from '@aziontech/webkit/button'"
+  ].join('\n'),
+  `const columns = [
+  { accessorKey: 'name', header: 'Name' },
+  { accessorKey: 'status', header: 'Status' },
+  { accessorKey: 'editor', header: 'Last Editor' }
+]
+const source = [
+  { id: '1', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com' },
+  { id: '2', name: 'Workload Bravo', status: 'Inactive', editor: 'user2@example.com' },
+  { id: '3', name: 'Workload Charlie', status: 'Degraded', editor: 'user3@example.com' },
+  { id: '4', name: 'Workload Delta', status: 'Active', editor: 'user4@example.com' },
+  { id: '5', name: 'Workload Echo', status: 'Inactive', editor: 'user5@example.com' },
+  { id: '6', name: 'Workload Foxtrot', status: 'Degraded', editor: 'user6@example.com' },
+  { id: '7', name: 'Workload Golf', status: 'Active', editor: 'user7@example.com' },
+  { id: '8', name: 'Workload Hotel', status: 'Inactive', editor: 'user8@example.com' }
+]
+
+const rows = ref(source)
+const loading = ref(false)
+
+// Flip loading true then back to false to replay the body enter transition.
+// The skeleton shows page-size (5) rows — the count the page will display.
+const reload = () => {
+  loading.value = true
+  setTimeout(() => {
+    rows.value = source
+    loading.value = false
+  }, 700)
+}`,
+  `<div class="flex flex-col gap-4">
+  <div>
+    <Button label="Reload" size="small" @click="reload" />
+  </div>
+  <Table
+    :data="rows"
+    :columns="columns"
+    row-key="id"
+    paginated
+    :page-size="5"
+    :loading="loading"
+    @refresh="reload"
+  />
+</div>`
+)
+
+export const ReloadTransition = {
+  name: 'Reload Transition',
+  render: () => ({
+    components,
+    setup() {
+      const source = [
+        { id: '1', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com' },
+        { id: '2', name: 'Workload Bravo', status: 'Inactive', editor: 'user2@example.com' },
+        { id: '3', name: 'Workload Charlie', status: 'Degraded', editor: 'user3@example.com' },
+        { id: '4', name: 'Workload Delta', status: 'Active', editor: 'user4@example.com' },
+        { id: '5', name: 'Workload Echo', status: 'Inactive', editor: 'user5@example.com' },
+        { id: '6', name: 'Workload Foxtrot', status: 'Degraded', editor: 'user6@example.com' },
+        { id: '7', name: 'Workload Golf', status: 'Active', editor: 'user7@example.com' },
+        { id: '8', name: 'Workload Hotel', status: 'Inactive', editor: 'user8@example.com' }
+      ]
+      const cols = [
+        { accessorKey: 'name', header: 'Name' },
+        { accessorKey: 'status', header: 'Status' },
+        { accessorKey: 'editor', header: 'Last Editor' }
+      ]
+      const data = ref(source)
+      const loading = ref(false)
+      const reload = () => {
+        loading.value = true
+        setTimeout(() => {
+          data.value = source
+          loading.value = false
+        }, 700)
+      }
+      return { data, cols, loading, reload }
+    },
+    template: `
+      <div class="flex flex-col gap-4">
+        <div>
+          <Button label="Reload" size="small" @click="reload" />
+        </div>
+        <Table
+          :data="data"
+          :columns="cols"
+          row-key="id"
+          :paginated="true"
+          :page-size="5"
+          :loading="loading"
+          @refresh="reload"
+        />
+      </div>
+    `
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      source: { code: RELOAD_SOURCE },
+      description: {
+        story:
+          'Click **Reload** to flip `loading` on and off. While it is true the table shows exactly `page-size` (5) skeleton rows — the number of rows the page will display — and when the data comes back the body plays its enter transition: an 8px `translate-y` with a fade (300ms `ease-out`, `motion-reduce`-safe). The animation replays on every load → data cycle, but not on client-side sorting or pagination (the body stays mounted).'
       }
     }
   }
