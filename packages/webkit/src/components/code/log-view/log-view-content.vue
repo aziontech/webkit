@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { computed, nextTick, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
+  import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
+  import Spinner from '../../utils/spinner/spinner.vue'
   import { splitTextByQuery } from './composables/split-text-by-query'
   import { useLogViewContext } from './composables/use-log-view-context'
 
@@ -82,7 +84,13 @@
   })
 
   watch(
-    () => [ctx.filteredLines.value.length, ctx.warningsOnly.value, ctx.search.value] as const,
+    () =>
+      [
+        ctx.filteredLines.value.length,
+        ctx.warningsOnly.value,
+        ctx.search.value,
+        ctx.loading.value
+      ] as const,
     () => {
       nextTick(resolveScrollViewport)
     }
@@ -96,7 +104,38 @@
     :data-testid="testId"
     class="relative min-h-0 flex-1"
   >
+    <div
+      v-if="ctx.showCopy.value && !ctx.loading.value"
+      class="absolute right-[var(--spacing-sm)] top-[var(--spacing-sm)] z-[3]"
+      :data-testid="`${ctx.testId}__copy-anchor`"
+    >
+      <CopyButton
+        :value="ctx.copyText.value"
+        kind="outlined"
+        size="small"
+        ariaLabel="Copy logs"
+        copiedLabel="Copied logs"
+        :disabled="!ctx.canCopy.value"
+        :data-testid="`${ctx.testId}__copy`"
+        @copy="ctx.emitCopy"
+      />
+    </div>
+
+    <div
+      v-if="ctx.loading.value"
+      role="status"
+      aria-live="polite"
+      :data-testid="`${testId}__loading`"
+      class="flex h-full min-h-0 flex-col items-center justify-center gap-[var(--spacing-md)] bg-[var(--bg-canvas)]"
+    >
+      <Spinner class="size-6 text-[var(--text-default)]" />
+      <span class="font-code text-label-sm text-[var(--text-muted)]">
+        {{ ctx.loadingLabel.value }}
+      </span>
+    </div>
+
     <ScrollArea
+      v-else
       orientation="both"
       :data-testid="`${testId}__body`"
       class="h-full min-h-0 bg-[var(--bg-canvas)] sm:overflow-x-hidden"

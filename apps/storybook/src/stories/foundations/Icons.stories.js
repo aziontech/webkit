@@ -1,11 +1,12 @@
-import IconGrid from '../../foundations/components/IconGrid.vue';
 import icons from '@aziontech/icons/catalog';
+import colorIcons from '@aziontech/icons/color-catalog';
 
+import IconGrid from '../../foundations/components/IconGrid.vue';
 import {
+  CodeBlock,
   PageContainer,
   PageHeader,
   SectionHeader,
-  CodeBlock,
 } from '../../foundations/components/layout/index.js';
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
@@ -52,7 +53,7 @@ export const Overview = {
         '<i class="pi pi-check"></i>',
         '<i class="pi pi-times text-default text-2xl"></i>',
       ].join('\n');
-      return { icons, args, usageCode };
+      return { icons, colorIcons, args, usageCode };
     },
     template: /* html */ `
       <PageContainer>
@@ -72,16 +73,19 @@ export const Overview = {
         <CodeBlock label="HTML" :content="usageCode" class="mb-6" />
         <p class="text-body-sm text-muted m-0 max-w-[620px] leading-relaxed mb-12">
           Icons are a font, which means they inherit text properties.
+          <strong class="text-default">Colored</strong> brand icons (the <code>-cor</code> set) are
+          multicolor logos that can't live in the font — they ship as inline SVG via
+          <code>@aziontech/icons/color-catalog</code> and keep their own palette.
         </p>
 
         <!-- Icon Gallery -->
         <SectionHeader
           title="Icon Gallery"
-          :description="\`Browse all \${icons.length} icons. Use the search to filter by name, and the slider to adjust preview size.\`"
+          :description="\`Browse all \${icons.length + colorIcons.length} icons. Use the search to filter by name, and the slider to adjust preview size.\`"
           size="lg"
         />
-        
-        <IconGrid :icons="icons" :initial-size="args.initialSize" />
+
+        <IconGrid :icons="icons" :color-icons="colorIcons" :initial-size="args.initialSize" />
       </PageContainer>
     `,
   }),

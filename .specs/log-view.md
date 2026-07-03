@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 58202bd3f15368b0b9b078147dcb4b4d20fb7dd37911d36c66b289df086253f1
+checksum: 49751f0a321eef939f1f251f761e293808202bfa2b51abdbff3ec61d05d3f251
 created: 2026-05-26
-last_updated: 2026-06-30
+last_updated: 2026-07-01
 ---
 
 # Log View — Component Spec
@@ -47,8 +47,8 @@ const warningsOnly = false
 
 LogView ships flat, individually importable sub-components (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
-- `log-view-header.vue` — Default 48px toolbar: copy control, line count, warning filter, and a search field. Slots: `left`, `right`, `search`.
-- `log-view-content.vue` — Scrollable log body with per-`type` line rendering, search highlighting, and a bottom scroll fade. Slot: `empty`.
+- `log-view-header.vue` — Default 48px toolbar: line count, warning filter, and a search field. Slots: `left`, `right`, `search`.
+- `log-view-content.vue` — Scrollable log body with per-`type` line rendering, search highlighting, a bottom scroll fade, and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `showCopy` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). Slot: `empty`.
 - `log-view-footer.vue` — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 
 ## Props
@@ -57,8 +57,10 @@ LogView ships flat, individually importable sub-components (each from its own `@
 |---|---|---|---|---|
 | `lines` | `LogViewLine[]` | `[]` | no | Log entries; filtered in LogViewContent by search and warnings-only. |
 | `searchPlaceholder` | `string` | `'Find in Logs'` | no | Placeholder for the default header search field. |
-| `showCopy` | `boolean` | `true` | no | Shows the copy-to-clipboard control in LogViewHeader. |
+| `showCopy` | `boolean` | `true` | no | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). |
 | `disabled` | `boolean` | `false` | no | Disables toolbar controls in LogViewHeader. |
+| `loading` | `boolean` | `false` | no | Replaces the LogViewContent log body with a centered spinner and label. |
+| `loadingLabel` | `string` | `'Loading...'` | no | Label shown beneath the spinner while `loading`. |
 
 ## v-model
 
@@ -96,8 +98,9 @@ LogView ships flat, individually importable sub-components (each from its own `@
 
 ## States
 
-- Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`
-- `data-disabled` / `data-warnings-only` on the LogView root
+- Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`
+- `data-disabled` / `data-warnings-only` / `data-loading` on the LogView root
+- `loading` state: LogViewContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type`
 
 ## Motion & Animations
@@ -134,13 +137,15 @@ LogView ships flat, individually importable sub-components (each from its own `@
 
 - Visible focus on the interactive controls in the header/footer.
 - LogViewContent uses `role="log"` with `aria-live="polite"`.
-- The warning filter exposes `aria-pressed`; the copy control uses `aria-label="Copy logs"`.
+- The warning filter exposes `aria-pressed`; the copy control (a CopyButton in LogViewContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy.
+- The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.
 - `motion-reduce:transition-none` on every motion-bearing class.
-- Touch target ≥40×40 px on the copy and warning controls (or justified deviation).
+- Touch target: the warning control is ≥40×40 px; the copy control uses CopyButton `size="small"` (28×28 px) to match CodeBlock — a justified deviation for the compact overlay.
 
 ## Stories (Storybook)
 
 - Default — composed LogViewHeader + LogViewContent over a realistic deploy log; search filters lines and highlights matches.
+- Loading — LogView with `loading` set; LogViewContent shows the centered spinner + label.
 
 ## Constraints — DO NOT
 
