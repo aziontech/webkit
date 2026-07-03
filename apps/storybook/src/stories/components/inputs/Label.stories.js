@@ -74,8 +74,14 @@ export const Default = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Label>} */
 export const Required = {
-  args: { required: true },
-  render: Template,
+  argTypes: { required: { control: false, table: { disable: true } } },
+  render: (args) => ({
+    components: { Label },
+    setup() {
+      return { props: args }
+    },
+    template: '<Label v-bind="props" required />'
+  }),
   parameters: {
     docs: { description: { story: 'Required label — appends the `Required` tag.' } }
   }

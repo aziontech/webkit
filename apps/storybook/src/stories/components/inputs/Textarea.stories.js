@@ -186,6 +186,7 @@ export const Invalid = {
 }
 
 export const Required = {
+  argTypes: { required: { control: false, table: { disable: true } } },
   render: () => ({
     components: { Textarea },
     setup() {

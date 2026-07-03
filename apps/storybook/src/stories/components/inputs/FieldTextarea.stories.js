@@ -154,10 +154,21 @@ export const Required = {
     name: 'message',
     label: 'Message',
     placeholder: 'Write your message',
-    helperText: 'This field is required.',
-    required: true
+    helperText: 'This field is required.'
   },
-  render: Template,
+  argTypes: { required: { control: false, table: { disable: true } } },
+  render: (args) => ({
+    components: { FieldTextarea },
+    setup() {
+      const value = ref(args.modelValue ?? '')
+      return { args, value }
+    },
+    template: `
+      <div class="max-w-sm">
+        <FieldTextarea v-model="value" v-bind="args" required />
+      </div>
+    `
+  }),
   parameters: {
     docs: {
       source: {

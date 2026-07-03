@@ -119,6 +119,7 @@ export const Disabled = {
 }
 
 export const Required = {
+  argTypes: { required: { control: false, table: { disable: true } } },
   render: () => ({
     components: { FieldCheckbox },
     setup() {

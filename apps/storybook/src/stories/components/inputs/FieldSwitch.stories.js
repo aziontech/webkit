@@ -199,9 +199,9 @@ export const Required = {
   args: {
     modelValue: false,
     label: 'Enable notifications',
-    description: 'Required to proceed.',
-    required: true
+    description: 'Required to proceed.'
   },
+  argTypes: { required: { control: false, table: { disable: true } } },
   render: (args) => ({
     components: { FieldSwitch },
     setup() {
@@ -212,6 +212,7 @@ export const Required = {
       <FieldSwitch
         v-bind="args"
         v-model="model"
+        required
       />
     `
   }),

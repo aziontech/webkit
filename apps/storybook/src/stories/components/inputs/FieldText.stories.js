@@ -1,4 +1,3 @@
-import Button from '@aziontech/webkit/button'
 import FieldText from '@aziontech/webkit/field-text'
 import { ref } from 'vue'
 
@@ -197,42 +196,22 @@ export const Sizes = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldText>} */
 export const Required = {
+  argTypes: { required: { control: false, table: { disable: true } } },
   render: () => ({
-    components: { FieldText, Button },
+    components: { FieldText },
     setup() {
       const value = ref('')
-      const missing = ref(false)
-      const loading = ref(false)
-
-      const onSubmit = () => {
-        if (loading.value) return
-        missing.value = false
-        loading.value = true
-        setTimeout(() => {
-          loading.value = false
-          missing.value = !value.value
-        }, 1200)
-      }
-
-      const onUpdate = (next) => {
-        value.value = next
-        if (next) missing.value = false
-      }
-
-      return { value, missing, loading, onSubmit, onUpdate }
+      return { value }
     },
     template: `
-      <div class="flex flex-col gap-4 w-[320px]">
+      <div class="w-[320px]">
         <FieldText
+          v-model="value"
           label="Email"
           placeholder="you@example.com"
-          :model-value="value"
-          @update:model-value="onUpdate"
-          :required="missing"
-          :disabled="loading"
-          :helper-text="missing ? 'This field is required.' : 'We need this to contact you.'"
+          helper-text="We need this to contact you."
+          required
         />
-        <Button label="Submit" size="medium" :loading="loading" @click="onSubmit" />
       </div>
     `
   }),
@@ -240,7 +219,7 @@ export const Required = {
     docs: {
       description: {
         story:
-          'Click **Submit** with the field empty: the button shows the loading spinner for ~1.2s (simulating an async call) and the input is locked. When loading finishes, the required check fires — the `Label` gets the Required tag, the input border turns warning, and the helper switches to the warning-tone "This field is required." copy. Typing any value clears the error.'
+          'When `required` is `true`, the Label shows the `*(Required)` indicator and the input receives native `required` + `aria-required="true"`.'
       }
     }
   }
