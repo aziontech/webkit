@@ -1,6 +1,15 @@
+import { ref } from 'vue'
+
 import Button from '@aziontech/webkit/button'
 import FieldTextarea from '@aziontech/webkit/field-textarea'
-import { ref } from 'vue'
+
+import { toSfc } from '../../_shared/story-source'
+
+const CORE_IMPORT = "import FieldTextarea from '@aziontech/webkit/field-textarea'"
+const IMPORTS = [CORE_IMPORT, "import { ref } from 'vue'"]
+
+const withRef = (body, { initial = "''" } = {}) =>
+  toSfc(IMPORTS, [`const value = ref(${initial})`, '', body].join('\n'))
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldTextarea>} */
 const meta = {
@@ -9,9 +18,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    backgrounds: {
-      default: 'dark'
-    },
+    backgrounds: { default: 'dark' },
     a11y: {
       config: {
         rules: [
@@ -22,38 +29,10 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Form field for multi-line text input that composes `Label`, `Textarea`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a textarea needs a visible label or helper/error message — i.e. virtually every long-form field outside of inline editing. Acts as the canonical wrapper for `Textarea` in form contexts.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import { ref } from 'vue'",
-          "import FieldTextarea from '@aziontech/webkit/field-textarea'",
-          '',
-          "const message = ref('')",
-          '</script>',
-          '',
-          '<template>',
-          '  <FieldTextarea',
-          '    v-model="message"',
-          '    label="Message"',
-          '    placeholder="Write your message"',
-          '    helper-text="Up to 500 characters."',
-          '    required',
-          '  />',
-          '</template>',
-          '```'
-        ].join('\n')
+        component:
+          'Form field for multi-line text input that composes `Label`, `Textarea`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a textarea needs a visible label or helper/error message — i.e. virtually every long-form field outside of inline editing. Acts as the canonical wrapper for `Textarea` in form contexts.'
       },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true
-      },
-      canvas: {
-        sourceState: 'shown'
-      }
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -81,26 +60,53 @@ const meta = {
     disabled: {
       control: 'boolean',
       description:
-        'Disables the textarea and switches the helper to `kind="disabled"` (lock icon).',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+        'Disables the underlying textarea and prepends a lock icon to the helper text row.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
     },
     readonly: {
       control: 'boolean',
       description:
-        'Marks the textarea read-only; value is visible but not editable. Native pass-through.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+        'Marks the textarea read-only; the value is visible but not editable. Native pass-through.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
     },
     required: {
       control: 'boolean',
       description:
-        'Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the textarea.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+        'Adds the `Required` tag to the `Label`, sets native `required` + `aria-required` on the textarea, and switches the helper to the warning tone.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
     },
     invalid: {
       control: 'boolean',
       description:
-        'Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the textarea.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+        'Applies invalid border tokens on the textarea (danger tone), sets `aria-invalid`, and switches the helper text to the danger tone.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    resizable: {
+      control: 'select',
+      options: ['vertical', 'horizontal', 'both', 'none'],
+      description:
+        'Forwarded to the underlying `Textarea`; controls which axes the user can drag to resize the field.',
+      table: {
+        category: 'props',
+        type: { summary: "'vertical' | 'horizontal' | 'both' | 'none'" },
+        defaultValue: { summary: "'vertical'" }
+      }
     },
     inputId: {
       control: 'text',
@@ -127,7 +133,8 @@ const meta = {
     disabled: false,
     readonly: false,
     required: false,
-    invalid: false
+    invalid: false,
+    resizable: 'vertical'
   }
 }
 
@@ -135,19 +142,35 @@ export default meta
 
 const Template = (args) => ({
   components: { FieldTextarea },
-  setup() {
-    return { args }
-  },
+  setup: () => ({ args }),
   template: '<FieldTextarea v-bind="args" />'
 })
+
+const DEFAULT_MARKUP = `<FieldTextarea
+  v-model="value"
+  label="Message"
+  placeholder="Write your message"
+  helper-text="Up to 500 characters."
+/>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldTextarea>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default field with label, textarea, and helper text.' } }
+    docs: {
+      description: { story: 'Default field with label, textarea, and helper text.' },
+      source: { code: withRef(DEFAULT_MARKUP) }
+    }
   }
 }
+
+const REQUIRED_MARKUP = `<FieldTextarea
+  v-model="value"
+  label="Message"
+  placeholder="Write your message"
+  helper-text="This field is required."
+  required
+/>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldTextarea>} */
 export const Required = {
@@ -155,7 +178,8 @@ export const Required = {
     components: { FieldTextarea, Button },
     setup() {
       const value = ref('')
-      const missing = ref(false)
+      // Start with the required indicator visible so the state is documented at rest, not only after submit.
+      const missing = ref(true)
       const loading = ref(false)
 
       const onSubmit = () => {
@@ -194,11 +218,20 @@ export const Required = {
     docs: {
       description: {
         story:
-          'Click **Submit** with the field empty: the button shows the loading spinner for ~1.2s (simulating an async call) and the textarea is locked. When loading finishes, the required check fires — the `Label` gets the Required tag, the textarea border turns warning, and the helper switches to the warning-tone "This field is required." copy. Typing any value clears the error.'
-      }
+          'The required indicator is on by default so the state is visible without interaction. Click **Submit** with the field empty: the button shows the loading spinner for ~1.2s (simulating an async call) and the textarea is locked; when loading finishes, the required check re-fires — the `Label` keeps the Required tag, the textarea border stays warning, and the helper reads "This field is required." Typing any value clears the state.'
+      },
+      controls: { disable: true },
+      source: { code: withRef(REQUIRED_MARKUP) }
     }
   }
 }
+
+const INVALID_MARKUP = `<FieldTextarea
+  v-model="value"
+  label="Message"
+  helper-text="This value is not valid."
+  invalid
+/>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldTextarea>} */
 export const Invalid = {
@@ -213,11 +246,19 @@ export const Invalid = {
     docs: {
       description: {
         story:
-          'Invalid state — the helper switches to `kind="invalid"` (danger tokens) and the textarea gets the invalid border/ring plus `aria-invalid`.'
-      }
+          'Invalid state — the helper switches to danger tokens and the textarea gets the invalid border plus `aria-invalid`.'
+      },
+      source: { code: withRef(INVALID_MARKUP, { initial: "'Text filled'" }) }
     }
   }
 }
+
+const DISABLED_MARKUP = `<FieldTextarea
+  v-model="value"
+  label="Message"
+  helper-text="This field is locked."
+  disabled
+/>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldTextarea>} */
 export const Disabled = {
@@ -232,8 +273,9 @@ export const Disabled = {
     docs: {
       description: {
         story:
-          'Disabled state — the textarea is disabled, the helper switches to `kind="disabled"` (lock icon), and the label dims via inherited muted text token.'
-      }
+          'Disabled state — the textarea is disabled, a lock icon appears in the helper row, and the label dims via the muted text token.'
+      },
+      source: { code: withRef(DISABLED_MARKUP, { initial: "'This message is locked.'" }) }
     }
   }
 }
