@@ -83,6 +83,7 @@
         <Chip
           size="medium"
           removable
+          clickable
           @remove="() => onRemove(filter)"
           @click="() => onEdit(filter)"
         >
