@@ -1,5 +1,5 @@
 {
-  "name": "@aziontech/design-system",
+  "name": "@aziontech/webkit-design-system",
   "author": "@aziontech",
   "private": true,
   "type": "module",
@@ -32,9 +32,11 @@
     "webkit:type-check": "pnpm --filter webkit type-check",
     "webkit:type-coverage": "pnpm --filter webkit type-coverage",
     "webkit:test": "pnpm --filter webkit test",
+    "webkit:test:coverage": "pnpm --filter webkit test:coverage",
     "webkit:test:watch": "pnpm --filter webkit test:watch",
-    "webkit:format": "prettier --write packages/webkit/**/*.{js,ts,vue,css,json,md}",
-    "webkit:format:check": "prettier --check packages/webkit/**/*.{js,ts,vue,css,json,md}",
+    "webkit:test:ui": "pnpm --filter webkit test:ui",
+    "webkit:format": "pnpm --filter webkit format",
+    "webkit:format:check": "pnpm --filter webkit format:check",
     "security:audit": "pnpm audit --audit-level=high",
     "governance": "pnpm run webkit:lint && pnpm run webkit:type-check && pnpm run webkit:format:check && pnpm run security:audit"
   },
@@ -43,7 +45,6 @@
     "autoprefixer": "^10.4.27",
     "pnpm": "^11.9.0",
     "primeflex": "^3.3.1",
-    "primevue": "3.47.2",
     "tailwindcss": "^3.4.19",
     "vue": "^3.5.29"
   },

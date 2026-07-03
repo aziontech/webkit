@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/vue3'
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/code/code-block/CodeBlock.stories'
@@ -248,7 +248,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only' }
       })
 
-      await fireEvent.click(getByTestId('data-code-block__copy'))
+      await fireEvent.click(within(getByTestId('data-code-block__copy')).getByRole('button'))
 
       await waitFor(() => {
         expect(emitted().copy).toBeTruthy()
@@ -266,7 +266,7 @@ describe('CodeBlock', () => {
       })
 
       await fireEvent.click(getAllByRole('tab')[1])
-      await fireEvent.click(getByTestId('data-code-block__copy'))
+      await fireEvent.click(within(getByTestId('data-code-block__copy')).getByRole('button'))
 
       await waitFor(() => {
         expect(emitted().copy).toBeTruthy()

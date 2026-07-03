@@ -50,7 +50,7 @@ const config = {
     config.resolve = config.resolve || {}
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      '@aziontech/webkit': '@aziontech/webkit.dev'
+      // '@aziontech/webkit': '@aziontech/webkit.dev'
     }
 
     // Enable dependency pre-bundling for faster rebuilds

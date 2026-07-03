@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/code/log-view/LogView.stories'
@@ -12,6 +12,16 @@ import LogViewFooter from './log-view-footer.vue'
 import LogViewHeader from './log-view-header.vue'
 
 const { Default } = composeStories(stories)
+
+// The real Clipboard API rejects in headless Chromium; stub writeText to resolve
+// so CopyButton's own logic (await write -> emit 'copy') runs. Not a layout mock.
+function stubClipboardResolved() {
+  return vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
+}
+
+afterEach(() => {
+  vi.restoreAllMocks()
+})
 
 // Grounded in complete-deploy-log.js shapes: text / success / folder / warning lines.
 const LINES: LogViewLine[] = [
@@ -152,7 +162,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { Host, search } = makeHost({})
       const { getByTestId, getAllByTestId } = render(Host)
 
-      const input = getByTestId('code-log-view__header__search-input') as HTMLInputElement
+      const input = getByTestId('code-log-view__header__search') as HTMLInputElement
       expect(input.getAttribute('aria-label')).toBe('Search logs')
 
       // Type a query matching only the "Build finished" success line.
@@ -171,7 +181,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { Host } = makeHost({})
       const { getByTestId, getAllByTestId } = render(Host)
 
-      await fireEvent.update(getByTestId('code-log-view__header__search-input'), 'finished')
+      await fireEvent.update(getByTestId('code-log-view__header__search'), 'finished')
 
       const rows = getAllByTestId('code-log-view__line')
       expect(rows).toHaveLength(1)
@@ -183,7 +193,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { Host } = makeHost({})
       const { getByTestId, queryAllByTestId } = render(Host)
 
-      await fireEvent.update(getByTestId('code-log-view__header__search-input'), 'zzz-no-match-zzz')
+      await fireEvent.update(getByTestId('code-log-view__header__search'), 'zzz-no-match-zzz')
 
       expect(queryAllByTestId('code-log-view__line')).toHaveLength(0)
       expect(getByTestId('code-log-view__empty')).toBeTruthy()
@@ -232,7 +242,8 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { Host } = makeHost({ onCopy: (v) => copied.push(v) })
       const { getByTestId } = render(Host)
 
-      await fireEvent.click(getByTestId('code-log-view__header__copy'))
+      stubClipboardResolved()
+      await fireEvent.click(within(getByTestId('code-log-view__copy')).getByRole('button'))
 
       // Emitted exactly once; payload is formatLogLineText joined by newlines.
       expect(copied).toHaveLength(1)
@@ -251,7 +262,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { Host } = makeHost({ showCopy: false })
       const { queryByTestId } = render(Host)
       // Header template: v-if="ctx.showCopy.value" on the default copy IconButton.
-      expect(queryByTestId('code-log-view__header__copy')).toBeNull()
+      expect(queryByTestId('code-log-view__copy')).toBeNull()
     })
   })
 
