@@ -2,12 +2,18 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoA11yViolations } from '../../test/axe'
 import * as stories from '../../../../../apps/storybook/src/stories/components/content/Overline.stories'
+import { expectNoA11yViolations } from '../../test/axe'
 import Overline from './overline.vue'
 
-const { Default, WithCursor, CursorWithoutPrefix, PrefixDoubleSlash, PrefixAngleBrackets, PrefixClosingTag } =
-  composeStories(stories)
+const {
+  Default,
+  WithCursor,
+  CursorWithoutPrefix,
+  PrefixDoubleSlash,
+  PrefixAngleBrackets,
+  PrefixClosingTag
+} = composeStories(stories)
 
 describe('Overline', () => {
   it('renders the default slot content', () => {

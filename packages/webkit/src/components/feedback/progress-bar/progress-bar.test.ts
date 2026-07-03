@@ -2,8 +2,8 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoA11yViolations } from '../../../test/axe'
 import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/progress-bar/ProgressBar.stories'
+import { expectNoA11yViolations } from '../../../test/axe'
 import ProgressBar from './progress-bar.vue'
 
 const { Default, Indeterminate } = composeStories(stories)

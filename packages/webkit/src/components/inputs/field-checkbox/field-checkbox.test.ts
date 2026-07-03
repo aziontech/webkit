@@ -11,15 +11,16 @@ const { Default, Disabled } = composeStories(stories)
 const ROOT = 'input-field-checkbox'
 const CONTROL = `${ROOT}__control`
 const INPUT = `${CONTROL}__input`
+const LABEL = `${ROOT}__label`
 
 describe('FieldCheckbox', () => {
-  it('renders the label root, the composed checkbox control and the native checkbox input', () => {
+  it('renders the div root, the composed checkbox control and the native checkbox input', () => {
     const { getByTestId } = render(FieldCheckbox, {
       props: { label: 'Accept' }
     })
 
     const root = getByTestId(ROOT)
-    expect(root.tagName).toBe('LABEL')
+    expect(root.tagName).toBe('DIV')
 
     const control = getByTestId(CONTROL)
     expect(control.tagName).toBe('SPAN')
@@ -35,17 +36,17 @@ describe('FieldCheckbox', () => {
       attrs: { 'data-testid': 'my-field' }
     })
 
-    expect(getByTestId('my-field').tagName).toBe('LABEL')
+    expect(getByTestId('my-field').tagName).toBe('DIV')
     expect(getByTestId('my-field__control').tagName).toBe('SPAN')
     expect(getByTestId('my-field__control__input').tagName).toBe('INPUT')
   })
 
-  it('associates the label root with the native input via a generated id when inputId is omitted', () => {
+  it('associates the inner label with the native input via a generated id when inputId is omitted', () => {
     const { getByTestId } = render(FieldCheckbox, {
       props: { label: 'Accept' }
     })
 
-    const forAttr = getByTestId(ROOT).getAttribute('for')
+    const forAttr = getByTestId(LABEL).getAttribute('for')
     const inputId = getByTestId(INPUT).getAttribute('id')
 
     expect(forAttr).toBeTruthy()
@@ -58,7 +59,7 @@ describe('FieldCheckbox', () => {
       props: { label: 'Accept', inputId: 'fc-1' }
     })
 
-    expect(getByTestId(ROOT).getAttribute('for')).toBe('fc-1')
+    expect(getByTestId(LABEL).getAttribute('for')).toBe('fc-1')
     expect(getByTestId(INPUT).getAttribute('id')).toBe('fc-1')
   })
 
@@ -204,12 +205,12 @@ describe('FieldCheckbox', () => {
     const helper = disabledWithText.getByTestId(`${ROOT}__helper`)
     expect(helper).toBeTruthy()
     expect(disabledWithText.getByTestId(`${ROOT}__helper-text`).textContent?.trim()).toBe('Locked')
-    expect(
-      disabledWithText.getByTestId(`${ROOT}__helper-icon`).getAttribute('aria-hidden')
-    ).toBe('true')
+    expect(disabledWithText.getByTestId(`${ROOT}__helper-icon`).getAttribute('aria-hidden')).toBe(
+      'true'
+    )
   })
 
-  it('merges a consumer-supplied class onto the label root', () => {
+  it('merges a consumer-supplied class onto the root', () => {
     const { getByTestId } = render(FieldCheckbox, {
       props: { label: 'Accept' },
       attrs: { class: 'consumer-class' }
@@ -236,7 +237,13 @@ describe('FieldCheckbox', () => {
 
   it('has no a11y violations when disabled with a helper badge', async () => {
     const { container } = render(FieldCheckbox, {
-      props: { modelValue: true, disabled: true, helperText: 'Locked', label: 'Accept terms', inputId: 'fc-c' }
+      props: {
+        modelValue: true,
+        disabled: true,
+        helperText: 'Locked',
+        label: 'Accept terms',
+        inputId: 'fc-c'
+      }
     })
 
     await expectNoA11yViolations(container)

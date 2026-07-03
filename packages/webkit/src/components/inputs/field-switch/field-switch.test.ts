@@ -33,22 +33,22 @@ describe('FieldSwitch', () => {
   })
 
   describe('root semantics', () => {
-    it('renders a label as the root element', () => {
+    it('renders a div as the root element', () => {
       const { getByTestId } = render(FieldSwitch, {
         props: { label: 'Notifications' }
       })
 
-      expect(getByTestId('input-field-switch').tagName).toBe('LABEL')
+      expect(getByTestId('input-field-switch').tagName).toBe('DIV')
     })
 
-    it('associates the label with the inner switch via for/id', () => {
+    it('associates the inner label with the inner switch via for/id', () => {
       const { getByTestId } = render(FieldSwitch, {
         props: { label: 'Notifications' }
       })
 
-      const root = getByTestId('input-field-switch')
+      const label = getByTestId('input-field-switch__label')
       const control = getByTestId('input-field-switch__control')
-      const forAttr = root.getAttribute('for')
+      const forAttr = label.getAttribute('for')
 
       expect(forAttr).toBeTruthy()
       expect(control.getAttribute('id')).toBe(forAttr)
@@ -247,18 +247,16 @@ describe('FieldSwitch', () => {
   })
 
   describe('smoke over modelValue states', () => {
-    it.each([[false, 'false'], [true, 'true']] as const)(
-      'reflects modelValue=%s as aria-checked=%s',
-      (value, expected) => {
-        const { getByTestId } = render(FieldSwitch, {
-          props: { label: 'Enable feature', modelValue: value }
-        })
+    it.each([
+      [false, 'false'],
+      [true, 'true']
+    ] as const)('reflects modelValue=%s as aria-checked=%s', (value, expected) => {
+      const { getByTestId } = render(FieldSwitch, {
+        props: { label: 'Enable feature', modelValue: value }
+      })
 
-        expect(getByTestId('input-field-switch__control').getAttribute('aria-checked')).toBe(
-          expected
-        )
-      }
-    )
+      expect(getByTestId('input-field-switch__control').getAttribute('aria-checked')).toBe(expected)
+    })
   })
 
   describe('story fixtures (composeStories)', () => {

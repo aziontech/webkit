@@ -3,7 +3,6 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/Sidebar.stories'
-
 import { expectNoA11yViolations } from '../../../test/axe'
 import { SidebarInjectionKey } from './injection-key'
 import SidebarHeader from './sidebar-header.vue'

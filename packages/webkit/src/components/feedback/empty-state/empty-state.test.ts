@@ -2,8 +2,8 @@ import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoA11yViolations } from '../../../test/axe'
 import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/empty-state/EmptyState.stories'
+import { expectNoA11yViolations } from '../../../test/axe'
 import EmptyState from './empty-state.vue'
 
 const { Default, Bordered, Sizes } = composeStories(stories)
@@ -40,7 +40,8 @@ describe('EmptyState', () => {
 
   it('renders the description only when provided', () => {
     const withDesc = within(
-      render(EmptyState, { props: { title: 'Empty', description: 'Add your first item.' } }).container
+      render(EmptyState, { props: { title: 'Empty', description: 'Add your first item.' } })
+        .container
     )
     expect(withDesc.getByTestId('feedback-empty-state__description').textContent).toBe(
       'Add your first item.'
@@ -117,7 +118,10 @@ describe('EmptyState', () => {
 
   it('has no accessibility violations on the default (transparent) render', async () => {
     const { container } = render(EmptyState, {
-      props: { title: 'No resource yet', description: 'Get started by creating your first resource.' }
+      props: {
+        title: 'No resource yet',
+        description: 'Get started by creating your first resource.'
+      }
     })
     await expectNoA11yViolations(container)
   })
@@ -149,11 +153,7 @@ describe('EmptyState', () => {
     it('renders the Sizes story with all three size variants', () => {
       const { getAllByTestId } = within(render(Sizes).container)
       const roots = getAllByTestId('feedback-empty-state')
-      expect(roots.map((el) => el.getAttribute('data-size'))).toEqual([
-        'small',
-        'medium',
-        'large'
-      ])
+      expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
     })
   })
 })

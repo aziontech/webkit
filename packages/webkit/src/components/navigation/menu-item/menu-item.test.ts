@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
-import { h } from 'vue'
 import { describe, expect, it } from 'vitest'
+import { h } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/MenuItem.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -44,9 +44,7 @@ describe('MenuItem', () => {
 
   it('renders the label prop, overridable by the default slot', () => {
     const withProp = render(MenuItem, { props: { label: 'FromProp' } })
-    expect(withProp.getByTestId('navigation-menu-item__label').textContent?.trim()).toBe(
-      'FromProp'
-    )
+    expect(withProp.getByTestId('navigation-menu-item__label').textContent?.trim()).toBe('FromProp')
     withProp.unmount()
 
     const withSlot = render(MenuItem, {

@@ -2,8 +2,8 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoA11yViolations } from '../../../test/axe'
 import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/icon-button/IconButton.stories'
+import { expectNoA11yViolations } from '../../../test/axe'
 import IconButton from './icon-button.vue'
 
 const { Default } = composeStories(stories)
