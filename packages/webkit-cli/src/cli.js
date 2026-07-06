@@ -2,29 +2,35 @@
 // @aziontech/webkit-cli — bin name `webkit`.
 //
 //   npx @aziontech/webkit-cli init [--dry-run] [--strict|--recommended]
+//   npx @aziontech/webkit-cli doctor
 //
-// Wires the design system into an existing project in one command: dependencies,
-// lint configs, pre-commit, the webkit MCP, the Claude Code bundle, and a
-// CLAUDE.md fragment. `--dry-run` plans without writing. Idempotent by design.
+// `init` wires the design system into an existing project in one command: dependencies,
+// lint configs, pre-commit, the webkit MCP, the Claude Code bundle, and a CLAUDE.md
+// fragment (`--dry-run` plans without writing; idempotent by design). `doctor` checks
+// that the wiring is healthy and reports resolved dependency versions.
 
 import { planInit } from './plan.js'
 import { applyPlan } from './apply.js'
+import { planDoctor } from './doctor.js'
 
 const HELP = `@aziontech/webkit-cli — adopt the design system in one command
 
 Usage:
   npx @aziontech/webkit-cli init [options]
+  npx @aziontech/webkit-cli doctor
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
+  doctor          Check the wiring is healthy; report resolved dependency versions.
 
-Options:
+Options (init):
   --dry-run       Print the plan without writing anything.
   --strict        Use the strict ESLint preset (default).
   --recommended   Use the recommended ESLint preset (correctness=error, perf=warn).
   -h, --help      Show this help.
 `
 
+const COMMANDS = new Set(['init', 'doctor'])
 const KNOWN_FLAGS = new Set(['--dry-run', '--strict', '--recommended', '-h', '--help'])
 
 function parseArgs(argv) {
@@ -40,6 +46,22 @@ function parseArgs(argv) {
     recommended: flags.has('--recommended') && !flags.has('--strict'),
     help: flags.has('-h') || flags.has('--help')
   }
+}
+
+const DOCTOR_LABEL = { ok: 'OK   ', warn: 'WARN ', fail: 'FAIL ' }
+
+function runDoctor(projectDir) {
+  process.stdout.write(`\n@aziontech/webkit-cli doctor\nproject: ${projectDir}\n\n`)
+  const report = planDoctor(projectDir)
+  for (const { check, status, detail } of report) {
+    const [head, ...rest] = detail.split('\n')
+    process.stdout.write(`${DOCTOR_LABEL[status] || status} ${check} — ${head}\n`)
+    for (const line of rest) process.stdout.write(`       ${line}\n`)
+  }
+  const fails = report.filter((c) => c.status === 'fail').length
+  const warns = report.filter((c) => c.status === 'warn').length
+  process.stdout.write(`\n${fails} fail, ${warns} warn, ${report.length - fails - warns} ok\n`)
+  return fails ? 1 : 0
 }
 
 function labelFor(result) {
@@ -100,12 +122,17 @@ function run(argv) {
     return 1
   }
 
-  if (command !== 'init') {
+  if (!COMMANDS.has(command)) {
     process.stderr.write(`Unknown command: ${command}\n\n${HELP}`)
     return 1
   }
 
   const projectDir = process.cwd()
+
+  if (command === 'doctor') {
+    return runDoctor(projectDir)
+  }
+
   const plan = planInit(projectDir, { recommended })
 
   process.stdout.write(

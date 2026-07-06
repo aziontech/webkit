@@ -31,9 +31,30 @@ The plan is computed by reading your project first, then applied without ever cl
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
 
+## `doctor` — check the wiring is healthy
+
+```bash
+npx @aziontech/webkit-cli doctor
+```
+
+The toolkit is fail-open by design (a missing catalog disables the lint rules rather than crashing), so a half-broken install is otherwise silent. `doctor` reads the project and reports each check as `OK` / `WARN` / `FAIL`:
+
+- **webkit catalog** resolvable (`FAIL` = lint rules are disabled — install webkit or set `WEBKIT_CATALOG_PATH`);
+- **eslint / stylelint config** present;
+- **mcp server** registered in `.mcp.json`;
+- **husky** `prepare` script + `.husky/pre-commit` lint block present;
+- **theme import** at the app entry;
+- **dependency versions** — the resolved installed version of each toolkit dependency, with a `WARN` for any still pinned as `latest` (and the suggested `^x.y.z` pin).
+
+It writes nothing and exits non-zero if any check is `FAIL` — safe to run in CI as a setup gate.
+
+## Dependency versions
+
+`init` records the toolkit dependencies as `latest` (so a fresh setup installs the newest published packages) and never re-pins a dependency you already pinned. After you install, run `doctor` to see the **resolved** versions and pin the ones you want to freeze — this keeps `init` simple and offline while giving you a reproducible pin when you're ready.
+
 ## Idempotency
 
-`init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server, the `prepare` script, and the CLAUDE.md fragment are added only if absent. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced.
+`init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server, the `prepare` script, and the CLAUDE.md fragment are added only if absent. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced. `doctor` is read-only.
 
 ## License
 

@@ -160,18 +160,7 @@ export function planInit(projectDir, opts = {}) {
 
   // 2. eslint.config.mjs — write if absent; otherwise print a merge snippet. The `.mjs`
   //    extension guarantees ESM regardless of the project's package.json `type`.
-  const existingEslint = firstExisting(projectDir, [
-    'eslint.config.js',
-    'eslint.config.mjs',
-    'eslint.config.cjs',
-    'eslint.config.ts',
-    '.eslintrc',
-    '.eslintrc.js',
-    '.eslintrc.cjs',
-    '.eslintrc.json',
-    '.eslintrc.yml',
-    '.eslintrc.yaml'
-  ])
+  const existingEslint = firstExisting(projectDir, ESLINT_CONFIG_CANDIDATES)
   if (existingEslint) {
     actions.push({
       type: 'advise',
@@ -188,18 +177,7 @@ export function planInit(projectDir, opts = {}) {
 
   // 3. .stylelintrc.json — write if absent; otherwise print a merge snippet (mirrors
   //    the eslint path so an existing stylelint config is never silently duplicated).
-  const existingStylelint = firstExisting(projectDir, [
-    '.stylelintrc',
-    '.stylelintrc.json',
-    '.stylelintrc.js',
-    '.stylelintrc.cjs',
-    '.stylelintrc.mjs',
-    '.stylelintrc.yml',
-    '.stylelintrc.yaml',
-    'stylelint.config.js',
-    'stylelint.config.cjs',
-    'stylelint.config.mjs'
-  ])
+  const existingStylelint = firstExisting(projectDir, STYLELINT_CONFIG_CANDIDATES)
   const pkgHasStylelint = (() => {
     const raw = read(join(projectDir, 'package.json'))
     if (!raw) return false
@@ -245,7 +223,7 @@ export function planInit(projectDir, opts = {}) {
     type: 'append',
     path: '.husky/pre-commit',
     content: HUSKY_PRECOMMIT,
-    marker: 'npx stylelint "**/*.{css,scss,vue}"',
+    marker: HUSKY_HOOK_MARKER,
     mode: 0o755
   })
   actions.push({
@@ -291,9 +269,39 @@ export function planInit(projectDir, opts = {}) {
   return actions
 }
 
+// Shared, side-effect-free helpers + constants reused by the doctor planner.
+export { read, firstExisting }
+export const ALL_DEPS = [...RUNTIME_DEPS, ...DEV_DEPS]
+export const ESLINT_CONFIG_CANDIDATES = [
+  'eslint.config.js',
+  'eslint.config.mjs',
+  'eslint.config.cjs',
+  'eslint.config.ts',
+  '.eslintrc',
+  '.eslintrc.js',
+  '.eslintrc.cjs',
+  '.eslintrc.json',
+  '.eslintrc.yml',
+  '.eslintrc.yaml'
+]
+export const STYLELINT_CONFIG_CANDIDATES = [
+  '.stylelintrc',
+  '.stylelintrc.json',
+  '.stylelintrc.js',
+  '.stylelintrc.cjs',
+  '.stylelintrc.mjs',
+  '.stylelintrc.yml',
+  '.stylelintrc.yaml',
+  'stylelint.config.js',
+  'stylelint.config.cjs',
+  'stylelint.config.mjs'
+]
+export const HUSKY_HOOK_MARKER = 'npx stylelint "**/*.{css,scss,vue}"'
+
 export const _internals = {
   RUNTIME_DEPS,
   DEV_DEPS,
+  DEP_VERSION,
   CLAUDE_BUNDLE,
   eslintFlatConfig,
   STYLELINT_CONTENT,

@@ -167,4 +167,5 @@ export function applyPlan(projectDir, plan) {
   return results
 }
 
+export { readJsonStrict }
 export const _internals = { mergePreserve }
