@@ -84,6 +84,43 @@ export function listCategories(catalog) {
 }
 
 /**
+ * The POSITIVE token inventory — what a consumer SHOULD use (the complement of the deny
+ * rules in validate_usage). Without a `category`, returns the group index (name + count)
+ * plus the typography utility classes. With a `category` (a group name like "primary",
+ * "bg", "text", "spacing", "radius", "shadow"), returns that group's CSS custom
+ * properties. Answers "I can't hardcode #hex — which token do I use instead?".
+ */
+export function listTokens(catalog, { category } = {}) {
+  if (!catalog.available) return NOT_AVAILABLE
+  const tokens = catalog.tokens || { cssVars: [], typography: [], groups: {} }
+  const groupNames = Object.keys(tokens.groups)
+
+  if (category != null && String(category).length) {
+    const key = String(category).toLowerCase().trim()
+    const group = tokens.groups[key]
+    if (!group) {
+      return {
+        ok: false,
+        available: true,
+        found: false,
+        category: key,
+        groups: groupNames,
+        message: `No token group "${key}". Available groups: ${groupNames.join(', ')}.`
+      }
+    }
+    return { ok: true, available: true, found: true, category: key, tokens: group }
+  }
+
+  return {
+    ok: true,
+    available: true,
+    groups: groupNames.map((name) => ({ name, count: tokens.groups[name].length })),
+    typography: tokens.typography,
+    hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "spacing", "radius", "shadow") for the CSS custom properties in that group.'
+  }
+}
+
+/**
  * Full entry for a component (props / events / slots / subcomponents), or a
  * not-found object carrying fuzzy suggestions so the caller can recover.
  */

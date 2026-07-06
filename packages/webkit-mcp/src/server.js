@@ -36,6 +36,7 @@ import {
   getUsageExample,
   listCategories,
   listComponents,
+  listTokens,
   searchComponents,
   suggestComponent,
   validateUsage
@@ -118,6 +119,24 @@ async function main() {
       inputSchema: {}
     },
     async () => json(listCategories(catalog))
+  )
+
+  tool(
+    'list_tokens',
+    {
+      title: 'List webkit design tokens',
+      description:
+        'The POSITIVE token inventory (what to USE instead of hardcoding): without a category, ' +
+        'returns the token group index + typography classes; with a category ("primary", "bg", ' +
+        '"text", "spacing", "radius", "shadow", …) returns that group\'s CSS custom properties.',
+      inputSchema: {
+        category: z
+          .string()
+          .optional()
+          .describe('Token group to expand (e.g. "primary", "bg", "text", "spacing"). Omit for the index.')
+      }
+    },
+    async ({ category }) => json(listTokens(catalog, { category }))
   )
 
   tool(

@@ -25,6 +25,7 @@ Requires Node ≥ 22. `@modelcontextprotocol/sdk` and `zod` are runtime dependen
 |---|---|
 | `list_components` | Every renderable component (compact cards), optionally filtered by category. |
 | `list_categories` | The distinct categories in the installed catalog. |
+| `list_tokens` | The positive token inventory (what to use instead of hardcoding): the token group index + typography classes, or a group's CSS custom properties when given a category. |
 | `get_component` | Full API for one component: props, events, slots, sub-components, structure. |
 | `get_import` | The tree-shakeable import to prefer, plus the compound (dot-notation) alternative when one exists. |
 | `search_components` | Components matching a substring. |

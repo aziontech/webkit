@@ -12,6 +12,7 @@ const { loadCatalog, _resetCatalogCache } = await import('../src/catalog.js')
 const {
   listComponents,
   listCategories,
+  listTokens,
   getComponent,
   getImport,
   searchComponents,
@@ -60,6 +61,33 @@ test('listCategories returns a sorted, non-empty list', () => {
   assert.equal(res.ok, true)
   assert.ok(res.categories.includes('actions'))
   assert.ok(res.categories.includes('data'))
+})
+
+test('listTokens returns the group index + typography classes', () => {
+  const res = listTokens(catalog)
+  assert.equal(res.ok, true)
+  const groupNames = res.groups.map((g) => g.name)
+  assert.ok(groupNames.includes('primary'), 'expected a "primary" group')
+  assert.ok(groupNames.includes('bg'), 'expected a "bg" group')
+  assert.ok(res.groups.every((g) => typeof g.count === 'number' && g.count > 0))
+  assert.ok(res.typography.includes('text-body-md'), 'expected typography classes')
+})
+
+test('listTokens expands a category to its CSS custom properties', () => {
+  const res = listTokens(catalog, { category: 'primary' })
+  assert.equal(res.ok, true)
+  assert.equal(res.found, true)
+  assert.ok(res.tokens.includes('--primary'), 'primary group should contain --primary')
+
+  const bg = listTokens(catalog, { category: 'bg' })
+  assert.ok(bg.tokens.includes('--bg-surface'), 'bg group should contain --bg-surface')
+})
+
+test('listTokens reports an unknown category with the available groups', () => {
+  const res = listTokens(catalog, { category: 'nope' })
+  assert.equal(res.ok, false)
+  assert.equal(res.found, false)
+  assert.ok(Array.isArray(res.groups) && res.groups.length > 0)
 })
 
 test('getComponent(table) has compoundRoot + subcomponents + props', () => {

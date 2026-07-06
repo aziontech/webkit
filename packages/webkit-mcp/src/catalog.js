@@ -96,6 +96,8 @@ function build(json) {
     version: json.webkitVersion || null,
     deniedPrefixes: json.deniedPrefixes || [],
     tokenRules,
+    /** Positive token inventory: { cssVars, typography, groups }. */
+    tokens: json.tokens || { cssVars: [], typography: [], groups: {} },
     /** Every subpath key in the catalog, in declared order. */
     subpaths,
     /** Raw import entries keyed by subpath. */
@@ -136,6 +138,7 @@ function empty() {
     version: null,
     deniedPrefixes: [],
     tokenRules: [],
+    tokens: { cssVars: [], typography: [], groups: {} },
     subpaths: [],
     imports: {},
     has: () => false,

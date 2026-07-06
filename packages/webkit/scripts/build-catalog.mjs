@@ -23,6 +23,16 @@ const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
 
+// Theme sources for the positive token inventory (see buildTokens): the generated CSS
+// custom properties and the semantic typography utility table. Both channels are unioned
+// so the inventory carries BOTH the semantic tokens consumers write (`--primary`,
+// `--bg-surface`, in v3) and the primitive scale (`--color-primary-500`, in v4).
+const THEME_GLOBALS_CANDIDATES = [
+  resolve(REPO_ROOT, 'packages/theme/dist/v3/globals.css'),
+  resolve(REPO_ROOT, 'packages/theme/dist/v4/globals.css')
+]
+const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/texts.data.js')
+
 // The public import name is always `@aziontech/webkit`, on every channel: external
 // consumers install the release package by that name, and inside the monorepo the dev
 // package (`@aziontech/webkit.dev`) is aliased to it, so every import written anywhere
@@ -255,8 +265,44 @@ function build() {
     webkitVersion: pkg.version,
     deniedPrefixes: [`${PKG_NAME}/src/`],
     tokenRules: TOKEN_RULES,
+    tokens: buildTokens(),
     imports
   }
+}
+
+/**
+ * Positive token inventory sourced from @aziontech/theme: the valid CSS custom
+ * properties (from the generated globals.css) and the typography utility classes (from
+ * the semantic texts table). Complements `tokenRules` (what NOT to write) with what a
+ * consumer SHOULD use. Deterministic (sorted) so the drift-check stays stable; fail-safe
+ * (empty) if the theme build output is unavailable.
+ */
+function buildTokens() {
+  const cssVarSet = new Set()
+  for (const globals of THEME_GLOBALS_CANDIDATES.filter((p) => existsSync(p))) {
+    const css = readFileSync(globals, 'utf-8')
+    for (const m of css.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gim)) cssVarSet.add(m[1])
+  }
+  const cssVars = [...cssVarSet].sort()
+
+  const typoSet = new Set()
+  if (existsSync(THEME_TEXTS)) {
+    const src = readFileSync(THEME_TEXTS, 'utf-8')
+    for (const m of src.matchAll(/['"](text-[a-z0-9-]+)['"]/g)) typoSet.add(m[1])
+  }
+  const typography = [...typoSet].sort()
+
+  // Group CSS vars by their first path segment (e.g. --bg-surface → "bg", --primary → "primary").
+  const grouped = {}
+  for (const v of cssVars) {
+    const name = v.slice(2)
+    const seg = name.includes('-') ? name.slice(0, name.indexOf('-')) : name
+    ;(grouped[seg] ||= []).push(v)
+  }
+  const groups = {}
+  for (const k of Object.keys(grouped).sort()) groups[k] = grouped[k]
+
+  return { cssVars, typography, groups }
 }
 
 const catalog = build()
