@@ -1,52 +1,117 @@
 ---
 name: input-group
 category: inputs
-structure: monolithic
-status: implemented
-spec_version: 3
+structure: composition
+status: approved
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 0ede3c42dbd778be429c8e91192d35cbc9b09f42154ae6a9ae6f064a2b6a74d7
+checksum: a084ea5340b76e0a5664fd895a69ce39d6b1679fa243ba3dd7a4c14b9af913bc
 created: 2026-07-01
-last_updated: 2026-07-01
+last_updated: 2026-07-06
 ---
 
 # InputGroup — Component Spec
 
 ## Purpose
 
-Monolithic container that flanks an input primitive with optional `#left` and `#right` named slots, joined by vertical seams, and reflects validation state on its border. The middle input goes in the root's `default` slot; the two side regions are simple named slots on the root — the same shape as `input-text`'s `iconLeft` / `iconRight` and `input-number`'s `prefix` / `suffix`, so the API stays consistent with the sibling inputs. Distinct from `field-*` components: `InputGroup` styles the input's *edges*; `field-*` wraps label + helper text. The middle slot expects a raw `<input>` styled `bg-[var(--bg-surface)]`, `text-label-sm`, `text-[var(--text-default)]`, `placeholder:text-[var(--text-muted)]` — matches the group's own surface so the field blends with the root while the side slots stand out as darker `--bg-canvas` islands.
+Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<InputText>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
 
 ## Usage
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import InputGroup from '@aziontech/webkit/input-group'
-const value = ref('')
+  import { ref } from 'vue'
+  // Compound — leads the docs, dot-notation
+  import InputGroup from '@aziontech/webkit/input-group'
+  import Button from '@aziontech/webkit/button'
+  import Select from '@aziontech/webkit/select'
+
+  const url = ref('')
+  const amount = ref('')
+  const currency = ref('BRL')
 </script>
 
 <template>
-  <InputGroup :invalid="false">
-    <template #left>https://</template>
+  <!-- Static addons flanking a middle input -->
+  <InputGroup>
+    <InputGroup.Addon>https://</InputGroup.Addon>
     <input
-      v-model="value"
+      v-model="url"
       placeholder="domain"
       class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
     />
-    <template #right>.com</template>
+    <InputGroup.Addon>.com</InputGroup.Addon>
+  </InputGroup>
+
+  <!-- Select on the left, input on the right -->
+  <InputGroup>
+    <Select
+      v-model="currency"
+      placeholder="BRL"
+    />
+    <input
+      v-model="amount"
+      placeholder="0.00"
+      class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
+    />
+  </InputGroup>
+
+  <!-- Input + trailing Button -->
+  <InputGroup :invalid="false">
+    <input
+      v-model="url"
+      placeholder="search"
+      class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
+    />
+    <Button
+      label="Search"
+      kind="primary"
+    />
   </InputGroup>
 </template>
 ```
 
+Standalone (tree-shakeable) imports — for consumers who want only the root or a specific sub-component:
+
+```vue
+<script setup>
+  import InputGroup from '@aziontech/webkit/input-group-root'
+  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+</script>
+```
+
+## Sub-components
+
+Folder layout:
+
+```
+packages/webkit/src/components/inputs/input-group/
+├── input-group.vue                      # root
+├── input-group-addon/
+│   └── input-group-addon.vue            # <InputGroup.Addon>
+└── index.ts                             # compound wire-up (Object.assign)
+```
+
+Public members of the compound:
+
+| Member | Attached name | Standalone export | Purpose |
+|---|---|---|---|
+| Root | — (the compound itself) | `@aziontech/webkit/input-group-root` | The container. Orchestrates borders, seams, focus ring, and states. |
+| `<InputGroup.Addon>` | `Addon` | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `R$`) rendered with the darker `--bg-canvas` fill and muted text. |
+
 ## Props
+
+Root props:
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `invalid` | `boolean` | `false` | no | Renders the error border and sets `aria-invalid="true"` on the root. |
 | `required` | `boolean` | `false` | no | Renders the required (warning) border and sets `aria-required="true"` on the root. |
-| `disabled` | `boolean` | `false` | no | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the middle `<input>` — the consumer is responsible for the inner input's own `disabled` attribute (mirrors how `FieldText` disables `InputText`). |
+| `disabled` | `boolean` | `false` | no | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `InputText`). |
+
+`InputGroup.Addon` props: _none_ — the sub-component is a pure presentational span whose content is the default slot. `v-bind="$attrs"` on its root lets the consumer pass `data-testid`, `aria-hidden`, `class` (merged via `cn`), etc.
 
 ## Events
 
@@ -56,9 +121,7 @@ const value = ref('')
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `left` | — | Optional left-side content (icon, static text, or a `<Button>`). When present, rendered inside a styled `<div>` (`bg-[var(--bg-canvas)]`, `px-[var(--spacing-md)]`, `text-label-sm`, `text-[color:var(--text-muted)]`, `border-r border-[color:var(--border-default)]`). |
-| `default` | — | Middle content — a raw `<input>` element (or any input primitive). |
-| `right` | — | Optional right-side content, same styling as `#left` but with `border-l` instead of `border-r`. |
+| `default` | — | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<InputText>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
 
 ## States
 
@@ -72,6 +135,11 @@ const value = ref('')
 - Hover (only when not focus-within, not invalid, not required, not disabled): `border-[var(--border-strong)]`
 - Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
 - Disabled: `bg-[var(--bg-disabled)]`, `text-[var(--text-disabled)]`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
+- Child seams (applied by the root via Tailwind child selectors):
+  - `[&>*:first-child]:rounded-l-[var(--shape-elements)]` and `[&>*:not(:first-child)]:rounded-l-none`
+  - `[&>*:last-child]:rounded-r-[var(--shape-elements)]` and `[&>*:not(:last-child)]:rounded-r-none`
+  - `[&>*:not(:last-child)]:border-r-[color:var(--border-default)] [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
+  - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the *inner-facing* border only
 
 ## Motion & Animations
 
@@ -95,12 +163,11 @@ const value = ref('')
 | root height | `h-8` (Tailwind utility) |
 | focus ring | `var(--ring-color)` |
 | focus ring offset | `var(--bg-canvas)` |
-| side slot surface | `var(--bg-canvas)` |
-| side slot text | `var(--text-muted)` |
-| side slot padding.x | `var(--spacing-md)` |
-| side slot typography | `.text-label-sm` |
-| left slot seam | `border-r border-[color:var(--border-default)]` |
-| right slot seam | `border-l border-[color:var(--border-default)]` |
+| child seam | `border-r border-[color:var(--border-default)]` (applied via `[&>*:not(:last-child)]:border-r`) |
+| addon surface | `var(--bg-canvas)` |
+| addon text | `var(--text-muted)` |
+| addon padding.x | `var(--spacing-md)` |
+| addon typography | `.text-label-sm` |
 
 ## Theme gaps
 
@@ -110,25 +177,28 @@ const value = ref('')
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-[var(--ring-color)] ring-offset-2 ring-offset-[var(--bg-canvas)]`) whenever any descendant (side-slot control or middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator. Suppressed when `data-disabled` is present.
-- Keyboard map: `Tab` moves through the side-slot interactive content (if any) and the middle input in DOM order. No custom keybindings on the group.
-- ARIA: root uses `role="group"`; `aria-invalid` and `aria-required` reflect the props. The inner input keeps its own `aria-*` — the group does not duplicate.
-- Contrast ≥4.5:1 for side-slot text against `var(--bg-canvas)`; ≥3:1 for the border in every state.
+- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-[var(--ring-color)] ring-offset-2 ring-offset-[var(--bg-canvas)]`) whenever any descendant (any child control or the middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator. Suppressed when `data-disabled` is present. Child components (`Button`, `Select`) retain their own focus behavior internally but the group's ring is visually authoritative.
+- Keyboard map: `Tab` moves through the children in DOM order. No custom keybindings on the group.
+- ARIA: root uses `role="group"`; `aria-invalid` and `aria-required` reflect the props. Each child keeps its own `aria-*` — the group does not duplicate.
+- `<InputGroup.Addon>` is decorative-by-default; when its content is not conveyed elsewhere the consumer should annotate it (`aria-hidden="true"` for pure decoration, or a visible-only label the middle input references via `aria-describedby`).
+- Contrast ≥4.5:1 for addon text against `var(--bg-canvas)`; ≥3:1 for the border in every state.
 - Motion: color transitions on state changes are `duration-150 ease-out` and pair with `motion-reduce:transition-none`.
-- Touch target ≥32×32 px for interactive side-slot content (matches root height `h-8`).
+- Touch target ≥32×32 px for interactive children (matches root height `h-8`).
 
 ## Stories (Storybook)
 
-- Default — root with a middle input, no side slots filled.
-- WithSlotLeft — `#left` slot filled (e.g. `https://`).
-- WithSlotRight — `#right` slot filled (e.g. `.com`).
-- BothSlots — both `#left` and `#right` filled.
-- WithIcon — `#left` filled with `<i class="pi pi-globe" aria-hidden="true" />`, showing how PrimeIcons inhabit the side slots at the same size as text content.
+- Default — root with a middle input, no addons or extra children.
+- WithAddonLeft — `<InputGroup.Addon>https://</InputGroup.Addon>` + middle input.
+- WithAddonRight — middle input + `<InputGroup.Addon>.com</InputGroup.Addon>`.
+- BothAddons — addon + input + addon.
+- WithButton — middle input + trailing `<Button label="Search" />`.
+- WithSelect — leading `<Select placeholder="BRL" />` + middle input.
+- WithAll — addon + `<Select>` + input + `<Button>` (four children).
 - Invalid — `invalid=true` (danger border).
-- Required — `required=true` (warning border).
+- Required — `required=true` (warning border, always visible).
 - Disabled — `disabled=true` (muted fill, not-allowed cursor, no focus ring).
 
-Justification for eight stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. Four slot-composition stories (Default, WithSlotLeft, WithSlotRight, BothSlots) document each named-slot position individually and combined. `WithIcon` demonstrates that side slots accept `<i>` icons at the same size/color as text content (parallel to `FieldText`'s Icons story). Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.
+Justification for ten stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. Four addon-composition stories (Default, WithAddonLeft, WithAddonRight, BothAddons) document the static-content path. Three integration stories (WithButton, WithSelect, WithAll) prove Button/Select-as-children — the whole point of v4. Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.
 
 ## Constraints — DO NOT
 

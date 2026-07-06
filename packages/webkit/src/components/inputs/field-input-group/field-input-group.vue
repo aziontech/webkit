@@ -3,6 +3,7 @@
 
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
   import InputGroup from '../input-group/input-group.vue'
+  import InputGroupAddon from '../input-group/input-group-addon/input-group-addon.vue'
   import Label from '../label/label.vue'
 
   defineOptions({
@@ -108,12 +109,13 @@
       :disabled="disabled"
       :data-testid="`${testId}__group`"
     >
-      <template
+      <InputGroupAddon
         v-if="$slots['left']"
-        #left
+        key="addon-left"
+        :data-testid="`${testId}__addon-left`"
       >
         <slot name="left" />
-      </template>
+      </InputGroupAddon>
       <input
         :id="resolvedInputId"
         :name="name"
@@ -128,12 +130,13 @@
         class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
         @input="onInput"
       />
-      <template
+      <InputGroupAddon
         v-if="$slots['right']"
-        #right
+        key="addon-right"
+        :data-testid="`${testId}__addon-right`"
       >
         <slot name="right" />
-      </template>
+      </InputGroupAddon>
     </InputGroup>
     <HelperText
       v-if="effectiveHelperText"
