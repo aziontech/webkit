@@ -93,6 +93,29 @@ async function main() {
     if (slotsDiff.missing.length) violations.push(`Slots missing in .vue: ${slotsDiff.missing.join(', ')}`)
     if (slotsDiff.extra.length) violations.push(`Slots in .vue not in spec: ${slotsDiff.extra.join(', ')}`)
 
+    // ---- Naming conventions (B1): things the spec tables can't catch ----
+    // Visual-variant prop must be `kind` (never variant/appearance/intent). `color` is
+    // left out on purpose — some components legitimately take a color value.
+    const FORBIDDEN_PROP = { variant: 'kind', appearance: 'kind', intent: 'kind' }
+    for (const p of sfc.props) {
+      const alt = FORBIDDEN_PROP[p.name]
+      if (alt) {
+        violations.push(`Prop "${p.name}" is not allowed — use "${alt}" (.claude/rules/naming.md).`)
+      }
+      if (/^(is|has)[A-Z]/.test(p.name)) {
+        const suggested = p.name.replace(/^(is|has)/, '').replace(/^./, (c) => c.toLowerCase())
+        violations.push(`Boolean prop "${p.name}" must drop the is/has prefix (use "${suggested}").`)
+      }
+    }
+    // Events are kebab-case (update:value, before-close). Flag a camelCase event name,
+    // but never a v-model `update:*` event (its payload segment can be camelCase).
+    for (const e of sfc.emits) {
+      if (!e.name.includes(':') && /^[a-z]+[A-Z]/.test(e.name)) {
+        const suggested = e.name.replace(/([A-Z])/g, '-$1').toLowerCase()
+        violations.push(`Event "${e.name}" must be kebab-case (use "${suggested}").`)
+      }
+    }
+
     // ---- defineOptions.name ----
     const expectedName = toPascal(info.name)
     if (sfc.defineOptionsName !== expectedName) {
