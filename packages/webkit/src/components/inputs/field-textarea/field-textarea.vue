@@ -28,6 +28,8 @@
     required?: boolean
     /** Switches the helper to kind=invalid and applies invalid border tokens on the textarea. */
     invalid?: boolean
+    /** Forwarded to the underlying Textarea; controls which axes the user can drag to resize the field. */
+    resizable?: 'vertical' | 'horizontal' | 'both' | 'none'
     /** id for the native textarea; consumed by Label via `for` and by `aria-describedby` wiring. */
     inputId?: string
   }
@@ -42,6 +44,7 @@
     readonly: false,
     required: false,
     invalid: false,
+    resizable: 'vertical',
     inputId: ''
   })
 
@@ -91,6 +94,7 @@
       :readonly="readonly"
       :required="required"
       :invalid="invalid"
+      :resizable="resizable"
       :aria-describedby="helperText ? helperId : undefined"
       :data-testid="`${testId}__control`"
     />
