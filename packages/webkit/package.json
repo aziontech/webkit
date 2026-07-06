@@ -138,6 +138,8 @@
     "./input-number": "./src/components/inputs/input-number/input-number.vue",
     "./field-text": "./src/components/inputs/field-text/field-text.vue",
     "./field-input-group": "./src/components/inputs/field-input-group/field-input-group.vue",
+    "./field-text-switch": "./src/components/inputs/field-text-switch/field-text-switch.vue",
+    "./field-phone-number": "./src/components/inputs/field-phone-number/field-phone-number.vue",
     "./helper-text": "./src/components/inputs/helper-text/helper-text.vue",
     "./label": "./src/components/inputs/label/label.vue",
     "./input-password": "./src/components/inputs/input-password/input-password.vue",
