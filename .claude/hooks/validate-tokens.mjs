@@ -85,6 +85,36 @@ const VIOLATIONS = [
     id: 'ts-ignore',
     regex: /\/\/\s*@ts-(?:ignore|nocheck|expect-error)\b/g,
     message: '`@ts-ignore`/`@ts-nocheck`/`@ts-expect-error`. Fix the underlying type issue.'
+  },
+  {
+    id: 'js-class-preset',
+    regex: /\bconst\s+\w*[Cc]lasses\s*=\s*(?:[{[]|computed\b)/g,
+    message:
+      'JS class preset (const *Classes = {…}/[…]/computed). Put utilities inline on the root class + switch variants with data-* (.claude/rules/styling.md).'
+  },
+  {
+    id: 'style-block',
+    regex: /<style[\s>]/g,
+    message:
+      'Component-local <style> block. Styles live inline on the root class as Tailwind utilities; no <style>/scoped CSS (.claude/rules/styling.md).'
+  },
+  {
+    id: 'keyframes-local',
+    regex: /@keyframes\b/g,
+    message:
+      'Component-local @keyframes. Add the animation to packages/theme/src/tokens/semantic/animations.js (run /add-animation) and use the animate-* utility.'
+  },
+  {
+    id: 'animate-arbitrary',
+    regex: /\banimate-\[/g,
+    message:
+      'Arbitrary animate-[…] value. Use a catalogued animate-* utility, or add one via /add-animation (semantic/animations.js).'
+  },
+  {
+    id: 'motion-hardcoded',
+    regex: /\b(?:duration|delay|ease)-\[/g,
+    message:
+      'Hardcoded duration/ease/delay. Use the duration/curve/ease tokens from primitives/animations (DESIGN.md § Animations).'
   }
 ]
 
