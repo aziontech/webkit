@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
+      toolkit: ${{ steps.filter.outputs.toolkit }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,6 +28,13 @@ jobs:
           filters: |
             webkit:
               - 'packages/webkit/**'
+            toolkit:
+              - 'packages/webkit/**'
+              - '.specs/**'
+              - 'packages/eslint-plugin-webkit/**'
+              - 'packages/stylelint-config-webkit/**'
+              - 'packages/webkit-mcp/**'
+              - 'packages/webkit-cli/**'
 
   # Security Scanning (parallel, fast)
   security:
@@ -181,11 +189,49 @@ jobs:
       - name: Verify Storybook output
         run: test -d apps/storybook/dist && echo "Storybook built successfully"
 
+  # Adoption toolkit — unit tests for the 4 sibling packages + catalog drift check.
+  # The catalog is generated from package.json#exports + .specs; this asserts the
+  # committed catalog.json matches a fresh build, so it can never go stale.
+  toolkit:
+    name: Adoption Toolkit (tests + catalog drift)
+    needs: changes
+    if: needs.changes.outputs.toolkit == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Catalog is in sync (no drift from exports/specs)
+        run: pnpm --filter @aziontech/webkit catalog:check
+
+      - name: eslint-plugin-webkit tests
+        run: pnpm --filter @aziontech/eslint-plugin-webkit test
+
+      - name: stylelint-config-webkit tests
+        run: pnpm --filter @aziontech/stylelint-config-webkit test
+
+      - name: webkit-mcp tests
+        run: pnpm --filter @aziontech/webkit-mcp test
+
+      - name: webkit-cli tests
+        run: pnpm --filter @aziontech/webkit-cli test
+
   # Summary Gate — passes when every upstream job is success or cleanly skipped.
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint, types, build, storybook]
+    needs: [changes, security, lint, types, build, storybook, toolkit]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -196,6 +242,7 @@ jobs:
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
             [storybook]="${{ needs.storybook.result }}"
+            [toolkit]="${{ needs.toolkit.result }}"
           )
           failed=0
           for job in "${!results[@]}"; do
