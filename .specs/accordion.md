@@ -2,14 +2,14 @@
 name: accordion
 category: content
 structure: composition
-status: implemented
-spec_version: 2
+status: draft
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: "480:876"
-checksum: 228238eb66de5c316dc42923e807a87ac550d3b351134e5ae64deb356827f793
+checksum: ""
 created: 2026-06-26
-last_updated: 2026-07-02
+last_updated: 2026-07-06
 ---
 
 # Accordion — Component Spec
@@ -137,10 +137,10 @@ Events below are emitted by the root `Accordion`.
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
 | chevron rotate on open | `transition-transform duration-150 ease-out` + `data-[state=open]:rotate-180` | inline (matches catalog) | `motion-reduce:transition-none` |
-| content reveal on open (on `Accordion.Content` only) | fade-in semantic utility from `animations.js` | semantic (matches catalog) | reduced-motion fallback via the matching `motion-reduce` utility |
+| content reveal on open (on `Accordion.Content` only) | `animate-accordion-expand` (enter) / `animate-accordion-collapse` (leave) — 150ms ease-out, animates `grid-template-rows: 0fr → 1fr` and `opacity: 0 → 1` on a `display: grid; overflow: hidden` wrapper | semantic (matches catalog) | `motion-reduce:animate-none` on both enter/leave class strings |
 | header hover state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
-> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The transitions above are taken from our existing catalog — the chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`), and the content reveal reuses the fade-in semantic utility (as `tab-view` does). No component-local `@keyframes`.
+> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The transitions above are taken from our existing catalog — the chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`), and the content reveal uses the dedicated `animate-accordion-expand` / `animate-accordion-collapse` semantic utilities (added to `animations.js` alongside `popup-scale-in` / `popup-scale-out`), driven by a Vue `<Transition>` mirroring the dropdown pattern (`enter-active-class` / `leave-active-class`). No component-local `@keyframes`.
 
 ## Tokens
 

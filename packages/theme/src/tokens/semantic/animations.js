@@ -37,6 +37,12 @@ export const animations = () => {
         animation: 'popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53)',
         transformOrigin: 'var(--popup-origin, center)',
       },
+      '.animate-accordion-expand': {
+        animation: 'accordionExpand 150ms ease-out forwards',
+      },
+      '.animate-accordion-collapse': {
+        animation: 'accordionCollapse 150ms ease-out forwards',
+      },
       '.animate-progress-indeterminate': {
         animation: 'progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite',
       },
@@ -78,6 +84,14 @@ export const animations = () => {
       '@keyframes popupScaleOut': {
         '0%': { opacity: '1', transform: 'scale(1)' },
         '100%': { opacity: '0', transform: 'scale(0.95)' },
+      },
+      '@keyframes accordionExpand': {
+        '0%': { opacity: '0', 'grid-template-rows': '0fr' },
+        '100%': { opacity: '1', 'grid-template-rows': '1fr' },
+      },
+      '@keyframes accordionCollapse': {
+        '0%': { opacity: '1', 'grid-template-rows': '1fr' },
+        '100%': { opacity: '0', 'grid-template-rows': '0fr' },
       },
       '@keyframes progressIndeterminate': {
         '0%': { 'inset-inline-start': '-35%', 'inset-inline-end': '100%' },

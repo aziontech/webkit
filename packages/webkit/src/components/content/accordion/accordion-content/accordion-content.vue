@@ -30,18 +30,25 @@
 </script>
 
 <template>
-  <div
-    v-if="itemCtx.open.value"
-    v-bind="$attrs"
-    role="region"
-    :id="itemCtx.contentId.value"
-    :aria-labelledby="itemCtx.triggerId.value"
-    :data-testid="testId"
-    :data-state="itemCtx.open.value ? 'open' : 'closed'"
-    :data-size="ctx.size.value"
-    :class="attrs.class"
-    class="animate-fade-in text-[var(--text-muted)] motion-reduce:animate-none data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+  <Transition
+    enter-active-class="animate-accordion-expand motion-reduce:animate-none"
+    leave-active-class="animate-accordion-collapse motion-reduce:animate-none"
   >
-    <slot />
-  </div>
+    <div
+      v-if="itemCtx.open.value"
+      v-bind="$attrs"
+      role="region"
+      :id="itemCtx.contentId.value"
+      :aria-labelledby="itemCtx.triggerId.value"
+      :data-testid="testId"
+      :data-state="itemCtx.open.value ? 'open' : 'closed'"
+      :data-size="ctx.size.value"
+      :class="attrs.class"
+      class="grid grid-rows-[1fr] overflow-hidden text-[var(--text-muted)] data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+    >
+      <div class="min-h-0">
+        <slot />
+      </div>
+    </div>
+  </Transition>
 </template>
