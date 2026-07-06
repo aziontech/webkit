@@ -78,7 +78,7 @@ const changePlanTemplate = `
             data-testid="template-change-plan-drawer__plans"
           >
             <CardPricing
-              class="!w-full min-w-0 flex-1 max-w-none"
+              class="w-full! min-w-0 flex-1 max-w-none"
               plan-title="Hobby"
               description="The perfect starting place"
               value="Free"
@@ -96,7 +96,7 @@ const changePlanTemplate = `
               </template>
             </CardPricing>
             <CardPricing
-              class="!w-full min-w-0 flex-1 max-w-none"
+              class="w-full! min-w-0 flex-1 max-w-none"
               plan-title="Pro"
               :description="billingDetailMonthly"
               value="20"
@@ -116,7 +116,7 @@ const changePlanTemplate = `
               </template>
             </CardPricing>
             <CardPricing
-              class="!w-full min-w-0 flex-1 max-w-none"
+              class="w-full! min-w-0 flex-1 max-w-none"
               plan-title="Enterprise"
               description="Suporte avançado e serviços contínuos."
               value="Custom"

@@ -133,7 +133,7 @@ function isCopied(name) {
           <span class="text-[9px] font-code text-muted text-center leading-tight w-full px-1 truncate max-w-20">{{ icon.name.replace('ai-', '') }}</span>
           <i :class="[
             'absolute top-1.5 right-1.5 text-[10px] transition-opacity duration-100',
-            isCopied(icon.name) ? 'pi pi-check !opacity-100 text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
+            isCopied(icon.name) ? 'pi pi-check opacity-100! text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
           ]" />
         </button>
       </div>
@@ -161,7 +161,7 @@ function isCopied(name) {
           <span class="text-[9px] font-code text-muted text-center leading-tight w-full px-1 truncate max-w-20">{{ icon.name.replace('ai-', '') }}</span>
           <i :class="[
             'absolute top-1.5 right-1.5 text-[10px] transition-opacity duration-100',
-            isCopied(icon.name) ? 'pi pi-check !opacity-100 text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
+            isCopied(icon.name) ? 'pi pi-check opacity-100! text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
           ]" />
         </button>
       </div>
@@ -189,7 +189,7 @@ function isCopied(name) {
           <span class="text-[9px] font-code text-muted text-center leading-tight w-full px-1 truncate max-w-20">{{ icon.name.replace('pi-', '') }}</span>
           <i :class="[
             'absolute top-1.5 right-1.5 text-[10px] transition-opacity duration-100',
-            isCopied(icon.name) ? 'pi pi-check !opacity-100 text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
+            isCopied(icon.name) ? 'pi pi-check opacity-100! text-success' : 'pi pi-copy opacity-0 group-hover:opacity-50'
           ]" />
         </button>
       </div>

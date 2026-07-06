@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url'
 
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 
 // `@aziontech/theme/theme-colors` is not a public entry — the Foundations page in
@@ -53,6 +54,10 @@ const config = {
     } else {
       config.plugins.splice(docgenIdx, 0, vue())
     }
+
+    // Tailwind v4 CSS-first pipeline: resolves `@import "tailwindcss"` in
+    // `@aziontech/theme/globals.css` and scans project sources for utility usage.
+    config.plugins.push(tailwindcss())
 
     // Dev channel: stories still import from '@aziontech/webkit/*'; redirect to the renamed
     // workspace package '@aziontech/webkit.dev/*' so no story file needs to change.

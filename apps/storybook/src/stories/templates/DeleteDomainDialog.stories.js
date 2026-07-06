@@ -56,7 +56,7 @@ const deleteDomainTemplate = `
           <p class="m-0 text-body-sm text-[var(--text-muted)]">
             {{ args.descriptionBeforeLink }}
             <Link
-              class="!inline-flex !h-auto !min-h-0 align-baseline"
+              class="inline-flex! h-auto! min-h-0! align-baseline"
               :href="args.helpCenterHref"
               :label="args.helpCenterLabel"
               :show-icon="false"

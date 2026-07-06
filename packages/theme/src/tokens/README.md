@@ -198,45 +198,20 @@ export const spacingsData = {
 ```bash
 # emit both v3 and v4 bundles
 pnpm --filter @aziontech/theme build:tokens
-
-# only one target
-pnpm --filter @aziontech/theme build:tokens:v3
-pnpm --filter @aziontech/theme build:tokens:v4
-
-# v3 + compile final CSS with tailwindcss
-pnpm --filter @aziontech/theme build:css:v3
 ```
 
-Outputs land in `packages/theme/dist/v3/` and `packages/theme/dist/v4/`.
+Output lands in `packages/theme/dist/v4/`.
 
-### Consuming in a Tailwind v3 project
-
-```js
-// tailwind.config.js
-import themePreset from '@aziontech/theme/tailwind-preset/v3'
-
-export default {
-  presets: [themePreset],
-  content: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: ['class'],
-}
-```
+### Consuming (Tailwind v4)
 
 ```css
 /* main.css */
-@import '@aziontech/theme/v3/globals.css';
-```
-
-Utilities like `text-default`, `bg-surface`, `border-default`, `text-primary`, `gap-md`, `p-md`, `.text-heading-lg`, etc. are then available everywhere.
-
-### Consuming in a Tailwind v4 project
-
-```css
-/* main.css */
-@import '@aziontech/theme/v4/globals.css';
+@import '@aziontech/theme/globals.css';
 ```
 
 No `tailwind.config.js` needed — v4 reads `@theme { … }` directly from the imported CSS.
+
+Utilities like `text-default`, `bg-surface`, `border-default`, `text-primary`, `gap-md`, `p-md`, `.text-heading-lg`, `animate-popup-scale-in`, etc. are then available everywhere.
 
 ### As JS objects (Node / build steps)
 

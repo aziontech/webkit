@@ -1,11 +1,9 @@
-@layer tailwind-base, primevue;
-
-@layer tailwind-base {
-  @tailwind base;
-}
-
-@tailwind components;
-@tailwind utilities;
+/**
+ * Tailwind v4 requires `@reference` in files that use `@apply` but are not
+ * the main Tailwind entry (`@import "tailwindcss"`). Point it at the theme's
+ * generated globals so `@apply` can resolve utilities.
+ */
+@reference "@aziontech/theme/globals.css";
 
 html,
 body,
@@ -29,35 +27,33 @@ body,
 
 .docblock-code-toggle {
   /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 .css-2p1np {
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 
 /* Text Name Column Props */
 .css-in3yi3 {
-  @apply !font-code !font-normal !text-neutral-50;
+  font-family: 'Roboto Mono', monospace !important;
+  @apply font-normal! text-neutral-50!;
 }
 
 .tabbutton > * {
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 
 .docblock-argstable-head > tr {
-  @apply !font-code !lowercase;
-}
-
-.css-in3yi3 {
-  @apply !font-code !font-normal !text-neutral-50;
+  font-family: 'Roboto Mono', monospace !important;
+  @apply lowercase!;
 }
 
 .css-7qiabv {
-  @apply !font-sans !text-neutral-500;
+  @apply font-sans! text-neutral-500!;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  @apply !font-sans !font-normal;
+  @apply font-sans! font-normal!;
 }
 
 /* Theme container styles */

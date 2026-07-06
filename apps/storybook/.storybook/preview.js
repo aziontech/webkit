@@ -1,24 +1,9 @@
-import { setup } from '@storybook/vue3'
-import PrimeVue from 'primevue/config'
-import Tooltip from 'primevue/tooltip'
 import { withThemeByClassName } from '@storybook/addon-themes'
 
-// v3 token build: primitives, --bg-* / --text-* / --border-*, and .text-body-md etc.
-// (replaces injectCssVars(), which only emitted --background-* aliases — webkit components use --bg-*)
 import '@aziontech/theme/globals.css'
-import 'primeflex/primeflex.css'
 import '../src/styles/preview.css'
-import '@aziontech/theme'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
-
-setup((app) => {
-  app.use(PrimeVue, {
-    ripple: false
-  })
-
-  app.directive('tooltip', Tooltip)
-})
 
 export const parameters = {
   controls: {

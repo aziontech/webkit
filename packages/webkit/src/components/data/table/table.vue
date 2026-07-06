@@ -1131,7 +1131,7 @@
               class="flex w-full flex-col items-center justify-center gap-[var(--spacing-6)] px-[var(--spacing-8)] py-[var(--spacing-12)] text-center"
             >
               <slot name="empty">
-                <EmptyIllustration class="!mb-0" />
+                <EmptyIllustration class="mb-0!" />
                 <div class="flex flex-col gap-[var(--spacing-2)]">
                   <p class="text-heading-sm text-[var(--text-default)]">No results yet</p>
                   <p class="text-body-sm text-[var(--text-muted)]">
