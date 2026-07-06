@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "azion": "^1.17.4",
+    "@babel/core": "^7.29.6",
     "@vitejs/plugin-vue": "^5.2.4",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.18.0",
