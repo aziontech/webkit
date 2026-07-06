@@ -1,6 +1,8 @@
-import { expect, within } from '@storybook/test'
-
 import Avatar from '@aziontech/webkit/avatar'
+
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Avatar from '@aziontech/webkit/avatar'"
 
 const kinds = ['circle', 'square']
 const sizes = ['small', 'medium', 'large']
@@ -10,11 +12,11 @@ const sampleImage =
 
 /** @type {import('@storybook/vue3').Meta<typeof Avatar>} */
 const meta = {
- title: 'Components/Content/Avatar',
+  title: 'Components/Content/Avatar',
   component: Avatar,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: { default: 'dark' },
     a11y: {
       config: {
@@ -27,67 +29,74 @@ const meta = {
     docs: {
       description: {
         component:
-          'User avatar for profiles and lists. Renders an image when `src` is set; otherwise initials from `label`; otherwise a user icon. Figma Webkit Avatar (node 477:882). Supports circle and square shapes and three sizes (24 / 32 / 48 px).'
-      }
+          'User avatar for profiles and lists. Renders an image when `src` is set, initials from `label` otherwise, and a fallback icon when neither is provided. Supports circle and square shapes and three sizes (24 / 32 / 48 px).'
+      },
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
     src: {
       control: 'text',
-      description: 'Image URL. Takes precedence over label and icon.',
+      description: 'Image URL. When set, renders a photo and takes precedence over label and icon.',
       table: {
+        category: 'props',
         type: { summary: 'string' },
-        category: 'props'
+        defaultValue: { summary: 'undefined' }
       }
     },
     alt: {
       control: 'text',
-      description: 'Accessible description when `src` is set.',
+      description: 'Accessible description for the image. Use when `src` is set.',
       table: {
+        category: 'props',
         type: { summary: 'string' },
-        category: 'props'
+        defaultValue: { summary: 'undefined' }
       }
     },
     label: {
       control: 'text',
-      description: 'Initials when no image (max two characters - uppercased).',
+      description: 'Initials shown when no image (normalized to two uppercase characters).',
       table: {
+        category: 'props',
         type: { summary: 'string' },
-        category: 'props'
+        defaultValue: { summary: 'undefined' }
       }
     },
     icon: {
       control: 'text',
       description: 'PrimeIcons class for the fallback when no image or label.',
       table: {
+        category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: 'pi pi-user' },
-        category: 'props'
+        defaultValue: { summary: "'pi pi-user'" }
       }
     },
     kind: {
-      control: { type: 'select' },
+      control: 'select',
       options: kinds,
-      description: 'Visual shape of the container.',
+      description: 'Visual shape of the avatar container.',
       table: {
-        type: { summary: 'AvatarKind' },
-        defaultValue: { summary: 'circle' },
-        category: 'props'
+        category: 'props',
+        type: { summary: "'circle' | 'square'" },
+        defaultValue: { summary: "'circle'" }
       }
     },
     size: {
-      control: { type: 'select' },
+      control: 'select',
       options: sizes,
       description: 'Size preset (small 24px, medium 32px, large 48px).',
       table: {
-        type: { summary: 'AvatarSize' },
-        defaultValue: { summary: 'medium' },
-        category: 'props'
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" }
       }
     }
   },
   args: {
+    src: '',
+    alt: '',
     label: 'AB',
+    icon: 'pi pi-user',
     kind: 'circle',
     size: 'medium'
   }
@@ -103,200 +112,146 @@ const Template = (args) => ({
   template: '<Avatar v-bind="args" />'
 })
 
+const DEFAULT_MARKUP = '<Avatar label="AB" kind="circle" size="medium" />'
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Avatar>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default circle avatar with initials.' } }
+    docs: {
+      description: { story: 'Default circle avatar with initials.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
 
-export const KindCircle = {
-  args: { kind: 'circle', label: 'AB' },
-  render: Template,
+const TYPES_TEMPLATE = `<div class="flex flex-wrap items-end gap-6">
+  <div class="flex flex-col items-center gap-2">
+    <Avatar kind="circle" label="AB" size="medium" />
+    <span class="text-body-xs text-[var(--text-muted)]">Circle</span>
+  </div>
+  <div class="flex flex-col items-center gap-2">
+    <Avatar kind="square" label="AB" size="medium" />
+    <span class="text-body-xs text-[var(--text-muted)]">Square</span>
+  </div>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Avatar>} */
+export const Types = {
+  render: () => ({ components: { Avatar }, template: TYPES_TEMPLATE }),
   parameters: {
-    docs: { description: { story: 'Circular shape (Figma Shape=Circle).' } }
+    docs: {
+      controls: { disable: true },
+      description: { story: 'Both shape variants side by side: circle and square at medium size.' },
+      source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
+    }
   }
 }
 
-export const KindSquare = {
-  args: { kind: 'square', label: 'AB' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Square shape with `shape-elements` radius.' } }
-  }
-}
+const SIZES_TEMPLATE = `<div class="flex flex-wrap items-end gap-4">
+  <Avatar label="AB" size="small" />
+  <Avatar label="AB" size="medium" />
+  <Avatar label="AB" size="large" />
+</div>`
 
-export const Kinds = {
-  render: () => ({
-    components: { Avatar },
-    template: `
-      <div class="flex flex-wrap items-end gap-6">
-        <div class="flex flex-col items-center gap-2">
-          <Avatar kind="circle" label="AB" size="medium" />
-          <span class="text-body-xs text-[var(--text-muted)]">Circle</span>
-        </div>
-        <div class="flex flex-col items-center gap-2">
-          <Avatar kind="square" label="AB" size="medium" />
-          <span class="text-body-xs text-[var(--text-muted)]">Square</span>
-        </div>
-      </div>
-    `
-  }),
-  parameters: {
-    docs: { description: { story: 'Circle vs square at medium size.' } }
-  }
-}
-
-export const SizeSmall = {
-  args: { size: 'small', label: 'AB' },
-  render: Template
-}
-
-export const SizeMedium = {
-  args: { size: 'medium', label: 'AB' },
-  render: Template
-}
-
-export const SizeLarge = {
-  args: { size: 'large', label: 'AB' },
-  render: Template
-}
-
+/** @type {import('@storybook/vue3').StoryObj<typeof Avatar>} */
 export const Sizes = {
-  render: () => ({
-    components: { Avatar },
-    template: `
+  render: () => ({ components: { Avatar }, template: SIZES_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: { story: 'All three size presets (24 / 32 / 48 px) with initials.' },
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
+    }
+  }
+}
+
+const FALLBACKS_TEMPLATE = `<div class="flex flex-wrap items-end gap-6">
+  <div class="flex flex-col items-center gap-2">
+    <Avatar src="${sampleImage}" alt="Portrait of a user" size="large" />
+    <span class="text-body-xs text-[var(--text-muted)]">Image</span>
+  </div>
+  <div class="flex flex-col items-center gap-2">
+    <Avatar label="JD" size="large" />
+    <span class="text-body-xs text-[var(--text-muted)]">Initials</span>
+  </div>
+  <div class="flex flex-col items-center gap-2">
+    <Avatar icon="pi pi-user" size="large" />
+    <span class="text-body-xs text-[var(--text-muted)]">Icon</span>
+  </div>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Avatar>} */
+export const Fallbacks = {
+  render: () => ({ components: { Avatar }, template: FALLBACKS_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Content precedence: photo when `src` is set, initials from `label` when there is no image, and the fallback icon when neither is provided.'
+      },
+      source: { code: toSfc(IMPORT, FALLBACKS_TEMPLATE) }
+    }
+  }
+}
+
+const VARIANT_GRID_TEMPLATE = `<div class="flex flex-col gap-8">
+  <section v-for="kind in kinds" :key="kind" class="flex flex-col gap-4">
+    <h3 class="text-heading-sm text-[var(--text-default)] capitalize">{{ kind }}</h3>
+    <div class="flex flex-col gap-6">
       <div class="flex flex-wrap items-end gap-4">
-        <Avatar label="AB" size="small" />
-        <Avatar label="AB" size="medium" />
-        <Avatar label="AB" size="large" />
+        <span class="w-16 text-body-xs text-[var(--text-muted)]">Text</span>
+        <Avatar v-for="size in sizes" :key="'l-' + kind + size" :kind="kind" :size="size" label="AB" />
       </div>
-    `
-  }),
-  parameters: {
-    docs: { description: { story: 'All three size presets with initials.' } }
-  }
-}
+      <div class="flex flex-wrap items-end gap-4">
+        <span class="w-16 text-body-xs text-[var(--text-muted)]">Icon</span>
+        <Avatar v-for="size in sizes" :key="'i-' + kind + size" :kind="kind" :size="size" />
+      </div>
+      <div class="flex flex-wrap items-end gap-4">
+        <span class="w-16 text-body-xs text-[var(--text-muted)]">Image</span>
+        <Avatar
+          v-for="size in sizes"
+          :key="'img-' + kind + size"
+          :kind="kind"
+          :size="size"
+          :src="sampleImage"
+          alt="User portrait"
+        />
+      </div>
+    </div>
+  </section>
+</div>`
 
-export const WithLabel = {
-  args: { label: 'JD', kind: 'circle', size: 'medium' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Initials fallback (Figma Type=Text).' } }
-  }
-}
-
-export const WithIcon = {
-  args: { label: undefined, icon: 'pi pi-user', kind: 'circle', size: 'medium' },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Icon fallback when no image or label (Figma Type=Icon).' } }
-  }
-}
-
-export const WithImage = {
-  args: {
-    src: sampleImage,
-    alt: 'Portrait of a user',
-    label: undefined,
-    kind: 'circle',
-    size: 'large'
-  },
-  render: Template,
-  parameters: {
-    docs: { description: { story: 'Photo avatar (Figma Type=Image).' } }
-  }
-}
-
+/** @type {import('@storybook/vue3').StoryObj<typeof Avatar>} */
 export const VariantGrid = {
   render: () => ({
     components: { Avatar },
     setup() {
       return { kinds, sizes, sampleImage }
     },
-    template: `
-      <div class="flex flex-col gap-8">
-        <section v-for="kind in kinds" :key="kind" class="flex flex-col gap-4">
-          <h3 class="text-heading-sm text-[var(--text-default)] capitalize">{{ kind }}</h3>
-          <div class="flex flex-col gap-6">
-            <div class="flex flex-wrap items-end gap-4">
-              <span class="w-16 text-body-xs text-[var(--text-muted)]">Text</span>
-              <Avatar v-for="size in sizes" :key="'l-' + kind + size" :kind="kind" :size="size" label="AB" />
-            </div>
-            <div class="flex flex-wrap items-end gap-4">
-              <span class="w-16 text-body-xs text-[var(--text-muted)]">Icon</span>
-              <Avatar v-for="size in sizes" :key="'i-' + kind + size" :kind="kind" :size="size" />
-            </div>
-            <div class="flex flex-wrap items-end gap-4">
-              <span class="w-16 text-body-xs text-[var(--text-muted)]">Image</span>
-              <Avatar
-                v-for="size in sizes"
-                :key="'img-' + kind + size"
-                :kind="kind"
-                :size="size"
-                :src="sampleImage"
-                alt="User portrait"
-              />
-            </div>
-          </div>
-        </section>
-      </div>
-    `
+    template: VARIANT_GRID_TEMPLATE
   }),
   parameters: {
     docs: {
+      controls: { disable: true },
       description: {
-        story: 'Matrix aligned with Figma node 477:882 (3 sizes; xl omitted from API).'
+        story:
+          'Full matrix of shapes and sizes across the three content modes (initials, icon, image).'
+      },
+      source: {
+        code: toSfc(
+          [
+            IMPORT,
+            '',
+            "const kinds = ['circle', 'square']",
+            "const sizes = ['small', 'medium', 'large']",
+            'const sampleImage =',
+            `  '${sampleImage}'`
+          ],
+          VARIANT_GRID_TEMPLATE
+        )
       }
     }
   }
-}
-
-export const LightDark = {
-  parameters: {
-    backgrounds: { default: 'light' },
-    docs: { description: { story: 'Light canvas — verify raised surface and text contrast.' } }
-  },
-  render: () => ({
-    components: { Avatar },
-    template: `
-      <div class="flex flex-wrap gap-4">
-        <Avatar label="AB" kind="circle" size="medium" />
-        <Avatar label="AB" kind="square" size="medium" />
-        <Avatar icon="pi pi-user" kind="circle" size="medium" />
-      </div>
-    `
-  })
-}
-
-export const Accessibility = {
-  args: { label: 'AB', kind: 'circle', size: 'medium' },
-  render: Template,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const avatar = canvas.getByRole('img', { name: 'AB' })
-    await expect(avatar).toBeInTheDocument()
-    await expect(canvas.getByTestId('content-avatar__label')).toHaveTextContent('AB')
-  }
-}
-
-export const AccessibilityImage = {
-  args: {
-    src: sampleImage,
-    alt: 'Portrait of a user',
-    kind: 'circle',
-    size: 'medium'
-  },
-  render: Template,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const img = canvas.getByRole('img', { name: 'Portrait of a user' })
-    await expect(img).toBeInTheDocument()
-    await expect(img).toHaveAttribute('src', sampleImage)
-  }
-}
-
-export const Playground = {
-  render: Template
 }

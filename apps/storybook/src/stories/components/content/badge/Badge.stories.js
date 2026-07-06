@@ -4,12 +4,24 @@ import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Badge from '@aziontech/webkit/badge'"
 
+/** @type {import('@storybook/vue3').Meta<typeof Badge>} */
 const meta = {
   title: 'Components/Content/Badge',
   component: Badge,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
+    backgrounds: {
+      default: 'dark'
+    },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
     docs: {
       description: {
         component:
@@ -31,18 +43,23 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'default'" },
-        defaultValue: { summary: 'primary' }
+        defaultValue: { summary: "'primary'" }
       }
     },
     size: {
-      control: 'inline-radio',
+      control: 'select',
       options: ['small', 'medium', 'large'],
       description: 'Size token; small is 20px tall, medium is 24px, large is 30px.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium' | 'large'" },
-        defaultValue: { summary: 'medium' }
+        defaultValue: { summary: "'medium'" }
       }
+    },
+    default: {
+      control: false,
+      description: 'Main content; falls back to the `value` prop when empty.',
+      table: { category: 'slots' }
     }
   },
   args: {
@@ -57,13 +74,14 @@ export default meta
 const Template = (args) => ({
   components: { Badge },
   setup() {
-    return { props: args }
+    return { args }
   },
-  template: '<Badge v-bind="props" />'
+  template: '<Badge v-bind="args" />'
 })
 
 const DEFAULT_MARKUP = '<Badge value="99" severity="primary" size="medium" />'
 
+/** @type {import('@storybook/vue3').StoryObj<typeof Badge>} */
 export const Default = {
   render: Template,
   parameters: {
@@ -83,11 +101,9 @@ const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
   <Badge value="99" severity="default" />
 </div>`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof Badge>} */
 export const Types = {
-  render: () => ({
-    components: { Badge },
-    template: TYPES_TEMPLATE
-  }),
+  render: () => ({ components: { Badge }, template: TYPES_TEMPLATE }),
   parameters: {
     docs: {
       controls: { disable: true },
@@ -103,11 +119,9 @@ const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
   <Badge value="99" size="large" />
 </div>`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof Badge>} */
 export const Sizes = {
-  render: () => ({
-    components: { Badge },
-    template: SIZES_TEMPLATE
-  }),
+  render: () => ({ components: { Badge }, template: SIZES_TEMPLATE }),
   parameters: {
     docs: {
       controls: { disable: true },

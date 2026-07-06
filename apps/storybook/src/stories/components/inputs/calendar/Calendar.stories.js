@@ -1,34 +1,28 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import Calendar from '@aziontech/webkit/calendar'
 
-const SINGLE_SOURCE = [
-  '<script setup>',
-  "import { ref } from 'vue'",
-  '',
-  "import Calendar from '@aziontech/webkit/calendar'",
-  '',
-  'const selected = ref(new Date(2026, 9, 8))',
-  '</script>',
-  '',
-  '<template>',
-  '  <Calendar v-model="selected" />',
-  '</template>'
-].join('\n')
+import { toSfc } from '../../../_shared/story-source'
 
-const RANGE_SOURCE = [
-  '<script setup>',
+const SINGLE_SCRIPT = [
   "import { ref } from 'vue'",
   '',
   "import Calendar from '@aziontech/webkit/calendar'",
   '',
-  'const selected = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })',
-  '</script>',
+  'const selected = ref(new Date(2026, 9, 8))'
+]
+
+const SINGLE_MARKUP = '<Calendar v-model="selected" />'
+
+const RANGE_SCRIPT = [
+  "import { ref } from 'vue'",
   '',
-  '<template>',
-  '  <Calendar v-model="selected" mode="range" />',
-  '</template>'
-].join('\n')
+  "import Calendar from '@aziontech/webkit/calendar'",
+  '',
+  'const selected = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })'
+]
+
+const RANGE_MARKUP = '<Calendar v-model="selected" mode="range" />'
 
 /** @type {import('@storybook/vue3').Meta<typeof Calendar>} */
 const meta = {
@@ -113,46 +107,66 @@ const meta = {
 
 export default meta
 
+const Template = (args) => ({
+  components: { Calendar },
+  setup() {
+    const value = ref(args.modelValue ?? new Date(2026, 9, 8))
+    watch(
+      () => args.modelValue,
+      (next) => {
+        value.value = next ?? new Date(2026, 9, 8)
+      }
+    )
+    const onUpdate = (next) => {
+      value.value = next
+      args['onUpdate:modelValue']?.(next)
+    }
+    return { args, value, onUpdate }
+  },
+  template: '<Calendar v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
+})
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Default = {
-  render: (args) => ({
-    components: { Calendar },
-    setup() {
-      const { onUpdateModelValue, onMonthChange, ...props } = args
-      const selected = ref(new Date(2026, 9, 8))
-
-      return { props, selected, onUpdateModelValue, onMonthChange }
-    },
-    template:
-      '<Calendar v-model="selected" v-bind="props" @update:modelValue="onUpdateModelValue" @month-change="onMonthChange" />'
-  }),
+  render: Template,
   parameters: {
     docs: {
-      source: { code: SINGLE_SOURCE },
-      description: { story: 'Single-mode calendar with a preselected date.' }
+      description: { story: 'Single-mode calendar with a preselected date.' },
+      source: { code: toSfc(SINGLE_SCRIPT, SINGLE_MARKUP) }
     }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Range = {
+  args: { mode: 'range' },
   render: (args) => ({
     components: { Calendar },
     setup() {
-      const { onUpdateModelValue, onMonthChange, ...props } = args
-      const selected = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })
-
-      return { props, selected, onUpdateModelValue, onMonthChange }
+      const value = ref(
+        args.modelValue ?? { start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) }
+      )
+      watch(
+        () => args.modelValue,
+        (next) => {
+          value.value = next ?? { start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) }
+        }
+      )
+      const onUpdate = (next) => {
+        value.value = next
+        args['onUpdate:modelValue']?.(next)
+      }
+      return { args, value, onUpdate }
     },
-    template:
-      '<Calendar v-model="selected" v-bind="props" mode="range" @update:modelValue="onUpdateModelValue" @month-change="onMonthChange" />'
+    template: '<Calendar v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
   }),
   parameters: {
     docs: {
-      source: { code: RANGE_SOURCE },
       description: {
-        story: 'Range mode showing a selected start and end date with the in-range band between them.'
-      }
+        story:
+          'Range mode showing a selected start and end date with the in-range band between them.'
+      },
+      source: { code: toSfc(RANGE_SCRIPT, RANGE_MARKUP) }
     }
   }
 }
