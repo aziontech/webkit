@@ -91,11 +91,9 @@ const labelClock = (date: Date, timezone = ''): string =>
 
 /* The defaults written by withTime: 00:00 on a start, 23:59 on an end. A time that
    still matches its default was never picked by the user, so the label omits it. */
-const isDefaultStartTime = (date: Date): boolean =>
-  date.getHours() === 0 && date.getMinutes() === 0
+const isDefaultStartTime = (date: Date): boolean => date.getHours() === 0 && date.getMinutes() === 0
 
-const isDefaultEndTime = (date: Date): boolean =>
-  date.getHours() === 23 && date.getMinutes() === 59
+const isDefaultEndTime = (date: Date): boolean => date.getHours() === 23 && date.getMinutes() === 59
 
 /** Exactly one whole calendar month, first day 00:00 through last day 23:59. */
 const isWholeMonth = (start: Date, end: Date): boolean =>
@@ -133,8 +131,7 @@ export const formatValueLabel = (
     return ''
   }
 
-  const startTime =
-    start && !isDefaultStartTime(start) ? `, ${labelClock(start, timezone)}` : ''
+  const startTime = start && !isDefaultStartTime(start) ? `, ${labelClock(start, timezone)}` : ''
   const endTime = end && !isDefaultEndTime(end) ? `, ${labelClock(end, timezone)}` : ''
 
   if (start && !end) {
