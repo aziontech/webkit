@@ -46,6 +46,7 @@
     "vue": "^3.5.29"
   },
   "devDependencies": {
+    "azion": "^1.20.22",
     "@chromatic-com/storybook": "^5.0.1",
     "@commitlint/cli": "^21.0.2",
     "@eslint/js": "^9.39.3",
