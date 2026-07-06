@@ -13,6 +13,9 @@ export default {
       description:
         'Disallow importing a @aziontech/webkit path that is not a published export of the installed version.'
     },
+    // Autofix only when there is exactly ONE close published subpath (unambiguous);
+    // with 0 or 2+ candidates we keep suggestions and never rewrite silently.
+    fixable: 'code',
     hasSuggestions: true,
     schema: [],
     messages: {
@@ -44,6 +47,11 @@ export default {
         node: sourceNode,
         messageId: 'unknown',
         data: { source, version: catalog.version ? `@${catalog.version}` : '', hint },
+        // Only a single unambiguous candidate is safe to apply automatically.
+        fix:
+          suggestions.length === 1
+            ? (fixer) => fixer.replaceText(sourceNode, JSON.stringify(prefix + suggestions[0]))
+            : undefined,
         suggest: suggestions.map((s) => ({
           messageId: 'replace',
           data: { replacement: prefix + s },

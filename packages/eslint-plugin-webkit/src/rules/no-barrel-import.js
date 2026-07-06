@@ -29,10 +29,11 @@ export default {
     }
   },
   create(context) {
-    // Load the catalog only for its import PREFIX (per installed channel). Matching the
-    // bare package uses isWebkitBare(), which is catalog-independent, so this rule still
-    // fires even when the catalog cannot be resolved.
-    const prefix = loadCatalog(ctxCwd(context)).prefix
+    // Matching the bare package uses isWebkitBare() (catalog-independent), so this rule
+    // still fires when the catalog cannot be resolved. The catalog is used only to VERIFY
+    // that each guessed per-subpath import actually exists before offering the split fix.
+    const catalog = loadCatalog(ctxCwd(context))
+    const prefix = catalog.prefix
 
     return {
       ImportDeclaration(node) {
@@ -50,25 +51,32 @@ export default {
         }
         if (!named.length) return
 
+        // The split rewrites `{ Button }` → `@aziontech/webkit/button` by kebab-casing the
+        // imported name. That is a GUESS, so only offer the fix when EVERY guessed subpath
+        // is a real published export — otherwise the "fix" would emit an import that
+        // valid-import-path then rejects.
+        const subs = named.map((s) => kebab(s.imported.name))
+        const allResolve = catalog.available && subs.every((sub) => catalog.has(sub))
+
         const first = named[0]
         const example = `import ${first.local.name} from '${prefix}${kebab(first.imported.name)}'`
         context.report({
           node,
           messageId: 'barrel',
           data: { example },
-          suggest: [
-            {
-              messageId: 'split',
-              fix: (fixer) => {
-                const lines = named.map((s) => {
-                  const local = s.local.name
-                  const sub = kebab(s.imported.name)
-                  return `import ${local} from '${prefix}${sub}'`
-                })
-                return fixer.replaceText(node, lines.join('\n'))
-              }
-            }
-          ]
+          suggest: allResolve
+            ? [
+                {
+                  messageId: 'split',
+                  fix: (fixer) => {
+                    const lines = named.map(
+                      (s, i) => `import ${s.local.name} from '${prefix}${subs[i]}'`
+                    )
+                    return fixer.replaceText(node, lines.join('\n'))
+                  }
+                }
+              ]
+            : []
         })
       },
       // `export * from '@aziontech/webkit'` re-exports the whole barrel.

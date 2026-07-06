@@ -30,8 +30,18 @@ test('valid-import-path', () => {
       "import X from '@aziontech/webkit/src/components/x'"
     ],
     invalid: [
-      { code: "import X from '@aziontech/webkit/buton'", errors: [{ messageId: 'unknown', suggestions: 1 }] },
-      { code: "import X from '@aziontech/webkit/chp'", errors: [{ messageId: 'unknown', suggestions: 2 }] }
+      // exactly one close subpath → autofix rewrites it (fixer emits double quotes)
+      {
+        code: "import X from '@aziontech/webkit/buton'",
+        output: 'import X from "@aziontech/webkit/button"',
+        errors: [{ messageId: 'unknown', suggestions: 1 }]
+      },
+      // two candidates (chip, chips) → ambiguous → suggestions only, NO autofix
+      {
+        code: "import X from '@aziontech/webkit/chp'",
+        output: null,
+        errors: [{ messageId: 'unknown', suggestions: 2 }]
+      }
     ]
   })
 })
@@ -44,8 +54,14 @@ test('no-deep-internal-import', () => {
       "import X from '@aziontech/webkit/buton'"
     ],
     invalid: [
-      { code: "import X from '@aziontech/webkit/src/components/x'", errors: [{ messageId: 'deep' }] },
-      { code: "import X from '@aziontech/webkit/table/internal'", errors: [{ messageId: 'deep', suggestions: 1 }] }
+      // /src/ deep import: reported, no published ancestor → no autofix
+      { code: "import X from '@aziontech/webkit/src/components/x'", output: null, errors: [{ messageId: 'deep' }] },
+      // deeper-than-published: nearest published ancestor is a single value → autofix
+      {
+        code: "import X from '@aziontech/webkit/table/internal'",
+        output: 'import X from "@aziontech/webkit/table"',
+        errors: [{ messageId: 'deep', suggestions: 1 }]
+      }
     ]
   })
 })
@@ -59,6 +75,9 @@ test('no-barrel-import', () => {
     invalid: [
       { code: "import { Button } from '@aziontech/webkit'", errors: [{ messageId: 'barrel', suggestions: 1 }] },
       { code: "import { Button, Chip } from '@aziontech/webkit'", errors: [{ messageId: 'barrel', suggestions: 1 }] },
+      // the guessed subpath (nonexistent) is not a published export → barrel still
+      // reported, but NO split suggestion is offered (would emit an invalid import)
+      { code: "import { Nonexistent } from '@aziontech/webkit'", errors: [{ messageId: 'barrel', suggestions: 0 }] },
       { code: "import * as WK from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] },
       // the dev channel is a bare barrel too
       { code: "import { Button } from '@aziontech/webkit.dev'", errors: [{ messageId: 'barrel', suggestions: 1 }] },
@@ -122,7 +141,11 @@ test('resolves the .dev channel package name from the catalog', () => {
     js.run('valid-import-path (dev channel)', validImportPath, {
       valid: ["import Button from '@aziontech/webkit.dev/button'"],
       invalid: [
-        { code: "import X from '@aziontech/webkit.dev/buton'", errors: [{ messageId: 'unknown', suggestions: 1 }] }
+        {
+          code: "import X from '@aziontech/webkit.dev/buton'",
+          output: 'import X from "@aziontech/webkit.dev/button"',
+          errors: [{ messageId: 'unknown', suggestions: 1 }]
+        }
       ]
     })
   } finally {

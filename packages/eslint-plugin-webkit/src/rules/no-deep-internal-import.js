@@ -9,6 +9,9 @@ export default {
   meta: {
     type: 'problem',
     docs: { description: 'Disallow importing @aziontech/webkit internals (deep paths / src).' },
+    // The replacement is a single, catalog-verified published entry point, so it is a
+    // safe autofix (not just a suggestion).
+    fixable: 'code',
     hasSuggestions: true,
     schema: [],
     messages: {
@@ -32,18 +35,15 @@ export default {
       if (!isSrc && !prefix) return // unknown-but-not-deep → valid-import-path owns it
 
       const replacement = prefix ? pkgPrefix + prefix : null
+      const applyFix = (fixer) => fixer.replaceText(sourceNode, JSON.stringify(replacement))
       context.report({
         node: sourceNode,
         messageId: 'deep',
         data: { source, hint: replacement ? ` '${replacement}'` : '' },
+        // Autofix + suggestion share the same deterministic replacement when one exists.
+        fix: replacement ? applyFix : undefined,
         suggest: replacement
-          ? [
-              {
-                messageId: 'replace',
-                data: { replacement },
-                fix: (fixer) => fixer.replaceText(sourceNode, JSON.stringify(replacement))
-              }
-            ]
+          ? [{ messageId: 'replace', data: { replacement }, fix: applyFix }]
           : []
       })
     }
