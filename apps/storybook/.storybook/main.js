@@ -1,4 +1,13 @@
+import { fileURLToPath } from 'node:url'
+
 import vue from '@vitejs/plugin-vue'
+
+// `@aziontech/theme/theme-colors` is not a public entry — the Foundations page in
+// this app is its only consumer. Alias it to the source file so we don't have to
+// widen the package's public surface (or cut a release) for an internal doc page.
+const themeColorsEntry = fileURLToPath(
+  new URL('../../../packages/theme/src/scripts/compile-theme.js', import.meta.url)
+)
 
 /** @type {import('@storybook/vue3-vite').StorybookConfig} */
 const config = {
@@ -50,7 +59,8 @@ const config = {
     config.resolve = config.resolve || {}
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      '@aziontech/webkit': '@aziontech/webkit.dev'
+      '@aziontech/webkit': '@aziontech/webkit.dev',
+      '@aziontech/theme/theme-colors': themeColorsEntry
     }
 
     // Enable dependency pre-bundling for faster rebuilds
