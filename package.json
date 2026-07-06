@@ -33,7 +33,7 @@
     "webkit:type-coverage": "pnpm --filter webkit type-coverage",
     "webkit:format": "prettier --write packages/webkit/**/*.{js,ts,vue,css,json,md}",
     "webkit:format:check": "prettier --check packages/webkit/**/*.{js,ts,vue,css,json,md}",
-    "security:audit": "pnpm audit || true",
+    "security:audit": "pnpm audit",
     "governance": "pnpm run webkit:lint && pnpm run webkit:type-check && pnpm run webkit:format:check && pnpm run security:audit"
   },
   "dependencies": {

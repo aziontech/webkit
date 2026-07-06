@@ -52,7 +52,7 @@ jobs:
 
       - name: Audit dependencies
         run: |
-          pnpm audit || true
+          pnpm audit
         working-directory: packages/webkit
 
       - name: Run TruffleHog (secret detection)
