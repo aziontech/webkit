@@ -493,7 +493,8 @@
           :data-size="size"
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="disabled || null"
-          class="inline-flex max-w-full items-stretch overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] data-[disabled]:opacity-60"
+          :data-two-part="isTwoPart || null"
+          class="inline-flex w-[var(--container-3xs)] max-w-full items-stretch overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] data-[disabled]:opacity-60 data-[two-part]:w-[var(--container-xs)]"
         >
           <template v-if="isTwoPart">
             <button

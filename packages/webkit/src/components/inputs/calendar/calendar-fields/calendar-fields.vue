@@ -123,7 +123,7 @@
             :model-value="startTimeText"
             :size="size"
             :disabled="disabled"
-            placeholder="09:00 AM"
+            placeholder="00:00"
             @update:model-value="startTimeText = $event"
             @change="commitTime('start', startTimeText)"
           />
@@ -155,7 +155,7 @@
             :model-value="endTimeText"
             :size="size"
             :disabled="disabled"
-            placeholder="05:00 PM"
+            placeholder="23:59"
             @update:model-value="endTimeText = $event"
             @change="commitTime('end', endTimeText)"
           />
