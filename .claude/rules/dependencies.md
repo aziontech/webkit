@@ -58,7 +58,7 @@ Use Vue `<Teleport to="body">` when the overlay must escape an `overflow: hidden
 </Transition>
 ```
 
-The catalog is in [`.claude/docs/DESIGN.md`](./tokens.md#animations--semanticanimationsjs).
+The catalog is in [`.claude/docs/DESIGN.md`](../docs/DESIGN.md#animations--semanticanimationsjs).
 
 ## Hook coverage
 
