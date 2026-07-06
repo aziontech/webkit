@@ -22,7 +22,7 @@
  * No external deps — node:fs/promises, node:path, node:url only.
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -227,6 +227,15 @@ const emitCssV4 = () => {
     '',
     '@import "tailwindcss";',
     '',
+    '/*',
+    ' * `@aziontech/webkit` components use arbitrary values (`bg-[var(--x)]`) that',
+    ' * Tailwind v4 only picks up when the source files are inside the scan.',
+    ' * Auto-detect scans the CWD only, so we point `@source` at the webkit',
+    ' * package via a monorepo-relative path (this file is under',
+    ' * `packages/theme/dist/v4/`; walking up three levels reaches `packages/`).',
+    ' */',
+    '@source "../../../webkit/src";',
+    '',
     '@theme {',
     formatVars(themeVars, '  '),
     '}',
@@ -253,9 +262,23 @@ const emitCssV4 = () => {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distRoot = resolve(__dirname, '../../dist');
 
+const fontsCss = await readFile(
+  resolve(__dirname, '../tokens/primitives/fonts.css'),
+  'utf8',
+);
+
 const dir = resolve(distRoot, 'v4');
 await mkdir(dir, { recursive: true });
-const css = emitCssV4();
+// `@import` must precede every other at-rule (CSS spec); `@font-face` before
+// `@import "tailwindcss"` would silently invalidate the import and skip
+// Tailwind's layer setup / utility generation. Splice fonts in AFTER the
+// import line by looking for the marker in the emitted CSS.
+const rawCss = emitCssV4();
+const IMPORT_LINE = '@import "tailwindcss";';
+const importIdx = rawCss.indexOf(IMPORT_LINE);
+if (importIdx === -1) throw new Error('emitCssV4 output is missing the tailwind import line');
+const afterImport = importIdx + IMPORT_LINE.length;
+const css = `${rawCss.slice(0, afterImport)}\n\n${fontsCss}${rawCss.slice(afterImport)}`;
 await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
 await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');
 console.log(`✓ v4 → ${dir}`);

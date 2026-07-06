@@ -46,8 +46,8 @@ export const buildTrees = () => {
   const { brand, ...restColors } = colorPrimitives;
   const color = {
     ...restColors,
-    primary: brand.primary,
-    accent: brand.accent,
+    'brand-primary': brand.primary,
+    'brand-accent': brand.accent,
     absolute: brand.absolute,
   };
 

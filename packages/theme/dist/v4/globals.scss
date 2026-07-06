@@ -2,6 +2,183 @@
 
 @import "tailwindcss";
 
+/**
+ * @font-face declarations for the Azion type system.
+ *
+ * Prepended verbatim into `dist/v4/globals.css` by `scripts/build-tokens.mjs`
+ * so any consumer of `@aziontech/theme/globals.css` gets the same faces the
+ * design system was authored against — no separate <link rel="stylesheet"> or
+ * per-app `@import "@fontsource/…"` needed.
+ *
+ * Fonts are hosted at fonts.azion.com under a permissive CORS policy; the
+ * requests are subresource-cached with `font-display: swap` so first paint
+ * uses the system fallback while the .woff2 loads.
+ */
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-mediumitalic.woff2') format('woff2');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-bold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-bolditalic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-bolditalic.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.azion.com/roboto/roboto-black.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('https://fonts.azion.com/roboto-mono/roboto-mono-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('https://fonts.azion.com/roboto-mono/roboto-mono-light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sora';
+  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.woff') format('woff'),
+       url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.woff') format('woff'),
+       url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+
+/*
+ * `@aziontech/webkit` components use arbitrary values (`bg-[var(--x)]`) that
+ * Tailwind v4 only picks up when the source files are inside the scan.
+ * Auto-detect scans the CWD only, so we point `@source` at the webkit
+ * package via a monorepo-relative path (this file is under
+ * `packages/theme/dist/v4/`; walking up three levels reaches `packages/`).
+ */
+@source "../../../webkit/src";
+
 @theme {
   --color-base-white: #FFFFFF;
   --color-base-black: #000000;
@@ -187,28 +364,28 @@
   --color-alpha-blue-900: #0072F5E5;
   --color-alpha-absolute-black: #000000E5;
   --color-alpha-absolute-white: #FFFFFFE5;
-  --color-primary-50: #FFF5EF;
-  --color-primary-100: #FFE7D8;
-  --color-primary-200: #FFCFB3;
-  --color-primary-300: #FFB180;
-  --color-primary-400: #FF8E4D;
-  --color-primary-500: #F3652B;
-  --color-primary-600: #D94A03;
-  --color-primary-700: #B03C02;
-  --color-primary-800: #8A2F02;
-  --color-primary-900: #692402;
-  --color-primary-950: #401602;
-  --color-accent-50: #F6F6FF;
-  --color-accent-100: #ECECFF;
-  --color-accent-200: #D9D7FA;
-  --color-accent-300: #B5B1F4;
-  --color-accent-400: #9F9AF1;
-  --color-accent-500: #8A84EC;
-  --color-accent-600: #756FE5;
-  --color-accent-700: #625BD5;
-  --color-accent-800: #524BBB;
-  --color-accent-900: #1F1E48;
-  --color-accent-950: #100F24;
+  --color-brand-primary-50: #FFF5EF;
+  --color-brand-primary-100: #FFE7D8;
+  --color-brand-primary-200: #FFCFB3;
+  --color-brand-primary-300: #FFB180;
+  --color-brand-primary-400: #FF8E4D;
+  --color-brand-primary-500: #F3652B;
+  --color-brand-primary-600: #D94A03;
+  --color-brand-primary-700: #B03C02;
+  --color-brand-primary-800: #8A2F02;
+  --color-brand-primary-900: #692402;
+  --color-brand-primary-950: #401602;
+  --color-brand-accent-50: #F6F6FF;
+  --color-brand-accent-100: #ECECFF;
+  --color-brand-accent-200: #D9D7FA;
+  --color-brand-accent-300: #B5B1F4;
+  --color-brand-accent-400: #9F9AF1;
+  --color-brand-accent-500: #8A84EC;
+  --color-brand-accent-600: #756FE5;
+  --color-brand-accent-700: #625BD5;
+  --color-brand-accent-800: #524BBB;
+  --color-brand-accent-900: #1F1E48;
+  --color-brand-accent-950: #100F24;
   --color-absolute-black: #0A0A0A;
   --color-absolute-white: #FAFAFA;
   --breakpoint-sm: 640px;
