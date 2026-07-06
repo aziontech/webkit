@@ -14,6 +14,7 @@ const {
   listCategories,
   listTokens,
   getComponent,
+  getBestPractices,
   getImport,
   searchComponents,
   suggestComponent,
@@ -88,6 +89,29 @@ test('listTokens reports an unknown category with the available groups', () => {
   assert.equal(res.ok, false)
   assert.equal(res.found, false)
   assert.ok(Array.isArray(res.groups) && res.groups.length > 0)
+})
+
+test('getComponent surfaces usage guidance fields (purpose + when/related/best-practices)', () => {
+  const res = getComponent(catalog, 'badge')
+  assert.equal(res.found, true)
+  assert.equal(typeof res.purpose, 'string')
+  assert.ok(res.purpose.length > 0, 'badge should carry a Purpose')
+  for (const k of ['useWhen', 'avoidWhen', 'related', 'bestPractices']) {
+    assert.ok(Array.isArray(res[k]), `${k} should be an array`)
+  }
+})
+
+test('getBestPractices returns the guidance subset for a known component', () => {
+  const res = getBestPractices(catalog, 'badge')
+  assert.equal(res.found, true)
+  assert.equal(typeof res.purpose, 'string')
+  assert.ok('useWhen' in res && 'avoidWhen' in res && 'related' in res && 'bestPractices' in res)
+})
+
+test('getBestPractices returns suggestions for an unknown component', () => {
+  const res = getBestPractices(catalog, 'buton')
+  assert.equal(res.found, false)
+  assert.ok(res.suggestions.includes('button'))
 })
 
 test('getComponent(table) has compoundRoot + subcomponents + props', () => {

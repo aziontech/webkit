@@ -31,6 +31,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { loadCatalog } from './catalog.js'
 import {
+  getBestPractices,
   getComponent,
   getImport,
   getUsageExample,
@@ -154,6 +155,21 @@ async function main() {
       }
     },
     async ({ name }) => json(getComponent(catalog, name))
+  )
+
+  tool(
+    'get_best_practices',
+    {
+      title: "Get a component's usage guidance",
+      description:
+        'When-to-use / when-NOT-to-use / related components / best-practice notes for one ' +
+        'component — the guidance for picking and using the RIGHT component (e.g. Badge vs Tag, ' +
+        'Dialog vs Drawer), distinct from get_component (the raw API).',
+      inputSchema: {
+        name: z.string().describe('Component name (kebab-case), e.g. "badge" or "dialog".')
+      }
+    },
+    async ({ name }) => json(getBestPractices(catalog, name))
   )
 
   tool(

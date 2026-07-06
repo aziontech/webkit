@@ -1578,7 +1578,8 @@
           "payload": "MouseEvent",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/button/`."
     },
     "button-highlight": {
       "import": "@aziontech/webkit/button-highlight",
@@ -1645,7 +1646,8 @@
           "payload": "MouseEvent",
           "notes": "Fires on activation; suppressed when `disabled` or `loading`."
         }
-      ]
+      ],
+      "purpose": "Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `kind` axis."
     },
     "mini-button": {
       "import": "@aziontech/webkit/mini-button",
@@ -1712,7 +1714,8 @@
           "payload": "MouseEvent",
           "notes": "Fires on activation; suppressed when `disabled`."
         }
-      ]
+      ],
+      "purpose": "Compact text action with an optional trailing external-link icon and a ghost hover surface. Use for secondary CTAs in dense layouts (cards, tables, toolbars) where a full `Button` is too heavy. Differs from `navigation/link` by using default body text color and a brand-colored icon."
     },
     "copy-button": {
       "import": "@aziontech/webkit/copy-button",
@@ -1772,7 +1775,8 @@
           "payload": "string",
           "notes": "Emitted after a successful clipboard write with the copied value."
         }
-      ]
+      ],
+      "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens."
     },
     "segmented-button": {
       "import": "@aziontech/webkit/segmented-button",
@@ -1853,7 +1857,8 @@
           "payload": "MouseEvent",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/icon-button/`."
     },
     "tag": {
       "import": "@aziontech/webkit/tag",
@@ -1906,7 +1911,8 @@
           "scope": "—",
           "notes": "Main content."
         }
-      ]
+      ],
+      "purpose": "Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set."
     },
     "avatar": {
       "import": "@aziontech/webkit/avatar",
@@ -1959,7 +1965,8 @@
           "required": "no",
           "doc": "Size preset matching Figma sm / md / lg (24 / 32 / 48 px)."
         }
-      ]
+      ],
+      "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/avatar/`."
     },
     "badge": {
       "import": "@aziontech/webkit/badge",
@@ -1998,7 +2005,8 @@
           "scope": "—",
           "notes": "Main content; falls back to `value` when empty."
         }
-      ]
+      ],
+      "purpose": "Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status value with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-value indicator with fully filled severity surfaces and no icon affordance."
     },
     "card-box": {
       "import": "@aziontech/webkit/card-box",
@@ -2043,7 +2051,8 @@
           "scope": "—",
           "notes": "Main content."
         }
-      ]
+      ],
+      "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/card-box/`."
     },
     "card-pricing": {
       "import": "@aziontech/webkit/card-pricing",
@@ -2164,7 +2173,8 @@
           "scope": "—",
           "notes": "Main content."
         }
-      ]
+      ],
+      "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/card-pricing/`."
     },
     "item": {
       "import": "@aziontech/webkit/item",
@@ -2222,7 +2232,8 @@
           "scope": "—",
           "notes": "Every sub-component exposes `default` for its region."
         }
-      ]
+      ],
+      "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for lists and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming)."
     },
     "item-root": {
       "import": "@aziontech/webkit/item-root",
@@ -2269,7 +2280,8 @@
           "scope": "—",
           "notes": "Every sub-component exposes `default` for its region."
         }
-      ]
+      ],
+      "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for lists and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming)."
     },
     "item-group": {
       "import": "@aziontech/webkit/item-group",
@@ -2371,7 +2383,8 @@
           "required": "no",
           "doc": "Size token; affects height, padding, and typography."
         }
-      ]
+      ],
+      "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/currency/`."
     },
     "log-view": {
       "import": "@aziontech/webkit/log-view",
@@ -2430,7 +2443,8 @@
           "scope": "—",
           "notes": "Sub-components (LogViewHeader, LogViewContent, LogViewFooter) composed in the desired order."
         }
-      ]
+      ],
+      "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **LogViewHeader**, **LogViewContent**, and **LogViewFooter** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer."
     },
     "log-view-content": {
       "import": "@aziontech/webkit/log-view-content",
@@ -2521,7 +2535,8 @@
           "payload": "string",
           "notes": "Fires after the active tab code is copied to the clipboard."
         }
-      ]
+      ],
+      "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab."
     },
     "table": {
       "import": "@aziontech/webkit/table",
@@ -2761,7 +2776,8 @@
           "scope": "—",
           "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
         }
-      ]
+      ],
+      "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Paginator`](./paginator.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`). `@tanstack/virtual` remains forbidden."
     },
     "table-root": {
       "import": "@aziontech/webkit/table-root",
@@ -2989,7 +3005,8 @@
           "scope": "—",
           "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
         }
-      ]
+      ],
+      "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Paginator`](./paginator.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`). `@tanstack/virtual` remains forbidden."
     },
     "table-header": {
       "import": "@aziontech/webkit/table-header",
@@ -3151,7 +3168,8 @@
           "scope": "—",
           "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
         }
-      ]
+      ],
+      "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component."
     },
     "paginator-root": {
       "import": "@aziontech/webkit/paginator-root",
@@ -3239,7 +3257,8 @@
           "scope": "—",
           "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
         }
-      ]
+      ],
+      "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component."
     },
     "pagination-button": {
       "import": "@aziontech/webkit/pagination-button",
@@ -3291,7 +3310,8 @@
           "scope": "—",
           "notes": "Diagram content: `flow-node` and `flow-parallel`, in flow order."
         }
-      ]
+      ],
+      "purpose": "Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Design source (rewritten to our conventions, never inherited as-is): the kumo \"Flow\" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). There is no Figma frame for this component; tokens are inferred from intent and recorded in the Theme gaps table."
     },
     "flow-root": {
       "import": "@aziontech/webkit/flow-root",
@@ -3317,7 +3337,8 @@
           "scope": "—",
           "notes": "Diagram content: `flow-node` and `flow-parallel`, in flow order."
         }
-      ]
+      ],
+      "purpose": "Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Design source (rewritten to our conventions, never inherited as-is): the kumo \"Flow\" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). There is no Figma frame for this component; tokens are inferred from intent and recorded in the Theme gaps table."
     },
     "flow-node": {
       "import": "@aziontech/webkit/flow-node",
@@ -3407,7 +3428,8 @@
           "scope": "{ move, moveAll, hasSelection, count, disabled, loading }",
           "notes": "Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`."
         }
-      ]
+      ],
+      "purpose": "Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate. Compound, composition API: the root (`<PickList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<PickList.Source>`, `<PickList.Controls>`, `<PickList.Target>` — and the context-aware `<PickList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). Double-clicking an option moves it to the opposite list (emitting `item-double-click`); this auto-move can be turned off with `move-on-double-click`. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones; the move arrows point left/right side-by-side and up/down when stacked."
     },
     "pick-list-root": {
       "import": "@aziontech/webkit/pick-list-root",
@@ -3471,7 +3493,8 @@
           "scope": "{ move, moveAll, hasSelection, count, disabled, loading }",
           "notes": "Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`."
         }
-      ]
+      ],
+      "purpose": "Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate. Compound, composition API: the root (`<PickList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<PickList.Source>`, `<PickList.Controls>`, `<PickList.Target>` — and the context-aware `<PickList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). Double-clicking an option moves it to the opposite list (emitting `item-double-click`); this auto-move can be turned off with `move-on-double-click`. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones; the move arrows point left/right side-by-side and up/down when stacked."
     },
     "pick-list-source": {
       "import": "@aziontech/webkit/pick-list-source",
@@ -3576,7 +3599,8 @@
           "scope": "—",
           "notes": "Replaces the default icon + title + description layout."
         }
-      ]
+      ],
+      "purpose": "Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action aligned to Figma Message (478:892)."
     },
     "empty-state": {
       "import": "@aziontech/webkit/empty-state",
@@ -3627,7 +3651,8 @@
           "scope": "—",
           "notes": "Action area below the description; consumer composes buttons and the documentation link."
         }
-      ]
+      ],
+      "purpose": "Centered placeholder shown when a resource list or section has no content yet. Stacks a decorative illustration, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. Unlike `Message`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background."
     },
     "status-indicator": {
       "import": "@aziontech/webkit/status-indicator",
@@ -3659,7 +3684,8 @@
           "required": "no",
           "doc": "Visible label text."
         }
-      ]
+      ],
+      "purpose": "Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`."
     },
     "toast": {
       "import": "@aziontech/webkit/toast",
@@ -3720,7 +3746,8 @@
           "scope": "{ toast, dismiss }",
           "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
         }
-      ]
+      ],
+      "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface."
     },
     "toast-root": {
       "import": "@aziontech/webkit/toast-root",
@@ -3774,7 +3801,8 @@
           "scope": "{ toast, dismiss }",
           "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
         }
-      ]
+      ],
+      "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface."
     },
     "toast-item": {
       "import": "@aziontech/webkit/toast-item",
@@ -3848,7 +3876,8 @@
           "required": "no",
           "doc": "Shimmer while loading; suppressed under reduced motion."
         }
-      ]
+      ],
+      "purpose": "A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons)."
     },
     "progress-bar": {
       "import": "@aziontech/webkit/progress-bar",
@@ -3894,7 +3923,8 @@
           "required": "no",
           "doc": "Loading state; animates a sliding segment and ignores `value`."
         }
-      ]
+      ],
+      "purpose": "Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity."
     },
     "calendar": {
       "import": "@aziontech/webkit/calendar",
@@ -3959,7 +3989,8 @@
           "payload": "CalendarMonth",
           "notes": "Emitted when the visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
         }
-      ]
+      ],
+      "purpose": "Inline date picker that renders a month grid for selecting a single date or a date range. Unlike a popover-anchored datepicker, Calendar is always-visible (no overlay, no positioning) and is the standalone surface a consumer embeds in a form, panel, or popover body. Date math uses the native `Date` API only — no date library."
     },
     "input-text": {
       "import": "@aziontech/webkit/input-text",
@@ -4052,7 +4083,8 @@
           "scope": "",
           "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
         }
-      ]
+      ],
+      "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / InputText)."
     },
     "input-number": {
       "import": "@aziontech/webkit/input-number",
@@ -4164,7 +4196,8 @@
           "scope": "—",
           "notes": "Content rendered after the input, before the spinner buttons (e.g. `%`)."
         }
-      ]
+      ],
+      "purpose": "Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input-text` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge."
     },
     "field-text": {
       "import": "@aziontech/webkit/field-text",
@@ -4271,7 +4304,8 @@
           "scope": "—",
           "notes": "Forwarded to the underlying `InputText#iconRight` slot."
         }
-      ]
+      ],
+      "purpose": "Form field for free-text input that composes `Label`, `InputText`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a text input needs a visible label or helper/error message — i.e. virtually every form field outside of inline editing. Aligned with Figma frame `536:22` (FieldText) and acts as the canonical wrapper for `InputText` in form contexts."
     },
     "helper-text": {
       "import": "@aziontech/webkit/helper-text",
@@ -4303,7 +4337,8 @@
           "scope": "—",
           "notes": "Helper text; falls back to `value` prop when empty."
         }
-      ]
+      ],
+      "purpose": "Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it."
     },
     "label": {
       "import": "@aziontech/webkit/label",
@@ -4335,7 +4370,8 @@
           "scope": "—",
           "notes": "Label text; falls back to `value` prop when empty."
         }
-      ]
+      ],
+      "purpose": "Form-field label that pairs descriptive text with an optional `Required` badge. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled."
     },
     "input-password": {
       "import": "@aziontech/webkit/input-password",
@@ -4428,7 +4464,8 @@
           "scope": "—",
           "notes": "Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden=\"true\"`)."
         }
-      ]
+      ],
+      "purpose": "Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `InputText` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer. Aligned with Figma frame `3714:10788` (Webkit / InputPassword). Token mapping inferred from the `input-text` sibling because the Figma MCP read tools were unreachable during spec authoring; reconciliation must verify against the frame at scaffold time."
     },
     "field-password": {
       "import": "@aziontech/webkit/field-password",
@@ -4549,7 +4586,8 @@
           "scope": "—",
           "notes": "Forwarded to the underlying `InputPassword#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled."
         }
-      ]
+      ],
+      "purpose": "Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern."
     },
     "box-grid-selection": {
       "import": "@aziontech/webkit/box-grid-selection",
@@ -4600,7 +4638,8 @@
           "scope": "{ item: BoxGridSelectionItem; selected: boolean }",
           "notes": "Trailing content below label/description (e.g. plan badge)."
         }
-      ]
+      ],
+      "purpose": "Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers). Each option shows label, optional icon and description, with optional trailing content via the `tag` slot. Migrated from the legacy `box-grid-selection` core component into the webkit inputs layer."
     },
     "chip": {
       "import": "@aziontech/webkit/chip",
@@ -4646,7 +4685,8 @@
           "scope": "—",
           "notes": "Chip content; falls back to `label` when empty."
         }
-      ]
+      ],
+      "purpose": "A Chip is a compact, self-contained token that labels a discrete value the user has applied — most often a removable filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator."
     },
     "checkbox": {
       "import": "@aziontech/webkit/checkbox",
@@ -4727,7 +4767,8 @@
           "payload": "unknown",
           "notes": "Fires on activation. Payload is the next boolean (binary mode) or the next array (multi mode) or the matched value (single-value mode)."
         }
-      ]
+      ],
+      "purpose": "Binary selection control. Supports single boolean (`binary: true`), single-value selection (matches `value` against `modelValue`), and array-based multi-select (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) without flipping `aria-checked` — used by parents that own a partial-selection summary (e.g. \"select all\" rows where some children are selected). Aligned with Figma frame `2027:7311`."
     },
     "field-checkbox": {
       "import": "@aziontech/webkit/field-checkbox",
@@ -4808,7 +4849,8 @@
           "payload": "boolean",
           "notes": "v-model."
         }
-      ]
+      ],
+      "purpose": "Inline checkbox field with leading control, label, optional description, and optional disabled helper badge. Matches Figma FieldCheckbox (node 2027:7337). Use for standalone consent checkboxes, agreement fields, or any isolated boolean choice within a form."
     },
     "field-checkbox-block": {
       "import": "@aziontech/webkit/field-checkbox-block",
@@ -4889,7 +4931,8 @@
           "payload": "boolean",
           "notes": "v-model."
         }
-      ]
+      ],
+      "purpose": "Card-style checkbox option with leading control, label, description, and optional disabled helper badge inside a bordered block. Matches Figma FieldCheckboxBlock (node 2027:7393). Use when each option benefits from a richer label and description rather than a plain checkbox row."
     },
     "field-radio": {
       "import": "@aziontech/webkit/field-radio",
@@ -4963,7 +5006,8 @@
           "payload": "string",
           "notes": "v-model."
         }
-      ]
+      ],
+      "purpose": "Inline radio field with label, optional description, optional disabled helper badge, and trailing RadioButton. Matches Figma FieldRadio (node 2027:7554)."
     },
     "field-radio-block": {
       "import": "@aziontech/webkit/field-radio-block",
@@ -5037,7 +5081,8 @@
           "payload": "string",
           "notes": "v-model."
         }
-      ]
+      ],
+      "purpose": "Card-style radio option with selected border and background. Matches Figma FieldRadioBlock (node 2027:7582). Use for plan selection or choices that need visual weight."
     },
     "field-switch": {
       "import": "@aziontech/webkit/field-switch",
@@ -5090,7 +5135,8 @@
           "payload": "boolean",
           "notes": "v-model."
         }
-      ]
+      ],
+      "purpose": "Inline boolean toggle with switch on the leading edge, label, optional description, and optional disabled helper badge. Matches Figma FieldSwitch (node 542:105)."
     },
     "field-switch-block": {
       "import": "@aziontech/webkit/field-switch-block",
@@ -5143,7 +5189,8 @@
           "payload": "boolean",
           "notes": "v-model."
         }
-      ]
+      ],
+      "purpose": "Card-style boolean toggle with switch, label, description, and optional disabled helper badge inside a bordered block. Matches Figma FieldSwitchBlock (node 2027:7168)."
     },
     "radio-button": {
       "import": "@aziontech/webkit/radio-button",
@@ -5196,7 +5243,8 @@
           "payload": "string",
           "notes": "v-model."
         }
-      ]
+      ],
+      "purpose": "Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Use `FieldRadio` or `FieldRadioBlock` for labeled layouts."
     },
     "switch": {
       "import": "@aziontech/webkit/switch",
@@ -5235,7 +5283,8 @@
           "payload": "boolean",
           "notes": "Emitted when the user toggles the switch. Paired with `v-model:isToggled`."
         }
-      ]
+      ],
+      "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts."
     },
     "textarea": {
       "import": "@aziontech/webkit/textarea",
@@ -5307,7 +5356,8 @@
           "scope": "",
           "notes": "Optional trailing icon, rendered at top-right. Suppressed when `disabled` (the lock icon takes over)."
         }
-      ]
+      ],
+      "purpose": "Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px and a vertical resize handle. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough."
     },
     "field-textarea": {
       "import": "@aziontech/webkit/field-textarea",
@@ -5395,7 +5445,8 @@
           "payload": "string",
           "notes": "v-model update."
         }
-      ]
+      ],
+      "purpose": "Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, vertical resize, 80px min-height) instead of `InputText`."
     },
     "dropdown": {
       "import": "@aziontech/webkit/dropdown",
@@ -5478,7 +5529,8 @@
           "scope": "—",
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
-      ]
+      ],
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-root": {
       "import": "@aziontech/webkit/dropdown-root",
@@ -5547,7 +5599,8 @@
           "scope": "—",
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
-      ]
+      ],
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-trigger": {
       "import": "@aziontech/webkit/dropdown-trigger",
@@ -5675,7 +5728,8 @@
           "scope": "—",
           "notes": "Composition slot; receives `<MultiSelectTrigger>` and `<MultiSelectContent>` (and the option tree inside it)."
         }
-      ]
+      ],
+      "purpose": "Select control specialised for choosing many options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<MultiSelectContent>`. Unlike `Select` (which toggles between single and multi via a `multiple` prop), MultiSelect is multi-only: `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `InputText`/`Select` trigger visuals."
     },
     "multi-select-root": {
       "import": "@aziontech/webkit/multi-select-root",
@@ -5776,7 +5830,8 @@
           "scope": "—",
           "notes": "Composition slot; receives `<MultiSelectTrigger>` and `<MultiSelectContent>` (and the option tree inside it)."
         }
-      ]
+      ],
+      "purpose": "Select control specialised for choosing many options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<MultiSelectContent>`. Unlike `Select` (which toggles between single and multi via a `multiple` prop), MultiSelect is multi-only: `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `InputText`/`Select` trigger visuals."
     },
     "multi-select-trigger": {
       "import": "@aziontech/webkit/multi-select-trigger",
@@ -5918,7 +5973,8 @@
           "scope": "—",
           "notes": "Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it)."
         }
-      ]
+      ],
+      "purpose": "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel)."
     },
     "select-root": {
       "import": "@aziontech/webkit/select-root",
@@ -6026,7 +6082,8 @@
           "scope": "—",
           "notes": "Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it)."
         }
-      ]
+      ],
+      "purpose": "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel)."
     },
     "select-trigger": {
       "import": "@aziontech/webkit/select-trigger",
@@ -6086,7 +6143,8 @@
           "scope": "—",
           "notes": "Centered content; overrides `label` when provided."
         }
-      ]
+      ],
+      "purpose": "Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an \"Or\"-style label) when the default slot or `label` prop is set. Unlike `ScrollArea` it adds no scrolling behaviour; it is a purely decorative-yet-semantic boundary exposing `role=\"separator\"`."
     },
     "scroll-area": {
       "import": "@aziontech/webkit/scroll-area",
@@ -6102,7 +6160,8 @@
           "scope": "—",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Structural layout primitive for scrolling or regions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/layout/scroll-area/`."
     },
     "global-header": {
       "import": "@aziontech/webkit/global-header",
@@ -6139,7 +6198,8 @@
           "scope": "—",
           "notes": "global-header-brand` exposes `default` for logo markup."
         }
-      ]
+      ],
+      "purpose": "Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in."
     },
     "sidebar": {
       "import": "@aziontech/webkit/sidebar",
@@ -6180,7 +6240,8 @@
           "scope": "—",
           "notes": "Named slot."
         }
-      ]
+      ],
+      "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`."
     },
     "sidebar-group": {
       "import": "@aziontech/webkit/sidebar-group",
@@ -6237,7 +6298,8 @@
           "scope": "—",
           "notes": "Custom composition (`BreadcrumbList` + items + separators). Used when `items` is empty."
         }
-      ]
+      ],
+      "purpose": "Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens)."
     },
     "breadcrumb-item": {
       "import": "@aziontech/webkit/breadcrumb-item",
@@ -6298,7 +6360,8 @@
           "payload": "MouseEvent",
           "notes": "Fires when the segment is activated (link or button)."
         }
-      ]
+      ],
+      "purpose": "Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring)."
     },
     "link": {
       "import": "@aziontech/webkit/link",
@@ -6365,7 +6428,8 @@
           "payload": "MouseEvent",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS)."
     },
     "menu-item": {
       "import": "@aziontech/webkit/menu-item",
@@ -6393,7 +6457,8 @@
           "scope": "—",
           "notes": "Named slot."
         }
-      ]
+      ],
+      "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/menu-item/`."
     },
     "tab-view": {
       "import": "@aziontech/webkit/tab-view",
@@ -6423,7 +6488,8 @@
           "scope": "—",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/tab-view/`."
     },
     "navigation-menu": {
       "import": "@aziontech/webkit/navigation-menu",
@@ -6458,7 +6524,8 @@
           "scope": "—",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/navigation-menu/`."
     },
     "tooltip": {
       "import": "@aziontech/webkit/tooltip",
@@ -6535,7 +6602,8 @@
           "scope": "—",
           "notes": "The trigger element. Tooltip anchors to its bounding box."
         }
-      ]
+      ],
+      "purpose": "Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `overlay/popover` instead."
     },
     "dialog": {
       "import": "@aziontech/webkit/dialog",
@@ -6598,7 +6666,8 @@
           "scope": "—",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`."
     },
     "dialog-close": {
       "import": "@aziontech/webkit/dialog-close",
@@ -6717,7 +6786,8 @@
           "scope": "—",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/drawer/`."
     },
     "drawer-close": {
       "import": "@aziontech/webkit/drawer-close",
@@ -6797,7 +6867,8 @@
           "scope": "—",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/panel/`."
     },
     "panel-content": {
       "import": "@aziontech/webkit/panel-content",
@@ -7020,7 +7091,8 @@
           "scope": "—",
           "notes": "Replaces the built-in footer primary button."
         }
-      ]
+      ],
+      "purpose": "Full-page post-deploy success screen: an optional `GlobalHeader` with brand, a centered `CardBox` with a congratulations header (scope tag + visit link), the application name, an embedded `LogView` build log, an icon next-steps list, and a secondary \"Manage\" CTA."
     },
     "onboarding-form": {
       "import": "@aziontech/webkit/onboarding-form",
@@ -7229,7 +7301,8 @@
           "scope": "—",
           "notes": "Replaces the built-in enterprise footer bar."
         }
-      ]
+      ],
+      "purpose": "Centered onboarding layout for post-signup flows, wrapped in `CardBox`: plan summary, usage intent (`BoxGridSelection`), full name (`InputText`), optional expert session (`FieldCheckbox`), primary continue action, and enterprise footer CTA. Composes existing webkit inputs and actions; consumers bind v-models for usage, name, and schedule preference."
     },
     "plan-success": {
       "import": "@aziontech/webkit/plan-success",
@@ -7318,7 +7391,8 @@
           "scope": "—",
           "notes": "Replaces the built-in footer primary button."
         }
-      ]
+      ],
+      "purpose": "Full-page post-checkout success screen for the Azion Plans flow ([Figma 833:23321](https://www.figma.com/design/eeX71MMNcfqKHoXWemUacK/-UXE-7875--Azion-Plans?node-id=833-23321)): optional `GlobalHeader` with brand, centered `CardBox` with activation message, numbered next steps, and a primary deploy CTA."
     },
     "platform-shell": {
       "import": "@aziontech/webkit/platform-shell",
@@ -7380,7 +7454,8 @@
           "scope": "—",
           "notes": "Main page content when the `tabs` slot is omitted."
         }
-      ]
+      ],
+      "purpose": "Application shell template for console-style layouts per [Webkit Example (Figma 3735:13804)](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-13804): a full-width `GlobalHeader` menubar, a persistent navigation column in the layout stack (typically `@aziontech/webkit/layout/sidebar`), a page heading region, `TabView` tabs in the main column, and scrollable panel content. The sidebar is not an overlay — it sits beside main content in a horizontal flex row below the header."
     },
     "sign-up-card": {
       "import": "@aziontech/webkit/sign-up-card",
@@ -7507,7 +7582,8 @@
           "payload": "unknown",
           "notes": "—"
         }
-      ]
+      ],
+      "purpose": "Composed template block for a product flow. Migrated from the existing implementation at `packages/webkit/src/components/Templates/sign-up-card/`."
     },
     "spinner": {
       "import": "@aziontech/webkit/spinner",
@@ -7516,7 +7592,8 @@
       "treeShakeableImport": "@aziontech/webkit/spinner",
       "category": "utils",
       "structure": "monolithic",
-      "status": "implemented"
+      "status": "implemented",
+      "purpose": "Shared visual utility used by other components. Migrated from the existing implementation at `packages/webkit/src/components/webkit/utils/spinner/`."
     },
     "svg/error-403": {
       "import": "@aziontech/webkit/svg/error-403",

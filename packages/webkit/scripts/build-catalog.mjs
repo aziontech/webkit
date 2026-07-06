@@ -129,6 +129,31 @@ function loadSpec(subpath) {
   return value
 }
 
+/** First real prose paragraph of a section (drops HTML comments + the `_none_` sentinel). */
+function firstProse(section) {
+  if (!section) return ''
+  const text = String(section)
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith('#') && !l.startsWith('|') && l !== '_none_')
+    .join(' ')
+    .trim()
+  return text
+}
+
+/** Markdown list items of a section as a trimmed string array (drops HTML comments). */
+function bullets(section) {
+  if (!section) return []
+  return String(section)
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => /^[-*]\s+/.test(l))
+    .map((l) => clean(l.replace(/^[-*]\s+/, '')))
+    .filter((l) => l && l !== '_none_')
+}
+
 function _readSpec(subpath) {
   const specFile = resolve(SPECS_DIR, `${subpath}.md`)
   if (!existsSync(specFile)) return null
@@ -149,6 +174,14 @@ function _readSpec(subpath) {
     category: frontmatter.category ?? null,
     structure: frontmatter.structure ?? null,
     status: frontmatter.status ?? null,
+    // Usage guidance (B3): Purpose prose + the structured "when/why" sections. Extracted
+    // when present; empty until a spec is backfilled. Powers get_component / suggest /
+    // get_best_practices and the Storybook description.
+    purpose: firstProse(getSection(body, 'Purpose')),
+    useWhen: bullets(getSection(body, 'When to use')),
+    avoidWhen: bullets(getSection(body, 'When NOT to use')),
+    related: bullets(getSection(body, 'Related')),
+    bestPractices: bullets(getSection(body, 'Best practices')),
     props,
     events,
     slots
@@ -253,6 +286,11 @@ function build() {
       if (spec.props.length) entry.props = spec.props
       if (spec.events.length) entry.events = spec.events
       if (spec.slots.length) entry.slots = spec.slots
+      if (spec.purpose) entry.purpose = spec.purpose
+      if (spec.useWhen.length) entry.useWhen = spec.useWhen
+      if (spec.avoidWhen.length) entry.avoidWhen = spec.avoidWhen
+      if (spec.related.length) entry.related = spec.related
+      if (spec.bestPractices.length) entry.bestPractices = spec.bestPractices
     } else if (entry.kind === 'component') {
       entry.category = categoryFromTarget(target)
     }

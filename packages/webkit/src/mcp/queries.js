@@ -154,9 +154,47 @@ export function getComponent(catalog, name) {
     subcomponents: e.subcomponents ?? [],
     parent: e.parent ?? null,
     rootOf: e.rootOf ?? null,
+    // Usage guidance (B3) — helps the AI pick the RIGHT component, not just a valid one.
+    purpose: e.purpose ?? null,
+    useWhen: e.useWhen ?? [],
+    avoidWhen: e.avoidWhen ?? [],
+    related: e.related ?? [],
+    bestPractices: e.bestPractices ?? [],
     props: e.props ?? [],
     events: e.events ?? [],
     slots: e.slots ?? []
+  }
+}
+
+/**
+ * The best-practices + when-to-use guidance for one component (a focused subset of
+ * getComponent): purpose, when to use, when NOT to use, related components, and the
+ * best-practice bullets. Answers "am I using this the right way / is this the right one?".
+ */
+export function getBestPractices(catalog, name) {
+  if (!catalog.available) return NOT_AVAILABLE
+  const key = String(name || '').trim()
+  const e = catalog.getEntry(key)
+  if (!e) {
+    return {
+      ok: false,
+      available: true,
+      found: false,
+      name: key,
+      suggestions: catalog.suggestSubpaths(key),
+      message: `No webkit export named "${key}".`
+    }
+  }
+  return {
+    ok: true,
+    available: true,
+    found: true,
+    name: key,
+    purpose: e.purpose ?? null,
+    useWhen: e.useWhen ?? [],
+    avoidWhen: e.avoidWhen ?? [],
+    related: e.related ?? [],
+    bestPractices: e.bestPractices ?? []
   }
 }
 
@@ -236,12 +274,15 @@ export function getImport(catalog, name) {
 }
 
 /** Score a component against a free-text need. Higher is better; 0 = no match. */
-function scoreMatch(name, category, query) {
+function scoreMatch(name, entry, query) {
   const q = query.toLowerCase().trim()
   if (!q) return 0
   const n = name.toLowerCase()
-  const c = (category || '').toLowerCase()
+  const c = (entry.category || '').toLowerCase()
   const words = q.split(/[\s/_-]+/).filter(Boolean)
+  // Intent text the need can match against: Purpose + the "when to use" bullets. This is
+  // what lets a phrase like "side panel that slides in" reach `drawer` over `dialog`.
+  const prose = [entry.purpose || '', ...(entry.useWhen || [])].join(' ').toLowerCase()
 
   let score = 0
   if (n === q) score += 100
@@ -254,6 +295,7 @@ function scoreMatch(name, category, query) {
     else if (n.includes(w)) score += 15
     else if (w.includes(n) && n.length >= 3) score += 12
     if (c.includes(w)) score += 4
+    if (w.length >= 3 && prose.includes(w)) score += 6 // intent match on purpose/useWhen
   }
   return score
 }
@@ -270,7 +312,7 @@ export function searchComponents(catalog, query) {
     .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
     .map((sub) => {
       const e = catalog.getEntry(sub)
-      return { sub, score: scoreMatch(sub, e.category, q) }
+      return { sub, score: scoreMatch(sub, e, q) }
     })
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
