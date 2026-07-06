@@ -21,6 +21,9 @@
   "scripts": {
     "test": "node --test test/*.test.mjs"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "zod": "^3.23.0"

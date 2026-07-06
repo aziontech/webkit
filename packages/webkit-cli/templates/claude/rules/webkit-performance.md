@@ -26,10 +26,10 @@ import TableRow from '@aziontech/webkit/table-row'
 import Table from '@aziontech/webkit/table'
 ```
 
-## Icons: import the ones you use
+## Icons: import the font once, use CSS classes
 
-- Import individual icons, never the whole `@aziontech/icons` set into one module.
-- Pulling the entire icon package ships hundreds of unused glyphs.
+- `@aziontech/icons` is an icon font. Import it once for its side effects (`import '@aziontech/icons'`, near the app entry) and reference icons by their CSS class.
+- Do not import a default/namespace binding (`import Icons from '@aziontech/icons'`) — the entry is CSS; a binding is meaningless and usually a mistake.
 
 ## Lazy-load heavy overlays
 

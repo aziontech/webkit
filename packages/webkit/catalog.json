@@ -460,7 +460,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Main content."
         }
       ]
     },
@@ -551,7 +552,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Main content; falls back to `value` when empty."
         }
       ]
     },
@@ -575,23 +577,28 @@
       "slots": [
         {
           "name": "header",
+          "scope": "—",
           "notes": "—"
         },
         {
           "name": "content",
+          "scope": "—",
           "notes": "—"
         },
         {
           "name": "footer",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Named slot."
         },
         {
           "name": "header-action",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Named slot."
         },
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Main content."
         }
       ]
     },
@@ -706,11 +713,13 @@
       "slots": [
         {
           "name": "actions",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Named slot."
         },
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Main content."
         }
       ]
     },
@@ -767,7 +776,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Every sub-component exposes `default` for its region."
         }
       ]
     },
@@ -813,7 +823,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Every sub-component exposes `default` for its region."
         }
       ]
     },
@@ -923,7 +934,13 @@
       "import": "@aziontech/webkit/log-view",
       "target": "./src/components/code/log-view/log-view.vue",
       "kind": "component",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/log-view",
+      "subcomponents": [
+        "@aziontech/webkit/log-view-content",
+        "@aziontech/webkit/log-view-footer",
+        "@aziontech/webkit/log-view-header"
+      ],
       "category": "code",
       "structure": "composition",
       "status": "implemented",
@@ -967,30 +984,31 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Sub-components (LogViewHeader, LogViewContent, LogViewFooter) composed in the desired order."
         }
       ]
     },
     "log-view-content": {
       "import": "@aziontech/webkit/log-view-content",
       "target": "./src/components/code/log-view/log-view-content.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/log-view-content",
-      "category": "code"
+      "kind": "subcomponent",
+      "parent": "log-view",
+      "treeShakeableImport": "@aziontech/webkit/log-view-content"
     },
     "log-view-footer": {
       "import": "@aziontech/webkit/log-view-footer",
       "target": "./src/components/code/log-view/log-view-footer.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/log-view-footer",
-      "category": "code"
+      "kind": "subcomponent",
+      "parent": "log-view",
+      "treeShakeableImport": "@aziontech/webkit/log-view-footer"
     },
     "log-view-header": {
       "import": "@aziontech/webkit/log-view-header",
       "target": "./src/components/code/log-view/log-view-header.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/log-view-header",
-      "category": "code"
+      "kind": "subcomponent",
+      "parent": "log-view",
+      "treeShakeableImport": "@aziontech/webkit/log-view-header"
     },
     "code-block": {
       "import": "@aziontech/webkit/code-block",
@@ -1267,31 +1285,38 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Composition mode: the scrollable region (TableCaption, TableHeader, TableBody)."
         },
         {
           "name": "footer",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Footer region rendered below the scroll viewport (e.g. TableFooter + Paginator), so it never scrolls with the body. In data-driven mode it renders automatically when `paginated`."
         },
         {
           "name": "caption",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Data-driven mode: caption content (wrapped in TableCaption), fixed above the scroll viewport."
         },
         {
           "name": "title",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Title text shown at the start of the toolbar band, fixed above the scroll viewport (both modes)."
         },
         {
           "name": "toolbar",
-          "notes": "{ table }"
+          "scope": "{ table }",
+          "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode."
         },
         {
           "name": "filters",
-          "notes": "{ table }"
+          "scope": "{ table }",
+          "notes": "Active-filter chips row below the toolbar (both modes); same `table` scope as `toolbar`."
         },
         {
           "name": "empty",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
         }
       ]
     },
@@ -1488,31 +1513,38 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Composition mode: the scrollable region (TableCaption, TableHeader, TableBody)."
         },
         {
           "name": "footer",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Footer region rendered below the scroll viewport (e.g. TableFooter + Paginator), so it never scrolls with the body. In data-driven mode it renders automatically when `paginated`."
         },
         {
           "name": "caption",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Data-driven mode: caption content (wrapped in TableCaption), fixed above the scroll viewport."
         },
         {
           "name": "title",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Title text shown at the start of the toolbar band, fixed above the scroll viewport (both modes)."
         },
         {
           "name": "toolbar",
-          "notes": "{ table }"
+          "scope": "{ table }",
+          "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode."
         },
         {
           "name": "filters",
-          "notes": "{ table }"
+          "scope": "{ table }",
+          "notes": "Active-filter chips row below the toolbar (both modes); same `table` scope as `toolbar`."
         },
         {
           "name": "empty",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
         }
       ]
     },
@@ -1590,7 +1622,12 @@
       "import": "@aziontech/webkit/paginator",
       "target": "./src/components/data/paginator/index.ts",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/paginator",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/paginator-root",
+      "subcomponents": [
+        "@aziontech/webkit/paginator-info",
+        "@aziontech/webkit/paginator-page-size"
+      ],
       "category": "data",
       "structure": "composition",
       "status": "approved",
@@ -1658,15 +1695,106 @@
       "slots": [
         {
           "name": "info",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Left region: page-info text (typically PaginatorInfo). In data-driven mode, overrides the default \"Showing X to Y of Z entries\" text."
         },
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Center region: pagination navigation buttons (composition mode only — ignored in data-driven mode, where the buttons are rendered internally)."
         },
         {
           "name": "controls",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
+        }
+      ]
+    },
+    "paginator-root": {
+      "import": "@aziontech/webkit/paginator-root",
+      "target": "./src/components/data/paginator/paginator.vue",
+      "kind": "root",
+      "rootOf": "paginator",
+      "treeShakeableImport": "@aziontech/webkit/paginator-root",
+      "category": "data",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "default": "1",
+          "required": "no",
+          "doc": "Current page, 1-based (data-driven mode). Supports `v-model:page`."
+        },
+        {
+          "name": "total",
+          "type": "number",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Total item count. When set, the Paginator runs in data-driven mode and renders its own controls."
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "default": "10",
+          "required": "no",
+          "doc": "Rows per page (data-driven mode). Supports `v-model:page-size`."
+        },
+        {
+          "name": "pageSizeOptions",
+          "type": "number[]",
+          "default": "[10, 25, 50, 100]",
+          "required": "no",
+          "doc": "Page-size options offered in the rows-per-page selector."
+        },
+        {
+          "name": "siblingCount",
+          "type": "number",
+          "default": "1",
+          "required": "no",
+          "doc": "Page numbers shown on each side of the current page before collapsing into an overflow ellipsis."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Pagination'",
+          "required": "no",
+          "doc": "Accessible name for the navigation landmark."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:page",
+          "payload": "[page: number]",
+          "notes": "Current page changed in data-driven mode (Previous / Next / page number). Supports `v-model:page`."
+        },
+        {
+          "name": "update:pageSize",
+          "payload": "[pageSize: number]",
+          "notes": "Rows-per-page changed via the internal selector. Supports `v-model:page-size`."
+        },
+        {
+          "name": "page-change",
+          "payload": "[page: number]",
+          "notes": "Convenience action event fired alongside `update:page` whenever the page changes."
+        }
+      ],
+      "slots": [
+        {
+          "name": "info",
+          "scope": "—",
+          "notes": "Left region: page-info text (typically PaginatorInfo). In data-driven mode, overrides the default \"Showing X to Y of Z entries\" text."
+        },
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Center region: pagination navigation buttons (composition mode only — ignored in data-driven mode, where the buttons are rendered internally)."
+        },
+        {
+          "name": "controls",
+          "scope": "—",
+          "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
         }
       ]
     },
@@ -1680,16 +1808,16 @@
     "paginator-info": {
       "import": "@aziontech/webkit/paginator-info",
       "target": "./src/components/data/paginator/paginator-info/paginator-info.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/paginator-info",
-      "category": "data"
+      "kind": "subcomponent",
+      "parent": "paginator",
+      "treeShakeableImport": "@aziontech/webkit/paginator-info"
     },
     "paginator-page-size": {
       "import": "@aziontech/webkit/paginator-page-size",
       "target": "./src/components/data/paginator/paginator-page-size/paginator-page-size.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/paginator-page-size",
-      "category": "data"
+      "kind": "subcomponent",
+      "parent": "paginator",
+      "treeShakeableImport": "@aziontech/webkit/paginator-page-size"
     },
     "flow": {
       "import": "@aziontech/webkit/flow",
@@ -1717,7 +1845,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Diagram content: `flow-node` and `flow-parallel`, in flow order."
         }
       ]
     },
@@ -1742,7 +1871,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Diagram content: `flow-node` and `flow-parallel`, in flow order."
         }
       ]
     },
@@ -1831,7 +1961,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "{ move, moveAll, hasSelection, count, disabled, loading }"
+          "scope": "{ move, moveAll, hasSelection, count, disabled, loading }",
+          "notes": "Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`."
         }
       ]
     },
@@ -1894,7 +2025,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "{ move, moveAll, hasSelection, count, disabled, loading }"
+          "scope": "{ move, moveAll, hasSelection, count, disabled, loading }",
+          "notes": "Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`."
         }
       ]
     },
@@ -1993,11 +2125,13 @@
       "slots": [
         {
           "name": "action",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Custom action control; replaces the built-in Button when provided."
         },
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the default icon + title + description layout."
         }
       ]
     },
@@ -2042,11 +2176,13 @@
       "slots": [
         {
           "name": "icon",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Decorative illustration centered above the title; rendered inside an `aria-hidden` container. Defaults to the bundled `EmptyStateIllustration` sub-component when not provided."
         },
         {
           "name": "actions",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Action area below the description; consumer composes buttons and the documentation link."
         }
       ]
     },
@@ -2138,7 +2274,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "{ toast, dismiss }"
+          "scope": "{ toast, dismiss }",
+          "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
         }
       ]
     },
@@ -2191,7 +2328,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "{ toast, dismiss }"
+          "scope": "{ toast, dismiss }",
+          "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
         }
       ]
     },
@@ -2463,11 +2601,13 @@
       "slots": [
         {
           "name": "iconLeft",
-          "notes": "Leading icon rendered inside the field, before the input."
+          "scope": "",
+          "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
         },
         {
           "name": "iconRight",
-          "notes": "Trailing icon rendered inside the field, after the input."
+          "scope": "",
+          "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
         }
       ]
     },
@@ -2573,11 +2713,13 @@
       "slots": [
         {
           "name": "prefix",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Content rendered before the input (e.g. `R$`)."
         },
         {
           "name": "suffix",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Content rendered after the input, before the spinner buttons (e.g. `%`)."
         }
       ]
     },
@@ -2678,11 +2820,13 @@
       "slots": [
         {
           "name": "iconLeft",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Forwarded to the underlying `InputText#iconLeft` slot."
         },
         {
           "name": "iconRight",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Forwarded to the underlying `InputText#iconRight` slot."
         }
       ]
     },
@@ -2713,7 +2857,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Helper text; falls back to `value` prop when empty."
         }
       ]
     },
@@ -2744,7 +2889,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Label text; falls back to `value` prop when empty."
         }
       ]
     },
@@ -2831,11 +2977,13 @@
       "slots": [
         {
           "name": "iconLeft",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Leading icon rendered inside the field, before the input. Hidden from assistive tech (`aria-hidden=\"true\"`)."
         },
         {
           "name": "iconRight",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden=\"true\"`)."
         }
       ]
     },
@@ -2950,11 +3098,13 @@
       "slots": [
         {
           "name": "iconLeft",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Forwarded to the underlying `InputPassword#iconLeft` slot."
         },
         {
           "name": "iconRight",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Forwarded to the underlying `InputPassword#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled."
         }
       ]
     },
@@ -2999,11 +3149,13 @@
       "slots": [
         {
           "name": "default",
-          "notes": "{ item: BoxGridSelectionItem; selected: boolean }"
+          "scope": "{ item: BoxGridSelectionItem; selected: boolean }",
+          "notes": "Overrides the entire card body for an option."
         },
         {
           "name": "tag",
-          "notes": "{ item: BoxGridSelectionItem; selected: boolean }"
+          "scope": "{ item: BoxGridSelectionItem; selected: boolean }",
+          "notes": "Trailing content below label/description (e.g. plan badge)."
         }
       ]
     },
@@ -3048,7 +3200,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Chip content; falls back to `label` when empty."
         }
       ]
     },
@@ -3703,10 +3856,12 @@
       "slots": [
         {
           "name": "iconLeft",
+          "scope": "",
           "notes": "Optional leading icon, rendered at top-left inside the field."
         },
         {
           "name": "iconRight",
+          "scope": "",
           "notes": "Optional trailing icon, rendered at top-right. Suppressed when `disabled` (the lock icon takes over)."
         }
       ]
@@ -3803,7 +3958,22 @@
       "import": "@aziontech/webkit/dropdown",
       "target": "./src/components/navigation/dropdown/index.ts",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/dropdown-root",
+      "subcomponents": [
+        "@aziontech/webkit/dropdown-trigger",
+        "@aziontech/webkit/dropdown-group",
+        "@aziontech/webkit/dropdown-option",
+        "@aziontech/webkit/dropdown-menu",
+        "@aziontech/webkit/dropdown-menu-trigger",
+        "@aziontech/webkit/dropdown-menu-portal",
+        "@aziontech/webkit/dropdown-menu-content",
+        "@aziontech/webkit/dropdown-menu-group",
+        "@aziontech/webkit/dropdown-menu-item",
+        "@aziontech/webkit/dropdown-menu-separator",
+        "@aziontech/webkit/dropdown-menu-from-model",
+        "@aziontech/webkit/dropdown-menu-factory"
+      ],
       "category": "navigation",
       "structure": "composition",
       "status": "implemented",
@@ -3852,38 +4022,110 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Place `<Dropdown.Trigger>` followed by one or more `<Dropdown.Group>`."
         },
         {
           "name": "top",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Sticky region rendered above the scrollable group list (e.g. search input)."
         },
         {
           "name": "bottom",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
+        }
+      ]
+    },
+    "dropdown-root": {
+      "import": "@aziontech/webkit/dropdown-root",
+      "target": "./src/components/navigation/dropdown/dropdown.vue",
+      "kind": "root",
+      "rootOf": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-root",
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
+        },
+        {
+          "name": "placement",
+          "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+          "default": "'bottom-start'",
+          "required": "no",
+          "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space."
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "default": "4",
+          "required": "no",
+          "doc": "Pixel gap between the trigger and the panel."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires on every open/closed transition; supports `v-model:open`."
+        },
+        {
+          "name": "select",
+          "payload": "{ value: string | number; event: MouseEvent | KeyboardEvent }",
+          "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Place `<Dropdown.Trigger>` followed by one or more `<Dropdown.Group>`."
+        },
+        {
+          "name": "top",
+          "scope": "—",
+          "notes": "Sticky region rendered above the scrollable group list (e.g. search input)."
+        },
+        {
+          "name": "bottom",
+          "scope": "—",
+          "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ]
     },
     "dropdown-trigger": {
       "import": "@aziontech/webkit/dropdown-trigger",
       "target": "./src/components/navigation/dropdown/dropdown-trigger/dropdown-trigger.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-trigger",
-      "category": "navigation"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-trigger"
     },
     "dropdown-group": {
       "import": "@aziontech/webkit/dropdown-group",
       "target": "./src/components/navigation/dropdown/dropdown-group/dropdown-group.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-group",
-      "category": "navigation"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-group"
     },
     "dropdown-option": {
       "import": "@aziontech/webkit/dropdown-option",
       "target": "./src/components/navigation/dropdown/dropdown-option/dropdown-option.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-option",
-      "category": "navigation"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-option"
     },
     "multi-select": {
       "import": "@aziontech/webkit/multi-select",
@@ -3987,7 +4229,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Composition slot; receives `<MultiSelectTrigger>` and `<MultiSelectContent>` (and the option tree inside it)."
         }
       ]
     },
@@ -4087,7 +4330,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Composition slot; receives `<MultiSelectTrigger>` and `<MultiSelectContent>` (and the option tree inside it)."
         }
       ]
     },
@@ -4228,7 +4472,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it)."
         }
       ]
     },
@@ -4335,7 +4580,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it)."
         }
       ]
     },
@@ -4394,7 +4640,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Centered content; overrides `label` when provided."
         }
       ]
     },
@@ -4409,6 +4656,7 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         }
       ]
@@ -4416,8 +4664,10 @@
     "global-header": {
       "import": "@aziontech/webkit/global-header",
       "target": "./src/components/layout/global-header/index.js",
-      "kind": "component",
+      "kind": "other",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/global-header",
+      "subcomponents": [],
       "category": "layout",
       "structure": "composition",
       "status": "implemented",
@@ -4433,15 +4683,18 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components."
         },
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Each sub-component (incl. `Container`) exposes `default` for region content."
         },
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "global-header-brand` exposes `default` for logo markup."
         }
       ]
     },
@@ -4449,7 +4702,13 @@
       "import": "@aziontech/webkit/sidebar",
       "target": "./src/components/layout/sidebar/sidebar.vue",
       "kind": "component",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/sidebar",
+      "subcomponents": [
+        "@aziontech/webkit/sidebar-group",
+        "@aziontech/webkit/sidebar-header",
+        "@aziontech/webkit/sidebar-footer"
+      ],
       "category": "layout",
       "structure": "composition",
       "status": "implemented",
@@ -4465,44 +4724,51 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         },
         {
           "name": "header",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Named slot."
         },
         {
           "name": "footer",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Named slot."
         }
       ]
     },
     "sidebar-group": {
       "import": "@aziontech/webkit/sidebar-group",
       "target": "./src/components/layout/sidebar/sidebar-group.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sidebar-group",
-      "category": "layout"
+      "kind": "subcomponent",
+      "parent": "sidebar",
+      "treeShakeableImport": "@aziontech/webkit/sidebar-group"
     },
     "sidebar-header": {
       "import": "@aziontech/webkit/sidebar-header",
       "target": "./src/components/layout/sidebar/sidebar-header.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sidebar-header",
-      "category": "layout"
+      "kind": "subcomponent",
+      "parent": "sidebar",
+      "treeShakeableImport": "@aziontech/webkit/sidebar-header"
     },
     "sidebar-footer": {
       "import": "@aziontech/webkit/sidebar-footer",
       "target": "./src/components/layout/sidebar/sidebar-footer.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sidebar-footer",
-      "category": "layout"
+      "kind": "subcomponent",
+      "parent": "sidebar",
+      "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
-      "kind": "component",
+      "kind": "other",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/breadcrumb",
+      "subcomponents": [
+        "@aziontech/webkit/breadcrumb-item"
+      ],
       "category": "navigation",
       "structure": "composition",
       "status": "implemented",
@@ -4525,14 +4791,16 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Custom composition (`BreadcrumbList` + items + separators). Used when `items` is empty."
         }
       ]
     },
     "breadcrumb-item": {
       "import": "@aziontech/webkit/breadcrumb-item",
       "target": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
-      "kind": "component",
+      "kind": "subcomponent",
+      "parent": "breadcrumb",
       "treeShakeableImport": "@aziontech/webkit/breadcrumb-item",
       "category": "navigation",
       "structure": "monolithic",
@@ -4674,19 +4942,23 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         },
         {
           "name": "tag",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Named slot."
         }
       ]
     },
     "tab-view": {
       "import": "@aziontech/webkit/tab-view",
       "target": "./src/components/navigation/tab-view/index.js",
-      "kind": "component",
+      "kind": "other",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/tab-view",
+      "subcomponents": [],
       "category": "navigation",
       "structure": "composition",
       "status": "implemented",
@@ -4705,6 +4977,7 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         }
       ]
@@ -4712,8 +4985,10 @@
     "navigation-menu": {
       "import": "@aziontech/webkit/navigation-menu",
       "target": "./src/components/navigation/navigation-menu/index.js",
-      "kind": "component",
+      "kind": "other",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/navigation-menu",
+      "subcomponents": [],
       "category": "navigation",
       "structure": "composition",
       "status": "implemented",
@@ -4737,6 +5012,7 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         }
       ]
@@ -4813,7 +5089,8 @@
       "slots": [
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "The trigger element. Tooltip anchors to its bounding box."
         }
       ]
     },
@@ -4821,7 +5098,17 @@
       "import": "@aziontech/webkit/dialog",
       "target": "./src/components/overlay/dialog/dialog.vue",
       "kind": "component",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/dialog",
+      "subcomponents": [
+        "@aziontech/webkit/dialog-close",
+        "@aziontech/webkit/dialog-content",
+        "@aziontech/webkit/dialog-description",
+        "@aziontech/webkit/dialog-overlay",
+        "@aziontech/webkit/dialog-portal",
+        "@aziontech/webkit/dialog-title",
+        "@aziontech/webkit/dialog-trigger"
+      ],
       "category": "overlay",
       "structure": "composition",
       "status": "implemented",
@@ -4865,6 +5152,7 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         }
       ]
@@ -4872,57 +5160,67 @@
     "dialog-close": {
       "import": "@aziontech/webkit/dialog-close",
       "target": "./src/components/overlay/dialog/dialog-close.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dialog-close",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dialog",
+      "treeShakeableImport": "@aziontech/webkit/dialog-close"
     },
     "dialog-content": {
       "import": "@aziontech/webkit/dialog-content",
       "target": "./src/components/overlay/dialog/dialog-content.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dialog-content",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dialog",
+      "treeShakeableImport": "@aziontech/webkit/dialog-content"
     },
     "dialog-description": {
       "import": "@aziontech/webkit/dialog-description",
       "target": "./src/components/overlay/dialog/dialog-description.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dialog-description",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dialog",
+      "treeShakeableImport": "@aziontech/webkit/dialog-description"
     },
     "dialog-overlay": {
       "import": "@aziontech/webkit/dialog-overlay",
       "target": "./src/components/overlay/dialog/dialog-overlay.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dialog-overlay",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dialog",
+      "treeShakeableImport": "@aziontech/webkit/dialog-overlay"
     },
     "dialog-portal": {
       "import": "@aziontech/webkit/dialog-portal",
       "target": "./src/components/overlay/dialog/dialog-portal.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dialog-portal",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dialog",
+      "treeShakeableImport": "@aziontech/webkit/dialog-portal"
     },
     "dialog-title": {
       "import": "@aziontech/webkit/dialog-title",
       "target": "./src/components/overlay/dialog/dialog-title.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dialog-title",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dialog",
+      "treeShakeableImport": "@aziontech/webkit/dialog-title"
     },
     "dialog-trigger": {
       "import": "@aziontech/webkit/dialog-trigger",
       "target": "./src/components/overlay/dialog/dialog-trigger.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dialog-trigger",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dialog",
+      "treeShakeableImport": "@aziontech/webkit/dialog-trigger"
     },
     "drawer": {
       "import": "@aziontech/webkit/drawer",
       "target": "./src/components/overlay/drawer/drawer.vue",
       "kind": "component",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/drawer",
+      "subcomponents": [
+        "@aziontech/webkit/drawer-close",
+        "@aziontech/webkit/drawer-content",
+        "@aziontech/webkit/drawer-description",
+        "@aziontech/webkit/drawer-overlay",
+        "@aziontech/webkit/drawer-portal",
+        "@aziontech/webkit/drawer-title",
+        "@aziontech/webkit/drawer-trigger"
+      ],
       "category": "overlay",
       "structure": "composition",
       "status": "implemented",
@@ -4973,6 +5271,7 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         }
       ]
@@ -4980,57 +5279,63 @@
     "drawer-close": {
       "import": "@aziontech/webkit/drawer-close",
       "target": "./src/components/overlay/drawer/drawer-close.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/drawer-close",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "drawer",
+      "treeShakeableImport": "@aziontech/webkit/drawer-close"
     },
     "drawer-content": {
       "import": "@aziontech/webkit/drawer-content",
       "target": "./src/components/overlay/drawer/drawer-content.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/drawer-content",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "drawer",
+      "treeShakeableImport": "@aziontech/webkit/drawer-content"
     },
     "drawer-description": {
       "import": "@aziontech/webkit/drawer-description",
       "target": "./src/components/overlay/drawer/drawer-description.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/drawer-description",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "drawer",
+      "treeShakeableImport": "@aziontech/webkit/drawer-description"
     },
     "drawer-overlay": {
       "import": "@aziontech/webkit/drawer-overlay",
       "target": "./src/components/overlay/drawer/drawer-overlay.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/drawer-overlay",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "drawer",
+      "treeShakeableImport": "@aziontech/webkit/drawer-overlay"
     },
     "drawer-portal": {
       "import": "@aziontech/webkit/drawer-portal",
       "target": "./src/components/overlay/drawer/drawer-portal.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/drawer-portal",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "drawer",
+      "treeShakeableImport": "@aziontech/webkit/drawer-portal"
     },
     "drawer-title": {
       "import": "@aziontech/webkit/drawer-title",
       "target": "./src/components/overlay/drawer/drawer-title.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/drawer-title",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "drawer",
+      "treeShakeableImport": "@aziontech/webkit/drawer-title"
     },
     "drawer-trigger": {
       "import": "@aziontech/webkit/drawer-trigger",
       "target": "./src/components/overlay/drawer/drawer-trigger.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/drawer-trigger",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "drawer",
+      "treeShakeableImport": "@aziontech/webkit/drawer-trigger"
     },
     "panel": {
       "import": "@aziontech/webkit/panel",
       "target": "./src/components/overlay/panel/panel.vue",
       "kind": "component",
+      "compoundRoot": true,
       "treeShakeableImport": "@aziontech/webkit/panel",
+      "subcomponents": [
+        "@aziontech/webkit/panel-content",
+        "@aziontech/webkit/panel-footer",
+        "@aziontech/webkit/panel-header"
+      ],
       "category": "overlay",
       "structure": "composition",
       "status": "implemented",
@@ -5046,6 +5351,7 @@
       "slots": [
         {
           "name": "default",
+          "scope": "—",
           "notes": "—"
         }
       ]
@@ -5053,86 +5359,86 @@
     "panel-content": {
       "import": "@aziontech/webkit/panel-content",
       "target": "./src/components/overlay/panel/panel-content.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/panel-content",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "panel",
+      "treeShakeableImport": "@aziontech/webkit/panel-content"
     },
     "panel-footer": {
       "import": "@aziontech/webkit/panel-footer",
       "target": "./src/components/overlay/panel/panel-footer.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/panel-footer",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "panel",
+      "treeShakeableImport": "@aziontech/webkit/panel-footer"
     },
     "panel-header": {
       "import": "@aziontech/webkit/panel-header",
       "target": "./src/components/overlay/panel/panel-header.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/panel-header",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "panel",
+      "treeShakeableImport": "@aziontech/webkit/panel-header"
     },
     "dropdown-menu": {
       "import": "@aziontech/webkit/dropdown-menu",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu"
     },
     "dropdown-menu-trigger": {
       "import": "@aziontech/webkit/dropdown-menu-trigger",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu-trigger.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-trigger",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-trigger"
     },
     "dropdown-menu-portal": {
       "import": "@aziontech/webkit/dropdown-menu-portal",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu-portal.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-portal",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-portal"
     },
     "dropdown-menu-content": {
       "import": "@aziontech/webkit/dropdown-menu-content",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu-content.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-content",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-content"
     },
     "dropdown-menu-group": {
       "import": "@aziontech/webkit/dropdown-menu-group",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu-group.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-group",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-group"
     },
     "dropdown-menu-item": {
       "import": "@aziontech/webkit/dropdown-menu-item",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu-item.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-item",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-item"
     },
     "dropdown-menu-separator": {
       "import": "@aziontech/webkit/dropdown-menu-separator",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu-separator.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-separator",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-separator"
     },
     "dropdown-menu-from-model": {
       "import": "@aziontech/webkit/dropdown-menu-from-model",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu-from-model.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-from-model",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-from-model"
     },
     "dropdown-menu-factory": {
       "import": "@aziontech/webkit/dropdown-menu-factory",
       "target": "./src/components/overlay/dropdown-menu/factory.ts",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-factory",
-      "category": "overlay"
+      "kind": "subcomponent",
+      "parent": "dropdown",
+      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-factory"
     },
     "deploy-success": {
       "import": "@aziontech/webkit/deploy-success",
@@ -5248,23 +5554,28 @@
       "slots": [
         {
           "name": "header",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in GlobalHeader bar (brand + regions)."
         },
         {
           "name": "success",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in congratulations header inside the CardBox header."
         },
         {
           "name": "logs",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in app name + LogView region in the CardBox content."
         },
         {
           "name": "steps",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in next-steps list in the CardBox footer."
         },
         {
           "name": "actions",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in footer primary button."
         }
       ]
     },
@@ -5467,11 +5778,13 @@
       "slots": [
         {
           "name": "plan",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in plan summary card."
         },
         {
           "name": "footer",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in enterprise footer bar."
         }
       ]
     },
@@ -5544,19 +5857,23 @@
       "slots": [
         {
           "name": "header",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in `GlobalHeader` bar (brand + regions)."
         },
         {
           "name": "success",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in success banner inside `CardBox` header."
         },
         {
           "name": "steps",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in next-steps list in `CardBox` content."
         },
         {
           "name": "actions",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Replaces the built-in footer primary button."
         }
       ]
     },
@@ -5587,31 +5904,38 @@
       "slots": [
         {
           "name": "header-left",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Start region inside `GlobalHeader`."
         },
         {
           "name": "header-middle",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Center region inside `GlobalHeader`."
         },
         {
           "name": "header-right",
-          "notes": "—"
+          "scope": "—",
+          "notes": "End region inside `GlobalHeader`."
         },
         {
           "name": "sidebar",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Navigation column; rendered in a fixed-width aside (`320px`, Figma shell)."
         },
         {
           "name": "page-header",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Page heading and actions above tabs (Figma PageHeading)."
         },
         {
           "name": "tabs",
-          "notes": "—"
+          "scope": "—",
+          "notes": "TabView.List` + `TabView.Content` children inside shell `TabView.Root`."
         },
         {
           "name": "default",
-          "notes": "—"
+          "scope": "—",
+          "notes": "Main page content when the `tabs` slot is omitted."
         }
       ]
     },

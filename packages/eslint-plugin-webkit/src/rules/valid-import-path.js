@@ -3,7 +3,7 @@
 // `/src/`) are owned by `no-deep-internal-import`, so this rule defers on those to
 // avoid double-reporting.
 
-import { loadCatalog, WEBKIT_PREFIX } from '../catalog.js'
+import { loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'
 
 export default {
@@ -24,20 +24,21 @@ export default {
   create(context) {
     const catalog = loadCatalog(ctxCwd(context))
     if (!catalog.available) return {}
+    const prefix = catalog.prefix
 
     function check(sourceNode) {
       if (!sourceNode || typeof sourceNode.value !== 'string') return
       const source = sourceNode.value
       if (source === 'catalog.json') return
-      if (!source.startsWith(WEBKIT_PREFIX)) return
-      const sub = source.slice(WEBKIT_PREFIX.length)
+      if (!source.startsWith(prefix)) return
+      const sub = source.slice(prefix.length)
       if (catalog.has(sub)) return
       // Deep-internal is `no-deep-internal-import`'s job.
       if (sub.startsWith('src/') || catalog.nearestPublishedPrefix(sub)) return
 
       const suggestions = catalog.suggestSubpaths(sub)
       const hint = suggestions.length
-        ? ` Did you mean ${suggestions.map((s) => WEBKIT_PREFIX + s).join(', ')}?`
+        ? ` Did you mean ${suggestions.map((s) => prefix + s).join(', ')}?`
         : ''
       context.report({
         node: sourceNode,
@@ -45,8 +46,8 @@ export default {
         data: { source, version: catalog.version ? `@${catalog.version}` : '', hint },
         suggest: suggestions.map((s) => ({
           messageId: 'replace',
-          data: { replacement: WEBKIT_PREFIX + s },
-          fix: (fixer) => fixer.replaceText(sourceNode, JSON.stringify(WEBKIT_PREFIX + s))
+          data: { replacement: prefix + s },
+          fix: (fixer) => fixer.replaceText(sourceNode, JSON.stringify(prefix + s))
         }))
       })
     }

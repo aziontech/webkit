@@ -19,16 +19,23 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "test": "node --test test/*.test.mjs"
   },
   "peerDependencies": {
-    "eslint": ">=8"
+    "eslint": ">=9"
   },
   "peerDependenciesMeta": {
     "vue-eslint-parser": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "eslint": ">=9",
+    "vue-eslint-parser": ">=9"
   },
   "keywords": ["eslint", "eslintplugin", "aziontech", "webkit", "design-system"]
 }

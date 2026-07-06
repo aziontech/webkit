@@ -10,14 +10,12 @@
 // the right component, the right (tree-shakeable) import, real props, and a runnable
 // SFC — instead of reinventing or reaching for PrimeVue.
 
-import { WEBKIT_BARE } from './catalog.js'
-
 const NOT_AVAILABLE = {
   ok: false,
   available: false,
   message:
     '@aziontech/webkit is not installed in this project (or its catalog.json is not resolvable). ' +
-    'Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH to its catalog.json.'
+    'Install @aziontech/webkit (or @aziontech/webkit.dev), or set WEBKIT_CATALOG_PATH to its catalog.json.'
 }
 
 /** kebab subpath → PascalCase binding: `empty-state` → `EmptyState`, `table-row` → `TableRow`. */
@@ -30,9 +28,11 @@ export function pascalCase(subpath) {
     .join('')
 }
 
-/** The subpath key of an entry (last segment of its import path). */
-function subpathOf(entry) {
-  return String(entry.import || '').slice(WEBKIT_BARE.length + 1)
+/** The subpath of a full import path, stripped of the catalog's package prefix. */
+function subpathOf(catalog, importPath) {
+  const prefix = catalog.prefix
+  const s = String(importPath || '')
+  return s.startsWith(prefix) ? s.slice(prefix.length) : s
 }
 
 /** A compact card for list/search results. */
@@ -146,8 +146,12 @@ export function getImport(catalog, name) {
     }
   }
 
+  // A distinct tree-shakeable root exists only when the catalog gives one. A .vue-rooted
+  // compound already IS its own lean root (treeShakeableImport === import). An index.ts
+  // compound with no `-root` export has none (treeShakeableImport === null).
+  const hasLeanRoot = e.treeShakeableImport != null
   const tree = e.treeShakeableImport ?? e.import
-  const binding = pascalCase(subpathOf({ import: tree }))
+  const binding = pascalCase(subpathOf(catalog, tree))
   const result = {
     ok: true,
     available: true,
@@ -157,26 +161,38 @@ export function getImport(catalog, name) {
     // The performant import to prefer.
     import: `import ${binding} from '${tree}'`,
     importPath: tree,
-    treeShakeable: true
+    treeShakeable: hasLeanRoot
   }
 
   if (e.compoundRoot) {
-    const compoundBinding = pascalCase(key)
-    result.compoundAlternative = {
-      import: `import ${compoundBinding} from '${e.import}'`,
-      importPath: e.import,
-      binding: compoundBinding,
-      note:
-        `The compound import (${e.import}) attaches every sub-component for dot-notation ` +
-        `(<${compoundBinding}.Row>, ...), but it is NOT tree-shakeable — it retains all ` +
-        `sub-components even when you render only the root. Prefer the -root import above ` +
-        `for the smallest bundle; use the compound when you want the dot-notation ergonomics.`,
-      subcomponents: e.subcomponents ?? []
+    const subs = e.subcomponents ?? []
+    const subExample = subs[0] ?? `${catalog.prefix}name-part`
+    // Two compound shapes. An index.ts Object.assign compound has a DISTINCT -root
+    // (tree !== import): the compound import gives dot-notation but is not tree-shakeable.
+    // A .vue-rooted compound is already its own lean root (tree === import): no separate
+    // non-tree-shakeable alternative exists; its sub-components are just separate exports.
+    if (hasLeanRoot && tree !== e.import) {
+      const compoundBinding = pascalCase(key)
+      result.compoundAlternative = {
+        import: `import ${compoundBinding} from '${e.import}'`,
+        importPath: e.import,
+        binding: compoundBinding,
+        note:
+          `The compound import (${e.import}) attaches every sub-component for dot-notation ` +
+          `(${compoundBinding}.Row, …), but it is NOT tree-shakeable — it retains all ` +
+          `sub-components even when you render only the root. Prefer the -root import above ` +
+          `for the smallest bundle; use the compound when you want the dot-notation ergonomics.`,
+        subcomponents: subs
+      }
+      result.note =
+        `${key} is a compound root. The tree-shakeable root import (above) is preferred; ` +
+        `import sub-components individually (e.g. ${subExample}) to keep the bundle minimal.`
+    } else {
+      result.subcomponents = subs
+      result.note =
+        `${key} owns sub-components (e.g. ${subExample}). The import above is already the lean ` +
+        `root; import each sub-component from its own subpath as needed.`
     }
-    result.note =
-      `${key} is a compound root. The tree-shakeable root import is preferred; import ` +
-      `sub-components individually (e.g. ${(e.subcomponents ?? [])[0] ?? '@aziontech/webkit/<name>-<part>'}) ` +
-      `to keep the bundle minimal.`
   }
 
   return result
@@ -291,8 +307,17 @@ function exampleProps(props) {
       return { name: p.name, attr: v ? p.name : null }
     }
     if (t === 'number') return { name: p.name, attr: `:${p.name}="${literalDefault(p)}"` }
-    // String / enum → quoted static attribute.
-    return { name: p.name, attr: `${p.name}="${literalDefault(p)}"` }
+    if (scalar(t)) {
+      // String / enum → quoted static attribute.
+      return { name: p.name, attr: `${p.name}="${literalDefault(p)}"` }
+    }
+    // Non-scalar (array / object / function): a static string would be wrong
+    // (`columns="text"` is not runnable). Bind an empty literal of the right shape so
+    // the snippet still parses and runs — the consumer fills it in.
+    const isArray = /\[\]\s*$|^Array\s*<|^readonly\s/.test(t)
+    const isFn = /=>|\bFunction\b/.test(t)
+    const literal = isArray ? '[]' : isFn ? '() => {}' : '{}'
+    return { name: p.name, attr: `:${p.name}="${literal}"` }
   })
 }
 
@@ -308,7 +333,7 @@ export function getUsageExample(catalog, name) {
   if (!comp.found) return comp
 
   const tree = comp.treeShakeableImport
-  const binding = pascalCase(subpathOf({ import: tree }))
+  const binding = pascalCase(subpathOf(catalog, tree))
   const importLine = `import ${binding} from '${tree}'`
 
   const attrs = exampleProps(comp.props)
@@ -355,7 +380,13 @@ export function validateUsage(catalog, { import: importPath, classes } = {}) {
 
   if (importPath != null && String(importPath).length) {
     const raw = String(importPath).trim()
-    if (!raw.startsWith(WEBKIT_BARE)) {
+    const bare = catalog.bare
+    const prefix = catalog.prefix
+    // Match the webkit package itself only — NOT sibling packages that share the name
+    // as a prefix (`@aziontech/webkit-cli`, `@aziontech/webkit-mcp`). Those are not
+    // webkit imports, so they must fall into the "nothing to validate" branch.
+    const isWebkit = raw === bare || raw.startsWith(prefix)
+    if (!isWebkit) {
       problems.push({
         kind: 'import',
         severity: 'info',
@@ -363,7 +394,7 @@ export function validateUsage(catalog, { import: importPath, classes } = {}) {
         message: `Not a @aziontech/webkit import — nothing to validate against the catalog.`
       })
     } else {
-      const sub = raw === WEBKIT_BARE ? '' : raw.slice(WEBKIT_BARE.length + 1)
+      const sub = raw === bare ? '' : raw.slice(prefix.length)
       const denied = catalog.deniedPrefixes.find((p) => raw.startsWith(p))
       if (denied) {
         problems.push({
@@ -380,7 +411,7 @@ export function validateUsage(catalog, { import: importPath, classes } = {}) {
           severity: 'error',
           import: raw,
           message: `Unknown webkit export "${raw}".`,
-          nearestPublishedPrefix: nearest ? `${WEBKIT_BARE}/${nearest}` : null,
+          nearestPublishedPrefix: nearest ? `${prefix}${nearest}` : null,
           suggestions: catalog.suggestSubpaths(sub)
         })
       }

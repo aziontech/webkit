@@ -45,12 +45,12 @@ test('planInit records the runtime and dev dependencies', () => {
   }
 })
 
-test('planInit writes eslint.config.js and .stylelintrc.json when absent', () => {
+test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
-    const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.js')
-    assert.ok(eslint, 'expected eslint.config.js write action')
+    const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.mjs')
+    assert.ok(eslint, 'expected eslint.config.mjs write action')
     assert.match(eslint.content, /@aziontech\/eslint-plugin-webkit/)
     assert.match(eslint.content, /configs\.strict/)
     assert.match(eslint.content, /vue-eslint-parser/)
@@ -58,6 +58,9 @@ test('planInit writes eslint.config.js and .stylelintrc.json when absent', () =>
     const stylelint = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
     assert.ok(stylelint, 'expected .stylelintrc.json write action')
     assert.match(stylelint.content, /@aziontech\/stylelint-config-webkit/)
+    // stylelint config wires the .vue / .scss custom syntaxes
+    assert.match(stylelint.content, /postcss-html/)
+    assert.match(stylelint.content, /postcss-scss/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -67,7 +70,7 @@ test('--recommended selects the recommended eslint preset', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, { recommended: true })
-    const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.js')
+    const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.mjs')
     assert.match(eslint.content, /configs\.recommended/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -79,10 +82,41 @@ test('an existing eslint config is advised, not overwritten', () => {
   try {
     writeFileSync(join(dir, 'eslint.config.js'), 'export default []\n')
     const plan = planInit(dir, {})
-    const write = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.js')
+    const write = plan.find((a) => a.type === 'write' && a.path.startsWith('eslint.config'))
     assert.equal(write, undefined, 'must not plan to write over an existing eslint config')
     const advise = plan.find((a) => a.type === 'advise' && /ESLint config already exists/.test(a.message))
     assert.ok(advise, 'expected an advise action with a merge snippet')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('an existing stylelint config is advised, not overwritten', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'stylelint.config.js'), 'export default {}\n')
+    const plan = planInit(dir, {})
+    const write = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
+    assert.equal(write, undefined, 'must not plan to write over an existing stylelint config')
+    const advise = plan.find((a) => a.type === 'advise' && /Stylelint config already exists/.test(a.message))
+    assert.ok(advise, 'expected a stylelint merge-snippet advice')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit adds the husky "prepare" script and a shim-free pre-commit hook', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const prepare = plan.find((a) => a.type === 'merge-json' && a.path === 'package.json')
+    assert.ok(prepare, 'expected a package.json merge for the prepare script')
+    assert.equal(prepare.merge.scripts.prepare, 'husky')
+
+    const hook = plan.find((a) => a.type === 'append' && a.path === '.husky/pre-commit')
+    assert.ok(hook, 'expected the husky pre-commit hook')
+    assert.doesNotMatch(hook.content, /husky\.sh/, 'must not use the removed husky v8 bootstrap shim')
+    assert.match(hook.content, /npx eslint/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -144,7 +178,7 @@ test('applyPlan writes the expected files and is idempotent on a second run', ()
     applyPlan(dir, planInit(dir, {}))
 
     // Files landed on disk.
-    assert.ok(existsSync(join(dir, 'eslint.config.js')))
+    assert.ok(existsSync(join(dir, 'eslint.config.mjs')))
     assert.ok(existsSync(join(dir, '.stylelintrc.json')))
     assert.ok(existsSync(join(dir, '.mcp.json')))
     assert.ok(existsSync(join(dir, '.husky/pre-commit')))
@@ -182,6 +216,27 @@ test('applyPlan writes the expected files and is idempotent on a second run', ()
     // Dependency versions unchanged (no re-pin).
     const pkg2 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
     assert.deepEqual(pkg2, pkg1, 'package.json changed on the second run')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan refuses to overwrite a malformed package.json (no data loss)', () => {
+  const dir = makeProject()
+  try {
+    const pkgPath = join(dir, 'package.json')
+    const malformed = '{ "name": "x", oops not valid json'
+    writeFileSync(pkgPath, malformed)
+
+    const results = applyPlan(dir, planInit(dir, {}))
+
+    // The unparseable file is left exactly as it was — never clobbered with `{}`.
+    assert.equal(readFileSync(pkgPath, 'utf8'), malformed)
+    // And the affected actions reported an error instead of silently succeeding.
+    assert.ok(
+      results.some((r) => r.result === 'error' && /not valid JSON/.test(r.detail)),
+      'expected an error result for the malformed package.json'
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

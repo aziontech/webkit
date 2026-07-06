@@ -1,12 +1,17 @@
-// Flags importing the ENTIRE @aziontech/icons set (default or namespace import), the
-// classic UI-lib bundle killer — every glyph ships even when a handful are used. Import
-// per-icon subpaths instead. Type-only imports are exempt. A central icon-registry module
-// that intentionally re-exports the set can opt out via the `allowedFiles` option.
+// Flags a default / namespace BINDING import of @aziontech/icons. That package is an
+// icon FONT: its entry is CSS, so the correct usage is a side-effect import
+// (`import '@aziontech/icons'`) plus the icon CSS classes — a default/namespace binding
+// is meaningless and usually a mistake. Side-effect imports (no specifiers) are allowed.
+// Type-only imports are exempt. A module that intentionally imports the set can opt out
+// via the `allowedFiles` option.
 
 export default {
   meta: {
     type: 'suggestion',
-    docs: { description: 'Disallow importing the whole @aziontech/icons set (import per-icon subpaths).' },
+    docs: {
+      description:
+        'Disallow a default/namespace binding import of the @aziontech/icons font (use a side-effect import + CSS classes).'
+    },
     schema: [
       {
         type: 'object',
@@ -19,7 +24,7 @@ export default {
     ],
     messages: {
       wholeSet:
-        "Importing the entire '{{pkg}}' set ships every glyph. Import only the icons you use (e.g. import ChevronIcon from '{{pkg}}/chevron')."
+        "'{{pkg}}' is an icon font — import it once for its side effects (import '{{pkg}}') and use the icon CSS classes, not a default/namespace binding."
     }
   },
   create(context) {

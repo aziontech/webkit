@@ -24,7 +24,7 @@ You are the local design-system reviewer. Given a diff (staged changes, a branch
 ### Performance
 
 - Root-only usage should take the tree-shakeable `<name>-root` path (or import specific sub-components) rather than the full compound.
-- Icons imported individually — flag any bulk import of the whole `@aziontech/icons` set.
+- `@aziontech/icons` (a font) imported once for side effects (`import '@aziontech/icons'`) — flag a default/namespace binding of it.
 - Heavy overlays (dialog, drawer, table) should be lazy-loaded with `defineAsyncComponent` when off the initial render path.
 
 ### Reuse

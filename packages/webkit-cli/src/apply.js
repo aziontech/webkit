@@ -16,11 +16,16 @@ function ensureDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true })
 }
 
-function readJson(path) {
+// Returns parsed JSON, or null when the file does NOT exist. Throws when the file
+// EXISTS but cannot be parsed — a caller must never overwrite a file it failed to
+// read (that would silently destroy the user's package.json / .mcp.json content).
+function readJsonStrict(path) {
+  if (!existsSync(path)) return null
+  const raw = readFileSync(path, 'utf8')
   try {
-    return JSON.parse(readFileSync(path, 'utf8'))
-  } catch {
-    return null
+    return JSON.parse(raw)
+  } catch (err) {
+    throw new Error(`${path} exists but is not valid JSON (${err.message}); refusing to overwrite it.`)
   }
 }
 
@@ -52,7 +57,12 @@ function mergePreserve(target, patch) {
 
 function applyAddDep(projectDir, action) {
   const pkgPath = join(projectDir, 'package.json')
-  const pkg = readJson(pkgPath) || {}
+  let pkg
+  try {
+    pkg = readJsonStrict(pkgPath) || {}
+  } catch (err) {
+    return { action, result: 'error', detail: err.message }
+  }
   const field = action.dev ? 'devDependencies' : 'dependencies'
   pkg[field] = pkg[field] || {}
   if (pkg[field][action.dep]) {
@@ -75,7 +85,12 @@ function applyWrite(projectDir, action) {
 
 function applyMergeJson(projectDir, action) {
   const target = join(projectDir, action.path)
-  const current = readJson(target) || {}
+  let current
+  try {
+    current = readJsonStrict(target) || {}
+  } catch (err) {
+    return { action, result: 'error', detail: err.message }
+  }
   const changed = mergePreserve(current, action.merge)
   if (!changed) {
     return { action, result: 'skipped', detail: `${action.path} already has ${action.description}` }

@@ -23,6 +23,12 @@ const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
 
+// The public import name is always `@aziontech/webkit`, on every channel: external
+// consumers install the release package by that name, and inside the monorepo the dev
+// package (`@aziontech/webkit.dev`) is aliased to it, so every import written anywhere
+// is `@aziontech/webkit/<subpath>`. The catalog therefore stamps this name into every
+// import path. (Resolving the catalog FILE on disk still accepts either package name —
+// see the dual-name resolver in the eslint-plugin / mcp loaders.)
 const PKG_NAME = '@aziontech/webkit'
 
 // Token rules ported verbatim from .claude/hooks/validate-tokens.mjs so the
@@ -99,10 +105,21 @@ function kindFromTarget(target) {
   if (target.startsWith('./src/svg/')) return 'svg'
   if (target.startsWith('./src/styles/')) return 'style'
   if (target.startsWith('./src/vite/')) return 'other'
-  return 'component'
+  // Only a `.vue` root or an `index.ts` compound barrel is a renderable component;
+  // any other target under src/components (a bare helper .ts) is not.
+  if (/\.vue$/.test(target) || /\/index\.ts$/.test(target)) return 'component'
+  return 'other'
 }
 
+const _specCache = new Map()
 function loadSpec(subpath) {
+  if (_specCache.has(subpath)) return _specCache.get(subpath)
+  const value = _readSpec(subpath)
+  _specCache.set(subpath, value)
+  return value
+}
+
+function _readSpec(subpath) {
   const specFile = resolve(SPECS_DIR, `${subpath}.md`)
   if (!existsSync(specFile)) return null
   const { frontmatter, body } = parseSpecFile(specFile)
@@ -115,7 +132,7 @@ function loadSpec(subpath) {
     .map((r) => ({ name: clean(r.event), payload: clean(r.payload), notes: clean(r.notes) }))
     .filter((e) => e.name && e.name !== '_none_')
   const slots = parseSpecTable(getSection(body, 'Slots') || '', 'notes')
-    .map((r) => ({ name: clean(Object.values(r)[0]), notes: clean(Object.values(r)[1]) }))
+    .map((r) => ({ name: clean(r.slot ?? Object.values(r)[0]), scope: clean(r.scope ?? ''), notes: clean(r.notes ?? '') }))
     .filter((s) => s.name && s.name !== '_none_')
 
   return {
@@ -136,8 +153,18 @@ function build() {
     .map((k) => k.slice(2))
   const subpathSet = new Set(subpaths)
 
-  // Compound roots: `X` is compound iff `X-root` is also exported.
-  const compoundRoots = subpaths.filter((s) => !s.includes('/') && subpathSet.has(`${s}-root`))
+  // A top-level subpath hosts a compound (owns sub-components) iff its spec is a
+  // composition, its target is an index.ts barrel, or it exports a `-root` sibling.
+  // Spec structure is the reliable signal: it catches .vue-rooted compounds
+  // (dialog, drawer, …) and index.ts compounds (dropdown, paginator) while NOT
+  // mis-catching monolithic components that merely share a name prefix
+  // (button vs button-highlight).
+  const compoundRoots = subpaths.filter((s) => {
+    if (s.includes('/')) return false
+    if (subpathSet.has(`${s}-root`)) return true
+    if (/\/index\.ts$/.test(exportsMap[`./${s}`] || '')) return true
+    return loadSpec(s)?.structure === 'composition'
+  })
   // Longest-first so multi-select wins over select when attributing subcomponents.
   const compoundByLength = [...compoundRoots].sort((a, b) => b.length - a.length)
 
@@ -183,9 +210,24 @@ function build() {
       entry.kind = kindFromTarget(target)
       if (isCompound) {
         entry.compoundRoot = true
-        entry.treeShakeableImport = `${PKG_NAME}/${subpath}-root`
+        const rootKey = `${subpath}-root`
+        const isBarrel = /\/index\.ts$/.test(target)
+        if (subpathSet.has(rootKey)) {
+          // Dedicated tree-shakeable root export (the canonical compound-api shape).
+          entry.treeShakeableImport = `${PKG_NAME}/${rootKey}`
+        } else if (isBarrel) {
+          // index.ts barrel with no `-root` export: the compound path pulls in every
+          // sub-component, so there is no tree-shakeable way in. Report it honestly
+          // instead of pointing at a non-existent `-root`.
+          entry.treeShakeableImport = null
+          entry.treeShakeableNote =
+            `No tree-shakeable root. Add "./${rootKey}" -> the root .vue, or import sub-components individually.`
+        } else {
+          // .vue-rooted compound: the main export already resolves to the lean root .vue.
+          entry.treeShakeableImport = importPath
+        }
         entry.subcomponents = subpaths
-          .filter((s) => s !== `${subpath}-root` && s !== subpath && s.startsWith(`${subpath}-`) && parentCompound(s) === subpath)
+          .filter((s) => s !== rootKey && s !== subpath && s.startsWith(`${subpath}-`) && parentCompound(s) === subpath)
           .map((s) => `${PKG_NAME}/${s}`)
       } else {
         entry.treeShakeableImport = importPath

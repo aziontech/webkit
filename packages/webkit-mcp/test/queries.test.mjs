@@ -138,6 +138,25 @@ test('validateUsage accepts a real import', () => {
   assert.equal(res.problems.length, 0)
 })
 
+test('validateUsage does NOT flag a sibling package as an invalid webkit import', () => {
+  // @aziontech/webkit-cli / -mcp share the name as a prefix but are not webkit imports.
+  for (const sibling of ['@aziontech/webkit-cli', '@aziontech/webkit-mcp']) {
+    const res = validateUsage(catalog, { import: sibling })
+    const problem = res.problems.find((p) => p.kind === 'import')
+    assert.ok(problem, `${sibling} should produce an info problem`)
+    assert.equal(problem.severity, 'info', `${sibling} must not be an error`)
+    assert.match(problem.message, /nothing to validate/)
+  }
+})
+
+test('getUsageExample binds an empty literal for a required array prop (never prop="text")', () => {
+  const res = getUsageExample(catalog, 'box-grid-selection')
+  assert.equal(res.found, true)
+  // items: BoxGridSelectionItem[] is required and non-scalar → :items="[]", not items="text"
+  assert.match(res.sfc, /:items="\[\]"/)
+  assert.doesNotMatch(res.sfc, /items="text"/)
+})
+
 test('validateUsage flags a hardcoded hex color in a class string', () => {
   const res = validateUsage(catalog, { classes: 'text-[#fff]' })
   assert.equal(res.ok, false)

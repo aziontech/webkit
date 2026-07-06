@@ -6,6 +6,7 @@ import * as vueParser from 'vue-eslint-parser'
 // Point every rule's catalog loader at the fixture (version-locked, deterministic).
 process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.json', import.meta.url))
 
+const { _resetCatalogCache } = await import('../src/catalog.js')
 const validImportPath = (await import('../src/rules/valid-import-path.js')).default
 const noDeepInternalImport = (await import('../src/rules/no-deep-internal-import.js')).default
 const noBarrelImport = (await import('../src/rules/no-barrel-import.js')).default
@@ -58,7 +59,13 @@ test('no-barrel-import', () => {
     invalid: [
       { code: "import { Button } from '@aziontech/webkit'", errors: [{ messageId: 'barrel', suggestions: 1 }] },
       { code: "import { Button, Chip } from '@aziontech/webkit'", errors: [{ messageId: 'barrel', suggestions: 1 }] },
-      { code: "import * as WK from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] }
+      { code: "import * as WK from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] },
+      // the dev channel is a bare barrel too
+      { code: "import { Button } from '@aziontech/webkit.dev'", errors: [{ messageId: 'barrel', suggestions: 1 }] },
+      // export-from re-exports, and dynamic import(), are barrels as well
+      { code: "export { Button } from '@aziontech/webkit'", errors: [{ messageId: 'barrel' }] },
+      { code: "export * from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] },
+      { code: "const p = import('@aziontech/webkit')", errors: [{ messageId: 'namespace' }] }
     ]
   })
 })
@@ -66,7 +73,8 @@ test('no-barrel-import', () => {
 test('no-whole-icon-set-import', () => {
   js.run('no-whole-icon-set-import', noWholeIconSetImport, {
     valid: [
-      "import Chevron from '@aziontech/icons/chevron'",
+      // The correct usage of the icon font: a side-effect import (no binding).
+      "import '@aziontech/icons'",
       { code: "import Icons from '@aziontech/icons'", options: [{ allowedFiles: ['icon-registry'] }], filename: 'src/icon-registry.js' }
     ],
     invalid: [
@@ -78,19 +86,49 @@ test('no-whole-icon-set-import', () => {
 
 test('no-hardcoded-color (script + template)', () => {
   js.run('no-hardcoded-color', noHardcodedColor, {
-    valid: ["const c = 'var(--primary)'", "const c = 'text-body-sm'"],
+    valid: [
+      "const c = 'var(--primary)'",
+      "const c = 'text-body-sm'",
+      // short 3-4 digit hex outside a style string is an id/anchor/route, not a color
+      "const anchor = '#dad'",
+      "const route = '#face'",
+      "const hash = '#bad'"
+    ],
     invalid: [
       { code: "const c = '#ff0000'", errors: [{ messageId: 'token' }] },
-      { code: "const c = 'text-gray-500'", errors: [{ messageId: 'token' }] }
+      { code: "const c = 'text-gray-500'", errors: [{ messageId: 'token' }] },
+      // short hex IS a color when the string looks like a style value
+      { code: "const c = 'color:#fff'", errors: [{ messageId: 'token' }] }
     ]
   })
   vue.run('no-hardcoded-color', noHardcodedColor, {
-    valid: [{ code: '<template><div class="text-body-sm">x</div></template>', filename: 'a.vue' }],
+    valid: [
+      { code: '<template><div class="text-body-sm">x</div></template>', filename: 'a.vue' },
+      // anchor href that happens to be valid hex must not be flagged
+      { code: '<template><a href="#dad">x</a></template>', filename: 'anchor.vue' }
+    ],
     invalid: [
       { code: '<template><div class="text-[#fff]">x</div></template>', filename: 'a.vue', errors: [{ messageId: 'token' }] },
       { code: '<template><div class="text-red-500">x</div></template>', filename: 'b.vue', errors: [{ messageId: 'token' }] }
     ]
   })
+})
+
+test('resolves the .dev channel package name from the catalog', () => {
+  const prev = process.env.WEBKIT_CATALOG_PATH
+  process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.dev.json', import.meta.url))
+  _resetCatalogCache()
+  try {
+    js.run('valid-import-path (dev channel)', validImportPath, {
+      valid: ["import Button from '@aziontech/webkit.dev/button'"],
+      invalid: [
+        { code: "import X from '@aziontech/webkit.dev/buton'", errors: [{ messageId: 'unknown', suggestions: 1 }] }
+      ]
+    })
+  } finally {
+    process.env.WEBKIT_CATALOG_PATH = prev
+    _resetCatalogCache()
+  }
 })
 
 test('prefer-tree-shakeable-root', () => {

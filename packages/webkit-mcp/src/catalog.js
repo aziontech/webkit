@@ -15,23 +15,45 @@ import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
-const PKG = '@aziontech/webkit'
+// webkit publishes under two names: the release channel (`@aziontech/webkit`) and the
+// dev channel (`@aziontech/webkit.dev`). Resolve whichever the consuming project has
+// installed; the import PREFIX every answer uses is read from the resolved catalog's
+// own `package` field, so it always matches the installed name.
+const CANDIDATE_PKGS = ['@aziontech/webkit', '@aziontech/webkit.dev']
+const DEFAULT_PKG = CANDIDATE_PKGS[0]
+
+/** True when `src` is a bare import of either webkit package name. */
+export function isWebkitBare(src) {
+  return typeof src === 'string' && CANDIDATE_PKGS.includes(src)
+}
 
 let cache = null // { path, value }
+let warned = false
 
 function resolveCatalogPath(cwd) {
   if (process.env.WEBKIT_CATALOG_PATH) return process.env.WEBKIT_CATALOG_PATH
   const require = createRequire(join(cwd || process.cwd(), '__webkit_resolve__.js'))
-  try {
-    return require.resolve(`${PKG}/catalog.json`)
-  } catch {
-    /* fall through */
+  for (const pkg of CANDIDATE_PKGS) {
+    try {
+      return require.resolve(`${pkg}/catalog.json`)
+    } catch {
+      /* try next candidate */
+    }
+    try {
+      return join(dirname(require.resolve(`${pkg}/package.json`)), 'catalog.json')
+    } catch {
+      /* try next candidate */
+    }
   }
-  try {
-    return join(dirname(require.resolve(`${PKG}/package.json`)), 'catalog.json')
-  } catch {
-    return null
-  }
+  return null
+}
+
+function warnOnce(message) {
+  if (warned) return
+  warned = true
+  // MCP speaks JSON-RPC over stdio, so diagnostics MUST go to stderr — never stdout.
+  // Fail-open must not be silent: announce the disabled state once.
+  process.stderr.write(`[webkit-mcp] ${message}\n`)
 }
 
 function levenshtein(a, b) {
@@ -64,9 +86,13 @@ function build(json) {
     message: r.message
   }))
 
+  const pkg = json.package || DEFAULT_PKG
+
   return {
     available: true,
-    package: json.package || PKG,
+    package: pkg,
+    prefix: `${pkg}/`,
+    bare: pkg,
     version: json.webkitVersion || null,
     deniedPrefixes: json.deniedPrefixes || [],
     tokenRules,
@@ -104,7 +130,9 @@ function build(json) {
 function empty() {
   return {
     available: false,
-    package: PKG,
+    package: DEFAULT_PKG,
+    prefix: `${DEFAULT_PKG}/`,
+    bare: DEFAULT_PKG,
     version: null,
     deniedPrefixes: [],
     tokenRules: [],
@@ -123,21 +151,29 @@ export function loadCatalog(cwd) {
   let value
   if (!path) {
     value = empty()
+    warnOnce(
+      'could not resolve a webkit catalog.json — answers will degrade to "not available". ' +
+        'Install @aziontech/webkit (or @aziontech/webkit.dev), or set WEBKIT_CATALOG_PATH.'
+    )
   } else {
     try {
       value = build(JSON.parse(readFileSync(path, 'utf-8')))
-    } catch {
+    } catch (err) {
       value = empty()
+      warnOnce(`failed to read the webkit catalog at ${path} (${err.message}) — answers will degrade to "not available".`)
     }
   }
   cache = { path, value }
   return value
 }
 
-/** Test-only: clear the memoized catalog (a single process may swap WEBKIT_CATALOG_PATH). */
+/** Test-only: clear the memoized catalog + warn latch (a single process may swap WEBKIT_CATALOG_PATH). */
 export function _resetCatalogCache() {
   cache = null
+  warned = false
 }
 
-export const WEBKIT_PREFIX = `${PKG}/`
-export const WEBKIT_BARE = PKG
+// Static defaults for callers without a loaded catalog. The loaded catalog's own
+// `.prefix` / `.bare` (derived from its `package` field) take precedence.
+export const WEBKIT_PREFIX = `${DEFAULT_PKG}/`
+export const WEBKIT_BARE = DEFAULT_PKG

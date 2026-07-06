@@ -1,6 +1,6 @@
 {
   "branches": ["dev"],
-  "tagFormat": "@aziontech/webkit.dev@${version}",
+  "tagFormat": "@aziontech/eslint-plugin-webkit@${version}",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
@@ -8,7 +8,7 @@
         "preset": "conventionalcommits",
         "presetOpts": {
           "gitRawCommitsOpts": {
-            "path": "packages/webkit"
+            "path": "packages/eslint-plugin-webkit"
           }
         },
         "parserOpts": {
@@ -51,7 +51,6 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "node scripts/build-catalog.mjs && vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],
@@ -60,10 +59,9 @@
       {
         "assets": [
           "package.json",
-          "CHANGELOG.md",
-          "catalog.json"
+          "CHANGELOG.md"
         ],
-        "message": "chore(release): @aziontech/webkit.dev ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        "message": "chore(release): @aziontech/eslint-plugin-webkit ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
     [

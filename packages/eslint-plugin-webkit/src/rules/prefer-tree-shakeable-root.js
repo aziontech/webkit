@@ -7,7 +7,7 @@
 // Only suggests — a compound root `X` is detected from the catalog (entry.compoundRoot).
 // Conservative: any dotted usage / member access / namespace-ish use suppresses it.
 
-import { loadCatalog, WEBKIT_PREFIX } from '../catalog.js'
+import { loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'
 
 function collectElementNames(node, out) {
@@ -31,27 +31,37 @@ export default {
     schema: [],
     messages: {
       preferRoot:
-        "'{{binding}}' is imported from the compound entry '@aziontech/webkit/{{sub}}' (bundles all sub-components) but only '<{{binding}}>' is used. Import '@aziontech/webkit/{{sub}}-root' to keep it tree-shakeable.",
-      useRoot: "Import from '@aziontech/webkit/{{sub}}-root'"
+        "'{{binding}}' is imported from the compound entry '{{compound}}' (bundles all sub-components) but only '<{{binding}}>' is used. Import '{{root}}' to keep it tree-shakeable.",
+      useRoot: "Import from '{{root}}'"
     }
   },
   create(context) {
     const catalog = loadCatalog(ctxCwd(context))
     if (!catalog.available) return {}
+    const pkgPrefix = catalog.prefix
 
-    const compoundImports = [] // { binding, sub, sourceNode }
+    const compoundImports = [] // { binding, compound, root, sourceNode }
     const scriptMembers = new Set() // identifiers used as `X.something` in <script>
 
     return {
       ImportDeclaration(node) {
         const src = node.source.value
-        if (typeof src !== 'string' || !src.startsWith(WEBKIT_PREFIX)) return
-        const sub = src.slice(WEBKIT_PREFIX.length)
+        if (typeof src !== 'string' || !src.startsWith(pkgPrefix)) return
+        const sub = src.slice(pkgPrefix.length)
         const entry = catalog.getEntry(sub)
         if (!entry || !entry.compoundRoot) return
+        // Only suggest when a DISTINCT tree-shakeable root actually exists. A .vue-rooted
+        // compound (dialog, drawer, …) is already its own lean root — treeShakeableImport
+        // equals the compound import — so there is nothing leaner to switch to.
+        if (!entry.treeShakeableImport || entry.treeShakeableImport === entry.import) return
         const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
         if (!def) return
-        compoundImports.push({ binding: def.local.name, sub, sourceNode: node.source })
+        compoundImports.push({
+          binding: def.local.name,
+          compound: entry.import,
+          root: entry.treeShakeableImport,
+          sourceNode: node.source
+        })
       },
       MemberExpression(node) {
         if (node.object && node.object.type === 'Identifier') scriptMembers.add(node.object.name)
@@ -70,13 +80,12 @@ export default {
           context.report({
             node: imp.sourceNode,
             messageId: 'preferRoot',
-            data: { binding: imp.binding, sub: imp.sub },
+            data: { binding: imp.binding, compound: imp.compound, root: imp.root },
             suggest: [
               {
                 messageId: 'useRoot',
-                data: { sub: imp.sub },
-                fix: (fixer) =>
-                  fixer.replaceText(imp.sourceNode, JSON.stringify(`${WEBKIT_PREFIX}${imp.sub}-root`))
+                data: { root: imp.root },
+                fix: (fixer) => fixer.replaceText(imp.sourceNode, JSON.stringify(imp.root))
               }
             ]
           })

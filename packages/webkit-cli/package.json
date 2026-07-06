@@ -1,11 +1,12 @@
 {
   "name": "@aziontech/webkit-cli",
   "version": "0.0.0",
-  "description": "One-command adopter for the @aziontech/webkit design system. `npx @aziontech/webkit init` wires deps, lint configs, pre-commit, the webkit MCP, and the Claude Code bundle into any existing project.",
+  "description": "One-command adopter for the @aziontech/webkit design system. `npx @aziontech/webkit-cli init` wires deps, lint configs, pre-commit, the webkit MCP, and the Claude Code bundle into any existing project.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "webkit": "./src/cli.js"
+    "webkit": "./src/cli.js",
+    "webkit-cli": "./src/cli.js"
   },
   "files": [
     "src",
@@ -18,6 +19,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "scripts": {
     "test": "node --test test/*.test.mjs"

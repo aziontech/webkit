@@ -26,6 +26,9 @@
 //     with the same argument meaning, so a fallback to `.tool` is provided below.
 //   - a handler returns `{ content: [{ type: 'text', text }] }`.
 
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+
 import { loadCatalog } from './catalog.js'
 import {
   getComponent,
@@ -41,6 +44,16 @@ import {
 const SDK_MCP = '@modelcontextprotocol/sdk/server/mcp.js'
 const SDK_STDIO = '@modelcontextprotocol/sdk/server/stdio.js'
 const ZOD = 'zod'
+
+/** This server's own version, read from its package.json (never hardcoded). */
+function serverVersion() {
+  try {
+    const pkgUrl = new URL('../package.json', import.meta.url)
+    return JSON.parse(readFileSync(fileURLToPath(pkgUrl), 'utf-8')).version || '0.0.0'
+  } catch {
+    return '0.0.0'
+  }
+}
 
 /** Wrap a plain-JSON result as an MCP tool response. */
 function json(result) {
@@ -68,7 +81,7 @@ async function main() {
   // consuming project), so answers are locked to the webkit version it installed.
   const catalog = loadCatalog(process.cwd())
 
-  const server = new McpServer({ name: '@aziontech/webkit-mcp', version: '0.0.0' })
+  const server = new McpServer({ name: '@aziontech/webkit-mcp', version: serverVersion() })
 
   /** Register a tool across the modern (registerTool) and legacy (tool) SDK shapes. */
   const tool = (name, config, handler) => {

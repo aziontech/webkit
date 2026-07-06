@@ -50,15 +50,8 @@
     "conventional-changelog-conventionalcommits": "^7.0.0",
     "semantic-release": "^23.0.0"
   },
-  "files": [
-    "src",
-    "catalog.json",
-    "package.json"
-  ],
-  "sideEffects": [
-    "**/*.vue",
-    "**/*.css"
-  ],
+  "files": ["src", "catalog.json", "package.json"],
+  "sideEffects": ["**/*.vue", "**/*.css"],
   "exports": {
     "./catalog.json": "./catalog.json",
     "./package.json": "./package.json",
@@ -105,6 +98,7 @@
     "./table-toolbar": "./src/components/data/table/table-toolbar/table-toolbar.vue",
     "./table-search": "./src/components/data/table/table-search/table-search.vue",
     "./paginator": "./src/components/data/paginator/index.ts",
+    "./paginator-root": "./src/components/data/paginator/paginator.vue",
     "./pagination-button": "./src/components/data/paginator/pagination-button/pagination-button.vue",
     "./paginator-info": "./src/components/data/paginator/paginator-info/paginator-info.vue",
     "./paginator-page-size": "./src/components/data/paginator/paginator-page-size/paginator-page-size.vue",
@@ -152,6 +146,7 @@
     "./textarea": "./src/components/inputs/textarea/textarea.vue",
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
     "./dropdown": "./src/components/navigation/dropdown/index.ts",
+    "./dropdown-root": "./src/components/navigation/dropdown/dropdown.vue",
     "./dropdown-trigger": "./src/components/navigation/dropdown/dropdown-trigger/dropdown-trigger.vue",
     "./dropdown-group": "./src/components/navigation/dropdown/dropdown-group/dropdown-group.vue",
     "./dropdown-option": "./src/components/navigation/dropdown/dropdown-option/dropdown-option.vue",

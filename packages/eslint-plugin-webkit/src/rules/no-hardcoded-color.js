@@ -21,9 +21,18 @@ export default {
     const rules = catalog.tokenRules
     if (!rules.length) return {}
 
+    // A short 3-4 digit hex (#dad, #face, #bad) is ambiguous: it is a color in a style
+    // string but also a perfectly valid DOM id / anchor / route (href="#dad"). Enforce
+    // the hex-color rule on a short hex ONLY when the string actually looks like a class
+    // or style value. A 6/8-digit hex (#ffffff) is almost never anything but a color.
+    const STYLE_SIGNAL =
+      /[:;{}]|--|\[#|\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent|from|via|to|shadow|decoration)-|\b(?:rgba?|hsla?|var|color|background)\b/
+    const FULL_HEX = /#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\b/
+
     function scan(node, text) {
       if (typeof text !== 'string' || !text) return
       for (const rule of rules) {
+        if (rule.id === 'hex-color' && !FULL_HEX.test(text) && !STYLE_SIGNAL.test(text)) continue
         const m = text.match(rule.re)
         if (m) {
           context.report({ node, messageId: 'token', data: { message: rule.message, sample: m[0] } })

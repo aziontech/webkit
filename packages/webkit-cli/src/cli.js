@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// @aziontech/webkit CLI — bin name `webkit`.
+// @aziontech/webkit-cli — bin name `webkit`.
 //
-//   npx @aziontech/webkit init [--dry-run] [--strict|--recommended]
+//   npx @aziontech/webkit-cli init [--dry-run] [--strict|--recommended]
 //
 // Wires the design system into an existing project in one command: dependencies,
 // lint configs, pre-commit, the webkit MCP, the Claude Code bundle, and a
@@ -10,10 +10,10 @@
 import { planInit } from './plan.js'
 import { applyPlan } from './apply.js'
 
-const HELP = `@aziontech/webkit — adopt the design system in one command
+const HELP = `@aziontech/webkit-cli — adopt the design system in one command
 
 Usage:
-  npx @aziontech/webkit init [options]
+  npx @aziontech/webkit-cli init [options]
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
@@ -25,12 +25,17 @@ Options:
   -h, --help      Show this help.
 `
 
+const KNOWN_FLAGS = new Set(['--dry-run', '--strict', '--recommended', '-h', '--help'])
+
 function parseArgs(argv) {
   const args = argv.slice(2)
   const command = args.find((a) => !a.startsWith('-')) || null
-  const flags = new Set(args.filter((a) => a.startsWith('-')))
+  const flagList = args.filter((a) => a.startsWith('-'))
+  const unknown = flagList.filter((f) => !KNOWN_FLAGS.has(f))
+  const flags = new Set(flagList)
   return {
     command,
+    unknown,
     dryRun: flags.has('--dry-run'),
     recommended: flags.has('--recommended') && !flags.has('--strict'),
     help: flags.has('-h') || flags.has('--help')
@@ -44,7 +49,8 @@ function labelFor(result) {
       merged: 'MERGE ',
       appended: 'APPEND',
       skipped: 'SKIP  ',
-      advised: 'NOTE  '
+      advised: 'NOTE  ',
+      error: 'ERROR '
     }[result] || result.toUpperCase()
   )
 }
@@ -55,7 +61,8 @@ function printResult({ action, result, detail }) {
     process.stdout.write(`\nNOTE   ${detail}\n`)
     return
   }
-  process.stdout.write(`${labelFor(result)} ${detail || action.type}\n`)
+  const stream = result === 'error' ? process.stderr : process.stdout
+  stream.write(`${labelFor(result)} ${detail || action.type}\n`)
 }
 
 function printPlan(plan) {
@@ -79,11 +86,18 @@ function printPlan(plan) {
 }
 
 function run(argv) {
-  const { command, dryRun, recommended, help } = parseArgs(argv)
+  const { command, dryRun, recommended, help, unknown } = parseArgs(argv)
 
   if (help || !command) {
     process.stdout.write(HELP)
     return command ? 0 : help ? 0 : 1
+  }
+
+  // Reject typo'd flags loudly — silently ignoring `--dryrun` would perform a real
+  // write run when the user meant `--dry-run`.
+  if (unknown.length) {
+    process.stderr.write(`Unknown option(s): ${unknown.join(', ')}\n\n${HELP}`)
+    return 1
   }
 
   if (command !== 'init') {
@@ -95,7 +109,7 @@ function run(argv) {
   const plan = planInit(projectDir, { recommended })
 
   process.stdout.write(
-    `\n@aziontech/webkit init — ${recommended ? 'recommended' : 'strict'} preset${dryRun ? ' (dry run)' : ''}\n`
+    `\n@aziontech/webkit-cli init — ${recommended ? 'recommended' : 'strict'} preset${dryRun ? ' (dry run)' : ''}\n`
   )
   process.stdout.write(`project: ${projectDir}\n\n`)
 
@@ -108,8 +122,16 @@ function run(argv) {
   const results = applyPlan(projectDir, plan)
   for (const r of results) printResult(r)
 
+  const errors = results.filter((r) => r.result === 'error')
+  if (errors.length) {
+    process.stderr.write(`\n${errors.length} action(s) failed — nothing was overwritten. Fix the file(s) above and re-run.\n`)
+    return 1
+  }
+
   process.stdout.write('\nDone. Run your package manager install to fetch the new dependencies.\n')
   return 0
 }
 
-process.exit(run(process.argv))
+// Set exitCode rather than process.exit() so buffered stdout flushes before exit
+// (process.exit can truncate piped output mid-write).
+process.exitCode = run(process.argv)

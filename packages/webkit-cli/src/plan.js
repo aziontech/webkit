@@ -40,6 +40,10 @@ const DEV_DEPS = [
   'eslint',
   'stylelint',
   'vue-eslint-parser',
+  // stylelint needs a custom syntax to parse `.vue` <style> blocks and `.scss` — the
+  // generated .stylelintrc wires these, so they must be installed too.
+  'postcss-html',
+  'postcss-scss',
   'husky'
 ]
 
@@ -99,12 +103,27 @@ export default [
 const ESLINT_SNIPPET_HEADER =
   'An ESLint config already exists — not overwriting it. Merge the webkit preset manually:'
 
-const STYLELINT_CONTENT = `${JSON.stringify({ extends: ['@aziontech/stylelint-config-webkit'] }, null, 2)}\n`
+const STYLELINT_SNIPPET_HEADER =
+  'A Stylelint config already exists — not overwriting it. Merge the webkit config manually:'
 
-const HUSKY_PRECOMMIT = `#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+// `.vue` <style> blocks and `.scss` need a custom syntax; the base config leaves that
+// to the consumer, so init wires it here (postcss-html / postcss-scss are in DEV_DEPS).
+const STYLELINT_CONTENT = `${JSON.stringify(
+  {
+    extends: ['@aziontech/stylelint-config-webkit'],
+    overrides: [
+      { files: ['**/*.vue'], customSyntax: 'postcss-html' },
+      { files: ['**/*.scss'], customSyntax: 'postcss-scss' }
+    ]
+  },
+  null,
+  2
+)}\n`
 
-# Lint with the webkit rules before every commit.
+// husky v9+: the hook file is just the commands. (The old `. .../husky.sh` bootstrap
+// line was removed in v9 and now warns/breaks.) Hooks activate via the `prepare`
+// script (`husky`), which init adds to package.json.
+const HUSKY_PRECOMMIT = `# Lint with the webkit rules before every commit.
 npx eslint .
 npx stylelint "**/*.{css,scss,vue}"
 `
@@ -139,7 +158,8 @@ export function planInit(projectDir, opts = {}) {
       'Dependencies recorded in package.json — run your package manager install (npm install / pnpm install / yarn) to fetch them.'
   })
 
-  // 2. eslint.config.js — write if absent; otherwise print a merge snippet.
+  // 2. eslint.config.mjs — write if absent; otherwise print a merge snippet. The `.mjs`
+  //    extension guarantees ESM regardless of the project's package.json `type`.
   const existingEslint = firstExisting(projectDir, [
     'eslint.config.js',
     'eslint.config.mjs',
@@ -160,19 +180,48 @@ export function planInit(projectDir, opts = {}) {
   } else {
     actions.push({
       type: 'write',
-      path: 'eslint.config.js',
+      path: 'eslint.config.mjs',
       content: eslintFlatConfig(severity),
       skipIfExists: true
     })
   }
 
-  // 3. .stylelintrc.json — write if absent.
-  actions.push({
-    type: 'write',
-    path: '.stylelintrc.json',
-    content: STYLELINT_CONTENT,
-    skipIfExists: true
-  })
+  // 3. .stylelintrc.json — write if absent; otherwise print a merge snippet (mirrors
+  //    the eslint path so an existing stylelint config is never silently duplicated).
+  const existingStylelint = firstExisting(projectDir, [
+    '.stylelintrc',
+    '.stylelintrc.json',
+    '.stylelintrc.js',
+    '.stylelintrc.cjs',
+    '.stylelintrc.mjs',
+    '.stylelintrc.yml',
+    '.stylelintrc.yaml',
+    'stylelint.config.js',
+    'stylelint.config.cjs',
+    'stylelint.config.mjs'
+  ])
+  const pkgHasStylelint = (() => {
+    const raw = read(join(projectDir, 'package.json'))
+    if (!raw) return false
+    try {
+      return Boolean(JSON.parse(raw).stylelint)
+    } catch {
+      return false
+    }
+  })()
+  if (existingStylelint || pkgHasStylelint) {
+    actions.push({
+      type: 'advise',
+      message: `${STYLELINT_SNIPPET_HEADER}\n${STYLELINT_CONTENT}`
+    })
+  } else {
+    actions.push({
+      type: 'write',
+      path: '.stylelintrc.json',
+      content: STYLELINT_CONTENT,
+      skipIfExists: true
+    })
+  }
 
   // 4. .mcp.json — merge the webkit server (idempotent; only if absent).
   actions.push({
@@ -182,7 +231,16 @@ export function planInit(projectDir, opts = {}) {
     merge: { mcpServers: { [MCP_SERVER_NAME]: MCP_SERVER_ENTRY } }
   })
 
-  // 5. .husky/pre-commit — write if absent (append the lint block otherwise).
+  // 5. package.json `prepare` script so husky activates hooks on install (husky v9
+  //    needs this; without it .husky/pre-commit never runs). Merge only if absent.
+  actions.push({
+    type: 'merge-json',
+    path: 'package.json',
+    description: 'add the "prepare" script (husky)',
+    merge: { scripts: { prepare: 'husky' } }
+  })
+
+  // 6. .husky/pre-commit — write if absent (append the lint block otherwise).
   actions.push({
     type: 'append',
     path: '.husky/pre-commit',
@@ -192,7 +250,8 @@ export function planInit(projectDir, opts = {}) {
   })
   actions.push({
     type: 'advise',
-    message: 'Husky pre-commit hook written — it needs git installed and `npx husky` to activate hooks.'
+    message:
+      'Husky pre-commit hook written. Run your package manager install (which runs the "prepare" script) to activate git hooks.'
   })
 
   // 6. Copy the Claude Code bundle into .claude/ (only missing files).
