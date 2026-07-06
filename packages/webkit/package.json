@@ -25,9 +25,14 @@
     "type-coverage": "type-coverage -p . --at-least 95 --detail",
     "catalog:build": "node scripts/build-catalog.mjs",
     "catalog:check": "node scripts/build-catalog.mjs && git diff --exit-code --stat catalog.json",
+    "test:toolkit": "node --test \"test/**/*.test.mjs\"",
     "figma:parse": "figma connect parse",
     "figma:publish": "figma connect publish",
     "figma:unpublish": "figma connect unpublish"
+  },
+  "bin": {
+    "webkit": "./src/cli/cli.js",
+    "webkit-mcp": "./src/mcp/server.js"
   },
   "dependencies": {
     "@tanstack/vue-table": "^8.21.3",
@@ -37,6 +42,26 @@
     "vee-validate": "^4.15.1",
     "vue-tsc": "^3.2.5",
     "@aziontech/theme": "workspace:*"
+  },
+  "optionalDependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=9",
+    "stylelint": ">=16",
+    "vue-eslint-parser": ">=9"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "stylelint": {
+      "optional": true
+    },
+    "vue-eslint-parser": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@figma/code-connect": "^1.4.5",
@@ -48,13 +73,26 @@
     "@semantic-release/npm": "^11.0.0",
     "@semantic-release/release-notes-generator": "^12.1.0",
     "conventional-changelog-conventionalcommits": "^7.0.0",
-    "semantic-release": "^23.0.0"
+    "semantic-release": "^23.0.0",
+    "eslint": ">=9",
+    "vue-eslint-parser": ">=9",
+    "stylelint": ">=16"
   },
-  "files": ["src", "catalog.json", "package.json"],
-  "sideEffects": ["**/*.vue", "**/*.css"],
+  "files": [
+    "src",
+    "cli-templates",
+    "catalog.json",
+    "package.json"
+  ],
+  "sideEffects": [
+    "**/*.vue",
+    "**/*.css"
+  ],
   "exports": {
     "./catalog.json": "./catalog.json",
     "./package.json": "./package.json",
+    "./eslint-plugin": "./src/eslint-plugin/index.js",
+    "./stylelint-config": "./src/stylelint-config.js",
     "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",
     "./overline": "./src/components/overline/overline.vue",
     "./button": "./src/components/actions/button/button.vue",

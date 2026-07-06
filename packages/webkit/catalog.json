@@ -1480,6 +1480,18 @@
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/package.json"
     },
+    "eslint-plugin": {
+      "import": "@aziontech/webkit/eslint-plugin",
+      "target": "./src/eslint-plugin/index.js",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/eslint-plugin"
+    },
+    "stylelint-config": {
+      "import": "@aziontech/webkit/stylelint-config",
+      "target": "./src/stylelint-config.js",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/stylelint-config"
+    },
     "empty-results-block": {
       "import": "@aziontech/webkit/empty-results-block",
       "target": "./src/components/empty-results-block/empty-results-block.vue",
