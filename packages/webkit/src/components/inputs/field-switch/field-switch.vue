@@ -2,6 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import Label from '../label/label.vue'
   import Switch from '../switch/switch.vue'
 
   defineOptions({
@@ -20,6 +21,8 @@
     description?: string
     /** Helper badge text shown when disabled. */
     helperText?: string
+    /** Adds the Required tag to the Label and sets aria-required on the switch. */
+    required?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -27,7 +30,8 @@
     disabled: false,
     label: '',
     description: '',
-    helperText: ''
+    helperText: '',
+    required: false
   })
 
   const emit = defineEmits<{
@@ -60,17 +64,18 @@
 </script>
 
 <template>
-  <label
-    :for="generatedId"
+  <div
     :class="rootClasses"
     :data-testid="testId"
     :data-disabled="disabled || null"
+    :data-required="required || null"
   >
     <Switch
       :id="generatedId"
       v-model:isToggled="model"
       :disabled="disabled"
       :aria-disabled="disabled || undefined"
+      :aria-required="required || undefined"
       :class="disabled ? 'opacity-50' : ''"
       :data-testid="`${testId}__control`"
     />
@@ -83,13 +88,13 @@
         :data-disabled="disabled || null"
         :data-testid="`${testId}__texts`"
       >
-        <span
+        <Label
           v-if="label"
-          class="text-label-md text-[var(--text-default)]"
+          :value="label"
+          :required="required"
+          :for="generatedId"
           :data-testid="`${testId}__label`"
-        >
-          {{ label }}
-        </span>
+        />
         <span
           v-if="description"
           class="text-body-xs text-[var(--text-muted)]"
@@ -111,5 +116,5 @@
         <span :data-testid="`${testId}__helper-text`">{{ helperText }}</span>
       </div>
     </div>
-  </label>
+  </div>
 </template>
