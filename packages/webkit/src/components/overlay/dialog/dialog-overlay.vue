@@ -21,7 +21,7 @@
   const isMobileOverlay = useOverlayMobile()
 
   const handleClick = () => {
-    if (!ctx?.closeable) return
+    if (!ctx?.closable) return
     ctx.close()
   }
 

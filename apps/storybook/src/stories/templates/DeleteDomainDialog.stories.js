@@ -162,7 +162,7 @@ export default {
       description: 'Initial open state when uncontrolled',
       table: { defaultValue: { summary: false }, category: 'Dialog' }
     },
-    closeable: {
+    closable: {
       control: 'boolean',
       description: 'When true, Escape and overlay click close the dialog',
       table: { defaultValue: { summary: true }, category: 'Dialog' }
@@ -236,7 +236,7 @@ export default {
   },
   args: {
     defaultOpen: false,
-    closeable: true,
+    closable: true,
     size: 'medium',
     triggerLabel: 'Delete domain',
     title: 'Delete Domain',

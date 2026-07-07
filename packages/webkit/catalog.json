@@ -7442,7 +7442,7 @@
           "doc": "Initial open state when uncontrolled."
         },
         {
-          "name": "closeable",
+          "name": "closable",
           "type": "boolean",
           "default": "undefined",
           "required": "no",
@@ -7571,7 +7571,7 @@
           "doc": "Initial open state when uncontrolled."
         },
         {
-          "name": "closeable",
+          "name": "closable",
           "type": "boolean",
           "default": "undefined",
           "required": "no",
@@ -7781,7 +7781,7 @@
           "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`."
         },
         {
-          "name": "dismissable",
+          "name": "closable",
           "type": "boolean",
           "default": "true",
           "required": "no",
@@ -7850,7 +7850,7 @@
           "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`."
         },
         {
-          "name": "dismissable",
+          "name": "closable",
           "type": "boolean",
           "default": "true",
           "required": "no",

@@ -20,7 +20,7 @@
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** When true, overlay click and Escape close the drawer. */
-      closeable?: boolean
+      closable?: boolean
       /** Edge the drawer panel slides from. */
       side?: DrawerSide
       /** Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. */
@@ -29,7 +29,7 @@
     {
       open: undefined,
       defaultOpen: false,
-      closeable: true,
+      closable: true,
       side: 'right',
       size: 'medium'
     }
@@ -63,14 +63,14 @@
   }
 
   const closeDrawer = () => {
-    if (!props.closeable) return
+    if (!props.closable) return
     isOpen.set(false)
   }
 
   provide(DrawerInjectionKey, {
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
-    closeable: props.closeable,
+    closable: props.closable,
     size: toRef(props, 'size'),
     open: openDrawer,
     close: closeDrawer,

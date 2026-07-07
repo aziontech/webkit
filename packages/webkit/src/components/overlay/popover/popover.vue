@@ -38,7 +38,7 @@
       /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
       width?: 'small' | 'medium' | 'large'
       /** Light-dismiss: when true, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set false to keep it open until the trigger or `PopoverClose` closes it. */
-      dismissable?: boolean
+      closable?: boolean
     }>(),
     {
       open: undefined,
@@ -46,7 +46,7 @@
       offset: 4,
       disabled: false,
       width: undefined,
-      dismissable: true
+      closable: true
     }
   )
 
@@ -123,7 +123,7 @@
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
     if (!isOpenState.value) return
-    if (!props.dismissable) return
+    if (!props.closable) return
     const target = event.target as globalThis.Node | null
     if (!target) return
     if (triggerRef.value?.contains(target)) return
@@ -133,7 +133,7 @@
 
   function onPanelKeydown(event: globalThis.KeyboardEvent) {
     if (event.key === 'Escape') {
-      if (!props.dismissable) return
+      if (!props.closable) return
       event.preventDefault()
       setOpen(false)
       focusTrigger()
@@ -142,7 +142,7 @@
 
   // Non-modal: moving focus out of the trigger + panel closes the popover.
   function onPanelFocusout(event: globalThis.FocusEvent) {
-    if (!props.dismissable) return
+    if (!props.closable) return
     const next = event.relatedTarget as globalThis.Node | null
     if (!next) return
     if (panelRef.value?.contains(next)) return

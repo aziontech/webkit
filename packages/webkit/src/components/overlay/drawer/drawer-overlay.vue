@@ -16,7 +16,7 @@
   const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
 
   const handleClick = () => {
-    if (!ctx?.closeable) return
+    if (!ctx?.closable) return
     ctx.close()
   }
 

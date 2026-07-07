@@ -15,7 +15,7 @@ export const DrawerMotionInjectionKey: InjectionKey<DrawerMotionContext> =
 export interface DrawerContext {
   testId: string
   isOpen: Readonly<Ref<boolean>>
-  closeable: boolean
+  closable: boolean
   size: Readonly<Ref<DrawerSize>>
   open: () => void
   close: () => void

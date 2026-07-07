@@ -108,7 +108,7 @@ const meta = {
         defaultValue: { summary: 'undefined' }
       }
     },
-    dismissable: {
+    closable: {
       control: 'boolean',
       description:
         'Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it.',
@@ -133,7 +133,7 @@ const meta = {
   args: {
     placement: 'bottom-start',
     offset: 4,
-    dismissable: true
+    closable: true
   }
 }
 
@@ -491,7 +491,7 @@ const filterComponents = {
   Button
 }
 
-const FILTER_TEMPLATE = `<Popover v-model:open="open" :dismissable="false" width="large">
+const FILTER_TEMPLATE = `<Popover v-model:open="open" :closable="false" width="large">
   <PopoverTrigger>
     <Button size="small" kind="secondary" icon="pi pi-filter" label="Filter" />
   </PopoverTrigger>
@@ -604,7 +604,7 @@ export const FilterExample = {
       controls: { disable: true },
       description: {
         story:
-          'A filter builder composed from `Popover` + `Select` + `InputText` + `Button` — a real usage, not a new variant. The header carries the title/description/close; the body is a `New Filter` row (field select, operator select, value input); the footer holds Cancel / Apply. It sets `:dismissable="false"` on purpose: the panel nests `Select` overlays (which teleport their own menus to `<body>`), so light-dismiss would treat picking an option as an outside-click; instead it is closed via the header close, Cancel, or Apply, driven by `v-model:open`.'
+          'A filter builder composed from `Popover` + `Select` + `InputText` + `Button` — a real usage, not a new variant. The header carries the title/description/close; the body is a `New Filter` row (field select, operator select, value input); the footer holds Cancel / Apply. It sets `:closable="false"` on purpose: the panel nests `Select` overlays (which teleport their own menus to `<body>`), so light-dismiss would treat picking an option as an outside-click; instead it is closed via the header close, Cancel, or Apply, driven by `v-model:open`.'
       },
       source: { code: toSfc(FILTER_SCRIPT, FILTER_TEMPLATE) }
     }
