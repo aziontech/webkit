@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 380c8b7121907e3ac77be9b9ed690401b7bd0b22654667bee8ac6085948b5381
+checksum: 2c12b4a292bd95c350dfaf552443fa7a776d67f13d7f68f8e5a72c59df5deb13
 created: 2026-05-22
 last_updated: 2026-05-29
 ---
@@ -13,6 +13,26 @@ last_updated: 2026-05-29
 ## Purpose
 
 Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/drawer/`.
+
+## When to use
+
+- A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.
+- The content is too large or persistent for a centered modal.
+
+## When NOT to use
+
+- It is a short, focused confirmation/task best centered and fully blocking → use `dialog`.
+- It is a small overlay anchored to a trigger → use a popover / `dropdown`.
+
+## Related
+
+- `dialog` — centered, blocking modal for focused tasks/confirmations.
+- `sidebar` — persistent (non-overlay) side navigation.
+
+## Best practices
+
+- Pick the edge (side) intentionally and keep it consistent across the app.
+- Trap focus while open and provide an obvious close affordance.
 
 ## Sub-components
 

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 3ca98cd0944855b2f1cf8fe288908bd459affc4c70df8fdacf7d29a1ea8ac0d1
+checksum: 891f453cc81d397c207a66c4109cc150947506124780ed275fb14268d7e6dae8
 created: 2026-05-22
 last_updated: 2026-05-28
 ---
@@ -16,6 +16,26 @@ last_updated: 2026-05-28
 ## Purpose
 
 Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.
+
+## When to use
+
+- Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
+- Show a status/category with severity color via `kind`.
+
+## When NOT to use
+
+- It is purely a count or one-glance status value → use `badge`.
+- The user can select or remove it (filters, multi-select values) → use `chip`.
+
+## Related
+
+- `badge` — denser count/short-value indicator with no icon affordance.
+- `chip` — interactive/removable token.
+
+## Best practices
+
+- Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.
+- Use `rounded` for the pill shape rather than a custom radius.
 
 ## Usage
 

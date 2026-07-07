@@ -1928,7 +1928,23 @@
           "notes": "Main content."
         }
       ],
-      "purpose": "Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set."
+      "purpose": "Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.",
+      "useWhen": [
+        "Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.",
+        "Show a status/category with severity color via `kind`."
+      ],
+      "avoidWhen": [
+        "It is purely a count or one-glance status value → use `badge`.",
+        "The user can select or remove it (filters, multi-select values) → use `chip`."
+      ],
+      "related": [
+        "badge` — denser count/short-value indicator with no icon affordance.",
+        "chip` — interactive/removable token."
+      ],
+      "bestPractices": [
+        "Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.",
+        "Use `rounded` for the pill shape rather than a custom radius."
+      ]
     },
     "avatar": {
       "import": "@aziontech/webkit/avatar",
@@ -2022,7 +2038,23 @@
           "notes": "Main content; falls back to `value` when empty."
         }
       ],
-      "purpose": "Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status value with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-value indicator with fully filled severity surfaces and no icon affordance."
+      "purpose": "Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status value with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-value indicator with fully filled severity surfaces and no icon affordance.",
+      "useWhen": [
+        "Surface a numeric count or a very short status value attached to another element (a bell with unread count, a status dot with a label).",
+        "Convey severity through `kind` (neutral / success / danger / …) with a fully filled surface."
+      ],
+      "avoidWhen": [
+        "The label is user-removable or selectable → use `chip`.",
+        "It is a labelled category/status with an optional leading icon or pill shape → use `tag`."
+      ],
+      "related": [
+        "tag` — labelled status/category chip with optional icon and pill shape; use when the label is descriptive, not a count.",
+        "chip` — interactive/removable token; use when the user can select or dismiss it."
+      ],
+      "bestPractices": [
+        "Keep the content to a count or a 1–2 word value; longer text belongs in `tag`.",
+        "Drive color from `kind`, never a hardcoded color or a raw palette class."
+      ]
     },
     "card-box": {
       "import": "@aziontech/webkit/card-box",
@@ -4100,7 +4132,24 @@
           "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
         }
       ],
-      "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / InputText)."
+      "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / InputText).",
+      "useWhen": [
+        "Capture a single line of free-form text (names, titles, search terms)."
+      ],
+      "avoidWhen": [
+        "The value spans multiple lines → use `textarea`.",
+        "The value is strictly numeric → use `input-number`.",
+        "The user must choose from a fixed set → use `select` / `multi-select`."
+      ],
+      "related": [
+        "textarea` — multi-line free text.",
+        "input-number` — numeric input with stepper semantics.",
+        "field-text` — input-text wrapped with label/help/error."
+      ],
+      "bestPractices": [
+        "Prefer the `field-*` wrapper when you need a label, helper text, or validation message.",
+        "Set an appropriate `type`/`inputmode` for the content (email, url, …)."
+      ]
     },
     "input-number": {
       "import": "@aziontech/webkit/input-number",
@@ -4213,7 +4262,21 @@
           "notes": "Content rendered after the input, before the spinner buttons (e.g. `%`)."
         }
       ],
-      "purpose": "Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input-text` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge."
+      "purpose": "Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input-text` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge.",
+      "useWhen": [
+        "Capture a strictly numeric value (counts, quantities, ports, prices)."
+      ],
+      "avoidWhen": [
+        "The value is free text → use `input-text`.",
+        "The user picks from a fixed set of numbers → use `select`."
+      ],
+      "related": [
+        "input-text` — free-text sibling with the same field API."
+      ],
+      "bestPractices": [
+        "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",
+        "Use `inputmode=\"numeric\"` semantics for mobile keyboards."
+      ]
     },
     "field-text": {
       "import": "@aziontech/webkit/field-text",
@@ -4702,7 +4765,23 @@
           "notes": "Chip content; falls back to `label` when empty."
         }
       ],
-      "purpose": "A Chip is a compact, self-contained token that labels a discrete value the user has applied — most often a removable filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator."
+      "purpose": "A Chip is a compact, self-contained token that labels a discrete value the user has applied — most often a removable filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator.",
+      "useWhen": [
+        "Represent a selectable or removable token — active filters, multi-select values, entered keywords.",
+        "The element is interactive (clickable / dismissible)."
+      ],
+      "avoidWhen": [
+        "It is a static count or one-glance status → use `badge`.",
+        "It is a static descriptive label/category with no interaction → use `tag`."
+      ],
+      "related": [
+        "badge` — static count/short-value indicator.",
+        "tag` — static labelled status/category chip."
+      ],
+      "bestPractices": [
+        "When removable, expose an accessible remove control with a clear label.",
+        "Group related chips in a `chip-group` rather than ad-hoc layout."
+      ]
     },
     "checkbox": {
       "import": "@aziontech/webkit/checkbox",
@@ -5373,7 +5452,21 @@
           "notes": "Optional trailing icon, rendered at top-right. Suppressed when `disabled` (the lock icon takes over)."
         }
       ],
-      "purpose": "Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px and a vertical resize handle. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough."
+      "purpose": "Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px and a vertical resize handle. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
+      "useWhen": [
+        "Capture multiple lines of free-form text (descriptions, comments, messages)."
+      ],
+      "avoidWhen": [
+        "The value is a single line → use `input-text`.",
+        "The value is strictly numeric → use `input-number`."
+      ],
+      "related": [
+        "input-text` — single-line sibling with the same field API."
+      ],
+      "bestPractices": [
+        "Give it a sensible default size; avoid auto-growing beyond the viewport.",
+        "Use the `field-*` wrapper for label/help/error."
+      ]
     },
     "field-textarea": {
       "import": "@aziontech/webkit/field-textarea",
@@ -6683,7 +6776,23 @@
           "notes": "—"
         }
       ],
-      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`."
+      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`.",
+      "useWhen": [
+        "A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.",
+        "The interaction must be completed or dismissed before returning to the page."
+      ],
+      "avoidWhen": [
+        "The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.",
+        "It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown`."
+      ],
+      "related": [
+        "drawer` — edge-anchored panel for secondary tasks / long content.",
+        "dropdown` — trigger-anchored menu for actions/options."
+      ],
+      "bestPractices": [
+        "Trap focus, restore it on close, and close on Escape and overlay click.",
+        "One clear primary action; keep the body scannable."
+      ]
     },
     "dialog-close": {
       "import": "@aziontech/webkit/dialog-close",
@@ -6803,7 +6912,23 @@
           "notes": "—"
         }
       ],
-      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/drawer/`."
+      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/drawer/`.",
+      "useWhen": [
+        "A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.",
+        "The content is too large or persistent for a centered modal."
+      ],
+      "avoidWhen": [
+        "It is a short, focused confirmation/task best centered and fully blocking → use `dialog`.",
+        "It is a small overlay anchored to a trigger → use a popover / `dropdown`."
+      ],
+      "related": [
+        "dialog` — centered, blocking modal for focused tasks/confirmations.",
+        "sidebar` — persistent (non-overlay) side navigation."
+      ],
+      "bestPractices": [
+        "Pick the edge (side) intentionally and keep it consistent across the app.",
+        "Trap focus while open and provide an obvious close affordance."
+      ]
     },
     "drawer-close": {
       "import": "@aziontech/webkit/drawer-close",

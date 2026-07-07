@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 699e929fbb5555adc5a66129fcda688db4c754488189c6194e54376f0afd5b38
+checksum: e083abf2055f1f2edcae3776e76dfae466453a5f1a011485eda7f083106a31f2
 created: 2026-06-23
 last_updated: 2026-06-23
 ---
@@ -17,6 +17,24 @@ last_updated: 2026-06-23
 ## Purpose
 
 Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px and a vertical resize handle. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+
+## When to use
+
+- Capture multiple lines of free-form text (descriptions, comments, messages).
+
+## When NOT to use
+
+- The value is a single line → use `input-text`.
+- The value is strictly numeric → use `input-number`.
+
+## Related
+
+- `input-text` — single-line sibling with the same field API.
+
+## Best practices
+
+- Give it a sensible default size; avoid auto-growing beyond the viewport.
+- Use the `field-*` wrapper for label/help/error.
 
 ## Usage
 

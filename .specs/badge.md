@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: 7adf7ca0da71f4a1ccb5fa254306fbee7d8813ff0b8ec60a1168a8d9c9a1e719
+checksum: d37492bd1dbec8cc3c561dc9a2f23db9a3b8e7d3b16ceed1233adbd53b3dfda3
 created: 2026-06-23
 last_updated: 2026-06-25
 ---
@@ -16,6 +16,26 @@ last_updated: 2026-06-25
 ## Purpose
 
 Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status value with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-value indicator with fully filled severity surfaces and no icon affordance.
+
+## When to use
+
+- Surface a numeric count or a very short status value attached to another element (a bell with unread count, a status dot with a label).
+- Convey severity through `kind` (neutral / success / danger / …) with a fully filled surface.
+
+## When NOT to use
+
+- The label is user-removable or selectable → use `chip`.
+- It is a labelled category/status with an optional leading icon or pill shape → use `tag`.
+
+## Related
+
+- `tag` — labelled status/category chip with optional icon and pill shape; use when the label is descriptive, not a count.
+- `chip` — interactive/removable token; use when the user can select or dismiss it.
+
+## Best practices
+
+- Keep the content to a count or a 1–2 word value; longer text belongs in `tag`.
+- Drive color from `kind`, never a hardcoded color or a raw palette class.
 
 ## Usage
 

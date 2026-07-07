@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 1f438ae1419577fcce4f1c3fa9703c8f067a73d7c673cfc9129738c830a70ec2
+checksum: cd3575e8e651651c7cfb19d6aa4769978914f162122113848e2a64bbb3075268
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -16,6 +16,26 @@ last_updated: 2026-05-22
 ## Purpose
 
 Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`.
+
+## When to use
+
+- A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.
+- The interaction must be completed or dismissed before returning to the page.
+
+## When NOT to use
+
+- The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
+- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown`.
+
+## Related
+
+- `drawer` — edge-anchored panel for secondary tasks / long content.
+- `dropdown` — trigger-anchored menu for actions/options.
+
+## Best practices
+
+- Trap focus, restore it on close, and close on Escape and overlay click.
+- One clear primary action; keep the body scannable.
 
 ## Sub-components
 
