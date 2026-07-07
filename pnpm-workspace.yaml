@@ -3,6 +3,9 @@ packages:
 
 allowBuilds:
   '@parcel/watcher': false
+  # Native binary ships via the platform optionalDep (@swc/core-<platform>);
+  # the build script is only a download fallback — not needed.
+  '@swc/core': false
   es5-ext: false
   esbuild: false
   ttf2woff2: false

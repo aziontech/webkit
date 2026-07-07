@@ -1,6 +1,6 @@
 import Button from '@aziontech/webkit/button'
 import NavigationMenu from '@aziontech/webkit/navigation-menu'
-import { expect, userEvent, within } from '@storybook/test'
+import { expect, userEvent, waitFor, within } from '@storybook/test'
 
 const navigationMenuComponents = {
   NavigationMenu,
@@ -316,7 +316,6 @@ export const Accessibility = {
     components: navigationMenuComponents,
     template: `
       <NavigationMenu
-        default-value="one"
         aria-label="Accessibility demo"
         data-testid="navigation-menu-a11y"
         class="flex flex-col gap-[var(--spacing-4)] p-[var(--spacing-4)]"
@@ -354,7 +353,13 @@ export const Accessibility = {
     await userEvent.click(triggers[0])
     await expect(triggers[0]).toHaveAttribute('aria-expanded', 'true')
 
+    // Synthetic (untrusted) clicks don't move native focus in a real browser,
+    // and Escape is handled on the trigger — focus it first, exactly where a
+    // keyboard user would be after activating the trigger.
+    triggers[0].focus()
     await userEvent.keyboard('{Escape}')
-    await expect(triggers[0]).toHaveAttribute('aria-expanded', 'false')
+    // Closing settles through the exit transition (use-transition-status),
+    // so the aria flip is async — poll instead of asserting the same tick.
+    await waitFor(() => expect(triggers[0]).toHaveAttribute('aria-expanded', 'false'))
   }
 }

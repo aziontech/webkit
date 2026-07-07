@@ -1,0 +1,93 @@
+name: Visual Regression @ Storybook
+
+# Styled layer of the test architecture: the Vitest browser suite
+# (package-webkit-test.yml) owns behavior/structure/ARIA on an unstyled DOM;
+# this workflow owns pixels — every story is screenshotted via
+# @storybook/test-runner and compared against the committed linux baselines
+# in apps/storybook/.storybook/test-visual/__image_snapshots__/linux/.
+#
+# Baseline lifecycle: baselines are platform-specific, so ONLY this workflow
+# (or a linux container) may generate them. To bootstrap or intentionally
+# update: run this workflow manually with update_baselines=true, download the
+# "visual-baselines-linux" artifact and commit its contents.
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'packages/webkit/**'
+      - 'packages/theme/**'
+      - 'packages/icons/**'
+      - 'apps/storybook/**'
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: 'Regenerate linux baselines and upload them as an artifact (commit manually)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: Storybook visual tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/storybook
+
+      - name: Build Storybook
+        run: pnpm run storybook:build
+
+      - name: Run visual tests
+        if: ${{ github.event.inputs.update_baselines != 'true' }}
+        run: pnpm --filter storybook run test:visual:ci
+
+      - name: Regenerate baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        run: pnpm --filter storybook run test:visual:update
+
+      - name: Upload regenerated baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines-linux
+          path: apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
+          retention-days: 7
+
+      - name: Upload diff output on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-output
+          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          retention-days: 7
+          if-no-files-found: ignore

@@ -1,5 +1,5 @@
 {
-  "name": "@aziontech/webkit-design-system",
+  "name": "@aziontech/design-system",
   "author": "@aziontech",
   "private": true,
   "type": "module",
@@ -21,6 +21,8 @@
     "storybook:dev": "pnpm --filter icons run build && pnpm --filter storybook run dev",
     "storybook:build": "pnpm --filter icons run build && pnpm --filter storybook run build",
     "storybook:preview": "pnpm --filter storybook run preview",
+    "storybook:test:visual": "pnpm run storybook:build && pnpm --filter storybook run test:visual:static",
+    "storybook:test:visual:update": "pnpm run storybook:build && pnpm --filter storybook run test:visual:update",
     "theme:build:tokens": "pnpm --filter theme run build:tokens",
     "theme:build:dts": "pnpm --filter theme run build:dts",
     "theme:clean:dts": "pnpm --filter theme run clean:dts",
@@ -49,7 +51,6 @@
     "vue": "^3.5.29"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^5.0.1",
     "@commitlint/cli": "^21.0.2",
     "@eslint/js": "^9.39.3",
     "@rushstack/eslint-patch": "^1.16.1",
