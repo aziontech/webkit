@@ -134,10 +134,6 @@ const meta = {
       action: 'update:value',
       table: { category: 'events' }
     },
-    'onValue-change': {
-      action: 'value-change',
-      table: { category: 'events' }
-    },
     'onOpen-change-complete': {
       action: 'open-change-complete',
       table: { category: 'events' }

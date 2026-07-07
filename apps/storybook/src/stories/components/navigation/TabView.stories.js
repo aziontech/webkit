@@ -51,10 +51,6 @@ const meta = {
       action: 'update:value',
       table: { category: 'events' }
     },
-    'onValue-change': {
-      action: 'value-change',
-      table: { category: 'events' }
-    },
     default: {
       control: false,
       description: 'Tab list, content region, and panels.',

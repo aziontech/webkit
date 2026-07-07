@@ -2751,11 +2751,6 @@
           "notes": "v-model:value."
         },
         {
-          "name": "value-change",
-          "payload": "string",
-          "notes": "Fires when the active tab changes."
-        },
-        {
           "name": "copy",
           "payload": "string",
           "notes": "Fires after the active tab code is copied to the clipboard."
@@ -3554,11 +3549,6 @@
           "name": "update:pageSize",
           "payload": "[pageSize: number]",
           "notes": "Rows-per-page changed via the internal selector. Supports `v-model:page-size`."
-        },
-        {
-          "name": "page-change",
-          "payload": "[page: number]",
-          "notes": "Convenience action event fired alongside `update:page` whenever the page changes."
         }
       ],
       "slots": [
@@ -3578,7 +3568,7 @@
           "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
         }
       ],
-      "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component."
+      "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component."
     },
     "paginator-root": {
       "import": "@aziontech/webkit/paginator-root",
@@ -3643,11 +3633,6 @@
           "name": "update:pageSize",
           "payload": "[pageSize: number]",
           "notes": "Rows-per-page changed via the internal selector. Supports `v-model:page-size`."
-        },
-        {
-          "name": "page-change",
-          "payload": "[page: number]",
-          "notes": "Convenience action event fired alongside `update:page` whenever the page changes."
         }
       ],
       "slots": [
@@ -3667,7 +3652,7 @@
           "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
         }
       ],
-      "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component."
+      "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component."
     },
     "pagination-button": {
       "import": "@aziontech/webkit/pagination-button",
@@ -7277,11 +7262,6 @@
           "name": "update:value",
           "payload": "value: TabViewValue | null",
           "notes": "v-model:value."
-        },
-        {
-          "name": "value-change",
-          "payload": "value: TabViewValue | null",
-          "notes": "—"
         }
       ],
       "slots": [
@@ -7308,11 +7288,6 @@
           "name": "update:value",
           "payload": "value: NavigationMenuValue, eventDetails: unknown",
           "notes": "v-model:value."
-        },
-        {
-          "name": "value-change",
-          "payload": "value: NavigationMenuValue, eventDetails: unknown",
-          "notes": "—"
         },
         {
           "name": "open-change-complete",

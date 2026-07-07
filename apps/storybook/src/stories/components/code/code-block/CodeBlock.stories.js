@@ -195,10 +195,6 @@ const meta = {
       action: 'update:value',
       table: { category: 'events' }
     },
-    onValueChange: {
-      action: 'value-change',
-      table: { category: 'events' }
-    },
     onCopy: {
       action: 'copy',
       table: { category: 'events' }
@@ -224,7 +220,6 @@ const Template = (args) => ({
         :copy-aria-label="args.copyAriaLabel"
         :animate-lines="args.animateLines"
         @copy="args.onCopy"
-        @value-change="args.onValueChange"
       />
     </div>
   `

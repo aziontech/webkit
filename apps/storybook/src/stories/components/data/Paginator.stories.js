@@ -59,7 +59,6 @@ const DATA_DRIVEN_SOURCE = `<Paginator
   :total="200"
   :page-size-options="[10, 25, 50, 100]"
   :sibling-count="1"
-  @page-change="loadPage"
 />`
 
 /** @type {import('@storybook/vue3').Meta<typeof Paginator>} */
@@ -152,11 +151,6 @@ const meta = {
       action: 'update:pageSize',
       description: 'Rows-per-page changed via the internal selector. Supports v-model:page-size.',
       table: { type: { summary: '(pageSize: number) => void' }, category: 'events' }
-    },
-    'onPage-change': {
-      action: 'page-change',
-      description: 'Fired alongside update:page whenever the page changes.',
-      table: { type: { summary: '(page: number) => void' }, category: 'events' }
     },
     info: {
       control: false,
@@ -288,7 +282,7 @@ export const DataDriven = {
       source: { code: DATA_DRIVEN_SOURCE },
       description: {
         story:
-          'Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Paginator renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change`.'
+          'Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Paginator renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize`.'
       }
     }
   }

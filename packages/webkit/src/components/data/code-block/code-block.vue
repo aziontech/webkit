@@ -80,7 +80,6 @@
 
   const emit = defineEmits<{
     'update:value': [value: string]
-    'value-change': [value: string]
     copy: [code: string]
   }>()
 
@@ -120,7 +119,6 @@
 
       valueModel.value = next
       emit('update:value', next)
-      emit('value-change', next)
     }
   })
 

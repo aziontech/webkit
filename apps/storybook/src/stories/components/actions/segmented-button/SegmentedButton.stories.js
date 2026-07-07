@@ -66,11 +66,6 @@ const meta = {
       action: 'update:modelValue',
       description: 'Emitted when the selected value changes.',
       table: { category: 'events', type: { summary: 'string' } }
-    },
-    onChange: {
-      action: 'change',
-      description: 'Emitted after the selected value changes.',
-      table: { category: 'events', type: { summary: 'string' } }
     }
   },
   args: {
@@ -85,7 +80,7 @@ export default meta
 const Template = (args) => ({
   components: { SegmentedButton },
   setup() {
-    const { onChange, 'onUpdate:modelValue': onUpdateModelValue, modelValue, ...props } = args
+    const { 'onUpdate:modelValue': onUpdateModelValue, modelValue, ...props } = args
     const value = ref(modelValue)
 
     watch(
@@ -95,10 +90,10 @@ const Template = (args) => ({
       }
     )
 
-    return { props, value, onChange, onUpdateModelValue }
+    return { props, value, onUpdateModelValue }
   },
   template:
-    '<SegmentedButton v-bind="props" v-model="value" @change="onChange" @update:model-value="onUpdateModelValue" />'
+    '<SegmentedButton v-bind="props" v-model="value" @update:model-value="onUpdateModelValue" />'
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof SegmentedButton>} */
