@@ -19,7 +19,6 @@
 import { getStoryContext, waitForPageReady } from '@storybook/test-runner'
 import { toMatchImageSnapshot } from 'jest-image-snapshot'
 
-const VISUAL_TEST_FREEZE_ID = 'visual-test-freeze'
 const TEST_VISUAL_DIR = `${__dirname}/test-visual`
 const DIFF_DIR = `${TEST_VISUAL_DIR}/__diff_output__`
 const SNAPSHOT_DIR = `${TEST_VISUAL_DIR}/__image_snapshots__/${process.platform}`
@@ -44,10 +43,10 @@ module.exports = {
     // 1ms keeps the events firing while making motion invisible to the
     // screenshot. Idempotent: story switches reuse the worker page.
     await page.evaluate(() => {
-      if (document.getElementById(VISUAL_TEST_FREEZE_ID)) return
+      if (document.getElementById('visual-test-freeze')) return
 
       const style = document.createElement('style')
-      style.id = VISUAL_TEST_FREEZE_ID
+      style.id = 'visual-test-freeze'
       style.textContent = `*, *::before, *::after {
         animation-duration: 1ms !important;
         animation-delay: 0ms !important;
