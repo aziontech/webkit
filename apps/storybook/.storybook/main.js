@@ -21,11 +21,6 @@ const config = {
     disableTelemetry: true
   },
   refs: {
-    // 'webkit-v3': {
-    //   title: 'Webkit V3',
-    //   url: 'https://webkit.azion.app/',
-    //   expanded: true
-    // }
   },
   viteFinal: async (config) => {
     // @vitejs/plugin-vue compiles the monorepo SFCs under packages/webkit (the framework only
@@ -49,8 +44,7 @@ const config = {
     // workspace package '@aziontech/webkit.dev/*' so no story file needs to change.
     config.resolve = config.resolve || {}
     config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      // '@aziontech/webkit': '@aziontech/webkit.dev'
+      ...(config.resolve.alias || {})
     }
 
     // Enable dependency pre-bundling for faster rebuilds
