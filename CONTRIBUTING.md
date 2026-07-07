@@ -59,6 +59,26 @@ pnpm governance             # lint + type-check + format:check + security:audit
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
 
+## Testing
+
+Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`.claude/rules/testing.md`](./.claude/rules/testing.md).
+
+```bash
+pnpm webkit:test                              # whole suite (headless Chromium)
+pnpm --filter @aziontech/webkit test:ui       # interactive UI (headed browser)
+pnpm --filter @aziontech/webkit test:coverage # v8 coverage report
+```
+
+The first run installs the browser: `pnpm --filter @aziontech/webkit exec playwright install chromium`.
+
+If pnpm aborts with a deps-verify error (common when `node_modules` is symlinked, e.g. a git worktree), prefix the command:
+
+```bash
+PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm webkit:test
+```
+
+Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm pack:check`.
+
 ## Commit convention
 
 We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-release` parses commit messages to compute version bumps and changelogs, so the scope and type matter.

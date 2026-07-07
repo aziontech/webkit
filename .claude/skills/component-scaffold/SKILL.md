@@ -11,10 +11,10 @@ last_updated: 2026-05-27
 
 Convert an approved `.specs/<name>.md` into:
 
-- `packages/webkit/src/components/webkit/<category>/<name>/<name>.vue` (TypeScript, JSDoc on every public prop).
+- `packages/webkit/src/components/<category>/<name>/<name>.vue` (TypeScript, JSDoc on every public prop).
 - (Composition only) **One folder per sub-component** under the root component directory — `<name>/<name>-<part>/<name>-<part>.vue`. The full file name is preserved (`dialog-trigger.vue`, not `index.vue`) so error traces and editor breadcrumbs are unambiguous.
-- (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts` at the root level (shared by every sub-component).
-- (Composition only) `packages/webkit/src/components/webkit/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
+- (Composition only) `packages/webkit/src/components/<category>/<name>/injection-key.ts` at the root level (shared by every sub-component).
+- (Composition only) `packages/webkit/src/components/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 - New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./overlay/dialog-trigger`) regardless of the folder nesting. For composition, the **root** export points at `index.ts` (the compound), **plus** a standalone `./<name>-root` export pointing at the root `.vue` for tree-shaking — see [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 
 Nothing else. The story, the Code Connect file, and the validation pass live in other skills.
@@ -22,7 +22,7 @@ Nothing else. The story, the Code Connect file, and the validation pass live in 
 **Folder layout — composition pattern (canonical, one folder per part):**
 
 ```
-packages/webkit/src/components/webkit/overlay/dialog/
+packages/webkit/src/components/overlay/dialog/
 ├── dialog.vue                          # root
 ├── index.ts                            # compound (Object.assign → Dialog.Trigger, ...); vue-tsc emits index.d.ts at publish
 ├── injection-key.ts                    # shared InjectionKey<DialogContext>
@@ -45,7 +45,7 @@ packages/webkit/src/components/webkit/overlay/dialog/
 **Folder layout — monolithic (unchanged):**
 
 ```
-packages/webkit/src/components/webkit/actions/button/
+packages/webkit/src/components/actions/button/
 └── button.vue
 ```
 
@@ -61,9 +61,9 @@ packages/webkit/src/components/webkit/actions/button/
 - The Constraints block (verbatim).
 - [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/rules/compound-api.md`](../../rules/compound-api.md) (composition only), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
 - The canonical files for cross-reference (read-only):
-  - `packages/webkit/src/components/webkit/actions/button/button.vue`
-  - `packages/webkit/src/components/webkit/actions/icon-button/icon-button.vue`
-  - `packages/webkit/src/components/webkit/content/card-pricing/card-pricing.vue`
+  - `packages/webkit/src/components/actions/button/button.vue`
+  - `packages/webkit/src/components/actions/icon-button/icon-button.vue`
+  - `packages/webkit/src/components/content/card-pricing/card-pricing.vue`
 
 ## Workflow
 
@@ -156,7 +156,7 @@ packages/webkit/src/components/webkit/actions/button/
 
 3. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
 
-   - `packages/webkit/src/components/webkit/<category>/<name>/<name>-<part>/<name>-<part>.vue`
+   - `packages/webkit/src/components/<category>/<name>/<name>-<part>/<name>-<part>.vue`
 
    Inside the `.vue`:
    - `defineOptions({ name: '<PascalRoot><PascalPart>', inheritAttrs: false })`.
@@ -167,7 +167,7 @@ packages/webkit/src/components/webkit/actions/button/
 4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
 
    ```ts
-   // packages/webkit/src/components/webkit/<category>/<name>/injection-key.ts
+   // packages/webkit/src/components/<category>/<name>/injection-key.ts
    import type { InjectionKey, Ref } from 'vue'
 
    export interface DialogContext {
@@ -202,26 +202,63 @@ packages/webkit/src/components/webkit/actions/button/
    The **composition root** points at `index.ts` (the compound); monolithic roots point at `<name>.vue`. Composition also gets a **standalone `./<name>-root`** key pointing straight at the root `.vue` — the tree-shaking path, since the compound `index.ts` retains every sub-component through `Object.assign` (see [`.claude/rules/compound-api.md`](../../rules/compound-api.md)):
 
    ```json
-   "./<name>": "./src/components/webkit/<category>/<name>/index.ts",
-   "./<name>-root": "./src/components/webkit/<category>/<name>/<name>.vue",
-   "./<name>-trigger": "./src/components/webkit/<category>/<name>/<name>-trigger/<name>-trigger.vue",
-   "./<name>-content": "./src/components/webkit/<category>/<name>/<name>-content/<name>-content.vue"
+   "./<name>": "./src/components/<category>/<name>/index.ts",
+   "./<name>-root": "./src/components/<category>/<name>/<name>.vue",
+   "./<name>-trigger": "./src/components/<category>/<name>/<name>-trigger/<name>-trigger.vue",
+   "./<name>-content": "./src/components/<category>/<name>/<name>-content/<name>-content.vue"
    ```
 
    Concrete example for a new `popover` composition component:
 
    ```json
-   "./overlay/popover": "./src/components/webkit/overlay/popover/index.ts",
-   "./overlay/popover-root": "./src/components/webkit/overlay/popover/popover.vue",
-   "./overlay/popover-trigger": "./src/components/webkit/overlay/popover/popover-trigger/popover-trigger.vue",
-   "./overlay/popover-content": "./src/components/webkit/overlay/popover/popover-content/popover-content.vue"
+   "./overlay/popover": "./src/components/overlay/popover/index.ts",
+   "./overlay/popover-root": "./src/components/overlay/popover/popover.vue",
+   "./overlay/popover-trigger": "./src/components/overlay/popover/popover-trigger/popover-trigger.vue",
+   "./overlay/popover-content": "./src/components/overlay/popover/popover-content/popover-content.vue"
    ```
 
-6. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
+6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly (**not** `composeStories`) because the story is written later by [`storybook-write`](../storybook-write/SKILL.md); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, and `composeStories`) per [`.claude/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) surfaces a reminder if this file is missing.
+
+   ```ts
+   // packages/webkit/src/components/<category>/<name>/<name>.test.ts
+   import { render } from '@testing-library/vue'
+   import { describe, expect, it } from 'vitest'
+
+   import { expectNoA11yViolations } from '../../../test/axe'
+   import <PascalName> from './<name>.vue'
+
+   // Starter suite emitted by the scaffold — a FLOOR, not the ceiling. Expand per
+   // .claude/rules/testing.md: reuse the Storybook story via composeStories, then
+   // assert every event with its payload, disabled/loading suppression, v-model
+   // round-trip, ARIA / data-state, and keyboard interaction.
+   describe('<PascalName>', () => {
+     it('renders and exposes the fallback data-testid', () => {
+       const { getByTestId } = render(<PascalName>, { props: { /* required spec props */ } })
+       expect(getByTestId('<category>-<name>')).toBeTruthy()
+     })
+
+     it('lets a consumer override data-testid', () => {
+       const { getByTestId } = render(<PascalName>, {
+         props: { /* required spec props */ },
+         attrs: { 'data-testid': 'custom-testid' }
+       })
+       expect(getByTestId('custom-testid')).toBeTruthy()
+     })
+
+     it('has no axe violations on the default render', async () => {
+       const { container } = render(<PascalName>, { props: { /* required spec props */ } })
+       await expectNoA11yViolations(container)
+     })
+   })
+   ```
+
+   For a **composition** root, expand the starter to render a realistic composed tree (root + its sub-components) instead of the bare root, since the root alone may render empty. Still a floor — the author fills events / `provide`-`inject` / `v-model`.
+
+7. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
 
 ## Outputs
 
-- The files listed above. No prose, no commentary, no edits to other paths.
+- The files listed above, **plus** the starter `<name>.test.ts` (step 6). No prose, no commentary, no edits to other paths.
 
 ## Rules
 
@@ -273,4 +310,5 @@ packages/webkit/src/components/webkit/actions/button/
 - [ ] No HEX / Tailwind palette / raw typography / `any` / `@ts-ignore`.
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
 - [ ] `data-testid` fallback equals `'<category>-<name>'` on the root and `'<category>-<name>__<part>'` on each sub-component.
+- [ ] Starter `<name>.test.ts` written next to the root `.vue` (render + `data-testid` fallback + consumer override + axe; required props filled from the spec) — satisfies `enforce-test-exists.mjs`.
 - [ ] No story file written, no `.figma.ts` written, no pnpm command run.

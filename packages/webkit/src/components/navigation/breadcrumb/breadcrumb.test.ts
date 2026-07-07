@@ -1,7 +1,7 @@
 import { userEvent } from '@storybook/test'
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/Breadcrumb.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -30,6 +30,14 @@ const TRAIL = [
   { label: 'Projects', href: '/projects' }, // middle -> overflow menu option
   { label: 'Settings' } // last -> current (span), current defaulted when omitted
 ]
+
+// Breadcrumb items are real <a href> links; in a real browser a click (or Enter
+// on a focused link) performs a full navigation that tears down the test iframe.
+// Prevent the default navigation at the document (capture) so the component's own
+// @click/@keydown handlers still run and emit `navigate`.
+const preventNavigation = (event: Event) => event.preventDefault()
+beforeEach(() => document.addEventListener('click', preventNavigation, true))
+afterEach(() => document.removeEventListener('click', preventNavigation, true))
 
 describe('Breadcrumb (composition, data-driven root)', () => {
   describe('compound API', () => {

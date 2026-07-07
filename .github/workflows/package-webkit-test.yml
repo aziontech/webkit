@@ -1,17 +1,16 @@
-name: Tests
+name: Tests @aziontech/webkit
 
 on:
   pull_request:
-    branches: [main, dev]
+    branches: [dev]
   push:
-    branches: [main, dev]
+    branches: [dev]
 
 permissions:
   contents: read
   pull-requests: read
 
 jobs:
-  # Short-circuit when webkit sources did not change.
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
@@ -53,15 +52,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
         working-directory: packages/webkit
 
       - name: Run tests (shard ${{ matrix.shard }})
-        run: pnpm exec vitest run --shard=${{ matrix.shard }}/4 --retry=2
+        run: pnpm exec vitest run --shard=${{ matrix.shard }}/4
         working-directory: packages/webkit
 
-  # Gate: passes when every shard succeeded or the suite was cleanly skipped.
   test-check:
     name: Tests Gate
     runs-on: ubuntu-latest
