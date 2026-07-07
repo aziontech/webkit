@@ -1,6 +1,6 @@
 import StatusIndicator from '@aziontech/webkit/status-indicator'
 
-const statuses = ['positive', 'info', 'neutral', 'warning', 'alt', 'danger']
+const statuses = ['success', 'info', 'neutral', 'warning', 'alt', 'danger']
 
 /** @type {import('@storybook/vue3').Meta<typeof StatusIndicator>} */
 const meta = {
@@ -33,7 +33,7 @@ const meta = {
           '</script>',
           '',
           '<template>',
-          '  <StatusIndicator status="positive" label="Status" />',
+          '  <StatusIndicator severity="success" label="Status" />',
           '</template>',
           '```'
         ].join('\n')
@@ -41,12 +41,12 @@ const meta = {
     }
   },
   argTypes: {
-    status: {
+    severity: {
       control: 'select',
       options: statuses,
       description: 'status.',
       table: {
-        defaultValue: { summary: 'positive' }
+        defaultValue: { summary: 'success' }
       }
     },
     label: {
@@ -65,7 +65,7 @@ const meta = {
     }
   },
   args: {
-    status: 'positive',
+    severity: 'success',
     label: 'Status',
     loading: false
   }
@@ -85,7 +85,7 @@ const Template = (args) => ({
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default positive status with label.' } }
+    docs: { description: { story: 'Default success status with label.' } }
   }
 }
 
@@ -101,7 +101,7 @@ export const Status = {
         <StatusIndicator
           v-for="status in statuses"
           :key="status"
-          :status="status"
+          :severity="status"
           label="Status"
         />
       </div>
@@ -115,7 +115,7 @@ export const Status = {
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
 export const Loading = {
   args: {
-    status: 'positive',
+    severity: 'success',
     label: 'Status',
     loading: true
   },

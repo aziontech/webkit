@@ -15,12 +15,12 @@
     /** Current sort direction shown by the glyph. */
     direction?: SortDirection
     /** Hides the button while keeping its layout slot. */
-    hidden?: boolean
+    visible?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     direction: 'none',
-    hidden: false
+    visible: true
   })
 
   const emit = defineEmits<{
@@ -60,7 +60,7 @@
     kind="transparent"
     size="small"
     :data-testid="testId"
-    :class="hidden ? 'invisible pointer-events-none' : undefined"
+    :class="!visible ? 'invisible pointer-events-none' : undefined"
     @click="handleClick"
   />
 </template>
