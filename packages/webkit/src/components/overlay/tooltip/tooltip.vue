@@ -76,7 +76,8 @@
     isOpen: isOpenRef,
     placement: placementRef,
     offset: 8,
-    autoPlacements: ['top', 'bottom', 'right', 'left']
+    autoPlacements: ['top', 'bottom', 'right', 'left'],
+    onDismiss: () => closeTooltip()
   })
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacement)

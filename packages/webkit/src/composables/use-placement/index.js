@@ -134,6 +134,7 @@ function pickBestPlacement(candidates, triggerRect, panelRect, viewport, offset,
  * @param {boolean} [options.flip] - When true, flips to the opposite side if the preferred one doesn't fit.
  * @param {Placement[]} [options.autoPlacements] - Candidates used when `placement === 'auto'`. Order is preference.
  * @param {number} [options.zIndex]
+ * @param {() => void} [options.onDismiss] - When provided, a scroll anywhere outside the panel dismisses it through this callback (the panel is anchored once and does not follow the page), while scrolls inside the panel are ignored. When omitted, a scroll repositions the panel instead. Resize always repositions.
  * @returns {{
  *   resolvedPlacement: import('vue').Ref<Placement>,
  *   panelStyle: import('vue').Ref<Record<string, string>>,
@@ -149,7 +150,8 @@ export function usePlacement({
   collisionPadding = 8,
   flip = true,
   autoPlacements,
-  zIndex = 1100
+  zIndex = 1100,
+  onDismiss
 }) {
   const initial = unref(placement)
   const initialResolved =
@@ -245,8 +247,24 @@ export function usePlacement({
     }
   }
 
-  function onScrollOrResize() {
+  function onResize() {
     if (!isOpen.value) return
+    updatePosition()
+  }
+
+  /**
+   * @param {Event} [event]
+   */
+  function onScroll(event) {
+    if (!isOpen.value) return
+    if (onDismiss) {
+      // The panel is anchored once and does not follow the page, so a scroll
+      // outside it dismisses it; a scroll inside the panel is left alone.
+      const target = /** @type {Node | null} */ (event?.target ?? null)
+      if (target && panelRef.value?.contains(target)) return
+      onDismiss()
+      return
+    }
     updatePosition()
   }
 
@@ -270,13 +288,15 @@ export function usePlacement({
   )
 
   onMounted(() => {
-    globalThis.window?.addEventListener('resize', onScrollOrResize)
-    globalThis.document?.addEventListener('scroll', onScrollOrResize, true)
+    globalThis.window?.addEventListener('resize', onResize)
+    // Capture phase: scroll does not bubble, so this also catches scrolls on any
+    // ancestor scroll container, not just the window.
+    globalThis.document?.addEventListener('scroll', onScroll, true)
   })
 
   onBeforeUnmount(() => {
-    globalThis.window?.removeEventListener('resize', onScrollOrResize)
-    globalThis.document?.removeEventListener('scroll', onScrollOrResize, true)
+    globalThis.window?.removeEventListener('resize', onResize)
+    globalThis.document?.removeEventListener('scroll', onScroll, true)
   })
 
   return { resolvedPlacement, panelStyle, updatePosition }

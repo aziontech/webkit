@@ -113,7 +113,8 @@
     isOpen: isOpenRef,
     placement: placementRef,
     offset: offsetRef,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
+    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+    onDismiss: () => setOpen(false)
   })
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as DropdownPlacement)
