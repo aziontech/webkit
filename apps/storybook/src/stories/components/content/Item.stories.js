@@ -104,7 +104,7 @@ const meta = {
         category: 'props'
       }
     },
-    mediaKind: {
+    kind: {
       control: 'select',
       options: ['default', 'icon', 'image'],
       description: 'ItemMedia region variant (icon frame, image frame).',
@@ -124,7 +124,7 @@ const meta = {
     kind: 'default',
     size: 'medium',
     asChild: false,
-    mediaKind: 'default'
+    kind: 'default'
   }
 }
 
@@ -213,7 +213,7 @@ export const WithIconMedia = {
     template: `
       <div class="flex w-full max-w-lg flex-col gap-[var(--spacing-4)]">
         <Item kind="outline" v-bind="args">
-          <ItemMedia media-kind="icon">
+          <ItemMedia kind="icon">
             <i class="ai ai-edge-firewall text-[length:inherit] leading-none" aria-hidden="true" />
           </ItemMedia>
           <ItemContent>
@@ -232,7 +232,7 @@ export const WithIconMedia = {
   parameters: {
     docs: {
       description: {
-        story: 'ItemMedia with mediaKind icon frames a leading icon before title and description.'
+        story: 'ItemMedia with kind icon frames a leading icon before title and description.'
       }
     }
   }
@@ -286,7 +286,7 @@ export const WithImageMedia = {
     template: `
       <div class="flex w-full max-w-md flex-col gap-[var(--spacing-4)]">
         <Item kind="outline" v-bind="args">
-          <ItemMedia media-kind="image">
+          <ItemMedia kind="image">
             <img
               :src="sampleThumbnailSrc"
               alt="Midnight City Lights"
@@ -308,7 +308,7 @@ export const WithImageMedia = {
     docs: {
       description: {
         story:
-          'ItemMedia with mediaKind image crops a thumbnail; a second ItemContent column can show metadata.'
+          'ItemMedia with kind image crops a thumbnail; a second ItemContent column can show metadata.'
       }
     }
   }
@@ -338,7 +338,7 @@ export const WithAsChild = {
         </Item>
         <Item kind="outline" size="small" as-child>
           <a href="#" class="no-underline text-inherit">
-            <ItemMedia media-kind="icon">
+            <ItemMedia kind="icon">
               <i class="ai ai-verified text-[length:inherit] leading-none" aria-hidden="true" />
             </ItemMedia>
             <ItemContent>

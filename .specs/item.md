@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-05-24
 last_updated: 2026-05-24
-checksum: ee3512ee63484ef33fb8e4f3a4cca78a2587c5fcb029bbdf3462501a096450e5
+checksum: 1b0f3505f9280bff926913b6b7e9865f443dea19cb89c4362ec6b1e669633b69
 ---
 # Item — Component Spec
 
@@ -19,7 +19,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - `item.vue` — Root row container (`kind`, `size`).
 - `item-group.vue` — Vertical list wrapper (`role="list"`).
 - `item-separator.vue` — Horizontal divider between rows in a group.
-- `item-media.vue` — Leading media slot (`mediaKind` for icon/image frames).
+- `item-media.vue` — Leading media slot (`kind` for icon/image frames).
 - `item-content.vue` — Main text column (title + description).
 - `item-title.vue` — Primary label line.
 - `item-description.vue` — Secondary muted line.
@@ -34,7 +34,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 | `kind` | `'default' \| 'outline' \| 'muted'` | `'default'` | no | Item root surface variant. |
 | `size` | `'small' \| 'medium'` | `'medium'` | no | Item root density (padding and gap). |
 | `asChild` | `boolean` | `false` | no | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor). |
-| `mediaKind` | `'default' \| 'icon' \| 'image'` | `'default'` | no | ItemMedia region variant (icon frame, image frame). |
+| `kind` | `'default' \| 'icon' \| 'image'` | `'default'` | no | ItemMedia region variant (icon frame, image frame). |
 
 ## Events
 
@@ -52,7 +52,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - Slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
 - `data-kind` on Item root: `default` | `outline` | `muted`
 - `data-size` on Item root: `small` | `medium`
-- `data-media-kind` on ItemMedia: `default` | `icon` | `image`
+- `data-kind` on ItemMedia: `default` | `icon` | `image`
 
 ## Motion & Animations
 
@@ -97,9 +97,9 @@ _none_
 - Outline
 - Muted
 - Small
-- WithIconMedia — `ItemMedia` with `mediaKind="icon"` and a leading icon (security-style row).
+- WithIconMedia — `ItemMedia` with `kind="icon"` and a leading icon (security-style row).
 - WithAvatar — `ItemMedia` wrapping `Avatar` for profile list rows.
-- WithImageMedia — `ItemMedia` with `mediaKind="image"` and a thumbnail image.
+- WithImageMedia — `ItemMedia` with `kind="image"` and a thumbnail image.
 - WithGroup — `ItemGroup` with multiple items, avatars, actions, and `ItemSeparator` between rows.
 - WithAsChild — `asChild` on `Item` wrapping an anchor; row layout merges onto the link; focus stays on the anchor.
 

@@ -2325,7 +2325,7 @@
           "doc": "slot Position."
         },
         {
-          "name": "cardStyle",
+          "name": "kind",
           "type": "'contained' | 'transparent'",
           "default": "'contained'",
           "required": "no",
@@ -2431,7 +2431,7 @@
           "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
         },
         {
-          "name": "mediaKind",
+          "name": "kind",
           "type": "'default' | 'icon' | 'image'",
           "default": "'default'",
           "required": "no",
@@ -2479,7 +2479,7 @@
           "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
         },
         {
-          "name": "mediaKind",
+          "name": "kind",
           "type": "'default' | 'icon' | 'image'",
           "default": "'default'",
           "required": "no",

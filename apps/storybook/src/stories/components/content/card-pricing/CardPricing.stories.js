@@ -58,7 +58,7 @@ export default {
       options: ['bottom', 'middle'],
       description: 'Slot and actions layout (bottom uses small currency, middle uses large)'
     },
-    cardStyle: {
+    kind: {
       control: 'select',
       options: ['contained', 'transparent'],
       description: 'Surface style variant (Figma Style)'
@@ -104,7 +104,7 @@ export const SlotPositionBottomContained = {
   args: {
     ...sharedArgs,
     slotPosition: 'bottom',
-    cardStyle: 'contained'
+    kind: 'contained'
   },
   render: renderCard
 }
@@ -113,7 +113,7 @@ export const SlotPositionBottomTransparent = {
   args: {
     ...sharedArgs,
     slotPosition: 'bottom',
-    cardStyle: 'transparent'
+    kind: 'transparent'
   },
   render: renderCard
 }
@@ -122,7 +122,7 @@ export const SlotPositionMiddleContained = {
   args: {
     ...sharedArgs,
     slotPosition: 'middle',
-    cardStyle: 'contained'
+    kind: 'contained'
   },
   render: renderCard
 }
@@ -131,7 +131,7 @@ export const SlotPositionMiddleTransparent = {
   args: {
     ...sharedArgs,
     slotPosition: 'middle',
-    cardStyle: 'transparent'
+    kind: 'transparent'
   },
   render: renderCard
 }
@@ -140,7 +140,7 @@ export const WithTag = {
   args: {
     ...sharedArgs,
     slotPosition: 'bottom',
-    cardStyle: 'contained',
+    kind: 'contained',
     showTag: true
   },
   render: renderCard
@@ -157,7 +157,7 @@ export const WithSlots = {
   args: {
     ...sharedArgs,
     slotPosition: 'middle',
-    cardStyle: 'contained',
+    kind: 'contained',
     showTag: true
   },
   render: (args) => ({
