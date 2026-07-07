@@ -321,7 +321,9 @@ function extractBracedBlockAfter(script, pattern) {
 }
 
 function extractProps(script) {
-  let block = extractBracedBlockAfter(script, /interface\s+Props\s*\{/)
+  // Match `interface Props {` AND named prop interfaces (`interface CardPricingProps {`)
+  // so components that name their props interface aren't silently skipped by the checks.
+  let block = extractBracedBlockAfter(script, /interface\s+\w*Props\s*\{/)
   if (!block) block = extractBracedBlockAfter(script, /defineProps<\s*\{/)
   if (!block) return []
   return parsePropsInterface(block)
@@ -370,7 +372,8 @@ function extractSlots(script) {
   for (const line of block.split('\n')) {
     const t = line.trim().replace(/;$/, '')
     if (!t) continue
-    const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\(/)
+    // Match both slot syntaxes: `name(): T` and `name?: () => T`.
+    const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\??\s*[:(]/)
     if (sm) out.push({ name: sm[1] })
   }
   return out
