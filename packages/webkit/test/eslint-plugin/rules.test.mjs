@@ -13,6 +13,8 @@ const noBarrelImport = (await import('../../src/eslint-plugin/rules/no-barrel-im
 const noWholeIconSetImport = (await import('../../src/eslint-plugin/rules/no-whole-icon-set-import.js')).default
 const noHardcodedColor = (await import('../../src/eslint-plugin/rules/no-hardcoded-color.js')).default
 const preferTreeShakeableRoot = (await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')).default
+const noDeprecatedComponent = (await import('../../src/eslint-plugin/rules/no-deprecated-component.js')).default
+const preferWebkitComponent = (await import('../../src/eslint-plugin/rules/prefer-webkit-component.js')).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -170,6 +172,36 @@ test('prefer-tree-shakeable-root', () => {
         filename: 'd.vue',
         errors: [{ messageId: 'preferRoot', suggestions: 1 }]
       }
+    ]
+  })
+})
+
+test('no-deprecated-component', () => {
+  js.run('no-deprecated-component', noDeprecatedComponent, {
+    valid: [
+      "import Chip from '@aziontech/webkit/chip'",
+      "import Button from '@aziontech/webkit/button'",
+      "import x from 'some-other-lib'"
+    ],
+    invalid: [
+      // `chips` is marked deprecated (replacedBy: chip) in the fixture catalog
+      {
+        code: "import X from '@aziontech/webkit/chips'",
+        errors: [{ messageId: 'deprecated', suggestions: 1 }]
+      }
+    ]
+  })
+})
+
+test('prefer-webkit-component', () => {
+  js.run('prefer-webkit-component', preferWebkitComponent, {
+    valid: [
+      "import Button from '@aziontech/webkit/button'",
+      "import _ from 'lodash'"
+    ],
+    invalid: [
+      { code: "import { Button } from 'primevue/button'", errors: [{ messageId: 'prefer' }] },
+      { code: "import PrimeVue from 'primevue'", errors: [{ messageId: 'prefer' }] }
     ]
   })
 })

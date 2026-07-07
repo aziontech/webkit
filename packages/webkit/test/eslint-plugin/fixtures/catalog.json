@@ -35,7 +35,9 @@
     "chips": {
       "import": "@aziontech/webkit/chips",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/chips"
+      "treeShakeableImport": "@aziontech/webkit/chips",
+      "deprecated": true,
+      "replacedBy": "chip"
     },
     "table": {
       "import": "@aziontech/webkit/table",

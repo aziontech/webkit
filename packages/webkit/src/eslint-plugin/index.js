@@ -8,9 +8,11 @@
 
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
+import noDeprecatedComponent from './rules/no-deprecated-component.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
+import preferWebkitComponent from './rules/prefer-webkit-component.js'
 import validImportPath from './rules/valid-import-path.js'
 
 const rules = {
@@ -19,7 +21,9 @@ const rules = {
   'no-barrel-import': noBarrelImport,
   'no-whole-icon-set-import': noWholeIconSetImport,
   'no-hardcoded-color': noHardcodedColor,
-  'prefer-tree-shakeable-root': preferTreeShakeableRoot
+  'prefer-tree-shakeable-root': preferTreeShakeableRoot,
+  'no-deprecated-component': noDeprecatedComponent,
+  'prefer-webkit-component': preferWebkitComponent
 }
 
 const FILES = ['**/*.vue', '**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', '**/*.mjs', '**/*.cjs']
@@ -46,9 +50,11 @@ const RECOMMENDED = {
   'valid-import-path': 'error',
   'no-deep-internal-import': 'error',
   'no-barrel-import': 'error',
+  'no-deprecated-component': 'error',
   'no-hardcoded-color': 'warn',
   'prefer-tree-shakeable-root': 'warn',
-  'no-whole-icon-set-import': 'warn'
+  'no-whole-icon-set-import': 'warn',
+  'prefer-webkit-component': 'warn'
 }
 
 const STRICT = Object.fromEntries(Object.keys(rules).map((r) => [r, 'error']))

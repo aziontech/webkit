@@ -174,6 +174,11 @@ function _readSpec(subpath) {
     category: frontmatter.category ?? null,
     structure: frontmatter.structure ?? null,
     status: frontmatter.status ?? null,
+    // Deprecation (B4): optional frontmatter (`deprecated: true`, `replaced_by: <name>`).
+    // Absent on every current spec, so no consumer rule fires until a component is
+    // actually deprecated — then no-deprecated-component steers to the replacement.
+    deprecated: frontmatter.deprecated === true,
+    replacedBy: frontmatter.replaced_by ?? null,
     // Usage guidance (B3): Purpose prose + the structured "when/why" sections. Extracted
     // when present; empty until a spec is backfilled. Powers get_component / suggest /
     // get_best_practices and the Storybook description.
@@ -291,6 +296,8 @@ function build() {
       if (spec.avoidWhen.length) entry.avoidWhen = spec.avoidWhen
       if (spec.related.length) entry.related = spec.related
       if (spec.bestPractices.length) entry.bestPractices = spec.bestPractices
+      if (spec.deprecated) entry.deprecated = true
+      if (spec.replacedBy) entry.replacedBy = spec.replacedBy
     } else if (entry.kind === 'component') {
       entry.category = categoryFromTarget(target)
     }
@@ -340,7 +347,22 @@ function buildTokens() {
   const groups = {}
   for (const k of Object.keys(grouped).sort()) groups[k] = grouped[k]
 
-  return { cssVars, typography, groups }
+  // Animation catalog: the valid `animate-*` NAMES (without the prefix), unioning the
+  // semantic-plugin utilities (.animate-*) with the primitive --animate-* custom
+  // properties. This is the source of truth the compliance hook cross-checks against.
+  const animSet = new Set()
+  const semAnim = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/animations.js')
+  if (existsSync(semAnim)) {
+    const src = readFileSync(semAnim, 'utf-8')
+    for (const m of src.matchAll(/\.animate-([a-z0-9-]+)/g)) animSet.add(m[1])
+  }
+  for (const v of cssVars) {
+    const m = /^--animate-([a-z0-9-]+)$/.exec(v)
+    if (m) animSet.add(m[1])
+  }
+  const animations = [...animSet].sort()
+
+  return { cssVars, typography, groups, animations }
 }
 
 const catalog = build()

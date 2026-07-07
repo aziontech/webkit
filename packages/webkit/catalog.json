@@ -1465,7 +1465,23 @@
         "--width-xl",
         "--width-xs"
       ]
-    }
+    },
+    "animations": [
+      "blink",
+      "bounce",
+      "fade-in",
+      "fade-out",
+      "highlight-fade",
+      "ping",
+      "popup-scale-in",
+      "popup-scale-out",
+      "progress-indeterminate",
+      "progress-indeterminate-short",
+      "pulse",
+      "shimmer",
+      "slide-down",
+      "spin"
+    ]
   },
   "imports": {
     "catalog.json": {

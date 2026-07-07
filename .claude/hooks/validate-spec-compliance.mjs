@@ -18,6 +18,17 @@ import {
 
 const ROOT = process.cwd()
 
+/** Valid animate-* names from the generated catalog, or null if it can't be read. */
+function loadCatalogAnimations() {
+  try {
+    const raw = readFileSync(resolve(ROOT, 'packages/webkit/catalog.json'), 'utf-8')
+    const anims = JSON.parse(raw)?.tokens?.animations
+    return Array.isArray(anims) ? new Set(anims) : null
+  } catch {
+    return null
+  }
+}
+
 function readStdin() {
   return new Promise((res) => {
     let data = ''
@@ -130,6 +141,27 @@ async function main() {
       violations.push(
         `data-testid fallback "${expectedTestId}" not found in <script setup>. Expected: ?? ${expectedTestId}`
       )
+    }
+  }
+
+  // ---- Animation catalog cross-check (independent of the spec Motion table) ----
+  // Every animate-* used in code must be a real utility in the theme animation catalog
+  // (semantic/animations.js + primitive --animate-*). Catches a spec + code that agree
+  // on a non-existent animation (which would silently produce no CSS at build time).
+  const catalogAnims = loadCatalogAnimations()
+  if (catalogAnims) {
+    const usedAnims = new Set(
+      extractAnimationClasses(vueText)
+        .filter((c) => c.startsWith('animate-') && c !== 'animate-none')
+        .map((c) => c.replace(/^animate-/, ''))
+    )
+    for (const nameOnly of usedAnims) {
+      if (!catalogAnims.has(nameOnly)) {
+        violations.push(
+          `Animation "animate-${nameOnly}" is not in the theme catalog. Run /add-animation ${nameOnly} ` +
+            `to add it to packages/theme/src/tokens/semantic/animations.js + record a Theme gap.`
+        )
+      }
     }
   }
 
