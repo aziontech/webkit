@@ -72,7 +72,7 @@
   >
     <Switch
       :id="generatedId"
-      v-model:isToggled="model"
+      v-model="model"
       :disabled="disabled"
       :aria-disabled="disabled || undefined"
       :aria-required="required || undefined"

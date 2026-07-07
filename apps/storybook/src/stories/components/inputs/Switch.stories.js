@@ -10,11 +10,11 @@ const basicSource = ({ initial = 'false', bind = '' } = {}) =>
     CORE_IMPORT,
     "import { ref } from 'vue'",
     '',
-    `const isToggled = ref(${initial})`,
+    `const modelValue = ref(${initial})`,
     '</script>',
     '',
     '<template>',
-    `  <Switch v-model:isToggled="isToggled"${bind ? ' ' + bind : ''} aria-label="Toggle setting" />`,
+    `  <Switch v-model="modelValue"${bind ? ' ' + bind : ''} aria-label="Toggle setting" />`,
     '</template>'
   ].join('\n')
 
@@ -46,11 +46,11 @@ const meta = {
           CORE_IMPORT,
           "import { ref } from 'vue'",
           '',
-          'const isToggled = ref(false)',
+          'const modelValue = ref(false)',
           '</script>',
           '',
           '<template>',
-          '  <Switch v-model:isToggled="isToggled" aria-label="Toggle setting" />',
+          '  <Switch v-model="modelValue" aria-label="Toggle setting" />',
           '</template>',
           '```'
         ].join('\n')
@@ -65,12 +65,12 @@ const meta = {
     }
   },
   argTypes: {
-    isToggled: {
+    modelValue: {
       control: 'boolean',
-      description: 'Toggled-on state. Bind with `v-model:isToggled="value"`.',
+      description: 'Toggled-on state. Bind with `v-model="value"`.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
-    type: {
+    kind: {
       control: 'select',
       options: ['default', 'privacy'],
       description: 'Visual variant. Privacy renders a lock icon inside the handle.',
@@ -80,13 +80,13 @@ const meta = {
         category: 'props'
       }
     },
-    isFocused: {
+    focused: {
       control: 'boolean',
       description: 'Forces the focused visual state regardless of keyboard focus.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
-    'onUpdate:isToggled': {
-      action: 'update:isToggled',
+    'onUpdate:modelValue': {
+      action: 'update:modelValue',
       description: 'Emitted when the user toggles the switch.',
       table: { type: { summary: 'boolean' }, category: 'events' }
     }
@@ -98,9 +98,9 @@ export default meta
 /** @type {import('@storybook/vue3').StoryObj<typeof Switch>} */
 export const Default = {
   args: {
-    isToggled: false,
-    type: 'default',
-    isFocused: false
+    modelValue: false,
+    kind: 'default',
+    focused: false
   },
   render: (args) => ({
     components: { Switch },
@@ -109,16 +109,16 @@ export const Default = {
     },
     template: `
       <Switch
-        v-model:isToggled="args.isToggled"
-        :type="args.type"
-        :is-focused="args.isFocused"
+        v-model="args.modelValue"
+        :kind="args.kind"
+        :focused="args.focused"
         aria-label="Toggle setting"
       />
     `
   }),
   parameters: {
     docs: {
-      description: { story: 'Default switch. Use the Controls panel to flip isToggled, type, and isFocused.' },
+      description: { story: 'Default switch. Use the Controls panel to flip modelValue, kind, and focused.' },
       source: { code: basicSource() }
     }
   }
@@ -137,10 +137,10 @@ export const Types = {
     },
     template: `
       <div class="flex flex-wrap items-center gap-[var(--spacing-4)]">
-        <Switch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />
-        <Switch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />
-        <Switch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />
-        <Switch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />
+        <Switch v-model="defaultOff" kind="default" aria-label="Default off" />
+        <Switch v-model="defaultOn" kind="default" aria-label="Default on" />
+        <Switch v-model="privacyOff" kind="privacy" aria-label="Privacy off" />
+        <Switch v-model="privacyOn" kind="privacy" aria-label="Privacy on" />
       </div>
     `
   }),
@@ -163,10 +163,10 @@ export const Types = {
           '</script>',
           '',
           '<template>',
-          '  <Switch v-model:isToggled="defaultOff" type="default" aria-label="Default off" />',
-          '  <Switch v-model:isToggled="defaultOn" type="default" aria-label="Default on" />',
-          '  <Switch v-model:isToggled="privacyOff" type="privacy" aria-label="Privacy off" />',
-          '  <Switch v-model:isToggled="privacyOn" type="privacy" aria-label="Privacy on" />',
+          '  <Switch v-model="defaultOff" kind="default" aria-label="Default off" />',
+          '  <Switch v-model="defaultOn" kind="default" aria-label="Default on" />',
+          '  <Switch v-model="privacyOff" kind="privacy" aria-label="Privacy off" />',
+          '  <Switch v-model="privacyOn" kind="privacy" aria-label="Privacy on" />',
           '</template>'
         ].join('\n')
       }

@@ -2848,11 +2848,11 @@
           "doc": "Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
         },
         {
-          "name": "headerVariant",
+          "name": "headerKind",
           "type": "'default' | 'compact'",
           "default": "'default'",
           "required": "no",
-          "doc": "Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `variant`."
+          "doc": "Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`."
         },
         {
           "name": "paginated",
@@ -3149,11 +3149,11 @@
           "doc": "Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
         },
         {
-          "name": "headerVariant",
+          "name": "headerKind",
           "type": "'default' | 'compact'",
           "default": "'default'",
           "required": "no",
-          "doc": "Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `variant`."
+          "doc": "Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`."
         },
         {
           "name": "paginated",
@@ -6043,32 +6043,32 @@
       "status": "implemented",
       "props": [
         {
-          "name": "isToggled",
+          "name": "modelValue",
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "Toggled-on state. Bind with `v-model:isToggled=\"value\"`. Mirrors the Figma `isToggled` variant."
+          "doc": "Toggled-on state. Bind with `v-model=\"value\"`. Mirrors the Figma `modelValue` variant."
         },
         {
-          "name": "type",
+          "name": "kind",
           "type": "'default' | 'privacy'",
           "default": "'default'",
           "required": "no",
           "doc": "Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on)."
         },
         {
-          "name": "isFocused",
+          "name": "focused",
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `isFocused` variant."
+          "doc": "Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant."
         }
       ],
       "events": [
         {
-          "name": "update:isToggled",
+          "name": "update:modelValue",
           "payload": "boolean",
-          "notes": "Emitted when the user toggles the switch. Paired with `v-model:isToggled`."
+          "notes": "Emitted when the user toggles the switch. Paired with `v-model`."
         }
       ],
       "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts."
