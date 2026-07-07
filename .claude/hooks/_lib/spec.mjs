@@ -369,12 +369,20 @@ function extractSlots(script) {
   const block = extractBracedBlockAfter(script, /defineSlots<\s*\{/)
   if (!block) return []
   const out = []
-  for (const line of block.split('\n')) {
-    const t = line.trim().replace(/;$/, '')
-    if (!t) continue
-    // Match both slot syntaxes: `name(): T` and `name?: () => T`.
-    const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\??\s*[:(]/)
-    if (sm) out.push({ name: sm[1] })
+  // Only TOP-LEVEL entries are slot names; a scoped slot's prop object
+  // (`default(props: { move: …, count: … })`) is nested and must be skipped.
+  let depth = 0
+  for (const rawLine of block.split('\n')) {
+    const t = rawLine.trim().replace(/;$/, '')
+    if (depth === 0 && t) {
+      // Match both slot syntaxes: `name(): T` and `name?: () => T`.
+      const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\??\s*[:(]/)
+      if (sm) out.push({ name: sm[1] })
+    }
+    for (const ch of rawLine) {
+      if (ch === '{' || ch === '(' || ch === '[') depth++
+      else if (ch === '}' || ch === ')' || ch === ']') depth--
+    }
   }
   return out
 }
