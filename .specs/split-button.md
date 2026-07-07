@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: c2e33be4e2d58c35e29859a84e1811a2d02951cc40d6826500e92db676a952fb
+checksum: f80b6a31121b9fc587479a52a16fbc63ea41fd8a1c65c068fb62217657753d1e
 created: 2026-06-30
-last_updated: 2026-07-01
+last_updated: 2026-07-05
 ---
 
 # Split Button — Component Spec
@@ -51,7 +51,7 @@ const items = [
 | `kind` | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | no | Visual variant applied to both joined segments. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | no | Disables both segments and prevents the menu from opening. |
-| `loading` | `boolean` | `false` | no | Shows a spinner on the primary button and disables its activation. |
+| `loading` | `boolean` | `false` | no | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. |
 | `updateLabelOnSelect` | `boolean` | `false` | no | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
 
 `SplitButtonItem` is the menu-action shape: `{ label: string; value?: string; icon?: string; disabled?: boolean }`. When `value` is omitted, `label` identifies the action.
@@ -60,8 +60,8 @@ const items = [
 
 | Event | Payload | Notes |
 |---|---|---|
-| `click` | `(event: MouseEvent, item: SplitButtonItem \| null)` | Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. |
-| `item-click` | `SplitButtonItem` | Fired when a menu action is selected; carries the matched `model` item. |
+| `click` | `(event: MouseEvent, item: SplitButtonItem \| null)` | Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`. |
+| `item-click` | `SplitButtonItem` | Fired when a menu action is selected; carries the matched `model` item. The menu cannot open while `disabled` or `loading`, so it never fires in those states. |
 
 ## Slots
 
@@ -75,6 +75,7 @@ const items = [
 - `data-disabled` mirrors the `disabled` prop
 - `data-loading` mirrors the `loading` prop
 - `data-state` on the menu toggle: `open` | `closed` (provided by the composed `Dropdown.Trigger`)
+- When `loading`, the control takes the disabled status: the primary button shows the spinner over the disabled tokens and blocks activation (owned by `Button`), the menu toggle is natively disabled with the disabled tokens, and the composed `Dropdown` is disabled so the menu cannot open. No `click` or `item-click` is emitted while loading.
 
 ## Motion & Animations
 
@@ -117,7 +118,7 @@ const items = [
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on both segments; the focused segment raises its z-index so the ring is not clipped by its neighbor.
 - Keyboard map: `Tab` focuses each segment; `Enter`/`Space` activates the primary button; on the toggle `Enter`/`Space`/`Down` open the menu, arrows navigate items, `Esc` closes and returns focus to the toggle (behavior owned by `Dropdown`).
-- ARIA: the primary button is a native `button`; the toggle exposes `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` via `Dropdown.Trigger` and carries an `aria-label`; the chevron icon is `aria-hidden`; `aria-busy` reflects the loading state.
+- ARIA: the primary button is a native `button`; the toggle exposes `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` via `Dropdown.Trigger` and carries an `aria-label`; the chevron icon is `aria-hidden`; `aria-busy` reflects the loading state. While `loading`, the toggle is a natively disabled button, so the menu cannot be opened by pointer or keyboard and assistive tech perceives the whole control as non-interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px at the large size.
@@ -129,7 +130,7 @@ Canonical layout — matches `apps/storybook/src/stories/components/actions/butt
 - Default
 - Types — composite story rendering every `kind` value side-by-side.
 - Sizes — composite story rendering every `size` value side-by-side.
-- Loading — `loading` prop demonstrated.
+- Loading — `loading` prop demonstrated: the whole control takes the disabled status (spinner on the primary segment, toggle disabled, menu blocked).
 - Disabled — `disabled` prop demonstrated.
 - UpdateLabelOnSelect — `updateLabelOnSelect` prop demonstrated: selecting a menu action swaps the primary button's label/icon and marks the row selected. Justified as a distinct interactive behavior not covered by the default story.
 
