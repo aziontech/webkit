@@ -345,7 +345,7 @@ const dataDrivenSnippet = (args, { cols } = {}) => {
     '',
     SOURCE_STATUS_SEVERITY,
     '',
-    'const onRowClick = (row) => {}',
+    'const onRowClick = (event, row) => {}',
     'const onRowAction = ({ action }) => {}'
   ].join('\n')
 
@@ -540,7 +540,13 @@ const meta = {
         category: 'props'
       }
     },
-    onRowClick: { action: 'row-click', table: { category: 'events' } },
+    onRowClick: {
+      action: 'row-click',
+      table: {
+        category: 'events',
+        type: { summary: '(event: MouseEvent, row: Record<string, unknown>)' }
+      }
+    },
     onRowAction: { action: 'row-action', table: { category: 'slot interactions (story only)' } },
     onCellClick: { action: 'cell-click', table: { category: 'slot interactions (story only)' } },
     onUpdateSorting: { action: 'update:sorting', table: { category: 'events' } },
