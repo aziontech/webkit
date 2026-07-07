@@ -89,3 +89,4 @@ packages/webkit/.vitest-attachments/
 apps/storybook/.storybook/test-visual/__diff_output__/
 apps/storybook/.storybook/test-visual/__image_snapshots__/*
 !apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
+apps/storybook/.storybook/test-visual/__image_snapshots__/darwin/
