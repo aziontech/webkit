@@ -43,7 +43,7 @@
     change: [value: string]
   }>()
 
-  const model = defineModel<string>({ default: undefined })
+  const model = defineModel<string | undefined>({ default: undefined })
 
   const attrs = useAttrs()
   const rootRef = ref<HTMLElement | null>(null)

@@ -84,7 +84,7 @@
     copy: [code: string]
   }>()
 
-  const valueModel = defineModel<string>('value', { default: undefined })
+  const valueModel = defineModel<string | undefined>('value', { default: undefined })
 
   const attrs = useAttrs()
   const tabListRef = ref<HTMLElement | null>(null)

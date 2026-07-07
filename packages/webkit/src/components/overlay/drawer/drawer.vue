@@ -39,7 +39,7 @@
     'update:open': [value: boolean]
   }>()
 
-  const openModel = defineModel<boolean>('open', { default: undefined })
+  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
 
   const attrs = useAttrs()
   const uid = useId()
