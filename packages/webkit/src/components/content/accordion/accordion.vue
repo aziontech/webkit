@@ -50,20 +50,15 @@
     default(): unknown
   }>()
 
-  const valueModel = defineModel<AccordionValue>('value', { default: undefined })
-
   const attrs = useAttrs()
   const baseId = useId()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-accordion')
 
-  const valueProp = computed(() => valueModel.value ?? props.value)
-
   const openValue = useControllable<AccordionValue>({
-    prop: valueProp,
+    prop: computed(() => props.value),
     defaultProp: props.defaultValue,
     onChange: (next) => {
-      valueModel.value = next
       emit('update:value', next)
       emit('value-change', next)
     }
