@@ -189,7 +189,9 @@ describe('InputPassword', () => {
 
     expect(queryByRole('button')).toBeNull()
     // Root reflects data-toggleable only when true; false → attribute absent.
-    expect(getByTestId('input-password').closest('span')?.getAttribute('data-toggleable')).toBeNull()
+    expect(
+      getByTestId('input-password').closest('span')?.getAttribute('data-toggleable')
+    ).toBeNull()
   })
 
   it('reflects data-toggleable on the root when toggleable is true', () => {
@@ -234,9 +236,9 @@ describe('InputPassword', () => {
       slots: { iconRight: '<i data-testid="right-icon" class="pi pi-key" />' }
     })
     expect(noToggle.queryByTestId('right-icon')).toBeTruthy()
-    expect(noToggle.getByTestId('input-password').closest('span')?.getAttribute('data-has-icon-right')).toBe(
-      'true'
-    )
+    expect(
+      noToggle.getByTestId('input-password').closest('span')?.getAttribute('data-has-icon-right')
+    ).toBe('true')
   })
 
   // --- a11y ---

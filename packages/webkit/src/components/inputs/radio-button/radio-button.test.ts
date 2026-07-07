@@ -114,16 +114,16 @@ describe('RadioButton', () => {
   it('sets data-disabled and the disabled attribute only when disabled is true', () => {
     const enabled = render(RadioButton, { props: { value: 'a' } })
     expect(enabled.getByTestId('input-radio-button').getAttribute('data-disabled')).toBeNull()
-    expect(
-      (enabled.getByTestId('input-radio-button__input') as HTMLInputElement).disabled
-    ).toBe(false)
+    expect((enabled.getByTestId('input-radio-button__input') as HTMLInputElement).disabled).toBe(
+      false
+    )
     enabled.unmount()
 
     const disabled = render(RadioButton, { props: { value: 'a', disabled: true } })
     expect(disabled.getByTestId('input-radio-button').hasAttribute('data-disabled')).toBe(true)
-    expect(
-      (disabled.getByTestId('input-radio-button__input') as HTMLInputElement).disabled
-    ).toBe(true)
+    expect((disabled.getByTestId('input-radio-button__input') as HTMLInputElement).disabled).toBe(
+      true
+    )
   })
 
   it('merges a consumer-supplied class onto the root span', () => {

@@ -65,7 +65,9 @@ describe('FieldRadioBlock', () => {
     })
 
     expect(getByTestId('input-field-radio-block__label').textContent?.trim()).toBe('Plan A')
-    expect(getByTestId('input-field-radio-block__description').textContent?.trim()).toBe('Best value')
+    expect(getByTestId('input-field-radio-block__description').textContent?.trim()).toBe(
+      'Best value'
+    )
   })
 
   it('omits the label and description nodes when those props are empty', () => {
@@ -152,16 +154,24 @@ describe('FieldRadioBlock', () => {
   it('reflects data-disabled on the label, card and texts only when disabled', () => {
     const enabled = render(FieldRadioBlock, { props: { value: 'a', label: 'Plan A' } })
     expect(enabled.getByTestId('input-field-radio-block').getAttribute('data-disabled')).toBeNull()
-    expect(enabled.getByTestId('input-field-radio-block__card').getAttribute('data-disabled')).toBeNull()
-    expect(enabled.getByTestId('input-field-radio-block__texts').getAttribute('data-disabled')).toBeNull()
+    expect(
+      enabled.getByTestId('input-field-radio-block__card').getAttribute('data-disabled')
+    ).toBeNull()
+    expect(
+      enabled.getByTestId('input-field-radio-block__texts').getAttribute('data-disabled')
+    ).toBeNull()
     enabled.unmount()
 
     const disabled = render(FieldRadioBlock, {
       props: { value: 'a', label: 'Plan A', disabled: true }
     })
     expect(disabled.getByTestId('input-field-radio-block').hasAttribute('data-disabled')).toBe(true)
-    expect(disabled.getByTestId('input-field-radio-block__card').hasAttribute('data-disabled')).toBe(true)
-    expect(disabled.getByTestId('input-field-radio-block__texts').hasAttribute('data-disabled')).toBe(true)
+    expect(
+      disabled.getByTestId('input-field-radio-block__card').hasAttribute('data-disabled')
+    ).toBe(true)
+    expect(
+      disabled.getByTestId('input-field-radio-block__texts').hasAttribute('data-disabled')
+    ).toBe(true)
   })
 
   it('renders the helper badge only when both disabled and helperText are present', () => {

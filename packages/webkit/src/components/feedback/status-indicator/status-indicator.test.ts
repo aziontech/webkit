@@ -41,9 +41,7 @@ describe('StatusIndicator', () => {
       const { getByTestId, unmount } = render(StatusIndicator, { props: { status } })
       expect(getByTestId('feedback-status-indicator').getAttribute('data-status')).toBe(status)
       // The dot mirrors the status too.
-      expect(getByTestId('feedback-status-indicator__dot').getAttribute('data-status')).toBe(
-        status
-      )
+      expect(getByTestId('feedback-status-indicator__dot').getAttribute('data-status')).toBe(status)
       unmount()
     }
   })
@@ -82,9 +80,7 @@ describe('StatusIndicator', () => {
     expect(getByTestId('feedback-status-indicator__spinner')).toBeTruthy()
     expect(queryByTestId('feedback-status-indicator__dot')).toBeNull()
     // Label appends the ellipsis in loading state.
-    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe(
-      'Deploying...'
-    )
+    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe('Deploying...')
   })
 
   it('merges a consumer-supplied class onto the root', () => {
@@ -92,9 +88,7 @@ describe('StatusIndicator', () => {
       attrs: { class: 'consumer-class' }
     })
 
-    expect(getByTestId('feedback-status-indicator').classList.contains('consumer-class')).toBe(
-      true
-    )
+    expect(getByTestId('feedback-status-indicator').classList.contains('consumer-class')).toBe(true)
   })
 
   it.each([...STATUSES])('has no a11y violations for status "%s"', async (status) => {
