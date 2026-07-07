@@ -100,7 +100,7 @@ const meta = {
       description: 'Fires when an enabled option is activated. The panel closes automatically.',
       table: {
         category: 'events',
-        type: { summary: '{ value: string | number; event: MouseEvent | KeyboardEvent }' }
+        type: { summary: '(event: MouseEvent | KeyboardEvent, value: string | number)' }
       }
     }
   },

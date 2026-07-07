@@ -56,8 +56,11 @@ const meta = {
     },
     onClick: {
       action: 'click',
-      description: 'Fires when the segment is activated.',
-      table: { type: { summary: 'MouseEvent' }, category: 'events' }
+      description: 'Fires when the segment is activated; carries the segment label and href.',
+      table: {
+        type: { summary: '(event: MouseEvent, item: { label: string; href: string })' },
+        category: 'events'
+      }
     }
   },
   args: {

@@ -37,7 +37,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 | Event | Payload | Notes |
 |---|---|---|
-| `navigate` | `href: string` | Fires when an ancestor segment is activated. |
+| `navigate` | `(event: MouseEvent, href: string)` | Fires when an ancestor segment is activated. `event` is the activation event; `href` is the segment's destination. |
 
 ## Slots
 

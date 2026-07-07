@@ -108,9 +108,9 @@ const meta = {
     },
     onClick: {
       action: 'click',
-      description: 'Emitted when an option row is activated.',
+      description: 'Emitted when an option row is activated; carries the item label and href.',
       table: {
-        type: { summary: '(event: MouseEvent) => void' },
+        type: { summary: '(event: MouseEvent, item: { label: string; href: string })' },
         category: 'events'
       }
     },

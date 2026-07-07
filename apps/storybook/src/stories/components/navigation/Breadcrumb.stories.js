@@ -43,8 +43,11 @@ const meta = {
     },
     onNavigate: {
       action: 'navigate',
-      description: 'Fires when an ancestor segment is activated.',
-      table: { type: { summary: 'string' }, category: 'events' }
+      description: 'Fires when an ancestor segment is activated; carries the event and the href.',
+      table: {
+        type: { summary: '(event: MouseEvent, href: string)' },
+        category: 'events'
+      }
     },
     default: {
       control: false,
