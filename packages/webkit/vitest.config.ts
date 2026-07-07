@@ -1,5 +1,3 @@
-import { fileURLToPath, URL } from 'node:url'
-
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
 
@@ -9,19 +7,22 @@ import { defineConfig } from 'vitest/config'
 // See .claude/rules/testing.md.
 export default defineConfig({
   plugins: [vue()],
+  // @testing-library/vue reads process.env.NODE_ENV; the browser has no
+  // `process`, so it must be statically replaced or fireEvent throws.
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('test')
+  },
   resolve: {
     alias: {
-      // Self-reference the public entry so `@aziontech/webkit/<name>` in stories
-      // resolves to this package's source during tests.
-      '@aziontech/webkit': '@aziontech/webkit.dev',
-      // Stable handle for the Storybook stories dir, so co-located tests import
-      // stories via `@stories/...` instead of brittle ../../../../../ paths.
-      '@stories': fileURLToPath(new URL('../../apps/storybook/src/stories', import.meta.url))
+      // The package name is `@aziontech/webkit.dev`; stories import the public
+      // `@aziontech/webkit/<name>` — map it back so it self-resolves via exports.
+      '@aziontech/webkit': '@aziontech/webkit.dev'
     }
   },
   test: {
     include: ['src/**/*.test.{ts,js}'],
     setupFiles: ['./src/test/setup.ts'],
+    retry: process.env.CI ? 2 : 0,
     browser: {
       enabled: true,
       provider: 'playwright',
