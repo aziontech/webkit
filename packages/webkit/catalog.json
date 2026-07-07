@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "0.0.0",
+  "webkitVersion": "4.0.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -2023,7 +2023,7 @@
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "Shows a spinner on the primary button and disables its activation."
+          "doc": "Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves."
         },
         {
           "name": "updateLabelOnSelect",
@@ -2037,12 +2037,12 @@
         {
           "name": "click",
           "payload": "(event: MouseEvent, item: SplitButtonItem | null)",
-          "notes": "Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`."
+          "notes": "Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`."
         },
         {
           "name": "item-click",
           "payload": "SplitButtonItem",
-          "notes": "Fired when a menu action is selected; carries the matched `model` item."
+          "notes": "Fired when a menu action is selected; carries the matched `model` item. The menu cannot open while `disabled` or `loading`, so it never fires in those states."
         }
       ],
       "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`."
@@ -2227,6 +2227,180 @@
         "Drive color from `kind`, never a hardcoded color or a raw palette class."
       ]
     },
+    "accordion": {
+      "import": "@aziontech/webkit/accordion",
+      "target": "./src/components/content/accordion/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/accordion-root",
+      "subcomponents": [
+        "@aziontech/webkit/accordion-item",
+        "@aziontech/webkit/accordion-trigger",
+        "@aziontech/webkit/accordion-content"
+      ],
+      "category": "content",
+      "structure": "composition",
+      "status": "draft",
+      "props": [
+        {
+          "name": "type",
+          "type": "'single' | 'multiple'",
+          "default": "'single'",
+          "required": "no",
+          "doc": "Whether one or multiple items can be open at the same time."
+        },
+        {
+          "name": "value",
+          "type": "string | string[] | null",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model:value`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[] | null",
+          "default": "null",
+          "required": "no",
+          "doc": "Initial open item(s) when uncontrolled."
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "In single mode, lets the open item collapse so that no item is open."
+        },
+        {
+          "name": "size",
+          "type": "'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects header height, padding, and typography. Provided to every item via context."
+        },
+        {
+          "name": "arrowPosition",
+          "type": "'left' | 'right'",
+          "default": "'right'",
+          "required": "no",
+          "doc": "Side of the header the chevron sits on. Provided to every item via context."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:value",
+          "payload": "string | string[] | null",
+          "notes": "v-model:value`. Fires when the open item(s) change."
+        },
+        {
+          "name": "value-change",
+          "payload": "string | string[] | null",
+          "notes": "Convenience event mirroring `update:value`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The `Accordion.Item` children. Each sub-component's own `default` slot is documented in the Sub-components section."
+        }
+      ],
+      "purpose": "A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tab-view` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type=\"single\"`) or several at once (`type=\"multiple\"`), and its content expands inline below each header."
+    },
+    "accordion-root": {
+      "import": "@aziontech/webkit/accordion-root",
+      "target": "./src/components/content/accordion/accordion.vue",
+      "kind": "root",
+      "rootOf": "accordion",
+      "treeShakeableImport": "@aziontech/webkit/accordion-root",
+      "category": "content",
+      "structure": "composition",
+      "status": "draft",
+      "props": [
+        {
+          "name": "type",
+          "type": "'single' | 'multiple'",
+          "default": "'single'",
+          "required": "no",
+          "doc": "Whether one or multiple items can be open at the same time."
+        },
+        {
+          "name": "value",
+          "type": "string | string[] | null",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model:value`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[] | null",
+          "default": "null",
+          "required": "no",
+          "doc": "Initial open item(s) when uncontrolled."
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "In single mode, lets the open item collapse so that no item is open."
+        },
+        {
+          "name": "size",
+          "type": "'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects header height, padding, and typography. Provided to every item via context."
+        },
+        {
+          "name": "arrowPosition",
+          "type": "'left' | 'right'",
+          "default": "'right'",
+          "required": "no",
+          "doc": "Side of the header the chevron sits on. Provided to every item via context."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:value",
+          "payload": "string | string[] | null",
+          "notes": "v-model:value`. Fires when the open item(s) change."
+        },
+        {
+          "name": "value-change",
+          "payload": "string | string[] | null",
+          "notes": "Convenience event mirroring `update:value`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The `Accordion.Item` children. Each sub-component's own `default` slot is documented in the Sub-components section."
+        }
+      ],
+      "purpose": "A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tab-view` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type=\"single\"`) or several at once (`type=\"multiple\"`), and its content expands inline below each header."
+    },
+    "accordion-item": {
+      "import": "@aziontech/webkit/accordion-item",
+      "target": "./src/components/content/accordion/accordion-item/accordion-item.vue",
+      "kind": "subcomponent",
+      "parent": "accordion",
+      "treeShakeableImport": "@aziontech/webkit/accordion-item"
+    },
+    "accordion-trigger": {
+      "import": "@aziontech/webkit/accordion-trigger",
+      "target": "./src/components/content/accordion/accordion-trigger/accordion-trigger.vue",
+      "kind": "subcomponent",
+      "parent": "accordion",
+      "treeShakeableImport": "@aziontech/webkit/accordion-trigger"
+    },
+    "accordion-content": {
+      "import": "@aziontech/webkit/accordion-content",
+      "target": "./src/components/content/accordion/accordion-content/accordion-content.vue",
+      "kind": "subcomponent",
+      "parent": "accordion",
+      "treeShakeableImport": "@aziontech/webkit/accordion-content"
+    },
     "card-box": {
       "import": "@aziontech/webkit/card-box",
       "target": "./src/components/content/card-box/card-box.vue",
@@ -2242,33 +2416,30 @@
           "default": "undefined",
           "required": "no",
           "doc": "Heading rendered in the header when the `header` slot is empty."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
         }
       ],
       "slots": [
         {
           "name": "header",
           "scope": "—",
-          "notes": "—"
+          "notes": "Replaces the default header layout (title + header-action)."
         },
         {
           "name": "content",
           "scope": "—",
-          "notes": "—"
+          "notes": "Main card body."
         },
         {
           "name": "footer",
           "scope": "—",
-          "notes": "Named slot."
-        },
-        {
-          "name": "header-action",
-          "scope": "—",
-          "notes": "Named slot."
-        },
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "Main content."
+          "notes": "Footer actions or metadata; omitted when empty."
         }
       ],
       "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/card-box/`."
@@ -2403,6 +2574,7 @@
       "treeShakeableImport": "@aziontech/webkit/item-root",
       "subcomponents": [
         "@aziontech/webkit/item-group",
+        "@aziontech/webkit/item-list",
         "@aziontech/webkit/item-separator",
         "@aziontech/webkit/item-media",
         "@aziontech/webkit/item-content",
@@ -2418,10 +2590,10 @@
       "props": [
         {
           "name": "kind",
-          "type": "'default' | 'outline' | 'muted'",
+          "type": "'default' | 'outline' | 'muted' | 'inline'",
           "default": "'default'",
           "required": "no",
-          "doc": "Item root surface variant."
+          "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists."
         },
         {
           "name": "size",
@@ -2436,13 +2608,6 @@
           "default": "false",
           "required": "no",
           "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
-        },
-        {
-          "name": "kind",
-          "type": "'default' | 'icon' | 'image'",
-          "default": "'default'",
-          "required": "no",
-          "doc": "ItemMedia region variant (icon frame, image frame)."
         }
       ],
       "slots": [
@@ -2452,7 +2617,7 @@
           "notes": "Every sub-component exposes `default` for its region."
         }
       ],
-      "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for lists and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming)."
+      "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `CardBox`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming)."
     },
     "item-root": {
       "import": "@aziontech/webkit/item-root",
@@ -2466,10 +2631,10 @@
       "props": [
         {
           "name": "kind",
-          "type": "'default' | 'outline' | 'muted'",
+          "type": "'default' | 'outline' | 'muted' | 'inline'",
           "default": "'default'",
           "required": "no",
-          "doc": "Item root surface variant."
+          "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists."
         },
         {
           "name": "size",
@@ -2484,13 +2649,6 @@
           "default": "false",
           "required": "no",
           "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
-        },
-        {
-          "name": "kind",
-          "type": "'default' | 'icon' | 'image'",
-          "default": "'default'",
-          "required": "no",
-          "doc": "ItemMedia region variant (icon frame, image frame)."
         }
       ],
       "slots": [
@@ -2500,7 +2658,7 @@
           "notes": "Every sub-component exposes `default` for its region."
         }
       ],
-      "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for lists and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming)."
+      "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `CardBox`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming)."
     },
     "item-group": {
       "import": "@aziontech/webkit/item-group",
@@ -2508,6 +2666,13 @@
       "kind": "subcomponent",
       "parent": "item",
       "treeShakeableImport": "@aziontech/webkit/item-group"
+    },
+    "item-list": {
+      "import": "@aziontech/webkit/item-list",
+      "target": "./src/components/content/item/item-list.vue",
+      "kind": "subcomponent",
+      "parent": "item",
+      "treeShakeableImport": "@aziontech/webkit/item-list"
     },
     "item-separator": {
       "import": "@aziontech/webkit/item-separator",
@@ -4823,6 +4988,98 @@
         "Set an appropriate `type`/`inputmode` for the content (email, url, …)."
       ]
     },
+    "input-group": {
+      "import": "@aziontech/webkit/input-group",
+      "target": "./src/components/inputs/input-group/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/input-group-root",
+      "subcomponents": [
+        "@aziontech/webkit/input-group-addon"
+      ],
+      "category": "inputs",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the error border and sets `aria-invalid=\"true\"` on the root."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the required (warning) border and sets `aria-required=\"true\"` on the root."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled=\"true\"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `InputText`)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<InputText>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
+        }
+      ],
+      "purpose": "Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<InputText>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job."
+    },
+    "input-group-root": {
+      "import": "@aziontech/webkit/input-group-root",
+      "target": "./src/components/inputs/input-group/input-group.vue",
+      "kind": "root",
+      "rootOf": "input-group",
+      "treeShakeableImport": "@aziontech/webkit/input-group-root",
+      "category": "inputs",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the error border and sets `aria-invalid=\"true\"` on the root."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the required (warning) border and sets `aria-required=\"true\"` on the root."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled=\"true\"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `InputText`)."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<InputText>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
+        }
+      ],
+      "purpose": "Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<InputText>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job."
+    },
+    "input-group-addon": {
+      "import": "@aziontech/webkit/input-group-addon",
+      "target": "./src/components/inputs/input-group/input-group-addon/input-group-addon.vue",
+      "kind": "subcomponent",
+      "parent": "input-group",
+      "treeShakeableImport": "@aziontech/webkit/input-group-addon"
+    },
     "input-number": {
       "import": "@aziontech/webkit/input-number",
       "target": "./src/components/inputs/input-number/input-number.vue",
@@ -5057,6 +5314,316 @@
         }
       ],
       "purpose": "Form field for free-text input that composes `Label`, `InputText`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a text input needs a visible label or helper/error message — i.e. virtually every form field outside of inline editing. Aligned with Figma frame `536:22` (FieldText) and acts as the canonical wrapper for `InputText` in form contexts."
+    },
+    "field-input-group": {
+      "import": "@aziontech/webkit/field-input-group",
+      "target": "./src/components/inputs/field-input-group/field-input-group.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-input-group",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound value of the internal `<input>`."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder forwarded to the internal `<input>`."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the input and the `InputGroup` chrome, and switches the helper to `kind=\"disabled\"` (lock icon)."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the internal input read-only; value is visible but not editable. Native pass-through."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind=\"invalid\"`. Also sets `aria-invalid` on the internal `<input>`."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "HTML `name` for the internal `<input>` (form + vee-validate integration)."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "[value: string]",
+          "notes": "Re-emitted from the internal `<input>` on native `input` event. Enables `v-model`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "left",
+          "scope": "—",
+          "notes": "Forwarded verbatim to `InputGroup`'s `#left`. Optional prefix content (icon, static text, or a small control)."
+        },
+        {
+          "name": "right",
+          "scope": "—",
+          "notes": "Forwarded verbatim to `InputGroup`'s `#right`. Optional suffix content."
+        }
+      ],
+      "purpose": "Form field wrapper around `InputGroup` that composes `Label`, `InputGroup` (with its own middle `<input>` rendered internally), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldText`'s API and template shape verbatim, except the underlying primitive is `InputGroup` (fixed height, no `size` prop, side slots for icons/text) instead of `InputText`. Use it whenever a text input surrounded by prefix/suffix content needs a visible label or helper/error message."
+    },
+    "field-text-switch": {
+      "import": "@aziontech/webkit/field-text-switch",
+      "target": "./src/components/inputs/field-text-switch/field-text-switch.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-text-switch",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound value of the internal `<input>`."
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Two-way bound state of the trailing `Switch`. When `false`, the internal `<input>` becomes inert (rendered with `disabled` tokens and the native `disabled` attribute) regardless of the `disabled` prop; the switch itself remains focusable so the consumer can turn the field back on."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder forwarded to the internal `<input>`."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the whole field: the internal `<input>`, the trailing `Switch`, and the `InputGroup` chrome; switches the helper to `kind=\"disabled\"` (lock icon). Independent from `enabled` — `disabled=true` overrides everything, `enabled=false` only disables the text input while keeping the switch operable."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the internal input read-only; value is visible but not editable. Does not affect the switch. Native pass-through."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`. Does not mark the switch as required."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind=\"invalid\"`. Also sets `aria-invalid` on the internal `<input>`."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "HTML `name` for the internal `<input>` (form + vee-validate integration)."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "string",
+          "notes": "Re-emitted from the internal `<input>` on native `input` event. Enables `v-model`."
+        },
+        {
+          "name": "update:enabled",
+          "payload": "boolean",
+          "notes": "Re-emitted from the trailing `<Switch>` on toggle. Enables `v-model:enabled`."
+        }
+      ],
+      "purpose": "Form field wrapper that composes `Label`, an `InputGroup` (holding an internal `<input>` on the left and a `<Switch>` as the trailing child on the right), and `HelperText` into a single vertical stack. Use it when a text value is only meaningful while a boolean feature is enabled — e.g. \"Custom domain\" (text) + \"Enabled\" (switch), \"Redirect URL\" + \"Follow redirects\", \"Cache key override\" + \"Override enabled\". The switch owns the field's on/off state: when `enabled` is `false`, the internal text input is automatically inert (disabled tokens + native `disabled`), so a single glance answers \"is this configured **and** on?\". No Figma reference at draft time — tokens are inferred from `input-group`, `switch`, and `field-input-group`."
+    },
+    "field-phone-number": {
+      "import": "@aziontech/webkit/field-phone-number",
+      "target": "./src/components/inputs/field-phone-number/field-phone-number.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-phone-number",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Two-way bound national number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Enables `v-model`."
+        },
+        {
+          "name": "country",
+          "type": "string",
+          "default": "'BR'",
+          "required": "no",
+          "doc": "Two-way bound ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`). Drives the dial code shown in the `Select` and the mask applied to the input. Enables `v-model:country`."
+        },
+        {
+          "name": "countries",
+          "type": "Array<{ code: string; dialCode: string; mask: string; label: string }>",
+          "default": "(built-in curated list — see Notes)",
+          "required": "no",
+          "doc": "Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). When omitted, the component uses its built-in list."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's mask literal (e.g. `(11) 99999-9999`)."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables both the dial-code `Select` and the internal `<input>`, and switches the helper to `kind=\"disabled\"` (lock icon)."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the internal `<input>` read-only; value is visible but not editable. The dial-code `Select` is also disabled while readonly (dial code cannot change without editing). Native pass-through on the input."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind=\"invalid\"`. Also sets `aria-invalid` on the internal `<input>`."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "HTML `name` for the internal `<input>` (form + vee-validate integration)."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "[value: string]",
+          "notes": "Emitted on every native `input` event of the internal `<input>` **and** whenever `country` changes (re-emitted so validators react to dial-code switches). Value is always digits-only (mask characters stripped)."
+        },
+        {
+          "name": "update:country",
+          "payload": "[code: string]",
+          "notes": "Emitted when the user picks a different country in the dial-code `Select`. Enables `v-model:country`."
+        }
+      ],
+      "purpose": "Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` applies a per-country mask so the user sees a formatted number as they type (e.g. `(11) 99999-9999` for BR). Emits two v-models: `modelValue` for the national digits (no dial code, no mask characters) and `country` for the selected ISO 3166-1 alpha-2 code."
     },
     "helper-text": {
       "import": "@aziontech/webkit/helper-text",
