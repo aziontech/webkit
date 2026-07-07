@@ -168,7 +168,7 @@ export const WithTag = {
       <BoxGridSelection v-bind="args" v-model="value">
         <template #tag="{ item }">
           <Tag
-            :value="item.tag"
+            :label="item.tag"
             severity="info"
           />
         </template>

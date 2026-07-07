@@ -86,7 +86,7 @@ const changePlanTemplate = `
               :show-suffix="false"
               :pricing-details="billingDetailMonthly"
               slot-position="middle"
-              card-style="contained"
+              kind="contained"
               action-label=""
               data-testid="template-change-plan-drawer__plan-hobby"
             >
@@ -106,7 +106,7 @@ const changePlanTemplate = `
               :show-tag="true"
               tag-label="Current plan"
               slot-position="middle"
-              card-style="contained"
+              kind="contained"
               action-label=""
               data-testid="template-change-plan-drawer__plan-pro"
             >
@@ -124,7 +124,7 @@ const changePlanTemplate = `
               :show-suffix="false"
               :pricing-details="billingDetailEnterprise"
               slot-position="middle"
-              card-style="contained"
+              kind="contained"
               action-label=""
               data-testid="template-change-plan-drawer__plan-enterprise"
             >

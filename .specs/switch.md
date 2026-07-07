@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 4e2f98d5b3795d3e85a2babd10fb26195d0cc00b8118c429fab9181ad7a8cf23
+checksum: d07fae422a497cb00a24640d4a769d8606e356e43bb0f237420bc7a29c6afe1e
 created: 2026-05-22
 last_updated: 2026-06-23
 ---
@@ -37,7 +37,7 @@ const enabled = ref(false)
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `boolean` | `false` | no | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma `modelValue` variant. |
+| `modelValue` | `boolean` | `false` | no | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant. |
 | `kind` | `'default' \| 'privacy'` | `'default'` | no | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
 | `focused` | `boolean` | `false` | no | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
 

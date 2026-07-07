@@ -193,10 +193,10 @@ export const AllVariants = {
     },
     template: `
       <div class="flex flex-wrap gap-6">
-        <CardPricing v-bind="sharedArgs" slot-position="bottom" card-style="contained" />
-        <CardPricing v-bind="sharedArgs" slot-position="bottom" card-style="transparent" />
-        <CardPricing v-bind="sharedArgs" slot-position="middle" card-style="contained" />
-        <CardPricing v-bind="sharedArgs" slot-position="middle" card-style="transparent" />
+        <CardPricing v-bind="sharedArgs" slot-position="bottom" kind="contained" />
+        <CardPricing v-bind="sharedArgs" slot-position="bottom" kind="transparent" />
+        <CardPricing v-bind="sharedArgs" slot-position="middle" kind="contained" />
+        <CardPricing v-bind="sharedArgs" slot-position="middle" kind="transparent" />
       </div>
     `
   })

@@ -92,7 +92,7 @@
     <slot v-if="$slots['default']" />
     <span
       v-else-if="label"
-      :data-testid="`${testId}__value`"
+      :data-testid="`${testId}__label`"
     >
       {{ label }}
     </span>

@@ -161,7 +161,7 @@
           <h1
             :id="headingId"
             class="text-center text-heading-md text-[var(--text-default)] [word-break:break-word]"
-            :data-testid="`${testId}__heading`"
+            :data-testid="`${testId}__title`"
           >
             {{ title }}
           </h1>
@@ -189,7 +189,7 @@
                       {{ planTitle }}
                     </ItemTitle>
                     <Tag
-                      :value="planPrice"
+                      :label="planPrice"
                       severity="secondary"
                       :data-testid="`${testId}__plan-price`"
                     />

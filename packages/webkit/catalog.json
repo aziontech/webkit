@@ -4071,14 +4071,14 @@
       "treeShakeableImport": "@aziontech/webkit/status-indicator",
       "category": "feedback",
       "structure": "monolithic",
-      "status": null,
+      "status": "implemented",
       "props": [
         {
           "name": "severity",
           "type": "'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'",
           "default": "'success'",
           "required": "no",
-          "doc": "severity."
+          "doc": "Severity token driving the status dot color."
         },
         {
           "name": "loading",
@@ -4095,7 +4095,7 @@
           "doc": "Visible label text."
         }
       ],
-      "purpose": "Communicates severity, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`."
+      "purpose": "Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`."
     },
     "toast": {
       "import": "@aziontech/webkit/toast",
@@ -6047,7 +6047,7 @@
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "Toggled-on state. Bind with `v-model=\"value\"`. Mirrors the Figma `modelValue` variant."
+          "doc": "Toggled-on state. Bind with `v-model=\"value\"`. Mirrors the Figma checked/on variant."
         },
         {
           "name": "kind",

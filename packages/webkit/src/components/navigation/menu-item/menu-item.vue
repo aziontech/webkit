@@ -181,7 +181,7 @@
       >
         <slot name="tag">
           <Tag
-            :value="tagValue"
+            :label="tagValue"
             :severity="tagSeverity"
             rounded
           />
@@ -222,7 +222,7 @@
       >
         <slot name="tag">
           <Tag
-            :value="tagValue"
+            :label="tagValue"
             :severity="tagSeverity"
             rounded
           />

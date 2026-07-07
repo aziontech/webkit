@@ -172,7 +172,7 @@
                     {{ description }}
                   </p>
                   <Tag
-                    :value="scope"
+                    :label="scope"
                     severity="secondary"
                     icon="pi pi-github"
                     :data-testid="`${testId}__scope-tag`"

@@ -2,9 +2,9 @@
 name: status-indicator
 category: feedback
 structure: monolithic
-severity: implemented
+status: implemented
 spec_version: 1
-checksum: d4251ebf97c6f451b6a78e4663fa033b730772efeb6014ca2207311c7bff3d3e
+checksum: 3075d5cccdeaeefd787f9b51f02690a868e0eb969278caea79915517e3943529
 created: 2026-05-22
 last_updated: 2026-05-28
 ---
@@ -12,7 +12,7 @@ last_updated: 2026-05-28
 
 ## Purpose
 
-Communicates severity, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`.
+Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`.
 
 ## Usage
 
@@ -30,7 +30,7 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `severity` | `'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'` | `'success'` | no | severity. |
+| `severity` | `'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'` | `'success'` | no | Severity token driving the status dot color. |
 | `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
 | `label` | `string` | `'Status'` | no | Visible label text. |
 
@@ -71,7 +71,7 @@ _none_
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `severity`, etc.) per sub-component.
+- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
@@ -100,7 +100,7 @@ _none_
 - Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not change `structure` after `severity: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
 - If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

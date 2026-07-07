@@ -124,7 +124,7 @@
           <Tag
             v-if="showTag"
             severity="primary"
-            :value="tagLabel"
+            :label="tagLabel"
             :data-testid="`${testId}__tag`"
           />
         </div>

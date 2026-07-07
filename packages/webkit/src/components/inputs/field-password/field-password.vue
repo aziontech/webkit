@@ -140,7 +140,7 @@
     <HelperText
       v-if="effectiveHelperText"
       :id="helperId"
-      :value="effectiveHelperText"
+      :label="effectiveHelperText"
       :kind="helperKind"
       :data-testid="`${testId}__helper`"
     />
