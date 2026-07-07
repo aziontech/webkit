@@ -154,6 +154,42 @@ function splitRow(line) {
 }
 
 /**
+ * Like parseTable, but tolerant of a union type cell containing unescaped `|`
+ * (e.g. `'a' | 'b' | 'c'`). Extra cells are absorbed into `overflowHeader`'s column so
+ * the columns AFTER it (Default, Required, JSDoc) keep their positions. Needed to read
+ * the Default column reliably. Mirrors build-catalog.mjs's parseSpecTable.
+ */
+export function parseTable2(sectionText, overflowHeader) {
+  if (!sectionText) return []
+  const lines = sectionText
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith('|'))
+  if (lines.length < 2) return []
+  const headers = splitRow(lines[0]).map((h) => h.toLowerCase())
+  const n = headers.length
+  const oIdx = headers.indexOf(overflowHeader)
+  const rows = []
+  for (let i = 2; i < lines.length; i++) {
+    let cells = splitRow(lines[i])
+    if (cells.every((c) => !c)) continue
+    if (cells.length > n && oIdx >= 0) {
+      const tailCount = n - 1 - oIdx
+      const before = cells.slice(0, oIdx)
+      const tail = tailCount > 0 ? cells.slice(cells.length - tailCount) : []
+      const mid = cells.slice(oIdx, cells.length - tailCount).join(' | ')
+      cells = [...before, mid, ...tail]
+    }
+    const row = {}
+    headers.forEach((h, idx) => {
+      row[h] = (cells[idx] ?? '').trim()
+    })
+    rows.push(row)
+  }
+  return rows
+}
+
+/**
  * True when a Props-table Default cell is the STRING LITERAL 'undefined' or 'null'
  * (the quoted text, not the JS value `undefined`). The cell text may be wrapped in
  * backticks, e.g. "`'undefined'`". Used by spec-validate to reject the empty-string
@@ -251,6 +287,7 @@ export function parseVueSfc(vueText) {
     props: extractProps(script),
     emits: extractEmits(script),
     slots: extractSlots(script),
+    defaults: extractDefaults(script),
     hasInjectionKey: /InjectionKey\b/.test(script) && /\bprovide\(/.test(script),
     raw: script
   }
@@ -337,6 +374,102 @@ function extractSlots(script) {
     if (sm) out.push({ name: sm[1] })
   }
   return out
+}
+
+/**
+ * Extract the `withDefaults(defineProps<…>(), { … })` defaults object as
+ * { propName: rawValueString }. Walks paren depth to find the SECOND argument's
+ * `{ … }`, then splits it at top level (string- and bracket-aware). Returns {} when
+ * there is no withDefaults call. Used for the Default-column drift check.
+ */
+export function extractDefaults(script) {
+  const idx = script.indexOf('withDefaults(')
+  if (idx === -1) return {}
+  const open = script.indexOf('(', idx)
+  if (open === -1) return {}
+  // Find the top-level comma (depth 1) separating defineProps() from the defaults object.
+  let depth = 0
+  let commaPos = -1
+  for (let i = open; i < script.length; i++) {
+    const ch = script[i]
+    if (ch === '(') depth++
+    else if (ch === ')') {
+      depth--
+      if (depth === 0) break
+    } else if (ch === ',' && depth === 1) {
+      commaPos = i
+      break
+    }
+  }
+  if (commaPos === -1) return {}
+  const braceStart = script.indexOf('{', commaPos)
+  if (braceStart === -1) return {}
+  let d = 1
+  let end = -1
+  for (let i = braceStart + 1; i < script.length; i++) {
+    if (script[i] === '{') d++
+    else if (script[i] === '}') {
+      d--
+      if (d === 0) {
+        end = i
+        break
+      }
+    }
+  }
+  if (end === -1) return {}
+  return parseDefaultsObject(script.slice(braceStart + 1, end))
+}
+
+function parseDefaultsObject(inner) {
+  const out = {}
+  for (const part of splitTopLevel(inner)) {
+    const m = part.match(/^\s*([a-zA-Z_$][\w$]*)\s*:\s*([\s\S]+)$/)
+    if (m) out[m[1]] = m[2].trim()
+  }
+  return out
+}
+
+/** Split a comma-separated fragment at top level, ignoring commas inside strings/brackets. */
+function splitTopLevel(s) {
+  const parts = []
+  let depth = 0
+  let cur = ''
+  let inStr = null
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i]
+    if (inStr) {
+      cur += ch
+      if (ch === inStr && s[i - 1] !== '\\') inStr = null
+      continue
+    }
+    if (ch === '"' || ch === "'" || ch === '`') {
+      inStr = ch
+      cur += ch
+      continue
+    }
+    if (ch === '(' || ch === '[' || ch === '{') depth++
+    else if (ch === ')' || ch === ']' || ch === '}') depth--
+    if (ch === ',' && depth === 0) {
+      if (cur.trim()) parts.push(cur)
+      cur = ''
+      continue
+    }
+    cur += ch
+  }
+  if (cur.trim()) parts.push(cur)
+  return parts
+}
+
+/**
+ * Resolve a `size?: SomeAlias` type reference to the underlying string union declared in
+ * the same script (`type SomeAlias = 'small' | 'medium' | 'large'`). Returns the union
+ * text, or null when the name isn't a simple identifier or has no local type alias.
+ */
+export function resolveTypeUnion(script, typeName) {
+  if (!typeName || !/^[A-Za-z_$][\w$]*$/.test(typeName)) return null
+  const re = new RegExp(`type\\s+${typeName}\\s*=\\s*([^\\n]+(?:\\n\\s*\\|[^\\n]+)*)`)
+  const m = script.match(re)
+  return m ? m[1].replace(/;\s*$/, '').trim() : null
 }
 
 // ---- Animation cross-check ----

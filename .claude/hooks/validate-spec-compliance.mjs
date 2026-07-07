@@ -12,9 +12,15 @@ import {
   isLegacyComponent,
   parseSpecFile,
   parseTable,
+  parseTable2,
   parseVueSfc,
-  resolveSpecForComponentPath
+  resolveSpecForComponentPath,
+  resolveTypeUnion
 } from './_lib/spec.mjs'
+import {
+  checkEventVocabulary,
+  checkPropVocabulary
+} from './_lib/prop-vocabulary.mjs'
 
 const ROOT = process.cwd()
 
@@ -104,26 +110,36 @@ async function main() {
     if (slotsDiff.missing.length) violations.push(`Slots missing in .vue: ${slotsDiff.missing.join(', ')}`)
     if (slotsDiff.extra.length) violations.push(`Slots in .vue not in spec: ${slotsDiff.extra.join(', ')}`)
 
-    // ---- Naming conventions (B1): things the spec tables can't catch ----
-    // Visual-variant prop must be `kind` (never variant/appearance/intent). `color` is
-    // left out on purpose — some components legitimately take a color value.
-    const FORBIDDEN_PROP = { variant: 'kind', appearance: 'kind', intent: 'kind' }
-    for (const p of sfc.props) {
-      const alt = FORBIDDEN_PROP[p.name]
-      if (alt) {
-        violations.push(`Prop "${p.name}" is not allowed — use "${alt}" (.claude/rules/naming.md).`)
-      }
-      if (/^(is|has)[A-Z]/.test(p.name)) {
-        const suggested = p.name.replace(/^(is|has)/, '').replace(/^./, (c) => c.toLowerCase())
-        violations.push(`Boolean prop "${p.name}" must drop the is/has prefix (use "${suggested}").`)
-      }
+    // ---- Canonical prop/event vocabulary (B1): things the spec tables can't catch ----
+    // The same concept must use the same prop name/type across every component: banned
+    // aliases (variant/status/closeable/heading/… -> kind/severity/closable/title/…),
+    // no is/has boolean prefix, canonical `size` token set + order. Single source of
+    // truth: .claude/hooks/_lib/prop-vocabulary.mjs (documented in prop-vocabulary.md).
+    for (const v of checkPropVocabulary(sfc.props, {
+      resolveTypeUnion: (t) => resolveTypeUnion(sfc.raw, t)
+    })) {
+      violations.push(v.message)
     }
-    // Events are kebab-case (update:value, before-close). Flag a camelCase event name,
-    // but never a v-model `update:*` event (its payload segment can be camelCase).
-    for (const e of sfc.emits) {
-      if (!e.name.includes(':') && /^[a-z]+[A-Z]/.test(e.name)) {
-        const suggested = e.name.replace(/([A-Z])/g, '-$1').toLowerCase()
-        violations.push(`Event "${e.name}" must be kebab-case (use "${suggested}").`)
+    for (const v of checkEventVocabulary(sfc.emits)) {
+      violations.push(v.message)
+    }
+
+    // ---- Default drift: spec Props "Default" column vs .vue withDefaults ----
+    // Only compares scalar defaults (string/boolean/number), normalized; undefined/null
+    // (controlled) and factory/object defaults are skipped, so this never false-positives.
+    const specPropRows = parseTable2(getSection(body, 'Props'), 'type')
+    for (const row of specPropRows) {
+      const name = (row.prop ?? '').replace(/^`|`$/g, '').trim()
+      if (!name) continue
+      const codeRaw = sfc.defaults[name]
+      if (codeRaw == null) continue // no withDefaults entry (required/controlled prop)
+      const specN = normalizeDefault(row.default)
+      const codeN = normalizeDefault(codeRaw)
+      if (specN == null || codeN == null) continue
+      if (specN !== codeN) {
+        violations.push(
+          `Default drift for prop "${name}": spec says ${row.default || '(empty)'} but .vue withDefaults has ${codeRaw}.`
+        )
       }
     }
 
@@ -224,6 +240,23 @@ function toPascal(kebab) {
     .split('-')
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
     .join('')
+}
+
+/**
+ * Normalize a default value (from a spec cell or a withDefaults entry) to a comparable
+ * scalar string, or null when it is not a plain scalar (skip drift check):
+ *   'foo' / "foo"  -> "'foo'"   ·   true/false -> as-is   ·   42 -> "42"
+ *   undefined/null/'' (controlled/empty) and factories/objects -> null (not compared).
+ */
+function normalizeDefault(raw) {
+  if (raw == null) return null
+  const s = String(raw).trim().replace(/^`|`$/g, '').trim()
+  if (s === '' || s === 'undefined' || s === 'null') return null
+  if (s === 'true' || s === 'false') return s
+  if (/^-?\d+(\.\d+)?$/.test(s)) return s
+  const str = s.match(/^['"](.*)['"]$/)
+  if (str) return `'${str[1]}'`
+  return null // arrow/factory/object default — not comparable
 }
 
 /** inputs category: `input-<name>`, except when name already starts with `input-`. */
