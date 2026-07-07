@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 167302fb12affaa17b4eb58092d06ba8b856958c5fae79c2a76365cc3c39b7cd
+checksum: 905f4e9e5d3e34bf91c5321fee72928f6897969a6579a35c86c3d6d0021349dd
 created: 2026-06-30
 last_updated: 2026-06-30
 ---
@@ -143,7 +143,7 @@ export default Object.assign(Popover, {
 | `offset` | `number` | `4` | no | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | no | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `width` | `'small' \| 'medium' \| 'large'` | `undefined` | no | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
-| `closable` | `boolean` | `true` | no | Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
+| `dismissible` | `boolean` | `true` | no | Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
 
 ## Events
 

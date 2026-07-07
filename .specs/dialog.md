@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 4376bdf4d0359334959b6701a4f4b9994fcc9c8709f162adbc4812d31a3b1186
+checksum: 4943583fbe9a549aee7268e9c46f812c9284cc3314a121f747eec2e24fd4d48a
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -53,7 +53,7 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 |---|---|---|---|---|
 | `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `undefined` | no | Initial open state when uncontrolled. |
-| `closable` | `boolean` | `undefined` | no | When true, overlay click and Escape close the dialog. |
+| `dismissible` | `boolean` | `undefined` | no | When true, overlay click and Escape close the dialog. |
 | `size` | `DialogSize` | `undefined` | no | Panel max-width preset passed to the inner Panel. |
 
 ## Events

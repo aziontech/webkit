@@ -57,7 +57,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          'Modal dialog built on the shared Panel shell. Supports overlay backdrop, closable behavior, and theme motion tokens (panel scale + opacity fade, overlay fade).',
+          'Modal dialog built on the shared Panel shell. Supports overlay backdrop, dismissible behavior, and theme motion tokens (panel scale + opacity fade, overlay fade).',
           '',
           '## Usage',
           '',
@@ -81,7 +81,7 @@ const meta = {
           '</script>',
           '',
           '<template>',
-          '  <Dialog v-model:open="open" closable size="medium">',
+          '  <Dialog v-model:open="open" dismissible size="medium">',
           '    <DialogTrigger>',
           '      <Button label="Open dialog" kind="primary" />',
           '    </DialogTrigger>',
@@ -124,7 +124,7 @@ const meta = {
       description: 'Initial open state when uncontrolled',
       table: { defaultValue: { summary: false } }
     },
-    closable: {
+    dismissible: {
       control: 'boolean',
       description: 'When true, Escape and overlay click close the dialog',
       table: { defaultValue: { summary: true } }
@@ -139,7 +139,7 @@ const meta = {
   },
   args: {
     defaultOpen: false,
-    closable: true,
+    dismissible: true,
     size: 'medium'
   }
 }

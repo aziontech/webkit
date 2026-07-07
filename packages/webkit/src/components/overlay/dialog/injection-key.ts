@@ -14,7 +14,7 @@ export const DialogMotionInjectionKey: InjectionKey<DialogMotionContext> =
 export interface DialogContext {
   testId: string
   isOpen: Readonly<Ref<boolean>>
-  closable: boolean
+  dismissible: boolean
   size: DialogSize
   open: () => void
   close: () => void

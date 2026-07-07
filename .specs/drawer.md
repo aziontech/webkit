@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 41318ab3b91353897d55d96c1e80f469329fe225c89a682b8bac98389badaabf
+checksum: 65965dbd5347e3baa7e40b64a88db40716b795e9f262f6578702e04740f32c8f
 created: 2026-05-22
 last_updated: 2026-05-29
 ---
@@ -50,7 +50,7 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 |---|---|---|---|---|
 | `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `undefined` | no | Initial open state when uncontrolled. |
-| `closable` | `boolean` | `undefined` | no | When true, overlay click and Escape close the drawer. |
+| `dismissible` | `boolean` | `undefined` | no | When true, overlay click and Escape close the drawer. |
 | `side` | `DrawerSide` | `undefined` | no | Edge the drawer panel slides from. |
 | `size` | `DrawerSize` | `undefined` | no | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
 

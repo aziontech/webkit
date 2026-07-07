@@ -201,7 +201,7 @@ export default {
       description: 'Initial open state when uncontrolled',
       table: { defaultValue: { summary: false }, category: 'props' }
     },
-    closable: {
+    dismissible: {
       control: 'boolean',
       description: 'When true, Escape and overlay click close the drawer',
       table: { defaultValue: { summary: true }, category: 'props' }
@@ -227,7 +227,7 @@ export default {
   },
   args: {
     defaultOpen: false,
-    closable: true,
+    dismissible: true,
     side: 'right',
     size: 'large'
   }

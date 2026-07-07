@@ -92,7 +92,7 @@ export default {
           '</script>',
           '',
           '<template>',
-          '  <Drawer v-model:open="open" closable side="right" size="medium">',
+          '  <Drawer v-model:open="open" dismissible side="right" size="medium">',
           '    <DrawerTrigger>',
           '      <Button label="Open drawer" kind="primary" />',
           '    </DrawerTrigger>',
@@ -135,7 +135,7 @@ export default {
       description: 'Initial open state when uncontrolled',
       table: { defaultValue: { summary: false } }
     },
-    closable: {
+    dismissible: {
       control: 'boolean',
       description: 'When true, Escape and overlay click close the drawer',
       table: { defaultValue: { summary: true } }
@@ -157,7 +157,7 @@ export default {
   },
   args: {
     defaultOpen: false,
-    closable: true,
+    dismissible: true,
     side: 'right',
     size: 'medium'
   }
@@ -245,7 +245,7 @@ export const Sizes = {
           :key="size"
           :size="size"
           v-model:open="openBySize[size]"
-          closable
+          dismissible
           side="right"
           :data-testid="'overlay-drawer-' + size"
         >
@@ -301,7 +301,7 @@ export const ScrollContent = {
       return { open, scrollSections }
     },
     template: `
-      <Drawer v-model:open="open" closable side="right" size="medium">
+      <Drawer v-model:open="open" dismissible side="right" size="medium">
         <DrawerTrigger>
           <Button label="Open scrollable drawer" kind="primary" />
         </DrawerTrigger>
