@@ -22,7 +22,7 @@
 
   interface Props {
     /** Page title above the form sections. */
-    heading?: string
+    title?: string
     /** Label above the plan summary card. */
     planLabel?: string
     /** Selected plan name in the summary card. */
@@ -68,7 +68,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    heading: 'Your first global deployment is seconds away',
+    title: 'Your first global deployment is seconds away',
     planLabel: 'Plan Selected',
     planTitle: 'Hobby',
     planPrice: 'Free',
@@ -163,7 +163,7 @@
             class="text-center text-heading-md text-[var(--text-default)] [word-break:break-word]"
             :data-testid="`${testId}__heading`"
           >
-            {{ heading }}
+            {{ title }}
           </h1>
 
           <section

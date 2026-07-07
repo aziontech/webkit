@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: approved
 spec_version: 2
-checksum: 784da2a102f546a61406dbc78eabecaeabff3692e5d244bf1f970333898f3b33
+checksum: 953ae243aa49d08bd4b1b2a271e3a63ddd87dc1806e9099b82aeaf02a783173f
 created: 2026-06-25
 last_updated: 2026-06-30
 ---
@@ -37,13 +37,13 @@ const model = ref([
 
 <template>
   <PickList v-model="model" data-key="id">
-    <PickList.Source header="Available">
+    <PickList.Source title="Available">
       <template #item="{ item }">{{ item.label }}</template>
     </PickList.Source>
 
     <PickList.Controls />
 
-    <PickList.Target header="Selected">
+    <PickList.Target title="Selected">
       <template #item="{ item }">{{ item.label }}</template>
     </PickList.Target>
   </PickList>
@@ -54,7 +54,7 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 
 ## Sub-components
 
-- `pick-list-source/pick-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `header` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls). Slots: `item` (`{ item, index, list }`) renders one option row; `header` overrides the heading content. Double-clicking an option moves it to the target (driven by the root via the injected context).
+- `pick-list-source/pick-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `title` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls). Slots: `item` (`{ item, index, list }`) renders one option row; `title` overrides the heading content. Double-clicking an option moves it to the target (driven by the root via the injected context).
 - `pick-list-target/pick-list-target.vue` — The target listbox (the right/bottom list). Same anatomy, props, and slots as `pick-list-source`, bound to the target side of the pair; double-clicking an option moves it back to the source.
 - `pick-list-controls/pick-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as icon-only buttons; reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point left/right when the lists are side by side and rotate to up/down when they stack on narrow viewports.
 
@@ -126,13 +126,13 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography (header) | `.text-label-lg` |
+| typography (title) | `.text-label-lg` |
 | typography (option) | `.text-body-md` |
 | surface (list) | `var(--bg-surface)` |
 | surface (option hover) | `var(--bg-hover)` |
 | surface (option selected) | `var(--bg-selected)` |
 | text | `var(--text-default)` |
-| text (header) | `var(--text-muted)` |
+| text (title) | `var(--text-muted)` |
 | text (disabled) | `var(--text-disabled)` |
 | surface (disabled) | `var(--bg-disabled)` |
 | border | `var(--border-default)` |
@@ -153,7 +153,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on each option and on every move control.
 - Keyboard map: `Tab` moves between the two listboxes and the control column; within a listbox `Space`/`Enter` toggle the focused option's selection; the move controls are activated with `Enter`/`Space`. Double-click on an option is a pointer affordance for moving it to the opposite list; the same move is reachable via select + the move controls (no keyboard-only feature is double-click-only).
-- ARIA: each list is `role="listbox"` with `aria-label` from its header text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled`.
+- ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
 - A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
 - Touch target ≥40×40 px for every move control (medium icon-button height).

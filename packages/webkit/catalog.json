@@ -8135,7 +8135,7 @@
       "status": "implemented",
       "props": [
         {
-          "name": "heading",
+          "name": "title",
           "type": "string",
           "default": "'Your first global deployment is seconds away'",
           "required": "no",

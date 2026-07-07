@@ -26,7 +26,7 @@ const meta = {
     }
   },
   argTypes: {
-    heading: {
+    title: {
       control: 'text',
       description: 'Page title above the form sections.',
       table: { type: { summary: 'string' }, category: 'props' }
