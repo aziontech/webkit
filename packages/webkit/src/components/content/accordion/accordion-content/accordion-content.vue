@@ -27,12 +27,53 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-content'
   )
+
+  const prefersReducedMotion = () =>
+    typeof globalThis.matchMedia === 'function' &&
+    globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const onEnter = (el: globalThis.Element, done: () => void) => {
+    const node = el as globalThis.HTMLElement
+    if (prefersReducedMotion()) {
+      done()
+      return
+    }
+    const target = node.scrollHeight
+    node.style.height = '0px'
+    node.style.transition = 'height 150ms ease-out'
+    void node.offsetHeight
+    node.style.height = `${target}px`
+    const finish = () => {
+      node.style.height = ''
+      node.style.transition = ''
+      done()
+    }
+    node.addEventListener('transitionend', finish, { once: true })
+  }
+
+  const onLeave = (el: globalThis.Element, done: () => void) => {
+    const node = el as globalThis.HTMLElement
+    if (prefersReducedMotion()) {
+      done()
+      return
+    }
+    node.style.height = `${node.scrollHeight}px`
+    node.style.transition = 'height 150ms ease-out'
+    void node.offsetHeight
+    node.style.height = '0px'
+    const finish = () => {
+      node.style.transition = ''
+      done()
+    }
+    node.addEventListener('transitionend', finish, { once: true })
+  }
 </script>
 
 <template>
   <Transition
-    enter-active-class="animate-accordion-expand motion-reduce:animate-none"
-    leave-active-class="animate-accordion-collapse motion-reduce:animate-none"
+    :css="false"
+    @enter="onEnter"
+    @leave="onLeave"
   >
     <div
       v-if="itemCtx.open.value"
@@ -44,11 +85,9 @@
       :data-state="itemCtx.open.value ? 'open' : 'closed'"
       :data-size="ctx.size.value"
       :class="attrs.class"
-      class="grid grid-rows-[1fr] overflow-hidden text-[var(--text-muted)] data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+      class="overflow-hidden text-[var(--text-muted)] data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
     >
-      <div class="min-h-0">
-        <slot />
-      </div>
+      <slot />
     </div>
   </Transition>
 </template>

@@ -137,10 +137,10 @@ Events below are emitted by the root `Accordion`.
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
 | chevron rotate on open | `transition-transform duration-150 ease-out` + `data-[state=open]:rotate-180` | inline (matches catalog) | `motion-reduce:transition-none` |
-| content reveal on open (on `Accordion.Content` only) | `animate-accordion-expand` (enter) / `animate-accordion-collapse` (leave) — 150ms ease-out, animates `grid-template-rows: 0fr → 1fr` and `opacity: 0 → 1` on a `display: grid; overflow: hidden` wrapper | semantic (matches catalog) | `motion-reduce:animate-none` on both enter/leave class strings |
+| content reveal on open (on `Accordion.Content` only) | `<Transition :css="false">` with JS `@enter`/`@leave` hooks that set an inline `transition: height 150ms ease-out` and animate `height: 0 → scrollHeight` on enter and `scrollHeight → 0` on leave, clearing both inline styles on `transitionend`. The wrapper stays `overflow-hidden` at rest. | inline (JS-driven; no keyframe utility) | Hooks short-circuit and call `done()` immediately when `matchMedia('(prefers-reduced-motion: reduce)')` matches |
 | header hover state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
-> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The transitions above are taken from our existing catalog — the chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`), and the content reveal uses the dedicated `animate-accordion-expand` / `animate-accordion-collapse` semantic utilities (added to `animations.js` alongside `popup-scale-in` / `popup-scale-out`), driven by a Vue `<Transition>` mirroring the dropdown pattern (`enter-active-class` / `leave-active-class`). No component-local `@keyframes`.
+> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`). The content reveal animates the real `height` of the panel via JS-driven `<Transition>` hooks — a pure-CSS keyframe cannot animate `height: 0 → auto`, and the `grid-template-rows: 0fr → 1fr` trick was rejected because it forces a `display: grid` wrapper that constrains embedded children (e.g. `LogView` with an explicit height). No component-local `@keyframes`; no shared `animate-*` utility.
 
 ## Tokens
 
