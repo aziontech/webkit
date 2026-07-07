@@ -58,6 +58,17 @@ export const SIZE = {
   bannedTokens: ['xs', 'sm', 'md', 'lg', 'xl']
 }
 
+// Positive-boolean rule: a negated boolean reads backwards (`:hidden="false"` to show).
+// These specific negatives must be inverted to their positive form (flip the default too).
+// `disabled` / `readonly` are the accepted, universal exceptions and are NOT listed here.
+export const NEGATIVE_BOOLEANS = {
+  hidden: 'visible',
+  closed: 'open',
+  inactive: 'active',
+  invisible: 'visible',
+  collapsed: 'expanded'
+}
+
 const RULE_DOC = '.claude/rules/prop-vocabulary.md'
 
 /** alias prop name -> { canonical, concept }, built once from CONCEPTS. */
@@ -92,6 +103,13 @@ export function checkPropVocabulary(props, opts = {}) {
       violations.push({
         prop: p.name,
         message: `Boolean prop "${p.name}" must drop the is/has prefix — use "${suggested}" (${RULE_DOC}).`
+      })
+      continue
+    }
+    if (NEGATIVE_BOOLEANS[p.name]) {
+      violations.push({
+        prop: p.name,
+        message: `Boolean prop "${p.name}" is negative — use the positive "${NEGATIVE_BOOLEANS[p.name]}" and flip the default (${RULE_DOC}).`
       })
       continue
     }
@@ -135,17 +153,31 @@ export function checkSizeUnion(unionText) {
 }
 
 /**
- * Check event names. Emits kebab-case; a `update:<prop>` v-model event is exempt (its
- * payload segment may be camelCase). Returns [{ event, message }].
+ * Check event names. Returns [{ event, message }]. Two rules:
+ *   1. Emits are kebab-case (a `update:<prop>` v-model event is exempt — its payload
+ *      segment may be camelCase).
+ *   2. NO REDUNDANT ECHO: an event named `<x>-change` is banned when the component also
+ *      emits `update:<x>` — it is a pure echo of the v-model update. Consumers use
+ *      `@update:<x>` / `v-model`. A genuinely distinct commit event (e.g. commit-on-blur)
+ *      must be a bare `change`, never `<x>-change`, so this never false-positives on it.
  */
 export function checkEventVocabulary(emits) {
   const violations = []
+  const names = new Set(emits.map((e) => e.name))
   for (const e of emits) {
     if (!e.name.includes(':') && /^[a-z]+[A-Z]/.test(e.name)) {
       const suggested = e.name.replace(/([A-Z])/g, '-$1').toLowerCase()
       violations.push({
         event: e.name,
         message: `Event "${e.name}" must be kebab-case — use "${suggested}" (${RULE_DOC}).`
+      })
+      continue
+    }
+    const m = e.name.match(/^(.+)-change$/)
+    if (m && names.has(`update:${m[1]}`)) {
+      violations.push({
+        event: e.name,
+        message: `Event "${e.name}" is redundant — it echoes "update:${m[1]}". Remove it; consumers use "@update:${m[1]}" / v-model. (A distinct commit event should be a bare "change", not "<x>-change".) (${RULE_DOC}).`
       })
     }
   }
@@ -158,6 +190,10 @@ export function vocabularySnapshot() {
     props: CONCEPTS.map((c) => ({ concept: c.concept, canonical: c.canonical, aliases: c.aliases })),
     size: { canonical: SIZE.canonical, bannedTokens: SIZE.bannedTokens },
     booleanPrefixes: { banned: ['is', 'has'] },
-    events: { convention: 'kebab-case, or update:<prop> for v-model' }
+    negativeBooleans: NEGATIVE_BOOLEANS,
+    events: {
+      convention: 'kebab-case, or update:<prop> for v-model',
+      noEchoRule: 'Do not emit "<x>-change" when "update:<x>" exists — it is redundant; use v-model / @update:<x>.'
+    }
   }
 }

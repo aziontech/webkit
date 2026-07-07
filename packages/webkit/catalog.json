@@ -1548,8 +1548,16 @@
         "has"
       ]
     },
+    "negativeBooleans": {
+      "hidden": "visible",
+      "closed": "open",
+      "inactive": "active",
+      "invisible": "visible",
+      "collapsed": "expanded"
+    },
     "events": {
-      "convention": "kebab-case, or update:<prop> for v-model"
+      "convention": "kebab-case, or update:<prop> for v-model",
+      "noEchoRule": "Do not emit \"<x>-change\" when \"update:<x>\" exists — it is redundant; use v-model / @update:<x>."
     }
   },
   "imports": {
