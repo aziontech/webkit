@@ -148,6 +148,7 @@
     >
       <CardBox
         class="w-full max-w-[768px]"
+        :padded="false"
         :data-testid="`${testId}__card`"
       >
         <template #header>

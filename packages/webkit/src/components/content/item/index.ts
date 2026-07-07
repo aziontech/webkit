@@ -5,12 +5,14 @@ import ItemDescription from './item-description.vue'
 import ItemFooter from './item-footer.vue'
 import ItemGroup from './item-group.vue'
 import ItemHeader from './item-header.vue'
+import ItemList from './item-list.vue'
 import ItemMedia from './item-media.vue'
 import ItemSeparator from './item-separator.vue'
 import ItemTitle from './item-title.vue'
 
 type CompoundItem = typeof Item & {
   Group: typeof ItemGroup
+  List: typeof ItemList
   Separator: typeof ItemSeparator
   Media: typeof ItemMedia
   Content: typeof ItemContent
@@ -23,6 +25,7 @@ type CompoundItem = typeof Item & {
 
 const ItemRoot = Object.assign(Item, {
   Group: ItemGroup,
+  List: ItemList,
   Separator: ItemSeparator,
   Media: ItemMedia,
   Content: ItemContent,
