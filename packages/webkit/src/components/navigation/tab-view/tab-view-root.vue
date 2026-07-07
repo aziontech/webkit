@@ -34,7 +34,7 @@
 
   defineSlots<{ default(): unknown }>()
 
-  const valueModel = defineModel<TabViewValue | null>('value', { default: undefined })
+  const valueModel = defineModel<TabViewValue | null | undefined>('value', { default: undefined })
 
   const attrs = useAttrs()
   const testId = computed(
