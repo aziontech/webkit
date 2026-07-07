@@ -2,21 +2,13 @@ import { ref } from 'vue'
 
 import Textarea from '@aziontech/webkit/textarea'
 
-const CORE_IMPORT = "import Textarea from '@aziontech/webkit/textarea'"
+import { toSfc } from '../../_shared/story-source'
 
-const basicSource = ({ initial = "''", bind = '' } = {}) =>
-  [
-    '<script setup>',
-    CORE_IMPORT,
-    "import { ref } from 'vue'",
-    '',
-    `const value = ref(${initial})`,
-    '</script>',
-    '',
-    '<template>',
-    `  <Textarea v-model="value"${bind ? ' ' + bind : ''} />`,
-    '</template>'
-  ].join('\n')
+const CORE_IMPORT = "import Textarea from '@aziontech/webkit/textarea'"
+const IMPORTS = [CORE_IMPORT, "import { ref } from 'vue'"]
+
+const withRef = (body, { initial = "''" } = {}) =>
+  toSfc(IMPORTS, [`const value = ref(${initial})`, '', body].join('\n'))
 
 /** @type {import('@storybook/vue3').Meta<typeof Textarea>} */
 const meta = {
@@ -36,28 +28,8 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Multi-line free-form text input. Renders a fixed-size (large) textarea with a vertical resize handle. Native textarea attributes (rows, maxlength, name, ...) flow through via attribute fallthrough. Supports optional `iconLeft` / `iconRight` slots — the textarea padding adjusts automatically so the text never sits under an icon. When `disabled`, the trailing slot is suppressed and a lock icon takes its place.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          CORE_IMPORT,
-          "import { ref } from 'vue'",
-          '',
-          "const value = ref('')",
-          '</script>',
-          '',
-          '<template>',
-          '  <Textarea v-model="value" placeholder="Write your message" />',
-          '</template>',
-          '```'
-        ].join('\n')
-      },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true
+        component:
+          'Multi-line free-form text input. Renders a fixed-size (large) textarea with a minimum height of 80px. The drag-resize axis is controlled by the `resizable` prop (`vertical` by default, `horizontal`, `both`, or `none`). Native textarea attributes (rows, maxlength, name, ...) flow through via attribute fallthrough.'
       },
       canvas: {
         sourceState: 'shown'
@@ -95,22 +67,30 @@ const meta = {
       description: 'Marks the field as required and sets aria-required.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
+    resizable: {
+      control: 'select',
+      options: ['vertical', 'horizontal', 'both', 'none'],
+      description: 'Which axes the user can drag to resize the field.',
+      table: {
+        type: { summary: "'vertical' | 'horizontal' | 'both' | 'none'" },
+        defaultValue: { summary: "'vertical'" },
+        category: 'props'
+      }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Emitted when the bound value changes.',
       table: { type: { summary: 'string' }, category: 'events' }
-    },
-    iconLeft: {
-      control: false,
-      description: 'Optional leading icon, rendered at top-left inside the field.',
-      table: { type: { summary: 'slot' }, category: 'slots' }
-    },
-    iconRight: {
-      control: false,
-      description:
-        'Optional trailing icon, rendered at top-right. Suppressed when `disabled` (lock icon takes over).',
-      table: { type: { summary: 'slot' }, category: 'slots' }
     }
+  },
+  args: {
+    modelValue: '',
+    placeholder: 'Write your message',
+    disabled: false,
+    readonly: false,
+    invalid: false,
+    required: false,
+    resizable: 'vertical'
   }
 }
 
@@ -129,17 +109,19 @@ const Template = (args) => ({
   `
 })
 
+const DEFAULT_MARKUP = '<Textarea v-model="value" placeholder="Write your message" />'
+
 export const Default = {
   args: { placeholder: 'Write your message' },
   render: Template,
   parameters: {
     docs: {
-      source: {
-        code: basicSource({ bind: 'placeholder="Write your message"' })
-      }
+      source: { code: withRef(DEFAULT_MARKUP) }
     }
   }
 }
+
+const DISABLED_MARKUP = '<Textarea v-model="value" placeholder="Placeholder" disabled />'
 
 export const Disabled = {
   render: () => ({
@@ -150,18 +132,16 @@ export const Disabled = {
     },
     template: `
       <div class="max-w-sm">
-        <Textarea v-model="value" placeholder="Placeholder" disabled />
+        ${DISABLED_MARKUP}
       </div>
     `
   }),
   parameters: {
-    docs: {
-      source: {
-        code: basicSource({ bind: 'placeholder="Placeholder" disabled' })
-      }
-    }
+    docs: { controls: { disable: true }, source: { code: withRef(DISABLED_MARKUP) } }
   }
 }
+
+const INVALID_MARKUP = '<Textarea v-model="value" invalid />'
 
 export const Invalid = {
   render: () => ({
@@ -172,18 +152,19 @@ export const Invalid = {
     },
     template: `
       <div class="max-w-sm">
-        <Textarea v-model="value" invalid />
+        ${INVALID_MARKUP}
       </div>
     `
   }),
   parameters: {
     docs: {
-      source: {
-        code: basicSource({ initial: "'Text Filled'", bind: 'invalid' })
-      }
+      controls: { disable: true },
+      source: { code: withRef(INVALID_MARKUP, { initial: "'Text Filled'" }) }
     }
   }
 }
+
+const REQUIRED_MARKUP = '<Textarea v-model="value" required placeholder="Required field" />'
 
 export const Required = {
   render: () => ({
@@ -194,20 +175,23 @@ export const Required = {
     },
     template: `
       <div class="max-w-sm">
-        <Textarea v-model="value" required placeholder="Required field" />
+        ${REQUIRED_MARKUP}
       </div>
     `
   }),
   parameters: {
-    docs: {
-      source: {
-        code: basicSource({ bind: 'required placeholder="Required field"' })
-      }
-    }
+    docs: { controls: { disable: true }, source: { code: withRef(REQUIRED_MARKUP) } }
   }
 }
 
-export const WithIcons = {
+const RESIZABLE_MARKUP = `<div class="flex flex-col gap-[var(--spacing-md)]">
+  <Textarea v-model="value" placeholder="resizable=vertical (default)" resizable="vertical" />
+  <Textarea v-model="value" placeholder="resizable=horizontal" resizable="horizontal" />
+  <Textarea v-model="value" placeholder="resizable=both" resizable="both" />
+  <Textarea v-model="value" placeholder="resizable=none" resizable="none" />
+</div>`
+
+export const Resizable = {
   render: () => ({
     components: { Textarea },
     setup() {
@@ -215,47 +199,12 @@ export const WithIcons = {
       return { value }
     },
     template: `
-      <div class="max-w-sm flex flex-col gap-[var(--spacing-md)]">
-        <Textarea v-model="value" placeholder="Leading icon">
-          <template #iconLeft><i class="pi pi-pencil" /></template>
-        </Textarea>
-        <Textarea v-model="value" placeholder="Trailing icon">
-          <template #iconRight><i class="pi pi-info-circle" /></template>
-        </Textarea>
-        <Textarea v-model="value" placeholder="Both icons">
-          <template #iconLeft><i class="pi pi-pencil" /></template>
-          <template #iconRight><i class="pi pi-info-circle" /></template>
-        </Textarea>
+      <div class="max-w-sm">
+        ${RESIZABLE_MARKUP}
       </div>
     `
   }),
   parameters: {
-    docs: {
-      source: {
-        code: [
-          '<script setup>',
-          CORE_IMPORT,
-          "import { ref } from 'vue'",
-          '',
-          "const value = ref('')",
-          '</script>',
-          '',
-          '<template>',
-          '  <Textarea v-model="value" placeholder="Leading icon">',
-          '    <template #iconLeft><i class="pi pi-pencil" /></template>',
-          '  </Textarea>',
-          '',
-          '  <Textarea v-model="value" placeholder="Trailing icon">',
-          '    <template #iconRight><i class="pi pi-info-circle" /></template>',
-          '  </Textarea>',
-          '',
-          '  <Textarea v-model="value" placeholder="Both icons">',
-          '    <template #iconLeft><i class="pi pi-pencil" /></template>',
-          '    <template #iconRight><i class="pi pi-info-circle" /></template>',
-          '  </Textarea>',
-          '</template>'
-        ].join('\n')
-      }
-    }
+    docs: { controls: { disable: true }, source: { code: withRef(RESIZABLE_MARKUP) } }
   }
 }

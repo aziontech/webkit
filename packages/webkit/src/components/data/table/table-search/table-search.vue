@@ -41,8 +41,17 @@
   <InputText
     v-bind="$attrs"
     :data-testid="testId"
+    class="flex-1"
+    size="small"
     :model-value="globalFilter"
     :placeholder="placeholder"
     @update:model-value="setFilter"
-  />
+  >
+    <template #iconLeft>
+      <i
+        class="pi pi-search text-button-md"
+        aria-hidden="true"
+      />
+    </template>
+  </InputText>
 </template>

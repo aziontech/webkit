@@ -161,11 +161,10 @@
         <template v-if="dataDriven">
           <PaginationButton
             kind="previous"
+            aria-label="Previous page"
             :disabled="currentPage <= 1"
             @click="onPrevious"
-          >
-            Previous
-          </PaginationButton>
+          />
           <PaginationButton
             v-for="item in pageItems"
             :key="item.key"
@@ -177,11 +176,10 @@
           </PaginationButton>
           <PaginationButton
             kind="next"
+            aria-label="Next page"
             :disabled="currentPage >= pageCount"
             @click="onNext"
-          >
-            Next
-          </PaginationButton>
+          />
         </template>
         <slot v-else />
       </div>

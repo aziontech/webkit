@@ -67,7 +67,23 @@
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
   const panelRef = ref<globalThis.HTMLElement | null>(null)
   const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
+  /**
+   * Stable teleport target for groups. Captured when the panel body mounts and
+   * cleared only after the close transition ends (see onPanelAfterLeave), so the
+   * teleported options ride the panel's own scale-out instead of unmounting the
+   * instant `isOpen` flips to false — Vue nulls the template ref before the leave
+   * transition completes, which would otherwise empty the panel mid-animation.
+   */
+  const bodyTarget = ref<globalThis.HTMLElement | null>(null)
   const groupCount = ref(0)
+
+  watch(panelBodyRef, (el) => {
+    if (el) bodyTarget.value = el
+  })
+
+  function onPanelAfterLeave() {
+    bodyTarget.value = null
+  }
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-dropdown'
@@ -97,7 +113,8 @@
     isOpen: isOpenRef,
     placement: placementRef,
     offset: offsetRef,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
+    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+    onDismiss: () => setOpen(false)
   })
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as DropdownPlacement)
@@ -294,7 +311,7 @@
     panelId,
     triggerRef,
     panelRef,
-    panelBodyRef,
+    panelBodyRef: bodyTarget,
     setOpen,
     selectOption,
     registerGroup,
@@ -322,6 +339,7 @@
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+        @after-leave="onPanelAfterLeave"
       >
         <div
           v-if="isOpenRef"

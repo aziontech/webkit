@@ -3,20 +3,20 @@ name: textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: e083abf2055f1f2edcae3776e76dfae466453a5f1a011485eda7f083106a31f2
+checksum: ce9065f011c9ae77d93365dc2644d6b1bd82e7d8c5482147652adec1c45a2481
 created: 2026-06-23
-last_updated: 2026-06-23
+last_updated: 2026-07-03
 ---
 
 # Textarea — Component Spec
 
 ## Purpose
 
-Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px and a vertical resize handle. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
 ## When to use
 
@@ -49,11 +49,9 @@ const value = ref('')
 <template>
   <Textarea v-model="value" placeholder="Write your message" />
 
-  <!-- With leading and trailing icons -->
-  <Textarea v-model="value" placeholder="Write your message">
-    <template #iconLeft><i class="pi pi-pencil" /></template>
-    <template #iconRight><i class="pi pi-info-circle" /></template>
-  </Textarea>
+  <!-- Lock the field height, or allow horizontal/both-axes drag -->
+  <Textarea v-model="value" placeholder="Fixed size" resizable="none" />
+  <Textarea v-model="value" placeholder="Any direction" resizable="both" />
 </template>
 ```
 
@@ -67,6 +65,7 @@ const value = ref('')
 | `readonly` | `boolean` | `false` | no | Marks the field as read-only; keeps focus styling, blocks edits. |
 | `invalid` | `boolean` | `false` | no | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
 | `required` | `boolean` | `false` | no | Marks the field as required and sets `aria-required`. |
+| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | no | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
 
 ## Events
 
@@ -76,10 +75,7 @@ const value = ref('')
 
 ## Slots
 
-| Slot | Notes |
-|---|---|
-| `iconLeft` | Optional leading icon, rendered at top-left inside the field. |
-| `iconRight` | Optional trailing icon, rendered at top-right. Suppressed when `disabled` (the lock icon takes over). |
+_No slots._
 
 ## States
 
@@ -89,7 +85,7 @@ const value = ref('')
 - `data-required` mirrors the `required` prop
 - `data-readonly` mirrors the `readonly` prop
 - `data-filled` mirrors whether `modelValue` is non-empty
-- `data-has-icon-left` / `data-has-icon-right` mirror whether the respective slots are filled (drive the textarea padding so the text never sits under an icon)
+- `data-resize` on the native `<textarea>` mirrors the `resizable` prop and drives the `resize-*` Tailwind variant
 
 ## Motion & Animations
 
@@ -114,10 +110,7 @@ const value = ref('')
 | border (required) | `var(--warning-border)` |
 | border (invalid) | `var(--danger-border)` |
 | border width | `var(--border-width-default)` |
-| spacing (padding default) | `var(--spacing-sm)` |
-| spacing (padding focus) | `var(--spacing-md)` |
-| spacing (padding disabled) | `var(--spacing-md)` |
-| gap | `var(--spacing-xs)` |
+| spacing (padding) | `var(--spacing-sm)` |
 | shape | `var(--shape-elements)` |
 
 ## Theme gaps
@@ -128,7 +121,7 @@ const value = ref('')
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: border-color swaps to `var(--ring-color)` and inner padding grows from `var(--spacing-sm)` to `var(--spacing-md)` on `:focus-within`; both transitions respect `motion-reduce:transition-none`.
+- Visible focus: on `:focus`, a `ring-2` shadow in `var(--ring-color)` plus a `ring-offset-2` in `var(--bg-canvas)` render around the field; the color transition respects `motion-reduce:transition-none`.
 - Keyboard map: `Tab` focuses; typing inserts text; `Enter` inserts a newline; `Shift+Tab` moves focus to the previous element.
 - ARIA: root is a native `<textarea>`; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; `aria-disabled` mirrors `disabled` when applicable.
 - Contrast ≥4.5:1 (text) / ≥3:1 (border + icons), including disabled state.
@@ -141,7 +134,7 @@ const value = ref('')
 - Disabled
 - Invalid — justified: `invalid` is a distinct visual state coming from the Figma spec that consumers need to verify in isolation.
 - Required — justified: `required` swaps the border to the warning (yellow) token and must be verifiable in isolation.
-- WithIcons — justified: the `iconLeft` / `iconRight` slots are visible only when filled by the consumer; the composite story documents leading-only, trailing-only, and both-icons layouts so the absolute positioning and padding compensation are verifiable.
+- Resizable — justified: `resizable` exposes four discrete axis modes (`vertical`, `horizontal`, `both`, `none`); the composite story renders each side by side so the drag-handle affordance and the resulting `resize-*` CSS behavior are verifiable in a single frame.
 
 ## Constraints — DO NOT
 
