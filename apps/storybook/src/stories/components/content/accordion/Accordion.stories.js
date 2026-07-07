@@ -1,5 +1,10 @@
 import Accordion from '@aziontech/webkit/accordion'
+import LogView from '@aziontech/webkit/log-view'
+import LogViewContent from '@aziontech/webkit/log-view-content'
+import LogViewHeader from '@aziontech/webkit/log-view-header'
+import { ref } from 'vue'
 
+import { completeDeployLog } from '../../code/log-view/complete-deploy-log.js'
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Accordion from '@aziontech/webkit/accordion'"
@@ -8,7 +13,10 @@ const components = {
   Accordion,
   AccordionItem: Accordion.Item,
   AccordionTrigger: Accordion.Trigger,
-  AccordionContent: Accordion.Content
+  AccordionContent: Accordion.Content,
+  LogView,
+  LogViewHeader,
+  LogViewContent
 }
 
 /** @type {import('@storybook/vue3').Meta<typeof Accordion>} */
@@ -358,6 +366,78 @@ const MULTIPLE_MARKUP = `<Accordion type="multiple" :default-value="['overview',
     <Accordion.Content>Available on Business and Enterprise plans.</Accordion.Content>
   </Accordion.Item>
 </Accordion>`
+
+const WITH_LOG_VIEW_IMPORT = [
+  "import Accordion from '@aziontech/webkit/accordion'",
+  "import LogView from '@aziontech/webkit/log-view'",
+  "import LogViewHeader from '@aziontech/webkit/log-view-header'",
+  "import LogViewContent from '@aziontech/webkit/log-view-content'",
+  "import { ref } from 'vue'",
+  '',
+  'const lines = [',
+  "  { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },",
+  "  { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },",
+  "  { id: '3', time: '13:47:42', type: 'folder', message: 'dist/index.js', folderType: 'asset', size: '12.4 kB', gzipSize: '4.1 kB' },",
+  "  { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }",
+  ']',
+  "const search = ref('')",
+  'const warningsOnly = ref(false)'
+]
+
+const WITH_LOG_VIEW_MARKUP = `<Accordion type="single" collapsible default-value="deploy-482" class="w-full max-w-[48rem]">
+  <Accordion.Item value="deploy-482">
+    <Accordion.Trigger>Deploy #482 — production</Accordion.Trigger>
+    <Accordion.Content>
+      <LogView :lines="lines" v-model:search="search" v-model:warnings-only="warningsOnly" class="h-[420px]">
+        <LogViewHeader />
+        <LogViewContent />
+      </LogView>
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="deploy-481">
+    <Accordion.Trigger>Deploy #481 — production</Accordion.Trigger>
+    <Accordion.Content>Completed at 12:04. No warnings.</Accordion.Content>
+  </Accordion.Item>
+</Accordion>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Accordion>} */
+export const WithLogView = {
+  render: () => ({
+    components,
+    setup() {
+      const search = ref('')
+      const warningsOnly = ref(false)
+      return { lines: completeDeployLog, search, warningsOnly }
+    },
+    template: `
+      <Accordion type="single" collapsible default-value="deploy-482" class="w-full max-w-[48rem]">
+        <AccordionItem value="deploy-482">
+          <AccordionTrigger>Deploy #482 — production</AccordionTrigger>
+          <AccordionContent>
+            <LogView :lines="lines" v-model:search="search" v-model:warnings-only="warningsOnly" class="h-[420px]">
+              <LogViewHeader />
+              <LogViewContent />
+            </LogView>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="deploy-481">
+          <AccordionTrigger>Deploy #481 — production</AccordionTrigger>
+          <AccordionContent>Completed at 12:04. No warnings.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Composição real: o slot `Accordion.Content` aceita qualquer componente. Aqui, cada item de deploy encapsula um `LogView` completo (header + content) sobre um log de deploy real.'
+      },
+      controls: { disable: true },
+      source: { code: toSfc(WITH_LOG_VIEW_IMPORT, WITH_LOG_VIEW_MARKUP) }
+    }
+  }
+}
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Accordion>} */
 export const Multiple = {
