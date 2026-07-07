@@ -62,7 +62,11 @@
     "conventional-changelog-conventionalcommits": "^7.0.0",
     "playwright": "^1.49.1",
     "semantic-release": "^23.0.0",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.9",
+    "vue": "^3.5.29"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.29"
   },
   "files": [
     "src",
