@@ -37,7 +37,7 @@
     size?: SplitButtonSize
     /** Disables both segments and prevents the menu from opening. */
     disabled?: boolean
-    /** Shows a spinner on the primary button and disables its activation. */
+    /** Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. */
     loading?: boolean
     /** When true, selecting a menu action updates the primary button label and icon to mirror that action and marks it as selected in the menu. */
     updateLabelOnSelect?: boolean
@@ -121,7 +121,7 @@
   >
     <Dropdown
       placement="bottom-end"
-      :disabled="disabled"
+      :disabled="disabled || loading"
       :data-testid="`${testId}__menu`"
       @select="onSelect"
     >
@@ -144,7 +144,7 @@
             :ariaLabel="toggleAriaLabel"
             :kind="kind"
             :size="size"
-            :disabled="disabled"
+            :disabled="disabled || loading"
             :data-testid="`${testId}__toggle-button`"
             class="!rounded-l-none -ml-px border-l border-[var(--border-default)] focus-visible:z-[1]"
           />

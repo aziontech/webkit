@@ -45,7 +45,7 @@
     hide: []
   }>()
 
-  const openModel = defineModel<boolean>('open', { default: undefined })
+  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
 
   const attrs = useAttrs()
   const uid = useId()
@@ -76,7 +76,8 @@
     isOpen: isOpenRef,
     placement: placementRef,
     offset: 8,
-    autoPlacements: ['top', 'bottom', 'right', 'left']
+    autoPlacements: ['top', 'bottom', 'right', 'left'],
+    onDismiss: () => closeTooltip()
   })
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacement)

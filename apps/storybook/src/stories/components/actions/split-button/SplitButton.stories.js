@@ -93,7 +93,8 @@ const meta = {
     },
     loading: {
       control: 'boolean',
-      description: 'Shows a spinner on the primary button and disables its activation.',
+      description:
+        'Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     updateLabelOnSelect: {
@@ -220,7 +221,8 @@ export const Loading = {
   parameters: {
     docs: {
       description: {
-        story: 'Loading state: a spinner replaces the primary icon and its activation is blocked.'
+        story:
+          'Loading state: the whole control takes the disabled status — a spinner replaces the primary icon, activation is blocked, the toggle is disabled, and the menu cannot open.'
       },
       source: { code: toSfc(SNIPPET_IMPORTS, LOADING_MARKUP) }
     }
