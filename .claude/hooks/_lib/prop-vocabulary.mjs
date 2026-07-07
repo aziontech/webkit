@@ -30,9 +30,12 @@ export const CONCEPTS = [
     aliases: ['status']
   },
   {
-    concept: 'closable / dismissible',
-    canonical: 'closable',
-    aliases: ['closeable', 'dismissable', 'dismissible']
+    // Light-dismiss (overlay closes on outside-click / Esc) — Dialog/Drawer/Popover.
+    // Distinct from `closable` (an explicit close affordance / X button — Message/Toast/
+    // TabViewItem), which stays a valid, separate name and is NOT an alias here.
+    concept: 'light-dismiss (closes on outside-click / Esc)',
+    canonical: 'dismissible',
+    aliases: ['dismissable', 'closeable']
   },
   {
     concept: 'primary heading text',

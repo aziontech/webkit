@@ -11,7 +11,8 @@ The single source of truth is [`.claude/hooks/_lib/prop-vocabulary.mjs`](../hook
 | Visual/structural variant | `kind` | component-specific string union | component-specific | `variant`, `appearance`, `intent`, `headerVariant`, `mediaKind`, `cardStyle` |
 | Severity / status color | `severity` | one shared union | per family | `status` |
 | Size | `size` | `'small' \| 'medium' \| 'large'` (this order; a subset is fine) | `large` for actions/links, else `medium` | any of `xs`/`sm`/`md`/`lg`/`xl`, or a reordered union |
-| Closable / dismissible | `closable` | `boolean` | `false` | `closeable`, `dismissable`, `dismissible` |
+| Light-dismiss (closes on outside-click / Esc) | `dismissible` | `boolean` | overlay-specific | `dismissable`, `closeable` |
+| Explicit close affordance (X button) | `closable` | `boolean` | `false` | — (distinct concept; not an alias of `dismissible`) |
 | Primary heading text | `title` | `string` | `''` | `heading`, `header` (as a **prop**) |
 | Primary two-way value | `modelValue` (default `v-model`) | component-specific | per component | `isToggled` |
 | Overlay open state | `open` (+ `v-model:open`), seed `defaultOpen` | `boolean` | `undefined` (controlled) | `visible`, `show`, `opened` |
