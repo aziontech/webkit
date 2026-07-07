@@ -62,7 +62,7 @@ const lines = [
 |---|---|---|
 | `action-click` | `MouseEvent` | Fires when the primary footer button is activated. |
 | `visit-click` | `MouseEvent` | Fires when the visit link is activated. |
-| `step-click` | `[index: number, event: MouseEvent]` | Fires when a next-step row is activated. |
+| `step-click` | `(event: MouseEvent, index: number)` | Fires when a next-step row is activated. `index` is the activated row's position. |
 
 ## Slots
 
