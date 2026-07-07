@@ -151,6 +151,7 @@
   >
     <CardBox
       class="w-full"
+      :padded="false"
       :data-testid="`${testId}__card`"
     >
       <template #content>

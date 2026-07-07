@@ -12,9 +12,12 @@
     defineProps<{
       /** Heading rendered in the header when the `header` slot is empty. */
       title?: string
+      /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
+      padded?: boolean
     }>(),
     {
-      title: ''
+      title: '',
+      padded: true
     }
   )
 
@@ -60,7 +63,7 @@
 
   const titleClasses = 'text-label-md text-[var(--text-default)]'
 
-  const contentClasses = 'flex min-h-0 flex-1 flex-col'
+  const contentClasses = 'flex min-h-0 flex-1 flex-col data-[padded]:p-[var(--spacing-md)]'
 
   const footerClasses =
     'flex min-h-14 shrink-0 items-center justify-center gap-[var(--spacing-sm)] border-t border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
@@ -100,6 +103,7 @@
 
     <div
       :class="contentClasses"
+      :data-padded="props.padded || null"
       :data-testid="`${testId}__content`"
     >
       <slot

@@ -1,9 +1,18 @@
 <script setup lang="ts">
-  import { computed, provide, useAttrs, useSlots } from 'vue'
+  import { computed, inject, provide, useAttrs, useSlots } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { itemRowShellClasses } from '../../inputs/presets/interactive-states'
-  import { ItemInjectionKey, type ItemKind, type ItemSize } from './injection-key'
+  import {
+    focusVisibleRingClasses,
+    ghostLayerClasses,
+    itemRowShellClasses
+  } from '../../inputs/presets/interactive-states'
+  import {
+    ItemContainerInjectionKey,
+    ItemInjectionKey,
+    type ItemKind,
+    type ItemSize
+  } from './injection-key'
   import { mergeAsChildSlot } from './merge-as-child'
 
   defineOptions({
@@ -14,7 +23,7 @@
   export type { ItemKind, ItemSize }
 
   interface Props {
-    /** Item root surface variant. */
+    /** Item root surface variant. `inline` removes the outer padding for inline placement and divided in-card lists. */
     kind?: ItemKind
     /** Item root density (padding and gap). */
     size?: ItemSize
@@ -34,8 +43,13 @@
 
   const attrs = useAttrs()
   const slots = useSlots()
+  const container = inject(ItemContainerInjectionKey, null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-item')
+
+  // Inside a list container (ItemGroup forces `inline`, ItemList forces `default`), the container's
+  // kind wins to avoid a box-in-box effect.
+  const kind = computed<ItemKind>(() => container?.forceKind ?? props.kind)
 
   const rootBindings = computed(() => {
     const rest = { ...attrs }
@@ -46,15 +60,21 @@
       ...rest,
       'data-slot': 'item',
       'data-testid': testId.value,
-      'data-kind': props.kind,
+      'data-kind': kind.value,
       'data-size': props.size,
-      class: cn(itemRowShellClasses, attrs.class as string | undefined)
+      // as-child target is the sole focusable/hoverable element for the whole row, so it draws the
+      // focus ring and hover/active ghost layers.
+      class: cn(
+        itemRowShellClasses,
+        props.asChild && [...focusVisibleRingClasses, ...ghostLayerClasses],
+        attrs.class as string | undefined
+      )
     }
   })
 
   provide(ItemInjectionKey, {
     testId: testId.value,
-    kind: props.kind,
+    kind: kind.value,
     size: props.size
   })
 

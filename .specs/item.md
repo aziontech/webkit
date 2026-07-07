@@ -6,18 +6,19 @@ status: implemented
 spec_version: 2
 created: 2026-05-24
 last_updated: 2026-05-24
-checksum: ee3512ee63484ef33fb8e4f3a4cca78a2587c5fcb029bbdf3462501a096450e5
+checksum: 7c708881c38ac4e3f27b15160973070bd25238adf783089f09565522a14462a4
 ---
 # Item — Component Spec
 
 ## Purpose
 
-Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for lists and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
+Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `CardBox`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
 
 ## Sub-components
 
 - `item.vue` — Root row container (`kind`, `size`).
-- `item-group.vue` — Vertical list wrapper (`role="list"`).
+- `item-group.vue` — Vertical list wrapper (`role="list"`) with a gap between rows; for off-card lists. Forces its descendant Items to render inline (no per-item surface or padding) to avoid a box-in-box effect.
+- `item-list.vue` — Vertical list wrapper (`role="list"`) that draws full-width dividers between rows and no gap; for in-card lists (inside a `CardBox` with `padded=false`). Forces its descendant Items to the `default` kind (padded rows, transparent surface, no per-item border) to avoid a box-in-box effect.
 - `item-separator.vue` — Horizontal divider between rows in a group.
 - `item-media.vue` — Leading media slot (`mediaKind` for icon/image frames).
 - `item-content.vue` — Main text column (title + description).
@@ -31,10 +32,11 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `'default' \| 'outline' \| 'muted'` | `'default'` | no | Item root surface variant. |
+| `kind` | `'default' \| 'outline' \| 'muted' \| 'inline'` | `'default'` | no | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
 | `size` | `'small' \| 'medium'` | `'medium'` | no | Item root density (padding and gap). |
 | `asChild` | `boolean` | `false` | no | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor). |
-| `mediaKind` | `'default' \| 'icon' \| 'image'` | `'default'` | no | ItemMedia region variant (icon frame, image frame). |
+
+> `ItemMedia` carries its own `mediaKind` prop (`'default' | 'icon' | 'image'`, default `'default'`) — see the Sub-components section. It is not a root `Item` prop.
 
 ## Events
 
@@ -48,15 +50,16 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ## States
 
-- Visual states on Item shell: `default` only (no row-level hover, active, or focus)
-- Slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
-- `data-kind` on Item root: `default` | `outline` | `muted`
+- Visual states on Item shell: `default` only, **except with `asChild`**, where the merged child (the whole-row link/button) gains row-level `hover`, `active`, and `focus-visible`
+- Without `asChild`, slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
+- `data-kind` on Item root: `default` | `outline` | `muted` | `inline` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
 - `data-size` on Item root: `small` | `medium`
 - `data-media-kind` on ItemMedia: `default` | `icon` | `image`
 
 ## Motion & Animations
 
-_none_
+- With `asChild`, the merged row uses the shared interactive ghost-layer hover/active treatment (opacity transition on `::before`/`::after`, motion-reduce safe). No component-local keyframes; sourced from the `interactive-states` preset.
+- Without `asChild`, the shell is static.
 
 ## Tokens
 
@@ -73,6 +76,8 @@ _none_
 | spacing gap (small) | `var(--spacing-2)` |
 | padding (medium) | `var(--spacing-4)` |
 | padding (small) | `var(--spacing-3)` |
+| ItemGroup row gap | `var(--spacing-lg)` |
+| ItemList divider | `var(--border-muted)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
 
@@ -84,7 +89,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: on slotted links and buttons only (Item shell does not draw a focus ring).
+- Visible focus: on slotted links and buttons. The Item shell draws no focus ring on its own, except with `asChild`, where the merged focusable child (e.g. an anchor) receives the `focus-visible` ring (`focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]`) and hover/active feedback.
 - Keyboard map: slotted links and buttons supply Tab order; use `asChild` to merge layout onto a single focusable child when the whole row is a link.
 - ARIA: `ItemGroup` uses `role="list"`; consumers may set `role="listitem"` on Item when inside a list; `ItemSeparator` uses `role="separator"`.
 - Contrast ≥4.5:1 for title and description text.
@@ -100,7 +105,10 @@ _none_
 - WithIconMedia — `ItemMedia` with `mediaKind="icon"` and a leading icon (security-style row).
 - WithAvatar — `ItemMedia` wrapping `Avatar` for profile list rows.
 - WithImageMedia — `ItemMedia` with `mediaKind="image"` and a thumbnail image.
-- WithGroup — `ItemGroup` with multiple items, avatars, actions, and `ItemSeparator` between rows.
+- WithGroup — `ItemGroup` with multiple items, avatars, and actions; gapped off-card list.
+- WithList — `ItemList` inside a `CardBox` (`padded=false`); rows separated by full-width dividers.
+- WithListAsChild — `ItemList` of `asChild` anchor rows inside a `CardBox`; whole-row links with dividers, row-level hover, and focus-visible ring.
+- Inline — `kind="inline"` items in an `ItemGroup`, placed directly on the page (no card, no outer padding).
 - WithAsChild — `asChild` on `Item` wrapping an anchor; row layout merges onto the link; focus stays on the anchor.
 
 ## Constraints — DO NOT

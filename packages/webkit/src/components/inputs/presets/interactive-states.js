@@ -107,8 +107,9 @@ export const itemRowShellClasses = [
   'rounded-[var(--shape-button)] border border-transparent text-body-sm text-[var(--text-default)]',
   'data-[kind=outline]:border-[var(--border-muted)] data-[kind=outline]:bg-[var(--bg-surface)]',
   'data-[kind=muted]:bg-[var(--bg-hover)]',
-  'data-[size=medium]:gap-[var(--spacing-md)] data-[size=medium]:p-[var(--spacing-md)]',
-  'data-[size=small]:gap-[var(--spacing-xs)] data-[size=small]:px-[var(--spacing-md)] data-[size=small]:py-[var(--spacing-sm)]'
+  // kind=inline needs no surface treatment (transparent, like default) and drops the outer padding below.
+  'data-[size=medium]:gap-[var(--spacing-md)] [&:not([data-kind=inline])]:data-[size=medium]:p-[var(--spacing-md)]',
+  'data-[size=small]:gap-[var(--spacing-xs)] [&:not([data-kind=inline])]:data-[size=small]:px-[var(--spacing-md)] [&:not([data-kind=inline])]:data-[size=small]:py-[var(--spacing-sm)]'
 ]
 
 /** Item shell only — no row-level hover/focus; slotted Button/link own interaction. */

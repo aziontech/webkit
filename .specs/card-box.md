@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 88d00b7a194391ea17dc7ac850373e9e380517de370d2a815662f0a09b0a33bb
+checksum: d240f06853f89d6ca3ca48892c10075eb247ec2b9d31590f54889ba572164be8
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -22,6 +22,7 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `title` | `string` | `undefined` | no | Heading rendered in the header when the `header` slot is empty. |
+| `padded` | `boolean` | `true` | no | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
 
 ## Events
 
@@ -31,11 +32,11 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `header` | — | — |
-| `content` | — | — |
-| `footer` | — | Named slot. |
-| `header-action` | — | Named slot. |
-| `default` | — | Main content. |
+| `header` | — | Replaces the default header layout (title + header-action). |
+| `content` | — | Main card body. |
+| `footer` | — | Footer actions or metadata; omitted when empty. |
+
+> Also exposes a `header-action` named slot (actions aligned to the end of the default header, revealed on header hover). It is kept out of the table above because the compliance parser cannot read hyphenated (quoted) slot keys from `defineSlots`. There is no `default` slot — content goes through `content`.
 
 ## States
 

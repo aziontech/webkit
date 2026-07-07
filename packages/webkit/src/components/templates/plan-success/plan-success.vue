@@ -99,6 +99,7 @@
     >
       <CardBox
         class="w-full max-w-[512px]"
+        :padded="false"
         :data-testid="`${testId}__card`"
       >
         <template #header>
