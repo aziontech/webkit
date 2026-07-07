@@ -1483,6 +1483,76 @@
       "spin"
     ]
   },
+  "vocabulary": {
+    "props": [
+      {
+        "concept": "visual/structural variant",
+        "canonical": "kind",
+        "aliases": [
+          "variant",
+          "appearance",
+          "intent",
+          "headerVariant",
+          "mediaKind",
+          "cardStyle"
+        ]
+      },
+      {
+        "concept": "severity / status color token",
+        "canonical": "severity",
+        "aliases": [
+          "status"
+        ]
+      },
+      {
+        "concept": "closable / dismissible",
+        "canonical": "closable",
+        "aliases": [
+          "closeable",
+          "dismissable",
+          "dismissible"
+        ]
+      },
+      {
+        "concept": "primary heading text",
+        "canonical": "title",
+        "aliases": [
+          "heading",
+          "header"
+        ]
+      },
+      {
+        "concept": "primary two-way-bound value",
+        "canonical": "modelValue",
+        "aliases": [
+          "isToggled"
+        ]
+      }
+    ],
+    "size": {
+      "canonical": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "bannedTokens": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
+    },
+    "booleanPrefixes": {
+      "banned": [
+        "is",
+        "has"
+      ]
+    },
+    "events": {
+      "convention": "kebab-case, or update:<prop> for v-model"
+    }
+  },
   "imports": {
     "catalog.json": {
       "import": "@aziontech/webkit/catalog.json",
@@ -1740,7 +1810,7 @@
       "treeShakeableImport": "@aziontech/webkit/copy-button",
       "category": "actions",
       "structure": "monolithic",
-      "status": "approved",
+      "status": "implemented",
       "props": [
         {
           "name": "value",
@@ -1865,6 +1935,20 @@
           "default": "'_self'",
           "required": "no",
           "doc": "Link target when `href` is set."
+        },
+        {
+          "name": "iconTransition",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Animates icon swaps with enter/leave transitions."
+        },
+        {
+          "name": "iconClass",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Extra classes applied to the icon glyph."
         }
       ],
       "events": [
@@ -1875,6 +1959,86 @@
         }
       ],
       "purpose": "Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/icon-button/`."
+    },
+    "split-button": {
+      "import": "@aziontech/webkit/split-button",
+      "target": "./src/components/actions/split-button/split-button.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/split-button",
+      "category": "actions",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Visible label text on the primary command button."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "PrimeIcons class for the primary button's leading icon."
+        },
+        {
+          "name": "model",
+          "type": "SplitButtonItem[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Actions rendered as rows in the attached overlay menu."
+        },
+        {
+          "name": "kind",
+          "type": "'primary' | 'secondary' | 'outlined'",
+          "default": "'primary'",
+          "required": "no",
+          "doc": "Visual variant applied to both joined segments."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'large'",
+          "required": "no",
+          "doc": "Size token; affects height, padding, and typography."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables both segments and prevents the menu from opening."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows a spinner on the primary button and disables its activation."
+        },
+        {
+          "name": "updateLabelOnSelect",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does."
+        }
+      ],
+      "events": [
+        {
+          "name": "click",
+          "payload": "(event: MouseEvent, item: SplitButtonItem | null)",
+          "notes": "Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`."
+        },
+        {
+          "name": "item-click",
+          "payload": "SplitButtonItem",
+          "notes": "Fired when a menu action is selected; carries the matched `model` item."
+        }
+      ],
+      "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`."
     },
     "tag": {
       "import": "@aziontech/webkit/tag",
@@ -2468,7 +2632,7 @@
           "type": "boolean",
           "default": "true",
           "required": "no",
-          "doc": "Shows the copy-to-clipboard control in LogViewHeader."
+          "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent)."
         },
         {
           "name": "disabled",
@@ -2476,6 +2640,20 @@
           "default": "false",
           "required": "no",
           "doc": "Disables toolbar controls in LogViewHeader."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Replaces the LogViewContent log body with a centered spinner and label."
+        },
+        {
+          "name": "loadingLabel",
+          "type": "string",
+          "default": "'Loading...'",
+          "required": "no",
+          "doc": "Label shown beneath the spinner while `loading`."
         }
       ],
       "events": [
@@ -2557,7 +2735,7 @@
           "type": "string",
           "default": "'Copy code'",
           "required": "no",
-          "doc": "Accessible name for the copy IconButton."
+          "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label)."
         },
         {
           "name": "animateLines",
@@ -2602,7 +2780,12 @@
         "@aziontech/webkit/table-cell",
         "@aziontech/webkit/table-sort-button",
         "@aziontech/webkit/table-toolbar",
-        "@aziontech/webkit/table-search"
+        "@aziontech/webkit/table-search",
+        "@aziontech/webkit/table-filter",
+        "@aziontech/webkit/table-applied-filters",
+        "@aziontech/webkit/table-column-selector",
+        "@aziontech/webkit/table-export",
+        "@aziontech/webkit/table-refresh-button"
       ],
       "category": "data",
       "structure": "composition",
@@ -2634,7 +2817,7 @@
           "type": "TableColumn[]",
           "default": "[]",
           "required": "no",
-          "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. When non-empty, the table renders itself via TanStack."
+          "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack."
         },
         {
           "name": "rowKey",
@@ -2754,6 +2937,48 @@
           "default": "[10, 25, 50, 100]",
           "required": "no",
           "doc": "Rows-per-page options shown in the footer selector."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Data-driven mode: render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`."
+        },
+        {
+          "name": "filters",
+          "type": "AppliedFilter[]",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:filters — structured applied conditions committed by `Table.Filter`, distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch."
+        },
+        {
+          "name": "filterFields",
+          "type": "FilterField[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder."
+        },
+        {
+          "name": "state",
+          "type": "TableStateSnapshot",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern."
+        },
+        {
+          "name": "initialState",
+          "type": "Partial<TableStateSnapshot>",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model."
+        },
+        {
+          "name": "exportFilename",
+          "type": "string",
+          "default": "'export.csv'",
+          "required": "no",
+          "doc": "Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given."
         }
       ],
       "events": [
@@ -2786,6 +3011,36 @@
           "name": "row-click",
           "payload": "row: Record<string, unknown>",
           "notes": "Fires when a rendered row is clicked (data-driven mode)."
+        },
+        {
+          "name": "update:filters",
+          "payload": "value: AppliedFilter[]",
+          "notes": "v-model:filters."
+        },
+        {
+          "name": "update:state",
+          "payload": "value: TableStateSnapshot",
+          "notes": "v-model:state; debounced so bursts of changes coalesce."
+        },
+        {
+          "name": "filter-apply",
+          "payload": "filters: AppliedFilter[]",
+          "notes": "The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`."
+        },
+        {
+          "name": "filter-remove",
+          "payload": "filter: AppliedFilter",
+          "notes": "One applied filter/chip was removed."
+        },
+        {
+          "name": "refresh",
+          "payload": "—",
+          "notes": "Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches."
+        },
+        {
+          "name": "export",
+          "payload": "rows: Record<string, unknown>[]",
+          "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
         }
       ],
       "slots": [
@@ -2811,13 +3066,13 @@
         },
         {
           "name": "toolbar",
-          "scope": "{ table }",
-          "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode."
+          "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
+          "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode; `selectedRows` / `selectedCount` / `clearSelection` expose the selection for bulk-action toolbars, and `loading` mirrors the prop."
         },
         {
           "name": "filters",
-          "scope": "{ table }",
-          "notes": "Active-filter chips row below the toolbar (both modes); same `table` scope as `toolbar`."
+          "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
+          "notes": "Active-filter chips row below the toolbar (both modes); same scope as `toolbar`."
         },
         {
           "name": "empty",
@@ -2825,7 +3080,7 @@
           "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
         }
       ],
-      "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Paginator`](./paginator.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`). `@tanstack/virtual` remains forbidden."
+      "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Paginator`](./paginator.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable)."
     },
     "table-root": {
       "import": "@aziontech/webkit/table-root",
@@ -2863,7 +3118,7 @@
           "type": "TableColumn[]",
           "default": "[]",
           "required": "no",
-          "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. When non-empty, the table renders itself via TanStack."
+          "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack."
         },
         {
           "name": "rowKey",
@@ -2983,6 +3238,48 @@
           "default": "[10, 25, 50, 100]",
           "required": "no",
           "doc": "Rows-per-page options shown in the footer selector."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Data-driven mode: render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`."
+        },
+        {
+          "name": "filters",
+          "type": "AppliedFilter[]",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:filters — structured applied conditions committed by `Table.Filter`, distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch."
+        },
+        {
+          "name": "filterFields",
+          "type": "FilterField[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder."
+        },
+        {
+          "name": "state",
+          "type": "TableStateSnapshot",
+          "default": "undefined",
+          "required": "no",
+          "doc": "v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern."
+        },
+        {
+          "name": "initialState",
+          "type": "Partial<TableStateSnapshot>",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model."
+        },
+        {
+          "name": "exportFilename",
+          "type": "string",
+          "default": "'export.csv'",
+          "required": "no",
+          "doc": "Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given."
         }
       ],
       "events": [
@@ -3015,6 +3312,36 @@
           "name": "row-click",
           "payload": "row: Record<string, unknown>",
           "notes": "Fires when a rendered row is clicked (data-driven mode)."
+        },
+        {
+          "name": "update:filters",
+          "payload": "value: AppliedFilter[]",
+          "notes": "v-model:filters."
+        },
+        {
+          "name": "update:state",
+          "payload": "value: TableStateSnapshot",
+          "notes": "v-model:state; debounced so bursts of changes coalesce."
+        },
+        {
+          "name": "filter-apply",
+          "payload": "filters: AppliedFilter[]",
+          "notes": "The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`."
+        },
+        {
+          "name": "filter-remove",
+          "payload": "filter: AppliedFilter",
+          "notes": "One applied filter/chip was removed."
+        },
+        {
+          "name": "refresh",
+          "payload": "—",
+          "notes": "Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches."
+        },
+        {
+          "name": "export",
+          "payload": "rows: Record<string, unknown>[]",
+          "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
         }
       ],
       "slots": [
@@ -3040,13 +3367,13 @@
         },
         {
           "name": "toolbar",
-          "scope": "{ table }",
-          "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode."
+          "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
+          "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode; `selectedRows` / `selectedCount` / `clearSelection` expose the selection for bulk-action toolbars, and `loading` mirrors the prop."
         },
         {
           "name": "filters",
-          "scope": "{ table }",
-          "notes": "Active-filter chips row below the toolbar (both modes); same `table` scope as `toolbar`."
+          "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
+          "notes": "Active-filter chips row below the toolbar (both modes); same scope as `toolbar`."
         },
         {
           "name": "empty",
@@ -3054,7 +3381,7 @@
           "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
         }
       ],
-      "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Paginator`](./paginator.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`). `@tanstack/virtual` remains forbidden."
+      "purpose": "Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Paginator`](./paginator.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable)."
     },
     "table-header": {
       "import": "@aziontech/webkit/table-header",
@@ -3125,6 +3452,41 @@
       "kind": "subcomponent",
       "parent": "table",
       "treeShakeableImport": "@aziontech/webkit/table-search"
+    },
+    "table-filter": {
+      "import": "@aziontech/webkit/table-filter",
+      "target": "./src/components/data/table/table-filter/table-filter.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-filter"
+    },
+    "table-applied-filters": {
+      "import": "@aziontech/webkit/table-applied-filters",
+      "target": "./src/components/data/table/table-applied-filters/table-applied-filters.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-applied-filters"
+    },
+    "table-column-selector": {
+      "import": "@aziontech/webkit/table-column-selector",
+      "target": "./src/components/data/table/table-column-selector/table-column-selector.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-column-selector"
+    },
+    "table-export": {
+      "import": "@aziontech/webkit/table-export",
+      "target": "./src/components/data/table/table-export/table-export.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-export"
+    },
+    "table-refresh-button": {
+      "import": "@aziontech/webkit/table-refresh-button",
+      "target": "./src/components/data/table/table-refresh-button/table-refresh-button.vue",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-refresh-button"
     },
     "paginator": {
       "import": "@aziontech/webkit/paginator",
@@ -3976,11 +4338,16 @@
     },
     "calendar": {
       "import": "@aziontech/webkit/calendar",
-      "target": "./src/components/inputs/calendar/calendar.vue",
+      "target": "./src/components/inputs/calendar/index.ts",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/calendar",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/calendar-root",
+      "subcomponents": [
+        "@aziontech/webkit/calendar-preset",
+        "@aziontech/webkit/calendar-clear"
+      ],
       "category": "inputs",
-      "structure": "monolithic",
+      "structure": "composition",
       "status": "approved",
       "props": [
         {
@@ -3988,14 +4355,21 @@
           "type": "Date | null | CalendarRange",
           "default": "null",
           "required": "no",
-          "doc": "Selected value for v-model. A `Date` (or null) in single mode; a `{ start, end }` range object in range mode."
+          "doc": "Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false)."
         },
         {
           "name": "mode",
           "type": "'single' | 'range'",
-          "default": "'single'",
+          "default": "'range'",
           "required": "no",
           "doc": "Selection mode. Single picks one date; range picks a start and end date."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the trigger, day-cell hit-area, and typography."
         },
         {
           "name": "min",
@@ -4016,29 +4390,335 @@
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "Disables the whole grid and navigation, applying disabled tokens."
+          "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
         },
         {
-          "name": "showHeader",
+          "name": "open",
+          "type": "boolean | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state of the popover. Use with v-model:open; omit for uncontrolled."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "'Select a Date Range'",
+          "required": "no",
+          "doc": "Trigger text shown when there is no selection."
+        },
+        {
+          "name": "presets",
+          "type": "CalendarPresetItem[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
+        },
+        {
+          "name": "showTime",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows Start/End time fields alongside the date fields."
+        },
+        {
+          "name": "showTimezone",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows the timezone selector below the fields."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone."
+        },
+        {
+          "name": "timezones",
+          "type": "string[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Timezone options for the selector; empty falls back to a curated list derived from `Intl`."
+        },
+        {
+          "name": "horizontal",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Lays the fields/apply column beside the calendar instead of below it."
+        },
+        {
+          "name": "clearable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows a clear control on the trigger that empties the committed selection."
+        },
+        {
+          "name": "showApply",
           "type": "boolean",
           "default": "true",
           "required": "no",
-          "doc": "Shows the month/year label and previous/next month navigation."
+          "doc": "Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately."
+        },
+        {
+          "name": "period",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Enables the \"Select Period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
+        },
+        {
+          "name": "split",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the trigger as a split control with a separate chevron affordance."
         }
       ],
       "events": [
         {
           "name": "update:modelValue",
           "payload": "Date | null | CalendarRange",
-          "notes": "v-model. The selected `Date` (single) or `{ start, end }` (range)."
+          "notes": "v-model. The committed `Date` (single) or `{ start, end }` (range); empty value on clear."
+        },
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "v-model:open. Emitted when the popover opens or closes."
+        },
+        {
+          "name": "update:timezone",
+          "payload": "string",
+          "notes": "v-model:timezone. Emitted when the timezone selection changes."
         },
         {
           "name": "month-change",
           "payload": "CalendarMonth",
-          "notes": "Emitted when the visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
+          "notes": "Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
+        },
+        {
+          "name": "apply",
+          "payload": "Date | null | CalendarRange",
+          "notes": "Emitted when the draft selection is committed via Apply."
         }
       ],
-      "purpose": "Inline date picker that renders a month grid for selecting a single date or a date range. Unlike a popover-anchored datepicker, Calendar is always-visible (no overlay, no positioning) and is the standalone surface a consumer embeds in a form, panel, or popover body. Date math uses the native `Date` API only — no date library."
+      "slots": [
+        {
+          "name": "trigger",
+          "scope": "{ open, value, displayValue }",
+          "notes": "Replaces the default trigger button; scope exposes the open state, raw value, and formatted label."
+        },
+        {
+          "name": "presets",
+          "scope": "—",
+          "notes": "Custom preset dropdown content (e.g. `<Calendar.Preset>`); overrides the `presets` prop rendering."
+        },
+        {
+          "name": "footer",
+          "scope": "—",
+          "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
+        }
+      ],
+      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
+    },
+    "calendar-root": {
+      "import": "@aziontech/webkit/calendar-root",
+      "target": "./src/components/inputs/calendar/calendar.vue",
+      "kind": "root",
+      "rootOf": "calendar",
+      "treeShakeableImport": "@aziontech/webkit/calendar-root",
+      "category": "inputs",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "Date | null | CalendarRange",
+          "default": "null",
+          "required": "no",
+          "doc": "Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false)."
+        },
+        {
+          "name": "mode",
+          "type": "'single' | 'range'",
+          "default": "'range'",
+          "required": "no",
+          "doc": "Selection mode. Single picks one date; range picks a start and end date."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the trigger, day-cell hit-area, and typography."
+        },
+        {
+          "name": "min",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Earliest selectable date; earlier days render disabled."
+        },
+        {
+          "name": "max",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Latest selectable date; later days render disabled."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
+        },
+        {
+          "name": "open",
+          "type": "boolean | undefined",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state of the popover. Use with v-model:open; omit for uncontrolled."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "'Select a Date Range'",
+          "required": "no",
+          "doc": "Trigger text shown when there is no selection."
+        },
+        {
+          "name": "presets",
+          "type": "CalendarPresetItem[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
+        },
+        {
+          "name": "showTime",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows Start/End time fields alongside the date fields."
+        },
+        {
+          "name": "showTimezone",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows the timezone selector below the fields."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone."
+        },
+        {
+          "name": "timezones",
+          "type": "string[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Timezone options for the selector; empty falls back to a curated list derived from `Intl`."
+        },
+        {
+          "name": "horizontal",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Lays the fields/apply column beside the calendar instead of below it."
+        },
+        {
+          "name": "clearable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Shows a clear control on the trigger that empties the committed selection."
+        },
+        {
+          "name": "showApply",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately."
+        },
+        {
+          "name": "period",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Enables the \"Select Period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
+        },
+        {
+          "name": "split",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Renders the trigger as a split control with a separate chevron affordance."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "Date | null | CalendarRange",
+          "notes": "v-model. The committed `Date` (single) or `{ start, end }` (range); empty value on clear."
+        },
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "v-model:open. Emitted when the popover opens or closes."
+        },
+        {
+          "name": "update:timezone",
+          "payload": "string",
+          "notes": "v-model:timezone. Emitted when the timezone selection changes."
+        },
+        {
+          "name": "month-change",
+          "payload": "CalendarMonth",
+          "notes": "Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
+        },
+        {
+          "name": "apply",
+          "payload": "Date | null | CalendarRange",
+          "notes": "Emitted when the draft selection is committed via Apply."
+        }
+      ],
+      "slots": [
+        {
+          "name": "trigger",
+          "scope": "{ open, value, displayValue }",
+          "notes": "Replaces the default trigger button; scope exposes the open state, raw value, and formatted label."
+        },
+        {
+          "name": "presets",
+          "scope": "—",
+          "notes": "Custom preset dropdown content (e.g. `<Calendar.Preset>`); overrides the `presets` prop rendering."
+        },
+        {
+          "name": "footer",
+          "scope": "—",
+          "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
+        }
+      ],
+      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
+    },
+    "calendar-preset": {
+      "import": "@aziontech/webkit/calendar-preset",
+      "target": "./src/components/inputs/calendar/calendar-preset/calendar-preset.vue",
+      "kind": "subcomponent",
+      "parent": "calendar",
+      "treeShakeableImport": "@aziontech/webkit/calendar-preset"
+    },
+    "calendar-clear": {
+      "import": "@aziontech/webkit/calendar-clear",
+      "target": "./src/components/inputs/calendar/calendar-clear/calendar-clear.vue",
+      "kind": "subcomponent",
+      "parent": "calendar",
+      "treeShakeableImport": "@aziontech/webkit/calendar-clear"
     },
     "input-text": {
       "import": "@aziontech/webkit/input-text",
@@ -4440,7 +5120,7 @@
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "Appends a `Required` tag next to the label text."
+          "doc": "Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; \"(Required)\" inherits `var(--text-muted)`."
         }
       ],
       "slots": [
@@ -4450,7 +5130,7 @@
           "notes": "Label text; falls back to `value` prop when empty."
         }
       ],
-      "purpose": "Form-field label that pairs descriptive text with an optional `Required` badge. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled."
+      "purpose": "Form-field label that pairs descriptive text with an optional required indicator. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word \"(Required)\" in muted text — replacing the older `Tag` badge for a lighter typographic signal."
     },
     "input-password": {
       "import": "@aziontech/webkit/input-password",
@@ -4741,7 +5421,7 @@
           "type": "'small' | 'medium'",
           "default": "'medium'",
           "required": "no",
-          "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+          "doc": "Size token; `small` is a fixed 20px, `medium`'s height is driven by its vertical padding (~30px)."
         },
         {
           "name": "removable",
@@ -4749,6 +5429,13 @@
           "default": "false",
           "required": "no",
           "doc": "When true, renders a trailing remove button that emits `remove`."
+        },
+        {
+          "name": "clickable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "When true, the chip body becomes interactive (`role=\"button\"`, focusable) and emits `click` on activation (click / Enter / Space)."
         }
       ],
       "events": [
@@ -4756,6 +5443,11 @@
           "name": "remove",
           "payload": "MouseEvent",
           "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out."
+        },
+        {
+          "name": "click",
+          "payload": "MouseEvent | KeyboardEvent",
+          "notes": "Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`."
         }
       ],
       "slots": [
@@ -5431,6 +6123,13 @@
           "default": "false",
           "required": "no",
           "doc": "Marks the field as required and sets `aria-required`."
+        },
+        {
+          "name": "resizable",
+          "type": "'vertical' | 'horizontal' | 'both' | 'none'",
+          "default": "'vertical'",
+          "required": "no",
+          "doc": "Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior."
         }
       ],
       "events": [
@@ -5440,19 +6139,7 @@
           "notes": "v-model update."
         }
       ],
-      "slots": [
-        {
-          "name": "iconLeft",
-          "scope": "",
-          "notes": "Optional leading icon, rendered at top-left inside the field."
-        },
-        {
-          "name": "iconRight",
-          "scope": "",
-          "notes": "Optional trailing icon, rendered at top-right. Suppressed when `disabled` (the lock icon takes over)."
-        }
-      ],
-      "purpose": "Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px and a vertical resize handle. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
+      "purpose": "Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
       "useWhen": [
         "Capture multiple lines of free-form text (descriptions, comments, messages)."
       ],
@@ -5541,6 +6228,13 @@
           "doc": "Switches the helper to `kind=invalid` and applies invalid border tokens on the textarea."
         },
         {
+          "name": "resizable",
+          "type": "'vertical' | 'horizontal' | 'both' | 'none'",
+          "default": "'vertical'",
+          "required": "no",
+          "doc": "Forwarded to the underlying `Textarea`; controls which axes the user can drag to resize the field."
+        },
+        {
           "name": "inputId",
           "type": "string",
           "default": "''",
@@ -5555,7 +6249,7 @@
           "notes": "v-model update."
         }
       ],
-      "purpose": "Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, vertical resize, 80px min-height) instead of `InputText`."
+      "purpose": "Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, 80px min-height, configurable resize axis via `resizable`) instead of `InputText`."
     },
     "dropdown": {
       "import": "@aziontech/webkit/dropdown",
@@ -7032,6 +7726,202 @@
       "parent": "panel",
       "treeShakeableImport": "@aziontech/webkit/panel-header"
     },
+    "popover": {
+      "import": "@aziontech/webkit/popover",
+      "target": "./src/components/overlay/popover/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/popover-root",
+      "subcomponents": [
+        "@aziontech/webkit/popover-trigger",
+        "@aziontech/webkit/popover-content",
+        "@aziontech/webkit/popover-header",
+        "@aziontech/webkit/popover-title",
+        "@aziontech/webkit/popover-description",
+        "@aziontech/webkit/popover-close",
+        "@aziontech/webkit/popover-footer"
+      ],
+      "category": "overlay",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
+        },
+        {
+          "name": "placement",
+          "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+          "default": "'bottom-start'",
+          "required": "no",
+          "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space."
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "default": "4",
+          "required": "no",
+          "doc": "Pixel gap between the trigger and the panel."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+        },
+        {
+          "name": "width",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`."
+        },
+        {
+          "name": "dismissable",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Place `<Popover.Trigger>` followed by `<Popover.Content>`."
+        }
+      ],
+      "purpose": "Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content."
+    },
+    "popover-root": {
+      "import": "@aziontech/webkit/popover-root",
+      "target": "./src/components/overlay/popover/popover.vue",
+      "kind": "root",
+      "rootOf": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-root",
+      "category": "overlay",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
+        },
+        {
+          "name": "placement",
+          "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+          "default": "'bottom-start'",
+          "required": "no",
+          "doc": "Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space."
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "default": "4",
+          "required": "no",
+          "doc": "Pixel gap between the trigger and the panel."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+        },
+        {
+          "name": "width",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`."
+        },
+        {
+          "name": "dismissable",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Place `<Popover.Trigger>` followed by `<Popover.Content>`."
+        }
+      ],
+      "purpose": "Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content."
+    },
+    "popover-trigger": {
+      "import": "@aziontech/webkit/popover-trigger",
+      "target": "./src/components/overlay/popover/popover-trigger/popover-trigger.vue",
+      "kind": "subcomponent",
+      "parent": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-trigger"
+    },
+    "popover-content": {
+      "import": "@aziontech/webkit/popover-content",
+      "target": "./src/components/overlay/popover/popover-content/popover-content.vue",
+      "kind": "subcomponent",
+      "parent": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-content"
+    },
+    "popover-header": {
+      "import": "@aziontech/webkit/popover-header",
+      "target": "./src/components/overlay/popover/popover-header/popover-header.vue",
+      "kind": "subcomponent",
+      "parent": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-header"
+    },
+    "popover-title": {
+      "import": "@aziontech/webkit/popover-title",
+      "target": "./src/components/overlay/popover/popover-title/popover-title.vue",
+      "kind": "subcomponent",
+      "parent": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-title"
+    },
+    "popover-description": {
+      "import": "@aziontech/webkit/popover-description",
+      "target": "./src/components/overlay/popover/popover-description/popover-description.vue",
+      "kind": "subcomponent",
+      "parent": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-description"
+    },
+    "popover-close": {
+      "import": "@aziontech/webkit/popover-close",
+      "target": "./src/components/overlay/popover/popover-close/popover-close.vue",
+      "kind": "subcomponent",
+      "parent": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-close"
+    },
+    "popover-footer": {
+      "import": "@aziontech/webkit/popover-footer",
+      "target": "./src/components/overlay/popover/popover-footer/popover-footer.vue",
+      "kind": "subcomponent",
+      "parent": "popover",
+      "treeShakeableImport": "@aziontech/webkit/popover-footer"
+    },
     "dropdown-menu": {
       "import": "@aziontech/webkit/dropdown-menu",
       "target": "./src/components/overlay/dropdown-menu/dropdown-menu.vue",
@@ -7789,6 +8679,12 @@
       "target": "./src/utils/cn.js",
       "kind": "util",
       "treeShakeableImport": "@aziontech/webkit/utils/cn"
+    },
+    "utils/csv": {
+      "import": "@aziontech/webkit/utils/csv",
+      "target": "./src/utils/csv.ts",
+      "kind": "util",
+      "treeShakeableImport": "@aziontech/webkit/utils/csv"
     },
     "styles/country-flags": {
       "import": "@aziontech/webkit/styles/country-flags",

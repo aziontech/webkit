@@ -25,7 +25,8 @@
     "card-box": {
       "import": "@aziontech/webkit/card-box",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/card-box"
+      "treeShakeableImport": "@aziontech/webkit/card-box",
+      "styleSeam": true
     },
     "chip": {
       "import": "@aziontech/webkit/chip",

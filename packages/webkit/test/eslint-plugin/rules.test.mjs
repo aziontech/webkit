@@ -15,6 +15,7 @@ const noHardcodedColor = (await import('../../src/eslint-plugin/rules/no-hardcod
 const preferTreeShakeableRoot = (await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')).default
 const noDeprecatedComponent = (await import('../../src/eslint-plugin/rules/no-deprecated-component.js')).default
 const preferWebkitComponent = (await import('../../src/eslint-plugin/rules/prefer-webkit-component.js')).default
+const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-override.js')).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -202,6 +203,31 @@ test('prefer-webkit-component', () => {
     invalid: [
       { code: "import { Button } from 'primevue/button'", errors: [{ messageId: 'prefer' }] },
       { code: "import PrimeVue from 'primevue'", errors: [{ messageId: 'prefer' }] }
+    ]
+  })
+})
+
+test('no-style-override', () => {
+  const imp = (n, s) => `<script setup>import ${n} from '@aziontech/webkit/${s}'</script>`
+  vue.run('no-style-override', noStyleOverride, {
+    valid: [
+      // no class/style on the webkit tag
+      { code: `${imp('Button', 'button')}<template><Button kind="primary">Save</Button></template>`, filename: 'a.vue' },
+      // class on a NON-webkit element is fine (consumer's own markup)
+      { code: `${imp('Button', 'button')}<template><div class="p-4"><Button /></div></template>`, filename: 'b.vue' },
+      // styleSeam component (card-box) is exempt
+      { code: `${imp('CardBox', 'card-box')}<template><CardBox class="bg-[var(--bg-canvas)]" /></template>`, filename: 'c.vue' },
+      // allow-listed via options (binding name)
+      { code: `${imp('Button', 'button')}<template><Button class="x" /></template>`, filename: 'd.vue', options: [{ allow: ['Button'] }] },
+      // checkStyle:false lets inline style through
+      { code: `${imp('Button', 'button')}<template><Button style="color:red" /></template>`, filename: 'e.vue', options: [{ checkStyle: false }] }
+    ],
+    invalid: [
+      { code: `${imp('Button', 'button')}<template><Button class="p-8">x</Button></template>`, filename: 'f.vue', errors: [{ messageId: 'override' }] },
+      { code: `${imp('Button', 'button')}<template><Button :class="cls" /></template>`, filename: 'g.vue', errors: [{ messageId: 'override' }] },
+      { code: `${imp('Button', 'button')}<template><Button style="color:red" /></template>`, filename: 'h.vue', errors: [{ messageId: 'override' }] },
+      // dot-notation sub-component of an imported compound
+      { code: `${imp('Table', 'table')}<template><Table><Table.Row class="x" /></Table></template>`, filename: 'i.vue', errors: [{ messageId: 'override' }] }
     ]
   })
 })

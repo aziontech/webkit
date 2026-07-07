@@ -16,6 +16,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
+import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -179,6 +180,10 @@ function _readSpec(subpath) {
     // actually deprecated — then no-deprecated-component steers to the replacement.
     deprecated: frontmatter.deprecated === true,
     replacedBy: frontmatter.replaced_by ?? null,
+    // Style seam (pillar 2): a component that INTENTIONALLY lets the consumer pass
+    // class/style to its root (a layout/container wrapper). no-style-override reads this
+    // to allow it. Opt-in via spec frontmatter `style_seam: true`; default false.
+    styleSeam: frontmatter.style_seam === true,
     // Usage guidance (B3): Purpose prose + the structured "when/why" sections. Extracted
     // when present; empty until a spec is backfilled. Powers get_component / suggest /
     // get_best_practices and the Storybook description.
@@ -298,6 +303,7 @@ function build() {
       if (spec.bestPractices.length) entry.bestPractices = spec.bestPractices
       if (spec.deprecated) entry.deprecated = true
       if (spec.replacedBy) entry.replacedBy = spec.replacedBy
+      if (spec.styleSeam) entry.styleSeam = true
     } else if (entry.kind === 'component') {
       entry.category = categoryFromTarget(target)
     }
@@ -311,6 +317,9 @@ function build() {
     deniedPrefixes: [`${PKG_NAME}/src/`],
     tokenRules: TOKEN_RULES,
     tokens: buildTokens(),
+    // Canonical prop vocabulary (pillar 1): the MCP surfaces this so AI-generated
+    // consumer code uses `kind` (not `variant`), `severity` (not `status`), etc.
+    vocabulary: vocabularySnapshot(),
     imports
   }
 }

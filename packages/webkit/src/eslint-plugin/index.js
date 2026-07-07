@@ -10,6 +10,7 @@ import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
+import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
@@ -23,7 +24,8 @@ const rules = {
   'no-hardcoded-color': noHardcodedColor,
   'prefer-tree-shakeable-root': preferTreeShakeableRoot,
   'no-deprecated-component': noDeprecatedComponent,
-  'prefer-webkit-component': preferWebkitComponent
+  'prefer-webkit-component': preferWebkitComponent,
+  'no-style-override': noStyleOverride
 }
 
 const FILES = ['**/*.vue', '**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', '**/*.mjs', '**/*.cjs']
@@ -54,7 +56,9 @@ const RECOMMENDED = {
   'no-hardcoded-color': 'warn',
   'prefer-tree-shakeable-root': 'warn',
   'no-whole-icon-set-import': 'warn',
-  'prefer-webkit-component': 'warn'
+  'prefer-webkit-component': 'warn',
+  // Behavioral nudge in recommended (warn); STRICT promotes it to error.
+  'no-style-override': 'warn'
 }
 
 const STRICT = Object.fromEntries(Object.keys(rules).map((r) => [r, 'error']))
