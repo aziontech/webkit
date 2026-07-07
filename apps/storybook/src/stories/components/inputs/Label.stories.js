@@ -28,7 +28,7 @@ const meta = {
           '</script>',
           '',
           '<template>',
-          '  <Label for="email" value="Email" required />',
+          '  <Label for="email" label="Email" required />',
           '  <InputText id="email" />',
           '</template>',
           '```'
@@ -37,7 +37,7 @@ const meta = {
     }
   },
   argTypes: {
-    value: {
+    label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'undefined' } }
@@ -49,7 +49,7 @@ const meta = {
     }
   },
   args: {
-    value: 'Label',
+    label: 'Label',
     required: false
   }
 }

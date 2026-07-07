@@ -12,7 +12,7 @@
 
   interface Props {
     /** Fallback text when the default slot is empty. */
-    value?: string
+    label?: string
     /** Color style for the badge surface and label. */
     severity?: BadgeSeverity
     /** Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. */
@@ -20,7 +20,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    value: '',
+    label: '',
     severity: 'primary',
     size: 'medium'
   })
@@ -59,10 +59,10 @@
   >
     <slot v-if="$slots['default']" />
     <span
-      v-else-if="value"
+      v-else-if="label"
       :data-testid="`${testId}__value`"
     >
-      {{ value }}
+      {{ label }}
     </span>
   </span>
 </template>

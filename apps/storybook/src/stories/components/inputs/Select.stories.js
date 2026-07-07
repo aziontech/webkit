@@ -564,7 +564,7 @@ export const WithOptionExtras = {
               </template>
               {{ o.label }}
               <template v-if="o.tag" #tag>
-                <Tag :value="o.tag" severity="info" size="small" />
+                <Tag :label="o.tag" severity="info" size="small" />
               </template>
             </SelectOption>
           </SelectContent>
@@ -605,7 +605,7 @@ export const WithOptionExtras = {
           '        </template>',
           '        {{ o.label }}',
           '        <template v-if="o.tag" #tag>',
-          '          <Tag :value="o.tag" severity="info" size="small" />',
+          '          <Tag :label="o.tag" severity="info" size="small" />',
           '        </template>',
           '      </Select.Option>',
           '    </Select.Content>',

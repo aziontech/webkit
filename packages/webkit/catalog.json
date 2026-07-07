@@ -2050,7 +2050,7 @@
       "status": "implemented",
       "props": [
         {
-          "name": "value",
+          "name": "label",
           "type": "string",
           "default": "'undefined'",
           "required": "no",
@@ -2098,11 +2098,11 @@
         "Show a status/category with severity color via `kind`."
       ],
       "avoidWhen": [
-        "It is purely a count or one-glance status value → use `badge`.",
+        "It is purely a count or one-glance status label → use `badge`.",
         "The user can select or remove it (filters, multi-select values) → use `chip`."
       ],
       "related": [
-        "badge` — denser count/short-value indicator with no icon affordance.",
+        "badge` — denser count/short-label indicator with no icon affordance.",
         "chip` — interactive/removable token."
       ],
       "bestPractices": [
@@ -2174,7 +2174,7 @@
       "status": "approved",
       "props": [
         {
-          "name": "value",
+          "name": "label",
           "type": "string",
           "default": "''",
           "required": "no",
@@ -2199,12 +2199,12 @@
         {
           "name": "default",
           "scope": "—",
-          "notes": "Main content; falls back to `value` when empty."
+          "notes": "Main content; falls back to `label` when empty."
         }
       ],
-      "purpose": "Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status value with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-value indicator with fully filled severity surfaces and no icon affordance.",
+      "purpose": "Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status label with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-label indicator with fully filled severity surfaces and no icon affordance.",
       "useWhen": [
-        "Surface a numeric count or a very short status value attached to another element (a bell with unread count, a status dot with a label).",
+        "Surface a numeric count or a very short status label attached to another element (a bell with unread count, a status dot with a label).",
         "Convey severity through `kind` (neutral / success / danger / …) with a fully filled surface."
       ],
       "avoidWhen": [
@@ -2216,7 +2216,7 @@
         "chip` — interactive/removable token; use when the user can select or dismiss it."
       ],
       "bestPractices": [
-        "Keep the content to a count or a 1–2 word value; longer text belongs in `tag`.",
+        "Keep the content to a count or a 1–2 word label; longer text belongs in `tag`.",
         "Drive color from `kind`, never a hardcoded color or a raw palette class."
       ]
     },
@@ -5076,7 +5076,7 @@
       "status": "implemented",
       "props": [
         {
-          "name": "value",
+          "name": "label",
           "type": "string",
           "default": "''",
           "required": "no",
@@ -5094,7 +5094,7 @@
         {
           "name": "default",
           "scope": "—",
-          "notes": "Helper text; falls back to `value` prop when empty."
+          "notes": "Helper text; falls back to `label` prop when empty."
         }
       ],
       "purpose": "Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it."
@@ -5109,7 +5109,7 @@
       "status": "implemented",
       "props": [
         {
-          "name": "value",
+          "name": "label",
           "type": "string",
           "default": "''",
           "required": "no",
@@ -5127,7 +5127,7 @@
         {
           "name": "default",
           "scope": "—",
-          "notes": "Label text; falls back to `value` prop when empty."
+          "notes": "Label text; falls back to `label` prop when empty."
         }
       ],
       "purpose": "Form-field label that pairs descriptive text with an optional required indicator. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word \"(Required)\" in muted text — replacing the older `Tag` badge for a lighter typographic signal."
@@ -8151,14 +8151,14 @@
         {
           "name": "planTitle",
           "type": "string",
-          "default": "'Pro Plan'",
+          "default": "'Hobby'",
           "required": "no",
           "doc": "Selected plan name in the summary card."
         },
         {
           "name": "planPrice",
           "type": "string",
-          "default": "'$20/MO'",
+          "default": "'Free'",
           "required": "no",
           "doc": "Price badge text beside the plan title."
         },
@@ -8172,7 +8172,7 @@
         {
           "name": "changeLabel",
           "type": "string",
-          "default": "'CHANGE'",
+          "default": "'Change'",
           "required": "no",
           "doc": "Label for the plan change action button."
         },
@@ -8249,7 +8249,7 @@
         {
           "name": "continueLabel",
           "type": "string",
-          "default": "'CONTINUE'",
+          "default": "'Continue'",
           "required": "no",
           "doc": "Primary submit button label."
         },

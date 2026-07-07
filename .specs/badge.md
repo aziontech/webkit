@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: d37492bd1dbec8cc3c561dc9a2f23db9a3b8e7d3b16ceed1233adbd53b3dfda3
+checksum: 2a688a8859634bc9d7aff56cd34b161effd8016f0b88259d53388ba6e1b67684
 created: 2026-06-23
 last_updated: 2026-06-25
 ---
@@ -15,11 +15,11 @@ last_updated: 2026-06-25
 
 ## Purpose
 
-Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status value with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-value indicator with fully filled severity surfaces and no icon affordance.
+Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status label with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-label indicator with fully filled severity surfaces and no icon affordance.
 
 ## When to use
 
-- Surface a numeric count or a very short status value attached to another element (a bell with unread count, a status dot with a label).
+- Surface a numeric count or a very short status label attached to another element (a bell with unread count, a status dot with a label).
 - Convey severity through `kind` (neutral / success / danger / …) with a fully filled surface.
 
 ## When NOT to use
@@ -34,7 +34,7 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 
 ## Best practices
 
-- Keep the content to a count or a 1–2 word value; longer text belongs in `tag`.
+- Keep the content to a count or a 1–2 word label; longer text belongs in `tag`.
 - Drive color from `kind`, never a hardcoded color or a raw palette class.
 
 ## Usage
@@ -45,7 +45,7 @@ import Badge from '@aziontech/webkit/badge'
 </script>
 
 <template>
-  <Badge value="99" severity="primary" size="medium" />
+  <Badge label="99" severity="primary" size="medium" />
 </template>
 ```
 
@@ -53,7 +53,7 @@ import Badge from '@aziontech/webkit/badge'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `''` | no | Fallback text when the default slot is empty. |
+| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | no | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. |
 
@@ -65,7 +65,7 @@ import Badge from '@aziontech/webkit/badge'
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `default` | — | Main content; falls back to `value` when empty. |
+| `default` | — | Main content; falls back to `label` when empty. |
 
 ## States
 
@@ -102,7 +102,7 @@ _none_
 
 - Visible focus: not applicable — Badge is non-interactive (no focus, no keyboard, no tab stop).
 - Keyboard map: none — Badge is not focusable and exposes no interactive affordance.
-- ARIA: the root is a presentational `<span>`; consumers that use the badge as a live count should label the host control (e.g. `aria-label="3 unread"`) since the visual value alone is not announced as status.
+- ARIA: the root is a presentational `<span>`; consumers that use the badge as a live count should label the host control (e.g. `aria-label="3 unread"`) since the visual label alone is not announced as status.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): every severity pairs a surface token with its matching `-contrast` (or `--text-default` for `default`), which the theme guarantees in both light and dark.
 - `motion-reduce:*`: not applicable — Badge is static (no motion).
 - Touch target: not applicable — Badge is non-interactive.
@@ -110,8 +110,8 @@ _none_
 ## Stories (Storybook)
 
 - Default
-- Types — composite story rendering every `severity` value side-by-side.
-- Sizes — composite story rendering every `size` value side-by-side.
+- Types — composite story rendering every `severity` label side-by-side.
+- Sizes — composite story rendering every `size` label side-by-side.
 
 <!-- Loading/Disabled stories are omitted: Badge declares neither prop and is non-interactive, so there are no such states to demonstrate (consistent with the canonical layout, which gates those stories on the props existing). -->
 
@@ -126,7 +126,7 @@ _none_
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=label]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.

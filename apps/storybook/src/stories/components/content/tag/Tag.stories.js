@@ -42,7 +42,7 @@ const meta = {
           '</script>',
           '',
           '<template>',
-          '  <Tag value="Label" severity="primary" size="medium" />',
+          '  <Tag label="Label" severity="primary" size="medium" />',
           '</template>',
           '```'
         ].join('\n')
@@ -50,7 +50,7 @@ const meta = {
     }
   },
   argTypes: {
-    value: {
+    label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
       table: {
@@ -121,7 +121,7 @@ const meta = {
     }
   },
   args: {
-    value: 'Label',
+    label: 'Label',
     severity: 'primary',
     size: 'medium',
     rounded: false,
@@ -159,7 +159,7 @@ export const Types = {
         <Tag
           v-for="severity in severities"
           :key="severity"
-          value="Label"
+          label="Label"
           :severity="severity"
           :size="args.size"
           :rounded="args.rounded"
@@ -180,16 +180,16 @@ export const Sizes = {
     template: `
       <div class="flex flex-col gap-4">
         <div class="flex flex-wrap items-center gap-4">
-          <Tag value="Label" severity="primary" size="medium" />
-          <Tag value="Label" severity="primary" size="medium" rounded />
-          <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" />
-          <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" rounded />
+          <Tag label="Label" severity="primary" size="medium" />
+          <Tag label="Label" severity="primary" size="medium" rounded />
+          <Tag label="Label" severity="primary" size="medium" icon="pi pi-box" />
+          <Tag label="Label" severity="primary" size="medium" icon="pi pi-box" rounded />
         </div>
         <div class="flex flex-wrap items-center gap-4">
-          <Tag value="Label" severity="primary" size="small" />
-          <Tag value="Label" severity="primary" size="small" rounded />
-          <Tag value="Label" severity="primary" size="small" icon="pi pi-box" />
-          <Tag value="Label" severity="primary" size="small" icon="pi pi-box" rounded />
+          <Tag label="Label" severity="primary" size="small" />
+          <Tag label="Label" severity="primary" size="small" rounded />
+          <Tag label="Label" severity="primary" size="small" icon="pi pi-box" />
+          <Tag label="Label" severity="primary" size="small" icon="pi pi-box" rounded />
         </div>
       </div>
     `
@@ -216,7 +216,7 @@ export const WithIcon = {
         <Tag
           v-for="severity in severities"
           :key="severity"
-          value="Label"
+          label="Label"
           :severity="severity"
           icon="pi pi-box"
           :size="args.size"

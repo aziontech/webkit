@@ -20,7 +20,7 @@
 
   interface Props {
     /** Fallback text when the default slot is empty. */
-    value?: string
+    label?: string
     /** Color style for the tag surface and label. */
     severity?: TagSeverity
     /** Size token; `medium` is 24px tall, `small` is 20px. */
@@ -32,7 +32,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    value: undefined,
+    label: undefined,
     severity: 'primary',
     size: 'medium',
     rounded: false,
@@ -91,10 +91,10 @@
     />
     <slot v-if="$slots['default']" />
     <span
-      v-else-if="value"
+      v-else-if="label"
       :data-testid="`${testId}__value`"
     >
-      {{ value }}
+      {{ label }}
     </span>
   </span>
 </template>

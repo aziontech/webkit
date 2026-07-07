@@ -30,7 +30,7 @@ const meta = {
           '',
           '<template>',
           '  <InputText id="email" />',
-          '  <HelperText kind="invalid" value="Enter a valid email address." />',
+          '  <HelperText kind="invalid" label="Enter a valid email address." />',
           '</template>',
           '```'
         ].join('\n')
@@ -45,7 +45,7 @@ const meta = {
     }
   },
   argTypes: {
-    value: {
+    label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'undefined' } }
@@ -62,7 +62,7 @@ const meta = {
     }
   },
   args: {
-    value: 'Helper Text',
+    label: 'Helper Text',
     kind: 'helper'
   }
 }
@@ -91,10 +91,10 @@ export const Types = {
     components: { HelperText },
     template: `
       <div class="flex flex-col gap-2">
-        <HelperText kind="helper" value="Helper Text" />
-        <HelperText kind="invalid" value="Text Error" />
-        <HelperText kind="required" value="Text Error" />
-        <HelperText kind="disabled" value="Helper Text" />
+        <HelperText kind="helper" label="Helper Text" />
+        <HelperText kind="invalid" label="Text Error" />
+        <HelperText kind="required" label="Text Error" />
+        <HelperText kind="disabled" label="Helper Text" />
       </div>
     `
   }),

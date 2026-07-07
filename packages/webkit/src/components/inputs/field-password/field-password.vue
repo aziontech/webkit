@@ -103,7 +103,7 @@
   >
     <Label
       v-if="label"
-      :value="label"
+      :label="label"
       :required="required"
       :for="resolvedInputId"
       :data-testid="`${testId}__label`"

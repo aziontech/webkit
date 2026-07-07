@@ -19,7 +19,7 @@ const meta = {
     }
   },
   argTypes: {
-    value: {
+    label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
@@ -46,7 +46,7 @@ const meta = {
     }
   },
   args: {
-    value: '99',
+    label: '99',
     severity: 'primary',
     size: 'medium'
   }
@@ -62,7 +62,7 @@ const Template = (args) => ({
   template: '<Badge v-bind="props" />'
 })
 
-const DEFAULT_MARKUP = '<Badge value="99" severity="primary" size="medium" />'
+const DEFAULT_MARKUP = '<Badge label="99" severity="primary" size="medium" />'
 
 export const Default = {
   render: Template,
@@ -75,12 +75,12 @@ export const Default = {
 }
 
 const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <Badge value="99" severity="primary" />
-  <Badge value="99" severity="secondary" />
-  <Badge value="99" severity="success" />
-  <Badge value="99" severity="warning" />
-  <Badge value="99" severity="danger" />
-  <Badge value="99" severity="default" />
+  <Badge label="99" severity="primary" />
+  <Badge label="99" severity="secondary" />
+  <Badge label="99" severity="success" />
+  <Badge label="99" severity="warning" />
+  <Badge label="99" severity="danger" />
+  <Badge label="99" severity="default" />
 </div>`
 
 export const Types = {
@@ -98,9 +98,9 @@ export const Types = {
 }
 
 const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <Badge value="99" size="small" />
-  <Badge value="99" size="medium" />
-  <Badge value="99" size="large" />
+  <Badge label="99" size="small" />
+  <Badge label="99" size="medium" />
+  <Badge label="99" size="large" />
 </div>`
 
 export const Sizes = {

@@ -90,7 +90,7 @@
       >
         <Label
           v-if="label"
-          :value="label"
+          :label="label"
           :required="required"
           :for="generatedId"
           :data-testid="`${testId}__label`"
