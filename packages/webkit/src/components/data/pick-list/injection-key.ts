@@ -29,7 +29,7 @@ export interface PickListContext {
   /** Moves every item of the originating list across. */
   moveAll: (direction: MoveDirection) => void
   /** Handles a double-click on the option at `index` in `side`: emits `item-double-click` and, unless cancelled, moves that item to the opposite list. */
-  itemDoubleClick: (side: PickListSide, index: number) => void
+  itemDoubleClick: (event: MouseEvent, side: PickListSide, index: number) => void
   /** Reads the loading flag a list reported. */
   isLoading: (side: PickListSide) => boolean
   /** A list reports its own loading flag so the controls can lock. */

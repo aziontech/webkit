@@ -1,5 +1,9 @@
 import Flow, { FlowAnchor, FlowNode, FlowParallel } from '@aziontech/webkit/flow'
 
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Flow from '@aziontech/webkit/flow'"
+
 // Storybook's vue3-vite docgen does not run on the cross-package webkit SFCs, so the
 // autodocs subcomponent tabs have no props table. Attach the docgen info explicitly
 // (vue-docgen-api shape) so FlowNode / FlowParallel / FlowAnchor document their API.
@@ -52,109 +56,18 @@ FlowAnchor.__docgenInfo = {
   slots: [{ name: 'default', description: 'The content the connector attaches to.' }]
 }
 
-const sfc = (markup) =>
-  [
-    '<script setup>',
-    "import Flow from '@aziontech/webkit/flow'",
-    '</script>',
-    '',
-    '<template>',
-    markup,
-    '</template>'
-  ].join('\n')
-
-const DEFAULT_SOURCE = sfc(
-  [
-    '  <Flow align="center">',
-    '    <Flow.Node>Source</Flow.Node>',
-    '    <Flow.Node>Transform</Flow.Node>',
-    '    <Flow.Node>Deliver</Flow.Node>',
-    '  </Flow>'
-  ].join('\n')
-)
-
-const PARALLEL_SOURCE = sfc(
-  [
-    '  <Flow align="center">',
-    '    <Flow.Node>Start</Flow.Node>',
-    '    <Flow.Parallel>',
-    '      <Flow.Node>Branch A</Flow.Node>',
-    '      <Flow.Node>Branch B</Flow.Node>',
-    '      <Flow.Node>Branch C</Flow.Node>',
-    '    </Flow.Parallel>',
-    '    <Flow.Node>End</Flow.Node>',
-    '  </Flow>'
-  ].join('\n')
-)
-
-const BRANCHES_SOURCE = sfc(
-  [
-    '  <Flow align="center">',
-    '    <Flow.Parallel>',
-    '      <Flow.Node>HTTP Trigger</Flow.Node>',
-    '      <Flow.Node>Cron Trigger</Flow.Node>',
-    '    </Flow.Parallel>',
-    '    <Flow.Node>Process Request</Flow.Node>',
-    '    <Flow.Parallel>',
-    '      <Flow.Node>Log Analytics</Flow.Node>',
-    '      <Flow.Node>Update Cache</Flow.Node>',
-    '      <Flow.Node>Send Notification</Flow.Node>',
-    '    </Flow.Parallel>',
-    '    <Flow.Node>Complete</Flow.Node>',
-    '  </Flow>'
-  ].join('\n')
-)
-
-const CUSTOM_NODES_SOURCE = sfc(
-  [
-    '  <Flow align="center">',
-    '    <Flow.Node unstyled class="size-4 rounded-full bg-[var(--border-default)]" />',
-    '    <Flow.Node>my-worker</Flow.Node>',
-    '    <Flow.Node',
-    '      unstyled',
-    '      class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)] py-[var(--spacing-xl)] text-label-md text-[var(--text-default)]"',
-    '    >',
-    '      Taller node',
-    '    </Flow.Node>',
-    '  </Flow>'
-  ].join('\n')
-)
-
-const ANCHORED_SOURCE = sfc(
-  [
-    '  <Flow align="center">',
-    '    <Flow.Node>Load balancer</Flow.Node>',
-    '    <Flow.Node unstyled>',
-    '      <div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)]">',
-    '        <Flow.Anchor type="end">',
-    '          <div class="flex h-10 items-center px-[var(--spacing-sm)] text-label-md text-[var(--text-muted)]">',
-    '            my-worker',
-    '          </div>',
-    '        </Flow.Anchor>',
-    '        <Flow.Anchor type="start">',
-    '          <div class="m-[var(--spacing-xxs)] mt-0 flex items-center gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-md text-[var(--text-default)]">',
-    '            Bindings <span class="text-[var(--text-muted)]">2</span>',
-    '          </div>',
-    '        </Flow.Anchor>',
-    '      </div>',
-    '    </Flow.Node>',
-    '    <Flow.Parallel>',
-    '      <Flow.Node>DATABASE</Flow.Node>',
-    '      <Flow.Node>OTHER_SERVICE</Flow.Node>',
-    '    </Flow.Parallel>',
-    '  </Flow>'
-  ].join('\n')
-)
-
-const DISABLED_SOURCE = sfc(
-  [
-    '  <Flow align="center">',
-    '    <Flow.Node>Source</Flow.Node>',
-    '    <Flow.Node disabled>Archive</Flow.Node>',
-    '    <Flow.Node>Deliver</Flow.Node>',
-    '  </Flow>'
-  ].join('\n')
-)
+const components = {
+  Flow,
+  // Compound sub-components registered under their dot-notation names so they
+  // resolve in Storybook's runtime-compiled string templates: Vue compiles
+  // `<Flow.Node>` to `resolveComponent("Flow.Node")`, an exact-name lookup (a
+  // bare `Flow` registration does not satisfy it). In a real SFC the dotted tag
+  // resolves off the imported `Flow` binding, so consumer code needs only
+  // `import Flow` — these extra registrations are a Storybook-runtime concern.
+  'Flow.Node': FlowNode,
+  'Flow.Parallel': FlowParallel,
+  'Flow.Anchor': FlowAnchor
+}
 
 /** @type {import('@storybook/vue3').Meta<typeof Flow>} */
 const meta = {
@@ -209,184 +122,167 @@ const meta = {
 
 export default meta
 
+const Template = (args) => ({
+  components,
+  setup() {
+    return { args }
+  },
+  template: `
+    <Flow v-bind="args">
+      <Flow.Node>Source</Flow.Node>
+      <Flow.Node>Transform</Flow.Node>
+      <Flow.Node>Deliver</Flow.Node>
+    </Flow>
+  `
+})
+
+const DEFAULT_MARKUP = `<Flow align="center">
+  <Flow.Node>Source</Flow.Node>
+  <Flow.Node>Transform</Flow.Node>
+  <Flow.Node>Deliver</Flow.Node>
+</Flow>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Flow>} */
 export const Default = {
-  render: (args) => ({
-    components: { Flow, FlowNode },
-    setup() {
-      return { args }
-    },
-    template: `
-      <Flow v-bind="args">
-        <FlowNode>Source</FlowNode>
-        <FlowNode>Transform</FlowNode>
-        <FlowNode>Deliver</FlowNode>
-      </Flow>
-    `
-  }),
+  render: Template,
   parameters: {
     docs: {
-      source: { code: DEFAULT_SOURCE },
-      description: { story: 'A sequential flow of nodes joined by connectors.' }
+      description: { story: 'A sequential flow of nodes joined by connectors.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
 }
+
+const PARALLEL_TEMPLATE = `<Flow align="center">
+  <Flow.Node>Start</Flow.Node>
+  <Flow.Parallel>
+    <Flow.Node>Branch A</Flow.Node>
+    <Flow.Node>Branch B</Flow.Node>
+    <Flow.Node>Branch C</Flow.Node>
+  </Flow.Parallel>
+  <Flow.Node>End</Flow.Node>
+</Flow>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Flow>} */
 export const Parallel = {
-  render: (args) => ({
-    components: { Flow, FlowNode, FlowParallel },
-    setup() {
-      return { args }
-    },
-    template: `
-      <Flow v-bind="args">
-        <FlowNode>Start</FlowNode>
-        <FlowParallel>
-          <FlowNode>Branch A</FlowNode>
-          <FlowNode>Branch B</FlowNode>
-          <FlowNode>Branch C</FlowNode>
-        </FlowParallel>
-        <FlowNode>End</FlowNode>
-      </Flow>
-    `
-  }),
+  render: () => ({ components, template: PARALLEL_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: PARALLEL_SOURCE },
+      controls: { disable: true },
       description: {
         story: 'A parallel group fans out from the previous node and back into the next.'
-      }
+      },
+      source: { code: toSfc(IMPORT, PARALLEL_TEMPLATE) }
     }
   }
 }
+
+const BRANCHES_TEMPLATE = `<Flow align="center">
+  <Flow.Parallel>
+    <Flow.Node>HTTP Trigger</Flow.Node>
+    <Flow.Node>Cron Trigger</Flow.Node>
+  </Flow.Parallel>
+  <Flow.Node>Process Request</Flow.Node>
+  <Flow.Parallel>
+    <Flow.Node>Log Analytics</Flow.Node>
+    <Flow.Node>Update Cache</Flow.Node>
+    <Flow.Node>Send Notification</Flow.Node>
+  </Flow.Parallel>
+  <Flow.Node>Complete</Flow.Node>
+</Flow>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Flow>} */
 export const Branches = {
-  render: (args) => ({
-    components: { Flow, FlowNode, FlowParallel },
-    setup() {
-      return { args }
-    },
-    template: `
-      <Flow v-bind="args">
-        <FlowParallel>
-          <FlowNode>HTTP Trigger</FlowNode>
-          <FlowNode>Cron Trigger</FlowNode>
-        </FlowParallel>
-        <FlowNode>Process Request</FlowNode>
-        <FlowParallel>
-          <FlowNode>Log Analytics</FlowNode>
-          <FlowNode>Update Cache</FlowNode>
-          <FlowNode>Send Notification</FlowNode>
-        </FlowParallel>
-        <FlowNode>Complete</FlowNode>
-      </Flow>
-    `
-  }),
+  render: () => ({ components, template: BRANCHES_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: BRANCHES_SOURCE },
+      controls: { disable: true },
       description: {
         story:
           'A leading parallel fans in and a trailing parallel fans out — connectors route correctly at the edges of the sequence.'
-      }
+      },
+      source: { code: toSfc(IMPORT, BRANCHES_TEMPLATE) }
     }
   }
 }
+
+const CUSTOM_NODES_TEMPLATE = `<Flow align="center">
+  <Flow.Node unstyled class="size-4 rounded-full bg-[var(--border-default)]" />
+  <Flow.Node>my-worker</Flow.Node>
+  <Flow.Node
+    unstyled
+    class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)] py-[var(--spacing-xl)] text-label-md text-[var(--text-default)]"
+  >
+    Taller node
+  </Flow.Node>
+</Flow>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Flow>} */
 export const CustomNodes = {
-  render: (args) => ({
-    components: { Flow, FlowNode },
-    setup() {
-      return { args }
-    },
-    template: `
-      <Flow v-bind="args">
-        <FlowNode unstyled class="size-4 rounded-full bg-[var(--border-default)]" />
-        <FlowNode>my-worker</FlowNode>
-        <FlowNode
-          unstyled
-          class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)] py-[var(--spacing-xl)] text-label-md text-[var(--text-default)]"
-        >
-          Taller node
-        </FlowNode>
-      </Flow>
-    `
-  }),
+  render: () => ({ components, template: CUSTOM_NODES_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: CUSTOM_NODES_SOURCE },
+      controls: { disable: true },
       description: {
         story:
           'Unstyled nodes whose slot content defines the appearance: a start dot, the default box, and a taller custom node.'
-      }
+      },
+      source: { code: toSfc(IMPORT, CUSTOM_NODES_TEMPLATE) }
     }
   }
 }
+
+const ANCHORED_TEMPLATE = `<Flow align="center">
+  <Flow.Node>Load balancer</Flow.Node>
+  <Flow.Node unstyled>
+    <div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)]">
+      <Flow.Anchor type="end">
+        <div class="flex h-10 items-center px-[var(--spacing-sm)] text-label-md text-[var(--text-muted)]">
+          my-worker
+        </div>
+      </Flow.Anchor>
+      <Flow.Anchor type="start">
+        <div class="m-[var(--spacing-xxs)] mt-0 flex items-center gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-md text-[var(--text-default)]">
+          Bindings <span class="text-[var(--text-muted)]">2</span>
+        </div>
+      </Flow.Anchor>
+    </div>
+  </Flow.Node>
+  <Flow.Parallel>
+    <Flow.Node>DATABASE</Flow.Node>
+    <Flow.Node>OTHER_SERVICE</Flow.Node>
+  </Flow.Parallel>
+</Flow>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Flow>} */
 export const AnchoredNode = {
-  render: (args) => ({
-    components: { Flow, FlowNode, FlowParallel, FlowAnchor },
-    setup() {
-      return { args }
-    },
-    template: `
-      <Flow v-bind="args">
-        <FlowNode>Load balancer</FlowNode>
-        <FlowNode unstyled>
-          <div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)]">
-            <FlowAnchor type="end">
-              <div class="flex h-10 items-center px-[var(--spacing-sm)] text-label-md text-[var(--text-muted)]">
-                my-worker
-              </div>
-            </FlowAnchor>
-            <FlowAnchor type="start">
-              <div class="m-[var(--spacing-xxs)] mt-0 flex items-center gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-md text-[var(--text-default)]">
-                Bindings <span class="text-[var(--text-muted)]">2</span>
-              </div>
-            </FlowAnchor>
-          </div>
-        </FlowNode>
-        <FlowParallel>
-          <FlowNode>DATABASE</FlowNode>
-          <FlowNode>OTHER_SERVICE</FlowNode>
-        </FlowParallel>
-      </Flow>
-    `
-  }),
+  render: () => ({ components, template: ANCHORED_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: ANCHORED_SOURCE },
+      controls: { disable: true },
       description: {
         story:
           'A multi-row card: the incoming connector attaches at the `end` anchor (my-worker) and the outgoing connectors leave from the `start` anchor (Bindings).'
-      }
+      },
+      source: { code: toSfc(IMPORT, ANCHORED_TEMPLATE) }
     }
   }
 }
 
+const DISABLED_TEMPLATE = `<Flow align="center">
+  <Flow.Node>Source</Flow.Node>
+  <Flow.Node disabled>Archive</Flow.Node>
+  <Flow.Node>Deliver</Flow.Node>
+</Flow>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Flow>} */
 export const Disabled = {
-  render: (args) => ({
-    components: { Flow, FlowNode },
-    setup() {
-      return { args }
-    },
-    template: `
-      <Flow v-bind="args">
-        <FlowNode>Source</FlowNode>
-        <FlowNode disabled>Archive</FlowNode>
-        <FlowNode>Deliver</FlowNode>
-      </Flow>
-    `
-  }),
+  render: () => ({ components, template: DISABLED_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: DISABLED_SOURCE },
-      description: { story: 'A disabled node with reduced-opacity connectors.' }
+      controls: { disable: true },
+      description: { story: 'A disabled node with reduced-opacity connectors.' },
+      source: { code: toSfc(IMPORT, DISABLED_TEMPLATE) }
     }
   }
 }
