@@ -1,14 +1,5 @@
-import { fileURLToPath } from 'node:url'
-
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
-
-// `@aziontech/theme/theme-colors` is not a public entry — the Foundations page in
-// this app is its only consumer. Alias it to the source file so we don't have to
-// widen the package's public surface (or cut a release) for an internal doc page.
-const themeColorsEntry = fileURLToPath(
-  new URL('../../../packages/theme/src/scripts/compile-theme.js', import.meta.url)
-)
 
 /** @type {import('@storybook/vue3-vite').StorybookConfig} */
 const config = {
@@ -58,15 +49,6 @@ const config = {
     // Tailwind v4 CSS-first pipeline: resolves `@import "tailwindcss"` in
     // `@aziontech/theme/globals.css` and scans project sources for utility usage.
     config.plugins.push(tailwindcss())
-
-    // Dev channel: stories still import from '@aziontech/webkit/*'; redirect to the renamed
-    // workspace package '@aziontech/webkit.dev/*' so no story file needs to change.
-    config.resolve = config.resolve || {}
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      '@aziontech/webkit': '@aziontech/webkit.dev',
-      '@aziontech/theme/theme-colors': themeColorsEntry
-    }
 
     // Enable dependency pre-bundling for faster rebuilds
     config.optimizeDeps = {
