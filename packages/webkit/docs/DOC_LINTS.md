@@ -25,14 +25,14 @@ All examples follow the repo's own conventions (PascalCase components, `<script 
 
 ## 1. How to run
 
-| Command (repo root) | What it checks |
-|---|---|
-| `pnpm webkit:lint` / `webkit:lint:fix` | ESLint (§2–§6), zero warnings / with auto-fix |
-| `pnpm webkit:lint:style` / `webkit:lint:style:fix` | Stylelint (§7) / with auto-fix |
-| `pnpm webkit:format:check` / `webkit:format` | Prettier (§8) check / write |
-| `pnpm webkit:type-check` | `vue-tsc --noEmit` (§9) |
-| `pnpm webkit:type-coverage` | type-coverage ≥ 95% (§9) |
-| `pnpm governance` | lint + type-check + format:check + audit — local mirror of CI |
+| Command (repo root)                                | What it checks                                                |
+| -------------------------------------------------- | ------------------------------------------------------------- |
+| `pnpm webkit:lint` / `webkit:lint:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                 |
+| `pnpm webkit:lint:style` / `webkit:lint:style:fix` | Stylelint (§7) / with auto-fix                                |
+| `pnpm webkit:format:check` / `webkit:format`       | Prettier (§8) check / write                                   |
+| `pnpm webkit:type-check`                           | `vue-tsc --noEmit` (§9)                                       |
+| `pnpm webkit:type-coverage`                        | type-coverage ≥ 95% (§9)                                      |
+| `pnpm governance`                                  | lint + type-check + format:check + audit — local mirror of CI |
 
 On `git commit`, husky runs lint-staged (ESLint/Stylelint/Prettier with auto-fix on staged files) and commitlint (§10). Never bypass with `--no-verify` — forbidden by [`git-workflow.md`](../.claude/rules/git-workflow.md).
 
@@ -646,7 +646,7 @@ One space inside interpolation braces.
 
 ```vue
 <template>
-  <span>{{label}}</span>
+  <span>{{ label }}</span>
 </template>
 ```
 
@@ -1194,30 +1194,26 @@ Tailwind's at-rules are valid input here; do not "fix" them away.
 
 Formatting is Prettier's job alone — never hand-fight it; run `pnpm webkit:format`. The options and what they produce:
 
-| Option | Value |
-|---|---|
-| `semi` | `false` — no semicolons |
-| `singleQuote` | `true` |
-| `tabWidth` | `2` |
-| `printWidth` | `100` |
-| `trailingComma` | `"none"` |
-| `singleAttributePerLine` | `true` |
-| `vueIndentScriptAndStyle` | `true` |
+| Option                    | Value                   |
+| ------------------------- | ----------------------- |
+| `semi`                    | `false` — no semicolons |
+| `singleQuote`             | `true`                  |
+| `tabWidth`                | `2`                     |
+| `printWidth`              | `100`                   |
+| `trailingComma`           | `"none"`                |
+| `singleAttributePerLine`  | `true`                  |
+| `vueIndentScriptAndStyle` | `true`                  |
 
 **❌ Wrong (script)**
 
 ```ts
-import { computed } from "vue";
+import { computed } from 'vue'
 
-const SIZES = [
-  "small",
-  "medium",
-  "large",
-];
+const SIZES = ['small', 'medium', 'large']
 
 const label = computed(() => {
-  return props.label ?? "Deploy";
-});
+  return props.label ?? 'Deploy'
+})
 ```
 
 **✅ Correct (what Prettier writes)**
@@ -1236,7 +1232,12 @@ const label = computed(() => {
 
 ```vue
 <template>
-  <Button label="Deploy" kind="primary" size="large" :loading="loading" />
+  <Button
+    label="Deploy"
+    kind="primary"
+    size="large"
+    :loading="loading"
+  />
 </template>
 ```
 
@@ -1443,12 +1444,12 @@ BREAKING CHANGE: size "xlarge" was removed; use "large".
 
 **Type → release bump** (must stay identical across `commitlint.config.js`, every `packages/*/.releaserc`, `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
 
-| Type | Bump |
-|---|---|
-| `feat` | **minor** |
-| `fix` · `hotfix` · `chore` · `docs` · `style` · `refactor` · `perf` | **patch** |
-| `test` · `ci` · `revert` | none (hygiene only) |
-| any type with `!` or `BREAKING CHANGE:` footer | **major** |
+| Type                                                                | Bump                |
+| ------------------------------------------------------------------- | ------------------- |
+| `feat`                                                              | **minor**           |
+| `fix` · `hotfix` · `chore` · `docs` · `style` · `refactor` · `perf` | **patch**           |
+| `test` · `ci` · `revert`                                            | none (hygiene only) |
+| any type with `!` or `BREAKING CHANGE:` footer                      | **major**           |
 
 Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify` ([`git-workflow.md`](../.claude/rules/git-workflow.md)).
 
