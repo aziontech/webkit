@@ -12,6 +12,7 @@ import noDeprecatedComponent from './rules/no-deprecated-component.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
+import preferDefineModel from './rules/prefer-define-model.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
 import validImportPath from './rules/valid-import-path.js'
@@ -25,6 +26,7 @@ const rules = {
   'prefer-tree-shakeable-root': preferTreeShakeableRoot,
   'no-deprecated-component': noDeprecatedComponent,
   'prefer-webkit-component': preferWebkitComponent,
+  'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride
 }
 
@@ -57,6 +59,8 @@ const RECOMMENDED = {
   'prefer-tree-shakeable-root': 'warn',
   'no-whole-icon-set-import': 'warn',
   'prefer-webkit-component': 'warn',
+  // Authoring nudge in recommended (warn); STRICT promotes it to error.
+  'prefer-define-model': 'warn',
   // Behavioral nudge in recommended (warn); STRICT promotes it to error.
   'no-style-override': 'warn'
 }

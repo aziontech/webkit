@@ -215,6 +215,9 @@ jobs:
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit.dev test:toolkit
 
+      - name: Construction-standard ratchet (no new authoring violations)
+        run: pnpm --filter @aziontech/webkit.dev run authoring
+
   # Summary Gate — passes when every upstream job is success or cleanly skipped.
   governance-check:
     name: Governance Gate

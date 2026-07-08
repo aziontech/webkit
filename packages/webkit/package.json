@@ -15,6 +15,8 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "pack:dry": "npm pack --dry-run",
+    "size": "size-limit",
+    "size:why": "size-limit --why",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
     "lint": "eslint src --ext .js,.js,.vue --max-warnings 0",
@@ -26,6 +28,8 @@
     "catalog:build": "node scripts/build-catalog.mjs",
     "catalog:check": "node scripts/build-catalog.mjs && git diff --exit-code --stat catalog.json",
     "test:toolkit": "node --test \"test/**/*.test.mjs\"",
+    "authoring": "node scripts/check-authoring.mjs",
+    "authoring:update": "node scripts/check-authoring.mjs --update",
     "figma:parse": "figma connect parse",
     "figma:publish": "figma connect publish",
     "figma:unpublish": "figma connect unpublish"

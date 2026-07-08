@@ -37,7 +37,7 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 | `token-mapper.md` | `token-map` | tokens | stdout Markdown only |
 | `reuse-auditor.md` | `reuse-audit` | dependencies | stdout JSON only |
 | `structure-decider.md` | `structure-decide` | naming | stdout 2 lines only |
-| `scaffolder.md` | `component-scaffold` | **no-invention, naming, bem-testid, tokens, accessibility, dependencies, migration** | `<name>.vue`, sub-components, `injection-key.ts`, root `package.json#exports` |
+| `scaffolder.md` | `component-scaffold` | **no-invention, naming, component-structure, props, prop-vocabulary, v-model, emits, event-payloads, slots, composables, root-element, component-states, styling, tokens, accessibility, testid, dependencies, migration** | `<name>.vue`, sub-components, `injection-key.ts`, root `package.json#exports` |
 | `storybook-writer.md` | `storybook-write` | naming, tokens, **storybook**, no-invention | `apps/storybook/src/stories/webkit/<category>/<Name>.stories.js` |
 | `code-connect-writer.md` | `code-connect-write` | naming, migration | `<name>.figma.ts` |
 | `echo-reporter.md` | `echo-report` | naming, tokens, storybook | stdout report only |
@@ -50,6 +50,20 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 | `dependencies.md` | **No external positioning/animation libs.** CSS + Vue primitives only |
 | `migration.md` | **Never inherit artifacts as-is.** Rewrite to our conventions |
 | `styling.md` | **Classes inline on the root.** No JS class presets, no `<style>` block, variants via `data-*` |
+| `component-structure.md` | Fixed folder layout + `<script setup>` section order |
+| `props.md` | Typed `interface Props` + `withDefaults` + JSDoc; exported variant unions |
+| `prop-vocabulary.md` | One canonical name/type/default per concept (`kind`, `size`, `disabled`…) |
+| `v-model.md` | Two-way values via `defineModel` — controlled + uncontrolled, one macro |
+| `emits.md` | Typed `defineEmits`, kebab names, model vs. activation |
+| `event-payloads.md` | Activation events emit `(event, item)` — DOM event first |
+| `slots.md` | Typed `defineSlots`, kebab names, fallback inside the slot |
+| `composables.md` | `readonly` outward, `toValue` args, `onScopeDispose` cleanup; context composable |
+| `root-element.md` | Own the root: polymorphism via `href`, `$attrs` forwarding, minimal `defineExpose` |
+| `component-states.md` | Declared, rendered state surface (loading/empty/error via DS components) |
+| `accessibility.md` | Role, keyboard, focus, `motion-reduce` — owned by the component |
+| `testid.md` | `data-testid` derived `<category>-<name>` / `input-<name>`, overridable |
+| `deprecation.md` | Mark `@deprecated` → one major → remove |
+| `bundle-budget.md` | Per-entry `size-limit`; tree-shaking stays intact |
 
 ## Source-of-truth docs ([.claude/docs/](../docs/))
 
@@ -57,7 +71,6 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 |---|---|
 | `DESIGN.md` | Tokens (typography, spacing, container, shape, shadow, colors), animation catalog, forbidden list |
 | `COMPONENT_REQUIREMENTS.md` | Component pattern: TypeScript, naming, slots, BEM data-testid, ARIA, Composition Pattern, Storybook discipline, Styling discipline |
-| `PRIMEVUE_ABSTRACTION.md` | PrimeVue wrapping under `core/primevue/*` |
 
 ## Rules every agent file inherits
 

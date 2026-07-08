@@ -1,0 +1,17 @@
+[
+  {
+    "name": "button",
+    "path": "src/components/actions/button/button.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "table-root",
+    "path": "src/components/data/table/table.vue",
+    "limit": "16 KB"
+  },
+  {
+    "name": "input-text",
+    "path": "src/components/inputs/input-text/input-text.vue",
+    "limit": "8 KB"
+  }
+]
