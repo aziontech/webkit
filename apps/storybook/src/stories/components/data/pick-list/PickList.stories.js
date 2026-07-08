@@ -173,7 +173,7 @@ const meta = {
       description:
         'Fired when an option is double-clicked, with the item, its index, and which list it was in.',
       table: {
-        type: { summary: "{ list: 'source' | 'target'; item: unknown; index: number }" },
+        type: { summary: "(event: MouseEvent, payload: { list: 'source' | 'target'; item: unknown; index: number })" },
         category: 'events'
       }
     },

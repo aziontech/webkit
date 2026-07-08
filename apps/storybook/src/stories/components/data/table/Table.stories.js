@@ -668,7 +668,7 @@ const meta = {
     onRowClick: {
       action: 'row-click',
       description: 'Fires when a rendered row is clicked (data-driven mode).',
-      table: { type: { summary: 'Record<string, unknown>' }, category: 'events' }
+      table: { type: { summary: '(event: MouseEvent, row: Record<string, unknown>)' }, category: 'events' }
     },
     'onUpdate:filters': {
       action: 'update:filters',
