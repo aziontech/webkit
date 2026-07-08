@@ -60,7 +60,7 @@
     "@vitest/ui": "^4.1.9",
     "axe-core": "^4.10.3",
     "conventional-changelog-conventionalcommits": "^7.0.0",
-    "playwright": "^1.49.1",
+    "playwright": "^1.61.1",
     "semantic-release": "^23.0.0",
     "vitest": "^4.1.9",
     "vue": "^3.5.29"
