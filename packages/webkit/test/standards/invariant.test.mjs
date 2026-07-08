@@ -36,10 +36,12 @@ test('every rule doc is registered as a standard, and every standard has a rule 
   assert.deepEqual(standardsWithNoRule, [], `standards with no rule doc: ${standardsWithNoRule}`)
 })
 
-test('every standard is accounted for: a gate OR explicitly review-gated (no silent gaps)', () => {
+test('every standard is blocking — at least one enforcement surface, nothing advisory', () => {
   for (const s of STANDARDS) {
-    const accounted = s.reviewGated === true || (Array.isArray(s.enforce) && s.enforce.length > 0)
-    assert.ok(accounted, `standard "${s.id}" has neither enforce[] nor reviewGated`)
+    assert.ok(
+      Array.isArray(s.enforce) && s.enforce.length > 0,
+      `standard "${s.id}" has no enforce[] — every standard must block (auto or mandatory review)`
+    )
   }
 })
 
