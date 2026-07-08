@@ -115,7 +115,7 @@ const meta = {
     onItemClick: {
       action: 'item-click',
       description: 'Fired when a menu action is selected; carries the matched model item.',
-      table: { category: 'events', type: { summary: 'SplitButtonItem' } }
+      table: { category: 'events', type: { summary: '(event: MouseEvent | KeyboardEvent, item: SplitButtonItem)' } }
     }
   },
   args: {

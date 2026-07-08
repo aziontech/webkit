@@ -53,7 +53,7 @@ const meta = {
       action: 'navigate',
       description:
         'Emitted when an ancestor segment is activated; the payload is the segment `href`.',
-      table: { category: 'events', type: { summary: 'string' } }
+      table: { category: 'events', type: { summary: '(event: MouseEvent, href: string)' } }
     },
     default: {
       control: false,
