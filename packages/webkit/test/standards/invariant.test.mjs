@@ -20,7 +20,7 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(HERE, '../../../..')
 
 const ruleIds = readdirSync(join(ROOT, '.claude/rules'))
-  .filter((f) => f.endsWith('.md'))
+  .filter((f) => f.endsWith('.md') && f !== 'README.md')
   .map((f) => f.replace(/\.md$/, ''))
 
 test('every rule doc is registered as a standard, and every standard has a rule doc', () => {
