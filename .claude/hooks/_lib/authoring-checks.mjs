@@ -63,6 +63,20 @@ export const MESSAGES = Object.fromEntries([
   ]
 ])
 
+// Maps each mechanized check id → the `.claude/rules` standard it enforces. The standards
+// invariant test (packages/webkit/test/standards/invariant.test.mjs) uses this to prove
+// every executable check is paired with a documented, write-time-enforced standard — so a
+// suggestion to the AI and the block in the pipeline stay the same definition.
+export const STANDARD_BY_CHECK = {
+  'manual-v-model': 'v-model',
+  'runtime-define-props': 'props',
+  'runtime-define-emits': 'emits',
+  'slot-without-defineslots': 'slots',
+  'composable-return-reactive': 'composables',
+  'composable-js': 'composables',
+  'deprecated-without-replacement': 'deprecation'
+}
+
 /** All violated check ids for a file's full content. Includes the path-based composable-js. */
 export function scanFile(relPath, content) {
   const found = []
