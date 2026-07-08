@@ -2,9 +2,9 @@
 // @aziontech/webkit design system. Flat-config first (ESLint 9). Namespace: `webkit`.
 //
 // Presets (flat-config arrays):
-//   recommended  — correctness = error, performance = warn
-//   strict       — everything = error
-//   performance  — only the performance rules
+//   recommended  — everything = error (nothing out of standard is a mere warning)
+//   strict       — everything = error (alias of recommended today)
+//   performance  — only the performance rules, all error
 
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
@@ -50,27 +50,27 @@ function preset(name, severities) {
   ]
 }
 
+// Nothing out of standard is a warning — every rule is `error` so the design system
+// cannot be used off-pattern without failing the consumer's lint.
 const RECOMMENDED = {
   'valid-import-path': 'error',
   'no-deep-internal-import': 'error',
   'no-barrel-import': 'error',
   'no-deprecated-component': 'error',
-  'no-hardcoded-color': 'warn',
-  'prefer-tree-shakeable-root': 'warn',
-  'no-whole-icon-set-import': 'warn',
-  'prefer-webkit-component': 'warn',
-  // Authoring nudge in recommended (warn); STRICT promotes it to error.
-  'prefer-define-model': 'warn',
-  // Behavioral nudge in recommended (warn); STRICT promotes it to error.
-  'no-style-override': 'warn'
+  'no-hardcoded-color': 'error',
+  'prefer-tree-shakeable-root': 'error',
+  'no-whole-icon-set-import': 'error',
+  'prefer-webkit-component': 'error',
+  'prefer-define-model': 'error',
+  'no-style-override': 'error'
 }
 
 const STRICT = Object.fromEntries(Object.keys(rules).map((r) => [r, 'error']))
 
 const PERFORMANCE = {
   'no-barrel-import': 'error',
-  'prefer-tree-shakeable-root': 'warn',
-  'no-whole-icon-set-import': 'warn'
+  'prefer-tree-shakeable-root': 'error',
+  'no-whole-icon-set-import': 'error'
 }
 
 plugin.configs = {
