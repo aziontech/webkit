@@ -153,7 +153,7 @@ const meta = {
     onStepClick: {
       action: 'step-click',
       description: 'Fires when a next-step row is activated.',
-      table: { category: 'events', type: { summary: '[index: number, event: MouseEvent]' } }
+      table: { category: 'events', type: { summary: '(event: MouseEvent, index: number)' } }
     }
   },
   args: {
