@@ -4,21 +4,27 @@
 // drift without failing the invariant test in CI
 // (packages/webkit/test/standards/invariant.test.mjs).
 //
-// NOTHING is advisory. Every standard is BLOCKING via one or more surfaces:
+// scope:
+//   'general' → a construction pattern any project building/consuming Vue components should
+//               follow; it SHIPS to consuming projects (the consumer guideline + eslint-plugin).
+//   'webkit'  → specific to authoring the webkit design system itself (specs, the exports map,
+//               Storybook, releases, the published package). It does NOT go to consumer projects.
+//
+// enforce[]: { surface, by }
 //   'write-time' → a .claude/hooks/<by>.mjs hook (exit 2)
 //   'lint'       → a packages/webkit/src/eslint-plugin/rules/<by>.js rule (error)
-//   'ci'         → governance.yml job / the check-authoring ratchet / commitlint /
-//                  branch-protection / size-limit / vuejs-accessibility
-//   'review'     → mandatory approval — the PR cannot merge without the required 2 approvals
-//                  (technical + design). Used for the parts regex cannot verify; review is a
-//                  hard gate, not a suggestion.
-// `note` records what is partial or pending activation (honest, not a silent gap).
+//   'ci'         → governance.yml job / check-authoring ratchet / commitlint / branch-protection
+//                  / size-limit / vuejs-accessibility
+//   'review'     → mandatory approval — the PR cannot merge without the 2 required approvals.
+// NOTHING is advisory: every standard has at least one blocking surface. `note` records what
+// is partial or pending activation (honest, never a silent gap).
 
 export const STANDARDS = [
-  // ── Foundational (11) ──
+  // ── Foundational ──
   {
     id: 'no-invention',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'write-time', by: 'validate-references' }
@@ -27,11 +33,13 @@ export const STANDARDS = [
   {
     id: 'prop-vocabulary',
     kind: 'foundational',
+    scope: 'general',
     enforce: [{ surface: 'write-time', by: 'validate-spec-compliance' }]
   },
   {
     id: 'naming',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'write-time', by: 'validate-story-source' }
@@ -40,6 +48,7 @@ export const STANDARDS = [
   {
     id: 'imports',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-references' },
       { surface: 'lint', by: 'valid-import-path' },
@@ -50,6 +59,7 @@ export const STANDARDS = [
   {
     id: 'compound-api',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [
       { surface: 'ci', by: 'catalog-drift' },
       { surface: 'review', by: 'required-approval' }
@@ -59,16 +69,19 @@ export const STANDARDS = [
   {
     id: 'styling',
     kind: 'foundational',
+    scope: 'general',
     enforce: [{ surface: 'write-time', by: 'validate-tokens' }]
   },
   {
     id: 'dependencies',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [{ surface: 'write-time', by: 'validate-references' }]
   },
   {
     id: 'migration',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'write-time', by: 'validate-references' },
@@ -80,16 +93,19 @@ export const STANDARDS = [
   {
     id: 'storybook-source',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [{ surface: 'write-time', by: 'validate-story-source' }]
   },
   {
     id: 'release-types',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [{ surface: 'ci', by: 'commitlint' }]
   },
   {
     id: 'git-workflow',
     kind: 'foundational',
+    scope: 'webkit',
     enforce: [
       { surface: 'ci', by: 'commitlint' },
       { surface: 'ci', by: 'branch-protection' }
@@ -97,10 +113,11 @@ export const STANDARDS = [
     note: 'Base branch + required checks enforced by branch protection; commit shape by commitlint.'
   },
 
-  // ── Construction (12) ──
+  // ── Construction ──
   {
     id: 'component-structure',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'review', by: 'required-approval' }
@@ -110,6 +127,7 @@ export const STANDARDS = [
   {
     id: 'props',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
@@ -120,6 +138,7 @@ export const STANDARDS = [
   {
     id: 'v-model',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
@@ -129,6 +148,7 @@ export const STANDARDS = [
   {
     id: 'emits',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
@@ -138,6 +158,7 @@ export const STANDARDS = [
   {
     id: 'slots',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
@@ -147,6 +168,7 @@ export const STANDARDS = [
   {
     id: 'composables',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' }
@@ -155,6 +177,7 @@ export const STANDARDS = [
   {
     id: 'root-element',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'write-time', by: 'validate-references' },
@@ -165,6 +188,7 @@ export const STANDARDS = [
   {
     id: 'component-states',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'review', by: 'required-approval' }
@@ -174,6 +198,7 @@ export const STANDARDS = [
   {
     id: 'accessibility',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'ci', by: 'vuejs-accessibility' },
       { surface: 'review', by: 'required-approval' }
@@ -183,11 +208,13 @@ export const STANDARDS = [
   {
     id: 'testid',
     kind: 'construction',
+    scope: 'general',
     enforce: [{ surface: 'write-time', by: 'validate-spec-compliance' }]
   },
   {
     id: 'deprecation',
     kind: 'construction',
+    scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
@@ -197,6 +224,7 @@ export const STANDARDS = [
   {
     id: 'bundle-budget',
     kind: 'construction',
+    scope: 'webkit',
     enforce: [
       { surface: 'ci', by: 'size-limit' },
       { surface: 'review', by: 'required-approval' }
@@ -206,3 +234,8 @@ export const STANDARDS = [
 ]
 
 export const STANDARDS_BY_ID = Object.fromEntries(STANDARDS.map((s) => [s.id, s]))
+
+/** Standards a consuming project should adopt — they ship out (guideline + eslint-plugin). */
+export const GENERAL_STANDARDS = STANDARDS.filter((s) => s.scope === 'general')
+/** Standards specific to authoring the webkit design system itself. */
+export const WEBKIT_STANDARDS = STANDARDS.filter((s) => s.scope === 'webkit')

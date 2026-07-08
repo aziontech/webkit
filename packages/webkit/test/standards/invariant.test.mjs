@@ -45,6 +45,15 @@ test('every standard is blocking — at least one enforcement surface, nothing a
   }
 })
 
+test('every standard is classified general (ships to projects) or webkit (internal)', () => {
+  for (const s of STANDARDS) {
+    assert.ok(
+      s.scope === 'general' || s.scope === 'webkit',
+      `standard "${s.id}" has invalid scope: ${JSON.stringify(s.scope)}`
+    )
+  }
+})
+
 test('every enforcer reference resolves to a real hook or eslint rule', () => {
   for (const s of STANDARDS) {
     for (const e of s.enforce || []) {
