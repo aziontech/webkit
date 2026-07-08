@@ -1,6 +1,6 @@
 # Rule: migration policy — never inherit, always rewrite
 
-When importing a component, pattern, or any artifact from **outside** this codebase (another design system, a Figma file, a Base UI / Reka UI / Radix / shadcn / PrimeVue example, a third-party library, a previous repo, a Stack Overflow answer, a CONTRACT.md file written before this pipeline existed), **you do not bring it as-is**. You rewrite it to our conventions before the spec is written, and you write the spec from scratch following [`.specs/_template.md`](../../.specs/_template.md).
+When importing a component, pattern, or any artifact from **outside** this codebase (another design system, a Figma file, a Base UI / Reka UI / Radix / shadcn example, a third-party library, a previous repo, a Stack Overflow answer, a CONTRACT.md file written before this pipeline existed), **you do not bring it as-is**. You rewrite it to our conventions before the spec is written, and you write the spec from scratch following [`.specs/_template.md`](../../.specs/_template.md).
 
 ## The rule
 
