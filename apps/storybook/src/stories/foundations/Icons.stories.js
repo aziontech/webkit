@@ -1,13 +1,13 @@
-import icons from '@aziontech/icons/catalog';
-import colorIcons from '@aziontech/icons/color-catalog';
+import icons from '@aziontech/icons/catalog'
+import colorIcons from '@aziontech/icons/color-catalog'
 
-import IconGrid from '../../foundations/components/IconGrid.vue';
+import IconGrid from '../../foundations/components/IconGrid.vue'
 import {
   CodeBlock,
   PageContainer,
   PageHeader,
-  SectionHeader,
-} from '../../foundations/components/layout/index.js';
+  SectionHeader
+} from '../../foundations/components/layout/index.js'
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
@@ -21,18 +21,21 @@ export default {
       description: {
         component: [
           'Icon library documentation — Azion custom icons and PrimeIcons.',
-          'Icons are distributed via `@aziontech/icons` package.',
-        ].join(' '),
+          'Icons are distributed via the `@aziontech/icons` package.'
+        ].join(' ')
       },
-    },
+      // Token/icon catalog page: a copy-paste SFC is not meaningful here, so the
+      // "Show code" panel stays hidden (documented foundations-catalog exemption).
+      canvas: { sourceState: 'none' }
+    }
   },
   argTypes: {
     initialSize: {
       control: { type: 'range', min: 12, max: 64, step: 4 },
-      defaultValue: 24,
-    },
-  },
-};
+      defaultValue: 24
+    }
+  }
+}
 
 // ─── Overview ─────────────────────────────────────────────────────────────────
 
@@ -44,16 +47,16 @@ export const Overview = {
       PageHeader,
       SectionHeader,
       CodeBlock,
-      IconGrid,
+      IconGrid
     },
     setup() {
       const usageCode = [
         '<i class="ai ai-azion"></i>',
         '<i class="ai ai-edge-functions text-default text-2xl"></i>',
         '<i class="pi pi-check"></i>',
-        '<i class="pi pi-times text-default text-2xl"></i>',
-      ].join('\n');
-      return { icons, colorIcons, args, usageCode };
+        '<i class="pi pi-times text-default text-2xl"></i>'
+      ].join('\n')
+      return { icons, colorIcons, args, usageCode }
     },
     template: /* html */ `
       <PageContainer>
@@ -87,14 +90,16 @@ export const Overview = {
 
         <IconGrid :icons="icons" :color-icons="colorIcons" :initial-size="args.initialSize" />
       </PageContainer>
-    `,
+    `
   }),
   args: {
-    initialSize: 24,
+    initialSize: 24
   },
   parameters: {
     docs: {
-      description: { story: 'Icon system overview: import, usage examples, and complete icon gallery.' },
-    },
-  },
-};
+      description: {
+        story: 'Icon system overview: import, usage examples, and complete icon gallery.'
+      }
+    }
+  }
+}

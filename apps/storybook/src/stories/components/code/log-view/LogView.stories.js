@@ -1,7 +1,7 @@
 import LogView from '@aziontech/webkit/log-view'
 import LogViewContent from '@aziontech/webkit/log-view-content'
 import LogViewHeader from '@aziontech/webkit/log-view-header'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 import { completeDeployLog } from './complete-deploy-log.js'
@@ -24,6 +24,7 @@ const IMPORT = [
   'const warningsOnly = ref(false)'
 ]
 
+/** @type {import('@storybook/vue3').Meta<typeof LogView>} */
 const meta = {
   title: 'Components/Code/LogView',
   component: LogView,
@@ -32,6 +33,14 @@ const meta = {
   parameters: {
     layout: 'padded',
     backgrounds: { default: 'dark' },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
     docs: {
       description: {
         component:
@@ -44,16 +53,24 @@ const meta = {
     lines: {
       control: false,
       description: 'Log entries to render (filtered client-side by search and warnings-only).',
-      table: { category: 'props', type: { summary: 'LogViewLine[]' }, defaultValue: { summary: '[]' } }
+      table: {
+        category: 'props',
+        type: { summary: 'LogViewLine[]' },
+        defaultValue: { summary: '[]' }
+      }
     },
     searchPlaceholder: {
       control: 'text',
       description: 'Placeholder for the default header search field.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Find in Logs'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Find in Logs'" }
+      }
     },
     showCopy: {
       control: 'boolean',
-      description: 'Shows the copy-to-clipboard control in LogViewHeader.',
+      description: 'Shows the copy-to-clipboard control in LogViewContent.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
     },
     disabled: {
@@ -69,7 +86,11 @@ const meta = {
     loadingLabel: {
       control: 'text',
       description: 'Label shown beneath the spinner while loading.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Loading...'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Loading...'" }
+      }
     },
     search: {
       control: 'text',
@@ -95,6 +116,12 @@ const meta = {
       action: 'copy',
       description: 'Fires after a successful copy; payload is the copied plain text.',
       table: { category: 'events', type: { summary: 'string' } }
+    },
+    default: {
+      control: false,
+      description:
+        'Sub-components composed in the desired order: LogViewHeader, LogViewContent, and optional LogViewFooter.',
+      table: { category: 'slots' }
     }
   },
   args: {
@@ -110,37 +137,64 @@ const meta = {
 
 export default meta
 
+const Template = (args) => ({
+  components,
+  setup() {
+    const search = ref(args.search ?? '')
+    const warningsOnly = ref(args.warningsOnly ?? false)
+    watch(
+      () => args.search,
+      (next) => {
+        search.value = next ?? ''
+      }
+    )
+    watch(
+      () => args.warningsOnly,
+      (next) => {
+        warningsOnly.value = next ?? false
+      }
+    )
+    const onUpdateSearch = (next) => {
+      search.value = next
+      args['onUpdate:search']?.(next)
+    }
+    const onUpdateWarningsOnly = (next) => {
+      warningsOnly.value = next
+      args['onUpdate:warningsOnly']?.(next)
+    }
+    return {
+      args,
+      lines: completeDeployLog,
+      search,
+      warningsOnly,
+      onUpdateSearch,
+      onUpdateWarningsOnly
+    }
+  },
+  template: `
+    <LogView
+      v-bind="args"
+      :lines="lines"
+      :search="search"
+      :warnings-only="warningsOnly"
+      class="h-[640px]"
+      @update:search="onUpdateSearch"
+      @update:warnings-only="onUpdateWarningsOnly"
+    >
+      <LogViewHeader />
+      <LogViewContent />
+    </LogView>
+  `
+})
+
 const DEFAULT_MARKUP = `<LogView :lines="lines" v-model:search="search" v-model:warnings-only="warningsOnly" class="h-[640px]">
   <LogViewHeader />
   <LogViewContent />
 </LogView>`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof LogView>} */
 export const Default = {
-  render: (args) => ({
-    components,
-    setup() {
-      const search = ref(args.search ?? '')
-      const warningsOnly = ref(args.warningsOnly ?? false)
-      return { args, lines: completeDeployLog, search, warningsOnly }
-    },
-    template: `
-      <LogView
-        :lines="lines"
-        :search-placeholder="args.searchPlaceholder"
-        :show-copy="args.showCopy"
-        :disabled="args.disabled"
-        :loading="args.loading"
-        :loading-label="args.loadingLabel"
-        v-model:search="search"
-        v-model:warnings-only="warningsOnly"
-        class="h-[640px]"
-        @copy="args.onCopy"
-      >
-        <LogViewHeader />
-        <LogViewContent />
-      </LogView>
-    `
-  }),
+  render: Template,
   parameters: {
     docs: {
       description: {
@@ -157,32 +211,15 @@ const LOADING_MARKUP = `<LogView :lines="lines" loading v-model:search="search" 
   <LogViewContent />
 </LogView>`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof LogView>} */
 export const Loading = {
-  render: () => ({
-    components,
-    setup() {
-      const search = ref('')
-      const warningsOnly = ref(false)
-      return { lines: completeDeployLog, search, warningsOnly }
-    },
-    template: `
-      <LogView
-        :lines="lines"
-        loading
-        v-model:search="search"
-        v-model:warnings-only="warningsOnly"
-        class="h-[640px]"
-      >
-        <LogViewHeader />
-        <LogViewContent />
-      </LogView>
-    `
-  }),
+  args: { loading: true },
+  render: Template,
   parameters: {
     docs: {
-      controls: { disable: true },
       description: {
-        story: 'While `loading` is set, LogViewContent replaces the log body with a centered spinner and the `loadingLabel` text.'
+        story:
+          'While `loading` is set, LogViewContent replaces the log body with a centered spinner and the `loadingLabel` text.'
       },
       source: { code: toSfc(IMPORT, LOADING_MARKUP) }
     }
