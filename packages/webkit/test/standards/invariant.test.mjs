@@ -90,13 +90,28 @@ test('every mechanized check maps to a standard enforced write-time by validate-
   }
 })
 
-test('the write-time hook and the CI ratchet share the single authoring-checks engine', () => {
+test('hook, CI ratchet, and consumer lint all share the single authoring-checks engine', () => {
+  const ENGINE = 'packages/webkit/src/eslint-plugin/authoring-checks.js'
+  assert.ok(existsSync(join(ROOT, ENGINE)), 'canonical engine missing from the package')
+
+  // write-time hook → the _lib shim → the package engine
   const hook = readFileSync(join(ROOT, '.claude/hooks/validate-authoring.mjs'), 'utf-8')
-  const ratchet = readFileSync(join(ROOT, 'packages/webkit/scripts/check-authoring.mjs'), 'utf-8')
+  assert.match(hook, /_lib\/authoring-checks\.mjs/, 'hook does not import the shim')
+  const shim = readFileSync(join(ROOT, '.claude/hooks/_lib/authoring-checks.mjs'), 'utf-8')
   assert.match(
-    hook,
-    /_lib\/authoring-checks\.mjs/,
-    'write-time hook does not import the shared engine'
+    shim,
+    /packages\/webkit\/src\/eslint-plugin\/authoring-checks\.js/,
+    'shim does not re-export the package engine'
   )
-  assert.match(ratchet, /authoring-checks\.mjs/, 'CI ratchet does not import the shared engine')
+
+  // DS CI ratchet → the package engine
+  const ratchet = readFileSync(join(ROOT, 'packages/webkit/scripts/check-authoring.mjs'), 'utf-8')
+  assert.match(ratchet, /authoring-checks\.js/, 'CI ratchet does not import the engine')
+
+  // consumer lint rule → the package engine
+  const rule = readFileSync(
+    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/authoring-standards.js'),
+    'utf-8'
+  )
+  assert.match(rule, /\.\.\/authoring-checks\.js/, 'consumer lint rule does not import the engine')
 })

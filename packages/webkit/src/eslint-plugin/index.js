@@ -6,6 +6,7 @@
 //   strict       — everything = error (alias of recommended today)
 //   performance  — only the performance rules, all error
 
+import authoringStandards from './rules/authoring-standards.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
@@ -27,7 +28,8 @@ const rules = {
   'no-deprecated-component': noDeprecatedComponent,
   'prefer-webkit-component': preferWebkitComponent,
   'prefer-define-model': preferDefineModel,
-  'no-style-override': noStyleOverride
+  'no-style-override': noStyleOverride,
+  'authoring-standards': authoringStandards
 }
 
 const FILES = ['**/*.vue', '**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', '**/*.mjs', '**/*.cjs']
@@ -62,7 +64,8 @@ const RECOMMENDED = {
   'no-whole-icon-set-import': 'error',
   'prefer-webkit-component': 'error',
   'prefer-define-model': 'error',
-  'no-style-override': 'error'
+  'no-style-override': 'error',
+  'authoring-standards': 'error'
 }
 
 const STRICT = Object.fromEntries(Object.keys(rules).map((r) => [r, 'error']))

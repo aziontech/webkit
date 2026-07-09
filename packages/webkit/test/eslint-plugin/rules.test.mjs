@@ -30,6 +30,8 @@ const preferWebkitComponent = (
 const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-override.js')).default
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
+const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))
+  .default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -371,6 +373,70 @@ test('prefer-define-model', () => {
         ),
         filename: 'g.vue',
         errors: [{ messageId: 'preferModel' }]
+      }
+    ]
+  })
+})
+
+test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () => {
+  const sfc = (script, template = '<div />') =>
+    `<script setup lang="ts">${script}</script><template>${template}</template>`
+  vueTs.run('authoring-standards', authoringStandards, {
+    valid: [
+      { code: sfc('const model = defineModel<string>()'), filename: 'a.vue' },
+      {
+        code: sfc('defineSlots<{ default(): unknown }>()', '<div><slot /></div>'),
+        filename: 'b.vue'
+      }
+    ],
+    invalid: [
+      // hand-rolled v-model
+      {
+        code: sfc(
+          "interface Props { modelValue?: boolean } withDefaults(defineProps<Props>(), { modelValue: false }); defineEmits<{ 'update:modelValue': [v: boolean] }>()"
+        ),
+        filename: 'c.vue',
+        errors: [{ messageId: 'manual-v-model' }]
+      },
+      // runtime defineProps
+      {
+        code: sfc('defineProps({ kind: String })'),
+        filename: 'd.vue',
+        errors: [{ messageId: 'runtime-define-props' }]
+      },
+      // <slot> without defineSlots
+      {
+        code: sfc('const a = 1', '<div><slot /></div>'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'slot-without-defineslots' }]
+      }
+    ]
+  })
+  js.run('authoring-standards', authoringStandards, {
+    valid: [
+      // a well-formed composable in .ts
+      {
+        code: 'export function useOk() { const v = 1; return { v } }',
+        filename: 'src/composables/use-ok.ts'
+      },
+      // @deprecated naming replacement + removal version
+      {
+        code: '/** @deprecated since 4.2 — use `kind`. Removed in 5.0 */ export const a = 1',
+        filename: 'src/x.js'
+      }
+    ],
+    invalid: [
+      // composable returning reactive() AND authored as .js → both blocks fire
+      {
+        code: 'export function useBad() { return reactive({ v: 1 }) }',
+        filename: 'src/composables/use-bad.js',
+        errors: [{ messageId: 'composable-return-reactive' }, { messageId: 'composable-js' }]
+      },
+      // bare @deprecated
+      {
+        code: '/** @deprecated */ export const a = 1',
+        filename: 'src/y.js',
+        errors: [{ messageId: 'deprecated-without-replacement' }]
       }
     ]
   })

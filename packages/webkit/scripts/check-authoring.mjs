@@ -15,7 +15,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, relative, resolve } from 'node:path'
 
-import { scanFile, MESSAGES } from '../../../.claude/hooks/_lib/authoring-checks.mjs'
+import { scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')

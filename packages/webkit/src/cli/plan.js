@@ -50,12 +50,27 @@ const DEV_DEPS = [
 // The Claude Code bundle files, relative to templates/claude. Copied into the
 // consumer's `.claude/` (only when the destination file is missing).
 const CLAUDE_BUNDLE = [
+  // usage rules (consuming webkit)
   'rules/webkit-imports.md',
   'rules/webkit-tokens.md',
   'rules/webkit-performance.md',
   'rules/webkit-prefer-over-custom.md',
   'rules/webkit-style-override.md',
+  // construction standards (building your own components) — the scope:general set
   'rules/webkit-construction-standards.md',
+  'rules/webkit-prop-vocabulary.md',
+  'rules/webkit-styling.md',
+  'rules/webkit-component-structure.md',
+  'rules/webkit-props.md',
+  'rules/webkit-v-model.md',
+  'rules/webkit-emits.md',
+  'rules/webkit-slots.md',
+  'rules/webkit-composables.md',
+  'rules/webkit-root-element.md',
+  'rules/webkit-component-states.md',
+  'rules/webkit-accessibility.md',
+  'rules/webkit-testid.md',
+  'rules/webkit-deprecation.md',
   'skills/webkit-usage/SKILL.md',
   'agents/webkit-expert.md',
   'agents/webkit-adopter.md',

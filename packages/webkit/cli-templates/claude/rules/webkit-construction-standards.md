@@ -20,10 +20,19 @@ with. One pattern per concern — follow ✅, avoid ❌.
 | data-testid     | none, or duplicated                                             | root `:data-testid` with a stable, derived fallback                                                             |
 | Deprecation     | silent rename/removal                                           | `@deprecated` naming the replacement + version, then remove in a major                                          |
 
+## The full rules (one per pattern)
+
+Each row above is a one-line digest; the full rule (with examples) ships alongside this
+file: `webkit-v-model.md`, `webkit-props.md`, `webkit-prop-vocabulary.md`,
+`webkit-emits.md`, `webkit-slots.md`, `webkit-composables.md`, `webkit-styling.md`,
+`webkit-component-structure.md`, `webkit-root-element.md`, `webkit-component-states.md`,
+`webkit-accessibility.md`, `webkit-testid.md`, `webkit-deprecation.md`.
+
 ## Notes
 
 - These are the design system's `scope: general` standards — they apply to any Vue
-  component, not only to webkit's. The lint already enforces the import/token/override
-  rules; these patterns keep your own components consistent with the ones you consume.
+  component, not only to webkit's. The mechanizable ones are **blocked** by the
+  `webkit/authoring-standards` ESLint rule (error) at commit and in CI; the rest are
+  convention + review.
 - Before building, check the catalog first (`suggest_component` on the `webkit` MCP or
   `node_modules/@aziontech/webkit/catalog.json`) — the component may already exist.

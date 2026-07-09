@@ -132,7 +132,8 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'write-time', by: 'validate-tokens' },
-      { surface: 'ci', by: 'check-authoring' }
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'authoring-standards' }
     ]
   },
   {
@@ -142,7 +143,8 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'prefer-define-model' }
+      { surface: 'lint', by: 'prefer-define-model' },
+      { surface: 'lint', by: 'authoring-standards' }
     ]
   },
   {
@@ -152,7 +154,8 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'ci', by: 'check-authoring' }
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'authoring-standards' }
     ]
   },
   {
@@ -162,7 +165,8 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'ci', by: 'check-authoring' }
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'authoring-standards' }
     ]
   },
   {
@@ -171,7 +175,8 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
-      { surface: 'ci', by: 'check-authoring' }
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'authoring-standards' }
     ]
   },
   {
@@ -218,7 +223,8 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'no-deprecated-component' }
+      { surface: 'lint', by: 'no-deprecated-component' },
+      { surface: 'lint', by: 'authoring-standards' }
     ]
   },
   {
