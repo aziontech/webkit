@@ -6,7 +6,7 @@ const IMPORT = "import IconButton from '@aziontech/webkit/icon-button'"
 
 /** @type {import('@storybook/vue3').Meta<typeof IconButton>} */
 const meta = {
-  title: 'Components/Actions/Icon Button',
+  title: 'Components/Actions/IconButton',
   component: IconButton,
   tags: ['autodocs'],
   parameters: {
@@ -126,7 +126,8 @@ const Template = (args) => ({
   template: '<IconButton v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<IconButton kind="primary" size="large" icon="pi pi-plus" aria-label="Add" />'
+const DEFAULT_MARKUP =
+  '<IconButton kind="primary" size="large" icon="pi pi-plus" aria-label="Add" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof IconButton>} */
 export const Default = {
