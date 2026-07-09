@@ -49,14 +49,9 @@
     disabled: false
   })
 
-  export interface DropdownSelectPayload {
-    value: DropdownOptionValue
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent
-  }
-
   const emit = defineEmits<{
     'update:open': [value: boolean]
-    select: [payload: DropdownSelectPayload]
+    select: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: DropdownOptionValue]
   }>()
 
   const openModel = defineModel<boolean | undefined>('open', { default: undefined })
@@ -171,7 +166,7 @@
     event: globalThis.MouseEvent | globalThis.KeyboardEvent
   ) {
     const wasOpen = isOpenState.value
-    emit('select', { value, event })
+    emit('select', event, value)
     if (wasOpen) {
       setOpen(false)
       focusTrigger()
