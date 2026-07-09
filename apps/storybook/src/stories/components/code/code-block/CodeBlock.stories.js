@@ -1,5 +1,5 @@
 import CodeBlock from '@aziontech/webkit/code-block'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -121,8 +121,14 @@ const animatedTabs = [
 const tabsConst = (tabs) => `const tabs = ${JSON.stringify(tabs, null, 2)}`
 
 // Each story's snippet is a single runnable SFC: the real import + the tab data
-// + the same props the canvas uses. PascalCase tag, no nested <template>.
-const snippet = (tabs, attrs) => toSfc([IMPORT, '', tabsConst(tabs)], `<CodeBlock :tabs="tabs" ${attrs} />`)
+// + the same wrapper and props the canvas renders. PascalCase tag, no nested <template>.
+const snippet = (tabs, attrs) =>
+  toSfc(
+    [IMPORT, '', tabsConst(tabs)],
+    `<div class="max-w-[692px]">
+  <CodeBlock :tabs="tabs" ${attrs} />
+</div>`
+  )
 
 /** @type {import('@storybook/vue3').Meta<typeof CodeBlock>} */
 const meta = {
@@ -133,6 +139,14 @@ const meta = {
     layout: 'padded',
     backgrounds: {
       default: 'dark'
+    },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
     },
     docs: {
       description: {
@@ -149,23 +163,36 @@ const meta = {
         'Tab definitions. Pass source on each tab’s `code` field (required), plus optional `language`, `fileName`, `fileIcon`, `highlightedLine`, or `lineChanges`.',
       table: {
         category: 'props',
-        type: { summary: 'CodeBlockTab[]' },
-        detail: '{ label, value, code, language?, fileName?, fileIcon?, highlightedLine?, lineChanges? }'
+        type: {
+          summary: 'CodeBlockTab[]',
+          detail:
+            '{ label, value, code, language?, fileName?, fileIcon?, highlightedLine?, lineChanges? }'
+        },
+        defaultValue: { summary: '[]' }
       }
     },
     value: {
       control: 'text',
       description: 'Controlled active tab value (`v-model:value`).',
-      table: { category: 'props', type: { summary: 'string' } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' }
+      }
     },
     defaultValue: {
       control: 'text',
       description: 'Initial active tab when uncontrolled.',
-      table: { category: 'props', type: { summary: 'string' } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' }
+      }
     },
     showLineNumbers: {
       control: 'boolean',
-      description: 'Shows a fixed-width gutter with zero-padded line numbers before each code line.',
+      description:
+        'Shows a fixed-width gutter with zero-padded line numbers before each code line.',
       table: {
         category: 'props',
         type: { summary: 'boolean' },
@@ -191,18 +218,28 @@ const meta = {
         defaultValue: { summary: 'false' }
       }
     },
-    onUpdateValue: {
+    'onUpdate:value': {
       action: 'update:value',
-      table: { category: 'events' }
+      description: 'v-model:value update emitted when the active tab changes.',
+      table: { category: 'events', type: { summary: 'string' } }
     },
     onValueChange: {
       action: 'value-change',
-      table: { category: 'events' }
+      description: 'Emitted when the active tab changes.',
+      table: { category: 'events', type: { summary: 'string' } }
     },
     onCopy: {
       action: 'copy',
-      table: { category: 'events' }
+      description: 'Emitted after the active tab code is copied to the clipboard.',
+      table: { category: 'events', type: { summary: 'string' } }
     }
+  },
+  args: {
+    tabs: languageSwitcherTabs,
+    defaultValue: 'js',
+    showLineNumbers: true,
+    copyAriaLabel: 'Copy code',
+    animateLines: false
   }
 }
 
@@ -211,64 +248,62 @@ export default meta
 const Template = (args) => ({
   components: { CodeBlock },
   setup() {
-    const value = ref(args.defaultValue ?? args.value ?? args.tabs?.[0]?.value ?? '')
+    const value = ref(args.value ?? args.defaultValue ?? args.tabs?.[0]?.value ?? '')
 
-    return { args, value }
+    watch(
+      () => args.value ?? args.defaultValue,
+      (next) => {
+        value.value = next ?? args.tabs?.[0]?.value ?? ''
+      }
+    )
+
+    const onUpdate = (next) => {
+      value.value = next
+      args['onUpdate:value']?.(next)
+    }
+
+    return { args, value, onUpdate }
   },
   template: `
     <div class="max-w-[692px]">
-      <CodeBlock
-        v-model:value="value"
-        :tabs="args.tabs"
-        :show-line-numbers="args.showLineNumbers"
-        :copy-aria-label="args.copyAriaLabel"
-        :animate-lines="args.animateLines"
-        @copy="args.onCopy"
-        @value-change="args.onValueChange"
-      />
+      <CodeBlock v-bind="args" :value="value" @update:value="onUpdate" />
     </div>
   `
 })
 
 /** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const Default = {
-  args: {
-    tabs: languageSwitcherTabs,
-    defaultValue: 'js',
-    showLineNumbers: true,
-    copyAriaLabel: 'Copy code'
-  },
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Language switcher: two tabs with a filename bar, syntax highlighting, and copy.' },
+      description: {
+        story: 'Language switcher: two tabs with a filename bar, syntax highlighting, and copy.'
+      },
       source: { code: snippet(languageSwitcherTabs, 'default-value="js" show-line-numbers') }
     }
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const WithoutLineNumbers = {
   args: {
-    tabs: languageSwitcherTabs,
-    defaultValue: 'js',
-    showLineNumbers: false,
-    copyAriaLabel: 'Copy code'
+    showLineNumbers: false
   },
   render: Template,
   parameters: {
     docs: {
       description: { story: 'Same language switcher with the line-number gutter hidden.' },
-      source: { code: snippet(languageSwitcherTabs, 'default-value="js" :show-line-numbers="false"') }
+      source: {
+        code: snippet(languageSwitcherTabs, 'default-value="js" :show-line-numbers="false"')
+      }
     }
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const WithFileName = {
   args: {
-    tabs: fileNameTabs,
-    defaultValue: 'js',
-    showLineNumbers: true,
-    copyAriaLabel: 'Copy code'
+    tabs: fileNameTabs
   },
   render: Template,
   parameters: {
@@ -279,45 +314,45 @@ export const WithFileName = {
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const WithDiff = {
   args: {
     tabs: diffTabs,
-    defaultValue: 'diff',
-    showLineNumbers: true,
-    copyAriaLabel: 'Copy code'
+    defaultValue: 'diff'
   },
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Per-line added/removed markers driven by the active tab’s `lineChanges`.' },
+      description: {
+        story: 'Per-line added/removed markers driven by the active tab’s `lineChanges`.'
+      },
       source: { code: snippet(diffTabs, 'default-value="diff" show-line-numbers') }
     }
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const WithHighlightedLine = {
   args: {
     tabs: highlightedTabs,
-    defaultValue: 'highlighted',
-    showLineNumbers: true,
-    copyAriaLabel: 'Copy code'
+    defaultValue: 'highlighted'
   },
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'One active line with an info background and leading bar via `highlightedLine`.' },
+      description: {
+        story: 'One active line with an info background and leading bar via `highlightedLine`.'
+      },
       source: { code: snippet(highlightedTabs, 'default-value="highlighted" show-line-numbers') }
     }
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const WithAnimatedLines = {
   args: {
     tabs: animatedTabs,
-    defaultValue: 'js',
-    showLineNumbers: true,
-    animateLines: true,
-    copyAriaLabel: 'Copy code'
+    animateLines: true
   },
   render: Template,
   parameters: {
