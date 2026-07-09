@@ -27,6 +27,102 @@ body,
   background: #0A0A0A !important;
   transition: all 0.4s ease-in-out !important;}
 
+/* ------------------------------------------------------------------ */
+/* MDX docs pages (Get Started, Style Guide) follow the theme toggle.  */
+/* parameters.docs.theme is static; these class-keyed rules make the   */
+/* docs surface, text, links, and tables switch with azion-light/dark. */
+/* ------------------------------------------------------------------ */
+.sbdocs.sbdocs-wrapper {
+  background: #ffffff !important;
+  transition: background 0.4s ease-in-out !important;
+}
+.azion-dark .sbdocs.sbdocs-wrapper {
+  background: #0a0a0a !important;
+}
+
+.sbdocs-content,
+.sbdocs-content p,
+.sbdocs-content li,
+.sbdocs-content td,
+.sbdocs-content h1,
+.sbdocs-content h2,
+.sbdocs-content h3,
+.sbdocs-content h4,
+.sbdocs-content blockquote {
+  color: #1a1a1a !important;
+}
+.azion-dark .sbdocs-content,
+.azion-dark .sbdocs-content p,
+.azion-dark .sbdocs-content li,
+.azion-dark .sbdocs-content td,
+.azion-dark .sbdocs-content h1,
+.azion-dark .sbdocs-content h2,
+.azion-dark .sbdocs-content h3,
+.azion-dark .sbdocs-content h4,
+.azion-dark .sbdocs-content blockquote {
+  color: #ededed !important;
+}
+
+/* Links: readable in both themes (the static docs theme made them #585C6D on black) */
+.sbdocs-content a,
+.sbdocs-content a:visited {
+  color: #c2410c !important;
+  text-decoration: underline;
+}
+.azion-dark .sbdocs-content a,
+.azion-dark .sbdocs-content a:visited {
+  color: #f3652b !important;
+}
+
+/* Tables */
+.sbdocs-content table th,
+.sbdocs-content table td {
+  border-color: #e5e5e5 !important;
+}
+.sbdocs-content table th {
+  background: #f5f5f5 !important;
+  color: #1a1a1a !important;
+}
+.sbdocs-content table tr {
+  background: transparent !important;
+  border-color: #e5e5e5 !important;
+}
+.azion-dark .sbdocs-content table th,
+.azion-dark .sbdocs-content table td {
+  border-color: #3e3e3e !important;
+}
+.azion-dark .sbdocs-content table th {
+  background: #171717 !important;
+  color: #ededed !important;
+}
+.azion-dark .sbdocs-content table tr {
+  border-color: #3e3e3e !important;
+}
+
+/* Inline code + rules */
+.sbdocs-content code:not([class*='language-']) {
+  background: #f4f4f4 !important;
+  color: #1a1a1a !important;
+  border: 1px solid #e5e5e5;
+}
+.azion-dark .sbdocs-content code:not([class*='language-']) {
+  background: #171717 !important;
+  color: #ededed !important;
+  border-color: #3e3e3e;
+}
+.sbdocs-content hr {
+  border-color: #e5e5e5 !important;
+}
+.azion-dark .sbdocs-content hr {
+  border-color: #3e3e3e !important;
+}
+.sbdocs-content blockquote {
+  border-left-color: #c2410c !important;
+}
+.azion-dark .sbdocs-content blockquote {
+  border-left-color: #f3652b !important;
+}
+
 .docblock-code-toggle {
   /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
   @apply !font-mono !font-normal;
