@@ -1,20 +1,36 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks Write/Edit/MultiEdit on Storybook *.stories.* files
-// whose Docs "Show code" output would not be a single, runnable, PascalCase SFC.
+// whose Docs "Show code" output would not be a single, runnable, PascalCase SFC,
+// or whose controls/docs wiring breaks the canonical story shape.
 // Enforces .claude/rules/storybook-source.md:
 //   - `parameters.docs` is a plain OBJECT LITERAL (a function call there makes
 //     Storybook print the raw CSF story object instead of the snippet);
 //   - the snippet comes from an explicit `source.code` built with `toSfc`
-//     (no dynamic `source.transform`);
+//     (no dynamic `source.transform`, no `source.type: 'dynamic'`);
 //   - no lowercase/kebab tag of an imported component, no nested <template>;
-//   - new stories import the shared helper and set `sourceState: 'shown'`.
-// Only NEWLY introduced violations block; pre-existing legacy is left alone.
+//   - stories import the shared helper and set `canvas.sourceState`;
+//   - no `argTypesRegex`, no legacy `Name.args = {...}` CSF2 form;
+//   - no Figma parameters/links (`addon-designs`, figma.com URLs);
+//   - `args` is never destructured/spread (it freezes the reactive proxy and
+//     silently breaks the Controls panel).
+//
+// STRICT MODE: the whole stories tree was migrated to the canonical pattern on
+// 2026-07-03, so every check applies to the RESULT of the write — there is no
+// legacy to grandfather. Foundations catalog pages (stories/foundations/*) are
+// exempt from the toSfc/helper requirement (they document tokens, not a
+// component API) but must still keep `docs` a literal and set
+// `canvas.sourceState` (use 'none' — a copy-paste SFC is meaningless there).
+//
+// Standalone audit mode: `node .claude/hooks/validate-story-source.mjs --all`
+// scans every story file under apps/storybook/src/stories and exits 1 when any
+// file violates the contract. Wire it in CI or run it manually after bulk edits.
 
-import { readFileSync } from 'node:fs'
-import { relative, resolve } from 'node:path'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { join, relative, resolve } from 'node:path'
 
 const ROOT = process.cwd()
 const STORY_RE = /\.stories\.(js|jsx|mjs|ts|tsx)$/
+const STORIES_DIR = 'apps/storybook/src/stories'
 
 function readStdin() {
   return new Promise((resolveStdin) => {
@@ -69,8 +85,8 @@ function importedComponents(content) {
 
 // Default imports of webkit components whose binding does not match the export
 // subpath. `import Chip from '@aziontech/webkit/chips'` is wrong — the binding
-// must be PascalCase(last segment of the subpath), i.e. `Chips`. This keeps the
-// snippet, the component name, and the export path in lockstep.
+// must be PascalCase(last segment of the subpath). This keeps the snippet, the
+// component name, and the export path in lockstep.
 function importBindingMismatches(content) {
   const out = []
   const re = /import\s+([A-Za-z_$][\w$]*)\s+from\s+['"]@aziontech\/webkit\/([^'"]+)['"]/g
@@ -78,12 +94,33 @@ function importBindingMismatches(content) {
   while ((m = re.exec(content))) {
     const binding = m[1]
     const subpath = m[2]
-    if (subpath.startsWith('utils/')) continue // non-component helpers (e.g. utils/cn)
+    if (subpath.startsWith('utils/') || subpath.startsWith('styles/')) continue // non-component helpers
     const expected = toPascal(subpath.split('/').pop())
     if (binding !== expected) out.push({ binding, subpath, expected })
   }
   return out
 }
+
+// Native HTML element names. A webkit component can share a name with one of
+// these (Label/label, Table/table, Button/button, ...). A lowercase such tag in
+// slot markup is legitimate native HTML, not a mis-cased component reference, so
+// it is NOT flagged. The real target of this check is a lowercase tag of a
+// NON-native component name (<skeleton>, <chips>, <avatar>, <empty-state>),
+// which never resolves when pasted.
+const NATIVE_HTML = new Set([
+  'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi',
+  'bdo', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code',
+  'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog',
+  'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer',
+  'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr',
+  'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li',
+  'link', 'main', 'map', 'mark', 'menu', 'meta', 'meter', 'nav', 'object', 'ol',
+  'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp',
+  'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'slot', 'small',
+  'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody',
+  'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr',
+  'track', 'u', 'ul', 'var', 'video', 'wbr'
+])
 
 // Lowercase/kebab tags of imported PascalCase components present as real tags.
 function lowercaseTagHits(content, components) {
@@ -91,6 +128,7 @@ function lowercaseTagHits(content, components) {
   for (const name of components) {
     if (name === name.toLowerCase()) continue
     for (const tag of new Set([name.toLowerCase(), toKebab(name)])) {
+      if (NATIVE_HTML.has(tag)) continue // legitimate native element, not a mis-cased component
       const re = new RegExp(`<\\/?${tag}(?=[\\s/>])`, 'g')
       if (re.test(content)) hits.push({ tag, expected: name })
     }
@@ -98,37 +136,43 @@ function lowercaseTagHits(content, components) {
   return hits
 }
 
-function checks(result, baseline, isNew) {
+function checks(result, relPath) {
   const violations = []
   const has = (s, str) => s.includes(str)
 
+  const isFoundations = relPath.includes('stories/foundations/')
   const usesHelper = has(result, '_shared/story-source')
   const usesToSfc = has(result, 'toSfc(')
   const hasDocsConfig = has(result, 'autodocs') || /\bdocs\s*:/.test(result)
 
-  // ---- anti-patterns (block when newly introduced) ----
+  // ---- anti-patterns (always blocked) ----
 
   // `docs:` set to a function call rather than a plain object literal. Storybook
   // then prints the raw CSF story object instead of the runnable snippet.
-  const docsCall = /\bdocs:\s*[A-Za-z_$][\w$]*\s*\(/
-  if (docsCall.test(result) && !docsCall.test(baseline)) {
+  if (/\bdocs:\s*[A-Za-z_$][\w$]*\s*\(/.test(result)) {
     violations.push({
       id: 'docs-not-literal',
-      message: 'parameters.docs is a function call. It must be a plain object literal; build the snippet with source.code: toSfc(...).'
+      message:
+        'parameters.docs is a function call. It must be a plain object literal; build the snippet with source.code: toSfc(...).'
     })
   }
 
-  // Dynamic source transform — we use explicit source.code, never a transform.
-  const transform = /\btransform:\s*(\(|async|function)/
-  if (transform.test(result) && !transform.test(baseline)) {
+  // Dynamic source — we use explicit source.code, never a transform or 'dynamic'.
+  if (/\btransform:\s*(\(|async|function)/.test(result)) {
     violations.push({
       id: 'handrolled-transform',
       message: 'docs.source.transform is forbidden. Set an explicit source.code: toSfc(IMPORT, TEMPLATE) instead.'
     })
   }
+  if (/\btype:\s*['"]dynamic['"]/.test(result)) {
+    violations.push({
+      id: 'dynamic-source',
+      message: "docs.source.type: 'dynamic' is forbidden. Set an explicit source.code: toSfc(IMPORT, TEMPLATE)."
+    })
+  }
 
   // Nested <template>.
-  if (/<template>\s*<template>/.test(result) && !/<template>\s*<template>/.test(baseline)) {
+  if (/<template>\s*<template>/.test(result)) {
     violations.push({
       id: 'nested-template',
       message: 'Nested <template> in the snippet. toSfc adds exactly one wrapper — the body must not contain <template>.'
@@ -137,12 +181,10 @@ function checks(result, baseline, isNew) {
 
   // Lowercase/kebab tag of an imported component.
   const hits = lowercaseTagHits(result, importedComponents(result))
-  const baseHits = new Set(lowercaseTagHits(baseline, importedComponents(baseline)).map((h) => h.tag))
-  const newHits = hits.filter((h) => !baseHits.has(h.tag))
-  if (newHits.length) {
+  if (hits.length) {
     violations.push({
       id: 'lowercase-tag',
-      message: `Lowercase/kebab component tag(s): ${newHits
+      message: `Lowercase/kebab component tag(s): ${hits
         .map((h) => `<${h.tag}> → <${h.expected}>`)
         .join(', ')}. Tags must match the PascalCase import.`
     })
@@ -151,35 +193,66 @@ function checks(result, baseline, isNew) {
   // Import binding must match the export subpath (PascalCase). Catches
   // `import Chip from '@aziontech/webkit/chips'` (binding Chip vs subpath chips).
   const bindHits = importBindingMismatches(result)
-  const baseBinds = new Set(importBindingMismatches(baseline).map((h) => `${h.binding}:${h.subpath}`))
-  const newBinds = bindHits.filter((h) => !baseBinds.has(`${h.binding}:${h.subpath}`))
-  if (newBinds.length) {
+  if (bindHits.length) {
     violations.push({
       id: 'import-binding-mismatch',
-      message: `Import binding(s) do not match the export subpath: ${newBinds
+      message: `Import binding(s) do not match the export subpath: ${bindHits
         .map((h) => `import ${h.binding} from '@aziontech/webkit/${h.subpath}' → expected '${h.expected}'`)
         .join('; ')}. Rename the binding, or the component/export, so file ↔ export ↔ name ↔ binding all agree.`
     })
   }
 
-  // ---- presence (enforced for NEW story files that emit docs) ----
-  if (isNew && hasDocsConfig) {
-    if (!usesHelper) {
+  // Deprecated Storybook wiring.
+  if (/argTypesRegex/.test(result)) {
+    violations.push({
+      id: 'argtypes-regex',
+      message: 'parameters.actions.argTypesRegex is deprecated. Declare each event explicitly in argTypes with { action }.'
+    })
+  }
+  if (/^[A-Z][A-Za-z0-9]*\.(args|argTypes|parameters)\s*=/m.test(result)) {
+    violations.push({
+      id: 'legacy-csf2-assignment',
+      message: 'Legacy `Story.args = {...}` assignment. Use CSF3 object-form stories (export const X = { args, render, parameters }).'
+    })
+  }
+
+  // Figma references live in <name>.figma.ts (Code Connect), never in stories.
+  if (/addon-designs|figma\.com/.test(result)) {
+    violations.push({
+      id: 'figma-reference',
+      message: 'Figma links/addon-designs are forbidden in stories. The Figma mapping is owned by the component `.figma.ts` (Code Connect).'
+    })
+  }
+
+  // Destructuring/spreading the reactive `args` proxy freezes property reads at
+  // setup time and silently breaks the Controls panel.
+  if (/(?:const|let|var)\s*\{[^}]*\}\s*=\s*args\b/.test(result) || /\{\s*\.\.\.args\b/.test(result)) {
+    violations.push({
+      id: 'args-destructure',
+      message:
+        'Destructuring or spreading `args` breaks Controls reactivity. Return { args } from setup() and bind v-bind="args" directly.'
+    })
+  }
+
+  // ---- presence (every story file that emits docs) ----
+  if (hasDocsConfig) {
+    if (!isFoundations && !usesHelper) {
       violations.push({
         id: 'missing-helper',
-        message: 'New story emits docs but does not import the shared helper (_shared/story-source).'
+        message: 'Story emits docs but does not import the shared helper (_shared/story-source).'
       })
     }
-    if (!usesToSfc) {
+    if (!isFoundations && !usesToSfc) {
       violations.push({
         id: 'missing-source-code',
-        message: 'New story does not build its Show code with source.code: toSfc(IMPORT, TEMPLATE).'
+        message: 'Story does not build its Show code with source.code: toSfc(IMPORT, TEMPLATE).'
       })
     }
     if (!has(result, 'sourceState')) {
       violations.push({
         id: 'missing-sourcestate',
-        message: "Missing canvas.sourceState: 'shown' in the meta docs block."
+        message:
+          "Missing canvas.sourceState in the meta docs block ('shown' for component/template stories, 'none' for foundations catalogs)."
       })
     }
   }
@@ -187,7 +260,46 @@ function checks(result, baseline, isNew) {
   return violations
 }
 
+function walkStories(dir) {
+  const out = []
+  let entries
+  try {
+    entries = readdirSync(dir)
+  } catch {
+    return out
+  }
+  for (const entry of entries) {
+    const full = join(dir, entry)
+    const st = statSync(full)
+    if (st.isDirectory()) out.push(...walkStories(full))
+    else if (STORY_RE.test(entry)) out.push(full)
+  }
+  return out
+}
+
+function runAll() {
+  const files = walkStories(resolve(ROOT, STORIES_DIR))
+  let failed = 0
+  for (const file of files) {
+    const relPath = relative(ROOT, file)
+    const violations = checks(readExistingFile(file), relPath)
+    if (violations.length) {
+      failed++
+      process.stderr.write(`\n${relPath}\n`)
+      for (const v of violations) process.stderr.write(`  [${v.id}] ${v.message}\n`)
+    }
+  }
+  if (failed) {
+    process.stderr.write(`\n${failed} story file(s) violate .claude/rules/storybook-source.md\n`)
+    process.exit(1)
+  }
+  process.stdout.write(`OK: ${files.length} story files comply with .claude/rules/storybook-source.md\n`)
+  process.exit(0)
+}
+
 async function main() {
+  if (process.argv.includes('--all')) return runAll()
+
   const raw = await readStdin()
   let input
   try {
@@ -204,10 +316,9 @@ async function main() {
 
   const relPath = relative(ROOT, resolve(filePath))
   const baseline = readExistingFile(filePath)
-  const isNew = baseline === ''
   const result = computeResult(tool, input.tool_input ?? {}, baseline)
 
-  const violations = checks(result, baseline, isNew)
+  const violations = checks(result, relPath)
   if (violations.length === 0) process.exit(0)
 
   const lines = [`BLOCKED: Storybook "Show code" validation failed on ${relPath}.`, '']
@@ -221,6 +332,10 @@ async function main() {
 }
 
 main().catch((err) => {
+  if (process.argv.includes('--all')) {
+    process.stderr.write(`validate-story-source --all error: ${err?.message ?? err}\n`)
+    process.exit(1) // audit mode fails loud
+  }
   process.stderr.write(`validate-story-source hook error: ${err?.message ?? err}\n`)
-  process.exit(0) // fail open
+  process.exit(0) // hook mode fails open
 })
