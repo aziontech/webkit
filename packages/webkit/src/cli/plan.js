@@ -54,6 +54,8 @@ const CLAUDE_BUNDLE = [
   'rules/webkit-tokens.md',
   'rules/webkit-performance.md',
   'rules/webkit-prefer-over-custom.md',
+  'rules/webkit-style-override.md',
+  'rules/webkit-construction-standards.md',
   'skills/webkit-usage/SKILL.md',
   'agents/webkit-expert.md',
   'agents/webkit-adopter.md',

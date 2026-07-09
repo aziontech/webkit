@@ -5,7 +5,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 ## Do
 
 - Use CSS variables from `@aziontech/theme` for color: `var(--primary)`, `var(--bg-surface)`, `var(--text-default)`, `var(--border-default)`, and the other semantic tokens.
-- Use the theme's spacing and radius tokens: `var(--spacing-2)`, `var(--spacing-4)`, `var(--shape-button)`.
+- Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `xxs…xxl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
 - Import the theme once, near your app entry: `import '@aziontech/theme'` (and `import '@aziontech/icons'` for icons).
 
@@ -20,7 +20,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 
 ```html
 <div
-  class="bg-[var(--bg-surface)] text-[var(--text-default)] p-[var(--spacing-4)] rounded-[var(--shape-card)]"
+  class="bg-[var(--bg-surface)] text-[var(--text-default)] p-[var(--spacing-md)] rounded-[var(--shape-card)]"
 >
   ...
 </div>

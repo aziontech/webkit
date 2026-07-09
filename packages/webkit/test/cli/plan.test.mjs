@@ -9,7 +9,10 @@ import { applyPlan } from '../../src/cli/apply.js'
 
 function makeProject() {
   const dir = mkdtempSync(join(tmpdir(), 'webkit-cli-'))
-  writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2))
+  writeFileSync(
+    join(dir, 'package.json'),
+    JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2)
+  )
   return dir
 }
 
@@ -30,8 +33,14 @@ test('planInit records the runtime and dev dependencies', () => {
     for (const d of ['eslint', 'stylelint', 'vue-eslint-parser', 'husky']) {
       assert.ok(deps.includes(d), `missing dev dep ${d}`)
     }
-    assert.ok(!deps.includes('@aziontech/eslint-plugin-webkit'), 'must not add a separate eslint-plugin package')
-    assert.ok(!deps.includes('@aziontech/stylelint-config-webkit'), 'must not add a separate stylelint-config package')
+    assert.ok(
+      !deps.includes('@aziontech/eslint-plugin-webkit'),
+      'must not add a separate eslint-plugin package'
+    )
+    assert.ok(
+      !deps.includes('@aziontech/stylelint-config-webkit'),
+      'must not add a separate stylelint-config package'
+    )
     // Dev flag is set correctly.
     const dev = plan.find((a) => a.type === 'add-dep' && a.dep === 'eslint')
     assert.equal(dev.dev, true)
@@ -81,7 +90,9 @@ test('an existing eslint config is advised, not overwritten', () => {
     const plan = planInit(dir, {})
     const write = plan.find((a) => a.type === 'write' && a.path.startsWith('eslint.config'))
     assert.equal(write, undefined, 'must not plan to write over an existing eslint config')
-    const advise = plan.find((a) => a.type === 'advise' && /ESLint config already exists/.test(a.message))
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /ESLint config already exists/.test(a.message)
+    )
     assert.ok(advise, 'expected an advise action with a merge snippet')
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -95,7 +106,9 @@ test('an existing stylelint config is advised, not overwritten', () => {
     const plan = planInit(dir, {})
     const write = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
     assert.equal(write, undefined, 'must not plan to write over an existing stylelint config')
-    const advise = plan.find((a) => a.type === 'advise' && /Stylelint config already exists/.test(a.message))
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /Stylelint config already exists/.test(a.message)
+    )
     assert.ok(advise, 'expected a stylelint merge-snippet advice')
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -112,7 +125,11 @@ test('planInit adds the husky "prepare" script and a shim-free pre-commit hook',
 
     const hook = plan.find((a) => a.type === 'append' && a.path === '.husky/pre-commit')
     assert.ok(hook, 'expected the husky pre-commit hook')
-    assert.doesNotMatch(hook.content, /husky\.sh/, 'must not use the removed husky v8 bootstrap shim')
+    assert.doesNotMatch(
+      hook.content,
+      /husky\.sh/,
+      'must not use the removed husky v8 bootstrap shim'
+    )
     assert.match(hook.content, /npx eslint/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -127,7 +144,12 @@ test('planInit merges the webkit MCP server into .mcp.json', () => {
     assert.ok(mcp, 'expected .mcp.json merge action')
     assert.ok(mcp.merge.mcpServers[MCP_SERVER_NAME], 'expected webkit server in the merge')
     assert.equal(mcp.merge.mcpServers[MCP_SERVER_NAME].command, 'npx')
-    assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, ['-y', '-p', '@aziontech/webkit', 'webkit-mcp'])
+    assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, [
+      '-y',
+      '-p',
+      '@aziontech/webkit',
+      'webkit-mcp'
+    ])
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -143,6 +165,8 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-tokens.md',
       '.claude/rules/webkit-performance.md',
       '.claude/rules/webkit-prefer-over-custom.md',
+      '.claude/rules/webkit-style-override.md',
+      '.claude/rules/webkit-construction-standards.md',
       '.claude/skills/webkit-usage/SKILL.md',
       '.claude/agents/webkit-expert.md',
       '.claude/agents/webkit-adopter.md',
@@ -250,7 +274,11 @@ test('applyPlan preserves an existing pinned dependency version', () => {
     applyPlan(dir, planInit(dir, {}))
 
     const after = JSON.parse(readFileSync(pkgPath, 'utf8'))
-    assert.equal(after.dependencies['@aziontech/webkit'], '^1.2.3', 'must not re-pin an existing dep')
+    assert.equal(
+      after.dependencies['@aziontech/webkit'],
+      '^1.2.3',
+      'must not re-pin an existing dep'
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

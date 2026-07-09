@@ -22,7 +22,7 @@ Do not guess a component name or import path. Look it up.
 
 - ✅ Flat import: `import Button from '@aziontech/webkit/button'`.
 - ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/mini-button` -> `MiniButton`.
-- ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-4)`, `text-button-lg`).
+- ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
 - ✅ `import '@aziontech/theme'` and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
