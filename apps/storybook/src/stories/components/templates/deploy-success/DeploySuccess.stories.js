@@ -11,7 +11,8 @@ const defaultSteps = [
   },
   {
     title: 'Point Traffic',
-    description: 'Redirect the traffic of a domain to Azion and take advantage of the distributed network.',
+    description:
+      'Redirect the traffic of a domain to Azion and take advantage of the distributed network.',
     icon: 'ai ai-network-lists'
   },
   {
@@ -54,7 +55,11 @@ const meta = {
     title: {
       control: 'text',
       description: 'Main success heading in the card header region.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Congratulations!'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Congratulations!'" }
+      }
     },
     description: {
       control: 'text',
@@ -64,22 +69,38 @@ const meta = {
     scope: {
       control: 'text',
       description: 'Scope label rendered in the header tag.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'mygithub-scope'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'mygithub-scope'" }
+      }
     },
     appName: {
       control: 'text',
       description: 'Deployed application name above the build log.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'myappname'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'myappname'" }
+      }
     },
     lines: {
       control: false,
       description: 'Build log entries passed to LogView.',
-      table: { category: 'props', type: { summary: 'LogViewLine[]' }, defaultValue: { summary: '[]' } }
+      table: {
+        category: 'props',
+        type: { summary: 'LogViewLine[]' },
+        defaultValue: { summary: '[]' }
+      }
     },
     stepsLabel: {
       control: 'text',
       description: 'Section label above the next-steps list.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Next Steps'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Next Steps'" }
+      }
     },
     steps: {
       control: false,
@@ -89,12 +110,20 @@ const meta = {
     actionLabel: {
       control: 'text',
       description: 'Primary footer button label.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Manage'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Manage'" }
+      }
     },
     visitLabel: {
       control: 'text',
       description: 'Visit link label in the card header.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Visit'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Visit'" }
+      }
     },
     visitHref: {
       control: 'text',
@@ -124,7 +153,7 @@ const meta = {
     onStepClick: {
       action: 'step-click',
       description: 'Fires when a next-step row is activated.',
-      table: { category: 'events', type: { summary: '[index: number, event: MouseEvent]' } }
+      table: { category: 'events', type: { summary: '(event: MouseEvent, index: number)' } }
     }
   },
   args: {
@@ -164,7 +193,9 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Default post-deploy success screen matching the Figma Example frame.' },
+      description: {
+        story: 'Default post-deploy success screen matching the Figma Example frame.'
+      },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
@@ -184,7 +215,9 @@ export const Disabled = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Success screen with the build-log toolbar and the manage action disabled.' },
+      description: {
+        story: 'Success screen with the build-log toolbar and the manage action disabled.'
+      },
       source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
     }
   }
