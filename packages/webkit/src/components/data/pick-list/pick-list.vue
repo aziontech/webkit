@@ -35,7 +35,10 @@
   const emit = defineEmits<{
     'update:modelValue': [value: PickListValue]
     move: [payload: { direction: MoveDirection; items: PickListItems }]
-    'item-double-click': [payload: { list: PickListSide; item: unknown; index: number }]
+    'item-double-click': [
+      event: MouseEvent,
+      payload: { list: PickListSide; item: unknown; index: number }
+    ]
   }>()
 
   defineSlots<{
@@ -164,10 +167,10 @@
     })
   }
 
-  const itemDoubleClick = (side: PickListSide, index: number): void => {
+  const itemDoubleClick = (event: MouseEvent, side: PickListSide, index: number): void => {
     if (props.disabled || anyLoading.value) return
     const item = items(side)[index]
-    emit('item-double-click', { list: side, item, index })
+    emit('item-double-click', event, { list: side, item, index })
     if (!props.moveOnDoubleClick) return
     moveItem(side, index)
   }

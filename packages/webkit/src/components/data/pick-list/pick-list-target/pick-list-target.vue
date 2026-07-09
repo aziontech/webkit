@@ -110,7 +110,7 @@
         :style="itemTransitionStyle"
         class="cursor-pointer select-none rounded-[var(--shape-elements)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-md text-[var(--text-default)] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[selected]:bg-[var(--bg-selected)] aria-disabled:cursor-not-allowed"
         @click="ctx.toggleSelection(side, index)"
-        @dblclick="ctx.itemDoubleClick(side, index)"
+        @dblclick="ctx.itemDoubleClick($event, side, index)"
         @keydown="onOptionKeydown(index, $event)"
       >
         <slot
