@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import Button from '@aziontech/webkit/button'
 import FieldTextarea from '@aziontech/webkit/field-textarea'
 
-import { toSfc } from '../../_shared/story-source'
+import { toSfc } from '../../../_shared/story-source'
 
 const CORE_IMPORT = "import FieldTextarea from '@aziontech/webkit/field-textarea'"
 const IMPORTS = [CORE_IMPORT, "import { ref } from 'vue'"]
