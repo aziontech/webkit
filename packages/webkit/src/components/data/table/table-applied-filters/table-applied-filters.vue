@@ -10,13 +10,13 @@
   })
 
   const emit = defineEmits<{
-    remove: [filter: AppliedFilter]
-    edit: [filter: AppliedFilter]
+    remove: [event: MouseEvent, filter: AppliedFilter]
+    edit: [event: MouseEvent | KeyboardEvent, filter: AppliedFilter]
   }>()
 
   defineSlots<{
     /** Override a single chip; receives its filter and a remove callback. */
-    chip(props: { filter: AppliedFilter; remove: () => void }): unknown
+    chip(props: { filter: AppliedFilter; remove: (event: MouseEvent) => void }): unknown
   }>()
 
   const attrs = useAttrs()
@@ -55,13 +55,13 @@
     return `${filter.field} ${operator} ${value}`.trim()
   }
 
-  const onRemove = (filter: AppliedFilter): void => {
+  const onRemove = (event: MouseEvent, filter: AppliedFilter): void => {
     ctx?.removeFilter(filter)
-    emit('remove', filter)
+    emit('remove', event, filter)
   }
-  const onEdit = (filter: AppliedFilter): void => {
+  const onEdit = (event: MouseEvent | KeyboardEvent, filter: AppliedFilter): void => {
     ctx?.editFilter(filter)
-    emit('edit', filter)
+    emit('edit', event, filter)
   }
 </script>
 
@@ -78,14 +78,14 @@
       <slot
         name="chip"
         :filter="filter"
-        :remove="() => onRemove(filter)"
+        :remove="(event: MouseEvent) => onRemove(event, filter)"
       >
         <Chip
           size="medium"
           removable
           clickable
-          @remove="() => onRemove(filter)"
-          @click="() => onEdit(filter)"
+          @remove="(event) => onRemove(event, filter)"
+          @click="(event) => onEdit(event, filter)"
         >
           {{ labelOf(filter) }}
         </Chip>
