@@ -16,7 +16,10 @@ const meta = {
     },
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
       }
     },
     docs: {
@@ -29,7 +32,7 @@ const meta = {
   },
   argTypes: {
     kind: {
-      control: 'inline-radio',
+      control: 'select',
       options: ['shape', 'circle'],
       description: 'Geometry: a rounded rectangular block (`shape`) or a circle.',
       table: {
@@ -58,7 +61,7 @@ const meta = {
     },
     animated: {
       control: 'boolean',
-      description: 'Pulse while loading; suppressed under reduced motion.',
+      description: 'Shimmer while loading; suppressed under reduced motion.',
       table: {
         category: 'props',
         type: { summary: 'boolean' },
@@ -79,9 +82,9 @@ export default meta
 const Template = (args) => ({
   components: { Skeleton },
   setup() {
-    return { props: args }
+    return { args }
   },
-  template: '<Skeleton v-bind="props" />'
+  template: '<Skeleton v-bind="args" />'
 })
 
 const DEFAULT_MARKUP = '<Skeleton kind="shape" width="240px" height="100px" animated />'
@@ -91,7 +94,7 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Default rectangular placeholder with a pulse.' },
+      description: { story: 'Default rectangular placeholder with a shimmer.' },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
@@ -126,7 +129,8 @@ export const Static = {
   parameters: {
     docs: {
       description: {
-        story: 'Non-pulsing placeholder when `animated: false` (also the reduced-motion fallback).'
+        story:
+          'Non-shimmering placeholder when `animated: false` (also the reduced-motion fallback).'
       },
       source: { code: toSfc(IMPORT, STATIC_MARKUP) }
     }
