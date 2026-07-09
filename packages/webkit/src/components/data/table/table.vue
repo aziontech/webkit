@@ -178,7 +178,7 @@
     'update:columnVisibility': [value: VisibilityState]
     'update:globalFilter': [value: string]
     'update:pagination': [value: PaginationState]
-    'row-click': [row: RowRecord]
+    'row-click': [event: MouseEvent, row: RowRecord]
     'update:filters': [value: AppliedFilter[]]
     'update:state': [value: TableStateSnapshot]
     'filter-apply': [filters: AppliedFilter[]]
@@ -672,11 +672,11 @@
   // stop is therefore fully row-clickable. See table-cell.vue.
   // When `selectOnRowClick` is set, a click on the inert row area toggles that
   // row's selection (the checkbox cell already toggles it directly).
-  const onRowClick = (row: Row<RowRecord>) => {
+  const onRowClick = (event: MouseEvent, row: Row<RowRecord>) => {
     if (props.selectOnRowClick && props.enableRowSelection) {
       row.toggleSelected()
     }
-    emit('row-click', row.original)
+    emit('row-click', event, row.original)
   }
 
   // Cumulative sticky offsets so adjacent frozen columns stack instead of overlapping.
@@ -1076,7 +1076,7 @@
                 :key="row.id"
                 v-memo="[row.getIsSelected(), row.original, resizeWidths]"
                 :selected="row.getIsSelected()"
-                @click="onRowClick(row)"
+                @click="onRowClick($event, row)"
               >
                 <TableCell
                   v-if="enableRowSelection"
