@@ -1,5 +1,8 @@
 # Guidelines — building and using `@aziontech/webkit`
 
+> This is the one-page digest. The **complete styleguide** — every code standard in full
+> detail, with the gate that blocks each one — is [`STYLEGUIDE.md`](./STYLEGUIDE.md).
+
 One page to **see every pattern** you need, whether you are:
 
 - **A — building a component by hand** (in the design system or in your own project) → follow

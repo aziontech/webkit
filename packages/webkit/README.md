@@ -6,7 +6,8 @@ tooling that keeps every project using them on-pattern: an ESLint plugin (every 
 wires it all in one command.
 
 - **Playground:** every component ships interactive stories in the Storybook, with controls for every prop.
-- **Guidelines:** [`docs/GUIDELINES.md`](./docs/GUIDELINES.md) — how to build and use components on-pattern.
+- **Styleguide:** [`docs/STYLEGUIDE.md`](./docs/STYLEGUIDE.md) — every code standard in full, with the gate that blocks each one.
+- **Guidelines:** [`docs/GUIDELINES.md`](./docs/GUIDELINES.md) — the one-page digest (build & use on-pattern).
 
 ## Getting started
 
