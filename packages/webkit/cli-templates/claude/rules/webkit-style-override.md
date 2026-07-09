@@ -26,14 +26,12 @@ makes upgrades unpredictable. The `webkit/no-style-override` ESLint rule blocks 
 
 ## Correct
 
+<!-- prettier-ignore -->
 ```html
 <!-- compose in the slot: your markup, your classes -->
-<button
-  kind="primary"
-  @click="submit"
->
+<Button kind="primary" @click="submit">
   <span class="inline-flex items-center gap-[var(--spacing-xs)]">Create account</span>
-</button>
+</Button>
 
 <!-- a styleSeam component accepts consumer classes by design -->
 <CardBox class="bg-[var(--bg-canvas)]">…</CardBox>
@@ -41,12 +39,8 @@ makes upgrades unpredictable. The `webkit/no-style-override` ESLint rule blocks 
 
 ## Wrong
 
+<!-- prettier-ignore -->
 ```html
-<button
-  class="p-8 bg-[#0a0a0a]"
-  @click="submit"
->
-  Create account
-</button>
-<dialog :style="{ width: '800px' }" />
+<Button class="p-8 bg-[#0a0a0a]" @click="submit">Create account</Button>
+<Dialog :style="{ width: '800px' }" />
 ```
