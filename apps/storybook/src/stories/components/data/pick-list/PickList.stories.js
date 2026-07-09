@@ -2,9 +2,9 @@ import PickList from '@aziontech/webkit/pick-list'
 import PickListControls from '@aziontech/webkit/pick-list-controls'
 import PickListSource from '@aziontech/webkit/pick-list-source'
 import PickListTarget from '@aziontech/webkit/pick-list-target'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-import { toSfc } from '../../_shared/story-source'
+import { toSfc } from '../../../_shared/story-source'
 
 // Compound sub-components registered under their dot-notation names so they
 // resolve in Storybook's runtime-compiled string templates: Vue compiles
@@ -79,6 +79,7 @@ const sourceFor = ({ root = [], source = [], target = [] } = {}) =>
 const meta = {
   title: 'Components/Data/PickList',
   component: PickList,
+  subcomponents: { PickListSource, PickListTarget, PickListControls },
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -103,7 +104,11 @@ const meta = {
     modelValue: {
       control: false,
       description: 'Bound pair of lists as [sourceItems, targetItems] (v-model).',
-      table: { type: { summary: '[unknown[], unknown[]]' }, category: 'props' }
+      table: {
+        type: { summary: '[unknown[], unknown[]]' },
+        defaultValue: { summary: '[[], []]' },
+        category: 'props'
+      }
     },
     dataKey: {
       control: 'text',
@@ -115,21 +120,29 @@ const meta = {
       description: 'Disables all selection and move controls and applies disabled tokens.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
-    sourceHeader: {
-      control: 'text',
-      description: 'Heading text for the source list (the `header` prop of `<PickList.Source>`).',
-      table: { type: { summary: 'string' }, category: 'sub-component props (story control)' }
-    },
-    targetHeader: {
-      control: 'text',
-      description: 'Heading text for the target list (the `header` prop of `<PickList.Target>`).',
-      table: { type: { summary: 'string' }, category: 'sub-component props (story control)' }
-    },
     moveOnDoubleClick: {
       control: 'boolean',
       description:
         'When true (default), double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' }, category: 'props' }
+    },
+    sourceHeader: {
+      control: 'text',
+      description: 'Heading text for the source list (the `header` prop of `PickList.Source`).',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" },
+        category: 'sub-component props (story control)'
+      }
+    },
+    targetHeader: {
+      control: 'text',
+      description: 'Heading text for the target list (the `header` prop of `PickList.Target`).',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" },
+        category: 'sub-component props (story control)'
+      }
     },
     loading: {
       control: { type: 'select' },
@@ -138,6 +151,7 @@ const meta = {
         "Drives the `loading` prop of each list. true = both lists; 'source'/'target' = one side. A loading list shows a spinner and locks moves.",
       table: {
         type: { summary: "boolean | 'source' | 'target'" },
+        defaultValue: { summary: 'false' },
         category: 'sub-component props (story control)'
       }
     },
@@ -159,8 +173,17 @@ const meta = {
       description:
         'Fired when an option is double-clicked, with the item, its index, and which list it was in.',
       table: {
-        type: { summary: "{ list: 'source' | 'target'; item: unknown; index: number }" },
+        type: { summary: "(event: MouseEvent, payload: { list: 'source' | 'target'; item: unknown; index: number })" },
         category: 'events'
+      }
+    },
+    default: {
+      control: false,
+      description:
+        'Composition slot receiving `PickList.Source`, `PickList.Controls`, and `PickList.Target` in flow order. The scope exposes the move actions plus selection/loading state for consumers rendering custom controls.',
+      table: {
+        type: { summary: '{ move, moveAll, hasSelection, count, disabled, loading }' },
+        category: 'slots'
       }
     }
   },
@@ -180,6 +203,12 @@ const Template = (args) => ({
   components,
   setup() {
     const value = ref(args.modelValue ?? sampleModel())
+    watch(
+      () => args.modelValue,
+      (next) => {
+        value.value = next ?? sampleModel()
+      }
+    )
     const onUpdate = (next) => {
       value.value = next
       args['onUpdate:modelValue']?.(next)
@@ -231,6 +260,7 @@ export const Default = {
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof PickList>} */
 export const Disabled = {
   args: { disabled: true },
   render: Template,
@@ -242,6 +272,7 @@ export const Disabled = {
   }
 }
 
+/** @type {import('@storybook/vue3').StoryObj<typeof PickList>} */
 export const Loading = {
   args: { loading: 'source' },
   render: Template,
