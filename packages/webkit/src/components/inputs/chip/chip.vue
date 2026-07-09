@@ -28,8 +28,8 @@
   })
 
   const emit = defineEmits<{
-    remove: [event: MouseEvent]
-    click: [event: MouseEvent | KeyboardEvent]
+    remove: [event: MouseEvent, label: string]
+    click: [event: MouseEvent | KeyboardEvent, label: string]
   }>()
 
   defineSlots<{
@@ -60,7 +60,7 @@
 
   function handleAfterLeave() {
     if (pendingRemoveEvent) {
-      emit('remove', pendingRemoveEvent)
+      emit('remove', pendingRemoveEvent, props.label)
       pendingRemoveEvent = undefined
     }
   }
@@ -70,7 +70,7 @@
       return
     }
 
-    emit('click', event)
+    emit('click', event, props.label)
   }
 
   function onKeydown(event: KeyboardEvent) {
@@ -81,7 +81,7 @@
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      emit('click', event)
+      emit('click', event, props.label)
     }
   }
 </script>

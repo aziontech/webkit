@@ -1,7 +1,9 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import InputNumber from '@aziontech/webkit/input-number'
 
-const CORE_IMPORT = "import InputNumber from '@aziontech/webkit/input-number'"
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import InputNumber from '@aziontech/webkit/input-number'"
 
 /** @type {import('@storybook/vue3').Meta<typeof InputNumber>} */
 const meta = {
@@ -23,32 +25,10 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting).',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          CORE_IMPORT,
-          "import { ref } from 'vue'",
-          '',
-          'const value = ref(1)',
-          '</script>',
-          '',
-          '<template>',
-          '  <InputNumber v-model="value" :min="0" :max="100" :step="1" placeholder="Quantity" />',
-          '</template>',
-          '```'
-        ].join('\n')
+        component:
+          'Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting).'
       },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true
-      },
-      canvas: {
-        sourceState: 'shown'
-      }
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -116,8 +96,16 @@ const meta = {
       description: 'Renders the chevron-up/chevron-down spinner controls.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
     },
-    prefix: { control: false, table: { category: 'slots' } },
-    suffix: { control: false, table: { category: 'slots' } },
+    prefix: {
+      control: false,
+      description: 'Content rendered before the input (e.g. `R$`).',
+      table: { category: 'slots' }
+    },
+    suffix: {
+      control: false,
+      description: 'Content rendered after the input, before the spinner buttons (e.g. `%`).',
+      table: { category: 'slots' }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Emitted on every value change (typing or spinner).',
@@ -144,134 +132,125 @@ const meta = {
 
 export default meta
 
-const basicSource = ({ initial = '0', bind = '' } = {}) =>
-  [
-    '<script setup>',
-    CORE_IMPORT,
-    "import { ref } from 'vue'",
-    '',
-    `const value = ref(${initial})`,
-    '</script>',
-    '',
-    '<template>',
-    `  <InputNumber v-model="value"${bind ? ' ' + bind : ''} />`,
-    '</template>'
-  ].join('\n')
+const Template = (args) => ({
+  components: { InputNumber },
+  setup() {
+    const value = ref(args.modelValue ?? 0)
+    watch(
+      () => args.modelValue,
+      (next) => {
+        value.value = next ?? 0
+      }
+    )
+    const onUpdate = (next) => {
+      value.value = next
+      args['onUpdate:modelValue']?.(next)
+    }
+    return { args, value, onUpdate }
+  },
+  template: `
+    <div class="w-[20rem]">
+      <InputNumber v-bind="args" :model-value="value" @update:model-value="onUpdate" />
+    </div>
+  `
+})
+
+const DEFAULT_SCRIPT = [IMPORT, "import { ref } from 'vue'", '', 'const value = ref(1)']
+const DEFAULT_MARKUP = `<div class="w-[20rem]">
+  <InputNumber v-model="value" :min="0" :max="100" :step="1" placeholder="Quantity" />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputNumber>} */
 export const Default = {
-  args: { placeholder: 'Quantity', modelValue: 1, min: 0, max: 100, step: 1 },
-  render: (args) => ({
-    components: { InputNumber },
-    setup() {
-      const value = ref(args.modelValue ?? 0)
-      return { args, value }
-    },
-    template: `
-      <div class="w-[20rem]">
-        <InputNumber v-bind="args" :model-value="value" @update:model-value="(v) => (value = v)" />
-      </div>
-    `
-  }),
+  args: { modelValue: 1, placeholder: 'Quantity', min: 0, max: 100, step: 1 },
+  render: Template,
   parameters: {
     docs: {
       description: { story: 'Default numeric input at medium size with a placeholder.' },
-      source: {
-        code: basicSource({
-          initial: '1',
-          bind: ':min="0" :max="100" :step="1" placeholder="Quantity"'
-        })
-      }
+      source: { code: toSfc(DEFAULT_SCRIPT, DEFAULT_MARKUP) }
     }
   }
 }
 
+const SIZES_SCRIPT = [
+  IMPORT,
+  "import { ref } from 'vue'",
+  '',
+  'const small = ref(1)',
+  'const medium = ref(10)',
+  'const large = ref(100)'
+]
+const SIZES_MARKUP = `<div class="flex w-[20rem] flex-col gap-[var(--spacing-md)]">
+  <InputNumber v-model="small" size="small" :min="0" :max="9" :step="1" />
+  <InputNumber v-model="medium" size="medium" :min="0" :max="99" :step="5" />
+  <InputNumber v-model="large" size="large" :min="0" :max="1000" :step="50" />
+</div>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof InputNumber>} */
 export const Sizes = {
-  render: () => ({
+  render: (args) => ({
     components: { InputNumber },
     setup() {
       const small = ref(1)
       const medium = ref(10)
       const large = ref(100)
-      return { small, medium, large }
+      const log = (next) => args['onUpdate:modelValue']?.(next)
+      return { small, medium, large, log }
     },
     template: `
       <div class="flex w-[20rem] flex-col gap-[var(--spacing-md)]">
-        <InputNumber :model-value="small" size="small" :min="0" :max="9" :step="1" @update:model-value="(v) => (small = v)" />
-        <InputNumber :model-value="medium" size="medium" :min="0" :max="99" :step="5" @update:model-value="(v) => (medium = v)" />
-        <InputNumber :model-value="large" size="large" :min="0" :max="1000" :step="50" @update:model-value="(v) => (large = v)" />
+        <InputNumber v-model="small" size="small" :min="0" :max="9" :step="1" @update:model-value="log" />
+        <InputNumber v-model="medium" size="medium" :min="0" :max="99" :step="5" @update:model-value="log" />
+        <InputNumber v-model="large" size="large" :min="0" :max="1000" :step="50" @update:model-value="log" />
       </div>
     `
   }),
   parameters: {
     docs: {
+      controls: { disable: true },
       description: {
         story:
           'All size variants stacked vertically. Each input has its own `ref`, its own bounds (`min`/`max`), and its own step.'
       },
-      source: {
-        code: [
-          '<script setup>',
-          CORE_IMPORT,
-          "import { ref } from 'vue'",
-          '',
-          'const small = ref(1)',
-          'const medium = ref(10)',
-          'const large = ref(100)',
-          '</script>',
-          '',
-          '<template>',
-          '  <InputNumber v-model="small" size="small" :min="0" :max="9" :step="1" />',
-          '  <InputNumber v-model="medium" size="medium" :min="0" :max="99" :step="5" />',
-          '  <InputNumber v-model="large" size="large" :min="0" :max="1000" :step="50" />',
-          '</template>'
-        ].join('\n')
-      }
+      source: { code: toSfc(SIZES_SCRIPT, SIZES_MARKUP) }
     }
   }
 }
+
+const DISABLED_SCRIPT = [IMPORT, "import { ref } from 'vue'", '', 'const value = ref(42)']
+const DISABLED_MARKUP = `<div class="w-[20rem]">
+  <InputNumber v-model="value" disabled />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof InputNumber>} */
 export const Disabled = {
-  render: () => ({
-    components: { InputNumber },
-    setup() {
-      const value = ref(42)
-      return { value }
-    },
-    template: `
-      <div class="w-[20rem]">
-        <InputNumber :model-value="value" disabled @update:model-value="(v) => (value = v)" />
-      </div>
-    `
-  }),
+  args: { modelValue: 42, disabled: true },
+  render: Template,
   parameters: {
     docs: {
-      description: { story: 'Disabled state — interaction (typing, spinner, arrow keys) is fully blocked.' },
-      source: { code: basicSource({ initial: '42', bind: 'disabled' }) }
+      description: {
+        story: 'Disabled state — interaction (typing, spinner, arrow keys) is fully blocked.'
+      },
+      source: { code: toSfc(DISABLED_SCRIPT, DISABLED_MARKUP) }
     }
   }
 }
 
+const INVALID_SCRIPT = [IMPORT, "import { ref } from 'vue'", '', 'const value = ref(99)']
+const INVALID_MARKUP = `<div class="w-[20rem]">
+  <InputNumber v-model="value" invalid required />
+</div>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof InputNumber>} */
 export const Invalid = {
-  render: () => ({
-    components: { InputNumber },
-    setup() {
-      const value = ref(99)
-      return { value }
-    },
-    template: `
-      <div class="w-[20rem]">
-        <InputNumber :model-value="value" invalid required @update:model-value="(v) => (value = v)" />
-      </div>
-    `
-  }),
+  args: { modelValue: 99, invalid: true, required: true },
+  render: Template,
   parameters: {
     docs: {
-      description: { story: 'Invalid state with the danger border applied. Interaction still works.' },
-      source: { code: basicSource({ initial: '99', bind: 'invalid required' }) }
+      description: {
+        story: 'Invalid state with the danger border applied. Interaction still works.'
+      },
+      source: { code: toSfc(INVALID_SCRIPT, INVALID_MARKUP) }
     }
   }
 }
