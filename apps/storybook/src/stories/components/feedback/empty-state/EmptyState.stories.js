@@ -2,27 +2,21 @@ import Button from '@aziontech/webkit/button'
 import EmptyState from '@aziontech/webkit/empty-state'
 import MiniButton from '@aziontech/webkit/mini-button'
 
-const ACTIONS_MARKUP = `    <template #actions>
-      <div class="flex gap-[var(--spacing-3)]">
-        <Button kind="secondary" label="Secondary Item" />
-        <Button kind="outlined" label="Create Item" />
-      </div>
-      <MiniButton label="View Documentation" icon="pi pi-arrow-right" size="medium" href="#" />
-    </template>`
+import { toSfc } from '../../../_shared/story-source'
 
-/** Wrap inner template markup in a full, copyable SFC — mirrors the rendered output 1:1. */
-const sfc = (markup) =>
-  [
-    '<script setup>',
-    "import EmptyState from '@aziontech/webkit/empty-state'",
-    "import Button from '@aziontech/webkit/button'",
-    "import MiniButton from '@aziontech/webkit/mini-button'",
-    '</script>',
-    '',
-    '<template>',
-    markup,
-    '</template>'
-  ].join('\n')
+const IMPORTS = [
+  "import EmptyState from '@aziontech/webkit/empty-state'",
+  "import Button from '@aziontech/webkit/button'",
+  "import MiniButton from '@aziontech/webkit/mini-button'"
+]
+
+const ACTIONS_MARKUP = `  <template #actions>
+    <div class="flex gap-[var(--spacing-3)]">
+      <Button kind="secondary" label="Secondary Item" />
+      <Button kind="outlined" label="Create Item" />
+    </div>
+    <MiniButton label="View Documentation" icon="pi pi-arrow-right" size="medium" href="#" />
+  </template>`
 
 /** @type {import('@storybook/vue3').Meta<typeof EmptyState>} */
 const meta = {
@@ -47,9 +41,7 @@ const meta = {
         component:
           'A full-region placeholder shown when a list or section has no content yet. It stacks a decorative illustration (the bundled `EmptyStateIllustration` by default), a title, an optional description, and a consumer-composed actions area, and renders on a plain background or inside a bordered surface card (`bordered`).'
       },
-      canvas: {
-        sourceState: 'shown'
-      }
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -64,7 +56,7 @@ const meta = {
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     size: {
-      control: 'inline-radio',
+      control: 'select',
       options: ['small', 'medium', 'large'],
       description:
         'Size token; affects the illustration size, the surrounding padding, and the gaps between illustration, text, and actions.',
@@ -88,7 +80,8 @@ const meta = {
     },
     actions: {
       control: false,
-      description: 'Action area below the description; consumer composes buttons and the documentation link.',
+      description:
+        'Action area below the description; consumer composes buttons and the documentation link.',
       table: { category: 'slots', type: { summary: 'slot' } }
     }
   },
@@ -107,36 +100,62 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template: `
-    <EmptyState v-bind="args">
+  template: `<EmptyState v-bind="args">
 ${ACTIONS_MARKUP}
-    </EmptyState>
-  `
+</EmptyState>`
 })
+
+const DEFAULT_MARKUP = `<EmptyState
+  title="No resource yet"
+  description="Get started by creating your first resource."
+>
+${ACTIONS_MARKUP}
+</EmptyState>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof EmptyState>} */
 export const Default = {
   render: Template,
   parameters: {
     docs: {
-      source: {
-        code: sfc(
-          [
-            '  <EmptyState',
-            '    title="No resource yet"',
-            '    description="Get started by creating your first resource."',
-            '  >',
-            ACTIONS_MARKUP,
-            '  </EmptyState>'
-          ].join('\n')
-        )
-      },
       description: {
         story: 'Default empty state: the illustration tile, title, description, and actions.'
-      }
+      },
+      source: { code: toSfc(IMPORTS, DEFAULT_MARKUP) }
     }
   }
 }
+
+const SIZES_TEMPLATE = `<div class="flex w-full flex-col gap-[var(--spacing-xl)]">
+  <EmptyState
+    v-for="size in ['small', 'medium', 'large']"
+    :key="size"
+    :size="size"
+    title="No resource yet"
+    description="Get started by creating your first resource."
+  >
+${ACTIONS_MARKUP}
+  </EmptyState>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof EmptyState>} */
+export const Sizes = {
+  render: () => ({ components: { EmptyState, Button, MiniButton }, template: SIZES_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: { story: 'The three size variants — small, medium, large — stacked.' },
+      source: { code: toSfc(IMPORTS, SIZES_TEMPLATE) }
+    }
+  }
+}
+
+const BORDERED_MARKUP = `<EmptyState
+  title="No resource yet"
+  description="Get started by creating your first resource."
+  bordered
+>
+${ACTIONS_MARKUP}
+</EmptyState>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof EmptyState>} */
 export const Bordered = {
@@ -144,61 +163,8 @@ export const Bordered = {
   render: Template,
   parameters: {
     docs: {
-      source: {
-        code: sfc(
-          [
-            '  <EmptyState',
-            '    title="No resource yet"',
-            '    description="Get started by creating your first resource."',
-            '    bordered',
-            '  >',
-            ACTIONS_MARKUP,
-            '  </EmptyState>'
-          ].join('\n')
-        )
-      },
-      description: { story: 'Content wrapped in a bordered surface card (`bordered`).' }
-    }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof EmptyState>} */
-export const Sizes = {
-  render: () => ({
-    components: { EmptyState, Button, MiniButton },
-    template: `
-      <div class="flex w-full flex-col gap-[var(--spacing-xl)]">
-        <EmptyState
-          v-for="s in ['small', 'medium', 'large']"
-          :key="s"
-          :size="s"
-          title="No resource yet"
-          description="Get started by creating your first resource."
-        >
-${ACTIONS_MARKUP}
-        </EmptyState>
-      </div>
-    `
-  }),
-  parameters: {
-    docs: {
-      controls: { disable: true },
-      source: {
-        code: sfc(
-          [
-            '  <EmptyState',
-            '    v-for="size in [\'small\', \'medium\', \'large\']"',
-            '    :key="size"',
-            '    :size="size"',
-            '    title="No resource yet"',
-            '    description="Get started by creating your first resource."',
-            '  >',
-            ACTIONS_MARKUP,
-            '  </EmptyState>'
-          ].join('\n')
-        )
-      },
-      description: { story: 'The three size variants — small, medium, large — stacked.' }
+      description: { story: 'Content wrapped in a bordered surface card (`bordered`).' },
+      source: { code: toSfc(IMPORTS, BORDERED_MARKUP) }
     }
   }
 }

@@ -1,18 +1,33 @@
 import CardBox from '@aziontech/webkit/card-box'
 
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import CardBox from '@aziontech/webkit/card-box'"
+
 /** @type {import('@storybook/vue3').Meta<typeof CardBox>} */
 const meta = {
- title: 'Components/Content/CardBox',
+  title: 'Components/Content/CardBox',
   component: CardBox,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    backgrounds: { default: 'dark' },
+    backgrounds: {
+      default: 'dark'
+    },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
     docs: {
       description: {
         component:
-          'Structured surface with optional header, body, and footer regions. Figma Webkit CardBox (node 562:6473). Use `title` and `header-action` for the default header layout, or the `header` slot for full control.'
-      }
+          'Structured surface with optional header, body, and footer regions. Use `title` and the `header-action` slot for the default header layout, or the `header` slot for full control.'
+      },
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -20,30 +35,30 @@ const meta = {
       control: 'text',
       description: 'Heading in the default header when the `header` slot is empty.',
       table: {
+        category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: "''" },
-        category: 'props'
+        defaultValue: { summary: "''" }
       }
     },
     header: {
-      description: 'Custom header content; replaces the default title + header-action layout.',
       control: false,
-      table: { type: { summary: 'VNode' }, category: 'slots' }
+      description: 'Custom header content; replaces the default title + header-action layout.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
     },
     'header-action': {
-      description: 'Actions at the end of the default header; revealed on header hover/focus.',
       control: false,
-      table: { type: { summary: 'VNode' }, category: 'slots' }
+      description: 'Actions at the end of the default header; revealed on header hover/focus.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
     },
     content: {
-      description: 'Main card body.',
       control: false,
-      table: { type: { summary: 'VNode' }, category: 'slots' }
+      description: 'Main card body.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
     },
     footer: {
-      description: 'Footer region; the footer bar is omitted when this slot is empty.',
       control: false,
-      table: { type: { summary: 'VNode' }, category: 'slots' }
+      description: 'Footer region; the footer bar is omitted when this slot is empty.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
     }
   },
   args: {
@@ -69,9 +84,25 @@ const Template = (args) => ({
   `
 })
 
+const DEFAULT_MARKUP = `<CardBox title="Card Title" class="w-full max-w-[512px]">
+  <template #content>
+    <p class="text-body-md text-[var(--text-default)] p-[var(--spacing-4)]">
+      Card body content. Place forms, tables, or any markup in the content slot.
+    </p>
+  </template>
+</CardBox>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof CardBox>} */
 export const Default = {
-  render: Template
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Default card with a title header and body content in the `content` slot.'
+      },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof CardBox>} */

@@ -1,19 +1,12 @@
 import Tag from '@aziontech/webkit/tag'
 
-const severities = [
-  'primary',
-  'secondary',
-  'accent',
-  'success',
-  'warning',
-  'danger',
-  'info',
-  'contrast'
-]
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Tag from '@aziontech/webkit/tag'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Tag>} */
 const meta = {
- title: 'Components/Content/Tag',
+  title: 'Components/Content/Tag',
   component: Tag,
   tags: ['autodocs'],
   parameters: {
@@ -31,22 +24,10 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import Tag from '@aziontech/webkit/tag'",
-          '</script>',
-          '',
-          '<template>',
-          '  <Tag value="Label" severity="primary" size="medium" />',
-          '</template>',
-          '```'
-        ].join('\n')
-      }
+        component:
+          'Compact status or category label with severity-based color coding. Supports an optional leading icon, pill shape via `rounded`, and two sizes.'
+      },
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -86,7 +67,7 @@ const meta = {
       control: 'select',
       options: ['small', 'medium'],
       description:
-        'Size token. `medium`: 24px height (`--h-6`), 8px horizontal padding and icon gap (`--spacing-xs`), 12px type (`text-tag-md`). `small`: 20px height (`--h-5`), 4px padding and gap (`--spacing-xxs`), 11px type (`text-tag-sm`).',
+        'Size token. `medium`: 24px height, 8px horizontal padding and icon gap (`--spacing-xs`), 12px type (`text-tag-md`). `small`: 20px height, 4px padding and gap (`--spacing-xxs`), 11px type (`text-tag-sm`).',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium'" },
@@ -134,102 +115,98 @@ export default meta
 const Template = (args) => ({
   components: { Tag },
   setup() {
-    return { props: args }
+    return { args }
   },
-  template: '<Tag v-bind="props" />'
+  template: '<Tag v-bind="args" />'
 })
+
+const DEFAULT_MARKUP = '<Tag value="Label" severity="primary" size="medium" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default primary tag at medium size.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
-export const Types = {
-  render: (args) => ({
-    components: { Tag },
-    setup() {
-      return { args, severities }
-    },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Tag
-          v-for="severity in severities"
-          :key="severity"
-          value="Label"
-          :severity="severity"
-          :size="args.size"
-          :rounded="args.rounded"
-          :icon="args.icon"
-        />
-      </div>
-    `
-  }),
-  parameters: {
-    docs: { description: { story: 'All severity variants side by side.' } }
-  }
-}
-
-/** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
-export const Sizes = {
-  render: () => ({
-    components: { Tag },
-    template: `
-      <div class="flex flex-col gap-4">
-        <div class="flex flex-wrap items-center gap-4">
-          <Tag value="Label" severity="primary" size="medium" />
-          <Tag value="Label" severity="primary" size="medium" rounded />
-          <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" />
-          <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" rounded />
-        </div>
-        <div class="flex flex-wrap items-center gap-4">
-          <Tag value="Label" severity="primary" size="small" />
-          <Tag value="Label" severity="primary" size="small" rounded />
-          <Tag value="Label" severity="primary" size="small" icon="pi pi-box" />
-          <Tag value="Label" severity="primary" size="small" icon="pi pi-box" rounded />
-        </div>
-      </div>
-    `
-  }),
-  parameters: {
     docs: {
-      description: {
-        story:
-          'Medium row (24px, `--spacing-xs` padding and gap) and small row (20px, `--spacing-xxs` padding and gap), each with default shape, pill, icon, and icon + pill.'
-      }
+      description: { story: 'Default primary tag at medium size.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
 }
 
+const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
+  <Tag value="Label" severity="primary" />
+  <Tag value="Label" severity="secondary" />
+  <Tag value="Label" severity="accent" />
+  <Tag value="Label" severity="success" />
+  <Tag value="Label" severity="warning" />
+  <Tag value="Label" severity="danger" />
+  <Tag value="Label" severity="info" />
+  <Tag value="Label" severity="contrast" />
+</div>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
-export const WithIcon = {
-  render: (args) => ({
-    components: { Tag },
-    setup() {
-      return { args, severities }
-    },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Tag
-          v-for="severity in severities"
-          :key="severity"
-          value="Label"
-          :severity="severity"
-          icon="pi pi-box"
-          :size="args.size"
-          :rounded="args.rounded"
-        />
-      </div>
-    `
-  }),
+export const Types = {
+  render: () => ({ components: { Tag }, template: TYPES_TEMPLATE }),
   parameters: {
     docs: {
+      controls: { disable: true },
+      description: { story: 'All severity variants side by side.' },
+      source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
+    }
+  }
+}
+
+const SIZES_TEMPLATE = `<div class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-center gap-4">
+    <Tag value="Label" severity="primary" size="medium" />
+    <Tag value="Label" severity="primary" size="medium" rounded />
+    <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" />
+    <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" rounded />
+  </div>
+  <div class="flex flex-wrap items-center gap-4">
+    <Tag value="Label" severity="primary" size="small" />
+    <Tag value="Label" severity="primary" size="small" rounded />
+    <Tag value="Label" severity="primary" size="small" icon="pi pi-box" />
+    <Tag value="Label" severity="primary" size="small" icon="pi pi-box" rounded />
+  </div>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
+export const Sizes = {
+  render: () => ({ components: { Tag }, template: SIZES_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Medium row (24px, `--spacing-xs` padding and gap) and small row (20px, `--spacing-xxs` padding and gap), each with default shape, pill, icon, and icon + pill.'
+      },
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
+    }
+  }
+}
+
+const WITH_ICON_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
+  <Tag value="Label" severity="primary" icon="pi pi-box" />
+  <Tag value="Label" severity="secondary" icon="pi pi-box" />
+  <Tag value="Label" severity="accent" icon="pi pi-box" />
+  <Tag value="Label" severity="success" icon="pi pi-box" />
+  <Tag value="Label" severity="warning" icon="pi pi-box" />
+  <Tag value="Label" severity="danger" icon="pi pi-box" />
+  <Tag value="Label" severity="info" icon="pi pi-box" />
+  <Tag value="Label" severity="contrast" icon="pi pi-box" />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
+export const WithIcon = {
+  render: () => ({ components: { Tag }, template: WITH_ICON_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
       description: {
         story: 'Leading icon via the `icon` prop (PrimeIcons class) across severity variants.'
-      }
+      },
+      source: { code: toSfc(IMPORT, WITH_ICON_TEMPLATE) }
     }
   }
 }
