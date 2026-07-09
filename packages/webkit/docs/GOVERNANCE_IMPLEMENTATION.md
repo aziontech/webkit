@@ -122,13 +122,13 @@ Type coverage configuration enforcing 95% type safety threshold.
 
 ### Reasoning
 
-| Setting                                                | Reason                                                                                                                                                                                                         |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`atLeast: 95`**                                      | Sets minimum type coverage to 95%. This means 95% of code must have explicit types rather than `any`. Balances strictness with pragmatism—allows 5% for complex third-party integrations or gradual migration. |
-| **`strict: true`**                                     | Enables strict type coverage checks. Counts only fully-typed code, not partially-typed.                                                                                                                        |
-| **`detail: true`**                                     | Provides detailed report showing which files/lines lack types. Helps developers understand exactly where to add types.                                                                                         |
-| **`ignoreCatch: true`**                                | Ignores catch clause variables. TypeScript defaults catch variables to `any`, and typing them requires `unknown` with type guards. Too noisy for initial adoption.                                             |
-| **`ignoreFiles: ["**/*.d.ts", "**/node_modules/**"]`** | Excludes declaration files and dependencies. Focus on project source code only.                                                                                                                                |
+| Setting                                                   | Reason                                                                                                                                                                                                         |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`atLeast: 95`**                                         | Sets minimum type coverage to 95%. This means 95% of code must have explicit types rather than `any`. Balances strictness with pragmatism—allows 5% for complex third-party integrations or gradual migration. |
+| **`strict: true`**                                        | Enables strict type coverage checks. Counts only fully-typed code, not partially-typed.                                                                                                                        |
+| **`detail: true`**                                        | Provides detailed report showing which files/lines lack types. Helps developers understand exactly where to add types.                                                                                         |
+| **`ignoreCatch: true`**                                   | Ignores catch clause variables. TypeScript defaults catch variables to `any`, and typing them requires `unknown` with type guards. Too noisy for initial adoption.                                             |
+| **`ignoreFiles: ["**/\*.d.ts", "**/node_modules/**"]`\*\* | Excludes declaration files and dependencies. Focus on project source code only.                                                                                                                                |
 
 ### Why Type Coverage Matters
 
@@ -303,11 +303,11 @@ Comprehensive CI/CD pipeline with parallel job execution.
 
 #### Trigger Strategy
 
-| Trigger                               | Reason                                                                                       |
-| ------------------------------------- | -------------------------------------------------------------------------------------------- |
-| **Pull requests to main**             | Catches issues in PRs before merge. Prevents broken code on main.                            |
-| **Pushes to main**                    | Double-checks even after PR merge. Catches direct commits to main (should be rare).          |
-| **Path filter: `packages/webkit/**`** | Only runs when webkit package changes. Saves CI resources. Doesn't run on unrelated changes. |
+| Trigger                                 | Reason                                                                                       |
+| --------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **Pull requests to main**               | Catches issues in PRs before merge. Prevents broken code on main.                            |
+| **Pushes to main**                      | Double-checks even after PR merge. Catches direct commits to main (should be rare).          |
+| **Path filter: `packages/webkit/**`\*\* | Only runs when webkit package changes. Saves CI resources. Doesn't run on unrelated changes. |
 
 #### Performance Optimizations
 

@@ -5,7 +5,12 @@ export type ToastType = 'default' | 'success' | 'info' | 'warning' | 'error' | '
 
 /** Corner (or edge-center) a toast (or the whole Toaster) is anchored to. */
 export type ToastPosition =
-  'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right'
 
 /** An inline action affordance rendered as a text button inside the toast. */
 export interface ToastAction {
