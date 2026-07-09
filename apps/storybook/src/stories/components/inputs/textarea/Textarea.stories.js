@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 import Textarea from '@aziontech/webkit/textarea'
 
-import { toSfc } from '../../_shared/story-source'
+import { toSfc } from '../../../_shared/story-source'
 
 const CORE_IMPORT = "import Textarea from '@aziontech/webkit/textarea'"
 const IMPORTS = [CORE_IMPORT, "import { ref } from 'vue'"]
