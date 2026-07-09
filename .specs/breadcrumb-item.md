@@ -33,7 +33,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 | Event | Payload | Notes |
 |---|---|---|
-| `click` | `MouseEvent` | Fires when the segment is activated (link or button). |
+| `click` | `(event: MouseEvent, item: { label: string; href: string })` | Fires when the segment is activated (link or button). `item` carries the segment's `label` and `href`. |
 
 ## Slots
 

@@ -31,8 +31,8 @@
   })
 
   const emit = defineEmits<{
-    click: [payload: globalThis.MouseEvent]
-    close: [payload: globalThis.MouseEvent | globalThis.KeyboardEvent]
+    click: [event: globalThis.MouseEvent, value: TabViewValue | string]
+    close: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: TabViewValue | string]
   }>()
 
   defineSlots<{
@@ -113,7 +113,7 @@
     }
 
     context?.setValue(resolvedValue.value)
-    emit('click', event)
+    emit('click', event, resolvedValue.value)
   }
 
   const onCloseClick = (event: globalThis.MouseEvent | globalThis.KeyboardEvent) => {
@@ -123,7 +123,7 @@
       return
     }
 
-    emit('close', event)
+    emit('close', event, resolvedValue.value)
   }
 
   onMounted(() => {

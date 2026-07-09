@@ -91,7 +91,7 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 | Event | Payload | Notes |
 |---|---|---|
 | `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. |
-| `select` | `{ value: string \| number; event: MouseEvent \| KeyboardEvent }` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
 
 ## Slots
 

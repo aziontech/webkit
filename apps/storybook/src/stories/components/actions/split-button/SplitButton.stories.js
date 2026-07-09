@@ -2,7 +2,7 @@ import SplitButton from '@aziontech/webkit/split-button'
 
 import { toSfc } from '../../../_shared/story-source'
 
-// Imports + a runnable `items` const so every "Show code" snippet is
+// Import lines + a runnable `items` const so every "Show code" snippet is
 // self-contained and matches the canvas exactly.
 const SNIPPET_IMPORTS = [
   "import SplitButton from '@aziontech/webkit/split-button'",
@@ -20,6 +20,7 @@ const ITEMS = [
   { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }
 ]
 
+/** @type {import('@storybook/vue3').Meta<typeof SplitButton>} */
 const meta = {
   title: 'Components/Actions/SplitButton',
   component: SplitButton,
@@ -114,7 +115,7 @@ const meta = {
     onItemClick: {
       action: 'item-click',
       description: 'Fired when a menu action is selected; carries the matched model item.',
-      table: { category: 'events', type: { summary: 'SplitButtonItem' } }
+      table: { category: 'events', type: { summary: '(event: MouseEvent | KeyboardEvent, item: SplitButtonItem)' } }
     }
   },
   args: {
@@ -134,21 +135,20 @@ export default meta
 const Template = (args) => ({
   components: { SplitButton },
   setup() {
-    const { onClick, onItemClick, ...props } = args
-
-    return { props, onClick, onItemClick }
+    return { args }
   },
-  template: '<SplitButton v-bind="props" @click="onClick" @item-click="onItemClick" />'
+  template: '<SplitButton v-bind="args" />'
 })
 
 const DEFAULT_MARKUP = `<SplitButton
+  kind="primary"
+  size="large"
   label="Save"
   icon="pi pi-check"
   :model="items"
-  @click="onSave"
-  @item-click="onAction"
 />`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof SplitButton>} */
 export const Default = {
   render: Template,
   parameters: {
@@ -165,6 +165,7 @@ const TYPES_MARKUP = `<div class="flex flex-wrap items-center gap-4">
   <SplitButton kind="outlined" label="Outlined" :model="items" />
 </div>`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof SplitButton>} */
 export const Types = {
   render: () => ({
     components: { SplitButton },
@@ -188,6 +189,7 @@ const SIZES_MARKUP = `<div class="flex flex-wrap items-center gap-4">
   <SplitButton size="large" label="Large" :model="items" />
 </div>`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof SplitButton>} */
 export const Sizes = {
   render: () => ({
     components: { SplitButton },
@@ -212,6 +214,7 @@ const LOADING_MARKUP = `<SplitButton
   :model="items"
 />`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof SplitButton>} */
 export const Loading = {
   args: { loading: true, label: 'Saving' },
   render: Template,
@@ -233,6 +236,7 @@ const DISABLED_MARKUP = `<SplitButton
   :model="items"
 />`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof SplitButton>} */
 export const Disabled = {
   args: { disabled: true },
   render: Template,
@@ -249,9 +253,9 @@ const UPDATE_LABEL_MARKUP = `<SplitButton
   icon="pi pi-check"
   :model="items"
   update-label-on-select
-  @item-click="onAction"
 />`
 
+/** @type {import('@storybook/vue3').StoryObj<typeof SplitButton>} */
 export const UpdateLabelOnSelect = {
   args: { updateLabelOnSelect: true },
   render: Template,

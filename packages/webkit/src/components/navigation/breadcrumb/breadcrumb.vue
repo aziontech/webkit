@@ -32,7 +32,7 @@
   })
 
   const emit = defineEmits<{
-    navigate: [href: string]
+    navigate: [event: MouseEvent, href: string]
   }>()
 
   defineSlots<{
@@ -71,14 +71,17 @@
     () => resolvedItems.value.length > 1 && firstItem.value !== lastItem.value
   )
 
-  const handleItemClick = (href: string) => {
-    emit('navigate', href)
+  const handleItemClick = (event: MouseEvent, href: string) => {
+    emit('navigate', event, href)
   }
 
-  const onOverflowSelect = (payload: { value: string | number }) => {
-    const href = typeof payload?.value === 'string' ? payload.value : undefined
+  const onOverflowSelect = (
+    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+    value: string | number
+  ) => {
+    const href = typeof value === 'string' ? value : undefined
     if (href) {
-      handleItemClick(href)
+      handleItemClick(event as MouseEvent, href)
     }
   }
 </script>
@@ -110,7 +113,7 @@
                 :icon="item.icon"
                 :class="item.current ? 'text-[var(--text-default)]' : undefined"
                 :data-testid="`${testId}__item-${index}`"
-                @click="() => !item.current && handleItemClick(item.href ?? '#')"
+                @click="(event) => !item.current && handleItemClick(event, item.href ?? '#')"
               />
             </li>
             <BreadcrumbSeparator
@@ -136,7 +139,9 @@
                 firstItem.current && !showDistinctEnds ? 'text-[var(--text-default)]' : undefined
               "
               :data-testid="`${testId}__item-0`"
-              @click="() => !firstItem.current && handleItemClick(firstItem.href ?? '#')"
+              @click="
+                (event) => !firstItem.current && handleItemClick(event, firstItem.href ?? '#')
+              "
             />
           </li>
 
@@ -194,7 +199,9 @@
                 :icon="lastItem.icon"
                 class="text-[var(--text-default)]"
                 :data-testid="`${testId}__item-last`"
-                @click="() => !lastItem.current && handleItemClick(lastItem.href ?? '#')"
+                @click="
+                  (event) => !lastItem.current && handleItemClick(event, lastItem.href ?? '#')
+                "
               />
             </li>
           </template>

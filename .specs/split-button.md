@@ -61,7 +61,7 @@ const items = [
 | Event | Payload | Notes |
 |---|---|---|
 | `click` | `(event: MouseEvent, item: SplitButtonItem \| null)` | Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`. |
-| `item-click` | `SplitButtonItem` | Fired when a menu action is selected; carries the matched `model` item. The menu cannot open while `disabled` or `loading`, so it never fires in those states. |
+| `item-click` | `(event: MouseEvent \| KeyboardEvent, item: SplitButtonItem)` | Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states. |
 
 ## Slots
 
