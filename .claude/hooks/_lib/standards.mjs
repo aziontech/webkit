@@ -70,7 +70,11 @@ export const STANDARDS = [
     id: 'styling',
     kind: 'foundational',
     scope: 'general',
-    enforce: [{ surface: 'write-time', by: 'validate-tokens' }]
+    enforce: [
+      { surface: 'write-time', by: 'validate-tokens' },
+      { surface: 'ci', by: 'check-authoring' }
+    ],
+    note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook.'
   },
   {
     id: 'dependencies',
@@ -186,9 +190,10 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'write-time', by: 'validate-references' },
+      { surface: 'ci', by: 'check-authoring' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: '`class` in defineProps + phantom asChild are blocked automatically; defineExpose/polymorphism confirmed in review.'
+    note: '`class` in defineProps + phantom asChild are blocked automatically (write-time AND the CI ratchet token scan); defineExpose/polymorphism confirmed in review.'
   },
   {
     id: 'component-states',
