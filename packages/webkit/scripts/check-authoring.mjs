@@ -19,12 +19,20 @@ import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plug
 // DS-internal engine (depends on .specs/): the same spec⇄code checks the PostToolUse
 // hook runs — no-invention, vocabulary, naming, defaults drift, testid, animations.
 import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
+// Storybook "Show code" checks — same engine as validate-story-source.
+import {
+  checks as storyChecks,
+  STORY_RE
+} from '../../../.claude/hooks/_lib/story-source-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES }
+// key → full message, for violations whose detail is computed at scan time
+const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
 const SRC = join(ROOT, 'packages/webkit/src')
+const STORIES = join(ROOT, 'apps/storybook/src')
 const BASELINE = join(SCRIPT_DIR, 'authoring-baseline.json')
 const WIP_PREFIX = 'packages/webkit/src/components/wip/'
 
@@ -61,6 +69,18 @@ function currentViolations() {
       if (result) {
         for (const v of result.violations) keys.push(`${rel}::spec:${v}`)
       }
+    }
+  }
+  // Storybook "Show code" discipline — the same checks validate-story-source runs at
+  // write time, over every *.stories.* file (existing debt frozen in the baseline).
+  for (const abs of walk(STORIES)) {
+    const rel = relative(ROOT, abs).split('\\').join('/')
+    if (!STORY_RE.test(rel)) continue
+    const content = readFileSync(abs, 'utf-8')
+    for (const v of storyChecks(content, '', true)) {
+      const key = `${rel}::story:${v.id}`
+      keys.push(key)
+      DETAILS.set(key, v.message)
     }
   }
   return keys.sort()
@@ -107,6 +127,8 @@ if (introduced.length) {
     if (id.startsWith('spec:')) {
       // spec-compliance keys carry the full violation message
       console.error(`    [spec] ${id.slice(5)}`)
+    } else if (id.startsWith('story:')) {
+      console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(6)}`)
     } else {
       console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^token:/, '')] ?? id}`)
     }

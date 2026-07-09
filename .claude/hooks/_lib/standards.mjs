@@ -85,7 +85,11 @@ export const STANDARDS = [
     id: 'dependencies',
     kind: 'foundational',
     scope: 'webkit',
-    enforce: [{ surface: 'write-time', by: 'validate-references' }]
+    enforce: [
+      { surface: 'write-time', by: 'validate-references' },
+      { surface: 'ci', by: 'type-check' }
+    ],
+    note: 'Forbidden libs are never installed — any import of one fails vue-tsc/build in CI, so an editor push cannot bypass the hook.'
   },
   {
     id: 'migration',
@@ -95,15 +99,20 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'write-time', by: 'validate-references' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
+      { surface: 'ci', by: 'check-authoring' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'The rewritten output cannot be off-standard — blocked by the aggregate of the output checks; review confirms nothing was inherited as-is.'
+    note: 'The rewritten output cannot be off-standard — blocked by the aggregate of the output checks (which the ratchet also runs in CI); review confirms nothing was inherited as-is.'
   },
   {
     id: 'storybook-source',
     kind: 'foundational',
     scope: 'webkit',
-    enforce: [{ surface: 'write-time', by: 'validate-story-source' }]
+    enforce: [
+      { surface: 'write-time', by: 'validate-story-source' },
+      { surface: 'ci', by: 'check-authoring' }
+    ],
+    note: 'The ratchet runs the same story-source engine over apps/storybook/src in CI; the Storybook build also fails on non-compiling stories.'
   },
   {
     id: 'release-types',
