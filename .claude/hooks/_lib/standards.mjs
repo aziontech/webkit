@@ -27,14 +27,18 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'write-time', by: 'validate-references' }
+      { surface: 'write-time', by: 'validate-references' },
+      { surface: 'ci', by: 'check-authoring' }
     ]
   },
   {
     id: 'prop-vocabulary',
     kind: 'foundational',
     scope: 'general',
-    enforce: [{ surface: 'write-time', by: 'validate-spec-compliance' }]
+    enforce: [
+      { surface: 'write-time', by: 'validate-spec-compliance' },
+      { surface: 'ci', by: 'check-authoring' }
+    ]
   },
   {
     id: 'naming',
@@ -42,7 +46,8 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'write-time', by: 'validate-story-source' }
+      { surface: 'write-time', by: 'validate-story-source' },
+      { surface: 'ci', by: 'check-authoring' }
     ]
   },
   {
@@ -124,7 +129,8 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'review', by: 'required-approval' }
+      { surface: 'review', by: 'required-approval' },
+      { surface: 'ci', by: 'check-authoring' }
     ],
     note: 'Folder layout + defineOptions blocked by spec-compliance; <script setup> section order confirmed in review.'
   },
@@ -201,7 +207,8 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'review', by: 'required-approval' }
+      { surface: 'review', by: 'required-approval' },
+      { surface: 'ci', by: 'check-authoring' }
     ],
     note: 'Spec state matrix checked; completeness confirmed in review.'
   },
@@ -219,7 +226,10 @@ export const STANDARDS = [
     id: 'testid',
     kind: 'construction',
     scope: 'general',
-    enforce: [{ surface: 'write-time', by: 'validate-spec-compliance' }]
+    enforce: [
+      { surface: 'write-time', by: 'validate-spec-compliance' },
+      { surface: 'ci', by: 'check-authoring' }
+    ]
   },
   {
     id: 'deprecation',

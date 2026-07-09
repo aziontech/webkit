@@ -16,6 +16,9 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 import { scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
+// DS-internal engine (depends on .specs/): the same spec⇄code checks the PostToolUse
+// hook runs — no-invention, vocabulary, naming, defaults drift, testid, animations.
+import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES }
 
@@ -49,6 +52,15 @@ function currentViolations() {
     // the same checks validate-tokens runs at write time, so an editor push can't bypass them
     if (tokenChecksApply(rel)) {
       for (const id of scanTokens(content)) keys.push(`${rel}::token:${id}`)
+    }
+    // spec ⇄ code compliance (no-invention, vocabulary, naming, testid, animations) —
+    // the same checks validate-spec-compliance runs post-write; skips files with no spec
+    // mapping and the legacy whitelist, exactly like the hook.
+    if (rel.endsWith('.vue')) {
+      const result = collectSpecViolations(abs, ROOT)
+      if (result) {
+        for (const v of result.violations) keys.push(`${rel}::spec:${v}`)
+      }
     }
   }
   return keys.sort()
@@ -92,7 +104,12 @@ if (introduced.length) {
     const file = k.slice(0, idx)
     const id = k.slice(idx + 2)
     console.error(`  ${file}`)
-    console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^token:/, '')] ?? id}`)
+    if (id.startsWith('spec:')) {
+      // spec-compliance keys carry the full violation message
+      console.error(`    [spec] ${id.slice(5)}`)
+    } else {
+      console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^token:/, '')] ?? id}`)
+    }
   }
   console.error(
     '\nFix the pattern (see .claude/rules/). Re-baselining is only for a deliberate, reviewed exception.'
