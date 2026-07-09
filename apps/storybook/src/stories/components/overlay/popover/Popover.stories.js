@@ -10,11 +10,7 @@ import Popover, {
   PopoverTitle,
   PopoverTrigger
 } from '@aziontech/webkit/popover'
-import Select, {
-  SelectContent,
-  SelectOption,
-  SelectTrigger
-} from '@aziontech/webkit/select'
+import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
@@ -453,7 +449,7 @@ export const Widths = {
       controls: { disable: true },
       description: {
         story:
-          "The `width` prop presets — click a trigger to open each: `small` (`var(--container-xs)`, 320px), `medium` (`var(--container-sm)`, 384px), and `large` (`var(--container-md)`, 448px). When `width` is omitted the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`."
+          'The `width` prop presets — click a trigger to open each: `small` (`var(--container-xs)`, 320px), `medium` (`var(--container-sm)`, 384px), and `large` (`var(--container-md)`, 448px). When `width` is omitted the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`.'
       },
       source: { code: toSfc(IMPORT, WIDTHS_TEMPLATE) }
     }
