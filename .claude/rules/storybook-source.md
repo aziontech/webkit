@@ -104,13 +104,15 @@ export const Types = {
 [`validate-story-source.mjs`](../hooks/validate-story-source.mjs) (PreToolUse on `Write|Edit|MultiEdit`) blocks any `*.stories.@(js|jsx|ts|tsx)` write that:
 
 - sets `parameters.docs` to a function call instead of an object literal;
-- declares a `docs.source.transform`;
-- contains a lowercase/kebab tag of a component it imports PascalCase;
+- declares a `docs.source.transform` **or** `docs.source.type: 'dynamic'`;
+- contains a lowercase/kebab tag of a **non-native** component it imports PascalCase (native HTML elements that share a component name — `<label>`, `<table>`, `<button>` — are allowed in slot markup);
 - contains a nested `<template>`;
 - imports a webkit component under a binding that does not match its export subpath (`import Chip from '@aziontech/webkit/chips'`) — see [`naming.md`](./naming.md);
-- (new files) omits the shared `story-source` import, `toSfc(...)`, or `sourceState: 'shown'`.
+- uses `parameters.actions.argTypesRegex`, the legacy CSF2 `Story.args = {…}` assignment form, or any Figma reference (`addon-designs`, `figma.com`);
+- destructures or spreads the reactive `args` proxy (`const { … } = args` / `{ …args }`), which freezes it and silently breaks the Controls panel;
+- omits the shared `story-source` import, `toSfc(...)`, or `canvas.sourceState`. Foundations catalog pages (`stories/foundations/*`) are exempt from the `toSfc`/helper requirement — they document tokens, not a component API — but must still keep `docs` a literal and set `canvas.sourceState: 'none'`.
 
-It only blocks **newly introduced** violations, so legacy stories are migrated as they are touched.
+The whole stories tree was migrated to this standard, so the hook enforces the full contract on **every** write — there is no "new violations only" grandfathering. Run `node .claude/hooks/validate-story-source.mjs --all` to audit the entire `apps/storybook/src/stories` tree at once (exits non-zero on any violation); wire it into CI or run it after bulk edits.
 
 ## Relationship to the storybook-write skill
 
