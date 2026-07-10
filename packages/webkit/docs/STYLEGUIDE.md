@@ -58,7 +58,7 @@ the answer, and using it is what makes light/dark theming work for free.
 If a design needs a color/size that has no token, that is a **theme gap**: record it and
 propose the token — never inline the raw value "until the theme catches up".
 
-**Enforced by:** `validate-tokens` (write-time) · `webkit/no-hardcoded-color` + the
+**Enforced by:** `validate-tokens` (write-time + the CI ratchet) · `webkit/no-hardcoded-color` + the
 stylelint config (consumer lint).
 
 ---
@@ -79,7 +79,7 @@ stylelint config (consumer lint).
 Plurality is part of the name: a single token is `chip`; a container for many is a
 different component (`chip-group`), never a plural spelling of the same one.
 
-**Enforced by:** `validate-spec-compliance` + `validate-story-source` (write-time).
+**Enforced by:** `validate-spec-compliance` + `validate-story-source` (write-time **and** re-run repo-wide by the CI ratchet).
 
 ---
 
@@ -113,7 +113,7 @@ imports → defineOptions({ name, inheritAttrs: false }) → types → props →
 → watchers/lifecycle → functions → defineExpose
 ```
 
-**Enforced by:** `validate-spec-compliance` (folder/name/defineOptions) · script order is
+**Enforced by:** `validate-spec-compliance` (folder/name/defineOptions, write-time + the CI ratchet) · script order is
 convention + review.
 
 ---
@@ -183,7 +183,7 @@ defaults) · type-coverage ≥ 95%.
 
 `size` house default: **actions/links default to `large`; everything else `medium`.**
 
-**Enforced by:** `validate-spec-compliance` (write-time; the dictionary lives in
+**Enforced by:** `validate-spec-compliance` (write-time + the CI ratchet; the dictionary lives in
 `prop-vocabulary.mjs` and is stamped into `catalog.json` for the MCP).
 
 ---
@@ -372,6 +372,7 @@ const rootClasses = computed(() => [shared, kindClasses[props.kind]])
   Vue SFC parser), no HTML-like tags in script comments.
 
 **Enforced by:** `validate-tokens` (class presets, `<style>`, `@keyframes`, raw values —
+write-time + the CI ratchet —
 write-time) · stylelint config + `webkit/no-hardcoded-color` (consumer).
 
 ---
@@ -431,7 +432,7 @@ owns. Loading placeholders are `Skeleton`; "no results" is `EmptyState` — neve
 re-invented per screen. Data that drives `loading`/`empty`/`error` comes from the
 consumer; a DS component never fetches.
 
-**Enforced by:** `validate-spec-compliance` (state props/events vs the spec) — matrix
+**Enforced by:** `validate-spec-compliance` (state props/events vs the spec, write-time + the CI ratchet) — matrix
 completeness is review.
 
 ---
@@ -471,7 +472,7 @@ const testId = computed(() => (attrs['data-testid'] as string) ?? 'input-chip')
 Interactive sub-elements a test must reach get their own derived testid
 (`data-table-sort-button`) so tests never depend on DOM structure.
 
-**Enforced by:** `validate-spec-compliance` (the fallback derivation) — write-time.
+**Enforced by:** `validate-spec-compliance` (the fallback derivation) — write-time + the CI ratchet.
 
 ---
 
@@ -616,7 +617,7 @@ Internal to the webkit repo — how its own components come to exist.
   mutually-exclusive state — never one-story-per-variant.
 - No Figma links in stories — the story documents API and behavior.
 
-**Enforced by:** `validate-story-source` (write-time) · Storybook build (CI).
+**Enforced by:** `validate-story-source` (write-time + the CI ratchet) · Storybook build (CI).
 
 ---
 

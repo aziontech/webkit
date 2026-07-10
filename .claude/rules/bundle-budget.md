@@ -27,7 +27,7 @@ A design system is imported into every consumer, so its size is the consumer's s
 
 ## Enforcement
 
-- **`size-limit`** runs as a **required** CI job in [`governance.yml`](../../.github/workflows/governance.yml): it builds each entry and fails on any over-budget path.
+- **`size-limit`** will run as a **required** CI job in [`governance.yml`](../../.github/workflows/governance.yml), failing on any over-budget path. Status: the budget config (`.size-limit.json`) and scripts ship already; **the CI job is pending activation** (the `size-limit` dev dependency still has to be installed) — until then, mandatory review gates budget changes.
 - **`sideEffects`** is declared once at the package root (`["**/*.vue", "**/*.css"]`) so bundlers can tree-shake (see [`compound-api.md`](./compound-api.md)).
 - **[`validate-references.mjs`](../hooks/validate-references.mjs)** blocks any forbidden positioning/animation dependency at write time.
 

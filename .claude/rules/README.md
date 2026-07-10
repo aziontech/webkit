@@ -12,15 +12,15 @@ This table is the human-readable summary of that registry — when in doubt, the
 
 | Rule | Scope | Fixes | Blocks via |
 |---|---|---|---|
-| [no-invention](./no-invention.md) | webkit | Nothing beyond the spec | spec-compliance · references |
-| [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/default per concept | spec-compliance |
-| [naming](./naming.md) | webkit | One kebab name across 6 surfaces | spec-compliance · story-source |
-| [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · lint |
+| [no-invention](./no-invention.md) | webkit | Nothing beyond the spec | spec-compliance · references · ratchet |
+| [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/default per concept | spec-compliance · ratchet |
+| [naming](./naming.md) | webkit | One kebab name across 6 surfaces | spec-compliance · story-source · ratchet |
+| [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · 5 lint rules |
 | [compound-api](./compound-api.md) | webkit | `index.ts` compound + tree-shakeable `-root` | catalog-drift · review |
-| [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens |
-| [dependencies](./dependencies.md) | webkit | No external positioning/animation libs | references |
-| [migration](./migration.md) | webkit | Rewrite inherited artifacts, never copy as-is | output checks · review |
-| [storybook-source](./storybook-source.md) | webkit | "Show code" is a runnable SFC | story-source |
+| [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens · ratchet · lints |
+| [dependencies](./dependencies.md) | webkit | No external positioning/animation libs | references · type-check (CI) |
+| [migration](./migration.md) | webkit | Rewrite inherited artifacts, never copy as-is | output checks · ratchet · review |
+| [storybook-source](./storybook-source.md) | webkit | "Show code" is a runnable SFC | story-source · ratchet |
 | [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
 | [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `dev` | commitlint · branch-protection |
 
@@ -28,16 +28,16 @@ This table is the human-readable summary of that registry — when in doubt, the
 
 | Rule | Scope | Fixes | Blocks via |
 |---|---|---|---|
-| [component-structure](./component-structure.md) | general | Folder layout + `<script setup>` order | spec-compliance · review |
+| [component-structure](./component-structure.md) | general | Folder layout + `<script setup>` order | spec-compliance · ratchet · review |
 | [props](./props.md) | general | Typed `interface Props` + `withDefaults` + JSDoc | authoring · spec-compliance · tokens · ratchet |
 | [v-model](./v-model.md) | general | Two-way via `defineModel` | authoring · ratchet · lint |
 | [emits](./emits.md) | general | Typed `defineEmits`; activation emits `(event, item)` | authoring · spec-compliance · ratchet |
 | [slots](./slots.md) | general | Typed `defineSlots`; fallback in the slot | authoring · spec-compliance · ratchet |
 | [composables](./composables.md) | general | `readonly` out, `toValue` args, `onScopeDispose` | authoring · ratchet |
-| [root-element](./root-element.md) | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · review |
-| [component-states](./component-states.md) | general | Rendered state surface via `data-*` + DS components | spec-compliance · review |
+| [root-element](./root-element.md) | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · ratchet · review |
+| [component-states](./component-states.md) | general | Rendered state surface via `data-*` + DS components | spec-compliance · ratchet · review |
 | [accessibility](./accessibility.md) | general | Role, keyboard, focus, `motion-reduce` | vuejs-accessibility · review |
-| [testid](./testid.md) | general | `data-testid` derived `<category>-<name>` | spec-compliance |
+| [testid](./testid.md) | general | `data-testid` derived `<category>-<name>` | spec-compliance · ratchet |
 | [deprecation](./deprecation.md) | general | `@deprecated` → one major → remove | authoring · ratchet · lint |
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
 

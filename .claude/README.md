@@ -19,7 +19,7 @@ standard code. This is the entry-point map; each area links to its own index.
 │   ├── enforce-component-create.mjs  # authoring only via the pipeline
 │   └── _lib/              # shared, single-source engines
 │       ├── standards.mjs         #   the registry: rule ↔ enforcement + scope (general/webkit)
-│       ├── authoring-checks.mjs  #   the check engine shared by the hook AND the CI ratchet
+│       ├── authoring-checks.mjs  #   construction checks (one of FOUR shared engines: authoring, token, spec, story)
 │       ├── prop-vocabulary.mjs   #   canonical prop dictionary
 │       ├── spec.mjs              #   SFC/spec parsing
 │       └── legacy-components.json #   grandfather list
@@ -30,10 +30,10 @@ standard code. This is the entry-point map; each area links to its own index.
 └── settings.json          # hook registration + permissions
 
 packages/webkit/           # the parts of the system that live in the package
-├── scripts/check-authoring.mjs      # CI ratchet — same engine as validate-authoring
+├── scripts/check-authoring.mjs      # CI ratchet — runs the four shared engines repo-wide
 ├── scripts/authoring-baseline.json  #   frozen debt; a new violation fails the PR
 ├── test/standards/invariant.test.mjs# the meta-check: rule ↔ enforcement can't drift
-├── src/eslint-plugin/     # consumer lints (10 rules, all error)
+├── src/eslint-plugin/     # consumer lints (11 rules, all error)
 ├── src/mcp/               # MCP server (guides the AI to the right usage)
 ├── docs/GUIDELINES.md     # consumer-facing styleguide (build & use)
 └── catalog.json           # generated manifest read by the lints + MCP

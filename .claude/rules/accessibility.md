@@ -40,7 +40,7 @@ A component in this package is accessible **by construction**, not by the consum
 ## Enforcement
 
 - **`eslint-plugin-vuejs-accessibility`** runs in the flat config ([`eslint.config.js`](../../eslint.config.js)) at `error` — today `alt-text`, `aria-props`, `aria-role`, and `click-events-have-key-events` are **blocking** in CI (`lint` job, zero warnings). Expanding to the full `flat/recommended` a11y set is a **ratchet**: enable the rest, fix the violations they surface, then keep them at `error`.
-- **Automated a11y (`axe`)** runs per component story in the test layer (Storybook a11y addon + `axe` assertions) — the component-testing frontier. A component with an axe violation fails its story test.
+- **Automated a11y (`axe`)** is the planned per-story gate (Storybook a11y addon + `axe` assertions in the component-testing frontier, owned by the testing workstream). **It does not run yet** — until it lands, behavioural a11y (focus, keyboard, restore) is gated by mandatory review.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** enforces the `ariaLabel` naming; the spec's a11y section (role + keyboard map) is required by [`.specs/_template.md`](../../.specs/_template.md).
 
 ## Why this rule exists
