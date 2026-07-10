@@ -72,12 +72,12 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Prefer defineModel() over a hand-written modelValue prop + update:modelValue emit (see .claude/rules/v-model.md).'
+        'Prefer defineModel() over a hand-written modelValue prop + update:modelValue emit (see the webkit-v-model rule shipped by `npx @aziontech/webkit init`).'
     },
     schema: [],
     messages: {
       preferModel:
-        'This component declares a `modelValue` prop and an `update:modelValue` emit by hand. Use `defineModel()` — it expresses the two-way value (controlled + uncontrolled) in one macro. See .claude/rules/v-model.md.'
+        'This component declares a `modelValue` prop and an `update:modelValue` emit by hand. Use `defineModel()` — it expresses the two-way value (controlled + uncontrolled) in one macro. See .claude/rules/webkit-v-model.md (shipped by `npx @aziontech/webkit init`).'
     }
   },
   create(context) {

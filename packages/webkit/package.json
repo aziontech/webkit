@@ -39,17 +39,15 @@
     "webkit-mcp": "./src/mcp/server.js"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
     "@tanstack/vue-table": "^8.21.3",
     "@vueuse/core": "^10.11.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
     "vee-validate": "^4.15.1",
     "vue-tsc": "^3.2.5",
+    "zod": "^3.23.0",
     "@aziontech/theme": "workspace:*"
-  },
-  "optionalDependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "zod": "^3.23.0"
   },
   "peerDependencies": {
     "eslint": ">=9",

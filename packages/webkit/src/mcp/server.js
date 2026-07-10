@@ -70,9 +70,9 @@ async function main() {
     ;({ z } = await import(ZOD))
   } catch (err) {
     process.stderr.write(
-      `@aziontech/webkit-mcp: missing runtime dependencies. ` +
-        `Install "@modelcontextprotocol/sdk" and "zod" (they are declared in this ` +
-        `package's dependencies and are installed automatically by \`npx @aziontech/webkit-mcp\`).\n` +
+      `webkit-mcp: missing runtime dependencies ("@modelcontextprotocol/sdk", "zod"). ` +
+        `They ship in @aziontech/webkit's dependencies — reinstall the package ` +
+        `(e.g. \`npx -y -p @aziontech/webkit webkit-mcp\`) or install them explicitly.\n` +
         `${err?.message ?? err}\n`
     )
     process.exit(1)

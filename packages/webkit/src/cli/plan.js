@@ -40,6 +40,9 @@ const DEV_DEPS = [
   'eslint',
   'stylelint',
   'vue-eslint-parser',
+  // TS sub-parser: the standards mandate <script setup lang="ts">, which
+  // vue-eslint-parser alone cannot parse.
+  '@typescript-eslint/parser',
   // stylelint needs a custom syntax to parse `.vue` <style> blocks and `.scss` — the
   // generated .stylelintrc wires these, so they must be installed too.
   'postcss-html',
@@ -101,18 +104,25 @@ function firstExisting(projectDir, candidates) {
 
 function eslintFlatConfig(severityConfig) {
   // A flat (ESLint 9) config that spreads the webkit preset and wires
-  // `vue-eslint-parser` for `.vue` files. `severityConfig` is 'strict' or
-  // 'recommended' — the preset key on the plugin.
+  // `vue-eslint-parser` for `.vue` files — with the TypeScript sub-parser, because the
+  // construction standards mandate `<script setup lang="ts">` and vue-eslint-parser
+  // alone cannot parse it. `severityConfig` is 'strict' or 'recommended'.
   return `import webkitPlugin from '@aziontech/webkit/eslint-plugin'
 import vueParser from 'vue-eslint-parser'
+import tsParser from '@typescript-eslint/parser'
 
 export default [
   ...webkitPlugin.configs.${severityConfig},
   {
     files: ['**/*.vue'],
     languageOptions: {
-      parser: vueParser
+      parser: vueParser,
+      parserOptions: { parser: tsParser }
     }
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: { parser: tsParser }
   }
 ]
 `
@@ -228,13 +238,33 @@ export function planInit(projectDir, opts = {}) {
   })
 
   // 5. package.json `prepare` script so husky activates hooks on install (husky v9
-  //    needs this; without it .husky/pre-commit never runs). Merge only if absent.
-  actions.push({
-    type: 'merge-json',
-    path: 'package.json',
-    description: 'add the "prepare" script (husky)',
-    merge: { scripts: { prepare: 'husky' } }
-  })
+  //    needs this; without it .husky/pre-commit never runs). Merge only if absent —
+  //    and when a DIFFERENT prepare script already exists, say so out loud instead of
+  //    silently leaving the hooks inert.
+  const existingPrepare = (() => {
+    const raw = read(join(projectDir, 'package.json'))
+    if (!raw) return undefined
+    try {
+      return JSON.parse(raw)?.scripts?.prepare
+    } catch {
+      return undefined
+    }
+  })()
+  if (existingPrepare && existingPrepare !== 'husky') {
+    actions.push({
+      type: 'advise',
+      message:
+        `package.json already has a "prepare" script ("${existingPrepare}") — husky was NOT wired, ` +
+        `so .husky/pre-commit will not run. Chain it yourself: "prepare": "${existingPrepare} && husky".`
+    })
+  } else {
+    actions.push({
+      type: 'merge-json',
+      path: 'package.json',
+      description: 'add the "prepare" script (husky)',
+      merge: { scripts: { prepare: 'husky' } }
+    })
+  }
 
   // 6. .husky/pre-commit — write if absent (append the lint block otherwise).
   actions.push({

@@ -25,8 +25,8 @@ Commands:
 
 Options (init):
   --dry-run       Print the plan without writing anything.
-  --strict        Use the strict ESLint preset (default).
-  --recommended   Use the recommended ESLint preset (correctness=error, perf=warn).
+  --strict        Use the strict ESLint preset (default; every rule is an error).
+  --recommended   Use the recommended ESLint preset (also every rule an error).
   -h, --help      Show this help.
 `
 
