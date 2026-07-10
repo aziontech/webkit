@@ -79,7 +79,7 @@ function currentViolations() {
     const rel = relative(ROOT, abs).split('\\').join('/')
     if (!STORY_RE.test(rel)) continue
     const content = readFileSync(abs, 'utf-8')
-    for (const v of storyChecks(content, '', true)) {
+    for (const v of storyChecks(content, rel)) {
       const key = `${rel}::story:${v.id}`
       keys.push(key)
       DETAILS.set(key, v.message)

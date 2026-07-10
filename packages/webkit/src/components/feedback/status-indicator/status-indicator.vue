@@ -3,7 +3,13 @@
 
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type StatusIndicatorSeverity = 'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'
+  export type StatusIndicatorSeverity =
+    | 'success'
+    | 'info'
+    | 'neutral'
+    | 'warning'
+    | 'alt'
+    | 'danger'
 
   defineOptions({
     name: 'StatusIndicator',

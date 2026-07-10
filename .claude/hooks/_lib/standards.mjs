@@ -182,6 +182,17 @@ export const STANDARDS = [
     ]
   },
   {
+    id: 'event-payloads',
+    kind: 'construction',
+    scope: 'general',
+    enforce: [
+      { surface: 'write-time', by: 'validate-spec-compliance' },
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'review', by: 'required-approval' }
+    ],
+    note: 'Activation events emit (event, item?). The spec Events table states the payload and spec⇄code compliance pins the emit set to it; the (event-first, no-duplication) shape itself is confirmed in review.'
+  },
+  {
     id: 'slots',
     kind: 'construction',
     scope: 'general',

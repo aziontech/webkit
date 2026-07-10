@@ -3,7 +3,7 @@
 // engine in ../authoring-checks.js (one definition, three surfaces: AI hook, DS ratchet,
 // consumer lint). Text-level, parser-agnostic, fail-open on virtual filenames.
 
-import { CONTENT_CHECKS, MESSAGES, isJsComposable } from '../authoring-checks.js'
+import { CONTENT_CHECKS, isJsComposable, MESSAGES } from '../authoring-checks.js'
 
 export default {
   meta: {

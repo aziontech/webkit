@@ -63,8 +63,8 @@ import Chip from '@aziontech/webkit/chip'
 
 | Event | Payload | Notes |
 |---|---|---|
-| `remove` | `MouseEvent` | Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out. |
-| `click` | `MouseEvent \| KeyboardEvent` | Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`. |
+| `remove` | `(event: MouseEvent, label: string)` | Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out. `label` is the chip's `label` prop, identifying which chip was removed. |
+| `click` | `(event: MouseEvent \| KeyboardEvent, label: string)` | Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`. |
 
 ## Slots
 

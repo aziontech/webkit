@@ -1,14 +1,16 @@
 import StatusIndicator from '@aziontech/webkit/status-indicator'
 
-const statuses = ['success', 'info', 'neutral', 'warning', 'alt', 'danger']
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import StatusIndicator from '@aziontech/webkit/status-indicator'"
 
 /** @type {import('@storybook/vue3').Meta<typeof StatusIndicator>} */
 const meta = {
- title: 'Components/Feedback/Status Indicator',
+  title: 'Components/Feedback/StatusIndicator',
   component: StatusIndicator,
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: {
       default: 'dark'
     },
@@ -22,45 +24,39 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Communicates status, alerts, or progress to the user.',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import StatusIndicator from '@aziontech/webkit/status-indicator'",
-          '</script>',
-          '',
-          '<template>',
-          '  <StatusIndicator severity="success" label="Status" />',
-          '</template>',
-          '```'
-        ].join('\n')
-      }
+        component:
+          'Communicates status, alerts, or progress to the user. Renders a colored status dot next to a label; while loading, a spinner replaces the dot and the label appends an ellipsis.'
+      },
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
     severity: {
       control: 'select',
-      options: statuses,
-      description: 'status.',
+      options: ['success', 'info', 'neutral', 'warning', 'alt', 'danger'],
+      description: 'Status variant; drives the dot color.',
       table: {
-        defaultValue: { summary: 'success' }
+        category: 'props',
+        type: { summary: "'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'" },
+        defaultValue: { summary: "'success'" }
       }
     },
     label: {
       control: 'text',
       description: 'Visible label text.',
       table: {
-        defaultValue: { summary: 'Status' }
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Status'" }
       }
     },
     loading: {
       control: 'boolean',
       description: 'Shows loading state and disables activation.',
       table: {
-        defaultValue: { summary: false }
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
       }
     }
   },
@@ -81,36 +77,41 @@ const Template = (args) => ({
   template: '<StatusIndicator v-bind="args" />'
 })
 
+const DEFAULT_MARKUP = '<StatusIndicator severity="success" label="Status" />'
+
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default success status with label.' } }
+    docs: {
+      description: { story: 'Default success status with label.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
 
+const STATUS_TEMPLATE = `<div class="flex flex-wrap items-center gap-[var(--spacing-3)]">
+  <StatusIndicator severity="success" label="Status" />
+  <StatusIndicator severity="info" label="Status" />
+  <StatusIndicator severity="neutral" label="Status" />
+  <StatusIndicator severity="warning" label="Status" />
+  <StatusIndicator severity="alt" label="Status" />
+  <StatusIndicator severity="danger" label="Status" />
+</div>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
 export const Status = {
-  render: () => ({
-    components: { StatusIndicator },
-    setup() {
-      return { statuses }
-    },
-    template: `
-      <div class="flex flex-wrap items-center gap-[var(--spacing-3)]">
-        <StatusIndicator
-          v-for="status in statuses"
-          :key="status"
-          :severity="status"
-          label="Status"
-        />
-      </div>
-    `
-  }),
+  render: () => ({ components: { StatusIndicator }, template: STATUS_TEMPLATE }),
   parameters: {
-    docs: { description: { story: 'All status variants side by side.' } }
+    docs: {
+      controls: { disable: true },
+      description: { story: 'All status variants side by side.' },
+      source: { code: toSfc(IMPORT, STATUS_TEMPLATE) }
+    }
   }
 }
+
+const LOADING_MARKUP = '<StatusIndicator severity="success" label="Status" loading />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
 export const Loading = {
@@ -124,7 +125,8 @@ export const Loading = {
     docs: {
       description: {
         story: 'Loading state: spinner replaces the dot and the label appends an ellipsis.'
-      }
+      },
+      source: { code: toSfc(IMPORT, LOADING_MARKUP) }
     }
   }
 }

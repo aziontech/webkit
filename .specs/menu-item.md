@@ -25,7 +25,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 | Event | Payload | Notes |
 |---|---|---|
-| `click` | `event: MouseEvent` | — |
+| `click` | `(event: MouseEvent, item: { label: string; href: string })` | `item` carries the menu item's `label` and `href`, identifying which item was activated. |
 
 ## Slots
 

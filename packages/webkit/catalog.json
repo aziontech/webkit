@@ -2041,8 +2041,8 @@
         },
         {
           "name": "item-click",
-          "payload": "SplitButtonItem",
-          "notes": "Fired when a menu action is selected; carries the matched `model` item. The menu cannot open while `disabled` or `loading`, so it never fires in those states."
+          "payload": "(event: MouseEvent | KeyboardEvent, item: SplitButtonItem)",
+          "notes": "Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states."
         }
       ],
       "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`."
@@ -3176,8 +3176,8 @@
         },
         {
           "name": "row-click",
-          "payload": "row: Record<string, unknown>",
-          "notes": "Fires when a rendered row is clicked (data-driven mode)."
+          "payload": "(event: MouseEvent, row: Record<string, unknown>)",
+          "notes": "Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record."
         },
         {
           "name": "update:filters",
@@ -3477,8 +3477,8 @@
         },
         {
           "name": "row-click",
-          "payload": "row: Record<string, unknown>",
-          "notes": "Fires when a rendered row is clicked (data-driven mode)."
+          "payload": "(event: MouseEvent, row: Record<string, unknown>)",
+          "notes": "Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record."
         },
         {
           "name": "update:filters",
@@ -3985,8 +3985,8 @@
         },
         {
           "name": "item-double-click",
-          "payload": "{ list: 'source' | 'target'; item: unknown; index: number }",
-          "notes": "Fired when an option is double-clicked, with the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading."
+          "payload": "(event: MouseEvent, payload: { list: 'source' | 'target'; item: unknown; index: number })",
+          "notes": "Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading."
         }
       ],
       "slots": [
@@ -4050,8 +4050,8 @@
         },
         {
           "name": "item-double-click",
-          "payload": "{ list: 'source' | 'target'; item: unknown; index: number }",
-          "notes": "Fired when an option is double-clicked, with the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading."
+          "payload": "(event: MouseEvent, payload: { list: 'source' | 'target'; item: unknown; index: number })",
+          "notes": "Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading."
         }
       ],
       "slots": [
@@ -6000,13 +6000,13 @@
       "events": [
         {
           "name": "remove",
-          "payload": "MouseEvent",
-          "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out."
+          "payload": "(event: MouseEvent, label: string)",
+          "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out. `label` is the chip's `label` prop, identifying which chip was removed."
         },
         {
           "name": "click",
-          "payload": "MouseEvent | KeyboardEvent",
-          "notes": "Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`."
+          "payload": "(event: MouseEvent | KeyboardEvent, label: string)",
+          "notes": "Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`."
         }
       ],
       "slots": [
@@ -6871,8 +6871,8 @@
         },
         {
           "name": "select",
-          "payload": "{ value: string | number; event: MouseEvent | KeyboardEvent }",
-          "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
+          "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+          "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
         }
       ],
       "slots": [
@@ -6941,8 +6941,8 @@
         },
         {
           "name": "select",
-          "payload": "{ value: string | number; event: MouseEvent | KeyboardEvent }",
-          "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
+          "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+          "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
         }
       ],
       "slots": [
@@ -7650,8 +7650,8 @@
       "events": [
         {
           "name": "navigate",
-          "payload": "href: string",
-          "notes": "Fires when an ancestor segment is activated."
+          "payload": "(event: MouseEvent, href: string)",
+          "notes": "Fires when an ancestor segment is activated. `event` is the activation event; `href` is the segment's destination."
         }
       ],
       "slots": [
@@ -7719,8 +7719,8 @@
       "events": [
         {
           "name": "click",
-          "payload": "MouseEvent",
-          "notes": "Fires when the segment is activated (link or button)."
+          "payload": "(event: MouseEvent, item: { label: string; href: string })",
+          "notes": "Fires when the segment is activated (link or button). `item` carries the segment's `label` and `href`."
         }
       ],
       "purpose": "Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring)."
@@ -7804,8 +7804,8 @@
       "events": [
         {
           "name": "click",
-          "payload": "event: MouseEvent",
-          "notes": "—"
+          "payload": "(event: MouseEvent, item: { label: string; href: string })",
+          "notes": "item` carries the menu item's `label` and `href`, identifying which item was activated."
         }
       ],
       "slots": [
@@ -8641,8 +8641,8 @@
         },
         {
           "name": "step-click",
-          "payload": "[index: number, event: MouseEvent]",
-          "notes": "Fires when a next-step row is activated."
+          "payload": "(event: MouseEvent, index: number)",
+          "notes": "Fires when a next-step row is activated. `index` is the activated row's position."
         }
       ],
       "slots": [

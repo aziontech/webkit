@@ -11,6 +11,17 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    backgrounds: {
+      default: 'dark'
+    },
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
+      }
+    },
     docs: {
       description: {
         component:
@@ -33,7 +44,11 @@ const meta = {
     copiedLabel: {
       control: 'text',
       description: 'Accessible name while the copied state is shown.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'Copied'" } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Copied'" }
+      }
     },
     kind: {
       control: 'select',
@@ -81,12 +96,13 @@ export default meta
 const Template = (args) => ({
   components: { CopyButton },
   setup() {
-    return { props: args }
+    return { args }
   },
-  template: '<CopyButton v-bind="props" @copy="props.onCopy" />'
+  template: '<CopyButton v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<CopyButton value="https://example.com/deploy/abc123" ariaLabel="Copy URL" />'
+const DEFAULT_MARKUP =
+  '<CopyButton value="https://example.com/deploy/abc123" ariaLabel="Copy URL" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof CopyButton>} */
 export const Default = {
@@ -94,13 +110,17 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Idle copy button. Activating it writes the value to the clipboard and briefly confirms success.' },
+      description: {
+        story:
+          'Idle copy button. Activating it writes the value to the clipboard and briefly confirms success.'
+      },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
 }
 
-const DISABLED_MARKUP = '<CopyButton value="https://example.com/deploy/abc123" ariaLabel="Copy URL" disabled />'
+const DISABLED_MARKUP =
+  '<CopyButton value="https://example.com/deploy/abc123" ariaLabel="Copy URL" disabled />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof CopyButton>} */
 export const Disabled = {
@@ -108,7 +128,9 @@ export const Disabled = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Disabled state — interaction is blocked and disabled tokens are applied.' },
+      description: {
+        story: 'Disabled state — interaction is blocked and disabled tokens are applied.'
+      },
       source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
     }
   }

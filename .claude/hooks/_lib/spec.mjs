@@ -384,12 +384,20 @@ function extractEmits(script) {
   const block = extractBracedBlockAfter(script, /defineEmits<\s*\{/)
   if (!block) return []
   const out = []
-  for (const line of block.split('\n')) {
-    const t = line.trim().replace(/;$/, '')
-    if (!t) continue
-    // shapes: `name: [args]` or `'update:open': [boolean]`
-    const em = t.match(/^['"]?([\w:-]+)['"]?\s*:\s*\[(.*)\]/)
-    if (em) out.push({ name: em[1], payload: em[2].trim() })
+  // Only TOP-LEVEL entries are event names; a payload tuple may span multiple
+  // lines (`'item-double-click': [\n  event: MouseEvent,\n  payload: { … }\n]`).
+  let depth = 0
+  for (const rawLine of block.split('\n')) {
+    const t = rawLine.trim().replace(/;$/, '')
+    if (depth === 0 && t) {
+      // shapes: `name: [args]`, `'update:open': [boolean]`, or `name: [` (tuple continues below)
+      const em = t.match(/^['"]?([\w:-]+)['"]?\s*:\s*\[(.*?)\]?$/)
+      if (em) out.push({ name: em[1], payload: em[2].trim() })
+    }
+    for (const ch of rawLine) {
+      if (ch === '{' || ch === '(' || ch === '[') depth++
+      else if (ch === '}' || ch === ')' || ch === ']') depth--
+    }
   }
   return out
 }
