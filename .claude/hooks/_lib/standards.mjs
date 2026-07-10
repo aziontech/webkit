@@ -58,7 +58,9 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-references' },
       { surface: 'lint', by: 'valid-import-path' },
       { surface: 'lint', by: 'no-barrel-import' },
-      { surface: 'lint', by: 'no-deep-internal-import' }
+      { surface: 'lint', by: 'no-deep-internal-import' },
+      { surface: 'lint', by: 'prefer-tree-shakeable-root' },
+      { surface: 'lint', by: 'no-whole-icon-set-import' }
     ]
   },
   {
@@ -77,9 +79,11 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-tokens' },
-      { surface: 'ci', by: 'check-authoring' }
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'no-hardcoded-color' },
+      { surface: 'lint', by: 'no-style-override' }
     ],
-    note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook.'
+    note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook; consumers get the color/override lints.'
   },
   {
     id: 'dependencies',
