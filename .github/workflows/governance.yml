@@ -28,6 +28,9 @@ jobs:
           filters: |
             webkit:
               - 'packages/webkit/**'
+              # dependency changes land here — the security job must audit them
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
             toolkit:
               - 'packages/webkit/**'
               - '.specs/**'
