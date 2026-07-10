@@ -31,6 +31,10 @@ jobs:
             toolkit:
               - 'packages/webkit/**'
               - '.specs/**'
+              # the ratchet + invariant also cover these — the job must run when they change
+              - '.claude/hooks/**'
+              - '.claude/rules/**'
+              - 'apps/storybook/**'
 
   # Security Scanning (parallel, fast)
   security:
@@ -228,6 +232,7 @@ jobs:
       - name: Check all jobs passed or skipped
         run: |
           declare -A results=(
+            [changes]="${{ needs.changes.result }}"
             [security]="${{ needs.security.result }}"
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
