@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/Drawer.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/drawer/Drawer.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Drawer from './drawer.vue'
 import DrawerClose from './drawer-close.vue'

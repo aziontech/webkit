@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/BreadcrumbItem.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/breadcrumb-item/BreadcrumbItem.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import BreadcrumbItem from './breadcrumb-item.vue'
 

@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/FieldCheckboxBlock.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-checkbox-block/FieldCheckboxBlock.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldCheckboxBlock from './field-checkbox-block.vue'
 
@@ -282,9 +282,17 @@ describe('FieldCheckboxBlock', () => {
   })
 
   describe('story fixtures (composeStories)', () => {
-    it('renders the Default story with two blocks', () => {
-      const { getAllByTestId } = render(Default())
-      expect(getAllByTestId(ROOT).length).toBe(2)
+    it('renders the Default story seeded unchecked and toggles it through the story v-model', async () => {
+      const { getByTestId } = render(Default())
+
+      const input = getByTestId(INPUT) as HTMLInputElement
+      expect(input.checked).toBe(false)
+
+      await fireEvent.click(input)
+
+      // The story Template wires a real v-model ref, so the click round-trips.
+      expect(input.checked).toBe(true)
+      expect(getByTestId(`${ROOT}__card`).getAttribute('data-checked')).toBe('true')
     })
 
     it('renders the Disabled story with a disabled input and a helper badge', () => {

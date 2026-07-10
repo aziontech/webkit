@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/MultiSelect.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/multi-select/MultiSelect.stories'
 import MultiSelect, {
   MultiSelectContent,
   MultiSelectGroup,

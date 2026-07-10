@@ -175,12 +175,12 @@ describe('Dropdown (compound / overlay)', () => {
     expect(getByTestId('navigation-dropdown__trigger').getAttribute('aria-expanded')).toBe('false')
   })
 
-  // ---- Selection: emits select({value,event}) + closes + returns focus -------
-  it('emits select with the option value + originating event, then closes the panel', async () => {
-    const onSelect = ref<Array<{ value: unknown; event: unknown }>>([])
+  // ---- Selection: emits select(event, value) + closes + returns focus -------
+  it('emits select with the originating event + option value, then closes the panel', async () => {
+    const onSelect = ref<Array<{ event: unknown; value: unknown }>>([])
     const { getByTestId } = render(Host, {
       props: {
-        onSelect: (payload: { value: unknown; event: unknown }) => onSelect.value.push(payload)
+        onSelect: (event: unknown, value: unknown) => onSelect.value.push({ event, value })
       }
     })
 
@@ -191,7 +191,7 @@ describe('Dropdown (compound / overlay)', () => {
 
     expect(onSelect.value).toHaveLength(1)
     expect(onSelect.value[0].value).toBe('settings')
-    // The payload carries the originating DOM event (a MouseEvent from the click).
+    // First positional arg carries the originating DOM event (a MouseEvent from the click).
     expect(onSelect.value[0].event).toBeInstanceOf(MouseEvent)
 
     // Panel closes on select.
@@ -270,10 +270,10 @@ describe('Dropdown (compound / overlay)', () => {
   })
 
   it('activates an option via keyboard Enter, emitting select for that option', async () => {
-    const onSelect = ref<Array<{ value: unknown; event: unknown }>>([])
+    const onSelect = ref<Array<{ event: unknown; value: unknown }>>([])
     const { getByTestId } = render(Host, {
       props: {
-        onSelect: (payload: { value: unknown; event: unknown }) => onSelect.value.push(payload)
+        onSelect: (event: unknown, value: unknown) => onSelect.value.push({ event, value })
       }
     })
 

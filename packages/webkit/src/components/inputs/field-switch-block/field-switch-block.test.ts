@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/FieldSwitchBlock.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-switch-block/FieldSwitchBlock.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldSwitchBlock from './field-switch-block.vue'
 
@@ -297,9 +297,17 @@ describe('FieldSwitchBlock', () => {
   })
 
   describe('story fixtures (composeStories)', () => {
-    it('renders the Default story with two blocks', () => {
-      const { getAllByTestId } = render(Default())
-      expect(getAllByTestId(ROOT).length).toBe(2)
+    it('renders the Default story seeded off and toggles it through the story v-model', async () => {
+      const { getByTestId } = render(Default())
+
+      const control = getByTestId(CONTROL)
+      expect(control.getAttribute('aria-checked')).toBe('false')
+
+      await fireEvent.click(control)
+
+      // The story Template wires a real v-model ref, so the click round-trips.
+      expect(control.getAttribute('aria-checked')).toBe('true')
+      expect(getByTestId(`${ROOT}__card`).getAttribute('data-checked')).toBe('true')
     })
 
     it('renders the Disabled story with a disabled block and a helper badge', () => {

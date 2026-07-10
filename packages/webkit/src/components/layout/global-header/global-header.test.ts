@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import GlobalHeader from './index.js'
 
-const { Default } = composeStories(stories)
+const { DefaultHeader } = composeStories(stories)
 
 /**
  * global-header is a COMPOSITION component: `index.js` attaches the region
@@ -216,7 +216,7 @@ describe('GlobalHeader', () => {
 
   describe('composeStories (the Default story fixture runs in-test)', () => {
     it('Default story renders the banner with its Left/Brand/Middle/Right regions', () => {
-      const { getByTestId, getByRole } = render(Default)
+      const { getByTestId, getByRole } = render(DefaultHeader)
       // The story composes Left>Brand (Azion logo), plus empty Middle and Right.
       expect(getByRole('banner', { name: 'Global header' })).toBeTruthy()
       expect(getByTestId('layout-global-header__left')).toBeTruthy()
@@ -226,7 +226,7 @@ describe('GlobalHeader', () => {
     })
 
     it('Default story has no a11y violations', async () => {
-      const { container } = render(Default)
+      const { container } = render(DefaultHeader)
       await expectNoA11yViolations(container)
     })
   })

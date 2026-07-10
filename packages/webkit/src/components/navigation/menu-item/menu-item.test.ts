@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/MenuItem.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/menu-item/MenuItem.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MenuItem from './menu-item.vue'
 

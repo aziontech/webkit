@@ -1,16 +1,16 @@
 import { userEvent } from '@storybook/test'
 import { composeStories } from '@storybook/vue3'
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/Breadcrumb.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/breadcrumb/Breadcrumb.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
 import BreadcrumbList from './breadcrumb-list.vue'
 import BreadcrumbSeparator from './breadcrumb-separator.vue'
 import Breadcrumb from './index.js'
 
-const { Default, TwoItems, SingleItem, FiveItems } = composeStories(stories)
+const { Default, Depths, ResponsiveCollapsed } = composeStories(stories)
 
 const TESTID = 'navigation-breadcrumb'
 
@@ -151,20 +151,23 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       // click — userEvent fires pointerdown/up so @select -> onOverflowSelect runs.
       await userEvent.click(option)
 
-      // Dropdown select -> onOverflowSelect -> handleItemClick -> navigate('/projects').
-      expect(emitted().navigate).toBeTruthy()
-      expect(emitted().navigate[0]).toEqual(['/projects'])
+      // Dropdown select -> onOverflowSelect -> handleItemClick -> navigate(event, '/projects').
+      const navigate = emitted().navigate as Array<[unknown, string]>
+      expect(navigate).toBeTruthy()
+      expect(navigate[0][1]).toBe('/projects')
     })
   })
 
   describe('navigate event (first / last segments)', () => {
-    it('emits navigate with the href when the first (ancestor) segment is clicked', async () => {
+    it('emits navigate(event, href) when the first (ancestor) segment is clicked', async () => {
       const { getByTestId, emitted } = render(Breadcrumb, { props: { items: TRAIL } })
 
       await fireEvent.click(getByTestId(`${TESTID}__item-0`))
 
-      expect(emitted().navigate).toHaveLength(1)
-      expect(emitted().navigate[0]).toEqual(['/home'])
+      const navigate = emitted().navigate as Array<[unknown, string]>
+      expect(navigate).toHaveLength(1)
+      expect(navigate[0][0]).toBeInstanceOf(MouseEvent)
+      expect(navigate[0][1]).toBe('/home')
     })
 
     it('does NOT emit navigate when the current (last) segment is clicked', async () => {
@@ -186,8 +189,10 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       // Enter activates a focused anchor -> real click -> navigate.
       await userEvent.keyboard('{Enter}')
 
-      expect(emitted().navigate).toBeTruthy()
-      expect(emitted().navigate[0]).toEqual(['/home'])
+      const navigate = emitted().navigate as Array<[unknown, string]>
+      expect(navigate).toBeTruthy()
+      expect(navigate[0][0]).toBeInstanceOf(MouseEvent)
+      expect(navigate[0][1]).toBe('/home')
     })
   })
 
@@ -325,27 +330,38 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
     })
 
-    it('composes the FiveItems story with an overflow menu and a current last item', () => {
-      const { getByTestId } = render(FiveItems())
+    it('composes the ResponsiveCollapsed story with an overflow menu and a current last item', () => {
+      const { getByTestId } = render(ResponsiveCollapsed())
 
       // 5 items -> 3 middle items collapse into the overflow menu.
       expect(getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
       expect(getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe('page')
     })
 
-    it('composes the TwoItems story: first anchor + current last, no overflow', () => {
-      const { getByTestId, queryByTestId } = render(TwoItems())
+    it('composes the Depths story: single, two-level and full five-level trails', () => {
+      const { getAllByTestId } = render(Depths())
 
-      expect(getByTestId(`${TESTID}__item-0`).tagName).toBe('A')
-      expect(getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe('page')
-      expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
-    })
+      // The story renders three Breadcrumb instances of increasing depth.
+      const [single, two, full] = getAllByTestId(TESTID)
 
-    it('composes the SingleItem story as a lone current item', () => {
-      const { getByTestId, queryByTestId } = render(SingleItem())
+      // single: one lone current item, nothing to collapse.
+      expect(within(single).getByTestId(`${TESTID}__item-0`).getAttribute('aria-current')).toBe(
+        'page'
+      )
+      expect(within(single).queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
 
-      expect(getByTestId(`${TESTID}__item-0`).getAttribute('aria-current')).toBe('page')
-      expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+      // two: first anchor + current last, no middle segments -> no overflow.
+      expect(within(two).getByTestId(`${TESTID}__item-0`).tagName).toBe('A')
+      expect(within(two).getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe(
+        'page'
+      )
+      expect(within(two).queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+
+      // full: five items -> the middle segments collapse into the overflow menu.
+      expect(within(full).getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
+      expect(within(full).getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe(
+        'page'
+      )
     })
   })
 

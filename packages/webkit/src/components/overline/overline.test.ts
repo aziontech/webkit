@@ -2,18 +2,11 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../apps/storybook/src/stories/components/content/Overline.stories'
+import * as stories from '../../../../../apps/storybook/src/stories/components/content/overline/Overline.stories'
 import { expectNoA11yViolations } from '../../test/axe'
 import Overline from './overline.vue'
 
-const {
-  Default,
-  WithCursor,
-  CursorWithoutPrefix,
-  PrefixDoubleSlash,
-  PrefixAngleBrackets,
-  PrefixClosingTag
-} = composeStories(stories)
+const { Default, Prefixes, Cursor } = composeStories(stories)
 
 describe('Overline', () => {
   it('renders the default slot content', () => {
@@ -102,23 +95,24 @@ describe('Overline', () => {
     expect(getByText('OVERLINE TEXT')).toBeInTheDocument()
   })
 
-  it('composes the WithCursor story (prefix + blinking cursor)', () => {
-    const { getByText, container } = render(WithCursor())
+  it('composes the Cursor story: blinking cursor with and without a prefix', () => {
+    const { getByText, container } = render(Cursor())
+
+    // First instance: prefix + text; second: text only, still with its cursor.
     expect(getByText('OVERLINE TEXT')).toBeInTheDocument()
     expect(getByText('//')).toBeInTheDocument()
-    expect(container.querySelector('.animate-blink')).not.toBeNull()
-  })
-
-  it('composes the CursorWithoutPrefix story (cursor, no prefix)', () => {
-    const { getByText, queryByText, container } = render(CursorWithoutPrefix())
     expect(getByText('NO PREFIX')).toBeInTheDocument()
-    expect(queryByText('//')).not.toBeInTheDocument()
-    expect(container.querySelector('.animate-blink')).not.toBeNull()
+    expect(container.querySelectorAll('.animate-blink')).toHaveLength(2)
   })
 
-  it('composes the prefix stories with their prefixes rendered', () => {
-    expect(render(PrefixDoubleSlash()).getByText('//')).toBeInTheDocument()
-    expect(render(PrefixAngleBrackets()).getByText('<>')).toBeInTheDocument()
-    expect(render(PrefixClosingTag()).getByText('</>')).toBeInTheDocument()
+  it('composes the Prefixes story with all three preset prefixes rendered', () => {
+    const { getByText } = render(Prefixes())
+
+    expect(getByText('//')).toBeInTheDocument()
+    expect(getByText('COMMENT STYLE')).toBeInTheDocument()
+    expect(getByText('<>')).toBeInTheDocument()
+    expect(getByText('CODE LABEL')).toBeInTheDocument()
+    expect(getByText('</>')).toBeInTheDocument()
+    expect(getByText('CLOSING TAG')).toBeInTheDocument()
   })
 })

@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import CardPricing from './card-pricing.vue'
 
-const { SlotPositionBottomContained } = composeStories(stories)
+const { Default } = composeStories(stories)
 
 const SLOT_POSITIONS = ['bottom', 'middle'] as const
 const CARD_STYLES = ['contained', 'transparent'] as const
@@ -189,12 +189,12 @@ describe('CardPricing', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('renders the composed SlotPositionBottomContained story fixture', () => {
-    const { getByTestId } = render(SlotPositionBottomContained)
+  it('renders the composed Default story fixture (bottom slot, contained surface)', () => {
+    const { getByTestId } = render(Default)
 
     const root = getByTestId(ROOT)
     expect(root).toBeInTheDocument()
-    // story args: planTitle "Pro", value "20", prefix "$", suffix "per month", actionLabel "Label"
+    // meta args: planTitle "Pro", value "20", prefix "$", suffix "per month", actionLabel "Label"
     expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Pro')
     expect(getByTestId(`${ROOT}__currency__value`)).toHaveTextContent('20')
     expect(getByTestId(`${ROOT}__action`)).toHaveTextContent('Label')

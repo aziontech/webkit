@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/TabView.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/tab-view/TabView.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import TabView from './index'
 import TabViewContent from './tab-view-content.vue'

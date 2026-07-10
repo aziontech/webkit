@@ -2,11 +2,11 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/Divider.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/divider/Divider.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Divider from './divider.vue'
 
-const { Default, WithLabel, Vertical } = composeStories(stories)
+const { Default, WithLabel, Orientations } = composeStories(stories)
 
 const TESTID = 'layout-divider'
 
@@ -116,12 +116,13 @@ describe('Divider', () => {
       expect(getByTestId(`${TESTID}__label`)).toHaveTextContent('OR')
     })
 
-    it('renders the Vertical story with vertical semantics', () => {
-      const { getByTestId } = render(Vertical())
-      const root = getByTestId(TESTID)
+    it('renders the Orientations story with one horizontal and one vertical divider', () => {
+      const { getAllByTestId } = render(Orientations())
+      const [horizontal, vertical] = getAllByTestId(TESTID)
 
-      expect(root).toHaveAttribute('aria-orientation', 'vertical')
-      expect(root).toHaveAttribute('data-orientation', 'vertical')
+      expect(horizontal).toHaveAttribute('data-orientation', 'horizontal')
+      expect(vertical).toHaveAttribute('aria-orientation', 'vertical')
+      expect(vertical).toHaveAttribute('data-orientation', 'vertical')
     })
   })
 })

@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/Switch.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/switch/Switch.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Switch from './switch.vue'
 

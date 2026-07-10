@@ -137,25 +137,38 @@ describe('SplitButton (joined command + menu overlay)', () => {
     await waitFor(() => expect(panel()).not.toBeNull())
   })
 
-  it('selecting an action emits item-click with the exact model item and closes the menu', async () => {
-    const itemClicks: SplitButtonItem[] = []
-    const view = render(host({ onItemClick: (item: SplitButtonItem) => itemClicks.push(item) }))
+  it('selecting an action emits item-click(event, item) with the exact model item and closes the menu', async () => {
+    const itemClicks: Array<[unknown, SplitButtonItem]> = []
+    const view = render(
+      host({
+        onItemClick: (event: MouseEvent | KeyboardEvent, item: SplitButtonItem) =>
+          itemClicks.push([event, item])
+      })
+    )
     await openMenu(view)
 
     await fireEvent.click(options()[0])
 
-    expect(itemClicks).toEqual([model[0]])
+    expect(itemClicks).toHaveLength(1)
+    expect(itemClicks[0][0]).toBeInstanceOf(MouseEvent)
+    expect(itemClicks[0][1]).toEqual(model[0])
     await waitFor(() => expect(panel()).toBeNull())
   })
 
   it('an action without value is matched through its label fallback', async () => {
-    const itemClicks: SplitButtonItem[] = []
-    const view = render(host({ onItemClick: (item: SplitButtonItem) => itemClicks.push(item) }))
+    const itemClicks: Array<[unknown, SplitButtonItem]> = []
+    const view = render(
+      host({
+        onItemClick: (event: MouseEvent | KeyboardEvent, item: SplitButtonItem) =>
+          itemClicks.push([event, item])
+      })
+    )
     await openMenu(view)
 
     await fireEvent.click(options()[1])
 
-    expect(itemClicks).toEqual([model[1]])
+    expect(itemClicks).toHaveLength(1)
+    expect(itemClicks[0][1]).toEqual(model[1])
   })
 
   it('a disabled action emits nothing and keeps the menu open', async () => {

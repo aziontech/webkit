@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/Tooltip.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/tooltip/Tooltip.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tooltip from './tooltip.vue'
 

@@ -3,7 +3,7 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/Select.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/select/Select.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from './index'
 

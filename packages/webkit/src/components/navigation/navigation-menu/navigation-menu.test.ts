@@ -4,7 +4,7 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/NavigationMenu.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/navigation-menu/NavigationMenu.stories'
 import NavigationMenu from './index'
 import NavigationMenuArrow from './navigation-menu-arrow.vue'
 import NavigationMenuBackdrop from './navigation-menu-backdrop.vue'

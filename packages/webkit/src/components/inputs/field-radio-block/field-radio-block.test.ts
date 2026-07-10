@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/FieldRadioBlock.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-radio-block/FieldRadioBlock.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldRadioBlock from './field-radio-block.vue'
 

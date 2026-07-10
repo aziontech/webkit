@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/Dialog.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/dialog/Dialog.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Dialog from './dialog.vue'
 import DialogClose from './dialog-close.vue'

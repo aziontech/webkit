@@ -3,7 +3,7 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/PickList.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/data/pick-list/PickList.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import PickList, { PickListControls, PickListSource, PickListTarget } from './index'
 
@@ -238,13 +238,15 @@ describe('PickList (composition compound)', () => {
       expect(payload?.items).toEqual([{ id: 1, label: 'Edge Functions' }])
     })
 
-    it('fires item-double-click with { list, item, index } and moves the item by default', async () => {
+    it('fires item-double-click(event, { list, item, index }) and moves the item by default', async () => {
       let dbl: { list: string; item: unknown; index: number } | undefined
+      let dblEvent: unknown
       const Tree = defineComponent({
         components: { PickList, PickListSource, PickListControls, PickListTarget },
         setup() {
           const model = ref(makeModel())
-          const onDouble = (p: { list: string; item: unknown; index: number }) => {
+          const onDouble = (event: unknown, p: { list: string; item: unknown; index: number }) => {
+            dblEvent = event
             dbl = p
           }
           return { model, onDouble }
@@ -265,6 +267,7 @@ describe('PickList (composition compound)', () => {
       const options = within(getByTestId('pick-list-source__list')).getAllByRole('option')
       await fireEvent.dblClick(options[1]) // WAF (index 1)
 
+      expect(dblEvent).toBeInstanceOf(MouseEvent)
       expect(dbl).toEqual({ list: 'source', item: { id: 2, label: 'WAF' }, index: 1 })
       // Default moveOnDoubleClick=true: WAF moves to the target.
       expect(within(getByTestId('pick-list-source__list')).getAllByRole('option')).toHaveLength(2)
@@ -280,7 +283,7 @@ describe('PickList (composition compound)', () => {
         components: { PickList, PickListSource, PickListControls, PickListTarget },
         setup() {
           const model = ref(makeModel())
-          const onDouble = (p: { list: string; item: unknown; index: number }) => {
+          const onDouble = (_event: unknown, p: { list: string; item: unknown; index: number }) => {
             dbl = p
           }
           return { model, onDouble }

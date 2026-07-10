@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/Paginator.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/data/paginator/Paginator.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Paginator from './index'
 import PaginationButton from './pagination-button/pagination-button.vue'

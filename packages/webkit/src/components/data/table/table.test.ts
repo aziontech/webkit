@@ -3,7 +3,7 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/Table.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/data/table/Table.stories'
 import Table from './index'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
@@ -279,7 +279,9 @@ describe('Table (composition + data-driven)', () => {
 
       const events = emitted()['row-click'] as unknown[][]
       expect(events).toBeTruthy()
-      expect(events[0][0]).toEqual(rows[0])
+      // row-click emits (event, row): the originating MouseEvent, then the record.
+      expect(events[0][0]).toBeInstanceOf(MouseEvent)
+      expect(events[0][1]).toEqual(rows[0])
     })
 
     it('emits update:sorting when a sortable header is toggled', async () => {
