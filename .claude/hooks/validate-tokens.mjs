@@ -21,13 +21,23 @@ function readStdin() {
   })
 }
 
-function collectContent(input) {
-  const tool = input.tool_name
-  const ti = input.tool_input ?? {}
-  if (tool === 'Write') return [ti.content ?? '']
-  if (tool === 'Edit') return [ti.new_string ?? '']
-  if (tool === 'MultiEdit') return (ti.edits ?? []).map((e) => e.new_string ?? '')
-  return []
+// Reconstruct the file content AFTER the tool runs (same discipline as
+// validate-authoring): scanning only the edit fragments lets a forbidden token be
+// introduced split across two edits. Honors replace_all.
+function applyEdit(base, oldS, newS, replaceAll) {
+  if (typeof oldS !== 'string' || !base.includes(oldS)) return base
+  return replaceAll ? base.split(oldS).join(newS ?? '') : base.replace(oldS, newS ?? '')
+}
+
+function resultingContent(tool, ti, baseline) {
+  if (tool === 'Write') return ti.content ?? ''
+  if (tool === 'Edit') return applyEdit(baseline, ti.old_string, ti.new_string, ti.replace_all)
+  if (tool === 'MultiEdit') {
+    let out = baseline
+    for (const e of ti.edits ?? []) out = applyEdit(out, e.old_string, e.new_string, e.replace_all)
+    return out
+  }
+  return baseline
 }
 
 function readExistingFile(filePath) {
@@ -77,7 +87,7 @@ async function main() {
   // For Edit/MultiEdit, baseline = existing file. For Write of new file, baseline = ''.
   const baseline = tool === 'Write' ? '' : readExistingFile(filePath)
 
-  const newContents = collectContent(input).join('\n')
+  const newContents = resultingContent(tool, input.tool_input ?? {}, baseline)
   const violations = findViolations(newContents, baseline)
   if (violations.length === 0) process.exit(0)
 

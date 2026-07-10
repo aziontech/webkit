@@ -40,18 +40,19 @@ function readExistingFile(filePath) {
 }
 
 // Reconstruct the file content AFTER the tool runs, so negative checks (must-have-X) are
-// correct instead of seeing only an edit fragment.
+// correct instead of seeing only an edit fragment. Honors replace_all.
+function applyEdit(base, oldS, newS, replaceAll) {
+  if (typeof oldS !== 'string' || oldS === '' || !base.includes(oldS)) return base
+  return replaceAll ? base.split(oldS).join(newS ?? '') : base.replace(oldS, newS ?? '')
+}
+
 function resultingContent(tool, ti, baseline) {
   if (tool === 'Write') return ti.content ?? ''
-  if (tool === 'Edit') {
-    const oldS = ti.old_string ?? ''
-    return oldS && baseline.includes(oldS) ? baseline.replace(oldS, ti.new_string ?? '') : baseline
-  }
+  if (tool === 'Edit') return applyEdit(baseline, ti.old_string, ti.new_string, ti.replace_all)
   if (tool === 'MultiEdit') {
     let result = baseline
     for (const e of ti.edits ?? []) {
-      const oldS = e.old_string ?? ''
-      if (oldS && result.includes(oldS)) result = result.replace(oldS, e.new_string ?? '')
+      result = applyEdit(result, e.old_string, e.new_string, e.replace_all)
     }
     return result
   }

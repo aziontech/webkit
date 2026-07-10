@@ -28,18 +28,18 @@ function readExistingFile(filePath) {
 }
 
 // Reconstruct the content the Write/Edit/MultiEdit would produce, so whole-file
-// checks (import present, sourceState present) see the real result.
+// checks (import present, sourceState present) see the real result. Honors replace_all.
+function applyEdit(base, oldS, newS, replaceAll) {
+  if (typeof oldS !== 'string' || !base.includes(oldS)) return base
+  return replaceAll ? base.split(oldS).join(newS ?? '') : base.replace(oldS, newS ?? '')
+}
+
 function computeResult(tool, ti, baseline) {
   if (tool === 'Write') return ti.content ?? ''
-  if (tool === 'Edit') {
-    if (typeof ti.old_string !== 'string') return baseline
-    return baseline.replace(ti.old_string, ti.new_string ?? '')
-  }
+  if (tool === 'Edit') return applyEdit(baseline, ti.old_string, ti.new_string, ti.replace_all)
   if (tool === 'MultiEdit') {
     let out = baseline
-    for (const e of ti.edits ?? []) {
-      if (typeof e.old_string === 'string') out = out.replace(e.old_string, e.new_string ?? '')
-    }
+    for (const e of ti.edits ?? []) out = applyEdit(out, e.old_string, e.new_string, e.replace_all)
     return out
   }
   return baseline
