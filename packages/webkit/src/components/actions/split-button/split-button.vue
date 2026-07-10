@@ -56,7 +56,7 @@
 
   const emit = defineEmits<{
     click: [event: MouseEvent, item: SplitButtonItem | null]
-    'item-click': [item: SplitButtonItem]
+    'item-click': [event: MouseEvent | KeyboardEvent, item: SplitButtonItem]
   }>()
 
   const attrs = useAttrs()
@@ -97,14 +97,14 @@
     emit('click', event, selectedItem.value)
   }
 
-  function onSelect(payload: { value: string | number }) {
-    const item = props.model.find((entry) => optionValue(entry) === String(payload.value))
+  function onSelect(event: MouseEvent | KeyboardEvent, value: string | number) {
+    const item = props.model.find((entry) => optionValue(entry) === String(value))
 
     if (item) {
       if (props.updateLabelOnSelect) {
         selectedValue.value = optionValue(item)
       }
-      emit('item-click', item)
+      emit('item-click', event, item)
     }
   }
 </script>

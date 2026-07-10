@@ -6,7 +6,7 @@ const IMPORT = "import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
 /** @type {import('@storybook/vue3').Meta<typeof ButtonHighlight>} */
 const meta = {
-  title: 'Components/Actions/Button Highlight',
+  title: 'Components/Actions/ButtonHighlight',
   component: ButtonHighlight,
   tags: ['autodocs'],
   parameters: {
@@ -134,7 +134,7 @@ export const Sizes = {
   }
 }
 
-const LOADING_MARKUP = '<ButtonHighlight label="Ask Azion" loading />'
+const LOADING_MARKUP = '<ButtonHighlight label="Ask Azion" icon="pi pi-sparkles" loading />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof ButtonHighlight>} */
 export const Loading = {
@@ -172,7 +172,7 @@ export const Icon = {
   }
 }
 
-const DISABLED_MARKUP = '<ButtonHighlight label="Ask Azion" disabled />'
+const DISABLED_MARKUP = '<ButtonHighlight label="Ask Azion" icon="pi pi-sparkles" disabled />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof ButtonHighlight>} */
 export const Disabled = {

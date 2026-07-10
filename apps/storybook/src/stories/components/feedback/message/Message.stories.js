@@ -1,8 +1,13 @@
 import Message from '@aziontech/webkit/message'
+import { computed } from 'vue'
+
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Message from '@aziontech/webkit/message'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Message>} */
 const meta = {
- title: 'Components/Feedback/Message',
+  title: 'Components/Feedback/Message',
   component: Message,
   tags: ['autodocs'],
   parameters: {
@@ -20,37 +25,10 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action aligned to Figma Message (478:892).',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import Message from '@aziontech/webkit/message'",
-          '</script>',
-          '',
-          '<template>',
-          '  <Message',
-          '    severity="info"',
-          '    title="Info message"',
-          '    description="A brief description of the message."',
-          '    action-label="Label"',
-          '    closable',
-          '    :life="5000"',
-          '    @close="handleClose"',
-          '  />',
-          '</template>',
-          '```'
-        ].join('\n')
+        component:
+          'Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action.'
       },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true
-      },
-      canvas: {
-        sourceState: 'shown'
-      }
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -103,6 +81,16 @@ const meta = {
       action: 'close',
       description: 'Emitted when the message is dismissed manually or after `life` expires.',
       table: { category: 'events', type: { summary: 'void' } }
+    },
+    default: {
+      control: false,
+      description: 'Replaces the default icon + title + description layout.',
+      table: { category: 'slots' }
+    },
+    action: {
+      control: false,
+      description: 'Custom action control; replaces the built-in text action button when provided.',
+      table: { category: 'slots' }
     }
   },
   args: {
@@ -118,101 +106,119 @@ const meta = {
 
 export default meta
 
-const messageRemountKey = (args) =>
-  JSON.stringify({
-    severity: args.severity,
-    title: args.title,
-    description: args.description,
-    icon: args.icon,
-    actionLabel: args.actionLabel,
-    closable: args.closable,
-    life: args.life
-  })
-
 const Template = (args) => ({
   components: { Message },
   setup() {
-    const { onAction, onClose, ...props } = args
-
-    return { props, onAction, onClose, remountKey: messageRemountKey(args) }
+    // Dismissal (close control / `life` expiry) unmounts the message; remount
+    // whenever a control changes so the canvas recovers without a page reload.
+    const remountKey = computed(() =>
+      JSON.stringify({
+        severity: args.severity,
+        title: args.title,
+        description: args.description,
+        icon: args.icon,
+        actionLabel: args.actionLabel,
+        closable: args.closable,
+        life: args.life
+      })
+    )
+    return { args, remountKey }
   },
-  template: '<Message :key="remountKey" v-bind="props" @action="onAction" @close="onClose" />'
+  template: '<Message :key="remountKey" v-bind="args" />'
 })
+
+const DEFAULT_MARKUP = `<Message
+  severity="info"
+  title="Info message"
+  description="A brief description of the message."
+  action-label="Label"
+/>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Message>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default info message with title, description, and action.' } }
+    docs: {
+      description: { story: 'Default info message with title, description, and action.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
+
+const TYPES_TEMPLATE = `<div class="flex w-full flex-col gap-4">
+  <Message
+    severity="info"
+    title="Info message"
+    description="A brief description of the message."
+    action-label="Label"
+  />
+  <Message
+    severity="success"
+    title="Success message"
+    description="A brief description of the message."
+    action-label="Label"
+  />
+  <Message
+    severity="warning"
+    title="Warning message"
+    description="A brief description of the message."
+    action-label="Label"
+  />
+  <Message
+    severity="danger"
+    title="Error message"
+    description="A brief description of the message."
+    action-label="Label"
+  />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Message>} */
 export const Types = {
-  render: () => ({
-    components: { Message },
-    template: `
-      <div class="flex w-full flex-col gap-4">
-        <Message
-          severity="info"
-          title="Info message"
-          description="A brief description of the message."
-          action-label="Label"
-        />
-        <Message
-          severity="success"
-          title="Success message"
-          description="A brief description of the message."
-          action-label="Label"
-        />
-        <Message
-          severity="warning"
-          title="Warning message"
-          description="A brief description of the message."
-          action-label="Label"
-        />
-        <Message
-          severity="danger"
-          title="Error message"
-          description="A brief description of the message."
-          action-label="Label"
-        />
-      </div>
-    `
-  }),
+  render: () => ({ components: { Message }, template: TYPES_TEMPLATE }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'All severity variants stacked.' }
+      description: { story: 'All severity variants stacked.' },
+      source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
     }
   }
 }
+
+const CLOSABLE_MARKUP = `<Message
+  severity="info"
+  title="Info message"
+  description="A brief description of the message."
+  action-label="Label"
+  closable
+/>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Message>} */
 export const Closable = {
-  args: {
-    closable: true
-  },
+  args: { closable: true },
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Closable message with a dismiss control on the trailing edge.' }
+      description: { story: 'Closable message with a dismiss control on the trailing edge.' },
+      source: { code: toSfc(IMPORT, CLOSABLE_MARKUP) }
     }
   }
 }
 
+const AUTO_DISMISS_MARKUP = `<Message
+  severity="info"
+  title="Info message"
+  description="A brief description of the message."
+  :life="5000"
+/>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Message>} */
 export const AutoDismiss = {
-  args: {
-    life: 5000,
-    actionLabel: ''
-  },
+  args: { life: 5000, actionLabel: '' },
   render: Template,
   parameters: {
     docs: {
-      description: {
-        story: 'Auto-dismisses after 5 seconds when `life` is greater than zero.'
-      }
+      description: { story: 'Auto-dismisses after 5 seconds when `life` is greater than zero.' },
+      source: { code: toSfc(IMPORT, AUTO_DISMISS_MARKUP) }
     }
   }
 }

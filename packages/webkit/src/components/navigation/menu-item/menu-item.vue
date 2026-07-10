@@ -53,7 +53,7 @@
   })
 
   const emit = defineEmits<{
-    click: [event: MouseEvent]
+    click: [event: MouseEvent, item: { label: string; href: string }]
   }>()
 
   defineSlots<{
@@ -132,7 +132,7 @@
       return
     }
 
-    emit('click', event)
+    emit('click', event, { label: props.label, href: props.href })
   }
 </script>
 

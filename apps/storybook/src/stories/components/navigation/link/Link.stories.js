@@ -1,8 +1,12 @@
 import Link from '@aziontech/webkit/link'
 
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import Link from '@aziontech/webkit/link'"
+
 /** @type {import('@storybook/vue3').Meta<typeof Link>} */
 const meta = {
- title: 'Components/Navigation/Link',
+  title: 'Components/Navigation/Link',
   component: Link,
   tags: ['autodocs'],
   parameters: {
@@ -12,21 +16,29 @@ const meta = {
     },
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
       }
     },
     docs: {
       description: {
         component:
-          'Text link with optional trailing icon and ghost hover surface.'
-      }
+          'Text link with an optional trailing icon and a ghost hover surface for navigating between views or sections.'
+      },
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
     label: {
       control: 'text',
       description: 'Visible label rendered inside the link.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'Learn More' } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Learn More'" }
+      }
     },
     size: {
       control: 'select',
@@ -40,7 +52,7 @@ const meta = {
     },
     disabled: {
       control: 'boolean',
-      description: 'Disables interaction and applies disabled token set.',
+      description: 'Disables interaction and applies the disabled token set.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     showIcon: {
@@ -54,13 +66,13 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: 'pi pi-external-link' }
+        defaultValue: { summary: "'pi pi-external-link'" }
       }
     },
     href: {
       control: 'text',
       description: 'Destination URL for the anchor.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: '#' } }
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "'#'" } }
     },
     target: {
       control: 'select',
@@ -96,49 +108,51 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template: `
-    <Link
-      :label="args.label"
-      :size="args.size"
-      :disabled="args.disabled"
-      :show-icon="args.showIcon"
-      :icon="args.icon"
-      :href="args.href"
-      :target="args.target"
-      @click="args.onClick"
-    />
-  `
+  template: '<Link v-bind="args" />'
 })
+
+const DEFAULT_MARKUP = '<Link label="Learn More" size="large" href="#" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Default large link with trailing icon.' } }
+    docs: {
+      description: { story: 'Default large link with a trailing icon.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
 
+const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
+  <Link size="large" label="Learn More" />
+  <Link size="medium" label="Learn More" />
+</div>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
 export const Sizes = {
-  render: () => ({
-    components: { Link },
-    template: `
-      <div class="flex flex-wrap items-center gap-4">
-        <Link size="large" label="Learn More" />
-        <Link size="medium" label="Learn More" />
-      </div>
-    `
-  }),
+  render: () => ({ components: { Link }, template: SIZES_TEMPLATE }),
   parameters: {
-    docs: { description: { story: 'All size variants side by side.' } }
+    docs: {
+      controls: { disable: true },
+      description: { story: 'All size variants side by side.' },
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
+    }
   }
 }
+
+const DISABLED_MARKUP = '<Link label="Learn More" disabled />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
 export const Disabled = {
   args: { disabled: true },
   render: Template,
   parameters: {
-    docs: { description: { story: 'Disabled state.' } }
+    docs: {
+      description: {
+        story: 'Disabled state; interaction is blocked and the disabled tokens apply.'
+      },
+      source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
+    }
   }
 }

@@ -69,14 +69,23 @@ export default {
     docs: {
       description: {
         component:
-          'Color foundations with a Wires-like layout. Every swatch is copyable and mapped to Azion theme tokens.'
-      }
+          'The color foundations catalog: every primitive shade scale and brand palette in the Azion theme. Each swatch maps to its `var(--*)` token and is copyable by clicking its value.'
+      },
+      canvas: { sourceState: 'none' }
     }
   }
 }
 
 export const Overview = {
   name: 'Overview',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Complete color reference: the primitive shade scales (orange, violet, blue, green, yellow, red, gray, slate, surface) followed by the brand palettes. Click any swatch value to copy its hex; use the semantic `var(--*)` tokens in components and keep the primitive shades for reference.'
+      }
+    }
+  },
   render: () => ({
     components: { PageContainer, PageHeader, ColorPaletteSection },
     setup() {
