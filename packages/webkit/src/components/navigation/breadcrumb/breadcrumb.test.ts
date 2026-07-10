@@ -45,7 +45,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(Breadcrumb.Item).toBe(BreadcrumbItem)
       expect(Breadcrumb.Separator).toBe(BreadcrumbSeparator)
       // The compound default export IS the root component.
-      expect(Breadcrumb).toBe(Breadcrumb.Root)
+      expect(Breadcrumb).toBe(Default)
     })
   })
 
