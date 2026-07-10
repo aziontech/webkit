@@ -171,7 +171,7 @@ const billingOptions = [
   { label: 'Yearly', value: 'yearly' }
 ]
 
-const planFeaturesSlot = `
+const planFeaturesSlot = \`
   <ul class="m-0 flex w-full list-none flex-col gap-2 p-0">
     <li class="text-label-sm text-[var(--text-muted)] leading-none">
       Todas as funcionalidades disponíveis
@@ -192,9 +192,9 @@ const planFeaturesSlot = `
       </span>
     </li>
   </ul>
-`
+\`
 
-const changePlanTemplate = `
+const changePlanTemplate = \`
   <Drawer
     v-bind="args"
     v-model:open="open"
@@ -233,7 +233,7 @@ const changePlanTemplate = `
               action-label=""
               data-testid="template-change-plan-drawer__plan-hobby"
             >
-              ${planFeaturesSlot}
+              \${planFeaturesSlot}
               <template #actions>
                 <Button label="Downgrade" kind="outlined" size="large" class="w-full" />
               </template>
@@ -253,7 +253,7 @@ const changePlanTemplate = `
               action-label=""
               data-testid="template-change-plan-drawer__plan-pro"
             >
-              ${planFeaturesSlot}
+              \${planFeaturesSlot}
               <template #actions>
                 <Button label="Upgrade to Yearly" kind="primary" size="large" class="w-full" />
               </template>
@@ -271,7 +271,7 @@ const changePlanTemplate = `
               action-label=""
               data-testid="template-change-plan-drawer__plan-enterprise"
             >
-              ${planFeaturesSlot}
+              \${planFeaturesSlot}
               <template #actions>
                 <Button label="Contact Sales" kind="outlined" size="large" class="w-full" />
               </template>
