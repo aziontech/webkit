@@ -210,13 +210,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Catalog is in sync (no drift from exports/specs)
-        run: pnpm --filter @aziontech/webkit.dev catalog:check
+        run: pnpm --filter @aziontech/webkit catalog:check
 
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
-        run: pnpm --filter @aziontech/webkit.dev test:toolkit
+        run: pnpm --filter @aziontech/webkit test:toolkit
 
       - name: Construction-standard ratchet (no new authoring violations)
-        run: pnpm --filter @aziontech/webkit.dev run authoring
+        run: pnpm --filter @aziontech/webkit run authoring
 
   # Summary Gate — passes when every upstream job is success or cleanly skipped.
   governance-check:
