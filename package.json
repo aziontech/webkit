@@ -23,7 +23,7 @@
     "storybook:preview": "pnpm --filter storybook run preview",
     "storybook:test:visual": "pnpm run storybook:build && pnpm --filter storybook run test:visual:static",
     "storybook:test:visual:update": "pnpm run storybook:build && pnpm --filter storybook run test:visual:update",
-    "storybook:test:visual:update:baseline":"gh workflow run app-storybook-test-visual-regression.yml -r test/webkit -f update_baselines=true",
+    "storybook:test:visual:update:baseline":"gh workflow run app-storybook-generate-baseline.yml -r test/webkit -f update_baselines=true",
     "storybook:validate-docs": "node .claude/hooks/validate-story-source.mjs --all",
     "theme:build:tokens": "pnpm --filter theme run build:tokens",
     "theme:build:dts": "pnpm --filter theme run build:dts",
