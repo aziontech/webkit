@@ -99,7 +99,7 @@ const meta = {
         defaultValue: { summary: "'right'" }
       }
     },
-    onUpdateValue: {
+    'onUpdate:value': {
       action: 'update:value',
       description: '`v-model:value`. Fires when the open item(s) change.',
       table: { category: 'events' }
@@ -143,15 +143,12 @@ const DEFAULT_MARKUP = `<Accordion type="single" collapsible default-value="over
 const Template = (args) => ({
   components,
   setup() {
-    const { onUpdateValue, onValueChange, ...props } = args
-    return { props, onUpdateValue, onValueChange }
+    return { args }
   },
   template: `
     <Accordion
-      v-bind="props"
+      v-bind="args"
       class="w-full max-w-[40rem]"
-      @update:value="onUpdateValue"
-      @value-change="onValueChange"
     >
       <AccordionItem value="overview">
         <AccordionTrigger>What is Azion?</AccordionTrigger>

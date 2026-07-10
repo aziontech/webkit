@@ -3,9 +3,13 @@ import IconButton from '@aziontech/webkit/icon-button'
 import ProgressBar from '@aziontech/webkit/progress-bar'
 import { ref } from 'vue'
 
+import { toSfc } from '../../../_shared/story-source'
+
+const IMPORT = "import ProgressBar from '@aziontech/webkit/progress-bar'"
+
 /** @type {import('@storybook/vue3').Meta<typeof ProgressBar>} */
 const meta = {
-  title: 'Components/Feedback/Progress Bar',
+  title: 'Components/Feedback/ProgressBar',
   component: ProgressBar,
   tags: ['autodocs'],
   parameters: {
@@ -15,7 +19,10 @@ const meta = {
     },
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true }
+        ]
       }
     },
     docs: {
@@ -23,30 +30,7 @@ const meta = {
         component:
           'Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress cannot be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.'
       },
-      source: {
-        type: 'dynamic',
-        excludeDecorators: true,
-        transform: (code) => {
-          const body = code
-            .trim()
-            .split('\n')
-            .map((line) => (line ? `  ${line}` : line))
-            .join('\n')
-
-          return [
-            '<script setup>',
-            "import ProgressBar from '@aziontech/webkit/progress-bar'",
-            '</script>',
-            '',
-            '<template>',
-            body,
-            '</template>'
-          ].join('\n')
-        }
-      },
-      canvas: {
-        sourceState: 'shown'
-      }
+      canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
@@ -112,57 +96,60 @@ export default meta
 const Template = (args) => ({
   components: { ProgressBar },
   setup() {
-    return { props: args }
+    return { args }
   },
-  template: '<ProgressBar v-bind="props" />'
+  template: '<ProgressBar v-bind="args" />'
 })
+
+const DEFAULT_MARKUP = '<ProgressBar :value="60" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof ProgressBar>} */
 export const Default = {
   render: Template,
   parameters: {
-    docs: { description: { story: 'Determinate bar at 60%.' } }
+    docs: {
+      description: { story: 'Determinate bar at 60%.' },
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
   }
 }
+
+const SHAPES_TEMPLATE = `<div class="flex w-[320px] flex-col gap-4">
+  <ProgressBar :value="60" shape="rounded" />
+  <ProgressBar :value="60" shape="flat" />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof ProgressBar>} */
 export const Shapes = {
-  render: () => ({
-    components: { ProgressBar },
-    template: `
-      <div style="display:flex; flex-direction:column; gap:16px; width:320px">
-        <ProgressBar :value="60" shape="rounded" />
-        <ProgressBar :value="60" shape="flat" />
-      </div>
-    `
-  }),
+  render: () => ({ components: { ProgressBar }, template: SHAPES_TEMPLATE }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'Both corner-radius variants stacked: `rounded` and `flat`.' }
+      description: { story: 'Both corner-radius variants stacked: `rounded` and `flat`.' },
+      source: { code: toSfc(IMPORT, SHAPES_TEMPLATE) }
     }
   }
 }
 
+const SIZES_TEMPLATE = `<div class="flex w-[320px] flex-col gap-4">
+  <ProgressBar :value="60" size="small" />
+  <ProgressBar :value="60" size="medium" />
+  <ProgressBar :value="60" size="large" />
+</div>`
+
 /** @type {import('@storybook/vue3').StoryObj<typeof ProgressBar>} */
 export const Sizes = {
-  render: () => ({
-    components: { ProgressBar },
-    template: `
-      <div style="display:flex; flex-direction:column; gap:16px; width:320px">
-        <ProgressBar :value="60" size="small" />
-        <ProgressBar :value="60" size="medium" />
-        <ProgressBar :value="60" size="large" />
-      </div>
-    `
-  }),
+  render: () => ({ components: { ProgressBar }, template: SIZES_TEMPLATE }),
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'All height tokens stacked: `small`, `medium`, `large`.' }
+      description: { story: 'All height tokens stacked: `small`, `medium`, `large`.' },
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }
   }
 }
+
+const INDETERMINATE_MARKUP = '<ProgressBar indeterminate />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof ProgressBar>} */
 export const Indeterminate = {
@@ -172,10 +159,37 @@ export const Indeterminate = {
     docs: {
       description: {
         story: 'Loading state when progress cannot be measured; animates a sliding segment.'
-      }
+      },
+      source: { code: toSfc(IMPORT, INDETERMINATE_MARKUP) }
     }
   }
 }
+
+const SIMULATION_TEMPLATE = `<div class="flex w-[320px] flex-col gap-4">
+  <ProgressBar :value="value" />
+  <div class="flex items-center gap-2">
+    <Button label="Next" kind="primary" size="small" @click="advance" />
+    <IconButton icon="pi pi-refresh" aria-label="Reset" size="small" kind="outlined" @click="reset" />
+    <span class="ml-auto">{{ value }}%</span>
+  </div>
+</div>`
+
+const SIMULATION_SCRIPT = [
+  IMPORT,
+  "import Button from '@aziontech/webkit/button'",
+  "import IconButton from '@aziontech/webkit/icon-button'",
+  "import { ref } from 'vue'",
+  '',
+  'const value = ref(0)',
+  '',
+  'const advance = () => {',
+  '  value.value = Math.min(100, value.value + 20)',
+  '}',
+  '',
+  'const reset = () => {',
+  '  value.value = 0',
+  '}'
+]
 
 /** @type {import('@storybook/vue3').StoryObj<typeof ProgressBar>} */
 export const Simulation = {
@@ -191,16 +205,7 @@ export const Simulation = {
       }
       return { value, advance, reset }
     },
-    template: `
-      <div style="display:flex; flex-direction:column; gap:16px; width:320px">
-        <ProgressBar :value="value" />
-        <div style="display:flex; align-items:center; gap:8px">
-          <Button label="Next" kind="primary" size="small"  @click="advance" />
-          <IconButton icon="pi pi-refresh" aria-label="Reset" size="small" kind="outlined" @click="reset" />
-          <span style="margin-left:auto">{{ value }}%</span>
-        </div>
-      </div>
-    `
+    template: SIMULATION_TEMPLATE
   }),
   parameters: {
     docs: {
@@ -208,7 +213,8 @@ export const Simulation = {
       description: {
         story:
           'Interactive: click **Next** to raise `value` by 20% each step; the reset icon button returns it to 0%. The determinate fill updates immediately on each change (determinate progress is not animated — motion is reserved for the indeterminate loading state).'
-      }
+      },
+      source: { code: toSfc(SIMULATION_SCRIPT, SIMULATION_TEMPLATE) }
     }
   }
 }

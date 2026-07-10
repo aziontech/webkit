@@ -78,7 +78,7 @@
   const emit = defineEmits<{
     'action-click': [event: MouseEvent]
     'visit-click': [event: MouseEvent]
-    'step-click': [index: number, event: MouseEvent]
+    'step-click': [event: MouseEvent, index: number]
   }>()
 
   defineSlots<{
@@ -98,7 +98,7 @@
 
   const onActionClick = (event: MouseEvent) => emit('action-click', event)
   const onVisitClick = (event: MouseEvent) => emit('visit-click', event)
-  const onStepClick = (index: number, event: MouseEvent) => emit('step-click', index, event)
+  const onStepClick = (event: MouseEvent, index: number) => emit('step-click', event, index)
 
   const GlobalHeaderLeft = GlobalHeader['Left']
   const GlobalHeaderBrand = GlobalHeader['Brand']
@@ -250,7 +250,7 @@
                       type="button"
                       :class="STEP_BUTTON_CLASS"
                       :disabled="disabled"
-                      @click="onStepClick(index, $event)"
+                      @click="onStepClick($event, index)"
                     >
                       <ItemMedia
                         media-kind="icon"
