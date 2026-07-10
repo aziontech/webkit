@@ -261,10 +261,10 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     it('renders a hand-composed trail through Root/List/Item/Separator', () => {
       const { getByTestId, getByText } = render({
         components: {
-          BreadcrumbRoot: Breadcrumb.Root,
-          BreadcrumbList: Breadcrumb.List,
-          BreadcrumbItem: Breadcrumb.Item,
-          BreadcrumbSeparator: Breadcrumb.Separator
+          BreadcrumbRoot: Breadcrumb,
+          BreadcrumbList: BreadcrumbList,
+          BreadcrumbItem: BreadcrumbItem,
+          BreadcrumbSeparator: BreadcrumbSeparator
         },
         template: `
           <BreadcrumbRoot>
