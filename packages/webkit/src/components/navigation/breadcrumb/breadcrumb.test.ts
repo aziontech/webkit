@@ -298,7 +298,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     })
 
     it('emits its own click on a manually composed BreadcrumbItem', async () => {
-      const { getByTestId, emitted } = render(Breadcrumb.Item, {
+      const { getByTestId, emitted } = render(BreadcrumbItem, {
         props: { label: 'Standalone', href: '/x', 'data-testid': 'solo' }
       })
 
