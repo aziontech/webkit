@@ -121,12 +121,17 @@ export function tokenChecksApply(rel) {
   )
 }
 
-/** All violated token-check ids for a file's full content. */
+/**
+ * All violated token-check ids for a file's full content — one entry PER MATCH, so the
+ * ratchet's multiset diff catches a second occurrence of an already-baselined id (a
+ * boolean-per-file scan would let it evade).
+ */
 export function scanTokens(content) {
   const found = []
   for (const c of TOKEN_CHECKS) {
     c.regex.lastIndex = 0
-    if (c.regex.test(content)) found.push(c.id)
+    const matches = content.match(c.regex)
+    if (matches) for (let i = 0; i < matches.length; i++) found.push(c.id)
     c.regex.lastIndex = 0
   }
   return found

@@ -75,12 +75,19 @@ export function testIdFallback(category, name) {
  * the .vue/spec is missing) — mirroring the write-time hook's skip conditions exactly.
  * Otherwise returns { info, violations: string[] } (empty array = compliant).
  */
-export function collectSpecViolations(abs, ROOT) {
+export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
   const info = resolveSpecForComponentPath(abs, ROOT)
   if (!info) return null
   if (isLegacyComponent(info.category, info.name, ROOT)) return null
   if (!existsSync(abs)) return null
-  if (!existsSync(info.specPath)) return null
+  if (!existsSync(info.specPath)) {
+    // The write-time hook skips spec-less files (enforce-spec-exists owns creation);
+    // the CI ratchet passes requireSpec so DELETING a spec can't evade the gate.
+    if (requireSpec) {
+      return { info, violations: [`Spec file missing: .specs/${info.name}.md`] }
+    }
+    return null
+  }
 
   const violations = []
 
@@ -88,12 +95,14 @@ export function collectSpecViolations(abs, ROOT) {
   const sfc = parseVueSfc(vueText)
   const { body } = parseSpecFile(info.specPath)
 
-  // Determine if this is the root .vue or a sub-component .vue.
+  // Determine if this is the root .vue or a sub-component .vue. Compositions whose
+  // root file is `<name>-root.vue` (tab-view, navigation-menu) are roots too — before
+  // this, naming a root that way silently skipped every root-level check.
   const fileName = abs
     .split('/')
     .pop()
     .replace(/\.vue$/, '')
-  const isRoot = fileName === info.name
+  const isRoot = fileName === info.name || fileName === `${info.name}-root`
 
   if (isRoot) {
     // ---- Props ----

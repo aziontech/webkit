@@ -41,7 +41,7 @@ function walk(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, entry.name)
     if (entry.isDirectory()) out.push(...walk(p))
-    else if (/\.(vue|ts|js|css|scss)$/.test(entry.name)) out.push(p)
+    else if (/\.(vue|ts|tsx|js|jsx|mjs|css|scss)$/.test(entry.name)) out.push(p)
   }
   return out
 }
@@ -65,7 +65,9 @@ function currentViolations() {
     // the same checks validate-spec-compliance runs post-write; skips files with no spec
     // mapping and the legacy whitelist, exactly like the hook.
     if (rel.endsWith('.vue')) {
-      const result = collectSpecViolations(abs, ROOT)
+      // requireSpec: deleting/renaming a spec surfaces as a violation instead of
+      // silently evaporating every baselined entry for that component.
+      const result = collectSpecViolations(abs, ROOT, { requireSpec: true })
       if (result) {
         for (const v of result.violations) keys.push(`${rel}::spec:${v}`)
       }
@@ -105,10 +107,26 @@ try {
   process.exit(1)
 }
 
-const baselineSet = new Set(baseline)
-const currentSet = new Set(current)
-const introduced = current.filter((k) => !baselineSet.has(k))
-const fixed = baseline.filter((k) => !currentSet.has(k))
+// Multiset semantics: keys can repeat (one entry per occurrence). A SECOND violation of
+// an already-baselined id in the same file is therefore introduced (a plain Set would
+// let it evade); fixing one of two occurrences only shows as fixed.
+function counts(keys) {
+  const m = new Map()
+  for (const k of keys) m.set(k, (m.get(k) ?? 0) + 1)
+  return m
+}
+const baseCounts = counts(baseline)
+const currCounts = counts(current)
+const introduced = []
+for (const [k, n] of currCounts) {
+  const extra = n - (baseCounts.get(k) ?? 0)
+  for (let i = 0; i < extra; i++) introduced.push(k)
+}
+const fixed = []
+for (const [k, n] of baseCounts) {
+  const gone = n - (currCounts.get(k) ?? 0)
+  for (let i = 0; i < gone; i++) fixed.push(k)
+}
 
 if (fixed.length) {
   console.log(

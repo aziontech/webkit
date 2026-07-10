@@ -71,10 +71,13 @@ export function validateFrontmatter(fm) {
   const errors = []
   if (!fm) return ['frontmatter missing or unparseable']
   if (!fm.name || !KEBAB_RE.test(fm.name)) errors.push('name: must be kebab-case')
-  if (!COMPONENT_CATEGORIES.includes(fm.category)) errors.push(`category: must be one of ${COMPONENT_CATEGORIES.join('|')}`)
-  if (!STRUCTURES.includes(fm.structure)) errors.push(`structure: must be one of ${STRUCTURES.join('|')}`)
+  if (!COMPONENT_CATEGORIES.includes(fm.category))
+    errors.push(`category: must be one of ${COMPONENT_CATEGORIES.join('|')}`)
+  if (!STRUCTURES.includes(fm.structure))
+    errors.push(`structure: must be one of ${STRUCTURES.join('|')}`)
   if (!STATUSES.includes(fm.status)) errors.push(`status: must be one of ${STATUSES.join('|')}`)
-  if (typeof fm.spec_version !== 'number' || fm.spec_version < 1) errors.push('spec_version: must be integer >= 1')
+  if (typeof fm.spec_version !== 'number' || fm.spec_version < 1)
+    errors.push('spec_version: must be integer >= 1')
   if (!isIsoDate(fm.created)) errors.push('created: must be YYYY-MM-DD')
   if (!isIsoDate(fm.last_updated)) errors.push('last_updated: must be YYYY-MM-DD')
   if (['approved', 'implemented', 'locked'].includes(fm.status)) {
@@ -246,16 +249,29 @@ export function constraintsBlockHasCanonicalBullets(body) {
 // ---- Spec lookup from a .vue path ----
 
 /**
- * Given an absolute path to a component .vue file under
- * packages/webkit/src/components/<category>/<name>/<file>.vue,
- * return { category, name, specPath }. Returns null if the path doesn't match.
+ * Given an absolute path to a component .vue file, return { category, name, specPath }.
+ * Handles the three real layouts (returns null only for non-component paths / wip):
+ *   components/<category>/<name>/<file>.vue            — categorized root or direct part
+ *   components/<category>/<name>/<sub>/…/<file>.vue    — nested sub-component folders
+ *   components/<name>/…/<file>.vue                     — flat components (avatar, tag,
+ *     overline) — they carry the 'content' testid category by convention
  */
 export function resolveSpecForComponentPath(filePath, repoRoot) {
   const rel = filePath.startsWith(repoRoot) ? filePath.slice(repoRoot.length + 1) : filePath
-  const m = rel.match(/^packages\/webkit\/src\/components\/([^/]+)\/([^/]+)\/[^/]+\.vue$/)
+  const m = rel.match(/^packages\/webkit\/src\/components\/(.+)\.vue$/)
   if (!m) return null
-  const [, category, name] = m
-  if (!COMPONENT_CATEGORIES.includes(category)) return null
+  const segs = m[1].split('/')
+  if (segs[0] === 'wip') return null
+  let category, name
+  if (COMPONENT_CATEGORIES.includes(segs[0])) {
+    if (segs.length < 3) return null // stray .vue directly under a category folder
+    category = segs[0]
+    name = segs[1]
+  } else {
+    if (segs.length < 2) return null // stray .vue directly under components/
+    category = 'content' // flat components use the content-<name> testid convention
+    name = segs[0]
+  }
   const specPath = resolve(repoRoot, '.specs', `${name}.md`)
   return { category, name, specPath }
 }
@@ -281,7 +297,15 @@ export function isLegacyComponent(category, name, repoRoot) {
  */
 export function parseVueSfc(vueText) {
   const script = extractScriptSetup(vueText)
-  if (!script) return { defineOptionsName: null, props: [], emits: [], slots: [], hasInjectionKey: false, raw: '' }
+  if (!script)
+    return {
+      defineOptionsName: null,
+      props: [],
+      emits: [],
+      slots: [],
+      hasInjectionKey: false,
+      raw: ''
+    }
   return {
     defineOptionsName: extractDefineOptionsName(script),
     props: extractProps(script),
@@ -344,7 +368,12 @@ function parsePropsInterface(block) {
     const m = trimmed.match(/^([a-zA-Z_][\w]*)\s*(\??)\s*:\s*(.+?)\s*$/)
     if (m) {
       const [, name, opt, type] = m
-      out.push({ name, optional: opt === '?', type: type.replace(/;$/, '').trim(), jsdoc: pendingDoc.trim() })
+      out.push({
+        name,
+        optional: opt === '?',
+        type: type.replace(/;$/, '').trim(),
+        jsdoc: pendingDoc.trim()
+      })
       pendingDoc = ''
     }
   }
