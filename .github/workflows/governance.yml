@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
+      tests: ${{ steps.filter.outputs.tests }}
+      visual: ${{ steps.filter.outputs.visual }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,6 +29,17 @@ jobs:
           filters: |
             webkit:
               - 'packages/webkit/**'
+            # Stories are fixtures of the unit suite (composeStories), so
+            # storybook changes retrigger the tests too.
+            tests:
+              - 'packages/webkit/**'
+              - 'apps/storybook/**'
+            # Pixels react to any styled layer: components, tokens, icons, stories.
+            visual:
+              - 'packages/webkit/**'
+              - 'packages/theme/**'
+              - 'packages/icons/**'
+              - 'apps/storybook/**'
 
   # Security Scanning (parallel, fast)
   security:
@@ -185,11 +198,106 @@ jobs:
       - name: Verify Storybook output
         run: test -d apps/storybook/dist && echo "Storybook built successfully"
 
+  # Vitest browser mode (real Chromium), sharded by 4 — behavior/structure/ARIA
+  # on an unstyled DOM. Ordered after lint + types (same tier as build/storybook).
+  # `!contains(needs.*.result, 'failure')` keeps it runnable when upstream jobs
+  # were cleanly skipped (e.g. a storybook-only PR skips the webkit-scoped lint).
+  tests:
+    name: Vitest browser (shard ${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    needs: [changes, lint, types]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.tests == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: packages/webkit
+
+      - name: Run tests (shard ${{ matrix.shard }})
+        run: pnpm exec vitest run --shard=${{ matrix.shard }}/4
+        working-directory: packages/webkit
+
+  # Visual regression — the styled layer: every story screenshotted via
+  # @storybook/test-runner and compared against the committed linux baselines
+  # (test:visual:ci fails on any missing baseline). Last link of the chain:
+  # pixels only run once behavior (tests) and both builds are green. Baseline
+  # regeneration lives in app-storybook-test-visual-regression.yml (dispatch).
+  visual:
+    name: Storybook visual tests
+    runs-on: ubuntu-latest
+    needs: [changes, security, lint, types, build, storybook, tests]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/storybook
+
+      - name: Build Storybook
+        run: pnpm run storybook:build
+
+      - name: Run visual tests
+        run: pnpm --filter storybook run test:visual:ci
+
+      - name: Upload diff output on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-output
+          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          retention-days: 7
+          if-no-files-found: ignore
+
   # Summary Gate — passes when every upstream job is success or cleanly skipped.
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint, types, build, storybook]
+    needs: [changes, security, lint, types, build, storybook, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -200,6 +308,8 @@ jobs:
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
             [storybook]="${{ needs.storybook.result }}"
+            [tests]="${{ needs.tests.result }}"
+            [visual]="${{ needs.visual.result }}"
           )
           failed=0
           for job in "${!results[@]}"; do

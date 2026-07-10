@@ -1,24 +1,17 @@
 name: Visual Regression @ Storybook
 
-# Styled layer of the test architecture: the Vitest browser suite
-# (package-webkit-test.yml) owns behavior/structure/ARIA on an unstyled DOM;
-# this workflow owns pixels — every story is screenshotted via
-# @storybook/test-runner and compared against the committed linux baselines
-# in apps/storybook/.storybook/test-visual/__image_snapshots__/linux/.
+# Baseline tool for the visual layer. The PR/push CHECK lives in the ordered
+# governance pipeline (governance.yml → job "visual", gated by the Governance
+# Gate); this workflow is dispatch-only and exists to regenerate the committed
+# linux baselines in apps/storybook/.storybook/test-visual/__image_snapshots__/linux/.
 #
-# Baseline lifecycle: baselines are platform-specific, so ONLY this workflow
-# (or a linux container) may generate them. To bootstrap or intentionally
-# update: run this workflow manually with update_baselines=true, download the
-# "visual-baselines-linux" artifact and commit its contents.
+# Baselines are platform-specific, so ONLY this workflow (or a linux container)
+# may generate them. To bootstrap or intentionally update: run it with
+# update_baselines=true, download the "visual-baselines-linux" artifact and
+# commit its contents. Dispatching with the default (false) runs a one-off
+# comparison against the committed baselines, outside any PR.
 
 on:
-  pull_request:
-    branches: [dev]
-    paths:
-      - 'packages/webkit/**'
-      - 'packages/theme/**'
-      - 'packages/icons/**'
-      - 'apps/storybook/**'
   workflow_dispatch:
     inputs:
       update_baselines:
