@@ -40,14 +40,12 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     it('attaches Root, List, Item and Separator to the compound root', () => {
       // Grounded in index.js: Breadcrumb.Root/List/Item/Separator are assigned.
       expect(Breadcrumb).toBeTruthy()
-      if (Breadcrumb) {
-        expect(Breadcrumb.Root).toBeTruthy()
-        expect(Breadcrumb.List).toBe(BreadcrumbList)
-        expect(Breadcrumb.Item).toBe(BreadcrumbItem)
-        expect(Breadcrumb.Separator).toBe(BreadcrumbSeparator)
-        // The compound default export IS the root component.
-        expect(Breadcrumb).toBe(Breadcrumb.Root)
-      }
+      expect(Breadcrumb.Root).toBeTruthy()
+      expect(Breadcrumb.List).toBe(BreadcrumbList)
+      expect(Breadcrumb.Item).toBe(BreadcrumbItem)
+      expect(Breadcrumb.Separator).toBe(BreadcrumbSeparator)
+      // The compound default export IS the root component.
+      expect(Breadcrumb).toBe(Breadcrumb.Root)
     })
   })
 
