@@ -1,7 +1,7 @@
 import DeploySuccess from '@aziontech/webkit/deploy-success'
 
-import { toSfc } from '../../../_shared/story-source'
-import { completeDeployLog } from '../../code/log-view/complete-deploy-log.js'
+import { toSfc } from '../_shared/story-source.js'
+import { completeDeployLog } from '../components/code/log-view/complete-deploy-log.js'
 
 const defaultSteps = [
   {
@@ -37,7 +37,7 @@ const IMPORT = [
 ]
 
 const meta = {
-  title: 'Components/Templates/DeploySuccess',
+  title: 'Templates/DeploySuccess',
   component: DeploySuccess,
   tags: ['autodocs'],
   parameters: {
