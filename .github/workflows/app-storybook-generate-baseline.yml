@@ -1,0 +1,82 @@
+name: Storybook Regenerate Baseline
+
+# Baseline tool for the visual layer. The PR/push CHECK lives in the ordered
+# governance pipeline (governance.yml → job "visual", gated by the Governance
+# Gate); this workflow is dispatch-only and exists to regenerate the committed
+# linux baselines in apps/storybook/.storybook/test-visual/__image_snapshots__/linux/.
+#
+# Baselines are platform-specific, so ONLY this workflow (or a linux container)
+# may generate them. To bootstrap or intentionally update: run it with
+# update_baselines=true, download the "visual-baselines-linux" artifact and
+# commit its contents. Dispatching with the default (false) runs a one-off
+# comparison against the committed baselines, outside any PR.
+
+on:
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: 'Regenerate linux baselines and upload them as an artifact (commit manually)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: Storybook Generate Baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/storybook
+
+      - name: Build Storybook
+        run: pnpm run storybook:build
+
+      - name: Regenerate baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        run: pnpm --filter storybook run test:visual:update
+
+      - name: Upload regenerated baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines-linux
+          path: apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
+          retention-days: 7
+
+      - name: Upload diff output on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-output
+          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          retention-days: 7
+          if-no-files-found: ignore
