@@ -1,5 +1,5 @@
-import { addons } from '@storybook/manager-api';
-import { create } from '@storybook/theming';
+import { addons } from '@storybook/manager-api'
+import { create } from '@storybook/theming'
 
 const azionTheme = create({
   base: 'dark',
@@ -51,8 +51,8 @@ const azionTheme = create({
 `,
   brandUrl: 'https://webkit.azion.app',
   brandImage: undefined,
-  brandTarget: '_self',
-});
+  brandTarget: '_self'
+})
 
 addons.setConfig({
   theme: azionTheme,
@@ -60,5 +60,5 @@ addons.setConfig({
   enableShortcuts: true,
   showToolbar: true,
   showPanel: true,
-  showNav: true,
-});
+  showNav: true
+})

@@ -112,11 +112,17 @@ export const TOKEN_CHECKS = [
 
 export const TOKEN_MESSAGES = Object.fromEntries(TOKEN_CHECKS.map((c) => [c.id, c.message]))
 
-/** File filter matching the write-time hook: component sources, excluding the wip/ zone. */
+/**
+ * File filter matching the write-time hook: component sources, excluding the wip/ zone
+ * and test files. Tests legitimately reference raw class strings as assertions
+ * (`toContain('text-sm')`) and use `@ts-expect-error` to exercise the type surface, so
+ * the token discipline does not apply to `*.test.*` / `*.spec.*` or the `src/test/` helpers.
+ */
 export function tokenChecksApply(rel) {
   return (
     rel.startsWith('packages/webkit/src/components/') &&
     !rel.startsWith('packages/webkit/src/components/wip/') &&
+    !/\.(test|spec)\.[tj]s$/.test(rel) &&
     /\.(vue|css|scss|ts)$/.test(rel)
   )
 }

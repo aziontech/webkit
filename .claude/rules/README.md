@@ -1,6 +1,6 @@
 # Rules — index
 
-The 24 construction standards, each a single `.md` in this folder. `scope: general` ships to
+The 25 construction standards, each a single `.md` in this folder. `scope: general` ships to
 consuming projects; `scope: webkit` is internal to the design system. The **machine-readable
 source of truth** for rule → enforcement is
 [`../hooks/_lib/standards.mjs`](../hooks/_lib/standards.mjs), whose pairing with the rule
@@ -24,7 +24,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
 | [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `dev` | commitlint · branch-protection |
 
-## Construction (13)
+## Construction (14)
 
 | Rule | Scope | Fixes | Blocks via |
 |---|---|---|---|
@@ -41,5 +41,6 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [testid](./testid.md) | general | `data-testid` derived `<category>-<name>` | spec-compliance · ratchet |
 | [deprecation](./deprecation.md) | general | `@deprecated` → one major → remove | authoring · ratchet · lint |
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
+| [testing](./testing.md) | webkit | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
 
-**Split:** 14 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 10 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).
+**Split:** 14 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 11 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).

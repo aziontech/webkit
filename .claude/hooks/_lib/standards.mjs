@@ -275,6 +275,17 @@ export const STANDARDS = [
       { surface: 'review', by: 'required-approval' }
     ],
     note: 'size-limit config present; CI job pending activation, review gates it meanwhile.'
+  },
+  {
+    id: 'testing',
+    kind: 'construction',
+    scope: 'webkit',
+    enforce: [
+      { surface: 'write-time', by: 'validate-references' },
+      { surface: 'ci', by: 'vitest' },
+      { surface: 'review', by: 'required-approval' }
+    ],
+    note: 'Every component ships a <name>.test.ts (Vitest browser mode via Playwright Chromium, the Storybook story as fixture, axe-core on the tree). The sharded Vitest browser CI job runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered.'
   }
 ]
 

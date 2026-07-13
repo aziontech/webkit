@@ -78,3 +78,15 @@ CLAUDE.md
 packages/icons/tmp/
 tmp
 .tmp
+
+# Vitest browser-mode failure screenshots (regenerated on demand)
+**/__screenshots__/
+# Vitest browser-mode attachments (failure artifacts, same nature as __screenshots__)
+packages/webkit/.vitest-attachments/
+
+# Visual regression (Storybook test-runner) — linux baselines are the CI
+# contract and ARE committed; other platforms and diff output are local-only.
+apps/storybook/.storybook/test-visual/__diff_output__/
+apps/storybook/.storybook/test-visual/__image_snapshots__/*
+!apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
+apps/storybook/.storybook/test-visual/__image_snapshots__/darwin/

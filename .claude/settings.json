@@ -79,6 +79,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/validate-spec-compliance.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/enforce-test-exists.mjs"
           }
         ]
       }

@@ -1,4 +1,4 @@
-import { tokenRef } from '../../scripts/refs.js';
+import { tokenRef } from '../../scripts/refs.js'
 
 const shared = {
   'surface-0': tokenRef('primitives.base.white'),
@@ -12,12 +12,12 @@ const shared = {
   'surface-700': tokenRef('primitives.gray.700'),
   'surface-800': tokenRef('primitives.gray.800'),
   'surface-900': tokenRef('primitives.gray.900'),
-  'surface-950': tokenRef('primitives.gray.950'),
-};
+  'surface-950': tokenRef('primitives.gray.950')
+}
 
 export const surfaces = {
   light: shared,
-  dark: shared,
-};
+  dark: shared
+}
 
-export default { surfaces };
+export default { surfaces }

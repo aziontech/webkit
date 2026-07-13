@@ -104,7 +104,10 @@ const meta = {
     onClick: {
       action: 'click',
       description: 'Emitted when an option row is activated.',
-      table: { category: 'events', type: { summary: '(event: MouseEvent, item: { label: string; href: string })' } }
+      table: {
+        category: 'events',
+        type: { summary: '(event: MouseEvent, item: { label: string; href: string })' }
+      }
     },
     default: {
       control: false,

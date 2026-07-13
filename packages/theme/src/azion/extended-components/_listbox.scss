@@ -24,8 +24,7 @@
       outline-offset: $focusOutlineOffset !important;
       box-shadow: $focusShadow !important;
     }
-    .p-listbox-item{
-      
+    .p-listbox-item {
       .p-listbox-empty-message {
         color: var(--text-color-empty);
         font-size: 14px;

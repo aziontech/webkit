@@ -6819,16 +6819,7 @@
       "subcomponents": [
         "@aziontech/webkit/dropdown-trigger",
         "@aziontech/webkit/dropdown-group",
-        "@aziontech/webkit/dropdown-option",
-        "@aziontech/webkit/dropdown-menu",
-        "@aziontech/webkit/dropdown-menu-trigger",
-        "@aziontech/webkit/dropdown-menu-portal",
-        "@aziontech/webkit/dropdown-menu-content",
-        "@aziontech/webkit/dropdown-menu-group",
-        "@aziontech/webkit/dropdown-menu-item",
-        "@aziontech/webkit/dropdown-menu-separator",
-        "@aziontech/webkit/dropdown-menu-from-model",
-        "@aziontech/webkit/dropdown-menu-factory"
+        "@aziontech/webkit/dropdown-option"
       ],
       "category": "navigation",
       "structure": "composition",
@@ -8470,69 +8461,6 @@
       "kind": "subcomponent",
       "parent": "popover",
       "treeShakeableImport": "@aziontech/webkit/popover-footer"
-    },
-    "dropdown-menu": {
-      "import": "@aziontech/webkit/dropdown-menu",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu"
-    },
-    "dropdown-menu-trigger": {
-      "import": "@aziontech/webkit/dropdown-menu-trigger",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-trigger.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-trigger"
-    },
-    "dropdown-menu-portal": {
-      "import": "@aziontech/webkit/dropdown-menu-portal",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-portal.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-portal"
-    },
-    "dropdown-menu-content": {
-      "import": "@aziontech/webkit/dropdown-menu-content",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-content.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-content"
-    },
-    "dropdown-menu-group": {
-      "import": "@aziontech/webkit/dropdown-menu-group",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-group.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-group"
-    },
-    "dropdown-menu-item": {
-      "import": "@aziontech/webkit/dropdown-menu-item",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-item.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-item"
-    },
-    "dropdown-menu-separator": {
-      "import": "@aziontech/webkit/dropdown-menu-separator",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-separator.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-separator"
-    },
-    "dropdown-menu-from-model": {
-      "import": "@aziontech/webkit/dropdown-menu-from-model",
-      "target": "./src/components/overlay/dropdown-menu/dropdown-menu-from-model.vue",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-from-model"
-    },
-    "dropdown-menu-factory": {
-      "import": "@aziontech/webkit/dropdown-menu-factory",
-      "target": "./src/components/overlay/dropdown-menu/factory.ts",
-      "kind": "subcomponent",
-      "parent": "dropdown",
-      "treeShakeableImport": "@aziontech/webkit/dropdown-menu-factory"
     },
     "deploy-success": {
       "import": "@aziontech/webkit/deploy-success",

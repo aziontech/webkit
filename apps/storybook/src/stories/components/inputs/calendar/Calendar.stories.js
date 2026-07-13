@@ -162,7 +162,8 @@ const meta = {
     },
     presets: {
       control: false,
-      description: 'Consumer-provided shortcuts; when present the trigger becomes a two-part control.',
+      description:
+        'Consumer-provided shortcuts; when present the trigger becomes a two-part control.',
       table: { category: 'props', type: { summary: 'CalendarPresetItem[]' } }
     },
     showTime: {
@@ -177,7 +178,8 @@ const meta = {
     },
     timezone: {
       control: 'text',
-      description: 'Selected IANA timezone (v-model:timezone). Empty resolves to the user local zone; set a specific IANA name to pin it.',
+      description:
+        'Selected IANA timezone (v-model:timezone). Empty resolves to the user local zone; set a specific IANA name to pin it.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     timezones: {
@@ -197,7 +199,8 @@ const meta = {
     },
     showApply: {
       control: 'boolean',
-      description: 'Stages edits in a draft and requires Apply to commit; when false, commits immediately.',
+      description:
+        'Stages edits in a draft and requires Apply to commit; when false, commits immediately.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
     },
     period: {
@@ -267,7 +270,8 @@ export const Default = {
     docs: {
       source: { code: DEFAULT_SOURCE },
       description: {
-        story: 'Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; set `timezone` to pin a specific IANA zone).'
+        story:
+          'Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; set `timezone` to pin a specific IANA zone).'
       }
     }
   }
@@ -330,7 +334,8 @@ export const Horizontal = {
     docs: {
       source: { code: HORIZONTAL_SOURCE },
       description: {
-        story: 'Horizontal layout places the Start/End fields and Apply beside the calendar, with a full-height divider.'
+        story:
+          'Horizontal layout places the Start/End fields and Apply beside the calendar, with a full-height divider.'
       }
     }
   }
@@ -358,7 +363,8 @@ export const WithPresets = {
     docs: {
       source: { code: PRESETS_SOURCE },
       description: {
-        story: 'Consumer presets drive the two-part trigger: the left dropdown applies a range in one click; the right calendar fine-tunes it.'
+        story:
+          'Consumer presets drive the two-part trigger: the left dropdown applies a range in one click; the right calendar fine-tunes it.'
       }
     }
   }
@@ -382,7 +388,8 @@ export const MinMax = {
     docs: {
       source: { code: MIN_MAX_SOURCE },
       description: {
-        story: 'The `min` and `max` bounds (±2 months) disable days outside the allowed window and clamp navigation.'
+        story:
+          'The `min` and `max` bounds (±2 months) disable days outside the allowed window and clamp navigation.'
       }
     }
   }
@@ -405,7 +412,9 @@ export const WithTime = {
   parameters: {
     docs: {
       source: { code: TIME_SOURCE },
-      description: { story: 'Start/End time fields round-trip the hours and minutes of each endpoint.' }
+      description: {
+        story: 'Start/End time fields round-trip the hours and minutes of each endpoint.'
+      }
     }
   }
 }
@@ -427,7 +436,9 @@ export const WithTimezone = {
   parameters: {
     docs: {
       source: { code: TIMEZONE_SOURCE },
-      description: { story: 'A timezone selector (IANA zones) labels the selection; defaults to the local zone.' }
+      description: {
+        story: 'A timezone selector (IANA zones) labels the selection; defaults to the local zone.'
+      }
     }
   }
 }
@@ -447,7 +458,8 @@ export const SelectPeriod = {
     docs: {
       source: { code: PERIOD_SOURCE },
       description: {
-        story: 'Select Period mode: pick a relative span (`45m`, `last month`) and the trigger shows the token beside the resolved window (`14:44 – 23:59`).'
+        story:
+          'Select Period mode: pick a relative span (`45m`, `last month`) and the trigger shows the token beside the resolved window (`14:44 – 23:59`).'
       }
     }
   }
@@ -467,7 +479,9 @@ export const Clearable = {
   parameters: {
     docs: {
       source: { code: CLEARABLE_SOURCE },
-      description: { story: 'A clear control on the trigger empties the committed selection when present.' }
+      description: {
+        story: 'A clear control on the trigger empties the committed selection when present.'
+      }
     }
   }
 }

@@ -7,5 +7,5 @@ export {
   backgroundTokens,
   textTokens,
   borderTokens,
-  playgroundColorTokens,
-} from '../utils/from-tokens.js';
+  playgroundColorTokens
+} from '../utils/from-tokens.js'

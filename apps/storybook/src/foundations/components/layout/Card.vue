@@ -1,26 +1,26 @@
 <script setup>
-/**
- * Card - Generic card component for documentation
- * Used for architecture diagrams, info boxes, etc.
- */
-defineProps({
-  overline: {
-    type: String,
-    default: ''
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  href: {
-    type: String,
-    default: ''
-  },
-  hoverable: {
-    type: Boolean,
-    default: false
-  }
-})
+  /**
+   * Card - Generic card component for documentation
+   * Used for architecture diagrams, info boxes, etc.
+   */
+  defineProps({
+    overline: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    href: {
+      type: String,
+      default: ''
+    },
+    hoverable: {
+      type: Boolean,
+      default: false
+    }
+  })
 </script>
 
 <template>
@@ -42,10 +42,7 @@ defineProps({
     </p>
     <h3
       v-if="title"
-      :class="[
-        'text-default m-0 mb-2',
-        href ? 'text-heading-md' : 'text-body-sm font-semibold'
-      ]"
+      :class="['text-default m-0 mb-2', href ? 'text-heading-md' : 'text-body-sm font-semibold']"
     >
       {{ title }}
     </h3>

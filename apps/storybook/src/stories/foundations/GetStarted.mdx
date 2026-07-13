@@ -83,6 +83,16 @@ Browse every component in the **Components** section of this Storybook — the *
 story is interactive, with controls for every prop, and each "Show code" snippet runs
 as-is when pasted into your app.
 
+**Where the foundation tokens live** (in `@aziontech/theme`):
+
+| Page             | Source in `@aziontech/theme`               |
+| ---------------- | ------------------------------------------ |
+| Primitive Colors | `src/tokens/primitives/colors/`            |
+| Theme Colors     | `src/tokens/theme/` + `semantic/colors.js` |
+| Typography       | `src/tokens/semantic/texts.data.js`        |
+| Spacing          | `src/tokens/semantic/spacings.data.js`     |
+| Responsive       | `src/tokens/primitives/breakpoints.js`     |
+
 ## 4. Stay on-pattern
 
 `init` enables the webkit ESLint preset, where **every rule is an `error`** — wrong

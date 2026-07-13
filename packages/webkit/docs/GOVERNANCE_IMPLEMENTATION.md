@@ -305,11 +305,11 @@ Comprehensive CI/CD pipeline with parallel job execution.
 
 #### Trigger Strategy
 
-| Trigger                           | Reason                                                                                                          |
+| Trigger | Reason |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| **Pull requests to main and dev** | Catches issues in PRs before merge. Prevents broken code on the integration branches.                           |
-| **Pushes to main and dev**        | Double-checks even after PR merge. Catches direct commits (should be rare).                                     |
-| **`changes` gating job**          | `dorny/paths-filter` computes `webkit` (package + lockfile) and `toolkit` (package + `.specs/` + `.claude/hooks | rules/` + storybook) outputs; downstream jobs short-circuit when nothing relevant moved, while the required checks stay registered. |
+| **Pull requests to main and dev** | Catches issues in PRs before merge. Prevents broken code on the integration branches. |
+| **Pushes to main and dev** | Double-checks even after PR merge. Catches direct commits (should be rare). |
+| **`changes` gating job** | `dorny/paths-filter` computes `webkit` (package + lockfile) and `toolkit` (package + `.specs/` + `.claude/hooks | rules/` + storybook) outputs; downstream jobs short-circuit when nothing relevant moved, while the required checks stay registered. |
 
 #### Performance Optimizations
 

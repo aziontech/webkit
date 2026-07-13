@@ -7,7 +7,7 @@ This document is the **map of the whole system**, in two parts:
 - **[Part 2 — Implementation](#part-2--implementation)**: how a product team _adopts and
   uses_ webkit — one `init`, then guided (MCP + docs) and enforced (lint + CI) usage.
 
-Both parts run on the same **rule system**: 24 standards, each one a rule document paired
+Both parts run on the same **rule system**: 25 standards, each one a rule document paired
 with a blocking gate. Rules are scoped **`general`** (they apply to any Vue codebase and
 ship to consumer projects) or **`webkit`** (internal to authoring the design system). The
 [roadmap](#roadmap--the-standards-pack) is to extract the `general` set into a standalone
@@ -147,8 +147,9 @@ Key properties:
   `Object.assign(Root, { Part })`, the flat compound export, and the tree-shakeable
   `<name>-root` export ([compound-api](../../../.claude/rules/compound-api.md)).
 - **Double-entry bookkeeping** — Step 7 re-derives the public API from the written files
-with an independent parser and diffs it against the spec; hook and echo disagreeing is
-itself a failure state (`degraded`).
+  with an independent parser and diffs it against the spec; hook and echo disagreeing is
+  itself a failure state (`degraded`).
+
 </details>
 
 ### Stage 4 — Write-time gates
@@ -413,8 +414,9 @@ major ahead; `doctor` reports the resolved versions to pin.
   pinned; after installing, `doctor` prints the resolved versions with suggested `^x.y.z`
   pins.
 - Both published channels resolve identically (`@aziontech/webkit` release,
-`@aziontech/webkit.dev` dev) — the lint import-prefix and MCP answers follow whichever
-is installed.
+  `@aziontech/webkit.dev` dev) — the lint import-prefix and MCP answers follow whichever
+  is installed.
+
 </details>
 
 ---
@@ -458,7 +460,7 @@ Construction patterns for **any** Vue component, anywhere. These are the future
 | [testid](../../../.claude/rules/testid.md)                           | overridable `data-testid` derived `<category>-<name>`                                      |
 | [deprecation](../../../.claude/rules/deprecation.md)                 | `@deprecated` naming the replacement → one major → removal                                 |
 
-### `scope: webkit` — 10 standards (internal to the design system)
+### `scope: webkit` — 11 standards (internal to the design system)
 
 How **this repo** authors, documents, and releases; they never ship to consumers.
 
@@ -474,6 +476,7 @@ How **this repo** authors, documents, and releases; they never ship to consumers
 | [release-types](../../../.claude/rules/release-types.md)       | commit type ⇄ version bump identical across 4 sources                              |
 | [git-workflow](../../../.claude/rules/git-workflow.md)         | branches/PRs only via `/create-branch` + `/open-pr`, base `dev`                    |
 | [bundle-budget](../../../.claude/rules/bundle-budget.md)       | size-limit per entry; tree-shaking preserved                                       |
+| [testing](../../../.claude/rules/testing.md)                   | one `<name>.test.ts` per component — Vitest browser mode, story fixture, axe       |
 
 ---
 
@@ -499,7 +502,7 @@ practices**, adoptable by any project (with or without webkit components).
 | AI guidance bundle         | `cli-templates/claude/`                              | the pack's `init` bundle                  |
 | Registry + invariant       | `standards.mjs` + `invariant.test.mjs`               | the pack's registry; webkit re-imports it |
 
-**What stays in webkit**: the 10 `webkit`-scope standards, the spec pipeline
+**What stays in webkit**: the 11 `webkit`-scope standards, the spec pipeline
 (`.specs/`, `/spec-create`, `/component-create`), the catalog-backed usage rules
 (`valid-import-path`, `prefer-tree-shakeable-root`, …), the MCP server, and `catalog.json`
 — these are about _this_ design system, not about construction in general.
@@ -528,7 +531,7 @@ a non-webkit repo can adopt the pack with one command.
 
 | Concern                          | Where                                                                                                                                                                             |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Rule documents (24)              | [`.claude/rules/`](../../../.claude/rules/) — index in its [README](../../../.claude/rules/README.md)                                                                             |
+| Rule documents (25)              | [`.claude/rules/`](../../../.claude/rules/) — index in its [README](../../../.claude/rules/README.md)                                                                             |
 | Machine registry (scope + gates) | [`.claude/hooks/_lib/standards.mjs`](../../../.claude/hooks/_lib/standards.mjs)                                                                                                   |
 | Write-time hooks                 | [`.claude/hooks/`](../../../.claude/hooks/) — [README](../../../.claude/hooks/README.md)                                                                                          |
 | Shared check engines             | [`src/eslint-plugin/*.js`](../src/eslint-plugin/) + [`.claude/hooks/_lib/*.mjs`](../../../.claude/hooks/_lib/)                                                                    |

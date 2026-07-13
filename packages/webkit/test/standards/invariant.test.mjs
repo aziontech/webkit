@@ -150,7 +150,8 @@ const CI_ENFORCERS = new Set([
   'size-limit',
   'type-check',
   'vuejs-accessibility',
-  'storybook-build'
+  'storybook-build',
+  'vitest'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {

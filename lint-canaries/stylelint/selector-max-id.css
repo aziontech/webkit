@@ -1,0 +1,4 @@
+/* CANARY — must keep failing selector-max-id (no #id selectors). */
+#toolbar {
+  display: flex;
+}
