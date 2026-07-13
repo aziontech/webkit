@@ -15,7 +15,7 @@
  * EXACT rule it guards, so a parse error or an unrelated finding cannot fake a
  * pass.
  *
- * Runs in CI (governance.yml → lint-canary job) . Locally:
+ * Runs in CI (governance.yml → lint-canary job).  Locally:
  *   node lint-canaries/index.js
  *
  * Docs: lint-canaries/README.md · packages/webkit/docs/DOC_LINTS.md
@@ -415,7 +415,7 @@ if (failures.length > 0) {
 A canary that "passes" its lint means the rule was weakened, removed, or its
 behavior changed with a dependency bump. If the relaxation is INTENTIONAL,
 update or delete the fixture and its manifest entry in
-lint-canaries/run-lint-canaries.mjs, and update
+lint-canaries/index.js, and update
 packages/webkit/docs/DOC_LINTS.md in the same PR.`)
   process.exit(1)
 }

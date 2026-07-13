@@ -22,14 +22,14 @@ The job triggers when anything that can change lint behavior moves: the four con
 Run locally when touching lint configs:
 
 ```sh
-node lint-canaries/run-lint-canaries.mjs
+node lint-canaries/index.js
 ```
 
 ## Layout
 
 ```
 lint-canaries/
-  run-lint-canaries.mjs   # runner + manifest (fixture → expected rule)
+  index.js   # runner + manifest (fixture → expected rule)
   eslint/
     vue-correctness/      # DOC_LINTS §2 — one .vue per vue/* rule
     accessibility/        # §3 — vuejs-accessibility/*
@@ -54,8 +54,8 @@ Do **not** add `lint-canaries/` to any lint script's target, and do not "fix" th
 ## Adding / removing a canary
 
 1. Add the minimal fixture under the linter's directory (one rule per file; extra incidental findings are fine — the runner only asserts the expected rule).
-2. Register it in the manifest at the top of [`run-lint-canaries.mjs`](./run-lint-canaries.mjs) with the exact rule id.
-3. Run `node lint-canaries/run-lint-canaries.mjs` — it must report the new entry as "still broken".
+2. Register it in the manifest at the top of [`index.js`](./index.js) with the exact rule id.
+3. Run `node lint-canaries/index.js` — it must report the new entry as "still broken".
 4. If you are _intentionally_ relaxing a rule: delete the fixture + manifest entry and update `DOC_LINTS.md` in the same PR.
 
 ## Known gaps (deliberate)
