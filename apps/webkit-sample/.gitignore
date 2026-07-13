@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Editor / OS
+.cursor/
+.DS_Store
+
+# Paths added by Azion CLI
+.edge/
+.vulcan
+.open-next
