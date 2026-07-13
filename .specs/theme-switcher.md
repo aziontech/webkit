@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 267f04e965b725c208edfd8ceec7307cc617aad2fd0c80ff29473b2387798758
+checksum: e80167c9153131f7a04f29912319657592b0f80453ffb93ae7ad2a5568d20203
 created: 2026-07-13
 last_updated: 2026-07-13
 ---
@@ -83,7 +83,7 @@ const theme = ref('system')
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `--border-width-default` (0.8px) | native `border` (1px) | `TODO: tokenizar border-width` |
+| `--border-width-default` (0.8px) | `border-[length:var(--border-width-default)]` (real compiled theme token) | `TODO: document --border-width-default in DESIGN.md` |
 
 ## Accessibility (WCAG 2.1 AA)
 
