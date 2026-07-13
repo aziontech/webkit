@@ -479,8 +479,8 @@ const GROUP_IMPORTS = [
 const groupRow = (person) => `  <Item>
     <Item.Media>
       <Avatar src="${person.avatar}" alt="${person.username}" label="${person.username
-  .charAt(0)
-  .toUpperCase()}" size="medium" />
+        .charAt(0)
+        .toUpperCase()}" size="medium" />
     </Item.Media>
     <Item.Content class="gap-[var(--spacing-1)]">
       <Item.Title>${person.username}</Item.Title>

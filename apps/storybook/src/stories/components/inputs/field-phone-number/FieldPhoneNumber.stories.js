@@ -23,7 +23,8 @@ const meta = {
   argTypes: {
     modelValue: {
       control: 'text',
-      description: 'Two-way bound national number as digits only (no dial code, no mask characters).',
+      description:
+        'Two-way bound national number as digits only (no dial code, no mask characters).',
       table: { category: 'props', type: { summary: 'string' } }
     },
     country: {
@@ -43,7 +44,8 @@ const meta = {
     },
     placeholder: {
       control: 'text',
-      description: "Placeholder forwarded to the internal input. Falls back to the country's mask when empty.",
+      description:
+        "Placeholder forwarded to the internal input. Falls back to the country's mask when empty.",
       table: { category: 'props', type: { summary: 'string' } }
     },
     helperText: {
@@ -54,7 +56,8 @@ const meta = {
     },
     disabled: {
       control: 'boolean',
-      description: 'Disables the dial-code Select and the internal input; switches helper to `kind="disabled"`.',
+      description:
+        'Disables the dial-code Select and the internal input; switches helper to `kind="disabled"`.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     readonly: {
@@ -64,7 +67,8 @@ const meta = {
     },
     required: {
       control: 'boolean',
-      description: 'Adds the Required tag to Label, propagates `required` to InputGroup and native input.',
+      description:
+        'Adds the Required tag to Label, propagates `required` to InputGroup and native input.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     invalid: {

@@ -1,18 +1,18 @@
 <script setup>
-/**
- * PageHeader - Page title and description component
- * Used at the top of foundation documentation pages
- */
-defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    default: ''
-  }
-})
+  /**
+   * PageHeader - Page title and description component
+   * Used at the top of foundation documentation pages
+   */
+  defineProps({
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      default: ''
+    }
+  })
 </script>
 
 <template>

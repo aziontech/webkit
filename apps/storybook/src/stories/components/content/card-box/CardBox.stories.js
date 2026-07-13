@@ -125,7 +125,8 @@ export const Flush = {
   parameters: {
     docs: {
       description: {
-        story: 'Set `padded=false` for edge-to-edge content such as an ItemList with full-width dividers.'
+        story:
+          'Set `padded=false` for edge-to-edge content such as an ItemList with full-width dividers.'
       }
     }
   }

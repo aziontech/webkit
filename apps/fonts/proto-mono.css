@@ -1,11 +1,13 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-Light.eot');
-  src: local('Proto Mono Light'), local('https://fonts.azion.com/ProtoMono-Light'),
-      url('https://fonts.azion.com/ProtoMono-Light.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono- .woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-Light.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-Light.ttf') format('truetype');
+  src:
+    local('Proto Mono Light'),
+    local('https://fonts.azion.com/ProtoMono-Light'),
+    url('https://fonts.azion.com/ProtoMono-Light.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono- .woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-Light.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -14,11 +16,13 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.eot');
-  src: local('Proto Mono Semi Bold Shadow'), local('https://fonts.azion.com/ProtoMono-SemiBoldShadow'),
-      url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.ttf') format('truetype');
+  src:
+    local('Proto Mono Semi Bold Shadow'),
+    local('https://fonts.azion.com/ProtoMono-SemiBoldShadow'),
+    url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-SemiBoldShadow.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -27,11 +31,13 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-LightShadow.eot');
-  src: local('Proto Mono Light Shadow'), local('https://fonts.azion.com/ProtoMono-LightShadow'),
-      url('https://fonts.azion.com/ProtoMono-LightShadow.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono-LightShadow.woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-LightShadow.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-LightShadow.ttf') format('truetype');
+  src:
+    local('Proto Mono Light Shadow'),
+    local('https://fonts.azion.com/ProtoMono-LightShadow'),
+    url('https://fonts.azion.com/ProtoMono-LightShadow.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono-LightShadow.woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-LightShadow.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-LightShadow.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -40,11 +46,13 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-RegularShadow.eot');
-  src: local('Proto Mono Regular Shadow'), local('https://fonts.azion.com/ProtoMono-RegularShadow'),
-      url('https://fonts.azion.com/ProtoMono-RegularShadow.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono-RegularShadow.woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-RegularShadow.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-RegularShadow.ttf') format('truetype');
+  src:
+    local('Proto Mono Regular Shadow'),
+    local('https://fonts.azion.com/ProtoMono-RegularShadow'),
+    url('https://fonts.azion.com/ProtoMono-RegularShadow.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono-RegularShadow.woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-RegularShadow.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-RegularShadow.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -53,11 +61,13 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-Regular.eot');
-  src: local('Proto Mono Regular'), local('https://fonts.azion.com/ProtoMono-Regular'),
-      url('https://fonts.azion.com/ProtoMono-Regular.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono-Regular.woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-Regular.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-Regular.ttf') format('truetype');
+  src:
+    local('Proto Mono Regular'),
+    local('https://fonts.azion.com/ProtoMono-Regular'),
+    url('https://fonts.azion.com/ProtoMono-Regular.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono-Regular.woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-Regular.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -66,11 +76,13 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-MediumShadow.eot');
-  src: local('Proto Mono Medium Shadow'), local('https://fonts.azion.com/ProtoMono-MediumShadow'),
-      url('https://fonts.azion.com/ProtoMono-MediumShadow.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono-MediumShadow.woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-MediumShadow.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-MediumShadow.ttf') format('truetype');
+  src:
+    local('Proto Mono Medium Shadow'),
+    local('https://fonts.azion.com/ProtoMono-MediumShadow'),
+    url('https://fonts.azion.com/ProtoMono-MediumShadow.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono-MediumShadow.woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-MediumShadow.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-MediumShadow.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -79,11 +91,13 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-SemiBold.eot');
-  src: local('Proto Mono Semi Bold'), local('https://fonts.azion.com/ProtoMono-SemiBold'),
-      url('https://fonts.azion.com/ProtoMono-SemiBold.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono-SemiBold.woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-SemiBold.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-SemiBold.ttf') format('truetype');
+  src:
+    local('Proto Mono Semi Bold'),
+    local('https://fonts.azion.com/ProtoMono-SemiBold'),
+    url('https://fonts.azion.com/ProtoMono-SemiBold.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono-SemiBold.woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-SemiBold.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -92,13 +106,14 @@
 @font-face {
   font-family: 'Proto Mono';
   src: url('https://fonts.azion.com/ProtoMono-Medium.eot');
-  src: local('Proto Mono Medium'), local('https://fonts.azion.com/ProtoMono-Medium'),
-      url('https://fonts.azion.com/ProtoMono-Medium.eot?#iefix') format('embedded-opentype'),
-      url('https://fonts.azion.com/ProtoMono-Medium.woff2') format('woff2'),
-      url('https://fonts.azion.com/ProtoMono-Medium.woff') format('woff'),
-      url('https://fonts.azion.com/ProtoMono-Medium.ttf') format('truetype');
+  src:
+    local('Proto Mono Medium'),
+    local('https://fonts.azion.com/ProtoMono-Medium'),
+    url('https://fonts.azion.com/ProtoMono-Medium.eot?#iefix') format('embedded-opentype'),
+    url('https://fonts.azion.com/ProtoMono-Medium.woff2') format('woff2'),
+    url('https://fonts.azion.com/ProtoMono-Medium.woff') format('woff'),
+    url('https://fonts.azion.com/ProtoMono-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
-
