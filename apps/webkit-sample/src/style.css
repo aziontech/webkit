@@ -1,0 +1,58 @@
+/* Theme tokens + generated semantic text classes (CSS custom properties,
+   .text-* component classes). Provides the design system contract. */
+@import '@aziontech/theme/globals.css';
+/* PrimeIcons — webkit components reference `pi pi-*` glyphs. */
+@import 'primeicons/primeicons.css';
+/* Azion icon library — monochrome brand/UI glyphs (`ai ai-*`, colored via
+   text color) plus multicolor brand logos (`ai-cor ai-*`, background-image). */
+@import '@aziontech/icons/azionicons';
+@import '@aziontech/icons/azionicons-color';
+
+/* Azion brand fonts from the official CDN (matches the theme's _fonts.scss).
+   Sora = body/headings (--font-sans); Proto Mono = overlines / big numbers
+   (--font-display). Proto Mono is proprietary and NOT on Google Fonts. */
+@font-face {
+  font-family: 'Sora';
+  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  margin: 0;
+  min-height: 100vh;
+}

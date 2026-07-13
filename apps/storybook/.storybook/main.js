@@ -45,14 +45,6 @@ const config = {
       config.plugins.splice(docgenIdx, 0, vue())
     }
 
-    // Dev channel: stories still import from '@aziontech/webkit/*'; redirect to the renamed
-    // workspace package '@aziontech/webkit.dev/*' so no story file needs to change.
-    config.resolve = config.resolve || {}
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      '@aziontech/webkit': '@aziontech/webkit.dev'
-    }
-
     // Enable dependency pre-bundling for faster rebuilds
     config.optimizeDeps = {
       ...config.optimizeDeps,

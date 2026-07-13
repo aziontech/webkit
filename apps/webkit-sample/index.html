@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" class="azion">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Azion brand fonts (Sora + Proto Mono) are declared via @font-face in
+         src/style.css and served from this CDN. Proto Mono is not on Google Fonts. -->
+    <link rel="preconnect" href="https://fonts.azion.com" crossorigin />
+    <!-- Apply the persisted (or system) theme before first paint to avoid a
+         flash. Mirrors the logic in src/theme.js — keep the storage key in sync. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("webkit-sample-theme");
+          var mode =
+            saved === "light" || saved === "dark" || saved === "system"
+              ? saved
+              : "system";
+          var dark =
+            mode === "dark" ||
+            (mode === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          var root = document.documentElement;
+          root.classList.add(dark ? "azion-dark" : "azion-light");
+          root.setAttribute("data-theme", dark ? "dark" : "light");
+        } catch (e) {}
+      })();
+    </script>
+    <title>Login · Azion WebKit</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
