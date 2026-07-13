@@ -161,9 +161,14 @@ const FOOTER_TEMPLATE = `<CardBox title="Card Title" class="w-full max-w-[512px]
     </p>
   </template>
   <template #footer>
-    <div class="flex w-full justify-end gap-[var(--spacing-sm)]">
-      <Button label="Cancel" kind="outlined" size="small" />
-      <Button label="Save" kind="outlined" size="small" />
+    <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
+      <span class="text-body-xs text-[var(--text-muted)]">
+        <a href="/docs" class="text-link">check documentation:</a>
+      </span>
+      <div class="flex gap-[var(--spacing-sm)]">
+        <Button label="Cancel" kind="outlined" size="small" />
+        <Button label="Save" kind="outlined" size="small" />
+      </div>
     </div>
   </template>
 </CardBox>`
