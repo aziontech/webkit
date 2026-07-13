@@ -1,9 +1,9 @@
-# @aziontech/webkit-cli
+# webkit CLI — `init` + `doctor`
 
-One command to adopt the [`@aziontech/webkit`](https://github.com/aziontech/webkit) design system in an existing project — correctly and performantly by construction.
+One command to adopt the [`@aziontech/webkit`](https://github.com/aziontech/webkit) design system in an existing project — correctly and performantly by construction. The CLI ships **inside** `@aziontech/webkit` (the `webkit` bin) — there is no separate CLI package.
 
 ```bash
-npx @aziontech/webkit-cli init
+npx @aziontech/webkit init
 ```
 
 It wires everything and then gets out of the way: after setup there are no extra commands to remember. The FORCE layer (ESLint + Stylelint) blocks incorrect usage on commit and in CI; the GUIDE layer (the webkit MCP + a Claude Code bundle) helps you and your AI write correct code from the start.
@@ -12,7 +12,7 @@ It wires everything and then gets out of the way: after setup there are no extra
 
 The plan is computed by reading your project first, then applied without ever clobbering your files — each step either writes something absent, merges/appends behind a marker, or just advises.
 
-1. **Dependencies** recorded in `package.json` — `@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons`, plus dev tools (`@aziontech/eslint-plugin-webkit`, `@aziontech/stylelint-config-webkit`, `eslint`, `stylelint`, `vue-eslint-parser`, `postcss-html`, `postcss-scss`, `husky`). It does not run an install — do that with your package manager.
+1. **Dependencies** recorded in `package.json` — `@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons`, plus dev tooling peers (`eslint`, `stylelint`, `vue-eslint-parser`, `@typescript-eslint/parser`, `postcss-html`, `postcss-scss`, `husky`). The ESLint plugin, Stylelint config, and MCP server all ship inside `@aziontech/webkit` (subpaths + bins), so no separate toolkit packages are added. It does not run an install — do that with your package manager.
 2. **`eslint.config.mjs`** (flat, ESM) wiring the webkit preset — or a merge snippet if an ESLint config already exists.
 3. **`.stylelintrc.json`** extending the webkit config, with the `.vue` / `.scss` custom syntaxes wired — or a merge snippet if a Stylelint config already exists.
 4. **`.mcp.json`** — the `webkit` MCP server merged in (other servers untouched).
@@ -23,18 +23,18 @@ The plan is computed by reading your project first, then applied without ever cl
 
 ## Options
 
-| Flag            | Effect                                                        |
-| --------------- | ------------------------------------------------------------- |
-| `--dry-run`     | Print the plan; write nothing.                                |
-| `--strict`      | Strict ESLint preset (default).                               |
-| `--recommended` | Recommended preset (correctness = error, performance = warn). |
+| Flag            | Effect                                                          |
+| --------------- | --------------------------------------------------------------- |
+| `--dry-run`     | Print the plan; write nothing.                                  |
+| `--strict`      | Strict ESLint preset (default).                                 |
+| `--recommended` | Recommended preset — every rule is still `error`, never `warn`. |
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
 
 ## `doctor` — check the wiring is healthy
 
 ```bash
-npx @aziontech/webkit-cli doctor
+npx @aziontech/webkit doctor
 ```
 
 The toolkit is fail-open by design (a missing catalog disables the lint rules rather than crashing), so a half-broken install is otherwise silent. `doctor` reads the project and reports each check as `OK` / `WARN` / `FAIL`:

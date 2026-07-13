@@ -67,7 +67,7 @@ Spawn the `validate-component` sub-agent. Runs `pnpm webkit:lint && type-check &
 ## Hard rules — enforced by hooks, the orchestrator must surface them
 
 - **No phantom imports.** `validate-references.mjs` blocks any `Write`/`Edit` that introduces an unresolved import.
-- **No HEX/Tailwind palette/raw typography/`class` in defineProps/`any`/`@ts-ignore`** in `packages/webkit/src/components/webkit/**`. `validate-tokens.mjs` enforces this.
+- **No HEX/Tailwind palette/raw typography/`class` in defineProps/`any`/`@ts-ignore`** in `packages/webkit/src/components/**`. `validate-tokens.mjs` enforces this.
 - **No webkit `.vue` write without the spec.** `enforce-spec-exists.mjs` blocks Writes when `.specs/<name>.md` is missing, not approved, or checksum-mismatched.
 - **No `.vue` that diverges from the spec.** `validate-spec-compliance.mjs` blocks props/events/slots/animations the spec did not list.
 - **No bypass.** `enforce-component-create.mjs` blocks first Write to a new webkit `.vue` if this command or skill was not referenced in the session.

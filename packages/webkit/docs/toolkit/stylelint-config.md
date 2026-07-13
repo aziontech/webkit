@@ -1,8 +1,8 @@
-# @aziontech/stylelint-config-webkit
+# webkit Stylelint config — `@aziontech/webkit/stylelint-config`
 
-Shareable [Stylelint](https://stylelint.io/) config that forbids hardcoded colors in CSS/SCSS and Vue `<style>` blocks, steering authors to design tokens from [`@aziontech/theme`](https://www.npmjs.com/package/@aziontech/theme) referenced as `var(--*)`.
+Shareable [Stylelint](https://stylelint.io/) config that forbids hardcoded colors in CSS/SCSS and Vue `<style>` blocks, steering authors to design tokens from [`@aziontech/theme`](https://www.npmjs.com/package/@aziontech/theme) referenced as `var(--*)`. It ships **inside** `@aziontech/webkit` as a subpath export — there is no separate config package.
 
-It is the styles-side complement to [`@aziontech/eslint-plugin-webkit`](https://www.npmjs.com/package/@aziontech/eslint-plugin-webkit), which owns JS/TS and Vue `<template>` class strings. Together they keep every color in your codebase pointing at a token instead of a literal.
+It is the styles-side complement to the [webkit ESLint plugin](./eslint-plugin.md), which owns JS/TS and Vue `<template>` class strings. Together they keep every color in your codebase pointing at a token instead of a literal.
 
 ## What it enforces
 
@@ -19,10 +19,10 @@ Built on Stylelint's built-in rules only (zero runtime dependencies):
 ## Install
 
 ```sh
-npm install --save-dev @aziontech/stylelint-config-webkit stylelint
+npm install --save-dev stylelint
 ```
 
-`stylelint` (>=15) is a peer dependency you install yourself.
+The config itself comes with `@aziontech/webkit`; `stylelint` (>=15) is a peer dependency you install yourself.
 
 ## Usage
 
@@ -30,7 +30,7 @@ Add it to your Stylelint config (`.stylelintrc.json`, `stylelint.config.js`, or 
 
 ```json
 {
-  "extends": ["@aziontech/stylelint-config-webkit"]
+  "extends": ["@aziontech/webkit/stylelint-config"]
 }
 ```
 
@@ -46,7 +46,7 @@ npm install --save-dev postcss-html postcss-scss
 
 ```json
 {
-  "extends": ["@aziontech/stylelint-config-webkit"],
+  "extends": ["@aziontech/webkit/stylelint-config"],
   "overrides": [
     {
       "files": ["**/*.vue"],

@@ -1,7 +1,9 @@
 # Guidelines — building and using `@aziontech/webkit`
 
 > This is the one-page digest. The **complete styleguide** — every code standard in full
-> detail, with the gate that blocks each one — is [`STYLEGUIDE.md`](./STYLEGUIDE.md).
+> detail, with the gate that blocks each one — is [`STYLEGUIDE.md`](./STYLEGUIDE.md). The
+> **end-to-end process map** (creation → release, adoption → enforcement) is
+> [`PROCESS.md`](./PROCESS.md).
 
 One page to **see every pattern** you need, whether you are:
 
@@ -55,7 +57,8 @@ Each is a `scope: general` standard. Follow ✅, avoid ❌.
 | **Two-way value**       | `defineProps({ modelValue }) + emit('update:modelValue')`            | `const model = defineModel<string>()`                                                   |
 | **Props**               | `defineProps({ kind: { type: String } })` · `variant` · `isDisabled` | `withDefaults(defineProps<Props>(), {…})` · `kind` · `disabled`                         |
 | **Prop vocabulary**     | `sm/md/lg` · `variant` · `closeable`                                 | `small/medium/large` · `kind` · `dismissible`                                           |
-| **Emits**               | `defineEmits(['click'])` · `emit('click', item)`                     | `defineEmits<{ 'item-click':[e,item] }>()` — event first                                |
+| **Emits**               | `defineEmits(['click'])` · echo events (`value-change`)              | `defineEmits<{ 'item-click':[e,item] }>()` · `v-model`/`@update:*` only                 |
+| **Event payloads**      | `emit('click', item)` · `{ value, event }` payload objects           | activation events emit `(event, item?)` — DOM event always first                        |
 | **Slots**               | `<slot/>` with no declaration                                        | `defineSlots<{ default():unknown }>()`                                                  |
 | **Composables**         | `return reactive({…})`                                               | `return { value: readonly(v), set }` · args via `toValue` · cleanup in `onScopeDispose` |
 | **Styling**             | `const kindClasses = {…}` · `#f3652b` · `text-blue-600`              | `data-[kind=primary]:bg-[var(--primary)]` inline · tokens only                          |

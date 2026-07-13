@@ -1,6 +1,6 @@
 # Rules — index
 
-The 23 construction standards, each a single `.md` in this folder. `scope: general` ships to
+The 24 construction standards, each a single `.md` in this folder. `scope: general` ships to
 consuming projects; `scope: webkit` is internal to the design system. The **machine-readable
 source of truth** for rule → enforcement is
 [`../hooks/_lib/standards.mjs`](../hooks/_lib/standards.mjs), whose pairing with the rule
@@ -24,14 +24,15 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
 | [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `dev` | commitlint · branch-protection |
 
-## Construction (12)
+## Construction (13)
 
 | Rule | Scope | Fixes | Blocks via |
 |---|---|---|---|
 | [component-structure](./component-structure.md) | general | Folder layout + `<script setup>` order | spec-compliance · ratchet · review |
 | [props](./props.md) | general | Typed `interface Props` + `withDefaults` + JSDoc | authoring · spec-compliance · tokens · ratchet |
 | [v-model](./v-model.md) | general | Two-way via `defineModel` | authoring · ratchet · lint |
-| [emits](./emits.md) | general | Typed `defineEmits`; activation emits `(event, item)` | authoring · spec-compliance · ratchet |
+| [emits](./emits.md) | general | Typed `defineEmits`; no echo events duplicating `update:*` | authoring · spec-compliance · ratchet |
+| [event-payloads](./event-payloads.md) | general | Activation events emit `(event, item?)` — event always first | spec-compliance · ratchet · review |
 | [slots](./slots.md) | general | Typed `defineSlots`; fallback in the slot | authoring · spec-compliance · ratchet |
 | [composables](./composables.md) | general | `readonly` out, `toValue` args, `onScopeDispose` | authoring · ratchet |
 | [root-element](./root-element.md) | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · ratchet · review |
@@ -41,4 +42,4 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [deprecation](./deprecation.md) | general | `@deprecated` → one major → remove | authoring · ratchet · lint |
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
 
-**Split:** 13 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 10 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review.
+**Split:** 14 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 10 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).
