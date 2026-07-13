@@ -1,5 +1,11 @@
 export type CodeBlockHighlightTokenType =
-  'keyword' | 'string' | 'function' | 'type' | 'punctuation' | 'identifier' | 'comment'
+  | 'keyword'
+  | 'string'
+  | 'function'
+  | 'type'
+  | 'punctuation'
+  | 'identifier'
+  | 'comment'
 
 export type CodeBlockHighlightToken = {
   text: string

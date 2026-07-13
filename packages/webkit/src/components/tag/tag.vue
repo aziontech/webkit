@@ -2,7 +2,14 @@
   import { computed, useAttrs } from 'vue'
 
   export type TagSeverity =
-    'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'info'
+    | 'warning'
+    | 'danger'
+    | 'accent'
+    | 'contrast'
 
   export type TagSize = 'small' | 'medium'
 
