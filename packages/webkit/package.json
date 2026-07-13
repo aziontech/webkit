@@ -90,6 +90,7 @@
     "./tag": "./src/components/tag/tag.vue",
     "./avatar": "./src/components/avatar/avatar.vue",
     "./badge": "./src/components/content/badge/badge.vue",
+    "./brand": "./src/components/content/brand/brand.vue",
     "./accordion": "./src/components/content/accordion/index.ts",
     "./accordion-root": "./src/components/content/accordion/accordion.vue",
     "./accordion-item": "./src/components/content/accordion/accordion-item/accordion-item.vue",
