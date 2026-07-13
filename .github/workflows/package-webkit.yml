@@ -7,6 +7,8 @@ on:
     paths:
       - 'packages/webkit/**'
 
+permissions: {}
+
 jobs:
   release:
     name: Semantic Release
