@@ -1,6 +1,7 @@
 @font-face {
   font-family: 'Roboto Condensed';
-  src: url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.woff') format('woff'),
+  src:
+    url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.woff') format('woff'),
     url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.ttf') format('truetype'),
     url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.otf') format('opentype');
   font-weight: 400;

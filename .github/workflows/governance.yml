@@ -18,15 +18,43 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
+      tests: ${{ steps.filter.outputs.tests }}
+      visual: ${{ steps.filter.outputs.visual }}
+      canary: ${{ steps.filter.outputs.canary }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3
         id: filter
         with:
           filters: |
             webkit:
               - 'packages/webkit/**'
+            # Stories are fixtures of the unit suite (composeStories), so
+            # storybook changes retrigger the tests too.
+            tests:
+              - 'packages/webkit/**'
+              - 'apps/storybook/**'
+            # Pixels react to any styled layer: components, tokens, icons, stories.
+            visual:
+              - 'packages/webkit/**'
+              - 'packages/theme/**'
+              - 'packages/icons/**'
+              - 'apps/storybook/**'
+            # Lint canaries guard the lint CONFIGS: anything that can change a
+            # rule's behavior (configs, the fixtures themselves, tooling deps)
+            # retriggers the canary job.
+            canary:
+              - 'eslint.config.js'
+              - 'packages/webkit/eslint.config.js'
+              - '.stylelintrc.json'
+              - '.prettierrc.json'
+              - '.prettierignore'
+              - 'commitlint.config.js'
+              - 'lint-canaries/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/governance.yml'
 
   # Security Scanning (parallel, fast)
   security:
@@ -35,14 +63,13 @@ jobs:
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -55,7 +82,7 @@ jobs:
         working-directory: packages/webkit
 
       - name: Run TruffleHog (secret detection)
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@8feb77b20aeb64366d106b08f2941287755c173b # main
         with:
           path: ./
           base: ${{ github.event.repository.default_branch }}
@@ -66,6 +93,35 @@ jobs:
         working-directory: packages/webkit
         continue-on-error: true
 
+  # Lint Canary (parallel, side by side with Security Scans) — INVERTED logic.
+  # Every fixture in lint-canaries/ violates one configured lint rule ON
+  # PURPOSE and must KEEP failing it. A fixture that lints clean means the
+  # rule was weakened or removed (eslint.config.js / .stylelintrc.json /
+  # .prettierrc.json / commitlint.config.js), so the job fails and stops the
+  # pipeline. See lint-canaries/README.md.
+  lint-canary:
+    name: Lint Canary (broken samples must stay broken)
+    needs: changes
+    if: needs.changes.outputs.canary == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run lint canaries (every fixture must still fail its rule)
+        run: node lint-canaries/index.js
+
   # Linting & Formatting (parallel)
   lint:
     name: Linting & Formatting
@@ -73,14 +129,13 @@ jobs:
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -104,14 +159,13 @@ jobs:
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -134,14 +188,13 @@ jobs:
     needs: [changes, lint, types]
     if: needs.changes.outputs.webkit == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -153,6 +206,10 @@ jobs:
         run: pnpm pack:dry
         working-directory: packages/webkit
 
+      - name: Assert no test files leak into the tarball
+        run: pnpm pack:check
+        working-directory: packages/webkit
+
   # Storybook Smoke Test
   storybook:
     name: Storybook Build
@@ -160,14 +217,13 @@ jobs:
     needs: [changes, lint, types]
     if: needs.changes.outputs.webkit == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -181,21 +237,119 @@ jobs:
       - name: Verify Storybook output
         run: test -d apps/storybook/dist && echo "Storybook built successfully"
 
+  # Vitest browser mode (real Chromium), sharded by 4 — behavior/structure/ARIA
+  # on an unstyled DOM. Ordered after lint + types (same tier as build/storybook).
+  # `!contains(needs.*.result, 'failure')` keeps it runnable when upstream jobs
+  # were cleanly skipped (e.g. a storybook-only PR skips the webkit-scoped lint).
+  tests:
+    name: Vitest browser (shard ${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    needs: [changes, lint, types]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.tests == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: packages/webkit
+
+      - name: Run tests (shard ${{ matrix.shard }})
+        run: pnpm exec vitest run --shard=${{ matrix.shard }}/4
+        working-directory: packages/webkit
+
+  # Visual regression — the styled layer: every story screenshotted via
+  # @storybook/test-runner and compared against the committed linux baselines
+  # (test:visual:ci fails on any missing baseline). Last link of the chain:
+  # pixels only run once behavior (tests) and both builds are green. Baseline
+  # regeneration lives in app-storybook-test-visual-regression.yml (dispatch).
+  visual:
+    name: Storybook visual tests
+    runs-on: ubuntu-latest
+    needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/storybook
+
+      - name: Build Storybook
+        run: pnpm run storybook:build
+
+      - name: Run visual tests
+        run: pnpm --filter storybook run test:visual:ci
+
+      - name: Upload diff output on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: visual-diff-output
+          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          retention-days: 7
+          if-no-files-found: ignore
+
   # Summary Gate — passes when every upstream job is success or cleanly skipped.
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint, types, build, storybook]
+    needs: [changes, security, lint-canary, lint, types, build, storybook, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
         run: |
           declare -A results=(
             [security]="${{ needs.security.result }}"
+            [lint-canary]="${{ needs.lint-canary.result }}"
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
             [storybook]="${{ needs.storybook.result }}"
+            [tests]="${{ needs.tests.result }}"
+            [visual]="${{ needs.visual.result }}"
           )
           failed=0
           for job in "${!results[@]}"; do

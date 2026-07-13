@@ -1,4 +1,4 @@
-import { tokenRef } from '../../scripts/refs.js';
+import { tokenRef } from '../../scripts/refs.js'
 
 /**
  * Syntax-highlighting colors for code editors (Figma: code-sintax).
@@ -12,7 +12,7 @@ export const codeSintax = {
     'code-sintax-punctuation': tokenRef('primitives.gray.500'),
     'code-sintax-function': tokenRef('brand.primary.primary-500'),
     'code-sintax-type': tokenRef('primitives.yellow.700'),
-    'code-sintax-string': tokenRef('primitives.blue.600'),
+    'code-sintax-string': tokenRef('primitives.blue.600')
   },
   dark: {
     'code-sintax-identifier': tokenRef('primitives.gray.50'),
@@ -21,8 +21,8 @@ export const codeSintax = {
     'code-sintax-punctuation': tokenRef('primitives.gray.400'),
     'code-sintax-function': tokenRef('brand.primary.primary-500'),
     'code-sintax-type': tokenRef('primitives.yellow.300'),
-    'code-sintax-string': tokenRef('primitives.blue.400'),
-  },
-};
+    'code-sintax-string': tokenRef('primitives.blue.400')
+  }
+}
 
-export default { codeSintax };
+export default { codeSintax }

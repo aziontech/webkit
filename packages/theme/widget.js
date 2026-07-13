@@ -1,1 +1,1 @@
-import './src/azion/theme-widget.scss';
+import './src/azion/theme-widget.scss'

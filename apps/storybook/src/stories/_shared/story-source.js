@@ -25,5 +25,13 @@ export const toSfc = (imports, body) => {
     .split('\n')
     .map((line) => (line ? `  ${line}` : line))
     .join('\n')
-  return ['<script setup>', ...importLines, '</script>', '', '<template>', indented, '</template>'].join('\n')
+  return [
+    '<script setup>',
+    ...importLines,
+    '</script>',
+    '',
+    '<template>',
+    indented,
+    '</template>'
+  ].join('\n')
 }

@@ -12,7 +12,7 @@ export const spacingsData = {
   'spacing-md': { _: '1rem' },
   'spacing-sm': { _: '0.75rem' },
   'spacing-xs': { _: '0.5rem' },
-  'spacing-xxs': { _: '0.25rem' },
-};
+  'spacing-xxs': { _: '0.25rem' }
+}
 
-export default { spacingsData };
+export default { spacingsData }

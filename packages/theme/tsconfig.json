@@ -10,11 +10,5 @@
     "outDir": "."
   },
   "include": ["src/**/*.js", "tokens.js"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/scripts/**",
-    "src/tests/**",
-    "src/**/*.d.ts"
-  ]
+  "exclude": ["node_modules", "dist", "src/scripts/**", "src/tests/**", "src/**/*.d.ts"]
 }

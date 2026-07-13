@@ -29,7 +29,7 @@ Import the main theme stylesheet:
 
 ```javascript
 // Default theme (includes light/dark mode support)
-import '@aziontech/theme';
+import '@aziontech/theme'
 ```
 
 Add the theme class to your root element:
@@ -52,12 +52,12 @@ Add the theme class to your root element:
 Add the preset to your `tailwind.config.js`:
 
 ```javascript
-import { preset } from '@aziontech/theme/tokens';
+import { preset } from '@aziontech/theme/tokens'
 
 export default {
-  presets: [preset],
+  presets: [preset]
   // your config
-};
+}
 ```
 
 #### Using the Plugin
@@ -65,7 +65,7 @@ export default {
 For static utility classes with light/dark mode support:
 
 ```javascript
-import { tokenUtilities } from '@aziontech/theme/tokens';
+import { tokenUtilities } from '@aziontech/theme/tokens'
 
 export default {
   plugins: [
@@ -74,7 +74,7 @@ export default {
       extraDarkSelectors: ['.azion.azion-dark']
     })
   ]
-};
+}
 ```
 
 ### Option 3: JavaScript Token Access
@@ -90,14 +90,14 @@ import {
   textSemantic,
   backgroundSemantic,
   borderSemantic
-} from '@aziontech/theme/tokens';
+} from '@aziontech/theme/tokens'
 
 // Use primitive colors
-const primaryColor = primitives.orange['500']; // '#fe601f'
-const accentColor = primitives.violet['500']; // '#8a84ec'
+const primaryColor = primitives.orange['500'] // '#fe601f'
+const accentColor = primitives.violet['500'] // '#8a84ec'
 
 // Use semantic tokens (returns token references)
-const textColor = textSemantic.light.textColorBase; // tokenRef('primitives.neutral.900')
+const textColor = textSemantic.light.textColorBase // tokenRef('primitives.neutral.900')
 ```
 
 ### Option 4: CSS Variables Injection
@@ -105,10 +105,10 @@ const textColor = textSemantic.light.textColorBase; // tokenRef('primitives.neut
 Inject CSS variables dynamically at runtime:
 
 ```javascript
-import { injectCssVars } from '@aziontech/theme/tokens';
+import { injectCssVars } from '@aziontech/theme/tokens'
 
 // Injects <style data-azion-tokens> into document.head
-const styleElement = injectCssVars();
+const styleElement = injectCssVars()
 ```
 
 ## Token Structure
@@ -118,15 +118,16 @@ const styleElement = injectCssVars();
 Base color palettes with numeric scales (50-950):
 
 ```javascript
-import { primitives } from '@aziontech/theme/tokens';
+import { primitives } from '@aziontech/theme/tokens'
 
-primitives.orange['500'];  // Primary brand color
-primitives.violet['500'];  // Accent brand color
-primitives.neutral['900']; // Dark surfaces
-primitives.neutral['50'];  // Light surfaces
+primitives.orange['500'] // Primary brand color
+primitives.violet['500'] // Accent brand color
+primitives.neutral['900'] // Dark surfaces
+primitives.neutral['50'] // Light surfaces
 ```
 
 Available primitives:
+
 - `base`: White and black
 - `orange`: Primary brand color (11 shades)
 - `violet`: Accent brand color (11 shades)
@@ -142,12 +143,12 @@ Available primitives:
 Azion-specific brand colors:
 
 ```javascript
-import { brandPrimitives } from '@aziontech/theme/tokens';
+import { brandPrimitives } from '@aziontech/theme/tokens'
 
-brandPrimitives.primary['500'];  // Orange brand color
-brandPrimitives.accent['500'];   // Violet accent color
-brandPrimitives.absolute.white;  // Pure white
-brandPrimitives.absolute.black;  // Pure black
+brandPrimitives.primary['500'] // Orange brand color
+brandPrimitives.accent['500'] // Violet accent color
+brandPrimitives.absolute.white // Pure white
+brandPrimitives.absolute.black // Pure black
 ```
 
 ### Surface Primitives
@@ -155,12 +156,12 @@ brandPrimitives.absolute.black;  // Pure black
 Surface color scales for backgrounds:
 
 ```javascript
-import { surfacePrimitives } from '@aziontech/theme/tokens';
+import { surfacePrimitives } from '@aziontech/theme/tokens'
 
-surfacePrimitives.surface['0'];   // White
-surfacePrimitives.surface['50'];  // Lightest gray
-surfacePrimitives.surface['900']; // Very dark gray
-surfacePrimitives.surface['950']; // Almost black
+surfacePrimitives.surface['0'] // White
+surfacePrimitives.surface['50'] // Lightest gray
+surfacePrimitives.surface['900'] // Very dark gray
+surfacePrimitives.surface['950'] // Almost black
 ```
 
 ### Semantic Tokens
@@ -170,45 +171,45 @@ Context-aware tokens that automatically adapt to light/dark themes:
 #### Background Tokens
 
 ```javascript
-import { backgroundSemantic } from '@aziontech/theme/tokens';
+import { backgroundSemantic } from '@aziontech/theme/tokens'
 
 // Light mode
-backgroundSemantic.light.bgLayer1;     // Surface 0 (white)
-backgroundSemantic.light.bgLayer2;     // Surface 50
-backgroundSemantic.light.bgCanvas;     // Surface 100
+backgroundSemantic.light.bgLayer1 // Surface 0 (white)
+backgroundSemantic.light.bgLayer2 // Surface 50
+backgroundSemantic.light.bgCanvas // Surface 100
 
 // Dark mode
-backgroundSemantic.dark.bgLayer1;      // Surface 800
-backgroundSemantic.dark.bgCanvas;      // Surface 950
+backgroundSemantic.dark.bgLayer1 // Surface 800
+backgroundSemantic.dark.bgCanvas // Surface 950
 ```
 
 #### Text Tokens
 
 ```javascript
-import { textSemantic } from '@aziontech/theme/tokens';
+import { textSemantic } from '@aziontech/theme/tokens'
 
 // Light mode
-textSemantic.light.textColorBase;      // neutral.900
-textSemantic.light.textColorMuted;     // neutral.600
-textSemantic.light.textColorLink;      // blue.600
+textSemantic.light.textColorBase // neutral.900
+textSemantic.light.textColorMuted // neutral.600
+textSemantic.light.textColorLink // blue.600
 
 // Dark mode
-textSemantic.dark.textColorBase;       // neutral.50
-textSemantic.dark.textColorMuted;      // neutral.400
-textSemantic.dark.textColorLink;       // blue.300
+textSemantic.dark.textColorBase // neutral.50
+textSemantic.dark.textColorMuted // neutral.400
+textSemantic.dark.textColorLink // blue.300
 ```
 
 #### Border Tokens
 
 ```javascript
-import { borderSemantic } from '@aziontech/theme/tokens';
+import { borderSemantic } from '@aziontech/theme/tokens'
 
-borderSemantic.light.borderBase;       // surface.200
-borderSemantic.light.borderPrimary;    // primary.500
-borderSemantic.light.borderDanger;     // red.600
+borderSemantic.light.borderBase // surface.200
+borderSemantic.light.borderPrimary // primary.500
+borderSemantic.light.borderDanger // red.600
 
-borderSemantic.dark.borderBase;        // surface.700
-borderSemantic.dark.borderDanger;      // red.400
+borderSemantic.dark.borderBase // surface.700
+borderSemantic.dark.borderDanger // red.400
 ```
 
 ## Theming
@@ -241,9 +242,9 @@ Or use the standard Tailwind dark mode class:
 
 ```javascript
 // Toggle dark mode
-const root = document.querySelector('.azion');
-root.classList.toggle('azion-dark');
-root.classList.toggle('azion-light');
+const root = document.querySelector('.azion')
+root.classList.toggle('azion-dark')
+root.classList.toggle('azion-light')
 ```
 
 ## Tailwind CSS Usage
@@ -279,7 +280,7 @@ When using the `tokenUtilities` plugin:
 ### Complete Tailwind Config Example
 
 ```javascript
-import { preset, tokenUtilities } from '@aziontech/theme/tokens';
+import { preset, tokenUtilities } from '@aziontech/theme/tokens'
 
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
@@ -291,7 +292,7 @@ export default {
       extraDarkSelectors: ['.azion.azion-dark']
     })
   ]
-};
+}
 ```
 
 ## CSS Variables
@@ -300,14 +301,18 @@ All semantic tokens are available as CSS variables:
 
 ```css
 /* Automatically generated */
-:root, [data-theme=light], .azion.azion-light {
+:root,
+[data-theme='light'],
+.azion.azion-light {
   --text-default: #171717;
   --text-muted: #525252;
   --background-surface: #ffffff;
   --border-default: #e5e5e5;
 }
 
-[data-theme=dark], .dark, .azion.azion-dark {
+[data-theme='dark'],
+.dark,
+.azion.azion-dark {
   --text-default: #fafafa;
   --text-muted: #a3a3a3;
   --background-surface: #262626;
@@ -330,10 +335,11 @@ Use in your CSS:
 For embedded widgets and iframes, use the widget theme variant:
 
 ```javascript
-import '@aziontech/theme/widget';
+import '@aziontech/theme/widget'
 ```
 
 The widget theme includes:
+
 - Compact variable definitions
 - Optimized for isolated contexts
 - Same token structure as main theme
@@ -343,6 +349,7 @@ The widget theme includes:
 ### Exports
 
 #### Default Export
+
 - `@aziontech/theme` - Main CSS theme (default.js)
 - `@aziontech/theme/widget` - Widget CSS theme (widget.js)
 - `@aziontech/theme/tokens` - JavaScript token system (src/tokens/index.js)
@@ -351,20 +358,20 @@ The widget theme includes:
 
 ```javascript
 // Primitive tokens
-export { primitives } from './primitives/colors.js';
-export { brandPrimitives, surfacePrimitives } from './primitives/brand.js';
+export { primitives } from './primitives/colors.js'
+export { brandPrimitives, surfacePrimitives } from './primitives/brand.js'
 
 // Semantic tokens
-export { textSemantic } from './semantic/text.js';
-export { backgroundSemantic } from './semantic/backgrounds.js';
-export { borderSemantic } from './semantic/borders.js';
+export { textSemantic } from './semantic/text.js'
+export { backgroundSemantic } from './semantic/backgrounds.js'
+export { borderSemantic } from './semantic/borders.js'
 
 // Build utilities
-export { tokenRef } from './build/refs.js';
-export { resolveRefsToCssVars } from './build/resolve.js';
-export { createCssVars, cssVarsString, injectCssVars } from './build/css-vars.js';
-export { preset } from './build/preset.js';
-export { tokenUtilities } from './build/tailwind-plugin';
+export { tokenRef } from './build/refs.js'
+export { resolveRefsToCssVars } from './build/resolve.js'
+export { createCssVars, cssVarsString, injectCssVars } from './build/css-vars.js'
+export { preset } from './build/preset.js'
+export { tokenUtilities } from './build/tailwind-plugin'
 ```
 
 ## Token Resolution
@@ -373,13 +380,13 @@ Tokens use a reference system for maintainability:
 
 ```javascript
 // Define token reference
-const textColor = tokenRef('primitives.neutral.900');
+const textColor = tokenRef('primitives.neutral.900')
 
 // Resolve to actual value
 resolveRefsToCssVars({
   primitives,
   textSemantic
-});
+})
 // Output: { '--text-textColorBase': '#171717' }
 ```
 

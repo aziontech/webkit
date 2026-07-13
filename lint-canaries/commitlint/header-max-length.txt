@@ -1,0 +1,1 @@
+fix(webkit): correct the paginator focus ring so that it stays visible in dark mode and in high-contrast themes

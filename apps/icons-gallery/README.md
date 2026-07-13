@@ -27,15 +27,15 @@ The application is deployed on **Azion's Edge Platform** for low-latency global 
 
 ### Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **Framework** | Vue 3 (Composition API, `<script setup>`) | Reactive UI components |
-| **Build** | Vite | Dev server, bundling, preview |
-| **Styling** | Tailwind CSS | Utility-first CSS framework |
-| **Icons** | `@aziontech/icons` | Icon font + catalog (workspace dependency) |
-| **Color Picker** | `vue3-colorpicker` | Color selection widget |
-| **Testing** | Vitest + jsdom | Unit testing |
-| **Deployment** | Azion Edge Platform | Global edge deployment |
+| Layer            | Technology                                | Purpose                                    |
+| ---------------- | ----------------------------------------- | ------------------------------------------ |
+| **Framework**    | Vue 3 (Composition API, `<script setup>`) | Reactive UI components                     |
+| **Build**        | Vite                                      | Dev server, bundling, preview              |
+| **Styling**      | Tailwind CSS                              | Utility-first CSS framework                |
+| **Icons**        | `@aziontech/icons`                        | Icon font + catalog (workspace dependency) |
+| **Color Picker** | `vue3-colorpicker`                        | Color selection widget                     |
+| **Testing**      | Vitest + jsdom                            | Unit testing                               |
+| **Deployment**   | Azion Edge Platform                       | Global edge deployment                     |
 
 ### Application Flow
 
@@ -112,15 +112,15 @@ apps/icons-gallery/
 
 ### Key Files Explained
 
-| File | Purpose |
-|------|---------|
-| [`src/App.vue`](src/App.vue) | Main component containing icon grid, controls, and state management |
-| [`src/components/IconCard.vue`](src/components/IconCard.vue) | Renders individual icon with hover actions (copy code, copy image, download) |
-| [`src/components/SearchBar.vue`](src/components/SearchBar.vue) | Search input with real-time filtering |
-| [`src/theme.js`](src/theme.js) | Theme initialization and toggle functionality |
-| [`vite.config.js`](vite.config.js) | Vite dev server (port 3333) and build config |
-| [`vitest.config.js`](vitest.config.js) | Vitest config (jsdom environment, setup file) |
-| [`azion.config.cjs`](azion.config.cjs) | Edge deployment configuration with caching rules |
+| File                                                           | Purpose                                                                      |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| [`src/App.vue`](src/App.vue)                                   | Main component containing icon grid, controls, and state management          |
+| [`src/components/IconCard.vue`](src/components/IconCard.vue)   | Renders individual icon with hover actions (copy code, copy image, download) |
+| [`src/components/SearchBar.vue`](src/components/SearchBar.vue) | Search input with real-time filtering                                        |
+| [`src/theme.js`](src/theme.js)                                 | Theme initialization and toggle functionality                                |
+| [`vite.config.js`](vite.config.js)                             | Vite dev server (port 3333) and build config                                 |
+| [`vitest.config.js`](vitest.config.js)                         | Vitest config (jsdom environment, setup file)                                |
+| [`azion.config.cjs`](azion.config.cjs)                         | Edge deployment configuration with caching rules                             |
 
 Icon metadata is **not** stored locally — it is imported at runtime from `@aziontech/icons/catalog` (resolved to `packages/icons/dist/catalog.json`).
 
@@ -168,17 +168,17 @@ pnpm build:azion
 
 ## Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `pnpm serve` | Start Vite dev server with HMR on port 3333 |
-| `pnpm build` | Build production bundle via Vite |
-| `pnpm build:azion` | Build optimized for Azion Edge Platform |
-| `pnpm preview` | Preview production build with Vite |
-| `pnpm test:unit` | Run Vitest unit tests once |
-| `pnpm test:unit:watch` | Run Vitest in watch mode |
-| `pnpm lint` | Run ESLint with autofix |
-| `pnpm format` | Format `src/` with Prettier |
-| `pnpm publish` | Deploy to Azion Edge Platform (`azion deploy --local --debug`) |
+| Script                 | Description                                                    |
+| ---------------------- | -------------------------------------------------------------- |
+| `pnpm serve`           | Start Vite dev server with HMR on port 3333                    |
+| `pnpm build`           | Build production bundle via Vite                               |
+| `pnpm build:azion`     | Build optimized for Azion Edge Platform                        |
+| `pnpm preview`         | Preview production build with Vite                             |
+| `pnpm test:unit`       | Run Vitest unit tests once                                     |
+| `pnpm test:unit:watch` | Run Vitest in watch mode                                       |
+| `pnpm lint`            | Run ESLint with autofix                                        |
+| `pnpm format`          | Format `src/` with Prettier                                    |
+| `pnpm publish`         | Deploy to Azion Edge Platform (`azion deploy --local --debug`) |
 
 ---
 
@@ -247,46 +247,46 @@ Azion-specific product and platform icons organized by category:
 
 #### Platform Pillars
 
-| Icon | Class | Usage |
-|------|-------|-------|
-| AI Pillar | `ai ai-ai-pillar` | AI/ML capabilities |
-| Build Pillar | `ai ai-build-pillar` | Build processes |
-| Deploy Pillar | `ai ai-deploy-pillar` | Deployment services |
-| Secure Pillar | `ai ai-secure-pillar` | Security features |
+| Icon           | Class                  | Usage               |
+| -------------- | ---------------------- | ------------------- |
+| AI Pillar      | `ai ai-ai-pillar`      | AI/ML capabilities  |
+| Build Pillar   | `ai ai-build-pillar`   | Build processes     |
+| Deploy Pillar  | `ai ai-deploy-pillar`  | Deployment services |
+| Secure Pillar  | `ai ai-secure-pillar`  | Security features   |
 | Observe Pillar | `ai ai-observe-pillar` | Observability tools |
 
 #### Edge Products
 
-| Icon | Class | Usage |
-|------|-------|-------|
-| Edge Application | `ai ai-edge-application` | Edge applications |
-| Edge Functions | `ai ai-edge-functions` | Serverless functions |
-| Edge Firewall | `ai ai-edge-firewall` | Web application firewall |
-| Edge DNS | `ai ai-edge-dns` | DNS services |
-| Edge KV | `ai ai-edge-kv` | Key-value storage |
-| Edge SQL | `ai ai-edge-sql` | SQL database |
-| Edge Storage | `ai ai-edge-storage` | Object storage |
-| Edge Orchestrator | `ai ai-edge-orchestrator` | Workflow orchestration |
+| Icon              | Class                     | Usage                    |
+| ----------------- | ------------------------- | ------------------------ |
+| Edge Application  | `ai ai-edge-application`  | Edge applications        |
+| Edge Functions    | `ai ai-edge-functions`    | Serverless functions     |
+| Edge Firewall     | `ai ai-edge-firewall`     | Web application firewall |
+| Edge DNS          | `ai ai-edge-dns`          | DNS services             |
+| Edge KV           | `ai ai-edge-kv`           | Key-value storage        |
+| Edge SQL          | `ai ai-edge-sql`          | SQL database             |
+| Edge Storage      | `ai ai-edge-storage`      | Object storage           |
+| Edge Orchestrator | `ai ai-edge-orchestrator` | Workflow orchestration   |
 
 #### Framework Integrations
 
-| Icon | Class | Usage |
-|------|-------|-------|
+| Icon    | Class           | Usage             |
+| ------- | --------------- | ----------------- |
 | Angular | `ai ai-angular` | Angular framework |
-| React | `ai ai-react` | React framework |
-| Vue | `ai ai-vue` | Vue framework |
-| Next.js | `ai ai-next` | Next.js framework |
-| Nuxt | `ai ai-nuxt` | Nuxt framework |
-| Astro | `ai ai-astro` | Astro framework |
-| Vite | `ai ai-vite` | Vite build tool |
+| React   | `ai ai-react`   | React framework   |
+| Vue     | `ai ai-vue`     | Vue framework     |
+| Next.js | `ai ai-next`    | Next.js framework |
+| Nuxt    | `ai ai-nuxt`    | Nuxt framework    |
+| Astro   | `ai ai-astro`   | Astro framework   |
+| Vite    | `ai ai-vite`    | Vite build tool   |
 
 #### Tools & Services
 
-| Icon | Class | Usage |
-|------|-------|-------|
-| Azion CLI | `ai ai-azion-cli` | Command-line tool |
-| Azion API | `ai ai-azion-api` | API services |
-| Ask Azion | `ai ai-ask-azion` | AI assistant |
+| Icon        | Class               | Usage                |
+| ----------- | ------------------- | -------------------- |
+| Azion CLI   | `ai ai-azion-cli`   | Command-line tool    |
+| Azion API   | `ai ai-azion-api`   | API services         |
+| Ask Azion   | `ai ai-ask-azion`   | AI assistant         |
 | Marketplace | `ai ai-marketplace` | Marketplace services |
 
 ### PrimeIcons (`pi`) — 314 icons
@@ -295,39 +295,39 @@ General-purpose UI icons from the PrimeIcons library. Some commonly used icons:
 
 #### Navigation & Arrows
 
-| Icon | Class | Usage |
-|------|-------|-------|
-| Home | `pi pi-home` | Home navigation |
+| Icon        | Class               | Usage           |
+| ----------- | ------------------- | --------------- |
+| Home        | `pi pi-home`        | Home navigation |
 | Arrow Right | `pi pi-arrow-right` | Right direction |
-| Arrow Left | `pi pi-arrow-left` | Left direction |
-| Arrow Up | `pi pi-arrow-up` | Up direction |
-| Arrow Down | `pi pi-arrow-down` | Down direction |
-| Angle Right | `pi pi-angle-right` | Chevron right |
-| Angle Left | `pi pi-angle-left` | Chevron left |
+| Arrow Left  | `pi pi-arrow-left`  | Left direction  |
+| Arrow Up    | `pi pi-arrow-up`    | Up direction    |
+| Arrow Down  | `pi pi-arrow-down`  | Down direction  |
+| Angle Right | `pi pi-angle-right` | Chevron right   |
+| Angle Left  | `pi pi-angle-left`  | Chevron left    |
 
 #### Actions
 
-| Icon | Class | Usage |
-|------|-------|-------|
-| Search | `pi pi-search` | Search action |
-| Plus | `pi pi-plus` | Add/create |
-| Times | `pi pi-times` | Close/cancel |
-| Check | `pi pi-check` | Confirm/success |
-| Edit | `pi pi-pencil` | Edit action |
-| Delete | `pi pi-trash` | Delete action |
+| Icon     | Class            | Usage           |
+| -------- | ---------------- | --------------- |
+| Search   | `pi pi-search`   | Search action   |
+| Plus     | `pi pi-plus`     | Add/create      |
+| Times    | `pi pi-times`    | Close/cancel    |
+| Check    | `pi pi-check`    | Confirm/success |
+| Edit     | `pi pi-pencil`   | Edit action     |
+| Delete   | `pi pi-trash`    | Delete action   |
 | Download | `pi pi-download` | Download action |
-| Copy | `pi pi-copy` | Copy action |
-| Cog | `pi pi-cog` | Settings |
+| Copy     | `pi pi-copy`     | Copy action     |
+| Cog      | `pi pi-cog`      | Settings        |
 
 #### Status & Feedback
 
-| Icon | Class | Usage |
-|------|-------|-------|
-| Info Circle | `pi pi-info-circle` | Information |
-| Exclamation Triangle | `pi pi-exclamation-triangle` | Warning |
-| Ban | `pi pi-ban` | Forbidden/blocked |
-| Bell | `pi pi-bell` | Notifications |
-| Spinner | `pi pi-spinner` | Loading state |
+| Icon                 | Class                        | Usage             |
+| -------------------- | ---------------------------- | ----------------- |
+| Info Circle          | `pi pi-info-circle`          | Information       |
+| Exclamation Triangle | `pi pi-exclamation-triangle` | Warning           |
+| Ban                  | `pi pi-ban`                  | Forbidden/blocked |
+| Bell                 | `pi pi-bell`                 | Notifications     |
+| Spinner              | `pi pi-spinner`              | Loading state     |
 
 ---
 
@@ -393,8 +393,8 @@ Tests live in `tests/unit/` and run on **Vitest** with the **jsdom** environment
 
 ### Current Coverage
 
-| Module | Tests |
-|--------|-------|
+| Module        | Tests                                             |
+| ------------- | ------------------------------------------------- |
 | Icon Download | PNG/SVG download helpers (`iconDownload.spec.js`) |
 
 ---
@@ -426,8 +426,8 @@ Tests live in `tests/unit/` and run on **Vitest** with the **jsdom** environment
 
 ## Related Packages
 
-| Package | Description |
-|---------|-------------|
+| Package                                              | Description                                 |
+| ---------------------------------------------------- | ------------------------------------------- |
 | [`@aziontech/icons`](../../packages/icons/README.md) | Icon font library (azionicons + primeicons) |
 
 ---

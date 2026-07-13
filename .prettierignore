@@ -1,0 +1,5 @@
+# Lint canaries are DELIBERATELY rule-breaking / mis-formatted fixtures that
+# must KEEP failing their lint (see lint-canaries/README.md). A repo-wide
+# `prettier --write` must never "fix" them. The canary runner itself bypasses
+# this file with --ignore-path=/dev/null.
+lint-canaries/

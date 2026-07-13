@@ -130,7 +130,9 @@ try {
   execSync('node scripts/build-color-catalog.mjs', { stdio: 'inherit' })
   console.log('  ✔ dist/color-catalog.json created')
 } catch {
-  console.error('\n🔴 Icons colored catalog generation failed. Fix the errors above before building.\n')
+  console.error(
+    '\n🔴 Icons colored catalog generation failed. Fix the errors above before building.\n'
+  )
   process.exit(1)
 }
 
@@ -141,7 +143,9 @@ try {
   execSync('node scripts/build-color-css.mjs', { stdio: 'inherit' })
   console.log('  ✔ dist/azionicons-color.css created')
 } catch {
-  console.error('\n🔴 CSS Icons colored catalog generation failed. Fix the errors above before building.\n')
+  console.error(
+    '\n🔴 CSS Icons colored catalog generation failed. Fix the errors above before building.\n'
+  )
   process.exit(1)
 }
 

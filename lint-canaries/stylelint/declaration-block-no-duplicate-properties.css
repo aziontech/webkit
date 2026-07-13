@@ -1,0 +1,6 @@
+/* CANARY — must keep failing declaration-block-no-duplicate-properties. */
+.chip {
+  margin: 0;
+  padding: var(--spacing-1);
+  margin: var(--spacing-2);
+}

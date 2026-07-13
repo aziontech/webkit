@@ -1,14 +1,12 @@
-import { mount } from '@vue/test-utils';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import IconCard from '@/components/IconCard.vue'; 
+import { mount } from '@vue/test-utils'
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest'
+import IconCard from '@/components/IconCard.vue'
 
 // Mock icons data - minimal version for testing
-const iconsData = [
-  { name: 'test-icon', icon: 'ai-azion' }
-];
+const iconsData = [{ name: 'test-icon', icon: 'ai-azion' }]
 
 describe('IconCard.vue - Test all icons', () => {
-  let wrapper;
+  let wrapper
 
   beforeEach(() => {
     // Mock fetch
@@ -16,14 +14,14 @@ describe('IconCard.vue - Test all icons', () => {
       if (url.includes('/assets/svg-raw/')) {
         return Promise.resolve({
           ok: true,
-          text: () => Promise.resolve('<svg fill="#ffffff" width="100" height="100"></svg>'),
-        });
+          text: () => Promise.resolve('<svg fill="#ffffff" width="100" height="100"></svg>')
+        })
       }
-      return Promise.reject(new Error('Not Found'));
-    });
+      return Promise.reject(new Error('Not Found'))
+    })
 
     // Mock window.URL.createObjectURL
-    window.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+    window.URL.createObjectURL = vi.fn(() => 'blob:mock-url')
 
     // Mock document.createElement for download links
     document.createElement = vi.fn((element) => {
@@ -33,17 +31,17 @@ describe('IconCard.vue - Test all icons', () => {
           download: '',
           click: vi.fn(),
           setAttribute: vi.fn(),
-          remove: vi.fn(),
-        };
+          remove: vi.fn()
+        }
       } else {
-        return {}; 
+        return {}
       }
-    }); 
-  });
+    })
+  })
 
   afterEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   iconsData.forEach((icon) => {
     it(`should render the SVG icon correctly for ${icon.name}`, async () => {
@@ -53,18 +51,18 @@ describe('IconCard.vue - Test all icons', () => {
           icon: icon.icon,
           color: '#000000',
           size: 'text-base',
-          downloadFormat: 'svg',
+          downloadFormat: 'svg'
         },
         global: {
           stubs: {
             transition: false,
-            'transition-group': false,
-          },
-        },
-      });
-    
+            'transition-group': false
+          }
+        }
+      })
+
       // Verify the component was mounted correctly
-      expect(wrapper.exists()).toBe(true);
-    });
-  });
-});
+      expect(wrapper.exists()).toBe(true)
+    })
+  })
+})

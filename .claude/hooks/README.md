@@ -59,6 +59,10 @@ PostToolUse hook on `Write|Edit|MultiEdit` of the same `.vue` paths. Re-reads th
 
 Bypassed for legacy components (same whitelist). Shared parser library: [`_lib/spec.mjs`](./_lib/spec.mjs).
 
+### [`enforce-test-exists.mjs`](./enforce-test-exists.mjs)
+
+PostToolUse hook on `Write` of a **root** component `.vue` (`packages/webkit/src/components/<category>/<name>/<name>.vue` — file name equals its folder). Warns (exit 2, surfaced to the agent) when the co-located `<name>.test.ts` is missing, so every component ships the browser-mode functional suite mandated by [`../rules/testing.md`](../rules/testing.md). PostToolUse (not Pre) so it never deadlocks `/component-create`, which writes the `.vue` before a test can exist. Composition sub-components are skipped (tested through their root). Bypassed for legacy components (same whitelist).
+
 ## Adding a new hook
 
 1. Create `<name>.mjs` in this directory.

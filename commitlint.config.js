@@ -32,7 +32,19 @@ export default {
     'type-enum': [
       2,
       'always',
-      ['feat', 'fix', 'hotfix', 'chore', 'docs', 'style', 'refactor', 'perf', 'test', 'ci', 'revert']
+      [
+        'feat',
+        'fix',
+        'hotfix',
+        'chore',
+        'docs',
+        'style',
+        'refactor',
+        'perf',
+        'test',
+        'ci',
+        'revert'
+      ]
     ],
     'scope-case': [2, 'always', 'lower-case'],
     'subject-empty': [2, 'never'],
