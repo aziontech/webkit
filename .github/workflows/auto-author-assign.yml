@@ -1,9 +1,9 @@
 name: Auto Author Assign
 on:
   issues:
-    types: [ opened, reopened ]
+    types: [opened, reopened]
   pull_request_target:
-    types: [ opened, reopened ]
+    types: [opened, reopened]
 
 permissions:
   issues: write
