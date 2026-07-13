@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 58e974f5dafed554096ab16d406240f51171f58f6c46d9fd3ea75026e03debae
+checksum: e7c4d63bea94d3384dae3461a9a3e37728387d50cf23b2adf2f393f893c8d0fa
 created: 2026-05-22
 last_updated: 2026-07-13
 ---
@@ -77,11 +77,9 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 ## Stories (Storybook)
 
 - Default — title header + `content`
-- WithHeaderAction — `header-action` slot revealed on header hover/focus (justified: the hover-reveal action is a core, otherwise-invisible feature)
-- WithFooter — `footer` region with actions (justified: the footer bar only renders when the slot is filled)
-- CustomHeader — `header` slot replacing the default title layout (justified: full-control header path)
+- Header — an action rendered in the `header` slot, aligned to the end (justified: demonstrates the full-control header path)
+- Footer — `footer` region with actions (justified: the footer bar only renders when the slot is filled)
 - Flush — `padded=false` edge-to-edge content (mutually-exclusive boolean state of the `padded` prop)
-- CustomContent — full header/content/footer composition (deployment-summary example; justified: demonstrates the ceiling of the custom-content slots)
 
 ## Constraints — DO NOT
 
