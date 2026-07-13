@@ -7,13 +7,15 @@ on:
     paths:
       - 'apps/storybook/**'
 
+permissions: {}
+
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
+      contents: read
 
     steps:
       - name: Checkout
