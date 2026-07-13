@@ -1,0 +1,8 @@
+/* CANARY — must keep failing selector-class-pattern (kebab-case only). */
+.CountryFlag {
+  background-position: 0 0;
+}
+
+.country_flag {
+  background-position: 0 0;
+}

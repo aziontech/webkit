@@ -24,7 +24,7 @@ export const fontSize = {
   '8xl': '6rem',
   '8xl--line-height': '1',
   '9xl': '8rem',
-  '9xl--line-height': '1',
-};
+  '9xl--line-height': '1'
+}
 
-export default { fontSize };
+export default { fontSize }

@@ -2,7 +2,7 @@ export const opacity = {
   25: '0.25',
   50: '0.5',
   75: '0.75',
-  100: '1',
-};
+  100: '1'
+}
 
-export default { opacity };
+export default { opacity }

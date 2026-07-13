@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { onClickOutside } from '@vueuse/core'
-  import { computed, type Ref, ref, useAttrs, watch } from 'vue'
+  import { type MaybeElement, onClickOutside } from '@vueuse/core'
+  import { computed, shallowRef, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element.js'
@@ -28,7 +28,7 @@
   )
 
   const root = useNavigationMenuRoot()
-  const popupHostRef = ref<HTMLElement | null>(null)
+  const popupHostRef = shallowRef<MaybeElement>(null)
 
   const popupClasses = computed(() =>
     cn(
@@ -62,7 +62,7 @@
     { immediate: true }
   )
 
-  onClickOutside(popupHostRef as Ref<HTMLElement | null | undefined>, (event) => {
+  onClickOutside(popupHostRef, (event) => {
     if (!root.menuOpen.value) {
       return
     }

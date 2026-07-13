@@ -59,6 +59,40 @@ pnpm governance             # lint + type-check + format:check + security:audit
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
 
+## Testing
+
+Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`.claude/rules/testing.md`](./.claude/rules/testing.md).
+
+```bash
+pnpm webkit:test                              # whole suite (headless Chromium)
+pnpm --filter @aziontech/webkit test:ui       # interactive UI (headed browser)
+pnpm --filter @aziontech/webkit test:coverage # v8 coverage report
+```
+
+The first run installs the browser: `pnpm --filter @aziontech/webkit exec playwright install chromium`.
+
+If pnpm aborts with a deps-verify error (common when `node_modules` is symlinked, e.g. a git worktree), prefix the command:
+
+```bash
+PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm webkit:test
+```
+
+Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm pack:check`.
+
+### Visual regression (Storybook test-runner)
+
+The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA. Pixels are owned by the visual layer: `@storybook/test-runner` visits every story in the built Storybook, screenshots `#storybook-root` and compares against committed baselines (`jest-image-snapshot`). Config: [`apps/storybook/.storybook/test-runner.js`](./apps/storybook/.storybook/test-runner.js).
+
+```bash
+pnpm storybook:test:visual                    # build + serve dist + compare (one-shot)
+pnpm --filter storybook run test:visual       # compare against a running `storybook:dev`
+pnpm --filter storybook run test:visual:update# regenerate LOCAL baselines
+```
+
+Baselines are **per-platform** (font rasterization differs): `apps/storybook/.storybook/test-visual/__image_snapshots__/linux/` is the CI contract and is committed; `darwin/` is local-only and gitignored. To bootstrap or intentionally update the committed baselines, run the **Visual Regression @ Storybook** workflow manually with `update_baselines=true`, download the `visual-baselines-linux` artifact and commit its contents — never commit baselines generated on macOS. Failed comparisons write annotated diffs to `test-visual/__diff_output__/` (uploaded as a CI artifact).
+
+Opt a story out of the snapshot (it is still visited for render errors) with `parameters: { visual: false }`.
+
 ## Commit convention
 
 We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-release` parses commit messages to compute version bumps and changelogs, so the scope and type matter.

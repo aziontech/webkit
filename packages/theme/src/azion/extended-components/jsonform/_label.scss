@@ -3,7 +3,7 @@
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
 
     .wrapper:has(+ .error) .input {
       border: 1px solid var(--error-color) !important;
@@ -39,7 +39,7 @@
         position: relative;
 
         &:after {
-          content: "(Required)";
+          content: '(Required)';
           color: var(--text-color-secondary) !important;
           font-size: 0.625rem !important;
           line-height: 1.25rem !important;
@@ -96,7 +96,11 @@
         height: 32px;
         border: 1px solid var(--surface-border);
         border-radius: 6px;
-        transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        transition:
+          background-color 0.2s,
+          color 0.2s,
+          border-color 0.2s,
+          box-shadow 0.2s;
 
         &.array-list-add {
           color: transparent !important;
@@ -109,7 +113,7 @@
             content: '\f16e';
             display: block;
             position: absolute;
-            font-family: "primeicons";
+            font-family: 'primeicons';
             color: var(--text-color) !important;
             left: 7px;
             top: 6px;
@@ -149,12 +153,16 @@
             color: transparent !important;
             border: 1px solid var(--surface-border);
             border-radius: 6px;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            transition:
+              background-color 0.2s,
+              color 0.2s,
+              border-color 0.2s,
+              box-shadow 0.2s;
 
             &::before {
               display: block;
               position: absolute;
-              font-family: "primeicons";
+              font-family: 'primeicons';
               color: var(--text-color) !important;
               left: 7px;
               top: 6px;
@@ -162,7 +170,7 @@
               height: 16px;
             }
 
-            &:hover{
+            &:hover {
               background-color: var(--surface-hover) !important;
             }
           }
