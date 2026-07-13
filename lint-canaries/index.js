@@ -332,7 +332,11 @@ function checkPrettier() {
   if (!assertFixturesExist(PRETTIER_CANARIES)) return
 
   const files = PRETTIER_CANARIES.map((f) => rel(f))
-  const res = run('prettier', ['--list-different', ...files])
+  // --ignore-path=/dev/null bypasses the root .prettierignore (which excludes
+  // lint-canaries/ so repo-wide `prettier --write` sweeps cannot "fix" the
+  // fixtures) and prettier 3's default .gitignore handling — the canary run is
+  // the ONE place these files must still be seen by prettier.
+  const res = run('prettier', ['--list-different', '--ignore-path', '/dev/null', ...files])
 
   // 0 = everything formatted (all canaries dead), 1 = differences (expected).
   if (res.error || (res.status !== 0 && res.status !== 1)) {

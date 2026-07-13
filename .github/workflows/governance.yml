@@ -49,6 +49,7 @@ jobs:
               - 'packages/webkit/eslint.config.js'
               - '.stylelintrc.json'
               - '.prettierrc.json'
+              - '.prettierignore'
               - 'commitlint.config.js'
               - 'lint-canaries/**'
               - 'package.json'

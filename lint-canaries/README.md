@@ -47,9 +47,10 @@ lint-canaries/
 
 - The repo lint scripts and CI lint job are scoped to `packages/webkit/src` (ESLint) and `packages/webkit/**` globs (Stylelint, Prettier, lint-staged). This directory lives at the repo root, outside all of them.
 - `packages/webkit/tsconfig.json` only includes `src/**`, so `vue-tsc` / `type-coverage` never see these files.
+- The root [`.prettierignore`](../.prettierignore) excludes `lint-canaries/`, so **repo-wide `prettier --write` sweeps can never "fix" the fixtures** (a sweep once reformatted the two Prettier fixtures and collapsed `${ label }` in the `template-curly-spacing` one, silently killing 3 canaries). The runner is the one place that must still see them, so it calls prettier with `--ignore-path=/dev/null`.
 - Only the canary runner ever lints them — expecting failure.
 
-Do **not** add `lint-canaries/` to any lint script's target, and do not "fix" these files: red squiggles in your editor here are the whole point.
+Do **not** add `lint-canaries/` to any lint script's target, do not remove it from `.prettierignore`, and do not "fix" these files — not even with `prettier --write` or `eslint --fix`: red squiggles in your editor here are the whole point.
 
 ## Adding / removing a canary
 
