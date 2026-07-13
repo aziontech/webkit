@@ -20,6 +20,7 @@ jobs:
       webkit: ${{ steps.filter.outputs.webkit }}
       tests: ${{ steps.filter.outputs.tests }}
       visual: ${{ steps.filter.outputs.visual }}
+      canary: ${{ steps.filter.outputs.canary }}
     steps:
       - uses: actions/checkout@v4
 
@@ -40,6 +41,19 @@ jobs:
               - 'packages/theme/**'
               - 'packages/icons/**'
               - 'apps/storybook/**'
+            # Lint canaries guard the lint CONFIGS: anything that can change a
+            # rule's behavior (configs, the fixtures themselves, tooling deps)
+            # retriggers the canary job.
+            canary:
+              - 'eslint.config.js'
+              - 'packages/webkit/eslint.config.js'
+              - '.stylelintrc.json'
+              - '.prettierrc.json'
+              - 'commitlint.config.js'
+              - 'lint-canaries/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/governance.yml'
 
   # Security Scanning (parallel, fast)
   security:
@@ -78,6 +92,36 @@ jobs:
         run: npx depcheck --ignores="@types/*,eslint-*,semantic-release"
         working-directory: packages/webkit
         continue-on-error: true
+
+  # Lint Canary (parallel, side by side with Security Scans) — INVERTED logic.
+  # Every fixture in lint-canaries/ violates one configured lint rule ON
+  # PURPOSE and must KEEP failing it. A fixture that lints clean means the
+  # rule was weakened or removed (eslint.config.js / .stylelintrc.json /
+  # .prettierrc.json / commitlint.config.js), so the job fails and stops the
+  # pipeline. See lint-canaries/README.md.
+  lint-canary:
+    name: Lint Canary (broken samples must stay broken)
+    needs: changes
+    if: needs.changes.outputs.canary == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run lint canaries (every fixture must still fail its rule)
+        run: node lint-canaries/index.js
 
   # Linting & Formatting (parallel)
   lint:
@@ -249,7 +293,7 @@ jobs:
   visual:
     name: Storybook visual tests
     runs-on: ubuntu-latest
-    needs: [changes, security, lint, types, build, storybook, tests]
+    needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
     steps:
@@ -297,13 +341,14 @@ jobs:
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint, types, build, storybook, tests, visual]
+    needs: [changes, security, lint-canary, lint, types, build, storybook, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
         run: |
           declare -A results=(
             [security]="${{ needs.security.result }}"
+            [lint-canary]="${{ needs.lint-canary.result }}"
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
