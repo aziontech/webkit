@@ -259,6 +259,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0 # full history so check-tests can diff a PR against its base
 
       - name: Setup pnpm
         uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
@@ -280,6 +282,12 @@ jobs:
 
       - name: Construction-standard ratchet (no new authoring violations)
         run: pnpm --filter @aziontech/webkit run authoring
+
+      - name: Every component has & updates its test (testing.md)
+        run: pnpm --filter @aziontech/webkit run test:gate
+        env:
+          # On a PR, require a changed component to ship its test in the SAME diff.
+          TEST_GATE_BASE: ${{ github.event_name == 'pull_request' && github.base_ref || '' }}
 
   # Vitest browser mode (real Chromium), sharded by 4 — behavior/structure/ARIA
   # on an unstyled DOM. Ordered after lint + types (same tier as build/storybook).

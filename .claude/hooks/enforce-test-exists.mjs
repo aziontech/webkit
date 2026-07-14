@@ -1,11 +1,15 @@
 #!/usr/bin/env node
-// PostToolUse hook: after a webkit-layer ROOT component .vue is written, warns
-// when the co-located <name>.test.ts is missing. Every component ships a
-// browser-mode functional suite next to its .vue (.claude/rules/testing.md).
+// PostToolUse hook: after a ROOT component .vue is written OR edited, blocks
+// (exit 2) when the co-located <name>.test.ts is missing. You cannot create a
+// component without a test, nor update one whose test does not exist — every
+// component ships a browser-mode functional suite next to its .vue
+// (.claude/rules/testing.md, a `general` standard). Freshness on update (a
+// changed .vue whose test was NOT touched) is the CI gate check-tests; this
+// write-time hook owns existence, on both create (Write) and update (Edit/MultiEdit).
 //
 // Why PostToolUse (not Pre): /component-create writes the .vue before any test
 // can exist, so a Pre block would deadlock the pipeline. Post surfaces the
-// reminder without undoing the write — same wiring as validate-spec-compliance.
+// blocking reminder without undoing the write — same wiring as validate-spec-compliance.
 //
 // Only the ROOT .vue is checked (basename === folder name). Composition
 // sub-components are tested through their root (testing.md), and resolveSpec…
@@ -37,7 +41,9 @@ async function main() {
     process.exit(0)
   }
 
-  if (input.tool_name !== 'Write') process.exit(0)
+  // Creating (Write) OR updating (Edit/MultiEdit) a component .vue both require the
+  // co-located test to exist — you cannot land a new or changed component untested.
+  if (!['Write', 'Edit', 'MultiEdit'].includes(input.tool_name)) process.exit(0)
   const filePath = input.tool_input?.file_path
   if (!filePath) process.exit(0)
 
