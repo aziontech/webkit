@@ -6632,6 +6632,46 @@
       ],
       "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts."
     },
+    "theme-switcher": {
+      "import": "@aziontech/webkit/theme-switcher",
+      "target": "./src/components/inputs/theme-switcher/theme-switcher.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/theme-switcher",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "value",
+          "type": "'system' | 'dark' | 'light'",
+          "default": "'system'",
+          "required": "no",
+          "doc": "Selected theme mode. Bind with `v-model:value`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the whole control and applies disabled tokens."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Theme'",
+          "required": "no",
+          "doc": "Accessible name for the icon-only segmented group."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:value",
+          "payload": "'system' | 'dark' | 'light'",
+          "notes": "Emitted when the user selects a mode. Paired with `v-model:value`."
+        }
+      ],
+      "purpose": "A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It is a pure controlled input: it reflects and emits the selected mode with `v-model:value` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tab-view` (view navigation), it is a fixed three-way single-select over the theme modes."
+    },
     "textarea": {
       "import": "@aziontech/webkit/textarea",
       "target": "./src/components/inputs/textarea/textarea.vue",
