@@ -180,21 +180,19 @@ describe('TabView (composition)', () => {
     })
   })
 
-  describe('v-model:value round-trip and value-change/update:value', () => {
-    it('emits both update:value and value-change with the new value on activation', async () => {
-      const changes: Array<string | number | null> = []
+  describe('v-model:value round-trip and update:value', () => {
+    it('emits update:value with the new value on activation', async () => {
       const updates: Array<string | number | null> = []
 
       const Host = defineComponent({
         components: { TabView, TabViewList, TabViewItem },
         setup() {
           return {
-            onUpdate: (v: string | number | null) => updates.push(v),
-            onChange: (v: string | number | null) => changes.push(v)
+            onUpdate: (v: string | number | null) => updates.push(v)
           }
         },
         template: `
-          <TabView default-value="tab-1" @update:value="onUpdate" @value-change="onChange">
+          <TabView default-value="tab-1" @update:value="onUpdate">
             <TabViewList>
               <TabViewItem value="tab-1" label="First" />
               <TabViewItem value="tab-2" label="Second" />
@@ -207,7 +205,6 @@ describe('TabView (composition)', () => {
       await fireEvent.click(getByText('Second'))
 
       expect(updates.at(-1)).toBe('tab-2')
-      expect(changes.at(-1)).toBe('tab-2')
     })
 
     it('round-trips v-model:value — external change selects the matching tab and content', async () => {

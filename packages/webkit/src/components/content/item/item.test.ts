@@ -178,24 +178,21 @@ describe('Item (composition)', () => {
       expect(el.textContent).toBe('A description')
     })
 
-    it('ItemMedia defaults data-media-kind to "default"', () => {
+    it('ItemMedia defaults data-kind to "default"', () => {
       const { getByTestId } = render(Item.Media, {
         slots: { default: '<span>m</span>' }
       })
-      expect(getByTestId('content-item__media').getAttribute('data-media-kind')).toBe('default')
+      expect(getByTestId('content-item__media').getAttribute('data-kind')).toBe('default')
     })
 
-    it.each([['icon'], ['image']])(
-      'ItemMedia reflects mediaKind="%s" on data-media-kind',
-      (mediaKind) => {
-        // mediaKind is the one scalar prop on ItemMedia; it drives data-media-kind.
-        const { getByTestId } = render(Item.Media, {
-          props: { mediaKind },
-          slots: { default: '<span>m</span>' }
-        })
-        expect(getByTestId('content-item__media').getAttribute('data-media-kind')).toBe(mediaKind)
-      }
-    )
+    it.each([['icon'], ['image']])('ItemMedia reflects kind="%s" on data-kind', (kind) => {
+      // kind is the one scalar prop on ItemMedia; it drives data-kind.
+      const { getByTestId } = render(Item.Media, {
+        props: { kind },
+        slots: { default: '<span>m</span>' }
+      })
+      expect(getByTestId('content-item__media').getAttribute('data-kind')).toBe(kind)
+    })
   })
 
   describe('asChild — merges root bindings onto the single slotted child (merge-as-child.js)', () => {
