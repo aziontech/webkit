@@ -226,6 +226,7 @@
     "./field-switch-block": "./src/components/inputs/field-switch-block/field-switch-block.vue",
     "./radio-button": "./src/components/inputs/radio-button/radio-button.vue",
     "./switch": "./src/components/inputs/switch/switch.vue",
+    "./theme-switcher": "./src/components/inputs/theme-switcher/theme-switcher.vue",
     "./textarea": "./src/components/inputs/textarea/textarea.vue",
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
     "./dropdown": "./src/components/navigation/dropdown/index.ts",
