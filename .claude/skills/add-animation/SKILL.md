@@ -57,7 +57,7 @@ Add a row to the component's `## Theme gaps` table in `.specs/<component>.md`:
 
 ### 3. Regenerate the catalog
 
-Run `pnpm --filter @aziontech/webkit.dev catalog:build` (or `node packages/webkit/scripts/build-catalog.mjs`).
+Run `pnpm --filter @aziontech/webkit catalog:build` (or `node packages/webkit/scripts/build-catalog.mjs`).
 Confirm `<name>` now appears in `catalog.json → tokens.animations`. This is what makes
 `validate-spec-compliance` accept `animate-<name>` in the component.
 

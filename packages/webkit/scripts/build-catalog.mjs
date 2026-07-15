@@ -34,12 +34,9 @@ const THEME_GLOBALS_CANDIDATES = [
 ]
 const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/texts.data.js')
 
-// The public import name is always `@aziontech/webkit`, on every channel: external
-// consumers install the release package by that name, and inside the monorepo the dev
-// package (`@aziontech/webkit.dev`) is aliased to it, so every import written anywhere
-// is `@aziontech/webkit/<subpath>`. The catalog therefore stamps this name into every
-// import path. (Resolving the catalog FILE on disk still accepts either package name —
-// see the dual-name resolver in the eslint-plugin / mcp loaders.)
+// The public import name is always `@aziontech/webkit`: every import written anywhere
+// is `@aziontech/webkit/<subpath>`, so the catalog stamps this name into every
+// import path.
 const PKG_NAME = '@aziontech/webkit'
 
 // Token rules ported verbatim from .claude/hooks/validate-tokens.mjs so the
@@ -130,11 +127,24 @@ function loadSpec(subpath) {
   return value
 }
 
+/**
+ * Strip HTML comments, re-applying until the text is stable: a single pass can leave a
+ * residual `<!--` when removals concatenate into a new comment opener.
+ */
+function stripHtmlComments(text) {
+  let out = String(text)
+  let prev
+  do {
+    prev = out
+    out = out.replace(/<!--[\s\S]*?-->/g, '')
+  } while (out !== prev)
+  return out
+}
+
 /** First real prose paragraph of a section (drops HTML comments + the `_none_` sentinel). */
 function firstProse(section) {
   if (!section) return ''
-  const text = String(section)
-    .replace(/<!--[\s\S]*?-->/g, '')
+  const text = stripHtmlComments(section)
     .split('\n')
     .map((l) => l.trim())
     .filter((l) => l && !l.startsWith('#') && !l.startsWith('|') && l !== '_none_')
@@ -146,8 +156,7 @@ function firstProse(section) {
 /** Markdown list items of a section as a trimmed string array (drops HTML comments). */
 function bullets(section) {
   if (!section) return []
-  return String(section)
-    .replace(/<!--[\s\S]*?-->/g, '')
+  return stripHtmlComments(section)
     .split('\n')
     .map((l) => l.trim())
     .filter((l) => /^[-*]\s+/.test(l))

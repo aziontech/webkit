@@ -12,7 +12,7 @@ Run the **add-animation** skill (`.claude/skills/add-animation/SKILL.md`). It:
    tokens from `primitives/animations/animate.js` (never a raw ms / cubic-bezier literal).
 2. Records a **Theme gaps** row in the component's `.specs/<component>.md` (when a
    component is given) so the addition is tracked.
-3. Regenerates the catalog (`pnpm --filter @aziontech/webkit.dev catalog:build`) so
+3. Regenerates the catalog (`pnpm --filter @aziontech/webkit catalog:build`) so
    `tokens.animations` includes `<name>` and the compliance cross-check passes.
 4. Reminds you to pair the class with `motion-reduce:*` in the component.
 

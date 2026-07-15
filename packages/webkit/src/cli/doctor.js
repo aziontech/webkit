@@ -23,11 +23,10 @@ import {
   STYLELINT_CONFIG_CANDIDATES
 } from './plan.js'
 
-// webkit publishes under two names; a consumer may have installed either.
-const WEBKIT_PKGS = ['@aziontech/webkit', '@aziontech/webkit.dev']
+const WEBKIT_PKGS = ['@aziontech/webkit']
 const ENTRY_CANDIDATES = ['src/main.ts', 'src/main.js', 'src/main.mts', 'src/main.mjs']
 
-/** Resolve the webkit catalog.json from the consumer project, trying both channels. */
+/** Resolve the webkit catalog.json from the consumer project. */
 function resolveCatalog(projectDir) {
   if (process.env.WEBKIT_CATALOG_PATH && existsSync(process.env.WEBKIT_CATALOG_PATH)) {
     return process.env.WEBKIT_CATALOG_PATH
@@ -81,7 +80,7 @@ export function planDoctor(projectDir) {
     add(
       'webkit catalog',
       'fail',
-      'not resolvable — lint rules are DISABLED. Install @aziontech/webkit (or @aziontech/webkit.dev), or set WEBKIT_CATALOG_PATH.'
+      'not resolvable — lint rules are DISABLED. Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH.'
     )
   }
 

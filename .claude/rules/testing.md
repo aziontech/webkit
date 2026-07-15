@@ -19,7 +19,7 @@ jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingC
 
 ## The stack (already wired — do not reinvent)
 
-- `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: 'playwright', instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `resolve.alias['@aziontech/webkit'] = '@aziontech/webkit.dev'` (self-reference so story imports resolve), `retry: process.env.CI ? 2 : 0`.
+- `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. Story imports of `@aziontech/webkit/*` resolve through the workspace package itself (no alias needed).
 - `packages/webkit/src/test/setup.ts` — imports `@aziontech/theme/globals.css` (styled DOM ⇒ axe contrast is real) + `cleanup()`.
 - `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`.
 - `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when webkit/storybook changes; the `toolkit` job runs `test:gate` (existence + freshness).

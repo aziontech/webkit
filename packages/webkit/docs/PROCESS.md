@@ -413,9 +413,8 @@ major ahead; `doctor` reports the resolved versions to pin.
 - `init` records toolkit deps as `latest` for a fresh setup and never re-pins what you
   pinned; after installing, `doctor` prints the resolved versions with suggested `^x.y.z`
   pins.
-- Both published channels resolve identically (`@aziontech/webkit` release,
-  `@aziontech/webkit.dev` dev) — the lint import-prefix and MCP answers follow whichever
-  is installed.
+- The lint import-prefix and MCP answers are read from the resolved catalog's `package`
+  field, so they always match the installed `@aziontech/webkit` version.
 
 </details>
 

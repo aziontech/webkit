@@ -7,7 +7,6 @@ import tsParser from '@typescript-eslint/parser'
 // Point every rule's catalog loader at the fixture (version-locked, deterministic).
 process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.json', import.meta.url))
 
-const { _resetCatalogCache } = await import('../../src/eslint-plugin/catalog.js')
 const validImportPath = (await import('../../src/eslint-plugin/rules/valid-import-path.js')).default
 const noDeepInternalImport = (
   await import('../../src/eslint-plugin/rules/no-deep-internal-import.js')
@@ -120,11 +119,6 @@ test('no-barrel-import', () => {
         errors: [{ messageId: 'barrel', suggestions: 0 }]
       },
       { code: "import * as WK from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] },
-      // the dev channel is a bare barrel too
-      {
-        code: "import { Button } from '@aziontech/webkit.dev'",
-        errors: [{ messageId: 'barrel', suggestions: 1 }]
-      },
       // export-from re-exports, and dynamic import(), are barrels as well
       { code: "export { Button } from '@aziontech/webkit'", errors: [{ messageId: 'barrel' }] },
       { code: "export * from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] },
@@ -187,29 +181,6 @@ test('no-hardcoded-color (script + template)', () => {
       }
     ]
   })
-})
-
-test('resolves the .dev channel package name from the catalog', () => {
-  const prev = process.env.WEBKIT_CATALOG_PATH
-  process.env.WEBKIT_CATALOG_PATH = fileURLToPath(
-    new URL('./fixtures/catalog.dev.json', import.meta.url)
-  )
-  _resetCatalogCache()
-  try {
-    js.run('valid-import-path (dev channel)', validImportPath, {
-      valid: ["import Button from '@aziontech/webkit.dev/button'"],
-      invalid: [
-        {
-          code: "import X from '@aziontech/webkit.dev/buton'",
-          output: 'import X from "@aziontech/webkit.dev/button"',
-          errors: [{ messageId: 'unknown', suggestions: 1 }]
-        }
-      ]
-    })
-  } finally {
-    process.env.WEBKIT_CATALOG_PATH = prev
-    _resetCatalogCache()
-  }
 })
 
 test('prefer-tree-shakeable-root', () => {

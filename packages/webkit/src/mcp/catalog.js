@@ -15,14 +15,13 @@ import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
-// webkit publishes under two names: the release channel (`@aziontech/webkit`) and the
-// dev channel (`@aziontech/webkit.dev`). Resolve whichever the consuming project has
-// installed; the import PREFIX every answer uses is read from the resolved catalog's
-// own `package` field, so it always matches the installed name.
-const CANDIDATE_PKGS = ['@aziontech/webkit', '@aziontech/webkit.dev']
+// webkit publishes under a single name (`@aziontech/webkit`). The import PREFIX every
+// answer uses is read from the resolved catalog's own `package` field, so it always
+// matches the installed name.
+const CANDIDATE_PKGS = ['@aziontech/webkit']
 const DEFAULT_PKG = CANDIDATE_PKGS[0]
 
-/** True when `src` is a bare import of either webkit package name. */
+/** True when `src` is a bare import of the webkit package name. */
 export function isWebkitBare(src) {
   return typeof src === 'string' && CANDIDATE_PKGS.includes(src)
 }
@@ -156,7 +155,7 @@ export function loadCatalog(cwd) {
     value = empty()
     warnOnce(
       'could not resolve a webkit catalog.json — answers will degrade to "not available". ' +
-        'Install @aziontech/webkit (or @aziontech/webkit.dev), or set WEBKIT_CATALOG_PATH.'
+        'Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH.'
     )
   } else {
     try {

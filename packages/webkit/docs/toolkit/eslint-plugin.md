@@ -4,7 +4,7 @@ ESLint rules that make **correct and performant** usage of the [`@aziontech/webk
 
 The catalog-backed rules read the **installed** webkit `catalog.json` (the version-locked manifest of allowed imports + token rules that ships inside the webkit package), so what the linter enforces always matches the webkit version the project actually has. If no webkit catalog can be resolved, the catalog-backed rules disable themselves and print a one-line warning — they never crash an unrelated repo, but they never fail _silently_ either. The construction-standard rules (`authoring-standards`, `prefer-define-model`, `no-style-override`) are catalog-independent and always run.
 
-The plugin resolves either published channel automatically: `@aziontech/webkit` (release) or `@aziontech/webkit.dev` (dev). The import prefix the rules match is read from the resolved catalog, so it always matches the installed name.
+The import prefix the rules match is read from the resolved catalog, so it always matches the installed name.
 
 ## Install
 

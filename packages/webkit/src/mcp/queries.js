@@ -15,7 +15,7 @@ const NOT_AVAILABLE = {
   available: false,
   message:
     '@aziontech/webkit is not installed in this project (or its catalog.json is not resolvable). ' +
-    'Install @aziontech/webkit (or @aziontech/webkit.dev), or set WEBKIT_CATALOG_PATH to its catalog.json.'
+    'Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH to its catalog.json.'
 }
 
 /** kebab subpath → PascalCase binding: `empty-state` → `EmptyState`, `table-row` → `TableRow`. */
