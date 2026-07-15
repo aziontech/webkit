@@ -1,16 +1,14 @@
 <script setup>
-import Avatar from "@aziontech/webkit/avatar";
-import Breadcrumb from "@aziontech/webkit/breadcrumb";
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
-import GlobalHeader from "@aziontech/webkit/global-header";
-import IconButton from "@aziontech/webkit/icon-button";
 import InputText from "@aziontech/webkit/input-text";
 import Item from "@aziontech/webkit/item";
 import Select from "@aziontech/webkit/select";
 import TabView from "@aziontech/webkit/tab-view";
 import { computed, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import CreationHeader from "./ui/CreationHeader.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -149,66 +147,12 @@ const resources = [
 
 <template>
   <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
-    <!-- Global header: back to console, brand + breadcrumb, help + account. -->
-    <GlobalHeader aria-label="Azion Console">
-      <GlobalHeader.Left>
-        <IconButton
-          icon="pi pi-chevron-left"
-          aria-label="Back to dashboard"
-          kind="outlined"
-          size="small"
-          @click="goToDashboard"
-        />
-        <GlobalHeader.Brand>
-          <span class="text-[var(--primary)]">
-            <svg
-              viewBox="0 0 90 18"
-              fill="currentColor"
-              role="img"
-              aria-label="Azion"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M86.637 0L85.1445 7.79033L87.861 11.1671L90 0H86.637ZM72.5099 0L69.1465 17.561H72.5111L74.8163 5.52224L84.5333 17.561H86.637L87.0518 15.4112L74.6131 0H72.5099Z"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M51.6563 0L48.293 17.561H65.7833L69.1466 0H51.6563ZM54.3884 3.31794H65.1392L63.0467 14.243H52.296L54.3884 3.31794Z"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M45.0001 0L41.707 17.561H44.9994L48.2924 0H45.0001Z"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M24.217 0L23.5814 3.31801H35.1962L21.3511 14.9756L20.8535 17.561H38.3437L38.9793 14.243H27.3646L41.2126 2.58289L41.7072 0H24.217Z"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M18.2868 0L0.490892 14.9821L0 17.561H2.5639L16.349 5.96141L14.1271 17.561H17.4898L20.8537 0H18.2868Z"
-              />
-            </svg>
-          </span>
-        </GlobalHeader.Brand>
-        <Breadcrumb :items="[{ label: 'Creation Center', current: true }]" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
-        <IconButton
-          icon="pi pi-question-circle"
-          aria-label="Help"
-          kind="transparent"
-          size="medium"
-        />
-        <Avatar :label="userEmail" size="medium" />
-      </GlobalHeader.Right>
-    </GlobalHeader>
+    <!-- Global header: back to console, brand + breadcrumb. -->
+    <CreationHeader
+      :breadcrumb="[{ label: 'Creation Center', current: true }]"
+      back-label="Back to dashboard"
+      @back="goToDashboard"
+    />
 
     <!-- Flow content -->
     <main class="min-w-0 flex-1 overflow-auto">
@@ -245,6 +189,7 @@ const resources = [
                     <Select
                       :model-value="scope"
                       aria-label="Git account scope"
+                      size="large"
                       :display-value="
                         (v) => scopes.find((s) => s.value === v)?.label ?? ''
                       "
@@ -275,6 +220,7 @@ const resources = [
 
                     <InputText
                       v-model="search"
+                      size="large"
                       placeholder="Search project or enter a Git Repository URL"
                       aria-label="Search project or enter a Git Repository URL"
                       class="w-full flex-1"
@@ -339,7 +285,7 @@ const resources = [
                   </template>
                   <template #content>
                     <div
-                      class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2"
+                      class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-3"
                     >
                       <button
                         v-for="(tpl, i) in templates"
