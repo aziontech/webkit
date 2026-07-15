@@ -56,6 +56,8 @@ PRO UX first → Minimal & Polished → earned delight. Run the skills roughly i
 | Goal | Skill |
 |---|---|
 | Structure the flow: right component, states, feedback, heuristics | [`/ux-heuristics`](../ux-heuristics/SKILL.md) |
+| Get async behavior right: lock the scope while running, toast request/API errors | [`/usability`](../usability/SKILL.md) |
+| Build accessible forms: Cards+ItemGroups or Fields-separated, fieldset/legend, submit-time required/invalid | [`/form`](../form/SKILL.md) |
 | Clean up slop: components-only, tokens-only, hierarchy, rhythm | [`/baseline-ui`](../baseline-ui/SKILL.md) |
 | Make motion smooth with animate tokens only | [`/motion-polish`](../motion-polish/SKILL.md) |
 | Final taste pass: hierarchy, rhythm, state completeness, balance | [`/impeccable-polish`](../impeccable-polish/SKILL.md) |
