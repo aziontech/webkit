@@ -86,6 +86,44 @@ hand-rolled, nothing hardcoded.
 - **SHOULD** drive variant styling from `data-*` attributes (per [`styling.md`](../../rules/styling.md)),
   not from JS class-preset objects.
 
+### Width & containers — fluid-first shell, cap only reading width
+
+The default is **fluid**: content fills the space the shell gives it. A container
+(`max-w-[var(--container-*)]`) is the exception, applied only where unbounded width hurts legibility or
+balance. Reach for it in this order.
+
+- **MUST** keep the **app shell fluid-first** — never cap it with a container. The **sidebar**, the
+  **global header**, the **page heading**, and the **main content spacing** (the content zone's
+  `p-[var(--spacing-*)]` inset) all stay full-width and stretch with the viewport. These are chrome; a
+  max-width on them only creates dead gutters.
+- **MUST** cap **reading / input width** with `max-w-[var(--container-2xs … xl)]`: form fields, text
+  columns, focused auth/save cards, fixed side rails. Pick the tight end (`2xs … sm`) for compact
+  settings rows and the loose end (up to `xl`, 576px) for an ItemGroup control column that must fit a
+  longer value — see [`/form`](../form/SKILL.md). A form input that spans a 2560px screen is a
+  legibility bug, not a feature.
+- **MUST** give **focused create/edit flows** a centered page container — `mx-auto
+  max-w-[var(--container-7xl)]` on the flow's content wrapper — so the column sits centered instead of
+  drifting to the left edge on wide screens. This is the one place the *page section* (not just a field)
+  is capped.
+- **SHOULD** keep **data-dense surfaces fluid** — tables, dashboards, log/grid views breathe to the full
+  content width; don't box them into a narrow container.
+- **MUST** express every cap as `max-w-[var(--container-<size>)]` (`3xs … 7xl`, from
+  `primitives/shape/container.js`). **NEVER** a raw `max-w-5xl` / `max-w-[768px]`, and never a legacy
+  helper (`.max-container-width`, `--container-max-width`). See [`DESIGN.md`](../../docs/DESIGN.md) § Max width.
+
+### Control size rhythm — same size on a horizontal line
+
+- **MUST** give buttons and fields sitting on the **same horizontal line** the **same `size`**. When a
+  `@aziontech/webkit/button` sits beside an `@aziontech/webkit/input-text` (search bar + submit, filter
+  row, toolbar, inline form), both take the same size token so their heights match and the row shares one
+  baseline. A `medium` input next to a `large` button breaks the rhythm.
+- **MUST** keep that one size consistent across every control in the group — inputs, selects, buttons,
+  icon-buttons in the same toolbar all share it. Don't mix a `small` icon-button into a row of `medium`
+  controls.
+- **SHOULD** align them on a shared baseline (`items-center` / `items-end`) so equal heights actually
+  read as one line, not stacked boxes.
+- Vertical stacks are exempt — this is about controls that sit **side by side**.
+
 ### Design restraint
 
 - **NEVER** gradients, glow effects, or multicolor fills unless explicitly requested.
@@ -118,4 +156,6 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - [ ] No HEX / rgb / Tailwind palette / arbitrary spacing / `rounded-md|lg` / raw `text-*` size remains.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
+- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width and focused flows are capped, always via `max-w-[var(--container-*)]`.
+- [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.
 - [ ] (File mode) Every violation has a quoted line, a why, and a concrete fix.
