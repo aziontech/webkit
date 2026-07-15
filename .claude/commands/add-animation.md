@@ -9,7 +9,7 @@ Run the **add-animation** skill (`.claude/skills/add-animation/SKILL.md`). It:
 
 1. Adds a `.animate-<name>` utility + its `@keyframes` to
    `packages/theme/src/tokens/semantic/animations.js`, using the `duration` / `curve`
-   tokens from `primitives/animations/animate.js` (never a raw ms / cubic-bezier literal).
+   tokens from `primitives/animations/animate.js` — published as `@aziontech/theme/animations` — (never a raw ms / cubic-bezier literal).
 2. Records a **Theme gaps** row in the component's `.specs/<component>.md` (when a
    component is given) so the addition is tracked.
 3. Regenerates the catalog (`pnpm --filter @aziontech/webkit catalog:build`) so

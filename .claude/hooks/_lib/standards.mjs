@@ -270,11 +270,8 @@ export const STANDARDS = [
     id: 'bundle-budget',
     kind: 'construction',
     scope: 'webkit',
-    enforce: [
-      { surface: 'ci', by: 'size-limit' },
-      { surface: 'review', by: 'required-approval' }
-    ],
-    note: 'size-limit config present; CI job pending activation, review gates it meanwhile.'
+    enforce: [{ surface: 'review', by: 'required-approval' }],
+    note: 'Budget of record lives in packages/webkit/.size-limit.json. An automated size gate is pending — size-limit needs a vue-aware preset (the binary is not installed today), so no CI job or script claims it yet. Review holds the line meanwhile; wire the CI job when the tooling lands.'
   },
   {
     id: 'testing',

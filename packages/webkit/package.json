@@ -16,8 +16,6 @@
     "clean": "rm -rf dist/",
     "pack:dry": "npm pack --dry-run",
     "pack:check": "! npm pack --dry-run 2>&1 | grep -E '\\.test\\.(ts|js)|src/test/'",
-    "size": "size-limit",
-    "size:why": "size-limit --why",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
     "lint": "eslint src --ext .js,.js,.vue --max-warnings 0",
@@ -92,10 +90,10 @@
     "@vitest/ui": "^4.1.9",
     "axe-core": "^4.10.3",
     "conventional-changelog-conventionalcommits": "^7.0.0",
-    "eslint": ">=9",
+    "eslint": "^9.39.3",
     "playwright": "^1.61.1",
     "semantic-release": "^23.0.0",
-    "stylelint": ">=16",
+    "stylelint": "^17.7.0",
     "vitest": "^4.1.9",
     "vue": "^3.5.29",
     "vue-eslint-parser": ">=9"
@@ -105,6 +103,7 @@
     "!src/**/*.test.{ts,js}",
     "!src/test/**",
     "cli-templates",
+    "docs",
     "catalog.json",
     "package.json"
   ],
@@ -115,6 +114,7 @@
   "exports": {
     "./catalog.json": "./catalog.json",
     "./package.json": "./package.json",
+    "./docs/STYLEGUIDE.md": "./docs/STYLEGUIDE.md",
     "./eslint-plugin": "./src/eslint-plugin/index.js",
     "./stylelint-config": "./src/stylelint-config.js",
     "./empty-results-block": "./src/components/empty-results-block/empty-results-block.vue",

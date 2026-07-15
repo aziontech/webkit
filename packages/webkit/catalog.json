@@ -1573,6 +1573,12 @@
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/package.json"
     },
+    "docs/STYLEGUIDE.md": {
+      "import": "@aziontech/webkit/docs/STYLEGUIDE.md",
+      "target": "./docs/STYLEGUIDE.md",
+      "kind": "doc",
+      "treeShakeableImport": "@aziontech/webkit/docs/STYLEGUIDE.md"
+    },
     "eslint-plugin": {
       "import": "@aziontech/webkit/eslint-plugin",
       "target": "./src/eslint-plugin/index.js",
@@ -8017,21 +8023,21 @@
         {
           "name": "defaultOpen",
           "type": "boolean",
-          "default": "undefined",
+          "default": "false",
           "required": "no",
           "doc": "Initial open state when uncontrolled."
         },
         {
           "name": "dismissible",
           "type": "boolean",
-          "default": "undefined",
+          "default": "true",
           "required": "no",
           "doc": "When true, overlay click and Escape close the dialog."
         },
         {
           "name": "size",
           "type": "DialogSize",
-          "default": "undefined",
+          "default": "'medium'",
           "required": "no",
           "doc": "Panel max-width preset passed to the inner Panel."
         }
@@ -8146,28 +8152,28 @@
         {
           "name": "defaultOpen",
           "type": "boolean",
-          "default": "undefined",
+          "default": "false",
           "required": "no",
           "doc": "Initial open state when uncontrolled."
         },
         {
           "name": "dismissible",
           "type": "boolean",
-          "default": "undefined",
+          "default": "true",
           "required": "no",
           "doc": "When true, overlay click and Escape close the drawer."
         },
         {
           "name": "side",
           "type": "DrawerSide",
-          "default": "undefined",
+          "default": "'right'",
           "required": "no",
           "doc": "Edge the drawer panel slides from."
         },
         {
           "name": "size",
           "type": "DrawerSize",
-          "default": "undefined",
+          "default": "'medium'",
           "required": "no",
           "doc": "Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport."
         }

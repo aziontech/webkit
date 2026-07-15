@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/components/**
-// (excluding the wip/ legacy zone) when the content violates DESIGN.md /
+// when the content violates DESIGN.md /
 // COMPONENT_REQUIREMENTS.md rules: hex/rgb/hsl colors, Tailwind palette, raw
 // typography, PrimeVue color utils, `class` in defineProps, `any`, `@ts-ignore`.
 
@@ -11,7 +11,6 @@ import { TOKEN_CHECKS as VIOLATIONS } from './_lib/token-checks.mjs'
 
 const ROOT = process.cwd()
 const TARGET_PREFIX = 'packages/webkit/src/components/'
-const WIP_PREFIX = 'packages/webkit/src/components/wip/'
 
 function readStdin() {
   return new Promise((resolveStdin) => {

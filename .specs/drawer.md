@@ -4,10 +4,11 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 65965dbd5347e3baa7e40b64a88db40716b795e9f262f6578702e04740f32c8f
+checksum: c3a154355d143cc737f006a3f8542e627fda21de59e172a6ba966520884f31fd
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-07-15
 ---
+
 # Drawer — Component Spec
 
 ## Purpose
@@ -46,25 +47,25 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `undefined` | no | Initial open state when uncontrolled. |
-| `dismissible` | `boolean` | `undefined` | no | When true, overlay click and Escape close the drawer. |
-| `side` | `DrawerSide` | `undefined` | no | Edge the drawer panel slides from. |
-| `size` | `DrawerSize` | `undefined` | no | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
+| Prop          | Type         | Default     | Required | JSDoc                                                                                                   |
+| ------------- | ------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `open`        | `boolean`    | `undefined` | no       | Controlled open state. Use with `v-model:open`.                                                         |
+| `defaultOpen` | `boolean`    | `false`     | no       | Initial open state when uncontrolled.                                                                   |
+| `dismissible` | `boolean`    | `true`      | no       | When true, overlay click and Escape close the drawer.                                                   |
+| `side`        | `DrawerSide` | `'right'`   | no       | Edge the drawer panel slides from.                                                                      |
+| `size`        | `DrawerSize` | `'medium'`  | no       | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event         | Payload          | Notes         |
+| ------------- | ---------------- | ------------- |
 | `update:open` | `value: boolean` | v-model:open. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
@@ -77,20 +78,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

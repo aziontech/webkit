@@ -43,16 +43,50 @@ const PKG_NAME = '@aziontech/webkit'
 // linter / stylelint / MCP validate against the same set the DS itself enforces.
 // Stored as source strings + flags (JSON-serializable) — consumers rebuild RegExp.
 const TOKEN_RULES = [
-  { id: 'hex-color', pattern: '#[0-9a-fA-F]{3,8}\\b', flags: 'g', message: 'Hex color hardcoded. Use semantic tokens (var(--primary), var(--bg-surface), var(--text-default), ...).' },
-  { id: 'rgb-hsl', pattern: '\\b(rgba?|hsla?)\\s*\\(', flags: 'g', message: 'RGB/HSL hardcoded. Use semantic tokens via var(--*).' },
-  { id: 'tailwind-palette', pattern: '\\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent)-(?:gray|slate|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\\d{2,3}\\b', flags: 'g', message: 'Tailwind palette color. Use semantic webkit tokens (var(--primary), var(--text-default), var(--bg-surface), ...).' },
-  { id: 'typography-raw-size', pattern: '\\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\\b(?!-)', flags: 'g', message: 'Raw Tailwind text size. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, ...).' },
-  { id: 'primevue-color', pattern: '(?<![\\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\\b', flags: 'g', message: 'PrimeVue/PrimeFlex color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...).' }
+  {
+    id: 'hex-color',
+    pattern: '#[0-9a-fA-F]{3,8}\\b',
+    flags: 'g',
+    message:
+      'Hex color hardcoded. Use semantic tokens (var(--primary), var(--bg-surface), var(--text-default), ...).'
+  },
+  {
+    id: 'rgb-hsl',
+    pattern: '\\b(rgba?|hsla?)\\s*\\(',
+    flags: 'g',
+    message: 'RGB/HSL hardcoded. Use semantic tokens via var(--*).'
+  },
+  {
+    id: 'tailwind-palette',
+    pattern:
+      '\\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent)-(?:gray|slate|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\\d{2,3}\\b',
+    flags: 'g',
+    message:
+      'Tailwind palette color. Use semantic webkit tokens (var(--primary), var(--text-default), var(--bg-surface), ...).'
+  },
+  {
+    id: 'typography-raw-size',
+    pattern: '\\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\\b(?!-)',
+    flags: 'g',
+    message:
+      'Raw Tailwind text size. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, ...).'
+  },
+  {
+    id: 'primevue-color',
+    pattern:
+      '(?<![\\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\\b',
+    flags: 'g',
+    message:
+      'PrimeVue/PrimeFlex color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...).'
+  }
 ]
 
 /** Strip surrounding backticks/whitespace from a markdown table cell. */
 function clean(cell) {
-  return String(cell ?? '').trim().replace(/^`|`$/g, '').trim()
+  return String(cell ?? '')
+    .trim()
+    .replace(/^`|`$/g, '')
+    .trim()
 }
 
 /**
@@ -61,7 +95,10 @@ function clean(cell) {
  * cleanly as `'a' | 'b'` after overflow merge, matching unescaped union cells.
  */
 function splitRow(line) {
-  return line.replace(/^\||\|$/g, '').split(/\s*\|\s*/).map((c) => c.trim().replace(/\s*\\$/, ''))
+  return line
+    .replace(/^\||\|$/g, '')
+    .split(/\s*\|\s*/)
+    .map((c) => c.trim().replace(/\s*\\$/, ''))
 }
 
 /**
@@ -72,7 +109,10 @@ function splitRow(line) {
  */
 function parseSpecTable(section, overflowHeader) {
   if (!section) return []
-  const lines = section.split('\n').map((l) => l.trim()).filter((l) => l.startsWith('|'))
+  const lines = section
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith('|'))
   if (lines.length < 2) return []
   const headers = splitRow(lines[0]).map((h) => h.toLowerCase())
   const n = headers.length
@@ -89,7 +129,9 @@ function parseSpecTable(section, overflowHeader) {
       cells = [...before, mid, ...tail]
     }
     const row = {}
-    headers.forEach((h, idx) => { row[h] = (cells[idx] ?? '').trim() })
+    headers.forEach((h, idx) => {
+      row[h] = (cells[idx] ?? '').trim()
+    })
     rows.push(row)
   }
   return rows
@@ -171,13 +213,23 @@ function _readSpec(subpath) {
   if (!frontmatter) return null
 
   const props = parseSpecTable(getSection(body, 'Props') || '', 'type')
-    .map((r) => ({ name: clean(r.prop), type: clean(r.type), default: clean(r.default), required: clean(r.required), doc: clean(r.jsdoc) }))
+    .map((r) => ({
+      name: clean(r.prop),
+      type: clean(r.type),
+      default: clean(r.default),
+      required: clean(r.required),
+      doc: clean(r.jsdoc)
+    }))
     .filter((p) => p.name && p.name !== '_none_')
   const events = parseSpecTable(getSection(body, 'Events') || '', 'payload')
     .map((r) => ({ name: clean(r.event), payload: clean(r.payload), notes: clean(r.notes) }))
     .filter((e) => e.name && e.name !== '_none_')
   const slots = parseSpecTable(getSection(body, 'Slots') || '', 'notes')
-    .map((r) => ({ name: clean(r.slot ?? Object.values(r)[0]), scope: clean(r.scope ?? ''), notes: clean(r.notes ?? '') }))
+    .map((r) => ({
+      name: clean(r.slot ?? Object.values(r)[0]),
+      scope: clean(r.scope ?? ''),
+      notes: clean(r.notes ?? '')
+    }))
     .filter((s) => s.name && s.name !== '_none_')
 
   return {
@@ -244,9 +296,9 @@ function build() {
     const importPath = `${PKG_NAME}/${subpath}`
     const entry = { import: importPath, target }
 
-    // Non-module exports (package.json, catalog.json): valid imports, not components.
-    if (subpath.endsWith('.json')) {
-      entry.kind = 'other'
+    // Non-module exports (package.json, catalog.json, docs/*.md): valid imports, not components.
+    if (subpath.endsWith('.json') || subpath.endsWith('.md')) {
+      entry.kind = subpath.endsWith('.md') ? 'doc' : 'other'
       entry.treeShakeableImport = importPath
       imports[subpath] = entry
       continue
@@ -266,7 +318,8 @@ function build() {
       entry.treeShakeableImport = importPath
     } else if (subpath.includes('/')) {
       const seg = subpath.split('/')[0]
-      entry.kind = seg === 'svg' ? 'svg' : seg === 'utils' ? 'util' : seg === 'styles' ? 'style' : 'component'
+      entry.kind =
+        seg === 'svg' ? 'svg' : seg === 'utils' ? 'util' : seg === 'styles' ? 'style' : 'component'
       entry.treeShakeableImport = importPath
     } else {
       entry.kind = kindFromTarget(target)
@@ -282,14 +335,19 @@ function build() {
           // sub-component, so there is no tree-shakeable way in. Report it honestly
           // instead of pointing at a non-existent `-root`.
           entry.treeShakeableImport = null
-          entry.treeShakeableNote =
-            `No tree-shakeable root. Add "./${rootKey}" -> the root .vue, or import sub-components individually.`
+          entry.treeShakeableNote = `No tree-shakeable root. Add "./${rootKey}" -> the root .vue, or import sub-components individually.`
         } else {
           // .vue-rooted compound: the main export already resolves to the lean root .vue.
           entry.treeShakeableImport = importPath
         }
         entry.subcomponents = subpaths
-          .filter((s) => s !== rootKey && s !== subpath && s.startsWith(`${subpath}-`) && parentCompound(s) === subpath)
+          .filter(
+            (s) =>
+              s !== rootKey &&
+              s !== subpath &&
+              s.startsWith(`${subpath}-`) &&
+              parentCompound(s) === subpath
+          )
           .map((s) => `${PKG_NAME}/${s}`)
       } else {
         entry.treeShakeableImport = importPath
