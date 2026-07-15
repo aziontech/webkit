@@ -51,6 +51,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Icon glyphs must always render in their icon font. Some webkit components
+   combine `pi pi-*` / `ai ai-*` with a typography token (e.g. Table.Search's
+   `pi pi-search text-button-md`), whose `font-family: Sora` would otherwise
+   clobber the icon font and render an empty box. Pin each so the glyph wins. */
+.pi {
+  font-family: 'primeicons' !important;
+}
+.ai {
+  font-family: 'azionicons' !important;
+}
+
 html,
 body {
   margin: 0;

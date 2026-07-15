@@ -1,18 +1,17 @@
 <script setup>
+import { curve, duration } from "@aziontech/theme/animations";
+import Button from "@aziontech/webkit/button";
+import CardBox from "@aziontech/webkit/card-box";
+import GlobalHeader from "@aziontech/webkit/global-header";
+import IconButton from "@aziontech/webkit/icon-button";
+import InputPassword from "@aziontech/webkit/input-password";
+import InputText from "@aziontech/webkit/input-text";
+import Label from "@aziontech/webkit/label";
+import Link from "@aziontech/webkit/link";
+import Tag from "@aziontech/webkit/tag";
+import { toast } from "@aziontech/webkit/toast";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-
-import { curve, duration } from "@aziontech/theme/animations";
-
-import GlobalHeader from "@aziontech/webkit/global-header";
-import CardBox from "@aziontech/webkit/card-box";
-import Label from "@aziontech/webkit/label";
-import InputText from "@aziontech/webkit/input-text";
-import InputPassword from "@aziontech/webkit/input-password";
-import Button from "@aziontech/webkit/button";
-import IconButton from "@aziontech/webkit/icon-button";
-import Tag from "@aziontech/webkit/tag";
-import Link from "@aziontech/webkit/link";
 
 // Prototype flow: 'email' collects the address, 'password' collects the secret.
 const step = ref("email");
@@ -32,14 +31,38 @@ const stepTransitionStyle = {
   transition: `opacity ${duration["moderate-02"]} ${curve["productive-entrance"]}, transform ${duration["fast-02"]} ${curve["productive-entrance"]}`,
 };
 
-const goToPassword = () => {
+// Mock backend calls. A rejected promise models a request-level failure
+// (network / 5xx) — type "fail" as the password to exercise the error path.
+const lookupEmail = () => new Promise((resolve) => setTimeout(resolve, 900));
+const authenticate = (secret) =>
+  new Promise((resolve, reject) =>
+    setTimeout(
+      () =>
+        secret === "fail"
+          ? reject(new Error("Invalid email or password."))
+          : resolve(),
+      900,
+    ),
+  );
+
+// `verifying` is the single lock: the primary Button shows :loading and every
+// field is :disabled off it. The handler also guards on the flag (no
+// double-submit), and releases it in `finally` so a failure never bricks the
+// form. Request failures surface via toast.error with a Retry action.
+const goToPassword = async () => {
   if (!canContinue.value || verifying.value) return;
-  // Mock the "does this email exist?" lookup with a short loading state.
   verifying.value = true;
-  setTimeout(() => {
-    verifying.value = false;
+  try {
+    await lookupEmail();
     step.value = "password";
-  }, 900);
+  } catch (error) {
+    toast.error("Couldn't verify that email.", {
+      description: error?.message ?? "Check your connection and try again.",
+      action: { label: "Retry", onClick: () => goToPassword() },
+    });
+  } finally {
+    verifying.value = false;
+  }
 };
 
 const backToEmail = () => {
@@ -47,13 +70,20 @@ const backToEmail = () => {
   password.value = "";
 };
 
-const signIn = () => {
+const signIn = async () => {
   if (password.value.trim() === "" || verifying.value) return;
-  // Mock authentication: Click -> Loading -> Success -> Dashboard route.
   verifying.value = true;
-  setTimeout(() => {
+  try {
+    await authenticate(password.value);
     router.push({ name: "dashboard", query: { email: email.value } });
-  }, 900);
+  } catch (error) {
+    toast.error("Sign-in failed.", {
+      description: error?.message ?? "Check your connection and try again.",
+      action: { label: "Retry", onClick: () => signIn() },
+    });
+  } finally {
+    verifying.value = false;
+  }
 };
 
 // On the email step the primary button advances; on the password step it submits.
@@ -159,9 +189,11 @@ const handlePrimary = () => {
                     id="login-email"
                     v-model="email"
                     type="email"
+                    size="large"
                     name="email"
                     autocomplete="email"
                     placeholder="myemail@azion.com"
+                    :disabled="verifying"
                     @keyup.enter="goToPassword"
                   />
                 </div>
@@ -179,6 +211,7 @@ const handlePrimary = () => {
                       aria-label="Change email"
                       kind="outlined"
                       size="small"
+                      :disabled="verifying"
                       @click="backToEmail"
                     />
                     <span
@@ -194,6 +227,8 @@ const handlePrimary = () => {
                     autocomplete="current-password"
                     placeholder="Type your password"
                     class="w-full"
+                    :disabled="verifying"
+                    @keyup.enter="signIn"
                   />
                 </div>
               </Transition>
@@ -240,8 +275,9 @@ const handlePrimary = () => {
                     label="Continue with Google"
                     kind="outlined"
                     size="large"
-                    icon="pi pi-google"
+                    icon="ai-cor ai-google"
                     class="w-full"
+                    :disabled="verifying"
                   />
                   <Button
                     label="Continue with Github"
@@ -249,6 +285,7 @@ const handlePrimary = () => {
                     size="large"
                     icon="pi pi-github"
                     class="w-full"
+                    :disabled="verifying"
                   />
                 </div>
               </div>
