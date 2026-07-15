@@ -129,7 +129,8 @@ async function main() {
       title: 'List webkit design tokens',
       description:
         'The POSITIVE token inventory (what to USE instead of hardcoding): without a category, ' +
-        'returns the token group index + typography classes; with a category ("primary", "bg", ' +
+        'returns the token group index + typography classes + the canonical prop/event vocabulary ' +
+        '(kind over variant, severity over status, …); with a category ("primary", "bg", ' +
         '"text", "spacing", "radius", "shadow", …) returns that group\'s CSS custom properties.',
       inputSchema: {
         category: z

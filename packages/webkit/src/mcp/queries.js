@@ -116,6 +116,7 @@ export function listTokens(catalog, { category } = {}) {
     available: true,
     groups: groupNames.map((name) => ({ name, count: tokens.groups[name].length })),
     typography: tokens.typography,
+    vocabulary: catalog.vocabulary || null,
     hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "spacing", "radius", "shadow") for the CSS custom properties in that group.'
   }
 }

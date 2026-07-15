@@ -97,6 +97,8 @@ function build(json) {
     tokenRules,
     /** Positive token inventory: { cssVars, typography, groups }. */
     tokens: json.tokens || { cssVars: [], typography: [], groups: {} },
+    /** Canonical prop/event dictionary: { props, size, booleanPrefixes, negativeBooleans, events }. */
+    vocabulary: json.vocabulary || null,
     /** Every subpath key in the catalog, in declared order. */
     subpaths,
     /** Raw import entries keyed by subpath. */
