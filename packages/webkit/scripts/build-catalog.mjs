@@ -157,7 +157,7 @@ function kindFromTarget(target) {
   if (target.startsWith('./src/vite/')) return 'other'
   // Only a `.vue` root or an `index.ts` compound barrel is a renderable component;
   // any other target under src/components (a bare helper .ts) is not.
-  if (/\.vue$/.test(target) || /\/index\.ts$/.test(target)) return 'component'
+  if (/\.vue$/.test(target) || /\/index\.(ts|js)$/.test(target)) return 'component'
   return 'other'
 }
 
@@ -276,7 +276,7 @@ function build() {
   const compoundRoots = subpaths.filter((s) => {
     if (s.includes('/')) return false
     if (subpathSet.has(`${s}-root`)) return true
-    if (/\/index\.ts$/.test(exportsMap[`./${s}`] || '')) return true
+    if (/\/index\.(ts|js)$/.test(exportsMap[`./${s}`] || '')) return true
     return loadSpec(s)?.structure === 'composition'
   })
   // Longest-first so multi-select wins over select when attributing subcomponents.
@@ -326,7 +326,7 @@ function build() {
       if (isCompound) {
         entry.compoundRoot = true
         const rootKey = `${subpath}-root`
-        const isBarrel = /\/index\.ts$/.test(target)
+        const isBarrel = /\/index\.(ts|js)$/.test(target)
         if (subpathSet.has(rootKey)) {
           // Dedicated tree-shakeable root export (the canonical compound-api shape).
           entry.treeShakeableImport = `${PKG_NAME}/${rootKey}`

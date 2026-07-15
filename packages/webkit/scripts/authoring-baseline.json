@@ -13,7 +13,6 @@
   "packages/webkit/src/components/actions/segmented-button/segmented-button.vue::token:js-class-preset",
   "packages/webkit/src/components/actions/segmented-button/segmented-button.vue::token:js-class-preset",
   "packages/webkit/src/components/avatar/avatar.vue::token:js-class-preset",
-  "packages/webkit/src/components/content/accordion/accordion.vue::spec:Event \"value-change\" is redundant — it echoes \"update:value\". Remove it; consumers use \"@update:value\" / v-model. (A distinct commit event should be a bare \"change\", not \"<x>-change\".) (.claude/rules/prop-vocabulary.md).",
   "packages/webkit/src/components/content/card-box/card-box.vue::token:js-class-preset",
   "packages/webkit/src/components/content/card-pricing/card-pricing.vue::token:js-class-preset",
   "packages/webkit/src/components/content/card-pricing/card-pricing.vue::token:js-class-preset",

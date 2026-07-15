@@ -1582,21 +1582,18 @@
     "eslint-plugin": {
       "import": "@aziontech/webkit/eslint-plugin",
       "target": "./src/eslint-plugin/index.js",
-      "kind": "other",
-      "treeShakeableImport": "@aziontech/webkit/eslint-plugin"
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./eslint-plugin-root\" -> the root .vue, or import sub-components individually.",
+      "subcomponents": [],
+      "category": null
     },
     "stylelint-config": {
       "import": "@aziontech/webkit/stylelint-config",
       "target": "./src/stylelint-config.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/stylelint-config"
-    },
-    "empty-results-block": {
-      "import": "@aziontech/webkit/empty-results-block",
-      "target": "./src/components/empty-results-block/empty-results-block.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/empty-results-block",
-      "category": null
     },
     "overline": {
       "import": "@aziontech/webkit/overline",
@@ -2296,11 +2293,6 @@
           "name": "update:value",
           "payload": "string | string[] | null",
           "notes": "v-model:value`. Fires when the open item(s) change."
-        },
-        {
-          "name": "value-change",
-          "payload": "string | string[] | null",
-          "notes": "Convenience event mirroring `update:value`."
         }
       ],
       "slots": [
@@ -2370,11 +2362,6 @@
           "name": "update:value",
           "payload": "string | string[] | null",
           "notes": "v-model:value`. Fires when the open item(s) change."
-        },
-        {
-          "name": "value-change",
-          "payload": "string | string[] | null",
-          "notes": "Convenience event mirroring `update:value`."
         }
       ],
       "slots": [
@@ -7565,9 +7552,10 @@
     "global-header": {
       "import": "@aziontech/webkit/global-header",
       "target": "./src/components/layout/global-header/index.js",
-      "kind": "other",
+      "kind": "component",
       "compoundRoot": true,
-      "treeShakeableImport": "@aziontech/webkit/global-header",
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./global-header-root\" -> the root .vue, or import sub-components individually.",
       "subcomponents": [],
       "category": "layout",
       "structure": "composition",
@@ -7666,9 +7654,10 @@
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
-      "kind": "other",
+      "kind": "component",
       "compoundRoot": true,
-      "treeShakeableImport": "@aziontech/webkit/breadcrumb",
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./breadcrumb-root\" -> the root .vue, or import sub-components individually.",
       "subcomponents": [
         "@aziontech/webkit/breadcrumb-item"
       ],
@@ -7862,9 +7851,10 @@
     "tab-view": {
       "import": "@aziontech/webkit/tab-view",
       "target": "./src/components/navigation/tab-view/index.js",
-      "kind": "other",
+      "kind": "component",
       "compoundRoot": true,
-      "treeShakeableImport": "@aziontech/webkit/tab-view",
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./tab-view-root\" -> the root .vue, or import sub-components individually.",
       "subcomponents": [],
       "category": "navigation",
       "structure": "composition",
@@ -7888,9 +7878,10 @@
     "navigation-menu": {
       "import": "@aziontech/webkit/navigation-menu",
       "target": "./src/components/navigation/navigation-menu/index.js",
-      "kind": "other",
+      "kind": "component",
       "compoundRoot": true,
-      "treeShakeableImport": "@aziontech/webkit/navigation-menu",
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./navigation-menu-root\" -> the root .vue, or import sub-components individually.",
       "subcomponents": [],
       "category": "navigation",
       "structure": "composition",
@@ -9219,25 +9210,37 @@
       "import": "@aziontech/webkit/use-controllable",
       "target": "./src/composables/use-controllable/index.js",
       "kind": "composable",
-      "treeShakeableImport": "@aziontech/webkit/use-controllable"
+      "compoundRoot": true,
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./use-controllable-root\" -> the root .vue, or import sub-components individually.",
+      "subcomponents": []
     },
     "use-focus-trap": {
       "import": "@aziontech/webkit/use-focus-trap",
       "target": "./src/composables/use-focus-trap/index.js",
       "kind": "composable",
-      "treeShakeableImport": "@aziontech/webkit/use-focus-trap"
+      "compoundRoot": true,
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./use-focus-trap-root\" -> the root .vue, or import sub-components individually.",
+      "subcomponents": []
     },
     "use-placement": {
       "import": "@aziontech/webkit/use-placement",
       "target": "./src/composables/use-placement/index.js",
       "kind": "composable",
-      "treeShakeableImport": "@aziontech/webkit/use-placement"
+      "compoundRoot": true,
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./use-placement-root\" -> the root .vue, or import sub-components individually.",
+      "subcomponents": []
     },
     "vite": {
       "import": "@aziontech/webkit/vite",
       "target": "./src/vite/index.js",
       "kind": "other",
-      "treeShakeableImport": "@aziontech/webkit/vite"
+      "compoundRoot": true,
+      "treeShakeableImport": null,
+      "treeShakeableNote": "No tree-shakeable root. Add \"./vite-root\" -> the root .vue, or import sub-components individually.",
+      "subcomponents": []
     }
   }
 }

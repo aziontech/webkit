@@ -57,8 +57,9 @@ function componentRootName(relFromComponents) {
   if (!relFromComponents.endsWith('.vue')) return null
   const parts = relFromComponents.split('/')
   const name = basename(parts.pop(), '.vue')
-  if (parts.length === 2 && parts[1] === name) return name // <category>/<name>/<name>.vue
-  if (parts.length === 1 && parts[0] === name) return name // flat <name>/<name>.vue
+  const base = name.endsWith('-root') ? name.slice(0, -5) : name
+  if (parts.length === 2 && parts[1] === base) return base // <category>/<name>/<name>[-root].vue
+  if (parts.length === 1 && parts[0] === base) return base // flat <name>/<name>[-root].vue
   return null
 }
 const relToComponents = (abs) => relative(COMPONENTS, abs).split(sep).join('/')
@@ -80,7 +81,7 @@ function walk(dir, out) {
 const roots = existsSync(COMPONENTS) ? walk(COMPONENTS, []) : []
 const missing = []
 for (const vue of roots) {
-  const name = basename(vue, '.vue')
+  const name = componentRootName(relToComponents(vue))
   const test = join(dirname(vue), `${name}.test.ts`)
   if (!existsSync(test)) missing.push(relative(ROOT, vue))
 }

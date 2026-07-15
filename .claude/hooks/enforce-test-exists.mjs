@@ -53,7 +53,8 @@ async function main() {
 
   // Root component only: <category>/<name>/<name>.vue. Composition sub-components
   // (<name>-part.vue) are tested through their root, so skip them.
-  if (basename(abs, '.vue') !== info.name) process.exit(0)
+  const vueBase = basename(abs, '.vue')
+  if (vueBase !== info.name && vueBase !== `${info.name}-root`) process.exit(0)
 
   // Legacy components bypass.
   if (isLegacyComponent(info.category, info.name, ROOT)) process.exit(0)
