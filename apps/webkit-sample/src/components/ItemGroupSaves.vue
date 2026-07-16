@@ -3,7 +3,7 @@
 // the OTHER approach to partitioned saves. Where "CardBox with independent saves"
 // composes Select/Label fields in each card, this uses the Account Settings surface
 // (Approach A: Item rows in a flush CardBox + Item.List dividers, titled by an
-// OVERLINE), but instead of ONE page-level save each topic group owns its OWN Save
+// section titles), but instead of ONE page-level save each topic group owns its OWN Save
 // in the card footer. Each group locks INDEPENDENTLY off its own `submitting` flag
 // (the /usability loading pattern, scoped to the saved block): that group's fields
 // and its right-side controls disable and its Save shows loading, while the other
@@ -74,9 +74,9 @@ const saveNotifications = () =>
         description="The same partitioned-save idea as CardBox, on the ItemGroup surface — Item rows in a flush card, each topic group owning its own save, so changes commit in parts."
       />
 
-      <!-- Group 1 — General (overline title, its own footer save). -->
+      <!-- Group 1 — General (section title, its own footer save). -->
       <section class="flex flex-col gap-[var(--spacing-sm)]">
-        <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           General
         </p>
         <CardBox :padded="false">
@@ -146,9 +146,9 @@ const saveNotifications = () =>
         </CardBox>
       </section>
 
-      <!-- Group 2 — Notifications (overline title, its own footer save). -->
+      <!-- Group 2 — Notifications (section title, its own footer save). -->
       <section class="flex flex-col gap-[var(--spacing-sm)]">
-        <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Notifications
         </p>
         <CardBox :padded="false">

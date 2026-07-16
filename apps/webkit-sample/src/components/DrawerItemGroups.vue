@@ -1,14 +1,14 @@
 <script setup>
 // Form type: DRAWER + MULTIPLE ITEMGROUPS (the `/form` skill, "Form types"). A
 // drawer create whose body is NOT one group (that's Variables.vue) nor stacked
-// field-* triads (that's DrawerForm.vue), but SEVERAL overline-titled ItemGroup
+// field-* triads (that's DrawerForm.vue), but SEVERAL section-titled ItemGroup
 // SECTIONS — the Account Settings layout (Approach A: each section a flush CardBox
 // wrapping an Item.List), hosted in a Drawer instead of a page. It is still ONE
 // logical create, so it has ONE scoped save (the drawer's primary action) — the
 // sections group the topic, not the save.
 //
 // Accessibility follows /form Approach A even in a drawer: the section title is an
-// OVERLINE above a header-less flush CardBox; in an ItemGroup the Item.Title IS the
+// section title above a header-less flush CardBox; in an ItemGroup the Item.Title IS the
 // label (guidance in Item.Description), and each control carries an aria-label (no
 // <Label for>). Validation runs on submit only; with no Label (so no required tag),
 // feedback is a HelperText under the control — amber `required` for an empty field
@@ -148,7 +148,7 @@ const submit = async () => {
     <main class="flex h-full flex-col">
       <PageHeading
         title="Services"
-        description="Drawer create whose body is several overline-titled ItemGroup sections — the settings layout, in context, with one scoped save."
+        description="Drawer create whose body is several section-titled ItemGroup sections — the settings layout, in context, with one scoped save."
       >
         <template #actions>
           <Button
@@ -175,7 +175,7 @@ const submit = async () => {
     </main>
 
     <!-- Create flow — a large Drawer whose body is several ItemGroup sections
-         (overline + flush CardBox + Item.List), all committed by one scoped save. -->
+         (section title + flush CardBox + Item.List), all committed by one scoped save. -->
     <Drawer v-model:open="drawerOpen" size="large" side="right">
       <DrawerPortal>
         <DrawerOverlay />
@@ -200,7 +200,7 @@ const submit = async () => {
             </PanelHeader>
 
             <PanelContent>
-              <!-- Sections are --spacing-lg apart; each overline sits --spacing-sm
+              <!-- Sections are --spacing-lg apart; each section title sits --spacing-sm
                    above its flush CardBox (the Approach A section rhythm). -->
               <fieldset
                 class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
@@ -210,7 +210,7 @@ const submit = async () => {
 
                 <!-- Section: General -->
                 <section class="flex flex-col gap-[var(--spacing-sm)]">
-                  <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     General
                   </p>
                   <CardBox :padded="false">
@@ -277,7 +277,7 @@ const submit = async () => {
 
                 <!-- Section: Runtime -->
                 <section class="flex flex-col gap-[var(--spacing-sm)]">
-                  <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     Runtime
                   </p>
                   <CardBox :padded="false">
@@ -365,7 +365,7 @@ const submit = async () => {
 
                 <!-- Section: Options -->
                 <section class="flex flex-col gap-[var(--spacing-sm)]">
-                  <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     Options
                   </p>
                   <CardBox :padded="false">

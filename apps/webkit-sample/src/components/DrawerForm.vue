@@ -12,6 +12,7 @@ import DrawerOverlay from "@aziontech/webkit/drawer-overlay";
 import DrawerPortal from "@aziontech/webkit/drawer-portal";
 import DrawerTitle from "@aziontech/webkit/drawer-title";
 import FieldText from "@aziontech/webkit/field-text";
+import FieldTextarea from "@aziontech/webkit/field-textarea";
 import HelperText from "@aziontech/webkit/helper-text";
 import Label from "@aziontech/webkit/label";
 import PanelContent from "@aziontech/webkit/panel-content";
@@ -204,13 +205,12 @@ const submit = async () => {
                   />
                 </div>
 
-                <FieldText
+                <FieldTextarea
                   v-model="form.description"
                   input-id="env-description"
                   name="description"
                   label="Description"
                   placeholder="Optional"
-                  size="large"
                   :disabled="submitting"
                   helper-text="A short note about what this environment is for."
                 />

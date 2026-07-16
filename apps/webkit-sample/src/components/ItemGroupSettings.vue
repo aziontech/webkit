@@ -1,7 +1,7 @@
 <script setup>
 // Form type: ITEMGROUP settings (the `/form` skill, "Form types"). Account-level
 // configuration built from Item rows (Approach A), grouped into topic SECTIONS —
-// each section is an OVERLINE title over a flush CardBox whose body is an Item.List
+// each section is an section title over a flush CardBox whose body is an Item.List
 // (the Account Settings pattern; see `/form` § Section title). The whole surface is
 // still ONE logical form saved as a single unit (one Save in the sticky footer) —
 // that's distinct from "CardBox with independent saves", where each card owns its
@@ -95,7 +95,7 @@ const submit = async () => {
         <PageHeading
           title-id="profile-title"
           title="Profile"
-          description="Define and manage personal account preferences and profile config. Topic sections of Item rows, each titled by an overline, saved as a single unit."
+          description="Define and manage personal account preferences and profile config. Topic sections of Item rows, each titled by a section heading, saved as a single unit."
         />
 
         <!-- One flag locks every control while the request is in flight. -->
@@ -105,9 +105,9 @@ const submit = async () => {
         >
           <legend class="sr-only">Profile settings</legend>
 
-          <!-- Section: General — an OVERLINE title over a flush CardBox. -->
+          <!-- Section: General — an section title over a flush CardBox. -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               General
             </p>
             <CardBox :padded="false">
@@ -178,7 +178,7 @@ const submit = async () => {
 
           <!-- Section: Preferences -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Preferences
             </p>
             <CardBox :padded="false">
@@ -244,7 +244,7 @@ const submit = async () => {
 
           <!-- Section: Notifications -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Notifications
             </p>
             <CardBox :padded="false">

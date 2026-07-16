@@ -3,7 +3,7 @@
 // /applications/new), sidebar hidden so the form is the only focus.
 //
 // Layout is Cards + ItemGroups (the `/form` skill, Approach A): a single centered
-// column of sections, each an OVERLINE title over a flush CardBox whose body is an
+// column of sections, each an section title over a flush CardBox whose body is an
 // Item.List. Every field is a small Item row (`size="small"`) — in an ItemGroup the
 // Item.Title IS the label (name in Item.Title, guidance in Item.Description) on the
 // left via Item.Content, the control on the right via Item.Actions. Richer controls
@@ -174,7 +174,7 @@ const submit = async () => {
     <CreationHeader
       :breadcrumb="[
         { label: 'Applications', href: '/applications' },
-        { label: 'Create' },
+        { label: 'Create Application' },
       ]"
       back-label="Back to Applications"
       @back="cancel"
@@ -200,7 +200,7 @@ const submit = async () => {
 
           <!-- Section: General -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               General
             </p>
             <CardBox :padded="false">
@@ -242,7 +242,7 @@ const submit = async () => {
 
           <!-- Section: Delivery Settings -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Delivery Settings
             </p>
             <CardBox :padded="false">
@@ -343,7 +343,7 @@ const submit = async () => {
 
           <!-- Section: Origins -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Origins
             </p>
             <CardBox :padded="false">
@@ -451,7 +451,7 @@ const submit = async () => {
 
           <!-- Section: Cache Expiration Policies -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Cache Expiration Policies
             </p>
             <CardBox :padded="false">
@@ -537,7 +537,7 @@ const submit = async () => {
 
           <!-- Section: Debug Rules -->
           <section class="flex flex-col gap-[var(--spacing-sm)]">
-            <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Debug Rules
             </p>
             <CardBox :padded="false">
