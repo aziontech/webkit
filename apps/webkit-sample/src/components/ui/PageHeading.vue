@@ -1,11 +1,14 @@
 <script setup>
-  // Reusable page heading, modeled on the Account Settings header: a title over
-  // an optional supporting description, with an optional `actions` slot on the
-  // right for the page's primary controls. Shared by every module page so the
-  // in-content heading reads the same everywhere.
+  // Reusable page heading block for SECOND-LEVEL pages (module / list / settings
+  // pages): the title over an optional supporting description on the left, with
+  // an optional `actions` slot for the page's primary controls on the right.
+  // Home doesn't use it — there the module name lives in the collapsible header
+  // crumb and the content leads.
   defineProps({
-    // The page title.
-    title: { type: String, required: true },
+    // The page title. Omit on a `collapsible` module page, where the module
+    // name is surfaced as the header breadcrumb crumb instead — printing it
+    // here too would duplicate it.
+    title: { type: String, default: '' },
     // Optional supporting line under the title.
     description: { type: String, default: '' },
     // Title scale: 'large' for the top-level module (Home); 'small' for every
@@ -23,8 +26,12 @@
 
 <template>
   <header class="flex items-start justify-between gap-[var(--spacing-md)]">
-    <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+    <div
+      v-if="title || description"
+      class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]"
+    >
       <h1
+        v-if="title"
         :id="titleId"
         :data-size="size"
         class="text-balance text-[var(--text-default)] data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
