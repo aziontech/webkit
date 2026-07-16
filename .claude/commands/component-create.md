@@ -35,7 +35,7 @@ Spawn the `spec-validator` sub-agent with the universal envelope (see `.claude/a
 If `--dry-run`, print the planned writes here and exit 0.
 
 ### Step 4 — Scaffold (writes)
-Spawn the `scaffolder` sub-agent. Envelope includes: spec verbatim + Constraints + rules (`no-invention`, `naming`, `bem-testid`, `tokens`, `accessibility`) + `component-scaffold` skill + canonical paths to inspect (button.vue, card-pricing.vue). Task tells it exactly which files to write.
+Spawn the `scaffolder` sub-agent. Envelope includes: spec verbatim + Constraints + the construction rules — `no-invention`, `naming`, `component-structure`, `props`, `prop-vocabulary`, `v-model`, `emits`, `event-payloads`, `slots`, `composables`, `root-element`, `component-states`, `styling`, `tokens`, `accessibility`, `testid` — + `component-scaffold` skill + canonical paths to inspect (button.vue, card-pricing.vue). Task tells it exactly which files to write.
 
 Hooks that fire on every Write:
 - PreToolUse: `enforce-spec-exists`, `validate-tokens`, `validate-references`, `enforce-component-create`.
@@ -67,7 +67,7 @@ Spawn the `validate-component` sub-agent. Runs `pnpm webkit:lint && type-check &
 ## Hard rules — enforced by hooks, the orchestrator must surface them
 
 - **No phantom imports.** `validate-references.mjs` blocks any `Write`/`Edit` that introduces an unresolved import.
-- **No HEX/Tailwind palette/raw typography/`class` in defineProps/`any`/`@ts-ignore`** in `packages/webkit/src/components/webkit/**`. `validate-tokens.mjs` enforces this.
+- **No HEX/Tailwind palette/raw typography/`class` in defineProps/`any`/`@ts-ignore`** in `packages/webkit/src/components/**`. `validate-tokens.mjs` enforces this.
 - **No webkit `.vue` write without the spec.** `enforce-spec-exists.mjs` blocks Writes when `.specs/<name>.md` is missing, not approved, or checksum-mismatched.
 - **No `.vue` that diverges from the spec.** `validate-spec-compliance.mjs` blocks props/events/slots/animations the spec did not list.
 - **No bypass.** `enforce-component-create.mjs` blocks first Write to a new webkit `.vue` if this command or skill was not referenced in the session.

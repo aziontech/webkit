@@ -23,7 +23,7 @@ const SIZES = ['small', 'medium'] as const
 
 describe('Tag', () => {
   it('renders with the default testid, default severity and default size', () => {
-    const { getByTestId } = render(Tag, { props: { value: 'Label' } })
+    const { getByTestId } = render(Tag, { props: { label: 'Label' } })
 
     const root = getByTestId('content-tag')
     expect(root).toBeTruthy()
@@ -36,7 +36,7 @@ describe('Tag', () => {
 
   it('honors a consumer-supplied data-testid', () => {
     const { getByTestId } = render(Tag, {
-      props: { value: 'Label' },
+      props: { label: 'Label' },
       attrs: { 'data-testid': 'my-tag' }
     })
 
@@ -44,29 +44,29 @@ describe('Tag', () => {
   })
 
   it('renders the value prop inside the value span when no slot is provided', () => {
-    const { getByTestId } = render(Tag, { props: { value: 'Online' } })
+    const { getByTestId } = render(Tag, { props: { label: 'Online' } })
 
-    const valueEl = getByTestId('content-tag__value')
+    const valueEl = getByTestId('content-tag__label')
     expect(valueEl.textContent?.trim()).toBe('Online')
   })
 
   it('renders default slot content and lets the slot take precedence over value', () => {
     const { getByTestId, queryByTestId } = render(Tag, {
-      props: { value: 'ignored' },
+      props: { label: 'ignored' },
       slots: { default: 'Slotted' }
     })
 
     const root = getByTestId('content-tag')
     expect(root.textContent).toContain('Slotted')
     // With a slot present the value fallback span is not rendered (v-if/v-else-if).
-    expect(queryByTestId('content-tag__value')).toBeNull()
+    expect(queryByTestId('content-tag__label')).toBeNull()
     expect(root.textContent).not.toContain('ignored')
   })
 
   it('reflects the severity prop on data-severity for every option', () => {
     for (const severity of SEVERITIES) {
       const { getByTestId, unmount } = render(Tag, {
-        props: { value: 'Label', severity }
+        props: { label: 'Label', severity }
       })
       expect(getByTestId('content-tag').getAttribute('data-severity')).toBe(severity)
       unmount()
@@ -75,7 +75,7 @@ describe('Tag', () => {
 
   it('falls back to primary when severity is undefined', () => {
     const { getByTestId } = render(Tag, {
-      props: { value: 'Label', severity: undefined }
+      props: { label: 'Label', severity: undefined }
     })
 
     expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')
@@ -84,7 +84,7 @@ describe('Tag', () => {
   it('reflects the size prop on data-size for every option', () => {
     for (const size of SIZES) {
       const { getByTestId, unmount } = render(Tag, {
-        props: { value: 'Label', size }
+        props: { label: 'Label', size }
       })
       expect(getByTestId('content-tag').getAttribute('data-size')).toBe(size)
       unmount()
@@ -92,18 +92,18 @@ describe('Tag', () => {
   })
 
   it('sets data-rounded only when rounded is true', () => {
-    const roundedOn = render(Tag, { props: { value: 'Label', rounded: true } })
+    const roundedOn = render(Tag, { props: { label: 'Label', rounded: true } })
     // Rendered as :data-rounded="rounded || null" → present (empty string) when true.
     expect(roundedOn.getByTestId('content-tag').hasAttribute('data-rounded')).toBe(true)
     roundedOn.unmount()
 
-    const roundedOff = render(Tag, { props: { value: 'Label', rounded: false } })
+    const roundedOff = render(Tag, { props: { label: 'Label', rounded: false } })
     expect(roundedOff.getByTestId('content-tag').getAttribute('data-rounded')).toBeNull()
   })
 
   it('renders the leading icon element with the provided class and hides it from a11y', () => {
     const { getByTestId } = render(Tag, {
-      props: { value: 'Label', icon: 'pi pi-box' }
+      props: { label: 'Label', icon: 'pi pi-box' }
     })
 
     const iconEl = getByTestId('content-tag__icon')
@@ -113,14 +113,14 @@ describe('Tag', () => {
   })
 
   it('does not render an icon element when no icon prop is given', () => {
-    const { queryByTestId } = render(Tag, { props: { value: 'Label' } })
+    const { queryByTestId } = render(Tag, { props: { label: 'Label' } })
 
     expect(queryByTestId('content-tag__icon')).toBeNull()
   })
 
   it('merges a consumer-supplied class onto the root', () => {
     const { getByTestId } = render(Tag, {
-      props: { value: 'Label' },
+      props: { label: 'Label' },
       attrs: { class: 'consumer-class' }
     })
 
@@ -129,7 +129,7 @@ describe('Tag', () => {
 
   it.each([...SEVERITIES])('has no a11y violations for severity "%s"', async (severity) => {
     const { container } = render(Tag, {
-      props: { value: 'Label', severity }
+      props: { label: 'Label', severity }
     })
 
     await expectNoA11yViolations(container)
@@ -137,7 +137,7 @@ describe('Tag', () => {
 
   it('has no a11y violations with an icon and pill shape', async () => {
     const { container } = render(Tag, {
-      props: { value: 'Label', icon: 'pi pi-box', rounded: true, size: 'small' }
+      props: { label: 'Label', icon: 'pi pi-box', rounded: true, size: 'small' }
     })
 
     await expectNoA11yViolations(container)

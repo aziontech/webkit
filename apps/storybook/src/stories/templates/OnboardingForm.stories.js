@@ -39,7 +39,7 @@ const meta = {
     }
   },
   argTypes: {
-    heading: {
+    title: {
       control: 'text',
       description: 'Page title above the form sections.',
       table: {
@@ -262,7 +262,7 @@ const meta = {
     }
   },
   args: {
-    heading: 'Your first global deployment is seconds away',
+    title: 'Your first global deployment is seconds away',
     planLabel: 'Plan Selected',
     planTitle: 'Hobby',
     planPrice: 'Free',

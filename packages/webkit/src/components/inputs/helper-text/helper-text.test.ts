@@ -12,7 +12,7 @@ const KINDS = ['helper', 'invalid', 'required', 'disabled'] as const
 
 describe('HelperText', () => {
   it('renders a <p> root with the default data-testid and default kind', () => {
-    const { getByTestId } = render(HelperText, { props: { value: 'Guidance' } })
+    const { getByTestId } = render(HelperText, { props: { label: 'Guidance' } })
 
     const root = getByTestId('input-helper-text')
     expect(root.tagName).toBe('P')
@@ -21,14 +21,14 @@ describe('HelperText', () => {
   })
 
   it('renders the value prop inside the __text span when no slot is provided', () => {
-    const { getByTestId } = render(HelperText, { props: { value: 'Enter a valid email address.' } })
+    const { getByTestId } = render(HelperText, { props: { label: 'Enter a valid email address.' } })
 
     expect(getByTestId('input-helper-text__text')).toHaveTextContent('Enter a valid email address.')
   })
 
   it('prefers the default slot over the value prop', () => {
     const { getByTestId } = render(HelperText, {
-      props: { value: 'fallback value' },
+      props: { label: 'fallback value' },
       slots: { default: 'Slot content wins' }
     })
 
@@ -39,14 +39,14 @@ describe('HelperText', () => {
 
   it('mirrors the kind prop onto data-kind for every variant', () => {
     for (const kind of KINDS) {
-      const { getByTestId, unmount } = render(HelperText, { props: { kind, value: 'x' } })
+      const { getByTestId, unmount } = render(HelperText, { props: { kind, label: 'x' } })
       expect(getByTestId('input-helper-text')).toHaveAttribute('data-kind', kind)
       unmount()
     }
   })
 
   it('renders the pi pi-lock icon only for the disabled kind', () => {
-    const disabled = render(HelperText, { props: { kind: 'disabled', value: 'Locked' } })
+    const disabled = render(HelperText, { props: { kind: 'disabled', label: 'Locked' } })
     const icon = disabled.getByTestId('input-helper-text__icon')
     expect(icon).toHaveClass('pi', 'pi-lock')
     // The icon is decorative and must be hidden from assistive tech.
@@ -54,7 +54,7 @@ describe('HelperText', () => {
     disabled.unmount()
 
     for (const kind of ['helper', 'invalid', 'required'] as const) {
-      const { queryByTestId, unmount } = render(HelperText, { props: { kind, value: 'x' } })
+      const { queryByTestId, unmount } = render(HelperText, { props: { kind, label: 'x' } })
       expect(queryByTestId('input-helper-text__icon')).toBeNull()
       unmount()
     }
@@ -62,7 +62,7 @@ describe('HelperText', () => {
 
   it('honors a consumer-supplied data-testid and derives child testids from it', () => {
     const { getByTestId } = render(HelperText, {
-      props: { kind: 'disabled', value: 'Locked' },
+      props: { kind: 'disabled', label: 'Locked' },
       attrs: { 'data-testid': 'field-hint' }
     })
 
@@ -72,12 +72,12 @@ describe('HelperText', () => {
   })
 
   it('has no accessibility violations in the default helper variant', async () => {
-    const { container } = render(HelperText, { props: { value: 'Helper guidance text' } })
+    const { container } = render(HelperText, { props: { label: 'Helper guidance text' } })
     await expectNoA11yViolations(container)
   })
 
   it('has no accessibility violations in the disabled variant (icon present)', async () => {
-    const { container } = render(HelperText, { props: { kind: 'disabled', value: 'Locked field' } })
+    const { container } = render(HelperText, { props: { kind: 'disabled', label: 'Locked field' } })
     await expectNoA11yViolations(container)
   })
 

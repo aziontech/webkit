@@ -128,13 +128,11 @@ describe('Accordion (compound / provide-inject)', () => {
   })
 
   // ---- Toggle behavior: single mode --------------------------------------------
-  it('click opens an item and emits update:value + value-change with the item value', async () => {
+  it('click opens an item and emits update:value with the item value', async () => {
     const updates: unknown[] = []
-    const changes: unknown[] = []
     const view = render(
       host({
-        'onUpdate:value': (v: unknown) => updates.push(v),
-        onValueChange: (v: unknown) => changes.push(v)
+        'onUpdate:value': (v: unknown) => updates.push(v)
       })
     )
 
@@ -142,7 +140,6 @@ describe('Accordion (compound / provide-inject)', () => {
     await waitFor(() => expect(regions()).toHaveLength(1))
 
     expect(updates).toEqual(['overview'])
-    expect(changes).toEqual(['overview'])
     expect(regions()[0].textContent).toContain('Azion runs your code at the edge')
   })
 

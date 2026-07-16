@@ -152,8 +152,8 @@ describe('Paginator (composition)', () => {
     })
   })
 
-  describe('events (grounded in the root emits: update:page / page-change / update:pageSize)', () => {
-    it('clicking Next emits update:page and page-change with the next page', async () => {
+  describe('events (grounded in the root emits: update:page / update:pageSize)', () => {
+    it('clicking Next emits update:page with the next page', async () => {
       const { getByRole, emitted } = render(Paginator, {
         props: { total: 30, pageSize: 10, page: 1 }
       })
@@ -161,7 +161,6 @@ describe('Paginator (composition)', () => {
 
       expect(emitted()['update:page']).toBeTruthy()
       expect(emitted()['update:page'][0]).toEqual([2])
-      expect(emitted()['page-change'][0]).toEqual([2])
     })
 
     it('clicking Previous emits the previous page', async () => {
@@ -171,7 +170,6 @@ describe('Paginator (composition)', () => {
       await fireEvent.click(getByRole('button', { name: /Previous/i }))
 
       expect(emitted()['update:page'][0]).toEqual([2])
-      expect(emitted()['page-change'][0]).toEqual([2])
     })
 
     it('clicking a specific page number emits that page', async () => {
@@ -180,7 +178,6 @@ describe('Paginator (composition)', () => {
       })
       await fireEvent.click(getByRole('button', { name: '3' }))
       expect(emitted()['update:page'][0]).toEqual([3])
-      expect(emitted()['page-change'][0]).toEqual([3])
     })
 
     it('clicking the current page is a no-op (goToPage returns when clamped === current)', async () => {
@@ -190,7 +187,6 @@ describe('Paginator (composition)', () => {
       await fireEvent.click(getByRole('button', { name: '2' }))
       // No emission because the clamped target equals the current page.
       expect(emitted()['update:page']).toBeUndefined()
-      expect(emitted()['page-change']).toBeUndefined()
     })
 
     it('disabled Previous on the first page does not emit on click', async () => {
@@ -214,7 +210,6 @@ describe('Paginator (composition)', () => {
       expect(emitted()['update:pageSize'][0]).toEqual([25])
       // currentPage (3) !== 1 -> the root resets to page 1.
       expect(emitted()['update:page'][0]).toEqual([1])
-      expect(emitted()['page-change'][0]).toEqual([1])
     })
 
     it('changing page-size while already on page 1 emits only update:pageSize (no reset)', async () => {
@@ -227,7 +222,6 @@ describe('Paginator (composition)', () => {
       expect(emitted()['update:pageSize'][0]).toEqual([50])
       // currentPage === 1 -> no page reset emitted.
       expect(emitted()['update:page']).toBeUndefined()
-      expect(emitted()['page-change']).toBeUndefined()
     })
   })
 

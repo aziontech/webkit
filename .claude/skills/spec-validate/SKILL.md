@@ -34,7 +34,7 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
 7. **Check Tokens.** Every "Token (DESIGN.md)" cell must match one of:
    - A generated class starting with `.text-` and present in DESIGN.md.
    - A `var(--*)` that exists in DESIGN.md.
-   No HEX, no RGB, no Tailwind palette, no PrimeVue utility.
+   No HEX, no RGB, no Tailwind palette, no external color utility.
 8. **Check Constraints block.** The "## Constraints — DO NOT" section must be present and must contain at least the bullets from `.specs/_template.md` (verbatim text check on the canonical bullets).
 9. **Write checksum.** If all checks pass and the input had `status: draft`, compute `sha256(body)` (everything after the closing `---` of the frontmatter), write it to the `checksum` field, and flip `status: approved`. Refresh `last_updated`.
 10. **Emit verdict.** Print `OK` or a list of failures (one per line, with the failing line number).

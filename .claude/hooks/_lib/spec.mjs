@@ -71,10 +71,13 @@ export function validateFrontmatter(fm) {
   const errors = []
   if (!fm) return ['frontmatter missing or unparseable']
   if (!fm.name || !KEBAB_RE.test(fm.name)) errors.push('name: must be kebab-case')
-  if (!COMPONENT_CATEGORIES.includes(fm.category)) errors.push(`category: must be one of ${COMPONENT_CATEGORIES.join('|')}`)
-  if (!STRUCTURES.includes(fm.structure)) errors.push(`structure: must be one of ${STRUCTURES.join('|')}`)
+  if (!COMPONENT_CATEGORIES.includes(fm.category))
+    errors.push(`category: must be one of ${COMPONENT_CATEGORIES.join('|')}`)
+  if (!STRUCTURES.includes(fm.structure))
+    errors.push(`structure: must be one of ${STRUCTURES.join('|')}`)
   if (!STATUSES.includes(fm.status)) errors.push(`status: must be one of ${STATUSES.join('|')}`)
-  if (typeof fm.spec_version !== 'number' || fm.spec_version < 1) errors.push('spec_version: must be integer >= 1')
+  if (typeof fm.spec_version !== 'number' || fm.spec_version < 1)
+    errors.push('spec_version: must be integer >= 1')
   if (!isIsoDate(fm.created)) errors.push('created: must be YYYY-MM-DD')
   if (!isIsoDate(fm.last_updated)) errors.push('last_updated: must be YYYY-MM-DD')
   if (['approved', 'implemented', 'locked'].includes(fm.status)) {
@@ -154,6 +157,42 @@ function splitRow(line) {
 }
 
 /**
+ * Like parseTable, but tolerant of a union type cell containing unescaped `|`
+ * (e.g. `'a' | 'b' | 'c'`). Extra cells are absorbed into `overflowHeader`'s column so
+ * the columns AFTER it (Default, Required, JSDoc) keep their positions. Needed to read
+ * the Default column reliably. Mirrors build-catalog.mjs's parseSpecTable.
+ */
+export function parseTable2(sectionText, overflowHeader) {
+  if (!sectionText) return []
+  const lines = sectionText
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith('|'))
+  if (lines.length < 2) return []
+  const headers = splitRow(lines[0]).map((h) => h.toLowerCase())
+  const n = headers.length
+  const oIdx = headers.indexOf(overflowHeader)
+  const rows = []
+  for (let i = 2; i < lines.length; i++) {
+    let cells = splitRow(lines[i])
+    if (cells.every((c) => !c)) continue
+    if (cells.length > n && oIdx >= 0) {
+      const tailCount = n - 1 - oIdx
+      const before = cells.slice(0, oIdx)
+      const tail = tailCount > 0 ? cells.slice(cells.length - tailCount) : []
+      const mid = cells.slice(oIdx, cells.length - tailCount).join(' | ')
+      cells = [...before, mid, ...tail]
+    }
+    const row = {}
+    headers.forEach((h, idx) => {
+      row[h] = (cells[idx] ?? '').trim()
+    })
+    rows.push(row)
+  }
+  return rows
+}
+
+/**
  * True when a Props-table Default cell is the STRING LITERAL 'undefined' or 'null'
  * (the quoted text, not the JS value `undefined`). The cell text may be wrapped in
  * backticks, e.g. "`'undefined'`". Used by spec-validate to reject the empty-string
@@ -210,18 +249,48 @@ export function constraintsBlockHasCanonicalBullets(body) {
 // ---- Spec lookup from a .vue path ----
 
 /**
- * Given an absolute path to a component .vue file under
- * packages/webkit/src/components/<category>/<name>/<file>.vue,
- * return { category, name, specPath }. Returns null if the path doesn't match.
+ * Absolute component .vue path → { category, name, specPath }; null for non-component
+ * paths and wip/. Accepts categorized (components/<category>/<name>/…/<file>.vue) and
+ * flat (components/<name>/…/<file>.vue) layouts — flat uses the 'content' testid category.
  */
 export function resolveSpecForComponentPath(filePath, repoRoot) {
   const rel = filePath.startsWith(repoRoot) ? filePath.slice(repoRoot.length + 1) : filePath
-  const m = rel.match(/^packages\/webkit\/src\/components\/([^/]+)\/([^/]+)\/[^/]+\.vue$/)
+  const m = rel.match(/^packages\/webkit\/src\/components\/(.+)\.vue$/)
   if (!m) return null
-  const [, category, name] = m
-  if (!COMPONENT_CATEGORIES.includes(category)) return null
+  const segs = m[1].split('/')
+  if (segs[0] === 'wip') return null
+  let category, name
+  if (COMPONENT_CATEGORIES.includes(segs[0])) {
+    if (segs.length < 3) return null // stray .vue directly under a category folder
+    category = segs[0]
+    name = segs[1]
+  } else {
+    if (segs.length < 2) return null // stray .vue directly under components/
+    category = 'content' // flat components use the content-<name> testid convention
+    name = segs[0]
+  }
   const specPath = resolve(repoRoot, '.specs', `${name}.md`)
   return { category, name, specPath }
+}
+
+/**
+ * THE root predicate — single definition consumed by check-tests.mjs (CI gate),
+ * enforce-test-exists.mjs and spec-compliance-checks.mjs (write-time hooks).
+ * A ROOT component .vue sits directly in its own component folder:
+ *   <category>/<name>/<name>[-root].vue   (2 segments after components/)
+ *   <name>/<name>[-root].vue              (flat, e.g. tag/tag.vue — 1 segment)
+ * Composition sub-components live deeper (<category>/<name>/<sub>/<sub>.vue) or are a
+ * dashed part next to the root (<name>-part.vue) — they are covered THROUGH their root.
+ * Returns the component name, or null when the file is not a root.
+ */
+export function componentRootName(relFromComponents) {
+  if (!relFromComponents.endsWith('.vue')) return null
+  const parts = relFromComponents.split('/')
+  const name = parts.pop().replace(/\.vue$/, '')
+  const base = name.endsWith('-root') ? name.slice(0, -5) : name
+  if (parts.length === 2 && parts[1] === base) return base
+  if (parts.length === 1 && parts[0] === base) return base
+  return null
 }
 
 // ---- Legacy whitelist ----
@@ -245,12 +314,21 @@ export function isLegacyComponent(category, name, repoRoot) {
  */
 export function parseVueSfc(vueText) {
   const script = extractScriptSetup(vueText)
-  if (!script) return { defineOptionsName: null, props: [], emits: [], slots: [], hasInjectionKey: false, raw: '' }
+  if (!script)
+    return {
+      defineOptionsName: null,
+      props: [],
+      emits: [],
+      slots: [],
+      hasInjectionKey: false,
+      raw: ''
+    }
   return {
     defineOptionsName: extractDefineOptionsName(script),
     props: extractProps(script),
     emits: extractEmits(script),
     slots: extractSlots(script),
+    defaults: extractDefaults(script),
     hasInjectionKey: /InjectionKey\b/.test(script) && /\bprovide\(/.test(script),
     raw: script
   }
@@ -284,7 +362,9 @@ function extractBracedBlockAfter(script, pattern) {
 }
 
 function extractProps(script) {
-  let block = extractBracedBlockAfter(script, /interface\s+Props\s*\{/)
+  // Match `interface Props {` AND named prop interfaces (`interface CardPricingProps {`)
+  // so components that name their props interface aren't silently skipped by the checks.
+  let block = extractBracedBlockAfter(script, /interface\s+\w*Props\s*\{/)
   if (!block) block = extractBracedBlockAfter(script, /defineProps<\s*\{/)
   if (!block) return []
   return parsePropsInterface(block)
@@ -305,7 +385,12 @@ function parsePropsInterface(block) {
     const m = trimmed.match(/^([a-zA-Z_][\w]*)\s*(\??)\s*:\s*(.+?)\s*$/)
     if (m) {
       const [, name, opt, type] = m
-      out.push({ name, optional: opt === '?', type: type.replace(/;$/, '').trim(), jsdoc: pendingDoc.trim() })
+      out.push({
+        name,
+        optional: opt === '?',
+        type: type.replace(/;$/, '').trim(),
+        jsdoc: pendingDoc.trim()
+      })
       pendingDoc = ''
     }
   }
@@ -316,12 +401,20 @@ function extractEmits(script) {
   const block = extractBracedBlockAfter(script, /defineEmits<\s*\{/)
   if (!block) return []
   const out = []
-  for (const line of block.split('\n')) {
-    const t = line.trim().replace(/;$/, '')
-    if (!t) continue
-    // shapes: `name: [args]` or `'update:open': [boolean]`
-    const em = t.match(/^['"]?([\w:-]+)['"]?\s*:\s*\[(.*)\]/)
-    if (em) out.push({ name: em[1], payload: em[2].trim() })
+  // Only TOP-LEVEL entries are event names; a payload tuple may span multiple
+  // lines (`'item-double-click': [\n  event: MouseEvent,\n  payload: { … }\n]`).
+  let depth = 0
+  for (const rawLine of block.split('\n')) {
+    const t = rawLine.trim().replace(/;$/, '')
+    if (depth === 0 && t) {
+      // shapes: `name: [args]`, `'update:open': [boolean]`, or `name: [` (tuple continues below)
+      const em = t.match(/^['"]?([\w:-]+)['"]?\s*:\s*\[(.*?)\]?$/)
+      if (em) out.push({ name: em[1], payload: em[2].trim() })
+    }
+    for (const ch of rawLine) {
+      if (ch === '{' || ch === '(' || ch === '[') depth++
+      else if (ch === '}' || ch === ')' || ch === ']') depth--
+    }
   }
   return out
 }
@@ -330,13 +423,118 @@ function extractSlots(script) {
   const block = extractBracedBlockAfter(script, /defineSlots<\s*\{/)
   if (!block) return []
   const out = []
-  for (const line of block.split('\n')) {
-    const t = line.trim().replace(/;$/, '')
-    if (!t) continue
-    const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\(/)
-    if (sm) out.push({ name: sm[1] })
+  // Only TOP-LEVEL entries are slot names; a scoped slot's prop object
+  // (`default(props: { move: …, count: … })`) is nested and must be skipped.
+  let depth = 0
+  for (const rawLine of block.split('\n')) {
+    const t = rawLine.trim().replace(/;$/, '')
+    if (depth === 0 && t) {
+      // Match both slot syntaxes: `name(): T` and `name?: () => T`.
+      const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\??\s*[:(]/)
+      if (sm) out.push({ name: sm[1] })
+    }
+    for (const ch of rawLine) {
+      if (ch === '{' || ch === '(' || ch === '[') depth++
+      else if (ch === '}' || ch === ')' || ch === ']') depth--
+    }
   }
   return out
+}
+
+/**
+ * Extract the `withDefaults(defineProps<…>(), { … })` defaults object as
+ * { propName: rawValueString }. Walks paren depth to find the SECOND argument's
+ * `{ … }`, then splits it at top level (string- and bracket-aware). Returns {} when
+ * there is no withDefaults call. Used for the Default-column drift check.
+ */
+export function extractDefaults(script) {
+  const idx = script.indexOf('withDefaults(')
+  if (idx === -1) return {}
+  const open = script.indexOf('(', idx)
+  if (open === -1) return {}
+  // Find the top-level comma (depth 1) separating defineProps() from the defaults object.
+  let depth = 0
+  let commaPos = -1
+  for (let i = open; i < script.length; i++) {
+    const ch = script[i]
+    if (ch === '(') depth++
+    else if (ch === ')') {
+      depth--
+      if (depth === 0) break
+    } else if (ch === ',' && depth === 1) {
+      commaPos = i
+      break
+    }
+  }
+  if (commaPos === -1) return {}
+  const braceStart = script.indexOf('{', commaPos)
+  if (braceStart === -1) return {}
+  let d = 1
+  let end = -1
+  for (let i = braceStart + 1; i < script.length; i++) {
+    if (script[i] === '{') d++
+    else if (script[i] === '}') {
+      d--
+      if (d === 0) {
+        end = i
+        break
+      }
+    }
+  }
+  if (end === -1) return {}
+  return parseDefaultsObject(script.slice(braceStart + 1, end))
+}
+
+function parseDefaultsObject(inner) {
+  const out = {}
+  for (const part of splitTopLevel(inner)) {
+    const m = part.match(/^\s*([a-zA-Z_$][\w$]*)\s*:\s*([\s\S]+)$/)
+    if (m) out[m[1]] = m[2].trim()
+  }
+  return out
+}
+
+/** Split a comma-separated fragment at top level, ignoring commas inside strings/brackets. */
+function splitTopLevel(s) {
+  const parts = []
+  let depth = 0
+  let cur = ''
+  let inStr = null
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i]
+    if (inStr) {
+      cur += ch
+      if (ch === inStr && s[i - 1] !== '\\') inStr = null
+      continue
+    }
+    if (ch === '"' || ch === "'" || ch === '`') {
+      inStr = ch
+      cur += ch
+      continue
+    }
+    if (ch === '(' || ch === '[' || ch === '{') depth++
+    else if (ch === ')' || ch === ']' || ch === '}') depth--
+    if (ch === ',' && depth === 0) {
+      if (cur.trim()) parts.push(cur)
+      cur = ''
+      continue
+    }
+    cur += ch
+  }
+  if (cur.trim()) parts.push(cur)
+  return parts
+}
+
+/**
+ * Resolve a `size?: SomeAlias` type reference to the underlying string union declared in
+ * the same script (`type SomeAlias = 'small' | 'medium' | 'large'`). Returns the union
+ * text, or null when the name isn't a simple identifier or has no local type alias.
+ */
+export function resolveTypeUnion(script, typeName) {
+  if (!typeName || !/^[A-Za-z_$][\w$]*$/.test(typeName)) return null
+  const re = new RegExp(`type\\s+${typeName}\\s*=\\s*([^\\n]+(?:\\n\\s*\\|[^\\n]+)*)`)
+  const m = script.match(re)
+  return m ? m[1].replace(/;\s*$/, '').trim() : null
 }
 
 // ---- Animation cross-check ----

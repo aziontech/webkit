@@ -31,7 +31,7 @@ const meta = {
     }
   },
   argTypes: {
-    value: {
+    label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
@@ -48,12 +48,12 @@ const meta = {
     },
     default: {
       control: false,
-      description: 'Helper text content; falls back to the `value` prop when empty.',
+      description: 'Helper text content; falls back to the `label` prop when empty.',
       table: { category: 'slots', type: { summary: 'VNode' } }
     }
   },
   args: {
-    value: 'Helper Text',
+    label: 'Helper Text',
     kind: 'helper'
   }
 }
@@ -68,7 +68,7 @@ const Template = (args) => ({
   template: '<HelperText v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<HelperText kind="helper" value="Helper Text" />'
+const DEFAULT_MARKUP = '<HelperText kind="helper" label="Helper Text" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof HelperText>} */
 export const Default = {
@@ -82,10 +82,10 @@ export const Default = {
 }
 
 const TYPES_TEMPLATE = `<div class="flex flex-col gap-2">
-  <HelperText kind="helper" value="Helper Text" />
-  <HelperText kind="invalid" value="Text Error" />
-  <HelperText kind="required" value="Text Error" />
-  <HelperText kind="disabled" value="Helper Text" />
+  <HelperText kind="helper" label="Helper Text" />
+  <HelperText kind="invalid" label="Text Error" />
+  <HelperText kind="required" label="Text Error" />
+  <HelperText kind="disabled" label="Helper Text" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof HelperText>} */
