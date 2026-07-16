@@ -6,6 +6,10 @@
     <!-- Azion brand fonts (Sora + Proto Mono) are declared via @font-face in
          src/style.css and served from this CDN. Proto Mono is not on Google Fonts. -->
     <link rel="preconnect" href="https://fonts.azion.com" crossorigin />
+    <!-- Font playground uses Google Fonts (see src/font.js); preconnect so the
+         chosen face resolves fast. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Apply the persisted (or system) theme before first paint to avoid a
          flash. Mirrors the logic in src/theme.js — keep the storage key in sync. -->
     <script>
@@ -23,6 +27,57 @@
           var root = document.documentElement;
           root.classList.add(dark ? "azion-dark" : "azion-light");
           root.setAttribute("data-theme", dark ? "dark" : "light");
+        } catch (e) {}
+      })();
+    </script>
+    <!-- Apply the persisted font face before first paint (mirrors src/font.js).
+         Keep the storage key and font map in sync with that module. -->
+    <script>
+      (function () {
+        try {
+          var FONTS = {
+            sora: { stack: "'Sora', sans-serif" },
+            inter: {
+              stack: "'Inter', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
+            },
+            rubik: {
+              stack: "'Rubik', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap",
+            },
+            "ibm-plex-sans": {
+              stack: "'IBM Plex Sans', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
+            },
+            geist: {
+              stack: "'Geist', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap",
+            },
+            roboto: {
+              stack: "'Roboto', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap",
+            },
+            "work-sans": {
+              stack: "'Work Sans', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=Work+Sans:wght@100..900&display=swap",
+            },
+            "instrument-sans": {
+              stack: "'Instrument Sans', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap",
+            },
+          };
+          var saved = localStorage.getItem("webkit-sample-font");
+          var font = FONTS[saved] ? saved : "sora";
+          var root = document.documentElement;
+          root.style.setProperty("--app-font", FONTS[font].stack);
+          root.setAttribute("data-font", font);
+          if (FONTS[font].href) {
+            var link = document.createElement("link");
+            link.id = "google-font-" + font;
+            link.rel = "stylesheet";
+            link.href = FONTS[font].href;
+            document.head.appendChild(link);
+          }
         } catch (e) {}
       })();
     </script>
