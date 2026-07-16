@@ -37,7 +37,7 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: 'undefined' }
+        defaultValue: { summary: "''" }
       }
     },
     severity: {

@@ -60,7 +60,9 @@
     kind="transparent"
     size="small"
     :data-testid="testId"
-    :class="!visible ? 'invisible pointer-events-none' : undefined"
+    :data-visible="visible"
+    :data-direction="direction"
+    class="data-[visible=false]:invisible data-[visible=false]:pointer-events-none"
     @click="handleClick"
   />
 </template>

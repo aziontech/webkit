@@ -25,7 +25,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    label: undefined,
+    label: '',
     severity: 'primary',
     size: 'medium',
     rounded: false,

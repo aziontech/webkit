@@ -382,9 +382,9 @@ function exampleProps(props) {
   return chosen.map((p) => {
     const t = String(p.type || '').trim()
     if (t === 'boolean') {
-      // Boolean true renders as a bare attribute; false is omitted.
       const v = literalDefault(p)
-      return { name: p.name, attr: v ? p.name : null }
+      const on = v === true || v === 'true'
+      return { name: p.name, attr: on ? p.name : null }
     }
     if (t === 'number') return { name: p.name, attr: `:${p.name}="${literalDefault(p)}"` }
     if (scalar(t)) {

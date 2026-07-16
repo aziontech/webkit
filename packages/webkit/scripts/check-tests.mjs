@@ -129,6 +129,12 @@ if (base) {
 }
 
 if (UPDATE) {
+  if (!base) {
+    console.error(
+      'check-tests --update requires TEST_GATE_BASE=<branch>; refusing to wipe the freshness baseline.'
+    )
+    process.exit(1)
+  }
   const names = [...new Set(staleNames)].sort()
   writeFileSync(
     BASELINE_PATH,

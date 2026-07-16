@@ -150,6 +150,9 @@ function categoryFromTarget(target) {
 
 /** kind by target path for non-component exports. */
 function kindFromTarget(target) {
+  if (target.startsWith('./src/eslint-plugin/')) return 'other'
+  if (target.startsWith('./src/mcp/')) return 'other'
+  if (target.startsWith('./src/cli/')) return 'other'
   if (target.startsWith('./src/utils/')) return 'util'
   if (target.startsWith('./src/composables/')) return 'composable'
   if (target.startsWith('./src/svg/')) return 'svg'
@@ -276,7 +279,7 @@ function build() {
   const compoundRoots = subpaths.filter((s) => {
     if (s.includes('/')) return false
     if (subpathSet.has(`${s}-root`)) return true
-    if (/\/index\.(ts|js)$/.test(exportsMap[`./${s}`] || '')) return true
+    if (/^\.\/src\/components\/.+\/index\.(ts|js)$/.test(exportsMap[`./${s}`] || '')) return true
     return loadSpec(s)?.structure === 'composition'
   })
   // Longest-first so multi-select wins over select when attributing subcomponents.

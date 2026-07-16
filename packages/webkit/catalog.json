@@ -1582,12 +1582,8 @@
     "eslint-plugin": {
       "import": "@aziontech/webkit/eslint-plugin",
       "target": "./src/eslint-plugin/index.js",
-      "kind": "component",
-      "compoundRoot": true,
-      "treeShakeableImport": null,
-      "treeShakeableNote": "No tree-shakeable root. Add \"./eslint-plugin-root\" -> the root .vue, or import sub-components individually.",
-      "subcomponents": [],
-      "category": null
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/eslint-plugin"
     },
     "stylelint-config": {
       "import": "@aziontech/webkit/stylelint-config",
@@ -2062,7 +2058,7 @@
         {
           "name": "label",
           "type": "string",
-          "default": "'undefined'",
+          "default": "''",
           "required": "no",
           "doc": "Fallback text when the default slot is empty."
         },
@@ -9210,37 +9206,25 @@
       "import": "@aziontech/webkit/use-controllable",
       "target": "./src/composables/use-controllable/index.js",
       "kind": "composable",
-      "compoundRoot": true,
-      "treeShakeableImport": null,
-      "treeShakeableNote": "No tree-shakeable root. Add \"./use-controllable-root\" -> the root .vue, or import sub-components individually.",
-      "subcomponents": []
+      "treeShakeableImport": "@aziontech/webkit/use-controllable"
     },
     "use-focus-trap": {
       "import": "@aziontech/webkit/use-focus-trap",
       "target": "./src/composables/use-focus-trap/index.js",
       "kind": "composable",
-      "compoundRoot": true,
-      "treeShakeableImport": null,
-      "treeShakeableNote": "No tree-shakeable root. Add \"./use-focus-trap-root\" -> the root .vue, or import sub-components individually.",
-      "subcomponents": []
+      "treeShakeableImport": "@aziontech/webkit/use-focus-trap"
     },
     "use-placement": {
       "import": "@aziontech/webkit/use-placement",
       "target": "./src/composables/use-placement/index.js",
       "kind": "composable",
-      "compoundRoot": true,
-      "treeShakeableImport": null,
-      "treeShakeableNote": "No tree-shakeable root. Add \"./use-placement-root\" -> the root .vue, or import sub-components individually.",
-      "subcomponents": []
+      "treeShakeableImport": "@aziontech/webkit/use-placement"
     },
     "vite": {
       "import": "@aziontech/webkit/vite",
       "target": "./src/vite/index.js",
       "kind": "other",
-      "compoundRoot": true,
-      "treeShakeableImport": null,
-      "treeShakeableNote": "No tree-shakeable root. Add \"./vite-root\" -> the root .vue, or import sub-components individually.",
-      "subcomponents": []
+      "treeShakeableImport": "@aziontech/webkit/vite"
     }
   }
 }

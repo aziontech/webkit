@@ -50,7 +50,18 @@ export const CONTENT_CHECKS = [
   {
     id: 'deprecated-without-replacement',
     applies: () => true,
-    violated: (t) => /@deprecated\s*(?:\*\/|\r?\n|$)/.test(t),
+    violated: (t) => {
+      const re = /@deprecated([^\n]*(?:\r?\n[ \t]*\*(?!\/)[^\n]*)*)/g
+      let m
+      while ((m = re.exec(t))) {
+        const rest = m[1]
+          .replace(/\r?\n[ \t]*\*/g, ' ')
+          .replace(/\*\/[^]*$/, '')
+          .trim()
+        if (!rest) return true
+      }
+      return false
+    },
     message:
       '`@deprecated` with no replacement/removal version. Name the replacement and the removal version (e.g. "@deprecated since 4.2 — use `kind`. Removed in 5.0").'
   }

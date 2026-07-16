@@ -7,10 +7,24 @@
 // repo-wide by the CI ratchet (packages/webkit/scripts/check-authoring.mjs) — one
 // definition, two surfaces, so an editor push can't bypass this hook.
 
-import { relative, resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
+import { relative, resolve, sep } from 'node:path'
 import { collectSpecViolations } from './_lib/spec-compliance-checks.mjs'
 
 const ROOT = process.cwd()
+
+// Same ratchet baseline the CI reads (`<rel>::spec:<violation>` keys): pre-existing,
+// grandfathered violations never block an unrelated edit — only NEW divergence does.
+function baselinedSpecKeys() {
+  try {
+    const entries = JSON.parse(
+      readFileSync(resolve(ROOT, 'packages/webkit/scripts/authoring-baseline.json'), 'utf-8')
+    )
+    return new Set(Array.isArray(entries) ? entries : [])
+  } catch {
+    return new Set()
+  }
+}
 
 function readStdin() {
   return new Promise((res) => {
@@ -37,7 +51,11 @@ async function main() {
   const result = collectSpecViolations(abs, ROOT)
   if (!result || result.violations.length === 0) process.exit(0)
 
-  const { info, violations } = result
+  const { info } = result
+  const rel = relative(ROOT, abs).split(sep).join('/')
+  const baseline = baselinedSpecKeys()
+  const violations = result.violations.filter((v) => !baseline.has(`${rel}::spec:${v}`))
+  if (violations.length === 0) process.exit(0)
   const header = `validate-spec-compliance: .vue diverges from .specs/${info.name}.md`
   const msg = [
     header,

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 4d297049864e2f6c77d14c69cc31a2d17a3b577b3e9e62923e2d00afb3516f54
+checksum: 1af37526ef3218e0bc6f7f9e67d7b4af8b20bc10c6d112a5a9f86beb619f5d21
 created: 2026-05-22
-last_updated: 2026-05-28
+last_updated: 2026-07-16
 ---
 # Tag — Component Spec
 
@@ -53,7 +53,7 @@ import Tag from '@aziontech/webkit/tag'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size` | `'small' | 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | no | Pill shape when true. |
