@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-05-24
 last_updated: 2026-05-24
-checksum: 7c708881c38ac4e3f27b15160973070bd25238adf783089f09565522a14462a4
+checksum: 23a3691909c8316cdbca93943c378e688d63820ea09555d076f489d8286a92d2
 ---
 # Item — Component Spec
 
@@ -20,7 +20,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - `item-group.vue` — Vertical list wrapper (`role="list"`) with a gap between rows; for off-card lists. Forces its descendant Items to render inline (no per-item surface or padding) to avoid a box-in-box effect.
 - `item-list.vue` — Vertical list wrapper (`role="list"`) that draws full-width dividers between rows and no gap; for in-card lists (inside a `CardBox` with `padded=false`). Forces its descendant Items to the `default` kind (padded rows, transparent surface, no per-item border) to avoid a box-in-box effect.
 - `item-separator.vue` — Horizontal divider between rows in a group.
-- `item-media.vue` — Leading media slot (`mediaKind` for icon/image frames).
+- `item-media.vue` — Leading media slot (`kind` for icon/image frames).
 - `item-content.vue` — Main text column (title + description).
 - `item-title.vue` — Primary label line.
 - `item-description.vue` — Secondary muted line.
@@ -36,7 +36,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 | `size` | `'small' \| 'medium'` | `'medium'` | no | Item root density (padding and gap). |
 | `asChild` | `boolean` | `false` | no | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor). |
 
-> `ItemMedia` carries its own `mediaKind` prop (`'default' | 'icon' | 'image'`, default `'default'`) — see the Sub-components section. It is not a root `Item` prop.
+> `ItemMedia` carries its own `kind` prop (`'default' | 'icon' | 'image'`, default `'default'`) — see the Sub-components section. It is not a root `Item` prop.
 
 ## Events
 
@@ -54,7 +54,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - Without `asChild`, slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
 - `data-kind` on Item root: `default` | `outline` | `muted` | `inline` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
 - `data-size` on Item root: `small` | `medium`
-- `data-media-kind` on ItemMedia: `default` | `icon` | `image`
+- `data-kind` on ItemMedia: `default` | `icon` | `image`
 
 ## Motion & Animations
 
@@ -102,9 +102,9 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - Outline
 - Muted
 - Small
-- WithIconMedia — `ItemMedia` with `mediaKind="icon"` and a leading icon (security-style row).
+- WithIconMedia — `ItemMedia` with `kind="icon"` and a leading icon (security-style row).
 - WithAvatar — `ItemMedia` wrapping `Avatar` for profile list rows.
-- WithImageMedia — `ItemMedia` with `mediaKind="image"` and a thumbnail image.
+- WithImageMedia — `ItemMedia` with `kind="image"` and a thumbnail image.
 - WithGroup — `ItemGroup` with multiple items, avatars, and actions; gapped off-card list.
 - WithList — `ItemList` inside a `CardBox` (`padded=false`); rows separated by full-width dividers.
 - WithListAsChild — `ItemList` of `asChild` anchor rows inside a `CardBox`; whole-row links with dividers, row-level hover, and focus-visible ring.

@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: d6468c8f3aadfd54ee13d5ca4a436d1eb9c24a419b85cf539c2dd8a587907889
+checksum: 572ca2b4a32a976435e6cff29394d1da46c20942846803ff0474268343f69805
 created: 2026-05-28
 last_updated: 2026-07-01
 ---
@@ -96,7 +96,6 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | Event | Payload | Notes |
 |---|---|---|
 | `update:value` | `string` | v-model:value. |
-| `value-change` | `string` | Fires when the active tab changes. |
 | `copy` | `string` | Fires after the active tab code is copied to the clipboard. |
 
 ## Slots

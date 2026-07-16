@@ -1,11 +1,16 @@
 #!/usr/bin/env node
-// PostToolUse hook: after a webkit-layer ROOT component .vue is written, warns
-// when the co-located <name>.test.ts is missing. Every component ships a
-// browser-mode functional suite next to its .vue (.claude/rules/testing.md).
+// PostToolUse hook: after a ROOT component .vue is written OR edited, blocks
+// (exit 2) when the co-located <name>.test.ts is missing. You cannot create a
+// component without a test, nor update one whose test does not exist — every
+// component ships a browser-mode functional suite next to its .vue
+// (.claude/rules/testing.md, a `general` standard). The CI gate check-tests
+// re-proves existence at merge time; this write-time hook owns existence on
+// both create (Write) and update (Edit/MultiEdit). Whether an existing test
+// still covers a changed component is a review concern, not a gate.
 //
 // Why PostToolUse (not Pre): /component-create writes the .vue before any test
 // can exist, so a Pre block would deadlock the pipeline. Post surfaces the
-// reminder without undoing the write — same wiring as validate-spec-compliance.
+// blocking reminder without undoing the write — same wiring as validate-spec-compliance.
 //
 // Only the ROOT .vue is checked (basename === folder name). Composition
 // sub-components are tested through their root (testing.md), and resolveSpec…
@@ -15,8 +20,8 @@
 // (.claude/hooks/_lib/legacy-components.json).
 
 import { existsSync } from 'node:fs'
-import { basename, dirname, relative, resolve } from 'node:path'
-import { isLegacyComponent, resolveSpecForComponentPath } from './_lib/spec.mjs'
+import { dirname, relative, resolve } from 'node:path'
+import { componentRootName, isLegacyComponent, resolveSpecForComponentPath } from './_lib/spec.mjs'
 
 const ROOT = process.cwd()
 
@@ -37,7 +42,9 @@ async function main() {
     process.exit(0)
   }
 
-  if (input.tool_name !== 'Write') process.exit(0)
+  // Creating (Write) OR updating (Edit/MultiEdit) a component .vue both require the
+  // co-located test to exist — you cannot land a new or changed component untested.
+  if (!['Write', 'Edit', 'MultiEdit'].includes(input.tool_name)) process.exit(0)
   const filePath = input.tool_input?.file_path
   if (!filePath) process.exit(0)
 
@@ -45,9 +52,10 @@ async function main() {
   const info = resolveSpecForComponentPath(abs, ROOT)
   if (!info) process.exit(0)
 
-  // Root component only: <category>/<name>/<name>.vue. Composition sub-components
-  // (<name>-part.vue) are tested through their root, so skip them.
-  if (basename(abs, '.vue') !== info.name) process.exit(0)
+  // Root component only — shared componentRootName predicate (_lib/spec.mjs), the same
+  // definition check-tests.mjs and spec-compliance-checks.mjs use. Sub-components are
+  // tested through their root, so skip them.
+  if (componentRootName(abs.split('/src/components/').pop()) !== info.name) process.exit(0)
 
   // Legacy components bypass.
   if (isLegacyComponent(info.category, info.name, ROOT)) process.exit(0)

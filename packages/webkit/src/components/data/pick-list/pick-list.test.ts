@@ -41,11 +41,11 @@ const Harness = (opts: { disabled?: boolean; moveOnDoubleClick?: boolean } = {})
         :disabled="disabled"
         :move-on-double-click="moveOnDoubleClick"
       >
-        <PickListSource header="Available">
+        <PickListSource title="Available">
           <template #item="{ item }">{{ item.label }}</template>
         </PickListSource>
         <PickListControls />
-        <PickListTarget header="Selected">
+        <PickListTarget title="Selected">
           <template #item="{ item }">{{ item.label }}</template>
         </PickListTarget>
       </PickList>
@@ -218,11 +218,11 @@ describe('PickList (composition compound)', () => {
         },
         template: `
           <PickList v-model="model" data-key="id" @move="onMove">
-            <PickListSource header="Available">
+            <PickListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListSource>
             <PickListControls />
-            <PickListTarget header="Selected">
+            <PickListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListTarget>
           </PickList>
@@ -253,11 +253,11 @@ describe('PickList (composition compound)', () => {
         },
         template: `
           <PickList v-model="model" data-key="id" @item-double-click="onDouble">
-            <PickListSource header="Available">
+            <PickListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListSource>
             <PickListControls />
-            <PickListTarget header="Selected">
+            <PickListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListTarget>
           </PickList>
@@ -290,11 +290,11 @@ describe('PickList (composition compound)', () => {
         },
         template: `
           <PickList v-model="model" data-key="id" :move-on-double-click="false" @item-double-click="onDouble">
-            <PickListSource header="Available">
+            <PickListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListSource>
             <PickListControls />
-            <PickListTarget header="Selected">
+            <PickListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListTarget>
           </PickList>
@@ -341,11 +341,11 @@ describe('PickList (composition compound)', () => {
         setup: () => ({ model: ref(makeModel()) }),
         template: `
           <PickList v-model="model" data-key="id">
-            <PickListSource header="Available" :loading="true">
+            <PickListSource title="Available" :loading="true">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListSource>
             <PickListControls />
-            <PickListTarget header="Selected">
+            <PickListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListTarget>
           </PickList>
@@ -377,11 +377,11 @@ describe('PickList (composition compound)', () => {
         setup: () => ({ model: ref(makeModel()) }),
         template: `
           <PickList v-model="model" data-key="id" v-slot="{ move, hasSelection, count, disabled, loading }">
-            <PickListSource header="Available">
+            <PickListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListSource>
             <PickListControls />
-            <PickListTarget header="Selected">
+            <PickListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
             </PickListTarget>
             <button

@@ -31,7 +31,7 @@ const meta = {
     }
   },
   argTypes: {
-    value: {
+    label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
@@ -43,12 +43,12 @@ const meta = {
     },
     default: {
       control: false,
-      description: 'Label text; falls back to the `value` prop when empty.',
+      description: 'Label text; falls back to the `label` prop when empty.',
       table: { category: 'slots', type: { summary: 'slot' } }
     }
   },
   args: {
-    value: 'Label',
+    label: 'Label',
     required: false
   }
 }
@@ -63,7 +63,7 @@ const Template = (args) => ({
   template: '<Label v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<Label value="Label" />'
+const DEFAULT_MARKUP = '<Label label="Label" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Label>} */
 export const Default = {
@@ -76,7 +76,7 @@ export const Default = {
   }
 }
 
-const REQUIRED_MARKUP = '<Label value="Label" required />'
+const REQUIRED_MARKUP = '<Label label="Label" required />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Label>} */
 export const Required = {

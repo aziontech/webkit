@@ -480,7 +480,7 @@ Prettier: Formatting with 2 spaces
 
 ## Migration Notes
 
-### From Legacy Config (.eslintrc.*) to Flat Config (eslint.config.js)
+### From Legacy Config (.eslintrc.\*) to Flat Config (eslint.config.js)
 
 **Old format:**
 

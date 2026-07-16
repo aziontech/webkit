@@ -31,7 +31,7 @@ For overlays (tooltip, popover, dropdown, menu):
 ```html
 <!-- Anchored via CSS — works in all evergreen browsers -->
 <button class="anchor"><!-- trigger --></button>
-<div class="absolute left-0 top-full mt-[var(--spacing-1)]"><!-- popover --></div>
+<div class="absolute left-0 top-full mt-[var(--spacing-xxs)]"><!-- popover --></div>
 
 <!-- Or via the native Popover API + CSS anchor positioning -->
 <button popovertarget="menu">Open</button>
@@ -58,7 +58,7 @@ Use Vue `<Teleport to="body">` when the overlay must escape an `overflow: hidden
 </Transition>
 ```
 
-The catalog is in [`.claude/docs/DESIGN.md`](./tokens.md#animations--semanticanimationsjs).
+The catalog is in [`.claude/docs/DESIGN.md`](../docs/DESIGN.md#animations--semanticanimationsjs).
 
 ## Hook coverage
 
