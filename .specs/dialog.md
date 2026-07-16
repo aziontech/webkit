@@ -7,15 +7,36 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 1f438ae1419577fcce4f1c3fa9703c8f067a73d7c673cfc9129738c830a70ec2
+checksum: 9603dc8041e4685b461146ebbe7d8e6a2545c84402df1b4036c78998febda6b3
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-07-15
 ---
+
 # Dialog — Component Spec
 
 ## Purpose
 
 Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`.
+
+## When to use
+
+- A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.
+- The interaction must be completed or dismissed before returning to the page.
+
+## When NOT to use
+
+- The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
+- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown`.
+
+## Related
+
+- `drawer` — edge-anchored panel for secondary tasks / long content.
+- `dropdown` — trigger-anchored menu for actions/options.
+
+## Best practices
+
+- Trap focus, restore it on close, and close on Escape and overlay click.
+- One clear primary action; keep the body scannable.
 
 ## Sub-components
 
@@ -29,24 +50,24 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `undefined` | no | Initial open state when uncontrolled. |
-| `closeable` | `boolean` | `undefined` | no | When true, overlay click and Escape close the dialog. |
-| `size` | `DialogSize` | `undefined` | no | Panel max-width preset passed to the inner Panel. |
+| Prop          | Type         | Default     | Required | JSDoc                                                 |
+| ------------- | ------------ | ----------- | -------- | ----------------------------------------------------- |
+| `open`        | `boolean`    | `undefined` | no       | Controlled open state. Use with `v-model:open`.       |
+| `defaultOpen` | `boolean`    | `false`     | no       | Initial open state when uncontrolled.                 |
+| `dismissible` | `boolean`    | `true`      | no       | When true, overlay click and Escape close the dialog. |
+| `size`        | `DialogSize` | `'medium'`  | no       | Panel max-width preset passed to the inner Panel.     |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event         | Payload          | Notes         |
+| ------------- | ---------------- | ------------- |
 | `update:open` | `value: boolean` | v-model:open. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
@@ -55,29 +76,29 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| open/close | `animate-fade-in` | semantic | `motion-reduce:animate-none` |
-| open/close | `animate-none` | semantic | `motion-reduce:animate-none` |
-| open/close | `animate-fade-out` | semantic | `motion-reduce:animate-none` |
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| Trigger      | Animation / Transition                    | Token    | Reduced-motion fallback         |
+| ------------ | ----------------------------------------- | -------- | ------------------------------- |
+| open/close   | `animate-fade-in`                         | semantic | `motion-reduce:animate-none`    |
+| open/close   | `animate-none`                            | semantic | `motion-reduce:animate-none`    |
+| open/close   | `animate-fade-out`                        | semantic | `motion-reduce:animate-none`    |
+| state change | `transition-colors duration-150 ease-out` | inline   | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

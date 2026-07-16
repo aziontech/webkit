@@ -503,7 +503,7 @@ const OPTION_EXTRAS_MARKUP = `<div style="width: 280px;">
         </template>
         {{ o.label }}
         <template v-if="o.tag" #tag>
-          <Tag :value="o.tag" severity="info" size="small" />
+          <Tag :label="o.tag" severity="info" size="small" />
         </template>
       </MultiSelectOption>
     </MultiSelectContent>

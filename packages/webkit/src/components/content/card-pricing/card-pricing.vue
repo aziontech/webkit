@@ -26,7 +26,7 @@
     /** slot Position. */
     slotPosition?: 'bottom' | 'middle'
     /** card Style. */
-    cardStyle?: 'contained' | 'transparent'
+    kind?: 'contained' | 'transparent'
     /** value. */
     value?: string
     /** prefix. */
@@ -49,7 +49,7 @@
     showTag: false,
     tagLabel: 'Popular',
     slotPosition: 'bottom',
-    cardStyle: 'contained',
+    kind: 'contained',
     value: '20',
     prefix: '$',
     suffix: 'per month',
@@ -71,7 +71,7 @@
 
   const isMiddle = computed(() => props.slotPosition === 'middle')
 
-  const isContained = computed(() => props.cardStyle === 'contained')
+  const isContained = computed(() => props.kind === 'contained')
 
   const rootClasses = computed(() => [
     'flex w-full flex-col items-start',
@@ -124,7 +124,7 @@
           <Tag
             v-if="showTag"
             severity="primary"
-            :value="tagLabel"
+            :label="tagLabel"
             :data-testid="`${testId}__tag`"
           />
         </div>

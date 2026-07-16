@@ -13,10 +13,10 @@ const SIZES = ['small', 'medium', 'large'] as const
 
 describe('Badge', () => {
   it('renders the value fallback text inside the value sub-element when no slot is given', () => {
-    const { getByTestId } = render(Badge, { props: { value: '99' } })
+    const { getByTestId } = render(Badge, { props: { label: '99' } })
 
     const root = getByTestId('content-badge')
-    const valueEl = getByTestId('content-badge__value')
+    const valueEl = getByTestId('content-badge__label')
 
     expect(valueEl).toBeInTheDocument()
     expect(valueEl).toHaveTextContent('99')
@@ -29,35 +29,35 @@ describe('Badge', () => {
     // root still renders
     expect(getByTestId('content-badge')).toBeInTheDocument()
     // value span is guarded by v-else-if="value"; empty default => absent
-    expect(queryByTestId('content-badge__value')).toBeNull()
+    expect(queryByTestId('content-badge__label')).toBeNull()
   })
 
   it('renders default slot content and suppresses the value fallback when both are provided', () => {
     const { getByTestId, queryByTestId } = render(Badge, {
-      props: { value: 'fallback-ignored' },
+      props: { label: 'fallback-ignored' },
       slots: { default: 'slotted' }
     })
 
     const root = getByTestId('content-badge')
     expect(root).toHaveTextContent('slotted')
     // slot present => v-if branch wins, value branch not rendered
-    expect(queryByTestId('content-badge__value')).toBeNull()
+    expect(queryByTestId('content-badge__label')).toBeNull()
     expect(root).not.toHaveTextContent('fallback-ignored')
   })
 
   it('honors a consumer-supplied data-testid on the root and derives the value sub-testid from it', () => {
     const { getByTestId } = render(Badge, {
-      props: { value: '7' },
+      props: { label: '7' },
       attrs: { 'data-testid': 'my-badge' }
     })
 
     expect(getByTestId('my-badge')).toBeInTheDocument()
-    expect(getByTestId('my-badge__value')).toHaveTextContent('7')
+    expect(getByTestId('my-badge__label')).toHaveTextContent('7')
   })
 
   it('reflects severity and size on data-* attributes of the root', () => {
     const { getByTestId } = render(Badge, {
-      props: { value: '1', severity: 'success', size: 'large' }
+      props: { label: '1', severity: 'success', size: 'large' }
     })
 
     const root = getByTestId('content-badge')
@@ -66,7 +66,7 @@ describe('Badge', () => {
   })
 
   it('applies default severity=primary and size=medium when unset', () => {
-    const { getByTestId } = render(Badge, { props: { value: '1' } })
+    const { getByTestId } = render(Badge, { props: { label: '1' } })
 
     const root = getByTestId('content-badge')
     expect(root).toHaveAttribute('data-severity', 'primary')
@@ -76,24 +76,24 @@ describe('Badge', () => {
   it('falls back to primary on an invalid severity', () => {
     const { getByTestId } = render(Badge, {
       // @ts-expect-error exercising the runtime guard on an out-of-range severity
-      props: { value: '1', severity: 'not-a-severity' }
+      props: { label: '1', severity: 'not-a-severity' }
     })
 
     expect(getByTestId('content-badge')).toHaveAttribute('data-severity', 'primary')
   })
 
   it.each(SEVERITIES)('renders data-severity=%s for each valid severity', (severity) => {
-    const { getByTestId } = render(Badge, { props: { value: '1', severity } })
+    const { getByTestId } = render(Badge, { props: { label: '1', severity } })
     expect(getByTestId('content-badge')).toHaveAttribute('data-severity', severity)
   })
 
   it.each(SIZES)('renders data-size=%s for each valid size', (size) => {
-    const { getByTestId } = render(Badge, { props: { value: '1', size } })
+    const { getByTestId } = render(Badge, { props: { label: '1', size } })
     expect(getByTestId('content-badge')).toHaveAttribute('data-size', size)
   })
 
   it('has no accessibility violations for the default value render', async () => {
-    const { container } = render(Badge, { props: { value: '99' } })
+    const { container } = render(Badge, { props: { label: '99' } })
     await expectNoA11yViolations(container)
   })
 
