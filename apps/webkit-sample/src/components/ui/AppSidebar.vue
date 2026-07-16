@@ -5,20 +5,24 @@
   // only the icon button is interactive — it opens a Popover listing the teams
   // (each with its plan tag, member count, and a checkmark on the current one)
   // plus a "Create new team" action. The account menu is a Dropdown anchored to
-  // the footer's overflow (⋮) button — grouped account/personal sections (each
-  // with an identity header), the theme control, and Logout. The full Azion
+  // the footer's overflow (⋮) button — a single account "Settings" entry (the
+  // per-category links are now tabs on the /account page), a personal section
+  // with an identity header, the theme control, and Logout. The full Azion
   // Console navigation is baked in as the default body (grouped by product area,
   // mirroring the console); a page can still override it via the default slot.
   import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import MenuItem from '@aziontech/webkit/menu-item'
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
   import SidebarGroup from '@aziontech/webkit/sidebar-group'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import AzionLogoMin from '@aziontech/webkit/svg/azion/min'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, ref } from 'vue'
 
   import { useTheme } from '../../theme.js'
@@ -46,9 +50,10 @@
   const navGroups = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/dashboard' },
-        { id: 'marketplace', label: 'Marketplace', icon: 'ai ai-marketplace' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads' }
+        { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' },
+        { id: 'marketplace', label: 'Marketplace', icon: 'ai ai-marketplace', path: '/marketplace' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads' },
+        { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' }
       ]
     },
     {
@@ -141,25 +146,31 @@
     teamMenuOpen.value = false
   }
 
-  // The two grouped sections of the account menu.
-  const accountLinks = [
-    { id: 'account-settings', label: 'Account Settings' },
-    { id: 'users-management', label: 'Users Management' },
-    { id: 'billing', label: 'Billing' },
-    { id: 'credentials', label: 'Credentials' },
-    { id: 'activity-history', label: 'Activity History' },
-    { id: 'teams-permissions', label: 'Teams Permissions' }
-  ]
-  const personalLinks = [
-    { id: 'your-settings', label: 'Your Settings' },
-    { id: 'personal-token', label: 'Personal Token' }
-  ]
+  // The account menu is controlled so custom (non-Option) rows — the identity
+  // header's Settings shortcut and the "Upgrade to Pro" CTA — can close it too.
+  const accountMenuOpen = ref(false)
 
-  // Dropdown emits (event, value) and closes itself on select; route the Logout
-  // entry to its own event and everything else to a generic select.
-  const onSelect = (event, value) => {
-    if (value === 'logout') emit('logout', event)
-    else emit('select', event, value)
+  // Entries the demo can't route anywhere real (Feedback, Changelog, Help,
+  // Upgrade) acknowledge with a toast; navigations bubble to the parent, which
+  // owns the router. Logout keeps its own event. "Personal Tokens" lives here,
+  // directly under the account identity + Settings — the account's tokens area.
+  const demoEntries = {
+    feedback: 'Feedback is disabled in the demo.',
+    changelog: "You're on the latest version.",
+    upgrade: 'Plan management is disabled in the demo.'
+  }
+
+  // Dropdown Options emit (event, value) and close the menu on select; the
+  // header gear and Upgrade CTA are plain buttons, so they close it by hand.
+  const routeEntry = (event, value) => {
+    if (value === 'logout') return emit('logout', event)
+    if (value in demoEntries) return toast.info(demoEntries[value])
+    emit('select', event, value)
+  }
+  const onSelect = (event, value) => routeEntry(event, value)
+  const onShortcut = (event, value) => {
+    accountMenuOpen.value = false
+    routeEntry(event, value)
   }
 </script>
 
@@ -178,7 +189,7 @@
           />
 
           </div>
-          
+
           <div
             class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)]"
           >
@@ -303,6 +314,7 @@
           </span>
 
           <Dropdown
+            v-model:open="accountMenuOpen"
             placement="top-end"
             @select="onSelect"
           >
@@ -315,46 +327,42 @@
               />
             </Dropdown.Trigger>
 
-            <!-- Account identity + account-level links -->
+            <!-- Account identity + the account's own links: Account Settings and
+                 Personal Tokens (the account's tokens) sit directly under the
+                 identity block. -->
             <Dropdown.Group>
               <template #top>
-                <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                  <span class="text-label-md text-[var(--text-default)]">
+                <div class="flex min-w-0 flex-col">
+                  <span class="truncate text-label-md text-[var(--text-default)]">
                     {{ userName }}
                   </span>
-                  <span class="text-body-xs text-[var(--text-muted)]">
-                    ID: {{ accountId }}&nbsp;&nbsp;Client ID: {{ clientId }}
-                  </span>
-                </div>
-              </template>
-              <Dropdown.Option
-                v-for="link in accountLinks"
-                :key="link.id"
-                :value="link.id"
-                :label="link.label"
-              />
-            </Dropdown.Group>
-
-            <!-- User identity + personal links + theme control -->
-            <Dropdown.Group>
-              <template #top>
-                <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                  <span class="text-label-md text-[var(--text-default)]">
-                    {{ userName }}
-                  </span>
-                  <span class="text-body-xs text-[var(--text-muted)]">
+                  <span class="truncate text-body-xs text-[var(--text-muted)]">
                     {{ user }}
                   </span>
                 </div>
               </template>
+
               <Dropdown.Option
-                v-for="link in personalLinks"
-                :key="link.id"
-                :value="link.id"
-                :label="link.label"
-              />
-              <!-- Theme row: not a selectable menuitem, but mirrors the
-                   Option's height/padding so it aligns with the rows above. -->
+                value="settings"
+                label="Account Settings"
+              >
+                <template #right>
+                  <i class="pi pi-cog" aria-hidden="true" />
+                </template>
+              </Dropdown.Option>
+              <Dropdown.Option
+                value="personal-tokens"
+                label="Personal Tokens"
+              >
+                <template #right>
+                  <i class="pi pi-key" aria-hidden="true" />
+                </template>
+              </Dropdown.Option>
+            </Dropdown.Group>
+
+            <!-- Theme row: not a selectable menuitem, but mirrors the Option's
+                 height/padding so its inline control aligns with the rows. -->
+            <Dropdown.Group>
               <div
                 class="flex h-8 min-h-8 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
               >
@@ -368,19 +376,71 @@
               </div>
             </Dropdown.Group>
 
+            <!-- Resources -->
+            <Dropdown.Group>
+              <Dropdown.Option
+                value="home"
+                label="Home Page"
+              >
+                <template #right>
+                  <i class="pi pi-home" aria-hidden="true" />
+                </template>
+              </Dropdown.Option>
+              <Dropdown.Option
+                value="changelog"
+                label="Changelog"
+              >
+                <template #right>
+                  <i class="pi pi-pencil" aria-hidden="true" />
+                </template>
+              </Dropdown.Option>
+              <Dropdown.Option
+                value="feedback"
+                label="Feedback"
+              >
+                <template #right>
+                  <i class="pi pi-comment" aria-hidden="true" />
+                </template>
+              </Dropdown.Option>
+              <Dropdown.Option
+                value="docs"
+                label="Docs"
+              >
+                <template #right>
+                  <i class="pi pi-book" aria-hidden="true" />
+                </template>
+              </Dropdown.Option>
+            </Dropdown.Group>
+
             <!-- Logout -->
             <Dropdown.Group>
               <Dropdown.Option
                 value="logout"
-                label="Logout"
+                label="Log Out"
               >
-                <template #left>
-                  <i
-                    class="pi pi-sign-out"
-                    aria-hidden="true"
-                  />
+                <template #right>
+                  <i class="pi pi-sign-out" aria-hidden="true" />
                 </template>
               </Dropdown.Option>
+            </Dropdown.Group>
+
+            <!-- Upgrade CTA + platform status -->
+            <Dropdown.Group>
+              <div class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]">
+                <Button
+                  label="Upgrade to Pro"
+                  kind="secondary"
+                  size="medium"
+                  class="w-full"
+                  @click="(event) => onShortcut(event, 'upgrade')"
+                />
+                <div class="flex justify-center px-[var(--spacing-xs)]">
+                  <StatusIndicator
+                    status="positive"
+                    label="All systems normal"
+                  />
+                </div>
+              </div>
             </Dropdown.Group>
           </Dropdown>
         </div>
