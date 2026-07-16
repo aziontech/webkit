@@ -67,3 +67,20 @@ body {
   margin: 0;
   min-height: 100vh;
 }
+
+/* Font playground (test harness): src/font.js sets `--app-font` on <html> to
+   swap the primary sans face at runtime while keeping the theme's type scale
+   (sizes / weights / tracking) untouched. Body text inherits the family from
+   <html>; the button text tokens are pinned here too since `.text-button-*`
+   sets its own family. Code (Roboto Mono), overlines & big numbers (Proto
+   Mono), and icon glyphs (`.pi` / `.ai`, pinned above) keep their own faces. */
+:root {
+  --app-font: 'Sora', sans-serif;
+}
+html {
+  font-family: var(--app-font);
+}
+.text-button-lg,
+.text-button-md {
+  font-family: var(--app-font);
+}
