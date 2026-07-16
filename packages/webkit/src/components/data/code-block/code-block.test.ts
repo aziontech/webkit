@@ -342,6 +342,22 @@ describe('CodeBlock', () => {
     })
   })
 
+  describe('border', () => {
+    it('draws the outer border by default (data-border set)', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(getByTestId('data-code-block').getAttribute('data-border')).toBe('true')
+    })
+
+    it('drops the outer border when border is false (data-border absent)', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, border: false }
+      })
+
+      expect(getByTestId('data-code-block').getAttribute('data-border')).toBeNull()
+    })
+  })
+
   describe('a11y (axe against styled DOM)', () => {
     it('single-tab layout has no violations', async () => {
       const { container } = render(CodeBlock, {

@@ -218,6 +218,16 @@ const meta = {
         defaultValue: { summary: 'false' }
       }
     },
+    border: {
+      control: 'boolean',
+      description:
+        'Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
+    },
     'onUpdate:value': {
       action: 'update:value',
       description: 'v-model:value update emitted when the active tab changes.',
@@ -234,7 +244,8 @@ const meta = {
     defaultValue: 'js',
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
-    animateLines: false
+    animateLines: false,
+    border: true
   }
 }
 
@@ -354,6 +365,25 @@ export const WithAnimatedLines = {
     docs: {
       description: { story: 'Staggered line entrance for website layouts via `animateLines`.' },
       source: { code: snippet(animatedTabs, 'default-value="js" show-line-numbers animate-lines') }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
+export const Borderless = {
+  args: {
+    border: false
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The outer card border dropped via `:border="false"` — for embedding inside a surface that already frames the block. Internal dividers are unaffected.'
+      },
+      source: {
+        code: snippet(languageSwitcherTabs, 'default-value="js" show-line-numbers :border="false"')
+      }
     }
   }
 }
