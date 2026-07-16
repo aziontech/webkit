@@ -33,8 +33,8 @@ const template = computed(() => getTemplate(route.query.template));
 const goToCreationCenter = () =>
   router.push({ path: "/create", query: { email: userEmail.value } });
 
-const goToDashboard = () =>
-  router.push({ path: "/dashboard", query: { email: userEmail.value } });
+const goHome = () =>
+  router.push({ path: "/home", query: { email: userEmail.value } });
 
 // Breadcrumb trail: clickable root back to the Creation Center, then the
 // current template as the active (last) crumb.
@@ -181,7 +181,7 @@ const nextSteps = [
          offset using the theme easing tokens. -->
     <main class="min-w-0 flex-1 overflow-auto">
       <div
-        class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-col items-center gap-[var(--spacing-xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]"
+        class="mx-auto flex w-full max-w-[var(--container-2xl)] flex-col items-center gap-[var(--spacing-xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]"
       >
         <!-- Preview strip for the form/deploy phases. On success it gives way
              to the in-card preview shown on the Congratulations card. -->
@@ -484,7 +484,7 @@ const nextSteps = [
                     label="Manage"
                     kind="secondary"
                     size="large"
-                    @click="goToDashboard"
+                    @click="goHome"
                   />
                 </template>
               </CardBox>

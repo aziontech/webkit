@@ -16,8 +16,8 @@ const router = useRouter();
 // Carry the signed-in user across the flow (falls back to a placeholder).
 const userEmail = computed(() => route.query.email || "myemail@azion.com");
 
-const goToDashboard = () =>
-  router.push({ path: "/dashboard", query: { email: userEmail.value } });
+const goHome = () =>
+  router.push({ path: "/home", query: { email: userEmail.value } });
 
 // Map a chosen template to a catalog slug, then hand it to the deploy flow.
 const slugFor = (title) => {
@@ -150,8 +150,8 @@ const resources = [
     <!-- Global header: back to console, brand + breadcrumb. -->
     <CreationHeader
       :breadcrumb="[{ label: 'Creation Center', current: true }]"
-      back-label="Back to dashboard"
-      @back="goToDashboard"
+      back-label="Back to Home"
+      @back="goHome"
     />
 
     <!-- Flow content -->

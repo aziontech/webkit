@@ -75,7 +75,7 @@ const signIn = async () => {
   verifying.value = true;
   try {
     await authenticate(password.value);
-    router.push({ name: "dashboard", query: { email: email.value } });
+    router.push({ name: "home", query: { email: email.value } });
   } catch (error) {
     toast.error("Sign-in failed.", {
       description: error?.message ?? "Check your connection and try again.",

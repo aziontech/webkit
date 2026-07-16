@@ -3,7 +3,6 @@
 // with the module breadcrumb) comes from AppLayout; this page renders only its
 // overview content: a welcome header, a metrics strip, the Resources and Recent
 // Activity tables, and a right rail with Monthly Usage + Marketplace Trends.
-import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
 import IconButton from "@aziontech/webkit/icon-button";
 import Link from "@aziontech/webkit/link";
@@ -15,22 +14,11 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import AppLayout from "./ui/AppLayout.vue";
-import PageHeading from "./ui/PageHeading.vue";
 
 const route = useRoute();
 
 // The email carried over from the login flow (falls back to a placeholder).
 const userEmail = computed(() => route.query.email || "gabriel.mendonca@azion.com");
-
-// A friendly display name derived from the email local part.
-const displayName = computed(() => {
-  const local = String(userEmail.value).split("@")[0];
-  return local
-    .split(/[._-]/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-});
 
 // Account-level metrics. `value` is the big number; `unit` sits beside it.
 const metrics = [
@@ -162,9 +150,6 @@ const featuredTemplate = {
   version: "1.1.0",
 };
 
-const inviteUser = () =>
-  toast.info("Invite sent", { description: "Your teammate will receive an email." });
-
 const openZoneActions = (event, row) =>
   toast.info(`Actions for ${row.zoneName}`, { description: "Zone ID " + row.id });
 </script>
@@ -175,19 +160,6 @@ const openZoneActions = (event, row) =>
       <div class="flex flex-col gap-[var(--spacing-lg)] xl:flex-row xl:items-start">
         <!-- Primary column -->
         <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-lg)]">
-          <!-- Welcome + Invite User -->
-          <PageHeading size="large" :title="`Welcome, ${displayName}`">
-            <template #actions>
-              <Button
-                label="Invite User"
-                kind="outlined"
-                size="small"
-                icon="pi pi-user-plus"
-                @click="inviteUser"
-              />
-            </template>
-          </PageHeading>
-
           <!-- Metrics -->
           <section class="flex flex-col gap-[var(--spacing-md)]">
             <div class="flex items-center gap-[var(--spacing-xs)]">
