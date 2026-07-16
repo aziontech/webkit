@@ -169,8 +169,8 @@ describe('CardPricing', () => {
     expect(getByTestId(ROOT)).toBeInTheDocument()
   })
 
-  it.each(CARD_STYLES)('renders cardStyle=%s without dropping the root', (cardStyle) => {
-    const { getByTestId } = render(CardPricing, { props: { cardStyle } })
+  it.each(CARD_STYLES)('renders kind=%s without dropping the root', (cardStyle) => {
+    const { getByTestId } = render(CardPricing, { props: { kind: cardStyle } })
     expect(getByTestId(ROOT)).toBeInTheDocument()
   })
 

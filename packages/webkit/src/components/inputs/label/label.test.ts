@@ -10,21 +10,21 @@ const { Default, Required } = composeStories(stories)
 
 describe('Label', () => {
   it('renders a <label> element carrying the default data-testid', () => {
-    const { getByTestId } = render(Label, { props: { value: 'Email' } })
+    const { getByTestId } = render(Label, { props: { label: 'Email' } })
 
     const root = getByTestId('input-label')
     expect(root.tagName).toBe('LABEL')
   })
 
   it('shows the value prop as the label text', () => {
-    const { getByTestId } = render(Label, { props: { value: 'Email' } })
+    const { getByTestId } = render(Label, { props: { label: 'Email' } })
 
     expect(getByTestId('input-label__text')).toHaveTextContent('Email')
   })
 
   it('renders default-slot content over the value fallback', () => {
     const { getByTestId } = render(Label, {
-      props: { value: 'Fallback' },
+      props: { label: 'Fallback' },
       slots: { default: 'Slotted' }
     })
 
@@ -34,14 +34,14 @@ describe('Label', () => {
   })
 
   it('does not set data-required and renders no Required tag by default', () => {
-    const { getByTestId, queryByTestId } = render(Label, { props: { value: 'Email' } })
+    const { getByTestId, queryByTestId } = render(Label, { props: { label: 'Email' } })
 
     expect(getByTestId('input-label')).not.toHaveAttribute('data-required')
     expect(queryByTestId('input-label__required')).toBeNull()
   })
 
   it('sets data-required and appends the Required tag when required', () => {
-    const { getByTestId } = render(Label, { props: { value: 'Email', required: true } })
+    const { getByTestId } = render(Label, { props: { label: 'Email', required: true } })
 
     expect(getByTestId('input-label')).toHaveAttribute('data-required')
 
@@ -52,7 +52,7 @@ describe('Label', () => {
 
   it('forwards the for attribute onto the label root via $attrs', () => {
     const { getByTestId } = render(Label, {
-      props: { value: 'Email' },
+      props: { label: 'Email' },
       attrs: { for: 'email-field' }
     })
 
@@ -61,7 +61,7 @@ describe('Label', () => {
 
   it('honours a consumer-supplied data-testid', () => {
     const { getByTestId } = render(Label, {
-      props: { value: 'Email' },
+      props: { label: 'Email' },
       attrs: { 'data-testid': 'custom-label' }
     })
 
@@ -71,20 +71,20 @@ describe('Label', () => {
   })
 
   it.each([
-    ['optional', { value: 'Name', required: false }],
-    ['required', { value: 'Name', required: true }]
+    ['optional', { label: 'Name', required: false }],
+    ['required', { label: 'Name', required: true }]
   ])('renders the %s variant', (_label, props) => {
     const { getByTestId } = render(Label, { props })
     expect(getByTestId('input-label')).toBeInTheDocument()
   })
 
   it('has no a11y violations in the default (optional) state', async () => {
-    const { container } = render(Label, { props: { value: 'Email' } })
+    const { container } = render(Label, { props: { label: 'Email' } })
     await expectNoA11yViolations(container)
   })
 
   it('has no a11y violations in the required state', async () => {
-    const { container } = render(Label, { props: { value: 'Email', required: true } })
+    const { container } = render(Label, { props: { label: 'Email', required: true } })
     await expectNoA11yViolations(container)
   })
 

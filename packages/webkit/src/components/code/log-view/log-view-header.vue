@@ -64,7 +64,7 @@
           <Tag
             severity="warning"
             icon="pi pi-exclamation-triangle"
-            :value="ctx.warningTagLabel.value"
+            :label="ctx.warningTagLabel.value"
           />
         </button>
       </slot>

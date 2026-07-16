@@ -51,7 +51,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
+        "prepareCmd": "node scripts/build-catalog.mjs && vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],
@@ -60,7 +60,8 @@
       {
         "assets": [
           "package.json",
-          "CHANGELOG.md"
+          "CHANGELOG.md",
+          "catalog.json"
         ],
         "message": "chore(release): @aziontech/webkit ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }

@@ -70,4 +70,4 @@ Transform the structured JSON from `figma-discover` into a deterministic mapping
 - [ ] Mapping table produced (or empty-marker comment).
 - [ ] Theme gaps table produced (or empty-marker comment).
 - [ ] Every "Resolved to" cell is either a `.text-*` class or a `var(--*)` literal.
-- [ ] No HEX / RGB / Tailwind / PrimeVue in the output.
+- [ ] No HEX / RGB / Tailwind / external color utility in the output.

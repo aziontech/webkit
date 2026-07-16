@@ -1,0 +1,27 @@
+[
+  {
+    "name": "button",
+    "path": "src/components/actions/button/button.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "input-text",
+    "path": "src/components/inputs/input-text/input-text.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "accordion-root",
+    "path": "src/components/content/accordion/accordion.vue",
+    "limit": "13 KB"
+  },
+  {
+    "name": "calendar-root",
+    "path": "src/components/inputs/calendar/calendar.vue",
+    "limit": "17 KB"
+  },
+  {
+    "name": "table-root",
+    "path": "src/components/data/table/table.vue",
+    "limit": "48 KB"
+  }
+]

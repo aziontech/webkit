@@ -8,13 +8,13 @@
 
   interface Props {
     /** Fallback text when the default slot is empty. */
-    value?: string
+    label?: string
     /** Appends a required indicator (an orange asterisk followed by the word "Required") next to the label text. */
     required?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
-    value: '',
+    label: '',
     required: false
   })
 
@@ -37,7 +37,7 @@
   >
     <span :data-testid="`${testId}__text`">
       <slot v-if="$slots['default']" />
-      <template v-else-if="value">{{ value }}</template>
+      <template v-else-if="label">{{ label }}</template>
     </span>
     <span
       v-if="required"

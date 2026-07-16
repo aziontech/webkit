@@ -72,7 +72,7 @@
   >
     <Switch
       :id="generatedId"
-      v-model:isToggled="model"
+      v-model="model"
       :disabled="disabled"
       :aria-disabled="disabled || undefined"
       :aria-required="required || undefined"
@@ -90,7 +90,7 @@
       >
         <Label
           v-if="label"
-          :value="label"
+          :label="label"
           :required="required"
           :for="generatedId"
           :data-testid="`${testId}__label`"

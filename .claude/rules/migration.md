@@ -1,6 +1,6 @@
 # Rule: migration policy — never inherit, always rewrite
 
-When importing a component, pattern, or any artifact from **outside** this codebase (another design system, a Figma file, a Base UI / Reka UI / Radix / shadcn / PrimeVue example, a third-party library, a previous repo, a Stack Overflow answer, a CONTRACT.md file written before this pipeline existed), **you do not bring it as-is**. You rewrite it to our conventions before the spec is written, and you write the spec from scratch following [`.specs/_template.md`](../../.specs/_template.md).
+When importing a component, pattern, or any artifact from **outside** this codebase (another design system, a Figma file, a Base UI / Reka UI / Radix / shadcn example, a third-party library, a previous repo, a Stack Overflow answer, a CONTRACT.md file written before this pipeline existed), **you do not bring it as-is**. You rewrite it to our conventions before the spec is written, and you write the spec from scratch following [`.specs/_template.md`](../../.specs/_template.md).
 
 ## The rule
 
@@ -18,9 +18,9 @@ When importing a component, pattern, or any artifact from **outside** this codeb
 | Source | events may be camelCase (`onValueChange`) | Always kebab-case (`update:value`, `value-change`). |
 | Source | boolean props may have `is`/`has` prefixes | No prefix (`disabled`, `loading`, `open`). |
 | Source | `class` declared in `defineProps` | Never. Use `useAttrs()` + `rootClasses` merging `attrs.class`. |
-| Source | Inline `@keyframes` or animation library | Only the semantic utilities catalogued in [`tokens.md`](./tokens.md#animations--semanticanimationsjs). No animation lib (see [`dependencies.md`](./dependencies.md)). |
+| Source | Inline `@keyframes` or animation library | Only the semantic utilities catalogued in [`DESIGN.md`](../docs/DESIGN.md#animations--semanticanimationsjs). No animation lib (see [`dependencies.md`](./dependencies.md)). |
 | Source | `@floating-ui/vue` for positioning | CSS only (anchor positioning, Popover API, `<Teleport>` + `position: fixed`). |
-| Source | Their tokens (`#fff`, `--brand-50`, `text-blue-600`) | Our tokens (`var(--bg-canvas)`, `var(--primary)`, `text-button-lg`). Catalog: [`tokens.md`](./tokens.md). |
+| Source | Their tokens (`#fff`, `--brand-50`, `text-blue-600`) | Our tokens (`var(--bg-canvas)`, `var(--primary)`, `text-button-lg`). Catalog: [`DESIGN.md`](../docs/DESIGN.md). |
 
 ### When migrating from Figma
 

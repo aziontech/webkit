@@ -223,11 +223,6 @@ const meta = {
       description: 'v-model:value update emitted when the active tab changes.',
       table: { category: 'events', type: { summary: 'string' } }
     },
-    onValueChange: {
-      action: 'value-change',
-      description: 'Emitted when the active tab changes.',
-      table: { category: 'events', type: { summary: 'string' } }
-    },
     onCopy: {
       action: 'copy',
       description: 'Emitted after the active tab code is copied to the clipboard.',

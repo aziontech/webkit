@@ -1,0 +1,17 @@
+{
+  "_comment": "FRESHNESS transition-debt only (see .claude/rules/testing.md). Existence is mandatory and NOT grandfathered — every component must have a test. Names here are components changed-without-test-touch before the gate existed; they are exempt from the freshness check only. New freshness debt is blocked. Re-snapshot with TEST_GATE_BASE=<base> pnpm --filter @aziontech/webkit run test:gate:update.",
+  "grandfathered": [
+    "field-checkbox",
+    "field-input-group",
+    "field-password",
+    "field-phone-number",
+    "field-radio",
+    "field-switch",
+    "field-switch-block",
+    "field-text",
+    "field-text-switch",
+    "field-textarea",
+    "menu-item",
+    "table"
+  ]
+}

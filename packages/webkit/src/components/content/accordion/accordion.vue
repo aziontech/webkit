@@ -43,7 +43,6 @@
 
   const emit = defineEmits<{
     'update:value': [value: AccordionValue]
-    'value-change': [value: AccordionValue]
   }>()
 
   defineSlots<{
@@ -60,7 +59,6 @@
     defaultProp: props.defaultValue,
     onChange: (next) => {
       emit('update:value', next)
-      emit('value-change', next)
     }
   })
 

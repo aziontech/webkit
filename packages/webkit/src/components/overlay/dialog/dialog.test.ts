@@ -183,7 +183,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 
-  describe('closing behaviors (closeable)', () => {
+  describe('closing behaviors (dismissible)', () => {
     it('Escape closes the dialog and returns focus to the trigger', async () => {
       const { getByTestId } = render(composed())
       await settle()
@@ -229,7 +229,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       await settle()
 
       const close = byTestId('overlay-dialog__close')!
-      // closeable (default) -> the IconButton is enabled.
+      // dismissible (default) -> the IconButton is enabled.
       expect(close.hasAttribute('disabled')).toBe(false)
 
       await fireEvent.click(close)
@@ -239,26 +239,26 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 
-  describe('closeable=false suppresses dismissal', () => {
+  describe('dismissible=false suppresses dismissal', () => {
     it('Escape and backdrop click do NOT close, and DialogClose is disabled', async () => {
-      const { getByTestId } = render(composed({ closeable: false }))
+      const { getByTestId } = render(composed({ dismissible: false }))
       await settle()
 
       await fireEvent.click(getByTestId('overlay-dialog__trigger'))
       await settle()
       expect(panel()).not.toBeNull()
 
-      // Escape: guarded by ctx.closeable.
+      // Escape: guarded by ctx.dismissible.
       await fireEvent.keyDown(document, { key: 'Escape' })
       await settle()
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
 
-      // Backdrop click: guarded by ctx.closeable.
+      // Backdrop click: guarded by ctx.dismissible.
       await fireEvent.click(backdrop()!)
       await settle()
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
 
-      // DialogClose reflects !closeable via disabled.
+      // DialogClose reflects !dismissible via disabled.
       const close = byTestId('overlay-dialog__close')!
       expect(close.hasAttribute('disabled')).toBe(true)
     })

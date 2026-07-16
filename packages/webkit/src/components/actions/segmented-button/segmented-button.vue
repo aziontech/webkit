@@ -39,10 +39,6 @@
     defaultValue: undefined
   })
 
-  const emit = defineEmits<{
-    change: [value: string]
-  }>()
-
   const model = defineModel<string | undefined>({ default: undefined })
 
   const attrs = useAttrs()
@@ -168,7 +164,6 @@
     }
 
     model.value = value
-    emit('change', value)
   }
 
   const selectOption = (value: string, disabled: boolean) => {

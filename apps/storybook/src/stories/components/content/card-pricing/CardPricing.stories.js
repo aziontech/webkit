@@ -100,7 +100,7 @@ const meta = {
         defaultValue: { summary: "'bottom'" }
       }
     },
-    cardStyle: {
+    kind: {
       control: 'select',
       options: ['contained', 'transparent'],
       description: 'Surface style variant.',
@@ -183,7 +183,7 @@ const meta = {
     showTag: false,
     tagLabel: 'Popular',
     slotPosition: 'bottom',
-    cardStyle: 'contained',
+    kind: 'contained',
     value: '20',
     prefix: '$',
     suffix: 'per month',
@@ -208,7 +208,7 @@ const DEFAULT_MARKUP = `<CardPricing
   description="Billed annually or $25/mo billed monthly."
   pricing-details="Billed annually or $25/mo billed monthly."
   slot-position="bottom"
-  card-style="contained"
+  kind="contained"
   value="20"
   prefix="$"
   suffix="per month"
@@ -231,7 +231,7 @@ export const Default = {
 const VARIANTS_TEMPLATE = `<div class="flex flex-wrap gap-6">
   <CardPricing
     slot-position="bottom"
-    card-style="contained"
+    kind="contained"
     plan-title="Pro"
     description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
@@ -242,7 +242,7 @@ const VARIANTS_TEMPLATE = `<div class="flex flex-wrap gap-6">
   />
   <CardPricing
     slot-position="bottom"
-    card-style="transparent"
+    kind="transparent"
     plan-title="Pro"
     description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
@@ -253,7 +253,7 @@ const VARIANTS_TEMPLATE = `<div class="flex flex-wrap gap-6">
   />
   <CardPricing
     slot-position="middle"
-    card-style="contained"
+    kind="contained"
     plan-title="Pro"
     description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
@@ -264,7 +264,7 @@ const VARIANTS_TEMPLATE = `<div class="flex flex-wrap gap-6">
   />
   <CardPricing
     slot-position="middle"
-    card-style="transparent"
+    kind="transparent"
     plan-title="Pro"
     description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
@@ -321,7 +321,7 @@ const SLOTS_TEMPLATE = `<CardPricing
   description="Billed annually or $25/mo billed monthly."
   pricing-details="Billed annually or $25/mo billed monthly."
   slot-position="middle"
-  card-style="contained"
+  kind="contained"
   show-tag
   tag-label="Popular"
   value="20"

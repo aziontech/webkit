@@ -245,20 +245,18 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
   })
 
   describe('events on real user actions (navigation-menu-root.vue emits)', () => {
-    it('emits update:value and value-change with the item value when a submenu opens', async () => {
+    it('emits update:value with the item value when a submenu opens', async () => {
       const updateValues: Array<unknown> = []
-      const changeValues: Array<unknown> = []
 
       const Wrapped = defineComponent({
         components: COMPONENTS,
         setup() {
           return {
-            onUpdate: (v: unknown) => updateValues.push(v),
-            onChange: (v: unknown) => changeValues.push(v)
+            onUpdate: (v: unknown) => updateValues.push(v)
           }
         },
         template: `
-          <NavigationMenu @update:value="onUpdate" @value-change="onChange">
+          <NavigationMenu @update:value="onUpdate">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
@@ -280,12 +278,10 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       await waitFor(() => expect(updateValues).toContain('solutions'), {
         timeout: OPEN_TIMEOUT
       })
-      expect(changeValues).toContain('solutions')
     })
 
-    it('emits update:value(null) / value-change(null) when the Backdrop is clicked (root.close)', async () => {
+    it('emits update:value(null) when the Backdrop is clicked (root.close)', async () => {
       const updateValues: Array<unknown> = []
-      const changeValues: Array<unknown> = []
 
       const Wrapped = defineComponent({
         components: COMPONENTS,
@@ -293,12 +289,11 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
           const value = ref<string | null>('solutions')
           return {
             value,
-            onUpdate: (v: unknown) => updateValues.push(v),
-            onChange: (v: unknown) => changeValues.push(v)
+            onUpdate: (v: unknown) => updateValues.push(v)
           }
         },
         template: `
-          <NavigationMenu v-model:value="value" @update:value="onUpdate" @value-change="onChange">
+          <NavigationMenu v-model:value="value" @update:value="onUpdate">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
@@ -330,7 +325,6 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       await waitFor(() => expect(updateValues).toContain(null), {
         timeout: OPEN_TIMEOUT
       })
-      expect(changeValues).toContain(null)
       await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'), {
         timeout: OPEN_TIMEOUT
       })

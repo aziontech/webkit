@@ -87,11 +87,6 @@ const meta = {
       action: 'update:modelValue',
       description: 'Emitted when the selected value changes.',
       table: { category: 'events', type: { summary: 'string' } }
-    },
-    onChange: {
-      action: 'change',
-      description: 'Emitted after the selected value changes.',
-      table: { category: 'events', type: { summary: 'string' } }
     }
   },
   args: {

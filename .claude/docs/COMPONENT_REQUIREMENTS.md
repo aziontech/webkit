@@ -476,7 +476,7 @@ If your component needs Vue Router:
 
 ### 3. Styling
 
-- ✅ **DO:** Use PrimeVue styling conventions
+- ✅ **DO:** Use the webkit token + `data-*` styling conventions
 - ✅ **DO:** Support custom classes via `attrs.class` (`useAttrs()` with `inheritAttrs: false`; do not declare `class` as a prop)
 - ✅ **DO:** Use Tailwind CSS utility classes
 - ❌ **DON'T:** Hardcode colors or spacing
@@ -560,7 +560,7 @@ When creating a new component, ensure you've completed all requirements:
 <script setup>
   import { computed, ref, toRef, useAttrs } from 'vue'
   import { useField } from 'vee-validate'
-  import InputText from 'primevue/inputtext'
+  import InputText from '@aziontech/webkit/input-text'
   import Label from '../label/label.vue'
 
   const emit = defineEmits(['blur', 'input'])
@@ -645,7 +645,7 @@ When creating a new component, ensure you've completed all requirements:
 ```vue
 <script setup>
   import { ref, onMounted } from 'vue'
-  import Button from 'primevue/button'
+  import Button from '@aziontech/webkit/button'
 
   const props = defineProps({
     apiUrl: {
@@ -708,7 +708,7 @@ When creating a new component, ensure you've completed all requirements:
 ```vue
 <script setup>
   import { useRouter } from 'vue-router'
-  import Button from 'primevue/button'
+  import Button from '@aziontech/webkit/button'
 
   const props = defineProps({
     to: {
@@ -786,7 +786,6 @@ When creating a new component, ensure you've completed all requirements:
 
 - [Vue 3 Composition API](https://vuejs.org/api/composition-api-setup.html)
 - [VeeValidate Documentation](https://vee-validate.logaretm.com/v4/)
-- [PrimeVue Components](https://primevue.org/)
 - [Vue Router Documentation](https://router.vuejs.org/)
 
 ---
@@ -806,7 +805,7 @@ All visual rules (typography classes, spacing, max-width, shape, semantic colors
 - **Shape:** `var(--shape-button)`, `var(--shape-elements)`, `var(--shape-card)`, `var(--shape-flat)`. For pseudo-element inheritance use `rounded-[inherit]`.
 - **Spacing:** `var(--spacing-1)..(--spacing-N)` applied via `px-[...]` / `py-[...]` / `gap-[...]` / `m-[...]`. For section-level responsive spacing use the semantic utilities (`gap-spacing-elements-md`, `p-spacing-elements-lg`).
 - **Max width:** `var(--container-max-width)` for layout containers, `var(--container-3xs..--container-7xl)` for fixed content (cards, modals). Utility helper: `.max-container-width`.
-- **Forbidden:** hex/rgb/hsl hardcoded; Tailwind palette names (`bg-gray-*`, `text-violet-*`); PrimeVue color utilities (`text-color`, `surface-*`); raw typography (`text-xs`/`text-sm`/`text-base`/`text-lg`).
+- **Forbidden:** hex/rgb/hsl hardcoded; Tailwind palette names (`bg-gray-*`, `text-violet-*`); external/legacy color utilities (`text-color`, `surface-*`); raw typography (`text-xs`/`text-sm`/`text-base`/`text-lg`).
 
 ### 2. TypeScript tipado obrigatório
 

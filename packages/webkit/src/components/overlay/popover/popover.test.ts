@@ -332,8 +332,8 @@ describe('Popover (compound / overlay)', () => {
     expect(onUpdate).toHaveBeenLastCalledWith(false)
   })
 
-  it('dismissable=false keeps the panel open on Escape and outside mousedown', async () => {
-    render(host({ dismissable: false }))
+  it('dismissible=false keeps the panel open on Escape and outside mousedown', async () => {
+    render(host({ dismissible: false }))
     const trigger = byTestId('overlay-popover__trigger') as HTMLElement
 
     await fireEvent.click(trigger)

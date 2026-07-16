@@ -89,7 +89,7 @@
     >
       <Label
         v-if="label"
-        :value="label"
+        :label="label"
         :for="resolvedInputId"
         :data-testid="`${testId}__label`"
       />

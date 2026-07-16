@@ -39,7 +39,6 @@
 
   const emit = defineEmits<{
     'update:value': [value: NavigationMenuValue, eventDetails: unknown]
-    'value-change': [value: NavigationMenuValue, eventDetails: unknown]
     'open-change-complete': [open: boolean]
   }>()
 

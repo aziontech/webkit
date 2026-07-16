@@ -68,7 +68,7 @@ describe('SegmentedButton', () => {
     expect(second.getAttribute('data-state')).toBe('active')
   })
 
-  it('emits change and update:modelValue with the clicked value', async () => {
+  it('emits update:modelValue with the clicked value', async () => {
     const { getAllByTestId, emitted } = render(SegmentedButton, {
       props: { options: OPTIONS }
     })
@@ -76,8 +76,8 @@ describe('SegmentedButton', () => {
     const [, second] = getAllByTestId('actions-segmented-button__option')
     await fireEvent.click(second)
 
-    expect(emitted().change).toBeTruthy()
-    expect(emitted().change[0]).toEqual(['two'])
+    expect(emitted()['update:modelValue']).toBeTruthy()
+    expect(emitted()['update:modelValue'][0]).toEqual(['two'])
     expect(emitted()['update:modelValue']).toBeTruthy()
     expect(emitted()['update:modelValue'][0]).toEqual(['two'])
   })
@@ -104,7 +104,7 @@ describe('SegmentedButton', () => {
     const [first] = getAllByTestId('actions-segmented-button__option')
     await fireEvent.click(first)
 
-    expect(emitted().change).toBeFalsy()
+    expect(emitted()['update:modelValue']).toBeFalsy()
     expect(emitted()['update:modelValue']).toBeFalsy()
   })
 
@@ -116,10 +116,10 @@ describe('SegmentedButton', () => {
     const [, second, third] = getAllByTestId('actions-segmented-button__option')
 
     await fireEvent.keyDown(second, { key: 'Enter' })
-    expect(emitted().change[0]).toEqual(['two'])
+    expect(emitted()['update:modelValue'][0]).toEqual(['two'])
 
     await fireEvent.keyDown(third, { key: ' ' })
-    expect(emitted().change[1]).toEqual(['three'])
+    expect(emitted()['update:modelValue'][1]).toEqual(['three'])
   })
 
   it('moves the selection with ArrowRight and ArrowLeft', async () => {
@@ -131,11 +131,11 @@ describe('SegmentedButton', () => {
 
     // Starts on "one" (index 0). ArrowRight -> "two".
     await fireEvent.keyDown(first, { key: 'ArrowRight' })
-    expect(emitted().change[0]).toEqual(['two'])
+    expect(emitted()['update:modelValue'][0]).toEqual(['two'])
 
     // Now selected is "two"; ArrowLeft -> "one".
     await fireEvent.keyDown(first, { key: 'ArrowLeft' })
-    expect(emitted().change[1]).toEqual(['one'])
+    expect(emitted()['update:modelValue'][1]).toEqual(['one'])
   })
 
   it('wraps ArrowLeft from the first option to the last option', async () => {
@@ -147,7 +147,7 @@ describe('SegmentedButton', () => {
 
     // Starts on "one" (index 0). ArrowLeft wraps to "three" (last).
     await fireEvent.keyDown(first, { key: 'ArrowLeft' })
-    expect(emitted().change[0]).toEqual(['three'])
+    expect(emitted()['update:modelValue'][0]).toEqual(['three'])
   })
 
   it('does not emit when a disabled option is clicked', async () => {
@@ -160,7 +160,7 @@ describe('SegmentedButton', () => {
 
     await fireEvent.click(disabledOption)
 
-    expect(emitted().change).toBeFalsy()
+    expect(emitted()['update:modelValue']).toBeFalsy()
     expect(emitted()['update:modelValue']).toBeFalsy()
   })
 
@@ -173,7 +173,7 @@ describe('SegmentedButton', () => {
 
     // Starts on "one"; ArrowRight must skip the disabled "two" and land on "three".
     await fireEvent.keyDown(first, { key: 'ArrowRight' })
-    expect(emitted().change[0]).toEqual(['three'])
+    expect(emitted()['update:modelValue'][0]).toEqual(['three'])
   })
 
   it('exposes the lock affordance only on disabled options', () => {

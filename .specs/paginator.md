@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 2de3ad1dae37c796f0a2ed5b42313390495ed52de9b4f72639504e017c303332
+checksum: 0f999d228c0e5fccab31fec873631c194a61ed27af3fcbf7a6fbf91c8243449b
 created: 2026-06-16
 last_updated: 2026-06-27
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-06-27
 
 ## Purpose
 
-Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component.
+Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component.
 
 ## Usage
 
@@ -66,7 +66,6 @@ const pageSize = ref(10)
     v-model:page-size="pageSize"
     :total="200"
     :page-size-options="[10, 25, 50, 100]"
-    @page-change="loadPage"
   />
 </template>
 ```
@@ -117,7 +116,6 @@ const pageSize = ref(10)
 |---|---|---|
 | `update:page` | `[page: number]` | Current page changed in data-driven mode (Previous / Next / page number). Supports `v-model:page`. |
 | `update:pageSize` | `[pageSize: number]` | Rows-per-page changed via the internal selector. Supports `v-model:page-size`. |
-| `page-change` | `[page: number]` | Convenience action event fired alongside `update:page` whenever the page changes. |
 
 <!-- These events are emitted by the root Paginator only in data-driven mode (when `total` is set). In composition mode the root emits nothing: page changes come from the slotted pagination-button (`click`) and the rows-per-page change from the slotted PaginatorPageSize (`update:modelValue`). -->
 
@@ -183,7 +181,7 @@ const pageSize = ref(10)
 
 - Default — full paginator with page-info text, Previous/numbers/overflow/Next, and a rows-per-page selector.
 - Buttons — PaginationButton in every `kind` (`previous` / `next` / `number` / `more`) and state (`default` / `selected` / `disabled`); justified because the button kinds and the current-page (`selected`) and `disabled` treatments are the core sub-component API and are not all visible in the Default story.
-- DataDriven — `total`-driven paginator with `v-model:page` / `v-model:page-size` and the `page-change` action; justified because the data-driven mode (internal rendering of info text, windowed page numbers, overflow ellipsis, page-size selector) and its emitted events are a distinct API surface from the slot-composition Default story and cannot be exercised there.
+- DataDriven — `total`-driven paginator with `v-model:page` / `v-model:page-size`; justified because the data-driven mode (internal rendering of info text, windowed page numbers, overflow ellipsis, page-size selector) and its emitted events are a distinct API surface from the slot-composition Default story and cannot be exercised there.
 
 ## Constraints — DO NOT
 

@@ -68,7 +68,7 @@ All rules are set to `error` level. This enforces:
 
 ## 2. Stylelint Configuration
 
-**File:** `/packages/webkit/.stylelintrc.json`
+**Files:** root [`.stylelintrc.json`](../../../.stylelintrc.json) (repo-wide config) + the `"stylelint"` key in [`packages/webkit/package.json`](../package.json)
 
 ### What Was Implemented
 
@@ -122,13 +122,13 @@ Type coverage configuration enforcing 95% type safety threshold.
 
 ### Reasoning
 
-| Setting                                                | Reason                                                                                                                                                                                                         |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`atLeast: 95`**                                      | Sets minimum type coverage to 95%. This means 95% of code must have explicit types rather than `any`. Balances strictness with pragmatism—allows 5% for complex third-party integrations or gradual migration. |
-| **`strict: true`**                                     | Enables strict type coverage checks. Counts only fully-typed code, not partially-typed.                                                                                                                        |
-| **`detail: true`**                                     | Provides detailed report showing which files/lines lack types. Helps developers understand exactly where to add types.                                                                                         |
-| **`ignoreCatch: true`**                                | Ignores catch clause variables. TypeScript defaults catch variables to `any`, and typing them requires `unknown` with type guards. Too noisy for initial adoption.                                             |
-| **`ignoreFiles: ["**/*.d.ts", "**/node_modules/**"]`** | Excludes declaration files and dependencies. Focus on project source code only.                                                                                                                                |
+| Setting                                                   | Reason                                                                                                                                                                                                         |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`atLeast: 95`**                                         | Sets minimum type coverage to 95%. This means 95% of code must have explicit types rather than `any`. Balances strictness with pragmatism—allows 5% for complex third-party integrations or gradual migration. |
+| **`strict: true`**                                        | Enables strict type coverage checks. Counts only fully-typed code, not partially-typed.                                                                                                                        |
+| **`detail: true`**                                        | Provides detailed report showing which files/lines lack types. Helps developers understand exactly where to add types.                                                                                         |
+| **`ignoreCatch: true`**                                   | Ignores catch clause variables. TypeScript defaults catch variables to `any`, and typing them requires `unknown` with type guards. Too noisy for initial adoption.                                             |
+| **`ignoreFiles: ["**/\*.d.ts", "**/node_modules/**"]`\*\* | Excludes declaration files and dependencies. Focus on project source code only.                                                                                                                                |
 
 ### Why Type Coverage Matters
 
@@ -248,21 +248,23 @@ Comprehensive CI/CD pipeline with parallel job execution.
 
 #### Job Structure
 
-| Job                  | Purpose                                         | Parallel?           |
-| -------------------- | ----------------------------------------------- | ------------------- |
-| **security**         | Dependency audit, secret detection, unused deps | ✅ Yes              |
-| **lint**             | ESLint, Stylelint, Prettier checks              | ✅ Yes              |
-| **types**            | TypeScript check, type coverage                 | ✅ Yes              |
-| **build**            | Pack dry run                                    | ❌ After lint+types |
-| **storybook**        | Storybook build verification                    | ❌ After lint+types |
-| **governance-check** | Summary gate ensuring all jobs passed           | ❌ After all        |
+| Job                  | Purpose                                                           | Parallel?           |
+| -------------------- | ----------------------------------------------------------------- | ------------------- |
+| **changes**          | `dorny/paths-filter` gate — `webkit` / `toolkit` change detection | first               |
+| **security**         | Dependency audit, secret detection, unused deps                   | ✅ Yes              |
+| **lint**             | ESLint, Stylelint, Prettier checks                                | ✅ Yes              |
+| **types**            | TypeScript check, type coverage                                   | ✅ Yes              |
+| **build**            | Pack dry run + size-limit                                         | ❌ After lint+types |
+| **storybook**        | Storybook build verification                                      | ❌ After lint+types |
+| **toolkit**          | Catalog drift check, toolkit tests, authoring **ratchet**         | ✅ Yes              |
+| **governance-check** | Summary gate ensuring all jobs passed (or cleanly skipped)        | ❌ After all        |
 
 #### Security Job Details
 
 | Step                                | Reason                                                                                                                                             |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`pnpm audit --audit-level=high`** | Checks for known vulnerabilities in npm dependencies. `high` level catches critical security issues.                                               |
-| **Gitleaks action**                 | Scans codebase for accidentally committed secrets (API keys, passwords, tokens). Prevents credential leaks.                                        |
+| **TruffleHog action**               | Scans codebase for accidentally committed secrets (API keys, passwords, tokens). Prevents credential leaks.                                        |
 | **depcheck**                        | Detects unused dependencies in `package.json`. Reduces bundle size and attack surface. Set to `continue-on-error: true` initially (informational). |
 
 #### Lint Job Details
@@ -296,18 +298,18 @@ Comprehensive CI/CD pipeline with parallel job execution.
 
 #### Governance Gate Job
 
-| Aspect             | Reason                                                                                   |
-| ------------------ | ---------------------------------------------------------------------------------------- |
-| **`if: always()`** | Runs even if previous jobs failed. Needed to report overall status.                      |
-| **Status check**   | Verifies security, lint, types, and build all succeeded. Fails the PR if any job failed. |
+| Aspect             | Reason                                                                                                                                          |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`if: always()`** | Runs even if previous jobs failed. Needed to report overall status.                                                                             |
+| **Status check**   | Verifies changes, security, lint, types, build, storybook, and toolkit all succeeded (or were cleanly skipped). Fails the PR if any job failed. |
 
 #### Trigger Strategy
 
-| Trigger                               | Reason                                                                                       |
-| ------------------------------------- | -------------------------------------------------------------------------------------------- |
-| **Pull requests to main**             | Catches issues in PRs before merge. Prevents broken code on main.                            |
-| **Pushes to main**                    | Double-checks even after PR merge. Catches direct commits to main (should be rare).          |
-| **Path filter: `packages/webkit/**`** | Only runs when webkit package changes. Saves CI resources. Doesn't run on unrelated changes. |
+| Trigger | Reason |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Pull requests to main and dev** | Catches issues in PRs before merge. Prevents broken code on the integration branches. |
+| **Pushes to main and dev** | Double-checks even after PR merge. Catches direct commits (should be rare). |
+| **`changes` gating job** | `dorny/paths-filter` computes `webkit` (package + lockfile) and `toolkit` (package + `.specs/` + `.claude/hooks | rules/` + storybook) outputs; downstream jobs short-circuit when nothing relevant moved, while the required checks stay registered. |
 
 #### Performance Optimizations
 
@@ -415,10 +417,12 @@ git commit -m "test: pre-commit hook"
 
 1. Create a PR touching `packages/webkit/`
 2. Navigate to Actions tab in GitHub
-3. Verify all 6 jobs run:
+3. Verify all 8 jobs run:
+   - changes (first — path-filter gate)
    - security (✅ parallel)
    - lint (✅ parallel)
    - types (✅ parallel)
+   - toolkit (✅ parallel — catalog drift + tests + authoring ratchet)
    - build (⏳ after lint+types)
    - storybook (⏳ after lint+types)
    - governance-check (⏳ after all)

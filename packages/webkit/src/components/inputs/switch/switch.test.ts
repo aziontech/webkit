@@ -43,9 +43,9 @@ describe('Switch', () => {
   })
 
   describe('checked state derivation', () => {
-    it('reflects isToggled=true via aria-checked and data-checked', () => {
+    it('reflects modelValue=true via aria-checked and data-checked', () => {
       const { getByTestId } = render(Switch, {
-        props: { isToggled: true },
+        props: { modelValue: true },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
@@ -54,9 +54,9 @@ describe('Switch', () => {
       expect(root.getAttribute('data-checked')).toBe('true')
     })
 
-    it('reflects isToggled=false via aria-checked and omits data-checked', () => {
+    it('reflects modelValue=false via aria-checked and omits data-checked', () => {
       const { getByTestId } = render(Switch, {
-        props: { isToggled: false },
+        props: { modelValue: false },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
@@ -66,38 +66,38 @@ describe('Switch', () => {
     })
   })
 
-  describe('data-type variant', () => {
-    it('reflects the default type on data-type', () => {
+  describe('data-kind variant', () => {
+    it('reflects the default type on data-kind', () => {
       const { getByTestId } = render(Switch, {
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
-      expect(getByTestId('input-switch').getAttribute('data-type')).toBe('default')
+      expect(getByTestId('input-switch').getAttribute('data-kind')).toBe('default')
     })
 
-    it('reflects the privacy type on data-type', () => {
+    it('reflects the privacy type on data-kind', () => {
       const { getByTestId } = render(Switch, {
-        props: { type: 'privacy' },
+        props: { kind: 'privacy' },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
-      expect(getByTestId('input-switch').getAttribute('data-type')).toBe('privacy')
+      expect(getByTestId('input-switch').getAttribute('data-kind')).toBe('privacy')
     })
   })
 
   describe('data-focused', () => {
-    it('sets data-focused when isFocused is true', () => {
+    it('sets data-focused when focused is true', () => {
       const { getByTestId } = render(Switch, {
-        props: { isFocused: true },
+        props: { focused: true },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
       expect(getByTestId('input-switch').getAttribute('data-focused')).toBe('true')
     })
 
-    it('omits data-focused when isFocused is false', () => {
+    it('omits data-focused when focused is false', () => {
       const { getByTestId } = render(Switch, {
-        props: { isFocused: false },
+        props: { focused: false },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
@@ -105,71 +105,71 @@ describe('Switch', () => {
     })
   })
 
-  describe('update:isToggled — click', () => {
+  describe('update:modelValue — click', () => {
     it('emits the negated boolean when clicking from off', async () => {
       const { getByTestId, emitted } = render(Switch, {
-        props: { isToggled: false },
+        props: { modelValue: false },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
       await fireEvent.click(getByTestId('input-switch'))
 
-      expect(emitted()['update:isToggled']).toBeTruthy()
-      expect(emitted()['update:isToggled'][0]).toEqual([true])
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'][0]).toEqual([true])
     })
 
     it('emits false when clicking from on', async () => {
       const { getByTestId, emitted } = render(Switch, {
-        props: { isToggled: true },
+        props: { modelValue: true },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
       await fireEvent.click(getByTestId('input-switch'))
 
-      expect(emitted()['update:isToggled'][0]).toEqual([false])
+      expect(emitted()['update:modelValue'][0]).toEqual([false])
     })
   })
 
-  describe('update:isToggled — keyboard', () => {
+  describe('update:modelValue — keyboard', () => {
     it('toggles on Space', async () => {
       const { getByTestId, emitted } = render(Switch, {
-        props: { isToggled: false },
+        props: { modelValue: false },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
       await fireEvent.keyDown(getByTestId('input-switch'), { key: ' ' })
 
-      expect(emitted()['update:isToggled']).toBeTruthy()
-      expect(emitted()['update:isToggled'][0]).toEqual([true])
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'][0]).toEqual([true])
     })
 
     it('toggles on Enter', async () => {
       const { getByTestId, emitted } = render(Switch, {
-        props: { isToggled: true },
+        props: { modelValue: true },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
       await fireEvent.keyDown(getByTestId('input-switch'), { key: 'Enter' })
 
-      expect(emitted()['update:isToggled'][0]).toEqual([false])
+      expect(emitted()['update:modelValue'][0]).toEqual([false])
     })
 
     it('does not toggle on an unrelated key', async () => {
       const { getByTestId, emitted } = render(Switch, {
-        props: { isToggled: false },
+        props: { modelValue: false },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
       await fireEvent.keyDown(getByTestId('input-switch'), { key: 'a' })
 
-      expect(emitted()['update:isToggled']).toBeUndefined()
+      expect(emitted()['update:modelValue']).toBeUndefined()
     })
   })
 
   describe('a11y', () => {
     it('has no violations in the off state with an accessible name', async () => {
       const { container } = render(Switch, {
-        props: { isToggled: false },
+        props: { modelValue: false },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
@@ -178,7 +178,7 @@ describe('Switch', () => {
 
     it('has no violations in the on privacy state with an accessible name', async () => {
       const { container } = render(Switch, {
-        props: { isToggled: true, type: 'privacy' },
+        props: { modelValue: true, kind: 'privacy' },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
@@ -187,13 +187,13 @@ describe('Switch', () => {
   })
 
   describe('smoke over type variants', () => {
-    it.each([['default'], ['privacy']] as const)('renders data-type=%s', (type) => {
+    it.each([['default'], ['privacy']] as const)('renders data-kind=%s', (type) => {
       const { getByTestId } = render(Switch, {
-        props: { type },
+        props: { kind: type },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
-      expect(getByTestId('input-switch').getAttribute('data-type')).toBe(type)
+      expect(getByTestId('input-switch').getAttribute('data-kind')).toBe(type)
     })
   })
 
