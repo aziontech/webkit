@@ -122,14 +122,6 @@ const meta = {
         type: { summary: '(value: string | number | null, details: unknown) => void' }
       }
     },
-    onValueChange: {
-      action: 'value-change',
-      description: 'Fires whenever the active item value changes, with the change event details.',
-      table: {
-        category: 'events',
-        type: { summary: '(value: string | number | null, details: unknown) => void' }
-      }
-    },
     onOpenChangeComplete: {
       action: 'open-change-complete',
       description: 'Fires after a panel finishes its open or close transition.',

@@ -112,7 +112,7 @@ const meta = {
         category: 'props'
       }
     },
-    mediaKind: {
+    kind: {
       control: 'select',
       options: ['default', 'icon', 'image'],
       description: 'ItemMedia region variant (icon frame, image frame).',
@@ -132,7 +132,7 @@ const meta = {
     kind: 'default',
     size: 'medium',
     asChild: false,
-    mediaKind: 'default'
+    kind: 'default'
   }
 }
 
@@ -231,7 +231,7 @@ export const Small = {
 }
 
 const ICON_MEDIA_MARKUP = `<Item kind="outline">
-  <Item.Media media-kind="icon">
+  <Item.Media kind="icon">
     <i class="ai ai-edge-firewall text-[length:inherit] leading-none" aria-hidden="true" />
   </Item.Media>
   <Item.Content>
@@ -253,7 +253,7 @@ export const WithIconMedia = {
     template: `
       <div class="flex w-full flex-col gap-[var(--spacing-4)]">
         <Item kind="outline" v-bind="args">
-          <ItemMedia media-kind="icon">
+          <ItemMedia kind="icon">
             <i class="ai ai-edge-firewall text-[length:inherit] leading-none" aria-hidden="true" />
           </ItemMedia>
           <ItemContent>
@@ -272,7 +272,7 @@ export const WithIconMedia = {
   parameters: {
     docs: {
       description: {
-        story: 'ItemMedia with mediaKind icon frames a leading icon before title and description.'
+        story: 'ItemMedia with kind icon frames a leading icon before title and description.'
       },
       source: { code: toSfc(BASIC_IMPORTS, ICON_MEDIA_MARKUP) }
     }
@@ -340,7 +340,7 @@ export const WithAvatar = {
 const IMAGE_IMPORTS = ["import Item from '@aziontech/webkit/item'"]
 
 const IMAGE_MARKUP = `<Item kind="outline">
-  <Item.Media media-kind="image">
+  <Item.Media kind="image">
     <img
       src="${sampleThumbnailSrc}"
       alt="Midnight City Lights"
@@ -366,7 +366,7 @@ export const WithImageMedia = {
     template: `
       <div class="flex w-full flex-col gap-[var(--spacing-4)]">
         <Item kind="outline" v-bind="args">
-          <ItemMedia media-kind="image">
+          <ItemMedia kind="image">
             <img
               :src="sampleThumbnailSrc"
               alt="Midnight City Lights"
@@ -388,7 +388,7 @@ export const WithImageMedia = {
     docs: {
       description: {
         story:
-          'ItemMedia with mediaKind image crops a thumbnail; a second ItemContent column can show metadata.'
+          'ItemMedia with kind image crops a thumbnail; a second ItemContent column can show metadata.'
       },
       source: { code: toSfc(IMAGE_IMPORTS, IMAGE_MARKUP) }
     }
@@ -411,7 +411,7 @@ const AS_CHILD_MARKUP = `<div class="flex w-full flex-col gap-[var(--spacing-4)]
   </Item>
   <Item kind="outline" size="small" as-child>
     <a href="#" class="no-underline text-inherit">
-      <Item.Media media-kind="icon">
+      <Item.Media kind="icon">
         <i class="pi pi-verified text-[length:inherit] leading-none" aria-hidden="true" />
       </Item.Media>
       <Item.Content>
@@ -445,7 +445,7 @@ export const WithAsChild = {
         </Item>
         <Item kind="outline" size="small" as-child>
           <a href="#" class="no-underline text-inherit">
-            <ItemMedia media-kind="icon">
+            <ItemMedia kind="icon">
               <i class="pi pi-verified text-[length:inherit] leading-none" aria-hidden="true" />
             </ItemMedia>
             <ItemContent>
@@ -548,7 +548,7 @@ const WITH_LIST_IMPORTS = [
 ]
 
 const WITH_LIST_ROW = `      <Item>
-        <Item.Media media-kind="icon">
+        <Item.Media kind="icon">
           <i class="ai ai-edge-application text-[length:inherit] leading-none" aria-hidden="true" />
         </Item.Media>
         <Item.Content>
@@ -582,7 +582,7 @@ export const WithList = {
         <template #content>
           <ItemList>
             <Item v-bind="args" v-for="n in 3" :key="n">
-              <ItemMedia media-kind="icon">
+              <ItemMedia kind="icon">
                 <i class="ai ai-edge-application text-[length:inherit] leading-none" aria-hidden="true" />
               </ItemMedia>
               <ItemContent>
@@ -616,7 +616,7 @@ const AS_CHILD_LIST_IMPORTS = [
 
 const AS_CHILD_LIST_ROW = `      <Item as-child>
         <a href="#" class="no-underline text-inherit">
-          <Item.Media media-kind="icon">
+          <Item.Media kind="icon">
             <i class="ai ai-edge-application text-[length:inherit] leading-none" aria-hidden="true" />
           </Item.Media>
           <Item.Content>
@@ -647,7 +647,7 @@ export const WithListAsChild = {
           <ItemList>
             <Item as-child v-for="n in 3" :key="n">
               <a href="#" class="no-underline text-inherit">
-                <ItemMedia media-kind="icon">
+                <ItemMedia kind="icon">
                   <i class="ai ai-edge-application text-[length:inherit] leading-none" aria-hidden="true" />
                 </ItemMedia>
                 <ItemContent>
@@ -676,7 +676,7 @@ export const WithListAsChild = {
 const INLINE_IMPORTS = ["import Item from '@aziontech/webkit/item'"]
 
 const inlineRow = (icon, title, description) => `  <Item kind="inline" size="small">
-    <Item.Media media-kind="icon">
+    <Item.Media kind="icon">
       <i class="ai ${icon} text-[length:inherit] leading-none" aria-hidden="true" />
     </Item.Media>
     <Item.Content>
@@ -703,7 +703,7 @@ export const Inline = {
       <div class="flex w-full">
         <ItemGroup>
           <Item kind="inline" size="small" v-bind="args">
-            <ItemMedia media-kind="icon">
+            <ItemMedia kind="icon">
               <i class="ai ai-domains text-[length:inherit] leading-none" aria-hidden="true" />
             </ItemMedia>
             <ItemContent>
@@ -713,7 +713,7 @@ export const Inline = {
             <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
           </Item>
           <Item kind="inline" size="small" v-bind="args">
-            <ItemMedia media-kind="icon">
+            <ItemMedia kind="icon">
               <i class="ai ai-network-lists text-[length:inherit] leading-none" aria-hidden="true" />
             </ItemMedia>
             <ItemContent>
@@ -723,7 +723,7 @@ export const Inline = {
             <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
           </Item>
           <Item kind="inline" size="small" v-bind="args">
-            <ItemMedia media-kind="icon">
+            <ItemMedia kind="icon">
               <i class="ai ai-real-time-metrics text-[length:inherit] leading-none" aria-hidden="true" />
             </ItemMedia>
             <ItemContent>

@@ -75,11 +75,6 @@ const meta = {
       description: 'Emitted when the active tab changes (drives `v-model:value`).',
       table: { category: 'events', type: { summary: 'string | number | null' } }
     },
-    onValueChange: {
-      action: 'value-change',
-      description: 'Emitted alongside `update:value` when the active tab changes.',
-      table: { category: 'events', type: { summary: 'string | number | null' } }
-    },
     default: {
       control: false,
       description: 'Tab list, content region, and panels.',
@@ -98,7 +93,6 @@ const DEFAULT_TEMPLATE = `
     :value="value"
     class="w-full max-w-[40rem]"
     @update:value="onUpdate"
-    @value-change="onValueChange"
   >
     <TabView.List>
       <TabView.Item value="tab-1" label="Tab Item" />
@@ -144,10 +138,7 @@ const Template = (args) => ({
       value.value = next
       args['onUpdate:value']?.(next)
     }
-    const onValueChange = (next) => {
-      args.onValueChange?.(next)
-    }
-    return { args, value, onUpdate, onValueChange }
+    return { args, value, onUpdate }
   },
   template: DEFAULT_TEMPLATE
 })
