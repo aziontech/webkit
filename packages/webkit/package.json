@@ -31,7 +31,6 @@
     "authoring": "node scripts/check-authoring.mjs",
     "authoring:update": "node scripts/check-authoring.mjs --update",
     "test:gate": "node scripts/check-tests.mjs",
-    "test:gate:update": "node scripts/check-tests.mjs --update",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui --browser.headless=false",

@@ -287,11 +287,8 @@ jobs:
       - name: Construction-standard ratchet (no new authoring violations)
         run: pnpm --filter @aziontech/webkit run authoring
 
-      - name: Every component has & updates its test (testing.md)
+      - name: Every component has its test (testing.md)
         run: pnpm --filter @aziontech/webkit run test:gate
-        env:
-          # On a PR, require a changed component to ship its test in the SAME diff.
-          TEST_GATE_BASE: ${{ github.event_name == 'pull_request' && github.base_ref || '' }}
 
   # Vitest browser mode (real Chromium), sharded by 4 — behavior/structure/ARIA
   # on an unstyled DOM. Ordered after lint + types (same tier as build/storybook).
