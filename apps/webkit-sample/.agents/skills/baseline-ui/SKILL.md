@@ -2,7 +2,7 @@
 name: baseline-ui
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
-last_updated: 2026-06-29
+last_updated: 2026-07-16
 ---
 
 # Skill: baseline-ui
@@ -61,6 +61,27 @@ hand-rolled, nothing hardcoded.
 - **MUST** use `text-balance` on headings and `text-pretty` on body/paragraph copy.
 - **MUST** use `tabular-nums` for numeric / data columns.
 
+### Section titles — a small heading, optically inset
+
+A **content section** (a titled block sitting above a `CardBox`, an `Item.List`, or a table) is
+labelled with a **small heading**, not an overline:
+
+- **MUST** title the section with `text-heading-xxs text-[var(--text-default)]` — the smallest heading
+  token. `text-overline-*` is **reserved for compact menu / popover group labels** (e.g.
+  `Dropdown.Group`, a Popover section), **not** page section titles.
+- **MUST** give the title an optical inset of `px-[var(--spacing-xs)]` so it lines up with the card's
+  inner content directly below it (the card body pads at `--spacing-md`; the smaller `--spacing-xs`
+  title inset reads as aligned, not indented).
+- **MUST** separate the title from the card it labels by `--spacing-sm` — the section wrapper is
+  `flex flex-col gap-[var(--spacing-sm)]`.
+- **SHOULD**, when the title row also carries a control (a filter dropdown, an action button), wrap it in
+  a `flex min-h-[var(--size-8)] items-center` row so the title baseline matches sibling section titles in
+  other columns (e.g. a two-column page where one title stands alone and the other sits beside a control).
+
+This is the canonical section-title treatment across the sample app (`Home`, `AccountSettings`,
+`CreateApplication`, `ItemGroupSettings`, `InPageForm`, `DrawerItemGroups`, …). A section title written as
+`text-overline-sm text-[var(--text-muted)]` is **legacy** — bring it to this pattern when you touch it.
+
 ### Shape & elevation — tokens only
 
 - **MUST** use `rounded-[var(--shape-button)]` (buttons), `rounded-[var(--shape-elements)]` (inputs,
@@ -105,6 +126,10 @@ balance. Reach for it in this order.
   max-w-[var(--container-7xl)]` on the flow's content wrapper — so the column sits centered instead of
   drifting to the left edge on wide screens. This is the one place the *page section* (not just a field)
   is capped.
+- **MUST** cap a **wizard / multi-step deployment flow** (`DeploymentFlow`) tighter than a general
+  create/edit page — `mx-auto max-w-[var(--container-2xl)]` (672px) on the flow's content wrapper. A
+  wizard is a single guided task with one thing to look at per step, so the step column stays narrow and
+  centered; the `7xl` cap above is for broader create/edit pages, not step-by-step wizards.
 - **SHOULD** keep **data-dense surfaces fluid** — tables, dashboards, log/grid views breathe to the full
   content width; don't box them into a narrow container.
 - **MUST** express every cap as `max-w-[var(--container-<size>)]` (`3xs … 7xl`, from
@@ -155,7 +180,8 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - [ ] Every interactive primitive is a `@aziontech/webkit` component.
 - [ ] No HEX / rgb / Tailwind palette / arbitrary spacing / `rounded-md|lg` / raw `text-*` size remains.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
+- [ ] Section titles use `text-heading-xxs text-[var(--text-default)]` with a `px-[var(--spacing-xs)]` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
-- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width and focused flows are capped, always via `max-w-[var(--container-*)]`.
+- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width and focused flows are capped, always via `max-w-[var(--container-*)]` — wizards/`DeploymentFlow` at `max-w-[var(--container-2xl)]`, broader create/edit pages at `7xl`.
 - [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.
 - [ ] (File mode) Every violation has a quoted line, a why, and a concrete fix.
