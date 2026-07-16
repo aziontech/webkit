@@ -80,7 +80,7 @@
     <Label
       v-if="label"
       :for="resolvedId"
-      :value="label"
+      :label="label"
       :required="required"
       :class="disabled ? 'opacity-50' : ''"
       :data-testid="`${testId}__label`"

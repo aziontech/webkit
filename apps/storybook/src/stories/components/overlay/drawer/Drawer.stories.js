@@ -115,7 +115,7 @@ const meta = {
       description: 'Initial open state when uncontrolled.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
-    closeable: {
+    dismissible: {
       control: 'boolean',
       description: 'When true, overlay click and Escape close the drawer.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
@@ -154,7 +154,7 @@ const meta = {
   },
   args: {
     defaultOpen: false,
-    closeable: true,
+    dismissible: true,
     side: 'right',
     size: 'medium'
   }
@@ -205,7 +205,7 @@ const Template = (args) => ({
   template: DEFAULT_RENDER_TEMPLATE
 })
 
-const DEFAULT_SNIPPET = `<Drawer v-model:open="open" closeable side="right" size="medium">
+const DEFAULT_SNIPPET = `<Drawer v-model:open="open" dismissible side="right" size="medium">
   <DrawerTrigger>
     <Button label="Open drawer" kind="primary" />
   </DrawerTrigger>
@@ -254,7 +254,7 @@ const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center justify-center g
     :key="size"
     :size="size"
     v-model:open="openBySize[size]"
-    closeable
+    dismissible
     side="right"
   >
     <DrawerTrigger>
@@ -347,7 +347,7 @@ export const Sizes = {
   }
 }
 
-const SCROLL_TEMPLATE = `<Drawer v-model:open="open" closeable side="right" size="medium">
+const SCROLL_TEMPLATE = `<Drawer v-model:open="open" dismissible side="right" size="medium">
   <DrawerTrigger>
     <Button label="Open scrollable drawer" kind="primary" />
   </DrawerTrigger>

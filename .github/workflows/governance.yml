@@ -18,18 +18,29 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
+      toolkit: ${{ steps.filter.outputs.toolkit }}
       tests: ${{ steps.filter.outputs.tests }}
       visual: ${{ steps.filter.outputs.visual }}
       canary: ${{ steps.filter.outputs.canary }}
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3
+      - uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
         id: filter
         with:
           filters: |
             webkit:
               - 'packages/webkit/**'
+              # dependency changes land here — the security job must audit them
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+            toolkit:
+              - 'packages/webkit/**'
+              - '.specs/**'
+              # the ratchet + invariant also cover these — the job must run when they change
+              - '.claude/hooks/**'
+              - '.claude/rules/**'
+              - 'apps/storybook/**'
             # Stories are fixtures of the unit suite (composeStories), so
             # storybook changes retrigger the tests too.
             tests:
@@ -63,13 +74,13 @@ jobs:
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -105,13 +116,13 @@ jobs:
     if: needs.changes.outputs.canary == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -129,13 +140,13 @@ jobs:
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -159,13 +170,13 @@ jobs:
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -188,13 +199,13 @@ jobs:
     needs: [changes, lint, types]
     if: needs.changes.outputs.webkit == 'true'
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -210,6 +221,10 @@ jobs:
         run: pnpm pack:check
         working-directory: packages/webkit
 
+      - name: Bundle budget (size gate)
+        run: pnpm run size
+        working-directory: packages/webkit
+
   # Storybook Smoke Test
   storybook:
     name: Storybook Build
@@ -217,7 +232,39 @@ jobs:
     needs: [changes, lint, types]
     if: needs.changes.outputs.webkit == 'true'
     steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: pnpm storybook:build
+
+      - name: Verify Storybook output
+        run: test -d apps/storybook/dist && echo "Storybook built successfully"
+
+  # Adoption toolkit — the toolkit's own node:test suites (ESLint rules, MCP, CLI,
+  # stylelint config) + catalog drift check. Everything ships inside @aziontech/webkit;
+  # the catalog is generated from package.json#exports + .specs, so this asserts the
+  # committed catalog.json matches a fresh build and can never go stale.
+  toolkit:
+    name: Adoption Toolkit (tests + catalog drift)
+    needs: changes
+    if: needs.changes.outputs.toolkit == 'true'
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0 # full history so check-tests can diff a PR against its base
 
       - name: Setup pnpm
         uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
@@ -231,11 +278,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook
-        run: pnpm storybook:build
+      - name: Catalog is in sync (no drift from exports/specs)
+        run: pnpm --filter @aziontech/webkit catalog:check
 
-      - name: Verify Storybook output
-        run: test -d apps/storybook/dist && echo "Storybook built successfully"
+      - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
+        run: pnpm --filter @aziontech/webkit test:toolkit
+
+      - name: Construction-standard ratchet (no new authoring violations)
+        run: pnpm --filter @aziontech/webkit run authoring
+
+      - name: Every component has & updates its test (testing.md)
+        run: pnpm --filter @aziontech/webkit run test:gate
+        env:
+          # On a PR, require a changed component to ship its test in the SAME diff.
+          TEST_GATE_BASE: ${{ github.event_name == 'pull_request' && github.base_ref || '' }}
 
   # Vitest browser mode (real Chromium), sharded by 4 — behavior/structure/ARIA
   # on an unstyled DOM. Ordered after lint + types (same tier as build/storybook).
@@ -251,13 +307,13 @@ jobs:
       matrix:
         shard: [1, 2, 3, 4]
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -266,7 +322,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Cache Playwright browsers
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -292,13 +348,13 @@ jobs:
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
@@ -307,7 +363,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Cache Playwright browsers
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -336,18 +392,20 @@ jobs:
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, tests, visual]
+    needs: [changes, security, lint-canary, lint, types, build, storybook, toolkit, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
         run: |
           declare -A results=(
+            [changes]="${{ needs.changes.result }}"
             [security]="${{ needs.security.result }}"
             [lint-canary]="${{ needs.lint-canary.result }}"
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
             [storybook]="${{ needs.storybook.result }}"
+            [toolkit]="${{ needs.toolkit.result }}"
             [tests]="${{ needs.tests.result }}"
             [visual]="${{ needs.visual.result }}"
           )

@@ -96,7 +96,7 @@
       >
         <Switch
           :id="generatedId"
-          v-model:isToggled="model"
+          v-model="model"
           :class="disabled ? 'pointer-events-none opacity-50' : ''"
           :data-testid="`${testId}__control`"
         />

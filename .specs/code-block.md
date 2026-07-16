@@ -97,7 +97,6 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | Event | Payload | Notes |
 |---|---|---|
 | `update:value` | `string` | v-model:value. |
-| `value-change` | `string` | Fires when the active tab changes. |
 | `copy` | `string` | Fires after the active tab code is copied to the clipboard. |
 
 ## Slots

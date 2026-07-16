@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: e72ea0f7d1667d07fcf47f47426ebff36d92cf86724ed0f89fc16f8e4ccd24c2
+checksum: 859ea7ee2d7a7773d279af1d8f0a330a87a01d35c4c2d1bb01d45a774c765547
 created: 2026-06-23
 last_updated: 2026-07-02
 ---
@@ -17,6 +17,26 @@ last_updated: 2026-07-02
 ## Purpose
 
 A Chip is a compact, self-contained token that labels a discrete value the user has applied — most often a removable filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label="f.label" removable @remove="dropFilter(f)" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator.
+
+## When to use
+
+- Represent a selectable or removable token — active filters, multi-select values, entered keywords.
+- The element is interactive (clickable / dismissible).
+
+## When NOT to use
+
+- It is a static count or one-glance status → use `badge`.
+- It is a static descriptive label/category with no interaction → use `tag`.
+
+## Related
+
+- `badge` — static count/short-value indicator.
+- `tag` — static labelled status/category chip.
+
+## Best practices
+
+- When removable, expose an accessible remove control with a clear label.
+- Group related chips in a `chip-group` rather than ad-hoc layout.
 
 ## Usage
 

@@ -8,7 +8,7 @@ import StatusIndicator from './status-indicator.vue'
 
 const { Default, Status, Loading } = composeStories(stories)
 
-const STATUSES = ['positive', 'info', 'neutral', 'warning', 'alt', 'danger'] as const
+const STATUSES = ['success', 'info', 'neutral', 'warning', 'alt', 'danger'] as const
 
 describe('StatusIndicator', () => {
   it('renders with the default testid, default status and default label', () => {
@@ -17,7 +17,7 @@ describe('StatusIndicator', () => {
     const root = getByTestId('feedback-status-indicator')
     expect(root).toBeTruthy()
     // Defaults from withDefaults: status positive, label "Status", loading false.
-    expect(root.getAttribute('data-status')).toBe('positive')
+    expect(root.getAttribute('data-severity')).toBe('success')
     expect(root.getAttribute('role')).toBe('status')
     // loading defaults to false → aria-busy is undefined (omitted) and data-loading null.
     expect(root.hasAttribute('aria-busy')).toBe(false)
@@ -36,20 +36,22 @@ describe('StatusIndicator', () => {
     expect(getByTestId('my-status__label')).toBeTruthy()
   })
 
-  it('reflects the status prop on data-status for every option', () => {
+  it('reflects the status prop on data-severity for every option', () => {
     for (const status of STATUSES) {
-      const { getByTestId, unmount } = render(StatusIndicator, { props: { status } })
-      expect(getByTestId('feedback-status-indicator').getAttribute('data-status')).toBe(status)
+      const { getByTestId, unmount } = render(StatusIndicator, { props: { severity: status } })
+      expect(getByTestId('feedback-status-indicator').getAttribute('data-severity')).toBe(status)
       // The dot mirrors the status too.
-      expect(getByTestId('feedback-status-indicator__dot').getAttribute('data-status')).toBe(status)
+      expect(getByTestId('feedback-status-indicator__dot').getAttribute('data-severity')).toBe(
+        status
+      )
       unmount()
     }
   })
 
   it('falls back to positive when status is undefined', () => {
-    const { getByTestId } = render(StatusIndicator, { props: { status: undefined } })
+    const { getByTestId } = render(StatusIndicator, { props: { severity: undefined } })
 
-    expect(getByTestId('feedback-status-indicator').getAttribute('data-status')).toBe('positive')
+    expect(getByTestId('feedback-status-indicator').getAttribute('data-severity')).toBe('success')
   })
 
   it('renders the label prop inside the label span', () => {
