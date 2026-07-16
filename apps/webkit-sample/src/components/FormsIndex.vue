@@ -28,7 +28,7 @@ const examples = [
     id: "in-page",
     title: "In Page create",
     description:
-      "The module create for a long form — a dedicated page with its own creation header and a sticky footer, sidebar hidden so the form is the only focus. Overline-titled ItemGroup sections, one save. Approach A.",
+      "The module create for a long form — a dedicated page with its own creation header and a sticky footer, sidebar hidden so the form is the only focus. Section-titled ItemGroup sections, one save. Approach A.",
     icon: "pi pi-file-edit",
     surface: "Page",
     save: "One save",
@@ -58,7 +58,7 @@ const examples = [
     id: "drawer-itemgroups",
     title: "ItemGroups in a Drawer",
     description:
-      "In-context create whose body is several overline-titled ItemGroup sections — the settings layout in a drawer. One scoped save. Approach A.",
+      "In-context create whose body is several section-titled ItemGroup sections — the settings layout in a drawer. One scoped save. Approach A.",
     icon: "pi pi-clone",
     surface: "Drawer",
     save: "One save",

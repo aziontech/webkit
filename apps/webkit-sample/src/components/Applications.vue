@@ -1,14 +1,17 @@
 <script setup>
 // Applications list — the Azion Console "Applications" module. The app shell
 // (single sidebar + GlobalHeader with the module breadcrumb) comes from
-// AppLayout; this page renders only its content: a TabView + data-driven
-// <Table> whose row actions open a Dropdown menu and whose toolbar composes the
-// table's own context-aware filter / search / refresh / export / column controls.
+// AppLayout; this page renders only its content: a PageHeading (title +
+// description + primary actions) over a data-driven <Table> whose row actions
+// open a Dropdown menu and whose toolbar composes the table's own context-aware
+// filter / search / refresh / export / column controls. As a first-level module
+// list it carries no navigation tabs — the table's own filter builder handles
+// narrowing by infrastructure.
 import Button from "@aziontech/webkit/button";
+import CardBox from "@aziontech/webkit/card-box";
 import CopyButton from "@aziontech/webkit/copy-button";
 import Dropdown from "@aziontech/webkit/dropdown";
 import IconButton from "@aziontech/webkit/icon-button";
-import TabView from "@aziontech/webkit/tab-view";
 import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
@@ -23,15 +26,6 @@ const router = useRouter();
 
 // The email carried over from the login flow (falls back to a placeholder).
 const userEmail = computed(() => route.query.email || "myemail@azion.com");
-
-// Infrastructure tabs filter the list — the "List with Tabs" pattern.
-const tabs = [
-  { value: "all", label: "All" },
-  { value: "Production", label: "Production" },
-  { value: "Staging", label: "Staging" },
-  { value: "Development", label: "Development" },
-];
-const activeTab = ref("all");
 
 // The application records that back the table (data-driven mode).
 const applications = ref([
@@ -145,13 +139,6 @@ const applications = ref([
   },
 ]);
 
-// The rows shown under the active infrastructure tab.
-const visibleApplications = computed(() =>
-  activeTab.value === "all"
-    ? applications.value
-    : applications.value.filter((app) => app.infrastructure === activeTab.value),
-);
-
 // Column model. `name` is the principal (emphasized) column; the trailing
 // `actions` column (kind: 'action') is auto-pinned to the right edge.
 const columns = [
@@ -195,9 +182,13 @@ const filterFields = [
 const createApplication = () =>
   router.push({ path: "/applications/new", query: { email: userEmail.value } });
 
-const openApp = (event, row) => {
-  toast.info(`Opening ${row.name}`, { description: `Application ID ${row.id}` });
-};
+// Opening an application enters its resource-detail view (the PageHeading +
+// nav-tabs pattern), landing on the Overview sub-page.
+const openApp = (event, row) =>
+  router.push({
+    path: `/applications/${row.id}`,
+    query: { email: userEmail.value },
+  });
 
 // Row action menu — Dropdown emits (event, value); `delete` removes the row.
 const onRowAction = (event, value, row) => {
@@ -206,8 +197,11 @@ const onRowAction = (event, value, row) => {
     toast.success(`${row.name} deleted`);
     return;
   }
+  if (value === "view") {
+    openApp(event, row);
+    return;
+  }
   const copy = {
-    view: `Opening ${row.name}`,
     edit: `Editing ${row.name}`,
     duplicate: `Duplicating ${row.name}`,
   };
@@ -217,11 +211,14 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="applications" :breadcrumb="[{ label: 'Applications' }]">
-    <main class="flex h-full flex-col">
-      <!-- Module intro + primary actions -->
+    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+      <!-- First-level module list. The module name lives in the header breadcrumb
+           crumb (AppLayout); the PageHeading sits OUT of the card (consistent with
+           every list view) and carries the primary actions. The borderless Table
+           lives in a flush CardBox (padded=false), framed edge-to-edge. -->
       <PageHeading
         title="Applications"
-        description="Define and manage applications that control request processing and application logic on Azion's global infrastructure."
+        description="Build, deploy, and manage your edge applications."
       >
         <template #actions>
           <Button
@@ -242,31 +239,18 @@ const onRowAction = (event, value, row) => {
         </template>
       </PageHeading>
 
-      <!-- Infrastructure tabs -->
-      <div class="pt-[var(--spacing-md)]">
-        <TabView v-model:value="activeTab">
-          <TabView.List>
-            <TabView.Item
-              v-for="tab in tabs"
-              :key="tab.value"
-              :value="tab.value"
-              :label="tab.label"
-            />
-          </TabView.List>
-        </TabView>
-      </div>
-
-      <!-- Applications table -->
-      <section class="flex min-h-0 flex-col pt-[var(--spacing-md)]">
+      <section class="flex min-h-0 flex-col">
+        <CardBox :padded="false">
+          <template #content>
         <Table
-          :data="visibleApplications"
+          :data="applications"
           :columns="columns"
           :filter-fields="filterFields"
           row-key="id"
           enable-sorting
           paginated
           :page-size="8"
-          border
+          :border="false"
           @row-click="openApp"
         >
           <template #toolbar>
@@ -328,6 +312,8 @@ const onRowAction = (event, value, row) => {
             </Dropdown>
           </template>
         </Table>
+          </template>
+        </CardBox>
       </section>
     </main>
   </AppLayout>

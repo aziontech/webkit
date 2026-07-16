@@ -228,7 +228,7 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="variables" :breadcrumb="[{ label: 'Variables' }]">
-    <main class="flex h-full flex-col">
+    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
       <!-- Module intro + primary action -->
       <PageHeading
         title="Variables"
@@ -246,7 +246,9 @@ const onRowAction = (event, value, row) => {
       </PageHeading>
 
       <!-- Variables table -->
-      <section class="flex min-h-0 flex-col pt-[var(--spacing-md)]">
+      <section class="flex min-h-0 flex-col">
+        <CardBox :padded="false">
+          <template #content>
         <Table
           :data="variables"
           :columns="columns"
@@ -255,7 +257,7 @@ const onRowAction = (event, value, row) => {
           enable-sorting
           paginated
           :page-size="10"
-          border
+          :border="false"
         >
           <template #toolbar>
             <div class="flex w-full items-center gap-[var(--spacing-xs)]">
@@ -325,6 +327,8 @@ const onRowAction = (event, value, row) => {
             </Dropdown>
           </template>
         </Table>
+          </template>
+        </CardBox>
       </section>
     </main>
 
