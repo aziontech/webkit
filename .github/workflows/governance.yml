@@ -31,13 +31,11 @@ jobs:
           filters: |
             webkit:
               - 'packages/webkit/**'
-              # dependency changes land here — the security job must audit them
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
             toolkit:
               - 'packages/webkit/**'
               - '.specs/**'
-              # the ratchet + invariant also cover these — the job must run when they change
               - '.claude/hooks/**'
               - '.claude/rules/**'
               - 'apps/storybook/**'
@@ -56,13 +54,14 @@ jobs:
             # rule's behavior (configs, the fixtures themselves, tooling deps)
             # retriggers the canary job.
             canary:
+              - 'packages/webkit/**'
+              - 'lint-canaries/**'
               - 'eslint.config.js'
               - 'packages/webkit/eslint.config.js'
               - '.stylelintrc.json'
               - '.prettierrc.json'
               - '.prettierignore'
               - 'commitlint.config.js'
-              - 'lint-canaries/**'
               - 'package.json'
               - 'pnpm-lock.yaml'
               - '.github/workflows/governance.yml'
