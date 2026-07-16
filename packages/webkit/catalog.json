@@ -2904,6 +2904,13 @@
           "default": "false",
           "required": "no",
           "doc": "Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart."
+        },
+        {
+          "name": "border",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Draw the outer card border around the block. On by default; set `:border=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected."
         }
       ],
       "events": [
