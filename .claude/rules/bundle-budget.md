@@ -7,10 +7,10 @@ A design system is imported into every consumer, so its size is the consumer's s
 > Each public export path has a **`size-limit` budget**. CI fails when an entry exceeds its budget (a `quality ratchet` — the budget only ratchets down). The **standalone `<name>-root`** and per-sub-component paths stay tree-shakeable: importing the root pulls in nothing else (see [`compound-api.md`](./compound-api.md)).
 
 ```jsonc
-// packages/webkit/.size-limit.json
+// packages/webkit/.size-limit.json (excerpt — budgets are measured gzip + headroom)
 [
-  { "name": "button",      "path": "src/components/actions/button/button.vue", "limit": "6 KB" },
-  { "name": "table-root",  "path": "src/components/data/table/table.vue",       "limit": "12 KB" }
+  { "name": "button",      "path": "src/components/actions/button/button.vue", "limit": "2.5 KB" },
+  { "name": "table-root",  "path": "src/components/data/table/table.vue",       "limit": "48 KB" }
 ]
 ```
 
@@ -27,7 +27,7 @@ A design system is imported into every consumer, so its size is the consumer's s
 
 ## Enforcement
 
-- **`size-limit`** will run as a **required** CI job in [`governance.yml`](../../.github/workflows/governance.yml), failing on any over-budget path. Status: the budget config (`.size-limit.json`) and scripts ship already; **the CI job is pending activation** (the `size-limit` dev dependency still has to be installed) — until then, mandatory review gates budget changes.
+- **`check-size.mjs`** ([`packages/webkit/scripts/check-size.mjs`](../../packages/webkit/scripts/check-size.mjs)) is the size gate, active as the **Bundle budget** step of the `build` job in [`governance.yml`](../../.github/workflows/governance.yml). The stock `size-limit` presets cannot compile `.vue` source, so the gate builds each budgeted entry itself with Vite + `@vitejs/plugin-vue` (vue externalized, minified) and fails on any entry whose gzipped output exceeds its budget. Entries not yet in `.size-limit.json` remain gated by review.
 - **`sideEffects`** is declared once at the package root (`["**/*.vue", "**/*.css"]`) so bundlers can tree-shake (see [`compound-api.md`](./compound-api.md)).
 - **[`validate-references.mjs`](../hooks/validate-references.mjs)** blocks any forbidden positioning/animation dependency at write time.
 

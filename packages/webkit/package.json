@@ -26,6 +26,7 @@
     "type-coverage": "type-coverage -p . --at-least 95 --detail",
     "catalog:build": "node scripts/build-catalog.mjs",
     "catalog:check": "node scripts/build-catalog.mjs && git diff --exit-code --stat catalog.json",
+    "size": "node scripts/check-size.mjs",
     "test:toolkit": "node --test \"test/**/*.test.mjs\"",
     "authoring": "node scripts/check-authoring.mjs",
     "authoring:update": "node scripts/check-authoring.mjs --update",

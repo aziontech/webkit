@@ -15,8 +15,9 @@
 
 import { execSync } from 'node:child_process'
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
-import { basename, dirname, join, relative, sep } from 'node:path'
+import { dirname, join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { componentRootName } from '../../../.claude/hooks/_lib/spec.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url)) // packages/webkit/scripts
 const ROOT = join(SCRIPT_DIR, '..', '..', '..') // repo root
@@ -47,21 +48,6 @@ try {
 }
 const UPDATE = process.argv.includes('--update')
 
-// A ROOT component .vue sits directly in its own component folder:
-//   <category>/<name>/<name>.vue   (dir segments after components/ = [category, name])
-//   <name>/<name>.vue              (flat, e.g. tag/tag.vue — 1 segment)
-// Composition sub-components live deeper (<category>/<name>/<sub>/<sub>.vue) or are a
-// dashed part next to the root (<name>-part.vue) — they are tested THROUGH their root,
-// so only the root name matches here. Returns the component name, or null if not a root.
-function componentRootName(relFromComponents) {
-  if (!relFromComponents.endsWith('.vue')) return null
-  const parts = relFromComponents.split('/')
-  const name = basename(parts.pop(), '.vue')
-  const base = name.endsWith('-root') ? name.slice(0, -5) : name
-  if (parts.length === 2 && parts[1] === base) return base // <category>/<name>/<name>[-root].vue
-  if (parts.length === 1 && parts[0] === base) return base // flat <name>/<name>[-root].vue
-  return null
-}
 const relToComponents = (abs) => relative(COMPONENTS, abs).split(sep).join('/')
 
 function walk(dir, out) {

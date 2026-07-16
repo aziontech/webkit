@@ -53,14 +53,14 @@ export const TOKEN_CHECKS = [
       'Raw font-family. Font family is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
-    id: 'primevue-color',
+    id: 'legacy-color-util',
     // The leading (?<![\w-]) excludes matches embedded in a CSS variable name
     // (e.g. the sanctioned `var(--bg-surface-overlay)`), so only the bare
-    // PrimeFlex utility class (`surface-overlay`, `text-color`, ...) is caught.
+    // legacy utility class (`surface-overlay`, `text-color`, ...) is caught.
     regex:
       /(?<![\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\b/g,
     message:
-      'PrimeVue color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...).'
+      'Legacy/external color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...).'
   },
   {
     id: 'class-in-defineprops',

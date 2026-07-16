@@ -249,12 +249,9 @@ export function constraintsBlockHasCanonicalBullets(body) {
 // ---- Spec lookup from a .vue path ----
 
 /**
- * Given an absolute path to a component .vue file, return { category, name, specPath }.
- * Handles the three real layouts (returns null only for non-component paths / wip):
- *   components/<category>/<name>/<file>.vue            — categorized root or direct part
- *   components/<category>/<name>/<sub>/…/<file>.vue    — nested sub-component folders
- *   components/<name>/…/<file>.vue                     — flat components (avatar, tag,
- *     overline) — they carry the 'content' testid category by convention
+ * Absolute component .vue path → { category, name, specPath }; null for non-component
+ * paths and wip/. Accepts categorized (components/<category>/<name>/…/<file>.vue) and
+ * flat (components/<name>/…/<file>.vue) layouts — flat uses the 'content' testid category.
  */
 export function resolveSpecForComponentPath(filePath, repoRoot) {
   const rel = filePath.startsWith(repoRoot) ? filePath.slice(repoRoot.length + 1) : filePath
@@ -274,6 +271,26 @@ export function resolveSpecForComponentPath(filePath, repoRoot) {
   }
   const specPath = resolve(repoRoot, '.specs', `${name}.md`)
   return { category, name, specPath }
+}
+
+/**
+ * THE root predicate — single definition consumed by check-tests.mjs (CI gate),
+ * enforce-test-exists.mjs and spec-compliance-checks.mjs (write-time hooks).
+ * A ROOT component .vue sits directly in its own component folder:
+ *   <category>/<name>/<name>[-root].vue   (2 segments after components/)
+ *   <name>/<name>[-root].vue              (flat, e.g. tag/tag.vue — 1 segment)
+ * Composition sub-components live deeper (<category>/<name>/<sub>/<sub>.vue) or are a
+ * dashed part next to the root (<name>-part.vue) — they are covered THROUGH their root.
+ * Returns the component name, or null when the file is not a root.
+ */
+export function componentRootName(relFromComponents) {
+  if (!relFromComponents.endsWith('.vue')) return null
+  const parts = relFromComponents.split('/')
+  const name = parts.pop().replace(/\.vue$/, '')
+  const base = name.endsWith('-root') ? name.slice(0, -5) : name
+  if (parts.length === 2 && parts[1] === base) return base
+  if (parts.length === 1 && parts[0] === base) return base
+  return null
 }
 
 // ---- Legacy whitelist ----

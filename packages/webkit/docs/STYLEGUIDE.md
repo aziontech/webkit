@@ -532,7 +532,9 @@ against its tree-shakeable path; budgets only ratchet **down** — raising one r
 written justification in the PR. Tree-shaking must stay intact: no module-top-level side
 effects, and the root `.vue` never imports the compound `index.ts`.
 
-**Enforced by:** `size-limit` in CI (activation pending — review gates it meanwhile).
+**Enforced by:** `scripts/check-size.mjs` in CI (the `build` job's Bundle budget step) —
+each budgeted entry is compiled with Vite + plugin-vue and its gzipped output compared
+against `.size-limit.json`; unbudgeted paths stay gated by review.
 
 ---
 

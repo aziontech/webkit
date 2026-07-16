@@ -1,23 +1,8 @@
-// Single source of truth pairing each STANDARD (the human rule the AI is told to follow,
-// `.claude/rules/<id>.md`) with its ENFORCEMENT (what blocks the merge). This is what makes
-// "what we suggest to the AI" and "what blocks the merge" the SAME definition — they cannot
-// drift without failing the invariant test in CI
-// (packages/webkit/test/standards/invariant.test.mjs).
-//
-// scope:
-//   'general' → a construction pattern any project building/consuming Vue components should
-//               follow; it SHIPS to consuming projects (the consumer guideline + eslint-plugin).
-//   'webkit'  → specific to authoring the webkit design system itself (specs, the exports map,
-//               Storybook, releases, the published package). It does NOT go to consumer projects.
-//
-// enforce[]: { surface, by }
-//   'write-time' → a .claude/hooks/<by>.mjs hook (exit 2)
-//   'lint'       → a packages/webkit/src/eslint-plugin/rules/<by>.js rule (error)
-//   'ci'         → governance.yml job / check-authoring ratchet / commitlint / branch-protection
-//                  / size-limit / vuejs-accessibility
-//   'review'     → mandatory approval — the PR cannot merge without the 2 required approvals.
-// NOTHING is advisory: every standard has at least one blocking surface. `note` records what
-// is partial or pending activation (honest, never a silent gap).
+// Machine-readable registry pairing each standard (.claude/rules/<id>.md) with what enforces
+// it; the invariant test (packages/webkit/test/standards/invariant.test.mjs) fails CI when
+// they drift. scope: 'general' ships to consumer projects, 'webkit' is DS-internal. enforce[]
+// surfaces: 'write-time' (hook), 'lint' (eslint-plugin rule), 'ci' (governance gate),
+// 'review' (mandatory approval). Semantics and full rule table: .claude/rules/README.md.
 
 export const STANDARDS = [
   // ── Foundational ──
@@ -270,8 +255,11 @@ export const STANDARDS = [
     id: 'bundle-budget',
     kind: 'construction',
     scope: 'webkit',
-    enforce: [{ surface: 'review', by: 'required-approval' }],
-    note: 'Budget of record lives in packages/webkit/.size-limit.json. An automated size gate is pending — size-limit needs a vue-aware preset (the binary is not installed today), so no CI job or script claims it yet. Review holds the line meanwhile; wire the CI job when the tooling lands.'
+    enforce: [
+      { surface: 'ci', by: 'size-limit' },
+      { surface: 'review', by: 'required-approval' }
+    ],
+    note: 'Budget of record lives in packages/webkit/.size-limit.json. scripts/check-size.mjs is the vue-aware gate: it compiles each budgeted entry with Vite + @vitejs/plugin-vue (vue externalized, minified) and fails the governance build job when the gzipped output exceeds its budget. Budgets only ratchet down; entries not yet budgeted stay gated by review.'
   },
   {
     id: 'testing',

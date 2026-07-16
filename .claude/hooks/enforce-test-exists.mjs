@@ -19,8 +19,8 @@
 // (.claude/hooks/_lib/legacy-components.json).
 
 import { existsSync } from 'node:fs'
-import { basename, dirname, relative, resolve } from 'node:path'
-import { isLegacyComponent, resolveSpecForComponentPath } from './_lib/spec.mjs'
+import { dirname, relative, resolve } from 'node:path'
+import { componentRootName, isLegacyComponent, resolveSpecForComponentPath } from './_lib/spec.mjs'
 
 const ROOT = process.cwd()
 
@@ -51,10 +51,10 @@ async function main() {
   const info = resolveSpecForComponentPath(abs, ROOT)
   if (!info) process.exit(0)
 
-  // Root component only: <category>/<name>/<name>.vue. Composition sub-components
-  // (<name>-part.vue) are tested through their root, so skip them.
-  const vueBase = basename(abs, '.vue')
-  if (vueBase !== info.name && vueBase !== `${info.name}-root`) process.exit(0)
+  // Root component only — shared componentRootName predicate (_lib/spec.mjs), the same
+  // definition check-tests.mjs and spec-compliance-checks.mjs use. Sub-components are
+  // tested through their root, so skip them.
+  if (componentRootName(abs.split('/src/components/').pop()) !== info.name) process.exit(0)
 
   // Legacy components bypass.
   if (isLegacyComponent(info.category, info.name, ROOT)) process.exit(0)

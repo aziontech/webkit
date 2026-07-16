@@ -2,7 +2,7 @@
 // PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/components/**
 // when the content violates DESIGN.md /
 // COMPONENT_REQUIREMENTS.md rules: hex/rgb/hsl colors, Tailwind palette, raw
-// typography, PrimeVue color utils, `class` in defineProps, `any`, `@ts-ignore`.
+// typography, legacy color utils, `class` in defineProps, `any`, `@ts-ignore`.
 
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'

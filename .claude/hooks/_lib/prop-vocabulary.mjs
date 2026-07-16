@@ -1,23 +1,10 @@
-// Canonical prop vocabulary — the single source of truth for prop naming across every
-// webkit component. The rule: the same concept always ships under the same prop name,
-// type, and default. Derived from the cross-component audit (2026-07); documented for
-// humans in .claude/rules/prop-vocabulary.md.
-//
-// Consumed by:
-//   - validate-spec-compliance.mjs  (author-side hook — blocks a divergent .vue on
-//     every Write/Edit, so both new components AND edits stay on-vocabulary)
-//   - scripts/build-catalog.mjs     (stamps `vocabulary` into catalog.json so the MCP
-//     can steer AI-generated consumer code toward the canonical names)
-//
-// No external deps — plain data + pure helpers.
+// Canonical prop vocabulary (machine-readable side of .claude/rules/prop-vocabulary.md).
+// Consumed by validate-spec-compliance.mjs (write-time block) and build-catalog.mjs
+// (stamps `vocabulary` into catalog.json for the MCP).
 
-// concept -> { canonical, aliases }. Every `alias` is BANNED as a prop name; the message
-// points at the canonical replacement. Only names with NO legitimate competing use are
-// listed, so the block is deterministic and false-positive-free:
-//   - `type` is NOT banned (native `<input type>` is legitimate).
-//   - `value` is NOT banned (identity / v-model payload / clipboard text are legitimate).
-//   - `header`/`title` collide only as PROP names here — a `header` SLOT is unaffected
-//     (the hook parses defineProps, never defineSlots, for this check).
+// concept -> { canonical, aliases }; every alias is banned as a prop name. Only names with
+// no legitimate competing use are listed (`type`, `value` stay allowed; slots are not
+// checked) — rationale per name in the rule doc.
 export const CONCEPTS = [
   {
     concept: 'visual/structural variant',
@@ -146,7 +133,10 @@ export function checkSizeUnion(unionText) {
   const idx = members.map((m) => canon.indexOf(m))
   const ordered = [...idx].sort((a, b) => a - b)
   if (idx.join(',') !== ordered.join(',')) {
-    const want = canon.filter((c) => members.includes(c)).map((c) => `'${c}'`).join(' | ')
+    const want = canon
+      .filter((c) => members.includes(c))
+      .map((c) => `'${c}'`)
+      .join(' | ')
     return `size union must be declared in canonical order: ${want} (${RULE_DOC}).`
   }
   return null
@@ -187,13 +177,18 @@ export function checkEventVocabulary(emits) {
 /** JSON-serializable snapshot for catalog.json (so the MCP can surface the vocabulary). */
 export function vocabularySnapshot() {
   return {
-    props: CONCEPTS.map((c) => ({ concept: c.concept, canonical: c.canonical, aliases: c.aliases })),
+    props: CONCEPTS.map((c) => ({
+      concept: c.concept,
+      canonical: c.canonical,
+      aliases: c.aliases
+    })),
     size: { canonical: SIZE.canonical, bannedTokens: SIZE.bannedTokens },
     booleanPrefixes: { banned: ['is', 'has'] },
     negativeBooleans: NEGATIVE_BOOLEANS,
     events: {
       convention: 'kebab-case, or update:<prop> for v-model',
-      noEchoRule: 'Do not emit "<x>-change" when "update:<x>" exists — it is redundant; use v-model / @update:<x>.'
+      noEchoRule:
+        'Do not emit "<x>-change" when "update:<x>" exists — it is redundant; use v-model / @update:<x>.'
     }
   }
 }

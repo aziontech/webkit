@@ -30,10 +30,10 @@
       "message": "Raw Tailwind text size. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, ...)."
     },
     {
-      "id": "primevue-color",
+      "id": "legacy-color-util",
       "pattern": "(?<![\\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\\b",
       "flags": "g",
-      "message": "PrimeVue/PrimeFlex color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...)."
+      "message": "Legacy/external color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...)."
     }
   ],
   "tokens": {

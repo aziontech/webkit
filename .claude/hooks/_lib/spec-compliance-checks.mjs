@@ -9,6 +9,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
+  componentRootName,
   extractAnimationClasses,
   getSection,
   hasMotionReduceEscape,
@@ -95,14 +96,10 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
   const sfc = parseVueSfc(vueText)
   const { body } = parseSpecFile(info.specPath)
 
-  // Determine if this is the root .vue or a sub-component .vue. Compositions whose
-  // root file is `<name>-root.vue` (tab-view, navigation-menu) are roots too — before
-  // this, naming a root that way silently skipped every root-level check.
-  const fileName = abs
-    .split('/')
-    .pop()
-    .replace(/\.vue$/, '')
-  const isRoot = fileName === info.name || fileName === `${info.name}-root`
+  // Root vs sub-component: the shared componentRootName predicate (spec.mjs) — the
+  // same definition check-tests.mjs and enforce-test-exists.mjs use, so `<name>-root.vue`
+  // compositions (tab-view, navigation-menu) count as roots on every surface.
+  const isRoot = componentRootName(abs.split('/src/components/').pop()) === info.name
 
   if (isRoot) {
     // ---- Props ----
@@ -186,19 +183,28 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
   }
 
   // ---- Animation catalog cross-check (independent of the spec Motion table) ----
-  const catalogAnims = loadCatalogAnimations(ROOT)
-  if (catalogAnims) {
-    const usedAnims = new Set(
-      extractAnimationClasses(vueText)
-        .filter((c) => c.startsWith('animate-') && c !== 'animate-none')
-        .map((c) => c.replace(/^animate-/, ''))
-    )
-    for (const nameOnly of usedAnims) {
-      if (!catalogAnims.has(nameOnly)) {
-        violations.push(
-          `Animation "animate-${nameOnly}" is not in the theme catalog. Run /add-animation ${nameOnly} ` +
-            `to add it to packages/theme/src/tokens/semantic/animations.js + record a Theme gap.`
-        )
+  // Loud, not conditional: a component that uses animate-* classes fails when the
+  // generated catalog cannot be read, instead of silently skipping the check.
+  const usedAnims = new Set(
+    extractAnimationClasses(vueText)
+      .filter((c) => c.startsWith('animate-') && c !== 'animate-none')
+      .map((c) => c.replace(/^animate-/, ''))
+  )
+  if (usedAnims.size) {
+    const catalogAnims = loadCatalogAnimations(ROOT)
+    if (!catalogAnims) {
+      violations.push(
+        'Cannot validate animate-* classes: packages/webkit/catalog.json is missing or unreadable. ' +
+          'Run `pnpm --filter @aziontech/webkit catalog:build`.'
+      )
+    } else {
+      for (const nameOnly of usedAnims) {
+        if (!catalogAnims.has(nameOnly)) {
+          violations.push(
+            `Animation "animate-${nameOnly}" is not in the theme catalog. Run /add-animation ${nameOnly} ` +
+              `to add it to packages/theme/src/tokens/semantic/animations.js + record a Theme gap.`
+          )
+        }
       }
     }
   }

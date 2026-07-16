@@ -221,6 +221,10 @@ jobs:
         run: pnpm pack:check
         working-directory: packages/webkit
 
+      - name: Bundle budget (size gate)
+        run: pnpm run size
+        working-directory: packages/webkit
+
   # Storybook Smoke Test
   storybook:
     name: Storybook Build
