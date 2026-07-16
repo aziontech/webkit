@@ -1,9 +1,10 @@
 import icons from '@aziontech/icons/catalog'
 import colorIcons from '@aziontech/icons/color-catalog'
 
+import CodeBlock from '@aziontech/webkit/code-block'
+
 import IconGrid from '../../foundations/components/IconGrid.vue'
 import {
-  CodeBlock,
   PageContainer,
   PageHeader,
   SectionHeader
@@ -50,13 +51,29 @@ export const Overview = {
       IconGrid
     },
     setup() {
-      const usageCode = [
-        '<i class="ai ai-azion"></i>',
-        '<i class="ai ai-edge-functions text-default text-2xl"></i>',
-        '<i class="pi pi-check"></i>',
-        '<i class="pi pi-times text-default text-2xl"></i>'
-      ].join('\n')
-      return { icons, colorIcons, args, usageCode }
+      const importTabs = [
+        {
+          label: 'JavaScript',
+          value: 'js',
+          language: 'javascript',
+          code: "import '@aziontech/icons';"
+        }
+      ]
+      const usageTabs = [
+        {
+          label: 'HTML',
+          value: 'html',
+          language: 'html',
+          fileName: 'index.html',
+          code: [
+            '<i class="ai ai-azion"></i>',
+            '<i class="ai ai-edge-functions text-default text-2xl"></i>',
+            '<i class="pi pi-check"></i>',
+            '<i class="pi pi-times text-default text-2xl"></i>'
+          ].join('\n')
+        }
+      ]
+      return { icons, colorIcons, args, importTabs, usageTabs }
     },
     template: /* html */ `
       <PageContainer>
@@ -67,13 +84,11 @@ export const Overview = {
 
         <!-- Import -->
         <SectionHeader title="Import" />
-        <CodeBlock label="JavaScript" class="mb-12">
-          import '@aziontech/icons';
-        </CodeBlock>
+        <CodeBlock :tabs="importTabs" :border="true" :show-line-numbers="false" class="h-fit mb-12" />
 
         <!-- Usage -->
         <SectionHeader title="Usage" />
-        <CodeBlock label="HTML" :content="usageCode" class="mb-6" />
+        <CodeBlock :tabs="usageTabs" :border="true" :show-line-numbers="false" class="h-fit mb-6" />
         <p class="text-body-sm text-muted m-0 max-w-[620px] leading-relaxed mb-12">
           Icons are a font, which means they inherit text properties.
           <strong class="text-default">Colored</strong> brand icons (the <code>-cor</code> set) are
