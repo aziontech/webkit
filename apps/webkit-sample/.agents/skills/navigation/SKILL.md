@@ -1,8 +1,8 @@
 ---
 name: navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (AppLayout + AppSidebar: full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (CreationHeader: no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (AppLayout + AppSidebar: full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (CreationHeader: no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the content layout inside the persistent shell: a --spacing-md inset (matching the header), the PageHeading out of the card, list tables in a flush borderless CardBox, and resource-detail tab pages sharing the same rhythm. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb.
 status: active
-last_updated: 2026-07-15
+last_updated: 2026-07-16
 ---
 
 # Skill: navigation
@@ -75,6 +75,38 @@ import AppLayout from "./ui/AppLayout.vue";
 - The breadcrumb appears only once the user is **inside** something (a trail of 2+ levels); a
   first-level module shows no crumb.
 
+#### The header always names the current location (breadcrumb) + the sidebar toggle (`collapsible`)
+
+1. **The breadcrumb renders on every level.** The header always names where the user is: a page that
+   passes a single first-level crumb (`[{ label: 'Home' }]`, `[{ label: 'Applications' }]`) shows that
+   one crumb, and a nested page shows the full trail (`Applications › New Application`). This is
+   consistent across the console — first-level pages are **not** special-cased to hide the crumb. Crumb
+   links (`href`) navigate; the last crumb is the current page.
+2. **Sidebar toggle (`collapsible`, default `true`).** A toggle (`⌘ pi pi-bars`) sits at the far left
+   of `GlobalHeader` on **every** console page. Clicking it collapses the rail **totally** (not to a
+   mini-rail — it is removed, and the content zone spans the full width); clicking again restores it.
+   The user stays visible via the header avatar while collapsed, so the shared invariant holds even
+   with no sidebar footer. It is standard chrome — you don't opt in; pass `:collapsible="false"` only
+   to suppress it on a page that must not collapse its rail.
+
+```vue
+<template>
+  <!-- Home: the header names the module via its single crumb; the sidebar
+       toggle is present by default. Home leads with content (no PageHeading). -->
+  <AppLayout
+    active="home"
+    :breadcrumb="[{ label: 'Home' }]"
+  >
+    <!-- content only -->
+  </AppLayout>
+</template>
+```
+
+- The breadcrumb naming the location and an in-page `PageHeading` are **different roles**: the crumb is
+  top chrome that says *where you are*; the `PageHeading` is the page's own title + description +
+  actions. A second-level page carries both (the crumb *and* its `PageHeading`); Home carries only the
+  crumb and lets its content lead.
+
 ### Shell 2 — focused creation (`CreationHeader`)
 
 For a **single task** — create, edit, deploy, a wizard step. The sidebar is gone so nothing competes
@@ -126,6 +158,74 @@ identity reads as "logged out" and breaks trust.
 `GlobalHeader.Right`), so every creation page gets it for free — a page must **not** have to remember
 to add it.
 
+## Content layout (inside the persistent shell)
+
+The shell frames the page; this is how the page's own content sits inside it. Every browse/list page
+and every resource-detail page follows the **same** layout and spacing, so moving between modules
+never feels like a different app.
+
+### The inset matches the header (`--spacing-md`)
+
+The content zone's padding is `--spacing-md` — the same edge padding as `GlobalHeader` — so page
+content lines up with the breadcrumb and the header actions. On a persistent-console page you get this
+for free from `AppLayout` (`padded`, default `true`); **don't** re-pad the page with a bespoke inset
+(`p-[var(--spacing-lg)]`). A resource-detail page that opts out of the shell inset (`:padded="false"`
+to run a full-bleed tab bar) re-applies the same `p-[var(--spacing-md)]` on its own scrolling content
+region — never `lg`.
+
+### List / module pages — heading out, table in a flush card
+
+```vue
+<template>
+  <AppLayout active="applications" :breadcrumb="[{ label: 'Applications' }]">
+    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+      <!-- PageHeading sits OUT of the card and carries the primary actions. -->
+      <PageHeading title="Applications" description="…">
+        <template #actions>
+          <Button label="New Resource" kind="primary" size="medium" icon="pi pi-plus" @click="…" />
+        </template>
+      </PageHeading>
+
+      <!-- The Table lives in a flush, borderless CardBox: the card supplies the
+           frame, so the table is edge-to-edge (padded=false) and border-free. -->
+      <section class="flex min-h-0 flex-col">
+        <CardBox :padded="false">
+          <template #content>
+            <Table :data="…" :columns="…" row-key="id" :border="false">
+              <template #toolbar>…<Table.Search … /></template>
+            </Table>
+          </template>
+        </CardBox>
+      </section>
+    </main>
+  </AppLayout>
+</template>
+```
+
+- **`PageHeading` is out of the card**, never in its `#header` — one heading role per page region.
+- **`--spacing-lg`** between the heading and the card (`gap` on `main`); the shell supplies the
+  `--spacing-md` inset.
+- **The table is framed by the card, not itself:** `CardBox :padded="false"` + `Table :border="false"`
+  — the card is the only border, so the table sits edge-to-edge.
+- **Search / filter live in the table's own `#toolbar`** (context-aware `Table.Search`, `Table.Filter`
+  …), not above the card.
+
+### Resource-detail pages — a fluid tab bar over the same content
+
+A resource you navigate INTO (`ApplicationDetail`) or a settings hub (`AccountSettings`) opts out of
+the shell inset (`:padded="false"`) to run a **full-bleed tab bar** as the bottom of the header, then
+scrolls its content in a `p-[var(--spacing-md)]` region. Each tab renders one of two bodies — and both
+lead with the heading OUT, `--spacing-lg` down to the content:
+
+- **A list tab** → the exact list pattern above (PageHeading out + flush borderless `Table`), with the
+  tab's create action in the heading's `#actions`.
+- **A settings tab** → the ItemGroup form: `--spacing-sm`-titled sections (`text-heading-xxs`) each
+  over a flush `CardBox` + `Item.List`, committed as **one block** by a single Save bar pinned below
+  the scroll region (see [`/form`](../form/SKILL.md) and [`/usability`](../usability/SKILL.md)).
+
+The rhythm is invariant across both: the heading is always **out** of the card, the inset is always
+`--spacing-md`, and the heading→content gap is always `--spacing-lg`.
+
 ## Hard rules
 
 - **One shell per page.** A page is either a persistent-console page or a focused-creation page —
@@ -138,11 +238,20 @@ to add it.
   shell. Remove the sidebar or switch to a browse page.
 - **Focused flows have a back way out.** A `CreationHeader` without a working `@back` (or a terminal
   state that justifies `:show-back="false"`) strands the user.
-- **Breadcrumb only when nested.** Show it at 2+ levels; a first-level page shows none. Crumb links
-  (`href`) navigate; the last crumb is the current page.
+- **The header always names the location.** The breadcrumb renders on every level — a single
+  first-level crumb (Home, Applications) or a nested trail (Applications › New Application). Crumb
+  links (`href`) navigate; the last crumb is the current page. The sidebar toggle (`collapsible`) is
+  separate chrome and on by default.
 - **Compose the shells, don't hand-roll.** Use `AppLayout` / `CreationHeader`; they wrap
   `@aziontech/webkit/global-header`, `/sidebar`, `/breadcrumb`. Never build a bare `<header>`/`<nav>`
   when a shell exists.
+- **The content inset is `--spacing-md`** — the header's edge padding. Take it from `AppLayout`
+  (`padded`); a page that runs a full-bleed tab bar re-applies `p-[var(--spacing-md)]` on its own
+  content region. Never a bespoke `p-[var(--spacing-lg)]` page inset.
+- **A list table lives in a flush, borderless `CardBox` with the `PageHeading` out of the card.**
+  `CardBox :padded="false"` + `Table :border="false"`; the heading (and its actions) sits above the
+  card, `--spacing-lg` away. Never bury the heading in the card `#header`, never ship a bare bordered
+  table, never wrap the table in a padded card.
 
 ## Review output
 
@@ -168,8 +277,9 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 - Header regions: `@aziontech/webkit/global-header` (`GlobalHeader.Left` / `.Middle` / `.Right` /
   `.Brand`). Sidebar: `@aziontech/webkit/sidebar` (+ `/sidebar-group`). Breadcrumb:
   `@aziontech/webkit/breadcrumb`.
-- Exemplars — persistent: `Dashboard.vue`, `Applications.vue`; focused: `CreateApplication.vue`,
-  `CreationCenter.vue`, `DeployTemplate.vue`.
+- Exemplars — persistent list: `Applications.vue`, `Variables.vue`, `PersonalTokens.vue`;
+  resource-detail (tab bar + content): `ApplicationDetail.vue`, `AccountSettings.vue`; focused:
+  `CreateApplication.vue`, `CreationCenter.vue`, `DeployTemplate.vue`.
 - Companion skills: [`/form`](../form/SKILL.md) (what fills a focused flow),
   [`/ux-heuristics`](../ux-heuristics/SKILL.md) (states + feedback),
   [`/baseline-ui`](../baseline-ui/SKILL.md) (components + tokens).
@@ -183,3 +293,5 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 - [ ] Focused flows have no sidebar and a working back way out (`@back` / breadcrumb).
 - [ ] The breadcrumb shows only at 2+ levels; crumb links navigate, the last crumb is current.
 - [ ] Shells are composed (`AppLayout` / `CreationHeader`), not hand-rolled.
+- [ ] Content inset is `--spacing-md` (from the shell); the `PageHeading` is out of the card,
+      `--spacing-lg` above a flush borderless `CardBox`-wrapped table. No bespoke `lg` page inset.
