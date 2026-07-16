@@ -3,9 +3,10 @@
 // (exit 2) when the co-located <name>.test.ts is missing. You cannot create a
 // component without a test, nor update one whose test does not exist — every
 // component ships a browser-mode functional suite next to its .vue
-// (.claude/rules/testing.md, a `general` standard). Freshness on update (a
-// changed .vue whose test was NOT touched) is the CI gate check-tests; this
-// write-time hook owns existence, on both create (Write) and update (Edit/MultiEdit).
+// (.claude/rules/testing.md, a `general` standard). The CI gate check-tests
+// re-proves existence at merge time; this write-time hook owns existence on
+// both create (Write) and update (Edit/MultiEdit). Whether an existing test
+// still covers a changed component is a review concern, not a gate.
 //
 // Why PostToolUse (not Pre): /component-create writes the .vue before any test
 // can exist, so a Pre block would deadlock the pipeline. Post surfaces the
