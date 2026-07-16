@@ -1,2 +1,4 @@
 * @aziontech/team-uxe
 lint-canaries/**/* @robsongajunior
+packages/webkit/eslint.config.js @robsongajunior
+eslint.config.js @robsongajunior
