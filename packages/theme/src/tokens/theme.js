@@ -1,16 +1,16 @@
-import { brandPrimitives, primitives, surfacePrimitives } from './primitives/colors/colors.js';
-import { semanticColors } from './semantic/colors.js';
+import { brandPrimitives, primitives, surfacePrimitives } from './primitives/colors/colors.js'
+import { semanticColors } from './semantic/colors.js'
 
 export const theme = {
   extend: {
     colors: {
       base: {
         white: primitives.base.white,
-        black: primitives.base.black,
+        black: primitives.base.black
       },
       brand: {
         primary: brandPrimitives.primary,
-        accent: brandPrimitives.accent,
+        accent: brandPrimitives.accent
       },
       surface: surfacePrimitives.surface,
       orange: primitives.orange,
@@ -21,12 +21,12 @@ export const theme = {
       red: primitives.red,
       green: primitives.green,
       yellow: primitives.yellow,
-      blue: primitives.blue,
+      blue: primitives.blue
     },
     textColor: semanticColors.text,
     backgroundColor: semanticColors.background,
-    borderColor: semanticColors.border,
-  },
-};
+    borderColor: semanticColors.border
+  }
+}
 
-export default { theme };
+export default { theme }

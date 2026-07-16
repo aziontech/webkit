@@ -1,10 +1,19 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html
+  lang="en"
+  data-theme="light"
+>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
     <title>Tokens — Builder Output Test</title>
-    <link rel="stylesheet" href="../../dist/v3/output.css" />
+    <link
+      rel="stylesheet"
+      href="../../dist/v3/output.css"
+    />
     <style>
       body {
         margin: 0;
@@ -13,17 +22,62 @@
         background: var(--color-base-white);
         color: var(--color-gray-900);
       }
-      .swatch { display: inline-block; width: 64px; height: 64px; border-radius: 6px; border: 1px solid var(--color-gray-200); margin-right: 8px; vertical-align: middle; }
-      .row { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
-      .label { font-family: ui-monospace, monospace; font-size: 0.8rem; color: var(--color-gray-700); }
-      section { margin-bottom: 2.5rem; border: 1px dashed var(--color-gray-200); padding: 1rem; border-radius: 8px; }
-      h1 { margin: 0 0 0.5rem; }
-      h2 { margin: 0 0 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-gray-600); }
-      .vp-tag { position: fixed; top: 8px; right: 8px; font-family: ui-monospace, monospace; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; background: var(--color-gray-100); color: var(--color-gray-700); }
+      .swatch {
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        border-radius: 6px;
+        border: 1px solid var(--color-gray-200);
+        margin-right: 8px;
+        vertical-align: middle;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 8px 0;
+      }
+      .label {
+        font-family: ui-monospace, monospace;
+        font-size: 0.8rem;
+        color: var(--color-gray-700);
+      }
+      section {
+        margin-bottom: 2.5rem;
+        border: 1px dashed var(--color-gray-200);
+        padding: 1rem;
+        border-radius: 8px;
+      }
+      h1 {
+        margin: 0 0 0.5rem;
+      }
+      h2 {
+        margin: 0 0 1rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--color-gray-600);
+      }
+      .vp-tag {
+        position: fixed;
+        top: 8px;
+        right: 8px;
+        font-family: ui-monospace, monospace;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: var(--color-gray-100);
+        color: var(--color-gray-700);
+      }
     </style>
   </head>
   <body>
-    <div class="vp-tag" id="vp">–</div>
+    <div
+      class="vp-tag"
+      id="vp"
+    >
+      –
+    </div>
 
     <h1>Tokens — Builder Output</h1>
     <p class="label">Redimensione a janela: 0–639 (_), 640–767 (sm), 768+ (md), 1280+ (xl).</p>
@@ -38,50 +92,83 @@
       <p class="text-body-lg">body-lg — sm only at md</p>
       <p class="text-body-md">body-md — static</p>
       <p class="text-body-md">
-        body-md with <a href="#" class="text-link">inline text-link</a>
+        body-md with
+        <a
+          href="#"
+          class="text-link"
+          >inline text-link</a
+        >
       </p>
       <p class="text-overline-md">overline-md — sm only at sm</p>
     </section>
 
     <section>
       <h2>Spacing (gap / padding)</h2>
-      <div class="gap-spacing-elements-xxl" style="display: flex; background: var(--color-gray-100); padding: 8px;">
-        <div style="background: var(--color-violet-300); width: 40px; height: 40px;"></div>
-        <div style="background: var(--color-violet-300); width: 40px; height: 40px;"></div>
-        <div style="background: var(--color-violet-300); width: 40px; height: 40px;"></div>
+      <div
+        class="gap-spacing-elements-xxl"
+        style="display: flex; background: var(--color-gray-100); padding: 8px"
+      >
+        <div style="background: var(--color-violet-300); width: 40px; height: 40px"></div>
+        <div style="background: var(--color-violet-300); width: 40px; height: 40px"></div>
+        <div style="background: var(--color-violet-300); width: 40px; height: 40px"></div>
       </div>
       <p class="label">gap-spacing-elements-xxl (gap muda em sm e xl)</p>
 
-      <div class="p-spacing-elements-xl" style="background: var(--color-orange-200); display: inline-block;">
-        <div style="background: var(--color-orange-500); width: 60px; height: 30px;"></div>
+      <div
+        class="p-spacing-elements-xl"
+        style="background: var(--color-orange-200); display: inline-block"
+      >
+        <div style="background: var(--color-orange-500); width: 60px; height: 30px"></div>
       </div>
       <p class="label">p-spacing-elements-xl (padding muda em sm e xl)</p>
     </section>
 
     <section>
       <h2>Containers</h2>
-      <div class="px-container py-container max-container-width" style="background: var(--color-yellow-100); margin: 0 auto;">
-        <p style="margin: 0;">.px-container .py-container .max-container-width — viewport-aware</p>
+      <div
+        class="px-container py-container max-container-width"
+        style="background: var(--color-yellow-100); margin: 0 auto"
+      >
+        <p style="margin: 0">.px-container .py-container .max-container-width — viewport-aware</p>
       </div>
     </section>
 
     <section>
       <h2>Tailwind utilities via preset (bg-gray-* etc.)</h2>
-      <div class="row"><span class="swatch bg-gray-100"></span><span class="label">bg-gray-100</span></div>
-      <div class="row"><span class="swatch bg-violet-500"></span><span class="label">bg-violet-500</span></div>
-      <div class="row"><span class="swatch bg-orange-500"></span><span class="label">bg-orange-500</span></div>
-      <div class="row"><span class="swatch bg-primary-500"></span><span class="label">bg-primary-500 (brand)</span></div>
+      <div class="row">
+        <span class="swatch bg-gray-100"></span><span class="label">bg-gray-100</span>
+      </div>
+      <div class="row">
+        <span class="swatch bg-violet-500"></span><span class="label">bg-violet-500</span>
+      </div>
+      <div class="row">
+        <span class="swatch bg-orange-500"></span><span class="label">bg-orange-500</span>
+      </div>
+      <div class="row">
+        <span class="swatch bg-primary-500"></span><span class="label">bg-primary-500 (brand)</span>
+      </div>
     </section>
 
     <script>
-      const vp = document.getElementById('vp');
+      const vp = document.getElementById('vp')
       const update = () => {
-        const w = window.innerWidth;
-        const bp = w >= 1536 ? '2xl' : w >= 1280 ? 'xl' : w >= 1024 ? 'lg' : w >= 768 ? 'md' : w >= 640 ? 'sm' : '_';
-        vp.textContent = `${w}px → ${bp}`;
-      };
-      window.addEventListener('resize', update);
-      update();
+        const w = window.innerWidth
+        const bp =
+          w >= 1536
+            ? '2xl'
+            : w >= 1280
+              ? 'xl'
+              : w >= 1024
+                ? 'lg'
+                : w >= 768
+                  ? 'md'
+                  : w >= 640
+                    ? 'sm'
+                    : '_'
+        vp.textContent = `${w}px → ${bp}`
+      }
+      window.addEventListener('resize', update)
+      update()
     </script>
   </body>
 </html>

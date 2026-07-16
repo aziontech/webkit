@@ -7,7 +7,7 @@ export const lineHeight = {
   7: '28px',
   8: '32px',
   9: '36px',
-  10: '40px',
-};
+  10: '40px'
+}
 
-export default { lineHeight };
+export default { lineHeight }

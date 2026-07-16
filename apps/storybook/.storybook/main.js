@@ -20,13 +20,7 @@ const config = {
   core: {
     disableTelemetry: true
   },
-  refs: {
-    // 'webkit-v3': {
-    //   title: 'Webkit V3',
-    //   url: 'https://webkit.azion.app/',
-    //   expanded: true
-    // }
-  },
+  refs: {},
   viteFinal: async (config) => {
     // @vitejs/plugin-vue compiles the monorepo SFCs under packages/webkit (the framework only
     // ships template-compilation, not the vue plugin). It MUST run before Storybook's docgen
@@ -37,7 +31,10 @@ const config = {
     // re-parses the SFC and throws "Element is missing end tag". See .claude/rules/styling.md.
     config.plugins = config.plugins || []
     const docgenIdx = config.plugins.findIndex(
-      (p) => p && (p.name === 'storybook:vue-docgen-plugin' || p.name === 'storybook:vue-component-meta-plugin')
+      (p) =>
+        p &&
+        (p.name === 'storybook:vue-docgen-plugin' ||
+          p.name === 'storybook:vue-component-meta-plugin')
     )
     if (docgenIdx === -1) {
       config.plugins.push(vue())
@@ -45,12 +42,9 @@ const config = {
       config.plugins.splice(docgenIdx, 0, vue())
     }
 
-    // Dev channel: stories still import from '@aziontech/webkit/*'; redirect to the renamed
-    // workspace package '@aziontech/webkit.dev/*' so no story file needs to change.
     config.resolve = config.resolve || {}
     config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      '@aziontech/webkit': '@aziontech/webkit.dev'
+      ...(config.resolve.alias || {})
     }
 
     // Enable dependency pre-bundling for faster rebuilds

@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 09166a5fbb39578f0760df223d1e211656e0c4da4067758703d9a42c727ef0e8
+checksum: 72191f33340de99b748b6edc3c53f9c50aef7d20d1829d36db8c670ff0515a7b
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -25,7 +25,7 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 | `showTag` | `boolean` | `false` | no | show Tag. |
 | `tagLabel` | `string` | `'Popular'` | no | tag Label. |
 | `slotPosition` | `'bottom' | 'middle'` | `'bottom'` | no | slot Position. |
-| `cardStyle` | `'contained' | 'transparent'` | `'contained'` | no | card Style. |
+| `kind` | `'contained' | 'transparent'` | `'contained'` | no | card Style. |
 | `value` | `string` | `'20'` | no | value. |
 | `prefix` | `string` | `'$'` | no | prefix. |
 | `suffix` | `string` | `'per month'` | no | suffix. |

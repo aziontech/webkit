@@ -53,7 +53,7 @@
 
   useEventListener(document, 'keydown', (event) => {
     if (!isOpen.value || event.key !== 'Escape') return
-    if (!ctx?.closeable) return
+    if (!ctx?.dismissible) return
     event.preventDefault()
     ctx.close()
   })

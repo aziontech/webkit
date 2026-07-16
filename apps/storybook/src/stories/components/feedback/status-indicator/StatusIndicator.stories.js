@@ -31,14 +31,14 @@ const meta = {
     }
   },
   argTypes: {
-    status: {
+    severity: {
       control: 'select',
-      options: ['positive', 'info', 'neutral', 'warning', 'alt', 'danger'],
+      options: ['success', 'info', 'neutral', 'warning', 'alt', 'danger'],
       description: 'Status variant; drives the dot color.',
       table: {
         category: 'props',
-        type: { summary: "'positive' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'" },
-        defaultValue: { summary: "'positive'" }
+        type: { summary: "'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'" },
+        defaultValue: { summary: "'success'" }
       }
     },
     label: {
@@ -61,7 +61,7 @@ const meta = {
     }
   },
   args: {
-    status: 'positive',
+    severity: 'success',
     label: 'Status',
     loading: false
   }
@@ -77,26 +77,26 @@ const Template = (args) => ({
   template: '<StatusIndicator v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<StatusIndicator status="positive" label="Status" />'
+const DEFAULT_MARKUP = '<StatusIndicator severity="success" label="Status" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
 export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Default positive status with label.' },
+      description: { story: 'Default success status with label.' },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
 }
 
 const STATUS_TEMPLATE = `<div class="flex flex-wrap items-center gap-[var(--spacing-3)]">
-  <StatusIndicator status="positive" label="Status" />
-  <StatusIndicator status="info" label="Status" />
-  <StatusIndicator status="neutral" label="Status" />
-  <StatusIndicator status="warning" label="Status" />
-  <StatusIndicator status="alt" label="Status" />
-  <StatusIndicator status="danger" label="Status" />
+  <StatusIndicator severity="success" label="Status" />
+  <StatusIndicator severity="info" label="Status" />
+  <StatusIndicator severity="neutral" label="Status" />
+  <StatusIndicator severity="warning" label="Status" />
+  <StatusIndicator severity="alt" label="Status" />
+  <StatusIndicator severity="danger" label="Status" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
@@ -111,12 +111,12 @@ export const Status = {
   }
 }
 
-const LOADING_MARKUP = '<StatusIndicator status="positive" label="Status" loading />'
+const LOADING_MARKUP = '<StatusIndicator severity="success" label="Status" loading />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
 export const Loading = {
   args: {
-    status: 'positive',
+    severity: 'success',
     label: 'Status',
     loading: true
   },

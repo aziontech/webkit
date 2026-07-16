@@ -34,9 +34,18 @@ export default [
         setInterval: 'readonly',
         clearInterval: 'readonly',
         ResizeObserver: 'readonly',
+        requestAnimationFrame: 'readonly',
+        cancelAnimationFrame: 'readonly',
+        Element: 'readonly',
+        SVGElement: 'readonly',
         HTMLElement: 'readonly',
+        HTMLAnchorElement: 'readonly',
+        HTMLButtonElement: 'readonly',
         HTMLSelectElement: 'readonly',
         HTMLInputElement: 'readonly',
+        HTMLOptionElement: 'readonly',
+        HTMLTextAreaElement: 'readonly',
+        HTMLLabelElement: 'readonly',
         MouseEvent: 'readonly',
         KeyboardEvent: 'readonly',
         Event: 'readonly',
@@ -69,36 +78,48 @@ export default [
       // https://eslint.vuejs.org/rules/no-dupe-v-else-if.html
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
-      'vue/component-tags-order': ['error', {'order': ['script[setup]', 'template', 'style']}],
+      'vue/component-tags-order': ['error', { order: ['script[setup]', 'template', 'style'] }],
       'vue/multi-word-component-names': 'off', // Allow flexibility in component naming
       'vue/no-arrow-functions-in-watch': 'error',
       'vue/no-async-in-computed-properties': 'error',
       'vue/no-child-content': 'error',
       'vue/no-dupe-keys': 'error',
       'vue/no-dupe-v-else-if': 'error',
-      'vue/no-duplicate-attributes': ['error', {
-        'allowCoexistClass': true,
-        'allowCoexistStyle': true
-      }],
+      'vue/no-duplicate-attributes': [
+        'error',
+        {
+          allowCoexistClass: true,
+          allowCoexistStyle: true
+        }
+      ],
       'vue/no-export-in-script-setup': 'error',
       'vue/no-empty-component-block': 'error',
       'vue/no-irregular-whitespace': 'error',
-      'vue/no-mutating-props': ['error', {
-        'shallowOnly': false
-      }],
+      'vue/no-mutating-props': [
+        'error',
+        {
+          shallowOnly: false
+        }
+      ],
       // "vue/no-reserved-component-names": ['error', {
-        //   "disallowVueBuiltInComponents": false,
-        //   "disallowVue3BuiltInComponents": false,
-        //   "htmlElementCaseSensitive": false,
-        // }],
+      //   "disallowVueBuiltInComponents": false,
+      //   "disallowVue3BuiltInComponents": false,
+      //   "htmlElementCaseSensitive": false,
+      // }],
       'vue/no-restricted-syntax': 'error',
-      'vue/no-reserved-keys': ['error', {
-        'reserved': [],
-        'groups': []
-      }],
-      'vue/no-reserved-props': ['error', {
-        'vueVersion': 3, // or 2
-      }],
+      'vue/no-reserved-keys': [
+        'error',
+        {
+          reserved: [],
+          groups: []
+        }
+      ],
+      'vue/no-reserved-props': [
+        'error',
+        {
+          vueVersion: 3 // or 2
+        }
+      ],
       'vue/no-unused-vars': 'error',
       'vue/v-if-else-key': 'error',
       'vue/no-ref-as-operand': 'error',

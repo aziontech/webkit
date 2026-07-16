@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 96db092d1b420a4d08f51402f3e207e60cdc68c740d841fec9def9b8a476b5c3
+checksum: 3075d5cccdeaeefd787f9b51f02690a868e0eb969278caea79915517e3943529
 created: 2026-05-22
 last_updated: 2026-05-28
 ---
@@ -22,7 +22,7 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <StatusIndicator status="positive" label="Status" />
+  <StatusIndicator severity="success" label="Status" />
 </template>
 ```
 
@@ -30,7 +30,7 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `status` | `'positive' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'` | `'positive'` | no | status. |
+| `severity` | `'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'` | `'success'` | no | Severity token driving the status dot color. |
 | `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
 | `label` | `string` | `'Status'` | no | Visible label text. |
 

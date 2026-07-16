@@ -7,15 +7,35 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 3ca98cd0944855b2f1cf8fe288908bd459affc4c70df8fdacf7d29a1ea8ac0d1
+checksum: 1af37526ef3218e0bc6f7f9e67d7b4af8b20bc10c6d112a5a9f86beb619f5d21
 created: 2026-05-22
-last_updated: 2026-05-28
+last_updated: 2026-07-16
 ---
 # Tag — Component Spec
 
 ## Purpose
 
 Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.
+
+## When to use
+
+- Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
+- Show a status/category with severity color via `kind`.
+
+## When NOT to use
+
+- It is purely a count or one-glance status label → use `badge`.
+- The user can select or remove it (filters, multi-select values) → use `chip`.
+
+## Related
+
+- `badge` — denser count/short-label indicator with no icon affordance.
+- `chip` — interactive/removable token.
+
+## Best practices
+
+- Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.
+- Use `rounded` for the pill shape rather than a custom radius.
 
 ## Usage
 
@@ -25,7 +45,7 @@ import Tag from '@aziontech/webkit/tag'
 </script>
 
 <template>
-  <Tag value="Label" severity="primary" size="medium" />
+  <Tag label="Label" severity="primary" size="medium" />
 </template>
 ```
 
@@ -33,7 +53,7 @@ import Tag from '@aziontech/webkit/tag'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `'undefined'` | no | Fallback text when the default slot is empty. |
+| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
 | `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size` | `'small' | 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | no | Pill shape when true. |
@@ -101,7 +121,7 @@ _none_
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=label]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.

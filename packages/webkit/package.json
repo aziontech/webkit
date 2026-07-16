@@ -15,6 +15,7 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "pack:dry": "npm pack --dry-run",
+    "pack:check": "! npm pack --dry-run 2>&1 | grep -E '\\.test\\.(ts|js)|src/test/'",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
     "lint": "eslint src --ext .js,.js,.vue --max-warnings 0",
@@ -23,18 +24,53 @@
     "lint:style:fix": "stylelint \"src/**/*.{css,scss,vue}\" --fix",
     "type-check": "vue-tsc --noEmit",
     "type-coverage": "type-coverage -p . --at-least 95 --detail",
+    "catalog:build": "node scripts/build-catalog.mjs",
+    "catalog:check": "node scripts/build-catalog.mjs && git diff --exit-code --stat catalog.json",
+    "size": "node scripts/check-size.mjs",
+    "test:toolkit": "node --test \"test/**/*.test.mjs\"",
+    "authoring": "node scripts/check-authoring.mjs",
+    "authoring:update": "node scripts/check-authoring.mjs --update",
+    "test:gate": "node scripts/check-tests.mjs",
+    "test:gate:update": "node scripts/check-tests.mjs --update",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui --browser.headless=false",
+    "test:watch": "vitest",
     "figma:parse": "figma connect parse",
     "figma:publish": "figma connect publish",
     "figma:unpublish": "figma connect unpublish"
   },
+  "bin": {
+    "webkit": "./src/cli/cli.js",
+    "webkit-mcp": "./src/mcp/server.js"
+  },
   "dependencies": {
+    "@aziontech/theme": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.0.0",
     "@tanstack/vue-table": "^8.21.3",
     "@vueuse/core": "^10.11.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
     "vee-validate": "^4.15.1",
     "vue-tsc": "^3.2.5",
-    "@aziontech/theme": "workspace:*"
+    "zod": "^3.23.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=9",
+    "stylelint": ">=16",
+    "vue": "^3.5.29",
+    "vue-eslint-parser": ">=9"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "stylelint": {
+      "optional": true
+    },
+    "vue-eslint-parser": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@figma/code-connect": "^1.4.5",
@@ -45,11 +81,31 @@
     "@semantic-release/github": "^9.2.6",
     "@semantic-release/npm": "^11.0.0",
     "@semantic-release/release-notes-generator": "^12.1.0",
+    "@storybook/test": "^8.6.15",
+    "@storybook/vue3": "^8.6.15",
+    "@testing-library/vue": "^8.1.0",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitest/browser": "^4.1.9",
+    "@vitest/browser-playwright": "^4.1.9",
+    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/ui": "^4.1.9",
+    "axe-core": "^4.10.3",
     "conventional-changelog-conventionalcommits": "^7.0.0",
-    "semantic-release": "^23.0.0"
+    "eslint": "^9.39.3",
+    "playwright": "^1.61.1",
+    "semantic-release": "^23.0.0",
+    "stylelint": "^17.7.0",
+    "vitest": "^4.1.9",
+    "vue": "^3.5.29",
+    "vue-eslint-parser": ">=9"
   },
   "files": [
     "src",
+    "!src/**/*.test.{ts,js}",
+    "!src/test/**",
+    "cli-templates",
+    "docs",
+    "catalog.json",
     "package.json"
   ],
   "sideEffects": [
@@ -57,6 +113,11 @@
     "**/*.css"
   ],
   "exports": {
+    "./catalog.json": "./catalog.json",
+    "./package.json": "./package.json",
+    "./docs/STYLEGUIDE.md": "./docs/STYLEGUIDE.md",
+    "./eslint-plugin": "./src/eslint-plugin/index.js",
+    "./stylelint-config": "./src/stylelint-config.js",
     "./overline": "./src/components/overline/overline.vue",
     "./button": "./src/components/actions/button/button.vue",
     "./button-highlight": "./src/components/actions/button-highlight/button-highlight.vue",
@@ -111,6 +172,7 @@
     "./table-export": "./src/components/data/table/table-export/table-export.vue",
     "./table-refresh-button": "./src/components/data/table/table-refresh-button/table-refresh-button.vue",
     "./paginator": "./src/components/data/paginator/index.ts",
+    "./paginator-root": "./src/components/data/paginator/paginator.vue",
     "./pagination-button": "./src/components/data/paginator/pagination-button/pagination-button.vue",
     "./paginator-info": "./src/components/data/paginator/paginator-info/paginator-info.vue",
     "./paginator-page-size": "./src/components/data/paginator/paginator-page-size/paginator-page-size.vue",
@@ -164,9 +226,11 @@
     "./field-switch-block": "./src/components/inputs/field-switch-block/field-switch-block.vue",
     "./radio-button": "./src/components/inputs/radio-button/radio-button.vue",
     "./switch": "./src/components/inputs/switch/switch.vue",
+    "./theme-switcher": "./src/components/inputs/theme-switcher/theme-switcher.vue",
     "./textarea": "./src/components/inputs/textarea/textarea.vue",
     "./field-textarea": "./src/components/inputs/field-textarea/field-textarea.vue",
     "./dropdown": "./src/components/navigation/dropdown/index.ts",
+    "./dropdown-root": "./src/components/navigation/dropdown/dropdown.vue",
     "./dropdown-trigger": "./src/components/navigation/dropdown/dropdown-trigger/dropdown-trigger.vue",
     "./dropdown-group": "./src/components/navigation/dropdown/dropdown-group/dropdown-group.vue",
     "./dropdown-option": "./src/components/navigation/dropdown/dropdown-option/dropdown-option.vue",
@@ -225,15 +289,6 @@
     "./popover-description": "./src/components/overlay/popover/popover-description/popover-description.vue",
     "./popover-close": "./src/components/overlay/popover/popover-close/popover-close.vue",
     "./popover-footer": "./src/components/overlay/popover/popover-footer/popover-footer.vue",
-    "./dropdown-menu": "./src/components/overlay/dropdown-menu/dropdown-menu.vue",
-    "./dropdown-menu-trigger": "./src/components/overlay/dropdown-menu/dropdown-menu-trigger.vue",
-    "./dropdown-menu-portal": "./src/components/overlay/dropdown-menu/dropdown-menu-portal.vue",
-    "./dropdown-menu-content": "./src/components/overlay/dropdown-menu/dropdown-menu-content.vue",
-    "./dropdown-menu-group": "./src/components/overlay/dropdown-menu/dropdown-menu-group.vue",
-    "./dropdown-menu-item": "./src/components/overlay/dropdown-menu/dropdown-menu-item.vue",
-    "./dropdown-menu-separator": "./src/components/overlay/dropdown-menu/dropdown-menu-separator.vue",
-    "./dropdown-menu-from-model": "./src/components/overlay/dropdown-menu/dropdown-menu-from-model.vue",
-    "./dropdown-menu-factory": "./src/components/overlay/dropdown-menu/factory.ts",
     "./deploy-success": "./src/components/templates/deploy-success/deploy-success.vue",
     "./onboarding-form": "./src/components/templates/onboarding-form/onboarding-form.vue",
     "./plan-success": "./src/components/templates/plan-success/plan-success.vue",

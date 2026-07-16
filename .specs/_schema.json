@@ -69,6 +69,19 @@
       "pattern": "^[a-f0-9]{64}$",
       "description": "sha256 of the spec body (everything after the frontmatter). Written by spec-validator on approval; verified by enforce-spec-exists on every Write."
     },
+    "deprecated": {
+      "type": "boolean",
+      "description": "When true, the eslint-plugin's no-deprecated-component steers consumers off this component (see replaced_by)."
+    },
+    "replaced_by": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "description": "kebab name of the component that replaces this deprecated one."
+    },
+    "style_seam": {
+      "type": "boolean",
+      "description": "When true, this component is intentionally personalizable: the consumer may pass class/style to its root, so no-style-override allows it (a documented style seam, e.g. a layout/container wrapper)."
+    },
     "created": {
       "type": "string",
       "format": "date"

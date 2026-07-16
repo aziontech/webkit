@@ -1,5 +1,5 @@
 export const ringOffset = {
-  'ring-offset': '0.5px',
-};
+  'ring-offset': '0.5px'
+}
 
-export default { ringOffset };
+export default { ringOffset }
