@@ -4,11 +4,11 @@
 
 Every component ships a co-located `*.test.ts` that proves it **works**, exercised in a **real browser**. The spec-compliance hooks prove a `.vue` _declares_ what its `.specs/<name>.md` promises; they do not prove a prop is read, an event is emitted, a focus ring is reachable, or an overlay closes on `Escape`. This rule closes that gap with the smallest per-component cost, and fixes the **floor** (not the ceiling) every component must clear.
 
-**You cannot create a component without its test, and you cannot land a new or a changed component without creating/updating its test.** Existence is enforced at write-time — on create _and_ on update — and again in CI; freshness (a changed `.vue` whose test was not touched in the same change) is enforced by the CI diff gate. There is no path to merge an untested component, nor a changed component whose test stood still.
+**You cannot create or land a component without its test.** Existence is enforced at write-time — on create _and_ on update — and again in CI. There is no path to merge an untested component. Whether an existing test still covers a changed component is a **review** concern, not a diff gate: a style-only change (CSS, tokens) legitimately ships without touching the test, so the machine only proves the test exists; the reviewer confirms it still asserts the behavior the change affects.
 
 ## The rule
 
-> Every component under `packages/webkit/src/components/<category>/<name>/` ships one `<name>.test.ts` next to the `.vue`, **created with the component and updated in the same change whenever the component changes**. It runs in **Vitest browser mode** (Playwright Chromium — never jsdom), reuses the component's Storybook story as the fixture via `composeStories`, asserts the functional surface below, and runs `axe-core` against the rendered tree. Composition sub-components are tested **through their root**; only the root gets a `.test.ts` (unless the spec promises behavior the root test cannot reach).
+> Every component under `packages/webkit/src/components/<category>/<name>/` ships one `<name>.test.ts` next to the `.vue`, **created with the component and kept current whenever its behavior changes** (reviewers hold that line; style-only changes need no test touch). It runs in **Vitest browser mode** (Playwright Chromium — never jsdom), reuses the component's Storybook story as the fixture via `composeStories`, asserts the functional surface below, and runs `axe-core` against the rendered tree. Composition sub-components are tested **through their root**; only the root gets a `.test.ts` (unless the spec promises behavior the root test cannot reach).
 
 ## Why browser mode, never jsdom
 
@@ -22,7 +22,7 @@ jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingC
 - `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. Story imports of `@aziontech/webkit/*` resolve through the workspace package itself (no alias needed).
 - `packages/webkit/src/test/setup.ts` — imports `@aziontech/theme/globals.css` (styled DOM ⇒ axe contrast is real) + `cleanup()`.
 - `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`.
-- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when webkit/storybook changes; the `toolkit` job runs `test:gate` (existence + freshness).
+- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when webkit/storybook changes; the `toolkit` job runs `test:gate` (existence).
 - Publish-safety: `packages/webkit/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter webkit pack:dry`). Test files never ship to npm.
 
 ## Conventions
@@ -72,10 +72,10 @@ A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **flo
 
 ## Enforcement
 
-Existence and freshness are both blocking — no advisory path:
+Existence is blocking — no advisory path:
 
 - **Write-time — existence, on create AND update.** `.claude/hooks/enforce-test-exists.mjs` (PostToolUse on `Write`/`Edit`/`MultiEdit`) blocks (exit 2) when a ROOT component `.vue` is written or edited and its co-located `<name>.test.ts` is missing. Composition sub-components are exempt (tested through their root); `wip/` and the legacy whitelist (`.claude/hooks/_lib/legacy-components.json`) are exempt.
-- **CI — existence (mandatory) + freshness.** `packages/webkit/scripts/check-tests.mjs` (`pnpm --filter @aziontech/webkit run test:gate`, run in the `toolkit` job of `governance.yml`) fails the PR when (a) **any** component has no co-located test, or (b) on a PR, a changed ROOT component `.vue` lands without its `<name>.test.ts` in the **same** diff. **Existence is mandatory and never grandfathered** — a component without a test always fails the build. Only _freshness_ carries a transition baseline (`scripts/test-gate-baseline.json`, same ratchet philosophy as `check-authoring`): components changed-without-a-test-touch before the gate existed are grandfathered there; new freshness debt is blocked. Re-snapshot with `TEST_GATE_BASE=<base> pnpm --filter @aziontech/webkit run test:gate:update`. This is what makes "no untested component" true at merge, not just at save.
+- **CI — existence (mandatory).** `packages/webkit/scripts/check-tests.mjs` (`pnpm --filter @aziontech/webkit run test:gate`, run in the `toolkit` job of `governance.yml`) fails the PR when **any** ROOT component has no co-located `<name>.test.ts`. **Never grandfathered** — a component without a test always fails the build. This is what makes "no untested component" true at merge, not just at save. There is deliberately **no** diff-freshness gate (changed `.vue` ⇒ changed test): it cannot tell a behavior change from a style-only one, so it taxed CSS/token PRs with no-op test edits; keeping the test honest on behavior changes is the reviewer's job (below).
 - **CI — the suite runs.** The sharded Vitest browser job (`vitest`, Playwright Chromium) runs `pnpm webkit:test` on every PR/push touching webkit; a failing assertion fails the PR.
 - **Write-time — test integrity.** `validate-references.mjs` blocks a test whose imports don't resolve (including a mistaken `@stories` alias).
 - **Publish safety.** `pnpm --filter webkit pack:dry` must list **no** `*.test.ts` — the `files` negation keeps tests out of the published package.

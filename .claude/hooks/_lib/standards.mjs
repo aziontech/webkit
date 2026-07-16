@@ -272,7 +272,7 @@ export const STANDARDS = [
       { surface: 'ci', by: 'vitest' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Every component ships a co-located <name>.test.ts and it is kept in lockstep with the component — you cannot create a component without a test, nor land a new or changed component without creating/updating its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence) or a changed component .vue is pushed without its test in the same diff (freshness); the sharded Vitest browser CI job (Playwright Chromium, Storybook story as fixture, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered.'
+    note: 'Every component ships a co-located <name>.test.ts — you cannot create or land a component without its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence — never grandfathered); the sharded Vitest browser CI job (Playwright Chromium, Storybook story as fixture, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered and that a behavior change updates the test (style-only changes need no test touch — deliberately no diff-freshness gate).'
   }
 ]
 
