@@ -110,9 +110,6 @@ export const Overview = {
     initialSize: 24
   },
   parameters: {
-    // Token gallery: reflows into a very tall single column at small widths,
-    // approaching Chromium's 16384px capture ceiling — snapshot both themes
-    // at desktop only.
     visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
       description: {

@@ -12,8 +12,6 @@ export default {
         component:
           'The typography foundations catalog: every semantic text class (`.text-*`) generated from `@aziontech/theme/texts`. Each row renders a sample in its own class and exposes the class name — click a row to copy it.'
       },
-      // Token/typography catalog page: a copy-paste SFC is not meaningful here, so the
-      // "Show code" panel stays hidden (documented foundations-catalog exemption).
       canvas: { sourceState: 'none' }
     }
   }
@@ -34,9 +32,6 @@ export const Overview = {
     `
   }),
   parameters: {
-    // Token gallery: reflows into a very tall single column at small widths,
-    // approaching Chromium's 16384px capture ceiling — snapshot both themes
-    // at desktop only.
     visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
       description: {

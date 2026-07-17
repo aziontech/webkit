@@ -1,7 +1,4 @@
-// v3 token build: primitives, --bg-* / --text-* / --border-*, and .text-body-md etc.
-// (replaces injectCssVars(), which only emitted --background-* aliases — webkit components use --bg-*)
 import '@aziontech/theme/globals.css'
-import 'primeflex/primeflex.css'
 import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
@@ -11,36 +8,24 @@ import { withThemeByClassName } from '@storybook/addon-themes'
 import { GLOBALS_UPDATED } from '@storybook/core-events'
 import { addons } from '@storybook/preview-api'
 import { setup } from '@storybook/vue3'
-import PrimeVue from 'primevue/config'
-import Tooltip from 'primevue/tooltip'
 
 import { STORYBOOK_VIEWPORTS, THEME_CLASSES } from './visual-modes.js'
 
-setup((app) => {
-  app.use(PrimeVue, {
-    ripple: false
-  })
-
-  app.directive('tooltip', Tooltip)
-})
-
-// withThemeByClassName only runs as a story decorator, so on pure-MDX docs pages
-// (Get Started, Style Guide) the toolbar toggle never updated the html class.
-// Mirror the `theme` global onto <html> ourselves so those pages switch too.
-// THEME_CLASSES lives in ./visual-modes.js — the visual test-runner applies
-// the same classes when it screenshots each theme.
 function applyThemeClass(name) {
-  const el = document.documentElement
-  el.classList.remove('azion', 'azion-light', 'azion-dark')
-  el.classList.add(...(THEME_CLASSES[name] || THEME_CLASSES.dark))
+  const docElement = document.documentElement
+
+  docElement.classList.remove('azion', 'azion-light', 'azion-dark')
+  docElement.classList.add(...(THEME_CLASSES[name] || THEME_CLASSES.dark))
 }
+
 applyThemeClass('dark')
+
 try {
   addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
     if (globals && globals.theme) applyThemeClass(globals.theme)
   })
-} catch {
-  /* headless/test contexts without a channel */
+} catch(error) {
+  console.error(`[ERROR]: ${error}`)
 }
 
 export const parameters = {
@@ -84,9 +69,6 @@ export const parameters = {
     }
   },
   viewport: {
-    // DS-breakpoint-aligned viewports — the same set the visual tests shoot
-    // (see ./visual-modes.js). Deliberately replaces the addon defaults, so
-    // story-level defaultViewport must use 'mobile' | 'tablet' | 'desktop'.
     viewports: STORYBOOK_VIEWPORTS
   },
   backgrounds: {

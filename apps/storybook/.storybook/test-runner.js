@@ -41,8 +41,6 @@ const TEST_VISUAL_DIR = `${__dirname}/test-visual`
 const DIFF_DIR = `${TEST_VISUAL_DIR}/__diff_output__`
 const SNAPSHOT_DIR = `${TEST_VISUAL_DIR}/__image_snapshots__/${process.platform}`
 
-/** Mirrors applyThemeClass() in preview.js. Re-adding classes that are already
- * present does not change computed style, so no transition fires on a no-op. */
 async function setThemeClasses(page, theme) {
   await page.evaluate((classes) => {
     const el = document.documentElement
@@ -51,26 +49,12 @@ async function setThemeClasses(page, theme) {
   }, THEME_CLASSES[theme])
 }
 
-/**
- * Double rAF: by the second callback the browser has committed a full
- * style → layout → ResizeObserver callbacks → paint frame for the
- * viewport/theme mutation, and every 1ms-frozen transition has started AND
- * finished (1ms < one frame), so transitionend-gated components are settled.
- * Event-driven — no sleeps.
- */
 async function settleFrame(page) {
   await page.evaluate(
     () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
   )
 }
 
-/**
- * Every <img> settled: loaded (and decoded, so it is paint-ready) or errored.
- * waitForPageReady's networkidle is not enough — a remote avatar photo can
- * still be decoding at screenshot time, flaking the story both ways. Cheap
- * no-op when images are already complete; also re-run per mode because a
- * resize can swap srcset/picture sources.
- */
 async function awaitImages(page) {
   await page.evaluate(() =>
     Promise.all(
@@ -96,17 +80,7 @@ module.exports = {
 
   async preVisit(page) {
     await page.setViewportSize(VIEWPORTS.desktop)
-
-    // Park the real pointer: the worker page is reused across stories, so a
-    // pointer left over an element would leak hover state (hover-open menus,
-    // tooltips) into the next story's render and screenshot.
     await page.mouse.move(0, 0)
-
-    // Near-zero durations instead of `animation: none` / reducedMotion:
-    // components that wait for animationend/transitionend to settle state
-    // (use-transition-status) would hang forever with animations removed —
-    // 1ms keeps the events firing while making motion invisible to the
-    // screenshot. Idempotent: story switches reuse the worker page.
     await page.evaluate(() => {
       if (document.getElementById('visual-test-freeze')) return
 
@@ -148,17 +122,15 @@ module.exports = {
     await page.evaluate(() => document.fonts.ready)
     await awaitImages(page)
 
-    // Collect per-mode failures instead of throwing on the first one, so a
-    // single CI run writes every failing mode's diff to __diff_output__.
     const failures = []
     try {
       for (const modeId of modes) {
         const { theme, viewport } = MODES[modeId]
+
         await page.setViewportSize(VIEWPORTS[viewport])
         await setThemeClasses(page, theme)
         await settleFrame(page)
-        // Nearly always resolved already; guards font faces and image sources
-        // referenced only by a breakpoint- or theme-specific rule.
+
         await page.evaluate(() => document.fonts.ready)
         await awaitImages(page)
 
@@ -168,8 +140,6 @@ module.exports = {
             customSnapshotsDir: SNAPSHOT_DIR,
             customSnapshotIdentifier: snapshotIdentifier(context.id, modeId),
             customDiffDir: DIFF_DIR,
-            // Absorb sub-pixel antialiasing noise; a real change moves far
-            // more than 0.01% of the element's pixels.
             failureThreshold: 0.01,
             failureThresholdType: 'percent'
           })
@@ -178,9 +148,6 @@ module.exports = {
         }
       }
     } finally {
-      // The worker page is reused across stories: restore the canonical
-      // dark-desktop state even though preVisit re-asserts the viewport and
-      // the theme decorator re-applies dark on the next story render.
       await setThemeClasses(page, 'dark')
       await page.setViewportSize(VIEWPORTS.desktop)
     }

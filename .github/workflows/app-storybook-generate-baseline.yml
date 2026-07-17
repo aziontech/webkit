@@ -1,16 +1,5 @@
 name: Storybook Regenerate Baseline
 
-# Baseline tool for the visual layer. The PR/push CHECK lives in the ordered
-# governance pipeline (governance.yml → job "visual", gated by the Governance
-# Gate); this workflow is dispatch-only and exists to regenerate the committed
-# linux baselines in apps/storybook/.storybook/test-visual/__image_snapshots__/linux/.
-#
-# Baselines are platform-specific, so ONLY this workflow (or a linux container)
-# may generate them. To bootstrap or intentionally update: run it with
-# update_baselines=true, download the "visual-baselines-linux" artifact and
-# commit its contents. Dispatching with the default (false) runs a one-off
-# comparison against the committed baselines, outside any PR.
-
 on:
   workflow_dispatch:
     inputs:
@@ -34,9 +23,6 @@ jobs:
   visual:
     name: Storybook Generate Baseline
     runs-on: ubuntu-latest
-    # Unsharded on purpose (one artifact = the whole baseline set); the
-    # 6-mode theme × viewport matrix makes a full regeneration ~6× the
-    # screenshots of the visual PR check's per-shard slice.
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
