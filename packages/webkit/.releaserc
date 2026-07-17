@@ -1,6 +1,6 @@
 {
-  "branches": ["dev"],
-  "tagFormat": "@aziontech/webkit.dev@${version}",
+  "branches": ["main"],
+  "tagFormat": "@aziontech/webkit@${version}",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
@@ -51,7 +51,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
+        "prepareCmd": "node scripts/build-catalog.mjs && vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],
@@ -60,9 +60,10 @@
       {
         "assets": [
           "package.json",
-          "CHANGELOG.md"
+          "CHANGELOG.md",
+          "catalog.json"
         ],
-        "message": "chore(release): @aziontech/webkit.dev ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        "message": "chore(release): @aziontech/webkit ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
     [

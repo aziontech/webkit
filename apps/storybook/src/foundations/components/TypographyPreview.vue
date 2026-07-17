@@ -1,24 +1,24 @@
 <script setup>
-import { ref } from 'vue'
+  import { ref } from 'vue'
 
-import { typographyCatalog, typographyLinkDemo } from '../data/typography.js'
+  import { typographyCatalog, typographyLinkDemo } from '../data/typography.js'
 
-const copiedKey = ref(null)
-let copyTimeout = null
+  const copiedKey = ref(null)
+  let copyTimeout = null
 
-function copyToClipboard(value, key) {
-  if (!value) return
-  navigator.clipboard?.writeText(value).catch(() => {})
-  copiedKey.value = key
-  if (copyTimeout) clearTimeout(copyTimeout)
-  copyTimeout = setTimeout(() => {
-    copiedKey.value = null
-  }, 1000)
-}
+  function copyToClipboard(value, key) {
+    if (!value) return
+    navigator.clipboard?.writeText(value).catch(() => {})
+    copiedKey.value = key
+    if (copyTimeout) clearTimeout(copyTimeout)
+    copyTimeout = setTimeout(() => {
+      copiedKey.value = null
+    }, 1000)
+  }
 
-function isCopied(key) {
-  return copiedKey.value === key
-}
+  function isCopied(key) {
+    return copiedKey.value === key
+  }
 </script>
 
 <template>
@@ -62,7 +62,10 @@ function isCopied(key) {
     >
       <div class="flex min-h-24 w-full items-center px-[var(--spacing-lg)] py-[var(--spacing-md)]">
         <p
-          :class="[typographyLinkDemo.parentClass, 'm-0 w-full break-words text-[var(--text-default)]']"
+          :class="[
+            typographyLinkDemo.parentClass,
+            'm-0 w-full break-words text-[var(--text-default)]'
+          ]"
         >
           {{ typographyLinkDemo.beforeLink }}
           <span :class="typographyLinkDemo.linkClass">{{ typographyLinkDemo.linkLabel }}</span

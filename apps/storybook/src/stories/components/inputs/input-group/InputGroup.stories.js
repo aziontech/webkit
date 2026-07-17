@@ -1,10 +1,6 @@
 import Button from '@aziontech/webkit/button'
 import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'
-import Select, {
-  SelectContent,
-  SelectOption,
-  SelectTrigger
-} from '@aziontech/webkit/select'
+import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
@@ -21,8 +17,7 @@ const MIDDLE_INPUT =
 // Runtime templates must use the FLAT sub-component name (<InputGroupAddon>) because
 // Vue's runtime template compiler can't reliably resolve dot-notation. The "Show code"
 // panel still shows the compound (<InputGroup.Addon>) — swapped by this helper.
-const toSource = (markup) =>
-  markup.replace(/<(\/?)InputGroupAddon\b/g, '<$1InputGroup.Addon')
+const toSource = (markup) => markup.replace(/<(\/?)InputGroupAddon\b/g, '<$1InputGroup.Addon')
 
 const components = {
   InputGroup,
@@ -57,7 +52,8 @@ const meta = {
     },
     required: {
       control: 'boolean',
-      description: 'Renders the required (warning) border and sets `aria-required="true"` on the root.',
+      description:
+        'Renders the required (warning) border and sets `aria-required="true"` on the root.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     disabled: {
@@ -113,7 +109,9 @@ export const WithAddonLeft = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: '`<InputGroupAddon>` before the middle input — static-text island on the left.' },
+      description: {
+        story: '`<InputGroupAddon>` before the middle input — static-text island on the left.'
+      },
       source: { code: toSfc(IMPORTS, toSource(WITH_ADDON_LEFT_MARKUP)) }
     }
   }
@@ -133,7 +131,9 @@ export const WithAddonRight = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: '`<InputGroupAddon>` after the middle input — static-text island on the right.' },
+      description: {
+        story: '`<InputGroupAddon>` after the middle input — static-text island on the right.'
+      },
       source: { code: toSfc(IMPORTS, toSource(WITH_ADDON_RIGHT_MARKUP)) }
     }
   }
@@ -154,7 +154,9 @@ export const BothAddons = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'Addons on both sides flanking the input — `https://…​.com` composition.' },
+      description: {
+        story: 'Addons on both sides flanking the input — `https://…​.com` composition.'
+      },
       source: { code: toSfc(IMPORTS, toSource(BOTH_ADDONS_MARKUP)) }
     }
   }

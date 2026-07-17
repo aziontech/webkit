@@ -1,0 +1,21 @@
+import { Meta, Markdown } from '@storybook/blocks'
+import styleguide from '@aziontech/webkit/docs/STYLEGUIDE.md?raw'
+
+<Meta
+  title="Style Guide"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'Every code standard in full — the programmer base reference, identical to the rule set the AI pipeline receives, with the gate that blocks each violation.'
+      }
+    }
+  }}
+/>
+
+{/* Single source: this page renders packages/webkit/docs/STYLEGUIDE.md verbatim. */}
+
+<Markdown>{styleguide}</Markdown>

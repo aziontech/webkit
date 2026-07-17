@@ -1,38 +1,38 @@
 <script setup>
-/**
- * CategoryCard - Link card for navigating between token categories
- * Used in the Colors overview for Background/Text/Border navigation
- */
-import { navigate } from '@storybook/addon-links';
+  /**
+   * CategoryCard - Link card for navigating between token categories
+   * Used in the Colors overview for Background/Text/Border navigation
+   */
+  import { navigate } from '@storybook/addon-links'
 
-const props = defineProps({
-  overline: {
-    type: String,
-    required: true
-  },
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  tokens: {
-    type: String,
-    required: true
-  },
-  storyId: {
-    type: String,
-    required: true
+  const props = defineProps({
+    overline: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    tokens: {
+      type: String,
+      required: true
+    },
+    storyId: {
+      type: String,
+      required: true
+    }
+  })
+
+  function handleNavigate() {
+    // The navigate function from addon-links takes { storyId } or { kind, story }
+    // It handles composed storybooks automatically through the Storybook manager
+    navigate({ storyId: props.storyId })
   }
-})
-
-function handleNavigate() {
-  // The navigate function from addon-links takes { storyId } or { kind, story }
-  // It handles composed storybooks automatically through the Storybook manager
-  navigate({ storyId: props.storyId });
-}
 </script>
 
 <template>

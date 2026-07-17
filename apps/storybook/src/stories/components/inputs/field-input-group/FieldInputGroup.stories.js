@@ -45,7 +45,8 @@ const meta = {
     },
     disabled: {
       control: 'boolean',
-      description: 'Disables the input and the `InputGroup` chrome; switches helper to `kind="disabled"`.',
+      description:
+        'Disables the input and the `InputGroup` chrome; switches helper to `kind="disabled"`.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     readonly: {
@@ -158,7 +159,9 @@ export const WithSlots = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: '`#left` and `#right` slots forwarded to the underlying `InputGroup`.' },
+      description: {
+        story: '`#left` and `#right` slots forwarded to the underlying `InputGroup`.'
+      },
       source: { code: toSfc(IMPORT, WITH_SLOTS_MARKUP) }
     }
   }
@@ -340,7 +343,7 @@ export const Icons = {
       controls: { disable: true },
       description: {
         story:
-          'PrimeIcons flanking the internal input inside `InputGroup`\'s side slots. Same vocabulary as `FieldText`\'s Icons story.'
+          "PrimeIcons flanking the internal input inside `InputGroup`'s side slots. Same vocabulary as `FieldText`'s Icons story."
       },
       source: { code: toSfc(IMPORT, ICONS_MARKUP) }
     }

@@ -10,13 +10,13 @@
 
   interface Props {
     /** Fallback text when the default slot is empty. */
-    value?: string
+    label?: string
     /** Visual variant; `disabled` also prepends a pi pi-lock icon. */
     kind?: HelperTextKind
   }
 
   withDefaults(defineProps<Props>(), {
-    value: '',
+    label: '',
     kind: 'helper'
   })
 
@@ -45,7 +45,7 @@
     />
     <span :data-testid="`${testId}__text`">
       <slot v-if="$slots['default']" />
-      <template v-else-if="value">{{ value }}</template>
+      <template v-else-if="label">{{ label }}</template>
     </span>
   </p>
 </template>

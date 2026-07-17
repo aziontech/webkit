@@ -136,8 +136,9 @@
 
 @font-face {
   font-family: 'Roboto Condensed';
-  src: url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.woff') format('woff'),
-       url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.ttf') format('truetype');
+  src:
+    url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.woff') format('woff'),
+    url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -145,8 +146,9 @@
 
 @font-face {
   font-family: 'Titillium Web';
-  src: url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.woff') format('woff'),
-       url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.ttf') format('truetype');
+  src:
+    url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.woff') format('woff'),
+    url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;

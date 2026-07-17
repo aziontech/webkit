@@ -1,1 +1,1 @@
-module.exports = 'mocked-file';
+module.exports = 'mocked-file'

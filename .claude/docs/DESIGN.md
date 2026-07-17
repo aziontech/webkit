@@ -214,7 +214,7 @@ Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`sha
 
 ### Do not
 
-- Use legacy theme vars such as `--card-shadow` in `components/webkit/` — they are PrimeVue/Azion SCSS aliases, not the primitive scale.
+- Use legacy theme vars such as `--card-shadow` in `components/webkit/` — they are legacy SCSS aliases, not the primitive scale.
 - Hardcode `box-shadow` values or Tailwind default shadows (`shadow-md`, `shadow-lg` without `var(--shadow-*)`).
 - Use `rgb(...)` / `rgba(...)` / hex in component class strings for elevation.
 
@@ -246,7 +246,7 @@ bg-[var(--bg-surface)] text-[var(--text-default)] text-[var(--text-muted)] ring-
 
 - Hardcode hex/rgb/hsl in component class strings.
 - Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `components/webkit/`.
-- Use PrimeVue color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
+- Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
 
 Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--secondary-contrast)]`, etc.).
 
@@ -439,12 +439,12 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 
 The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hook blocks: **fix the value, do not work around it.**
 
-- **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), PrimeVue color utilities (`text-color`, `surface-50`).
+- **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), external/legacy color utilities (`text-color`, `surface-50`).
 - **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-[length:var(--text-*-font-size)]` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-[var(--container-<size>)]` only (`3xs` … `7xl` from `primitives/shape/container.js`).
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
-- **Shadow:** legacy `--card-shadow` (PrimeVue alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
+- **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.
 - **TypeScript:** `any`, `@ts-ignore`, `class` declared in `defineProps`.
 
@@ -454,7 +454,6 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 
 - Token architecture: `packages/theme/src/tokens/README.md`
 - Component structure and API: [`COMPONENT_REQUIREMENTS.md`](./COMPONENT_REQUIREMENTS.md)
-- PrimeVue wrapping: [`PRIMEVUE_ABSTRACTION.md`](./PRIMEVUE_ABSTRACTION.md)
 - Storybook foundations (typography catalog): `apps/storybook/src/foundations/data/typography.js`
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)

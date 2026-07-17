@@ -18,6 +18,33 @@ last_updated: <YYYY-MM-DD>
 
 <1–3 sentences. What the component is, when to use it, what makes it different from siblings in the same category.>
 
+## When to use
+
+<!-- Bullets: the concrete situations this component is the right choice for. Extracted
+     into the catalog (useWhen) + surfaced by the MCP (get_best_practices / suggest_component).
+     Optional today, but strongly recommended — especially to disambiguate siblings. -->
+
+- <use case>
+
+## When NOT to use
+
+<!-- Bullets: situations where a sibling/other component fits better — name it. This is
+     what resolves "X vs Y" (e.g. badge vs tag, dialog vs drawer). Extracted as avoidWhen. -->
+
+- <anti-case → use `<other-component>` instead>
+
+## Related
+
+<!-- Sibling / commonly-paired components, each with one-line "why/when". Extracted as related. -->
+
+- `<component>` — <how it differs / when to reach for it instead>
+
+## Best practices
+
+<!-- Bullets: do/don't guidance specific to this component. Extracted as bestPractices. -->
+
+- <practice>
+
 ## Usage
 
 <!-- ONE fenced ```vue block with:
