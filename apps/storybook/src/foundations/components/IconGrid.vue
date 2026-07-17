@@ -125,7 +125,7 @@ function isCopied(name) {
         <button
           v-for="icon in azionIcons"
           :key="icon.name"
-          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-subtle bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-default bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
@@ -153,7 +153,7 @@ function isCopied(name) {
         <button
           v-for="icon in filteredColorIcons"
           :key="icon.name"
-          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-subtle bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-default bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
@@ -181,7 +181,7 @@ function isCopied(name) {
         <button
           v-for="icon in primeIcons"
           :key="icon.name"
-          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-subtle bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-default bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
