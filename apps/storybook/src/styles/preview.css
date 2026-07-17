@@ -16,15 +16,9 @@ body,
 .sb-main-padded,
 .docs-story,
 .docs-story > * {
-  background: #ffffff !important;
+  background: var(--bg-canvas) !important;
   transition: all 0.4s ease-in-out !important;
 }
-
-.azion-dark .sb-main-padded,
-.azion-dark .docs-story,
-.azion-dark .docs-story > * {
-  background: #0A0A0A !important;
-  transition: all 0.4s ease-in-out !important;}
 
 .docblock-code-toggle {
   /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
@@ -65,12 +59,8 @@ h1, h2, h3, h4, h5, h6 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.azion-light > body {
-  background: #ffffff !important;
-  transition: all 0.4s ease-in-out !important;
-}
-.azion-dark > body {
-  background: #0A0A0A !important;
+.azion > body {
+  background: var(--bg-canvas) !important;
   transition: all 0.4s ease-in-out !important;
 }
 
@@ -82,20 +72,10 @@ h1, h2, h3, h4, h5, h6 {
   color-scheme: light;
 }
 
-/* https://github.com/primefaces/primevue/issues/882#issuecomment-1780802552 */
-body.p-overflow-hidden {
-  --scrollbar-width: 0px !important;
-}
-
 /* https://aziontech.atlassian.net/browse/UXE-1798 */
 /* child scroll behaviour is affecting the parent scroll behaviour */
 * {
   overscroll-behavior: auto !important;
-}
-
-.grecaptcha-badge {
-  bottom: 75px !important;
-  z-index: 11;
 }
 
 .font-sora {
