@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 
+import InputText from '@aziontech/webkit/input-text';
+
 import ColoredIconPreview from './ColoredIconPreview.vue';
 
 const props = defineProps({
@@ -81,20 +83,17 @@ function isCopied(name) {
   <div class="flex flex-col gap-8">
     <!-- Controls -->
     <div class="flex gap-5 items-center flex-wrap">
-      <div class="relative flex-1 min-w-[200px] max-w-[400px]">
-        <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-muted text-sm" />
-        <input
-          v-model="searchQuery"
-          type="text"
-          class="w-full px-2.5 py-2.5 pl-9 rounded-md border border-default bg-surface text-default text-sm font-sans placeholder:text-muted focus:outline-none focus:border-primary"
-          placeholder="Search icons by name..."
-        />
-        <span
-          v-if="searchQuery"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-muted font-code"
-        >
-          {{ filteredCount }} / {{ totalCount }}
-        </span>
+      <div class="flex-1 min-w-[200px] max-w-[400px]">
+        <InputText v-model="searchQuery" placeholder="Search icons by name...">
+          <template #iconLeft>
+            <i class="pi pi-search text-sm" />
+          </template>
+          <template v-if="searchQuery" #iconRight>
+            <span class="text-[11px] font-code text-[var(--text-muted)]">
+              {{ filteredCount }} / {{ totalCount }}
+            </span>
+          </template>
+        </InputText>
       </div>
       
       <div class="flex items-center gap-2.5">
