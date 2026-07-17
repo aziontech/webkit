@@ -12,7 +12,8 @@ export default {
       description: {
         component:
           'Semantic theme colors — every mode-aware color token that ships in `@aziontech/theme/globals.css`, generated straight from the token source so the catalog can never drift. Each swatch renders the live token, so toggle the theme in the toolbar to see light and dark. Click a row to copy its CSS variable.'
-      }
+      },
+      canvas: { sourceState: 'none' }
     }
   }
 }
