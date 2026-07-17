@@ -94,7 +94,7 @@
 
   const CONTENT_CLASS =
     'relative z-[1] inline-flex items-center justify-center gap-[var(--spacing-xs)] w-full h-full ' +
-    'text-[var(--text-default)] ' +
+    'text-[var(--color-base-white)] ' +
     'data-[size=large]:px-[var(--spacing-md)] data-[size=large]:text-button-lg ' +
     'data-[size=medium]:px-[var(--spacing-sm)] data-[size=medium]:text-button-md ' +
     'data-[size=small]:px-[var(--spacing-xs)] data-[size=small]:text-button-md ' +

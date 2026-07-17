@@ -140,14 +140,14 @@ Plain JS objects with literal values. Theme-invariant.
 // tokens/primitives/colors/brand.js
 export const brandPrimitives = {
   primary: { 50: '#FFF5EF', 100: '#FFE7D8', /* … */ 500: '#FE601F', /* … */ 950: '#401602' },
-  accent:  { 50: '#F6F6FF', /* … */ 500: '#8A84EC', /* … */ 950: '#0B0A19' },
-  absolute: { black: '#0A0A0A', white: '#FCFCFC' },
-};
+  accent: { 50: '#F6F6FF', /* … */ 500: '#8A84EC', /* … */ 950: '#0B0A19' },
+  absolute: { black: '#0A0A0A', white: '#FCFCFC' }
+}
 ```
 
 ```js
 // tokens/primitives/shape/spacing.js
-export const spacing = { 1: '4px', 2: '8px', /* … */ 96: '384px' };
+export const spacing = { 1: '4px', 2: '8px', /* … */ 96: '384px' }
 ```
 
 ### Semantic / theme
@@ -156,22 +156,22 @@ Objects with `light` / `dark` variants. Values are `tokenRef(...)` calls that po
 
 ```js
 // tokens/theme/primary.js
-import { tokenRef } from '../../scripts/refs.js';
+import { tokenRef } from '../../scripts/refs.js'
 
 export const primary = {
   light: {
-    primary:           tokenRef('brand.primary.primary-500'),
-    'primary-mask':    tokenRef('primitives.alpha.orange.100'),
-    'primary-hover':   tokenRef('brand.primary.primary-600'),
-    'primary-contrast': tokenRef('primitives.base.black'),
+    primary: tokenRef('brand.primary.primary-500'),
+    'primary-mask': tokenRef('primitives.alpha.orange.100'),
+    'primary-hover': tokenRef('brand.primary.primary-600'),
+    'primary-contrast': tokenRef('primitives.base.black')
   },
   dark: {
-    primary:           tokenRef('brand.primary.primary-500'),
-    'primary-mask':    tokenRef('primitives.alpha.orange.100'),
-    'primary-hover':   tokenRef('brand.primary.primary-600'),
-    'primary-contrast': tokenRef('primitives.base.white'),
-  },
-};
+    primary: tokenRef('brand.primary.primary-500'),
+    'primary-mask': tokenRef('primitives.alpha.orange.100'),
+    'primary-hover': tokenRef('brand.primary.primary-600'),
+    'primary-contrast': tokenRef('primitives.base.white')
+  }
+}
 ```
 
 ### Responsive semantic data (`*.data.js`)
@@ -182,9 +182,9 @@ Containers, spacings, and texts use a per-breakpoint table that `build-tokens.mj
 // tokens/semantic/spacings.data.js
 export const spacingsData = {
   'gap-sm': { _: '8px', md: '12px', xl: '16px' },
-  'gap-md': { _: '12px', md: '16px', xl: '24px' },
+  'gap-md': { _: '12px', md: '16px', xl: '24px' }
   // …
-};
+}
 ```
 
 `_` is the base value emitted in `:root`; the breakpoint keys (`sm`, `md`, `lg`, `xl`, `2xl`) become media-query overrides.
@@ -196,7 +196,7 @@ export const spacingsData = {
 ### Building the package
 
 ```bash
-# emit both v3 and v4 bundles
+# emit the v4 bundle
 pnpm --filter @aziontech/theme build:tokens
 ```
 
@@ -216,18 +216,18 @@ Utilities like `text-default`, `bg-surface`, `border-default`, `text-primary`, `
 ### As JS objects (Node / build steps)
 
 ```js
-import { createCssVars, cssVarsString } from '@aziontech/theme';
+import { createCssVars, cssVarsString } from '@aziontech/theme'
 
-createCssVars();   // → { light: { '--text-default': '#1A1A1A', … }, dark: { … } }
-cssVarsString();   // → ':root, [data-theme=light], .azion.azion-light { … } [data-theme=dark], … { … }'
+createCssVars() // → { light: { '--text-default': '#1A1A1A', … }, dark: { … } }
+cssVarsString() // → ':root, [data-theme=light], .azion.azion-light { … } [data-theme=dark], … { … }'
 ```
 
 ### Injecting at runtime (browser)
 
 ```js
-import { injectCssVars } from '@aziontech/theme';
+import { injectCssVars } from '@aziontech/theme'
 
-injectCssVars(); // appends a <style data-azion-tokens> element to <head>
+injectCssVars() // appends a <style data-azion-tokens> element to <head>
 ```
 
 Only useful if you can't precompile and import `globals.css` — production usage should prefer the static stylesheet.
@@ -244,8 +244,8 @@ Only useful if you can't precompile and import `globals.css` — production usag
    ```js
    export const spacing = {
      /* … */
-     128: '512px',   // new
-   };
+     128: '512px' // new
+   }
    ```
 
 3. Rebuild (`pnpm --filter @aziontech/theme build:tokens`). The compiler picks it up and emits `--spacing-128: 512px`.
@@ -260,13 +260,13 @@ Only useful if you can't precompile and import `globals.css` — production usag
    export const border = {
      light: {
        /* … */
-       'border-emphasis': tokenRef('primitives.gray.400'),
+       'border-emphasis': tokenRef('primitives.gray.400')
      },
      dark: {
        /* … */
-       'border-emphasis': tokenRef('primitives.gray.500'),
-     },
-   };
+       'border-emphasis': tokenRef('primitives.gray.500')
+     }
+   }
    ```
 
 3. Rebuild. The new variable lands in both `:root` and `[data-theme=dark]` blocks.
@@ -279,8 +279,8 @@ Only useful if you can't precompile and import `globals.css` — production usag
    // tokens/semantic/spacings.data.js
    export const spacingsData = {
      /* … */
-     'gap-2xl': { _: '32px', md: '40px', xl: '56px' },
-   };
+     'gap-2xl': { _: '32px', md: '40px', xl: '56px' }
+   }
    ```
 
 2. Rebuild. `build-tokens.mjs` emits the base var in `:root`, per-breakpoint `@media` overrides, **and** a matching `.gap-2xl { gap: var(--gap-2xl) }` utility.
@@ -308,14 +308,14 @@ Bundles with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` pres
 
 `tokenRef(path)` returns a marker object `{ __ref: path }` that the compiler resolves at build time. Supported path prefixes (see `scripts/resolve.js`):
 
-| Prefix | Looks up |
-|---|---|
-| `primitives.X.Y.Z` | `tokens/primitives/colors/colors.js` tree (e.g., `primitives.gray.900`, `primitives.alpha.orange.100`) |
-| `surfacePrimitives.surface.N` | the surface palette (used internally; usually referenced via `brand.surfaces.…`) |
-| `brand.surfaces.surface-N` | `surfacePrimitives.surface[N]` (e.g., `brand.surfaces.surface-100` → `#F5F5F5`) |
-| `brand.primary.primary-N` | `brandPrimitives.primary[N]` (e.g., `brand.primary.primary-500` → `#FE601F`) |
-| `brand.accent.accent-N` | `brandPrimitives.accent[N]` |
-| `brand.absolute.X` | `brandPrimitives.absolute.X` (`black` / `white`) |
+| Prefix                        | Looks up                                                                                               |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `primitives.X.Y.Z`            | `tokens/primitives/colors/colors.js` tree (e.g., `primitives.gray.900`, `primitives.alpha.orange.100`) |
+| `surfacePrimitives.surface.N` | the surface palette (used internally; usually referenced via `brand.surfaces.…`)                       |
+| `brand.surfaces.surface-N`    | `surfacePrimitives.surface[N]` (e.g., `brand.surfaces.surface-100` → `#F5F5F5`)                        |
+| `brand.primary.primary-N`     | `brandPrimitives.primary[N]` (e.g., `brand.primary.primary-500` → `#FE601F`)                           |
+| `brand.accent.accent-N`       | `brandPrimitives.accent[N]`                                                                            |
+| `brand.absolute.X`            | `brandPrimitives.absolute.X` (`black` / `white`)                                                       |
 
 Refs of unknown prefixes are left as the raw path string in the output — flag for "this needs resolver support".
 
@@ -340,11 +340,15 @@ npx http-server packages/theme/src -p 8080
 The compiled CSS targets multiple hooks so the runtime can pick whichever convention the consumer uses:
 
 ```css
-:root, [data-theme=light], .azion.azion-light {
+:root,
+[data-theme='light'],
+.azion.azion-light {
   /* light theme vars */
 }
 
-[data-theme=dark], .dark, .azion.azion-dark {
+[data-theme='dark'],
+.dark,
+.azion.azion-dark {
   /* dark theme vars */
 }
 ```
@@ -353,13 +357,13 @@ Switching is a one-liner:
 
 ```js
 // data-attribute strategy
-document.documentElement.setAttribute('data-theme', 'dark'); // or 'light'
+document.documentElement.setAttribute('data-theme', 'dark') // or 'light'
 
 // Tailwind class strategy
-document.documentElement.classList.toggle('dark');
+document.documentElement.classList.toggle('dark')
 
 // Azion namespaced classes (use one or the other)
-document.documentElement.classList.add('azion', 'azion-dark');
+document.documentElement.classList.add('azion', 'azion-dark')
 ```
 
 All three strategies hit the same set of CSS variables.

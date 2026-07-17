@@ -516,7 +516,7 @@ const OPTION_EXTRAS_TEMPLATE = `<div class="w-[280px]">
         </template>
         {{ o.label }}
         <template v-if="o.tag" #tag>
-          <Tag :value="o.tag" severity="info" size="small" />
+          <Tag :label="o.tag" severity="info" size="small" />
         </template>
       </Select.Option>
     </Select.Content>

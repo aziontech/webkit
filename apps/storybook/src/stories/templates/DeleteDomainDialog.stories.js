@@ -117,7 +117,7 @@ const SNIPPET_MARKUP = `<Dialog size="medium" v-model:open="open">
 
 const deleteDomainTemplate = `
   <Dialog
-    :closeable="args.closeable"
+    :dismissible="args.dismissible"
     :size="args.size"
     :open="open"
     data-testid="template-delete-domain-dialog"
@@ -281,7 +281,7 @@ const meta = {
         defaultValue: { summary: 'false' }
       }
     },
-    closeable: {
+    dismissible: {
       control: 'boolean',
       description: 'When true, Escape and overlay click close the dialog.',
       table: {
@@ -407,7 +407,7 @@ const meta = {
   },
   args: {
     defaultOpen: false,
-    closeable: true,
+    dismissible: true,
     size: 'medium',
     triggerLabel: 'Delete domain',
     title: 'Delete Domain',

@@ -57,7 +57,7 @@ const sourceFor = ({ root = [], source = [], target = [] } = {}) =>
       ...root.map((attr) => `  ${attr}`),
       '>',
       '  <PickList.Source',
-      '    header="Available"',
+      '    title="Available"',
       ...source.map((attr) => `    ${attr}`),
       '  >',
       '    <template #item="{ item }">{{ item.label }}</template>',
@@ -66,7 +66,7 @@ const sourceFor = ({ root = [], source = [], target = [] } = {}) =>
       '  <PickList.Controls />',
       '',
       '  <PickList.Target',
-      '    header="Selected"',
+      '    title="Selected"',
       ...target.map((attr) => `    ${attr}`),
       '  >',
       '    <template #item="{ item }">{{ item.label }}</template>',
@@ -126,18 +126,18 @@ const meta = {
         'When true (default), double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' }, category: 'props' }
     },
-    sourceHeader: {
+    sourceTitle: {
       control: 'text',
-      description: 'Heading text for the source list (the `header` prop of `PickList.Source`).',
+      description: 'Heading text for the source list (the `title` prop of `PickList.Source`).',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: "''" },
         category: 'sub-component props (story control)'
       }
     },
-    targetHeader: {
+    targetTitle: {
       control: 'text',
-      description: 'Heading text for the target list (the `header` prop of `PickList.Target`).',
+      description: 'Heading text for the target list (the `title` prop of `PickList.Target`).',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: "''" },
@@ -173,7 +173,10 @@ const meta = {
       description:
         'Fired when an option is double-clicked, with the item, its index, and which list it was in.',
       table: {
-        type: { summary: "(event: MouseEvent, payload: { list: 'source' | 'target'; item: unknown; index: number })" },
+        type: {
+          summary:
+            "(event: MouseEvent, payload: { list: 'source' | 'target'; item: unknown; index: number })"
+        },
         category: 'events'
       }
     },
@@ -189,8 +192,8 @@ const meta = {
   },
   args: {
     dataKey: 'id',
-    sourceHeader: 'Available',
-    targetHeader: 'Selected',
+    sourceTitle: 'Available',
+    targetTitle: 'Selected',
     disabled: false,
     moveOnDoubleClick: true,
     loading: false
@@ -227,7 +230,7 @@ const Template = (args) => ({
         @item-double-click="args.onItemDoubleClick"
       >
         <PickList.Source
-          :header="args.sourceHeader"
+          :title="args.sourceTitle"
           :loading="args.loading === true || args.loading === 'source'"
         >
           <template #item="{ item }">{{ item.label }}</template>
@@ -236,7 +239,7 @@ const Template = (args) => ({
         <PickList.Controls />
 
         <PickList.Target
-          :header="args.targetHeader"
+          :title="args.targetTitle"
           :loading="args.loading === true || args.loading === 'target'"
         >
           <template #item="{ item }">{{ item.label }}</template>

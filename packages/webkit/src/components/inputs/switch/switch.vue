@@ -11,22 +11,22 @@
   export type SwitchType = 'default' | 'privacy'
 
   interface Props {
-    /** Toggled-on state. Bind with `v-model:isToggled="value"`. */
-    isToggled?: boolean
+    /** Toggled-on state. Bind with `v-model`. */
+    modelValue?: boolean
     /** Visual variant. Privacy renders a lock icon inside the handle. */
-    type?: SwitchType
+    kind?: SwitchType
     /** Forces the focused visual state regardless of keyboard focus. */
-    isFocused?: boolean
+    focused?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    isToggled: false,
-    type: 'default',
-    isFocused: false
+    modelValue: false,
+    kind: 'default',
+    focused: false
   })
 
   const emit = defineEmits<{
-    'update:isToggled': [value: boolean]
+    'update:modelValue': [value: boolean]
   }>()
 
   const attrs = useAttrs()
@@ -40,12 +40,12 @@
     return rest
   })
 
-  const isChecked = computed(() => props.isToggled === true)
+  const isChecked = computed(() => props.modelValue === true)
 
   const buttonRef = ref<globalThis.HTMLButtonElement | null>(null)
 
   watch(
-    () => props.isFocused,
+    () => props.focused,
     (next) => {
       if (next) buttonRef.value?.focus()
       else buttonRef.value?.blur()
@@ -54,7 +54,7 @@
   )
 
   function handleToggle() {
-    emit('update:isToggled', !isChecked.value)
+    emit('update:modelValue', !isChecked.value)
   }
 
   function handleKeydown(event: globalThis.KeyboardEvent) {
@@ -86,9 +86,9 @@
     role="switch"
     :aria-checked="isChecked"
     :data-testid="testId"
-    :data-type="type"
+    :data-kind="kind"
     :data-checked="isChecked || null"
-    :data-focused="isFocused || null"
+    :data-focused="focused || null"
     :class="rootClass"
     v-bind="passthroughAttrs"
     @click="handleToggle"
@@ -100,12 +100,12 @@
       :data-testid="`${testId}__handle`"
     >
       <i
-        v-if="type === 'privacy'"
+        v-if="kind === 'privacy'"
         aria-hidden="true"
         :class="LOCK_OFF_CLASS"
       />
       <i
-        v-if="type === 'privacy'"
+        v-if="kind === 'privacy'"
         aria-hidden="true"
         :class="LOCK_ON_CLASS"
       />

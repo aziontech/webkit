@@ -16,7 +16,7 @@
  * derived automatically.
  */
 
-import { tokenRef } from '../../scripts/refs.js';
+import { tokenRef } from '../../scripts/refs.js'
 
 export const semanticColorsData = {
   text: {
@@ -35,7 +35,7 @@ export const semanticColorsData = {
       'success-hover': tokenRef('primitives.green.500'),
       success: tokenRef('primitives.green.600'),
       danger: tokenRef('primitives.red.600'),
-      warning: tokenRef('primitives.yellow.600'),
+      warning: tokenRef('primitives.yellow.600')
     },
     dark: {
       default: tokenRef('primitives.gray.50'),
@@ -52,8 +52,8 @@ export const semanticColorsData = {
       'success-hover': tokenRef('primitives.green.500'),
       success: tokenRef('primitives.green.400'),
       danger: tokenRef('primitives.red.400'),
-      warning: tokenRef('primitives.yellow.400'),
-    },
+      warning: tokenRef('primitives.yellow.400')
+    }
   },
   background: {
     light: {
@@ -70,7 +70,7 @@ export const semanticColorsData = {
       backdrop: tokenRef('primitives.alpha.neutral.25'),
       'primary-hover': tokenRef('brand.primary.primary-600'),
       primary: tokenRef('brand.primary.primary-500'),
-      'primary-mask': tokenRef('primitives.alpha.brand.primary.65'),
+      'primary-mask': tokenRef('primitives.alpha.brand.primary.65')
     },
     dark: {
       'surface-raised': tokenRef('brand.surfaces.surface-800'),
@@ -86,8 +86,8 @@ export const semanticColorsData = {
       backdrop: tokenRef('primitives.alpha.neutral.25'),
       'primary-hover': tokenRef('brand.primary.primary-400'),
       primary: tokenRef('brand.primary.primary-500'),
-      'primary-mask': tokenRef('primitives.alpha.brand.primary.65'),
-    },
+      'primary-mask': tokenRef('primitives.alpha.brand.primary.65')
+    }
   },
   border: {
     light: {
@@ -103,7 +103,7 @@ export const semanticColorsData = {
       'danger-hover': tokenRef('primitives.red.500'),
       'primary-hover': tokenRef('brand.primary.primary-600'),
       'accent-hover': tokenRef('brand.accent.accent-600'),
-      subtle: tokenRef('brand.surfaces.surface-200'),
+      subtle: tokenRef('brand.surfaces.surface-200')
     },
     dark: {
       default: tokenRef('brand.surfaces.surface-800'),
@@ -118,21 +118,21 @@ export const semanticColorsData = {
       'danger-hover': tokenRef('primitives.red.500'),
       'primary-hover': tokenRef('brand.primary.primary-400'),
       'accent-hover': tokenRef('brand.accent.accent-400'),
-      subtle: tokenRef('brand.surfaces.surface-700'),
-    },
-  },
-};
+      subtle: tokenRef('brand.surfaces.surface-700')
+    }
+  }
+}
 
 const toCssVarMap = (category, mode) =>
-  Object.fromEntries(Object.keys(mode).map((key) => [key, `var(--${category}-${key})`]));
+  Object.fromEntries(Object.keys(mode).map((key) => [key, `var(--${category}-${key})`]))
 
 export const semanticColors = {
   text: toCssVarMap('text', semanticColorsData.text.light),
   background: toCssVarMap('background', semanticColorsData.background.light),
-  border: toCssVarMap('border', semanticColorsData.border.light),
-};
+  border: toCssVarMap('border', semanticColorsData.border.light)
+}
 
 export default {
   semanticColors,
-  semanticColorsData,
-};
+  semanticColorsData
+}

@@ -103,7 +103,7 @@
       /** Data-driven mode: clicking a row toggles its selection (requires enableRowSelection). */
       selectOnRowClick?: boolean
       /** Header density: `compact` shrinks the column-header row's height and padding. */
-      headerVariant?: 'default' | 'compact'
+      headerKind?: 'default' | 'compact'
       /** Render a Paginator in the footer. */
       paginated?: boolean
       /** Rows per page when paginated. */
@@ -150,7 +150,7 @@
       enableSorting: false,
       enableRowSelection: false,
       selectOnRowClick: false,
-      headerVariant: 'default',
+      headerKind: 'default',
       paginated: false,
       pageSize: 10,
       sorting: undefined,
@@ -982,7 +982,7 @@
         <template v-if="dataDriven">
           <TableHeader
             frozen
-            :variant="headerVariant"
+            :kind="headerKind"
           >
             <TableRow>
               <TableHeadCell

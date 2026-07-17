@@ -63,7 +63,7 @@ const plansMarkup = `<div
     :show-suffix="false"
     :pricing-details="billingDetailMonthly"
     slot-position="middle"
-    card-style="contained"
+    kind="contained"
     action-label=""
     data-testid="template-change-plan-drawer__plan-hobby"
   >
@@ -83,7 +83,7 @@ const plansMarkup = `<div
     :show-tag="true"
     tag-label="Current plan"
     slot-position="middle"
-    card-style="contained"
+    kind="contained"
     action-label=""
     data-testid="template-change-plan-drawer__plan-pro"
   >
@@ -101,7 +101,7 @@ const plansMarkup = `<div
     :show-suffix="false"
     :pricing-details="billingDetailEnterprise"
     slot-position="middle"
-    card-style="contained"
+    kind="contained"
     action-label=""
     data-testid="template-change-plan-drawer__plan-enterprise"
   >
@@ -341,7 +341,7 @@ const meta = {
         defaultValue: { summary: 'false' }
       }
     },
-    closeable: {
+    dismissible: {
       control: 'boolean',
       description: 'When true, overlay click and Escape close the drawer.',
       table: {
@@ -379,7 +379,7 @@ const meta = {
   },
   args: {
     defaultOpen: false,
-    closeable: true,
+    dismissible: true,
     side: 'right',
     size: 'large'
   }

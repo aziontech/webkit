@@ -2,7 +2,6 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
   import { useOverlayMobile } from '../../overlay/composables/use-overlay-mobile'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
   import Dropdown from '../dropdown'
@@ -153,14 +152,18 @@
               :data-testid="`${testId}__segment-overflow`"
             >
               <Dropdown :data-testid="`${testId}__overflow-menu`">
-                <Dropdown.Trigger>
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    aria-label="Show pages in between"
-                    ariaLabel="Show pages in between"
-                    kind="transparent"
-                    size="small"
-                    :data-testid="`${testId}__overflow-trigger`"
+                <!-- The Trigger is itself role="button"; the icon is decorative
+                     content. Nesting a real button here trips axe
+                     nested-interactive. Styled to match a transparent/small
+                     IconButton with the same tokens. -->
+                <Dropdown.Trigger
+                  aria-label="Show pages in between"
+                  :data-testid="`${testId}__overflow-trigger`"
+                  class="h-7 min-w-7 items-center justify-center rounded-[var(--shape-button)] px-1 text-button-md text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-mask)] active:bg-[var(--bg-active)] motion-reduce:transition-none"
+                >
+                  <i
+                    class="pi pi-ellipsis-h leading-none"
+                    aria-hidden="true"
                   />
                 </Dropdown.Trigger>
                 <Dropdown.Group>

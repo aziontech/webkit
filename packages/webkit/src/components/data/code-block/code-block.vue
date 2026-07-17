@@ -67,6 +67,8 @@
     copyAriaLabel?: string
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
+    /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
+    border?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -75,12 +77,12 @@
     defaultValue: undefined,
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
-    animateLines: false
+    animateLines: false,
+    border: true
   })
 
   const emit = defineEmits<{
     'update:value': [value: string]
-    'value-change': [value: string]
     copy: [code: string]
   }>()
 
@@ -120,7 +122,6 @@
 
       valueModel.value = next
       emit('update:value', next)
-      emit('value-change', next)
     }
   })
 
@@ -448,10 +449,11 @@
   <div
     :class="
       cn(
-        'flex w-full flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]',
+        'flex w-full flex-col overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-surface)] data-[border]:border data-[border]:border-[var(--border-default)]',
         attrs.class as string | undefined
       )
     "
+    :data-border="border || null"
     :data-testid="testId"
   >
     <div
@@ -525,7 +527,7 @@
     </div>
 
     <div
-      class="relative flex h-[320px] shrink-0 flex-col"
+      class="relative flex max-h-[320px] shrink-0 flex-col"
       :data-testid="`${testId}__content`"
     >
       <div

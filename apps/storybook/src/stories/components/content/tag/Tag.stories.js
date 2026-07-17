@@ -31,13 +31,13 @@ const meta = {
     }
   },
   argTypes: {
-    value: {
+    label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
       table: {
         category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: 'undefined' }
+        defaultValue: { summary: "''" }
       }
     },
     severity: {
@@ -102,7 +102,7 @@ const meta = {
     }
   },
   args: {
-    value: 'Label',
+    label: 'Label',
     severity: 'primary',
     size: 'medium',
     rounded: false,
@@ -120,7 +120,7 @@ const Template = (args) => ({
   template: '<Tag v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<Tag value="Label" severity="primary" size="medium" />'
+const DEFAULT_MARKUP = '<Tag label="Label" severity="primary" size="medium" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
 export const Default = {
@@ -134,14 +134,14 @@ export const Default = {
 }
 
 const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <Tag value="Label" severity="primary" />
-  <Tag value="Label" severity="secondary" />
-  <Tag value="Label" severity="accent" />
-  <Tag value="Label" severity="success" />
-  <Tag value="Label" severity="warning" />
-  <Tag value="Label" severity="danger" />
-  <Tag value="Label" severity="info" />
-  <Tag value="Label" severity="contrast" />
+  <Tag label="Label" severity="primary" />
+  <Tag label="Label" severity="secondary" />
+  <Tag label="Label" severity="accent" />
+  <Tag label="Label" severity="success" />
+  <Tag label="Label" severity="warning" />
+  <Tag label="Label" severity="danger" />
+  <Tag label="Label" severity="info" />
+  <Tag label="Label" severity="contrast" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */
@@ -158,16 +158,16 @@ export const Types = {
 
 const SIZES_TEMPLATE = `<div class="flex flex-col gap-4">
   <div class="flex flex-wrap items-center gap-4">
-    <Tag value="Label" severity="primary" size="medium" />
-    <Tag value="Label" severity="primary" size="medium" rounded />
-    <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" />
-    <Tag value="Label" severity="primary" size="medium" icon="pi pi-box" rounded />
+    <Tag label="Label" severity="primary" size="medium" />
+    <Tag label="Label" severity="primary" size="medium" rounded />
+    <Tag label="Label" severity="primary" size="medium" icon="pi pi-box" />
+    <Tag label="Label" severity="primary" size="medium" icon="pi pi-box" rounded />
   </div>
   <div class="flex flex-wrap items-center gap-4">
-    <Tag value="Label" severity="primary" size="small" />
-    <Tag value="Label" severity="primary" size="small" rounded />
-    <Tag value="Label" severity="primary" size="small" icon="pi pi-box" />
-    <Tag value="Label" severity="primary" size="small" icon="pi pi-box" rounded />
+    <Tag label="Label" severity="primary" size="small" />
+    <Tag label="Label" severity="primary" size="small" rounded />
+    <Tag label="Label" severity="primary" size="small" icon="pi pi-box" />
+    <Tag label="Label" severity="primary" size="small" icon="pi pi-box" rounded />
   </div>
 </div>`
 
@@ -187,14 +187,14 @@ export const Sizes = {
 }
 
 const WITH_ICON_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <Tag value="Label" severity="primary" icon="pi pi-box" />
-  <Tag value="Label" severity="secondary" icon="pi pi-box" />
-  <Tag value="Label" severity="accent" icon="pi pi-box" />
-  <Tag value="Label" severity="success" icon="pi pi-box" />
-  <Tag value="Label" severity="warning" icon="pi pi-box" />
-  <Tag value="Label" severity="danger" icon="pi pi-box" />
-  <Tag value="Label" severity="info" icon="pi pi-box" />
-  <Tag value="Label" severity="contrast" icon="pi pi-box" />
+  <Tag label="Label" severity="primary" icon="pi pi-box" />
+  <Tag label="Label" severity="secondary" icon="pi pi-box" />
+  <Tag label="Label" severity="accent" icon="pi pi-box" />
+  <Tag label="Label" severity="success" icon="pi pi-box" />
+  <Tag label="Label" severity="warning" icon="pi pi-box" />
+  <Tag label="Label" severity="danger" icon="pi pi-box" />
+  <Tag label="Label" severity="info" icon="pi pi-box" />
+  <Tag label="Label" severity="contrast" icon="pi pi-box" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Tag>} */

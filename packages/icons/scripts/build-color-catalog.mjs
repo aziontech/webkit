@@ -41,10 +41,6 @@ const data = files.map((file) => {
   }
 })
 
-writeFileSync(
-  join(DIST_DIR, 'color-catalog.json'),
-  JSON.stringify(data, null, 2) + '\n',
-  CHARSET
-)
+writeFileSync(join(DIST_DIR, 'color-catalog.json'), JSON.stringify(data, null, 2) + '\n', CHARSET)
 
 console.log(`  ✔ dist/color-catalog.json created (${data.length} colored icons)`)

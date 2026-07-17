@@ -6,13 +6,7 @@
 
   export type MenuItemKind = 'option' | 'group'
   export type MenuItemTagSeverity =
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'info'
-    | 'warning'
-    | 'danger'
-    | 'accent'
+    'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
 
   defineOptions({
     name: 'MenuItem',
@@ -181,7 +175,7 @@
       >
         <slot name="tag">
           <Tag
-            :value="tagValue"
+            :label="tagValue"
             :severity="tagSeverity"
             rounded
           />
@@ -222,7 +216,7 @@
       >
         <slot name="tag">
           <Tag
-            :value="tagValue"
+            :label="tagValue"
             :severity="tagSeverity"
             rounded
           />

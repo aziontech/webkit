@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: f3a6b7a531a51f6488909ebd407d38f712555152c9290529608f41b6b038cecb
+checksum: d07fae422a497cb00a24640d4a769d8606e356e43bb0f237420bc7a29c6afe1e
 created: 2026-05-22
 last_updated: 2026-06-23
 ---
@@ -29,7 +29,7 @@ const enabled = ref(false)
 </script>
 
 <template>
-  <Switch v-model:isToggled="enabled" type="default" />
+  <Switch v-model="enabled" kind="default" />
 </template>
 ```
 
@@ -37,15 +37,15 @@ const enabled = ref(false)
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `isToggled` | `boolean` | `false` | no | Toggled-on state. Bind with `v-model:isToggled="value"`. Mirrors the Figma `isToggled` variant. |
-| `type` | `'default' \| 'privacy'` | `'default'` | no | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
-| `isFocused` | `boolean` | `false` | no | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `isFocused` variant. |
+| `modelValue` | `boolean` | `false` | no | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant. |
+| `kind` | `'default' \| 'privacy'` | `'default'` | no | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
+| `focused` | `boolean` | `false` | no | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:isToggled` | `boolean` | Emitted when the user toggles the switch. Paired with `v-model:isToggled`. |
+| `update:modelValue` | `boolean` | Emitted when the user toggles the switch. Paired with `v-model`. |
 
 ## Slots
 
@@ -54,9 +54,9 @@ const enabled = ref(false)
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`
-- `data-checked` mirrors the `isToggled` prop (toggled-on state)
-- `data-focused` mirrors the `isFocused` prop and applies the same ring tokens as `:focus-visible`
-- `data-type` mirrors the `type` prop (`default` | `privacy`)
+- `data-checked` mirrors the `modelValue` prop (toggled-on state)
+- `data-focused` mirrors the `focused` prop and applies the same ring tokens as `:focus-visible`
+- `data-kind` mirrors the `type` prop (`default` | `privacy`)
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks
 
 ## Motion & Animations
@@ -86,7 +86,7 @@ const enabled = ref(false)
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`. The same ring is applied when `isFocused` is `true` (`data-[focused]` mirror).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`. The same ring is applied when `focused` is `true` (`data-[focused]` mirror).
 - Keyboard map: `Tab` focuses; `Space` / `Enter` toggles.
 - ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`. The lock icon in `type="privacy"` is decorative — `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).

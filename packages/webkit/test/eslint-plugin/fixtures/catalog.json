@@ -1,0 +1,63 @@
+{
+  "package": "@aziontech/webkit",
+  "webkitVersion": "9.9.9",
+  "deniedPrefixes": ["@aziontech/webkit/src/"],
+  "tokenRules": [
+    {
+      "id": "hex-color",
+      "pattern": "#[0-9a-fA-F]{3,8}\\b",
+      "flags": "g",
+      "message": "Hex color hardcoded. Use semantic tokens (var(--primary), ...)."
+    },
+    {
+      "id": "tailwind-palette",
+      "pattern": "\\b(?:bg|text|border)-(?:gray|red|blue|green)-\\d{2,3}\\b",
+      "flags": "g",
+      "message": "Tailwind palette color. Use semantic webkit tokens."
+    }
+  ],
+  "imports": {
+    "button": {
+      "import": "@aziontech/webkit/button",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/button"
+    },
+    "card-box": {
+      "import": "@aziontech/webkit/card-box",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/card-box",
+      "styleSeam": true
+    },
+    "chip": {
+      "import": "@aziontech/webkit/chip",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/chip"
+    },
+    "chips": {
+      "import": "@aziontech/webkit/chips",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/chips",
+      "deprecated": true,
+      "replacedBy": "chip"
+    },
+    "table": {
+      "import": "@aziontech/webkit/table",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/table-root",
+      "subcomponents": ["@aziontech/webkit/table-row"]
+    },
+    "table-root": {
+      "import": "@aziontech/webkit/table-root",
+      "kind": "root",
+      "rootOf": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-root"
+    },
+    "table-row": {
+      "import": "@aziontech/webkit/table-row",
+      "kind": "subcomponent",
+      "parent": "table",
+      "treeShakeableImport": "@aziontech/webkit/table-row"
+    }
+  }
+}

@@ -79,7 +79,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Modal dialog built on the shared Panel shell. Compose a trigger, an overlay backdrop, and the panel regions (header, body, footer); Escape and overlay click close the dialog when `closeable`.'
+          'Modal dialog built on the shared Panel shell. Compose a trigger, an overlay backdrop, and the panel regions (header, body, footer); Escape and overlay click close the dialog when `dismissible`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -104,7 +104,7 @@ const meta = {
       description: 'Initial open state when uncontrolled.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
-    closeable: {
+    dismissible: {
       control: 'boolean',
       description: 'When true, overlay click and Escape close the dialog.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
@@ -132,7 +132,7 @@ const meta = {
   },
   args: {
     defaultOpen: false,
-    closeable: true,
+    dismissible: true,
     size: 'medium'
   }
 }
@@ -182,7 +182,7 @@ const Template = (args) => ({
   template: DEFAULT_RENDER_TEMPLATE
 })
 
-const DEFAULT_SNIPPET = `<Dialog v-model:open="open" closeable size="medium">
+const DEFAULT_SNIPPET = `<Dialog v-model:open="open" dismissible size="medium">
   <DialogTrigger>
     <Button label="Open dialog" kind="primary" />
   </DialogTrigger>
