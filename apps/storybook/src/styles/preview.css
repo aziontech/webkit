@@ -78,11 +78,7 @@ h1, h2, h3, h4, h5, h6 {
   overscroll-behavior: auto !important;
 }
 
-.font-sora {
-  font-family: 'Sora', sans-serif;
-}
-
-.font-proto-mono, .font-proto {
+.font-proto-mono {
   font-family: 'Proto Mono', sans-serif;
 }
 
