@@ -1,11 +1,18 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html
+  lang="en"
+  data-theme="light"
+>
   <head>
     <meta charset="UTF-8" />
     <title>Theme — Light/Dark Toggle Test</title>
     <style>
-      html { color-scheme: light; }
-      html[data-theme="dark"] { color-scheme: dark; }
+      html {
+        color-scheme: light;
+      }
+      html[data-theme='dark'] {
+        color-scheme: dark;
+      }
 
       body {
         font-family: ui-sans-serif, system-ui, sans-serif;
@@ -14,9 +21,14 @@
         background: var(--bg-canvas);
         color: var(--text-default);
         min-height: 100vh;
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease;
       }
-      h1 { margin: 0 0 0.25rem; font-size: 1.25rem; }
+      h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.25rem;
+      }
       h2 {
         font-size: 0.875rem;
         text-transform: uppercase;
@@ -24,7 +36,11 @@
         color: var(--text-muted);
         margin: 2rem 0 0.75rem;
       }
-      .meta { color: var(--text-muted); font-size: 0.875rem; margin: 0 0 1.5rem; }
+      .meta {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin: 0 0 1.5rem;
+      }
       code {
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         font-size: 0.8rem;
@@ -46,9 +62,17 @@
         font: inherit;
         font-weight: 600;
       }
-      .toggle:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
-      .toggle:active { background: var(--primary-active); }
-      .toggle:focus-visible { outline: 2px solid var(--ring-color); outline-offset: 2px; }
+      .toggle:hover {
+        background: var(--primary-hover);
+        border-color: var(--primary-hover);
+      }
+      .toggle:active {
+        background: var(--primary-active);
+      }
+      .toggle:focus-visible {
+        outline: 2px solid var(--ring-color);
+        outline-offset: 2px;
+      }
       .badge {
         font-family: ui-monospace, monospace;
         font-size: 0.75rem;
@@ -75,12 +99,16 @@
       .card .swatch {
         height: 60px;
         background-image:
-          linear-gradient(45deg, rgba(0,0,0,.06) 25%, transparent 25%),
-          linear-gradient(-45deg, rgba(0,0,0,.06) 25%, transparent 25%),
-          linear-gradient(45deg, transparent 75%, rgba(0,0,0,.06) 75%),
-          linear-gradient(-45deg, transparent 75%, rgba(0,0,0,.06) 75%);
+          linear-gradient(45deg, rgba(0, 0, 0, 0.06) 25%, transparent 25%),
+          linear-gradient(-45deg, rgba(0, 0, 0, 0.06) 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.06) 75%),
+          linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.06) 75%);
         background-size: 12px 12px;
-        background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+        background-position:
+          0 0,
+          0 6px,
+          6px -6px,
+          -6px 0;
       }
       .card .swatch-inner {
         width: 100%;
@@ -118,19 +146,28 @@
         color: var(--primary-contrast);
         border-color: var(--primary);
       }
-      .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+        border-color: var(--primary-hover);
+      }
       .btn-secondary {
         background: var(--secondary);
         color: var(--secondary-contrast);
         border-color: var(--secondary);
       }
-      .btn-secondary:hover { background: var(--secondary-hover); border-color: var(--secondary-hover); }
+      .btn-secondary:hover {
+        background: var(--secondary-hover);
+        border-color: var(--secondary-hover);
+      }
       .btn-accent {
         background: var(--accent);
         color: var(--accent-contrast);
         border-color: var(--accent);
       }
-      .btn-accent:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+      .btn-accent:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+      }
 
       .alert {
         padding: 0.75rem 1rem;
@@ -139,10 +176,26 @@
         margin-bottom: 0.5rem;
         font-size: 0.875rem;
       }
-      .alert-success { background: var(--success); border-color: var(--success-border); color: var(--success-contrast); }
-      .alert-warning { background: var(--warning); border-color: var(--warning-border); color: var(--warning-contrast); }
-      .alert-danger { background: var(--danger); border-color: var(--danger-border); color: var(--danger-contrast); }
-      .alert-info { background: var(--info); border-color: var(--info-border); color: var(--info-contrast); }
+      .alert-success {
+        background: var(--success);
+        border-color: var(--success-border);
+        color: var(--success-contrast);
+      }
+      .alert-warning {
+        background: var(--warning);
+        border-color: var(--warning-border);
+        color: var(--warning-contrast);
+      }
+      .alert-danger {
+        background: var(--danger);
+        border-color: var(--danger-border);
+        color: var(--danger-contrast);
+      }
+      .alert-info {
+        background: var(--info);
+        border-color: var(--info-border);
+        color: var(--info-contrast);
+      }
 
       .surface-stack {
         display: flex;
@@ -155,12 +208,25 @@
         border-radius: 6px;
         border: 1px solid var(--border-default);
       }
-      .surface-tile.canvas       { background: var(--bg-canvas); }
-      .surface-tile.surface      { background: var(--bg-surface); }
-      .surface-tile.raised       { background: var(--bg-surface-raised); }
-      .surface-tile.overlay      { background: var(--bg-surface-overlay); }
-      .surface-tile.selected     { background: var(--bg-selected); }
-      .surface-tile.contrast     { background: var(--bg-contrast); color: var(--bg-surface); }
+      .surface-tile.canvas {
+        background: var(--bg-canvas);
+      }
+      .surface-tile.surface {
+        background: var(--bg-surface);
+      }
+      .surface-tile.raised {
+        background: var(--bg-surface-raised);
+      }
+      .surface-tile.overlay {
+        background: var(--bg-surface-overlay);
+      }
+      .surface-tile.selected {
+        background: var(--bg-selected);
+      }
+      .surface-tile.contrast {
+        background: var(--bg-contrast);
+        color: var(--bg-surface);
+      }
 
       pre {
         background: var(--bg-surface);
@@ -178,9 +244,19 @@
   </head>
   <body>
     <div class="topbar">
-      <h1 style="flex:1;">Theme — Light/Dark Toggle Test</h1>
-      <span class="badge" id="theme-label">data-theme=light</span>
-      <button class="toggle" id="toggle" type="button">Switch to dark</button>
+      <h1 style="flex: 1">Theme — Light/Dark Toggle Test</h1>
+      <span
+        class="badge"
+        id="theme-label"
+        >data-theme=light</span
+      >
+      <button
+        class="toggle"
+        id="toggle"
+        type="button"
+      >
+        Switch to dark
+      </button>
     </div>
     <p class="meta">
       <span id="count">…</span> light + <span id="count-dark">…</span> dark vars injected via
@@ -211,19 +287,34 @@
     </div>
 
     <h2>Surfaces (semantic alias for grays)</h2>
-    <div class="grid" id="surfaces"></div>
+    <div
+      class="grid"
+      id="surfaces"
+    ></div>
 
     <h2>Primary / Secondary / Accent</h2>
-    <div class="grid" id="brand"></div>
+    <div
+      class="grid"
+      id="brand"
+    ></div>
 
     <h2>Backgrounds (token swatches)</h2>
-    <div class="grid" id="bg"></div>
+    <div
+      class="grid"
+      id="bg"
+    ></div>
 
     <h2>Borders / Text / Ring</h2>
-    <div class="grid" id="bw"></div>
+    <div
+      class="grid"
+      id="bw"
+    ></div>
 
     <h2>Feedback (token swatches)</h2>
-    <div class="grid" id="feedback"></div>
+    <div
+      class="grid"
+      id="feedback"
+    ></div>
 
     <h2>Full Generated CSS</h2>
     <pre id="css"></pre>
@@ -232,79 +323,81 @@
       import {
         compileThemeCss,
         compileThemeVars,
-        injectThemeCss,
-      } from '../scripts/compile-theme.js';
+        injectThemeCss
+      } from '../scripts/compile-theme.js'
 
-      const styleTag = injectThemeCss();
-      const all = compileThemeVars();
-      const css = compileThemeCss();
+      const styleTag = injectThemeCss()
+      const all = compileThemeVars()
+      const css = compileThemeCss()
 
-      document.getElementById('count').textContent = Object.keys(all.light).length;
-      document.getElementById('count-dark').textContent = Object.keys(all.dark).length;
-      document.getElementById('css').textContent = css;
+      document.getElementById('count').textContent = Object.keys(all.light).length
+      document.getElementById('count-dark').textContent = Object.keys(all.dark).length
+      document.getElementById('css').textContent = css
 
       // Toggle
-      const toggle = document.getElementById('toggle');
-      const label = document.getElementById('theme-label');
+      const toggle = document.getElementById('toggle')
+      const label = document.getElementById('theme-label')
       const applyTheme = (next) => {
-        document.documentElement.setAttribute('data-theme', next);
-        label.textContent = `data-theme=${next}`;
-        toggle.textContent = next === 'dark' ? 'Switch to light' : 'Switch to dark';
-      };
+        document.documentElement.setAttribute('data-theme', next)
+        label.textContent = `data-theme=${next}`
+        toggle.textContent = next === 'dark' ? 'Switch to light' : 'Switch to dark'
+      }
       toggle.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme') || 'light';
-        applyTheme(current === 'dark' ? 'light' : 'dark');
-      });
-      applyTheme('light');
+        const current = document.documentElement.getAttribute('data-theme') || 'light'
+        applyTheme(current === 'dark' ? 'light' : 'dark')
+      })
+      applyTheme('light')
 
       // Build swatch grids using the current (light) vars for label/value display.
       // The actual color rendered is the live var, which switches on toggle.
       const mkCard = (name) => {
-        const card = document.createElement('div');
-        card.className = 'card';
+        const card = document.createElement('div')
+        card.className = 'card'
         card.innerHTML = `
           <div class="swatch"><div class="swatch-inner" style="background: var(${name});"></div></div>
           <div class="label">${name.replace('--', '')}</div>
           <div class="value" data-var="${name}"></div>
-        `;
-        return card;
-      };
+        `
+        return card
+      }
 
       const fillGroup = (id, predicate) => {
-        const el = document.getElementById(id);
+        const el = document.getElementById(id)
         Object.keys(all.light)
           .filter(predicate)
-          .forEach((name) => el.appendChild(mkCard(name)));
-      };
+          .forEach((name) => el.appendChild(mkCard(name)))
+      }
 
-      fillGroup('surfaces', (k) => k.startsWith('--surface-'));
+      fillGroup('surfaces', (k) => k.startsWith('--surface-'))
       fillGroup('brand', (k) =>
         /^--(primary|secondary|accent)(-|$)/.test(k) && !k.startsWith('--accent-')
-        ? true
-        : /^--(primary|secondary|accent)(-|$)/.test(k));
-      fillGroup('bg', (k) => k.startsWith('--bg-'));
-      fillGroup('bw', (k) =>
-        k.startsWith('--border-') || k.startsWith('--text-') || k.startsWith('--ring-'));
-      fillGroup('feedback', (k) =>
-        /^--(success|warning|danger|info)(-|$)/.test(k));
+          ? true
+          : /^--(primary|secondary|accent)(-|$)/.test(k)
+      )
+      fillGroup('bg', (k) => k.startsWith('--bg-'))
+      fillGroup(
+        'bw',
+        (k) => k.startsWith('--border-') || k.startsWith('--text-') || k.startsWith('--ring-')
+      )
+      fillGroup('feedback', (k) => /^--(success|warning|danger|info)(-|$)/.test(k))
 
       // Live-update the value labels and CSS pre when toggling.
       const refreshValues = () => {
-        const theme = document.documentElement.getAttribute('data-theme') || 'light';
-        const map = all[theme];
+        const theme = document.documentElement.getAttribute('data-theme') || 'light'
+        const map = all[theme]
         document.querySelectorAll('[data-var]').forEach((el) => {
-          const name = el.getAttribute('data-var');
-          el.textContent = map[name] ?? '';
-        });
-      };
-      refreshValues();
+          const name = el.getAttribute('data-var')
+          el.textContent = map[name] ?? ''
+        })
+      }
+      refreshValues()
       new MutationObserver(refreshValues).observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['data-theme'],
-      });
+        attributeFilter: ['data-theme']
+      })
 
-      console.info('[theme] injected', styleTag);
-      console.info('[theme] vars', all);
+      console.info('[theme] injected', styleTag)
+      console.info('[theme] vars', all)
     </script>
   </body>
 </html>

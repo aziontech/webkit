@@ -6,9 +6,13 @@
  * `{ light, dark }` map of CSS variable names → resolved color values.
  */
 
-import { brandPrimitives,primitives, surfacePrimitives } from '../tokens/primitives/colors/colors.js';
-import { semanticColorsData } from '../tokens/semantic/colors.js';
-import { resolveRefsToCssVars } from './resolve.js';
+import {
+  brandPrimitives,
+  primitives,
+  surfacePrimitives
+} from '../tokens/primitives/colors/colors.js'
+import { semanticColorsData } from '../tokens/semantic/colors.js'
+import { resolveRefsToCssVars } from './resolve.js'
 
 export const createCssVars = () =>
   resolveRefsToCssVars({
@@ -17,26 +21,26 @@ export const createCssVars = () =>
     brandPrimitives,
     textSemantic: semanticColorsData.text,
     backgroundSemantic: semanticColorsData.background,
-    borderSemantic: semanticColorsData.border,
-  });
+    borderSemantic: semanticColorsData.border
+  })
 
 export const cssVarsString = () => {
-  const { light, dark } = createCssVars();
+  const { light, dark } = createCssVars()
   const format = (vars) =>
     Object.entries(vars)
       .map(([key, value]) => `  ${key}: ${value};`)
-      .join('\n');
+      .join('\n')
 
   return [
     `:root, [data-theme=light], .azion.azion-light {\n${format(light)}\n}`,
-    `[data-theme=dark], .dark, .azion.azion-dark {\n${format(dark)}\n}`,
-  ].join('\n\n');
-};
+    `[data-theme=dark], .dark, .azion.azion-dark {\n${format(dark)}\n}`
+  ].join('\n\n')
+}
 
 export const injectCssVars = () => {
-  const style = document.createElement('style');
-  style.setAttribute('data-azion-tokens', 'true');
-  style.textContent = cssVarsString();
-  document.head.appendChild(style);
-  return style;
-};
+  const style = document.createElement('style')
+  style.setAttribute('data-azion-tokens', 'true')
+  style.textContent = cssVarsString()
+  document.head.appendChild(style)
+  return style
+}

@@ -12,19 +12,19 @@
 
   interface Props {
     /** Heading text for the list; also its accessible name. */
-    header?: string
+    title?: string
     /** Shows a spinner in place of options and locks this list's controls while data loads. */
     loading?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    header: '',
+    title: '',
     loading: false
   })
 
   defineSlots<{
     item(props: { item: unknown; index: number; list: PickListSide }): unknown
-    header(): unknown
+    title(): unknown
   }>()
 
   const side: PickListSide = 'source'
@@ -68,13 +68,13 @@
       :data-testid="`${testId}__header`"
       class="text-label-lg text-[var(--text-muted)]"
     >
-      <slot name="header">{{ header }}</slot>
+      <slot name="title">{{ title }}</slot>
     </h3>
     <TransitionGroup
       tag="ul"
       role="listbox"
       aria-multiselectable="true"
-      :aria-label="header || undefined"
+      :aria-label="title || undefined"
       :aria-disabled="ctx.disabled.value || undefined"
       :aria-busy="loading || undefined"
       :data-testid="`${testId}__list`"

@@ -1,0 +1,4 @@
+/* CANARY — must keep failing value-no-vendor-prefix (warning severity). */
+.panel {
+  display: -webkit-flex;
+}

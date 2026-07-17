@@ -3,7 +3,7 @@ export const perspective = {
   near: '300px',
   normal: '500px',
   midrange: '800px',
-  distant: '1200px',
-};
+  distant: '1200px'
+}
 
-export default { perspective };
+export default { perspective }

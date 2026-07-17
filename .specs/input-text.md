@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 2
-checksum: 70f887fdc6932b1f79b79148688ae417dc3090513fd7d6607c77075ecdf5a898
+checksum: 8246d8ce93c14e5de391a509eb927c41e9de1aaaff0ee4258189a3c42fd22a0f
 created: 2026-05-22
 last_updated: 2026-06-16
 ---
@@ -15,6 +15,27 @@ last_updated: 2026-06-16
 Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer.
 
 Aligned with Figma frame `562:6774` (Webkit / InputText).
+
+## When to use
+
+- Capture a single line of free-form text (names, titles, search terms).
+
+## When NOT to use
+
+- The value spans multiple lines → use `textarea`.
+- The value is strictly numeric → use `input-number`.
+- The user must choose from a fixed set → use `select` / `multi-select`.
+
+## Related
+
+- `textarea` — multi-line free text.
+- `input-number` — numeric input with stepper semantics.
+- `field-text` — input-text wrapped with label/help/error.
+
+## Best practices
+
+- Prefer the `field-*` wrapper when you need a label, helper text, or validation message.
+- Set an appropriate `type`/`inputmode` for the content (email, url, …).
 
 ## Props
 

@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: d6468c8f3aadfd54ee13d5ca4a436d1eb9c24a419b85cf539c2dd8a587907889
+checksum: 2a59538bb1ac5d21812069fe362232ea9af4e421cd04a1b7d9b8f3eeecd9246b
 created: 2026-05-28
-last_updated: 2026-07-01
+last_updated: 2026-07-13
 ---
 
 
@@ -68,6 +68,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | `showLineNumbers` | `boolean` | `true` | no | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
 | `copyAriaLabel` | `string` | `'Copy code'` | no | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
 | `animateLines` | `boolean` | `false` | no | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart. |
+| `border` | `boolean` | `true` | no | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
 ## Type shapes
 
@@ -96,7 +97,6 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | Event | Payload | Notes |
 |---|---|---|
 | `update:value` | `string` | v-model:value. |
-| `value-change` | `string` | Fires when the active tab changes. |
 | `copy` | `string` | Fires after the active tab code is copied to the clipboard. |
 
 ## Slots
@@ -121,7 +121,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
 
-Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, 320 px height). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
+Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
 
 ## Motion & Animations
 
@@ -186,6 +186,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 - WithDiff — single tab with `lineChanges` for added/removed rows (Figma: Diff).
 - WithHighlightedLine — single tab with `highlightedLine={6}` (Figma: Highlighted).
 - WithAnimatedLines — single tab with `animateLines={true}` for staggered website entrance.
+- Borderless — Default sample with `border={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
 
 ## Constraints — DO NOT
 

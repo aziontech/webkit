@@ -1,0 +1,46 @@
+# Rules — index
+
+The 25 construction standards, each a single `.md` in this folder. `scope: general` ships to
+consuming projects; `scope: webkit` is internal to the design system. The **machine-readable
+source of truth** for rule → enforcement is
+[`../hooks/_lib/standards.mjs`](../hooks/_lib/standards.mjs), whose pairing with the rule
+files is checked in CI by
+[`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+This table is the human-readable summary of that registry — when in doubt, the registry wins.
+
+## Foundational (11)
+
+| Rule | Scope | Fixes | Blocks via |
+|---|---|---|---|
+| [no-invention](./no-invention.md) | webkit | Nothing beyond the spec | spec-compliance · references · ratchet |
+| [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/default per concept | spec-compliance · ratchet |
+| [naming](./naming.md) | webkit | One kebab name across 6 surfaces | spec-compliance · story-source · ratchet |
+| [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · 5 lint rules |
+| [compound-api](./compound-api.md) | webkit | `index.ts` compound + tree-shakeable `-root` | catalog-drift · review |
+| [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens · ratchet · lints |
+| [dependencies](./dependencies.md) | webkit | No external positioning/animation libs | references · type-check (CI) |
+| [migration](./migration.md) | webkit | Rewrite inherited artifacts, never copy as-is | output checks · ratchet · review |
+| [storybook-source](./storybook-source.md) | webkit | "Show code" is a runnable SFC | story-source · ratchet |
+| [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
+| [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `dev` | commitlint · branch-protection |
+
+## Construction (14)
+
+| Rule | Scope | Fixes | Blocks via |
+|---|---|---|---|
+| [component-structure](./component-structure.md) | general | Folder layout + `<script setup>` order | spec-compliance · ratchet · review |
+| [props](./props.md) | general | Typed `interface Props` + `withDefaults` + JSDoc | authoring · spec-compliance · tokens · ratchet |
+| [v-model](./v-model.md) | general | Two-way via `defineModel` | authoring · ratchet · lint |
+| [emits](./emits.md) | general | Typed `defineEmits`; no echo events duplicating `update:*` | authoring · spec-compliance · ratchet |
+| [event-payloads](./event-payloads.md) | general | Activation events emit `(event, item?)` — event always first | spec-compliance · ratchet · review |
+| [slots](./slots.md) | general | Typed `defineSlots`; fallback in the slot | authoring · spec-compliance · ratchet |
+| [composables](./composables.md) | general | `readonly` out, `toValue` args, `onScopeDispose` | authoring · ratchet |
+| [root-element](./root-element.md) | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · ratchet · review |
+| [component-states](./component-states.md) | general | Rendered state surface via `data-*` + DS components | spec-compliance · ratchet · review |
+| [accessibility](./accessibility.md) | general | Role, keyboard, focus, `motion-reduce` | vuejs-accessibility · review |
+| [testid](./testid.md) | general | `data-testid` derived `<category>-<name>` | spec-compliance · ratchet |
+| [deprecation](./deprecation.md) | general | `@deprecated` → one major → remove | authoring · ratchet · lint |
+| [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
+| [testing](./testing.md) | webkit | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
+
+**Split:** 14 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 11 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).

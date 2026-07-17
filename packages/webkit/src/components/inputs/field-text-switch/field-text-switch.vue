@@ -117,7 +117,7 @@
   >
     <Label
       v-if="label"
-      :value="label"
+      :label="label"
       :required="required"
       :for="resolvedInputId"
       :data-testid="`${testId}__label`"
@@ -144,19 +144,19 @@
       />
       <InputGroupAddon :data-testid="`${testId}__switch-slot`">
         <Switch
-          :is-toggled="enabled"
+          :model-value="enabled"
           :disabled="disabled"
           :aria-label="switchLabel"
           :data-testid="`${testId}__switch`"
           :style="switchStyle"
-          @update:is-toggled="onToggle"
+          @update:model-value="onToggle"
         />
       </InputGroupAddon>
     </InputGroup>
     <HelperText
       v-if="effectiveHelperText"
       :id="helperId"
-      :value="effectiveHelperText"
+      :label="effectiveHelperText"
       :kind="helperKind"
       :data-testid="`${testId}__helper`"
     />

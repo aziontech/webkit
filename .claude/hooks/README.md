@@ -1,20 +1,22 @@
 # `.claude/hooks/`
 
-`PreToolUse` hooks for the Azion Webkit monorepo. Wired up in [`../settings.json`](../settings.json). Each hook runs **before** the matching tool call and can either approve (exit 0) or block (exit 2) the operation.
+`PreToolUse`/`PostToolUse` hooks for the Azion Webkit monorepo. Wired up in [`../settings.json`](../settings.json). Each hook runs around the matching tool call and can either approve (exit 0) or block (exit 2) the operation.
 
 The hooks fail open on unexpected errors (invalid JSON input, missing files, etc.) — they never silently break the workflow.
+
+Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs` and `_lib/story-source-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 
 ## Hooks
 
 ### [`validate-tokens.mjs`](./validate-tokens.mjs)
 
-Blocks `Write`/`Edit`/`MultiEdit` on `.vue` / `.css` / `.scss` / `.ts` files under `packages/webkit/src/components/webkit/**` when the **new** content introduces any of:
+Blocks `Write`/`Edit`/`MultiEdit` on `.vue` / `.css` / `.scss` / `.ts` files under `packages/webkit/src/components/**` when the **new** content introduces any of:
 
 - Hex/RGB/HSL colors
 - Tailwind palette names (`bg-gray-500`, `text-violet-600`, ...)
 - Raw Tailwind text sizes (`text-xs|sm|base|lg|...`)
 - Raw typography tokens (`text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, `font-family`, `font-sora`, ...)
-- PrimeVue color utilities (`text-color`, `surface-*`)
+- External/legacy color utilities (`text-color`, `surface-*`)
 - `class` declared in `defineProps`
 - `any` type
 - `// @ts-ignore` / `// @ts-nocheck` / `// @ts-expect-error`
@@ -32,13 +34,33 @@ Blocks `Write`/`Edit`/`MultiEdit` on any `.vue` / `.ts` / `.js` / `.mjs` / `.cjs
 
 Prevents the agent from hallucinating paths or speculatively importing modules that have not been installed yet.
 
+### [`validate-authoring.mjs`](./validate-authoring.mjs)
+
+Blocks `Write`/`Edit`/`MultiEdit` when the resulting file introduces a construction-standard violation ([`props`](../rules/props.md), [`v-model`](../rules/v-model.md), [`emits`](../rules/emits.md), [`slots`](../rules/slots.md), [`composables`](../rules/composables.md), [`deprecation`](../rules/deprecation.md)):
+
+- Hand-rolled `modelValue` prop + `update:modelValue` emit (use `defineModel`)
+- Runtime `defineProps({...})` / `defineEmits([...])` (use the typed generic forms)
+- `<slot>` in the template without a typed `defineSlots`
+- A composable returning `reactive()` state or authored as `.js`
+- `@deprecated` without a named replacement + removal version
+
+Engine: [`_lib/authoring-checks.mjs`](./_lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run.
+
+### [`validate-story-source.mjs`](./validate-story-source.mjs)
+
+Blocks `Write`/`Edit`/`MultiEdit` on any `*.stories.*` file whose **resulting content** violates the [storybook-source](../rules/storybook-source.md) contract — the Docs "Show code" must be a single runnable PascalCase SFC. **Strict**: the whole stories tree is on the canonical pattern, so every check applies to the full result of the write (no "newly-introduced-only" grandfathering). 13 checks: `docs-not-literal`, `handrolled-transform`, `dynamic-source`, `nested-template`, `lowercase-tag` (native HTML tags exempt), `import-binding-mismatch`, `argtypes-regex`, `legacy-csf2-assignment`, `figma-reference`, `args-destructure`, `missing-helper`, `missing-source-code`, `missing-sourcestate` (foundations pages exempt from the helper/`toSfc` requirement).
+
+Also runs standalone: `node .claude/hooks/validate-story-source.mjs --all` audits the entire stories tree and exits non-zero on any violation.
+
+Engine: [`_lib/story-source-checks.mjs`](./_lib/story-source-checks.mjs) — shared with the CI ratchet.
+
 ### [`enforce-component-create.mjs`](./enforce-component-create.mjs)
 
-Blocks the **first** `Write` that creates a new `.vue` under `packages/webkit/src/components/webkit/<category>/<name>/` when the session transcript shows no reference to the spec-driven pipeline. Forces the agent to run `/spec-create` then `/component-create`, which load the orchestrator at [`../commands/component-create.md`](../commands/component-create.md) and the focused skills under [`../skills/`](../skills/).
+Blocks the **first** `Write` that creates a new `.vue` under `packages/webkit/src/components/<category>/<name>/` when the session transcript shows no reference to the spec-driven pipeline. Forces the agent to run `/spec-create` then `/component-create`, which load the orchestrator at [`../commands/component-create.md`](../commands/component-create.md) and the focused skills under [`../skills/`](../skills/).
 
 ### [`enforce-spec-exists.mjs`](./enforce-spec-exists.mjs)
 
-PreToolUse hook on `Write` of any `packages/webkit/src/components/webkit/<category>/<name>/<file>.vue`. Blocks when:
+PreToolUse hook on `Write` of any `packages/webkit/src/components/<category>/<name>/<file>.vue`. Blocks when:
 
 - `.specs/<name>.md` is missing.
 - The spec's `status` is not `approved` or `implemented` (drafts cannot drive code generation; locked specs require a `spec_version` bump).
@@ -58,6 +80,10 @@ PostToolUse hook on `Write|Edit|MultiEdit` of the same `.vue` paths. Re-reads th
 - Motion-bearing classes without a `motion-reduce:*` escape.
 
 Bypassed for legacy components (same whitelist). Shared parser library: [`_lib/spec.mjs`](./_lib/spec.mjs).
+
+### [`enforce-test-exists.mjs`](./enforce-test-exists.mjs)
+
+PostToolUse hook on `Write` of a **root** component `.vue` (`packages/webkit/src/components/<category>/<name>/<name>.vue` — file name equals its folder). Warns (exit 2, surfaced to the agent) when the co-located `<name>.test.ts` is missing, so every component ships the browser-mode functional suite mandated by [`../rules/testing.md`](../rules/testing.md). PostToolUse (not Pre) so it never deadlocks `/component-create`, which writes the `.vue` before a test can exist. Composition sub-components are skipped (tested through their root). Bypassed for legacy components (same whitelist).
 
 ## Adding a new hook
 

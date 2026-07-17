@@ -27,7 +27,7 @@ export const spacing = {
   64: '256px',
   72: '288px',
   80: '320px',
-  96: '384px',
-};
+  96: '384px'
+}
 
-export default { spacing };
+export default { spacing }

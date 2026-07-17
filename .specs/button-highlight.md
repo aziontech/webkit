@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: f55dd19b92c68f040e5061fd35eb787f04bcf227baceeb3d6ffef33ac0bce1dd
+checksum: 5b9f7589e3a0eb87bea77f56af5f24ca4a2d512551d2930d2e2961c8ceeba1fe
 created: 2026-06-01
-last_updated: 2026-06-01
+last_updated: 2026-07-13
 ---
 # Button Highlight — Component Spec
 
@@ -72,7 +72,7 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 |---|---|
 | typography (large) | `.text-button-lg` |
 | typography (medium/small) | `.text-button-md` |
-| text | `var(--text-default)` |
+| text | `var(--color-base-white)` |
 | text (disabled) | `var(--text-disabled)` |
 | surface (disabled) | `var(--bg-disabled)` |
 | backdrop overlay | `var(--bg-backdrop)` |
@@ -103,7 +103,7 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
 - Keyboard map: `Tab` focuses; `Enter` / `Space` activates.
 - ARIA: `<button>` role by default; renders `<a>` when `href` is set with `aria-disabled` / `aria-busy` mirroring `disabled` / `loading`.
-- Contrast: gradient passes ≥4.5:1 for the `--text-default` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
+- Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
 - `motion-reduce:transition-none` on every transition class.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
 

@@ -1,4 +1,4 @@
-import { tokenRef } from '../../../scripts/refs.js';
+import { tokenRef } from '../../../scripts/refs.js'
 
 export const width = {
   '3xs': tokenRef('shape.container.3xs'),
@@ -13,7 +13,7 @@ export const width = {
   '4xl': tokenRef('shape.container.4xl'),
   '5xl': tokenRef('shape.container.5xl'),
   '6xl': tokenRef('shape.container.6xl'),
-  '7xl': tokenRef('shape.container.7xl'),
-};
+  '7xl': tokenRef('shape.container.7xl')
+}
 
-export default { width };
+export default { width }

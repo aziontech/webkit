@@ -2,10 +2,11 @@
   import { ref } from 'vue'
 
   // SVGs são importados lazily via Vite glob (substitui o require() do webpack)
-  const svgModules = import.meta.glob(
-    '../../node_modules/@aziontech/icons/src/svg-raw/**/*.svg',
-    { query: '?raw', import: 'default', eager: false }
-  )
+  const svgModules = import.meta.glob('../../node_modules/@aziontech/icons/src/svg-raw/**/*.svg', {
+    query: '?raw',
+    import: 'default',
+    eager: false
+  })
 
   // Props
   const props = defineProps({

@@ -40,7 +40,6 @@
   const emit = defineEmits<{
     'update:page': [page: number]
     'update:pageSize': [pageSize: number]
-    'page-change': [page: number]
   }>()
 
   defineSlots<{
@@ -120,7 +119,6 @@
     const clamped = Math.min(Math.max(1, next), pageCount.value)
     if (clamped === currentPage.value) return
     emit('update:page', clamped)
-    emit('page-change', clamped)
   }
 
   const onPrevious = () => goToPage(currentPage.value - 1)
@@ -135,7 +133,6 @@
     // Reset to the first page so the current page can never fall out of range.
     if (currentPage.value !== 1) {
       emit('update:page', 1)
-      emit('page-change', 1)
     }
   }
 </script>

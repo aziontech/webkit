@@ -4,13 +4,13 @@
   "rules": {
     "at-rule-no-unknown": null,
     "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
-    "no-descending-specificity": [true, { "severity": "warn" }],
+    "no-descending-specificity": [true, { "severity": "warning" }],
     "declaration-block-no-duplicate-properties": true,
     "no-duplicate-selectors": true,
     "order/properties-alphabetical-order": true,
-    "property-no-vendor-prefix": [true, { "severity": "warn" }],
-    "value-no-vendor-prefix": [true, { "severity": "warn" }],
+    "property-no-vendor-prefix": [true, { "severity": "warning" }],
+    "value-no-vendor-prefix": [true, { "severity": "warning" }],
     "selector-max-id": 0
   },
-  "ignoreFiles": ["dist/**/*", "node_modules/**/*"]
+  "ignoreFiles": ["**/dist/**", "**/node_modules/**", "**/coverage/**"]
 }

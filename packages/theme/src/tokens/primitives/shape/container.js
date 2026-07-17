@@ -11,7 +11,7 @@ export const container = {
   '4xl': '896px',
   '5xl': '1024px',
   '6xl': '1152px',
-  '7xl': '1280px',
-};
+  '7xl': '1280px'
+}
 
-export default { container };
+export default { container }

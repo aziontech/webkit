@@ -1,0 +1,4 @@
+/* CANARY — must keep failing property-no-vendor-prefix (warning severity). */
+.panel {
+  -webkit-transform: scale(1.02);
+}

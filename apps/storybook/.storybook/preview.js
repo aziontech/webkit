@@ -2,6 +2,8 @@ import { setup } from '@storybook/vue3'
 import PrimeVue from 'primevue/config'
 import Tooltip from 'primevue/tooltip'
 import { withThemeByClassName } from '@storybook/addon-themes'
+import { addons } from '@storybook/preview-api'
+import { GLOBALS_UPDATED } from '@storybook/core-events'
 
 // v3 token build: primitives, --bg-* / --text-* / --border-*, and .text-body-md etc.
 // (replaces injectCssVars(), which only emitted --background-* aliases — webkit components use --bg-*)
@@ -19,6 +21,27 @@ setup((app) => {
 
   app.directive('tooltip', Tooltip)
 })
+
+// withThemeByClassName only runs as a story decorator, so on pure-MDX docs pages
+// (Get Started, Style Guide) the toolbar toggle never updated the html class.
+// Mirror the `theme` global onto <html> ourselves so those pages switch too.
+const THEME_CLASSES = {
+  light: ['azion', 'azion-light'],
+  dark: ['azion', 'azion-dark']
+}
+function applyThemeClass(name) {
+  const el = document.documentElement
+  el.classList.remove('azion', 'azion-light', 'azion-dark')
+  el.classList.add(...(THEME_CLASSES[name] || THEME_CLASSES.dark))
+}
+applyThemeClass('dark')
+try {
+  addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
+    if (globals && globals.theme) applyThemeClass(globals.theme)
+  })
+} catch {
+  /* headless/test contexts without a channel */
+}
 
 export const parameters = {
   controls: {
@@ -39,7 +62,8 @@ export const parameters = {
       fontCode: '"Roboto Mono", monospace',
       // Colors
       colorPrimary: '#F3652B',
-      colorSecondary: '#585C6D',
+      // Also the docs hyperlink color — #585C6D was unreadable on the dark canvas.
+      colorSecondary: '#F3652B',
       // UI
       appBg: '#0a0a0a',
       appContentBg: '#0a0a0a',
@@ -76,6 +100,7 @@ export const parameters = {
     storySort: {
       order: [
         'Get Started',
+        'Style Guide',
         'Foundations',
         ['Colors', 'Spacing', 'Typography', 'Icons'],
         'Components',

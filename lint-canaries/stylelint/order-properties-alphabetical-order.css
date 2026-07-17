@@ -1,0 +1,7 @@
+/* CANARY — must keep failing order/properties-alphabetical-order. */
+.panel {
+  display: flex;
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  align-items: center;
+}

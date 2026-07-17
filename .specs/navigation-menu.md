@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 389a2b04021ec2eb11f783a9936ef6afad959ddee92b9b5ec2bb5a35f9a41966
+checksum: eeac38ffbd59a75d8d8f19378b2b2e2c5a9a3cdae1315dd1a4a9d40af30c5ea3
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -41,7 +41,6 @@ Helps users move between views or sections. Migrated from the existing implement
 | Event | Payload | Notes |
 |---|---|---|
 | `update:value` | `value: NavigationMenuValue, eventDetails: unknown` | v-model:value. |
-| `value-change` | `value: NavigationMenuValue, eventDetails: unknown` | — |
 | `open-change-complete` | `open: boolean` | — |
 
 ## Slots

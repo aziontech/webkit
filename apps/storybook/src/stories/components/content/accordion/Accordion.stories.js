@@ -104,11 +104,6 @@ const meta = {
       description: '`v-model:value`. Fires when the open item(s) change.',
       table: { category: 'events' }
     },
-    onValueChange: {
-      action: 'value-change',
-      description: 'Convenience event mirroring `update:value`.',
-      table: { category: 'events' }
-    },
     default: {
       control: false,
       description: 'The `Accordion.Item` children.',

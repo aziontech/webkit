@@ -173,7 +173,7 @@
                     {{ description }}
                   </p>
                   <Tag
-                    :value="scope"
+                    :label="scope"
                     severity="secondary"
                     icon="pi pi-github"
                     :data-testid="`${testId}__scope-tag`"
@@ -253,7 +253,7 @@
                       @click="onStepClick($event, index)"
                     >
                       <ItemMedia
-                        media-kind="icon"
+                        kind="icon"
                         class="relative z-[1] !size-10 shrink-0 !translate-y-0 self-center border-[var(--border-muted)] bg-[var(--bg-surface)]"
                       >
                         <i

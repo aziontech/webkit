@@ -151,7 +151,6 @@ export function useNavigationMenuRootState(
         : (triggers.value.find((entry) => entry.value === nextValue)?.el ?? null)
 
     emit('update:value', nextValue, details)
-    emit('value-change', nextValue, details)
 
     if (nextValue != null) {
       void notifyOpenChangeComplete(true)

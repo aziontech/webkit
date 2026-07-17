@@ -1,0 +1,8 @@
+/* CANARY — must keep failing no-descending-specificity (warning severity). */
+.menu .item {
+  color: var(--text-primary);
+}
+
+.item {
+  color: var(--text-secondary);
+}

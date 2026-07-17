@@ -88,7 +88,7 @@ async function main() {
   // edit-via-Write — let it pass (validate-tokens.mjs still applies).
   if (existsSync(filePath) && !fileIsRecent(filePath)) process.exit(0)
 
-  if (skillReferencedInTranscript(input.transcript_path)) process.exit(0)
+  if (pipelineReferencedInTranscript(input.transcript_path)) process.exit(0)
 
   const msg = [
     `Component-create gate: blocked Write to ${relPath}`,

@@ -155,7 +155,7 @@ Composed, page-level examples: ChangePlanDrawer, DeleteDomainDialog, Onboarding 
 Stories are written using the Component Story Format (CSF). Here's an example:
 
 ```javascript
-import Button from '@aziontech/webkit/button';
+import Button from '@aziontech/webkit/button'
 
 export default {
   title: 'Components/Actions/Button',
@@ -166,14 +166,14 @@ export default {
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     disabled: { control: 'boolean' }
   }
-};
+}
 
 export const Default = {
   args: {
     kind: 'primary',
     size: 'large'
   }
-};
+}
 ```
 
 > Imports use the `@aziontech/webkit/*` paths; Storybook resolves them to `@aziontech/webkit.dev` automatically. New component stories follow the canonical `Button.stories.js` shape — see [`.claude/skills/storybook-write`](../../.claude/skills/storybook-write/SKILL.md).

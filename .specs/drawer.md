@@ -4,15 +4,36 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 380c8b7121907e3ac77be9b9ed690401b7bd0b22654667bee8ac6085948b5381
+checksum: c3a154355d143cc737f006a3f8542e627fda21de59e172a6ba966520884f31fd
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-07-15
 ---
+
 # Drawer — Component Spec
 
 ## Purpose
 
 Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/drawer/`.
+
+## When to use
+
+- A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.
+- The content is too large or persistent for a centered modal.
+
+## When NOT to use
+
+- It is a short, focused confirmation/task best centered and fully blocking → use `dialog`.
+- It is a small overlay anchored to a trigger → use a popover / `dropdown`.
+
+## Related
+
+- `dialog` — centered, blocking modal for focused tasks/confirmations.
+- `sidebar` — persistent (non-overlay) side navigation.
+
+## Best practices
+
+- Pick the edge (side) intentionally and keep it consistent across the app.
+- Trap focus while open and provide an obvious close affordance.
 
 ## Sub-components
 
@@ -26,25 +47,25 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `undefined` | no | Initial open state when uncontrolled. |
-| `closeable` | `boolean` | `undefined` | no | When true, overlay click and Escape close the drawer. |
-| `side` | `DrawerSide` | `undefined` | no | Edge the drawer panel slides from. |
-| `size` | `DrawerSize` | `undefined` | no | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
+| Prop          | Type         | Default     | Required | JSDoc                                                                                                   |
+| ------------- | ------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `open`        | `boolean`    | `undefined` | no       | Controlled open state. Use with `v-model:open`.                                                         |
+| `defaultOpen` | `boolean`    | `false`     | no       | Initial open state when uncontrolled.                                                                   |
+| `dismissible` | `boolean`    | `true`      | no       | When true, overlay click and Escape close the drawer.                                                   |
+| `side`        | `DrawerSide` | `'right'`   | no       | Edge the drawer panel slides from.                                                                      |
+| `size`        | `DrawerSize` | `'medium'`  | no       | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event         | Payload          | Notes         |
+| ------------- | ---------------- | ------------- |
 | `update:open` | `value: boolean` | v-model:open. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
@@ -57,20 +78,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

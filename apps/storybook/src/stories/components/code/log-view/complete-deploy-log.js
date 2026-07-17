@@ -66,10 +66,16 @@ export const completeDeployLog = [
     id: '22',
     time: '13:47:48',
     type: 'success',
-    message: 'Successfully created GitHub Actions workflow file at .github/workflows/azion-deploy.yml'
+    message:
+      'Successfully created GitHub Actions workflow file at .github/workflows/azion-deploy.yml'
   },
   { id: '23', time: '13:47:50', type: 'text', message: '[TASK] - #. Dump azion variables!' },
-  { id: '24', time: '13:47:50', type: 'success', message: 'Variables file (.env) dumped successfully' },
+  {
+    id: '24',
+    time: '13:47:50',
+    type: 'success',
+    message: 'Variables file (.env) dumped successfully'
+  },
   { id: '25', time: '13:47:50', type: 'text', message: '[TASK] - # Deploy template!' },
   {
     id: '26',
@@ -77,7 +83,12 @@ export const completeDeployLog = [
     type: 'text',
     message: '2026-05-26T13:47:51.181Z DEBUG Verifying if an update is required'
   },
-  { id: '27', time: '13:47:51', type: 'text', message: '2026-05-26T13:47:51.181Z DEBUG Exec Schedules' },
+  {
+    id: '27',
+    time: '13:47:51',
+    type: 'text',
+    message: '2026-05-26T13:47:51.181Z DEBUG Exec Schedules'
+  },
   { id: '28', time: '13:47:51', type: 'text', message: 'Running deploy command' },
   {
     id: '29',
@@ -92,9 +103,24 @@ export const completeDeployLog = [
     message: 'Building your Application. This process may take a few minutes'
   },
   { id: '31', time: '13:47:51', type: 'text', message: 'Running build step command:' },
-  { id: '32', time: '13:47:51', type: 'text', message: '$ DEBUG=true npx --yes edge-functions@5.3.1 build' },
-  { id: '33', time: '13:48:15', type: 'text', message: '[Azion] [Build] › ℹ info Using preset: vue' },
-  { id: '34', time: '13:48:15', type: 'text', message: '[Azion] [Pre-Build] › ℹ info Starting pre-build...' },
+  {
+    id: '32',
+    time: '13:47:51',
+    type: 'text',
+    message: '$ DEBUG=true npx --yes edge-functions@5.3.1 build'
+  },
+  {
+    id: '33',
+    time: '13:48:15',
+    type: 'text',
+    message: '[Azion] [Build] › ℹ info Using preset: vue'
+  },
+  {
+    id: '34',
+    time: '13:48:15',
+    type: 'text',
+    message: '[Azion] [Pre-Build] › ℹ info Starting pre-build...'
+  },
   { id: '35', time: '13:48:15', type: 'text', message: '[Vue/Vite] › ℹ info' },
   { id: '36', time: '13:48:15', type: 'text', message: '> vue-vite-static@0.0.0 build' },
   { id: '37', time: '13:48:15', type: 'text', message: '> vite build' },
@@ -232,14 +258,24 @@ export const completeDeployLog = [
     type: 'text',
     message: '2026-05-26T13:48:17.226Z DEBUG Create Edge Application'
   },
-  { id: '61', time: '13:48:18', type: 'success', message: 'Created Application vue-3-teste with ID 1779802985' },
+  {
+    id: '61',
+    time: '13:48:18',
+    type: 'success',
+    message: 'Created Application vue-3-teste with ID 1779802985'
+  },
   {
     id: '62',
     time: '13:48:18',
     type: 'text',
     message: '2026-05-26T13:48:18.447Z DEBUG Update Edge Application'
   },
-  { id: '63', time: '13:48:19', type: 'text', message: '2026-05-26T13:48:19.594Z DEBUG Create Origins' },
+  {
+    id: '63',
+    time: '13:48:19',
+    type: 'text',
+    message: '2026-05-26T13:48:19.594Z DEBUG Create Origins'
+  },
   { id: '64', time: '13:48:20', type: 'success', message: 'Created Origin for Application' },
   {
     id: '65',
@@ -247,7 +283,12 @@ export const completeDeployLog = [
     type: 'text',
     message: '2026-05-26T13:48:20.541Z DEBUG Get Rules Engine Default'
   },
-  { id: '66', time: '13:48:21', type: 'text', message: '2026-05-26T13:48:21.421Z DEBUG Update Rules Engine' },
+  {
+    id: '66',
+    time: '13:48:21',
+    type: 'text',
+    message: '2026-05-26T13:48:21.421Z DEBUG Update Rules Engine'
+  },
   {
     id: '67',
     time: '13:48:22',
@@ -272,7 +313,8 @@ export const completeDeployLog = [
     id: '72',
     time: '13:48:46',
     type: 'text',
-    message: '2026-05-26T13:48:46.835Z DEBUG Object_key: 20260526134817/assets/AboutView-4d995ba2.css'
+    message:
+      '2026-05-26T13:48:46.835Z DEBUG Object_key: 20260526134817/assets/AboutView-4d995ba2.css'
   },
   {
     id: '73',
@@ -296,7 +338,8 @@ export const completeDeployLog = [
     id: '76',
     time: '13:48:46',
     type: 'text',
-    message: '2026-05-26T13:48:46.835Z DEBUG Object_key: 20260526134817/assets/AboutView-dc6b62c6.js'
+    message:
+      '2026-05-26T13:48:46.835Z DEBUG Object_key: 20260526134817/assets/AboutView-dc6b62c6.js'
   },
   {
     id: '77',
@@ -353,7 +396,12 @@ export const completeDeployLog = [
     type: 'text',
     message: '2026-05-26T13:48:51.362Z DEBUG Create Edge Function'
   },
-  { id: '87', time: '13:48:53', type: 'success', message: 'Created Function vue-3-teste with ID 52818' },
+  {
+    id: '87',
+    time: '13:48:53',
+    type: 'success',
+    message: 'Created Function vue-3-teste with ID 52818'
+  },
   {
     id: '88',
     time: '13:48:53',
@@ -367,38 +415,78 @@ export const completeDeployLog = [
     message: '2026-05-26T13:48:53.939Z DEBUG Create Edge Function Instance'
   },
   { id: '90', time: '13:48:56', type: 'text', message: 'Reading manifest.json file' },
-  { id: '91', time: '13:48:56', type: 'text', message: 'Creating resources found in manifest.json file' },
-  { id: '92', time: '13:48:56', type: 'text', message: '2026-05-26T13:48:56.079Z DEBUG Create Origins' },
+  {
+    id: '91',
+    time: '13:48:56',
+    type: 'text',
+    message: 'Creating resources found in manifest.json file'
+  },
+  {
+    id: '92',
+    time: '13:48:56',
+    type: 'text',
+    message: '2026-05-26T13:48:56.079Z DEBUG Create Origins'
+  },
   {
     id: '93',
     time: '13:48:57',
     type: 'success',
     message: 'Origin origin-storage-default with id 261044 successfully created'
   },
-  { id: '94', time: '13:48:57', type: 'text', message: '2026-05-26T13:48:57.257Z DEBUG Create Rules Engine' },
+  {
+    id: '94',
+    time: '13:48:57',
+    type: 'text',
+    message: '2026-05-26T13:48:57.257Z DEBUG Create Rules Engine'
+  },
   {
     id: '95',
     time: '13:48:58',
     type: 'success',
     message: 'Rule Engine Set Storage Origin for All Requests with id 561537 successfully created'
   },
-  { id: '96', time: '13:48:58', type: 'text', message: '2026-05-26T13:48:58.424Z DEBUG Create Rules Engine' },
+  {
+    id: '96',
+    time: '13:48:58',
+    type: 'text',
+    message: '2026-05-26T13:48:58.424Z DEBUG Create Rules Engine'
+  },
   {
     id: '97',
     time: '13:48:58',
     type: 'success',
     message: 'Rule Engine Deliver Static Assets with id 561538 successfully created'
   },
-  { id: '98', time: '13:48:59', type: 'text', message: '2026-05-26T13:48:59.557Z DEBUG Create Rules Engine' },
+  {
+    id: '98',
+    time: '13:48:59',
+    type: 'text',
+    message: '2026-05-26T13:48:59.557Z DEBUG Create Rules Engine'
+  },
   {
     id: '99',
     time: '13:49:00',
     type: 'success',
     message: 'Rule Engine Redirect to index.html with id 561539 successfully created'
   },
-  { id: '100', time: '13:49:00', type: 'text', message: '2026-05-26T13:49:00.700Z DEBUG Create Domain' },
-  { id: '101', time: '13:49:05', type: 'success', message: 'Created Domain vue-3-teste with ID 1779806653' },
-  { id: '102', time: '13:49:05', type: 'success', message: 'Your Application was deployed successfully' },
+  {
+    id: '100',
+    time: '13:49:00',
+    type: 'text',
+    message: '2026-05-26T13:49:00.700Z DEBUG Create Domain'
+  },
+  {
+    id: '101',
+    time: '13:49:05',
+    type: 'success',
+    message: 'Created Domain vue-3-teste with ID 1779806653'
+  },
+  {
+    id: '102',
+    time: '13:49:05',
+    type: 'success',
+    message: 'Your Application was deployed successfully'
+  },
   {
     id: '103',
     time: '13:49:05',
@@ -419,9 +507,15 @@ export const completeDeployLog = [
     id: '108',
     time: '13:49:08',
     type: 'text',
-    message: 'Initialized empty Git repository in /azion-samples/templates/vue/vue3-vite-static/.git/'
+    message:
+      'Initialized empty Git repository in /azion-samples/templates/vue/vue3-vite-static/.git/'
   },
-  { id: '109', time: '13:49:08', type: 'success', message: '[master (root-commit) 3a184a9] [bot] Automated Config' },
+  {
+    id: '109',
+    time: '13:49:08',
+    type: 'success',
+    message: '[master (root-commit) 3a184a9] [bot] Automated Config'
+  },
   { id: '110', time: '13:49:08', type: 'text', message: '29 files changed, 7630 insertions(+)' },
   {
     id: '111',
@@ -429,7 +523,12 @@ export const completeDeployLog = [
     type: 'text',
     message: 'create mode 100644 .github/workflows/azion-deploy.yml'
   },
-  { id: '112', time: '13:49:08', type: 'text', message: 'create mode 100644 .github/workflows/main.yml' },
+  {
+    id: '112',
+    time: '13:49:08',
+    type: 'text',
+    message: 'create mode 100644 .github/workflows/main.yml'
+  },
   { id: '113', time: '13:49:08', type: 'text', message: 'create mode 100644 .gitignore' },
   { id: '114', time: '13:49:08', type: 'text', message: 'create mode 100644 README.md' },
   { id: '115', time: '13:49:08', type: 'text', message: 'create mode 100644 azion.config.mjs' },
@@ -444,9 +543,24 @@ export const completeDeployLog = [
   { id: '124', time: '13:49:08', type: 'text', message: 'create mode 100644 src/assets/base.css' },
   { id: '125', time: '13:49:08', type: 'text', message: 'create mode 100644 src/assets/logo.svg' },
   { id: '126', time: '13:49:08', type: 'text', message: 'create mode 100644 src/assets/main.css' },
-  { id: '127', time: '13:49:08', type: 'text', message: 'create mode 100644 src/components/HelloWorld.vue' },
-  { id: '128', time: '13:49:08', type: 'text', message: 'create mode 100644 src/components/TheWelcome.vue' },
-  { id: '129', time: '13:49:08', type: 'text', message: 'create mode 100644 src/components/WelcomeItem.vue' },
+  {
+    id: '127',
+    time: '13:49:08',
+    type: 'text',
+    message: 'create mode 100644 src/components/HelloWorld.vue'
+  },
+  {
+    id: '128',
+    time: '13:49:08',
+    type: 'text',
+    message: 'create mode 100644 src/components/TheWelcome.vue'
+  },
+  {
+    id: '129',
+    time: '13:49:08',
+    type: 'text',
+    message: 'create mode 100644 src/components/WelcomeItem.vue'
+  },
   {
     id: '130',
     time: '13:49:08',
@@ -471,13 +585,33 @@ export const completeDeployLog = [
     type: 'text',
     message: 'create mode 100644 src/components/icons/IconSupport.vue'
   },
-  { id: '134', time: '13:49:08', type: 'text', message: 'create mode 100644 src/components/icons/IconTooling.vue' },
+  {
+    id: '134',
+    time: '13:49:08',
+    type: 'text',
+    message: 'create mode 100644 src/components/icons/IconTooling.vue'
+  },
   { id: '135', time: '13:49:08', type: 'text', message: 'create mode 100644 src/main.js' },
   { id: '136', time: '13:49:08', type: 'text', message: 'create mode 100644 src/router/index.js' },
-  { id: '137', time: '13:49:08', type: 'text', message: 'create mode 100644 src/views/AboutView.vue' },
-  { id: '138', time: '13:49:08', type: 'text', message: 'create mode 100644 src/views/HomeView.vue' },
+  {
+    id: '137',
+    time: '13:49:08',
+    type: 'text',
+    message: 'create mode 100644 src/views/AboutView.vue'
+  },
+  {
+    id: '138',
+    time: '13:49:08',
+    type: 'text',
+    message: 'create mode 100644 src/views/HomeView.vue'
+  },
   { id: '139', time: '13:49:08', type: 'text', message: 'create mode 100644 vite.config.js' },
-  { id: '140', time: '13:49:09', type: 'text', message: "branch 'main' set up to track 'origin/main'." },
+  {
+    id: '140',
+    time: '13:49:09',
+    type: 'text',
+    message: "branch 'main' set up to track 'origin/main'."
+  },
   {
     id: '141',
     time: '13:49:09',
@@ -485,11 +619,16 @@ export const completeDeployLog = [
     message: '[TASK] - #. Set Azion Personal Token in the repository.'
   },
   { id: '142', time: '13:49:10', type: 'text', message: '[TASK] - #. Update repository info.' },
-  { id: '143', time: '13:49:10', type: 'text', message: '[TASK] - #. Delete local azion-samples repository!' },
+  {
+    id: '143',
+    time: '13:49:10',
+    type: 'text',
+    message: '[TASK] - #. Delete local azion-samples repository!'
+  },
   {
     id: '144',
     time: '13:49:10',
     type: 'success',
     message: '[TASK] - #. Deploy finalized successfully!'
-  },
+  }
 ]

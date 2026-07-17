@@ -43,7 +43,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Pagination controls in two modes: composition — a three-region landmark (page-info text, navigation buttons, rows-per-page selector) wired by hand through slots — and data-driven, where `total` makes the Paginator render its own windowed controls and emit `update:page` / `update:pageSize` / `page-change`.'
+          'Pagination controls in two modes: composition — a three-region landmark (page-info text, navigation buttons, rows-per-page selector) wired by hand through slots — and data-driven, where `total` makes the Paginator render its own windowed controls and emit `update:page` / `update:pageSize`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -102,11 +102,6 @@ const meta = {
       action: 'update:pageSize',
       description: 'Rows-per-page changed via the internal selector. Supports `v-model:page-size`.',
       table: { category: 'events', type: { summary: '(pageSize: number) => void' } }
-    },
-    onPageChange: {
-      action: 'page-change',
-      description: 'Fired alongside `update:page` whenever the page changes.',
-      table: { category: 'events', type: { summary: '(page: number) => void' } }
     },
     info: {
       control: false,
@@ -213,7 +208,6 @@ const DATA_DRIVEN_MARKUP = `<Paginator
   :total="200"
   :page-size-options="[10, 25, 50, 100]"
   :sibling-count="1"
-  @page-change="loadPage"
 />`
 
 const DATA_DRIVEN_SCRIPT = [
@@ -221,8 +215,7 @@ const DATA_DRIVEN_SCRIPT = [
   "import { ref } from 'vue'",
   '',
   'const page = ref(1)',
-  'const pageSize = ref(10)',
-  "const loadPage = (nextPage) => console.log('page-change', nextPage)"
+  'const pageSize = ref(10)'
 ]
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Paginator>} */
@@ -246,8 +239,8 @@ export const DataDriven = {
       return { args, page, pageSize }
     },
     // `v-bind="args"` merges the Storybook action spies with the v-model
-    // handlers, so update:page / update:pageSize / page-change all log in the
-    // Actions panel while the local refs keep the canvas interactive.
+    // handlers, so update:page / update:pageSize log in the Actions panel
+    // while the local refs keep the canvas interactive.
     template: `
       <Paginator
         v-bind="args"
@@ -260,7 +253,7 @@ export const DataDriven = {
     docs: {
       description: {
         story:
-          'Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Paginator renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize` / `page-change`.'
+          'Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Paginator renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize`.'
       },
       source: { code: toSfc(DATA_DRIVEN_SCRIPT, DATA_DRIVEN_MARKUP) }
     }

@@ -196,7 +196,7 @@ const baseArgs = {
   enableSorting: true,
   enableRowSelection: false,
   selectOnRowClick: false,
-  headerVariant: 'default',
+  headerKind: 'default',
   loading: false
 }
 
@@ -234,8 +234,8 @@ const dataDrivenSource = (args) => {
   if (args.selectOnRowClick) open.push('  select-on-row-click')
   if (args.paginated) open.push('  paginated')
   if (args.paginated && args.pageSize !== 10) open.push(`  :page-size="${args.pageSize}"`)
-  if (args.headerVariant && args.headerVariant !== 'default') {
-    open.push(`  header-variant="${args.headerVariant}"`)
+  if (args.headerKind && args.headerKind !== 'default') {
+    open.push(`  header-kind="${args.headerKind}"`)
   }
   if (args.maxHeight) open.push(`  max-height="${args.maxHeight}"`)
   if (args.border) open.push('  border')
@@ -486,7 +486,7 @@ const meta = {
       description: 'Clicking a row toggles its selection (requires `enableRowSelection`).',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
-    headerVariant: {
+    headerKind: {
       control: 'inline-radio',
       options: ['default', 'compact'],
       description: 'Header density: `compact` shrinks the column-header row height and padding.',
@@ -668,7 +668,10 @@ const meta = {
     onRowClick: {
       action: 'row-click',
       description: 'Fires when a rendered row is clicked (data-driven mode).',
-      table: { type: { summary: '(event: MouseEvent, row: Record<string, unknown>)' }, category: 'events' }
+      table: {
+        type: { summary: '(event: MouseEvent, row: Record<string, unknown>)' },
+        category: 'events'
+      }
     },
     'onUpdate:filters': {
       action: 'update:filters',
@@ -850,17 +853,17 @@ export const CompactHeader = {
   render: makeStory({ rows, columns }),
   args: {
     paginated: false,
-    headerVariant: 'compact'
+    headerKind: 'compact'
   },
   parameters: {
     docs: {
       description: {
         story:
-          'A denser header via `header-variant="compact"` (forwarded to `Table.Header`): the column-header row uses a reduced height and padding, so the table opens straight onto that header row.'
+          'A denser header via `header-kind="compact"` (forwarded to `Table.Header`): the column-header row uses a reduced height and padding, so the table opens straight onto that header row.'
       },
       source: {
         code: dataDrivenSnippet(
-          { ...baseArgs, paginated: false, headerVariant: 'compact' },
+          { ...baseArgs, paginated: false, headerKind: 'compact' },
           { cols: columns }
         )
       }
@@ -947,17 +950,17 @@ export const CompactHeaderWithStickyColumn = {
   render: makeStory({ rows, columns: wideColumns }),
   args: {
     paginated: false,
-    headerVariant: 'compact'
+    headerKind: 'compact'
   },
   parameters: {
     docs: {
       description: {
         story:
-          'A compact header (`header-variant="compact"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No paginator.'
+          'A compact header (`header-kind="compact"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No paginator.'
       },
       source: {
         code: dataDrivenSnippet(
-          { ...baseArgs, paginated: false, headerVariant: 'compact' },
+          { ...baseArgs, paginated: false, headerKind: 'compact' },
           { cols: wideColumns }
         )
       }

@@ -85,6 +85,7 @@
       kindClasses[props.kind],
       sizeClasses[props.size],
       !hasImage.value && typographyClasses[props.size],
+      showLabel.value && 'border border-[var(--border-default)]',
       attrs.class as string | undefined
     )
   )

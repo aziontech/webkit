@@ -8,5 +8,5 @@ export {
   getActiveBreakpoint,
   resolveResponsiveValue,
   breakpoints,
-  breakpointRows,
-} from '../utils/from-tokens.js';
+  breakpointRows
+} from '../utils/from-tokens.js'

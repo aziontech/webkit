@@ -1,27 +1,27 @@
 <script setup>
-/**
- * SectionHeader - Section title with optional description
- * Used for major sections within documentation pages
- */
-defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    default: ''
-  },
-  size: {
-    type: String,
-    default: 'sm',
-    validator: (v) => ['sm', 'md', 'lg'].includes(v)
-  },
-  marginBottom: {
-    type: String,
-    default: 'mb-4'
-  }
-})
+  /**
+   * SectionHeader - Section title with optional description
+   * Used for major sections within documentation pages
+   */
+  defineProps({
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      default: ''
+    },
+    size: {
+      type: String,
+      default: 'sm',
+      validator: (v) => ['sm', 'md', 'lg'].includes(v)
+    },
+    marginBottom: {
+      type: String,
+      default: 'mb-4'
+    }
+  })
 </script>
 
 <template>

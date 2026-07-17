@@ -1,0 +1,8 @@
+/* CANARY — must keep failing no-duplicate-selectors. */
+.country-flag {
+  background-repeat: no-repeat;
+}
+
+.country-flag {
+  background-size: contain;
+}

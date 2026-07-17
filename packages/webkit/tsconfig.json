@@ -13,6 +13,9 @@
     "src/**/*.d.ts",
     "src/**/*.d.ts.map",
     "src/**/*.figma.ts",
+    "src/**/*.test.ts",
+    "src/**/*.test.js",
+    "src/test",
     "src/core/list-data-table",
     "src/services/markdown"
   ]

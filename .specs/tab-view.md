@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: b005454d4bd2330793a88d063cb9b01afe78f2016d1c49ec2008ee3f1b1dc8bf
+checksum: 31904e8156de30e1675ac0114f0200a0422b240a6a7b28c19d4c16a1243f4fc3
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -32,7 +32,6 @@ Helps users move between views or sections. Migrated from the existing implement
 | Event | Payload | Notes |
 |---|---|---|
 | `update:value` | `value: TabViewValue | null` | v-model:value. |
-| `value-change` | `value: TabViewValue | null` | — |
 
 ## Slots
 

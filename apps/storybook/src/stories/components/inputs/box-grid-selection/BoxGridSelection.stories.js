@@ -199,7 +199,7 @@ const WITH_TAG_SCRIPT = [
 
 const WITH_TAG_MARKUP = `<BoxGridSelection v-model="selected" :items="items">
   <template #tag="{ item }">
-    <Tag :value="item.tag" severity="info" />
+    <Tag :label="item.tag" severity="info" />
   </template>
 </BoxGridSelection>`
 
@@ -225,7 +225,7 @@ export const WithTag = {
     template: `
       <BoxGridSelection v-bind="args" :model-value="value" @update:model-value="onUpdate">
         <template #tag="{ item }">
-          <Tag :value="item.tag" severity="info" />
+          <Tag :label="item.tag" severity="info" />
         </template>
       </BoxGridSelection>
     `

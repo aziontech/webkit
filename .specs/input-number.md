@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 8449ce81cf99775068ba3af50021f6da330a39244f31afaf9bd2c578f546aa14
+checksum: 87b0114465648987177c017ea2740a5a3301195560b33e8ef309fc48cae2e173
 created: 2026-06-22
 last_updated: 2026-06-22
 ---
@@ -17,6 +17,24 @@ last_updated: 2026-06-22
 ## Purpose
 
 Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input-text` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge.
+
+## When to use
+
+- Capture a strictly numeric value (counts, quantities, ports, prices).
+
+## When NOT to use
+
+- The value is free text → use `input-text`.
+- The user picks from a fixed set of numbers → use `select`.
+
+## Related
+
+- `input-text` — free-text sibling with the same field API.
+
+## Best practices
+
+- Set `min` / `max` / `step` to constrain input rather than validating after the fact.
+- Use `inputmode="numeric"` semantics for mobile keyboards.
 
 ## Usage
 
