@@ -1,4 +1,5 @@
 import { primitives } from '@aziontech/theme/colors'
+
 import ColorPaletteSection from '../../foundations/components/ColorPaletteSection.vue'
 import { PageContainer, PageHeader } from '../../foundations/components/layout/index.js'
 
@@ -79,6 +80,10 @@ export default {
 export const Overview = {
   name: 'Overview',
   parameters: {
+    // Token gallery: reflows into a very tall single column at small widths,
+    // approaching Chromium's 16384px capture ceiling — snapshot both themes
+    // at desktop only.
+    visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
       description: {
         story:

@@ -13,6 +13,10 @@ const defaultConfig = getJestConfig()
  */
 module.exports = {
   ...defaultConfig,
+  // Six screenshots + six PNG comparisons per story (theme × viewport matrix
+  // in .storybook/visual-modes.js); jest's default 5s was sized for one.
+  // Headroom for the tall foundation galleries on a cold CI runner.
+  testTimeout: 30000,
   testPathIgnorePatterns: [
     ...(defaultConfig.testPathIgnorePatterns ?? []),
     '/src/stories/templates/'

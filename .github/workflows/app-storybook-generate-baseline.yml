@@ -18,6 +18,10 @@ on:
         description: 'Regenerate linux baselines and upload them as an artifact (commit manually)'
         type: boolean
         default: false
+      modes:
+        description: 'Comma-separated visual modes to (re)generate, e.g. light-desktop,dark-mobile (empty = full matrix; see .storybook/visual-modes.js)'
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -30,7 +34,10 @@ jobs:
   visual:
     name: Storybook Generate Baseline
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Unsharded on purpose (one artifact = the whole baseline set); the
+    # 6-mode theme × viewport matrix makes a full regeneration ~6× the
+    # screenshots of the visual PR check's per-shard slice.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -63,6 +70,8 @@ jobs:
       - name: Regenerate baselines
         if: ${{ github.event.inputs.update_baselines == 'true' }}
         run: pnpm --filter storybook run test:visual:update
+        env:
+          VISUAL_MODES: ${{ github.event.inputs.modes }}
 
       - name: Upload regenerated baselines
         if: ${{ github.event.inputs.update_baselines == 'true' }}

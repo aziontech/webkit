@@ -1,10 +1,3 @@
-import { setup } from '@storybook/vue3'
-import PrimeVue from 'primevue/config'
-import Tooltip from 'primevue/tooltip'
-import { withThemeByClassName } from '@storybook/addon-themes'
-import { addons } from '@storybook/preview-api'
-import { GLOBALS_UPDATED } from '@storybook/core-events'
-
 // v3 token build: primitives, --bg-* / --text-* / --border-*, and .text-body-md etc.
 // (replaces injectCssVars(), which only emitted --background-* aliases — webkit components use --bg-*)
 import '@aziontech/theme/globals.css'
@@ -13,6 +6,15 @@ import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
+
+import { withThemeByClassName } from '@storybook/addon-themes'
+import { GLOBALS_UPDATED } from '@storybook/core-events'
+import { addons } from '@storybook/preview-api'
+import { setup } from '@storybook/vue3'
+import PrimeVue from 'primevue/config'
+import Tooltip from 'primevue/tooltip'
+
+import { STORYBOOK_VIEWPORTS, THEME_CLASSES } from './visual-modes.js'
 
 setup((app) => {
   app.use(PrimeVue, {
@@ -25,10 +27,8 @@ setup((app) => {
 // withThemeByClassName only runs as a story decorator, so on pure-MDX docs pages
 // (Get Started, Style Guide) the toolbar toggle never updated the html class.
 // Mirror the `theme` global onto <html> ourselves so those pages switch too.
-const THEME_CLASSES = {
-  light: ['azion', 'azion-light'],
-  dark: ['azion', 'azion-dark']
-}
+// THEME_CLASSES lives in ./visual-modes.js — the visual test-runner applies
+// the same classes when it screenshots each theme.
 function applyThemeClass(name) {
   const el = document.documentElement
   el.classList.remove('azion', 'azion-light', 'azion-dark')
@@ -83,6 +83,12 @@ export const parameters = {
       inputBorderRadius: 4
     }
   },
+  viewport: {
+    // DS-breakpoint-aligned viewports — the same set the visual tests shoot
+    // (see ./visual-modes.js). Deliberately replaces the addon defaults, so
+    // story-level defaultViewport must use 'mobile' | 'tablet' | 'desktop'.
+    viewports: STORYBOOK_VIEWPORTS
+  },
   backgrounds: {
     default: 'azion azion-dark',
     values: [
@@ -113,8 +119,8 @@ export const parameters = {
 export const decorators = [
   withThemeByClassName({
     themes: {
-      light: 'azion azion-light',
-      dark: 'azion azion-dark'
+      light: THEME_CLASSES.light.join(' '),
+      dark: THEME_CLASSES.dark.join(' ')
     },
     defaultTheme: 'dark'
   })

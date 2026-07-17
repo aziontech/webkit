@@ -333,16 +333,23 @@ jobs:
         working-directory: packages/webkit
 
   # Visual regression — the styled layer: every story screenshotted via
-  # @storybook/test-runner and compared against the committed linux baselines
-  # (test:visual:ci fails on any missing baseline). Last link of the chain:
-  # pixels only run once behavior (tests) and both builds are green. Baseline
-  # regeneration lives in app-storybook-test-visual-regression.yml (dispatch).
+  # @storybook/test-runner in the 6-mode theme × viewport matrix (see
+  # apps/storybook/.storybook/visual-modes.js) and compared against the
+  # committed linux baselines (test:visual:ci fails on any missing baseline).
+  # Last link of the chain: pixels only run once behavior (tests) and both
+  # builds are green. Sharded like the Vitest job — jest splits the story
+  # files across shards. Baseline regeneration lives in
+  # app-storybook-generate-baseline.yml (dispatch).
   visual:
-    name: Storybook visual tests
+    name: Storybook visual tests (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
     needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -372,14 +379,16 @@ jobs:
       - name: Build Storybook
         run: pnpm run storybook:build
 
-      - name: Run visual tests
+      - name: Run visual tests (shard ${{ matrix.shard }}/4)
         run: pnpm --filter storybook run test:visual:ci
+        env:
+          VISUAL_SHARD: ${{ matrix.shard }}/4
 
       - name: Upload diff output on failure
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: visual-diff-output
+          name: visual-diff-output-shard-${{ matrix.shard }}
           path: apps/storybook/.storybook/test-visual/__diff_output__/
           retention-days: 7
           if-no-files-found: ignore

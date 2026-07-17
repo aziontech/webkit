@@ -1,6 +1,5 @@
 import icons from '@aziontech/icons/catalog'
 import colorIcons from '@aziontech/icons/color-catalog'
-
 import CodeBlock from '@aziontech/webkit/code-block'
 
 import IconGrid from '../../foundations/components/IconGrid.vue'
@@ -111,6 +110,10 @@ export const Overview = {
     initialSize: 24
   },
   parameters: {
+    // Token gallery: reflows into a very tall single column at small widths,
+    // approaching Chromium's 16384px capture ceiling — snapshot both themes
+    // at desktop only.
+    visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
       description: {
         story: 'Icon system overview: import, usage examples, and complete icon gallery.'

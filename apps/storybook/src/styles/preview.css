@@ -14,6 +14,10 @@ body,
 }
 
 /* Storybook Docs Preview (sbdocs/sbdocs-preview) canvas background */
+/* ⚠ Any `transition` rule in this file MUST be mirrored in the freeze style
+   injected by .storybook/test-runner.js — its selectors need equal specificity
+   to force transition-duration: 1ms during visual snapshots (theme flips
+   would otherwise animate for 0.4s and smear the screenshots). */
 .sb-main-padded,
 .docs-story,
 .docs-story > * {
