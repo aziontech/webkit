@@ -71,7 +71,8 @@
 
   const sharedClasses = [
     'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full',
-    'border border-transparent bg-[var(--bg-disabled)] data-[checked]:bg-[var(--primary)]',
+    'border border-[var(--border-default)] bg-[var(--bg-disabled)]',
+    'data-[checked]:border-[var(--primary)] data-[checked]:bg-[var(--primary)]',
     ...ghostLayerClasses,
     ...focusVisibleRingClasses,
     ...focusSuppressHoverGhostClasses,
@@ -79,10 +80,10 @@
   ]
 
   const disabledClasses =
-    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:opacity-50 data-[checked]:data-[disabled]:border-[var(--border-default)] data-[checked]:data-[disabled]:bg-[var(--bg-disabled)]'
 
   const handleClasses =
-    'pointer-events-none absolute left-0.5 top-1/2 z-[1] size-4 -translate-y-1/2 rounded-full bg-[var(--bg-surface)] shadow-[var(--shadow-xs)] transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-data-[checked]:translate-x-4'
+    'pointer-events-none absolute left-0.5 top-1/2 z-[1] size-4 -translate-y-1/2 rounded-full bg-[var(--bg-surface)] shadow-[var(--shadow-xs)] transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-data-[checked]:translate-x-4 group-data-[disabled]:bg-[var(--text-disabled)] group-data-[disabled]:shadow-none'
 
   const rootClasses = computed(() => cn(sharedClasses, disabledClasses, attrs.class))
 </script>
