@@ -93,7 +93,7 @@
   })
 
   const inputClasses = computed(() => [
-    'relative z-[1] w-full min-w-0 border-0 bg-transparent outline-none',
+    'relative z-[1] h-full w-full min-w-0 self-stretch border-0 bg-transparent outline-none',
     'text-[var(--text-default)] placeholder:text-[var(--text-muted)]',
     'disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]',
     'read-only:cursor-default',
