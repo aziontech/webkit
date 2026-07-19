@@ -38,6 +38,11 @@
     inputClass: {
       type: String,
       default: ''
+    },
+    size: {
+      type: String,
+      default: 'medium',
+      validator: (value) => ['small', 'medium', 'large'].includes(value)
     }
   })
 
@@ -58,6 +63,12 @@
   const slots = useSlots()
   const hasIconSlot = !!slots.icon
 
+  const inputSizeClass = computed(() => {
+    if (props.size === 'small') return 'p-inputtext-sm'
+    if (props.size === 'large') return 'p-inputtext-lg'
+    return ''
+  })
+
   const {
     value: inputValue,
     errorMessage,
@@ -76,7 +87,10 @@
       :label="props.label"
       :isRequired="attrs.required"
     />
-    <div class="p-inputgroup">
+    <div
+      :data-size="size"
+      class="p-inputgroup rounded-[var(--shape-button)] focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-1 focus-within:ring-offset-[var(--bg-canvas)] [&_.p-inputtext:focus]:!shadow-none [&_.p-inputtext:focus]:!outline-none [&_.p-inputtext:enabled:focus]:!border-[var(--border-default)] data-[size=small]:[&_.p-inputgroup-addon]:py-[var(--spacing-1)] data-[size=small]:[&_.p-inputgroup-addon]:px-[var(--spacing-2)] data-[size=large]:[&_.p-inputgroup-addon]:py-[var(--spacing-3)] data-[size=large]:[&_.p-inputgroup-addon]:px-[var(--spacing-4)]"
+    >
       <div
         class="p-inputgroup-addon"
         v-if="hasIconSlot"
@@ -90,7 +104,7 @@
         :name="name"
         :readonly="readonly"
         :disabled="disabled"
-        :class="[{ 'p-invalid': errorMessage }, $attrs.class, inputClass]"
+        :class="[{ 'p-invalid': errorMessage }, inputSizeClass, $attrs.class, inputClass]"
         type="text"
         :placeholder="props.placeholder"
         @input="handleChange"
