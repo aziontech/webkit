@@ -34,6 +34,7 @@ import { compileThemeCss } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
+import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
 import { semanticColors } from '../tokens/semantic/colors.js';
 import { createCssVars } from './css-vars.js';
 
@@ -104,6 +105,7 @@ const buildFlatModel = () => ({
   primitives: flattenPrimitives(),
   containers: flattenSingleValue(containersData, (k) => `--container-${k}`),
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
+  zIndices: flattenSingleValue(zIndicesData, (k) => `--${k}`),
   texts: flattenBundle(textsData),
   semanticColors: buildSemanticColorVars(),
 });
@@ -175,6 +177,7 @@ const emitCssV3 = () => {
     { title: 'Primitives', vars: m.primitives },
     { title: 'Containers', vars: m.containers._ || {} },
     { title: 'Spacings', vars: m.spacings._ || {} },
+    { title: 'Z-indices', vars: m.zIndices._ || {} },
     { title: 'Texts', vars: m.texts._ || {} },
     { title: 'Semantic colors', vars: m.semanticColors.light },
   ];
@@ -189,6 +192,7 @@ const emitCssV3 = () => {
     const merged = {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
+      ...(m.zIndices[bp] || {}),
       ...(m.texts[bp] || {}),
     };
     if (Object.keys(merged).length > 0) mediaBlocks.push(emitMediaBlockV3(bp, merged));
@@ -333,6 +337,7 @@ const emitCssV4 = () => {
     ...rootPrimitiveVars,
     ...(m.containers._ || {}),
     ...(m.spacings._ || {}),
+    ...(m.zIndices._ || {}),
     ...(m.texts._ || {}),
   };
 
@@ -341,6 +346,7 @@ const emitCssV4 = () => {
     const merged = {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
+      ...(m.zIndices[bp] || {}),
       ...(m.texts[bp] || {}),
     };
     if (Object.keys(merged).length === 0) continue;

@@ -460,6 +460,9 @@
   --spacing-sm: 0.75rem;
   --spacing-xs: 0.5rem;
   --spacing-xxs: 0.25rem;
+  --z-input-field: 1;
+  --z-input-popup: 10;
+  --z-input-overlay: 1100;
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.20;
   --text-big-number-md-font-family: Proto Mono;

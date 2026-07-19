@@ -353,7 +353,7 @@
       top: `${rect.bottom + 4}px`,
       left: `${rect.left}px`,
       width: `${rect.width}px`,
-      zIndex: 1100
+      zIndex: 'var(--z-input-overlay)'
     }
   }
 
@@ -558,7 +558,7 @@
       <button
         type="button"
         role="combobox"
-        class="relative z-[1] flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] border-0 bg-transparent p-0 text-left outline-none disabled:cursor-not-allowed"
+        class="relative z-[var(--z-input-field)] flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] border-0 bg-transparent p-0 text-left outline-none disabled:cursor-not-allowed"
         :disabled="disabled || loading"
         :aria-expanded="isOpen"
         aria-haspopup="listbox"
@@ -602,7 +602,7 @@
       <button
         v-if="showClear && hasValue && !disabled && !loading"
         type="button"
-        class="relative z-[1] inline-flex shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--text-muted)] hover:text-[var(--text-default)]"
+        class="relative z-[var(--z-input-field)] inline-flex shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--text-muted)] hover:text-[var(--text-default)]"
         :aria-label="`Clear ${placeholder ?? 'selection'}`"
         :data-testid="`${testId}__clear`"
         @click="clearValue"
@@ -626,7 +626,8 @@
           :class="[
             ...panelClasses,
             'webkit-dropdown-panel-motion',
-            !useTeleport && 'absolute left-0 top-full z-10 mt-[var(--spacing-xxs)] w-full'
+            !useTeleport &&
+              'absolute left-0 top-full z-[var(--z-input-popup)] mt-[var(--spacing-xxs)] w-full'
           ]"
           :style="useTeleport ? panelStyle : undefined"
           :data-testid="`${testId}__panel`"

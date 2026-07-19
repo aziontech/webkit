@@ -82,7 +82,7 @@
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
 
   const handleClasses =
-    'pointer-events-none absolute left-0.5 top-1/2 z-[1] size-4 -translate-y-1/2 rounded-full bg-[var(--bg-surface)] shadow-[var(--shadow-xs)] transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-data-[checked]:translate-x-4'
+    'pointer-events-none absolute left-0.5 top-1/2 z-[var(--z-input-field)] size-4 -translate-y-1/2 rounded-full bg-[var(--bg-surface)] shadow-[var(--shadow-xs)] transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-data-[checked]:translate-x-4'
 
   const rootClasses = computed(() => cn(sharedClasses, disabledClasses, attrs.class))
 </script>
