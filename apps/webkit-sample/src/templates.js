@@ -2,13 +2,26 @@
 // `settings` array describing the template-specific fields shown under
 // "Template Settings" on the deploy screen — this is what changes from one
 // template to the next. A field: { name, label, placeholder, description,
-// required }.
+// required }. Titles/descriptions mirror the Creation Center cards so the deploy
+// screen reflects exactly the template that was clicked.
 
 export const templates = {
+  "next-boilerplate": {
+    slug: "next-boilerplate",
+    title: "Next.js Boilerplate",
+    description:
+      "Deploy a full-stack Next.js application to the edge in a few steps.",
+    framework: "next",
+    repoOwner: "aziontech",
+    repoPath: "templates/nextjs",
+    defaultRepoName: "nextjs-boilerplate",
+    settings: [],
+  },
+
   "nuxt-ecommerce": {
     slug: "nuxt-ecommerce",
-    title: "Nuxt Ecommerce",
-    description: "Starter kit for high-performance commerce with Nuxt.",
+    title: "Nuxt E-commerce",
+    description: "Launch a Nuxt e-commerce or content app on the edge.",
     framework: "nuxt",
     repoOwner: "aziontech",
     repoPath: "templates/nuxt-ecommerce",
@@ -78,12 +91,80 @@ export const templates = {
 
   "vue-boilerplate": {
     slug: "vue-boilerplate",
-    title: "Vue Boilerplate",
-    description: "Deploy a Vue.js single-page application directly on the edge.",
+    title: "Vue.js Quick Setup",
+    description:
+      "A lightweight template to rapidly build Vue.js applications on the edge.",
     framework: "vue",
     repoOwner: "aziontech",
     repoPath: "templates/vue",
     defaultRepoName: "vue-boilerplate",
+    settings: [],
+  },
+
+  "angular-boilerplate": {
+    slug: "angular-boilerplate",
+    title: "Angular Boilerplate",
+    description: "Automate your Angular deployment process with this template.",
+    framework: "angular",
+    repoOwner: "aziontech",
+    repoPath: "templates/angular",
+    defaultRepoName: "angular-boilerplate",
+    settings: [],
+  },
+
+  "astro-starter": {
+    slug: "astro-starter",
+    title: "Astro Starter",
+    description: "Ship a content-driven Astro site that renders at the edge.",
+    framework: "astro",
+    repoOwner: "aziontech",
+    repoPath: "templates/astro",
+    defaultRepoName: "astro-starter",
+    settings: [],
+  },
+
+  "svelte-boilerplate": {
+    slug: "svelte-boilerplate",
+    title: "Svelte Boilerplate",
+    description:
+      "Accelerate the deployment of Svelte applications to run on the edge.",
+    framework: "svelte",
+    repoOwner: "aziontech",
+    repoPath: "templates/svelte",
+    defaultRepoName: "svelte-boilerplate",
+    settings: [],
+  },
+
+  "solidjs-starter": {
+    slug: "solidjs-starter",
+    title: "SolidJS Starter",
+    description: "Build a fine-grained reactive SolidJS app on the edge.",
+    framework: "solidjs",
+    repoOwner: "aziontech",
+    repoPath: "templates/solidjs",
+    defaultRepoName: "solidjs-starter",
+    settings: [],
+  },
+
+  "redwood-boilerplate": {
+    slug: "redwood-boilerplate",
+    title: "RedwoodJS Boilerplate",
+    description: "Deploy a full-stack RedwoodJS application on the edge.",
+    framework: "redwood",
+    repoOwner: "aziontech",
+    repoPath: "templates/redwood",
+    defaultRepoName: "redwood-boilerplate",
+    settings: [],
+  },
+
+  "flutter-web": {
+    slug: "flutter-web",
+    title: "Flutter Web",
+    description: "Serve a cross-platform Flutter web build from the edge.",
+    framework: "flutter",
+    repoOwner: "aziontech",
+    repoPath: "templates/flutter",
+    defaultRepoName: "flutter-web",
     settings: [],
   },
 };

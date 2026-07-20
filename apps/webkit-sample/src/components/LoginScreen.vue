@@ -184,7 +184,7 @@ const handlePrimary = () => {
                   :style="stepTransitionStyle"
                   class="flex flex-col gap-[var(--spacing-xs)] motion-reduce:transition-none motion-reduce:transform-none"
                 >
-                  <Label for="login-email" value="Email" />
+                  <Label for="login-email" label="Email" />
                   <InputText
                     id="login-email"
                     v-model="email"
@@ -259,7 +259,7 @@ const handlePrimary = () => {
                   />
                   <Tag
                     v-if="step === 'email'"
-                    value="Last used"
+                    label="Last used"
                     severity="info"
                     size="small"
                     class="absolute right-[var(--spacing-sm)] top-0 -translate-y-1/2"

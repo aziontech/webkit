@@ -166,7 +166,7 @@ const saveNotifications = () =>
                   </Item.Content>
                   <Item.Actions class="flex-1 justify-end">
                     <Switch
-                      v-model:isToggled="notifications.productUpdates"
+                      v-model="notifications.productUpdates"
                       aria-label="Product updates"
                       :disabled="savingNotifications"
                     />
@@ -180,7 +180,7 @@ const saveNotifications = () =>
                   </Item.Content>
                   <Item.Actions class="flex-1 justify-end">
                     <Switch
-                      v-model:isToggled="notifications.securityAlerts"
+                      v-model="notifications.securityAlerts"
                       aria-label="Security alerts"
                       :disabled="savingNotifications"
                     />

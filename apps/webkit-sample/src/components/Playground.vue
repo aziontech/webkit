@@ -144,8 +144,8 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
                 <Button label="Primary" kind="primary" size="medium" />
                 <Button label="Secondary" kind="secondary" size="medium" />
                 <Button label="Outlined" kind="outlined" size="medium" />
-                <Tag value="Active" severity="success" size="small" />
-                <Tag value="Preview" severity="secondary" size="small" />
+                <Tag label="Active" severity="success" size="small" />
+                <Tag label="Preview" severity="secondary" size="small" />
               </div>
 
               <InputText

@@ -114,7 +114,7 @@ const submit = async () => {
           :key="env.id"
           class="flex items-center justify-between rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
         >
-          <span class="font-code text-label-sm text-[var(--text-default)]">{{ env.name }}</span>
+          <span class="text-label-code-sm text-[var(--text-default)]">{{ env.name }}</span>
           <span class="text-body-xs text-[var(--text-muted)]">{{ regionLabel(env.region) }}</span>
         </li>
       </ul>
@@ -201,7 +201,7 @@ const submit = async () => {
                     v-if="submitted && regionEmpty"
                     id="env-region-error"
                     kind="required"
-                    value="This field is required."
+                    label="This field is required."
                   />
                 </div>
 

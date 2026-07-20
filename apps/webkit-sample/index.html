@@ -10,6 +10,13 @@
          chosen face resolves fast. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Code face (Roboto Mono) for the theme's `text-label-code-*` /
+         `--font-code` tokens. Loaded persistently (not part of the sans
+         playground) so code labels always render in the mono face. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap"
+    />
     <!-- Apply the persisted (or system) theme before first paint to avoid a
          flash. Mirrors the logic in src/theme.js — keep the storage key in sync. -->
     <script>

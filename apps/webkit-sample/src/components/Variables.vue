@@ -273,7 +273,7 @@ const onRowAction = (event, value, row) => {
           </template>
 
           <template #cell-key="{ value }">
-            <span class="font-code">{{ value }}</span>
+            <span class="text-label-code-sm">{{ value }}</span>
           </template>
 
           <template #cell-value="{ row }">
@@ -292,7 +292,7 @@ const onRowAction = (event, value, row) => {
 
           <template #cell-secret="{ value }">
             <Tag
-              :value="value ? 'Secret' : 'Variable'"
+              :label="value ? 'Secret' : 'Variable'"
               :severity="value ? 'warning' : 'secondary'"
               size="medium"
             />
@@ -313,8 +313,16 @@ const onRowAction = (event, value, row) => {
               </Dropdown.Trigger>
 
               <Dropdown.Group>
-                <Dropdown.Option value="edit" label="Edit" />
-                <Dropdown.Option value="duplicate" label="Duplicate" />
+                <Dropdown.Option value="edit" label="Edit">
+                  <template #left>
+                    <i class="pi pi-pencil" aria-hidden="true" />
+                  </template>
+                </Dropdown.Option>
+                <Dropdown.Option value="duplicate" label="Clone">
+                  <template #left>
+                    <i class="pi pi-clone" aria-hidden="true" />
+                  </template>
+                </Dropdown.Option>
               </Dropdown.Group>
 
               <Dropdown.Group>
@@ -398,7 +406,7 @@ const onRowAction = (event, value, row) => {
                               v-if="errors.key"
                               id="variable-key-error"
                               :kind="form.key.trim() ? 'invalid' : 'required'"
-                              :value="errors.key"
+                              :label="errors.key"
                             />
                           </div>
                         </Item.Actions>
@@ -428,7 +436,7 @@ const onRowAction = (event, value, row) => {
                               v-if="errors.value"
                               id="variable-value-error"
                               kind="required"
-                              :value="errors.value"
+                              :label="errors.value"
                             />
                           </div>
                         </Item.Actions>
@@ -444,7 +452,7 @@ const onRowAction = (event, value, row) => {
                         </Item.Content>
                         <Item.Actions class="flex-1 justify-end">
                           <Switch
-                            v-model:isToggled="form.secret"
+                            v-model="form.secret"
                             aria-label="Secret"
                           />
                         </Item.Actions>

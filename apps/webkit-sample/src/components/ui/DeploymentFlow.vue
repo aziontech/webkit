@@ -1,17 +1,14 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-
 import CardBox from "@aziontech/webkit/card-box";
-import Accordion from "@aziontech/webkit/accordion";
-import LogView from "@aziontech/webkit/log-view";
-import LogViewHeader from "@aziontech/webkit/log-view-header";
-import LogViewContent from "@aziontech/webkit/log-view-content";
-import Tag from "@aziontech/webkit/tag";
 import Spinner from "@aziontech/webkit/spinner";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 
-// Drives the post-deploy "Deployment" card through its four states
-// (Figma "Deployment States"): initial -> loading -> started -> finished.
-const props = defineProps({
+import DeploymentLogs from "./DeploymentLogs.vue";
+
+// Drives the post-deploy "Deployment" card: a brief "cloning" splash, then the
+// live DeploymentLogs view (the shared 3-step accordion). When the logs finish
+// streaming, we hand off to the success screen via `finished`.
+defineProps({
   repoOwner: { type: String, default: "aziontech" },
   repoPath: { type: String, default: "templates/nextjs" },
   scope: { type: String, default: "gab-az" },
@@ -19,106 +16,16 @@ const props = defineProps({
 
 const emit = defineEmits(["finished"]);
 
-// Mock deployment log — revealed progressively while "started", shown in full
-// once "finished".
-const LOGS = [
-  ["13:47:33", "[TASK] - #. Deploy started successfully!"],
-  ["13:47:33", "[TASK] - #. Creating Azion token!"],
-  ["13:47:33", "[TASK] - #. Add to Azion CLI!"],
-  ["13:47:33", "Please remember to login before running any commands: 'azion login'"],
-  ["13:47:33", "Token saved in /root/.azion/default/settings.toml"],
-  ["13:47:33", "This token will be used by default with all commands"],
-  ["13:47:33", "[TASK] - # Current directory: vue/vue3-vite-static/"],
-  ["13:47:33", "[TASK] - #. Cloning template!"],
-  ["13:47:38", "[TASK] - # Build template"],
-  ["13:47:47", "added 478 packages, and audited 479 packages in 9s"],
-  ["13:47:47", "82 packages are looking for funding"],
-  ["13:47:47", "run `npm fund` for details"],
-  ["13:47:47", "24 vulnerabilities (5 low, 7 moderate, 10 high, 2 critical)"],
-  ["13:47:47", "To address all issues, run:"],
-  ["13:47:47", "  npm audit fix --force"],
-  ["13:49:08", "create mode 100644 src/main.js"],
-  ["13:49:08", "create mode 100644 src/router/index.js"],
-  ["13:49:09", "branch 'main' set up to track 'origin/main'."],
-  ["13:49:09", "[TASK] - #. Set Azion Personal Token in the repository."],
-  ["13:49:10", "[TASK] - #. Deploy finalized successfully!"],
-];
+// initial (cloning splash) | live (streaming logs)
+const phase = ref("initial");
 
-// initial | loading | started | finished
-const state = ref("initial");
-const elapsed = ref(0);
-const revealed = ref(0);
-const logSearch = ref("");
-
-const timers = [];
-const after = (ms, fn) => timers.push(setTimeout(fn, ms));
-const clearAll = () => {
-  timers.forEach(clearTimeout);
-  timers.length = 0;
-  if (tick) clearInterval(tick);
-  if (stream) clearInterval(stream);
-};
-
-let tick = null;
-let stream = null;
-
-const visibleLogs = computed(() => LOGS.slice(0, revealed.value));
-
-// Map the mock log tuples to LogView's line model: the vulnerability line is a
-// warning (so LogView's header surfaces the warning count) and the
-// "successfully" milestones render as success lines.
-const logViewLines = computed(() =>
-  visibleLogs.value.map(([time, message], i) => ({
-    id: String(i),
-    time,
-    type: message.includes("vulnerabilit")
-      ? "warning"
-      : message.includes("successfully")
-        ? "success"
-        : "text",
-    message,
-  })),
-);
-
-const elapsedLabel = computed(() => {
-  const s = elapsed.value;
-  return s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`;
-});
-
-const headerStatus = computed(() => {
-  if (state.value === "initial") return "Preparing git repository";
-  return `Project started ${elapsed.value}s ago.`;
-});
-
-// Stream log lines while in the "started" phase, then settle to "finished".
-const startStreaming = () => {
-  stream = setInterval(() => {
-    if (revealed.value < LOGS.length) {
-      revealed.value += 1;
-    } else {
-      clearInterval(stream);
-      stream = null;
-      // Settle into the "Completed" state, let it breathe, then hand off to
-      // the success screen.
-      after(500, () => {
-        state.value = "finished";
-        if (tick) clearInterval(tick);
-      });
-      after(2200, () => emit("finished"));
-    }
-  }, 160);
-};
-
+let splashTimer = null;
 onMounted(() => {
-  tick = setInterval(() => (elapsed.value += 1), 1000);
-  after(2500, () => (state.value = "loading"));
-  after(3600, () => {
-    state.value = "started";
-    startStreaming();
-  });
+  splashTimer = setTimeout(() => (phase.value = "live"), 2400);
 });
-
-onBeforeUnmount(clearAll);
+onBeforeUnmount(() => {
+  if (splashTimer) clearTimeout(splashTimer);
+});
 
 // Azion arrow mark (leftmost glyph of the wordmark) for the clone illustration.
 const azionMark =
@@ -127,29 +34,24 @@ const azionMark =
 
 <template>
   <CardBox :padded="false" class="w-full">
-    <!-- Header: title + live status / completed tag -->
+    <!-- Header: title + preparing status while cloning -->
     <template #header>
       <p class="text-heading-xs text-[var(--text-default)]">Deployment</p>
-      <div class="flex items-center gap-[var(--spacing-sm)]">
-        <Tag
-          v-if="state === 'finished'"
-          value="Completed"
-          severity="success"
-        />
+      <div
+        v-if="phase === 'initial'"
+        class="flex items-center gap-[var(--spacing-sm)]"
+      >
         <span class="text-label-sm text-[var(--text-muted)]">
-          {{ state === "finished" ? elapsedLabel : headerStatus }}
+          Preparing git repository
         </span>
-        <Spinner
-          v-if="state !== 'finished'"
-          class="size-4 text-[var(--text-muted)]"
-        />
+        <Spinner class="size-4 text-[var(--text-muted)]" />
       </div>
     </template>
 
     <template #content>
       <!-- Initial: cloning illustration -->
       <div
-        v-if="state === 'initial'"
+        v-if="phase === 'initial'"
         class="flex min-h-[374px] flex-col items-center justify-center gap-[var(--spacing-xl)] p-[var(--spacing-lg)]"
       >
         <!-- Browser-window mock -->
@@ -206,28 +108,8 @@ const azionMark =
         </div>
       </div>
 
-      <!-- Loading / Started / Finished: Deployment Logs in an accordion,
-           rendered by the LogView component (built-in count, search, warnings
-           filter, copy, timestamps and scrolling). -->
-      <Accordion v-else type="single" collapsible default-value="logs">
-        <Accordion.Item value="logs">
-          <Accordion.Trigger> 
-            <h2 class="text-label-sm text-[var(--text-muted)]">Deployment Logs</h2>
-          </Accordion.Trigger>
-          <Accordion.Content>
-            <LogView
-              v-model:search="logSearch"
-              :lines="logViewLines"
-              :loading="state === 'loading'"
-              loading-label="Loading..."
-              class="h-[360px]"
-            >
-              <LogViewHeader />
-              <LogViewContent />
-            </LogView>
-          </Accordion.Content>
-        </Accordion.Item>
-      </Accordion>
+      <!-- Live: the shared DeploymentLogs view streams the steps. -->
+      <DeploymentLogs v-else live @finished="emit('finished')" />
     </template>
   </CardBox>
 </template>

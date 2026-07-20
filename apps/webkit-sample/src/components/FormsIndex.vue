@@ -65,6 +65,16 @@ const examples = [
     path: "/forms/drawer-itemgroups",
   },
   {
+    id: "nested-drawer",
+    title: "Nested drawer",
+    description:
+      "A drawer whose Select needs a related resource that doesn't exist yet — a quick-add opens a second, smaller drawer stacked over the first, then selects the new resource back into the parent. Each drawer is its own scoped save.",
+    icon: "pi pi-sitemap",
+    surface: "Drawer",
+    save: "Save per drawer",
+    path: "/forms/nested-drawer",
+  },
+  {
     id: "dialog",
     title: "Dialog form",
     description:
@@ -135,8 +145,8 @@ const open = (example) =>
               <i class="text-body-xs" :class="example.icon" aria-hidden="true" />
             </span>
             <div class="flex items-center gap-[var(--spacing-xxs)]">
-              <Tag :value="example.surface" severity="secondary" size="medium" />
-              <Tag :value="example.save" severity="info" size="medium" />
+              <Tag :label="example.surface" severity="secondary" size="medium" />
+              <Tag :label="example.save" severity="info" size="medium" />
             </div>
           </div>
           <span class="flex w-full flex-col gap-[var(--spacing-xs)]">

@@ -9,6 +9,7 @@
 // each add / REMOVE / REORDER (move up/down — no drag lib, per dependencies.md).
 // Row controls are size="large" to keep the horizontal rhythm with the large
 // fields. Validation on submit only; one `submitting` flag locks the scope.
+import { curve, duration } from "@aziontech/theme/animations";
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
 import Divider from "@aziontech/webkit/divider";
@@ -81,18 +82,29 @@ const submitted = ref(false);
 const submitting = ref(false);
 
 // Morph the repeater lines when they add / remove / reorder. Vue's built-in
-// TransitionGroup FLIPs positions via `moveClass`; timing/easing come from the
-// animate tokens (duration-* / ease-* utilities from primitives/animations).
+// TransitionGroup FLIPs positions via `moveClass`. The azion preset ships no
+// named `duration-*`/`ease-*` utilities, so we take the timing from the animate
+// tokens (@aziontech/theme/animations) as CSS custom properties (morphStyle,
+// set on each TransitionGroup wrapper) and read them via arbitrary utilities —
+// no hardcoded ms / cubic-bezier.
+const morphStyle = {
+  "--tg-move-duration": duration["slow-01"],
+  "--tg-move-ease": curve["expressive-entrance"],
+  "--tg-enter-duration": duration["moderate-01"],
+  "--tg-enter-ease": curve["productive-entrance"],
+  "--tg-leave-duration": duration["slow-01"],
+  "--tg-leave-ease": curve["productive-exit"],
+};
 const morphTransition = {
   moveClass:
-    "transition-transform duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none",
+    "transition-transform duration-[var(--tg-move-duration)] ease-[var(--tg-move-ease)] motion-reduce:transition-none",
   enterActiveClass:
-    "transition-all duration-moderate-01 ease-productive-entrance motion-reduce:transition-none",
+    "transition-all duration-[var(--tg-enter-duration)] ease-[var(--tg-enter-ease)] motion-reduce:transition-none",
   enterFromClass: "-translate-y-[var(--spacing-xxs)] opacity-0",
   // Removal is a plain fade-out (no absolute/translate — that made the leaving
   // row jump to the container origin before fading).
   leaveActiveClass:
-    "transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none",
+    "transition-opacity duration-[var(--tg-leave-duration)] ease-[var(--tg-leave-ease)] motion-reduce:transition-none",
   leaveToClass: "opacity-0",
 };
 
@@ -110,6 +122,16 @@ watch(open, (isOpen) => {
 // ── Criteria repeater: add / remove / reorder ──
 const addCondition = (group, join) => group.conditions.push(newCondition(join));
 const addCriteria = () => form.criteria.push(newGroup());
+
+// Reorder whole criteria groups (move up/down — same no-drag-lib pattern as the
+// conditions/behaviors). The first group always reads "If", the rest "Or", and
+// that label is index-driven, so it stays correct after a move.
+const moveCriteria = (index, direction) => {
+  const target = index + direction;
+  if (target < 0 || target >= form.criteria.length) return;
+  const [moved] = form.criteria.splice(index, 1);
+  form.criteria.splice(target, 0, moved);
+};
 
 const removeCondition = (groupIndex, condIndex) => {
   if (totalConditions.value <= 1) return; // keep at least one condition overall
@@ -139,6 +161,81 @@ const moveBehavior = (index, direction) => {
   if (target < 0 || target >= form.behaviors.length) return;
   const [moved] = form.behaviors.splice(index, 1);
   form.behaviors.splice(target, 0, moved);
+};
+
+// ── Native drag-and-drop reorder (no library, per dependencies.md) ──
+// A row/group is draggable only while its grip handle is held (mousedown), so
+// the inputs stay interactive; the element itself is the drop zone. Reordering
+// splices the array, so the same TransitionGroup morph plays. `scope` keeps a
+// drag contained to its own list (a condition can't drop into another group).
+// Pointer DnD is desktop/mouse; the move buttons remain for click/keyboard/touch.
+const dnd = reactive({ scope: null, from: -1, over: -1 });
+
+// The grip handle IS the drag source (IconButton doesn't forward listeners or
+// `draggable`, so the grip is a plain focusable element we control). Only the
+// grip is draggable, so the row's inputs stay fully interactive; the row itself
+// is the drop zone. Sized to match IconButton large (size-10). Arrow keys on a
+// focused grip reorder without a pointer (keyboard a11y).
+const GRIP_CLASS =
+  "inline-flex shrink-0 cursor-grab items-center justify-center rounded-[var(--shape-button)] " +
+  "text-[var(--text-muted)] outline-none transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] " +
+  "focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] active:cursor-grabbing motion-reduce:transition-none";
+
+// Row states, keyed off the drag: `dragging` = the lifted source row;
+// `drop` = the row currently under the pointer (where it will land).
+const isDragging = (scope, index) => dnd.scope === scope && dnd.from === index;
+const isDropTarget = (scope, index) =>
+  dnd.scope === scope && dnd.over === index && dnd.from !== index;
+
+// Base + state classes shared by every draggable row/group. `dragging` = the
+// moved item: dimmed with a DASHED accent border around the whole element (an
+// outline, so no layout shift). `drop` = where the item can be placed: a solid
+// accent line on TOP (a `before` pseudo, so it never shifts layout).
+const dragRowClass =
+  "relative rounded-[var(--shape-card)] transition-[opacity,transform,outline-color] " +
+  "data-[dragging]:opacity-70 data-[dragging]:scale-[0.98] data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-[var(--accent)] " +
+  "data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:-top-[var(--spacing-xxs)] data-[drop]:before:border-t-2 data-[drop]:before:border-[var(--accent)] data-[drop]:before:content-['']";
+
+const onDragStart = (scope, index, event) => {
+  dnd.scope = scope;
+  dnd.from = index;
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", String(index)); // Firefox needs data
+    // Show the whole row as the drag image, not just the grip.
+    const row = event.currentTarget?.closest?.("[data-drag-row]");
+    if (row) event.dataTransfer.setDragImage(row, 12, 12);
+  }
+};
+const onDragEnter = (scope, index) => {
+  if (dnd.scope === scope) dnd.over = index;
+};
+const onDragEnd = () => {
+  dnd.scope = null;
+  dnd.from = -1;
+  dnd.over = -1;
+};
+
+const reorder = (list, from, to) => {
+  if (from < 0 || to < 0 || from === to || from >= list.length || to >= list.length) return;
+  const [moved] = list.splice(from, 1);
+  list.splice(to, 0, moved);
+};
+const dropOnCondition = (groupIndex, index) => {
+  if (dnd.scope !== "cond-" + groupIndex) return;
+  reorder(form.criteria[groupIndex].conditions, dnd.from, index);
+  form.criteria[groupIndex].conditions[0].join = null;
+  onDragEnd();
+};
+const dropOnBehavior = (index) => {
+  if (dnd.scope !== "behavior") return;
+  reorder(form.behaviors, dnd.from, index);
+  onDragEnd();
+};
+const dropOnCriteria = (index) => {
+  if (dnd.scope !== "criteria") return;
+  reorder(form.criteria, dnd.from, index);
+  onDragEnd();
 };
 
 const isValid = () => {
@@ -239,7 +336,7 @@ const submit = async () => {
                               v-if="nameError"
                               id="rule-name-error"
                               kind="required"
-                              value="Name is required."
+                              label="Name is required."
                             />
                           </div>
                         </Item.Actions>
@@ -321,28 +418,90 @@ const submit = async () => {
                         tag="div"
                         class="relative flex flex-col gap-[var(--spacing-lg)]"
                         v-bind="morphTransition"
+                        :style="morphStyle"
                       >
                       <div
                         v-for="(group, gIdx) in form.criteria"
                         :key="group.id"
-                        class="flex flex-col gap-[var(--spacing-sm)]"
+                        data-drag-row
+                        :data-dragging="isDragging('criteria', gIdx) || null"
+                        :data-drop="isDropTarget('criteria', gIdx) || null"
+                        :class="['flex flex-col gap-[var(--spacing-sm)]', dragRowClass]"
+                        @dragenter.prevent="onDragEnter('criteria', gIdx)"
+                        @dragover.prevent
+                        @drop="dropOnCriteria(gIdx)"
                       >
                         <div class="flex items-center gap-[var(--spacing-xs)]">
+                          <!-- Grip: hold to drag the whole criteria group; the
+                               move buttons remain for click / keyboard / touch. -->
+                          <span
+                            v-if="form.criteria.length > 1"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Drag to reorder criteria, or use arrow keys"
+                            draggable="true"
+                            :class="[GRIP_CLASS, 'size-8']"
+                            @dragstart="onDragStart('criteria', gIdx, $event)"
+                            @dragend="onDragEnd"
+                            @keydown.up.prevent="moveCriteria(gIdx, -1)"
+                            @keydown.down.prevent="moveCriteria(gIdx, 1)"
+                          >
+                            <i class="pi pi-bars" aria-hidden="true" />
+                          </span>
                           <span class="text-overline-sm text-[var(--text-muted)]">
                             {{ gIdx === 0 ? "If" : "Or" }}
                           </span>
                           <span class="h-px flex-1 bg-[var(--border-default)]" />
+                          <!-- Group-level reorder — surfaced only when there is
+                               more than one criteria group to move. -->
+                          <div
+                            v-if="form.criteria.length > 1"
+                            class="flex items-center gap-[var(--spacing-xxs)]"
+                          >
+                            <IconButton
+                              icon="pi pi-arrow-up"
+                              kind="transparent"
+                              size="small"
+                              aria-label="Move criteria up"
+                              :disabled="submitting || gIdx === 0"
+                              @click="moveCriteria(gIdx, -1)"
+                            />
+                            <IconButton
+                              icon="pi pi-arrow-down"
+                              kind="transparent"
+                              size="small"
+                              aria-label="Move criteria down"
+                              :disabled="submitting || gIdx === form.criteria.length - 1"
+                              @click="moveCriteria(gIdx, 1)"
+                            />
+                          </div>
                         </div>
 
+                        <!-- Nested conditions: a left border rail + indentation
+                             segments the group's conditions from the "If"/"Or"
+                             header, marking them as nested inside the group. The
+                             rail closes with a bottom segment and a rounded
+                             bottom-left corner (`--shape-card`), so it reads as
+                             one connected bracket wrapping the group rather than a
+                             loose vertical line. Border tokens (`--border-muted`)
+                             at the default width keep the adornment theme-aware. -->
+                        <div class="ml-[var(--spacing-xs)] flex flex-col gap-[var(--spacing-sm)] rounded-bl-[var(--shape-card)] border-b-[length:var(--border-width-default)] border-l-[length:var(--border-width-default)] border-[var(--border-muted)] pb-[var(--spacing-md)] pl-[var(--spacing-md)]">
                         <TransitionGroup
                           tag="div"
                           class="relative flex flex-col gap-[var(--spacing-sm)]"
                           v-bind="morphTransition"
+                          :style="morphStyle"
                         >
                           <div
                             v-for="(cond, cIdx) in group.conditions"
                             :key="cond.id"
-                            class="flex flex-col gap-[var(--spacing-xxs)]"
+                            data-drag-row
+                            :data-dragging="isDragging('cond-' + gIdx, cIdx) || null"
+                            :data-drop="isDropTarget('cond-' + gIdx, cIdx) || null"
+                            :class="['flex flex-col gap-[var(--spacing-xxs)]', dragRowClass]"
+                            @dragenter.prevent="onDragEnter('cond-' + gIdx, cIdx)"
+                            @dragover.prevent
+                            @drop="dropOnCondition(gIdx, cIdx)"
                           >
                             <span
                               v-if="cIdx > 0"
@@ -395,8 +554,22 @@ const submit = async () => {
                             />
 
                             <!-- Row controls at the fields' size (large) to keep the
-                                 horizontal rhythm: reorder + remove. -->
+                                 horizontal rhythm: drag grip + reorder + remove. -->
                             <div class="flex items-center gap-[var(--spacing-xxs)]">
+                              <span
+                                v-if="group.conditions.length > 1"
+                                role="button"
+                                tabindex="0"
+                                aria-label="Drag to reorder condition, or use arrow keys"
+                                draggable="true"
+                                :class="[GRIP_CLASS, 'size-10']"
+                                @dragstart="onDragStart('cond-' + gIdx, cIdx, $event)"
+                                @dragend="onDragEnd"
+                                @keydown.up.prevent="moveCondition(gIdx, cIdx, -1)"
+                                @keydown.down.prevent="moveCondition(gIdx, cIdx, 1)"
+                              >
+                                <i class="pi pi-bars" aria-hidden="true" />
+                              </span>
                               <IconButton
                                 icon="pi pi-arrow-up"
                                 kind="outlined"
@@ -446,6 +619,7 @@ const submit = async () => {
                             @click="addCondition(group, 'or')"
                           />
                         </div>
+                        </div>
                       </div>
                       </TransitionGroup>
 
@@ -489,11 +663,18 @@ const submit = async () => {
                         tag="div"
                         class="relative flex flex-col gap-[var(--spacing-sm)]"
                         v-bind="morphTransition"
+                        :style="morphStyle"
                       >
                       <div
                         v-for="(behavior, bIdx) in form.behaviors"
                         :key="behavior.id"
-                        class="flex items-start gap-[var(--spacing-xs)]"
+                        data-drag-row
+                        :data-dragging="isDragging('behavior', bIdx) || null"
+                        :data-drop="isDropTarget('behavior', bIdx) || null"
+                        :class="['flex items-start gap-[var(--spacing-xs)]', dragRowClass]"
+                        @dragenter.prevent="onDragEnter('behavior', bIdx)"
+                        @dragover.prevent
+                        @drop="dropOnBehavior(bIdx)"
                       >
                         <Select
                           v-model="behavior.type"
@@ -515,6 +696,20 @@ const submit = async () => {
                         </Select>
 
                         <div class="flex items-center gap-[var(--spacing-xxs)]">
+                          <span
+                            v-if="form.behaviors.length > 1"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Drag to reorder behavior, or use arrow keys"
+                            draggable="true"
+                            :class="[GRIP_CLASS, 'size-10']"
+                            @dragstart="onDragStart('behavior', bIdx, $event)"
+                            @dragend="onDragEnd"
+                            @keydown.up.prevent="moveBehavior(bIdx, -1)"
+                            @keydown.down.prevent="moveBehavior(bIdx, 1)"
+                          >
+                            <i class="pi pi-bars" aria-hidden="true" />
+                          </span>
                           <IconButton
                             icon="pi pi-arrow-up"
                             kind="outlined"
@@ -574,7 +769,7 @@ const submit = async () => {
                         </Item.Content>
                         <Item.Actions class="flex-1 justify-end">
                           <Switch
-                            v-model:isToggled="form.active"
+                            v-model="form.active"
                             aria-label="Active"
                             :disabled="submitting"
                           />

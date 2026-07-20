@@ -82,7 +82,7 @@ const toastFailed = (error) =>
           <Item.Title>Delete this Application</Item.Title>
           <Item.Description>
             Permanently removes
-            <span class="font-code">{{ application.name }}</span> and all associated
+            <span class="text-label-code-sm">{{ application.name }}</span> and all associated
             settings. This cannot be undone.
           </Item.Description>
         </Item.Content>

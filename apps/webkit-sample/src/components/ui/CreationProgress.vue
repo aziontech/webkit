@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
     <template #header>
       <p class="text-heading-xs text-[var(--text-default)]">{{ title }}</p>
       <div class="flex items-center gap-[var(--spacing-sm)]">
-        <Tag v-if="done" value="Completed" severity="success" />
+        <Tag v-if="done" label="Completed" severity="success" />
         <span class="text-label-sm text-[var(--text-muted)]">
           {{ done ? elapsedLabel : `Provisioning… ${elapsed}s` }}
         </span>
@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
           <Item.Actions>
             <Tag
               v-if="stepState(index) === 'done'"
-              value="Done"
+              label="Done"
               severity="success"
               size="small"
             />
