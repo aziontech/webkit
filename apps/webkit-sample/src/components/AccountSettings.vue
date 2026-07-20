@@ -1043,7 +1043,7 @@ const onTeamAction = (event, value, row) => {
 
             <template #cell-name="{ row }">
               <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                <Avatar :label="row.name" size="small" />
+                <Avatar :label="row.name" size="small" kind="square" />
                 <span class="truncate">{{ row.name }}</span>
               </div>
             </template>
