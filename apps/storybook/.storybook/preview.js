@@ -2,7 +2,7 @@ import { withThemeByClassName } from '@storybook/addon-themes'
 import { addons } from '@storybook/preview-api'
 import { GLOBALS_UPDATED } from '@storybook/core-events'
 
-import '@aziontech/theme/globals.css'
+import '@aziontech/theme'
 import '../src/styles/preview.css'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'

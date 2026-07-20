@@ -30,7 +30,7 @@ import { animate } from '../tokens/primitives/animations/animate.js';
 import { animateExtras, keyframes } from '../tokens/primitives/animations/keyframes.js';
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { buildTrees, flatten } from './compile-primitives.js';
-import { compileThemeCss } from './compile-theme.js';
+import { compileThemeCss, compileThemeVars } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
@@ -100,7 +100,12 @@ const formatVars = (vars, indent) =>
     .map(([k, v]) => `${indent}${k}: ${v};`)
     .join('\n');
 
-/** Component classes (.text-*, .gap-*, .px-container). */
+/**
+ * Container / spacing / animation-extra classes — emitted inside `@layer components`.
+ * These are used bare (never behind Tailwind variants), so component-layer is fine.
+ * Typography classes are NOT here; they ship as `@utility` (see emitTextUtilities)
+ * so that variant modifiers like `data-[size=medium]:text-button-md` compile.
+ */
 const emitComponentClasses = (indent = '  ') => {
   const lines = [];
 
@@ -117,29 +122,6 @@ const emitComponentClasses = (indent = '  ') => {
   }
 
   lines.push('');
-  lines.push(`${indent}/* ── Texts ── */`);
-  for (const [key, bundle] of Object.entries(textsData)) {
-    const baseProps = Object.keys(bundle).filter((prop) => prop !== 'states');
-    const decls = baseProps
-      .map((prop) => `${kebab(prop)}: var(--${key}-${kebab(prop)});`)
-      .join(' ');
-    lines.push(`${indent}.${key} { ${decls} }`);
-
-    if (bundle.states) {
-      for (const [pseudo, rules] of Object.entries(bundle.states)) {
-        const pseudoSuffix = pseudoClassName(pseudo);
-        lines.push(`${indent}.${key}:${pseudoSuffix} { ${formatStateDecls(rules)}; }`);
-      }
-    }
-
-    if (bundle.transition) {
-      lines.push(`${indent}@media (prefers-reduced-motion: reduce) {`);
-      lines.push(`${indent}  .${key} { transition: none; }`);
-      lines.push(`${indent}}`);
-    }
-  }
-
-  lines.push('');
   lines.push(`${indent}/* ── Animation extras (properties beyond the animation shorthand) ── */`);
   for (const [selector, decls] of Object.entries(animateExtras)) {
     const body = Object.entries(decls)
@@ -150,6 +132,117 @@ const emitComponentClasses = (indent = '  ') => {
 
   return lines.join('\n');
 };
+
+/**
+ * Emit typography classes as Tailwind v4 `@utility` blocks so they participate
+ * in variant compilation (`data-[size=medium]:text-button-md`, `hover:text-link`,
+ * etc.). `@layer components` classes are opaque to v4's variant resolver and
+ * their modifiers silently drop, leaving elements at the inherited 16px.
+ */
+const emitTextUtilities = () => {
+  const blocks = [];
+  for (const [key, bundle] of Object.entries(textsData)) {
+    const baseProps = Object.keys(bundle).filter((prop) => prop !== 'states');
+    const declLines = baseProps.map(
+      (prop) => `  ${kebab(prop)}: var(--${key}-${kebab(prop)});`,
+    );
+    const nested = [];
+    if (bundle.states) {
+      for (const [pseudo, rules] of Object.entries(bundle.states)) {
+        const pseudoSuffix = pseudoClassName(pseudo);
+        nested.push(`  &:${pseudoSuffix} { ${formatStateDecls(rules)}; }`);
+      }
+    }
+    blocks.push(`@utility ${key} {\n${[...declLines, ...nested].join('\n')}\n}`);
+
+    if (bundle.transition) {
+      blocks.push(
+        `@media (prefers-reduced-motion: reduce) {\n  .${key} { transition: none; }\n}`,
+      );
+    }
+  }
+  return blocks.join('\n\n');
+};
+
+/**
+ * Emit semantic color utilities (`text-*`, `bg-*`, `border-*`, `ring-*`).
+ *
+ * Tailwind v4's auto-generated color utilities pull from `@theme { --color-* }`,
+ * but our semantic tokens live under domain-specific prefixes (`--text-default`,
+ * `--bg-canvas`, `--border-default`, `--primary`) so v3's preset generated the
+ * classes by axis instead. Without them, `text-primary`, `bg-surface`, and
+ * `border-default` (heavily used across the webkit components — unchanged
+ * from dev) compile to nothing under v4.
+ *
+ * Rules:
+ *   - Prefix-keyed tokens (`bg-*`, `text-*`, `border-*`, `ring-*`) become one
+ *     utility on the matching axis: `@utility bg-canvas { background-color: var(--bg-canvas); }`.
+ *   - Bare semantic tokens (`primary`, `accent`, `danger`, `warning`, `success`,
+ *     `info`, `secondary`, and their `-mask`/`-selected`/`-contrast`/`-border`
+ *     suffixes) become three utilities so a consumer can use `bg-primary`,
+ *     `text-primary`, `border-primary` interchangeably.
+ *   - `code-sintax-*` tokens are consumer-composed via arbitrary values in code
+ *     highlighters and don't need a utility (skipped).
+ */
+const AXIS_BY_PREFIX = {
+  'bg-': { utility: (k) => k, prop: 'background-color' },
+  'text-': { utility: (k) => k, prop: 'color' },
+  'border-': { utility: (k) => k, prop: 'border-color' },
+  'ring-': { utility: (k) => k, prop: '--tw-ring-color' },
+};
+
+const isCodeSintax = (key) => key.startsWith('code-sintax-');
+
+const emitSemanticColorUtilities = () => {
+  const { light } = compileThemeVars();
+  const keys = Object.keys(light).map((k) => k.replace(/^--/, ''));
+  const blocks = [];
+  // Skip utilities already defined as typography (textsData) — `text-link`
+  // there ships the hover/focus states and would be silently overridden by
+  // a bare color-only utility emitted afterwards.
+  const emitted = new Set(Object.keys(textsData));
+
+  for (const key of keys) {
+    if (isCodeSintax(key)) continue;
+    const prefixEntry = Object.entries(AXIS_BY_PREFIX).find(([prefix]) =>
+      key.startsWith(prefix),
+    );
+    if (prefixEntry) {
+      const [, axis] = prefixEntry;
+      const utility = axis.utility(key);
+      if (emitted.has(utility)) continue;
+      emitted.add(utility);
+      blocks.push(`@utility ${utility} { ${axis.prop}: var(--${key}); }`);
+      continue;
+    }
+    // Bare token — expose on all three color axes.
+    for (const [prefix, axis] of Object.entries(AXIS_BY_PREFIX)) {
+      if (prefix === 'ring-') continue; // ring is opt-in, not for every token
+      const utility = `${prefix}${key}`;
+      if (emitted.has(utility)) continue;
+      emitted.add(utility);
+      blocks.push(`@utility ${utility} { ${axis.prop}: var(--${key}); }`);
+    }
+  }
+  return blocks.join('\n');
+};
+
+/**
+ * Restore browser affordances that Tailwind v4's preflight removed.
+ * v3 shipped `button { cursor: pointer }` by default; v4 does not, so every
+ * interactive element loses the hand cursor unless a component overrides it.
+ * Disabled controls keep the default cursor.
+ */
+const emitBaseLayer = () =>
+  [
+    '@layer base {',
+    '  button:not(:disabled),',
+    '  [role="button"]:not([aria-disabled="true"]),',
+    '  summary {',
+    '    cursor: pointer;',
+    '  }',
+    '}',
+  ].join('\n');
 
 /** Emit `@keyframes` blocks at the top level of the stylesheet. */
 const emitKeyframes = () => {
@@ -254,6 +347,12 @@ const emitCssV4 = () => {
     '@layer components {',
     emitComponentClasses(),
     '}',
+    '',
+    emitTextUtilities(),
+    '',
+    emitSemanticColorUtilities(),
+    '',
+    emitBaseLayer(),
     '',
   ].join('\n');
 };
