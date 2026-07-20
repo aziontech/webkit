@@ -352,7 +352,7 @@
           :data-state="isOpenRef ? 'open' : 'closed'"
           :data-placement="resolvedPlacementRef"
           :style="panelStyle"
-          class="flex min-w-[var(--container-3xs)] max-w-[var(--container-2xs)] flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xxs)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="z-[1100] flex min-w-[var(--container-3xs)] max-w-[var(--container-2xs)] flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xxs)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"
         >
           <div
