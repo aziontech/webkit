@@ -7,7 +7,6 @@ import '@aziontech/webkit/styles/country-flags'
 import { withThemeByClassName } from '@storybook/addon-themes'
 import { GLOBALS_UPDATED } from '@storybook/core-events'
 import { addons } from '@storybook/preview-api'
-import { setup } from '@storybook/vue3'
 
 import { STORYBOOK_VIEWPORTS, THEME_CLASSES } from './visual-modes.js'
 
