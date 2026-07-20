@@ -12,7 +12,6 @@
 //
 // A deployment row (in either table) opens the read-only WorkloadDeploymentDrawer.
 import Accordion from "@aziontech/webkit/accordion";
-import Avatar from "@aziontech/webkit/avatar";
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
 import CopyButton from "@aziontech/webkit/copy-button";
@@ -30,7 +29,9 @@ import { toast } from "@aziontech/webkit/toast";
 import { computed, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { authorAt } from "../lib/people";
 import AppLayout from "./ui/AppLayout.vue";
+import LastModifiedCell from "./ui/LastModifiedCell.vue";
 import PageHeading from "./ui/PageHeading.vue";
 import WorkloadDeploymentDrawer from "./ui/WorkloadDeploymentDrawer.vue";
 
@@ -84,16 +85,22 @@ const statusMeta = (status) =>
   STATUS_SEVERITY[status] ?? { severity: "neutral", loading: false };
 
 const deployments = ref([
-  { id: "d1", versionId: "1293183210", environment: "Production", current: true, status: "Building", duration: "", date: "May 15, 2026, 11:00:25 am", author: "rafael.umman@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d2", versionId: "1293183211", environment: "Production", current: false, status: "Ready", duration: "99s", date: "May 15, 2026, 10:41:12 am", author: "rafael.umman@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d3", versionId: "1293183212", environment: "Production", current: false, status: "Building", duration: "", date: "May 15, 2026, 10:22:07 am", author: "julia.costa@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d4", versionId: "1293183213", environment: "Stage", current: false, status: "Error", duration: "", date: "May 15, 2026, 09:58:44 am", author: "marco.silva@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d5", versionId: "1293183214", environment: "Stage", current: false, status: "Queued", duration: "", date: "May 15, 2026, 09:40:31 am", author: "julia.costa@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d6", versionId: "1293183215", environment: "Production", current: false, status: "Ready", duration: "99s", date: "May 14, 2026, 06:12:09 pm", author: "rafael.umman@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d7", versionId: "1293183216", environment: "Production", current: false, status: "Building", duration: "", date: "May 14, 2026, 05:51:52 pm", author: "ana.pereira@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d8", versionId: "1293183217", environment: "Stage", current: false, status: "Draft", duration: "", date: "May 14, 2026, 05:30:18 pm", author: "marco.silva@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-  { id: "d9", versionId: "1293183218", environment: "Stage", current: false, status: "Queued", duration: "", date: "May 14, 2026, 05:02:47 pm", author: "ana.pereira@azion.com", application: "App name", firewall: "firewall_name", customPage: "Application" },
-]);
+  { id: "d1", versionId: "1293183210", environment: "Production", current: true, status: "Building", duration: "", date: "May 15, 2026, 11:00:25 am", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d2", versionId: "1293183211", environment: "Production", current: false, status: "Ready", duration: "99s", date: "May 15, 2026, 10:41:12 am", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d3", versionId: "1293183212", environment: "Production", current: false, status: "Building", duration: "", date: "May 15, 2026, 10:22:07 am", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d4", versionId: "1293183213", environment: "Stage", current: false, status: "Error", duration: "", date: "May 15, 2026, 09:58:44 am", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d5", versionId: "1293183214", environment: "Stage", current: false, status: "Queued", duration: "", date: "May 15, 2026, 09:40:31 am", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d6", versionId: "1293183215", environment: "Production", current: false, status: "Ready", duration: "99s", date: "May 14, 2026, 06:12:09 pm", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d7", versionId: "1293183216", environment: "Production", current: false, status: "Building", duration: "", date: "May 14, 2026, 05:51:52 pm", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d8", versionId: "1293183217", environment: "Stage", current: false, status: "Draft", duration: "", date: "May 14, 2026, 05:30:18 pm", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  { id: "d9", versionId: "1293183218", environment: "Stage", current: false, status: "Queued", duration: "", date: "May 14, 2026, 05:02:47 pm", application: "App name", firewall: "firewall_name", customPage: "Application" },
+  // The deploying user's avatar comes from the shared team roster
+  // (src/lib/people.js), assigned round-robin per deployment.
+].map((deployment, index) => ({
+  ...deployment,
+  author: authorAt(index).name,
+  authorAvatar: authorAt(index).avatar,
+})));
 
 // The current (active) deployment drives the Active Deployment card.
 const activeDeployment = computed(
@@ -104,7 +111,6 @@ const columns = [
   { accessorKey: "versionId", header: "Version", enableSorting: true, principal: true },
   { accessorKey: "status", header: "Status" },
   { accessorKey: "date", header: "Last Modified", enableSorting: true, grow: 2 },
-  { accessorKey: "author", header: "Author", grow: 2 },
   { id: "actions", kind: "action", hideable: false },
 ];
 const filterFields = [
@@ -280,10 +286,11 @@ const deleteWorkload = () => {
                   <div class="flex items-start justify-between gap-[var(--spacing-xs)]">
                     <div class="flex flex-col gap-[var(--spacing-xxs)]">
                       <span class="text-label-sm  text-[var(--text-muted)]">Deployed</span>
-                      <div class="flex items-center gap-[var(--spacing-xs)]">
-                        <Avatar :label="activeDeployment.author" size="small" />
-                        <span class="text-body-sm text-[var(--text-muted)]">3 days ago</span>
-                      </div>
+                      <LastModifiedCell
+                        :author="activeDeployment.author"
+                        :avatar-src="activeDeployment.authorAvatar"
+                        :date="activeDeployment.date"
+                      />
                     </div>
                     <IconButton
                       icon="pi pi-ellipsis-v"
@@ -411,11 +418,8 @@ const deleteWorkload = () => {
                     />
                   </template>
 
-                  <template #cell-author="{ value }">
-                    <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                      <Avatar :label="value" size="small" />
-                      <span class="truncate text-body-sm text-[var(--text-default)]">{{ value }}</span>
-                    </div>
+                  <template #cell-date="{ value, row }">
+                    <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
                   </template>
 
                   <template #cell-actions="{ row }">
@@ -493,11 +497,8 @@ const deleteWorkload = () => {
                   />
                 </template>
 
-                <template #cell-author="{ value }">
-                  <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                    <Avatar :label="value" size="small" />
-                    <span class="truncate text-body-sm text-[var(--text-default)]">{{ value }}</span>
-                  </div>
+                <template #cell-date="{ value, row }">
+                  <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
                 </template>
 
                 <template #cell-actions="{ row }">

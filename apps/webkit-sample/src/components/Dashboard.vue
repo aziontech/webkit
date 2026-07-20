@@ -4,6 +4,7 @@
 // overview content: a welcome header, a metrics strip, the Resources and Recent
 // Activity tables, and a right rail with Monthly Usage + Marketplace Trends.
 import CardBox from "@aziontech/webkit/card-box";
+import CopyButton from "@aziontech/webkit/copy-button";
 import IconButton from "@aziontech/webkit/icon-button";
 import Link from "@aziontech/webkit/link";
 import Table from "@aziontech/webkit/table";
@@ -13,7 +14,9 @@ import Tooltip from "@aziontech/webkit/tooltip";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
+import { authorAt } from "../lib/people";
 import AppLayout from "./ui/AppLayout.vue";
+import LastModifiedCell from "./ui/LastModifiedCell.vue";
 
 const route = useRoute();
 
@@ -59,14 +62,18 @@ const resources = [
     zoneName: "aasdasdasdas",
     domain: "r72xyxc3d9.map.azionedge.net",
     status: "Active",
-    lastModified: "",
+    author: authorAt(0).name,
+    authorAvatar: authorAt(0).avatar,
+    lastModified: "July 18, 2026, 09:12:00 AM",
   },
   {
     id: "zone-2",
     zoneName: "MyFunction",
     domain: "domain.com",
     status: "Active",
-    lastModified: "",
+    author: authorAt(1).name,
+    authorAvatar: authorAt(1).avatar,
+    lastModified: "July 20, 2026, 08:30:00 AM",
   },
 ];
 
@@ -228,19 +235,31 @@ const openZoneActions = (event, row) =>
               <template #content>
                 <Table :data="resources" :columns="resourceColumns" row-key="id">
                   <template #cell-domain="{ value }">
-                    <a
-                      :href="`https://${value}`"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-[var(--spacing-xxs)] whitespace-nowrap hover:underline"
-                      @click.stop
-                    >
-                      <span>{{ value }}</span>
-                      <i class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]" aria-hidden="true" />
-                    </a>
+                    <!-- Domain link (truncates) + external-redirect arrow; copy button pinned to the cell's right edge so it aligns across rows. -->
+                    <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                      <a
+                        :href="`https://${value}`"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+                        @click.stop
+                      >
+                        <span class="truncate">{{ value }}</span>
+                        <i class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]" aria-hidden="true" />
+                      </a>
+                      <CopyButton
+                        kind="outlined"
+                        :value="value"
+                        aria-label="Copy domain name"
+                        class="ml-auto shrink-0"
+                      />
+                    </div>
                   </template>
                   <template #cell-status="{ value }">
                     <Tag :label="value" severity="success" size="small" />
+                  </template>
+                  <template #cell-lastModified="{ value, row }">
+                    <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
                   </template>
                   <template #cell-actions="{ row }">
                     <IconButton

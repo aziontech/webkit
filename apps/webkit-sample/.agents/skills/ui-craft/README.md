@@ -29,6 +29,7 @@ consistent with [`styling.md`](../../rules/styling.md), [`dependencies.md`](../.
 | [`ux-heuristics`](../ux-heuristics/SKILL.md) | Get the flow right: right component, states (loading/empty/error), feedback, Nielsen heuristics. | 1 |
 | [`usability`](../usability/SKILL.md) | Async behavior: lock the scope while an action runs (loading trigger + disabled fields), report request/API errors via toast. | 1b |
 | [`form`](../form/SKILL.md) | Accessible forms: field-* triads (label/helper/aria wired), fieldset/legend grouping, trigger-labelled selects, focus-managed error summary, native locked submit. | 1c |
+| [`tables`](../tables/SKILL.md) | Data tables: data-driven `<Table>`, column model, toolbar, internal-scroll body, and cell recipes (name/status/domain/actions/copy) — copy button pinned to the cell's right edge for aligned domain cells. | 1d |
 | [`baseline-ui`](../baseline-ui/SKILL.md) | Deslop: components-only, tokens-only, typography hierarchy, spacing rhythm. | 2 |
 | [`motion-polish`](../motion-polish/SKILL.md) | Smooth motion using only animate tokens + `motion-reduce` escapes. | 3 |
 | [`impeccable-polish`](../impeccable-polish/SKILL.md) | Final taste pass: hierarchy, rhythm, state completeness, optical balance. | 4 |

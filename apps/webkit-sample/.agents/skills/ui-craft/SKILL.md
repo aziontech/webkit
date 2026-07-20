@@ -54,6 +54,14 @@ components and tokens — not for authoring the webkit primitives themselves (th
    width consistent across sibling pages of the same kind (e.g. Home and Marketplace both
    `--container-7xl`); AppLayout's inset supplies the horizontal gutter, and `pt-[var(--spacing-*)]`
    adds the page's top breathing room.
+8. **Align field columns with one width.** When form controls share a right-hand column
+   (`Item.Actions justify-end`, a fields-separated settings group, or any stacked run of inputs),
+   give every field in that run the **same width** from the `--container-*` scale so their edges line
+   up — pick the width the longest-value field needs (e.g. `max-w-[var(--container-sm)]`) and apply it
+   as a `min-w`/`max-w` to the whole run. A **disabled** or short-value field is **not** an exception:
+   it matches its siblings' width instead of collapsing narrower and breaking the column (a lone
+   `--container-2xs` field beside `--container-sm` siblings reads as a ragged step). Widths still come
+   only from the token scale — never a raw `px`/`rem`.
 
 ## The progression
 
@@ -64,6 +72,7 @@ PRO UX first → Minimal & Polished → earned delight. Run the skills roughly i
 | Structure the flow: right component, states, feedback, heuristics | [`/ux-heuristics`](../ux-heuristics/SKILL.md) |
 | Get async behavior right: lock the scope while running, toast request/API errors | [`/usability`](../usability/SKILL.md) |
 | Build accessible forms: Cards+ItemGroups or Fields-separated, fieldset/legend, submit-time required/invalid | [`/form`](../form/SKILL.md) |
+| Build data tables: data-driven `<Table>`, column model, toolbar, internal-scroll body, cell recipes (name/status/domain/actions/copy) | [`/tables`](../tables/SKILL.md) |
 | Clean up slop: components-only, tokens-only, hierarchy, rhythm | [`/baseline-ui`](../baseline-ui/SKILL.md) |
 | Make motion smooth with animate tokens only | [`/motion-polish`](../motion-polish/SKILL.md) |
 | Final taste pass: hierarchy, rhythm, state completeness, balance | [`/impeccable-polish`](../impeccable-polish/SKILL.md) |
