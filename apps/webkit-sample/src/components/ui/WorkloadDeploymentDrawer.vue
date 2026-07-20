@@ -112,7 +112,7 @@ const metaBlocks = computed(() => {
                 <div class="flex flex-col gap-[var(--spacing-xxs)]">
                   <span class="text-overline-sm uppercase text-[var(--text-muted)]">Created</span>
                   <div class="flex items-center gap-[var(--spacing-xs)]">
-                    <Avatar :label="deployment.author" size="small" />
+                    <Avatar :label="deployment.author" size="small" kind="square" />
                     <span class="text-body-sm text-[var(--text-default)]">{{ deployment.author }}</span>
                   </div>
                 </div>

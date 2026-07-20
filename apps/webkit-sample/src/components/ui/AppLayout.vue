@@ -261,6 +261,7 @@
             <Avatar
               :label="userEmail"
               size="medium"
+              kind="square"
             />
           </button>
         </GlobalHeader.Right>
