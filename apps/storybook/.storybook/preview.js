@@ -23,8 +23,8 @@ try {
   addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
     if (globals && globals.theme) applyThemeClass(globals.theme)
   })
-} catch(error) {
-  console.error(`[ERROR]: ${error}`)
+} catch {
+  /* headless/test contexts without a channel */
 }
 
 export const parameters = {
