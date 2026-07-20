@@ -261,6 +261,9 @@ jobs:
       - name: Every component has its test (testing.md)
         run: pnpm --filter @aziontech/webkit run test:gate
 
+      - name: Skill/agent doc standards ratchet (no new out-of-standard docs)
+        run: pnpm --filter @aziontech/webkit run doc-standards
+
   smoke:
     name: Consumer smoke test (init + build)
     needs: changes

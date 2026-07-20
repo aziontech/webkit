@@ -1,6 +1,7 @@
 ---
 name: add-animation
 description: Scaffold a new webkit animation into the semantic catalog (semantic/animations.js) + record the Theme gap. Used when a component needs an animation the catalog lacks, instead of a component-local @keyframes or an off-catalog animate-[…].
+scope: webkit
 ---
 
 # Skill: add-animation

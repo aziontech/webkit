@@ -3,6 +3,7 @@ name: audit-fix
 description: Fix `pnpm audit --audit-level=high` failures by bumping the offending dependency to its patched version, with a semver-aware guardrail (patch = auto, minor = validate carefully, major = ALERT and ask). Identifies the owning monorepo project and emits a status report.
 status: active
 last_updated: 2026-06-28
+scope: webkit
 ---
 
 # Skill: audit-fix

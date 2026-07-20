@@ -273,6 +273,16 @@ export const STANDARDS = [
       { surface: 'review', by: 'required-approval' }
     ],
     note: 'Every component ships a co-located <name>.test.ts — you cannot create or land a component without its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence — never grandfathered); the sharded Vitest browser CI job (Playwright Chromium, Storybook story as fixture, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered and that a behavior change updates the test (style-only changes need no test touch — deliberately no diff-freshness gate).'
+  },
+  {
+    id: 'authoring-docs',
+    kind: 'foundational',
+    scope: 'webkit',
+    enforce: [
+      { surface: 'write-time', by: 'validate-authoring-docs' },
+      { surface: 'ci', by: 'check-authoring-docs' }
+    ],
+    note: 'Skills (.claude/skills + cli-templates/claude/skills) and agents (.claude/agents + cli-templates/claude/agents) carry conforming frontmatter (name==folder/filename, non-empty description, scope matching location; consumer skills webkit-* + status + last_updated) and no file-as-example refs. validate-authoring-docs blocks a new/edited doc write-time (exit 2); check-authoring-docs is the CI ratchet over all four populations; both share _lib/authoring-docs-checks.mjs. scope=webkit: the standard about how the authoring/adoption bundle is shaped is DS-internal (like storybook-source), even though the consumer skills it validates ship out.'
   }
 ]
 

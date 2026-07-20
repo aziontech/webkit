@@ -3,6 +3,7 @@ name: structure-decide
 description: Decide `monolithic` vs `composition` using the shadcn-vue criterion. Pure decision; never writes code.
 status: active
 last_updated: 2026-05-22
+scope: webkit
 ---
 
 # Skill: structure-decide

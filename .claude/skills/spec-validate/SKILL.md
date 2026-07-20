@@ -3,6 +3,7 @@ name: spec-validate
 description: Validate a `.specs/<name>.md` against the schema, the body section rules, and the Constraints block. Writes the checksum and flips status from draft to approved when valid.
 status: active
 last_updated: 2026-05-22
+scope: webkit
 ---
 
 # Skill: spec-validate

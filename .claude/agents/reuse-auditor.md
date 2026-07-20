@@ -2,6 +2,7 @@
 name: reuse-auditor
 description: Isolated sub-agent that scans composables/utils/siblings for logic to reuse instead of duplicating. Pure read; emits a JSON suggestion list.
 status: active
+scope: webkit
 ---
 
 # Agent: reuse-auditor

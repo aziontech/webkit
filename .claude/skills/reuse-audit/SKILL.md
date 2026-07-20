@@ -3,6 +3,7 @@ name: reuse-audit
 description: Scan composables, utility components, and same-category siblings for logic that should be reused instead of duplicated. Emits a structured suggestion list.
 status: active
 last_updated: 2026-05-22
+scope: webkit
 ---
 
 # Skill: reuse-audit

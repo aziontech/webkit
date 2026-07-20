@@ -140,6 +140,17 @@ test('the token, spec-compliance, and story-source engines are shared by hook AN
   assert.match(ratchet, /story-source-checks\.mjs/, 'ratchet does not import the story engine')
 })
 
+test('authoring-docs hook AND ratchet share the single _lib/authoring-docs-checks engine', () => {
+  assert.ok(existsSync(join(ROOT, '.claude/hooks/_lib/authoring-docs-checks.mjs')))
+  const hook = readFileSync(join(ROOT, '.claude/hooks/validate-authoring-docs.mjs'), 'utf-8')
+  assert.match(hook, /_lib\/authoring-docs-checks\.mjs/, 'hook does not import the engine')
+  const ratchet = readFileSync(
+    join(ROOT, 'packages/webkit/scripts/check-authoring-docs.mjs'),
+    'utf-8'
+  )
+  assert.match(ratchet, /authoring-docs-checks\.mjs/, 'ratchet does not import the engine')
+})
+
 // The gates that may appear as `surface: 'ci'` — a typo or a fictional enforcer here is
 // exactly the failure mode that let the toolkit job no-op on a ghost package name.
 const CI_ENFORCERS = new Set([
@@ -152,7 +163,8 @@ const CI_ENFORCERS = new Set([
   'vuejs-accessibility',
   'storybook-build',
   'vitest',
-  'check-tests'
+  'check-tests',
+  'check-authoring-docs'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {
