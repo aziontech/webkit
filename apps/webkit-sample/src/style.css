@@ -65,7 +65,24 @@
 html,
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* App shell root. The single full-height layout (AppLayout, h-dvh) owns all
+   scrolling through its own inner regions (content zone, table viewport,
+   sidebar); the document itself must never scroll. A stray absolutely-
+   positioned descendant with no positioned ancestor — e.g. an `sr-only`
+   <legend> inside a fieldset — otherwise resolves against the initial
+   containing block (the viewport), so no `overflow` on <html>/<body> can clip
+   it, and it extends the page: the whole shell scrolls away and exposes blank
+   space. Making #app a positioned, overflow-clipped, viewport-sized box gives
+   those descendants a containing block inside the shell, so scrolling stays
+   with the regions that own it. */
+#app {
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 /* Font playground (test harness): src/font.js sets `--app-font` on <html> to
