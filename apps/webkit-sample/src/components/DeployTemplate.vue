@@ -187,7 +187,7 @@ const nextSteps = [
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col overflow-hidden bg-[var(--bg-canvas)]">
     <!-- Single creation header: back + brand + breadcrumb (hidden on success). -->
     <CreationHeader
       :show-back="status !== 'success'"
