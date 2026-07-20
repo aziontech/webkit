@@ -3,6 +3,7 @@ name: webkit-baseline-ui
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-baseline-ui

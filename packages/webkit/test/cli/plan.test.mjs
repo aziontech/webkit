@@ -251,27 +251,21 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-root-element.md',
       '.claude/rules/webkit-component-states.md',
       '.claude/rules/webkit-accessibility.md',
+      '.claude/rules/webkit-motion.md',
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
       '.claude/skills/webkit-usage/SKILL.md',
-      // UI-craft pack + cross-cutting quality skills (consumer-side authoring guidance).
+      // UI-craft pack (13 skills after the redundancy/false-positive pass).
       '.claude/skills/webkit-ui-craft/SKILL.md',
       '.claude/skills/webkit-ux-heuristics/SKILL.md',
       '.claude/skills/webkit-ui-states/SKILL.md',
-      '.claude/skills/webkit-usability/SKILL.md',
       '.claude/skills/webkit-form/SKILL.md',
       '.claude/skills/webkit-navigation/SKILL.md',
       '.claude/skills/webkit-baseline-ui/SKILL.md',
+      '.claude/skills/webkit-theming-dark-mode/SKILL.md',
+      '.claude/skills/webkit-data-viz/SKILL.md',
       '.claude/skills/webkit-motion-polish/SKILL.md',
       '.claude/skills/webkit-impeccable-polish/SKILL.md',
-      '.claude/skills/webkit-delight/SKILL.md',
-      '.claude/skills/webkit-accessibility-implementation/SKILL.md',
-      '.claude/skills/webkit-content-microcopy/SKILL.md',
-      '.claude/skills/webkit-responsive-layout/SKILL.md',
-      '.claude/skills/webkit-theming-dark-mode/SKILL.md',
-      '.claude/skills/webkit-performance-ux/SKILL.md',
-      '.claude/skills/webkit-i18n-readiness/SKILL.md',
-      '.claude/skills/webkit-data-viz/SKILL.md',
       '.claude/skills/webkit-ui-verify/SKILL.md',
       '.claude/skills/webkit-ds-adoption/SKILL.md',
       '.claude/agents/webkit-expert.md',
@@ -281,6 +275,18 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/agents/webkit-adoption-auditor.md'
     ]) {
       assert.ok(copies.includes(rel), `missing bundle copy ${rel}`)
+    }
+    // Dropped (false positives) and merged skills must NOT ship — locks the redundancy pass.
+    for (const gone of [
+      '.claude/skills/webkit-performance-ux/SKILL.md',
+      '.claude/skills/webkit-content-microcopy/SKILL.md',
+      '.claude/skills/webkit-i18n-readiness/SKILL.md',
+      '.claude/skills/webkit-responsive-layout/SKILL.md',
+      '.claude/skills/webkit-usability/SKILL.md',
+      '.claude/skills/webkit-delight/SKILL.md',
+      '.claude/skills/webkit-accessibility-implementation/SKILL.md'
+    ]) {
+      assert.ok(!copies.includes(gone), `dropped/merged skill must not ship: ${gone}`)
     }
   } finally {
     rmSync(dir, { recursive: true, force: true })

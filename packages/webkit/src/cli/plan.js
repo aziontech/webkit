@@ -86,29 +86,22 @@ const CLAUDE_BUNDLE = [
   'rules/webkit-root-element.md',
   'rules/webkit-component-states.md',
   'rules/webkit-accessibility.md',
+  'rules/webkit-motion.md',
   'rules/webkit-testid.md',
   'rules/webkit-deprecation.md',
   // Mechanics — how to consume webkit correctly (imports, tokens, tree-shaking).
   'skills/webkit-usage/SKILL.md',
-  // UI-craft pack — umbrella + structure + foundation + polish (build product UI on webkit).
+  // UI-craft pack — umbrella + structure + foundation, then polish (build product UI on webkit).
   'skills/webkit-ui-craft/SKILL.md',
   'skills/webkit-ux-heuristics/SKILL.md',
   'skills/webkit-ui-states/SKILL.md',
-  'skills/webkit-usability/SKILL.md',
   'skills/webkit-form/SKILL.md',
   'skills/webkit-navigation/SKILL.md',
   'skills/webkit-baseline-ui/SKILL.md',
+  'skills/webkit-theming-dark-mode/SKILL.md',
+  'skills/webkit-data-viz/SKILL.md',
   'skills/webkit-motion-polish/SKILL.md',
   'skills/webkit-impeccable-polish/SKILL.md',
-  'skills/webkit-delight/SKILL.md',
-  // Cross-cutting quality — the categories every mature design system gives app teams.
-  'skills/webkit-accessibility-implementation/SKILL.md',
-  'skills/webkit-content-microcopy/SKILL.md',
-  'skills/webkit-responsive-layout/SKILL.md',
-  'skills/webkit-theming-dark-mode/SKILL.md',
-  'skills/webkit-performance-ux/SKILL.md',
-  'skills/webkit-i18n-readiness/SKILL.md',
-  'skills/webkit-data-viz/SKILL.md',
   // Verify + migrate.
   'skills/webkit-ui-verify/SKILL.md',
   'skills/webkit-ds-adoption/SKILL.md',

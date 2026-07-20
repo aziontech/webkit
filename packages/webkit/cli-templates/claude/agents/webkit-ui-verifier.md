@@ -1,6 +1,7 @@
 ---
 name: webkit-ui-verifier
 description: Runs the visual and behavioral QA pass on a @aziontech/webkit app — builds and serves it, drives real routes with headless Chromium, and reports only what it observed across themes, console, a11y, states, and interaction.
+scope: general
 ---
 
 # Agent: webkit-ui-verifier

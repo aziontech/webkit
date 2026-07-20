@@ -3,6 +3,7 @@ name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (AppLayout + AppSidebar: full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (CreationHeader: no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the content layout inside the persistent shell: a --spacing-md inset (matching the header), the PageHeading out of the card, list tables in a flush borderless CardBox, and resource-detail tab pages sharing the same rhythm. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb.
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-navigation
@@ -353,7 +354,7 @@ tab renders one of two bodies — and both lead with the heading OUT, `--spacing
   the tab's create action in the heading's `#actions`.
 - **A settings tab** → the `ItemGroup` form: `--spacing-sm`-titled sections (`text-heading-xxs`) each
   over a flush `CardBox` + `Item.List`, committed as **one block** by a single Save bar pinned below
-  the scroll region (see `webkit-form` and `webkit-usability`).
+  the scroll region (see `webkit-form` and `webkit-ui-states`).
 
 The rhythm is invariant across both: the heading is always **out** of the card, the inset is always
 `--spacing-md`, and the heading→content gap is always `--spacing-lg`.
@@ -415,7 +416,7 @@ End with: `navigation sound` or `N gaps — fix before polish`.
   `@aziontech/webkit/breadcrumb`. There is no `@aziontech/webkit/app-layout` or `/creation-header` — do
   not import one.
 - **Companion skills:** `webkit-form` (what fills a focused flow), `webkit-ux-heuristics` (states +
-  feedback), `webkit-usability` (locking + toast), `webkit-baseline-ui` (components + tokens).
+  feedback), `webkit-ui-states` (locking + toast), `webkit-baseline-ui` (components + tokens).
 
 ## Definition of Done
 

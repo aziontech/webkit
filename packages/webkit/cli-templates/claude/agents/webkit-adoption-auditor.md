@@ -1,6 +1,7 @@
 ---
 name: webkit-adoption-auditor
 description: Measures how much of an app already renders through @aziontech/webkit versus hand-rolled UI, and produces a prioritized backlog of custom components that have a webkit equivalent to adopt.
+scope: general
 ---
 
 # Agent: webkit-adoption-auditor

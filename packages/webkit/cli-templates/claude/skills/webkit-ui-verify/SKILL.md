@@ -1,8 +1,9 @@
 ---
 name: webkit-ui-verify
-description: Drive a finished @aziontech/webkit screen in a real browser (Playwright, headless Chromium) and OBSERVE before declaring it done — screenshot both themes at multiple widths, assert zero console errors, run axe-core against the live tree, and exercise the loading/empty/error states and the primary interaction. Use as the runtime gate that verifies what the other skills prescribe, before you call any route finished.
+description: Drive a finished @aziontech/webkit screen in a real browser (Playwright, headless Chromium) and OBSERVE before declaring it done — screenshot both themes at multiple widths, assert zero console errors, run axe-core against the live tree, and exercise the loading/empty/error states and the primary interaction. The runtime a11y gate the accessibility rule defers to: axe on the rendered tree, focus trap/restore observed, live-region announcements. Use as the runtime gate that verifies what the other skills prescribe, before you call any route finished.
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-ui-verify
@@ -44,14 +45,19 @@ Run every route through all four, in both themes and at 2–3 widths. A pass tha
 width, or a state did not verify the screen.
 
 - **Visual, both themes × widths.** Screenshot in **light** and in `data-theme="dark"`, at **375**,
-  **768**, and **1280** px. This is the check `webkit-theming-dark-mode` and `webkit-responsive-layout`
-  defer to — two-theme screenshots catch the dark-only regression; multi-width catches the layout that
+  **768**, and **1280** px. This is the check `webkit-theming-dark-mode` and `webkit-baseline-ui`
+  (responsive widths) defer to — two-theme screenshots catch the dark-only regression; multi-width catches the layout that
   only breaks on a phone. Look at every shot; a saved file is not a passed check.
 - **Console, zero tolerance.** Collect `console` errors, `pageerror`, and `requestfailed` on load
   **and** during the primary interaction. A Vue warning or a failed request is a **fail**, not noise.
-- **Accessibility, at runtime.** Run **axe-core** against the rendered tree. This is the runtime a11y
-  check `webkit-accessibility-implementation` defers to — it catches the behavioral 60% (contrast on
-  real surfaces, names, roles as rendered) that lint cannot. Any violation is a finding.
+- **Accessibility (runtime).** This is the executable a11y check **the accessibility rule defers to** —
+  the runtime gate for the behavioral surface lint cannot see. Run **axe-core** against the rendered
+  tree (contrast on real surfaces, names, roles as rendered); any violation is a finding. Then observe
+  the two things axe cannot assert on its own: **focus trap/restore** on overlays (focus moves in on
+  open, stays trapped while open, returns to the trigger on close — see Interaction + focus below), and
+  **live-region announcements** — a status that changes asynchronously (loading, saved, error) must
+  reach an `aria-live` region / webkit status surface, not be conveyed by colour or a silent spinner
+  alone.
 - **States, forced.** Do not wait for the happy path to be the only path. Force **loading** (throttle
   or delay the request), **empty** (make it return no data), and **error** (make the request fail), and
   confirm each renders per `webkit-ui-states` — a `Skeleton`, an `EmptyState`, a `Message` — never a
@@ -142,6 +148,8 @@ Extend it per route: add `page.route()` calls to force empty/error, and a `userE
 - Force loading, empty, and error, and confirm each renders a webkit state component — never a blank or
   broken screen.
 - Overlays trap focus while open and restore it to the trigger on close; the action's feedback appears.
+- Async status (loading, saved, error) is announced via an `aria-live` region / webkit status surface —
+  not colour or a silent spinner alone.
 - Assert **behavior, console, a11y, and visual snapshots** — never class strings, pixel positions, or
   animation timing.
 
@@ -168,7 +176,7 @@ End with: `verified — ship` or `N findings — fix before ship`.
 - [ ] The route was driven in a real headless browser; every screenshot was looked at, not just saved.
 - [ ] Both themes and 2–3 widths captured; no dark-only or narrow-width regression.
 - [ ] Zero console errors / failed requests on load and on the primary interaction.
-- [ ] axe-core run against the live tree with no violations.
+- [ ] axe-core run against the live tree with no violations; async status announced via a live region.
 - [ ] Loading, empty, and error each forced and each renders its webkit state component.
 - [ ] Primary flow driven; focus traps + restores; the action's feedback appears.
 - [ ] Wired into CI as a smoke/visual job — this runtime gate runs on every PR, not just locally.

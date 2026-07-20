@@ -1,8 +1,9 @@
 ---
 name: webkit-form
-description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, CardBox with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Grouped in a real <fieldset>/<legend>, validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Message callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-usability (locking + toast).
+description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, CardBox with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Message callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-form
@@ -14,7 +15,7 @@ that is really a placeholder, a select whose `<label for>` points at nothing, a 
 only in colour, a field that never says it was required. This skill fixes the accessibility of a form
 built on `@aziontech/webkit` so it is operable by keyboard, understandable by a screen reader, and
 recoverable when it rejects input. It is the a11y companion to `/webkit-ux-heuristics`
-(which establishes the states) and `/webkit-usability` (which locks the scope and
+(which establishes the states) and `/webkit-ui-states` (which locks the scope and
 toasts request errors) — this skill owns **layout, labels, grouping, validation semantics, and submit**.
 
 There are **two ways to lay out a form**, and both are first-class:
@@ -44,7 +45,29 @@ Pick one per form; don't mix row-fields and stacked-fields in the same section.
 - Building or reviewing any create/edit page, settings panel, drawer form, or multi-field form.
 - The user asks "is this form accessible", "wire up the labels", "the screen reader skips this",
   "where do errors go", "which layout for this form".
-- After `/webkit-ux-heuristics` establishes the states and before `/webkit-usability` locks the async submit.
+- After `/webkit-ux-heuristics` establishes the states and before `/webkit-ui-states` locks the async submit.
+
+## Label association — every control names itself (both approaches)
+
+The one non-negotiable both layouts share: every control has a **programmatic accessible name**, its
+error is **tied to it**, and related controls are **grouped** — so a screen reader announces the field,
+its state, and the group it belongs to. The mechanics differ per approach, the contract does not:
+
+- **A real label, never a placeholder.** Approach B (and a composed `Select`) wires a real `<label for>`
+  to the control `id` — via a `field-*` wrapper or a hand-rendered `Label`; a composed `Select` points
+  `for` at `Select.Trigger`'s `id` (labelling the wrapper labels nothing). Approach A (ItemGroup) uses
+  `Item.Title` as the field name and gives the control an `aria-label`. A placeholder is **never** the
+  label — it disappears on input and is not a reliable accessible name.
+- **Errors associated via `aria-describedby`.** The on-field `HelperText` carries an `id` and the control
+  points `aria-describedby` at it, so the message is announced when focus lands; the control's
+  `:required` / `:invalid` props set `aria-required` / `aria-invalid` — don't hand-roll them. A `field-*`
+  wrapper wires this for you; in an ItemGroup you set `aria-describedby` on the control and the `id` on
+  the `<HelperText>` yourself.
+- **Groups in `<fieldset>` + `<legend>`.** Each section is a native `<fieldset>` with a `<legend>`
+  (`sr-only` when a visible title already names it); a radio/checkbox set is its own `<fieldset>` whose
+  `<legend>` is the question.
+
+The sections below show each mechanism in place; this is the contract they satisfy.
 
 ## Form Layout — the spacing reference
 
@@ -112,7 +135,7 @@ contexts** in Azion products:
 save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **or** several overline-titled
 sections, like Account Settings; the sections group the topic, not the save). A form deliberately split
 into independently-committed cards — the **CardBox with independent saves** type — has **one save per
-card**, each locking off its own `submitting` flag (the `/webkit-usability` contract).
+card**, each locking off its own `submitting` flag (the `/webkit-ui-states` contract).
 
 ### Example — CardBox with its own save
 
@@ -139,7 +162,7 @@ link on the left and Save on the right. Canonical pattern:
     { label: 'Disabled', value: 'disabled' }
   ]
   const displayValue = (v) => options.find((o) => o.value === v)?.label ?? ''
-  const submitting = ref(false) // /webkit-usability: Save :loading + fields :disabled off one flag
+  const submitting = ref(false) // /webkit-ui-states: Save :loading + fields :disabled off one flag
 </script>
 
 <template>
@@ -325,7 +348,7 @@ Applications module.
 Three decisions make it safe:
 
 - **Independent scopes.** The parent and child are separate `<form>`s, each with its **own** `submitting`
-  flag, its own `<fieldset :disabled>`, its own Save `:loading` (the `/webkit-usability` Pattern 1 lock, per
+  flag, its own `<fieldset :disabled>`, its own Save `:loading` (the `/webkit-ui-states` Pattern 1 lock, per
   drawer). Submitting the child never locks the parent, and the parent's save never touches the child.
 - **A controlled Select + a sentinel value.** The parent `Select` is **controlled** (`:model-value`, not
   `v-model`) so picking the quick-add never commits a real value. The quick-add is a normal
@@ -790,12 +813,12 @@ Rules:
 - **No custom error-summary block** (`role="alert"` list of links) and **no `Message` callout** for
   field validation. Those were removed on purpose: the field's own state + its `HelperText` is the feedback.
 - **Never `toast` a field error.** Missing/invalid input stays on the field. Toast is for
-  request/API failures only (see `/webkit-usability`).
+  request/API failures only (see `/webkit-ui-states`).
 
 ## Submission — native submit, one locked scope, sticky actions
 
 The primary action drives the native submit so **Enter submits**. While the request runs, **one flag
-locks the whole scope** — this is `/webkit-usability` **Pattern 1**; this skill **references it, does not
+locks the whole scope** — this is `/webkit-ui-states` **Pattern 1**; this skill **references it, does not
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
 flag**. On a long form, the actions live in a **sticky bar** so Save/Cancel are always reachable.
 
@@ -824,7 +847,7 @@ Rules:
   `<button type="submit" class="sr-only">` inside the `<form>` so Enter still submits.
 - **Lock off one flag.** `<fieldset :disabled="submitting">` + `:disabled="submitting"` on **every**
   control + Save `:loading="submitting"`; guard the handler and release in `finally` (this IS
-  `/webkit-usability` Pattern 1 — the fieldset is the native lock, the per-control
+  `/webkit-ui-states` Pattern 1 — the fieldset is the native lock, the per-control
   `:disabled` is what makes webkit `Select`/`Switch`/`field-*` show the disabled visual).
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
@@ -895,7 +918,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - Field wrappers, `Label`, `HelperText`, `Item`, `CardBox`, `Select`, `Button` import paths: ask the
   webkit MCP `suggest_component`, or read `node_modules/@aziontech/webkit/catalog.json` (`imports`) —
   every key is a real subpath.
-- Companion skills: `/webkit-ux-heuristics` (states + inline error placement) and `/webkit-usability`
+- Companion skills: `/webkit-ux-heuristics` (states + inline error placement) and `/webkit-ui-states`
   (lock-the-scope + toast for request errors).
 - Token catalog (spacing, colour, shape, typography): the `@aziontech/theme` tokens (the `--*` CSS
   variables it ships; the webkit MCP lists them).
@@ -934,5 +957,5 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       state/`kind` (required is NOT an error); filled-but-malformed uses the red `invalid` state/`kind`;
       never both on one field. No error-summary block, no `Message` callout for field validation.
 - [ ] `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag
-      (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per `/webkit-usability`
+      (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per `/webkit-ui-states`
       Pattern 1); request errors toast, field errors stay inline.

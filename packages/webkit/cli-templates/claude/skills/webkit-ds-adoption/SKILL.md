@@ -3,6 +3,7 @@ name: webkit-ds-adoption
 description: Migrating an existing app onto @aziontech/webkit is a sequence of small, shippable stories in dependency order — never a big-bang rewrite. Use when adopting webkit into a legacy screen or app: decompose the migration, check the catalog before building custom, track a coverage scorecard per screen, and file gaps instead of forking. Drives each screen from custom toward webkit, story by story.
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-ds-adoption

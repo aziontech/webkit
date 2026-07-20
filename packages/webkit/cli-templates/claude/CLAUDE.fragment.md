@@ -44,11 +44,11 @@ runs axe + screenshots), and taste is a review concern.
 Start with `/webkit-ui-craft` (the umbrella that routes the rest). Get structure and states right
 before any polish:
 
-- **Structure:** `/webkit-ux-heuristics` · `/webkit-ui-states` · `/webkit-usability` · `/webkit-form` · `/webkit-navigation`
-- **Foundation:** `/webkit-baseline-ui`
-- **Cross-cutting quality:** `/webkit-accessibility-implementation` · `/webkit-content-microcopy` · `/webkit-responsive-layout` · `/webkit-theming-dark-mode` · `/webkit-performance-ux` · `/webkit-i18n-readiness` · `/webkit-data-viz`
-- **Polish:** `/webkit-motion-polish` · `/webkit-impeccable-polish` · `/webkit-delight`
-- **Verify + migrate:** `/webkit-ui-verify` · `/webkit-ds-adoption`
+- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-navigation`
+- **Foundation:** `/webkit-baseline-ui` (tokens, hierarchy, containers, responsive widths)
+- **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
+- **Polish:** `/webkit-motion-polish` · `/webkit-impeccable-polish` (finish + earned delight)
+- **Verify + migrate:** `/webkit-ui-verify` (runtime axe + both themes + states) · `/webkit-ds-adoption`
 
 Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/webkit-usage`.
 

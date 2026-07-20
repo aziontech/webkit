@@ -1,8 +1,9 @@
 ---
 name: webkit-impeccable-polish
-description: The "feels finished" sign-off for UI on @aziontech/webkit — a whole-screen cross-axis pass that confirms state completeness, optical balance, and coherence AFTER the per-axis skills ran. It names each axis and defers the token rules to the skill that owns them; it does not re-teach token sets.
+description: The "feels finished" sign-off for UI on @aziontech/webkit — a whole-screen cross-axis pass that confirms state completeness, optical balance, and coherence AFTER the per-axis skills ran, plus an optional earned-delight pass (at most one or two restrained, token-driven moments at a completion / first-time / recovery / milestone). It names each axis and defers the token rules to the skill that owns them; it does not re-teach token sets.
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-impeccable-polish
@@ -49,9 +50,28 @@ named — go there for the allowed values; here you only confirm the screen as a
 6. **Two themes hold.** The screen reads correctly in light and dark without per-theme edits — confirm
    via `/webkit-theming-dark-mode`, and observe it for real with `/webkit-ui-verify`.
 
+## Earned delight (optional)
+
+Once the six checks hold, **at most one or two** moments may earn a touch of delight — never sprinkled
+across hover states and every button (that is exactly the noise the restraint check, item 5, exists to
+catch). A moment is earned only at a **completion** (saved / deployed / published), a **first-time**
+success, an **error recovery**, or a **milestone** crossed.
+
+Keep it inside the register:
+
+- **Token-driven motion only** — a `transform`/`opacity` transition on the right curve (values per
+  `/webkit-motion-polish`). No new dependency, no confetti, no component-local `@keyframes`.
+- **Copy is the cheapest delight** — product-specific and technical. Say what the product actually did
+  ("Deployed to 24 edge locations"), never generic filler ("All done! 🎉") or AI-slop loading lines.
+- **Never block** — each moment is `< 1s`, skippable, and carries a `motion-reduce:*` escape; it
+  amplifies the result, never gates or obscures it.
+- **Nothing playful on a critical error path** — be calm and clear, not cute.
+
 ## Hard rules
 
 - Do not re-teach token sets here — name the axis, defer the allowed values to the owning skill.
+- Do not sprinkle delight — at most one or two earned moments (completion / first-time / recovery /
+  milestone), token motion + product-specific copy only; no new lib, no confetti, no `@keyframes`.
 - Do not sign off a screen with a missing interactive or async state — that is what this pass exists
   to catch.
 - Do not add polish that the structure skills haven't cleared: a missing empty/error state is a
@@ -75,3 +95,4 @@ End with a verdict: `finished` or `N issues across <items>`.
 - [ ] Every interactive state present; every async state present (`/webkit-ui-states`); selected/current visible.
 - [ ] Radii and elevation coherent per role; one accent per view; no unrequested ornament.
 - [ ] Motion reduced-motion-safe; the screen holds in both themes (verified, not assumed).
+- [ ] Delight, if any, is at most one or two earned moments — token motion + product-specific copy, `< 1s`, skippable, `motion-reduce:*`-safe, no new lib/confetti.

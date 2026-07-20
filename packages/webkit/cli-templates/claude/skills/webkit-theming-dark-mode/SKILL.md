@@ -3,6 +3,7 @@ name: webkit-theming-dark-mode
 description: Every screen in a @aziontech/webkit app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-theming-dark-mode

@@ -1,8 +1,9 @@
 ---
 name: webkit-ui-craft
-description: Umbrella entry for building product UI on @aziontech/webkit with taste and PRO UX. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — structure (ux-heuristics, usability, ui-states, form, navigation), foundation (baseline-ui), cross-cutting quality (accessibility, content, responsive, theming, performance, i18n, data-viz), polish (motion, impeccable, delight), and verification (ui-verify).
+description: Umbrella entry for building product UI on @aziontech/webkit with taste and PRO UX. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, navigation), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
 status: active
 last_updated: 2026-07-20
+scope: general
 ---
 
 # Skill: webkit-ui-craft
@@ -20,10 +21,10 @@ webkit primitives.
 - `/webkit-ui-craft` — apply the principles below to all UI work in this conversation and route to the
   right child skill for the task at hand.
 - `/webkit-ui-craft <file>` — run the progression as a review: structure (`/webkit-ux-heuristics` →
-  `/webkit-ui-states` → `/webkit-usability`) → foundation (`/webkit-baseline-ui`) → cross-cutting
-  quality (accessibility, responsive, theming) → polish (`/webkit-motion-polish` →
-  `/webkit-impeccable-polish`, then `/webkit-delight` only if a moment earns it) → verify
-  (`/webkit-ui-verify`). Output each child skill's findings under its own heading.
+  `/webkit-ui-states` → `/webkit-form` → `/webkit-navigation`) → foundation (`/webkit-baseline-ui`) →
+  cross-cutting quality (`/webkit-theming-dark-mode`, `/webkit-data-viz`) → polish
+  (`/webkit-motion-polish` → `/webkit-impeccable-polish`) → verify (`/webkit-ui-verify`). Output each
+  child skill's findings under its own heading.
 
 ## The 3 principles
 
@@ -49,36 +50,32 @@ text-body-* > text-label-* > text-overline-*`). See `/webkit-baseline-ui`.
    shell, focused-flow centering) lives in `/webkit-baseline-ui`.
 6. **Token motion only** — `animate-*` utilities + `duration-*`/`ease-*` tokens, with a
    `motion-reduce:*` escape; no animation library. See `/webkit-motion-polish`.
-7. **Accessible & localizable by construction** — labels, focus, ARIA state, target size; no
-   hardcoded strings. See `/webkit-accessibility-implementation`, `/webkit-i18n-readiness`.
+7. **Accessible by construction** — labels, focus, ARIA state, target size. See `/webkit-form`,
+   `/webkit-ui-verify`.
 8. **Works in both themes** — style through role tokens so light and dark need no per-theme edits.
    See `/webkit-theming-dark-mode`.
+
+> Accessibility is enforced by the shipped `accessibility` rule and verified at runtime by
+> `/webkit-ui-verify` (axe on the rendered screen).
 
 ## The progression — route by phase
 
 Run roughly in this order; polish amplifies a sound structure, it can't rescue a broken one.
 
-| Phase      | Goal                                                                   | Skill                                  |
-| ---------- | ---------------------------------------------------------------------- | -------------------------------------- |
-| Mechanics  | Import path, tokens, tree-shaking                                      | `/webkit-usage`                        |
-| Structure  | Right component + Nielsen heuristics; the 3 states must exist          | `/webkit-ux-heuristics`                |
-| Structure  | The full loading/empty/error/partial state surface, per component      | `/webkit-ui-states`                    |
-| Structure  | Async behavior: lock the scope while running, toast request errors     | `/webkit-usability`                    |
-| Structure  | Accessible forms: fieldset/legend, submit-time required/invalid        | `/webkit-form`                         |
-| Structure  | The two console shells; one GlobalHeader; user always visible          | `/webkit-navigation`                   |
-| Foundation | Deslop: components-only, tokens-only, hierarchy, rhythm, containers    | `/webkit-baseline-ui`                  |
-| Quality    | WCAG 2.2 AA on the composition: focus, ARIA, live regions, targets     | `/webkit-accessibility-implementation` |
-| Quality    | UX writing: actionable errors, specific CTAs, consistent vocabulary    | `/webkit-content-microcopy`            |
-| Quality    | How the screen reorganizes across sizes; nav collapses to a drawer     | `/webkit-responsive-layout`            |
-| Quality    | Both themes work with zero per-theme edits                             | `/webkit-theming-dark-mode`            |
-| Quality    | Perceived performance: optimistic UI, zero layout shift, debounce      | `/webkit-performance-ux`               |
-| Quality    | Localizable by construction: no hardcoded strings, text expansion, RTL | `/webkit-i18n-readiness`               |
-| Quality    | Charts mapped to tokens: form by question, palette, anatomy            | `/webkit-data-viz`                     |
-| Polish     | Smooth motion with tokens only                                         | `/webkit-motion-polish`                |
-| Polish     | The "feels finished" cross-screen sign-off                             | `/webkit-impeccable-polish`            |
-| Polish     | One earned, restrained moment of delight                               | `/webkit-delight`                      |
-| Verify     | Drive the screen: both themes, widths, console, axe, states            | `/webkit-ui-verify`                    |
-| Migrate    | Adopt webkit incrementally in an existing app; coverage scorecard      | `/webkit-ds-adoption`                  |
+| Phase      | Goal                                                                       | Skill                       |
+| ---------- | -------------------------------------------------------------------------- | --------------------------- |
+| Mechanics  | Import path, tokens, tree-shaking                                          | `/webkit-usage`             |
+| Structure  | Right component + Nielsen heuristics; the 3 states must exist              | `/webkit-ux-heuristics`     |
+| Structure  | Full loading/empty/error/partial state surface + async scope-lock & toasts | `/webkit-ui-states`         |
+| Structure  | Accessible forms: fieldset/legend, submit-time required/invalid            | `/webkit-form`              |
+| Structure  | The two console shells; one GlobalHeader; user always visible              | `/webkit-navigation`        |
+| Foundation | Deslop: components-only, tokens-only, hierarchy, rhythm, containers        | `/webkit-baseline-ui`       |
+| Quality    | Both themes work with zero per-theme edits                                 | `/webkit-theming-dark-mode` |
+| Quality    | Charts mapped to tokens: form by question, palette, anatomy                | `/webkit-data-viz`          |
+| Polish     | Smooth motion with tokens only                                             | `/webkit-motion-polish`     |
+| Polish     | The "feels finished" cross-screen sign-off, incl. an earned delight moment | `/webkit-impeccable-polish` |
+| Verify     | Drive the screen: both themes, widths, console, axe/a11y, states           | `/webkit-ui-verify`         |
+| Migrate    | Adopt webkit incrementally in an existing app; coverage scorecard          | `/webkit-ds-adoption`       |
 
 ## When to invoke
 
