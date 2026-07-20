@@ -107,6 +107,16 @@ export const TOKEN_CHECKS = [
     regex: /\b(?:duration|delay|ease)-\[/g,
     message:
       'Hardcoded duration/ease/delay. Use the duration/curve/ease tokens from primitives/animations (DESIGN.md § Animations).'
+  },
+  {
+    // A Tailwind arbitrary value that opens with `--(` — e.g. `min-h-[--(size-4)]` —
+    // compiles to invalid CSS `min-height: var(--(size-4))`. Vite 6 / esbuild (Storybook)
+    // tolerate it; a consumer on Vite 8 / lightningcss rejects it and the build dies. It is
+    // never intentional: the author meant a token `[var(--x)]` or a utility (`min-h-7`).
+    id: 'malformed-arbitrary-var',
+    regex: /-\[--\(/g,
+    message:
+      'Malformed arbitrary value `-[--(…)]` → invalid CSS `var(--(…))` (breaks a consumer build on lightningcss). Use `[var(--token)]` or a Tailwind utility (e.g. min-h-7).'
   }
 ]
 

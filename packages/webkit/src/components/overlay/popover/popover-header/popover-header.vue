@@ -32,7 +32,7 @@
       close, instead of centering in the header's symmetric padding.
     -->
     <div
-      class="flex min-h-[--(size-4)] flex-col gap-[var(--spacing-xxs)] pr-[var(--spacing-xxl)] [&>button]:absolute [&>button]:right-[var(--spacing-md)] [&>button]:top-[var(--spacing-sm)]"
+      class="flex min-h-7 flex-col gap-[var(--spacing-xxs)] pr-[var(--spacing-xxl)] [&>button]:absolute [&>button]:right-[var(--spacing-md)] [&>button]:top-[var(--spacing-sm)]"
     >
       <slot />
     </div>
