@@ -30,6 +30,21 @@
     } else if (event.key === 'Escape' && ctx.open.value) {
       event.preventDefault()
       ctx.setOpen(false)
+    } else if (event.key === 'Tab' && ctx.open.value) {
+      // Trap Tab inside the open Select — hand focus over to the panel,
+      // which owns the focus cycle across search input, options, footer.
+      const panel = document.getElementById(ctx.contentId)
+      const focusable = panel?.querySelectorAll<HTMLElement>(
+        '[role="option"]:not([data-disabled]), a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+      const items = focusable ? Array.from(focusable).filter((el) => el.offsetParent !== null) : []
+      if (items.length === 0) {
+        event.preventDefault()
+        return
+      }
+      event.preventDefault()
+      const target = event.shiftKey ? items[items.length - 1] : items[0]
+      target?.focus()
     }
   }
 </script>
