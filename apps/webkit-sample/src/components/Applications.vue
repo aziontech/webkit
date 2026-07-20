@@ -18,7 +18,9 @@ import { toast } from "@aziontech/webkit/toast";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { authorAt } from "../lib/people";
 import AppLayout from "./ui/AppLayout.vue";
+import LastModifiedCell from "./ui/LastModifiedCell.vue";
 import PageHeading from "./ui/PageHeading.vue";
 
 const route = useRoute();
@@ -47,7 +49,8 @@ const presetIcon = (preset) => presetMeta[preset]?.icon ?? "";
 // git-backed: it points at a `repository` + `branch` and is built from a
 // framework `preset`, deployed by GitHub Actions running the Azion CLI. The
 // first row mirrors the real reference repo gab-az/webkit-sample-vue (id, preset,
-// domain from its azion/azion.json).
+// domain from its azion/azion.json). The Last Modified avatar comes from the
+// shared team roster (src/lib/people.js), assigned round-robin per row.
 const applications = ref([
   {
     id: "1784552864",
@@ -181,7 +184,10 @@ const applications = ref([
     status: "Inactive",
     lastModified: "May 02, 2026, 01:15:00 PM",
   },
-]);
+].map((app, index) => {
+  const person = authorAt(index);
+  return { ...app, author: person.name, authorAvatar: person.avatar };
+}));
 
 // Column model. `name` is the principal (emphasized) column; the trailing
 // `actions` column (kind: 'action') is auto-pinned to the right edge.
@@ -358,19 +364,24 @@ const onRowAction = (event, value, row) => {
           </template>
 
           <template #cell-domainName="{ value }">
-            <div class="flex items-center gap-[var(--spacing-xs)]">
-              <!-- Domain shown in full (no truncate) + view-details logic + external-redirect arrow. -->
+            <!-- Domain link (truncates) + external-redirect arrow; copy button pinned to the cell's right edge so it aligns across rows. -->
+            <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
               <a
                 :href="`https://${value}`"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-[var(--spacing-xxs)] whitespace-nowrap hover:underline"
+                class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
                 @click.stop
               >
-                <span>{{ value }}</span>
+                <span class="truncate">{{ value }}</span>
                 <i class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]" aria-hidden="true" />
               </a>
-              <CopyButton kind="outlined" :value="value" aria-label="Copy domain name" />
+              <CopyButton
+                kind="outlined"
+                :value="value"
+                aria-label="Copy domain name"
+                class="ml-auto shrink-0"
+              />
             </div>
           </template>
 
@@ -380,6 +391,10 @@ const onRowAction = (event, value, row) => {
               :severity="value === 'Active' ? 'success' : 'secondary'"
               size="medium"
             />
+          </template>
+
+          <template #cell-lastModified="{ value, row }">
+            <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
           </template>
 
           <template #cell-actions="{ row }">

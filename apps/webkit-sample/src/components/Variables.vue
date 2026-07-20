@@ -44,7 +44,9 @@ import { toast } from "@aziontech/webkit/toast";
 import { computed, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
+import { authorAt } from "../lib/people";
 import AppLayout from "./ui/AppLayout.vue";
+import LastModifiedCell from "./ui/LastModifiedCell.vue";
 import PageHeading from "./ui/PageHeading.vue";
 
 const route = useRoute();
@@ -60,7 +62,8 @@ const variables = ref([
     key: "API_BASE_URL",
     value: "https://api.example.com",
     secret: false,
-    lastEditor: "maria.silva",
+    lastEditor: authorAt(0).name,
+    lastEditorAvatar: authorAt(0).avatar,
     lastModified: "June 28, 2026, 10:12:00 AM",
   },
   {
@@ -68,7 +71,8 @@ const variables = ref([
     key: "STRIPE_SECRET_KEY",
     value: "sk_live_51H8sX2eZv...",
     secret: true,
-    lastEditor: "joao.costa",
+    lastEditor: authorAt(1).name,
+    lastEditorAvatar: authorAt(1).avatar,
     lastModified: "June 12, 2026, 04:45:00 PM",
   },
   {
@@ -76,7 +80,8 @@ const variables = ref([
     key: "FEATURE_FLAGS",
     value: "checkout_v2,dark_mode",
     secret: false,
-    lastEditor: "maria.silva",
+    lastEditor: authorAt(2).name,
+    lastEditorAvatar: authorAt(2).avatar,
     lastModified: "May 30, 2026, 09:05:00 AM",
   },
   {
@@ -84,7 +89,8 @@ const variables = ref([
     key: "DATABASE_PASSWORD",
     value: "p4ssw0rd-r0t4t3d",
     secret: true,
-    lastEditor: "ana.pereira",
+    lastEditor: authorAt(3).name,
+    lastEditorAvatar: authorAt(3).avatar,
     lastModified: "May 18, 2026, 02:20:00 PM",
   },
   {
@@ -92,7 +98,8 @@ const variables = ref([
     key: "MAX_UPLOAD_MB",
     value: "25",
     secret: false,
-    lastEditor: "joao.costa",
+    lastEditor: authorAt(4).name,
+    lastEditorAvatar: authorAt(4).avatar,
     lastModified: "April 22, 2026, 11:38:00 AM",
   },
 ]);
@@ -103,8 +110,7 @@ const columns = [
   { accessorKey: "key", header: "Key", enableSorting: true, principal: true },
   { accessorKey: "value", header: "Value", grow: 2 },
   { accessorKey: "secret", header: "Type", enableSorting: true },
-  { accessorKey: "lastEditor", header: "Last Editor", enableSorting: true },
-  { accessorKey: "lastModified", header: "Last Modified", enableSorting: true },
+  { accessorKey: "lastModified", header: "Last Modified", enableSorting: true, grow: 2 },
   { id: "actions", kind: "action", hideable: false },
 ];
 
@@ -277,7 +283,7 @@ const onRowAction = (event, value, row) => {
           </template>
 
           <template #cell-value="{ row }">
-            <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+            <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
               <span class="truncate text-code-label-sm text-[var(--text-muted)]">
                 {{ displayValue(row) }}
               </span>
@@ -286,8 +292,13 @@ const onRowAction = (event, value, row) => {
                 kind="outlined"
                 :value="row.value"
                 aria-label="Copy value"
+                class="ml-auto shrink-0"
               />
             </div>
+          </template>
+
+          <template #cell-lastModified="{ value, row }">
+            <LastModifiedCell :author="row.lastEditor" :avatar-src="row.lastEditorAvatar" :date="value" />
           </template>
 
           <template #cell-secret="{ value }">

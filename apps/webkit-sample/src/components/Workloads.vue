@@ -5,9 +5,9 @@
 // whose toolbar composes the table's own filter / search / refresh / export /
 // column controls and whose rows open the workload detail view. As a first-level
 // module list it carries no navigation tabs.
-import Avatar from "@aziontech/webkit/avatar";
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
+import CopyButton from "@aziontech/webkit/copy-button";
 import Dropdown from "@aziontech/webkit/dropdown";
 import IconButton from "@aziontech/webkit/icon-button";
 import Popover from "@aziontech/webkit/popover";
@@ -17,7 +17,9 @@ import { toast } from "@aziontech/webkit/toast";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { authorAt } from "../lib/people";
 import AppLayout from "./ui/AppLayout.vue";
+import LastModifiedCell from "./ui/LastModifiedCell.vue";
 import PageHeading from "./ui/PageHeading.vue";
 
 const route = useRoute();
@@ -26,12 +28,6 @@ const router = useRouter();
 const userEmail = computed(() => route.query.email || "myemail@azion.com");
 
 // The workload records that back the table (data-driven mode).
-const owners = [
-  "rafael.umman@azion.com",
-  "julia.costa@azion.com",
-  "marco.silva@azion.com",
-  "ana.pereira@azion.com",
-];
 const workloads = ref(
   Array.from({ length: 20 }, (_, i) => {
     const n = i + 1;
@@ -53,7 +49,8 @@ const workloads = ref(
       domainCount: extraCount,
       status: n % 9 === 0 ? "Inactive" : "Active",
       lastModified: "May 15, 2026, 11:00:25 am",
-      owner: owners[i % owners.length],
+      owner: authorAt(i).name,
+      ownerAvatar: authorAt(i).avatar,
     };
   }),
 );
@@ -63,7 +60,6 @@ const columns = [
   { accessorKey: "domain", header: "Domains", grow: 2 },
   { accessorKey: "status", header: "Status", enableSorting: true },
   { accessorKey: "lastModified", header: "Last Modified", enableSorting: true, grow: 2 },
-  { accessorKey: "owner", header: "Last Modified By", grow: 2 },
   { id: "actions", kind: "action", hideable: false },
 ];
 
@@ -158,8 +154,18 @@ const onRowAction = (event, value, row) => {
               </template>
 
               <template #cell-domain="{ row, value }">
-                <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                  <span class="truncate">{{ value }}</span>
+                <!-- Primary domain link (truncates) + arrow, then "+N" overflow Popover; copy button pinned to the cell's right edge so it aligns across rows. -->
+                <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <a
+                    :href="`https://${value}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+                    @click.stop
+                  >
+                    <span class="truncate">{{ value }}</span>
+                    <i class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]" aria-hidden="true" />
+                  </a>
                   <Popover
                     v-if="row.domainCount"
                     placement="bottom-start"
@@ -170,7 +176,7 @@ const onRowAction = (event, value, row) => {
                         :label="`+${row.domainCount}`"
                         severity="secondary"
                         size="small"
-                        class="cursor-pointer"
+                        class="shrink-0 cursor-pointer"
                       />
                     </Popover.Trigger>
 
@@ -193,6 +199,12 @@ const onRowAction = (event, value, row) => {
                       </div>
                     </Popover.Content>
                   </Popover>
+                  <CopyButton
+                    kind="outlined"
+                    :value="value"
+                    aria-label="Copy domain name"
+                    class="ml-auto shrink-0"
+                  />
                 </div>
               </template>
 
@@ -204,11 +216,8 @@ const onRowAction = (event, value, row) => {
                 />
               </template>
 
-              <template #cell-owner="{ value }">
-                <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                  <Avatar :label="value" size="small" />
-                  <span class="truncate text-body-sm text-[var(--text-default)]">{{ value }}</span>
-                </div>
+              <template #cell-lastModified="{ value, row }">
+                <LastModifiedCell :author="row.owner" :avatar-src="row.ownerAvatar" :date="value" />
               </template>
 
               <template #cell-actions="{ row }">
