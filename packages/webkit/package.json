@@ -14,7 +14,6 @@
   },
   "scripts": {
     "clean": "rm -rf dist/",
-    "pack:dry": "npm pack --dry-run",
     "pack:check": "! npm pack --dry-run 2>&1 | grep -E '\\.test\\.(ts|js)|src/test/'",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
