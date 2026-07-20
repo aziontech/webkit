@@ -157,7 +157,7 @@ export const ResponsiveCollapsed = {
     items: [ancestor, ancestor, ancestor, ancestor, current]
   },
   parameters: {
-    viewport: { defaultViewport: 'mobile1' },
+    viewport: { defaultViewport: 'mobile' },
     docs: {
       description: {
         story:

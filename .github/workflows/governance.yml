@@ -11,8 +11,6 @@ permissions:
   pull-requests: read
 
 jobs:
-  # Detect whether webkit sources changed. Required checks below stay
-  # registered on every PR; jobs short-circuit when nothing relevant moved.
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
@@ -34,39 +32,31 @@ jobs:
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
             toolkit:
-              - 'packages/webkit/**'
               - '.specs/**'
               - '.claude/hooks/**'
               - '.claude/rules/**'
               - 'apps/storybook/**'
-            # Stories are fixtures of the unit suite (composeStories), so
-            # storybook changes retrigger the tests too.
+              - 'packages/webkit/**'
             tests:
               - 'packages/webkit/**'
               - 'apps/storybook/**'
-            # Pixels react to any styled layer: components, tokens, icons, stories.
             visual:
               - 'packages/webkit/**'
               - 'packages/theme/**'
               - 'packages/icons/**'
               - 'apps/storybook/**'
-            # Lint canaries guard the lint CONFIGS: anything that can change a
-            # rule's behavior (configs, the fixtures themselves, tooling deps)
-            # retriggers the canary job.
             canary:
               - 'packages/webkit/**'
               - 'lint-canaries/**'
               - 'eslint.config.js'
-              - 'packages/webkit/eslint.config.js'
-              - '.stylelintrc.json'
-              - '.prettierrc.json'
-              - '.prettierignore'
               - 'commitlint.config.js'
               - 'package.json'
               - 'pnpm-lock.yaml'
+              - '.stylelintrc.json'
+              - '.prettierrc.json'
+              - '.prettierignore'
               - '.github/workflows/governance.yml'
 
-  # Security Scanning (parallel, fast)
   security:
     name: Security Scans
     needs: changes
@@ -103,12 +93,6 @@ jobs:
         working-directory: packages/webkit
         continue-on-error: true
 
-  # Lint Canary (parallel, side by side with Security Scans) — INVERTED logic.
-  # Every fixture in lint-canaries/ violates one configured lint rule ON
-  # PURPOSE and must KEEP failing it. A fixture that lints clean means the
-  # rule was weakened or removed (eslint.config.js / .stylelintrc.json /
-  # .prettierrc.json / commitlint.config.js), so the job fails and stops the
-  # pipeline. See lint-canaries/README.md.
   lint-canary:
     name: Lint Canary (broken samples must stay broken)
     needs: changes
@@ -132,7 +116,6 @@ jobs:
       - name: Run lint canaries (every fixture must still fail its rule)
         run: node lint-canaries/index.js
 
-  # Linting & Formatting (parallel)
   lint:
     name: Linting & Formatting
     needs: changes
@@ -162,7 +145,6 @@ jobs:
       - name: Prettier check (fail on diff)
         run: pnpm prettier --check "packages/webkit/**/*.{js,ts,vue,css,json,md}"
 
-  # Type Safety & Coverage (parallel)
   types:
     name: TypeScript & Type Coverage
     needs: changes
@@ -191,7 +173,6 @@ jobs:
         run: npx type-coverage -p . --at-least 95 --detail
         working-directory: packages/webkit
 
-  # Build Verification (needs lint + types)
   build:
     name: Build Verification
     runs-on: ubuntu-latest
@@ -212,10 +193,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Pack dry run
-        run: pnpm pack:dry
-        working-directory: packages/webkit
-
       - name: Assert no test files leak into the tarball
         run: pnpm pack:check
         working-directory: packages/webkit
@@ -224,7 +201,6 @@ jobs:
         run: pnpm run size
         working-directory: packages/webkit
 
-  # Storybook Smoke Test
   storybook:
     name: Storybook Build
     runs-on: ubuntu-latest
@@ -251,10 +227,6 @@ jobs:
       - name: Verify Storybook output
         run: test -d apps/storybook/dist && echo "Storybook built successfully"
 
-  # Adoption toolkit — the toolkit's own node:test suites (ESLint rules, MCP, CLI,
-  # stylelint config) + catalog drift check. Everything ships inside @aziontech/webkit;
-  # the catalog is generated from package.json#exports + .specs, so this asserts the
-  # committed catalog.json matches a fresh build and can never go stale.
   toolkit:
     name: Adoption Toolkit (tests + catalog drift)
     needs: changes
@@ -263,7 +235,7 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
-          fetch-depth: 0 # full history so check-tests can diff a PR against its base
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
@@ -289,11 +261,6 @@ jobs:
       - name: Every component has its test (testing.md)
         run: pnpm --filter @aziontech/webkit run test:gate
 
-  # Consumer smoke test — the umbrella gate for the `webkit init` adoption flow.
-  # Packs @aziontech/{theme,icons,webkit}, scaffolds a bare Vite+Vue app, runs `init`,
-  # renders a real <Button> and builds. Catches the classes of failure the internal CI
-  # cannot see: unstyled components (Tailwind not wired), a malformed arbitrary value that
-  # breaks lightningcss, missing fonts, or a dist absent from the published tarball.
   smoke:
     name: Consumer smoke test (init + build)
     needs: changes
@@ -318,10 +285,6 @@ jobs:
       - name: Init + build a bare consumer app
         run: pnpm --filter @aziontech/webkit run smoke:consume
 
-  # Vitest browser mode (real Chromium), sharded by 4 — behavior/structure/ARIA
-  # on an unstyled DOM. Ordered after lint + types (same tier as build/storybook).
-  # `!contains(needs.*.result, 'failure')` keeps it runnable when upstream jobs
-  # were cleanly skipped (e.g. a storybook-only PR skips the webkit-scoped lint).
   tests:
     name: Vitest browser (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
@@ -361,17 +324,16 @@ jobs:
         run: pnpm exec vitest run --shard=${{ matrix.shard }}/4
         working-directory: packages/webkit
 
-  # Visual regression — the styled layer: every story screenshotted via
-  # @storybook/test-runner and compared against the committed linux baselines
-  # (test:visual:ci fails on any missing baseline). Last link of the chain:
-  # pixels only run once behavior (tests) and both builds are green. Baseline
-  # regeneration lives in app-storybook-test-visual-regression.yml (dispatch).
   visual:
-    name: Storybook visual tests
+    name: Storybook visual tests (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
     needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -401,19 +363,20 @@ jobs:
       - name: Build Storybook
         run: pnpm run storybook:build
 
-      - name: Run visual tests
+      - name: Run visual tests (shard ${{ matrix.shard }}/4)
         run: pnpm --filter storybook run test:visual:ci
+        env:
+          VISUAL_SHARD: ${{ matrix.shard }}/4
 
       - name: Upload diff output on failure
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: visual-diff-output
+          name: visual-diff-output-shard-${{ matrix.shard }}
           path: apps/storybook/.storybook/test-visual/__diff_output__/
           retention-days: 7
           if-no-files-found: ignore
 
-  # Summary Gate — passes when every upstream job is success or cleanly skipped.
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
