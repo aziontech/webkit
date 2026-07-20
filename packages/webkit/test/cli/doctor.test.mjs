@@ -23,19 +23,22 @@ test('doctor on a bare project fails the required checks', () => {
     assert.equal(statusOf(report, 'webkit catalog'), 'fail')
     assert.equal(statusOf(report, 'eslint config'), 'fail')
     assert.equal(statusOf(report, 'stylelint config'), 'fail')
+    assert.equal(statusOf(report, 'tailwind config'), 'fail')
     assert.equal(statusOf(report, 'mcp server'), 'fail')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('doctor after init passes the config/mcp/husky checks', () => {
+test('doctor after init passes the config/mcp/husky/style checks', () => {
   const dir = makeProject()
   try {
     applyPlan(dir, planInit(dir, {}))
     const report = planDoctor(dir)
     assert.equal(statusOf(report, 'eslint config'), 'ok')
     assert.equal(statusOf(report, 'stylelint config'), 'ok')
+    assert.equal(statusOf(report, 'tailwind config'), 'ok')
+    assert.equal(statusOf(report, 'postcss config'), 'ok')
     assert.equal(statusOf(report, 'mcp server'), 'ok')
     assert.equal(statusOf(report, 'husky prepare script'), 'ok')
     assert.equal(statusOf(report, 'pre-commit hook'), 'ok')
@@ -49,7 +52,10 @@ test('doctor after init passes the config/mcp/husky checks', () => {
 test('doctor resolves the catalog via WEBKIT_CATALOG_PATH', () => {
   const dir = makeProject()
   const catalog = join(dir, 'catalog.json')
-  writeFileSync(catalog, JSON.stringify({ package: '@aziontech/webkit', webkitVersion: '1.2.3', imports: {} }))
+  writeFileSync(
+    catalog,
+    JSON.stringify({ package: '@aziontech/webkit', webkitVersion: '1.2.3', imports: {} })
+  )
   const prev = process.env.WEBKIT_CATALOG_PATH
   process.env.WEBKIT_CATALOG_PATH = catalog
   try {
@@ -74,7 +80,10 @@ test('doctor warns when a toolkit dependency is pinned as "latest" and reports i
     // Simulate the installed package so doctor can read its resolved version.
     const inst = join(dir, 'node_modules', '@aziontech', 'webkit')
     mkdirSync(inst, { recursive: true })
-    writeFileSync(join(inst, 'package.json'), JSON.stringify({ name: '@aziontech/webkit', version: '2.5.0' }))
+    writeFileSync(
+      join(inst, 'package.json'),
+      JSON.stringify({ name: '@aziontech/webkit', version: '2.5.0' })
+    )
 
     const report = planDoctor(dir)
     const dep = report.find((c) => c.check === 'dependency versions')

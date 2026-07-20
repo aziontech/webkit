@@ -289,6 +289,35 @@ jobs:
       - name: Every component has its test (testing.md)
         run: pnpm --filter @aziontech/webkit run test:gate
 
+  # Consumer smoke test — the umbrella gate for the `webkit init` adoption flow.
+  # Packs @aziontech/{theme,icons,webkit}, scaffolds a bare Vite+Vue app, runs `init`,
+  # renders a real <Button> and builds. Catches the classes of failure the internal CI
+  # cannot see: unstyled components (Tailwind not wired), a malformed arbitrary value that
+  # breaks lightningcss, missing fonts, or a dist absent from the published tarball.
+  smoke:
+    name: Consumer smoke test (init + build)
+    needs: changes
+    if: needs.changes.outputs.visual == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Init + build a bare consumer app
+        run: pnpm --filter @aziontech/webkit run smoke:consume
+
   # Vitest browser mode (real Chromium), sharded by 4 — behavior/structure/ARIA
   # on an unstyled DOM. Ordered after lint + types (same tier as build/storybook).
   # `!contains(needs.*.result, 'failure')` keeps it runnable when upstream jobs
@@ -388,7 +417,7 @@ jobs:
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, toolkit, tests, visual]
+    needs: [changes, security, lint-canary, lint, types, build, storybook, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -402,6 +431,7 @@ jobs:
             [build]="${{ needs.build.result }}"
             [storybook]="${{ needs.storybook.result }}"
             [toolkit]="${{ needs.toolkit.result }}"
+            [smoke]="${{ needs.smoke.result }}"
             [tests]="${{ needs.tests.result }}"
             [visual]="${{ needs.visual.result }}"
           )

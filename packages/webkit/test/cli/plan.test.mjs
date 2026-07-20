@@ -55,11 +55,16 @@ test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () =
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
+    const deps = findAddDeps(plan)
     const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.mjs')
     assert.ok(eslint, 'expected eslint.config.mjs write action')
     assert.match(eslint.content, /@aziontech\/webkit\/eslint-plugin/)
     assert.match(eslint.content, /configs\.strict/)
     assert.match(eslint.content, /vue-eslint-parser/)
+    // Static a11y floor is wired (the lint half of the accessibility skill).
+    assert.match(eslint.content, /eslint-plugin-vuejs-accessibility/)
+    assert.match(eslint.content, /vuejs-accessibility\/click-events-have-key-events/)
+    assert.ok(deps.includes('eslint-plugin-vuejs-accessibility'), 'missing a11y lint dep')
 
     const stylelint = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
     assert.ok(stylelint, 'expected .stylelintrc.json write action')
@@ -67,6 +72,74 @@ test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () =
     // stylelint config wires the .vue / .scss custom syntaxes
     assert.match(stylelint.content, /postcss-html/)
     assert.match(stylelint.content, /postcss-scss/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const deps = findAddDeps(plan)
+    // Style pipeline deps present and pinned to a range (NOT "latest").
+    for (const d of ['tailwindcss', 'postcss', 'autoprefixer']) {
+      assert.ok(deps.includes(d), `missing style dep ${d}`)
+      const action = plan.find((a) => a.type === 'add-dep' && a.dep === d)
+      assert.notEqual(action.version, 'latest', `${d} must be pinned, not "latest"`)
+      assert.equal(action.dev, true)
+    }
+    // Tailwind v3 specifically (matches the theme preset).
+    const tw = plan.find((a) => a.type === 'add-dep' && a.dep === 'tailwindcss')
+    assert.match(tw.version, /^\^3\./, 'tailwind must be v3 to match the theme preset')
+
+    const twCfg = plan.find((a) => a.type === 'write' && a.path === 'tailwind.config.mjs')
+    assert.ok(twCfg, 'expected tailwind.config.mjs write action')
+    assert.match(twCfg.content, /@aziontech\/theme\/tailwind-preset/)
+    // Critically, it must scan webkit's source so component classes compile.
+    assert.match(twCfg.content, /node_modules\/@aziontech\/webkit\/src/)
+
+    const pcCfg = plan.find((a) => a.type === 'write' && a.path === 'postcss.config.mjs')
+    assert.ok(pcCfg, 'expected postcss.config.mjs write action')
+    assert.match(pcCfg.content, /tailwindcss/)
+    assert.match(pcCfg.content, /autoprefixer/)
+
+    const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
+    assert.ok(cssEntry, 'expected src/webkit.css write action')
+    assert.match(cssEntry.content, /@aziontech\/theme\/globals\.css/)
+    assert.match(cssEntry.content, /@tailwind base/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('an existing tailwind config is advised, not overwritten', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'tailwind.config.js'), 'export default {}\n')
+    const plan = planInit(dir, {})
+    const write = plan.find((a) => a.type === 'write' && a.path.startsWith('tailwind.config'))
+    assert.equal(write, undefined, 'must not plan to write over an existing tailwind config')
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /Tailwind config already exists/.test(a.message)
+    )
+    assert.ok(advise, 'expected a tailwind merge-snippet advice')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit advises the LIGHT default + data-theme dark opt-in', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const advise = plan.find(
+      (a) =>
+        a.type === 'advise' &&
+        /defaults to LIGHT/.test(a.message) &&
+        /data-theme="dark"/.test(a.message)
+    )
+    assert.ok(advise, 'expected a theme-selection advice mentioning the dark opt-in')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -181,9 +254,31 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
       '.claude/skills/webkit-usage/SKILL.md',
+      // UI-craft pack + cross-cutting quality skills (consumer-side authoring guidance).
+      '.claude/skills/webkit-ui-craft/SKILL.md',
+      '.claude/skills/webkit-ux-heuristics/SKILL.md',
+      '.claude/skills/webkit-ui-states/SKILL.md',
+      '.claude/skills/webkit-usability/SKILL.md',
+      '.claude/skills/webkit-form/SKILL.md',
+      '.claude/skills/webkit-navigation/SKILL.md',
+      '.claude/skills/webkit-baseline-ui/SKILL.md',
+      '.claude/skills/webkit-motion-polish/SKILL.md',
+      '.claude/skills/webkit-impeccable-polish/SKILL.md',
+      '.claude/skills/webkit-delight/SKILL.md',
+      '.claude/skills/webkit-accessibility-implementation/SKILL.md',
+      '.claude/skills/webkit-content-microcopy/SKILL.md',
+      '.claude/skills/webkit-responsive-layout/SKILL.md',
+      '.claude/skills/webkit-theming-dark-mode/SKILL.md',
+      '.claude/skills/webkit-performance-ux/SKILL.md',
+      '.claude/skills/webkit-i18n-readiness/SKILL.md',
+      '.claude/skills/webkit-data-viz/SKILL.md',
+      '.claude/skills/webkit-ui-verify/SKILL.md',
+      '.claude/skills/webkit-ds-adoption/SKILL.md',
       '.claude/agents/webkit-expert.md',
       '.claude/agents/webkit-adopter.md',
-      '.claude/agents/webkit-reviewer.md'
+      '.claude/agents/webkit-reviewer.md',
+      '.claude/agents/webkit-ui-verifier.md',
+      '.claude/agents/webkit-adoption-auditor.md'
     ]) {
       assert.ok(copies.includes(rel), `missing bundle copy ${rel}`)
     }

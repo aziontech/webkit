@@ -19,8 +19,10 @@ import {
   firstExisting,
   HUSKY_HOOK_MARKER,
   MCP_SERVER_NAME,
+  POSTCSS_CONFIG_CANDIDATES,
   read,
-  STYLELINT_CONFIG_CANDIDATES
+  STYLELINT_CONFIG_CANDIDATES,
+  TAILWIND_CONFIG_CANDIDATES
 } from './plan.js'
 
 const WEBKIT_PKGS = ['@aziontech/webkit']
@@ -113,6 +115,26 @@ export function planDoctor(projectDir) {
         : 'no stylelint config found — run `npx @aziontech/webkit init`.')
   )
 
+  // 3b. Tailwind config present — webkit's source classes only compile when the consumer
+  //     runs Tailwind with the theme preset. Without it the components render unstyled.
+  const tailwindCfg = firstExisting(projectDir, TAILWIND_CONFIG_CANDIDATES)
+  add(
+    'tailwind config',
+    tailwindCfg ? 'ok' : 'fail',
+    tailwindCfg
+      ? tailwindCfg
+      : 'no tailwind config — webkit component classes will not compile (unstyled UI). Run `npx @aziontech/webkit init`.'
+  )
+
+  // 3c. PostCSS config present (runs Tailwind + autoprefixer in the build).
+  const postcssCfg = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
+  add(
+    'postcss config',
+    postcssCfg ? 'ok' : 'warn',
+    postcssCfg ||
+      'no postcss config — Tailwind may not run in the build. Run `npx @aziontech/webkit init`.'
+  )
+
   // 4. .mcp.json registers the webkit server.
   const mcpPath = join(projectDir, '.mcp.json')
   if (!existsSync(mcpPath)) {
@@ -152,15 +174,19 @@ export function planDoctor(projectDir) {
       : 'no .husky/pre-commit lint block — commits are not linted locally.'
   )
 
-  // 7. theme imported at the app entry (advisory; only when an entry file exists).
+  // 7. Design-system styles imported at the app entry (advisory; only when an entry
+  //    exists). Looks for the generated src/webkit.css OR a direct globals.css import — a
+  //    bare `@aziontech/theme` resolves to the JS token export and loads NO styles.
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   if (entry) {
     const src = read(join(projectDir, entry)) || ''
-    const themed = src.includes('@aziontech/theme')
+    const styled = src.includes('webkit.css') || src.includes('@aziontech/theme/globals.css')
     add(
-      'theme import',
-      themed ? 'ok' : 'warn',
-      themed ? `imported in ${entry}` : `add \`import '@aziontech/theme'\` to ${entry}.`
+      'styles import',
+      styled ? 'ok' : 'warn',
+      styled
+        ? `imported in ${entry}`
+        : `add \`import './webkit.css'\` (tokens + fonts + tailwind) to ${entry}.`
     )
   }
 
