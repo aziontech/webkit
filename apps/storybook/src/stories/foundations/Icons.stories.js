@@ -1,6 +1,5 @@
 import icons from '@aziontech/icons/catalog'
 import colorIcons from '@aziontech/icons/color-catalog'
-
 import CodeBlock from '@aziontech/webkit/code-block'
 
 import IconGrid from '../../foundations/components/IconGrid.vue'
@@ -111,6 +110,7 @@ export const Overview = {
     initialSize: 24
   },
   parameters: {
+    visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
       description: {
         story: 'Icon system overview: import, usage examples, and complete icon gallery.'

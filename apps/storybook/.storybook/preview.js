@@ -1,25 +1,24 @@
-import { withThemeByClassName } from '@storybook/addon-themes'
-import { addons } from '@storybook/preview-api'
-import { GLOBALS_UPDATED } from '@storybook/core-events'
-
-import '@aziontech/theme'
+import '@aziontech/theme/globals.css'
 import '../src/styles/preview.css'
+import '@aziontech/theme'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
 
-// withThemeByClassName only runs as a story decorator, so on pure-MDX docs pages
-// (Get Started, Style Guide) the toolbar toggle never updated the html class.
-// Mirror the `theme` global onto <html> ourselves so those pages switch too.
-const THEME_CLASSES = {
-  light: ['azion', 'azion-light'],
-  dark: ['azion', 'azion-dark']
-}
+import { withThemeByClassName } from '@storybook/addon-themes'
+import { GLOBALS_UPDATED } from '@storybook/core-events'
+import { addons } from '@storybook/preview-api'
+
+import { STORYBOOK_VIEWPORTS, THEME_CLASSES } from './visual-modes.js'
+
 function applyThemeClass(name) {
-  const el = document.documentElement
-  el.classList.remove('azion', 'azion-light', 'azion-dark')
-  el.classList.add(...(THEME_CLASSES[name] || THEME_CLASSES.dark))
+  const docElement = document.documentElement
+
+  docElement.classList.remove('azion', 'azion-light', 'azion-dark')
+  docElement.classList.add(...(THEME_CLASSES[name] || THEME_CLASSES.dark))
 }
+
 applyThemeClass('dark')
+
 try {
   addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
     if (globals && globals.theme) applyThemeClass(globals.theme)
@@ -31,6 +30,7 @@ try {
 export const parameters = {
   controls: {
     matchers: {
+      color: /(background|color)$/i,
       date: /Date$/i
     },
     expanded: true
@@ -67,6 +67,9 @@ export const parameters = {
       inputBorderRadius: 4
     }
   },
+  viewport: {
+    viewports: STORYBOOK_VIEWPORTS
+  },
   backgrounds: {
     default: 'azion azion-dark',
     values: [
@@ -97,8 +100,8 @@ export const parameters = {
 export const decorators = [
   withThemeByClassName({
     themes: {
-      light: 'azion azion-light',
-      dark: 'azion azion-dark'
+      light: THEME_CLASSES.light.join(' '),
+      dark: THEME_CLASSES.dark.join(' ')
     },
     defaultTheme: 'dark'
   })
