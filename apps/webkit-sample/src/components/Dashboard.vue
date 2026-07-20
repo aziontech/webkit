@@ -227,8 +227,20 @@ const openZoneActions = (event, row) =>
             <CardBox :padded="false">
               <template #content>
                 <Table :data="resources" :columns="resourceColumns" row-key="id">
+                  <template #cell-domain="{ value }">
+                    <a
+                      :href="`https://${value}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-[var(--spacing-xxs)] whitespace-nowrap hover:underline"
+                      @click.stop
+                    >
+                      <span>{{ value }}</span>
+                      <i class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]" aria-hidden="true" />
+                    </a>
+                  </template>
                   <template #cell-status="{ value }">
-                    <Tag :value="value" severity="success" size="small" />
+                    <Tag :label="value" severity="success" size="small" />
                   </template>
                   <template #cell-actions="{ row }">
                     <IconButton
@@ -262,7 +274,7 @@ const openZoneActions = (event, row) =>
                   <template #cell-operation="{ value }">
                     <Tag
                       v-if="operationSeverity(value)"
-                      :value="value"
+                      :label="value"
                       :severity="operationSeverity(value)"
                       size="small"
                     />

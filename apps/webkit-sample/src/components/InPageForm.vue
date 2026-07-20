@@ -233,7 +233,7 @@ const submit = async () => {
                           v-if="errors.name"
                           id="app-name-error"
                           kind="required"
-                          :value="errors.name"
+                          :label="errors.name"
                         />
                       </div>
                     </Item.Actions>
@@ -305,7 +305,7 @@ const submit = async () => {
                           v-if="errors.httpPorts"
                           id="app-httpPorts-error"
                           kind="required"
-                          :value="errors.httpPorts"
+                          :label="errors.httpPorts"
                         />
                       </div>
                     </Item.Actions>
@@ -415,7 +415,7 @@ const submit = async () => {
                           v-if="errors.address"
                           id="app-address-error"
                           kind="required"
-                          :value="errors.address"
+                          :label="errors.address"
                         />
                       </div>
                     </Item.Actions>
@@ -442,7 +442,7 @@ const submit = async () => {
                           v-if="errors.hostHeader"
                           id="app-hostHeader-error"
                           kind="required"
-                          :value="errors.hostHeader"
+                          :label="errors.hostHeader"
                         />
                       </div>
                     </Item.Actions>
@@ -557,7 +557,7 @@ const submit = async () => {
                     </Item.Content>
                     <Item.Actions class="flex-1 justify-end">
                       <Switch
-                        v-model:isToggled="form.debugRules"
+                        v-model="form.debugRules"
                         aria-label="Active"
                       />
                     </Item.Actions>

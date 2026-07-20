@@ -26,9 +26,29 @@ const router = useRouter();
 // Carry the signed-in user across the flow (falls back to a placeholder).
 const userEmail = computed(() => route.query.email || "myemail@azion.com");
 
-// Resolve the template from the query — this drives the preview AND the
-// per-template "Template Settings" fields below.
-const template = computed(() => getTemplate(route.query.template));
+// A deploy starts either from a catalog template (?template=slug) or from
+// importing an existing Git repository (?repo=name&owner=account). A repo import
+// synthesizes a template-shaped source (no template-specific settings) so the
+// rest of the flow — preview, form, deployment, success — is identical.
+const isRepoImport = computed(() => Boolean(route.query.repo));
+
+const template = computed(() => {
+  if (isRepoImport.value) {
+    const name = String(route.query.repo);
+    const owner = String(route.query.owner || "gab-az");
+    return {
+      slug: `repo:${owner}/${name}`,
+      title: name,
+      description: `Import and deploy the ${name} repository directly from GitHub.`,
+      framework: String(route.query.framework || ""),
+      repoOwner: owner,
+      repoPath: name,
+      defaultRepoName: name,
+      settings: [],
+    };
+  }
+  return getTemplate(route.query.template);
+});
 
 const goToCreationCenter = () =>
   router.push({ path: "/create", query: { email: userEmail.value } });
@@ -39,7 +59,7 @@ const goHome = () =>
 // Breadcrumb trail: clickable root back to the Creation Center, then the
 // current template as the active (last) crumb.
 const breadcrumbItems = computed(() => [
-  { label: "Start from a Template" },
+  { label: isRepoImport.value ? "Import from Git" : "Start from a Template" },
   { label: template.value.title, current: true },
 ]);
 const onBreadcrumbNavigate = () => goToCreationCenter();
@@ -232,7 +252,7 @@ const nextSteps = [
                       class="grid grid-cols-1 items-start gap-[var(--spacing-lg)] sm:grid-cols-2"
                     >
                       <div class="flex flex-col gap-[var(--spacing-xs)]">
-                        <Label value="Scope" required for="scope" />
+                        <Label label="Scope" required for="scope" />
                         <Select
                           v-model="scope"
                           size="large"
@@ -257,7 +277,7 @@ const nextSteps = [
                       </div>
 
                       <div class="flex flex-col gap-[var(--spacing-xs)]">
-                        <Label :value="repoLabel" required for="repoName" />
+                        <Label :label="repoLabel" required for="repoName" />
                         <!-- Repo name joined with the visibility toggle in a
                              single InputGroup: the input is the middle control
                              and the trailing addon carries the Public/Private
@@ -277,8 +297,8 @@ const nextSteps = [
                           <InputGroupAddon>
                             <Tooltip text="Toggle repository visibility (public or private)">
                               <Switch
-                                v-model:isToggled="isPublic"
-                                type="privacy"
+                                v-model="isPublic"
+                                kind="privacy"
                                 :disabled="submitting"
                                 :aria-label="
                                   isPublic
@@ -329,7 +349,7 @@ const nextSteps = [
                              canDeploy (error prevention), so there is no red
                              required-error state to surface here. -->
                         <Label
-                          :value="field.label"
+                          :label="field.label"
                           :required="field.required"
                           :for="field.name"
                         />
@@ -344,7 +364,7 @@ const nextSteps = [
                         <HelperText
                           v-if="field.description"
                           :id="`${field.name}-helper`"
-                          :value="field.description"
+                          :label="field.description"
                         />
                       </div>
                     </div>
@@ -399,7 +419,7 @@ const nextSteps = [
                     >
                       You just deployed a new application into
                       <Tag
-                        :value="scope"
+                        :label="scope"
                         severity="secondary"
                         icon="pi pi-github"
                       />

@@ -68,6 +68,7 @@ const resources = {
     ],
     rows: [],
     empty: {
+      icon: "pi pi-box",
       title: "No Workloads created yet",
       description:
         "Create your first deploy starting from scratch, a template or importing your code.",
@@ -107,6 +108,7 @@ const resources = {
     ],
     rows: [],
     empty: {
+      icon: "pi pi-globe",
       title: "No DNS zones created yet",
       description:
         "Add a zone to manage records and route traffic through Azion Edge DNS.",
@@ -139,6 +141,7 @@ const resources = {
     ],
     rows: [],
     empty: {
+      icon: "pi pi-database",
       title: "No buckets created yet",
       description: "Create a bucket to store and serve static assets from the edge.",
       actions: [
@@ -170,6 +173,7 @@ const resources = {
     ],
     rows: [],
     empty: {
+      icon: "pi pi-code",
       title: "No functions created yet",
       description: "Write an edge function to run serverless code close to your users.",
       actions: [
@@ -331,6 +335,32 @@ const onRowAction = (event, value, row) => {
       >
         <template #content>
           <div class="flex flex-col items-center gap-[var(--spacing-xs)] px-[var(--spacing-md)] py-[var(--spacing-xl)] text-center">
+            <!-- Featured icon (same pattern as CreationCenter's Git-provider
+                 tile): a solid box framed by two concentric translucent
+                 squares. -->
+            <span
+              class="mb-[var(--spacing-xs)] relative flex size-10 items-center justify-center"
+            >
+              <span
+                aria-hidden="true"
+                class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-5"
+              />
+              <span
+                aria-hidden="true"
+                class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-10"
+              />
+              <span
+                class="relative flex size-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]"
+              >
+                <i
+                  :class="[
+                    current.empty.icon,
+                    'text-[1rem] leading-none text-[var(--text-default)]',
+                  ]"
+                  aria-hidden="true"
+                />
+              </span>
+            </span>
             <h3 class="text-heading-xs text-[var(--text-default)]">
               {{ current.empty.title }}
             </h3>
@@ -344,12 +374,20 @@ const onRowAction = (event, value, row) => {
               v-for="action in current.empty.actions"
               :key="action.id"
             >
-              <Item.Media media-kind="icon">
-                <i
-                  :class="action.icon"
-                  class="text-body-md text-[var(--text-muted)]"
-                  aria-hidden="true"
-                />
+              <Item.Media>
+                <!-- Icon frame: 32px square, surface-raised fill, muted
+                     hairline border, shape-elements radius, 18px glyph. -->
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+                >
+                  <i
+                    :class="[
+                      action.icon,
+                      'text-[18px] leading-none text-[var(--text-default)]',
+                    ]"
+                    aria-hidden="true"
+                  />
+                </span>
               </Item.Media>
               <Item.Content>
                 <Item.Title>{{ action.title }}</Item.Title>
@@ -384,7 +422,7 @@ const onRowAction = (event, value, row) => {
           >
             <template #cell-status="{ value }">
               <Tag
-                :value="value"
+                :label="value"
                 :severity="statusSeverity(value)"
                 size="medium"
               />

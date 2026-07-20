@@ -63,7 +63,7 @@ const isLink = computed(() => Boolean(props.href));
           </span>
           <i
             v-if="isLink"
-            class="pi pi-external-link text-[length:inherit] leading-none text-[var(--text-muted)]"
+            class="pi pi-arrow-up-right text-[length:inherit] leading-none text-[var(--text-muted)]"
             aria-hidden="true"
           />
         </span>

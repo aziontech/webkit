@@ -52,7 +52,7 @@
       items: [
         { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' },
         { id: 'marketplace', label: 'Marketplace', icon: 'ai ai-marketplace', path: '/marketplace' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
         { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' }
       ]
     },
@@ -244,7 +244,7 @@
                           {{ team.label }}
                         </span>
                         <Tag
-                          :value="team.plan"
+                          :label="team.plan"
                           severity="secondary"
                           size="small"
                           

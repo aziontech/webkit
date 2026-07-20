@@ -289,7 +289,7 @@ watch(dialogOpen, (open) => {
           </template>
 
           <template #cell-status="{ value }">
-            <Tag :value="value" :severity="statusSeverity(value)" size="medium" />
+            <Tag :label="value" :severity="statusSeverity(value)" size="medium" />
           </template>
 
           <template #cell-actions="{ row }">
@@ -394,7 +394,7 @@ watch(dialogOpen, (open) => {
                                 v-if="errors.name"
                                 id="pt-name-error"
                                 kind="required"
-                                :value="errors.name"
+                                :label="errors.name"
                               />
                             </div>
                           </Item.Actions>

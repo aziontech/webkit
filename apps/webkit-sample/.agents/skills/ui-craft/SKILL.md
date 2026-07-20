@@ -1,8 +1,8 @@
 ---
 name: ui-craft
-description: Umbrella entry for the UI-craft pack — build product UIs and prototypes on @aziontech/webkit with frontend taste and PRO UX. Explains the 3 principles, the 6 rules, the polish progression, and routes to baseline-ui, ux-heuristics, motion-polish, impeccable-polish, and delight.
+description: Umbrella entry for the UI-craft pack — build product UIs and prototypes on @aziontech/webkit with frontend taste and PRO UX. Explains the 3 principles, the 8 rules, the polish progression, and routes to baseline-ui, ux-heuristics, motion-polish, impeccable-polish, and delight.
 status: active
-last_updated: 2026-06-29
+last_updated: 2026-07-16
 ---
 
 # Skill: ui-craft
@@ -34,7 +34,7 @@ components and tokens — not for authoring the webkit primitives themselves (th
 3. **PRO UX first.** Get the flow, states, and feedback right before any aesthetic or delight pass. A
    beautiful screen with a missing empty/error/loading state is not done.
 
-## The 6 rules (non-negotiable)
+## The 8 rules (non-negotiable)
 
 1. **Use only components.** Compose from `@aziontech/webkit`. Don't hand-roll a button, input, modal,
    tooltip, or dropdown the system already ships.
@@ -48,6 +48,12 @@ components and tokens — not for authoring the webkit primitives themselves (th
    scale order: `text-heading-* > text-body-* > text-label-* > text-overline-*`. Only tokens.
 6. **Keep UI rhythm** with a consistent spacing rule — only the `--spacing-xxs … --spacing-xxl` scale,
    applied consistently for padding, gap, and margin.
+7. **Contain the page.** Full-bleed content reads unfocused on wide screens. Wrap a page's root
+   `main` in a centered max-width container — `mx-auto w-full max-w-[var(--container-*)]` — using the
+   `--container-*` scale (`--container-2xs … --container-7xl`), never a raw `px`/`rem` width. Keep the
+   width consistent across sibling pages of the same kind (e.g. Home and Marketplace both
+   `--container-7xl`); AppLayout's inset supplies the horizontal gutter, and `pt-[var(--spacing-*)]`
+   adds the page's top breathing room.
 
 ## The progression
 
@@ -87,5 +93,6 @@ amplifies a sound structure; it cannot rescue a broken one.
 - [ ] The right child skill ran for the task (structure before polish).
 - [ ] Every component is from `@aziontech/webkit`; every visual value is a token.
 - [ ] Typography uses only `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
+- [ ] The page `main` is a centered `max-w-[var(--container-*)]` container, consistent with sibling pages.
 - [ ] Motion uses only animate tokens with `motion-reduce:*` escapes.
 - [ ] Delight, if present, is a single earned moment — not noise.

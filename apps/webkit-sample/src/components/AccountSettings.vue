@@ -815,7 +815,7 @@ const onTeamAction = (event, value, row) => {
                       </Item.Content>
                       <Item.Actions class="flex-1 justify-end">
                         <Switch
-                          v-model:isToggled="form.allowSocialLogin"
+                          v-model="form.allowSocialLogin"
                           aria-label="Allow Social Login"
                           :disabled="submitting"
                         />
@@ -831,7 +831,7 @@ const onTeamAction = (event, value, row) => {
                       </Item.Content>
                       <Item.Actions class="flex-1 justify-end">
                         <Switch
-                          v-model:isToggled="form.enforceMfa"
+                          v-model="form.enforceMfa"
                           aria-label="Enforce Multi-Factor Authentication"
                           :disabled="submitting"
                         />
@@ -889,7 +889,7 @@ const onTeamAction = (event, value, row) => {
                           {{ provider.name }}
                           <Tag
                             v-if="provider.tag"
-                            :value="provider.tag"
+                            :label="provider.tag"
                             severity="success"
                             size="small"
                           />
@@ -902,7 +902,7 @@ const onTeamAction = (event, value, row) => {
                           :label="provider.action"
                           kind="outlined"
                           size="medium"
-                          :icon="provider.connected ? undefined : 'pi pi-external-link'"
+                          :icon="provider.connected ? undefined : 'pi pi-arrow-up-right'"
                           @click="onProviderAction(provider)"
                         />
                       </Item.Actions>
@@ -1049,11 +1049,11 @@ const onTeamAction = (event, value, row) => {
             </template>
 
             <template #cell-role="{ value }">
-              <Tag :value="value" :severity="roleSeverity(value)" size="medium" />
+              <Tag :label="value" :severity="roleSeverity(value)" size="medium" />
             </template>
 
             <template #cell-status="{ value }">
-              <Tag :value="value" :severity="statusSeverity(value)" size="medium" />
+              <Tag :label="value" :severity="statusSeverity(value)" size="medium" />
             </template>
 
             <template #cell-actions="{ row }">
@@ -1110,7 +1110,7 @@ const onTeamAction = (event, value, row) => {
                       <span class="text-title-h3 text-[var(--text-default)]">
                         {{ plan.name }}
                       </span>
-                      <Tag value="Current" severity="success" size="medium" />
+                      <Tag label="Current" severity="success" size="medium" />
                     </div>
                     <p class="text-body-sm text-[var(--text-muted)]">
                       <span class="text-title-h4 text-[var(--text-default)]">{{ plan.price }}</span>
@@ -1189,7 +1189,7 @@ const onTeamAction = (event, value, row) => {
               :border="false"
             >
               <template #cell-status="{ value }">
-                <Tag :value="value" :severity="invoiceStatusSeverity(value)" size="medium" />
+                <Tag :label="value" :severity="invoiceStatusSeverity(value)" size="medium" />
               </template>
               <template #cell-actions="{ row }">
                 <IconButton
@@ -1240,13 +1240,13 @@ const onTeamAction = (event, value, row) => {
 
             <template #cell-token="{ value }">
               <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                <span class="truncate font-code text-body-xs text-[var(--text-muted)]">{{ value }}</span>
+                <span class="truncate text-label-code-sm text-[var(--text-muted)]">{{ value }}</span>
                 <CopyButton kind="outlined" :value="value" aria-label="Copy token" />
               </div>
             </template>
 
             <template #cell-status="{ value }">
-              <Tag :value="value" :severity="credentialStatusSeverity(value)" size="medium" />
+              <Tag :label="value" :severity="credentialStatusSeverity(value)" size="medium" />
             </template>
 
             <template #cell-actions="{ row }">
@@ -1306,7 +1306,7 @@ const onTeamAction = (event, value, row) => {
             </template>
 
             <template #cell-category="{ value }">
-              <Tag :value="value" :severity="categorySeverity(value)" size="medium" />
+              <Tag :label="value" :severity="categorySeverity(value)" size="medium" />
             </template>
           </Table>
             </template>
@@ -1398,7 +1398,7 @@ const onTeamAction = (event, value, row) => {
             </template>
 
             <template #cell-status="{ value }">
-              <Tag :value="value" :severity="teamStatusSeverity(value)" size="medium" />
+              <Tag :label="value" :severity="teamStatusSeverity(value)" size="medium" />
             </template>
 
             <template #cell-actions="{ row }">

@@ -126,6 +126,13 @@ balance. Reach for it in this order.
   max-w-[var(--container-7xl)]` on the flow's content wrapper — so the column sits centered instead of
   drifting to the left edge on wide screens. This is the one place the *page section* (not just a field)
   is capped.
+- **SHOULD** center a **landing / browse / catalog page** — a page of stacked sections, card grids, and
+  tabs (e.g. `Home`, `Marketplace`) — in a `mx-auto w-full max-w-[var(--container-7xl)]` container on its
+  root `main`, so the content sits centered instead of drifting to the left edge on wide screens; add the
+  page's top breathing room with `pt-[var(--spacing-*)]`. Keep the width **identical across sibling pages
+  of the same kind** so moving between them never reflows the column. The shell around it (sidebar,
+  header, content-zone inset) stays fluid per the first bullet — the cap lives on the page's own `main`,
+  not the AppLayout content zone.
 - **MUST** cap a **wizard / multi-step deployment flow** (`DeploymentFlow`) tighter than a general
   create/edit page — `mx-auto max-w-[var(--container-2xl)]` (672px) on the flow's content wrapper. A
   wizard is a single guided task with one thing to look at per step, so the step column stays narrow and
@@ -182,6 +189,6 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
 - [ ] Section titles use `text-heading-xxs text-[var(--text-default)]` with a `px-[var(--spacing-xs)]` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
-- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width and focused flows are capped, always via `max-w-[var(--container-*)]` — wizards/`DeploymentFlow` at `max-w-[var(--container-2xl)]`, broader create/edit pages at `7xl`.
+- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width, focused flows, and landing/browse pages are capped, always via `max-w-[var(--container-*)]` — wizards/`DeploymentFlow` at `max-w-[var(--container-2xl)]`, broader create/edit and landing/browse pages (`Home`, `Marketplace`) centered at `7xl`.
 - [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.
 - [ ] (File mode) Every violation has a quoted line, a why, and a concrete fix.

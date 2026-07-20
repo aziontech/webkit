@@ -71,6 +71,7 @@
 
 <template>
   <section
+    v-bind="$attrs"
     :class="rootClasses"
     :data-testid="testId"
   >

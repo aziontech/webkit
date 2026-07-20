@@ -185,7 +185,7 @@ const saveProtection = () =>
                 </p>
               </div>
               <Switch
-                v-model:isToggled="protection.shareableLinks"
+                v-model="protection.shareableLinks"
                 aria-labelledby="dp-links-label"
                 :disabled="savingProtection"
               />

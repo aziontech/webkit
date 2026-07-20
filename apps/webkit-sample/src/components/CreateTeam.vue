@@ -32,7 +32,7 @@ import {
   resourcePermissions,
   useTeams,
 } from "../teams.js";
-import AppLayout from "./ui/AppLayout.vue";
+import CreationHeader from "./ui/CreationHeader.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -45,6 +45,16 @@ const goToList = () =>
     path: "/account",
     query: { email: userEmail.value, tab: "teams-permissions" },
   });
+
+// Breadcrumb crumbs carry their own query (e.g. /account?tab=teams-permissions);
+// split it out and merge so the target tab is preserved alongside the email.
+const onCrumb = (event, href) => {
+  if (href && href !== "#") {
+    const [path, queryString] = href.split("?");
+    const extra = Object.fromEntries(new URLSearchParams(queryString || ""));
+    router.push({ path, query: { email: userEmail.value, ...extra } });
+  }
+};
 
 const { getTeam, createTeam, updateTeam, removeTeam } = useTeams();
 
@@ -195,13 +205,20 @@ const breadcrumb = [
 </script>
 
 <template>
-  <AppLayout :sidebar="false" :padded="false" :breadcrumb="breadcrumb">
-    <form
-      class="flex min-h-full flex-col"
-      :aria-label="editing ? 'Edit Team' : 'Create Team'"
-      novalidate
-      @submit.prevent="submit"
-    >
+  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
+    <CreationHeader
+      :breadcrumb="breadcrumb"
+      back-label="Back to Teams Permissions"
+      @back="goToList"
+      @navigate="onCrumb"
+    />
+    <main class="min-h-0 flex-1 overflow-auto">
+      <form
+        class="flex min-h-full flex-col"
+        :aria-label="editing ? 'Edit Team' : 'Create Team'"
+        novalidate
+        @submit.prevent="submit"
+      >
       <div
         class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-1 flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
       >
@@ -283,7 +300,7 @@ const breadcrumb = [
                       Inactive teams keep their permissions but can't be assigned.
                     </span>
                   </div>
-                  <Switch id="team-active" v-model:is-toggled="form.active" />
+                  <Switch id="team-active" v-model="form.active" />
                 </div>
               </div>
             </template>
@@ -316,14 +333,14 @@ const breadcrumb = [
                     type="button"
                     label="Select all"
                     kind="outlined"
-                    size="medium"
+                    size="large"
                     @click="selectAll"
                   />
                   <Button
                     type="button"
                     label="Clear"
                     kind="text"
-                    size="medium"
+                    size="large"
                     @click="clearAll"
                   />
                 </div>
@@ -442,6 +459,7 @@ const breadcrumb = [
           </div>
         </div>
       </footer>
-    </form>
-  </AppLayout>
+      </form>
+    </main>
+  </div>
 </template>

@@ -1,8 +1,8 @@
 ---
 name: usability
-description: Async-interaction usability for UI on @aziontech/webkit — lock the scope while an action is in flight (trigger shows :loading, every field :disabled off one flag) and report request/API failures where the user is looking via @aziontech/webkit/toast. Keeps field validation next to the field; toasts are for request-level errors.
+description: Async-interaction usability for UI on @aziontech/webkit — lock the scope while an action is in flight (trigger shows :loading, every field :disabled off one flag), pick the right loading affordance (Skeleton / Button :loading / Spinner / ProgressBar) for the direction and emphasis of the flow, and report request/API failures where the user is looking via @aziontech/webkit/toast. Keeps field validation next to the field; toasts are for request-level errors.
 status: active
-last_updated: 2026-07-14
+last_updated: 2026-07-20
 ---
 
 # Skill: usability
@@ -33,6 +33,8 @@ errors), made concrete for `@aziontech/webkit`.
 - Building or reviewing anything with a submit, save, delete, or fetch that then mutates the screen.
 - The user asks "why did it submit twice", "the form didn't lock", "where do errors go", "handle the
   API error".
+- Choosing or reviewing a loading affordance — "spinner or progress bar", "skeleton vs spinner",
+  "loading state for the deploy/build logs", "why does the spinner keep spinning after it's done".
 - After `/ux-heuristics` establishes the states, to make the loading + error states behave correctly.
 
 ## Pattern 1 — lock the scope while an action is in flight
@@ -100,23 +102,26 @@ Rules:
   `@aziontech/webkit/skeleton` (see `DeployTemplate.vue`'s `settingsLoading`), don't disable empty
   fields — see the **Skeleton vs Button loading** section below.
 
-## Skeleton vs Button loading — pick by direction of the flow
+## The loading vocabulary — four affordances, one per question
 
-Both are "system status" (heuristic 1), but they answer different questions and are **not**
-interchangeable. The direction of the data decides which one:
+Every loading state is "system status" (heuristic 1), but the four affordances answer **different
+questions** and are **not** interchangeable. Pick by two axes: the **direction** of the flow (data
+coming *in* vs. an action going *out*) and whether the wait has a **measurable extent**.
 
-- **Reading data *into* a view → `@aziontech/webkit/skeleton`.** There is nothing for the user to act
-  on yet; the screen is arriving. Reserve the layout with skeletons so it doesn't reflow when the data
-  lands, and don't render disabled-but-empty fields (a disabled empty input reads as "broken", not
-  "loading").
-- **Committing an action *out* of a view (submit / save / delete) → Button `:loading` + fields
-  `:disabled`.** The screen is already here and the user has committed a payload; lock it off one flag
-  per Pattern 1. The trigger takes `:loading`, every field the action reads takes `:disabled`.
+| Affordance | Answers | Use when | Emphasis |
+|---|---|---|---|
+| `@aziontech/webkit/skeleton` | "the screen is arriving" | Reading data *into* a view (first paint, route enter, fetch-then-render) | High — occupies the content's own space |
+| Button `:loading` + fields `:disabled` | "your action is committed and running" | Committing an action *out* (submit / save / delete / mutate) | High — locks the scope (Pattern 1) |
+| `@aziontech/webkit/spinner` | "something is still working" | Continuous / indeterminate background activity with **no measurable extent** — a per-step status glyph, a header "Preparing…" status, a streaming log | **Low** — a small glyph beside a label, never the whole view |
+| `@aziontech/webkit/progress-bar` | "how far along the whole thing is" | A long process with a **measurable whole** (steps done / total, bytes, %) | Medium — a flush bar conveying forward motion |
 
-| Moment | Affordance | Why |
-|---|---|---|
-| First paint / route enter / fetch-then-render | `Skeleton` in place of the arriving content | Reserves layout, no reflow; nothing is actionable yet |
-| Submit / save / delete / any mutate | Button `:loading` + all fields `:disabled` (one flag) | Prevents double-submit and mid-flight edits (Pattern 1) |
+### Skeleton vs Button loading — direction of the flow
+
+- **Reading data *into* a view → `Skeleton`.** There is nothing for the user to act on yet; the screen
+  is arriving. Reserve the layout with skeletons so it doesn't reflow when the data lands, and don't
+  render disabled-but-empty fields (a disabled empty input reads as "broken", not "loading").
+- **Committing an action *out* of a view → Button `:loading` + fields `:disabled`.** The screen is
+  already here and the user has committed a payload; lock it off one flag per Pattern 1.
 
 Rules of thumb:
 
@@ -127,6 +132,92 @@ Rules of thumb:
 - **A view can do both in sequence:** Skeletons while the initial data loads (`settingsLoading`), then
   Button `:loading` + `:disabled` fields when the user submits the now-populated form (`submitting`).
   Two different flags, two different affordances — see [`DeployTemplate.vue`](../../../src/components/DeployTemplate.vue).
+
+### Spinner — continuous feedback, low emphasis
+
+A `Spinner` says *"work is ongoing"* when there is **nothing to reserve** (it's not content arriving)
+and **nothing to lock** (the user isn't waiting on a button they pressed) — a background or streaming
+process the user watches rather than blocks on. It carries the **least** emphasis of the four: a
+`size-4` glyph next to a status label, tinted with a text token (`--text-muted` for ambient,
+`--text-default`/`--primary` for the active item), **never** a full-view overlay.
+
+- **Pair it with a label, never alone.** "Preparing git repository" + Spinner, "Provisioning… 12s" +
+  Spinner — the words say *what*, the spinner says *still going*. A lone spinner is a spinner that never
+  explains itself.
+- **Use it for per-item liveness in a sequence.** In a multi-step list, the running step gets a
+  `--primary`/`--text-default` Spinner, queued steps a dimmed (`--text-muted opacity-60`) one, done
+  steps a check glyph. The exemplars are [`DeploymentLogs.vue`](../../../src/components/ui/DeploymentLogs.vue)
+  (per-step glyph: check / running Spinner / pending Spinner) and
+  [`CreationProgress.vue`](../../../src/components/ui/CreationProgress.vue) (active Spinner → `pi-check-circle`).
+- **Remove it the instant the process settles.** When the flow is `finished`, swap the header Spinner
+  for a `Tag severity="success"` — a spinner that keeps turning after completion reads as stuck.
+- **Not for determinate work.** If you can compute "N of M done", that's a ProgressBar, not (only) a
+  Spinner.
+
+```vue
+<script setup>
+import Spinner from "@aziontech/webkit/spinner";
+import Tag from "@aziontech/webkit/tag";
+</script>
+
+<template>
+  <!-- Low-emphasis header status: label + Spinner while running, Tag once done -->
+  <div class="flex items-center gap-[var(--spacing-sm)]">
+    <Tag v-if="done" label="Completed" severity="success" />
+    <span class="text-label-sm text-[var(--text-muted)]">
+      {{ done ? elapsedLabel : `Provisioning… ${elapsed}s` }}
+    </span>
+    <Spinner v-if="!done" class="size-4 text-[var(--text-muted)]" />
+  </div>
+</template>
+```
+
+### ProgressBar — forward motion over a measurable whole
+
+A `ProgressBar` answers *"how far along"* — reach for it only when the wait has a **measurable
+extent**: log lines revealed / total, steps done, upload bytes. Feed it `:value` + `:max`; use
+`indeterminate` only when there genuinely is no measurable extent yet (and prefer a Spinner there
+instead, since indeterminate progress and a spinner say the same thing). Place it flush on an edge
+(`size="small" shape="flat"`) so it reads as ambient forward motion, not a control.
+
+- **Determinate whenever you can count.** `DeploymentLogs` computes `progress` from revealed log lines
+  over `totalLines` — a real percentage, not `indeterminate`.
+- **Remove it on completion.** Like the Spinner, the bar is gone once `phase === 'finished'` — there is
+  no more motion to convey.
+
+## Combining loading types — the deployment flow
+
+Spinner and ProgressBar are **complementary, not redundant**: the Spinner conveys *local liveness*
+("this step is alive"), the ProgressBar conveys *global progress* ("here's the whole job"). A long
+multi-step process that has **both** per-unit activity **and** a measurable whole shows both at once.
+The canonical orchestration is the deploy flow, three components handing off in sequence:
+
+1. **`DeploymentFlow.vue`** — the "cloning" splash. A **Skeleton-style** browser-window mock reserves
+   the layout while the repo clones (nothing to act on yet), and the header carries a low-emphasis
+   `--text-muted` **Spinner** + "Preparing git repository". After a beat it hands off to the logs.
+2. **`DeploymentLogs.vue`** — the sequential build logs (the example the whole pattern is built on).
+   Three affordances at once, each doing one job:
+   - a **per-step Spinner** glyph (running = `--text-default`, pending = dimmed, done = `pi-check`) —
+     *which step is alive*;
+   - a **header Spinner** + `statusLabel` while `phase !== 'finished'` — *the job as a whole is alive*;
+   - a flush **ProgressBar** (`:value="progress"` over revealed log lines) on the bottom edge — *how
+     far along*.
+   On `finished`, the Spinners and the bar are all removed and a `Tag severity="success"` + a
+   `CopyButton` take their place.
+3. **`CreationProgress.vue`** — the provisioning variant: per-step **Spinner** → `pi-check-circle`, a
+   header Spinner + elapsed counter, and **no ProgressBar** — the check-marks down the step list *are*
+   the progress, so a bar would be redundant. Add the bar only when the whole is measurable but the
+   step list isn't the progress indicator itself.
+
+The rule the flow encodes:
+
+- **Skeleton** while content arrives → **Spinner** for the indeterminate/streaming middle → **Tag /
+  content** once settled. One affordance per moment, never two saying the same thing.
+- **Spinner + ProgressBar together** only when you have both per-unit liveness *and* a countable whole
+  (`DeploymentLogs`). If the step list already shows progress via check-marks (`CreationProgress`), the
+  ProgressBar is redundant — drop it.
+- **Every ongoing affordance clears on settle.** Spinners and bars disappear the moment the flow is
+  `finished`; a turning spinner or a stuck bar after completion is a bug, not decoration.
 
 ```vue
 <script setup>
@@ -246,13 +337,20 @@ End with: `async flows sound` or `N gaps — fix before polish`.
 - Lock-the-scope exemplar: [`DeployTemplate.vue`](../../../src/components/DeployTemplate.vue)
   (`submitting` → `:loading` + `:disabled`), fetch-then-render exemplar: its `settingsLoading` +
   `@aziontech/webkit/skeleton`.
+- Loading-affordance exemplars: [`DeploymentFlow.vue`](../../../src/components/ui/DeploymentFlow.vue)
+  (Skeleton mock + header Spinner splash), [`DeploymentLogs.vue`](../../../src/components/ui/DeploymentLogs.vue)
+  (per-step Spinner + header Spinner + flush ProgressBar), [`CreationProgress.vue`](../../../src/components/ui/CreationProgress.vue)
+  (per-step Spinner, no bar).
+- Loading component APIs: `@aziontech/webkit/spinner`, `@aziontech/webkit/progress-bar`
+  (`:value` / `:max` / `indeterminate` / `size` / `shape`), `@aziontech/webkit/skeleton`.
 - Component import paths: `packages/webkit/package.json#exports`.
 - Companion skills: [`/ux-heuristics`](../ux-heuristics/SKILL.md) (states + error placement),
   [`/impeccable-polish`](../impeccable-polish/SKILL.md) (state-completeness sign-off).
 
 ## Definition of Done
 
-- [ ] Loading affordance matches direction: `Skeleton` while reading data *into* a view; Button `:loading` + `:disabled` fields when committing an action *out*.
+- [ ] Loading affordance matches the question: `Skeleton` while reading data *into* a view; Button `:loading` + `:disabled` fields when committing an action *out*; `Spinner` (low emphasis, + label) for indeterminate/streaming activity; `ProgressBar` (`:value`/`:max`) for a measurable whole.
+- [ ] `Spinner` + `ProgressBar` appear together only when there is both per-unit liveness *and* a countable whole; every ongoing affordance is removed the moment the flow settles (swap to a success `Tag`).
 - [ ] Every async action locks its scope off **one** flag: trigger `:loading`, every field `:disabled`.
 - [ ] The handler guards on the flag and releases it in `finally` (success **and** failure).
 - [ ] `<Toaster>` is mounted once; request/API errors raise `toast.error` / `toast.promise`.

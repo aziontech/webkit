@@ -168,7 +168,7 @@ const submit = async () => {
           :key="service.id"
           class="flex items-center justify-between rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
         >
-          <span class="font-code text-label-sm text-[var(--text-default)]">{{ service.name }}</span>
+          <span class="text-label-code-sm text-[var(--text-default)]">{{ service.name }}</span>
           <span class="text-body-xs text-[var(--text-muted)]">{{ runtimeLabel(service.runtime) }}</span>
         </li>
       </ul>
@@ -246,7 +246,7 @@ const submit = async () => {
                                 v-if="errors.name"
                                 id="service-name-error"
                                 :kind="form.name.trim() ? 'invalid' : 'required'"
-                                :value="errors.name"
+                                :label="errors.name"
                               />
                             </div>
                           </Item.Actions>
@@ -326,7 +326,7 @@ const submit = async () => {
                                 v-if="errors.runtime"
                                 id="service-runtime-error"
                                 kind="required"
-                                :value="errors.runtime"
+                                :label="errors.runtime"
                               />
                             </div>
                           </Item.Actions>
@@ -378,7 +378,7 @@ const submit = async () => {
                           </Item.Content>
                           <Item.Actions class="flex-1 justify-end">
                             <Switch
-                              v-model:isToggled="form.active"
+                              v-model="form.active"
                               aria-label="Active"
                               :disabled="submitting"
                             />
@@ -392,7 +392,7 @@ const submit = async () => {
                           </Item.Content>
                           <Item.Actions class="flex-1 justify-end">
                             <Switch
-                              v-model:isToggled="form.logging"
+                              v-model="form.logging"
                               aria-label="Request logging"
                               :disabled="submitting"
                             />

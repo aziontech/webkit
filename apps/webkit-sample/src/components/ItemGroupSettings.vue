@@ -136,7 +136,7 @@ const submit = async () => {
                           v-if="submitted && nameEmpty"
                           id="full-name-error"
                           kind="required"
-                          value="This field is required."
+                          label="This field is required."
                         />
                       </div>
                     </Item.Actions>
@@ -166,7 +166,7 @@ const submit = async () => {
                           v-if="submitted && emailInvalid"
                           id="email-error"
                           :kind="emailEmpty ? 'required' : 'invalid'"
-                          :value="emailEmpty ? 'This field is required.' : 'Enter a valid email address.'"
+                          :label="emailEmpty ? 'This field is required.' : 'Enter a valid email address.'"
                         />
                       </div>
                     </Item.Actions>
@@ -257,7 +257,7 @@ const submit = async () => {
                     </Item.Content>
                     <Item.Actions class="flex-1 justify-end">
                       <Switch
-                        v-model:isToggled="form.productUpdates"
+                        v-model="form.productUpdates"
                         aria-label="Product updates"
                         :disabled="submitting"
                       />

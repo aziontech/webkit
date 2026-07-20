@@ -405,7 +405,7 @@ const submit = async () => {
               <HelperText
                 v-if="deploymentTypeWarning"
                 kind="required"
-                value="Select a deployment type."
+                label="Select a deployment type."
               />
             </fieldset>
 
@@ -449,7 +449,7 @@ const submit = async () => {
                   </MultiSelect.Option>
                 </MultiSelect.Content>
               </MultiSelect>
-              <HelperText value="Leave empty to deploy to every available region." />
+              <HelperText label="Leave empty to deploy to every available region." />
             </div>
           </section>
 
@@ -606,7 +606,7 @@ const submit = async () => {
             <HelperText
               v-if="acceptWarning"
               kind="required"
-              value="You must acknowledge this before deploying."
+              label="You must acknowledge this before deploying."
             />
           </div>
 
