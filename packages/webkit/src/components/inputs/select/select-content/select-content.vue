@@ -40,6 +40,35 @@
     '--popup-origin': 'top'
   }))
 
+  const getFocusableElements = (): HTMLElement[] => {
+    const el = root.value
+    if (!el) return []
+    const selector =
+      '[role="option"]:not([data-disabled]), a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    return Array.from(el.querySelectorAll<HTMLElement>(selector)).filter(
+      (node) => node.offsetParent !== null
+    )
+  }
+
+  const trapTab = (event: globalThis.KeyboardEvent) => {
+    const focusable = getFocusableElements()
+    if (focusable.length === 0) {
+      event.preventDefault()
+      return
+    }
+    const active = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const currentIndex = active ? focusable.indexOf(active) : -1
+    const delta = event.shiftKey ? -1 : 1
+    const nextIndex =
+      currentIndex === -1
+        ? event.shiftKey
+          ? focusable.length - 1
+          : 0
+        : (currentIndex + delta + focusable.length) % focusable.length
+    event.preventDefault()
+    focusable[nextIndex]?.focus()
+  }
+
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     if (event.key === 'Escape') {
       event.preventDefault()
@@ -47,7 +76,7 @@
       return
     }
     if (event.key === 'Tab') {
-      ctx.setOpen(false)
+      trapTab(event)
       return
     }
     if (
