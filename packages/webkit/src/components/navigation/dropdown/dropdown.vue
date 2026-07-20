@@ -191,7 +191,11 @@
       setOpen(false)
       focusTrigger()
     } else if (event.key === 'Tab') {
-      setOpen(false)
+      // Trap Tab inside the open panel — cycle through enabled options
+      // instead of letting the browser move focus outside.
+      event.preventDefault()
+      if (event.shiftKey) focusPrevOption()
+      else focusNextOption()
     }
   }
 
