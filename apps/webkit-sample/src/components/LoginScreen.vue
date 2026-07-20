@@ -94,7 +94,7 @@ const handlePrimary = () => {
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col overflow-y-auto bg-[var(--bg-canvas)]">
     <!-- Global header -->
     <GlobalHeader aria-label="Azion Console">
       <GlobalHeader.Brand>
@@ -298,7 +298,13 @@ const handlePrimary = () => {
           <p class="text-body-sm text-[var(--text-default)]">
             Don't have an account?
           </p>
-          <Link label="Sign up" size="medium" :show-icon="false" href="#" />
+          <Link
+            label="Sign up"
+            size="medium"
+            :show-icon="false"
+            href="/signup"
+            @click.prevent="router.push({ name: 'signup' })"
+          />
         </div>
       </div>
     </main>

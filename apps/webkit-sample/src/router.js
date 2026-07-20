@@ -4,6 +4,7 @@ import AccountSettings from './components/AccountSettings.vue'
 import ApplicationDetail from './components/ApplicationDetail.vue'
 import Applications from './components/Applications.vue'
 import CardBoxSaves from './components/CardBoxSaves.vue'
+import CheckInbox from './components/CheckInbox.vue'
 import CreateApplication from './components/CreateApplication.vue'
 import CreateTeam from './components/CreateTeam.vue'
 import CreateWorkload from './components/CreateWorkload.vue'
@@ -21,8 +22,10 @@ import ItemGroupSettings from './components/ItemGroupSettings.vue'
 import LoginScreen from './components/LoginScreen.vue'
 import Marketplace from './components/Marketplace.vue'
 import NestedDrawer from './components/NestedDrawer.vue'
+import Personalize from './components/Personalize.vue'
 import PersonalTokens from './components/PersonalTokens.vue'
 import Playground from './components/Playground.vue'
+import SignUp from './components/SignUp.vue'
 import TemplateSettings from './components/TemplateSettings.vue'
 import Variables from './components/Variables.vue'
 import WorkloadDetail from './components/WorkloadDetail.vue'
@@ -31,6 +34,9 @@ import Workloads from './components/Workloads.vue'
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', name: 'login', component: LoginScreen },
+  { path: '/signup', name: 'signup', component: SignUp },
+  { path: '/signup/verify', name: 'signup-verify', component: CheckInbox },
+  { path: '/signup/personalize', name: 'signup-personalize', component: Personalize },
   { path: '/home', name: 'home', component: Home },
   { path: '/dashboard', name: 'dashboard', component: Dashboard },
   { path: '/applications', name: 'applications', component: Applications },
