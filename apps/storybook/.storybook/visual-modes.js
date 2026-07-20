@@ -78,6 +78,13 @@ export function resolveModes(visualParam, envFilter) {
     .split(',')
     .map((mode) => mode.trim())
     .filter(Boolean)
+  for (const mode of allow) {
+    if (!MODES[mode]) {
+      throw new Error(
+        `Unknown visual mode "${mode}" in VISUAL_MODES. Valid modes: ${Object.keys(MODES).join(', ')}`
+      )
+    }
+  }
   return requested.filter((mode) => allow.includes(mode))
 }
 
