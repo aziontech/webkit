@@ -20,11 +20,13 @@ import FieldRadioBlock from "@aziontech/webkit/field-radio-block";
 import HelperText from "@aziontech/webkit/helper-text";
 import InputGroup, { InputGroupAddon } from "@aziontech/webkit/input-group";
 import InputText from "@aziontech/webkit/input-text";
+import Label from "@aziontech/webkit/label";
 import Message from "@aziontech/webkit/message";
 import PanelContent from "@aziontech/webkit/panel-content";
 import PanelFooter from "@aziontech/webkit/panel-footer";
 import PanelHeader from "@aziontech/webkit/panel-header";
 import Select from "@aziontech/webkit/select";
+import { toast } from "@aziontech/webkit/toast";
 import { reactive, ref, watch } from "vue";
 
 // Two-way open state; the parent binds v-model:open.
@@ -103,8 +105,15 @@ const submit = async () => {
       certificate: labelFor(certificateOptions)(form.certificate),
     });
     open.value = false;
+  } catch (error) {
+    // Request-level failure surfaces here (the parent only sees a successful
+    // `save`), so report it where the user is looking — never silently.
+    toast.error("Couldn't add the domain.", {
+      description: error?.message ?? "Check your connection and try again.",
+      action: { label: "Retry", onClick: () => submit() },
+    });
   } finally {
-    submitting.value = false;
+    submitting.value = false; // release on success AND failure
   }
 };
 </script>
@@ -149,6 +158,7 @@ const submit = async () => {
                   :input-id="`domain-kind-${option.value}`"
                   :label="option.label"
                   :description="option.description"
+                  :disabled="submitting"
                 />
               </fieldset>
 
@@ -157,16 +167,15 @@ const submit = async () => {
                 <template #content>
                   <div class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-md)]">
                     <div class="flex flex-col gap-[var(--spacing-xs)]">
-                      <span class="text-label-md text-[var(--text-default)]">
-                        Domain <span class="text-[var(--text-muted)]">(Required)</span>
-                      </span>
+                      <Label for="add-domain-input" required>Domain</Label>
                       <InputGroup :disabled="submitting">
                         <InputText
+                          id="add-domain-input"
                           v-model="form.domain"
                           size="large"
                           class="flex-1"
-                          aria-label="Domain"
                           placeholder="my-workload"
+                          :disabled="submitting"
                           :required="!!errors.domain"
                           :aria-describedby="errors.domain ? 'add-domain-error' : undefined"
                           @update:model-value="errors.domain = ''"
@@ -188,14 +197,15 @@ const submit = async () => {
                     />
 
                     <div class="flex flex-col gap-[var(--spacing-xs)]">
-                      <span class="text-label-md text-[var(--text-default)]">Environment</span>
+                      <Label for="add-domain-environment">Environment</Label>
                       <Select
                         v-model="form.environment"
                         size="large"
                         class="w-full"
+                        :disabled="submitting"
                         :display-value="labelFor(environmentOptions)"
                       >
-                        <Select.Trigger aria-label="Environment" />
+                        <Select.Trigger id="add-domain-environment" />
                         <!-- Select.Content teleports to <body> at z-50; inside the
                              Drawer panel (z-[1001]) it needs a higher z to show. -->
                         <Select.Content class="!z-[1002]">
@@ -211,16 +221,15 @@ const submit = async () => {
                     </div>
 
                     <div class="flex flex-col gap-[var(--spacing-xs)]">
-                      <span class="text-label-md text-[var(--text-default)]">
-                        Digital Certificate
-                      </span>
+                      <Label for="add-domain-certificate">Digital Certificate</Label>
                       <Select
                         v-model="form.certificate"
                         size="large"
                         class="w-full"
+                        :disabled="submitting"
                         :display-value="labelFor(certificateOptions)"
                       >
-                        <Select.Trigger aria-label="Digital Certificate" />
+                        <Select.Trigger id="add-domain-certificate" />
                         <Select.Content class="!z-[1002]">
                           <Select.Option
                             v-for="option in certificateOptions"
