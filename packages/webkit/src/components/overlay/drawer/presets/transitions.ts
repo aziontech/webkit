@@ -69,7 +69,11 @@ export const getDrawerTransitionStyle = (
   const phase = motionPhaseForState(state)
   const { duration: transitionDuration, curve: transitionTimingFunction } =
     drawerMotion[target][phase]
-  const property = target === 'panel' ? 'transform' : 'opacity'
+  // Tailwind v4 compiles `translate-x-*` / `translate-y-*` to the CSS
+  // `translate` property, not the `transform` shorthand — so the panel must
+  // transition `translate`. Transitioning `transform` alone would leave the
+  // translate change untweened (the drawer would snap into place).
+  const property = target === 'panel' ? 'translate' : 'opacity'
 
   return {
     transition: `${property} ${transitionDuration} ${transitionTimingFunction}`

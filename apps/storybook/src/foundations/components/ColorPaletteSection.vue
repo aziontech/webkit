@@ -37,7 +37,7 @@
   <section class="mb-[var(--spacing-xxl)]">
     <div class="mb-[var(--spacing-md)]">
       <h2
-        class="m-0 mb-[var(--spacing-xs)] border-b border-[var(--border-default)] pb-[var(--spacing-xs)] !text-overline-md text-[var(--text-muted)]"
+        class="m-0 mb-[var(--spacing-xs)] border-b border-[var(--border-default)] pb-[var(--spacing-xs)] text-overline-md! text-[var(--text-muted)]"
       >
         {{ title }}
       </h2>

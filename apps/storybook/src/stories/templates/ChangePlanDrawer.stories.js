@@ -171,13 +171,117 @@ const billingOptions = [
   { label: 'Yearly', value: 'yearly' }
 ]
 
-const planFeatureItems = [
-  { icon: 'pi pi-globe', label: 'Infraestrutura global' },
-  { icon: 'pi pi-code', label: 'Funções serverless' },
-  { icon: 'pi pi-image', label: 'Image optimization' },
-  { icon: 'ai ai-store', label: 'Armazenamento e banco de dados' },
-  { icon: 'pi pi-shield', label: 'Mitigação de DDoS e firewall' }
-]`
+const planFeaturesSlot = \`
+  <ul class="m-0 flex w-full list-none flex-col gap-2 p-0">
+    <li class="text-label-sm text-[var(--text-muted)] leading-none">
+      Todas as funcionalidades disponíveis
+    </li>
+    <li
+      v-for="(feature, index) in planFeatureItems"
+      :key="index"
+      class="flex items-center gap-[10px]"
+    >
+      <span
+        class="flex size-5 shrink-0 items-center justify-center"
+        aria-hidden="true"
+      >
+        <i :class="feature.icon" class="text-[var(--text-default)]" />
+      </span>
+      <span class="text-label-sm text-[var(--text-default)] leading-none">
+        {{ feature.label }}
+      </span>
+    </li>
+  </ul>
+\`
+
+const changePlanTemplate = \`
+  <Drawer
+    v-bind="args"
+    v-model:open="open"
+    data-testid="template-change-plan-drawer"
+  >
+    <DrawerTrigger>
+      <Button label="Change plan" kind="primary" />
+    </DrawerTrigger>
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Change Plan</DrawerTitle>
+          <DrawerClose />
+        </PanelHeader>
+        <PanelContent class="flex flex-col items-center gap-[var(--spacing-6)]">
+          <SegmentedButton
+            v-model="billingPeriod"
+            :options="billingOptions"
+            ariaLabel="Billing period"
+          />
+          <div
+            class="flex w-full min-w-0 flex-col items-stretch justify-center gap-[var(--spacing-6)] lg:flex-row"
+            data-testid="template-change-plan-drawer__plans"
+          >
+            <CardPricing
+              class="w-full! min-w-0 flex-1 max-w-none"
+              plan-title="Hobby"
+              description="The perfect starting place"
+              value="Free"
+              :show-prefix="false"
+              :show-suffix="false"
+              :pricing-details="billingDetailMonthly"
+              slot-position="middle"
+              card-style="contained"
+              action-label=""
+              data-testid="template-change-plan-drawer__plan-hobby"
+            >
+              \${planFeaturesSlot}
+              <template #actions>
+                <Button label="Downgrade" kind="outlined" size="large" class="w-full" />
+              </template>
+            </CardPricing>
+            <CardPricing
+              class="w-full! min-w-0 flex-1 max-w-none"
+              plan-title="Pro"
+              :description="billingDetailMonthly"
+              value="20"
+              prefix="$"
+              suffix="per month"
+              :pricing-details="billingDetailMonthly"
+              :show-tag="true"
+              tag-label="Current plan"
+              slot-position="middle"
+              card-style="contained"
+              action-label=""
+              data-testid="template-change-plan-drawer__plan-pro"
+            >
+              \${planFeaturesSlot}
+              <template #actions>
+                <Button label="Upgrade to Yearly" kind="primary" size="large" class="w-full" />
+              </template>
+            </CardPricing>
+            <CardPricing
+              class="w-full! min-w-0 flex-1 max-w-none"
+              plan-title="Enterprise"
+              description="Suporte avançado e serviços contínuos."
+              value="Custom"
+              :show-prefix="false"
+              :show-suffix="false"
+              :pricing-details="billingDetailEnterprise"
+              slot-position="middle"
+              card-style="contained"
+              action-label=""
+              data-testid="template-change-plan-drawer__plan-enterprise"
+            >
+              \${planFeaturesSlot}
+              <template #actions>
+                <Button label="Contact Sales" kind="outlined" size="large" class="w-full" />
+              </template>
+            </CardPricing>
+          </div>
+        </PanelContent>
+      </DrawerContent>
+    </DrawerPortal>
+  </Drawer>
+`
 
 const SNIPPET_BODY = `<Drawer
   side="right"

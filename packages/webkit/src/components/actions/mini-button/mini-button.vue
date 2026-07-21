@@ -56,8 +56,8 @@
     'data-[size=medium]:h-8 data-[size=medium]:min-h-8',
     'data-[size=medium]:text-button-md',
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed',
-    'data-[disabled]:!text-[var(--text-disabled)] data-[disabled]:[&_.mini-button-ghost]:hidden',
-    'data-[disabled]:[&_.mini-button-icon]:!text-[var(--text-disabled)]',
+    'data-[disabled]:text-[var(--text-disabled)]! data-[disabled]:[&_.mini-button-ghost]:hidden',
+    'data-[disabled]:[&_.mini-button-icon]:text-[var(--text-disabled)]!',
     attrs['class']
   ])
 
