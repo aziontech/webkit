@@ -344,8 +344,8 @@ importers:
   packages/webkit:
     dependencies:
       '@aziontech/theme':
-        specifier: workspace:*
-        version: link:../theme
+        specifier: ^4.0.0
+        version: 4.0.0(typescript@6.0.3)
       '@modelcontextprotocol/sdk':
         specifier: ^1.0.0
         version: 1.29.0(zod@3.25.76)
@@ -461,6 +461,9 @@ packages:
 
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
+
+  '@aziontech/theme@4.0.0':
+    resolution: {integrity: sha512-7kNzJFnIWjvXQS/GDz8hsOr1T1KnVEO9+HJeUbEevTjKwIwqViQF+tWu8RTlqUJYkbNdMsoeMApVZuczGReb4w==}
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -7644,6 +7647,12 @@ snapshots:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
       '@csstools/css-tokenizer': 3.0.4
       lru-cache: 10.4.3
+
+  '@aziontech/theme@4.0.0(typescript@6.0.3)':
+    dependencies:
+      vue-tsc: 3.3.7(typescript@6.0.3)
+    transitivePeerDependencies:
+      - typescript
 
   '@babel/code-frame@7.29.7':
     dependencies:
