@@ -73,15 +73,26 @@
       label: 'Secure',
       items: [
         { id: 'connectors', label: 'Connectors', icon: 'ai ai-edge-connectors' },
-        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns' },
+        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
         { id: 'firewalls', label: 'Firewalls', icon: 'ai ai-edge-firewall' }
       ]
     },
     {
       label: 'Store',
       items: [
-        { id: 'object-storage', label: 'Object Storage', icon: 'ai ai-edge-storage' },
-        { id: 'sql-database', label: 'SQL Database', icon: 'ai ai-edge-sql', tag: 'Preview' }
+        {
+          id: 'object-storage',
+          label: 'Object Storage',
+          icon: 'ai ai-edge-storage',
+          path: '/object-storage'
+        },
+        {
+          id: 'sql-database',
+          label: 'SQL Database',
+          icon: 'ai ai-edge-sql',
+          path: '/sql-database',
+          tag: 'Preview'
+        }
       ]
     },
     {
