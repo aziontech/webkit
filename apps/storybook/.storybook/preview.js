@@ -1,4 +1,3 @@
-import '@aziontech/theme/globals.css'
 import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
@@ -89,7 +88,7 @@ export const parameters = {
         'Get Started',
         'Style Guide',
         'Foundations',
-        ['Colors', 'Spacing', 'Typography', 'Icons'],
+        ['Colors', 'Theme', 'Spacing', 'Typography', 'Icons'],
         'Components',
         'Site'
       ]

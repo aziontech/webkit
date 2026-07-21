@@ -1,11 +1,10 @@
-@layer tailwind-base;
+/**
+ * Tailwind v4 requires `@reference` in files that use `@apply` but are not
+ * the main Tailwind entry (`@import "tailwindcss"`). Point it at the theme's
+ * generated globals so `@apply` can resolve utilities.
+ */
+@reference "@aziontech/theme";
 
-@layer tailwind-base {
-  @tailwind base;
-}
-
-@tailwind components;
-@tailwind utilities;
 
 html,
 body,
@@ -21,149 +20,39 @@ body,
 .sb-main-padded,
 .docs-story,
 .docs-story > * {
-  background: #ffffff !important;
+  background: var(--bg-canvas) !important;
   transition: all 0.4s ease-in-out !important;
-}
-
-.azion-dark .sb-main-padded,
-.azion-dark .docs-story,
-.azion-dark .docs-story > * {
-  background: #0a0a0a !important;
-  transition: all 0.4s ease-in-out !important;
-}
-
-/* ------------------------------------------------------------------ */
-/* MDX docs pages (Get Started, Style Guide) follow the theme toggle.  */
-/* parameters.docs.theme is static; these class-keyed rules make the   */
-/* docs surface, text, links, and tables switch with azion-light/dark. */
-/* ------------------------------------------------------------------ */
-.sbdocs.sbdocs-wrapper {
-  background: #ffffff !important;
-  transition: background 0.4s ease-in-out !important;
-}
-.azion-dark .sbdocs.sbdocs-wrapper {
-  background: #0a0a0a !important;
-}
-
-.sbdocs-content,
-.sbdocs-content p,
-.sbdocs-content li,
-.sbdocs-content td,
-.sbdocs-content h1,
-.sbdocs-content h2,
-.sbdocs-content h3,
-.sbdocs-content h4,
-.sbdocs-content blockquote {
-  color: #1a1a1a !important;
-}
-.azion-dark .sbdocs-content,
-.azion-dark .sbdocs-content p,
-.azion-dark .sbdocs-content li,
-.azion-dark .sbdocs-content td,
-.azion-dark .sbdocs-content h1,
-.azion-dark .sbdocs-content h2,
-.azion-dark .sbdocs-content h3,
-.azion-dark .sbdocs-content h4,
-.azion-dark .sbdocs-content blockquote {
-  color: #ededed !important;
-}
-
-/* Links: readable in both themes (the static docs theme made them #585C6D on black) */
-.sbdocs-content a,
-.sbdocs-content a:visited {
-  color: #c2410c !important;
-  text-decoration: underline;
-}
-.azion-dark .sbdocs-content a,
-.azion-dark .sbdocs-content a:visited {
-  color: #f3652b !important;
-}
-
-/* Tables */
-.sbdocs-content table th,
-.sbdocs-content table td {
-  border-color: #e5e5e5 !important;
-}
-.sbdocs-content table th {
-  background: #f5f5f5 !important;
-  color: #1a1a1a !important;
-}
-.sbdocs-content table tr {
-  background: transparent !important;
-  border-color: #e5e5e5 !important;
-}
-.azion-dark .sbdocs-content table th,
-.azion-dark .sbdocs-content table td {
-  border-color: #3e3e3e !important;
-}
-.azion-dark .sbdocs-content table th {
-  background: #171717 !important;
-  color: #ededed !important;
-}
-.azion-dark .sbdocs-content table tr {
-  border-color: #3e3e3e !important;
-}
-
-/* Inline code + rules */
-.sbdocs-content code:not([class*='language-']) {
-  background: #f4f4f4 !important;
-  color: #1a1a1a !important;
-  border: 1px solid #e5e5e5;
-}
-.azion-dark .sbdocs-content code:not([class*='language-']) {
-  background: #171717 !important;
-  color: #ededed !important;
-  border-color: #3e3e3e;
-}
-.sbdocs-content hr {
-  border-color: #e5e5e5 !important;
-}
-.azion-dark .sbdocs-content hr {
-  border-color: #3e3e3e !important;
-}
-.sbdocs-content blockquote {
-  border-left-color: #c2410c !important;
-}
-.azion-dark .sbdocs-content blockquote {
-  border-left-color: #f3652b !important;
 }
 
 .docblock-code-toggle {
   /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 .css-2p1np {
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 
 /* Text Name Column Props */
 .css-in3yi3 {
-  @apply !font-code !font-normal !text-neutral-50;
+  font-family: 'Roboto Mono', monospace !important;
+  @apply font-normal! text-neutral-50!;
 }
 
 .tabbutton > * {
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 
 .docblock-argstable-head > tr {
-  @apply !font-code !lowercase;
-}
-
-.css-in3yi3 {
-  @apply !font-code !font-normal !text-neutral-50;
+  font-family: 'Roboto Mono', monospace !important;
+  @apply lowercase!;
 }
 
 .css-7qiabv {
-  @apply !font-sans !text-neutral-500;
+  @apply font-sans! text-neutral-500!;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply !font-sans !font-normal;
+h1, h2, h3, h4, h5, h6 {
+  @apply font-sans! font-normal!;
 }
 
 /* Theme container styles */
@@ -174,12 +63,8 @@ h6 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.azion-light > body {
-  background: #ffffff !important;
-  transition: all 0.4s ease-in-out !important;
-}
-.azion-dark > body {
-  background: #0a0a0a !important;
+.azion > body {
+  background: var(--bg-canvas) !important;
   transition: all 0.4s ease-in-out !important;
 }
 
@@ -191,31 +76,17 @@ h6 {
   color-scheme: light;
 }
 
-/* https://github.com/primefaces/primevue/issues/882#issuecomment-1780802552 */
-body.p-overflow-hidden {
-  --scrollbar-width: 0px !important;
-}
-
 /* https://aziontech.atlassian.net/browse/UXE-1798 */
 /* child scroll behaviour is affecting the parent scroll behaviour */
 * {
   overscroll-behavior: auto !important;
 }
 
-.grecaptcha-badge {
-  bottom: 75px !important;
-  z-index: 11;
-}
-
-.font-sora {
-  font-family: 'Sora', sans-serif;
-}
-
-.font-proto-mono,
-.font-proto {
+.font-proto-mono {
   font-family: 'Proto Mono', sans-serif;
 }
 
 .font-code {
   font-family: 'Roboto Mono', monospace !important;
 }
+
