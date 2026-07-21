@@ -4,6 +4,7 @@ description: Scan composables, utility components, and same-category siblings fo
 status: active
 last_updated: 2026-05-22
 scope: webkit
+enforced_by: [no-invention, imports, composables]
 ---
 
 # Skill: reuse-audit

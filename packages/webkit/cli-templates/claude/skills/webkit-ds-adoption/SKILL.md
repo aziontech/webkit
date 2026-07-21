@@ -4,6 +4,7 @@ description: Migrating an existing app onto @aziontech/webkit is a sequence of s
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-prefer-over-custom, webkit-prop-vocabulary, webkit-style-override, review]
 ---
 
 # Skill: webkit-ds-adoption

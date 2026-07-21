@@ -4,6 +4,7 @@ description: Component-map discovery pass — for each UX moment (loading→Skel
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, review]
 ---
 
 # Skill: webkit-ux-heuristics

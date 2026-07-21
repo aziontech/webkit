@@ -4,6 +4,7 @@ description: Consume the @aziontech/webkit design system correctly. Use when add
 scope: general
 status: active
 last_updated: 2026-07-20
+enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-performance]
 ---
 
 # Skill: webkit-usage

@@ -4,6 +4,7 @@ description: Accessible forms on @aziontech/webkit — one Form Layout spacing r
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
 
 # Skill: webkit-form

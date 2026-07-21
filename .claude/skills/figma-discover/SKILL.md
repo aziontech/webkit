@@ -4,6 +4,7 @@ description: Pull design tokens, regions, and states from a Figma frame via the 
 status: active
 last_updated: 2026-05-22
 scope: webkit
+enforced_by: [dependencies, migration]
 ---
 
 # Skill: figma-discover

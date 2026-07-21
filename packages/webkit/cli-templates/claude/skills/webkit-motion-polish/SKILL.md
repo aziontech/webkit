@@ -4,6 +4,7 @@ description: Make motion smooth using only @aziontech/theme animate tokens — a
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---
 
 # Skill: webkit-motion-polish

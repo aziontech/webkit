@@ -4,6 +4,7 @@ description: The "feels finished" sign-off for UI on @aziontech/webkit — a who
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [ui-verify, webkit-component-states, webkit-motion, review]
 ---
 
 # Skill: webkit-impeccable-polish

@@ -4,6 +4,7 @@ description: The token adapter that maps charts onto @aziontech/theme — every 
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 ---
 
 # Skill: webkit-data-viz

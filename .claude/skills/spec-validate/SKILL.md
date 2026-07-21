@@ -4,6 +4,7 @@ description: Validate a `.specs/<name>.md` against the schema, the body section 
 status: active
 last_updated: 2026-05-22
 scope: webkit
+enforced_by: [prop-vocabulary, props, styling, migration]
 ---
 
 # Skill: spec-validate

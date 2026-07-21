@@ -4,6 +4,7 @@ description: Run the project's pnpm checks (lint, type-check, type-coverage, sto
 status: active
 last_updated: 2026-05-22
 scope: webkit
+enforced_by: [storybook-source, props, dependencies]
 ---
 
 # Skill: validate-component

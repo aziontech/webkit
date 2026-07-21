@@ -4,6 +4,7 @@ description: Write a minimal `.stories.js` for a webkit component using the cano
 status: active
 last_updated: 2026-06-24
 scope: webkit
+enforced_by: [storybook-source, naming]
 ---
 
 # Skill: storybook-write

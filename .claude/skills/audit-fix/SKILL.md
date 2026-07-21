@@ -4,6 +4,7 @@ description: Fix `pnpm audit --audit-level=high` failures by bumping the offendi
 status: active
 last_updated: 2026-06-28
 scope: webkit
+enforced_by: [release-types, git-workflow]
 ---
 
 # Skill: audit-fix

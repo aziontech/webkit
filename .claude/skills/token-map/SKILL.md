@@ -4,6 +4,7 @@ description: Map a Figma token JSON blob to DESIGN.md classes / `var(--*)` seman
 status: active
 last_updated: 2026-05-22
 scope: webkit
+enforced_by: [styling, migration]
 ---
 
 # Skill: token-map

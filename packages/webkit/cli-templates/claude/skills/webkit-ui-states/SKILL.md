@@ -4,6 +4,7 @@ description: Every data-backed view in a @aziontech/webkit app declares its full
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-component-states, webkit-prefer-over-custom, ui-verify]
 ---
 
 # Skill: webkit-ui-states

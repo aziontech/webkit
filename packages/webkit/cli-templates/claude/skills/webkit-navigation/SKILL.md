@@ -4,6 +4,7 @@ description: Two navigation shells for UI on @aziontech/webkit — the persisten
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
 
 # Skill: webkit-navigation

@@ -4,6 +4,7 @@ description: Interactively draft `.specs/<name>.md` for a new webkit component. 
 status: active
 last_updated: 2026-05-22
 scope: webkit
+enforced_by: [no-invention, props, styling]
 ---
 
 # Skill: spec-create

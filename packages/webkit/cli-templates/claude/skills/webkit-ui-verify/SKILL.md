@@ -4,6 +4,7 @@ description: Drive a finished @aziontech/webkit screen in a real browser (Playwr
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [ui-verify, webkit-accessibility, webkit-component-states]
 ---
 
 # Skill: webkit-ui-verify

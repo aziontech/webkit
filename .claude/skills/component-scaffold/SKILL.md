@@ -4,6 +4,7 @@ description: Write the `.vue` file(s) for a component, plus the entry in `packag
 status: active
 last_updated: 2026-05-27
 scope: webkit
+enforced_by: [no-invention, compound-api, styling, testing]
 ---
 
 # Skill: component-scaffold

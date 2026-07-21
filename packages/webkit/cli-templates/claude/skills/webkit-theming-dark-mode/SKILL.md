@@ -4,6 +4,7 @@ description: Every screen in a @aziontech/webkit app works in BOTH light and dar
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-tokens, ui-verify]
 ---
 
 # Skill: webkit-theming-dark-mode

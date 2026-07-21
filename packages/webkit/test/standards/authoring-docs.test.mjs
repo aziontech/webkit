@@ -44,6 +44,7 @@ test('a conforming internal skill passes clean', () => {
     'name: good-skill',
     'description: A perfectly fine internal skill that finds components via the MCP/catalog.',
     'scope: webkit',
+    'enforced_by: [no-invention]',
     '---',
     '',
     '# Skill: good-skill',
@@ -62,6 +63,7 @@ test('a conforming consumer skill (webkit- prefix + status + last_updated) passe
     'scope: general',
     'status: active',
     'last_updated: 2026-07-20',
+    'enforced_by: [webkit-tokens, ui-verify]',
     '---',
     '',
     'Body prose.'
@@ -108,12 +110,39 @@ test('a bad consumer skill is flagged on every axis', () => {
     'consumer-skill-prefix',
     'consumer-skill-status',
     'description-empty',
+    'enforced-by-missing',
     'exports-as-lookup',
     'file-as-exemplar',
     'name-mismatch',
     'scope-missing',
     'src-escape'
   ])
+})
+
+test('enforced_by is required on skills and exempt on agents', () => {
+  const skillNoEB = ['---', 'name: x', 'description: d.', 'scope: webkit', '---', 'body'].join('\n')
+  assert.ok(
+    ids('.claude/skills/x/SKILL.md', skillNoEB).includes('enforced-by-missing'),
+    'a skill with no enforced_by must be flagged'
+  )
+  const skillEB = [
+    '---',
+    'name: x',
+    'description: d.',
+    'scope: webkit',
+    'enforced_by: [styling]',
+    '---',
+    'body'
+  ].join('\n')
+  assert.ok(
+    !ids('.claude/skills/x/SKILL.md', skillEB).includes('enforced-by-missing'),
+    'a skill WITH enforced_by must not be flagged'
+  )
+  const agent = ['---', 'name: x', 'description: d.', 'scope: webkit', '---', 'role'].join('\n')
+  assert.ok(
+    !ids('.claude/agents/x.md', agent).includes('enforced-by-missing'),
+    'agents are not skills — enforced_by is not required'
+  )
 })
 
 test('scope-mismatch fires when scope disagrees with the file location', () => {

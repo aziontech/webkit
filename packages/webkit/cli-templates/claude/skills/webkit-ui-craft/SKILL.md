@@ -4,6 +4,7 @@ description: Umbrella entry for building product UI on @aziontech/webkit with ta
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-prefer-over-custom, webkit-tokens, webkit-accessibility, ui-verify]
 ---
 
 # Skill: webkit-ui-craft

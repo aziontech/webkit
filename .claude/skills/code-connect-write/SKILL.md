@@ -4,6 +4,7 @@ description: Generate the `<name>.figma.ts` Code Connect mapping. Skipped automa
 status: active
 last_updated: 2026-05-22
 scope: webkit
+enforced_by: [no-invention, prop-vocabulary, naming]
 ---
 
 # Skill: code-connect-write

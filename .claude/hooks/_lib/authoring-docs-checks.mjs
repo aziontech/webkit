@@ -49,6 +49,8 @@ export const MESSAGES = {
   'consumer-skill-prefix': 'a consumer skill `name` must start with "webkit-".',
   'consumer-skill-status': 'a consumer skill must declare `status:`.',
   'consumer-skill-last-updated': 'a consumer skill must declare `last_updated:`.',
+  'enforced-by-missing':
+    'a skill must declare a non-empty `enforced_by:` flow array — every skill maps to ≥1 enforcer (a rule id, `ui-verify`, or `review`) so nothing is merely advisory.',
   'component-src-path':
     'file-as-example: hardcoded component source path — find components via the webkit MCP/catalog, not a src/ path.',
   'file-as-exemplar':
@@ -61,8 +63,21 @@ export const MESSAGES = {
 
 function splitFrontmatter(content) {
   const m = content.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
-  if (!m) return { fm: null }
-  return { fm: parseYamlFrontmatter(m[1]) }
+  if (!m) return { fm: null, fmText: '' }
+  return { fm: parseYamlFrontmatter(m[1]), fmText: m[1] }
+}
+
+// `enforced_by` is a YAML flow array (`enforced_by: [a, b, c]`). The shared frontmatter
+// parser doesn't handle arrays, so extract it from the raw frontmatter text. Exported so the
+// invariant test resolves each entry against the skill's rule population without re-parsing.
+export function parseEnforcedBy(fmText) {
+  if (!fmText) return []
+  const m = fmText.match(/^enforced_by:[ \t]*\[([^\]]*)\][ \t]*$/m)
+  if (!m) return []
+  return m[1]
+    .split(',')
+    .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
+    .filter(Boolean)
 }
 
 // parseYamlFrontmatter represents an empty-valued key (`description:`) as {} (it treats a
@@ -82,7 +97,7 @@ export function scanDoc(rel, content) {
   const out = []
   const push = (id) => out.push({ id, message: MESSAGES[id] })
 
-  const { fm } = splitFrontmatter(content)
+  const { fm, fmText } = splitFrontmatter(content)
   if (!fm) {
     push('frontmatter-missing')
   } else {
@@ -92,6 +107,11 @@ export function scanDoc(rel, content) {
     if (!scope) push('scope-missing')
     else if (scope !== 'general' && scope !== 'webkit') push('scope-invalid')
     else if (scope !== info.scope) push('scope-mismatch')
+
+    // Every skill (internal + consumer) declares what enforces it — a rule id, `ui-verify`,
+    // or `review` — so no skill is merely advisory. Presence is checked here (write-time +
+    // CI ratchet); resolution of each entry is checked by the standards invariant test.
+    if (info.kind === 'skill' && parseEnforcedBy(fmText).length === 0) push('enforced-by-missing')
 
     if (info.kind === 'skill' && info.variant === 'consumer') {
       if (!str(fm.name).startsWith('webkit-')) push('consumer-skill-prefix')

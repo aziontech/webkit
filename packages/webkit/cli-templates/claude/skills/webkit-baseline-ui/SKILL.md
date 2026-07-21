@@ -4,6 +4,7 @@ description: Fast deslop pass for UI built on @aziontech/webkit — enforce comp
 status: active
 last_updated: 2026-07-20
 scope: general
+enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
 ---
 
 # Skill: webkit-baseline-ui
