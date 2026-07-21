@@ -134,7 +134,7 @@
           :disabled="disabled"
           :loading="loading"
           :data-testid="`${testId}__primary`"
-          class="!rounded-r-none focus-visible:z-[1]"
+          class="rounded-r-none! focus-visible:z-[1]"
           @click="onPrimaryClick"
         />
 
@@ -146,7 +146,7 @@
             :size="size"
             :disabled="disabled || loading"
             :data-testid="`${testId}__toggle-button`"
-            class="!rounded-l-none -ml-px border-l border-[var(--border-default)] focus-visible:z-[1]"
+            class="rounded-l-none! -ml-px border-l border-[var(--border-default)] focus-visible:z-[1]"
           />
         </Dropdown.Trigger>
       </div>

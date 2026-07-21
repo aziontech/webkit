@@ -6,6 +6,7 @@ export const text = {
     'text-muted': tokenRef('primitives.gray.600'),
     'text-disabled': tokenRef('primitives.gray.400'),
     'text-link': tokenRef('primitives.blue.600'),
+    'text-link-hover': tokenRef('primitives.blue.700'),
     'text-contrast': tokenRef('primitives.gray.50')
   },
   dark: {
@@ -13,6 +14,7 @@ export const text = {
     'text-muted': tokenRef('primitives.gray.400'),
     'text-disabled': tokenRef('primitives.gray.700'),
     'text-link': tokenRef('primitives.blue.400'),
+    'text-link-hover': tokenRef('primitives.blue.300'),
     'text-contrast': tokenRef('primitives.base.black')
   }
 }

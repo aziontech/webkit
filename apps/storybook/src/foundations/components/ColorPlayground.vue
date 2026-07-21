@@ -1,109 +1,106 @@
 <script setup>
-  import { ref, computed, onMounted, onUnmounted } from 'vue'
-  import { playgroundColorTokens } from '../data/colors.js'
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { playgroundColorTokens } from '../data/colors.js';
 
-  const tokens = Array.isArray(playgroundColorTokens) ? playgroundColorTokens : []
+const tokens = Array.isArray(playgroundColorTokens) ? playgroundColorTokens : [];
 
-  const CATEGORIES = [
-    { key: 'theme', label: 'Theme', filter: (t) => t.category === 'theme' },
-    { key: 'background', label: 'Background', filter: (t) => t.category === 'background' },
-    { key: 'text', label: 'Text', filter: (t) => t.category === 'text' },
-    { key: 'border', label: 'Border', filter: (t) => t.category === 'border' }
-  ]
+const CATEGORIES = [
+  { key: 'theme', label: 'Theme', filter: (t) => t.category === 'theme' },
+  { key: 'background', label: 'Background', filter: (t) => t.category === 'background' },
+  { key: 'text', label: 'Text', filter: (t) => t.category === 'text' },
+  { key: 'border', label: 'Border', filter: (t) => t.category === 'border' },
+];
 
-  const selectedCategory = ref('theme')
-  const selectedTokenName = ref('primary')
+const selectedCategory = ref('theme');
+const selectedTokenName = ref('primary');
 
-  const isDark = ref(true)
-  let observer = null
+const isDark = ref(true);
+let observer = null;
 
-  function updateTheme() {
-    const lightEl = document.querySelector('.azion-light')
-    isDark.value = !lightEl
-  }
+function updateTheme() {
+  const lightEl = document.querySelector('.azion-light');
+  isDark.value = !lightEl;
+}
 
-  onMounted(() => {
-    updateTheme()
-    observer = new MutationObserver(updateTheme)
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+onMounted(() => {
+  updateTheme();
+  observer = new MutationObserver(updateTheme);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-    const first = tokens.find((t) => t.name === 'primary') ?? tokens[0]
-    if (first) selectedTokenName.value = first.name
-  })
+  const first = tokens.find((t) => t.name === 'primary') ?? tokens[0];
+  if (first) selectedTokenName.value = first.name;
+});
 
-  onUnmounted(() => {
-    observer?.disconnect()
-  })
+onUnmounted(() => {
+  observer?.disconnect();
+});
 
-  const activeTokens = computed(() => {
-    const cat = CATEGORIES.find((c) => c.key === selectedCategory.value)
-    return cat ? tokens.filter(cat.filter) : tokens
-  })
+const activeTokens = computed(() => {
+  const cat = CATEGORIES.find((c) => c.key === selectedCategory.value);
+  return cat ? tokens.filter(cat.filter) : tokens;
+});
 
-  const selectedToken = computed(
-    () =>
-      activeTokens.value.find((t) => t.name === selectedTokenName.value) ?? activeTokens.value[0]
-  )
+const selectedToken = computed(
+  () => activeTokens.value.find((t) => t.name === selectedTokenName.value) ?? activeTokens.value[0]
+);
 
-  const currentHex = computed(() =>
-    isDark.value ? selectedToken.value?.darkHex : selectedToken.value?.lightHex
-  )
+const currentHex = computed(() =>
+  isDark.value ? selectedToken.value?.darkHex : selectedToken.value?.lightHex
+);
 
-  const modeLabel = computed(() => (isDark.value ? 'dark' : 'light'))
+const modeLabel = computed(() => (isDark.value ? 'dark' : 'light'));
 
-  const previewStyle = computed(() => {
-    const hex = currentHex.value
-    if (!hex) return {}
-    const cat = selectedCategory.value
-    if (cat === 'background' || cat === 'theme') return { backgroundColor: hex }
-    if (cat === 'text') return { color: hex }
-    if (cat === 'border') return { borderColor: hex, borderWidth: '2px', borderStyle: 'solid' }
-    return { backgroundColor: hex }
-  })
+const previewStyle = computed(() => {
+  const hex = currentHex.value;
+  if (!hex) return {};
+  const cat = selectedCategory.value;
+  if (cat === 'background' || cat === 'theme') return { backgroundColor: hex };
+  if (cat === 'text') return { color: hex };
+  if (cat === 'border') return { borderColor: hex, borderWidth: '2px', borderStyle: 'solid' };
+  return { backgroundColor: hex };
+});
 
-  const previewTextStyle = computed(() => {
-    if (selectedCategory.value === 'text') return { color: currentHex.value }
-    return { color: labelColor(currentHex.value) }
-  })
+const previewTextStyle = computed(() => {
+  if (selectedCategory.value === 'text') return { color: currentHex.value };
+  return { color: labelColor(currentHex.value) };
+});
 
-  function labelColor(hex) {
-    if (!hex || hex.length < 7) return '#888'
-    const h = hex.replace('#', '').slice(0, 6)
-    const r = parseInt(h.slice(0, 2), 16)
-    const g = parseInt(h.slice(2, 4), 16)
-    const b = parseInt(h.slice(4, 6), 16)
-    return 0.299 * r + 0.587 * g + 0.114 * b > 140 ? '#000' : '#fff'
-  }
+function labelColor(hex) {
+  if (!hex || hex.length < 7) return '#888';
+  const h = hex.replace('#', '').slice(0, 6);
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return 0.299 * r + 0.587 * g + 0.114 * b > 140 ? '#000' : '#fff';
+}
 
-  function onCategoryChange() {
-    selectedTokenName.value = activeTokens.value[0]?.name ?? ''
-  }
+function onCategoryChange() {
+  selectedTokenName.value = activeTokens.value[0]?.name ?? '';
+}
 
-  const copiedKey = ref(null)
-  let copyTimeout = null
+const copiedKey = ref(null);
+let copyTimeout = null;
 
-  function copyToClipboard(text, key) {
-    navigator.clipboard?.writeText(text).catch(() => {})
-    copiedKey.value = key
-    if (copyTimeout) clearTimeout(copyTimeout)
-    copyTimeout = setTimeout(() => {
-      copiedKey.value = null
-    }, 1000)
-  }
+function copyToClipboard(text, key) {
+  navigator.clipboard?.writeText(text).catch(() => {});
+  copiedKey.value = key;
+  if (copyTimeout) clearTimeout(copyTimeout);
+  copyTimeout = setTimeout(() => {
+    copiedKey.value = null;
+  }, 1000);
+}
 
-  function isCopied(key) {
-    return copiedKey.value === key
-  }
+function isCopied(key) {
+  return copiedKey.value === key;
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex gap-5 items-end flex-wrap">
       <div class="flex flex-col gap-1.5">
-        <label class="text-[10px] font-semibold uppercase tracking-wider text-muted"
-          >Category</label
-        >
+        <label class="text-[10px] font-semibold uppercase tracking-wider text-muted">Category</label>
         <div class="flex rounded-md overflow-hidden border border-default">
           <button
             v-for="cat in CATEGORIES"
@@ -112,11 +109,11 @@
               'px-3.5 py-1.5 text-xs font-medium cursor-pointer bg-transparent transition-all duration-100',
               selectedCategory === cat.key
                 ? 'bg-primary text-white font-semibold'
-                : 'text-muted border-r border-default last:border-r-0'
+                : 'text-muted border-r border-default last:border-r-0',
             ]"
             @click="
-              selectedCategory = cat.key
-              onCategoryChange()
+              selectedCategory = cat.key;
+              onCategoryChange();
             "
           >
             {{ cat.label }}
@@ -130,11 +127,7 @@
           v-model="selectedTokenName"
           class="px-3 py-1.5 rounded-md border border-default bg-surface text-default font-code text-xs min-w-[220px] cursor-pointer"
         >
-          <option
-            v-for="token in activeTokens"
-            :key="token.name"
-            :value="token.name"
-          >
+          <option v-for="token in activeTokens" :key="token.name" :value="token.name">
             {{ token.tailwindClass }}
           </option>
         </select>
@@ -147,104 +140,64 @@
         :class="selectedCategory !== 'border' ? 'border border-default' : ''"
         :style="previewStyle"
       >
-        <span
-          class="font-code text-[15px] font-semibold"
-          :style="previewTextStyle"
-        >
+        <span class="font-code text-[15px] font-semibold" :style="previewTextStyle">
           {{ selectedToken?.tailwindClass }}
         </span>
       </div>
 
-      <div
-        class="flex-1 min-w-[280px] flex flex-col gap-3.5 p-4 rounded-lg border border-default bg-surface"
-      >
+      <div class="flex-1 min-w-[280px] flex flex-col gap-3.5 p-4 rounded-lg border border-default bg-surface">
         <div class="flex flex-col gap-1.5">
-          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted"
-            >Tailwind class</span
-          >
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Tailwind class</span>
           <button
             class="group inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
             @click="copyToClipboard(selectedToken?.tailwindClass, 'tw')"
           >
-            <code
-              class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded"
-              >{{ selectedToken?.tailwindClass }}</code
-            >
-            <i
-              :class="[
-                'pi text-[11px] opacity-0 group-hover:!opacity-50',
-                isCopied('tw') ? 'pi-check text-success' : 'pi-copy'
-              ]"
-            />
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.tailwindClass }}</code>
+            <i :class="['pi text-[11px] opacity-0 group-hover:opacity-50!', isCopied('tw') ? 'pi-check text-success' : 'pi-copy']" />
           </button>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted"
-            >CSS variable</span
-          >
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">CSS variable</span>
           <button
             class="group inline-flex items-center gap-1.5 bg-none border-none p-0 cursor-pointer text-left hover:brightness-110"
             @click="copyToClipboard(selectedToken?.cssVar, 'css')"
           >
-            <code
-              class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded"
-              >{{ selectedToken?.cssVar }}</code
-            >
-            <i
-              :class="[
-                'pi text-[11px] opacity-0 group-hover:!opacity-50',
-                isCopied('css') ? 'pi-check text-success' : 'pi-copy'
-              ]"
-            />
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.cssVar }}</code>
+            <i :class="['pi text-[11px] opacity-0 group-hover:opacity-50!', isCopied('css') ? 'pi-check text-success' : 'pi-copy']" />
           </button>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted"
-            >Resolved ({{ modeLabel }})</span
-          >
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Resolved ({{ modeLabel }})</span>
           <span class="flex items-center gap-1.5 flex-wrap">
             <span
               class="w-3.5 h-3.5 rounded flex-shrink-0 border border-default"
               :style="{ background: currentHex ?? 'transparent' }"
             />
-            <code
-              class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded"
-              >{{ currentHex }}</code
-            >
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ currentHex }}</code>
           </span>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted"
-            >Description</span
-          >
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Description</span>
           <span class="text-[13px] text-default">{{ selectedToken?.description }}</span>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted"
-            >Light → Dark</span
-          >
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Light → Dark</span>
           <span class="flex items-center gap-1.5 flex-wrap">
             <span
               class="w-3.5 h-3.5 rounded flex-shrink-0 border border-default"
               :style="{ background: selectedToken?.lightHex ?? 'transparent' }"
             />
-            <code
-              class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded"
-              >{{ selectedToken?.lightHex }}</code
-            >
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.lightHex }}</code>
             <span class="opacity-40 text-[11px]">→</span>
             <span
               class="w-3.5 h-3.5 rounded flex-shrink-0 border border-default"
               :style="{ background: selectedToken?.darkHex ?? 'transparent' }"
             />
-            <code
-              class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded"
-              >{{ selectedToken?.darkHex }}</code
-            >
+            <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.darkHex }}</code>
           </span>
         </div>
       </div>
