@@ -1,6 +1,7 @@
 ---
 name: webkit-adopter
 description: Runs and explains the @aziontech/webkit adoption flow — `npx @aziontech/webkit init`. Sets up deps, lint configs, pre-commit, the webkit MCP, and the Claude Code bundle in this project, idempotently.
+scope: general
 ---
 
 # Agent: webkit-adopter

@@ -2,6 +2,7 @@
 name: scaffolder
 description: Isolated sub-agent that writes the component `.vue` files + updates `packages/webkit/package.json#exports`. Strictly spec-bound; every prop/event/slot must come from the spec.
 status: active
+scope: webkit
 ---
 
 # Agent: scaffolder

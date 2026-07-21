@@ -3,6 +3,8 @@ name: figma-discover
 description: Pull design tokens, regions, and states from a Figma frame via the Figma MCP. Pure read; emits a structured JSON blob the rest of the pipeline consumes.
 status: active
 last_updated: 2026-05-22
+scope: webkit
+enforced_by: [dependencies, migration]
 ---
 
 # Skill: figma-discover

@@ -2,6 +2,7 @@
 name: spec-validator
 description: Isolated sub-agent that validates a `.specs/<name>.md` against schema, body rules, and the Constraints block. On pass, computes sha256(body), writes `checksum`, and flips `status: draft → approved`.
 status: active
+scope: webkit
 ---
 
 # Agent: spec-validator

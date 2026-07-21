@@ -19,6 +19,7 @@ import {
   firstExisting,
   HUSKY_HOOK_MARKER,
   MCP_SERVER_NAME,
+  POSTCSS_CONFIG_CANDIDATES,
   read,
   STYLELINT_CONFIG_CANDIDATES
 } from './plan.js'
@@ -113,6 +114,28 @@ export function planDoctor(projectDir) {
         : 'no stylelint config found — run `npx @aziontech/webkit init`.')
   )
 
+  // 3b. The CSS entry must `@source` webkit's source — under Tailwind v4 that is what compiles
+  //     webkit's component classes (node_modules is excluded from auto content-detection).
+  //     Without it the components render unstyled.
+  const cssEntry = read(join(projectDir, 'src/webkit.css'))
+  const hasSource = Boolean(cssEntry && /@source\b[^\n]*@aziontech\/webkit/.test(cssEntry))
+  add(
+    'webkit.css @source',
+    hasSource ? 'ok' : 'fail',
+    hasSource
+      ? 'src/webkit.css @sources @aziontech/webkit'
+      : 'src/webkit.css missing an @source for @aziontech/webkit — component classes will not compile (unstyled UI). Run `npx @aziontech/webkit init`.'
+  )
+
+  // 3c. PostCSS config present — it runs Tailwind v4 (`@tailwindcss/postcss`) in the build.
+  const postcssCfg = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
+  add(
+    'postcss config',
+    postcssCfg ? 'ok' : 'warn',
+    postcssCfg ||
+      'no postcss config — Tailwind v4 may not run in the build. Run `npx @aziontech/webkit init`.'
+  )
+
   // 4. .mcp.json registers the webkit server.
   const mcpPath = join(projectDir, '.mcp.json')
   if (!existsSync(mcpPath)) {
@@ -152,15 +175,19 @@ export function planDoctor(projectDir) {
       : 'no .husky/pre-commit lint block — commits are not linted locally.'
   )
 
-  // 7. theme imported at the app entry (advisory; only when an entry file exists).
+  // 7. Design-system styles imported at the app entry (advisory; only when an entry exists).
+  //    Looks for the generated src/webkit.css — importing it (not `@aziontech/theme` bare)
+  //    is what includes the `@source` that compiles webkit's component classes.
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   if (entry) {
     const src = read(join(projectDir, entry)) || ''
-    const themed = src.includes('@aziontech/theme')
+    const styled = src.includes('webkit.css')
     add(
-      'theme import',
-      themed ? 'ok' : 'warn',
-      themed ? `imported in ${entry}` : `add \`import '@aziontech/theme'\` to ${entry}.`
+      'styles import',
+      styled ? 'ok' : 'warn',
+      styled
+        ? `imported in ${entry}`
+        : `add \`import './webkit.css'\` (theme tokens + fonts + Tailwind + the webkit @source) to ${entry}.`
     )
   }
 
