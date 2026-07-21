@@ -30,6 +30,7 @@ import PanelHeader from "@aziontech/webkit/panel-header";
 import Select from "@aziontech/webkit/select";
 import Switch from "@aziontech/webkit/switch";
 import { toast } from "@aziontech/webkit/toast";
+import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, reactive, ref, watch } from "vue";
 
 const open = defineModel("open", { type: Boolean, default: false });
@@ -458,22 +459,26 @@ const submit = async () => {
                             v-if="form.criteria.length > 1"
                             class="flex items-center gap-[var(--spacing-xxs)]"
                           >
-                            <IconButton
-                              icon="pi pi-arrow-up"
-                              kind="transparent"
-                              size="small"
-                              aria-label="Move criteria up"
-                              :disabled="submitting || gIdx === 0"
-                              @click="moveCriteria(gIdx, -1)"
-                            />
-                            <IconButton
-                              icon="pi pi-arrow-down"
-                              kind="transparent"
-                              size="small"
-                              aria-label="Move criteria down"
-                              :disabled="submitting || gIdx === form.criteria.length - 1"
-                              @click="moveCriteria(gIdx, 1)"
-                            />
+                            <Tooltip text="Move criteria up">
+                              <IconButton
+                                icon="pi pi-arrow-up"
+                                kind="outlined"
+                                size="small"
+                                aria-label="Move criteria up"
+                                :disabled="submitting || gIdx === 0"
+                                @click="moveCriteria(gIdx, -1)"
+                              />
+                            </Tooltip>
+                            <Tooltip text="Move criteria down">
+                              <IconButton
+                                icon="pi pi-arrow-down"
+                                kind="outlined"
+                                size="small"
+                                aria-label="Move criteria down"
+                                :disabled="submitting || gIdx === form.criteria.length - 1"
+                                @click="moveCriteria(gIdx, 1)"
+                              />
+                            </Tooltip>
                           </div>
                         </div>
 
@@ -570,30 +575,36 @@ const submit = async () => {
                               >
                                 <i class="pi pi-bars" aria-hidden="true" />
                               </span>
-                              <IconButton
-                                icon="pi pi-arrow-up"
-                                kind="outlined"
-                                size="large"
-                                aria-label="Move condition up"
-                                :disabled="submitting || cIdx === 0"
-                                @click="moveCondition(gIdx, cIdx, -1)"
-                              />
-                              <IconButton
-                                icon="pi pi-arrow-down"
-                                kind="outlined"
-                                size="large"
-                                aria-label="Move condition down"
-                                :disabled="submitting || cIdx === group.conditions.length - 1"
-                                @click="moveCondition(gIdx, cIdx, 1)"
-                              />
-                              <IconButton
-                                icon="pi pi-trash"
-                                kind="outlined"
-                                size="large"
-                                aria-label="Remove condition"
-                                :disabled="submitting || totalConditions <= 1"
-                                @click="removeCondition(gIdx, cIdx)"
-                              />
+                              <Tooltip text="Move condition up">
+                                <IconButton
+                                  icon="pi pi-arrow-up"
+                                  kind="outlined"
+                                  size="large"
+                                  aria-label="Move condition up"
+                                  :disabled="submitting || cIdx === 0"
+                                  @click="moveCondition(gIdx, cIdx, -1)"
+                                />
+                              </Tooltip>
+                              <Tooltip text="Move condition down">
+                                <IconButton
+                                  icon="pi pi-arrow-down"
+                                  kind="outlined"
+                                  size="large"
+                                  aria-label="Move condition down"
+                                  :disabled="submitting || cIdx === group.conditions.length - 1"
+                                  @click="moveCondition(gIdx, cIdx, 1)"
+                                />
+                              </Tooltip>
+                              <Tooltip text="Remove condition">
+                                <IconButton
+                                  icon="pi pi-trash"
+                                  kind="outlined"
+                                  size="large"
+                                  aria-label="Remove condition"
+                                  :disabled="submitting || totalConditions <= 1"
+                                  @click="removeCondition(gIdx, cIdx)"
+                                />
+                              </Tooltip>
                             </div>
                           </div>
                           </div>
@@ -710,30 +721,36 @@ const submit = async () => {
                           >
                             <i class="pi pi-bars" aria-hidden="true" />
                           </span>
-                          <IconButton
-                            icon="pi pi-arrow-up"
-                            kind="outlined"
-                            size="large"
-                            aria-label="Move behavior up"
-                            :disabled="submitting || bIdx === 0"
-                            @click="moveBehavior(bIdx, -1)"
-                          />
-                          <IconButton
-                            icon="pi pi-arrow-down"
-                            kind="outlined"
-                            size="large"
-                            aria-label="Move behavior down"
-                            :disabled="submitting || bIdx === form.behaviors.length - 1"
-                            @click="moveBehavior(bIdx, 1)"
-                          />
-                          <IconButton
-                            icon="pi pi-trash"
-                            kind="outlined"
-                            size="large"
-                            aria-label="Remove behavior"
-                            :disabled="submitting || form.behaviors.length <= 1"
-                            @click="removeBehavior(bIdx)"
-                          />
+                          <Tooltip text="Move behavior up">
+                            <IconButton
+                              icon="pi pi-arrow-up"
+                              kind="outlined"
+                              size="large"
+                              aria-label="Move behavior up"
+                              :disabled="submitting || bIdx === 0"
+                              @click="moveBehavior(bIdx, -1)"
+                            />
+                          </Tooltip>
+                          <Tooltip text="Move behavior down">
+                            <IconButton
+                              icon="pi pi-arrow-down"
+                              kind="outlined"
+                              size="large"
+                              aria-label="Move behavior down"
+                              :disabled="submitting || bIdx === form.behaviors.length - 1"
+                              @click="moveBehavior(bIdx, 1)"
+                            />
+                          </Tooltip>
+                          <Tooltip text="Remove behavior">
+                            <IconButton
+                              icon="pi pi-trash"
+                              kind="outlined"
+                              size="large"
+                              aria-label="Remove behavior"
+                              :disabled="submitting || form.behaviors.length <= 1"
+                              @click="removeBehavior(bIdx)"
+                            />
+                          </Tooltip>
                         </div>
                       </div>
                       </TransitionGroup>
