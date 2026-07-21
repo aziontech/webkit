@@ -3,6 +3,8 @@ name: spec-create
 description: Interactively draft `.specs/<name>.md` for a new webkit component. Owns the questions, the cross-reference with DESIGN.md and Figma, and the initial `status: draft` write. Never writes component code.
 status: active
 last_updated: 2026-05-22
+scope: webkit
+enforced_by: [no-invention, props, styling]
 ---
 
 # Skill: spec-create

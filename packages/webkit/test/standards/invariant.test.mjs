@@ -15,6 +15,7 @@ import {
   STANDARD_BY_CHECK,
   MESSAGES
 } from '../../../../.claude/hooks/_lib/authoring-checks.mjs'
+import { parseEnforcedBy } from '../../../../.claude/hooks/_lib/authoring-docs-checks.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(HERE, '../../../..')
@@ -22,6 +23,39 @@ const ROOT = resolve(HERE, '../../../..')
 const ruleIds = readdirSync(join(ROOT, '.claude/rules'))
   .filter((f) => f.endsWith('.md') && f !== 'README.md')
   .map((f) => f.replace(/\.md$/, ''))
+
+// The consumer rule population that shipped skills reference in their enforced_by.
+const CONSUMER_RULES_DIR = 'packages/webkit/cli-templates/claude/rules'
+const consumerRuleIds = readdirSync(join(ROOT, CONSUMER_RULES_DIR))
+  .filter((f) => f.endsWith('.md') && f !== 'README.md')
+  .map((f) => f.replace(/\.md$/, ''))
+
+const dirNames = (rel) =>
+  readdirSync(join(ROOT, rel), { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+
+// Both skill populations: internal (.claude/skills) and consumer (cli-templates).
+const SKILLS = [
+  ...dirNames('.claude/skills').map((id) => ({
+    id,
+    path: join('.claude/skills', id, 'SKILL.md'),
+    valid: new Set([...ruleIds, 'review'])
+  })),
+  ...dirNames('packages/webkit/cli-templates/claude/skills').map((id) => ({
+    id,
+    path: join('packages/webkit/cli-templates/claude/skills', id, 'SKILL.md'),
+    valid: new Set([...consumerRuleIds, 'ui-verify', 'review'])
+  }))
+]
+
+// Extract the raw frontmatter block so parseEnforcedBy never matches a body line.
+const frontmatterOf = (content) => {
+  const m = content.match(/^---\n([\s\S]*?)\n---/)
+  return m ? m[1] : ''
+}
+const enforcedByOf = (rel) =>
+  parseEnforcedBy(frontmatterOf(readFileSync(join(ROOT, rel), 'utf-8')))
 
 test('every rule doc is registered as a standard, and every standard has a rule doc', () => {
   const rules = new Set(ruleIds)
@@ -140,6 +174,40 @@ test('the token, spec-compliance, and story-source engines are shared by hook AN
   assert.match(ratchet, /story-source-checks\.mjs/, 'ratchet does not import the story engine')
 })
 
+test('authoring-docs hook AND ratchet share the single _lib/authoring-docs-checks engine', () => {
+  assert.ok(existsSync(join(ROOT, '.claude/hooks/_lib/authoring-docs-checks.mjs')))
+  const hook = readFileSync(join(ROOT, '.claude/hooks/validate-authoring-docs.mjs'), 'utf-8')
+  assert.match(hook, /_lib\/authoring-docs-checks\.mjs/, 'hook does not import the engine')
+  const ratchet = readFileSync(
+    join(ROOT, 'packages/webkit/scripts/check-authoring-docs.mjs'),
+    'utf-8'
+  )
+  assert.match(ratchet, /authoring-docs-checks\.mjs/, 'ratchet does not import the engine')
+})
+
+// The skill-side invariant: a skill is guidance, so on its own it is advisory. Every skill
+// (internal + consumer) declares enforced_by naming what makes it non-optional — the same
+// "nothing advisory" guarantee rules already have. Presence is also caught write-time/ratchet
+// by the engine; resolution (below) needs both rule populations, so it lives here.
+test('every skill declares a non-empty enforced_by (guidance → gate traceability)', () => {
+  const missing = SKILLS.filter((s) => enforcedByOf(s.path).length === 0).map((s) => s.id)
+  assert.deepEqual(missing, [], `skills with no enforced_by: ${missing.join(', ')}`)
+})
+
+test('every enforced_by entry resolves to a rule of its population, ui-verify, or review', () => {
+  const bad = []
+  for (const s of SKILLS) {
+    for (const e of enforcedByOf(s.path)) {
+      if (!s.valid.has(e)) bad.push(`${s.id} → "${e}"`)
+    }
+  }
+  assert.deepEqual(
+    bad,
+    [],
+    `unresolved enforced_by entries (not a rule of the skill's population / ui-verify / review): ${bad.join(', ')}`
+  )
+})
+
 // The gates that may appear as `surface: 'ci'` — a typo or a fictional enforcer here is
 // exactly the failure mode that let the toolkit job no-op on a ghost package name.
 const CI_ENFORCERS = new Set([
@@ -152,7 +220,8 @@ const CI_ENFORCERS = new Set([
   'vuejs-accessibility',
   'storybook-build',
   'vitest',
-  'check-tests'
+  'check-tests',
+  'check-authoring-docs'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {

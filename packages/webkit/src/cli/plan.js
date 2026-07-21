@@ -40,6 +40,9 @@ const DEV_DEPS = [
   'eslint',
   'stylelint',
   'vue-eslint-parser',
+  // Static a11y lint for .vue composition — backs the accessibility skill with a blocking
+  // floor (the runtime half is axe, run by the webkit-ui-verifier agent).
+  'eslint-plugin-vuejs-accessibility',
   // TS sub-parser: the standards mandate <script setup lang="ts">, which
   // vue-eslint-parser alone cannot parse.
   '@typescript-eslint/parser',
@@ -48,6 +51,18 @@ const DEV_DEPS = [
   'postcss-html',
   'postcss-scss',
   'husky'
+]
+
+// Style pipeline deps, pinned to explicit ranges (NOT "latest"). @aziontech/theme ships a
+// Tailwind v4 stylesheet (`@import "tailwindcss"` in its globals), so the consumer runs
+// Tailwind v4 via its PostCSS plugin (`@tailwindcss/postcss`) — Vite auto-detects the
+// generated postcss.config, so no vite.config change is needed. The consumer's Tailwind must
+// still scan webkit's source for the component classes (data-[kind=…]:…) to be generated at
+// all — that is the `@source` directive in the CSS entry below; without it the components
+// render UNSTYLED. (v4 is CSS-first: no tailwind.config, no preset, no autoprefixer.)
+const STYLE_DEV_DEPS = [
+  { dep: 'tailwindcss', version: '^4.0.0' },
+  { dep: '@tailwindcss/postcss', version: '^4.0.0' }
 ]
 
 // The Claude Code bundle files, relative to templates/claude. Copied into the
@@ -72,12 +87,32 @@ const CLAUDE_BUNDLE = [
   'rules/webkit-root-element.md',
   'rules/webkit-component-states.md',
   'rules/webkit-accessibility.md',
+  'rules/webkit-motion.md',
   'rules/webkit-testid.md',
   'rules/webkit-deprecation.md',
+  // Mechanics — how to consume webkit correctly (imports, tokens, tree-shaking).
   'skills/webkit-usage/SKILL.md',
+  // UI-craft pack — umbrella + structure + foundation, then polish (build product UI on webkit).
+  'skills/webkit-ui-craft/SKILL.md',
+  'skills/webkit-ux-heuristics/SKILL.md',
+  'skills/webkit-ui-states/SKILL.md',
+  'skills/webkit-form/SKILL.md',
+  'skills/webkit-tables/SKILL.md',
+  'skills/webkit-navigation/SKILL.md',
+  'skills/webkit-baseline-ui/SKILL.md',
+  'skills/webkit-theming-dark-mode/SKILL.md',
+  'skills/webkit-data-viz/SKILL.md',
+  'skills/webkit-motion-polish/SKILL.md',
+  'skills/webkit-impeccable-polish/SKILL.md',
+  // Verify + migrate.
+  'skills/webkit-ui-verify/SKILL.md',
+  'skills/webkit-ds-adoption/SKILL.md',
+  // Specialist agents.
   'agents/webkit-expert.md',
   'agents/webkit-adopter.md',
-  'agents/webkit-reviewer.md'
+  'agents/webkit-reviewer.md',
+  'agents/webkit-ui-verifier.md',
+  'agents/webkit-adoption-auditor.md'
 ]
 
 // Marker line that guards the CLAUDE.md fragment so it is appended exactly once.
@@ -108,16 +143,31 @@ function eslintFlatConfig(severityConfig) {
   // construction standards mandate `<script setup lang="ts">` and vue-eslint-parser
   // alone cannot parse it. `severityConfig` is 'strict' or 'recommended'.
   return `import webkitPlugin from '@aziontech/webkit/eslint-plugin'
+import a11y from 'eslint-plugin-vuejs-accessibility'
 import vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
 export default [
+  // webkit rules — imports, tokens, tree-shaking, no-restyle, prefer-webkit-component,
+  // defineModel, deprecation. Every rule is an error (nothing out of standard is a warning).
   ...webkitPlugin.configs.${severityConfig},
   {
     files: ['**/*.vue'],
     languageOptions: {
       parser: vueParser,
       parserOptions: { parser: tsParser }
+    },
+    // Static a11y floor for the composition layer — the lint half of the
+    // webkit-accessibility-implementation skill (the runtime half is axe, via the
+    // webkit-ui-verifier agent). Mirrors the design system's own config.
+    plugins: { 'vuejs-accessibility': a11y },
+    rules: {
+      'vuejs-accessibility/alt-text': 'error',
+      'vuejs-accessibility/aria-props': 'error',
+      'vuejs-accessibility/aria-role': 'error',
+      'vuejs-accessibility/click-events-have-key-events': 'error',
+      'vuejs-accessibility/label-has-for': 'error',
+      'vuejs-accessibility/no-autofocus': 'error'
     }
   },
   {
@@ -127,6 +177,36 @@ export default [
 ]
 `
 }
+
+// PostCSS config: Tailwind v4's PostCSS plugin. Vite auto-detects postcss.config.mjs, so
+// this is all the wiring the consumer needs — no vite.config change. `.mjs` forces ESM
+// regardless of package.json `type`. (v4 folds autoprefixer in; no separate plugin.)
+function postcssConfig() {
+  return `export default {
+  plugins: {
+    '@tailwindcss/postcss': {}
+  }
+}
+`
+}
+
+// The CSS entry the consumer imports once (e.g. from src/main). `@import '@aziontech/theme'`
+// pulls the design system's Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + web
+// fonts) in one line; the `@source` then points Tailwind at webkit's SOURCE so its component
+// utility classes (data-[kind=…]:bg-[var(--…)]) are generated in the consumer's build —
+// node_modules is excluded from Tailwind's auto content-detection, so without this `@source`
+// the webkit components render UNSTYLED. The consumer's own src is auto-detected.
+function styleEntryContent() {
+  return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
+@import '@aziontech/theme';
+
+/* webkit is consumed as source — scan it so its component utility classes compile. */
+@source '../node_modules/@aziontech/webkit/src';
+`
+}
+
+const POSTCSS_SNIPPET_HEADER =
+  'A PostCSS config already exists — not overwriting it. Add the Tailwind v4 plugin manually:'
 
 const ESLINT_SNIPPET_HEADER =
   'An ESLint config already exists — not overwriting it. Merge the webkit preset manually:'
@@ -180,10 +260,42 @@ export function planInit(projectDir, opts = {}) {
   for (const dep of DEV_DEPS) {
     actions.push({ type: 'add-dep', dep, version: DEP_VERSION, dev: true })
   }
+  // Style pipeline deps at pinned ranges (Tailwind v4, to match the theme's v4 stylesheet).
+  for (const { dep, version } of STYLE_DEV_DEPS) {
+    actions.push({ type: 'add-dep', dep, version, dev: true })
+  }
   actions.push({
     type: 'advise',
     message:
       'Dependencies recorded in package.json — run your package manager install (npm install / pnpm install / yarn) to fetch them.'
+  })
+
+  // 1b. PostCSS (Tailwind v4) — @aziontech/theme ships a v4 stylesheet, so the consumer runs
+  //     Tailwind v4 via its PostCSS plugin; Vite auto-detects postcss.config.mjs (no
+  //     vite.config change). The CSS entry's `@source` points Tailwind at webkit's source so
+  //     its component classes compile — without it the components render unstyled. Write if
+  //     absent; otherwise print a merge snippet.
+  const existingPostcss = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
+  if (existingPostcss) {
+    actions.push({
+      type: 'advise',
+      message: `${POSTCSS_SNIPPET_HEADER}\n${postcssConfig()}`
+    })
+  } else {
+    actions.push({
+      type: 'write',
+      path: 'postcss.config.mjs',
+      content: postcssConfig(),
+      skipIfExists: true
+    })
+  }
+  // A ready-to-import CSS entry (`@import '@aziontech/theme'` + `@source` over webkit).
+  // Written only if missing; the entry-file advice below points the app at it.
+  actions.push({
+    type: 'write',
+    path: 'src/webkit.css',
+    content: styleEntryContent(),
+    skipIfExists: true
   })
 
   // 2. eslint.config.mjs — write if absent; otherwise print a merge snippet. The `.mjs`
@@ -297,7 +409,10 @@ export function planInit(projectDir, opts = {}) {
     marker: CLAUDE_FRAGMENT_MARKER
   })
 
-  // 8. Best-effort entry-file advice — never rewrites their entry file.
+  // 8. Best-effort entry-file advice — never rewrites their entry file. Points at the
+  //    generated src/webkit.css (which `@import`s the theme's v4 stylesheet + `@source`s
+  //    webkit) plus the icon font. Import webkit.css (not `@aziontech/theme` bare) so the
+  //    `@source` that compiles webkit's component classes is included.
   const entry = firstExisting(projectDir, [
     'src/main.ts',
     'src/main.js',
@@ -306,20 +421,44 @@ export function planInit(projectDir, opts = {}) {
   ])
   if (entry) {
     const src = read(join(projectDir, entry)) || ''
-    if (!src.includes('@aziontech/theme')) {
+    if (!src.includes('webkit.css') && !src.includes('@aziontech/theme')) {
       actions.push({
         type: 'advise',
-        message: `Add the design-system styles to ${entry} (import once, near the top):\nimport '@aziontech/theme'\nimport '@aziontech/icons'`
+        message: `Add the design-system styles to ${entry} (import once, near the top):\nimport './webkit.css'\nimport '@aziontech/icons'`
       })
     }
   }
+
+  // 9. Theme selection — the tokens default to LIGHT (:root). Dark is opt-in via a
+  //    data-theme attribute on <html>; say so, since nothing else in the wiring reveals it.
+  actions.push({
+    type: 'advise',
+    message:
+      'Theme: the design system defaults to LIGHT. For dark mode set <html data-theme="dark"> (or toggle it at runtime); the tokens also respond to the `.dark` class.'
+  })
 
   return actions
 }
 
 // Shared, side-effect-free helpers + constants reused by the doctor planner.
 export { firstExisting, read }
-export const ALL_DEPS = [...RUNTIME_DEPS, ...DEV_DEPS]
+export const ALL_DEPS = [...RUNTIME_DEPS, ...DEV_DEPS, ...STYLE_DEV_DEPS.map((d) => d.dep)]
+export const TAILWIND_CONFIG_CANDIDATES = [
+  'tailwind.config.js',
+  'tailwind.config.cjs',
+  'tailwind.config.mjs',
+  'tailwind.config.ts'
+]
+export const POSTCSS_CONFIG_CANDIDATES = [
+  'postcss.config.js',
+  'postcss.config.cjs',
+  'postcss.config.mjs',
+  'postcss.config.ts',
+  '.postcssrc',
+  '.postcssrc.json',
+  '.postcssrc.js',
+  '.postcssrc.cjs'
+]
 export const ESLINT_CONFIG_CANDIDATES = [
   'eslint.config.js',
   'eslint.config.mjs',
@@ -349,9 +488,12 @@ export const HUSKY_HOOK_MARKER = 'npx stylelint "**/*.{css,scss,vue}"'
 export const _internals = {
   RUNTIME_DEPS,
   DEV_DEPS,
+  STYLE_DEV_DEPS,
   DEP_VERSION,
   CLAUDE_BUNDLE,
   eslintFlatConfig,
+  postcssConfig,
+  styleEntryContent,
   STYLELINT_CONTENT,
   HUSKY_PRECOMMIT
 }

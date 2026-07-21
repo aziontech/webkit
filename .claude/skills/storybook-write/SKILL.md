@@ -3,6 +3,8 @@ name: storybook-write
 description: Write a minimal `.stories.js` for a webkit component using the canonical Button.stories.js shape. Stories are Default + one composite story per multi-option axis (Types / Sizes / Icons / …) + one story per mutually-exclusive state (Loading / Disabled / Filled / Invalid) — never one-story-per-variant. Give `parameters.docs.description.component` a short prose lead from `## Purpose`, keep `parameters.docs` a plain object literal, and give every story an explicit `source.code: toSfc(IMPORT, TEMPLATE)` (from `apps/storybook/src/stories/_shared/story-source.js`) so the Docs "Show code" panel is always a single runnable PascalCase SFC. See `.claude/rules/storybook-source.md`.
 status: active
 last_updated: 2026-06-24
+scope: webkit
+enforced_by: [storybook-source, naming]
 ---
 
 # Skill: storybook-write

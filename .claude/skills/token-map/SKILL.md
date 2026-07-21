@@ -3,6 +3,8 @@ name: token-map
 description: Map a Figma token JSON blob to DESIGN.md classes / `var(--*)` semantic tokens. Pure transformation; never edits the spec or component files.
 status: active
 last_updated: 2026-05-22
+scope: webkit
+enforced_by: [styling, migration]
 ---
 
 # Skill: token-map

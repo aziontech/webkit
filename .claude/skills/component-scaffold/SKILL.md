@@ -3,6 +3,8 @@ name: component-scaffold
 description: Write the `.vue` file(s) for a component, plus the entry in `packages/webkit/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec. For composition pattern, each sub-component lives in its own folder.
 status: active
 last_updated: 2026-05-27
+scope: webkit
+enforced_by: [no-invention, compound-api, styling, testing]
 ---
 
 # Skill: component-scaffold
