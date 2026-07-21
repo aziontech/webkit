@@ -300,11 +300,8 @@ const onRowAction = (event, value, row) => {
         </template>
       </PageHeading>
 
-      <section class="flex min-h-0 flex-1 flex-col">
-        <CardBox
-          :padded="false"
-          class="h-full"
-        >
+      <section class="flex min-h-0 flex-col">
+        <CardBox :padded="false">
           <template #content>
         <Table
           :data="applications"
@@ -315,8 +312,6 @@ const onRowAction = (event, value, row) => {
           paginated
           :page-size="8"
           :border="false"
-          max-height="100%"
-          class="h-full"
           @row-click="openApp"
         >
           <template #toolbar>
