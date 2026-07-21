@@ -255,11 +255,12 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
       '.claude/skills/webkit-usage/SKILL.md',
-      // UI-craft pack (13 skills after the redundancy/false-positive pass).
+      // UI-craft pack (14 skills: the redundancy/false-positive pass + webkit-tables).
       '.claude/skills/webkit-ui-craft/SKILL.md',
       '.claude/skills/webkit-ux-heuristics/SKILL.md',
       '.claude/skills/webkit-ui-states/SKILL.md',
       '.claude/skills/webkit-form/SKILL.md',
+      '.claude/skills/webkit-tables/SKILL.md',
       '.claude/skills/webkit-navigation/SKILL.md',
       '.claude/skills/webkit-baseline-ui/SKILL.md',
       '.claude/skills/webkit-theming-dark-mode/SKILL.md',

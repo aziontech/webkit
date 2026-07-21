@@ -2,7 +2,7 @@
 name: webkit-baseline-ui
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-07-21
 scope: general
 enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
 ---
@@ -40,7 +40,12 @@ hand-rolled, nothing hardcoded.
   `node_modules/@aziontech/webkit/catalog.json` (`imports`) — every key is a real subpath (e.g.
   `@aziontech/webkit/button`, `@aziontech/webkit/input-text`, `@aziontech/webkit/dialog`,
   `@aziontech/webkit/dropdown-menu`).
-- **NEVER** hand-roll a `<button>`, input, modal, tooltip, dropdown, or tabs that webkit ships.
+- **NEVER** hand-roll a `<button>`, input, modal, tooltip, dropdown, tabs, **or divider** that webkit
+  ships — this includes a separator. A horizontal/vertical rule is **`@aziontech/webkit/divider`**
+  (`<Divider />` / `<Divider orientation="vertical" />`), **never** a hand-rolled `<hr>` or a
+  `<div class="border-t …">` / `<div class="h-px bg-…">`. If you're reaching for a border utility to draw
+  a line between sections, that's the Divider component. (A real, observed failure: a `<div>` with border
+  classes standing in for the Divider — do not.)
 - **NEVER** mix another component library's primitives onto the same surface.
 - **MUST** use `@aziontech/webkit/icon-button` with an `aria-label` for icon-only actions.
 - **MUST** use `@aziontech/webkit/utils/cn` (clsx + tailwind-merge) for any class composition.

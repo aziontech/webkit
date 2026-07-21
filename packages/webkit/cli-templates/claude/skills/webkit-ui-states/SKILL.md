@@ -2,7 +2,7 @@
 name: webkit-ui-states
 description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Message), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-07-21
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, ui-verify]
 ---
@@ -94,6 +94,18 @@ Rules of thumb:
 - **A view can do both in sequence:** Skeletons while the initial data loads, then Button `:loading`
   - `:disabled` fields when the user submits the now-populated form. Two different flags, two
     different affordances.
+
+For **ongoing activity** that is neither first paint nor a committed submit, pick by whether you can
+count the work:
+
+- **Indeterminate / streaming → `Spinner`, low emphasis, always with a label.** "Preparing
+  repository…", "Provisioning… 12s", or the running step in a multi-step list — a `Spinner` beside
+  text, never a bare spinner with no label. Remove it the instant the process settles.
+- **A measurable whole → `ProgressBar` (`:value` / `:max`).** When you can compute "N of M done"
+  (an upload, a deploy with countable phases), show forward motion, not a spinner. Remove it on
+  completion.
+- **Both together only** when you have per-unit liveness _and_ a countable whole (a per-step `Spinner`
+  over an overall `ProgressBar`). Every ongoing affordance clears the moment the flow finishes.
 
 The state-matrix render — Skeleton (data in), then Message / EmptyState / data:
 

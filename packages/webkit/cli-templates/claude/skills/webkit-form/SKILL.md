@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, CardBox with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Message callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-07-21
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -47,6 +47,48 @@ Pick one per form; don't mix row-fields and stacked-fields in the same section.
 - The user asks "is this form accessible", "wire up the labels", "the screen reader skips this",
   "where do errors go", "which layout for this form".
 - After `/webkit-ux-heuristics` establishes the states and before `/webkit-ui-states` locks the async submit.
+
+## Reach for the complete `Field*` first — loose inputs are the fallback
+
+webkit ships two tiers of form control. **Default to the complete `Field*` component**; reach for a loose
+input only when no `Field*` fits.
+
+- **`Field*` (complete, preferred):** `FieldText`, `FieldTextarea`, `FieldPassword`, `FieldPhoneNumber`,
+  `FieldRadio` / `FieldRadioBlock`, `FieldCheckbox` / `FieldCheckboxBlock`, `FieldSwitch` /
+  `FieldSwitchBlock`, `FieldTextSwitch`, `FieldInputGroup`. Each bundles the **label ↔ control
+  association**, the on-field `HelperText`, and the `required` / `invalid` a11y wiring (`aria-required` /
+  `aria-invalid` / `aria-describedby`) that this skill otherwise asks you to wire by hand. Using it means
+  the accessible-name / error-association rules below are satisfied **by construction**.
+- **Loose (`InputText`, `InputNumber`, `Textarea`, `Select`, `Checkbox`, `RadioButton`, `Switch`,
+  `InputGroup`, …):** the bare control, no label/helper/validation shell. Use one only when the matching
+  `Field*` genuinely doesn't fit — a composed `Select` inside a custom row, a control in an `Item.Actions`
+  cell, a bespoke layout the `Field*` wrapper can't express. When you do, **you** own the label
+  association + `aria-describedby` per the rules below.
+
+This is a **preference, not a prohibition**: check whether a `Field*` covers the need first; if it does,
+use it; if it truly doesn't, drop to the loose control and wire the a11y yourself.
+
+```vue
+<!-- ✅ Preferred — the field owns label + helper + validation -->
+<FieldText
+  id="app-name"
+  label="Application name"
+  v-model="form.name"
+  :invalid="!!errors.name"
+  :helper-text="errors.name || 'Shown in the dashboard.'"
+  required
+/>
+
+<!-- ⚠️ Loose — only when no Field* fits; now YOU wire the label + aria-describedby -->
+<Label for="app-name">Application name</Label>
+<InputText
+  id="app-name"
+  v-model="form.name"
+  aria-describedby="app-name-help"
+  :invalid="!!errors.name"
+/>
+<HelperText id="app-name-help">{{ errors.name || 'Shown in the dashboard.' }}</HelperText>
+```
 
 ## Label association — every control names itself (both approaches)
 
@@ -928,6 +970,9 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## Definition of Done
 
+- [ ] Every control is a complete `Field*` (`FieldText`, `FieldTextarea`, `FieldPassword`, `FieldRadioBlock`,
+      `FieldSwitch`, …) unless no `Field*` fits; a loose input (`InputText`, `Select`, …) is used only as
+      the fallback, and then the label + `aria-describedby` are wired by hand.
 - [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / CardBox with
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
       Dialog, or an ItemGroup — single block _or_ multiple overline-titled sections); one save per card only
