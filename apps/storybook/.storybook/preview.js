@@ -1,4 +1,3 @@
-import '@aziontech/theme/globals.css'
 import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'

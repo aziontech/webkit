@@ -48,16 +48,13 @@
   "files": [
     "src/",
     "dist/",
-    "LICENSE",
-    "tokens.js"
+    "LICENSE"
   ],
   "exports": {
     ".": "./dist/v4/globals.css",
     "./animations": "./src/tokens/primitives/animations/animate.js",
     "./colors": "./src/tokens/primitives/colors/colors.js",
     "./texts": "./src/tokens/semantic/texts.data.js",
-    "./theme-colors": "./src/scripts/compile-theme.js",
-    "./globals.css": "./dist/v4/globals.css",
-    "./globals.scss": "./dist/v4/globals.scss"
+    "./theme-colors": "./src/scripts/compile-theme.js"
   }
 }
