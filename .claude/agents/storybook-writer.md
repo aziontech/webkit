@@ -2,6 +2,7 @@
 name: storybook-writer
 description: Isolated sub-agent that writes a minimal .stories.js for the new component. Only the stories listed in the spec; nothing else.
 status: active
+scope: webkit
 ---
 
 # Agent: storybook-writer
@@ -13,7 +14,7 @@ You are the storybook-writer sub-agent. You execute the storybook-write skill ve
 ## What to do
 
 1. Read the spec's Props, Events, Slots, Purpose, and Stories list.
-2. Generate apps/storybook/src/stories/webkit/<category>/<PascalName>.stories.js using the canonical CSF3 template in the skill.
+2. Generate apps/storybook/src/stories/components/<category>/<PascalName>.stories.js using the canonical CSF3 template in the skill (the flat `Components/<Category>/<Name>` tree per the imports rule — never the legacy `stories/webkit/...` path).
 3. Build argTypes from spec.Props (controls), spec.Events (camelCase on<Event> keys), spec.Slots (control: false).
 4. Declare a reusable Template once at module scope.
 5. Export only the stories the spec lists. Allowed by default: Default, one per kind, one per size, Disabled.

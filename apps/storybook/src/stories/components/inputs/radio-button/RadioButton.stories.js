@@ -103,7 +103,6 @@ const Template = (args) => ({
     )
     const onUpdate = (next) => {
       selected.value = next
-      args['onUpdate:modelValue']?.(next)
     }
     return { args, selected, onUpdate }
   },

@@ -2,6 +2,7 @@
 name: structure-decider
 description: Isolated sub-agent that decides `monolithic` vs `composition` using the shadcn-vue rule. Emits two lines (verdict + rationale).
 status: active
+scope: webkit
 ---
 
 # Agent: structure-decider
