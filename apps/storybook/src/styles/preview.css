@@ -3,7 +3,7 @@
  * the main Tailwind entry (`@import "tailwindcss"`). Point it at the theme's
  * generated globals so `@apply` can resolve utilities.
  */
-@reference "@aziontech/theme/globals.css";
+@reference "@aziontech/theme";
 
 
 html,
