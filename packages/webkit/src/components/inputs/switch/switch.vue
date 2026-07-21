@@ -70,11 +70,9 @@
   const HANDLE_CLASS =
     'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-full bg-[var(--text-muted)] transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-4 group-data-[checked]:bg-[var(--bg-canvas)]'
 
-  const LOCK_OFF_CLASS =
-    'pi pi-lock text-body-xxs leading-none text-[var(--bg-surface)] group-data-[checked]:hidden'
-
-  const LOCK_ON_CLASS =
-    'pi pi-lock-open text-body-xxs leading-none text-[var(--success-contrast)] hidden group-data-[checked]:inline-block'
+  const LOCK_ICON_CLASS = 'pi text-body-xxs leading-none'
+  const LOCK_OFF_CLASS = `${LOCK_ICON_CLASS} pi-lock text-[var(--bg-surface)]`
+  const LOCK_ON_CLASS = `${LOCK_ICON_CLASS} pi-lock-open text-[var(--success-contrast)]`
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 </script>
@@ -102,12 +100,7 @@
       <i
         v-if="kind === 'privacy'"
         aria-hidden="true"
-        :class="LOCK_OFF_CLASS"
-      />
-      <i
-        v-if="kind === 'privacy'"
-        aria-hidden="true"
-        :class="LOCK_ON_CLASS"
+        :class="isChecked ? LOCK_ON_CLASS : LOCK_OFF_CLASS"
       />
     </span>
   </button>
