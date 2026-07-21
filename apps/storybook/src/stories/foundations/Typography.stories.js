@@ -1,5 +1,5 @@
-import TypographyPreview from '../../foundations/components/TypographyPreview.vue'
 import { PageContainer, PageHeader } from '../../foundations/components/layout/index.js'
+import TypographyPreview from '../../foundations/components/TypographyPreview.vue'
 
 export default {
   title: 'Foundations/Typography',
@@ -12,8 +12,6 @@ export default {
         component:
           'The typography foundations catalog: every semantic text class (`.text-*`) generated from `@aziontech/theme/texts`. Each row renders a sample in its own class and exposes the class name — click a row to copy it.'
       },
-      // Token/typography catalog page: a copy-paste SFC is not meaningful here, so the
-      // "Show code" panel stays hidden (documented foundations-catalog exemption).
       canvas: { sourceState: 'none' }
     }
   }
@@ -34,6 +32,7 @@ export const Overview = {
     `
   }),
   parameters: {
+    visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
       description: {
         story:

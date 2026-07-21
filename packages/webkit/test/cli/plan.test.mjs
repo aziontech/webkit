@@ -55,11 +55,16 @@ test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () =
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
+    const deps = findAddDeps(plan)
     const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.mjs')
     assert.ok(eslint, 'expected eslint.config.mjs write action')
     assert.match(eslint.content, /@aziontech\/webkit\/eslint-plugin/)
     assert.match(eslint.content, /configs\.strict/)
     assert.match(eslint.content, /vue-eslint-parser/)
+    // Static a11y floor is wired (the lint half of the accessibility skill).
+    assert.match(eslint.content, /eslint-plugin-vuejs-accessibility/)
+    assert.match(eslint.content, /vuejs-accessibility\/click-events-have-key-events/)
+    assert.ok(deps.includes('eslint-plugin-vuejs-accessibility'), 'missing a11y lint dep')
 
     const stylelint = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
     assert.ok(stylelint, 'expected .stylelintrc.json write action')
@@ -67,6 +72,74 @@ test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () =
     // stylelint config wires the .vue / .scss custom syntaxes
     assert.match(stylelint.content, /postcss-html/)
     assert.match(stylelint.content, /postcss-scss/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const deps = findAddDeps(plan)
+    // Style pipeline deps present and pinned to a range (NOT "latest").
+    for (const d of ['tailwindcss', '@tailwindcss/postcss']) {
+      assert.ok(deps.includes(d), `missing style dep ${d}`)
+      const action = plan.find((a) => a.type === 'add-dep' && a.dep === d)
+      assert.notEqual(action.version, 'latest', `${d} must be pinned, not "latest"`)
+      assert.equal(action.dev, true)
+    }
+    // Tailwind v4 specifically (matches the theme's v4 stylesheet).
+    const tw = plan.find((a) => a.type === 'add-dep' && a.dep === 'tailwindcss')
+    assert.match(tw.version, /^\^4\./, 'tailwind must be v4 to match the theme stylesheet')
+    // v4 is CSS-first: no autoprefixer, no tailwind.config.
+    assert.ok(!deps.includes('autoprefixer'), 'autoprefixer is not needed under Tailwind v4')
+    const twCfg = plan.find(
+      (a) => a.type === 'write' && a.path && a.path.startsWith('tailwind.config')
+    )
+    assert.equal(twCfg, undefined, 'Tailwind v4 is CSS-first — no tailwind.config should be written')
+
+    const pcCfg = plan.find((a) => a.type === 'write' && a.path === 'postcss.config.mjs')
+    assert.ok(pcCfg, 'expected postcss.config.mjs write action')
+    assert.match(pcCfg.content, /@tailwindcss\/postcss/)
+
+    const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
+    assert.ok(cssEntry, 'expected src/webkit.css write action')
+    assert.match(cssEntry.content, /@import '@aziontech\/theme'/)
+    // Critically, it must @source webkit's source so component classes compile.
+    assert.match(cssEntry.content, /@source[^\n]*@aziontech\/webkit\/src/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('an existing postcss config is advised, not overwritten', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'postcss.config.js'), 'export default {}\n')
+    const plan = planInit(dir, {})
+    const write = plan.find((a) => a.type === 'write' && a.path.startsWith('postcss.config'))
+    assert.equal(write, undefined, 'must not plan to write over an existing postcss config')
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /PostCSS config already exists/.test(a.message)
+    )
+    assert.ok(advise, 'expected a postcss merge-snippet advice')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit advises the LIGHT default + data-theme dark opt-in', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const advise = plan.find(
+      (a) =>
+        a.type === 'advise' &&
+        /defaults to LIGHT/.test(a.message) &&
+        /data-theme="dark"/.test(a.message)
+    )
+    assert.ok(advise, 'expected a theme-selection advice mentioning the dark opt-in')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -178,14 +251,43 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-root-element.md',
       '.claude/rules/webkit-component-states.md',
       '.claude/rules/webkit-accessibility.md',
+      '.claude/rules/webkit-motion.md',
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
       '.claude/skills/webkit-usage/SKILL.md',
+      // UI-craft pack (14 skills: the redundancy/false-positive pass + webkit-tables).
+      '.claude/skills/webkit-ui-craft/SKILL.md',
+      '.claude/skills/webkit-ux-heuristics/SKILL.md',
+      '.claude/skills/webkit-ui-states/SKILL.md',
+      '.claude/skills/webkit-form/SKILL.md',
+      '.claude/skills/webkit-tables/SKILL.md',
+      '.claude/skills/webkit-navigation/SKILL.md',
+      '.claude/skills/webkit-baseline-ui/SKILL.md',
+      '.claude/skills/webkit-theming-dark-mode/SKILL.md',
+      '.claude/skills/webkit-data-viz/SKILL.md',
+      '.claude/skills/webkit-motion-polish/SKILL.md',
+      '.claude/skills/webkit-impeccable-polish/SKILL.md',
+      '.claude/skills/webkit-ui-verify/SKILL.md',
+      '.claude/skills/webkit-ds-adoption/SKILL.md',
       '.claude/agents/webkit-expert.md',
       '.claude/agents/webkit-adopter.md',
-      '.claude/agents/webkit-reviewer.md'
+      '.claude/agents/webkit-reviewer.md',
+      '.claude/agents/webkit-ui-verifier.md',
+      '.claude/agents/webkit-adoption-auditor.md'
     ]) {
       assert.ok(copies.includes(rel), `missing bundle copy ${rel}`)
+    }
+    // Dropped (false positives) and merged skills must NOT ship — locks the redundancy pass.
+    for (const gone of [
+      '.claude/skills/webkit-performance-ux/SKILL.md',
+      '.claude/skills/webkit-content-microcopy/SKILL.md',
+      '.claude/skills/webkit-i18n-readiness/SKILL.md',
+      '.claude/skills/webkit-responsive-layout/SKILL.md',
+      '.claude/skills/webkit-usability/SKILL.md',
+      '.claude/skills/webkit-delight/SKILL.md',
+      '.claude/skills/webkit-accessibility-implementation/SKILL.md'
+    ]) {
+      assert.ok(!copies.includes(gone), `dropped/merged skill must not ship: ${gone}`)
     }
   } finally {
     rmSync(dir, { recursive: true, force: true })

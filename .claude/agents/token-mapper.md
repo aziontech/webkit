@@ -2,6 +2,7 @@
 name: token-mapper
 description: Isolated sub-agent that maps a Figma token JSON to DESIGN.md classes / `var(--*)` tokens. Pure read; emits a Markdown mapping table.
 status: active
+scope: webkit
 ---
 
 # Agent: token-mapper

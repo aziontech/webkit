@@ -9,6 +9,28 @@ How to style components under `packages/webkit/src/components/webkit/` using tok
 
 ---
 
+## Stack baseline
+
+### Tailwind v4 (CSS-first)
+
+`@aziontech/webkit` targets **Tailwind v4 only**. `packages/theme/src/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/v4/globals.{css,scss}` — and consumers import it directly:
+
+```css
+@import '@aziontech/theme/globals.css';
+```
+
+That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. Utility detection is done by the `@source "../../../webkit/src"` directive inside the emitted globals — that is what makes arbitrary utilities like `bg-[var(--primary)]` or `p-[var(--spacing-md)]` work in webkit components without any extra config on the consumer side.
+
+Integration points:
+
+- **Vite / Storybook:** register `@tailwindcss/vite` once. See [`apps/storybook/.storybook/main.js`](../../apps/storybook/.storybook/main.js).
+- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/storybook/src/styles/preview.css`](../../apps/storybook/src/styles/preview.css).
+- **`!important`:** use the v4 suffix syntax (`opacity-50!`, `size-10!`). The v3 prefix (`!opacity-50`) is forbidden.
+
+Do not add a `tailwind.config.*` file to any package under `packages/`. All theme customization lives in the token sources under `packages/theme/src/tokens/`, is compiled into `@theme { … }`, and reaches components via CSS custom properties.
+
+---
+
 ## Typography
 
 ### Source of truth

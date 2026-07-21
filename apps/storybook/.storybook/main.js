@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 
 /** @type {import('@storybook/vue3-vite').StorybookConfig} */
@@ -40,6 +41,15 @@ const config = {
       config.plugins.push(vue())
     } else {
       config.plugins.splice(docgenIdx, 0, vue())
+    }
+
+    // Tailwind v4 CSS-first pipeline: resolves `@import "tailwindcss"` in
+    // `@aziontech/theme/globals.css` and scans project sources for utility usage.
+    config.plugins.push(tailwindcss())
+
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...(config.resolve.alias || {})
     }
 
     // Enable dependency pre-bundling for faster rebuilds

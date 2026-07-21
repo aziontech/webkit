@@ -1,6 +1,10 @@
 ---
 name: webkit-usage
 description: Consume the @aziontech/webkit design system correctly. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — how to find the right component, import it with the flat path, style with @aziontech/theme tokens, and keep bundles small.
+scope: general
+status: active
+last_updated: 2026-07-20
+enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-performance]
 ---
 
 # Skill: webkit-usage

@@ -2,7 +2,7 @@
 
 This is the Storybook documentation application for the `@aziontech/webkit` component library. It provides an interactive documentation and development environment for all webkit components, foundations, and composed templates.
 
-> This app consumes the **dev channel** of the library. Stories import from `@aziontech/webkit/*`, which Storybook aliases to the workspace package `@aziontech/webkit.dev` (see `.storybook/main.js`). You don't need to change import paths in stories.
+> Stories import from `@aziontech/webkit/*`, resolved from the workspace package `@aziontech/webkit`.
 
 ## Technology Stack
 
@@ -12,7 +12,7 @@ This is the Storybook documentation application for the `@aziontech/webkit` comp
 - **Tailwind CSS 3.3.x** — Utility-first CSS;
 - **Sass 1.86.x** — Stylesheet preprocessor;
 - **PrimeVue 3.35.0 / PrimeFlex 3.3.x / VeeValidate 4.15.x** — power the legacy `Field*` / `Input*` form stories;
-- **Internal workspace packages** — `@aziontech/webkit.dev` (components), `@aziontech/icons` (icon set), `@aziontech/theme` (design tokens & theming).
+- **Internal workspace packages** — `@aziontech/webkit` (components), `@aziontech/icons` (icon set), `@aziontech/theme` (design tokens & theming).
 
 Key Storybook addons: `@storybook/addon-essentials`, `@storybook/addon-links`, `@storybook/addon-themes`, `@whitespace/storybook-addon-html`.
 
@@ -176,7 +176,7 @@ export const Default = {
 }
 ```
 
-> Imports use the `@aziontech/webkit/*` paths; Storybook resolves them to `@aziontech/webkit.dev` automatically. New component stories follow the canonical `Button.stories.js` shape — see [`.claude/skills/storybook-write`](../../.claude/skills/storybook-write/SKILL.md).
+> Imports use the `@aziontech/webkit/*` paths. New component stories follow the canonical `Button.stories.js` shape — see [`.claude/skills/storybook-write`](../../.claude/skills/storybook-write/SKILL.md).
 
 ## Adding New Stories
 

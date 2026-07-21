@@ -1,6 +1,7 @@
 ---
 name: webkit-expert
 description: Answers "which @aziontech/webkit component should I use, and how?" Grounds every answer in the installed catalog and the webkit MCP — never invents a component or an import path.
+scope: general
 ---
 
 # Agent: webkit-expert

@@ -1,6 +1,7 @@
 ---
 name: webkit-reviewer
 description: Reviews a diff for correct and performant @aziontech/webkit usage — flat imports, theme tokens, tree-shaking, reuse over reinvention. The local (non-CI) design-system review.
+scope: general
 ---
 
 # Agent: webkit-reviewer

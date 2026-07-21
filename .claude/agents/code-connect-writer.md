@@ -2,6 +2,7 @@
 name: code-connect-writer
 description: Isolated sub-agent that writes the <name>.figma.ts Code Connect mapping next to the .vue. Skips itself when @figma/code-connect is not installed.
 status: active
+scope: webkit
 ---
 
 # Agent: code-connect-writer

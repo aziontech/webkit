@@ -71,14 +71,14 @@
   const GLOW_CLASS =
     'absolute inset-0 pointer-events-none ' +
     'animate-spin [animation-duration:8s] [animation-timing-function:linear] ' +
-    '[background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-primary-500))] ' +
+    '[background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] ' +
     '[filter:blur(12px)] ' +
     'motion-reduce:animate-none ' +
     'group-data-[inactive]/highlight:hidden'
 
   const BASE_CLASS =
     'absolute inset-px pointer-events-none rounded-[inherit] ' +
-    '[background-image:linear-gradient(120deg,var(--color-accent-900)_17%,var(--color-accent-100)_53%,var(--color-accent-600)_96%)] ' +
+    '[background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] ' +
     'transition-opacity duration-300 ease-out motion-reduce:transition-none ' +
     'group-hover/highlight:opacity-25 ' +
     'group-data-[inactive]/highlight:[background-image:none] ' +

@@ -2,6 +2,7 @@
 name: spec-author
 description: Isolated sub-agent that drafts a `.specs/<name>.md` interactively. Output: a single `.md` file with `status: draft`. Never writes component code.
 status: active
+scope: webkit
 ---
 
 # Agent: spec-author

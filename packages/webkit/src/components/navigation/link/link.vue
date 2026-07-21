@@ -53,7 +53,7 @@
     'data-[size=large]:text-button-lg',
     'data-[size=medium]:text-button-md',
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed',
-    'data-[disabled]:!text-[var(--text-disabled)] data-[disabled]:[&_.link-ghost]:hidden',
+    'data-[disabled]:text-[var(--text-disabled)]! data-[disabled]:[&_.link-ghost]:hidden',
     attrs['class']
   ])
 
