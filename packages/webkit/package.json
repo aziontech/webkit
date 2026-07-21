@@ -46,7 +46,7 @@
     "webkit-mcp": "./src/mcp/server.js"
   },
   "dependencies": {
-    "@aziontech/theme": "workspace:*",
+    "@aziontech/theme": "^4.0.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@tanstack/vue-table": "^8.21.3",
     "@vueuse/core": "^10.11.1",
