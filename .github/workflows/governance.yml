@@ -82,7 +82,7 @@ jobs:
         working-directory: packages/webkit
 
       - name: Run TruffleHog (secret detection)
-        uses: trufflesecurity/trufflehog@8feb77b20aeb64366d106b08f2941287755c173b # main
+        uses: trufflesecurity/trufflehog@38999f88bed87fce0861ac313cbca06267b439c7 # main
         with:
           path: ./
           base: ${{ github.event.repository.default_branch }}
