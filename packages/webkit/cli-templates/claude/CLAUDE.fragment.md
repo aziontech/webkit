@@ -20,9 +20,10 @@ layer you're in, because only one of them is optional:
   (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`) — never hex, `rgb`, `hsl`, or Tailwind palette.
 - **Never restyle a webkit component.** No `class`/`:class`/`style` on its tag — compose inside its
   slots or use its props.
-- **Styles + theme.** Load `src/webkit.css` once at the app entry (tokens + the `@tailwind`
-  layers) — a bare `import '@aziontech/theme'` loads NO styles. Light is the default; for dark set
-  `<html data-theme="dark">`.
+- **Styles + theme.** Load `src/webkit.css` once at the app entry — it `@import`s the theme's
+  Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + fonts) and `@source`s webkit so its
+  component classes compile. Import `webkit.css`, not `@aziontech/theme` bare (the `@source` is what
+  compiles webkit's classes). Light is the default; for dark set `<html data-theme="dark">`.
 - **Accessible & keyboard-operable.** Label every field, keep a visible focus ring, mirror state in
   ARIA, no click handler without a key handler.
 - **Small bundles.** Prefer the `<name>-root` path (or specific sub-components), import icons

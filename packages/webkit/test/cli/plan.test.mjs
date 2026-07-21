@@ -83,47 +83,47 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     const plan = planInit(dir, {})
     const deps = findAddDeps(plan)
     // Style pipeline deps present and pinned to a range (NOT "latest").
-    for (const d of ['tailwindcss', 'postcss', 'autoprefixer']) {
+    for (const d of ['tailwindcss', '@tailwindcss/postcss']) {
       assert.ok(deps.includes(d), `missing style dep ${d}`)
       const action = plan.find((a) => a.type === 'add-dep' && a.dep === d)
       assert.notEqual(action.version, 'latest', `${d} must be pinned, not "latest"`)
       assert.equal(action.dev, true)
     }
-    // Tailwind v3 specifically (matches the theme preset).
+    // Tailwind v4 specifically (matches the theme's v4 stylesheet).
     const tw = plan.find((a) => a.type === 'add-dep' && a.dep === 'tailwindcss')
-    assert.match(tw.version, /^\^3\./, 'tailwind must be v3 to match the theme preset')
-
-    const twCfg = plan.find((a) => a.type === 'write' && a.path === 'tailwind.config.mjs')
-    assert.ok(twCfg, 'expected tailwind.config.mjs write action')
-    assert.match(twCfg.content, /@aziontech\/theme\/tailwind-preset/)
-    // Critically, it must scan webkit's source so component classes compile.
-    assert.match(twCfg.content, /node_modules\/@aziontech\/webkit\/src/)
+    assert.match(tw.version, /^\^4\./, 'tailwind must be v4 to match the theme stylesheet')
+    // v4 is CSS-first: no autoprefixer, no tailwind.config.
+    assert.ok(!deps.includes('autoprefixer'), 'autoprefixer is not needed under Tailwind v4')
+    const twCfg = plan.find(
+      (a) => a.type === 'write' && a.path && a.path.startsWith('tailwind.config')
+    )
+    assert.equal(twCfg, undefined, 'Tailwind v4 is CSS-first — no tailwind.config should be written')
 
     const pcCfg = plan.find((a) => a.type === 'write' && a.path === 'postcss.config.mjs')
     assert.ok(pcCfg, 'expected postcss.config.mjs write action')
-    assert.match(pcCfg.content, /tailwindcss/)
-    assert.match(pcCfg.content, /autoprefixer/)
+    assert.match(pcCfg.content, /@tailwindcss\/postcss/)
 
     const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
     assert.ok(cssEntry, 'expected src/webkit.css write action')
-    assert.match(cssEntry.content, /@aziontech\/theme\/globals\.css/)
-    assert.match(cssEntry.content, /@tailwind base/)
+    assert.match(cssEntry.content, /@import '@aziontech\/theme'/)
+    // Critically, it must @source webkit's source so component classes compile.
+    assert.match(cssEntry.content, /@source[^\n]*@aziontech\/webkit\/src/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('an existing tailwind config is advised, not overwritten', () => {
+test('an existing postcss config is advised, not overwritten', () => {
   const dir = makeProject()
   try {
-    writeFileSync(join(dir, 'tailwind.config.js'), 'export default {}\n')
+    writeFileSync(join(dir, 'postcss.config.js'), 'export default {}\n')
     const plan = planInit(dir, {})
-    const write = plan.find((a) => a.type === 'write' && a.path.startsWith('tailwind.config'))
-    assert.equal(write, undefined, 'must not plan to write over an existing tailwind config')
+    const write = plan.find((a) => a.type === 'write' && a.path.startsWith('postcss.config'))
+    assert.equal(write, undefined, 'must not plan to write over an existing postcss config')
     const advise = plan.find(
-      (a) => a.type === 'advise' && /Tailwind config already exists/.test(a.message)
+      (a) => a.type === 'advise' && /PostCSS config already exists/.test(a.message)
     )
-    assert.ok(advise, 'expected a tailwind merge-snippet advice')
+    assert.ok(advise, 'expected a postcss merge-snippet advice')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

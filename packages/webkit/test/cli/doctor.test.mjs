@@ -23,7 +23,7 @@ test('doctor on a bare project fails the required checks', () => {
     assert.equal(statusOf(report, 'webkit catalog'), 'fail')
     assert.equal(statusOf(report, 'eslint config'), 'fail')
     assert.equal(statusOf(report, 'stylelint config'), 'fail')
-    assert.equal(statusOf(report, 'tailwind config'), 'fail')
+    assert.equal(statusOf(report, 'webkit.css @source'), 'fail')
     assert.equal(statusOf(report, 'mcp server'), 'fail')
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -37,7 +37,7 @@ test('doctor after init passes the config/mcp/husky/style checks', () => {
     const report = planDoctor(dir)
     assert.equal(statusOf(report, 'eslint config'), 'ok')
     assert.equal(statusOf(report, 'stylelint config'), 'ok')
-    assert.equal(statusOf(report, 'tailwind config'), 'ok')
+    assert.equal(statusOf(report, 'webkit.css @source'), 'ok')
     assert.equal(statusOf(report, 'postcss config'), 'ok')
     assert.equal(statusOf(report, 'mcp server'), 'ok')
     assert.equal(statusOf(report, 'husky prepare script'), 'ok')

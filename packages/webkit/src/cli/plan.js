@@ -53,15 +53,16 @@ const DEV_DEPS = [
   'husky'
 ]
 
-// Style pipeline deps pinned to explicit ranges (NOT "latest"): webkit ships source with
-// Tailwind v3 utility classes and @aziontech/theme exports a v3 preset, so a floating
-// "latest" would pull Tailwind v4 and break the preset. The consumer's Tailwind must scan
-// webkit's source for the component classes (data-[kind=…]:…) to be generated at all —
-// without this pipeline the components render UNSTYLED. See the tailwind.config below.
+// Style pipeline deps, pinned to explicit ranges (NOT "latest"). @aziontech/theme ships a
+// Tailwind v4 stylesheet (`@import "tailwindcss"` in its globals), so the consumer runs
+// Tailwind v4 via its PostCSS plugin (`@tailwindcss/postcss`) — Vite auto-detects the
+// generated postcss.config, so no vite.config change is needed. The consumer's Tailwind must
+// still scan webkit's source for the component classes (data-[kind=…]:…) to be generated at
+// all — that is the `@source` directive in the CSS entry below; without it the components
+// render UNSTYLED. (v4 is CSS-first: no tailwind.config, no preset, no autoprefixer.)
 const STYLE_DEV_DEPS = [
-  { dep: 'tailwindcss', version: '^3.4.0' },
-  { dep: 'postcss', version: '^8.4.0' },
-  { dep: 'autoprefixer', version: '^10.4.0' }
+  { dep: 'tailwindcss', version: '^4.0.0' },
+  { dep: '@tailwindcss/postcss', version: '^4.0.0' }
 ]
 
 // The Claude Code bundle files, relative to templates/claude. Copied into the
@@ -177,51 +178,35 @@ export default [
 `
 }
 
-// Tailwind config: spreads the @aziontech/theme v3 preset and — critically — scans
-// @aziontech/webkit's SOURCE so the component utility classes (data-[kind=…]:bg-[var(--…)])
-// are generated in the consumer's build. `.mjs` forces ESM regardless of package.json type.
-function tailwindConfig() {
-  return `import preset from '@aziontech/theme/tailwind-preset'
-
-/** @type {import('tailwindcss').Config} */
-export default {
-  presets: [preset],
-  content: [
-    './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}',
-    // webkit is consumed as source — scan it so its component classes compile.
-    './node_modules/@aziontech/webkit/src/**/*.{vue,js,ts}'
-  ]
-}
-`
-}
-
+// PostCSS config: Tailwind v4's PostCSS plugin. Vite auto-detects postcss.config.mjs, so
+// this is all the wiring the consumer needs — no vite.config change. `.mjs` forces ESM
+// regardless of package.json `type`. (v4 folds autoprefixer in; no separate plugin.)
 function postcssConfig() {
   return `export default {
   plugins: {
-    tailwindcss: {},
-    autoprefixer: {}
+    '@tailwindcss/postcss': {}
   }
 }
 `
 }
 
-// The CSS entry the consumer imports once (e.g. src/style.css). Pulls the design-system
-// tokens and the three @tailwind layers that generate webkit's component classes.
-// (Web fonts ship from @aziontech/theme separately; wire that import when the theme
-// exposes it.)
+// The CSS entry the consumer imports once (e.g. from src/main). `@import '@aziontech/theme'`
+// pulls the design system's Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + web
+// fonts) in one line; the `@source` then points Tailwind at webkit's SOURCE so its component
+// utility classes (data-[kind=…]:bg-[var(--…)]) are generated in the consumer's build —
+// node_modules is excluded from Tailwind's auto content-detection, so without this `@source`
+// the webkit components render UNSTYLED. The consumer's own src is auto-detected.
 function styleEntryContent() {
   return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
-@import '@aziontech/theme/globals.css';
+@import '@aziontech/theme';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* webkit is consumed as source — scan it so its component utility classes compile. */
+@source '../node_modules/@aziontech/webkit/src';
 `
 }
 
-const TAILWIND_SNIPPET_HEADER =
-  'A Tailwind config already exists — not overwriting it. Merge the webkit preset + content globs manually:'
+const POSTCSS_SNIPPET_HEADER =
+  'A PostCSS config already exists — not overwriting it. Add the Tailwind v4 plugin manually:'
 
 const ESLINT_SNIPPET_HEADER =
   'An ESLint config already exists — not overwriting it. Merge the webkit preset manually:'
@@ -275,7 +260,7 @@ export function planInit(projectDir, opts = {}) {
   for (const dep of DEV_DEPS) {
     actions.push({ type: 'add-dep', dep, version: DEP_VERSION, dev: true })
   }
-  // Style pipeline deps at pinned ranges (Tailwind v3 to match the theme preset).
+  // Style pipeline deps at pinned ranges (Tailwind v4, to match the theme's v4 stylesheet).
   for (const { dep, version } of STYLE_DEV_DEPS) {
     actions.push({ type: 'add-dep', dep, version, dev: true })
   }
@@ -285,25 +270,18 @@ export function planInit(projectDir, opts = {}) {
       'Dependencies recorded in package.json — run your package manager install (npm install / pnpm install / yarn) to fetch them.'
   })
 
-  // 1b. Tailwind + PostCSS — webkit ships source with Tailwind classes, so the consumer
-  //     MUST run Tailwind (with the theme preset + a content glob over webkit's source) or
-  //     the components render unstyled. Write if absent; otherwise print a merge snippet.
-  const existingTailwind = firstExisting(projectDir, TAILWIND_CONFIG_CANDIDATES)
-  if (existingTailwind) {
+  // 1b. PostCSS (Tailwind v4) — @aziontech/theme ships a v4 stylesheet, so the consumer runs
+  //     Tailwind v4 via its PostCSS plugin; Vite auto-detects postcss.config.mjs (no
+  //     vite.config change). The CSS entry's `@source` points Tailwind at webkit's source so
+  //     its component classes compile — without it the components render unstyled. Write if
+  //     absent; otherwise print a merge snippet.
+  const existingPostcss = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
+  if (existingPostcss) {
     actions.push({
       type: 'advise',
-      message: `${TAILWIND_SNIPPET_HEADER}\n${tailwindConfig()}`
+      message: `${POSTCSS_SNIPPET_HEADER}\n${postcssConfig()}`
     })
   } else {
-    actions.push({
-      type: 'write',
-      path: 'tailwind.config.mjs',
-      content: tailwindConfig(),
-      skipIfExists: true
-    })
-  }
-  const existingPostcss = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
-  if (!existingPostcss) {
     actions.push({
       type: 'write',
       path: 'postcss.config.mjs',
@@ -311,8 +289,8 @@ export function planInit(projectDir, opts = {}) {
       skipIfExists: true
     })
   }
-  // A ready-to-import CSS entry (tokens + @tailwind layers). Written only if missing;
-  // the entry-file advice below points the app at it.
+  // A ready-to-import CSS entry (`@import '@aziontech/theme'` + `@source` over webkit).
+  // Written only if missing; the entry-file advice below points the app at it.
   actions.push({
     type: 'write',
     path: 'src/webkit.css',
@@ -432,9 +410,9 @@ export function planInit(projectDir, opts = {}) {
   })
 
   // 8. Best-effort entry-file advice — never rewrites their entry file. Points at the
-  //    generated src/webkit.css (tokens + @tailwind layers) plus the icon font.
-  //    NOTE: the CSS lives at `@aziontech/theme/globals.css` — a bare `import
-  //    '@aziontech/theme'` resolves to the JS token export and loads NO styles.
+  //    generated src/webkit.css (which `@import`s the theme's v4 stylesheet + `@source`s
+  //    webkit) plus the icon font. Import webkit.css (not `@aziontech/theme` bare) so the
+  //    `@source` that compiles webkit's component classes is included.
   const entry = firstExisting(projectDir, [
     'src/main.ts',
     'src/main.js',
@@ -443,7 +421,7 @@ export function planInit(projectDir, opts = {}) {
   ])
   if (entry) {
     const src = read(join(projectDir, entry)) || ''
-    if (!src.includes('webkit.css') && !src.includes('@aziontech/theme/globals.css')) {
+    if (!src.includes('webkit.css') && !src.includes('@aziontech/theme')) {
       actions.push({
         type: 'advise',
         message: `Add the design-system styles to ${entry} (import once, near the top):\nimport './webkit.css'\nimport '@aziontech/icons'`
@@ -514,7 +492,6 @@ export const _internals = {
   DEP_VERSION,
   CLAUDE_BUNDLE,
   eslintFlatConfig,
-  tailwindConfig,
   postcssConfig,
   styleEntryContent,
   STYLELINT_CONTENT,
