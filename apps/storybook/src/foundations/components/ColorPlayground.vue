@@ -153,7 +153,7 @@ function isCopied(key) {
             @click="copyToClipboard(selectedToken?.tailwindClass, 'tw')"
           >
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.tailwindClass }}</code>
-            <i :class="['pi text-[11px] opacity-0 group-hover:!opacity-50', isCopied('tw') ? 'pi-check text-success' : 'pi-copy']" />
+            <i :class="['pi text-[11px] opacity-0 group-hover:opacity-50!', isCopied('tw') ? 'pi-check text-success' : 'pi-copy']" />
           </button>
         </div>
 
@@ -164,7 +164,7 @@ function isCopied(key) {
             @click="copyToClipboard(selectedToken?.cssVar, 'css')"
           >
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.cssVar }}</code>
-            <i :class="['pi text-[11px] opacity-0 group-hover:!opacity-50', isCopied('css') ? 'pi-check text-success' : 'pi-copy']" />
+            <i :class="['pi text-[11px] opacity-0 group-hover:opacity-50!', isCopied('css') ? 'pi-check text-success' : 'pi-copy']" />
           </button>
         </div>
 

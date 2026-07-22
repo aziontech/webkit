@@ -64,41 +64,41 @@
     'data-[size=large]:min-w-20 data-[size=large]:h-10 ' +
     'data-[size=medium]:min-w-16 data-[size=medium]:h-8 ' +
     'data-[size=small]:min-w-14 data-[size=small]:h-7 ' +
-    'data-[loading]:cursor-loading ' +
-    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed ' +
-    'data-[disabled]:border-transparent data-[disabled]:bg-[var(--bg-disabled)]'
+    'data-[loading]:cursor-wait ' +
+    'data-[disabled]:cursor-not-allowed ' +
+    'data-[inactive]:border-transparent data-[inactive]:bg-[var(--bg-disabled)]'
 
   const GLOW_CLASS =
     'absolute inset-0 pointer-events-none ' +
     'animate-spin [animation-duration:8s] [animation-timing-function:linear] ' +
-    '[background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-primary-500))] ' +
+    '[background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] ' +
     '[filter:blur(12px)] ' +
     'motion-reduce:animate-none ' +
-    'group-data-[disabled]/highlight:hidden'
+    'group-data-[inactive]/highlight:hidden'
 
   const BASE_CLASS =
     'absolute inset-px pointer-events-none rounded-[inherit] ' +
-    '[background-image:linear-gradient(120deg,var(--color-accent-900)_17%,var(--color-accent-100)_53%,var(--color-accent-600)_96%)] ' +
+    '[background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] ' +
     'transition-opacity duration-300 ease-out motion-reduce:transition-none ' +
     'group-hover/highlight:opacity-25 ' +
-    'group-data-[disabled]/highlight:[background-image:none] ' +
-    'group-data-[disabled]/highlight:bg-[var(--bg-disabled)] ' +
-    'group-data-[disabled]/highlight:opacity-100'
+    'group-data-[inactive]/highlight:[background-image:none] ' +
+    'group-data-[inactive]/highlight:bg-[var(--bg-disabled)] ' +
+    'group-data-[inactive]/highlight:opacity-100'
 
   const SCRIM_CLASS =
     'absolute inset-px pointer-events-none rounded-[inherit] ' +
     'bg-[var(--bg-backdrop)] ' +
     'transition-opacity duration-300 ease-out motion-reduce:transition-none ' +
     'group-hover/highlight:opacity-25 ' +
-    'group-data-[disabled]/highlight:hidden'
+    'group-data-[inactive]/highlight:hidden'
 
   const CONTENT_CLASS =
     'relative z-[1] inline-flex items-center justify-center gap-[var(--spacing-xs)] w-full h-full ' +
-    'text-[var(--text-default)] ' +
+    'text-[var(--color-base-white)] ' +
     'data-[size=large]:px-[var(--spacing-md)] data-[size=large]:text-button-lg ' +
     'data-[size=medium]:px-[var(--spacing-sm)] data-[size=medium]:text-button-md ' +
     'data-[size=small]:px-[var(--spacing-xs)] data-[size=small]:text-button-md ' +
-    'group-data-[disabled]/highlight:text-[var(--text-disabled)]'
+    'group-data-[inactive]/highlight:text-[var(--text-disabled)]'
 
   const rootClasses = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 
@@ -125,6 +125,7 @@
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
+    :data-inactive="isInactive ? '' : undefined"
     :data-testid="testId"
     @click="handleClick"
   >
@@ -169,6 +170,7 @@
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
+    :data-inactive="isInactive ? '' : undefined"
     :data-testid="testId"
     @click="handleClick"
   >

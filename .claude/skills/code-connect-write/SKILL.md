@@ -3,6 +3,8 @@ name: code-connect-write
 description: Generate the `<name>.figma.ts` Code Connect mapping. Skipped automatically when `@figma/code-connect` is not installed.
 status: active
 last_updated: 2026-05-22
+scope: webkit
+enforced_by: [no-invention, prop-vocabulary, naming]
 ---
 
 # Skill: code-connect-write

@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Tag from '../../tag/tag.vue'
-
   defineOptions({
     name: 'Label',
     inheritAttrs: false
@@ -10,13 +8,13 @@
 
   interface Props {
     /** Fallback text when the default slot is empty. */
-    value?: string
-    /** Appends a `Required` tag next to the label text. */
+    label?: string
+    /** Appends a required indicator (an orange asterisk followed by the word "Required") next to the label text. */
     required?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
-    value: undefined,
+    label: '',
     required: false
   })
 
@@ -39,14 +37,19 @@
   >
     <span :data-testid="`${testId}__text`">
       <slot v-if="$slots['default']" />
-      <template v-else-if="value">{{ value }}</template>
+      <template v-else-if="label">{{ label }}</template>
     </span>
-    <Tag
+    <span
       v-if="required"
-      value="Required"
-      severity="warning"
-      size="small"
       :data-testid="`${testId}__required`"
-    />
+      class="text-label-sm text-[var(--text-muted)]"
+    >
+      <span
+        aria-hidden="true"
+        class="text-[var(--primary)]"
+        >*</span
+      >
+      (Required)
+    </span>
   </label>
 </template>

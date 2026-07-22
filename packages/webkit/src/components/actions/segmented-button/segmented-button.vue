@@ -39,11 +39,7 @@
     defaultValue: undefined
   })
 
-  const emit = defineEmits<{
-    change: [value: string]
-  }>()
-
-  const model = defineModel<string>({ default: undefined })
+  const model = defineModel<string | undefined>({ default: undefined })
 
   const attrs = useAttrs()
   const rootRef = ref<HTMLElement | null>(null)
@@ -168,7 +164,6 @@
     }
 
     model.value = value
-    emit('change', value)
   }
 
   const selectOption = (value: string, disabled: boolean) => {

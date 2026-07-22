@@ -1,0 +1,77 @@
+name: Storybook Regenerate Baseline
+
+on:
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: 'Regenerate linux baselines and upload them as an artifact (commit manually)'
+        type: boolean
+        default: false
+      modes:
+        description: 'Comma-separated visual modes to (re)generate, e.g. light-desktop,dark-mobile (empty = full matrix; see .storybook/visual-modes.js)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: Storybook Generate Baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/storybook
+
+      - name: Build Storybook
+        run: pnpm run storybook:build
+
+      - name: Regenerate baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        run: pnpm --filter storybook run test:visual:update
+        env:
+          VISUAL_MODES: ${{ github.event.inputs.modes }}
+
+      - name: Upload regenerated baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-baselines-linux
+          path: apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
+          retention-days: 7
+
+      - name: Upload diff output on failure
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-diff-output
+          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          retention-days: 7
+          if-no-files-found: ignore

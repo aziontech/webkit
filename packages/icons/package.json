@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/icons",
-  "version": "1.4.0",
+  "version": "4.0.0",
   "description": "Azion icon font library — azionicons + primeicons as CSS/woff2",
   "license": "MIT",
   "repository": {
@@ -37,7 +37,9 @@
   "exports": {
     ".": "./dist/index.css",
     "./azionicons": "./dist/azionicons.css",
+    "./azionicons-color": "./dist/azionicons-color.css",
     "./primeicons": "./dist/primeicons.css",
-    "./catalog": "./dist/catalog.json"
+    "./catalog": "./dist/catalog.json",
+    "./color-catalog": "./dist/color-catalog.json"
   }
 }

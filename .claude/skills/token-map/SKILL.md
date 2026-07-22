@@ -3,6 +3,8 @@ name: token-map
 description: Map a Figma token JSON blob to DESIGN.md classes / `var(--*)` semantic tokens. Pure transformation; never edits the spec or component files.
 status: active
 last_updated: 2026-05-22
+scope: webkit
+enforced_by: [styling, migration]
 ---
 
 # Skill: token-map
@@ -70,4 +72,4 @@ Transform the structured JSON from `figma-discover` into a deterministic mapping
 - [ ] Mapping table produced (or empty-marker comment).
 - [ ] Theme gaps table produced (or empty-marker comment).
 - [ ] Every "Resolved to" cell is either a `.text-*` class or a `var(--*)` literal.
-- [ ] No HEX / RGB / Tailwind / PrimeVue in the output.
+- [ ] No HEX / RGB / Tailwind / external color utility in the output.

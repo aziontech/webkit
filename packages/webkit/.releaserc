@@ -23,6 +23,10 @@
           { "type": "docs", "release": "patch" },
           { "type": "style", "release": "patch" },
           { "type": "refactor", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "test", "release": false },
+          { "type": "ci", "release": false },
+          { "type": "revert", "release": false },
           { "breaking": true, "release": "major" }
         ]
       }
@@ -47,7 +51,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
+        "prepareCmd": "node scripts/build-catalog.mjs && vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],
@@ -56,7 +60,8 @@
       {
         "assets": [
           "package.json",
-          "CHANGELOG.md"
+          "CHANGELOG.md",
+          "catalog.json"
         ],
         "message": "chore(release): @aziontech/webkit ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }

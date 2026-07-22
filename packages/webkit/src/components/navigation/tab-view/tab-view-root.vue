@@ -29,12 +29,11 @@
 
   const emit = defineEmits<{
     'update:value': [value: TabViewValue | null]
-    'value-change': [value: TabViewValue | null]
   }>()
 
   defineSlots<{ default(): unknown }>()
 
-  const valueModel = defineModel<TabViewValue | null>('value', { default: undefined })
+  const valueModel = defineModel<TabViewValue | null | undefined>('value', { default: undefined })
 
   const attrs = useAttrs()
   const testId = computed(
@@ -81,7 +80,6 @@
 
       valueModel.value = next
       emit('update:value', next)
-      emit('value-change', next)
     }
   })
 

@@ -15,6 +15,7 @@ import {
   validateFrontmatter,
   getSection,
   parseTable,
+  defaultCellIsStringUndefined,
   bodyChecksum,
   constraintsBlockHasCanonicalBullets,
   parseVueSfc,
@@ -148,6 +149,13 @@ group('lib: body parsing', () => {
     assertTrue(propNames.includes('kind'), 'kind missing')
     assertTrue(propNames.includes('size'), 'size missing')
     assertTrue(propNames.includes('disabled'), 'disabled missing')
+  })
+  test('defaultCellIsStringUndefined flags quoted undefined/null only', () => {
+    assertTrue(defaultCellIsStringUndefined("`'undefined'`") === true, "quoted 'undefined' should flag")
+    assertTrue(defaultCellIsStringUndefined("`'null'`") === true, "quoted 'null' should flag")
+    assertTrue(defaultCellIsStringUndefined('`undefined`') === false, 'unquoted undefined is legitimate')
+    assertTrue(defaultCellIsStringUndefined("`''`") === false, 'empty string is legitimate')
+    assertTrue(defaultCellIsStringUndefined("`'medium'`") === false, 'real string default is legitimate')
   })
 })
 
@@ -324,6 +332,106 @@ group('hook: validate-spec-compliance.mjs', () => {
       }
     })
     assertEqual(r.code, 0)
+  })
+})
+
+group('hook: validate-story-source.mjs', () => {
+  const story = (content) => ({ tool_name: 'Write', tool_input: { file_path: resolve(ROOT, 'x.stories.js'), content } })
+
+  test('non-story path passes through (exit 0)', () => {
+    const r = runHook('.claude/hooks/validate-story-source.mjs', {
+      tool_name: 'Write',
+      tool_input: { file_path: resolve(ROOT, 'random/file.vue'), content: '<foo />' }
+    })
+    assertEqual(r.code, 0)
+  })
+  test('new story with literal docs + toSfc + PascalCase passes (exit 0)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Foo from '@aziontech/webkit/foo'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<Foo bar="1" />`',
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 0)
+  })
+  test('docs as a function call blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Foo from '@aziontech/webkit/foo'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          "docs: runnableDocs({ imports: IMPORT })"
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/docs-not-literal/.test(r.stderr), 'should flag docs function call')
+  })
+  test('lowercase/kebab component tag blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import EmptyState from '@aziontech/webkit/empty-state'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<empty-state title="x" />`',
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/lowercase-tag/.test(r.stderr), 'should flag lowercase tag')
+  })
+  test('import binding not matching export subpath blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Chip from '@aziontech/webkit/chips'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<Chip label="x" />`',
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/import-binding-mismatch/.test(r.stderr), 'should flag binding/subpath mismatch')
+  })
+  test('hand-rolled transform blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        ["import Foo from '@aziontech/webkit/foo'", "tags: ['autodocs']", 'docs: { source: { transform: (code) => code } }'].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/handrolled-transform|missing-helper/.test(r.stderr), 'should flag hand-rolled / missing helper')
+  })
+  test('nested <template> blocks (exit 2)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Foo from '@aziontech/webkit/foo'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<template>\n  <template>\n    <Foo />\n  </template>\n</template>`',
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 2)
+    assertTrue(/nested-template/.test(r.stderr), 'should flag nested template')
   })
 })
 

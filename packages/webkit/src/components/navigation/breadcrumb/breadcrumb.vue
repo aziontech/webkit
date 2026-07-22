@@ -2,13 +2,9 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
   import { useOverlayMobile } from '../../overlay/composables/use-overlay-mobile'
-  import DropdownMenu from '../../overlay/dropdown-menu/dropdown-menu.vue'
-  import DropdownMenuContent from '../../overlay/dropdown-menu/dropdown-menu-content.vue'
-  import DropdownMenuItem from '../../overlay/dropdown-menu/dropdown-menu-item.vue'
-  import DropdownMenuTrigger from '../../overlay/dropdown-menu/dropdown-menu-trigger.vue'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
+  import Dropdown from '../dropdown'
   import BreadcrumbList from './breadcrumb-list.vue'
   import BreadcrumbSeparator from './breadcrumb-separator.vue'
 
@@ -35,7 +31,7 @@
   })
 
   const emit = defineEmits<{
-    navigate: [href: string]
+    navigate: [event: MouseEvent, href: string]
   }>()
 
   defineSlots<{
@@ -74,13 +70,17 @@
     () => resolvedItems.value.length > 1 && firstItem.value !== lastItem.value
   )
 
-  const handleItemClick = (href: string) => {
-    emit('navigate', href)
+  const handleItemClick = (event: MouseEvent, href: string) => {
+    emit('navigate', event, href)
   }
 
-  const onOverflowSelect = (href: string | undefined) => {
+  const onOverflowSelect = (
+    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+    value: string | number
+  ) => {
+    const href = typeof value === 'string' ? value : undefined
     if (href) {
-      handleItemClick(href)
+      handleItemClick(event as MouseEvent, href)
     }
   }
 </script>
@@ -112,7 +112,7 @@
                 :icon="item.icon"
                 :class="item.current ? 'text-[var(--text-default)]' : undefined"
                 :data-testid="`${testId}__item-${index}`"
-                @click="() => !item.current && handleItemClick(item.href ?? '#')"
+                @click="(event) => !item.current && handleItemClick(event, item.href ?? '#')"
               />
             </li>
             <BreadcrumbSeparator
@@ -138,7 +138,9 @@
                 firstItem.current && !showDistinctEnds ? 'text-[var(--text-default)]' : undefined
               "
               :data-testid="`${testId}__item-0`"
-              @click="() => !firstItem.current && handleItemClick(firstItem.href ?? '#')"
+              @click="
+                (event) => !firstItem.current && handleItemClick(event, firstItem.href ?? '#')
+              "
             />
           </li>
 
@@ -149,30 +151,39 @@
               class="inline-flex items-center"
               :data-testid="`${testId}__segment-overflow`"
             >
-              <DropdownMenu :data-testid="`${testId}__overflow-menu`">
-                <DropdownMenuTrigger>
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    aria-label="Show pages in between"
-                    ariaLabel="Show pages in between"
-                    kind="transparent"
-                    size="small"
-                    :data-testid="`${testId}__overflow-trigger`"
+              <Dropdown :data-testid="`${testId}__overflow-menu`">
+                <!-- The Trigger is itself role="button"; the icon is decorative
+                     content. Nesting a real button here trips axe
+                     nested-interactive. Styled to match a transparent/small
+                     IconButton with the same tokens. -->
+                <Dropdown.Trigger
+                  aria-label="Show pages in between"
+                  :data-testid="`${testId}__overflow-trigger`"
+                  class="h-7 min-w-7 items-center justify-center rounded-[var(--shape-button)] px-1 text-button-md text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-mask)] active:bg-[var(--bg-active)] motion-reduce:transition-none"
+                >
+                  <i
+                    class="pi pi-ellipsis-h leading-none"
+                    aria-hidden="true"
                   />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
+                </Dropdown.Trigger>
+                <Dropdown.Group>
+                  <Dropdown.Option
                     v-for="(item, index) in middleItems"
                     :key="`${item.label}-${index}`"
+                    :value="item.href ?? '#'"
                     :label="item.label"
-                    :value="item.href"
-                    :href="item.href"
-                    :icon="item.showIcon ? item.icon : undefined"
                     :data-testid="`${testId}__overflow-item-${index}`"
                     @select="onOverflowSelect"
-                  />
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  >
+                    <template
+                      v-if="item.showIcon && item.icon"
+                      #leading
+                    >
+                      <i :class="item.icon" />
+                    </template>
+                  </Dropdown.Option>
+                </Dropdown.Group>
+              </Dropdown>
             </li>
           </template>
 
@@ -191,7 +202,9 @@
                 :icon="lastItem.icon"
                 class="text-[var(--text-default)]"
                 :data-testid="`${testId}__item-last`"
-                @click="() => !lastItem.current && handleItemClick(lastItem.href ?? '#')"
+                @click="
+                  (event) => !lastItem.current && handleItemClick(event, lastItem.href ?? '#')
+                "
               />
             </li>
           </template>

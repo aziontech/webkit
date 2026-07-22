@@ -20,14 +20,14 @@
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** When true, overlay click and Escape close the dialog. */
-      closeable?: boolean
+      dismissible?: boolean
       /** Panel max-width preset passed to the inner Panel. */
       size?: DialogSize
     }>(),
     {
       open: undefined,
       defaultOpen: false,
-      closeable: true,
+      dismissible: true,
       size: 'medium'
     }
   )
@@ -36,7 +36,7 @@
     'update:open': [value: boolean]
   }>()
 
-  const openModel = defineModel<boolean>('open', { default: undefined })
+  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
 
   const attrs = useAttrs()
   const uid = useId()
@@ -60,14 +60,14 @@
   }
 
   const closeDialog = () => {
-    if (!props.closeable) return
+    if (!props.dismissible) return
     isOpen.set(false)
   }
 
   provide(DialogInjectionKey, {
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
-    closeable: props.closeable,
+    dismissible: props.dismissible,
     size: props.size,
     open: openDialog,
     close: closeDialog,

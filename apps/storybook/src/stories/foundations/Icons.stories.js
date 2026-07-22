@@ -1,12 +1,13 @@
-import IconGrid from '../../foundations/components/IconGrid.vue';
-import icons from '@aziontech/icons/catalog';
+import icons from '@aziontech/icons/catalog'
+import colorIcons from '@aziontech/icons/color-catalog'
+import CodeBlock from '@aziontech/webkit/code-block'
 
+import IconGrid from '../../foundations/components/IconGrid.vue'
 import {
   PageContainer,
   PageHeader,
-  SectionHeader,
-  CodeBlock,
-} from '../../foundations/components/layout/index.js';
+  SectionHeader
+} from '../../foundations/components/layout/index.js'
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
@@ -20,18 +21,21 @@ export default {
       description: {
         component: [
           'Icon library documentation — Azion custom icons and PrimeIcons.',
-          'Icons are distributed via `@aziontech/icons` package.',
-        ].join(' '),
+          'Icons are distributed via the `@aziontech/icons` package.'
+        ].join(' ')
       },
-    },
+      // Token/icon catalog page: a copy-paste SFC is not meaningful here, so the
+      // "Show code" panel stays hidden (documented foundations-catalog exemption).
+      canvas: { sourceState: 'none' }
+    }
   },
   argTypes: {
     initialSize: {
       control: { type: 'range', min: 12, max: 64, step: 4 },
-      defaultValue: 24,
-    },
-  },
-};
+      defaultValue: 24
+    }
+  }
+}
 
 // ─── Overview ─────────────────────────────────────────────────────────────────
 
@@ -43,16 +47,32 @@ export const Overview = {
       PageHeader,
       SectionHeader,
       CodeBlock,
-      IconGrid,
+      IconGrid
     },
     setup() {
-      const usageCode = [
-        '<i class="ai ai-azion"></i>',
-        '<i class="ai ai-edge-functions text-default text-2xl"></i>',
-        '<i class="pi pi-check"></i>',
-        '<i class="pi pi-times text-default text-2xl"></i>',
-      ].join('\n');
-      return { icons, args, usageCode };
+      const importTabs = [
+        {
+          label: 'JavaScript',
+          value: 'js',
+          language: 'javascript',
+          code: "import '@aziontech/icons';"
+        }
+      ]
+      const usageTabs = [
+        {
+          label: 'HTML',
+          value: 'html',
+          language: 'html',
+          fileName: 'index.html',
+          code: [
+            '<i class="ai ai-azion"></i>',
+            '<i class="ai ai-edge-functions text-default text-2xl"></i>',
+            '<i class="pi pi-check"></i>',
+            '<i class="pi pi-times text-default text-2xl"></i>'
+          ].join('\n')
+        }
+      ]
+      return { icons, colorIcons, args, importTabs, usageTabs }
     },
     template: /* html */ `
       <PageContainer>
@@ -63,34 +83,38 @@ export const Overview = {
 
         <!-- Import -->
         <SectionHeader title="Import" />
-        <CodeBlock label="JavaScript" class="mb-12">
-          import '@aziontech/icons';
-        </CodeBlock>
+        <CodeBlock :tabs="importTabs" :border="true" :show-line-numbers="false" class="h-fit mb-12" />
 
         <!-- Usage -->
         <SectionHeader title="Usage" />
-        <CodeBlock label="HTML" :content="usageCode" class="mb-6" />
+        <CodeBlock :tabs="usageTabs" :border="true" :show-line-numbers="false" class="h-fit mb-6" />
         <p class="text-body-sm text-muted m-0 max-w-[620px] leading-relaxed mb-12">
           Icons are a font, which means they inherit text properties.
+          <strong class="text-default">Colored</strong> brand icons (the <code>-cor</code> set) are
+          multicolor logos that can't live in the font — they ship as inline SVG via
+          <code>@aziontech/icons/color-catalog</code> and keep their own palette.
         </p>
 
         <!-- Icon Gallery -->
         <SectionHeader
           title="Icon Gallery"
-          :description="\`Browse all \${icons.length} icons. Use the search to filter by name, and the slider to adjust preview size.\`"
+          :description="\`Browse all \${icons.length + colorIcons.length} icons. Use the search to filter by name, and the slider to adjust preview size.\`"
           size="lg"
         />
-        
-        <IconGrid :icons="icons" :initial-size="args.initialSize" />
+
+        <IconGrid :icons="icons" :color-icons="colorIcons" :initial-size="args.initialSize" />
       </PageContainer>
-    `,
+    `
   }),
   args: {
-    initialSize: 24,
+    initialSize: 24
   },
   parameters: {
+    visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
-      description: { story: 'Icon system overview: import, usage examples, and complete icon gallery.' },
-    },
-  },
-};
+      description: {
+        story: 'Icon system overview: import, usage examples, and complete icon gallery.'
+      }
+    }
+  }
+}

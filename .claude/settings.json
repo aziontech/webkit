@@ -8,7 +8,6 @@
       "Bash(pnpm webkit:lint:*)",
       "Bash(pnpm webkit:type-check)",
       "Bash(pnpm webkit:type-coverage)",
-      "Bash(pnpm webkit:build:dts)",
       "Bash(pnpm webkit:format)",
       "Bash(pnpm webkit:format:check)",
       "Bash(pnpm storybook:build)",
@@ -26,7 +25,8 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git show:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(npm run *)"
     ],
     "deny": [
       "Bash(git push --force:*)",
@@ -47,6 +47,14 @@
           {
             "type": "command",
             "command": "node .claude/hooks/validate-references.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/validate-story-source.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/validate-authoring.mjs"
           }
         ]
       },
@@ -71,6 +79,14 @@
           {
             "type": "command",
             "command": "node .claude/hooks/validate-spec-compliance.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/enforce-test-exists.mjs"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/validate-authoring-docs.mjs"
           }
         ]
       }

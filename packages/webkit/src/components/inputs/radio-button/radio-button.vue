@@ -61,17 +61,18 @@
 
   const sharedClasses = [
     ...toggleControlClasses,
-    'group size-5 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface)]'
+    'group size-5 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface)]',
+    '[&:not([data-checked])]:hover:border-[var(--primary)] [&:not([data-checked])]:hover:before:opacity-0'
   ]
 
   const checkedClasses =
-    'data-[checked]:border-[var(--primary)] data-[checked]:bg-[var(--primary)] data-[checked]:before:hidden data-[checked]:after:hidden'
+    'data-[checked]:border-[var(--primary)] data-[checked]:bg-[var(--primary)] data-[checked]:after:hidden'
 
   const disabledClasses =
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:opacity-50 data-[checked]:data-[disabled]:border-[var(--border-default)] data-[checked]:data-[disabled]:bg-[var(--bg-disabled)]'
 
   const indicatorClasses =
-    'size-2.5 rounded-full bg-[var(--primary-contrast)] group-data-[disabled]:bg-[var(--text-disabled)]'
+    'pointer-events-none absolute left-1/2 top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--primary-contrast)] group-data-[disabled]:bg-[var(--text-disabled)]'
 
   const rootClasses = computed(() =>
     cn(sharedClasses, checkedClasses, disabledClasses, attrs.class)

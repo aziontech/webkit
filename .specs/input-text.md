@@ -2,61 +2,102 @@
 name: input-text
 category: inputs
 structure: monolithic
-status: implemented
-spec_version: 1
-checksum: 97999e7ff2387e3a772c205d4d6dfe51928faa0259117f60f6ac80c763768c20
+status: approved
+spec_version: 2
+checksum: 8246d8ce93c14e5de391a509eb927c41e9de1aaaff0ee4258189a3c42fd22a0f
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-06-16
 ---
 # Input Text — Component Spec
 
 ## Purpose
 
-Collects or edits user input. Migrated from the existing implementation at `packages/webkit/src/components/webkit/inputs/input-text/`.
+Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer.
+
+Aligned with Figma frame `562:6774` (Webkit / InputText).
+
+## When to use
+
+- Capture a single line of free-form text (names, titles, search terms).
+
+## When NOT to use
+
+- The value spans multiple lines → use `textarea`.
+- The value is strictly numeric → use `input-number`.
+- The user must choose from a fixed set → use `select` / `multi-select`.
+
+## Related
+
+- `textarea` — multi-line free text.
+- `input-number` — numeric input with stepper semantics.
+- `field-text` — input-text wrapped with label/help/error.
+
+## Best practices
+
+- Prefer the `field-*` wrapper when you need a label, helper text, or validation message.
+- Set an appropriate `type`/`inputmode` for the content (email, url, …).
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `'undefined'` | no | model Value. |
-| `placeholder` | `string` | `'undefined'` | no | placeholder. |
-| `type` | `string` | `'text'` | no | type. |
+| `modelValue` | `string` | `''` | no | Two-way bound value of the field. |
+| `placeholder` | `string` | `''` | no | Placeholder shown when the field is empty. |
+| `type` | `'text' \| 'email' \| 'number'` | `'text'` | no | Native input type. Restricted to single-line variants the field treats identically. |
+| `maxLength` | `number \| undefined` | `undefined` | no | Native `maxlength` — maximum number of characters allowed. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | readonly. |
-| `size` | `'small' | 'medium' | 'large'` | `'medium'` | no | Size token; affects height, padding, and typography. |
-| `invalid` | `boolean` | `false` | no | invalid. |
+| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but not editable. Native pass-through. |
+| `required` | `boolean` | `false` | no | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
+| `invalid` | `boolean` | `false` | no | Applies the invalid border + ring tokens and sets `aria-invalid`. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:modelValue` | `unknown` | — |
+| `update:modelValue` | `string` | Emitted on native `input` event with the new value. |
 
 ## Slots
 
-| _none_ | — | — |
+| Slot | Purpose | Notes |
+|---|---|---|
+| `iconLeft` | Leading icon rendered inside the field, before the input. | Hidden from assistive tech (`aria-hidden="true"`). |
+| `iconRight` | Trailing icon rendered inside the field, after the input. | Hidden from assistive tech (`aria-hidden="true"`). |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`
+- `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
+- `data-invalid` mirrors the `invalid` prop
+- `data-required` mirrors the `required` prop; drives the warning-border treatment
+- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`)
+- `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| state change (border/ring/bg) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography | .text-body-sm |
+| typography | `.text-label-sm` |
 | surface | `var(--bg-surface)` |
+| surface (disabled) | `var(--bg-disabled)` |
 | text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
+| text (placeholder/muted) | `var(--text-muted)` |
+| text (disabled) | `var(--text-disabled)` |
+| border (default) | `var(--border-default)` |
+| border (hover) | `var(--border-strong)` |
+| border (invalid) | `var(--danger-border)` |
+| border (required) | `var(--warning-border)` |
+| ring (focus) | `var(--ring-color)` |
+| spacing (horizontal padding) | `var(--spacing-sm)` |
+| spacing (gap between icon and input) | `var(--spacing-xs)` |
 | shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
 
 ## Theme gaps
 
@@ -66,19 +107,22 @@ Collects or edits user input. Migrated from the existing implementation at `pack
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots.
+- Keyboard map: `Tab` focuses the input; standard text-editing keys apply.
+- ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
+- `motion-reduce:transition-none` on every transition-bearing class.
+- Touch target ≥40×40 px on `size="large"`; smaller sizes are intended for dense layouts where the wrapping label area extends the hit zone.
 
 ## Stories (Storybook)
 
 - Default
-- Small (size)
-- Medium (size)
-- Large (size)
+- Sizes — composite story rendering all three sizes side by side (canonical composite per `storybook-write` skill).
+- Icons — composite story showing the `iconLeft` slot, the `iconRight` slot, and both combined. Justification: documents the slot API surface from the Figma component (`hasIconLeft`/`iconLeft`, `hasIconRight`/`iconRight`) in a single browsable view.
+- Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop) and not visible from the Default story.
+- Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
+- Email — justification: documents `type="email"` (native browser keyboard / validation surface) since the `type` prop is restricted and only two values matter visually.
+- MaxLength — justification: documents `maxLength` as a hard character cap; behavior is invisible from props alone and only observable while typing.
 - Disabled
 
 ## Constraints — DO NOT

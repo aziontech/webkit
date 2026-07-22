@@ -21,8 +21,8 @@ The webkit layer **must not** depend on external libraries for positioning, anch
 - **Vue 3** primitives — `<Teleport>`, `<Transition>`, `<TransitionGroup>`, `defineModel`, `provide`/`inject`.
 - **`clsx` + `tailwind-merge`** via [`@aziontech/webkit/utils/cn`](../../packages/webkit/src/utils/cn.ts) — class merging only.
 - **`@vueuse/core`** — small reactive utilities (e.g. `useElementVisibility`). **Not** `@vueuse/motion`.
-- **PrimeVue** — only as wrapped via `core/primevue/*`. New components prefer the webkit layer with no PrimeVue dependency.
 - **VeeValidate** — only inside `core/form/*` per existing pattern.
+- **`@tanstack/vue-table`** — headless table state engine (sorting, pagination, row selection, column models) **only** inside the single `data/table` component's data-driven mode (`data` + `columns`); `data/data-table` is an alias of `data/table`. Granted via the **Exceptions** process below. This is `@tanstack/vue-table` / `@tanstack/table-core` (headless logic) — **not** `@tanstack/virtual` (scroll virtualization), which remains forbidden in the table above.
 
 ## How to anchor / position without a lib
 
@@ -31,7 +31,7 @@ For overlays (tooltip, popover, dropdown, menu):
 ```html
 <!-- Anchored via CSS — works in all evergreen browsers -->
 <button class="anchor"><!-- trigger --></button>
-<div class="absolute left-0 top-full mt-[var(--spacing-1)]"><!-- popover --></div>
+<div class="absolute left-0 top-full mt-[var(--spacing-xxs)]"><!-- popover --></div>
 
 <!-- Or via the native Popover API + CSS anchor positioning -->
 <button popovertarget="menu">Open</button>
@@ -58,7 +58,7 @@ Use Vue `<Teleport to="body">` when the overlay must escape an `overflow: hidden
 </Transition>
 ```
 
-The catalog is in [`.claude/docs/DESIGN.md`](./tokens.md#animations--semanticanimationsjs).
+The catalog is in [`.claude/docs/DESIGN.md`](../docs/DESIGN.md#animations--semanticanimationsjs).
 
 ## Hook coverage
 
@@ -70,4 +70,12 @@ BLOCKED: forbidden dependency <name>. Use CSS + tokens per .claude/rules/depende
 
 ## Exceptions
 
-There are none today. If a future component genuinely cannot be built without an external lib (e.g. an embedded code editor like Monaco), it requires (a) a written rationale in the spec's **Purpose** section, (b) explicit human approval, and (c) an entry in this file's **Allowed** section.
+If a future component genuinely cannot be built without an external lib (e.g. an embedded code editor like Monaco), it requires (a) a written rationale in the spec's **Purpose** section, (b) explicit human approval, and (c) an entry in this file's **Allowed** section.
+
+### Granted exceptions
+
+| Lib | Scope | Rationale | Approved |
+|---|---|---|---|
+| `@tanstack/vue-table` (`@tanstack/table-core`) | `data/table` only (data-driven mode) | A correct, accessible, headless table state engine (sorting / pagination / row selection / column visibility, client- and server-side) is large surface to own in-house and is a pure-logic library — it ships **no** markup, styles, positioning, or animation, so it does not fight DESIGN.md. Rendering stays 100% in our own `data/table` sub-components (our tokens, our a11y). Rationale recorded in `.specs/table.md` § Purpose (added when the data-driven mode lands). | Human-approved 2026-06-15 |
+
+> The exception is **narrow**: `@tanstack/vue-table` is permitted only as the state engine behind the single `data/table` component. Do not import it in other components, and do not pull in `@tanstack/virtual` or any other `@tanstack/*` package without a new exception row.

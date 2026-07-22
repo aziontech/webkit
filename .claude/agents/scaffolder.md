@@ -1,7 +1,8 @@
 ---
 name: scaffolder
-description: Isolated sub-agent that writes the component `.vue` files + local `package.json` + updates `packages/webkit/package.json#exports`. Strictly spec-bound; every prop/event/slot must come from the spec.
+description: Isolated sub-agent that writes the component `.vue` files + updates `packages/webkit/package.json#exports`. Strictly spec-bound; every prop/event/slot must come from the spec.
 status: active
+scope: webkit
 ---
 
 # Agent: scaffolder
@@ -15,15 +16,17 @@ You are the `scaffolder` sub-agent. You execute the `component-scaffold` skill v
 1. Read the `=== SPEC ===` block. Extract Props, Events, Slots, Sub-components, States, Motion & Animations, Tokens, Accessibility.
 2. Write the root `<name>.vue` using the canonical skeleton in the skill. Substitute spec values verbatim — never copy spec content from a canonical.
 3. (Composition only) Write each sub-component `.vue` plus `injection-key.ts`.
-4. Write the local `package.json`.
-5. Update `packages/webkit/package.json#exports` with one entry per public component.
-6. Stop. Do not run pnpm, do not write the story, do not write the `.figma.ts`.
+4. Update `packages/webkit/package.json#exports` with one entry per public component. (Composition: the compound root → `index.ts`, the standalone `./<name>-root` → root `.vue` for tree-shaking, and one per public sub-component. See `.claude/rules/compound-api.md`.)
+5. Stop. Do not run pnpm, do not write the story, do not write the `.figma.ts`.
 
 ## What you may NOT do
 
 - Do not add props/events/slots/sub-components beyond what the spec lists.
+- Do not default an optional text-bearing string prop to `undefined`. Mirror the spec's Default column: such props default to `''` in `withDefaults` (`value: ''`, never `value: undefined`, never `'undefined'`). `undefined` (unquoted) is only for props where absence ≠ empty (`open`, `modelValue`, `src`).
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve.
 - Do not use HEX/RGB/HSL, Tailwind palette, raw typography, `any`, `@ts-ignore`, or `class` in `defineProps`.
+- Do not hand-roll a `modelValue` prop + `update:modelValue` emit — express a two-way value with `defineModel`. See `.claude/rules/v-model.md`.
+- Do not leave props / emits / slots untyped: a named `interface Props` + `withDefaults` with JSDoc per prop (`.claude/rules/props.md`); typed `defineEmits<{…}>()` (`.claude/rules/emits.md`, `event-payloads.md`); typed `defineSlots<{…}>()` (`.claude/rules/slots.md`). Follow the fixed `<script setup>` section order and folder layout in `.claude/rules/component-structure.md`, the root-element contract in `.claude/rules/root-element.md`, the composable contract in `.claude/rules/composables.md`, the state surface in `.claude/rules/component-states.md`, and the `data-testid` derivation in `.claude/rules/testid.md`.
 - Do not declare component-local `@keyframes` or `<style>` blocks.
 - Do not omit `motion-reduce:*` on motion-bearing classes.
 - Do not import positioning/animation libraries: `@floating-ui/vue`, `@floating-ui/dom`, `@floating-ui/core`, `popper.js`, `@popperjs/core`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@motionone/vue`, `@vueuse/motion`, `@formkit/auto-animate`, `interact.js`, drag-drop runtimes, scroll virtualization libs. Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
@@ -39,7 +42,6 @@ You are the `scaffolder` sub-agent. You execute the `component-scaffold` skill v
 {
   "files_written": [
     "packages/webkit/src/components/webkit/<category>/<name>/<name>.vue",
-    "packages/webkit/src/components/webkit/<category>/<name>/package.json",
     "packages/webkit/package.json"
   ],
   "exports_added": ["./<category>/<name>"],

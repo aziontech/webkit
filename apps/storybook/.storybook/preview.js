@@ -1,24 +1,30 @@
-import { setup } from '@storybook/vue3'
-import PrimeVue from 'primevue/config'
-import Tooltip from 'primevue/tooltip'
-import { withThemeByClassName } from '@storybook/addon-themes'
-
-// v3 token build: primitives, --bg-* / --text-* / --border-*, and .text-body-md etc.
-// (replaces injectCssVars(), which only emitted --background-* aliases — webkit components use --bg-*)
-import '@aziontech/theme/globals.css'
-import 'primeflex/primeflex.css'
 import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
 
-setup((app) => {
-  app.use(PrimeVue, {
-    ripple: false
-  })
+import { withThemeByClassName } from '@storybook/addon-themes'
+import { GLOBALS_UPDATED } from '@storybook/core-events'
+import { addons } from '@storybook/preview-api'
 
-  app.directive('tooltip', Tooltip)
-})
+import { STORYBOOK_VIEWPORTS, THEME_CLASSES } from './visual-modes.js'
+
+function applyThemeClass(name) {
+  const docElement = document.documentElement
+
+  docElement.classList.remove('azion', 'azion-light', 'azion-dark')
+  docElement.classList.add(...(THEME_CLASSES[name] || THEME_CLASSES.dark))
+}
+
+applyThemeClass('dark')
+
+try {
+  addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
+    if (globals && globals.theme) applyThemeClass(globals.theme)
+  })
+} catch {
+  /* headless/test contexts without a channel */
+}
 
 export const parameters = {
   controls: {
@@ -39,7 +45,8 @@ export const parameters = {
       fontCode: '"Roboto Mono", monospace',
       // Colors
       colorPrimary: '#F3652B',
-      colorSecondary: '#585C6D',
+      // Also the docs hyperlink color — #585C6D was unreadable on the dark canvas.
+      colorSecondary: '#F3652B',
       // UI
       appBg: '#0a0a0a',
       appContentBg: '#0a0a0a',
@@ -59,6 +66,9 @@ export const parameters = {
       inputBorderRadius: 4
     }
   },
+  viewport: {
+    viewports: STORYBOOK_VIEWPORTS
+  },
   backgrounds: {
     default: 'azion azion-dark',
     values: [
@@ -76,10 +86,9 @@ export const parameters = {
     storySort: {
       order: [
         'Get Started',
+        'Style Guide',
         'Foundations',
-        ['Colors', 'Spacing', 'Typography', 'Icons'],
-        'Primevue',
-        'Primevue',
+        ['Colors', 'Theme', 'Spacing', 'Typography', 'Icons'],
         'Components',
         'Site'
       ]
@@ -90,8 +99,8 @@ export const parameters = {
 export const decorators = [
   withThemeByClassName({
     themes: {
-      light: 'azion azion-light',
-      dark: 'azion azion-dark'
+      light: THEME_CLASSES.light.join(' '),
+      dark: THEME_CLASSES.dark.join(' ')
     },
     defaultTheme: 'dark'
   })

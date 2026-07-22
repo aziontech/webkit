@@ -9,6 +9,28 @@ How to style components under `packages/webkit/src/components/webkit/` using tok
 
 ---
 
+## Stack baseline
+
+### Tailwind v4 (CSS-first)
+
+`@aziontech/webkit` targets **Tailwind v4 only**. `packages/theme/src/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/v4/globals.{css,scss}` — and consumers import it directly:
+
+```css
+@import '@aziontech/theme/globals.css';
+```
+
+That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. Utility detection is done by the `@source "../../../webkit/src"` directive inside the emitted globals — that is what makes arbitrary utilities like `bg-[var(--primary)]` or `p-[var(--spacing-md)]` work in webkit components without any extra config on the consumer side.
+
+Integration points:
+
+- **Vite / Storybook:** register `@tailwindcss/vite` once. See [`apps/storybook/.storybook/main.js`](../../apps/storybook/.storybook/main.js).
+- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/storybook/src/styles/preview.css`](../../apps/storybook/src/styles/preview.css).
+- **`!important`:** use the v4 suffix syntax (`opacity-50!`, `size-10!`). The v3 prefix (`!opacity-50`) is forbidden.
+
+Do not add a `tailwind.config.*` file to any package under `packages/`. All theme customization lives in the token sources under `packages/theme/src/tokens/`, is compiled into `@theme { … }`, and reaches components via CSS custom properties.
+
+---
+
 ## Typography
 
 ### Source of truth
@@ -44,6 +66,7 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | `text-heading-2xl` … `text-heading-sm`                             | Headings                                 |
 | `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
+| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers) |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in) |
 | `text-button-lg` / `text-button-md`                                | Button labels                            |
 | `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline) |
@@ -80,7 +103,7 @@ For anchors **inside** body or heading copy, use the `text-link` typography clas
 </p>
 ```
 
-For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/navigation/link` — not `text-link` alone.
+For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/link` — not `text-link` alone.
 
 ---
 
@@ -213,7 +236,7 @@ Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`sha
 
 ### Do not
 
-- Use legacy theme vars such as `--card-shadow` in `components/webkit/` — they are PrimeVue/Azion SCSS aliases, not the primitive scale.
+- Use legacy theme vars such as `--card-shadow` in `components/webkit/` — they are legacy SCSS aliases, not the primitive scale.
 - Hardcode `box-shadow` values or Tailwind default shadows (`shadow-md`, `shadow-lg` without `var(--shadow-*)`).
 - Use `rgb(...)` / `rgba(...)` / hex in component class strings for elevation.
 
@@ -235,16 +258,17 @@ bg-[var(--bg-surface)] text-[var(--text-default)] text-[var(--text-muted)] ring-
 | Role          | Examples                                                                                                  |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
 | Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                  |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
 | Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                       |
 | Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                              |
-| Feedback      | `--success`, `--warning`, `--danger`, `--info` (+ `-border`, `-contrast` where defined)                   |
+| Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
+| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation` |
 
 ### Do not
 
 - Hardcode hex/rgb/hsl in component class strings.
 - Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `components/webkit/`.
-- Use PrimeVue color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
+- Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
 
 Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--secondary-contrast)]`, etc.).
 
@@ -437,12 +461,12 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 
 The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hook blocks: **fix the value, do not work around it.**
 
-- **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), PrimeVue color utilities (`text-color`, `surface-50`).
+- **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), external/legacy color utilities (`text-color`, `surface-50`).
 - **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-[length:var(--text-*-font-size)]` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-[var(--container-<size>)]` only (`3xs` … `7xl` from `primitives/shape/container.js`).
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
-- **Shadow:** legacy `--card-shadow` (PrimeVue alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
+- **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.
 - **TypeScript:** `any`, `@ts-ignore`, `class` declared in `defineProps`.
 
@@ -452,7 +476,6 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 
 - Token architecture: `packages/theme/src/tokens/README.md`
 - Component structure and API: [`COMPONENT_REQUIREMENTS.md`](./COMPONENT_REQUIREMENTS.md)
-- PrimeVue wrapping: [`PRIMEVUE_ABSTRACTION.md`](./PRIMEVUE_ABSTRACTION.md)
 - Storybook foundations (typography catalog): `apps/storybook/src/foundations/data/typography.js`
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)

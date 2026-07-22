@@ -4,7 +4,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 
 ## The rule
 
-> **Não crie presets de classe CSS** (objetos `kindClasses` / `sizeClasses` / `sharedClasses` no script). **Não crie classes dentro do componente** (sem `<style>` block, sem CSS local, sem utility custom). Tudo vai inline no `class` do root, usando `data-*` para alternar variantes.
+> **Do not create CSS class presets** (`kindClasses` / `sizeClasses` / `sharedClasses` objects in the script). **Do not create classes inside the component** (no `<style>` block, no local CSS, no custom utility). Everything goes inline on the root's `class`, using `data-*` to switch variants.
 
 ## What this means in practice
 
@@ -21,9 +21,9 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
     text: 'bg-transparent'
   }
   const sizeClasses: Record<Size, string> = {
-    small: 'h-7 px-[var(--spacing-2)] text-button-md',
-    medium: 'h-8 px-[var(--spacing-3)] text-button-md',
-    large: 'h-10 px-[var(--spacing-4)] text-button-lg'
+    small: 'h-7 px-[var(--spacing-xs)] text-button-md',
+    medium: 'h-8 px-[var(--spacing-sm)] text-button-md',
+    large: 'h-10 px-[var(--spacing-md)] text-button-lg'
   }
   const rootClasses = computed(() => [
     sharedClasses,
@@ -104,9 +104,9 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
       data-[kind=outlined]:border data-[kind=outlined]:border-[var(--border-default)] data-[kind=outlined]:bg-transparent
       data-[kind=text]:bg-transparent
 
-      data-[size=small]:h-7 data-[size=small]:px-[var(--spacing-2)] data-[size=small]:text-button-md
-      data-[size=medium]:h-8 data-[size=medium]:px-[var(--spacing-3)] data-[size=medium]:text-button-md
-      data-[size=large]:h-10 data-[size=large]:px-[var(--spacing-4)] data-[size=large]:text-button-lg
+      data-[size=small]:h-7 data-[size=small]:px-[var(--spacing-xs)] data-[size=small]:text-button-md
+      data-[size=medium]:h-8 data-[size=medium]:px-[var(--spacing-sm)] data-[size=medium]:text-button-md
+      data-[size=large]:h-10 data-[size=large]:px-[var(--spacing-md)] data-[size=large]:text-button-lg
 
       data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed
     "
@@ -139,7 +139,7 @@ Some components let the consumer override internal token choices (e.g. `<Card cl
     :data-testid="testId"
     :class="
       cn(
-        'rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-4)]',
+        'rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-md)]',
         attrs.class as string
       )
     "

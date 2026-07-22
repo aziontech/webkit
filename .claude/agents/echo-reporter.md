@@ -2,6 +2,7 @@
 name: echo-reporter
 description: Isolated sub-agent that re-reads every file written this run, parses props/events/slots/animations independently, and diffs against the spec. Cross-checks against validate-spec-compliance.mjs.
 status: active
+scope: webkit
 ---
 
 # Agent: echo-reporter

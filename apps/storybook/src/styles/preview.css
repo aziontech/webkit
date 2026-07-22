@@ -1,11 +1,10 @@
-@layer tailwind-base, primevue;
+/**
+ * Tailwind v4 requires `@reference` in files that use `@apply` but are not
+ * the main Tailwind entry (`@import "tailwindcss"`). Point it at the theme's
+ * generated globals so `@apply` can resolve utilities.
+ */
+@reference "@aziontech/theme";
 
-@layer tailwind-base {
-  @tailwind base;
-}
-
-@tailwind components;
-@tailwind utilities;
 
 html,
 body,
@@ -14,50 +13,46 @@ body,
 }
 
 /* Storybook Docs Preview (sbdocs/sbdocs-preview) canvas background */
+/* ⚠ Any `transition` rule in this file MUST be mirrored in the freeze style
+   injected by .storybook/test-runner.js — its selectors need equal specificity
+   to force transition-duration: 1ms during visual snapshots (theme flips
+   would otherwise animate for 0.4s and smear the screenshots). */
 .sb-main-padded,
 .docs-story,
 .docs-story > * {
-  background: #ffffff !important;
+  background: var(--bg-canvas) !important;
   transition: all 0.4s ease-in-out !important;
 }
 
-.azion-dark .sb-main-padded,
-.azion-dark .docs-story,
-.azion-dark .docs-story > * {
-  background: #0A0A0A !important;
-  transition: all 0.4s ease-in-out !important;}
-
 .docblock-code-toggle {
   /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 .css-2p1np {
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 
 /* Text Name Column Props */
 .css-in3yi3 {
-  @apply !font-code !font-normal !text-neutral-50;
+  font-family: 'Roboto Mono', monospace !important;
+  @apply font-normal! text-neutral-50!;
 }
 
 .tabbutton > * {
-  @apply !font-mono !font-normal;
+  @apply font-mono! font-normal!;
 }
 
 .docblock-argstable-head > tr {
-  @apply !font-code !lowercase;
-}
-
-.css-in3yi3 {
-  @apply !font-code !font-normal !text-neutral-50;
+  font-family: 'Roboto Mono', monospace !important;
+  @apply lowercase!;
 }
 
 .css-7qiabv {
-  @apply !font-sans !text-neutral-500;
+  @apply font-sans! text-neutral-500!;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  @apply !font-sans !font-normal;
+  @apply font-sans! font-normal!;
 }
 
 /* Theme container styles */
@@ -68,12 +63,8 @@ h1, h2, h3, h4, h5, h6 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.azion-light > body {
-  background: #ffffff !important;
-  transition: all 0.4s ease-in-out !important;
-}
-.azion-dark > body {
-  background: #0A0A0A !important;
+.azion > body {
+  background: var(--bg-canvas) !important;
   transition: all 0.4s ease-in-out !important;
 }
 
@@ -85,27 +76,13 @@ h1, h2, h3, h4, h5, h6 {
   color-scheme: light;
 }
 
-/* https://github.com/primefaces/primevue/issues/882#issuecomment-1780802552 */
-body.p-overflow-hidden {
-  --scrollbar-width: 0px !important;
-}
-
 /* https://aziontech.atlassian.net/browse/UXE-1798 */
 /* child scroll behaviour is affecting the parent scroll behaviour */
 * {
   overscroll-behavior: auto !important;
 }
 
-.grecaptcha-badge {
-  bottom: 75px !important;
-  z-index: 11;
-}
-
-.font-sora {
-  font-family: 'Sora', sans-serif;
-}
-
-.font-proto-mono, .font-proto {
+.font-proto-mono {
   font-family: 'Proto Mono', sans-serif;
 }
 

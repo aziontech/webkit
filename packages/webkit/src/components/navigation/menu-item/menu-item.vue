@@ -6,13 +6,7 @@
 
   export type MenuItemKind = 'option' | 'group'
   export type MenuItemTagSeverity =
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'info'
-    | 'warning'
-    | 'danger'
-    | 'accent'
+    'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
 
   defineOptions({
     name: 'MenuItem',
@@ -53,7 +47,7 @@
   })
 
   const emit = defineEmits<{
-    click: [event: MouseEvent]
+    click: [event: MouseEvent, item: { label: string; href: string }]
   }>()
 
   defineSlots<{
@@ -132,7 +126,7 @@
       return
     }
 
-    emit('click', event)
+    emit('click', event, { label: props.label, href: props.href })
   }
 </script>
 
@@ -181,7 +175,7 @@
       >
         <slot name="tag">
           <Tag
-            :value="tagValue"
+            :label="tagValue"
             :severity="tagSeverity"
             rounded
           />
@@ -222,7 +216,7 @@
       >
         <slot name="tag">
           <Tag
-            :value="tagValue"
+            :label="tagValue"
             :severity="tagSeverity"
             rounded
           />

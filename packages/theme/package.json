@@ -1,7 +1,7 @@
 {
   "name": "@aziontech/theme",
   "type": "module",
-  "version": "2.6.0",
+  "version": "4.0.0",
   "author": "aziontech",
   "license": "MIT",
   "repository": {
@@ -12,14 +12,11 @@
   "scripts": {
     "pack:dry": "npm pack --dry-run",
     "format": "prettier --write scripts/ src/",
+    "build": "pnpm build:tokens",
     "build:tokens": "node src/scripts/build-tokens.mjs",
-    "build:tokens:v3": "node src/scripts/build-tokens.mjs --target=v3",
-    "build:tokens:v4": "node src/scripts/build-tokens.mjs --target=v4",
-    "build:css:v3": "pnpm build:tokens:v3 && tailwindcss -c dist/v3/tailwind.config.js -i dist/v3/globals.css -o dist/v3/output.css",
-    "test:tokens:v3": "pnpm build:css:v3 && open src/tests/tokens.html",
     "clean:dts": "find src -name '*.d.ts' -delete && find src -name '*.d.ts.map' -delete",
     "build:dts": "pnpm clean:dts && vue-tsc --declaration --emitDeclarationOnly",
-    "prepack": "pnpm build:dts"
+    "prepack": "pnpm build:tokens && pnpm build:dts"
   },
   "publishConfig": {
     "access": "public"
@@ -35,7 +32,6 @@
     "token-generator"
   ],
   "dependencies": {
-    "tailwindcss": "^3.4.17",
     "vue-tsc": "^3.2.5"
   },
   "devDependencies": {
@@ -52,26 +48,13 @@
   "files": [
     "src/",
     "dist/",
-    "LICENSE",
-    "default.js",
-    "tokens.js",
-    "widget.js"
+    "LICENSE"
   ],
   "exports": {
-    ".": "./default.js",
+    ".": "./dist/v4/globals.css",
     "./animations": "./src/tokens/primitives/animations/animate.js",
     "./colors": "./src/tokens/primitives/colors/colors.js",
     "./texts": "./src/tokens/semantic/texts.data.js",
-    "./tailwind-preset": "./dist/v3/tailwind-preset.js",
-    "./tailwind-preset/v3": "./dist/v3/tailwind-preset.js",
-    "./tailwind/semantic-spacings-plugin": "./src/tokens/semantic/spacings.js",
-    "./tailwind/semantic-texts-plugin": "./src/tokens/semantic/texts.js",
-    "./tailwind/semantic-animations-plugin": "./src/tokens/semantic/animations.js",
-    "./globals.css": "./dist/v3/globals.css",
-    "./globals.scss": "./dist/v3/globals.scss",
-    "./v3/globals.css": "./dist/v3/globals.css",
-    "./v3/globals.scss": "./dist/v3/globals.scss",
-    "./v4/globals.css": "./dist/v4/globals.css",
-    "./v4/globals.scss": "./dist/v4/globals.scss"
+    "./theme-colors": "./src/scripts/compile-theme.js"
   }
 }

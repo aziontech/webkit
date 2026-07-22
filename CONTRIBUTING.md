@@ -24,7 +24,7 @@ pnpm storybook:dev
 Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, story, and exports are derived from it.
 
 1. **Draft the spec** — `/spec-create <name>` writes `.specs/<name>.md` with `status: draft`. Review and flip to `status: approved`.
-2. **Scaffold** — `/component-create <name>` writes the `.vue`, its local `package.json`, the `packages/webkit/package.json#exports` entry, and a minimal `.stories.js`. It will refuse to add props, events, or slots that are not in the spec.
+2. **Scaffold** — `/component-create <name>` writes the `.vue`, the `packages/webkit/package.json#exports` entry, and a minimal `.stories.js`. It will refuse to add props, events, or slots that are not in the spec.
 3. **Verify** — `/component-verify <name>` re-runs spec compliance and validators without touching files.
 
 The spec template lives at [`.specs/_template.md`](./.specs/_template.md). The Constraints block is verbatim by design — do not edit it.
@@ -59,6 +59,40 @@ pnpm governance             # lint + type-check + format:check + security:audit
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
 
+## Testing
+
+Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`.claude/rules/testing.md`](./.claude/rules/testing.md).
+
+```bash
+pnpm webkit:test                              # whole suite (headless Chromium)
+pnpm --filter @aziontech/webkit test:ui       # interactive UI (headed browser)
+pnpm --filter @aziontech/webkit test:coverage # v8 coverage report
+```
+
+The first run installs the browser: `pnpm --filter @aziontech/webkit exec playwright install chromium`.
+
+If pnpm aborts with a deps-verify error (common when `node_modules` is symlinked, e.g. a git worktree), prefix the command:
+
+```bash
+PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm webkit:test
+```
+
+Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm pack:check`.
+
+### Visual regression (Storybook test-runner)
+
+The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA. Pixels are owned by the visual layer: `@storybook/test-runner` visits every story in the built Storybook, screenshots `#storybook-root` and compares against committed baselines (`jest-image-snapshot`). Config: [`apps/storybook/.storybook/test-runner.js`](./apps/storybook/.storybook/test-runner.js).
+
+```bash
+pnpm storybook:test:visual                    # build + serve dist + compare (one-shot)
+pnpm --filter storybook run test:visual       # compare against a running `storybook:dev`
+pnpm --filter storybook run test:visual:update# regenerate LOCAL baselines
+```
+
+Baselines are **per-platform** (font rasterization differs): `apps/storybook/.storybook/test-visual/__image_snapshots__/linux/` is the CI contract and is committed; `darwin/` is local-only and gitignored. To bootstrap or intentionally update the committed baselines, run the **Visual Regression @ Storybook** workflow manually with `update_baselines=true`, download the `visual-baselines-linux` artifact and commit its contents — never commit baselines generated on macOS. Failed comparisons write annotated diffs to `test-visual/__diff_output__/` (uploaded as a CI artifact).
+
+Opt a story out of the snapshot (it is still visited for render errors) with `parameters: { visual: false }`.
+
 ## Commit convention
 
 We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-release` parses commit messages to compute version bumps and changelogs, so the scope and type matter.
@@ -72,7 +106,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-r
 | `docs` | README, spec body, JSDoc | patch |
 | `style` | Formatting / whitespace only | patch |
 | `refactor` | Internal restructure with no API change | patch |
-| `perf` | Performance improvement (via conventional-commits preset default) | patch |
+| `perf` | Performance improvement | patch |
 | `test` | Test additions or changes | none |
 | `ci` | CI/CD pipeline changes | none |
 | `revert` | Reverting a prior commit | none |
@@ -110,7 +144,7 @@ A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`
 
 The config also enforces:
 
-- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. The first eight produce a release (per `.releaserc` rules + conventional-commits preset defaults); `test`, `ci`, `revert` are allowed for hygiene but produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
+- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Every type is enumerated in each `.releaserc` `releaseRules`: the first eight produce a release (`feat` → minor, the rest → patch); `test`, `ci`, `revert` carry `release: false` for hygiene and produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
 - `type` and `scope` must be lower-case.
 - `subject` cannot be empty.
 - Header (full first line) cannot exceed 100 characters.

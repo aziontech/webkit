@@ -2,6 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import Label from '../label/label.vue'
   import RadioButton from '../radio-button/radio-button.vue'
 
   defineOptions({
@@ -68,24 +69,30 @@
 </script>
 
 <template>
-  <label
-    :for="resolvedInputId"
+  <div
     :class="rootClasses"
     :data-testid="testId"
     :data-disabled="disabled || null"
   >
+    <RadioButton
+      v-model="model"
+      :value="value"
+      :name="name"
+      :disabled="disabled"
+      :input-id="resolvedInputId"
+      :data-testid="`${testId}__control`"
+    />
     <div
       :class="textsClasses"
       :data-disabled="disabled || null"
       :data-testid="`${testId}__texts`"
     >
-      <span
+      <Label
         v-if="label"
-        class="text-body-sm text-[var(--text-default)]"
+        :label="label"
+        :for="resolvedInputId"
         :data-testid="`${testId}__label`"
-      >
-        {{ label }}
-      </span>
+      />
       <span
         v-if="description"
         class="text-body-xs text-[var(--text-muted)]"
@@ -106,13 +113,5 @@
         <span :data-testid="`${testId}__helper-text`">{{ helperText }}</span>
       </div>
     </div>
-    <RadioButton
-      v-model="model"
-      :value="value"
-      :name="name"
-      :disabled="disabled"
-      :input-id="resolvedInputId"
-      :data-testid="`${testId}__control`"
-    />
-  </label>
+  </div>
 </template>
