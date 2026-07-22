@@ -57,12 +57,12 @@ const meta = {
     },
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
+      options: ['small', 'medium'],
       description:
-        'Size token; affects the adornment size, the surrounding padding, and the gaps between adornment, text, and actions.',
+        'Size token (small and medium only); scales the adornment, the title and description typography, the surrounding padding, and the gaps on one harmonic ramp.',
       table: {
         category: 'props',
-        type: { summary: "'small' | 'medium' | 'large'" },
+        type: { summary: "'small' | 'medium'" },
         defaultValue: { summary: "'medium'" }
       }
     },
@@ -129,7 +129,7 @@ export const Default = {
 
 const SIZES_TEMPLATE = `<div class="flex w-full flex-col gap-[var(--spacing-xl)]">
   <EmptyState
-    v-for="size in ['small', 'medium', 'large']"
+    v-for="size in ['small', 'medium']"
     :key="size"
     :size="size"
     title="No resource yet"
@@ -146,7 +146,7 @@ export const Sizes = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'The three size variants — small, medium, large — stacked.' },
+      description: { story: 'The size variants — small and medium — stacked.' },
       source: { code: toSfc(IMPORTS, SIZES_TEMPLATE) }
     }
   }

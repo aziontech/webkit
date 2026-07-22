@@ -51,8 +51,8 @@ import MiniButton from '@aziontech/webkit/mini-button'
 | `title` | `string` | `—` | yes | Primary heading announcing the empty resource. |
 | `description` | `string` | `''` | no | Supporting body copy below the title. |
 | `icon` | `string` | `''` | no | PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
-| `bordered` | `boolean` | `false` | no | When true, wraps the content in a bordered surface card; otherwise renders on a transparent background. |
+| `size` | `'small' \| 'medium'` | `'medium'` | no | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
+| `bordered` | `boolean` | `false` | no | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background. |
 
 ## Events
 
@@ -82,7 +82,7 @@ _none_
 | title typography | per-`size` — see harmonic scale below |
 | description typography | per-`size` — see harmonic scale below |
 | surface (bordered) | `var(--bg-surface)` |
-| border (bordered) | `var(--border-default)` |
+| border (bordered) | `var(--border-default)` (dashed, `var(--border-width-default)`) |
 | title text | `var(--text-default)` |
 | description text | `var(--text-muted)` |
 | adornment tile surface | `var(--bg-surface)` |
@@ -98,13 +98,13 @@ _none_
 
 Every axis steps up one rung per size on a single harmonic ramp. The title climbs the **heading** scale (`heading` tokens only — never `body`); the description climbs the **body** scale one rung below it, so the pair stays in proportion at every size.
 
-| Axis | `small` | `medium` | `large` |
-|---|---|---|---|
-| title typography | `.text-heading-xxs` (14px) | `.text-heading-sm` (14 → 18px) | `.text-heading-md` (16 → 24px) |
-| description typography | `.text-body-xs` (12px) | `.text-body-sm` (14px) | `.text-body-md` (16px) |
-| adornment tile | `size-8` (32px) | `size-10` (40px) | `size-12` (48px) |
-| padding (x · y) | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` | `var(--spacing-12)` · `var(--spacing-16)` |
-| stack gap | `var(--spacing-4)` | `var(--spacing-6)` | `var(--spacing-8)` |
+| Axis | `small` | `medium` |
+|---|---|---|
+| title typography | `.text-heading-xxs` (14px) | `.text-heading-sm` (14 → 18px) |
+| description typography | `.text-body-xs` (12px) | `.text-body-sm` (14px) |
+| adornment tile | `size-8` (32px) | `size-10` (40px) |
+| padding (x · y) | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` |
+| stack gap | `var(--spacing-4)` | `var(--spacing-6)` |
 
 ## Theme gaps
 

@@ -111,11 +111,11 @@ describe('EmptyState', () => {
     const def = within(render(EmptyState, { props: { title: 'Empty' } }).container)
     expect(def.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('medium')
 
-    const large = within(render(EmptyState, { props: { title: 'Empty', size: 'large' } }).container)
-    expect(large.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('large')
+    const small = within(render(EmptyState, { props: { title: 'Empty', size: 'small' } }).container)
+    expect(small.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('small')
   })
 
-  it.each(['small', 'medium', 'large'] as const)(
+  it.each(['small', 'medium'] as const)(
     'mirrors size=%s onto data-size of the root and the icon tile',
     (size) => {
       const { getByTestId } = within(
@@ -160,10 +160,10 @@ describe('EmptyState', () => {
       expect(getByTestId('feedback-empty-state').getAttribute('data-bordered')).toBe('true')
     })
 
-    it('renders the Sizes story with all three size variants', () => {
+    it('renders the Sizes story with all size variants', () => {
       const { getAllByTestId } = within(render(Sizes).container)
       const roots = getAllByTestId('feedback-empty-state')
-      expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
+      expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium'])
     })
   })
 })
