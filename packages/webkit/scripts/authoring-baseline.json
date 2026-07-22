@@ -185,7 +185,6 @@
   "packages/webkit/src/components/overlay/panel/panel.vue::spec:Props in .vue not in spec: sizeAtMd",
   "packages/webkit/src/components/overlay/panel/panel.vue::token:js-class-preset",
   "packages/webkit/src/components/overlay/popover/popover-close/popover-close.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
-  "packages/webkit/src/components/overlay/popover/popover-content/popover-content.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
   "packages/webkit/src/components/overlay/popover/popover-description/popover-description.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
   "packages/webkit/src/components/overlay/popover/popover-footer/popover-footer.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
   "packages/webkit/src/components/overlay/popover/popover-header/popover-header.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
@@ -207,5 +206,6 @@
   "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::spec:data-testid fallback \"'templates-sign-up-card'\" not found in <script setup>. Expected: ?? 'templates-sign-up-card'",
   "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::token:js-class-preset",
   "packages/webkit/src/components/utils/spinner/spinner.vue::spec:Animation classes in .vue but not in spec: animate-spin",
-  "packages/webkit/src/components/utils/spinner/spinner.vue::spec:data-testid fallback \"'utils-spinner'\" not found in <script setup>. Expected: ?? 'utils-spinner'"
+  "packages/webkit/src/components/utils/spinner/spinner.vue::spec:data-testid fallback \"'utils-spinner'\" not found in <script setup>. Expected: ?? 'utils-spinner'",
+  "packages/webkit/src/components/overlay/popover/popover.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out"
 ]
