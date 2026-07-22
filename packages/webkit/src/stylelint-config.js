@@ -14,6 +14,9 @@
 const USE_TOKEN =
   'Use a design token from @aziontech/theme via var(--*) instead of a hardcoded color.'
 
+const USE_MOTION_TOKEN =
+  'Motion timing lives in the theme tokens: use the animate-* utilities or var(--duration-*/--ease-*) — never a literal ms/s, a raw cubic-bezier(), or transition: all.'
+
 export default {
   rules: {
     // Bans hex colors: `#fff`, `#ffffff`, `#ffffffff`. The message tells the
@@ -40,9 +43,17 @@ export default {
         '/^(color|background|background-color|border|border-color|outline|outline-color|fill|stroke|box-shadow|text-shadow)$/':
           [
             '/^(?!.*var\\().*\\b(black|white|red|green|blue|yellow|orange|purple|pink|gray|grey|silver|gold)\\b/i'
-          ]
+          ],
+        // Motion timing discipline (the styles-side of webkit/no-hardcoded-motion):
+        //  - a literal duration (200ms / 1.5s) in transition/animation — tokens only;
+        //  - a raw cubic-bezier() — the curves ship as --ease-* tokens;
+        //  - bare `transition: all` — always name the animated properties.
+        // A value that reads its timing from var(--…) passes untouched.
+        '/^(transition|transition-duration|transition-delay|animation|animation-duration|animation-delay)$/':
+          ['/(?<!var\\([^)]*)\\b\\d+(\\.\\d+)?m?s\\b/', '/cubic-bezier\\(/'],
+        '/^transition$/': ['/^all\\b/']
       },
-      { message: `${USE_TOKEN} Named colors are not allowed.` }
+      { message: `${USE_TOKEN} ${USE_MOTION_TOKEN}` }
     ]
   }
 }

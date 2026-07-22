@@ -28,6 +28,11 @@ layer you're in, because only one of them is optional:
   ARIA, no click handler without a key handler.
 - **Small bundles.** Prefer the `<name>-root` path (or specific sub-components), import icons
   individually, lazy-load heavy overlays.
+- **App-level setup at first use.** A few components declare a one-time wiring in their catalog
+  `setup` field (via the MCP's `get_component`). Toast: before the first `toast(...)` call, wire
+  `import { ToastPlugin } from '@aziontech/webkit/toast'` + `.use(ToastPlugin)` on `createApp()`
+  in the entry (the plugin mounts the region automatically); skip if already wired. `webkit doctor`
+  flags usage with missing setup.
 
 ### Enforced by lint (blocks — nothing here is a suggestion)
 

@@ -21,6 +21,25 @@ always has a reduced-motion escape. This is the invariant behind the `/webkit-mo
 - For `data-state="open|closed"` overlay motion, read `duration` + `curve` from the tokens and emit
   the inline `transition` per phase; keep transform/opacity in classes, only timing inline.
 
+## The panel recipe (sidebar / drawer / any v-if region)
+
+A conditionally rendered region never animates by itself — wrap the `v-if` in a Vue `Transition`
+and hand the enter/leave phases to the catalogued utilities. For lateral panels the pair is
+`animate-slide-in-left` / `animate-slide-out-left` (right-anchored drawers use the `-right` pair):
+
+```vue
+<Transition
+  enter-active-class="animate-slide-in-left motion-reduce:animate-none"
+  leave-active-class="animate-slide-out-left motion-reduce:animate-none"
+>
+  <aside v-if="sidebarOpen">...</aside>
+</Transition>
+```
+
+Content or backdrops appearing in place use `animate-fade-in` / `animate-fade-out` in the same
+shape; vertical disclosure uses `animate-slide-down`. Ask the webkit MCP
+(`list_tokens` with category `animations`) for every utility, its timing, and when to use it.
+
 ## Never
 
 - A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline

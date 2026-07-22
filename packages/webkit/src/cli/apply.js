@@ -129,6 +129,38 @@ function applyAppend(projectDir, action) {
   return { action, result: 'appended', detail: action.path }
 }
 
+// Prepend the entry-file imports that are not already there. Bare-import presence is
+// checked by the module SPECIFIER (the quoted path), not the whole line, so
+// `import "./webkit.css"` with double quotes — or an import the user moved further
+// down — still counts as wired. Named imports are checked by IDENTIFIER (importing
+// something else from the same module must not satisfy them).
+function applyPatchEntry(projectDir, action) {
+  const target = join(projectDir, action.path)
+  if (!existsSync(target)) {
+    return { action, result: 'skipped', detail: `${action.path} missing` }
+  }
+  const src = readFileSync(target, 'utf8')
+  const missing = action.imports.filter((line) => {
+    const named = line.match(/import\s*\{\s*([A-Za-z_$][\w$]*)\s*\}/)?.[1]
+    if (named) return !new RegExp(`\\b${named}\\b`).test(src)
+    const spec = line.match(/['"]([^'"]+)['"]/)?.[1]
+    return spec ? !src.includes(spec) : !src.includes(line)
+  })
+  if (!missing.length) {
+    return {
+      action,
+      result: 'skipped',
+      detail: `${action.path} already has the design-system imports`
+    }
+  }
+  writeFileSync(target, `${missing.join('\n')}\n${src}`, 'utf8')
+  return {
+    action,
+    result: 'merged',
+    detail: `${action.path}: added ${missing.map((l) => l.match(/['"]([^'"]+)['"]/)?.[1] || l).join(', ')}`
+  }
+}
+
 function applyCopy(projectDir, action) {
   const target = join(projectDir, action.to)
   if (existsSync(target)) {
@@ -167,6 +199,9 @@ export function applyPlan(projectDir, plan) {
         break
       case 'copy':
         results.push(applyCopy(projectDir, action))
+        break
+      case 'patch-entry':
+        results.push(applyPatchEntry(projectDir, action))
         break
       case 'advise':
         results.push({ action, result: 'advised', detail: action.message })

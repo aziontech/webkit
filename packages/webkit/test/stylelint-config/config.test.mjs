@@ -37,7 +37,10 @@ test('allows a design token via var(--*)', async () => {
 test('flags a raw color function (function-disallowed-list)', async () => {
   const warnings = await lint('a{color:rgb(0,0,0)}')
   assert.ok(warnings.length > 0, 'expected at least one warning for rgb()')
-  assert.ok(firedBy(warnings, 'function-disallowed-list'), 'expected function-disallowed-list to fire')
+  assert.ok(
+    firedBy(warnings, 'function-disallowed-list'),
+    'expected function-disallowed-list to fire'
+  )
 })
 
 test('flags a named color on a color property (declaration-property-value-disallowed-list)', async () => {
@@ -51,6 +54,45 @@ test('flags a named color on a color property (declaration-property-value-disall
 test('leaves safe keyword values alone (currentColor / transparent / inherit)', async () => {
   for (const value of ['currentColor', 'transparent', 'inherit']) {
     const warnings = await lint(`a{color:${value}}`)
-    assert.equal(warnings.length, 0, `expected no warnings for ${value}, got: ${JSON.stringify(warnings)}`)
+    assert.equal(
+      warnings.length,
+      0,
+      `expected no warnings for ${value}, got: ${JSON.stringify(warnings)}`
+    )
+  }
+})
+
+test('flags literal motion timing / raw cubic-bezier / transition: all', async () => {
+  for (const decl of [
+    'transition:opacity 200ms',
+    'transition-duration:1.5s',
+    'animation:spin 1s linear',
+    'transition:opacity 240ms cubic-bezier(0.4,0,0.2,1)',
+    'transition:all'
+  ]) {
+    const warnings = await lint(`a{${decl}}`)
+    assert.ok(
+      firedBy(warnings, 'declaration-property-value-disallowed-list'),
+      `expected the motion discipline to fire for "${decl}"`
+    )
+    assert.match(
+      warnings.find((w) => w.rule === 'declaration-property-value-disallowed-list').text,
+      /animate-\*|duration/
+    )
+  }
+})
+
+test('allows motion timing read from tokens (var(--duration-*/--ease-*))', async () => {
+  for (const decl of [
+    'transition:opacity var(--duration-fast-01) var(--ease-productive-entrance)',
+    'transition:transform var(--duration-moderate-01)',
+    'animation-duration:var(--duration-slow-01)'
+  ]) {
+    const warnings = await lint(`a{${decl}}`)
+    assert.equal(
+      warnings.length,
+      0,
+      `expected no warnings for "${decl}", got: ${JSON.stringify(warnings)}`
+    )
   }
 })
