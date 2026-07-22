@@ -667,7 +667,10 @@
       "--width-md",
       "--width-sm",
       "--width-xl",
-      "--width-xs"
+      "--width-xs",
+      "--z-input-field",
+      "--z-input-overlay",
+      "--z-input-popup"
     ],
     "typography": [
       "text-big-number-lg",
@@ -1400,6 +1403,11 @@
         "--width-sm",
         "--width-xl",
         "--width-xs"
+      ],
+      "z": [
+        "--z-input-field",
+        "--z-input-overlay",
+        "--z-input-popup"
       ]
     },
     "animations": [
