@@ -8132,6 +8132,13 @@
           "default": "'medium'",
           "required": "no",
           "doc": "Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport."
+        },
+        {
+          "name": "mobileBehavior",
+          "type": "DrawerMobileBehavior",
+          "default": "'sheet'",
+          "required": "no",
+          "doc": "Mobile presentation below `md`: `sheet` docks to the bottom as a sheet; `side` keeps the `side` edge panel full-height."
         }
       ],
       "events": [
