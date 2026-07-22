@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import InputGroup, { InputGroupAddon } from './index'
 
-const { Default, BothAddons, WithButton, WithSelect, Invalid, Required, Disabled } =
+const { Default, Sizes, BothAddons, WithButton, WithSelect, Invalid, Required, Disabled } =
   composeStories(stories)
 
 // The middle input is a consumer-provided raw <input>; aria-label gives it an
@@ -95,6 +95,53 @@ describe('InputGroup', () => {
       const root = getByTestId('input-group')
       expect(root.getAttribute('data-required')).toBeNull()
       expect(root.getAttribute('aria-required')).toBeNull()
+    })
+  })
+
+  describe('size', () => {
+    it('defaults data-size to "medium" on the root', () => {
+      const { getByTestId } = render(InputGroup, { slots: { default: LABELLED_INPUT } })
+      expect(getByTestId('input-group').getAttribute('data-size')).toBe('medium')
+    })
+
+    it.each(['small', 'medium', 'large'] as const)(
+      'reflects size="%s" as data-size on the root',
+      (size) => {
+        const { getByTestId } = render(InputGroup, {
+          props: { size },
+          slots: { default: LABELLED_INPUT }
+        })
+        expect(getByTestId('input-group').getAttribute('data-size')).toBe(size)
+      }
+    )
+
+    it('propagates size to inner addons via CSS ancestor selector (data-size on root)', () => {
+      const { getByTestId } = render(InputGroup, {
+        props: { size: 'large' },
+        slots: {
+          default: `<span data-testid="addon-l">$</span>${LABELLED_INPUT}`
+        }
+      })
+      // The group's data-size is the single source of truth read by the addon's
+      // ancestor-scoped Tailwind variants ([[data-size=large]_&]:...). Assert
+      // the contract at the boundary the CSS reads.
+      expect(getByTestId('input-group').getAttribute('data-size')).toBe('large')
+    })
+  })
+
+  describe('focus (single ring — ENG-46733)', () => {
+    it('suppresses focus rings on all descendant elements so only the group ring shows', () => {
+      const { getByTestId } = render(InputGroup, {
+        slots: { default: LABELLED_INPUT }
+      })
+      const root = getByTestId('input-group')
+      const cls = root.getAttribute('class') ?? ''
+      // Descendant focus rings (buttons, links, comboboxes, input wrappers) are
+      // neutralized — the group owns the single visible focus indicator.
+      expect(cls).toContain('[&_*]:focus-visible:!ring-0')
+      expect(cls).toContain('[&_*]:focus-within:!ring-0')
+      // The group itself still renders its focus-within ring.
+      expect(cls).toContain('focus-within:ring-2')
     })
   })
 
@@ -219,6 +266,13 @@ describe('InputGroup', () => {
       expect(trigger.getAttribute('role')).toBe('combobox')
       expect(trigger.getAttribute('aria-expanded')).toBe('false')
       expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('BRL')
+    })
+
+    it('renders the Sizes story with one group per size, each carrying data-size', () => {
+      const { getAllByTestId } = render(Sizes)
+      const groups = getAllByTestId('input-group')
+      expect(groups).toHaveLength(3)
+      expect(groups.map((g) => g.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
     })
 
     it('renders the Invalid story with data-invalid on the root', () => {
