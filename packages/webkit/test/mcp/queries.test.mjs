@@ -104,6 +104,16 @@ test('listTokens surfaces the animations catalog with timing + use-when', () => 
   assert.ok(index.groups.some((g) => g.name === 'animations' && g.count > 0))
 })
 
+test('every animate-* utility has a useWhen entry (guidance stays in sync with the catalog)', async () => {
+  const { animate, useWhen } = await import('@aziontech/theme/animations')
+  for (const name of Object.keys(animate)) {
+    assert.ok(
+      typeof useWhen[name] === 'string' && useWhen[name].length > 0,
+      `animate-${name} has no useWhen entry — add it in packages/theme/src/tokens/primitives/animations/animate.js`
+    )
+  }
+})
+
 test('getComponent surfaces app-level setup for toast', () => {
   const res = getComponent(catalog, 'toast')
   assert.equal(res.found, true)
