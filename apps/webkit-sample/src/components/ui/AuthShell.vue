@@ -1,12 +1,12 @@
 <script setup>
 // The shared chrome for every unauthenticated screen (Sign Up, Check Inbox,
 // Personalize): the black GlobalHeader with the Azion brand mark + a
-// Documentation link, a flex-1 slotted body, and the persistent copyright
-// footer. Screens compose their own two-column layout inside the default slot.
+// Documentation link and a flex-1 slotted body. Screens compose their own
+// two-column layout inside the default slot.
 //
-// Kept as one component so the brand SVG, the Documentation affordance, and the
-// footer are defined once and stay identical across the whole signup flow —
-// mirroring how CreationHeader centralizes the header for the creation flows.
+// Kept as one component so the brand SVG and the Documentation affordance are
+// defined once and stay identical across the whole signup flow — mirroring how
+// CreationHeader centralizes the header for the creation flows.
 import Button from "@aziontech/webkit/button";
 import GlobalHeader from "@aziontech/webkit/global-header";
 </script>
@@ -67,13 +67,5 @@ import GlobalHeader from "@aziontech/webkit/global-header";
     <main class="flex flex-1 flex-col">
       <slot />
     </main>
-
-    <footer
-      class="border-t-[length:var(--border-width-default)] border-[var(--border-muted)] px-[var(--spacing-xl)] py-[var(--spacing-md)]"
-    >
-      <p class="text-body-xs text-[var(--text-muted)]">
-        © Azion Technologies, Inc or its affiliates. All rights reserved.
-      </p>
-    </footer>
   </div>
 </template>

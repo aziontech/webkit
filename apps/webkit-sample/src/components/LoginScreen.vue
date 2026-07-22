@@ -7,7 +7,6 @@ import IconButton from "@aziontech/webkit/icon-button";
 import InputPassword from "@aziontech/webkit/input-password";
 import InputText from "@aziontech/webkit/input-text";
 import Label from "@aziontech/webkit/label";
-import Link from "@aziontech/webkit/link";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
 import { computed, ref } from "vue";
@@ -298,13 +297,12 @@ const handlePrimary = () => {
           <p class="text-body-sm text-[var(--text-default)]">
             Don't have an account?
           </p>
-          <Link
-            label="Sign up"
-            size="medium"
-            :show-icon="false"
+          <a
+            class="text-link text-body-sm"
             href="/signup"
             @click.prevent="router.push({ name: 'signup' })"
-          />
+            >Sign up</a
+          >
         </div>
       </div>
     </main>
