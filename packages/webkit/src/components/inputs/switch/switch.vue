@@ -72,7 +72,7 @@
 
   const LOCK_ICON_CLASS = 'pi text-body-xxs leading-none'
   const LOCK_OFF_CLASS = `${LOCK_ICON_CLASS} pi-lock text-[var(--bg-surface)]`
-  const LOCK_ON_CLASS = `${LOCK_ICON_CLASS} pi-lock-open text-[var(--success-contrast)]`
+  const LOCK_ON_CLASS = `${LOCK_ICON_CLASS} pi-lock-open text-[var(--text-default)]`
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 </script>

@@ -186,6 +186,49 @@ describe('Switch', () => {
     })
   })
 
+  describe('privacy lock icon', () => {
+    it('renders no lock icon when kind=default', () => {
+      const { getByTestId } = render(Switch, {
+        props: { kind: 'default', modelValue: true },
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+
+      const handle = getByTestId('input-switch__handle')
+      expect(handle.querySelector('i.pi')).toBeNull()
+    })
+
+    it('renders pi-lock tinted var(--bg-surface) when privacy is off', () => {
+      const { getByTestId } = render(Switch, {
+        props: { kind: 'privacy', modelValue: false },
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+
+      const icon = getByTestId('input-switch__handle').querySelector('i.pi') as HTMLElement | null
+      expect(icon).not.toBeNull()
+      expect(icon!.classList.contains('pi-lock')).toBe(true)
+      expect(icon!.classList.contains('pi-lock-open')).toBe(false)
+      expect(icon!.className).toContain('text-[var(--bg-surface)]')
+      expect(icon!.getAttribute('aria-hidden')).toBe('true')
+    })
+
+    it('renders pi-lock-open tinted var(--text-default) when privacy is on (contrasts against handle, not track)', () => {
+      const { getByTestId } = render(Switch, {
+        props: { kind: 'privacy', modelValue: true },
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+
+      const icon = getByTestId('input-switch__handle').querySelector('i.pi') as HTMLElement | null
+      expect(icon).not.toBeNull()
+      expect(icon!.classList.contains('pi-lock-open')).toBe(true)
+      expect(icon!.classList.contains('pi-lock')).toBe(false)
+      // The on icon must NOT reuse --success-contrast (the surrounding track color)
+      // — that made the icon "blend" into the track visually. It uses --text-default
+      // so it contrasts against the handle's --bg-canvas fill in both themes.
+      expect(icon!.className).toContain('text-[var(--text-default)]')
+      expect(icon!.className).not.toContain('text-[var(--success-contrast)]')
+    })
+  })
+
   describe('smoke over type variants', () => {
     it.each([['default'], ['privacy']] as const)('renders data-kind=%s', (type) => {
       const { getByTestId } = render(Switch, {
