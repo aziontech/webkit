@@ -105,7 +105,9 @@ test('listTokens surfaces the animations catalog with timing + use-when', () => 
 })
 
 test('every animate-* utility has a useWhen entry (guidance stays in sync with the catalog)', async () => {
-  const { animate, useWhen } = await import('@aziontech/theme/animations')
+  const { animate, useWhen } = await import(
+    '../../../theme/src/tokens/primitives/animations/animate.js'
+  )
   for (const name of Object.keys(animate)) {
     assert.ok(
       typeof useWhen[name] === 'string' && useWhen[name].length > 0,
