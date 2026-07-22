@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/vue3'
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
@@ -12,7 +12,7 @@ import TabViewList from './tab-view-list.vue'
 import TabViewPanel from './tab-view-panel.vue'
 import TabViewRoot from './tab-view-root.vue'
 
-const { Default } = composeStories(stories)
+const { Default, Scrollable } = composeStories(stories)
 
 // A realistic composed tab tree wired through the dot-notation sub-components.
 // Uncontrolled (default-value) unless a test overrides via v-model.
@@ -62,6 +62,27 @@ describe('TabView (composition)', () => {
       const list = getByTestId('tv__list')
       expect(list.getAttribute('role')).toBe('tablist')
       expect(getByTestId('tv__content')).toBeTruthy()
+    })
+
+    it('makes the tab list horizontally scrollable (mobile overflow)', () => {
+      const { getByTestId } = render(Tree)
+      const list = getByTestId('tv__list')
+
+      // Real rendered behavior (styled DOM in the browser), not a class-string check:
+      // the list is a horizontal-scroll container so overflowing tabs scroll on mobile.
+      expect(globalThis.getComputedStyle(list).overflowX).toBe('auto')
+    })
+
+    it('renders an animated trailing edge fade when the tab bar overflows', async () => {
+      // The Scrollable story packs 8 tabs into a width-constrained container, so the
+      // list overflows: the trailing fade overlay renders (leading one does not at start).
+      const { getByRole, container } = render(Scrollable)
+      const list = getByRole('tablist')
+
+      await waitFor(() => expect(list.getAttribute('data-fade-end')).toBe('true'))
+      expect(list.getAttribute('data-fade-start')).toBeNull()
+      expect(container.querySelector('[data-testid$="__fade-end"]')).toBeTruthy()
+      expect(container.querySelector('[data-testid$="__fade-start"]')).toBeNull()
     })
 
     it('renders each tab as role=tab and each panel as role=tabpanel', () => {
