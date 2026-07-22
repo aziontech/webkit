@@ -119,6 +119,7 @@
     "./docs/STYLEGUIDE.md": "./docs/STYLEGUIDE.md",
     "./eslint-plugin": "./src/eslint-plugin/index.js",
     "./stylelint-config": "./src/stylelint-config.js",
+    "./styles": "./src/styles.css",
     "./overline": "./src/components/overline/overline.vue",
     "./button": "./src/components/actions/button/button.vue",
     "./button-highlight": "./src/components/actions/button-highlight/button-highlight.vue",

@@ -93,6 +93,9 @@ export function validateFrontmatter(fm) {
       errors.push('figma.node_id: must match <num>:<num>')
     }
   }
+  if (fm.setup !== undefined && (typeof fm.setup !== 'string' || !fm.setup.trim())) {
+    errors.push('setup: must be a non-empty string when present')
+  }
   return errors
 }
 

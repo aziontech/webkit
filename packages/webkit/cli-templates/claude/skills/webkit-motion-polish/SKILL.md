@@ -2,7 +2,7 @@
 name: webkit-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-07-22
 scope: general
 enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---
@@ -52,10 +52,29 @@ The `animate-*` utilities from the animation token catalog (listed by the webkit
 | `animate-fade-in` / `animate-fade-out`               | opacity in / out                                                 |
 | `animate-slide-down`                                 | height 0 → auto (the one catalogued height animation — see note) |
 | `animate-popup-scale-in` / `animate-popup-scale-out` | scale + fade for popovers/menus                                  |
+| `animate-slide-in-left` / `animate-slide-out-left`   | left-anchored panel enter/leave (sidebar, nav drawer)            |
+| `animate-slide-in-right` / `animate-slide-out-right` | right-anchored panel enter/leave (settings/detail drawer)        |
 | `animate-blink`                                      | caret/blink                                                      |
 | `animate-highlight-fade`                             | row-flash highlight                                              |
 
 For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the trigger anchor.
+
+### The panel recipe (sidebar / drawer / any v-if region)
+
+A conditionally rendered region never animates by itself — wrap the `v-if` in a Vue `Transition`
+and hand the phases to the catalogued pair:
+
+```vue
+<Transition
+  enter-active-class="animate-slide-in-left motion-reduce:animate-none"
+  leave-active-class="animate-slide-out-left motion-reduce:animate-none"
+>
+  <aside v-if="sidebarOpen">...</aside>
+</Transition>
+```
+
+Same shape with `animate-fade-in/out` for in-place content and backdrops, and
+`animate-slide-down` for vertical disclosure.
 
 ### Timing only from tokens
 

@@ -1,11 +1,14 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { planInit, CLAUDE_FRAGMENT_MARKER, MCP_SERVER_NAME } from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
+
+const MAIN_TS =
+  "import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n"
 
 function makeProject() {
   const dir = mkdtempSync(join(tmpdir(), 'webkit-cli-'))
@@ -13,6 +16,7 @@ function makeProject() {
     join(dir, 'package.json'),
     JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2)
   )
+  mkdirSync(join(dir, 'src'))
   return dir
 }
 
@@ -97,7 +101,11 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     const twCfg = plan.find(
       (a) => a.type === 'write' && a.path && a.path.startsWith('tailwind.config')
     )
-    assert.equal(twCfg, undefined, 'Tailwind v4 is CSS-first — no tailwind.config should be written')
+    assert.equal(
+      twCfg,
+      undefined,
+      'Tailwind v4 is CSS-first — no tailwind.config should be written'
+    )
 
     const pcCfg = plan.find((a) => a.type === 'write' && a.path === 'postcss.config.mjs')
     assert.ok(pcCfg, 'expected postcss.config.mjs write action')
@@ -106,8 +114,14 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
     assert.ok(cssEntry, 'expected src/webkit.css write action')
     assert.match(cssEntry.content, /@import '@aziontech\/theme'/)
-    // Critically, it must @source webkit's source so component classes compile.
-    assert.match(cssEntry.content, /@source[^\n]*@aziontech\/webkit\/src/)
+    // Critically, it must register webkit's source so component classes compile — via the
+    // package-name import (the @source ships inside webkit), never a ../node_modules path.
+    assert.match(cssEntry.content, /@import '@aziontech\/webkit\/styles'/)
+    assert.doesNotMatch(
+      cssEntry.content,
+      /node_modules/,
+      'the CSS entry must not hardcode a node_modules path'
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -140,6 +154,102 @@ test('planInit advises the LIGHT default + data-theme dark opt-in', () => {
         /data-theme="dark"/.test(a.message)
     )
     assert.ok(advise, 'expected a theme-selection advice mentioning the dark opt-in')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit patches the app entry with the style imports by default', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    const plan = planInit(dir, {})
+    const patch = plan.find((a) => a.type === 'patch-entry')
+    assert.ok(patch, 'expected a patch-entry action for src/main.ts')
+    assert.equal(patch.path, 'src/main.ts')
+    assert.deepEqual(patch.imports, ["import './webkit.css'", "import '@aziontech/icons'"])
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('wireEntry: false falls back to entry advice, never edits the file', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    const plan = planInit(dir, { wireEntry: false })
+    assert.equal(
+      plan.find((a) => a.type === 'patch-entry'),
+      undefined,
+      'must not plan an entry patch with wireEntry: false'
+    )
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /import '\.\/webkit\.css'/.test(a.message)
+    )
+    assert.ok(advise, 'expected the entry-imports advice')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('icons: false drops @aziontech/icons from deps and entry imports', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    const plan = planInit(dir, { icons: false })
+    assert.ok(!findAddDeps(plan).includes('@aziontech/icons'), 'icons dep must be omitted')
+    const patch = plan.find((a) => a.type === 'patch-entry')
+    assert.deepEqual(patch.imports, ["import './webkit.css'"])
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit never wires feature-scoped setup (toast is just-in-time, not init)', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS)
+    const plan = planInit(dir, {})
+    const patch = plan.find((a) => a.type === 'patch-entry')
+    assert.equal(patch.use, undefined, 'patch-entry must not carry plugin wiring')
+    assert.ok(
+      !patch.imports.some((l) => l.includes('ToastPlugin')),
+      'init must not import ToastPlugin — toast setup is just-in-time (catalog `setup` + doctor)'
+    )
+    assert.ok(
+      !plan.some((a) => a.type === 'advise' && /ToastPlugin|Toaster/.test(a.message)),
+      'init must not advise toast setup'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan wires the entry imports once and is idempotent', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    applyPlan(dir, planInit(dir, {}))
+
+    const wired = readFileSync(join(dir, 'src/main.ts'), 'utf8')
+    assert.ok(wired.startsWith("import './webkit.css'\nimport '@aziontech/icons'\n"))
+    assert.ok(wired.includes(MAIN_TS), 'original entry content must be preserved')
+
+    // Second run — no duplication.
+    applyPlan(dir, planInit(dir, {}))
+    const again = readFileSync(join(dir, 'src/main.ts'), 'utf8')
+    assert.equal(again, wired, 'entry file changed on the second run')
+
+    // A partially wired entry (double quotes, moved line) is completed, not duplicated.
+    writeFileSync(join(dir, 'src/main.ts'), `import "./webkit.css"\n${MAIN_TS}`)
+    applyPlan(dir, planInit(dir, {}))
+    const completed = readFileSync(join(dir, 'src/main.ts'), 'utf8')
+    assert.equal(completed.split('webkit.css').length - 1, 1, 'webkit.css import duplicated')
+    assert.equal(
+      completed.split('@aziontech/icons').length - 1,
+      1,
+      'icons import missing/duplicated'
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

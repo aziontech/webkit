@@ -4,9 +4,7 @@ import test from 'node:test'
 
 // Point the loader at the real generated catalog (version-locked, deterministic).
 // Set BEFORE importing the loader so the first resolve honors the override.
-process.env.WEBKIT_CATALOG_PATH = fileURLToPath(
-  new URL('../../catalog.json', import.meta.url)
-)
+process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 
 const { loadCatalog, _resetCatalogCache } = await import('../../src/mcp/catalog.js')
 const {
@@ -89,6 +87,39 @@ test('listTokens reports an unknown category with the available groups', () => {
   assert.equal(res.ok, false)
   assert.equal(res.found, false)
   assert.ok(Array.isArray(res.groups) && res.groups.length > 0)
+  assert.ok(res.groups.includes('animations'), 'animations must be advertised as a group')
+})
+
+test('listTokens surfaces the animations catalog with timing + use-when', () => {
+  const res = listTokens(catalog, { category: 'animations' })
+  assert.equal(res.ok, true)
+  assert.equal(res.found, true)
+  const slideIn = res.tokens.find((t) => t.class === 'animate-slide-in-left')
+  assert.ok(slideIn, 'expected animate-slide-in-left in the animations catalog')
+  assert.match(slideIn.value, /slideInLeft/)
+  assert.match(slideIn.useWhen, /sidebar/i)
+  assert.match(res.hint, /motion-reduce/)
+  // The index (no category) also advertises the animations group.
+  const index = listTokens(catalog)
+  assert.ok(index.groups.some((g) => g.name === 'animations' && g.count > 0))
+})
+
+test('every animate-* utility has a useWhen entry (guidance stays in sync with the catalog)', async () => {
+  const { animate, useWhen } = await import(
+    '../../../theme/src/tokens/primitives/animations/animate.js'
+  )
+  for (const name of Object.keys(animate)) {
+    assert.ok(
+      typeof useWhen[name] === 'string' && useWhen[name].length > 0,
+      `animate-${name} has no useWhen entry — add it in packages/theme/src/tokens/primitives/animations/animate.js`
+    )
+  }
+})
+
+test('getComponent surfaces app-level setup for toast', () => {
+  const res = getComponent(catalog, 'toast')
+  assert.equal(res.found, true)
+  assert.match(res.setup, /ToastPlugin/)
 })
 
 test('getComponent surfaces usage guidance fields (purpose + when/related/best-practices)', () => {
@@ -155,8 +186,10 @@ test('suggestComponent resolves a table-ish need to table', () => {
   const byTypo = suggestComponent(catalog, 'datatable')
   // "datatable" contains "table" → substring/word match, or fuzzy fallback.
   const resolved = byTypo.best?.name
-  assert.ok(resolved === 'table' || byTypo.alternatives.some((a) => a.name === 'table'),
-    `expected datatable to resolve to table, got ${resolved}`)
+  assert.ok(
+    resolved === 'table' || byTypo.alternatives.some((a) => a.name === 'table'),
+    `expected datatable to resolve to table, got ${resolved}`
+  )
 })
 
 test('searchComponents finds a component by substring', () => {
