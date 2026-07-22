@@ -29,6 +29,7 @@ import DrawerPortal from "@aziontech/webkit/drawer-portal";
 import DrawerTitle from "@aziontech/webkit/drawer-title";
 import HelperText from "@aziontech/webkit/helper-text";
 import IconButton from "@aziontech/webkit/icon-button";
+import InputGroup from "@aziontech/webkit/input-group";
 import InputText from "@aziontech/webkit/input-text";
 import Item from "@aziontech/webkit/item";
 import PanelContent from "@aziontech/webkit/panel-content";
@@ -122,6 +123,19 @@ const presetIcon = (preset) => presetMeta[preset]?.icon ?? "";
 const repository = ref("gab-az/webkit-sample-vue");
 const apiTokenName = "webkit-sample-vue build token";
 const buildCacheEnabled = ref(true);
+// Build-cache options, revealed below the toggle when the cache is on. Applied
+// live (the Deployment section has no group Save), like the appearance prefs
+// elsewhere.
+const buildCacheScopeOptions = [
+  { label: "Per branch", value: "branch" },
+  { label: "Shared across branches", value: "shared" },
+];
+const buildCache = reactive({
+  scope: "branch",
+  autoInvalidate: true,
+});
+const buildCacheScopeLabel = (value) =>
+  buildCacheScopeOptions.find((option) => option.value === value)?.label ?? "";
 
 // Group 1 — Build configuration (preset + build/deploy commands + paths). Save
 // stays disabled until a field diverges from the saved baseline.
@@ -1135,48 +1149,132 @@ const submitFunction = async () => {
             <CardBox :padded="false">
               <template #content>
                 <Item.List>
-                  <!-- API token — the AZION_PERSONAL_TOKEN GitHub secret -->
+                  <!-- API token — the AZION_PERSONAL_TOKEN GitHub secret. The
+                       token name is the field VALUE on the right: a readonly
+                       InputText with a copy addon (InputGroup), not buried in the
+                       description. -->
                   <Item size="small">
                     <Item.Content>
                       <Item.Title>API token</Item.Title>
                       <Item.Description>
-                        Name: {{ apiTokenName }} — stored as the AZION_PERSONAL_TOKEN
-                        GitHub secret.
+                        Stored as the AZION_PERSONAL_TOKEN GitHub secret.
                       </Item.Description>
                     </Item.Content>
                     <Item.Actions class="flex-1 justify-end">
-                      <IconButton
-                        icon="pi pi-pencil"
-                        kind="transparent"
-                        size="small"
-                        aria-label="Edit API token"
-                        @click="comingSoon('Edit API token')"
-                      />
+                      <InputGroup class="w-full max-w-[var(--container-sm)]">
+                        <InputText
+                          :model-value="apiTokenName"
+                          size="large"
+                          class="flex-1"
+                          aria-label="API token"
+                          readonly
+                        />
+                        <CopyButton
+                          kind="transparent"
+                          :value="apiTokenName"
+                          aria-label="Copy API token"
+                        />
+                      </InputGroup>
                     </Item.Actions>
                   </Item>
 
-                  <!-- Build cache -->
+                  <!-- Build cache — a switch on the right (field-on-right
+                       pattern). When on, its options are revealed in the group
+                       below. -->
                   <Item size="small">
                     <Item.Content>
                       <Item.Title>Build cache</Item.Title>
                       <Item.Description>
-                        <span class="inline-flex items-center gap-[var(--spacing-xs)]">
-                          {{ buildCacheEnabled ? "Enabled" : "Disabled" }}
-                          <Button
-                            label="Clear cache"
-                            kind="text"
-                            size="small"
-                            @click="comingSoon('Clear build cache')"
-                          />
-                        </span>
+                        Reuse cached build artifacts across deploys to speed up
+                        builds.
+                      </Item.Description>
+                    </Item.Content>
+                    <Item.Actions class="flex-1 justify-end">
+                      <Switch
+                        v-model="buildCacheEnabled"
+                        aria-label="Build cache"
+                      />
+                    </Item.Actions>
+                  </Item>
+                </Item.List>
+              </template>
+            </CardBox>
+          </section>
+
+          <!-- Revealed only when the build cache is on: its options as a standard
+               ItemGroup section (same anatomy as every other section — a section
+               title over a flush CardBox whose body is an Item.List, one Item row
+               per option, control on the right). Applied live; the Deployment
+               section carries no group Save. -->
+          <section
+            v-if="buildCacheEnabled"
+            class="flex flex-col gap-[var(--spacing-sm)]"
+          >
+            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+              Build cache settings
+            </p>
+            <CardBox :padded="false">
+              <template #content>
+                <Item.List>
+                  <Item size="small">
+                    <Item.Content>
+                      <Item.Title>Cache scope</Item.Title>
+                      <Item.Description>
+                        Whether each branch keeps its own cache or all branches
+                        share one.
+                      </Item.Description>
+                    </Item.Content>
+                    <Item.Actions class="flex-1 justify-end">
+                      <Select
+                        v-model="buildCache.scope"
+                        size="large"
+                        class="w-full max-w-[var(--container-sm)]"
+                        :display-value="buildCacheScopeLabel"
+                      >
+                        <Select.Trigger aria-label="Cache scope" />
+                        <Select.Content>
+                          <Select.Option
+                            v-for="option in buildCacheScopeOptions"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </Select.Option>
+                        </Select.Content>
+                      </Select>
+                    </Item.Actions>
+                  </Item>
+                  <Item size="small">
+                    <Item.Content>
+                      <Item.Title>Auto-invalidate on config change</Item.Title>
+                      <Item.Description>
+                        Discard the cache automatically when the build
+                        configuration changes.
+                      </Item.Description>
+                    </Item.Content>
+                    <Item.Actions class="flex-1 justify-end">
+                      <Switch
+                        v-model="buildCache.autoInvalidate"
+                        aria-label="Auto-invalidate on config change"
+                      />
+                    </Item.Actions>
+                  </Item>
+                  <Item size="small">
+                    <Item.Content>
+                      <Item.Title>Clear cache</Item.Title>
+                      <Item.Description>
+                        Remove all cached build artifacts; the next deploy rebuilds
+                        from scratch.
                       </Item.Description>
                     </Item.Content>
                     <Item.Actions class="flex-1 justify-end">
                       <Button
-                        :label="buildCacheEnabled ? 'Disable' : 'Enable'"
-                        kind="text"
-                        size="small"
-                        @click="buildCacheEnabled = !buildCacheEnabled"
+                        type="button"
+                        label="Clear cache"
+                        kind="outlined"
+                        size="medium"
+                        icon="pi pi-refresh"
+                        @click="comingSoon('Clear build cache')"
                       />
                     </Item.Actions>
                   </Item>
