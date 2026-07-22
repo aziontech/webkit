@@ -62,3 +62,17 @@ shape; vertical disclosure uses `animate-slide-down`. Ask the webkit MCP
   `/webkit-motion-polish` review pass; where a stylelint rule can catch a raw `cubic-bezier(` or a
   bare `transition: all`, wire it as the mechanical floor. Suggestion is not the ceiling: what a lint
   can block, block.
+
+### Known `no-hardcoded-motion` gaps (review still owns these)
+
+The lint is a heuristic over class and style strings; three shapes are known to slip past it and
+stay a review concern:
+
+- **Tailwind arbitrary properties** bypass the timing check: in `[transition:opacity_200ms]` the
+  underscore defeats the word boundary, and `[animation-delay:2s]` sits outside the `animation:`
+  prefix — while `[transition:all]` is caught.
+- **Tailwind v4's dynamic numeric scale**: `duration-937` passes (only the bracketed
+  `duration-[937ms]` form is flagged).
+- **The `motion-reduce:` pairing check reads only the static `class` attribute** — when the escape
+  lives in a coexisting bound `:class` fragment, the static-side motion class is flagged even
+  though the element is correctly paired.

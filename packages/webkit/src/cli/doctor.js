@@ -243,7 +243,9 @@ export function planDoctor(projectDir) {
   for (const file of srcFiles) {
     const src = read(file) || ''
     if (src.includes('@aziontech/webkit/toast')) usesToast = true
-    if (/\.use\(\s*ToastPlugin\s*[),]|<Toaster|<Toast\.Toaster/.test(src)) toastWired = true
+    if (/\.use\(\s*ToastPlugin\s*[),]|<Toaster[\s/>]|<Toast\.Toaster/.test(src)) {
+      toastWired = true
+    }
     if (usesToast && toastWired) break
   }
   if (usesToast) {

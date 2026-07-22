@@ -53,7 +53,14 @@ export default {
           ['/(?<!var\\([^)]*)\\b\\d+(\\.\\d+)?m?s\\b/', '/cubic-bezier\\(/'],
         '/^transition$/': ['/^all\\b/']
       },
-      { message: `${USE_TOKEN} ${USE_MOTION_TOKEN}` }
+      {
+        // One rule instance covers two disciplines; the message function routes each
+        // violation to its own guidance (stylelint passes the property as message args).
+        message: (prop) =>
+          /^(transition|animation)/.test(prop)
+            ? USE_MOTION_TOKEN
+            : `${USE_TOKEN} Named colors are not allowed.`
+      }
     ]
   }
 }

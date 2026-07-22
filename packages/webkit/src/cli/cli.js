@@ -83,11 +83,18 @@ async function resolveInitOptions(parsed) {
     icons: !parsed.noIcons,
     wireEntry: !parsed.noEntry
   }
-  const interactive = process.stdin.isTTY && process.stdout.isTTY && !parsed.yes
+  // --dry-run implies --yes: a plan-only run prints the plan, it never prompts.
+  const interactive = process.stdin.isTTY && process.stdout.isTTY && !parsed.yes && !parsed.dryRun
   if (!interactive) return opts
 
   const { createInterface } = await import('node:readline/promises')
   const rl = createInterface({ input: process.stdin, output: process.stdout })
+  // Without a SIGINT listener, readline pauses the input stream on Ctrl+C and the
+  // pending question never resolves (per Node docs) — exit like an interrupted CLI.
+  rl.on('SIGINT', () => {
+    rl.close()
+    process.exit(130)
+  })
   const ask = async (question) => {
     const answer = (await rl.question(`${question} [Y/n] `)).trim().toLowerCase()
     return answer === '' || answer === 'y' || answer === 'yes'

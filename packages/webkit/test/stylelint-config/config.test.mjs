@@ -49,6 +49,9 @@ test('flags a named color on a color property (declaration-property-value-disall
     firedBy(warnings, 'declaration-property-value-disallowed-list'),
     'expected declaration-property-value-disallowed-list to fire for a named color'
   )
+  const text = warnings.find((w) => w.rule === 'declaration-property-value-disallowed-list').text
+  assert.match(text, /Named colors are not allowed/)
+  assert.doesNotMatch(text, /animate-\*/, 'a color violation must not carry motion guidance')
 })
 
 test('leaves safe keyword values alone (currentColor / transparent / inherit)', async () => {
@@ -75,9 +78,12 @@ test('flags literal motion timing / raw cubic-bezier / transition: all', async (
       firedBy(warnings, 'declaration-property-value-disallowed-list'),
       `expected the motion discipline to fire for "${decl}"`
     )
-    assert.match(
-      warnings.find((w) => w.rule === 'declaration-property-value-disallowed-list').text,
-      /animate-\*|duration/
+    const text = warnings.find((w) => w.rule === 'declaration-property-value-disallowed-list').text
+    assert.match(text, /animate-\*|duration/)
+    assert.doesNotMatch(
+      text,
+      /Named colors/,
+      'a motion violation must not lead with color guidance'
     )
   }
 })

@@ -130,10 +130,11 @@ function applyAppend(projectDir, action) {
 }
 
 // Prepend the entry-file imports that are not already there. Bare-import presence is
-// checked by the module SPECIFIER (the quoted path), not the whole line, so
-// `import "./webkit.css"` with double quotes — or an import the user moved further
-// down — still counts as wired. Named imports are checked by IDENTIFIER (importing
-// something else from the same module must not satisfy them).
+// checked by a line-anchored import of the module SPECIFIER, so `import "./webkit.css"`
+// with double quotes — or an import the user moved further down — still counts as wired,
+// while a commented-out `// import './webkit.css'` or a superstring path ('../webkit.css')
+// does not. Named imports are checked by IDENTIFIER (importing something else from the
+// same module must not satisfy them).
 function applyPatchEntry(projectDir, action) {
   const target = join(projectDir, action.path)
   if (!existsSync(target)) {
@@ -144,7 +145,9 @@ function applyPatchEntry(projectDir, action) {
     const named = line.match(/import\s*\{\s*([A-Za-z_$][\w$]*)\s*\}/)?.[1]
     if (named) return !new RegExp(`\\b${named}\\b`).test(src)
     const spec = line.match(/['"]([^'"]+)['"]/)?.[1]
-    return spec ? !src.includes(spec) : !src.includes(line)
+    if (!spec) return !src.includes(line)
+    const escaped = spec.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return !new RegExp(`^\\s*import\\s+['"]${escaped}['"]`, 'm').test(src)
   })
   if (!missing.length) {
     return {

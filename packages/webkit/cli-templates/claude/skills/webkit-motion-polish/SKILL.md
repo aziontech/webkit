@@ -2,7 +2,7 @@
 name: webkit-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-07-22
 scope: general
 enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---

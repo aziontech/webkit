@@ -81,7 +81,8 @@ export const ToastPlugin: Plugin = {
     if (typeof document === 'undefined') return
     const host = document.createElement('div')
     host.setAttribute('data-webkit-toaster', '')
-    document.body.appendChild(host)
+    // body can be null when use() runs from a non-deferred head script.
+    ;(document.body ?? document.documentElement).appendChild(host)
     // The SFC $props type is readonly without an index signature; createVNode wants Data.
     const vnode = createVNode(Toaster, options as Record<string, unknown> | undefined)
     vnode.appContext = app._context

@@ -11,12 +11,47 @@ const durationRows = Object.entries(duration).map(([name, value]) => ({
 
 const curveRows = Object.entries(curve).map(([name, value]) => ({ name: `ease-${name}`, value }))
 
+// Some utilities are invisible on the default primary square: shimmer animates
+// background-position (needs a gradient + background-size), the progress pair animates
+// inset-inline-* (needs a positioned bar inside the track), slide-down reveals height
+// (needs inner content to measure), and highlight-fade paints a background tint meant
+// for text rows. Each gets a preview shape that actually shows the motion.
+const DEFAULT_PREVIEW_CLASS = 'h-8 w-8 rounded-[var(--shape-elements)] bg-[var(--primary)]'
+
+const PREVIEW_OVERRIDES = {
+  shimmer: {
+    class: 'h-8 w-20 rounded-[var(--shape-elements)]',
+    style: {
+      background:
+        'linear-gradient(90deg, var(--bg-surface) 25%, var(--surface-hover) 50%, var(--bg-surface) 75%)',
+      backgroundSize: '200% 100%'
+    }
+  },
+  'slide-down': {
+    class: 'w-8 overflow-hidden rounded-[var(--shape-elements)] bg-[var(--primary)]',
+    style: { interpolateSize: 'allow-keywords' },
+    inner: true
+  },
+  'highlight-fade': {
+    class:
+      'rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)]',
+    text: 'Updated row'
+  },
+  'progress-indeterminate': {
+    class: 'absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-[var(--primary)]'
+  },
+  'progress-indeterminate-short': {
+    class: 'absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-[var(--primary)]'
+  }
+}
+
 const animationRows = Object.entries(animate).map(([name, value]) => ({
   id: name,
   className: `animate-${name}`,
   value,
   useWhen: useWhen[name] ?? '',
-  loops: /\binfinite\b/.test(value)
+  loops: /\binfinite\b/.test(value),
+  preview: PREVIEW_OVERRIDES[name]
 }))
 
 const PANEL_RECIPE = `<Transition
@@ -56,7 +91,14 @@ export const Overview = {
   render: () => ({
     components: { PageContainer, PageHeader, CodeBlock },
     data() {
-      return { replayKeys: {}, durationRows, curveRows, animationRows, PANEL_RECIPE }
+      return {
+        replayKeys: {},
+        durationRows,
+        curveRows,
+        animationRows,
+        PANEL_RECIPE,
+        DEFAULT_PREVIEW_CLASS
+      }
     },
     methods: {
       replay(id) {
@@ -79,12 +121,16 @@ export const Overview = {
               :key="row.id"
               class="flex items-center gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-sm)]"
             >
-              <div class="flex h-16 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-canvas)]">
+              <div class="relative flex h-16 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-canvas)]">
                 <div
                   :key="replayKeys[row.id] || 0"
-                  class="h-8 w-8 rounded-[var(--shape-elements)] bg-[var(--primary)] motion-reduce:animate-none"
-                  :class="row.className"
-                ></div>
+                  class="motion-reduce:animate-none"
+                  :class="[row.preview?.class || DEFAULT_PREVIEW_CLASS, row.className]"
+                  :style="row.preview?.style"
+                >
+                  <template v-if="row.preview?.text">{{ row.preview.text }}</template>
+                  <div v-else-if="row.preview?.inner" class="h-8 w-8"></div>
+                </div>
               </div>
               <div class="min-w-0 flex-1">
                 <div class="flex flex-wrap items-baseline gap-x-[var(--spacing-sm)]">
