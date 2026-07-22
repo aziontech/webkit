@@ -48,7 +48,6 @@ const options = [
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string \| number \| unknown[]` | `undefined` | no | Two-way bound selection. Scalar in single mode; array in multi mode. |
 | `options` | `Array<{ value: unknown; label: string; disabled?: boolean }>` | `[]` | no | Options rendered inside the dropdown. When empty, the dropdown renders no options. |
 | `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
 | `placeholder` | `string` | `''` | no | Placeholder shown on the trigger when nothing is selected. |
@@ -61,11 +60,15 @@ const options = [
 | `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the trigger. |
 | `inputId` | `string` | `''` | no | id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`. |
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+|---|---|---|---|---|
+| `v-model` | `string \| number \| unknown[]` | `undefined` | `update:modelValue` | Two-way bound selection via `defineModel`. Scalar in single mode; array in multi mode. |
+
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:modelValue` | `(value: string \| number \| unknown[])` | Re-emitted from the underlying `Select` on every selection change. |
+_No plain events — activation flows through `v-model`._
 
 ## Slots
 

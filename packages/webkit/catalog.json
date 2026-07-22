@@ -5175,13 +5175,6 @@
       "status": "implemented",
       "props": [
         {
-          "name": "modelValue",
-          "type": "string | number | unknown[]",
-          "default": "undefined",
-          "required": "no",
-          "doc": "Two-way bound selection. Scalar in single mode; array in multi mode."
-        },
-        {
           "name": "options",
           "type": "Array<{ value: unknown; label: string; disabled?: boolean }>",
           "default": "[]",
@@ -5257,13 +5250,6 @@
           "default": "''",
           "required": "no",
           "doc": "id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`."
-        }
-      ],
-      "events": [
-        {
-          "name": "update:modelValue",
-          "payload": "(value: string | number | unknown[])",
-          "notes": "Re-emitted from the underlying `Select` on every selection change."
         }
       ],
       "slots": [

@@ -3,10 +3,10 @@
 
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
   import Label from '../label/label.vue'
+  import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
   import SelectOption from '../select/select-option/select-option.vue'
   import SelectTrigger from '../select/select-trigger/select-trigger.vue'
-  import Select from '../select/select.vue'
 
   defineOptions({
     name: 'FieldSelect',
@@ -25,8 +25,6 @@
   }
 
   interface Props {
-    /** Two-way bound selection. Scalar in single mode; array in multi mode. */
-    modelValue?: FieldSelectValue
     /** Options rendered inside the dropdown. When empty, no options render. */
     options?: FieldSelectOption[]
     /** Text rendered inside the Label. When empty, the label row is omitted. */
@@ -52,7 +50,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
     options: () => [],
     label: '',
     placeholder: '',
@@ -66,9 +63,7 @@
     inputId: ''
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: FieldSelectValue]
-  }>()
+  const modelValue = defineModel<FieldSelectValue>({ default: undefined })
 
   defineSlots<{
     default(): unknown
@@ -77,7 +72,9 @@
   const attrs = useAttrs()
   const generatedId = useId()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-field-select')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-field-select'
+  )
 
   const resolvedInputId = computed(() => props.inputId || generatedId)
   const helperId = computed(() => `${resolvedInputId.value}-helper`)
@@ -117,7 +114,7 @@
       :data-testid="`${testId}__label`"
     />
     <Select
-      :model-value="modelValue"
+      v-model="modelValue"
       :multiple="multiple"
       :placeholder="placeholder"
       :size="size"
@@ -126,7 +123,6 @@
       :required="required"
       :invalid="invalid"
       :data-testid="`${testId}__select`"
-      @update:model-value="(value) => emit('update:modelValue', value as FieldSelectValue)"
     >
       <SelectTrigger
         :id="resolvedInputId"
