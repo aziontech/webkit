@@ -150,7 +150,7 @@
     'relative inline-flex h-7 w-fit items-center gap-[var(--spacing-xxs)] p-[var(--spacing-xxs)] rounded-full border-solid border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)]'
 
   const SEGMENT_CLASS =
-    'relative z-[1] inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] [&:not([data-state=active])]:hover:bg-[var(--bg-hover)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]'
+    'relative z-[var(--z-input-field)] inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] [&:not([data-state=active])]:hover:bg-[var(--bg-hover)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]'
 </script>
 
 <template>
