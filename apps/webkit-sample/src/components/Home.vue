@@ -235,15 +235,18 @@ const onRowAction = (event, value, row) => {
       <ContrastBanner />
     </div>
 
-    <main class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-row items-start gap-[var(--spacing-lg)]">
+    <main class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-col items-start gap-[var(--spacing-lg)] md:flex-row">
       <!-- Left (minor): account usage — one metric per card, its reading beside a
-           small progress bar showing plan consumption. -->
-      <aside class="flex w-full max-w-[var(--container-xs)] shrink-0 flex-col gap-[var(--spacing-md)]">
+           small progress bar showing plan consumption. On mobile it spans the
+           full width above the resources; on `md`+ it becomes the narrow rail. -->
+      <aside class="flex w-full shrink-0 flex-col gap-[var(--spacing-md)] md:max-w-[var(--container-xs)]">
         <div class="flex min-h-[var(--size-8)] items-center px-[var(--spacing-xs)]">
           <h2 class="text-heading-xxs text-[var(--text-default)]">Usage</h2>
         </div>
 
-        <div class="flex flex-col gap-[var(--spacing-md)]">
+        <!-- 2-up on mobile where the aside is full width; single column once it
+             narrows into the desktop rail. -->
+        <div class="grid grid-cols-2 gap-[var(--spacing-md)] md:grid-cols-1">
           <CardBox
             v-for="metric in metrics"
             :key="metric.label"
@@ -289,7 +292,7 @@ const onRowAction = (event, value, row) => {
 
       <!-- Right (major): resources with a filter Dropdown whose selected option
            carries the checkmark; choosing one swaps the card below. -->
-      <section class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-md)]">
+      <section class="flex w-full min-w-0 flex-col gap-[var(--spacing-md)] md:flex-1">
         <header class="flex min-h-[var(--size-8)] items-center gap-[var(--spacing-sm)] px-[var(--spacing-xs)]">
           <h2 class="text-heading-xxs text-[var(--text-default)]">Resources</h2>
 
@@ -434,12 +437,14 @@ const onRowAction = (event, value, row) => {
                 @select="(event, value) => onRowAction(event, value, row)"
               >
                 <Dropdown.Trigger>
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    size="small"
-                    aria-label="Row actions"
-                  />
+                  <Tooltip text="Row actions">
+                    <IconButton
+                      icon="pi pi-ellipsis-h"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Row actions"
+                    />
+                  </Tooltip>
                 </Dropdown.Trigger>
 
                 <Dropdown.Group>
