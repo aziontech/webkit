@@ -1,16 +1,16 @@
 ---
-description: Open a PR to `dev`. Analyzes the diff to pick the Conventional Commit type/scope (drives the semantic-release bump), prompts for the related issue (optional), commits by context, pushes, and opens the PR.
+description: Open a PR to `main`. Analyzes the diff to pick the Conventional Commit type/scope (drives the semantic-release bump), prompts for the related issue (optional), commits by context, pushes, and opens the PR.
 argument-hint: [PR title or focus]
 ---
 
-You are running `/open-pr`. Land the current working changes as a pull request against `dev`, following the repo's commit + versioning conventions end to end.
+You are running `/open-pr`. Land the current working changes as a pull request against `main`, following the repo's commit + versioning conventions end to end.
 
 **User input:** $ARGUMENTS
 
 ## Source of truth
 
 - Commit format and type→bump: [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention and [`commitlint.config.js`](../../commitlint.config.js).
-- Release rules: `packages/<pkg>/.releaserc` (semantic-release; merges to `dev` cut the version).
+- Release rules: `packages/<pkg>/.releaserc` (semantic-release; merges to `main` cut the version).
 
 ## Steps
 
@@ -28,9 +28,9 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 ### 2. Related issue (optional)
 - Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank for `NO-ISSUE`)". Blank → use `[NO-ISSUE]`.
 
-### 3. Ensure a `dev`-based branch
-- If on `dev`/`main` (or not on a `dev`-based feature branch), run the `/create-branch` flow (type from step 1, issue from step 2), carrying the working changes over.
-- **Never** open a PR directly from `main` or `dev`.
+### 3. Ensure a `main`-based feature branch
+- If on `main` (or not on a `main`-based feature branch), run the `/create-branch` flow (type from step 1, issue from step 2), carrying the working changes over.
+- **Never** open a PR directly from `main`.
 
 ### 4. Commit by context
 - **Split shared docs/rules from code.** If the diff mixes code with shared docs/rules/templates (`.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md`, …), tell the user those belong in a **separate PR** and offer to split them out. A component's own new `.specs/<name>.md` stays with the component.
@@ -40,16 +40,16 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 - Let the hooks run — `commit-msg` runs commitlint and the header must pass. **Do not** use `--no-verify` to skip commitlint. If `pre-commit` (lint-staged) fails for an environmental reason, report it and ask the user before retrying.
 
 ### 5. Show the plan and confirm
-- Show the planned commit header(s), the implied version bump (minor/patch/major/none), and the target base (`dev`). Confirm with the user before pushing.
+- Show the planned commit header(s), the implied version bump (minor/patch/major/none), and the target base (`main`). Confirm with the user before pushing.
 
 ### 6. Push and open the PR
 - `git push -u origin <branch>`.
-- If a PR already exists for the branch, update it; otherwise `gh pr create --base dev --head <branch>`.
+- If a PR already exists for the branch, update it; otherwise `gh pr create --base main --head <branch>`.
 - **Title:** the conventional commit header (or `$ARGUMENTS`). **Body:** `## Summary` (what + why) and `## Notes`; call out any new dependency and any breaking change; reference the issue. No Figma links, no attribution footer.
 - Report the PR URL.
 
 ## Rules
 
-- The base branch is always `dev`.
+- The base branch is always `main`.
 - Commit and push only as part of this command (running it is the authorization). Do not commit unrelated changes.
 - Keep imports/exports in the public flat form per [`.claude/rules/imports.md`](../rules/imports.md) when the diff touches `package.json#exports` or stories.
