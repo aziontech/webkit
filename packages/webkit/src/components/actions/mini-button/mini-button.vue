@@ -85,13 +85,12 @@
     @click="handleClick"
   >
     <span
-      class="mini-button-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-[var(--spacing-xs)] -right-[var(--spacing-xs)] h-8 rounded-[var(--shape-button)] bg-[var(--bg-hover)] opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-mask)] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 group-active:before:bg-[var(--bg-active)]"
+      class="mini-button-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-[var(--spacing-xs)] -right-[var(--spacing-xs)] group-data-[size=large]:h-8 group-data-[size=medium]:h-6 rounded-[var(--shape-button)] bg-[var(--bg-hover)] opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-mask)] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 group-active:before:bg-[var(--bg-active)]"
       aria-hidden="true"
       :data-testid="`${testId}__ghost`"
     />
     <span
-      :data-size="size"
-      class="relative z-[1] inline-flex flex-nowrap items-center gap-[var(--spacing-xs)] data-[size=medium]:gap-[var(--spacing-sm)]"
+      class="relative z-[1] inline-flex flex-nowrap items-center gap-[var(--spacing-xs)] group-data-[size=medium]:gap-[var(--spacing-xxs)]"
       :data-testid="`${testId}__content`"
     >
       <span
