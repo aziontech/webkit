@@ -15,7 +15,6 @@
 // affordance so the flow into the platform stays traversable.
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
-import Link from "@aziontech/webkit/link";
 import Spinner from "@aziontech/webkit/spinner";
 import { toast } from "@aziontech/webkit/toast";
 import { computed, ref } from "vue";
@@ -96,14 +95,13 @@ const simulateVerification = () =>
                   <Spinner class="size-4" />
                   Sending…
                 </span>
-                <Link
+                <a
                   v-else
-                  label="Resend Email"
-                  size="medium"
-                  :show-icon="false"
+                  class="text-link text-body-sm"
                   href="#"
                   @click.prevent="resend"
-                />
+                  >Resend Email</a
+                >
               </div>
 
               <Button
@@ -121,13 +119,13 @@ const simulateVerification = () =>
         <!-- Prototype-only affordance for the verification link. -->
         <div class="flex items-center gap-[var(--spacing-xs)]">
           <p class="text-body-xs text-[var(--text-muted)]">Prototype:</p>
-          <Link
-            label="Simulate email verification"
-            size="medium"
-            icon="pi pi-arrow-right"
+          <a
+            class="text-link inline-flex items-center gap-[var(--spacing-xxs)] text-body-sm"
             href="#"
             @click.prevent="simulateVerification"
-          />
+            >Simulate email verification
+            <i class="pi pi-arrow-right text-[0.875em]" aria-hidden="true" />
+          </a>
         </div>
       </div>
 

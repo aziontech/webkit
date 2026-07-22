@@ -23,7 +23,6 @@ import FieldPassword from "@aziontech/webkit/field-password";
 import HelperText from "@aziontech/webkit/helper-text";
 import InputText from "@aziontech/webkit/input-text";
 import Label from "@aziontech/webkit/label";
-import Link from "@aziontech/webkit/link";
 import { toast } from "@aziontech/webkit/toast";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -201,23 +200,21 @@ const goToSignIn = () => router.push({ name: "login" });
                 @click="signUp"
               />
 
-              <p class="text-body-sm text-[var(--text-muted)]">
+              <p class="text-center text-body-sm text-[var(--text-muted)]">
                 By signing up, you agree to the
-                <Link
-                  label="Terms of Service"
-                  size="medium"
-                  :show-icon="false"
+                <a
+                  class="text-link"
                   href="https://www.azion.com/en/documentation/"
                   target="_blank"
-                />
+                  >Terms of Service</a
+                >
                 and
-                <Link
-                  label="Privacy Policy."
-                  size="medium"
-                  :show-icon="false"
+                <a
+                  class="text-link"
                   href="https://www.azion.com/en/documentation/"
                   target="_blank"
-                />
+                  >Privacy Policy.</a
+                >
               </p>
             </form>
           </template>
@@ -227,13 +224,12 @@ const goToSignIn = () => router.push({ name: "login" });
           <p class="text-body-sm text-[var(--text-default)]">
             Already have an account?
           </p>
-          <Link
-            label="Sign In"
-            size="medium"
-            :show-icon="false"
+          <a
+            class="text-link text-body-sm"
             href="/login"
             @click.prevent="goToSignIn"
-          />
+            >Sign In</a
+          >
         </div>
       </div>
 

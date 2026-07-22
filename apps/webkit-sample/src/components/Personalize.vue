@@ -200,22 +200,28 @@ const submit = async () => {
                 />
               </div>
 
-              <!-- Full name — FieldText owns its own Label (required tag) and
-                   HelperText; no bespoke Label/div wrapper. -->
+              <!-- Full name — Label rendered here so its required tag is
+                   PERSISTENT (always required), decoupled from the field's amber
+                   state. The wrapper gets NO `label`; :required is bound to the
+                   post-submit empty state so only the amber (border + helper) is
+                   revealed on a failed submit, not from first render. Required-only
+                   (no format check), so it never enters the red :invalid state. -->
               <!-- No :disabled binding: the outer fieldset already disables the
                    input while submitting, and FieldText's own disabled state would
                    force a "This field is locked." helper we don't want here. -->
-              <FieldText
-                v-model="form.fullName"
-                input-id="personalize-name"
-                name="fullName"
-                label="Your Full Name"
-                required
-                size="large"
-                placeholder="Jane Doe"
-                :helper-text="errors.fullName"
-                @update:model-value="errors.fullName = ''"
-              />
+              <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <Label for="personalize-name" required>Your Full Name</Label>
+                <FieldText
+                  v-model="form.fullName"
+                  input-id="personalize-name"
+                  name="fullName"
+                  size="large"
+                  placeholder="Jane Doe"
+                  :required="!!errors.fullName"
+                  :helper-text="errors.fullName"
+                  @update:model-value="errors.fullName = ''"
+                />
+              </div>
 
               <!-- Onboarding session toggle — optional. field-switch-block renders
                    the switch beside its own label in a bordered block. -->
@@ -231,6 +237,7 @@ const submit = async () => {
                 label="Submit"
                 kind="primary"
                 size="large"
+                class="w-full"
                 :loading="submitting"
                 @click="submit"
               />
