@@ -1062,12 +1062,14 @@ const onTeamAction = (event, value, row) => {
                 @select="(event, value) => onUserAction(event, value, row)"
               >
                 <Dropdown.Trigger>
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    size="small"
-                    aria-label="User actions"
-                  />
+                  <Tooltip text="User actions">
+                    <IconButton
+                      icon="pi pi-ellipsis-h"
+                      kind="outlined"
+                      size="small"
+                      aria-label="User actions"
+                    />
+                  </Tooltip>
                 </Dropdown.Trigger>
                 <Dropdown.Group>
                   <Dropdown.Option value="view" label="View profile" />
@@ -1192,13 +1194,15 @@ const onTeamAction = (event, value, row) => {
                 <Tag :label="value" :severity="invoiceStatusSeverity(value)" size="medium" />
               </template>
               <template #cell-actions="{ row }">
-                <IconButton
-                  icon="pi pi-download"
-                  kind="outlined"
-                  size="small"
-                  aria-label="Download invoice"
-                  @click="(event) => downloadInvoice(event, row)"
-                />
+                <Tooltip text="Download invoice">
+                  <IconButton
+                    icon="pi pi-download"
+                    kind="outlined"
+                    size="small"
+                    aria-label="Download invoice"
+                    @click="(event) => downloadInvoice(event, row)"
+                  />
+                </Tooltip>
               </template>
             </Table>
               </template>
@@ -1255,12 +1259,14 @@ const onTeamAction = (event, value, row) => {
                 @select="(event, value) => onCredentialAction(event, value, row)"
               >
                 <Dropdown.Trigger>
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    size="small"
-                    aria-label="Credential actions"
-                  />
+                  <Tooltip text="Credential actions">
+                    <IconButton
+                      icon="pi pi-ellipsis-h"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Credential actions"
+                    />
+                  </Tooltip>
                 </Dropdown.Trigger>
                 <Dropdown.Group>
                   <Dropdown.Option value="view" label="View details" />
@@ -1407,12 +1413,14 @@ const onTeamAction = (event, value, row) => {
                 @select="(event, value) => onTeamAction(event, value, row)"
               >
                 <Dropdown.Trigger>
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    size="small"
-                    aria-label="Team actions"
-                  />
+                  <Tooltip text="Team actions">
+                    <IconButton
+                      icon="pi pi-ellipsis-h"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Team actions"
+                    />
+                  </Tooltip>
                 </Dropdown.Trigger>
                 <Dropdown.Group>
                   <Dropdown.Option value="edit" label="Edit">

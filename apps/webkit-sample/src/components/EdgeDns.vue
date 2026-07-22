@@ -20,6 +20,7 @@ import Link from "@aziontech/webkit/link";
 import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
+import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -311,12 +312,14 @@ const onRowAction = (event, value, row) => {
                   @select="(event, value) => onRowAction(event, value, row)"
                 >
                   <Dropdown.Trigger>
-                    <IconButton
-                      icon="pi pi-ellipsis-h"
-                      kind="outlined"
-                      size="small"
-                      aria-label="Row actions"
-                    />
+                    <Tooltip text="Row actions">
+                      <IconButton
+                        icon="pi pi-ellipsis-h"
+                        kind="outlined"
+                        size="small"
+                        aria-label="Row actions"
+                      />
+                    </Tooltip>
                   </Dropdown.Trigger>
 
                   <Dropdown.Group>

@@ -1127,13 +1127,15 @@ const submitFunction = async () => {
                   </template>
 
                   <template #cell-actions="{ row }">
-                    <IconButton
-                      icon="pi pi-trash"
-                      kind="outlined"
-                      size="small"
-                      aria-label="Remove variable"
-                      @click="(event) => removeVariable(event, row)"
-                    />
+                    <Tooltip text="Remove variable">
+                      <IconButton
+                        icon="pi pi-trash"
+                        kind="outlined"
+                        size="small"
+                        aria-label="Remove variable"
+                        @click="(event) => removeVariable(event, row)"
+                      />
+                    </Tooltip>
                   </template>
                 </Table>
               </template>

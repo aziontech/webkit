@@ -27,6 +27,7 @@ import Message from "@aziontech/webkit/message";
 import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
+import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -293,12 +294,14 @@ const saveAndDeploy = () => persist({ deploy: true });
                         @select="(event, value) => onDomainAction(event, value, row)"
                       >
                         <Dropdown.Trigger>
-                          <IconButton
-                            icon="pi pi-ellipsis-h"
-                            kind="outlined"
-                            size="small"
-                            aria-label="Domain actions"
-                          />
+                          <Tooltip text="Domain actions">
+                            <IconButton
+                              icon="pi pi-ellipsis-h"
+                              kind="outlined"
+                              size="small"
+                              aria-label="Domain actions"
+                            />
+                          </Tooltip>
                         </Dropdown.Trigger>
                         <Dropdown.Group>
                           <Dropdown.Option value="edit" label="Edit">
@@ -363,20 +366,24 @@ const saveAndDeploy = () => persist({ deploy: true });
                                 {{ env.bundle }}
                               </span>
                               <Tag label="Linked" severity="success" size="medium" />
-                              <IconButton
-                                icon="pi pi-pencil"
-                                kind="outlined"
-                                size="small"
-                                aria-label="Edit deployment settings"
-                                @click="openLink(env.name)"
-                              />
-                              <IconButton
-                                icon="pi pi-times"
-                                kind="transparent"
-                                size="small"
-                                aria-label="Unlink deployment settings"
-                                @click="unlink(env.name)"
-                              />
+                              <Tooltip text="Edit deployment settings">
+                                <IconButton
+                                  icon="pi pi-pencil"
+                                  kind="outlined"
+                                  size="small"
+                                  aria-label="Edit deployment settings"
+                                  @click="openLink(env.name)"
+                                />
+                              </Tooltip>
+                              <Tooltip text="Unlink deployment settings">
+                                <IconButton
+                                  icon="pi pi-times"
+                                  kind="transparent"
+                                  size="small"
+                                  aria-label="Unlink deployment settings"
+                                  @click="unlink(env.name)"
+                                />
+                              </Tooltip>
                             </template>
                             <template v-else>
                               <span class="text-body-sm text-[var(--text-muted)]">

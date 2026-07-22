@@ -47,6 +47,7 @@ import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import Textarea from "@aziontech/webkit/textarea";
 import { toast } from "@aziontech/webkit/toast";
+import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
@@ -298,12 +299,14 @@ watch(dialogOpen, (open) => {
               @select="(event, value) => onTokenAction(event, value, row)"
             >
               <Dropdown.Trigger>
-                <IconButton
-                  icon="pi pi-ellipsis-h"
-                  kind="outlined"
-                  size="small"
-                  aria-label="Token actions"
-                />
+                <Tooltip text="Token actions">
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="outlined"
+                    size="small"
+                    aria-label="Token actions"
+                  />
+                </Tooltip>
               </Dropdown.Trigger>
               <Dropdown.Group>
                 <Dropdown.Option value="view" label="View details" />

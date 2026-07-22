@@ -506,12 +506,14 @@ const runQuery = async () => {
                   @select="(event, value) => value === 'delete' && deleteTable(event, table)"
                 >
                   <Dropdown.Trigger>
-                    <IconButton
-                      icon="pi pi-ellipsis-h"
-                      kind="transparent"
-                      size="small"
-                      aria-label="Table actions"
-                    />
+                    <Tooltip text="Table actions">
+                      <IconButton
+                        icon="pi pi-ellipsis-h"
+                        kind="transparent"
+                        size="small"
+                        aria-label="Table actions"
+                      />
+                    </Tooltip>
                   </Dropdown.Trigger>
                   <Dropdown.Group>
                     <Dropdown.Option value="delete" label="Delete table">
@@ -885,12 +887,14 @@ const runQuery = async () => {
                   @select="(event, value) => value === 'run' ? (applyTemplate(item.sql), runQuery()) : deleteHistory(event, item)"
                 >
                   <Dropdown.Trigger>
-                    <IconButton
-                      icon="pi pi-ellipsis-h"
-                      kind="transparent"
-                      size="small"
-                      aria-label="Query actions"
-                    />
+                    <Tooltip text="Query actions">
+                      <IconButton
+                        icon="pi pi-ellipsis-h"
+                        kind="transparent"
+                        size="small"
+                        aria-label="Query actions"
+                      />
+                    </Tooltip>
                   </Dropdown.Trigger>
                   <Dropdown.Group>
                     <Dropdown.Option value="run" label="Run query">

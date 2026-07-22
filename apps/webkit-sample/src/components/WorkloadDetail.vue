@@ -26,6 +26,7 @@ import TabView from "@aziontech/webkit/tab-view";
 import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
+import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -428,12 +429,14 @@ const deleteWorkload = () => {
                       @select="(event, value) => onRowAction(event, value, row)"
                     >
                       <Dropdown.Trigger>
-                        <IconButton
-                          icon="pi pi-ellipsis-h"
-                          kind="outlined"
-                          size="small"
-                          aria-label="Deployment actions"
-                        />
+                        <Tooltip text="Deployment actions">
+                          <IconButton
+                            icon="pi pi-ellipsis-h"
+                            kind="outlined"
+                            size="small"
+                            aria-label="Deployment actions"
+                          />
+                        </Tooltip>
                       </Dropdown.Trigger>
                       <Dropdown.Group>
                         <Dropdown.Option value="details" label="View details" />
@@ -507,12 +510,14 @@ const deleteWorkload = () => {
                     @select="(event, value) => onRowAction(event, value, row)"
                   >
                     <Dropdown.Trigger>
-                      <IconButton
-                        icon="pi pi-ellipsis-h"
-                        kind="outlined"
-                        size="small"
-                        aria-label="Deployment actions"
-                      />
+                      <Tooltip text="Deployment actions">
+                        <IconButton
+                          icon="pi pi-ellipsis-h"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Deployment actions"
+                        />
+                      </Tooltip>
                     </Dropdown.Trigger>
                     <Dropdown.Group>
                       <Dropdown.Option value="details" label="View details" />
