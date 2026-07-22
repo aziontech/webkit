@@ -262,13 +262,15 @@ const openZoneActions = (event, row) =>
                     <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
                   </template>
                   <template #cell-actions="{ row }">
-                    <IconButton
-                      icon="pi pi-ellipsis-h"
-                      kind="transparent"
-                      size="small"
-                      aria-label="Zone actions"
-                      @click="(event) => openZoneActions(event, row)"
-                    />
+                    <Tooltip text="Zone actions">
+                      <IconButton
+                        icon="pi pi-ellipsis-h"
+                        kind="transparent"
+                        size="small"
+                        aria-label="Zone actions"
+                        @click="(event) => openZoneActions(event, row)"
+                      />
+                    </Tooltip>
                   </template>
                 </Table>
               </template>

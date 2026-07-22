@@ -18,6 +18,7 @@ import IconButton from "@aziontech/webkit/icon-button";
 import SplitButton from "@aziontech/webkit/split-button";
 import Table from "@aziontech/webkit/table";
 import { toast } from "@aziontech/webkit/toast";
+import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -348,12 +349,14 @@ const onAddAction = (event, item) => runAddAction(item.value);
                   @select="(event, value) => onRowAction(event, value, row)"
                 >
                   <Dropdown.Trigger>
-                    <IconButton
-                      icon="pi pi-ellipsis-h"
-                      kind="outlined"
-                      size="small"
-                      aria-label="Object actions"
-                    />
+                    <Tooltip text="Object actions">
+                      <IconButton
+                        icon="pi pi-ellipsis-h"
+                        kind="outlined"
+                        size="small"
+                        aria-label="Object actions"
+                      />
+                    </Tooltip>
                   </Dropdown.Trigger>
 
                   <Dropdown.Group>
