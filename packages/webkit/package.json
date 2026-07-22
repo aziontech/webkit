@@ -209,6 +209,7 @@
     "./input-group-root": "./src/components/inputs/input-group/input-group.vue",
     "./input-group-addon": "./src/components/inputs/input-group/input-group-addon/input-group-addon.vue",
     "./input-number": "./src/components/inputs/input-number/input-number.vue",
+    "./field-select": "./src/components/inputs/field-select/field-select.vue",
     "./field-text": "./src/components/inputs/field-text/field-text.vue",
     "./field-input-group": "./src/components/inputs/field-input-group/field-input-group.vue",
     "./field-text-switch": "./src/components/inputs/field-text-switch/field-text-switch.vue",

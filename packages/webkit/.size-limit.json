@@ -23,5 +23,10 @@
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
     "limit": "48 KB"
+  },
+  {
+    "name": "field-select",
+    "path": "src/components/inputs/field-select/field-select.vue",
+    "limit": "6 KB"
   }
 ]
