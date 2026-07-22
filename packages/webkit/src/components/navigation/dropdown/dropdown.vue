@@ -362,7 +362,7 @@
           <div
             ref="panelBodyRef"
             :data-testid="`${testId}__body`"
-            class="flex flex-1 flex-col overflow-y-auto"
+            class="flex flex-1 flex-col overflow-x-hidden overflow-y-auto"
           />
 
           <div
