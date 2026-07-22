@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "azion:dev": "azion dev",
+    "deploy": "azion deploy --auto --local"
   },
   "dependencies": {
     "@aziontech/icons": "workspace:*",

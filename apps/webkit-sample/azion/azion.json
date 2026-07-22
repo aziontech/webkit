@@ -3,7 +3,7 @@
   "bucket": "webkit-sample",
   "preset": "vue",
   "env": "production",
-  "prefix": "20260622094306",
+  "prefix": "20260721194810",
   "rotate-prefix": true,
   "not-first-run": true,
   "function": {
@@ -20,10 +20,10 @@
     "name": "__DEFAULT__"
   },
   "domain": {
-    "id": 1782137114,
+    "id": 1784675753,
     "name": "webkit-sample",
-    "domain_name": "ve7r6kxbm6.map.azionedge.net",
-    "url": "https://ve7r6kxbm6.map.azionedge.net"
+    "domain_name": "mh2saqc1un.map.azionedge.net",
+    "url": "https://mh2saqc1un.map.azionedge.net"
   },
   "rt-purge": {
     "purge_on_publish": true
