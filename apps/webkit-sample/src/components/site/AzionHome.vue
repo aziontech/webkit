@@ -9,9 +9,9 @@
   import CardBox from '@aziontech/webkit/card-box'
   import CardPricing from '@aziontech/webkit/card-pricing'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import Tag from '@aziontech/webkit/tag'
   import { useRouter } from 'vue-router'
 
+  import AsciiGlobe from './AsciiGlobe.vue'
   import PlatformShowcase from './PlatformShowcase.vue'
 
   const router = useRouter()
@@ -29,6 +29,16 @@
     { icon: 'ai-cor ai-angular', label: 'Angular' },
     { icon: 'ai-cor ai-nuxt', label: 'Nuxt' },
     { icon: 'ai-cor ai-solidjs', label: 'SolidJS' }
+  ]
+
+  // Compact capability strip sitting under the hero CTA (bold lead-in + one
+  // supporting line each), mirroring the azion.com-style hero footer row.
+  const heroFeatures = [
+    { title: 'Edge Functions', description: 'Serverless na borda, sem cold starts nem timeouts.' },
+    { title: 'Object Storage', description: 'Armazenamento S3-compatível, distribuído globalmente.' },
+    { title: 'Edge SQL', description: 'Banco de dados distribuído com latência de milissegundos.' },
+    { title: 'Edge Firewall', description: 'WAF e mitigação de DDoS aplicados antes da origem.' },
+    { title: 'AI Inference', description: 'Modelos de IA executados próximos ao usuário.' }
   ]
 
   // The four platform pillars from azion.com, each with its product line-up.
@@ -191,41 +201,62 @@
 
 <template>
   <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <!-- Left-aligned hierarchy: a full-bleed animated globe fills the top band,
+       the eyebrow → headline → CTAs overlap its lower edge, and a compact
+       capability strip closes the section — mirroring the azion.com hero. -->
   <section class="relative overflow-hidden border-b border-[var(--border-muted)]">
+    <!-- Animated ASCII globe backdrop, concentrated in the top band. -->
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent"
-    />
-    <div class="mx-auto flex w-full max-w-[var(--container-5xl)] flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)] py-[var(--spacing-xxl)] text-center">
-      <Tag
-        label="Plataforma de Edge Computing"
-        severity="contrast"
-        size="medium"
-      />
-      <h1 class="max-w-[var(--container-4xl)] text-balance text-heading-2xl text-[var(--text-default)]">
-        Infraestrutura Distribuída para Workloads Modernos
-      </h1>
-      <p class="max-w-[var(--container-2xl)] text-pretty text-body-lg text-[var(--text-muted)]">
-        Faça o deploy instantaneamente em escala global, com zero downtime, alta performance e
-        segurança nativa. Do código à borda em segundos.
-      </p>
-      <div class="mt-[var(--spacing-xs)] flex flex-col items-center gap-[var(--spacing-sm)] sm:flex-row">
-        <Button
-          label="Começar Gratuitamente"
-          kind="primary"
-          size="large"
-          @click="goSignup"
-        />
-        <Button
-          label="Falar com um Especialista"
-          kind="secondary"
-          size="large"
-          href="#contato"
-        />
+      class="pointer-events-none absolute inset-x-0 top-0 h-[clamp(360px,52vh,620px)] overflow-hidden"
+    >
+      <AsciiGlobe class="size-full opacity-80" />
+      <!-- Fade the lower half into the canvas so the headline reads on solid. -->
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-canvas)]" />
+    </div>
+
+    <div class="relative z-10 mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)]">
+      <!-- Copy block, pushed down to overlap the globe's lower edge. -->
+      <div class="flex flex-col items-start gap-[var(--spacing-md)] pb-[var(--spacing-xl)] pt-[clamp(260px,40vh,500px)]">
+        <div class="flex items-center gap-[var(--spacing-xs)]">
+          <span
+            aria-hidden="true"
+            class="size-2.5 rounded-[var(--shape-elements)] bg-[var(--color-orange-500)]"
+          />
+          <span class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+            Plataforma de Edge Computing
+          </span>
+        </div>
+        <h1 class="max-w-[var(--container-4xl)] text-balance text-left text-heading-2xl text-[var(--text-default)]">
+          A borda programável para aplicações e agentes.
+        </h1>
+        <div class="mt-[var(--spacing-xs)] flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center">
+          <Button
+            label="Começar agora"
+            kind="primary"
+            size="large"
+            @click="goSignup"
+          />
+          <Button
+            label="Ler a documentação"
+            kind="secondary"
+            size="large"
+            href="#contato"
+          />
+        </div>
       </div>
-      <p class="text-body-xs text-[var(--text-muted)]">
-        Sem cartão de crédito · Deploy em minutos · Cancele quando quiser
-      </p>
+
+      <!-- Capability strip. -->
+      <div class="grid grid-cols-2 gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-md)] border-t border-[var(--border-muted)] py-[var(--spacing-lg)] md:grid-cols-3 lg:grid-cols-5">
+        <p
+          v-for="feature in heroFeatures"
+          :key="feature.title"
+          class="text-pretty text-body-sm text-[var(--text-muted)]"
+        >
+          <span class="font-semibold text-[var(--text-default)]">{{ feature.title }}.</span>
+          {{ feature.description }}
+        </p>
+      </div>
     </div>
   </section>
 

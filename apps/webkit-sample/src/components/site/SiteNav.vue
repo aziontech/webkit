@@ -108,20 +108,20 @@
 
 <template>
   <header
-    class="sticky top-0 z-40 border-b border-[var(--border-muted)] bg-[var(--bg-canvas)]/80 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg-canvas)]/70"
+    class="sticky top-0 z-40 border-b border-[var(--border-default)] bg-[var(--bg-surface)]"
   >
     <NavigationMenu
       aria-label="Azion"
-      class="mx-auto flex w-full max-w-[var(--container-7xl)] items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+      class="mx-auto flex h-14 w-full min-w-0 max-w-[var(--container-7xl)] items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)]"
     >
       <RouterLink
         to="/site"
         aria-label="Azion — início"
-        class="shrink-0 rounded-[var(--shape-elements)] transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+        class="inline-flex shrink-0 items-center self-center rounded-[var(--shape-elements)] transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
       >
         <Brand
           kind="default"
-          size="medium"
+          size="small"
         />
       </RouterLink>
 
