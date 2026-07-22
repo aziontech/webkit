@@ -14,6 +14,7 @@
   import Button from '@aziontech/webkit/button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
+  import InputText from '@aziontech/webkit/input-text'
   import MenuItem from '@aziontech/webkit/menu-item'
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -23,6 +24,7 @@
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast } from '@aziontech/webkit/toast'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
   import { useTheme } from '../../theme.js'
@@ -132,6 +134,26 @@
   const { theme } = useTheme()
   const userName = computed(() => props.name || props.user.split('@')[0])
 
+  // Sidebar nav search: a fixed field above the scrolling nav that filters the
+  // baked-in groups by item label (case-insensitive). Groups with no surviving
+  // item drop out entirely; when nothing matches, a compact muted line stands in
+  // for the list. `Escape` clears the query.
+  const searchQuery = ref('')
+  const filteredGroups = computed(() => {
+    const query = searchQuery.value.trim().toLowerCase()
+    if (!query) return navGroups
+    return navGroups
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => item.label.toLowerCase().includes(query))
+      }))
+      .filter((group) => group.items.length > 0)
+  })
+  const hasResults = computed(() => filteredGroups.value.length > 0)
+  const clearSearch = () => {
+    searchQuery.value = ''
+  }
+
   // Team switcher (sidebar top): the signed-in user's team is the default, named
   // "<user> Team". A couple of shared teams round out the list; each carries a
   // plan tag + member count like the console. Only the icon button is
@@ -221,12 +243,14 @@
               width="small"
             >
               <Popover.Trigger>
-                <IconButton
-                  icon="pi pi-sort-alt"
-                  aria-label="Switch team"
-                  kind="transparent"
-                  size="small"
-                />
+                <Tooltip text="Switch team">
+                  <IconButton
+                    icon="pi pi-sort-alt"
+                    aria-label="Switch team"
+                    kind="transparent"
+                    size="small"
+                  />
+                </Tooltip>
               </Popover.Trigger>
 
               <Popover.Content>
@@ -293,11 +317,28 @@
             </Popover>
           </div>
         </div>
+
+        <!-- Nav search: filters the baked-in groups by label. Lives in the fixed
+             header region so it stays put while the nav below it scrolls. Escape
+             clears the query. -->
+        <div class="pt-[var(--spacing-sm)]">
+          <InputText
+            v-model="searchQuery"
+            placeholder="Search"
+            size="small"
+            aria-label="Search navigation"
+            @keydown.esc="clearSearch"
+          >
+            <template #iconLeft>
+              <i class="pi pi-search" aria-hidden="true" />
+            </template>
+          </InputText>
+        </div>
       </template>
 
       <slot>
         <SidebarGroup
-          v-for="(group, i) in navGroups"
+          v-for="(group, i) in filteredGroups"
           :key="group.label ?? `group-${i}`"
           :label="group.label"
         >
@@ -311,6 +352,12 @@
             @click="(event) => emit('navigate', event, item)"
           />
         </SidebarGroup>
+        <p
+          v-if="!hasResults"
+          class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+        >
+          No results for “{{ searchQuery.trim() }}”
+        </p>
       </slot>
 
       <template #footer>
@@ -330,12 +377,14 @@
             @select="onSelect"
           >
             <Dropdown.Trigger>
-              <IconButton
-                icon="pi pi-ellipsis-v"
-                aria-label="Account menu"
-                kind="outlined"
-                size="small"
-              />
+              <Tooltip text="Account menu">
+                <IconButton
+                  icon="pi pi-ellipsis-v"
+                  aria-label="Account menu"
+                  kind="outlined"
+                  size="small"
+                />
+              </Tooltip>
             </Dropdown.Trigger>
 
             <!-- Account identity + the account's own links: Account Settings and

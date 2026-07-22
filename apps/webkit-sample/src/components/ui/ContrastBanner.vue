@@ -49,21 +49,22 @@ const onCopy = async () => {
   <Tooltip text="Copies a setup prompt for your AI coding tool" placement="top">
     <button
       type="button"
-      class="group inline-flex items-center gap-[var(--spacing-sm)] rounded-full bg-[var(--bg-contrast)] py-[var(--spacing-xs)] pl-[var(--spacing-md)] pr-[var(--spacing-md)] text-label-md text-[var(--text-contrast)] transition-[transform,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-[var(--primary)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none motion-reduce:transform-none"
+      class="group inline-flex max-w-full items-center gap-[var(--spacing-xs)] rounded-full bg-[var(--bg-contrast)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-contrast)] transition-[scale,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-[var(--primary)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none motion-reduce:scale-100 sm:gap-[var(--spacing-sm)] sm:px-[var(--spacing-md)] sm:py-[var(--spacing-xs)] sm:text-label-md"
       @click="onCopy"
     >
       <!-- Azion mark — the bare icon. -->
-      <AzionLogoMin class="h-[var(--size-5)] w-auto shrink-0" aria-hidden="true" />
+      <AzionLogoMin class="h-[var(--size-4)] w-auto shrink-0 sm:h-[var(--size-5)]" aria-hidden="true" />
 
-      <span class="whitespace-nowrap font-medium">
+      <span class="min-w-0 truncate font-medium sm:whitespace-nowrap">
         Onboard your Agent to {{ brand }}
       </span>
 
       <!-- AI coding tools — bare brand logos on the pill. Claude keeps its
            color; Cursor / Windsurf / Codex / OpenCode are monochrome
-           (currentColor). -->
+           (currentColor). Decorative, so they drop off below `sm` where the
+           pill would otherwise overflow a phone; the label carries the CTA. -->
       <span
-        class="ml-[var(--spacing-xxs)] flex items-center gap-[var(--spacing-xs)]"
+        class="ml-[var(--spacing-xxs)] hidden shrink-0 items-center gap-[var(--spacing-xs)] sm:flex"
         aria-hidden="true"
       >
         <!-- Claude -->
