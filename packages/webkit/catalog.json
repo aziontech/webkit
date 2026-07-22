@@ -5165,6 +5165,116 @@
         "Use `inputmode=\"numeric\"` semantics for mobile keyboards."
       ]
     },
+    "field-select": {
+      "import": "@aziontech/webkit/field-select",
+      "target": "./src/components/inputs/field-select/field-select.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-select",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "string | number | unknown[]",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Two-way bound selection. Scalar in single mode; array in multi mode."
+        },
+        {
+          "name": "options",
+          "type": "Array<{ value: unknown; label: string; disabled?: boolean }>",
+          "default": "[]",
+          "required": "no",
+          "doc": "Options rendered inside the dropdown. When empty, the dropdown renders no options."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder shown on the trigger when nothing is selected."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to the default disabled message so the lock icon always has matching copy."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size forwarded to the `Select` trigger. Heights: small=28px, medium=32px, large=40px."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Switches the component to multi-select; `modelValue` becomes an array."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the select and switches the helper to `kind=\"disabled\"` (lock icon)."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the select read-only; value is visible but the dropdown is locked."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the `Required` tag to the `Label` and sets `aria-required` on the trigger."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Switches the helper to `kind=\"invalid\"` and applies invalid border/ring tokens on the trigger."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "payload": "(value: string | number | unknown[])",
+          "notes": "Re-emitted from the underlying `Select` on every selection change."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Optional override for the rendered options. When absent, the component renders one `Select.Option` per entry in `options`."
+        }
+      ],
+      "purpose": "Form field wrapper for `Select` that composes `Label`, `Select` (with its `Trigger` + `Content` + `Option` sub-components), and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a select needs a visible label or helper/error message — mirroring `FieldText`'s role for text inputs. Options are supplied via a data prop (`options: { value, label }[]`) so the field owns the rendering; consumers who need slot-based composition can drop to the underlying `Select` compound directly."
+    },
     "field-text": {
       "import": "@aziontech/webkit/field-text",
       "target": "./src/components/inputs/field-text/field-text.vue",
