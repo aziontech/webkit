@@ -384,6 +384,81 @@ describe('Select (compound / overlay)', () => {
     expect(trigger.getAttribute('role')).toBe('combobox')
   })
 
+  // ---- Focus ring: arrow-key navigation focuses the option (ENG-46730) -----
+  // Options carry `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]`
+  // and `tabindex="-1"`, so the ring shows when the keyboard handler moves
+  // focus to the option via `.focus()`. This regression test asserts the
+  // handler actually moves DOM focus, which is the missing link when the ring
+  // does not appear.
+  it('moves DOM focus onto the first option on ArrowDown from within the panel (ENG-46730)', async () => {
+    render(Host, { props: { startOpen: true } })
+    const content = getContent() as HTMLElement
+    expect(content).not.toBeNull()
+
+    await fireEvent.keyDown(content, { key: 'ArrowDown' })
+
+    const options = getOptions()
+    expect(document.activeElement).toBe(options[0])
+    // Options render tabindex=-1 + the focus-visible ring classes; asserting
+    // both here proves the ring is reachable by keyboard navigation.
+    expect(options[0].getAttribute('tabindex')).toBe('-1')
+    expect(options[0].className).toContain('focus-visible:ring-2')
+  })
+
+  it('wraps ArrowDown from the last option back to the first (ENG-46730)', async () => {
+    render(Host, { props: { startOpen: true } })
+    const content = getContent() as HTMLElement
+    const options = getOptions()
+    options[options.length - 1].focus()
+
+    await fireEvent.keyDown(content, { key: 'ArrowDown' })
+
+    expect(document.activeElement).toBe(options[0])
+  })
+
+  // ---- Regression: trigger reopen (ENG-46739) -------------------------------
+  // A real pointer press fires `pointerdown` then `click`. When the dropdown
+  // is open, the content's document-level capture listener saw the trigger
+  // pointerdown as an "outside" click and closed the panel; the trigger's own
+  // @click then re-opened it. The visible symptom is that closing the panel
+  // via the trigger appeared to require a second click, or emitted
+  // update:open twice per press. The fix ignores pointerdown on the trigger.
+  it('does not reopen the panel when the trigger receives a real pointerdown+click while open (ENG-46739)', async () => {
+    const { getByTestId } = render(Host, { props: { startOpen: true } })
+    const trigger = getByTestId('select-trigger')
+    expect(getContent()).not.toBeNull()
+
+    // Simulate a real press: pointerdown lands on the trigger with the panel
+    // open. The document capture listener runs first; the trigger's click
+    // handler runs after.
+    await fireEvent.pointerDown(trigger)
+    await fireEvent.click(trigger)
+
+    // Panel must be closed. Before the fix, the pointerdown closed the panel
+    // and the click re-opened it, leaving the panel visible.
+    expect(getContent()).toBeNull()
+  })
+
+  it('opens exactly once on a real trigger press when starting closed (ENG-46739)', async () => {
+    const { getByTestId, emitted } = render(Select, {
+      props: { placeholder: 'x' },
+      slots: {
+        default: () => [h(SelectTrigger), h(SelectContent)]
+      }
+    })
+    const trigger = getByTestId('select-trigger')
+
+    await fireEvent.pointerDown(trigger)
+    await fireEvent.click(trigger)
+
+    // The trigger click drives one open transition. Before the fix, the
+    // document pointerdown listener registered on the previous open cycle
+    // could still see the press and emit an extra update:open(false).
+    const events = emitted()['update:open']
+    expect(events).toBeTruthy()
+    expect(events).toEqual([[true]])
+  })
+
   // ---- enum smoke floor -----------------------------------------------------
   it.each(['small', 'medium', 'large'] as const)(
     'reflects size "%s" as data-size on root and trigger',
