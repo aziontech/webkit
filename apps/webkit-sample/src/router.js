@@ -25,6 +25,7 @@ import InPageForm from './components/InPageForm.vue'
 import ItemGroupSaves from './components/ItemGroupSaves.vue'
 import ItemGroupSettings from './components/ItemGroupSettings.vue'
 import LoginScreen from './components/LoginScreen.vue'
+import ManageResources from './components/ManageResources.vue'
 import Marketplace from './components/Marketplace.vue'
 import NestedDrawer from './components/NestedDrawer.vue'
 import ObjectStorage from './components/ObjectStorage.vue'
@@ -84,6 +85,7 @@ const routes = [
   { path: '/create', name: 'create', component: CreationCenter },
   { path: '/deploy', name: 'deploy', component: DeployTemplate },
   { path: '/account', name: 'account', component: AccountSettings },
+  { path: '/resources', name: 'resources', component: ManageResources },
   { path: '/personal-tokens', name: 'personal-tokens', component: PersonalTokens },
   { path: '/playground', name: 'playground', component: Playground },
   { path: '/teams/new', name: 'teams-new', component: CreateTeam },
