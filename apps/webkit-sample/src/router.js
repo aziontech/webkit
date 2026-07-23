@@ -32,6 +32,7 @@ import Personalize from './components/Personalize.vue'
 import PersonalTokens from './components/PersonalTokens.vue'
 import Playground from './components/Playground.vue'
 import SignUp from './components/SignUp.vue'
+import AzionDocs from './components/docs/AzionDocs.vue'
 import LandingAzion from './components/site/LandingAzion.vue'
 import SqlDatabase from './components/SqlDatabase.vue'
 import SqlDatabaseDetail from './components/SqlDatabaseDetail.vue'
@@ -47,6 +48,7 @@ const routes = [
   // from the console app shell used by every other route.
   { path: '/site', redirect: '/site/home' },
   { path: '/site/home', name: 'site-home', component: LandingAzion },
+  { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   { path: '/login', name: 'login', component: LoginScreen },
   { path: '/signup', name: 'signup', component: SignUp },
   { path: '/signup/verify', name: 'signup-verify', component: CheckInbox },
