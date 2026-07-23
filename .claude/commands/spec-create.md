@@ -1,6 +1,6 @@
 ---
 description: Draft a `.specs/<name>.md` for a new webkit component interactively. Status starts at `draft`; review the file, mark `status: approved`, then run `/component-create <name>`.
-argument-hint: <name> [--category <category>] [--figma <url>]
+argument-hint: [<name>] [--category <category>] [--figma <url>]
 ---
 
 You are creating a new component spec for `.specs/<name>.md`. Follow the `spec-create` skill in `.claude/skills/spec-create/SKILL.md` exactly.
@@ -11,7 +11,7 @@ You are creating a new component spec for `.specs/<name>.md`. Follow the `spec-c
 
 `spec-create` has **two distinct paths**. Detect the mode from the arguments (and confirm with the user before drafting):
 
-- **Mode A — Figma-driven** (`--figma <url>` present). The Figma frame is the source of truth: extract tokens/regions/states, map them to DESIGN.md, and ask the user only where the frame is silent (behavior, a11y intent, story list).
+- **Mode A — Figma-driven** (`--figma <url>` present). The Figma frame is the source of truth: extract tokens/regions/states, map them to DESIGN.md, and ask the user only where the frame is silent (behavior, a11y intent, story list). The component **name** is derived from the frame's component name (normalized to kebab, confirmed with the user); passing `<name>` is **optional** here and, when given, overrides the frame.
 - **Mode B — Name + Category** (no `--figma`; the user is building **without** a design). There is **no** ground truth, so invention risk is highest. This mode is deliberately **more blocking**: it **always asks** about every section, one at a time, **never infers** props/events/tokens, and refuses to write until each mandatory section has a real answer (**no silent `TBD`**). `--category` is required here (ask + confirm if missing).
 
 If `--figma` is absent, you are in **Mode B** — do not quietly infer from intent. If both a URL and "no figma" intent are ambiguous, ask which mode the user wants before proceeding.
@@ -25,12 +25,12 @@ If `--figma` is absent, you are in **Mode B** — do not quietly infer from inte
    - [`.claude/rules/no-invention.md`](.claude/rules/no-invention.md), [`naming.md`](.claude/docs/COMPONENT_REQUIREMENTS.md), [`tokens.md`](.claude/docs/DESIGN.md), [`accessibility.md`](.claude/docs/COMPONENT_REQUIREMENTS.md), [`bem-testid.md`](.claude/docs/COMPONENT_REQUIREMENTS.md).
    - [`.claude/docs/DESIGN.md`](.claude/docs/DESIGN.md) — design tokens (authoritative).
 
-2. **Parse the arguments.** Required: `<name>` (kebab-case). Optional: `--category`, `--figma`. If the name is missing or invalid, ask the user.
+2. **Parse the arguments.** `<name>` (kebab-case) is **required in Mode B**; in **Mode A it is optional** — when omitted it is derived from the frame's component name (normalized + confirmed), and a passed `<name>` overrides. **If the frame has no usable name, ask the user.** Optional: `--category`, `--figma`. If the name is missing in Mode B (no `--figma`), ask the user.
 
 3. **Refuse to overwrite** any existing `.specs/<name>.md` whose `status ∈ {approved, implemented, locked}`.
 
 4. **Invoke the `spec-author` sub-agent** with the universal envelope from `.claude/agents/_README.md`. Pass it the user's arguments, the **mode** (A or B), and ask it to:
-   - **Mode A (Figma):** run `figma-extractor` + `token-mapper` to pre-fill Tokens/regions/states; confirm the extracted values with the user; ask only about behavior/a11y/stories the frame cannot express. Infer the category from the frame + confirm.
+   - **Mode A (Figma):** run `figma-extractor` + `token-mapper` to pre-fill Tokens/regions/states; confirm the extracted values with the user; ask only about behavior/a11y/stories the frame cannot express. Derive the component **name** from the frame's `component_name` (normalize to kebab, confirm) unless `<name>` was passed (which overrides); **if the frame has no usable name, ask the user for it.** Infer the category from the frame + confirm.
    - **Mode B (Name + Category):** ask about **every** section, one at a time — Purpose / Props / Events / Slots / Sub-components (only when composition) / States / Motion & Animations / Accessibility / Stories — and **map each token to DESIGN.md with the user, never infer**. Confirm the category first. If the user leaves any mandatory section unanswered, emit `BLOCKED:` and write nothing (**no silent `TBD`** in this mode).
    - Write `.specs/<name>.md` with `status: draft`.
 
