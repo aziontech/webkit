@@ -17,6 +17,10 @@ import { fileURLToPath } from 'node:url'
 
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
+import {
+  animate as themeAnimate,
+  useWhen as themeAnimateUseWhen
+} from '../../theme/src/tokens/primitives/animations/animate.js'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -244,6 +248,13 @@ function _readSpec(subpath) {
     // actually deprecated — then no-deprecated-component steers to the replacement.
     deprecated: frontmatter.deprecated === true,
     replacedBy: frontmatter.replaced_by ?? null,
+    // App-level setup (frontmatter `setup:`): the one-time wiring a component needs before
+    // first use (e.g. toast's `.use(ToastPlugin)`). Surfaced by the MCP so the AI wires it
+    // just-in-time; `doctor` backstops it mechanically.
+    setup:
+      typeof frontmatter.setup === 'string' && frontmatter.setup.trim()
+        ? frontmatter.setup.trim()
+        : null,
     // Style seam (pillar 2): a component that INTENTIONALLY lets the consumer pass
     // class/style to its root (a layout/container wrapper). no-style-override reads this
     // to allow it. Opt-in via spec frontmatter `style_seam: true`; default false.
@@ -374,6 +385,7 @@ function build() {
       if (spec.deprecated) entry.deprecated = true
       if (spec.replacedBy) entry.replacedBy = spec.replacedBy
       if (spec.styleSeam) entry.styleSeam = true
+      if (spec.setup) entry.setup = spec.setup
     } else if (entry.kind === 'component') {
       entry.category = categoryFromTarget(target)
     }
@@ -441,7 +453,18 @@ function buildTokens() {
   }
   const animations = [...animSet].sort()
 
-  return { cssVars, typography, groups, animations }
+  // Animation guide: per-utility timing value + "when to use it" prose, read from the
+  // theme's own token source (single source of truth). The MCP surfaces this so a
+  // consumer (or its AI) picks the right utility — e.g. slide-in-left for a sidebar.
+  const animationGuide = {}
+  for (const name of animations) {
+    animationGuide[name] = {
+      value: themeAnimate[name] ?? null,
+      useWhen: themeAnimateUseWhen[name] ?? null
+    }
+  }
+
+  return { cssVars, typography, groups, animations, animationGuide }
 }
 
 const catalog = build()

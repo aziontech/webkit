@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -119,6 +119,7 @@
     "./docs/STYLEGUIDE.md": "./docs/STYLEGUIDE.md",
     "./eslint-plugin": "./src/eslint-plugin/index.js",
     "./stylelint-config": "./src/stylelint-config.js",
+    "./styles": "./src/styles.css",
     "./overline": "./src/components/overline/overline.vue",
     "./button": "./src/components/actions/button/button.vue",
     "./button-highlight": "./src/components/actions/button-highlight/button-highlight.vue",

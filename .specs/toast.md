@@ -4,12 +4,13 @@ category: feedback
 structure: composition
 status: approved
 spec_version: 1
+setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: c68746e63dc5815cf542ed26f75b33bbec3b7749fb196ea5e8d78ac605ce5689
+checksum: cabba791be74b5dc7773877c1631197ead9fdb650779837aef9142427dd127ba
 created: 2026-06-23
-last_updated: 2026-06-29
+last_updated: 2026-07-21
 ---
 
 # Toast — Component Spec
@@ -41,12 +42,12 @@ import Button from '@aziontech/webkit/button'
 </template>
 ```
 
-**2. Service (install once in main.js)** — `app.use(ToastPlugin)` registers `<Toaster>` as a global component and exposes the imperative API as `this.$toast` (Options API / templates) and through `inject`; inside `setup` use `useToast()` to get the same API:
+**2. Service (install once in main.js)** — `app.use(ToastPlugin)` mounts the toast region automatically on a dedicated host element (no manual `<Toaster />` needed; the vnode shares the app's context, and the host is torn down on `app.unmount()`), registers `<Toaster>` as a global component, and exposes the imperative API as `this.$toast` (Options API / templates) and through `inject`; inside `setup` use `useToast()` to get the same API. Region defaults (position, duration, …) ride the plugin options. A manually mounted `<Toaster />` alongside the plugin is harmless — the store activates only the first registered region, so toasts never render twice. SSR-safe: without a DOM the auto-mount is skipped:
 
 ```ts
 // main.js
 import { ToastPlugin } from '@aziontech/webkit/toast'
-app.use(ToastPlugin)
+app.use(ToastPlugin, { position: 'bottom-right' })
 ```
 
 ```vue
