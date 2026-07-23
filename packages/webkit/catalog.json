@@ -4251,17 +4251,17 @@
         },
         {
           "name": "size",
-          "type": "'small' | 'medium' | 'large'",
+          "type": "'small' | 'medium'",
           "default": "'medium'",
           "required": "no",
-          "doc": "Size token; scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together."
+          "doc": "Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together."
         },
         {
           "name": "bordered",
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "When true, wraps the content in a bordered surface card; otherwise renders on a transparent background."
+          "doc": "When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background."
         }
       ],
       "slots": [

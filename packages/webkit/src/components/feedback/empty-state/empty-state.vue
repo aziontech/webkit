@@ -50,7 +50,7 @@
     class="flex w-full flex-col items-center justify-center text-center data-[bordered]:rounded-[var(--shape-button)] data-[bordered]:border data-[bordered]:border-dashed data-[bordered]:border-[length:var(--border-width-default,1px)] data-[bordered]:border-[var(--border-default)] data-[bordered]:bg-[var(--bg-surface)] data-[size=small]:gap-[var(--spacing-4)] data-[size=small]:px-[var(--spacing-6)] data-[size=small]:py-[var(--spacing-8)] data-[size=medium]:gap-[var(--spacing-6)] data-[size=medium]:px-[var(--spacing-8)] data-[size=medium]:py-[var(--spacing-12)]"
   >
     <div
-      v-if="$slots.icon || icon"
+      v-if="$slots['icon'] || icon"
       :data-testid="`${testId}__icon`"
       :data-size="size"
       aria-hidden="true"
