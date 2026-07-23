@@ -145,3 +145,39 @@ export const Types = {
     }
   }
 }
+
+const PRIVACY_SCRIPT = [
+  IMPORT,
+  "import { ref } from 'vue'",
+  '',
+  'const off = ref(false)',
+  'const on = ref(true)'
+]
+
+const PRIVACY_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-4)]">
+  <Switch v-model="off" kind="privacy" aria-label="Privacy off" />
+  <Switch v-model="on" kind="privacy" aria-label="Privacy on" />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Switch>} */
+export const Privacy = {
+  render: () => ({
+    components: { Switch },
+    setup() {
+      const off = ref(false)
+      const on = ref(true)
+      return { off, on }
+    },
+    template: PRIVACY_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Privacy variant in both states. The off handle carries a closed lock (`pi-lock`) tinted `var(--bg-surface)` against the muted handle; the on handle carries an open lock (`pi-lock-open`) tinted `var(--text-default)` against the canvas handle — so the icon contrasts against the handle rather than blending into the surrounding `var(--success-contrast)` track.'
+      },
+      source: { code: toSfc(PRIVACY_SCRIPT, PRIVACY_TEMPLATE) }
+    }
+  }
+}
