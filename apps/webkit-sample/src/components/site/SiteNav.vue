@@ -74,7 +74,7 @@
     {
       label: 'Recursos para Devs',
       items: [
-        { icon: 'ai ai-datasheet', label: 'Documentação', description: 'Guias e referência da plataforma' },
+        { icon: 'ai ai-datasheet', label: 'Documentação', description: 'Guias e referência da plataforma', href: '/site/docs' },
         { icon: 'ai ai-azion-cli', label: 'Dev Tools', description: 'CLI, SDKs e integrações' },
         { icon: 'ai ai-azion-api', label: 'API Reference', description: 'Automatize com a API da Azion' },
         { icon: 'ai ai-real-time-events', label: 'Release Notes', description: 'Novidades e mudanças recentes' }
@@ -169,7 +169,7 @@
                   v-for="item in group.items"
                   :key="item.label"
                   layout="entry"
-                  href="#"
+                  :href="item.href || '#'"
                   :description="item.description"
                   close-on-click
                 >
