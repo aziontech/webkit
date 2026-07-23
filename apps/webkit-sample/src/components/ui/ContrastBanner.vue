@@ -21,6 +21,10 @@ import Tooltip from "@aziontech/webkit/tooltip";
 const props = defineProps({
   // Brand the agent is being onboarded to — completes "Onboard your agent to …".
   brand: { type: String, default: "Azion" },
+  // Overrides the default "Onboard your Agent to {brand}" label when set.
+  label: { type: String, default: "" },
+  // Shows the leading Azion mark; hide it for a plain text pill.
+  showLogo: { type: Boolean, default: true },
   // The prompt copied to the clipboard on click.
   prompt: {
     type: String,
@@ -53,10 +57,14 @@ const onCopy = async () => {
       @click="onCopy"
     >
       <!-- Azion mark — the bare icon. -->
-      <AzionLogoMin class="h-[var(--size-4)] w-auto shrink-0 sm:h-[var(--size-5)]" aria-hidden="true" />
+      <AzionLogoMin
+        v-if="showLogo"
+        class="h-[var(--size-4)] w-auto shrink-0 sm:h-[var(--size-5)]"
+        aria-hidden="true"
+      />
 
       <span class="min-w-0 truncate font-medium sm:whitespace-nowrap">
-        Onboard your Agent to {{ brand }}
+        {{ label || `Onboard your Agent to ${brand}` }}
       </span>
 
       <!-- AI coding tools — bare brand logos on the pill. Claude keeps its
