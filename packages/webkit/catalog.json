@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "4.1.0",
+  "webkitVersion": "4.2.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -4243,25 +4243,32 @@
           "doc": "Supporting body copy below the title."
         },
         {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders."
+        },
+        {
           "name": "size",
-          "type": "'small' | 'medium' | 'large'",
+          "type": "'small' | 'medium'",
           "default": "'medium'",
           "required": "no",
-          "doc": "Size token; affects the illustration size, the surrounding padding, and the gaps between illustration, text, and actions."
+          "doc": "Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together."
         },
         {
           "name": "bordered",
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "When true, wraps the content in a bordered surface card; otherwise renders on a transparent background."
+          "doc": "When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background."
         }
       ],
       "slots": [
         {
           "name": "icon",
           "scope": "—",
-          "notes": "Decorative illustration centered above the title; rendered inside an `aria-hidden` container. Defaults to the bundled `EmptyStateIllustration` sub-component when not provided."
+          "notes": "Custom adornment centered above the title, rendered inside an `aria-hidden` container. Overrides the `icon` prop's featured-icon tile. When neither this slot nor the `icon` prop is provided, no adornment renders."
         },
         {
           "name": "actions",
@@ -4269,7 +4276,7 @@
           "notes": "Action area below the description; consumer composes buttons and the documentation link."
         }
       ],
-      "purpose": "Centered placeholder shown when a resource list or section has no content yet. Stacks a decorative illustration, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. Unlike `Message`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background."
+      "purpose": "Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Message`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background."
     },
     "status-indicator": {
       "import": "@aziontech/webkit/status-indicator",
