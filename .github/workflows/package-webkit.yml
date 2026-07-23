@@ -46,3 +46,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_PKG }}
           NPM_CONFIG_PROVENANCE: true
+
+      - name: Open version bump PR
+        env:
+          GH_TOKEN: ${{ secrets.GIT_PKG }}
+        run: |
+          if git diff --quiet -- packages/webkit/package.json; then
+            echo "No release published; skipping version bump PR."
+            exit 0
+          fi
+          VERSION="$(node -p "require('./packages/webkit/package.json').version")"
+          BRANCH="ci/release-webkit-${VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add packages/webkit/package.json packages/webkit/CHANGELOG.md packages/webkit/catalog.json
+          git commit -m "ci(release): bump @aziontech/webkit to ${VERSION}"
+          git push --force origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "ci(release): bump @aziontech/webkit to ${VERSION} [skip ci]" \
+            --body "Automated follow-up to the @aziontech/webkit@${VERSION} release: aligns package.json, CHANGELOG.md and catalog.json with the published version. Release notes: https://github.com/aziontech/webkit/releases/tag/%40aziontech%2Fwebkit%40${VERSION} — Merging this PR does not trigger a new release (ci commits produce no version bump)."
