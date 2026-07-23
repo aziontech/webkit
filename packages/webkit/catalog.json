@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "4.0.0",
+  "webkitVersion": "4.1.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -55,6 +55,10 @@
       "--animate-pulse",
       "--animate-shimmer",
       "--animate-slide-down",
+      "--animate-slide-in-left",
+      "--animate-slide-in-right",
+      "--animate-slide-out-left",
+      "--animate-slide-out-right",
       "--animate-spin",
       "--aspect-video",
       "--bg-active",
@@ -724,6 +728,10 @@
         "--animate-pulse",
         "--animate-shimmer",
         "--animate-slide-down",
+        "--animate-slide-in-left",
+        "--animate-slide-in-right",
+        "--animate-slide-out-left",
+        "--animate-slide-out-right",
         "--animate-spin"
       ],
       "aspect": [
@@ -1424,8 +1432,86 @@
       "pulse",
       "shimmer",
       "slide-down",
+      "slide-in-left",
+      "slide-in-right",
+      "slide-out-left",
+      "slide-out-right",
       "spin"
-    ]
+    ],
+    "animationGuide": {
+      "blink": {
+        "value": "blink 1s step-end infinite",
+        "useWhen": "Text caret / terminal cursor blink."
+      },
+      "bounce": {
+        "value": "bounce 1s infinite",
+        "useWhen": "Playful attention bounce (scroll-down hints); use sparingly."
+      },
+      "fade-in": {
+        "value": "fadeIn 220ms ease-in-out",
+        "useWhen": "Content or backdrop appearing in place (no directional origin)."
+      },
+      "fade-out": {
+        "value": "fadeOut 220ms ease-in-out",
+        "useWhen": "Content or backdrop leaving in place (pair of fade-in)."
+      },
+      "highlight-fade": {
+        "value": "highlight ease-in forwards",
+        "useWhen": "Row/item briefly highlighted after an update (recently changed)."
+      },
+      "ping": {
+        "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+        "useWhen": "One-off attention ring radiating from a small element (notification dot)."
+      },
+      "popup-scale-in": {
+        "value": "popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1)",
+        "useWhen": "Anchored overlays opening (dropdown, popover, tooltip, menu); set --popup-origin."
+      },
+      "popup-scale-out": {
+        "value": "popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53)",
+        "useWhen": "Anchored overlays closing (pair of popup-scale-in)."
+      },
+      "progress-indeterminate": {
+        "value": "progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite",
+        "useWhen": "Indeterminate linear progress bar (primary sweep)."
+      },
+      "progress-indeterminate-short": {
+        "value": "progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite",
+        "useWhen": "Indeterminate linear progress bar (secondary short sweep)."
+      },
+      "pulse": {
+        "value": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "useWhen": "Skeleton/placeholder opacity pulse while content loads."
+      },
+      "shimmer": {
+        "value": "shimmer 1.6s linear infinite",
+        "useWhen": "Skeleton shimmer sweep while content loads."
+      },
+      "slide-down": {
+        "value": "slideDown 220ms ease-in-out",
+        "useWhen": "Vertical disclosure expanding (accordion panel, expandable row)."
+      },
+      "slide-in-left": {
+        "value": "slideInLeft 240ms cubic-bezier(0.39, 0.57, 0.56, 1)",
+        "useWhen": "Left-anchored panel entering (sidebar, navigation drawer). Wrap the v-if region in a Vue Transition with enter-active-class."
+      },
+      "slide-in-right": {
+        "value": "slideInRight 240ms cubic-bezier(0.39, 0.57, 0.56, 1)",
+        "useWhen": "Right-anchored panel entering (settings/detail drawer)."
+      },
+      "slide-out-left": {
+        "value": "slideOutLeft 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)",
+        "useWhen": "Left-anchored panel leaving (pair of slide-in-left; use as leave-active-class)."
+      },
+      "slide-out-right": {
+        "value": "slideOutRight 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)",
+        "useWhen": "Right-anchored panel leaving (pair of slide-in-right)."
+      },
+      "spin": {
+        "value": "spin 1s linear infinite",
+        "useWhen": "Indeterminate circular spinners (loading icons)."
+      }
+    }
   },
   "vocabulary": {
     "props": [
@@ -1534,6 +1620,12 @@
       "target": "./src/stylelint-config.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/stylelint-config"
+    },
+    "styles": {
+      "import": "@aziontech/webkit/styles",
+      "target": "./src/styles.css",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/styles"
     },
     "overline": {
       "import": "@aziontech/webkit/overline",
@@ -4280,7 +4372,8 @@
           "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
         }
       ],
-      "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface."
+      "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
+      "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
     },
     "toast-root": {
       "import": "@aziontech/webkit/toast-root",
@@ -4335,7 +4428,8 @@
           "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry."
         }
       ],
-      "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface."
+      "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
+      "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
     },
     "toast-item": {
       "import": "@aziontech/webkit/toast-item",

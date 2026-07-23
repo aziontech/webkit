@@ -56,17 +56,6 @@
       }
     ],
     [
-      "@semantic-release/git",
-      {
-        "assets": [
-          "package.json",
-          "CHANGELOG.md",
-          "catalog.json"
-        ],
-        "message": "chore(release): @aziontech/webkit ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-      }
-    ],
-    [
       "@semantic-release/github",
       {
         "labels": false
