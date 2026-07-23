@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { type ComponentPublicInstance } from 'vue'
+
   import { usePopoverContext } from '../injection-key'
 
   defineOptions({
@@ -14,8 +16,9 @@
 
   // Assign the panel element to the root-owned context ref (function ref), so the root's
   // placement / focus / Esc+Tab / outside-click logic keeps operating on `ctx.panelRef`.
-  const setPanelRef = (el: globalThis.Element | null) => {
-    ctx.panelRef.value = (el as globalThis.HTMLElement | null) ?? null
+  // The param matches Vue's VNodeRef signature (Element | ComponentPublicInstance | null).
+  const setPanelRef = (el: globalThis.Element | ComponentPublicInstance | null) => {
+    ctx.panelRef.value = el instanceof HTMLElement ? el : null
   }
 </script>
 
