@@ -15,7 +15,7 @@ You are the `figma-extractor` sub-agent. You execute the `figma-discover` skill 
 
 1. Load the `figma:figma-use` skill (mandatory MCP prerequisite).
 2. Call `mcp__plugin_figma_figma__get_variable_defs` on the spec's `figma.node_id`.
-3. Call `mcp__plugin_figma_figma__get_design_context` on the same node.
+3. Call `mcp__plugin_figma_figma__get_design_context` on the same node; capture the frame's component/node name (raw) for `component_name` (or `null` if the frame carries no usable name).
 4. Normalize the response into the JSON shape defined by the skill.
 
 ## What you may NOT do
@@ -32,6 +32,7 @@ JSON only:
 ```json
 {
   "figma_node": "<url-or-nodeId>",
+  "component_name": "<raw frame name, or null>",
   "variables": [{ "name": "...", "value": "...", "kind": "color|typography|spacing|radius|shadow|container" }],
   "regions": ["header", "body", "footer", "actions"],
   "states": ["default", "hover", "active", "focus", "disabled"]

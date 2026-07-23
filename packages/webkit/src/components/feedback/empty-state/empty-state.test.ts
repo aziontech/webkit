@@ -28,7 +28,7 @@ describe('EmptyState', () => {
   it('honours a consumer-supplied data-testid across the whole subtree', () => {
     const { getByTestId } = within(
       render(EmptyState, {
-        props: { title: 'Empty' },
+        props: { title: 'Empty', icon: 'pi pi-inbox' },
         attrs: { 'data-testid': 'custom-empty' }
       }).container
     )
@@ -51,19 +51,27 @@ describe('EmptyState', () => {
     expect(withoutDesc.queryByTestId('feedback-empty-state__description')).toBeNull()
   })
 
-  it('marks the icon container aria-hidden and renders the default illustration', () => {
-    const { getByTestId } = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+  it('renders no adornment when neither the icon prop nor the icon slot is provided', () => {
+    const { queryByTestId } = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+
+    expect(queryByTestId('feedback-empty-state__icon')).toBeNull()
+  })
+
+  it('renders the standardized featured-icon tile when the icon prop is set', () => {
+    const { getByTestId } = within(
+      render(EmptyState, { props: { title: 'Empty', icon: 'pi pi-inbox' } }).container
+    )
 
     const icon = getByTestId('feedback-empty-state__icon')
     expect(icon.getAttribute('aria-hidden')).toBe('true')
-    // Default slot renders the bundled illustration (an svg/element inside the tile).
-    expect(icon.children.length).toBeGreaterThan(0)
+    // The tile carries the consumer-supplied icon glyph.
+    expect(icon.querySelector('i.pi.pi-inbox')).toBeTruthy()
   })
 
-  it('renders custom icon slot content in place of the default illustration', () => {
+  it('renders custom icon slot content, overriding the icon prop tile', () => {
     const { getByTestId } = within(
       render(EmptyState, {
-        props: { title: 'Empty' },
+        props: { title: 'Empty', icon: 'pi pi-inbox' },
         slots: { icon: '<span data-testid="my-icon">glyph</span>' }
       }).container
     )
@@ -71,6 +79,8 @@ describe('EmptyState', () => {
     const icon = getByTestId('feedback-empty-state__icon')
     expect(icon.getAttribute('aria-hidden')).toBe('true')
     expect(getByTestId('my-icon').textContent).toBe('glyph')
+    // Slot wins: the prop's default tile glyph is not rendered.
+    expect(icon.querySelector('i.pi.pi-inbox')).toBeNull()
   })
 
   it('renders the actions region only when the actions slot is supplied', () => {
@@ -101,15 +111,15 @@ describe('EmptyState', () => {
     const def = within(render(EmptyState, { props: { title: 'Empty' } }).container)
     expect(def.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('medium')
 
-    const large = within(render(EmptyState, { props: { title: 'Empty', size: 'large' } }).container)
-    expect(large.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('large')
+    const small = within(render(EmptyState, { props: { title: 'Empty', size: 'small' } }).container)
+    expect(small.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('small')
   })
 
-  it.each(['small', 'medium', 'large'] as const)(
+  it.each(['small', 'medium'] as const)(
     'mirrors size=%s onto data-size of the root and the icon tile',
     (size) => {
       const { getByTestId } = within(
-        render(EmptyState, { props: { title: 'Empty', size } }).container
+        render(EmptyState, { props: { title: 'Empty', size, icon: 'pi pi-inbox' } }).container
       )
       expect(getByTestId('feedback-empty-state').getAttribute('data-size')).toBe(size)
       expect(getByTestId('feedback-empty-state__icon').getAttribute('data-size')).toBe(size)
@@ -150,10 +160,10 @@ describe('EmptyState', () => {
       expect(getByTestId('feedback-empty-state').getAttribute('data-bordered')).toBe('true')
     })
 
-    it('renders the Sizes story with all three size variants', () => {
+    it('renders the Sizes story with all size variants', () => {
       const { getAllByTestId } = within(render(Sizes).container)
       const roots = getAllByTestId('feedback-empty-state')
-      expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
+      expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium'])
     })
   })
 })

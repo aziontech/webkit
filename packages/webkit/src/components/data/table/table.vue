@@ -19,8 +19,8 @@
   import { useDebounceFn } from '@vueuse/core'
   import { computed, getCurrentInstance, provide, ref, useAttrs, useSlots, watch } from 'vue'
 
-  import EmptyIllustration from '../../../svg/illustration-layers/illustration-layers.vue'
   import { downloadCsv, toCsv } from '../../../utils/csv'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
@@ -1128,16 +1128,15 @@
               v-if="!loading && rows.length === 0"
               role="presentation"
               :data-testid="`${testId}__empty`"
-              class="flex w-full flex-col items-center justify-center gap-[var(--spacing-6)] px-[var(--spacing-8)] py-[var(--spacing-12)] text-center"
+              class="w-full"
             >
               <slot name="empty">
-                <EmptyIllustration class="mb-0!" />
-                <div class="flex flex-col gap-[var(--spacing-2)]">
-                  <p class="text-heading-sm text-[var(--text-default)]">No results yet</p>
-                  <p class="text-body-sm text-[var(--text-muted)]">
-                    Get started by creating your first resource.
-                  </p>
-                </div>
+                <EmptyState
+                  size="small"
+                  icon="pi pi-table"
+                  title="No results yet"
+                  description="Get started by creating your first resource."
+                />
               </slot>
             </div>
           </Transition>
