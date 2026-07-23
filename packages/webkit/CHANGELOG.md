@@ -1,3 +1,10 @@
+## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.1.0...@aziontech/webkit@4.2.0) (2026-07-23)
+
+### Features
+
+- derive spec name from the Figma frame in /spec-create ([#791](https://github.com/aziontech/webkit/issues/791)) ([df59ab4](https://github.com/aziontech/webkit/commit/df59ab42c6ced1414ec0047abdfb9d5f067382ae))
+- **webkit:** overhaul EmptyState (icon tile, size-scaled type, dashed border) + Table empty state ([#786](https://github.com/aziontech/webkit/issues/786)) ([26ae5ee](https://github.com/aziontech/webkit/commit/26ae5ee6f6e878d85df5a3d9247e9936a00d405f))
+
 ## [4.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.0.0...@aziontech/webkit@4.1.0) (2026-07-23)
 
 ### Features

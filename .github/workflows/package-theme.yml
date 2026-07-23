@@ -9,6 +9,10 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: release-theme
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Semantic Release
@@ -52,7 +56,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GIT_PKG }}
         run: |
           if git diff --quiet -- packages/theme/package.json; then
-            echo "No release published; skipping version bump PR."
+            echo "No release published; skipping packages/theme version bump PR."
             exit 0
           fi
           VERSION="$(node -p "require('./packages/theme/package.json').version")"
@@ -63,6 +67,12 @@ jobs:
           git add packages/theme/package.json packages/theme/CHANGELOG.md
           git commit -m "ci(release): bump @aziontech/theme to ${VERSION}"
           git push --force origin "$BRANCH"
-          gh pr create --base main --head "$BRANCH" \
+          PR_URL=$(gh pr create --base main --head "$BRANCH" \
             --title "ci(release): bump @aziontech/theme to ${VERSION} [skip ci]" \
-            --body "Automated follow-up to the @aziontech/theme@${VERSION} release: aligns package.json and CHANGELOG.md with the published version. Release notes: https://github.com/aziontech/webkit/releases/tag/%40aziontech%2Ftheme%40${VERSION} — Merging this PR does not trigger a new release (ci commits produce no version bump)."
+            --body "Automated follow-up to the @aziontech/theme@${VERSION} release: aligns package.json and CHANGELOG.md with the published version. Release notes: https://github.com/aziontech/webkit/releases/tag/%40aziontech%2Ftheme%40${VERSION} — Merging this PR does not trigger a new release (ci commits produce no version bump).")
+          gh pr merge --squash --auto \
+            --subject "ci(release): bump @aziontech/theme to ${VERSION} [skip ci] (#${PR_URL##*/})" \
+            "$PR_URL" \
+            || gh pr merge --squash \
+              --subject "ci(release): bump @aziontech/theme to ${VERSION} [skip ci] (#${PR_URL##*/})" \
+              "$PR_URL"
