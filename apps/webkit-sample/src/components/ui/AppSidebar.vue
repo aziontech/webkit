@@ -214,18 +214,15 @@
         <!-- Standalone reduced Azion brand + a team switcher pill. The name is a
              static label; only the icon button is interactive (opens the team
              popover — mirrors the console's team menu). -->
-        <div class="flex  items-center gap-[var(--spacing-sm)] pl-[var(--spacing-xxs)] pr-[var(--spacing-xs)]">
+        <div class="flex items-center gap-[var(--spacing-sm)] pl-[var(--spacing-xxs)] pr-[var(--spacing-xs)]">
           <div class="size-[var(--size-8)] flex items-center justify-center">
             <AzionLogoMin
-            class="h-[var(--size-4)] w-auto shrink-0"
-            aria-label="Azion"
-          />
-
+              class="h-[var(--size-4)] w-auto shrink-0"
+              aria-label="Azion"
+            />
           </div>
 
-          <div
-            class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)]"
-          >
+          <div class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)]">
             <Avatar
               :label="selectedTeamLabel"
               size="small"
@@ -274,7 +271,7 @@
                       kind="square"
                     />
                     <span class="flex min-w-0 flex-1 flex-col">
-                      <span class="flex items-center ">
+                      <span class="flex items-center">
                         <span class="truncate text-label-sm text-[var(--text-default)]">
                           {{ team.label }}
                         </span>
@@ -282,7 +279,6 @@
                           :label="team.plan"
                           severity="secondary"
                           size="small"
-                          
                         />
                       </span>
                       <span class="text-body-xs text-[var(--text-muted)]">
