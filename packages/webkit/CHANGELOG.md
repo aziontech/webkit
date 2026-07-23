@@ -1,3 +1,13 @@
+## [4.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.0.0...@aziontech/webkit@4.1.0) (2026-07-23)
+
+### Features
+
+- webkit init hardening, toast service auto-mount, and motion token adoption ([#772](https://github.com/aziontech/webkit/issues/772)) ([5534fb2](https://github.com/aziontech/webkit/commit/5534fb2f570729c79728b33b561082b65d5d44af))
+
+### Bug Fixes
+
+- bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
+
 ## [3.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.8.0...@aziontech/webkit@3.9.0) (2026-06-18)
 
 ### Features
