@@ -39,7 +39,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A full-region placeholder shown when a list or section has no content yet. It stacks a decorative illustration (the bundled `EmptyStateIllustration` by default), a title, an optional description, and a consumer-composed actions area, and renders on a plain background or inside a bordered surface card (`bordered`).'
+          'A full-region placeholder shown when a list or section has no content yet. It stacks an optional standardized featured-icon tile (driven by the `icon` prop), a title, an optional description, and a consumer-composed actions area, and renders on a plain background or inside a bordered surface card (`bordered`). Supply custom adornment content via the `icon` slot, or omit both `icon` prop and slot for no adornment.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -57,26 +57,26 @@ const meta = {
     },
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
+      options: ['small', 'medium'],
       description:
-        'Size token; affects the illustration size, the surrounding padding, and the gaps between illustration, text, and actions.',
+        'Size token (small and medium only); scales the adornment, the title and description typography, the surrounding padding, and the gaps on one harmonic ramp.',
       table: {
         category: 'props',
-        type: { summary: "'small' | 'medium' | 'large'" },
+        type: { summary: "'small' | 'medium'" },
         defaultValue: { summary: "'medium'" }
       }
+    },
+    icon: {
+      control: 'text',
+      description:
+        'PrimeIcons/Azion icon class for the standardized adornment; renders a size-scaled featured-icon tile. The `icon` slot overrides it; omit both for no adornment.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     bordered: {
       control: 'boolean',
       description:
         'When true, wraps the content in a bordered surface card; otherwise renders on a transparent background.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
-    },
-    icon: {
-      control: false,
-      description:
-        'Decorative illustration centered above the title; rendered inside an aria-hidden container. Defaults to the bundled EmptyStateIllustration.',
-      table: { category: 'slots', type: { summary: 'slot' } }
     },
     actions: {
       control: false,
@@ -88,6 +88,7 @@ const meta = {
   args: {
     title: 'No resource yet',
     description: 'Get started by creating your first resource.',
+    icon: 'pi pi-inbox',
     size: 'medium',
     bordered: false
   }
@@ -108,6 +109,7 @@ ${ACTIONS_MARKUP}
 const DEFAULT_MARKUP = `<EmptyState
   title="No resource yet"
   description="Get started by creating your first resource."
+  icon="pi pi-inbox"
 >
 ${ACTIONS_MARKUP}
 </EmptyState>`
@@ -118,7 +120,7 @@ export const Default = {
   parameters: {
     docs: {
       description: {
-        story: 'Default empty state: the illustration tile, title, description, and actions.'
+        story: 'Default empty state: the standardized featured-icon tile, title, description, and actions.'
       },
       source: { code: toSfc(IMPORTS, DEFAULT_MARKUP) }
     }
@@ -127,11 +129,12 @@ export const Default = {
 
 const SIZES_TEMPLATE = `<div class="flex w-full flex-col gap-[var(--spacing-xl)]">
   <EmptyState
-    v-for="size in ['small', 'medium', 'large']"
+    v-for="size in ['small', 'medium']"
     :key="size"
     :size="size"
     title="No resource yet"
     description="Get started by creating your first resource."
+    icon="pi pi-inbox"
   >
 ${ACTIONS_MARKUP}
   </EmptyState>
@@ -143,8 +146,51 @@ export const Sizes = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'The three size variants — small, medium, large — stacked.' },
+      description: { story: 'The size variants — small and medium — stacked.' },
       source: { code: toSfc(IMPORTS, SIZES_TEMPLATE) }
+    }
+  }
+}
+
+const ICON_MARKUP = `<EmptyState
+  title="No resource yet"
+  description="Get started by creating your first resource."
+  icon="pi pi-inbox"
+>
+${ACTIONS_MARKUP}
+</EmptyState>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof EmptyState>} */
+export const Icon = {
+  args: { icon: 'pi pi-inbox' },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story: 'The standardized featured-icon tile adornment, driven by the `icon` prop.'
+      },
+      source: { code: toSfc(IMPORTS, ICON_MARKUP) }
+    }
+  }
+}
+
+const NO_ADORNMENT_MARKUP = `<EmptyState
+  title="No resource yet"
+  description="Get started by creating your first resource."
+>
+${ACTIONS_MARKUP}
+</EmptyState>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof EmptyState>} */
+export const NoAdornment = {
+  args: { icon: '' },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story: 'No adornment: neither the `icon` prop nor the `icon` slot is provided, so the adornment container does not render.'
+      },
+      source: { code: toSfc(IMPORTS, NO_ADORNMENT_MARKUP) }
     }
   }
 }
@@ -152,6 +198,7 @@ export const Sizes = {
 const BORDERED_MARKUP = `<EmptyState
   title="No resource yet"
   description="Get started by creating your first resource."
+  icon="pi pi-inbox"
   bordered
 >
 ${ACTIONS_MARKUP}
