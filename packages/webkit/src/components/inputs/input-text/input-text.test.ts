@@ -152,6 +152,26 @@ describe('InputText', () => {
     })
   })
 
+  describe('clickable area', () => {
+    it('input fills the wrapper vertically so padding-area clicks reach it', () => {
+      const { getByTestId } = render(InputText, { props: { size: 'large' } })
+      const input = getByTestId('input-text') as HTMLInputElement
+      expect(input.className).toMatch(/\bh-full\b/)
+      expect(input.className).toMatch(/\bself-stretch\b/)
+    })
+
+    it('resolves the input at the top edge of the wrapper (previous dead band)', () => {
+      const { getByTestId } = render(InputText, { props: { size: 'large' } })
+      const input = getByTestId('input-text') as HTMLInputElement
+      const wrapper = input.closest('[data-size]') as HTMLElement
+      const rect = wrapper.getBoundingClientRect()
+      const el = document.elementFromPoint(rect.left + rect.width / 2, rect.top + 2)
+      expect(el).toBe(input)
+      input.focus()
+      expect(document.activeElement).toBe(input)
+    })
+  })
+
   describe('a11y (axe against styled DOM)', () => {
     it('Default has no violations', async () => {
       const { container } = render(InputText, {
