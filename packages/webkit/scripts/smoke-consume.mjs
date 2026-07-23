@@ -141,15 +141,19 @@ const install = () =>
     PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: 'false'
   })
 install() // base: vue + the three tarballs
-run('node', [join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js'), 'init'], app)
+// --yes: accept every default (icons + toast + entry wiring) without prompting.
+run('node', [join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js'), 'init', '--yes'], app)
 install() // pick up the style deps init added to package.json (tailwind/postcss/…)
 
-// main.ts must import the generated CSS entry (init only advises it — the consumer wires it).
-const mainPath = join(app, 'src/main.ts')
-writeFileSync(
-  mainPath,
-  `import './webkit.css'\nimport '@aziontech/icons'\n${readFileSync(mainPath, 'utf8')}`
-)
+// init must have wired the style/icon imports into main.ts itself (patch-entry).
+// Feature-scoped setup (toast) is deliberately NOT wired by init — it is just-in-time.
+const mainSrc = readFileSync(join(app, 'src/main.ts'), 'utf8')
+if (!mainSrc.includes('./webkit.css') || !mainSrc.includes('@aziontech/icons')) {
+  fail('init did not wire the design-system imports into src/main.ts (patch-entry).')
+}
+if (mainSrc.includes('ToastPlugin')) {
+  fail('init must not wire the toast plugin — toast setup is just-in-time (catalog + doctor).')
+}
 
 // ── 5. Build ────────────────────────────────────────────────────────────────
 run('pnpm', ['run', 'build'], app, { PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: 'false' })

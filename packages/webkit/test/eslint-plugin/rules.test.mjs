@@ -17,6 +17,8 @@ const noWholeIconSetImport = (
 ).default
 const noHardcodedColor = (await import('../../src/eslint-plugin/rules/no-hardcoded-color.js'))
   .default
+const noHardcodedMotion = (await import('../../src/eslint-plugin/rules/no-hardcoded-motion.js'))
+  .default
 const preferTreeShakeableRoot = (
   await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')
 ).default
@@ -178,6 +180,77 @@ test('no-hardcoded-color (script + template)', () => {
         code: '<template><div class="text-red-500">x</div></template>',
         filename: 'b.vue',
         errors: [{ messageId: 'token' }]
+      }
+    ]
+  })
+})
+
+test('no-hardcoded-motion (script + template)', () => {
+  js.run('no-hardcoded-motion', noHardcodedMotion, {
+    valid: [
+      // catalogued utility + tokens: fine
+      "const c = 'animate-slide-in-left motion-reduce:animate-none'",
+      "const c = 'transition-colors duration-150 ease-out motion-reduce:transition-none'",
+      // timing from tokens in a style string: fine
+      "const s = 'transition: opacity var(--duration-fast-01)'",
+      // arbitrary transition PROPERTY (not timing) is allowed — the width-collapse recipe
+      "const c = 'transition-[grid-template-columns]'"
+    ],
+    invalid: [
+      { code: "const c = 'duration-[180ms]'", errors: [{ messageId: 'arbitrary' }] },
+      {
+        code: "const c = 'ease-[cubic-bezier(0.4,0,0.2,1)]'",
+        errors: [{ messageId: 'arbitrary' }]
+      },
+      { code: "const c = 'animate-[wiggle_1s_ease-in-out]'", errors: [{ messageId: 'arbitrary' }] },
+      { code: "const s = 'transition: opacity 200ms'", errors: [{ messageId: 'styleTiming' }] },
+      { code: "const s = 'animation: spin 1.5s linear'", errors: [{ messageId: 'styleTiming' }] },
+      { code: "const s = 'transition: all'", errors: [{ messageId: 'styleTiming' }] },
+      // invented animation name → steered back to the catalog
+      { code: "const c = 'animate-wiggle'", errors: [{ messageId: 'unknownAnimation' }] }
+    ]
+  })
+  vue.run('no-hardcoded-motion', noHardcodedMotion, {
+    valid: [
+      // motion + escape on the same static class string
+      {
+        code: '<template><aside class="animate-slide-in-left motion-reduce:animate-none">x</aside></template>',
+        filename: 'a.vue'
+      },
+      // no motion at all
+      {
+        code: '<template><div class="text-body-sm">x</div></template>',
+        filename: 'b.vue'
+      },
+      // transition-none IS the escape — not motion
+      {
+        code: '<template><div class="transition-none">x</div></template>',
+        filename: 'c.vue'
+      }
+    ],
+    invalid: [
+      // static class with motion and no reduced-motion escape
+      {
+        code: '<template><aside class="animate-slide-in-left">x</aside></template>',
+        filename: 'd.vue',
+        errors: [{ messageId: 'pairing' }]
+      },
+      {
+        code: '<template><div class="transition-colors duration-150 ease-out">x</div></template>',
+        filename: 'e.vue',
+        errors: [{ messageId: 'pairing' }]
+      },
+      // arbitrary timing in a template class
+      {
+        code: '<template><div class="duration-[180ms] motion-reduce:transition-none">x</div></template>',
+        filename: 'f.vue',
+        errors: [{ messageId: 'arbitrary' }]
+      },
+      // inline style timing
+      {
+        code: '<template><div style="transition: opacity 200ms">x</div></template>',
+        filename: 'g.vue',
+        errors: [{ messageId: 'styleTiming' }]
       }
     ]
   })
