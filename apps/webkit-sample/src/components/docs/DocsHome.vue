@@ -12,6 +12,10 @@
   import { ref } from 'vue'
 
   import ContrastBanner from '../ui/ContrastBanner.vue'
+  import BannerContainer from '../site/foundations/components/layout/BannerContainer.vue'
+  import CardGrid from '../site/foundations/components/layout/CardGrid.vue'
+  import SectionContainer from '../site/foundations/components/layout/SectionContainer.vue'
+  import SectionModule from '../site/foundations/components/layout/SectionModule.vue'
 
   const activePrimitive = ref('build')
 
@@ -235,48 +239,48 @@
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-[var(--container-6xl)] px-[var(--spacing-lg)] py-[var(--spacing-xxl)]">
-    <!-- ── Hero ───────────────────────────────────────────────────────── -->
-    <section class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-md)]">
-      <h1 class="text-balance text-heading-2xl text-[var(--text-default)]">Welcome to Azion Docs</h1>
-      <p class="text-pretty text-body-lg text-[var(--text-muted)]">
-        We make every application fast and reliable. Deploy your projects instantly on the most
-        reliable global network, leverage enterprise-grade security, and scale from zero to peak
-        without cold starts.
-      </p>
-      <div class="mt-[var(--spacing-sm)] flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center">
-        <Button
-          label="Get started"
-          kind="primary"
-          size="large"
-          href="#get-started"
-        />
-        <!-- Copy-prompt affordance, built on the same contrast-pill banner as the
-             console Home page: one button that copies a ready-to-paste agent
-             prompt pointing at the docs. -->
-        <ContrastBanner
-          label="Copy Prompt"
-          :show-logo="false"
-          :prompt="agentPrompt"
-        />
-      </div>
-    </section>
-
-    <!-- ── What the platform includes ─────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <div class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-sm)]">
-        <p class="text-overline-sm text-[var(--text-muted)]">Platform Overview</p>
-        <h2 class="text-balance text-heading-lg text-[var(--text-default)]">
-          A fully managed platform to build, secure, deploy, and observe
-        </h2>
-        <p class="text-pretty text-body-md text-[var(--text-muted)]">
-          Azion Web Platform unifies serverless, security, content delivery and acceleration,
-          storage, and real-time observability so teams can ship applications worldwide with
-          consistent performance.
+  <div>
+    <!-- ── Hero: fluid banner spanning the full content width, bottom border ── -->
+    <BannerContainer max-width="6xl">
+      <div class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-md)]">
+        <h1 class="text-balance text-heading-2xl text-[var(--text-default)]">Welcome to Azion Docs</h1>
+        <p class="text-pretty text-body-lg text-[var(--text-muted)]">
+          We make every application fast and reliable. Deploy your projects instantly on the most
+          reliable global network, leverage enterprise-grade security, and scale from zero to peak
+          without cold starts.
         </p>
+        <div class="mt-[var(--spacing-sm)] flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center">
+          <Button
+            label="Get started"
+            kind="primary"
+            size="large"
+            href="#get-started"
+          />
+          <!-- Copy-prompt affordance, built on the same contrast-pill banner as the
+               console Home page: one button that copies a ready-to-paste agent
+               prompt pointing at the docs. -->
+          <ContrastBanner
+            label="Copy Prompt"
+            :show-logo="false"
+            :prompt="agentPrompt"
+          />
+        </div>
       </div>
+    </BannerContainer>
 
-      <ul class="mt-[var(--spacing-lg)] grid gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
+    <!-- ══ Bordered content column ═══════════════════════════════════════════
+         Vertical rules (border-x) on both edges; its top edge is the hero's
+         border-b and its bottom edge the docs footer/shell, so the frame reads
+         as one continuous border with no doubled lines. Sections keep their
+         mt-based rhythm inside. -->
+    <SectionContainer max-width="6xl">
+    <!-- ── What the platform includes ─────────────────────────────────── -->
+    <SectionModule
+      :divided="false"
+      title="A fully managed platform to build, secure, deploy, and observe"
+      description="Azion Web Platform unifies serverless, security, content delivery and acceleration, storage, and real-time observability so teams can ship applications worldwide with consistent performance."
+    >
+      <ul class="grid gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
         <li
           v-for="item in platformIncludes"
           :key="item.text"
@@ -293,13 +297,11 @@
           <span class="text-pretty text-body-sm text-[var(--text-default)]">{{ item.text }}</span>
         </li>
       </ul>
-    </section>
+    </SectionModule>
 
     <!-- ── Core concepts ──────────────────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <h2 class="text-heading-lg text-[var(--text-default)]">Core concepts</h2>
-
-      <div class="mt-[var(--spacing-lg)] grid gap-[var(--spacing-md)] lg:grid-cols-2">
+    <SectionModule title="Core concepts">
+      <div class="grid gap-[var(--spacing-md)] lg:grid-cols-2">
         <CardBox class="h-full">
           <template #content>
             <div class="flex flex-col gap-[var(--spacing-sm)]">
@@ -334,19 +336,14 @@
           </template>
         </CardBox>
       </div>
-    </section>
+    </SectionModule>
 
     <!-- ── How Azion handles a request ────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <div class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-xxs)]">
-        <h2 class="text-heading-lg text-[var(--text-default)]">How Azion handles a request</h2>
-        <p class="text-body-md text-[var(--text-muted)]">
-          Azion Web Platform routes each request through its global network to serve users from the
-          best available location.
-        </p>
-      </div>
-
-      <ol class="mt-[var(--spacing-lg)] grid gap-[var(--spacing-md)] lg:grid-cols-3">
+    <SectionModule
+      title="How Azion handles a request"
+      description="Azion Web Platform routes each request through its global network to serve users from the best available location."
+    >
+      <ol class="grid gap-[var(--spacing-md)] lg:grid-cols-3">
         <li
           v-for="(step, index) in requestSteps"
           :key="step.title"
@@ -361,15 +358,11 @@
           <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ step.body }}</p>
         </li>
       </ol>
-    </section>
+    </SectionModule>
 
     <!-- ── Powerful primitives ────────────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <h2 class="text-balance text-heading-lg text-[var(--text-default)]">
-        Powerful primitives, seamlessly integrated
-      </h2>
-
-      <div class="mt-[var(--spacing-lg)]">
+    <SectionModule title="Powerful primitives, seamlessly integrated">
+      <div>
         <TabView v-model:value="activePrimitive">
           <TabView.List>
             <TabView.Item
@@ -436,12 +429,11 @@
           </TabView.Content>
         </TabView>
       </div>
-    </section>
+    </SectionModule>
 
     <!-- ── Common use cases ───────────────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <h2 class="text-heading-lg text-[var(--text-default)]">What you can build</h2>
-      <ul class="mt-[var(--spacing-lg)] grid gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-sm)] sm:grid-cols-2">
+    <SectionModule title="What you can build">
+      <ul class="grid gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-sm)] sm:grid-cols-2">
         <li
           v-for="useCase in useCases"
           :key="useCase"
@@ -454,32 +446,23 @@
           {{ useCase }}
         </li>
       </ul>
-    </section>
+    </SectionModule>
 
     <!-- ── Featured templates ─────────────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <div class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-sm)]">
-        <h2 class="text-balance text-heading-lg text-[var(--text-default)]">
-          Start Here: Kick Off Your Project with Ready-to-Use Templates
-        </h2>
-        <p class="text-pretty text-body-md text-[var(--text-muted)]">
-          The fastest way to start using the Azion Web Platform. Deploy instantly from dozens of
-          templates, including e-commerce, blogs, APIs, full-stack SSR, and more; leverage
-          integrations by connecting to Sanity, Cosmic, ButterCMS, Turso, or bringing your own
-          RESTful CMS or database. CI/CD is auto-configured so you can focus on your code, not the
-          pipeline.
-        </p>
-        <p class="text-pretty text-body-md text-[var(--text-muted)]">
-          Here are a few of our most popular templates to get you started. For more information,
-          you can visit our
-          <a
-            href="#"
-            class="text-link underline-offset-2 hover:underline"
-          >documentation page on using templates</a>.
-        </p>
-      </div>
+    <SectionModule
+      title="Start Here: Kick Off Your Project with Ready-to-Use Templates"
+      description="The fastest way to start using the Azion Web Platform. Deploy instantly from dozens of templates — e-commerce, blogs, APIs, full-stack SSR, and more; connect Sanity, Cosmic, ButterCMS, Turso, or your own RESTful CMS. CI/CD is auto-configured so you can focus on your code, not the pipeline."
+    >
+      <p class="m-0 mb-[var(--spacing-lg)] max-w-[var(--container-3xl)] text-pretty text-body-md text-[var(--text-muted)]">
+        Here are a few of our most popular templates to get you started. For more information,
+        you can visit our
+        <a
+          href="#"
+          class="text-link underline-offset-2 hover:underline"
+        >documentation page on using templates</a>.
+      </p>
 
-      <div class="mt-[var(--spacing-lg)] grid gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
+      <CardGrid :columns="3">
         <a
           v-for="template in templates"
           :key="template.name"
@@ -499,19 +482,15 @@
             aria-hidden="true"
           />
         </a>
-      </div>
-    </section>
+      </CardGrid>
+    </SectionModule>
 
     <!-- ── Developer tools ────────────────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <div class="flex flex-col gap-[var(--spacing-xxs)]">
-        <h2 class="text-heading-lg text-[var(--text-default)]">Developer tools</h2>
-        <p class="text-body-md text-[var(--text-muted)]">
-          Everything you need to build, automate, and observe on the platform.
-        </p>
-      </div>
-
-      <div class="mt-[var(--spacing-lg)] grid gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
+    <SectionModule
+      title="Developer tools"
+      description="Everything you need to build, automate, and observe on the platform."
+    >
+      <CardGrid :columns="3">
         <CardBox
           v-for="tool in tools"
           :key="tool.name"
@@ -531,14 +510,12 @@
             </div>
           </template>
         </CardBox>
-      </div>
-    </section>
+      </CardGrid>
+    </SectionModule>
 
     <!-- ── FAQ ────────────────────────────────────────────────────────── -->
-    <section class="mt-[var(--spacing-xxl)]">
-      <h2 class="text-heading-lg text-[var(--text-default)]">Frequently asked questions</h2>
-
-      <div class="mt-[var(--spacing-lg)] max-w-[var(--container-3xl)]">
+    <SectionModule title="Frequently asked questions">
+      <div class="max-w-[var(--container-3xl)]">
         <Accordion
           type="single"
           collapsible
@@ -558,6 +535,7 @@
           </Accordion.Item>
         </Accordion>
       </div>
-    </section>
+    </SectionModule>
+    </SectionContainer>
   </div>
 </template>
