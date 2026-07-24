@@ -12,6 +12,7 @@
   import { useRouter } from 'vue-router'
 
   import AsciiGlobe from './AsciiGlobe.vue'
+  import PlatformIllustrations from './PlatformIllustrations.vue'
   import PlatformShowcase from './PlatformShowcase.vue'
 
   const router = useRouter()
@@ -204,7 +205,7 @@
   <!-- Left-aligned hierarchy: a full-bleed animated globe fills the top band,
        the eyebrow → headline → CTAs overlap its lower edge, and a compact
        capability strip closes the section — mirroring the azion.com hero. -->
-  <section class="relative overflow-hidden border-b border-[var(--border-muted)]">
+  <section class="relative overflow-hidden border-b border-[var(--border-default)]">
     <!-- Animated ASCII globe backdrop, concentrated in the top band. -->
     <div
       aria-hidden="true"
@@ -260,8 +261,16 @@
     </div>
   </section>
 
+  <!-- ══ Bordered content column ═══════════════════════════════════════════
+       Everything after the fluid hero lives in one centered column with
+       continuous vertical rules on its left and right edges (the azion.com
+       "framed grid"). The column carries only `border-x`: its top edge is the
+       hero's `border-b` and its bottom edge is the footer's `border-t`, so the
+       four sides read as one frame with no doubled lines. Sections inside
+       divide with their own `border-b` horizontal rules. -->
+  <div class="mx-auto w-full max-w-[var(--container-7xl)] border-x border-[var(--border-default)]">
   <!-- ── Framework trust strip ────────────────────────────────────────── -->
-  <section class="border-b border-[var(--border-muted)] bg-[var(--bg-surface)]">
+  <section class="border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
     <div class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)] py-[var(--spacing-xl)]">
       <p class="text-overline-sm text-[var(--text-muted)]">Compatível com o seu framework</p>
       <ul class="flex flex-wrap items-center justify-center gap-x-[var(--spacing-xl)] gap-y-[var(--spacing-md)]">
@@ -330,7 +339,7 @@
   </section>
 
   <!-- ── Feature highlights ───────────────────────────────────────────── -->
-  <section class="border-y border-[var(--border-muted)] bg-[var(--bg-surface)]">
+  <section class="border-y border-[var(--border-default)] bg-[var(--bg-surface)]">
     <div class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-col gap-[var(--spacing-xxl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
       <div
         v-for="(feature, index) in features"
@@ -379,6 +388,9 @@
   <!-- ── Platform showcase (git graph · API keys · control plane · usage) ─ -->
   <PlatformShowcase />
 
+  <!-- ── Platform illustrations (version · deploy · network · ai · secure · observe) ─ -->
+  <PlatformIllustrations />
+
   <!-- ── Stats band ───────────────────────────────────────────────────── -->
   <section class="mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
     <dl class="grid grid-cols-2 gap-[var(--spacing-lg)] lg:grid-cols-4">
@@ -394,7 +406,7 @@
   </section>
 
   <!-- ── Developer / CLI section ──────────────────────────────────────── -->
-  <section class="border-y border-[var(--border-muted)] bg-[var(--bg-surface)]">
+  <section class="border-y border-[var(--border-default)] bg-[var(--bg-surface)]">
     <div class="mx-auto grid w-full max-w-[var(--container-7xl)] items-center gap-[var(--spacing-xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)] lg:grid-cols-2">
       <div class="flex flex-col gap-[var(--spacing-md)]">
         <p class="text-overline-sm text-[var(--text-muted)]">Feito para desenvolvedores</p>
@@ -471,7 +483,7 @@
        On a surface band the cards share the band's fill and read flat. -->
   <section
     id="precos"
-    class="border-t border-[var(--border-muted)] bg-[var(--bg-canvas)]"
+    class="border-t border-[var(--border-default)] bg-[var(--bg-canvas)]"
   >
     <div class="mx-auto w-full max-w-[var(--container-7xl)] scroll-mt-[var(--spacing-xxl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
       <div class="flex flex-col items-center gap-[var(--spacing-sm)] text-center">
@@ -531,30 +543,37 @@
   <!-- ── Final CTA (#contato) ─────────────────────────────────────────── -->
   <section
     id="contato"
-    class="border-t border-[var(--border-muted)]"
+    class="border-t border-[var(--border-default)]"
   >
-    <div class="mx-auto flex w-full max-w-[var(--container-5xl)] scroll-mt-[var(--spacing-xxl)] flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)] py-[var(--spacing-xxl)] text-center">
-      <h2 class="max-w-[var(--container-3xl)] text-balance text-heading-xl text-[var(--text-default)]">
-        Pronto para levar seus workloads para a borda?
-      </h2>
-      <p class="max-w-[var(--container-2xl)] text-pretty text-body-lg text-[var(--text-muted)]">
-        Crie sua conta gratuita e faça o primeiro deploy global em minutos. Precisa de ajuda para
-        escalar? Fale com nossos especialistas.
-      </p>
-      <div class="flex flex-col items-center gap-[var(--spacing-sm)] sm:flex-row">
-        <Button
-          label="Começar Gratuitamente"
-          kind="primary"
-          size="large"
-          @click="goSignup"
-        />
-        <Button
-          label="Falar com um Especialista"
-          kind="secondary"
-          size="large"
-          href="#"
-        />
-      </div>
+    <div class="mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
+      <!-- Azion "registration frame" — corner crosshair marks + vertical hatch. -->
+      <FrameBox hatch>
+        <div class="flex scroll-mt-[var(--spacing-xxl)] flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)] py-[var(--spacing-xxl)] text-center">
+          <h2 class="max-w-[var(--container-3xl)] text-balance text-heading-xl text-[var(--text-default)]">
+            Pronto para levar seus workloads para a borda?
+          </h2>
+          <p class="max-w-[var(--container-2xl)] text-pretty text-body-lg text-[var(--text-muted)]">
+            Crie sua conta gratuita e faça o primeiro deploy global em minutos. Precisa de ajuda para
+            escalar? Fale com nossos especialistas.
+          </p>
+          <div class="flex flex-col items-center gap-[var(--spacing-sm)] sm:flex-row">
+            <Button
+              label="Começar Gratuitamente"
+              kind="primary"
+              size="large"
+              @click="goSignup"
+            />
+            <Button
+              label="Falar com um Especialista"
+              kind="secondary"
+              size="large"
+              href="#"
+            />
+          </div>
+        </div>
+      </FrameBox>
     </div>
   </section>
+  </div>
+  <!-- ══ End bordered content column ═══════════════════════════════════════ -->
 </template>
