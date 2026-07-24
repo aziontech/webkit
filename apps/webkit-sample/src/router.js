@@ -14,6 +14,7 @@ import CreateZone from './components/CreateZone.vue'
 import CreationCenter from './components/CreationCenter.vue'
 import Dashboard from './components/Dashboard.vue'
 import DeployTemplate from './components/DeployTemplate.vue'
+import Diagrams from './components/Diagrams.vue'
 import DialogForm from './components/DialogForm.vue'
 import DrawerForm from './components/DrawerForm.vue'
 import DrawerItemGroups from './components/DrawerItemGroups.vue'
@@ -90,6 +91,7 @@ const routes = [
   { path: '/resources', name: 'resources', component: ManageResources },
   { path: '/personal-tokens', name: 'personal-tokens', component: PersonalTokens },
   { path: '/playground', name: 'playground', component: Playground },
+  { path: '/diagrams', name: 'diagrams', component: Diagrams },
   { path: '/teams/new', name: 'teams-new', component: CreateTeam },
   { path: '/teams/:id', name: 'teams-edit', component: CreateTeam },
 ]

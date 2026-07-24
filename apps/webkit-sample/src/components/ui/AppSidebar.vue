@@ -55,7 +55,8 @@
         { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' },
         { id: 'marketplace', label: 'Marketplace', icon: 'ai ai-marketplace', path: '/marketplace' },
         { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
-        { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' }
+        { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' },
+        { id: 'diagrams', label: 'Diagrams', icon: 'pi pi-share-alt', path: '/diagrams' }
       ]
     },
     {
