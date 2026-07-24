@@ -151,7 +151,7 @@ const handlePrimary = () => {
       class="flex flex-1 flex-col items-center justify-center p-[var(--spacing-md)]"
     >
       <div
-        class="flex w-full max-w-[var(--container-sm)] flex-col items-center gap-[var(--spacing-xs)]"
+        class="flex w-full max-w-[var(--container-sm)] flex-col items-center gap-[var(--spacing-md)]"
       >
         <CardBox class="w-full">
           <template #content>
