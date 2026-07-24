@@ -69,7 +69,13 @@ export const getDialogTransitionStyle = (
   const { duration: transitionDuration, curve: transitionTimingFunction } =
     dialogMotion[target][phase]
   if (target === 'panel') {
-    const transition = `transform ${transitionDuration} ${transitionTimingFunction}, opacity ${transitionDuration} ${transitionTimingFunction}`
+    // Tailwind v4 compiles `scale-*` / `translate-*` to the standalone `scale` /
+    // `translate` CSS properties, NOT the `transform` shorthand — so the panel must
+    // transition those (plus `opacity`). Transitioning `transform` alone leaves the
+    // desktop scale (and mobile translate) untweened, so the panel snaps open/closed
+    // instead of scaling. Mirrors the drawer preset's `translate` fix.
+    const t = `${transitionDuration} ${transitionTimingFunction}`
+    const transition = `translate ${t}, scale ${t}, opacity ${t}`
     return { transition }
   }
 
@@ -92,7 +98,7 @@ export const dialogPanelTransitionClasses = [
   // Desktop (≥ md): centered scale + fade
   'md:origin-center',
   'md:translate-y-0',
-  'md:scale-[0.98]',
+  'md:scale-[0.9]',
   'md:opacity-0',
   'md:data-[state=open]:scale-100',
   'md:data-[state=open]:opacity-100',

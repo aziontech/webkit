@@ -230,25 +230,26 @@ describe('Popover (compound / overlay)', () => {
   })
 
   // ---- Focus management -------------------------------------------------------
-  it('moves focus to the first focusable element inside the panel on open', async () => {
+  it('keeps focus on the trigger on open — does not pull it into the panel', async () => {
     render(host())
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
 
-    // DOM order inside the panel: header close IconButton, then footer Apply.
+    // Focus is NOT auto-moved to the close button (or anywhere inside the panel).
     const close = byTestId('overlay-popover__close') as HTMLElement
-    await waitFor(() => expect(document.activeElement).toBe(close))
+    expect(document.activeElement).not.toBe(close)
+    expect((panel() as HTMLElement).contains(document.activeElement)).toBe(false)
   })
 
-  it('focuses the panel itself when it contains nothing focusable', async () => {
+  it('does not auto-focus the panel when it has no focusable content', async () => {
     render(textOnlyHost)
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
 
-    await waitFor(() => expect(document.activeElement).toBe(panel()))
+    expect(document.activeElement).not.toBe(panel())
   })
 
-  it('closes when focus moves out of the panel to an outside element', async () => {
+  it('does not close when focus moves to an outside element (Tab never dismisses)', async () => {
     const Outside = defineComponent({
       components: { Host: host() },
       template: `<div><Host /><button type="button" data-testid="outside">Elsewhere</button></div>`
@@ -258,9 +259,29 @@ describe('Popover (compound / overlay)', () => {
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
 
-    // Real focus move (as Tab / click-focus would produce): focusout with an
-    // outside relatedTarget closes the non-modal popover.
+    // Focus leaving the panel no longer closes it — only Esc / outside-click dismiss.
     getByTestId('outside').focus()
+    expect(panel()).not.toBeNull()
+  })
+
+  it('Tab / Shift+Tab do not close the panel (focus is contained in trigger + panel)', async () => {
+    render(host())
+    await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+    await waitFor(() => expect(panel()).not.toBeNull())
+
+    await fireEvent.keyDown(document, { key: 'Tab' })
+    expect(panel()).not.toBeNull()
+
+    await fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
+    expect(panel()).not.toBeNull()
+  })
+
+  it('Escape closes the panel from the document level (focus on the trigger)', async () => {
+    render(host())
+    await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+    await waitFor(() => expect(panel()).not.toBeNull())
+
+    await fireEvent.keyDown(document, { key: 'Escape' })
     await waitFor(() => expect(panel()).toBeNull())
   })
 

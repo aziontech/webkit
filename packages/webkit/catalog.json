@@ -7843,10 +7843,10 @@
         },
         {
           "name": "size",
-          "type": "'large' | 'medium'",
+          "type": "'small' | 'medium' | 'large'",
           "default": "'large'",
           "required": "no",
-          "doc": "Size token; affects height, gap, and typography."
+          "doc": "Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button."
         },
         {
           "name": "disabled",
@@ -8436,7 +8436,7 @@
           "type": "boolean",
           "default": "true",
           "required": "no",
-          "doc": "Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
+          "doc": "Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
         }
       ],
       "events": [
@@ -8505,7 +8505,7 @@
           "type": "boolean",
           "default": "true",
           "required": "no",
-          "doc": "Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
+          "doc": "Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
         }
       ],
       "events": [

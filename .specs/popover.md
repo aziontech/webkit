@@ -3,13 +3,13 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 905f4e9e5d3e34bf91c5321fee72928f6897969a6579a35c86c3d6d0021349dd
+checksum: fda32a6bfbd35aeff4521753aefad097adbe249a83f961cb14878b00a6d4db7b
 created: 2026-06-30
-last_updated: 2026-06-30
+last_updated: 2026-07-22
 ---
 
 # Popover — Component Spec
@@ -63,13 +63,13 @@ import PopoverFooter from '@aziontech/webkit/popover-footer'
 
 ## Sub-components
 
-The root `Popover` owns open/closed state, anchoring/placement, outside-click + `Esc` dismissal, focus return, **and renders the single teleported, animated floating panel** (the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin`, and `data-state` / `data-placement`). Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `placement`, and a panel-body ref the content teleports into), so every sub-component is context-aware and the consumer wires nothing. `Popover.Content` teleports its content into the root's panel — it does not own its own overlay (this mirrors `navigation/dropdown`, where the root owns the floating panel and the sub-components fill it). Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
+The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus containment and return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `placement`, `width`, `panelStyle`, and the `panelRef` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-placement`, and assigns itself to the root's `panelRef` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
 
 - `popover-trigger/popover-trigger.vue` — slot-only abstract wrapper. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a single inline element that toggles the panel on click and exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`. The popover anchors to this element's bounding box.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The wrapper attaches aria + click; the consumer must not bind those itself.
-- `popover-content/popover-content.vue` — the panel's content region. Teleports its default slot into the root's floating panel (via the injected panel-body ref) and arranges it as a flex column: `Popover.Header` (when present), the free-form body, then `Popover.Footer` (when present). The root — not this component — owns the panel element and its surface/border/radius/shadow, `position: fixed` anchoring, `role="dialog"` + `aria-modal="false"`, `aria-labelledby` / `aria-describedby` (from injected `titleId`/`descriptionId`), the open/close `animate-popup-scale-*`, and `data-state` / `data-placement`. `Popover.Content` adds no overlay or animation of its own.
+- `popover-content/popover-content.vue` — renders the floating panel via a single `<Teleport to="body">` + `<Transition>`, with its default slot (`Popover.Header`, the free-form body, `Popover.Footer`) arranged inline as a flex column inside the panel. It owns the panel element and its surface/border/radius/shadow, `position: fixed` anchoring (from the injected `panelStyle`), `role="dialog"` + `aria-modal="false"`, `aria-labelledby` / `aria-describedby` (from injected `titleId`/`descriptionId`), the open/close `animate-popup-scale-in` / `animate-popup-scale-out`, and `data-state` / `data-placement`. It assigns the panel element to the injected `panelRef` (function ref) so the root's placement, focus, `Esc`/`Tab` and outside-click logic operate on it. Because the content lives in the same teleported element as the animation, the scale animation carries the whole panel on enter/leave.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the popover anatomy (`Popover.Header`, body content, `Popover.Footer`).
@@ -143,7 +143,7 @@ export default Object.assign(Popover, {
 | `offset` | `number` | `4` | no | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | no | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `width` | `'small' \| 'medium' \| 'large'` | `undefined` | no | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
-| `dismissible` | `boolean` | `true` | no | Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
+| `dismissible` | `boolean` | `true` | no | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
 
 ## Events
 
@@ -205,8 +205,8 @@ export default Object.assign(Popover, {
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the trigger and the close button.
 - Keyboard map:
-  - On the trigger: `Enter` / `Space` toggles the panel. When it opens, focus moves into the panel (the first focusable element, else the panel itself).
-  - Inside the panel: `Esc` closes the panel and returns focus to the trigger; `Tab` / `Shift+Tab` move through the panel's focusable children in DOM order and, since the popover is **non-modal**, continue past the panel without trapping — moving focus out closes the panel.
+  - On the trigger: `Enter` / `Space` toggles the panel. When it opens, focus **stays on the trigger** — it is not moved into the panel.
+  - `Esc` closes the panel and returns focus to the trigger, from anywhere (trigger or panel). `Tab` / `Shift+Tab` are **contained** within the trigger and the panel's focusable children: Tab from the trigger moves into the panel, Tab past the last panel child wraps back to the trigger, and Shift+Tab reverses. Tabbing **never** closes the panel — only `Esc` or an outside-click dismiss it.
   - Outside-click closes the panel; focus is not forced back to the trigger on outside-click.
 - ARIA: trigger exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`; the floating panel (rendered by the root) uses `role="dialog"` with `aria-modal="false"`, `aria-labelledby` pointing at the `Popover.Title` id and `aria-describedby` pointing at the `Popover.Description` id (when present); `Popover.Close` is an `IconButton` with `aria-label="Close"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled trigger state (validated via `--text-muted` / `--text-disabled` tokens).

@@ -25,6 +25,8 @@
   const indicatorHeight = ref(0)
   const indicatorOffsetX = ref(0)
   const indicatorOffsetY = ref(0)
+  const canScrollStart = ref(false)
+  const canScrollEnd = ref(false)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${context.testId}__list`
@@ -40,10 +42,27 @@
     transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
   }))
 
-  /** TODO: tokenizar — Figma `--tabview/tabviewnavbg` (transparent nav). */
+  // Edge-fade affordance (same intent as the table's frozen-edge gradient): a gradient
+  // overlay on the scrollable side(s) fades the tabs into the nav background, hinting at
+  // off-screen tabs. Rendered as elements (not a mask) so their appearance/removal can use
+  // the semantic fade-in / fade-out animation utilities; a non-scrollable edge renders
+  // nothing, so the first / last tab is never covered at rest.
+  const updateScrollAffordance = () => {
+    const el = listRef.value
+    if (!el) return
+    canScrollStart.value = el.scrollLeft > 1
+    canScrollEnd.value = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth - 1
+  }
+
+  /**
+   * TODO: tokenizar — Figma `--tabview/tabviewnavbg` (transparent nav).
+   * `overflow-x-auto` lets the tab row scroll horizontally on narrow (mobile) viewports
+   * instead of overflowing; the scrollbar is hidden so the bar stays clean, and the tabs
+   * remain `shrink-0` so they keep their intrinsic width and scroll rather than compress.
+   */
   const listClasses = computed(() =>
     cn(
-      'relative flex shrink-0 items-end gap-[var(--spacing-xs)] bg-transparent',
+      'relative flex w-full shrink-0 items-end gap-[var(--spacing-xs)] overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
       attrs.class as string | undefined
     )
   )
@@ -76,14 +95,18 @@
 
     indicatorWidth.value = tabRect.width
     indicatorHeight.value = tabRect.height
-    indicatorOffsetX.value = tabRect.left - listRect.left
-    indicatorOffsetY.value = tabRect.top - listRect.top
+    // Offsets are relative to the list's scrolled content origin (add scrollLeft/Top), so
+    // the absolutely-positioned indicator — which scrolls with the content — stays aligned
+    // with its tab when the list scrolls horizontally on mobile.
+    indicatorOffsetX.value = tabRect.left - listRect.left + listEl.scrollLeft
+    indicatorOffsetY.value = tabRect.top - listRect.top + listEl.scrollTop
     indicatorVisible.value = true
   }
 
   const scheduleIndicatorSync = () => {
     nextTick(() => {
       syncIndicator()
+      updateScrollAffordance()
     })
   }
 
@@ -91,16 +114,19 @@
 
   onMounted(() => {
     scheduleIndicatorSync()
+    listRef.value?.addEventListener('scroll', updateScrollAffordance, { passive: true })
 
     if (typeof ResizeObserver !== 'undefined' && listRef.value) {
       resizeObserver = new ResizeObserver(() => {
         syncIndicator()
+        updateScrollAffordance()
       })
       resizeObserver.observe(listRef.value)
     }
   })
 
   onBeforeUnmount(() => {
+    listRef.value?.removeEventListener('scroll', updateScrollAffordance)
     resizeObserver?.disconnect()
     resizeObserver = null
   })
@@ -110,20 +136,47 @@
 </script>
 
 <template>
-  <div
-    ref="listRef"
-    role="tablist"
-    :class="listClasses"
-    :data-testid="testId"
-    @keydown="context.onListKeydown"
-  >
-    <span
-      v-show="indicatorVisible"
-      :class="indicatorClasses"
-      :style="[indicatorTransitionStyle, indicatorTransformStyle]"
-      :data-testid="`${testId}__indicator`"
-      aria-hidden="true"
-    />
-    <slot />
+  <div class="relative w-full">
+    <div
+      ref="listRef"
+      role="tablist"
+      :class="listClasses"
+      :data-testid="testId"
+      :data-fade-start="canScrollStart || null"
+      :data-fade-end="canScrollEnd || null"
+      @keydown="context.onListKeydown"
+    >
+      <span
+        v-show="indicatorVisible"
+        :class="indicatorClasses"
+        :style="[indicatorTransitionStyle, indicatorTransformStyle]"
+        :data-testid="`${testId}__indicator`"
+        aria-hidden="true"
+      />
+      <slot />
+    </div>
+
+    <Transition
+      enter-active-class="animate-fade-in motion-reduce:animate-none"
+      leave-active-class="animate-fade-out motion-reduce:animate-none"
+    >
+      <span
+        v-if="canScrollStart"
+        :data-testid="`${testId}__fade-start`"
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-y-0 left-0 z-10 w-[var(--spacing-6)] bg-gradient-to-r from-[var(--bg-canvas)] to-transparent"
+      />
+    </Transition>
+    <Transition
+      enter-active-class="animate-fade-in motion-reduce:animate-none"
+      leave-active-class="animate-fade-out motion-reduce:animate-none"
+    >
+      <span
+        v-if="canScrollEnd"
+        :data-testid="`${testId}__fade-end`"
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-y-0 right-0 z-10 w-[var(--spacing-6)] bg-gradient-to-l from-[var(--bg-canvas)] to-transparent"
+      />
+    </Transition>
   </div>
 </template>

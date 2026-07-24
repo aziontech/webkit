@@ -3,13 +3,13 @@ name: tab-view
 category: navigation
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 31904e8156de30e1675ac0114f0200a0422b240a6a7b28c19d4c16a1243f4fc3
+checksum: 9a23a13b0205624a780b6ac76086455a35d38ac2b266757cbf91080258308e6b
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-07-22
 ---
 # Tab View — Component Spec
 
@@ -43,6 +43,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- Responsive: the tab list (`TabView.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Motion & Animations
 
@@ -50,6 +51,7 @@ Helps users move between views or sections. Migrated from the existing implement
 |---|---|---|---|
 | open/close | `animate-fade-in` | semantic | `motion-reduce:animate-none` |
 | open/close | `animate-none` | semantic | `motion-reduce:animate-none` |
+| scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out` | semantic | `motion-reduce:animate-none` |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
@@ -81,6 +83,7 @@ Helps users move between views or sections. Migrated from the existing implement
 ## Stories (Storybook)
 
 - Default
+- Scrollable — many tabs in a width-constrained container; justified because the horizontal-scroll (mobile) behavior of `TabView.List` is a distinct rendered state that the Default story (few tabs, no overflow) does not exercise.
 
 ## Constraints — DO NOT
 

@@ -14,6 +14,10 @@ export interface PopoverContext {
   disabled: Ref<boolean>
   /** Resolved placement passed to the floating panel as data-placement. */
   placement: Ref<PopoverPlacement>
+  /** Panel width preset (data-width); undefined = fluid default. */
+  width: Ref<'small' | 'medium' | 'large' | undefined>
+  /** Fixed-position style (top/left/z-index/--popup-origin) for the floating panel. */
+  panelStyle: Ref<Record<string, string>>
   /** Stable element ids used to wire aria-controls / aria-labelledby / aria-describedby. */
   triggerId: string
   contentId: string
@@ -21,9 +25,8 @@ export interface PopoverContext {
   descriptionId: string
   /** Mutable refs the sub-components attach DOM elements to. */
   triggerRef: Ref<globalThis.HTMLElement | null>
+  /** The floating panel element. `Popover.Content` renders the panel and assigns this. */
   panelRef: Ref<globalThis.HTMLElement | null>
-  /** Teleport target inside the open panel; the content portals here. */
-  panelBodyRef: Ref<globalThis.HTMLElement | null>
   /** Drives open state. Sub-components never call defineEmits directly. */
   setOpen: (value: boolean) => void
   /** Returns focus to the trigger element (used on Esc and Popover.Close). */

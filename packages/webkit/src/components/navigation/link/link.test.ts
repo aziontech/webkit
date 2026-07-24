@@ -100,7 +100,7 @@ describe('Link', () => {
     expect(root.getAttribute('tabindex')).toBeNull()
   })
 
-  it.each(['large', 'medium'] as const)('renders size variant %s', (size) => {
+  it.each(['small', 'medium', 'large'] as const)('renders size variant %s', (size) => {
     const { getByTestId } = render(Link, { props: { size } })
     expect(getByTestId('navigation-link').getAttribute('data-size')).toBe(size)
   })
@@ -125,6 +125,7 @@ describe('Link', () => {
     const sizes = getAllByTestId('navigation-link').map((el) => el.getAttribute('data-size'))
     expect(sizes).toContain('large')
     expect(sizes).toContain('medium')
+    expect(sizes).toContain('small')
   })
 
   it('renders the composed Disabled story with disabled a11y state', () => {
