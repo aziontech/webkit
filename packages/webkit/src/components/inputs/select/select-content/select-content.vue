@@ -82,6 +82,11 @@
     const target = event.target as Node | null
     if (!el || !target) return
     if (el.contains(target)) return
+    // Bail when the pointer lands on the trigger — the trigger's own @click
+    // will toggle the state; closing here would race the reopen and either
+    // require a "double click" to close or emit update:open twice per press.
+    const trigger = ctx.triggerRef.value
+    if (trigger && trigger.contains(target)) return
     ctx.setOpen(false)
   }
 
