@@ -1,34 +1,201 @@
 <script setup>
-  // The "Component Grid" layer of the Webkit Hub home: a 3D-tilted plane showcasing
-  // real @aziontech/webkit components. Each component sits in a ComponentGridCell
-  // that highlights it on hover/focus (dashed accent ring + floating label),
-  // recreating the Figma "Grid 3D Transform" frame. Components are rendered
-  // display-only — the grid demonstrates the library, it is not a working console.
+  // The "Component Grid" — every top-level @aziontech/webkit component, live and
+  // fully interactive, plotted into the eight library categories (Actions, Inputs,
+  // Content, Feedback, Overlay, Navigation, Data, Code). Overlay collects the
+  // layered/floating surfaces (Dialog, Drawer, Popover, Tooltip, Dropdown, Toast);
+  // Code collects the source/log surfaces (CodeBlock, LogView). Each component sits in a bordered
+  // ComponentGridCell that highlights on hover/focus. When `category` is set, only
+  // that category's section renders (the Hub drives one category per view); left
+  // empty, every section renders. Category ids match the Hub sidebar's
+  // "Components" items (actions, inputs, content, feedback, overlay, navigation,
+  // data, code).
+  //
+  // Usage snippets are the canonical minimal forms from each component's Storybook
+  // Default story, so the grid can never drift from what ships.
+  import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Badge from '@aziontech/webkit/badge'
+  import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
+  import Brand from '@aziontech/webkit/brand'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
+  import ButtonHighlight from '@aziontech/webkit/button-highlight'
+  import Calendar from '@aziontech/webkit/calendar'
+  import CardBox from '@aziontech/webkit/card-box'
+  import CardPricing from '@aziontech/webkit/card-pricing'
+  import Checkbox from '@aziontech/webkit/checkbox'
   import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import Currency from '@aziontech/webkit/currency'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
+  import Divider from '@aziontech/webkit/divider'
+  import Drawer from '@aziontech/webkit/drawer'
+  import DrawerClose from '@aziontech/webkit/drawer-close'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerDescription from '@aziontech/webkit/drawer-description'
+  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+  import DrawerPortal from '@aziontech/webkit/drawer-portal'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+  import Dropdown from '@aziontech/webkit/dropdown'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import FieldCheckbox from '@aziontech/webkit/field-checkbox'
+  import FieldCheckboxBlock from '@aziontech/webkit/field-checkbox-block'
+  import FieldInputGroup from '@aziontech/webkit/field-input-group'
+  import FieldPassword from '@aziontech/webkit/field-password'
+  import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
+  import FieldRadio from '@aziontech/webkit/field-radio'
+  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import FieldSwitch from '@aziontech/webkit/field-switch'
+  import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
+  import FieldText from '@aziontech/webkit/field-text'
+  import FieldTextSwitch from '@aziontech/webkit/field-text-switch'
+  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import Flow from '@aziontech/webkit/flow'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
+  import InputGroup from '@aziontech/webkit/input-group'
+  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputNumber from '@aziontech/webkit/input-number'
+  import InputPassword from '@aziontech/webkit/input-password'
   import InputText from '@aziontech/webkit/input-text'
+  import Item from '@aziontech/webkit/item'
+  import Label from '@aziontech/webkit/label'
+  import Link from '@aziontech/webkit/link'
+  import LogView from '@aziontech/webkit/log-view'
+  import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogViewHeader from '@aziontech/webkit/log-view-header'
+  import MenuItem from '@aziontech/webkit/menu-item'
   import Message from '@aziontech/webkit/message'
+  import MiniButton from '@aziontech/webkit/mini-button'
+  import MultiSelect from '@aziontech/webkit/multi-select'
+  import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import Overline from '@aziontech/webkit/overline'
+  import PaginationButton from '@aziontech/webkit/pagination-button'
+  import Paginator from '@aziontech/webkit/paginator'
+  import Panel from '@aziontech/webkit/panel'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PickList from '@aziontech/webkit/pick-list'
+  import Popover from '@aziontech/webkit/popover'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import ProgressBar from '@aziontech/webkit/progress-bar'
+  import RadioButton from '@aziontech/webkit/radio-button'
+  import ScrollArea from '@aziontech/webkit/scroll-area'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import Select from '@aziontech/webkit/select'
+  import Sidebar from '@aziontech/webkit/sidebar'
+  import SidebarGroup from '@aziontech/webkit/sidebar-group'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Spinner from '@aziontech/webkit/spinner'
+  import SplitButton from '@aziontech/webkit/split-button'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import AzionLogo from '@aziontech/webkit/svg/azion/default'
   import Switch from '@aziontech/webkit/switch'
   import TabView from '@aziontech/webkit/tab-view'
+  import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
+  import Textarea from '@aziontech/webkit/textarea'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
   import ComponentGridCell from './ComponentGridCell.vue'
 
-  // Static display state for the showcased components.
-  const switchOn = ref(true)
-  const search = ref('edge-function')
-  const view = ref('grid')
-  const viewOptions = [
-    { label: 'Grid', value: 'grid' },
-    { label: 'List', value: 'list' }
+  // When `category` is set the grid renders just that one category's section — so
+  // the Hub sidebar can drive a single category into its own content view. Left
+  // empty, every category renders. Ids: actions, inputs, content, feedback,
+  // overlay, navigation, data, code.
+  const props = defineProps({
+    category: { type: String, default: '' }
+  })
+  const showCategory = (id) => !props.category || props.category === id
+
+  // ── Actions ───────────────────────────────────────────────────────────────
+  const splitItems = [
+    { label: 'Save and continue', value: 'save-continue' },
+    { label: 'Save as draft', value: 'save-draft' }
   ]
-  const tab = ref('overview')
+  const segmentedValue = ref('option-1')
+  const segmentedOptions = [
+    { label: 'Grid', value: 'option-1' },
+    { label: 'List', value: 'option-2' },
+    { label: 'Map', value: 'option-3' }
+  ]
+
+  // ── Inputs ────────────────────────────────────────────────────────────────
+  const inputTextValue = ref('edge-function')
+  const inputNumberValue = ref(10)
+  const inputPasswordValue = ref('')
+  const textareaValue = ref('')
+  const checkboxValue = ref(true)
+  const radioValue = ref('a')
+  const switchValue = ref(true)
+  const calendarRange = ref(null)
+  const selectValue = ref('')
+  const selectOptions = [
+    { value: 'opt-1', label: 'Option 1' },
+    { value: 'opt-2', label: 'Option 2' },
+    { value: 'opt-3', label: 'Option 3' }
+  ]
+  const multiSelectValue = ref([])
+  const multiSelectOptions = [
+    { value: 'opt-1', label: 'Option 1' },
+    { value: 'opt-2', label: 'Option 2' },
+    { value: 'opt-3', label: 'Option 3' }
+  ]
+  const boxGridValue = ref('option1')
+  const boxGridItems = [
+    { value: 'option1', icon: 'pi pi-check', label: 'Option One', description: 'First option' },
+    { value: 'option2', icon: 'pi pi-times', label: 'Option Two', description: 'Second option' },
+    { value: 'option3', icon: 'pi pi-star', label: 'Option Three', description: 'Third option' }
+  ]
+  const themeSwitcherValue = ref('system')
+  const fieldTextValue = ref('')
+  const fieldPasswordValue = ref('')
+  const fieldTextareaValue = ref('')
+  const fieldPhoneValue = ref('')
+  const fieldPhoneCountry = ref('BR')
+  const fieldCheckboxValue = ref(false)
+  const fieldCheckboxBlockValue = ref(false)
+  const fieldRadioValue = ref('option1')
+  const fieldRadioBlockValue = ref('plan-a')
+  const fieldSwitchValue = ref(false)
+  const fieldSwitchBlockValue = ref(false)
+  const fieldInputGroupValue = ref('')
+  const fieldTextSwitchValue = ref('')
+  const fieldTextSwitchEnabled = ref(true)
+
+  // ── Feedback ──────────────────────────────────────────────────────────────
+  const dialogOpen = ref(false)
+  const drawerOpen = ref(false)
+  const showToast = () =>
+    toast('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
+
+  // ── Navigation ────────────────────────────────────────────────────────────
+  const crumbs = [
+    { label: 'Home', href: '#', showIcon: true, icon: 'pi pi-home' },
+    { label: 'Edge Functions', href: '#' },
+    { label: 'my-function', current: true }
+  ]
+  const tabValue = ref('overview')
+
+  // ── Data ──────────────────────────────────────────────────────────────────
   const codeTabs = [
     {
       label: 'main.js',
@@ -37,136 +204,1176 @@
       code: "export default async function (request) {\n  return new Response('Hello from the edge')\n}"
     }
   ]
+  const tableItems = [
+    { id: '1001', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com' },
+    { id: '1002', name: 'Workload Bravo', status: 'Inactive', editor: 'user2@example.com' },
+    { id: '1003', name: 'Workload Charlie', status: 'Degraded', editor: 'user3@example.com' }
+  ]
+  const logSearch = ref('')
+  const logWarningsOnly = ref(false)
+  const logLines = [
+    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },
+    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },
+    {
+      id: '3',
+      time: '13:47:42',
+      type: 'folder',
+      message: 'dist/index.js',
+      folderType: 'asset',
+      size: '12.4 kB',
+      gzipSize: '4.1 kB'
+    },
+    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }
+  ]
+  const pickListModel = ref([
+    [
+      { id: 1, label: 'Edge Functions' },
+      { id: 2, label: 'WAF' },
+      { id: 3, label: 'Image Processor' }
+    ],
+    [{ id: 4, label: 'Cache' }]
+  ])
 </script>
 
 <template>
-  <div class="perspective relative">
-    <div class="plane grid grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[var(--spacing-xxl)] md:grid-cols-3">
-      <ComponentGridCell name="Button">
-        <Button
-          label="Deploy"
-          kind="primary"
-          size="medium"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="SegmentedButton">
-        <SegmentedButton
-          v-model="view"
-          :options="viewOptions"
-          aria-label="View"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="Tag">
-        <Tag
-          label="Production"
-          severity="success"
-          size="medium"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="Switch">
-        <Switch
-          v-model="switchOn"
-          aria-label="Enable edge cache"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="Chip">
-        <Chip label="edge-function" />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="Avatar">
-        <Avatar
-          label="Ana Souza"
-          size="medium"
-          kind="square"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="InputText">
-        <InputText
-          v-model="search"
-          size="medium"
-          aria-label="Search components"
-          placeholder="Search"
-          class="w-full"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="Badge">
-        <Badge
-          label="99"
-          severity="danger"
-          size="medium"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="IconButton">
-        <IconButton
-          icon="pi pi-bolt"
-          kind="outlined"
-          aria-label="Run"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="Message">
-        <Message
-          severity="info"
-          title="Deploy started"
-        />
-      </ComponentGridCell>
-
-      <ComponentGridCell name="TabView">
-        <TabView v-model:value="tab">
-          <TabView.List>
-            <TabView.Item
-              value="overview"
-              label="Overview"
-            />
-            <TabView.Item
-              value="metrics"
-              label="Metrics"
-            />
-          </TabView.List>
-          <TabView.Content>
-            <TabView.Panel value="overview" />
-            <TabView.Panel value="metrics" />
-          </TabView.Content>
-        </TabView>
-      </ComponentGridCell>
-
-      <ComponentGridCell
-        name="CodeBlock"
-        class="col-span-2 md:col-span-1"
+  <div class="relative flex w-full flex-col gap-[var(--spacing-xl)]">
+    <!-- ── Actions ──────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('actions')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
       >
-        <CodeBlock
-          :tabs="codeTabs"
-          :show-line-numbers="false"
-          class="w-full"
-        />
-      </ComponentGridCell>
-    </div>
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Actions</h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Buttons &amp; triggers</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="Button">
+          <Button
+            kind="primary"
+            size="large"
+            label="Button"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="SplitButton">
+          <SplitButton
+            kind="primary"
+            size="large"
+            label="Save"
+            icon="pi pi-check"
+            :model="splitItems"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="IconButton">
+          <IconButton
+            kind="primary"
+            size="large"
+            icon="pi pi-plus"
+            aria-label="Add"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="MiniButton">
+          <MiniButton
+            size="large"
+            label="Learn More"
+            href="#"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="CopyButton">
+          <CopyButton
+            value="https://example.com/deploy/abc123"
+            aria-label="Copy URL"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="ButtonHighlight">
+          <ButtonHighlight
+            size="large"
+            label="Ask Azion"
+            icon="pi pi-sparkles"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="SegmentedButton">
+          <SegmentedButton
+            v-model="segmentedValue"
+            :options="segmentedOptions"
+            aria-label="View"
+          />
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Inputs ───────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('inputs')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Inputs</h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Fields &amp; controls</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="InputText">
+          <InputText
+            v-model="inputTextValue"
+            placeholder="Type something"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="InputNumber">
+          <InputNumber
+            v-model="inputNumberValue"
+            :min="0"
+            :max="100"
+            :step="1"
+            placeholder="Quantity"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="InputPassword">
+          <InputPassword
+            v-model="inputPasswordValue"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Textarea">
+          <Textarea
+            v-model="textareaValue"
+            placeholder="Write your message"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Checkbox">
+          <Checkbox
+            v-model="checkboxValue"
+            binary
+            input-id="grid-checkbox"
+            aria-label="Toggle option"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="RadioButton">
+          <RadioButton
+            v-model="radioValue"
+            name="grid-radio"
+            value="a"
+            input-id="grid-radio-a"
+            aria-label="Option A"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Switch">
+          <Switch
+            v-model="switchValue"
+            aria-label="Toggle setting"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Chip">
+          <Chip
+            label="edge-function"
+            size="medium"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Calendar">
+          <Calendar
+            v-model="calendarRange"
+            mode="range"
+            clearable
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="ThemeSwitcher">
+          <ThemeSwitcher
+            v-model:value="themeSwitcherValue"
+            aria-label="Theme"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Label">
+          <Label
+            label="Label"
+            required
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="HelperText">
+          <HelperText
+            kind="helper"
+            label="Helper Text"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Select">
+          <div class="w-full">
+            <Select
+              v-model="selectValue"
+              placeholder="Select an option"
+            >
+              <Select.Trigger />
+              <Select.Content>
+                <Select.Option
+                  v-for="o in selectOptions"
+                  :key="o.value"
+                  :value="o.value"
+                >
+                  {{ o.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+          </div>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="MultiSelect">
+          <div class="w-full">
+            <MultiSelect
+              v-model="multiSelectValue"
+              placeholder="Select options"
+            >
+              <MultiSelect.Trigger />
+              <MultiSelect.Content>
+                <MultiSelect.Option
+                  v-for="o in multiSelectOptions"
+                  :key="o.value"
+                  :value="o.value"
+                >
+                  {{ o.label }}
+                </MultiSelect.Option>
+              </MultiSelect.Content>
+            </MultiSelect>
+          </div>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="InputGroup">
+          <InputGroup class="w-full">
+            <InputGroupAddon>https://</InputGroupAddon>
+            <input
+              placeholder="domain"
+              class="h-full min-w-0 flex-1 border-0 bg-[var(--bg-surface)] px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus:ring-0"
+            />
+            <InputGroupAddon>.com</InputGroupAddon>
+          </InputGroup>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="BoxGridSelection"
+          class="col-span-2 md:col-span-4"
+        >
+          <BoxGridSelection
+            v-model="boxGridValue"
+            :items="boxGridItems"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldText">
+          <FieldText
+            v-model="fieldTextValue"
+            label="Email"
+            placeholder="you@example.com"
+            helper-text="We'll never share your email."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldPassword">
+          <FieldPassword
+            v-model="fieldPasswordValue"
+            label="Password"
+            placeholder="Enter your password"
+            helper-text="At least 8 characters."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldTextarea">
+          <FieldTextarea
+            v-model="fieldTextareaValue"
+            label="Message"
+            placeholder="Write your message"
+            helper-text="Up to 500 characters."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldPhoneNumber">
+          <FieldPhoneNumber
+            v-model="fieldPhoneValue"
+            v-model:country="fieldPhoneCountry"
+            label="Phone"
+            helper-text="We'll send the verification code here."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldInputGroup">
+          <FieldInputGroup
+            v-model="fieldInputGroupValue"
+            label="Website"
+            placeholder="mysite"
+            helper-text="Enter the domain without the scheme."
+            class="w-full"
+          >
+            <template #left>https://</template>
+            <template #right>.com</template>
+          </FieldInputGroup>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldTextSwitch">
+          <FieldTextSwitch
+            v-model="fieldTextSwitchValue"
+            v-model:enabled="fieldTextSwitchEnabled"
+            label="Custom domain"
+            placeholder="mysite.com"
+            helper-text="Only used while enabled."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldCheckbox">
+          <FieldCheckbox
+            v-model="fieldCheckboxValue"
+            label="Checkbox label"
+            description="Checkbox description"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldCheckboxBlock">
+          <FieldCheckboxBlock
+            v-model="fieldCheckboxBlockValue"
+            label="Enable feature"
+            description="Turns this feature on for your project."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldRadio">
+          <FieldRadio
+            v-model="fieldRadioValue"
+            name="grid-field-radio"
+            value="option1"
+            label="Radio label"
+            description="Radio description"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldRadioBlock">
+          <FieldRadioBlock
+            v-model="fieldRadioBlockValue"
+            name="grid-plan"
+            value="plan-a"
+            label="Standard plan"
+            description="Up to 5 projects and 10 GB storage."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldSwitch">
+          <FieldSwitch
+            v-model="fieldSwitchValue"
+            label="Switch label"
+            description="Switch description"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldSwitchBlock">
+          <FieldSwitchBlock
+            v-model="fieldSwitchBlockValue"
+            label="Switch label"
+            description="Switch description"
+            class="w-full"
+          />
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Content ──────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('content')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Content</h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Identity, status &amp; display</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="Avatar">
+          <Avatar
+            label="AB"
+            kind="circle"
+            size="large"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Badge">
+          <Badge
+            label="99"
+            severity="danger"
+            size="medium"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Brand">
+          <Brand kind="default" />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Currency">
+          <Currency
+            value="20"
+            prefix="$"
+            suffix="per month"
+            size="large"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Overline">
+          <Overline prefix="//">OVERLINE TEXT</Overline>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Tag">
+          <div class="flex flex-col items-center gap-[var(--spacing-xs)]">
+            <Tag
+              label="Production"
+              severity="success"
+              size="medium"
+              icon="pi pi-check"
+              rounded
+            />
+            <Tag
+              label="Beta"
+              severity="info"
+              size="medium"
+            />
+            <Tag
+              label="Failed"
+              severity="danger"
+              size="medium"
+            />
+          </div>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Accordion">
+          <Accordion
+            type="single"
+            collapsible
+            default-value="overview"
+            size="large"
+            class="w-full"
+          >
+            <Accordion.Item value="overview">
+              <Accordion.Trigger>What is Azion?</Accordion.Trigger>
+              <Accordion.Content
+                >Azion runs your code at the edge, close to users.</Accordion.Content
+              >
+            </Accordion.Item>
+            <Accordion.Item value="pricing">
+              <Accordion.Trigger>How does pricing work?</Accordion.Trigger>
+              <Accordion.Content
+                >Pay only for what you use, with no upfront cost.</Accordion.Content
+              >
+            </Accordion.Item>
+          </Accordion>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="CardBox">
+          <CardBox
+            title="Card Title"
+            class="w-full"
+          >
+            <template #content>
+              <p class="text-body-sm text-[var(--text-muted)]">
+                Card body content. Place forms, tables, or any markup in the content slot.
+              </p>
+            </template>
+          </CardBox>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Item">
+          <Item
+            kind="outline"
+            class="w-full"
+          >
+            <Item.Media kind="icon">
+              <i
+                class="ai ai-edge-firewall"
+                aria-hidden="true"
+              />
+            </Item.Media>
+            <Item.Content>
+              <Item.Title>Security Alert</Item.Title>
+              <Item.Description>New login detected from unknown device.</Item.Description>
+            </Item.Content>
+            <Item.Actions>
+              <Button
+                label="Review"
+                kind="outlined"
+                size="large"
+              />
+            </Item.Actions>
+          </Item>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Divider">
+          <Divider
+            orientation="horizontal"
+            label="OR"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="ScrollArea">
+          <ScrollArea
+            orientation="vertical"
+            aria-label="Scrollable content"
+            class="h-[180px] w-full rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]"
+          >
+            <div class="h-[420px]">
+              Long content that scrolls vertically inside the area — add enough content to exceed
+              the fixed height so the custom scrollbar appears.
+            </div>
+          </ScrollArea>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="CardPricing">
+          <CardPricing
+            plan-title="Pro"
+            description="Everything you need to ship at the edge."
+            pricing-details="Billed annually or $25/mo billed monthly."
+            slot-position="bottom"
+            kind="contained"
+            value="20"
+            prefix="$"
+            suffix="per month"
+            action-label="Choose Pro"
+            class="w-full max-w-[420px]"
+          />
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Feedback ─────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('feedback')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+          Feedback
+        </h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Messages &amp; progress</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="Skeleton">
+          <Skeleton
+            kind="shape"
+            width="160px"
+            height="80px"
+            animated
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Spinner">
+          <Spinner class="size-6 text-[var(--text-default)]" />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="StatusIndicator">
+          <StatusIndicator
+            severity="success"
+            label="Status"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Message">
+          <Message
+            severity="info"
+            title="Deploy started"
+            description="Your edge function is rolling out to every point of presence."
+            action-label="View"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="ProgressBar">
+          <div class="flex w-full flex-col gap-[var(--spacing-md)]">
+            <ProgressBar
+              :value="68"
+              size="large"
+              shape="rounded"
+            />
+            <ProgressBar
+              indeterminate
+              size="large"
+              shape="rounded"
+            />
+          </div>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Panel">
+          <Panel
+            size="large"
+            class="w-full"
+          >
+            <PanelHeader>Panel title</PanelHeader>
+            <PanelContent>Body content composed by the consumer.</PanelContent>
+            <PanelFooter class="justify-end">
+              <Button
+                label="Save"
+                kind="primary"
+                size="large"
+              />
+            </PanelFooter>
+          </Panel>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="EmptyState">
+          <EmptyState
+            title="No resource yet"
+            description="Get started by creating your first resource."
+          >
+            <template #actions>
+              <div class="flex gap-[var(--spacing-sm)]">
+                <Button
+                  kind="secondary"
+                  label="Secondary"
+                />
+                <Button
+                  kind="outlined"
+                  label="Create Item"
+                />
+              </div>
+              <MiniButton
+                label="View Documentation"
+                icon="pi pi-arrow-right"
+                size="large"
+                href="#"
+              />
+            </template>
+          </EmptyState>
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Overlay ──────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('overlay')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Overlay</h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Layered, floating surfaces</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="Tooltip">
+          <Tooltip
+            text="This is a Tooltip"
+            placement="top"
+          >
+            <Button
+              label="Hover me"
+              kind="outlined"
+              size="large"
+            />
+          </Tooltip>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Dialog">
+          <Dialog
+            v-model:open="dialogOpen"
+            dismissible
+            size="large"
+          >
+            <DialogTrigger>
+              <Button
+                label="Open dialog"
+                kind="primary"
+              />
+            </DialogTrigger>
+            <DialogPortal>
+              <DialogOverlay />
+              <DialogContent>
+                <PanelHeader class="w-full">
+                  <DialogTitle>Dialog Title</DialogTitle>
+                  <DialogClose />
+                </PanelHeader>
+                <PanelContent>
+                  <DialogDescription>
+                    Modal content. Uses the shared Panel header, body, and footer regions.
+                  </DialogDescription>
+                </PanelContent>
+                <PanelFooter class="flex-col md:flex-row md:justify-end">
+                  <Button
+                    class="w-full md:w-auto"
+                    label="Cancel"
+                    kind="outlined"
+                    @click="dialogOpen = false"
+                  />
+                  <Button
+                    class="w-full md:w-auto"
+                    label="Save"
+                    kind="primary"
+                  />
+                </PanelFooter>
+              </DialogContent>
+            </DialogPortal>
+          </Dialog>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Drawer">
+          <Drawer
+            v-model:open="drawerOpen"
+            dismissible
+            side="right"
+            size="large"
+          >
+            <DrawerTrigger>
+              <Button
+                label="Open drawer"
+                kind="primary"
+              />
+            </DrawerTrigger>
+            <DrawerPortal>
+              <DrawerOverlay />
+              <DrawerContent>
+                <PanelHeader class="w-full">
+                  <DrawerTitle>Drawer Title</DrawerTitle>
+                  <DrawerClose />
+                </PanelHeader>
+                <PanelContent>
+                  <DrawerDescription>
+                    Side panel content. Uses the same Panel regions as Dialog.
+                  </DrawerDescription>
+                </PanelContent>
+                <PanelFooter class="flex-col md:flex-row md:justify-end">
+                  <Button
+                    class="w-full md:w-auto"
+                    label="Cancel"
+                    kind="outlined"
+                    @click="drawerOpen = false"
+                  />
+                  <Button
+                    class="w-full md:w-auto"
+                    label="Save"
+                    kind="primary"
+                  />
+                </PanelFooter>
+              </DrawerContent>
+            </DrawerPortal>
+          </Drawer>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Popover">
+          <Popover>
+            <PopoverTrigger>
+              <Button
+                kind="secondary"
+                label="Open popover"
+              />
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverHeader>
+                <PopoverTitle>Popover title</PopoverTitle>
+                <PopoverClose />
+              </PopoverHeader>
+              <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">
+                This content is rendered inside the popover panel.
+              </div>
+            </PopoverContent>
+          </Popover>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Dropdown">
+          <Dropdown>
+            <Dropdown.Trigger>
+              <Button
+                label="Actions"
+                kind="outlined"
+                size="large"
+              />
+            </Dropdown.Trigger>
+            <Dropdown.Group>
+              <Dropdown.Option
+                value="rename"
+                label="Rename"
+              />
+              <Dropdown.Option
+                value="duplicate"
+                label="Duplicate"
+              />
+            </Dropdown.Group>
+            <Dropdown.Group>
+              <Dropdown.Option
+                value="delete"
+                label="Delete"
+              />
+            </Dropdown.Group>
+          </Dropdown>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Toast">
+          <div class="flex flex-col items-center">
+            <Toaster position="bottom-right" />
+            <Button
+              label="Show toast"
+              @click="showToast"
+            />
+          </div>
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Navigation ───────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('navigation')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+          Navigation
+        </h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Wayfinding, menus &amp; shells</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="Link">
+          <Link
+            label="Learn More"
+            size="large"
+            href="#"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="MenuItem">
+          <ul class="m-0 w-[220px] list-none p-0">
+            <MenuItem
+              kind="option"
+              label="Option 1"
+              icon="pi pi-home"
+            />
+            <MenuItem
+              kind="option"
+              label="Option 2"
+              icon="pi pi-cog"
+            />
+          </ul>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Breadcrumb">
+          <Breadcrumb :items="crumbs" />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="TabView">
+          <TabView
+            v-model:value="tabValue"
+            class="w-full"
+          >
+            <TabView.List>
+              <TabView.Item
+                value="overview"
+                label="Overview"
+              />
+              <TabView.Item
+                value="metrics"
+                label="Metrics"
+              />
+            </TabView.List>
+            <TabView.Content class="mt-[var(--spacing-sm)]">
+              <TabView.Panel value="overview">
+                <p class="text-body-sm text-[var(--text-muted)]">Overview content.</p>
+              </TabView.Panel>
+              <TabView.Panel value="metrics">
+                <p class="text-body-sm text-[var(--text-muted)]">Metrics content.</p>
+              </TabView.Panel>
+            </TabView.Content>
+          </TabView>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Sidebar">
+          <Sidebar
+            aria-label="Application"
+            class="h-[280px] w-full"
+          >
+            <SidebarGroup>
+              <MenuItem
+                label="Home"
+                icon="pi pi-home"
+                href="#"
+                selected
+              />
+              <MenuItem
+                label="Marketplace"
+                icon="pi pi-shopping-cart"
+                href="#"
+              />
+            </SidebarGroup>
+            <SidebarGroup label="Build">
+              <MenuItem
+                label="Applications"
+                icon="pi pi-th-large"
+                href="#"
+              />
+              <MenuItem
+                label="Variables"
+                icon="pi pi-sliders-h"
+                href="#"
+              />
+            </SidebarGroup>
+          </Sidebar>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="NavigationMenu"
+          class="col-span-2 md:col-span-4"
+        >
+          <NavigationMenu
+            aria-label="Sections"
+            class="flex w-full items-center gap-[var(--spacing-sm)]"
+          >
+            <NavigationMenu.List>
+              <NavigationMenu.Item value="solutions">
+                <NavigationMenu.Trigger>Solutions</NavigationMenu.Trigger>
+                <NavigationMenu.Content class="w-full p-0">
+                  <NavigationMenu.List label="By use case">
+                    <NavigationMenu.Item
+                      layout="entry"
+                      href="#"
+                      description="Accelerate development"
+                      close-on-click
+                    >
+                      Development
+                    </NavigationMenu.Item>
+                  </NavigationMenu.List>
+                </NavigationMenu.Content>
+              </NavigationMenu.Item>
+              <NavigationMenu.Item>
+                <NavigationMenu.Trigger href="#">Pricing</NavigationMenu.Trigger>
+              </NavigationMenu.Item>
+            </NavigationMenu.List>
+            <NavigationMenu.Portal>
+              <NavigationMenu.Positioner
+                side="bottom"
+                align="start"
+                :side-offset="12"
+              >
+                <NavigationMenu.Popup>
+                  <NavigationMenu.Arrow />
+                  <NavigationMenu.Viewport />
+                </NavigationMenu.Popup>
+              </NavigationMenu.Positioner>
+            </NavigationMenu.Portal>
+          </NavigationMenu>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="GlobalHeader"
+          class="col-span-2 md:col-span-4"
+        >
+          <GlobalHeader
+            aria-label="Global header"
+            class="w-full"
+          >
+            <GlobalHeader.Left>
+              <GlobalHeader.Brand>
+                <a
+                  href="#"
+                  aria-label="Azion home"
+                >
+                  <AzionLogo />
+                </a>
+              </GlobalHeader.Brand>
+            </GlobalHeader.Left>
+            <GlobalHeader.Middle />
+            <GlobalHeader.Right />
+          </GlobalHeader>
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Data ─────────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('data')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Data</h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Tables &amp; display</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="PaginationButton">
+          <PaginationButton
+            kind="number"
+            selected
+          >
+            1
+          </PaginationButton>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Flow">
+          <Flow align="center">
+            <Flow.Node>Source</Flow.Node>
+            <Flow.Node>Transform</Flow.Node>
+            <Flow.Node>Deliver</Flow.Node>
+          </Flow>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="Paginator"
+          class="col-span-2 md:col-span-4"
+        >
+          <Paginator class="w-full">
+            <template #info>
+              <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>
+            </template>
+            <Paginator.Button
+              kind="previous"
+              disabled
+            >
+              Previous
+            </Paginator.Button>
+            <Paginator.Button
+              kind="number"
+              selected
+            >
+              1
+            </Paginator.Button>
+            <Paginator.Button kind="number">2</Paginator.Button>
+            <Paginator.Button kind="number">3</Paginator.Button>
+            <Paginator.Button kind="more" />
+            <Paginator.Button kind="next">Next</Paginator.Button>
+            <template #controls>
+              <Paginator.PageSize
+                :model-value="10"
+                :options="[10, 25, 50, 100]"
+              />
+            </template>
+          </Paginator>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="Table"
+          class="col-span-2 md:col-span-4"
+        >
+          <Table
+            border
+            class="w-full"
+          >
+            <Table.Header>
+              <Table.Row>
+                <Table.HeadCell principal>Name</Table.HeadCell>
+                <Table.HeadCell>Status</Table.HeadCell>
+                <Table.HeadCell>Last Editor</Table.HeadCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row
+                v-for="item in tableItems"
+                :key="item.id"
+              >
+                <Table.Cell principal>
+                  <span class="min-w-0 flex-1 truncate">{{ item.name }}</span>
+                </Table.Cell>
+                <Table.Cell>
+                  <span class="min-w-0 flex-1 truncate">{{ item.status }}</span>
+                </Table.Cell>
+                <Table.Cell>
+                  <span class="min-w-0 flex-1 truncate">{{ item.editor }}</span>
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="PickList"
+          class="col-span-2 md:col-span-4"
+        >
+          <PickList
+            v-model="pickListModel"
+            data-key="id"
+            class="w-full"
+          >
+            <PickList.Source title="Available">
+              <template #item="{ item }">{{ item.label }}</template>
+            </PickList.Source>
+            <PickList.Controls />
+            <PickList.Target title="Selected">
+              <template #item="{ item }">{{ item.label }}</template>
+            </PickList.Target>
+          </PickList>
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Code ─────────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('code')"
+      class="flex flex-col gap-[var(--spacing-sm)]"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Code</h3>
+        <span class="text-body-xs text-[var(--text-muted)]">Source &amp; log surfaces</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell
+          name="CodeBlock"
+          class="col-span-2 md:col-span-4"
+        >
+          <CodeBlock
+            :tabs="codeTabs"
+            default-value="main"
+            :show-line-numbers="false"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="LogView"
+          class="col-span-2 md:col-span-4"
+        >
+          <LogView
+            v-model:search="logSearch"
+            v-model:warnings-only="logWarningsOnly"
+            :lines="logLines"
+            class="h-[360px] w-full"
+          >
+            <LogViewHeader />
+            <LogViewContent />
+          </LogView>
+        </ComponentGridCell>
+      </div>
+    </section>
   </div>
 </template>
-
-<style scoped>
-  /* 3D perspective plane. Geometry (perspective/rotate) has no theme token, so it
-     lives here; every color/spacing/shape token stays in the template classes. */
-  .perspective {
-    perspective: 1600px;
-    perspective-origin: 60% 20%;
-  }
-
-  .plane {
-    transform: rotateX(26deg) rotateZ(-16deg) scale(0.96);
-    transform-style: preserve-3d;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .plane {
-      transform: none;
-    }
-  }
-</style>
