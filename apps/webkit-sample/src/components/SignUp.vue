@@ -220,7 +220,7 @@ const goToSignIn = () => router.push({ name: "login" });
           </template>
         </CardBox>
 
-        <div class="flex items-center gap-[var(--spacing-xs)]">
+        <div class="flex items-center justify-center gap-[var(--spacing-xs)]">
           <p class="text-body-sm text-[var(--text-default)]">
             Already have an account?
           </p>
