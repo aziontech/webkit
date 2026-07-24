@@ -361,6 +361,52 @@ describe('Dropdown (compound / overlay)', () => {
     expect(command?.textContent?.trim()).toBe('⌘P')
   })
 
+  // ---- ENG-46740: panel body clips overflowing content ---------------------
+  it('clips horizontal overflow on the panel body so content respects the panel rounded borders', async () => {
+    const { getByTestId } = render(Host)
+    await fireEvent.click(getByTestId('navigation-dropdown__trigger'))
+    await waitForOpen(3)
+
+    const body = document.body.querySelector(
+      '[data-testid="navigation-dropdown__body"]'
+    ) as HTMLElement
+    expect(body).not.toBeNull()
+
+    // Body must declare horizontal clipping and vertical auto-scroll on the
+    // rendered class attribute (ENG-46740). Tests do not run Tailwind, so we
+    // assert the utility classnames that carry the behavior.
+    const cls = body.className
+    expect(cls).toContain('overflow-x-hidden')
+    expect(cls).toContain('overflow-y-auto')
+  })
+
+  // ---- ENG-46741: divider between groups is a flush hairline ---------------
+  it('separates consecutive groups with a flush hairline (no vertical padding around the divider)', async () => {
+    render(Host, { props: { open: true, grouped: true } })
+    await waitForOpen(5)
+
+    const groups = Array.from(document.body.querySelectorAll('[role="group"]')) as HTMLElement[]
+    expect(groups).toHaveLength(2)
+
+    const secondCls = groups[1].className
+    const firstCls = groups[0].className
+
+    // The divider is a hairline top border applied only to non-first groups.
+    expect(secondCls).toContain('[&:not([data-first])]:border-t')
+    expect(secondCls).toContain('[&:not([data-first])]:border-[var(--border-default)]')
+
+    // No margin-top and no padding-top around the divider — must be flush.
+    expect(secondCls).not.toMatch(/(?:^|[\s:])mt-\[/)
+    expect(secondCls).not.toMatch(/(?:^|[\s:])pt-\[/)
+    expect(secondCls).not.toMatch(/\[&:not\(\[data-first\]\)\]:mt-/)
+    expect(secondCls).not.toMatch(/\[&:not\(\[data-first\]\)\]:pt-/)
+
+    // Both groups share the same base class; first group has data-first so the
+    // non-first variant never applies to it (no border, no spacing).
+    expect(firstCls).toBe(secondCls)
+    expect(groups[0].hasAttribute('data-first')).toBe(true)
+  })
+
   // ---- Accessibility: axe on the open menu overlay --------------------------
   it('has no axe violations on the open menu panel with grouped options', async () => {
     render(Host, { props: { open: true, grouped: true } })
