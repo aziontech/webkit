@@ -14,20 +14,12 @@
 
   const ctx = usePopoverContext()
 
-  // Assign the panel element to the root-owned context ref (function ref), so the root's
-  // placement / focus / Esc+Tab / outside-click logic keeps operating on `ctx.panelRef`.
-  // The param matches Vue's VNodeRef signature (Element | ComponentPublicInstance | null).
   const setPanelRef = (el: globalThis.Element | ComponentPublicInstance | null) => {
     ctx.panelRef.value = el instanceof HTMLElement ? el : null
   }
 </script>
 
 <template>
-  <!--
-    The panel + its content render together in ONE teleported subtree (the Select /
-    Tooltip pattern), so Vue's <Transition> scales the whole thing on enter/leave. The
-    root owns state/placement/focus and reads this element through `ctx.panelRef`.
-  -->
   <Teleport to="body">
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"

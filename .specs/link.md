@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 6c7950e5948ce797cd74e688afb6563fd065f024c212b06f847469ea2841a0c0
+checksum: 82a01ef41214686b035f6f6f700873cd25b1c0f963f820bbd40220e27ece8c9a
 created: 2026-05-22
 last_updated: 2026-07-22
 figma:
@@ -22,12 +22,12 @@ Helps users move between views or sections. Migrated from the existing implement
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `label` | `string` | `'Learn More'` | no | Visible label rendered inside the link. |
-| `size` | `'small' | 'medium' | 'large'` | `'large'` | no | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `showIcon` | `boolean` | `true` | no | When true, renders the trailing icon. |
 | `icon` | `string` | `'pi pi-external-link'` | no | PrimeIcons class for the trailing icon. |
 | `href` | `string` | `'#'` | no | Destination URL for the anchor. |
-| `target` | `'_blank' | '_self'` | `'_self'` | no | Link target when navigating. |
+| `target` | `'_blank' \| '_self'` | `'_self'` | no | Link target when navigating. |
 
 ## Events
 

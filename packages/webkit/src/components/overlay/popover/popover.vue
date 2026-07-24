@@ -124,9 +124,6 @@
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
     if (!isOpenState.value) return
 
-    // Esc dismisses and returns focus to the trigger. Handled at the document level
-    // (not on the panel) so it also works while focus rests on the trigger — the panel
-    // is not auto-focused on open.
     if (event.key === 'Escape') {
       if (!props.dismissible) return
       event.preventDefault()
@@ -135,9 +132,6 @@
       return
     }
 
-    // Contain Tab / Shift+Tab within [trigger, ...panel] so focus never escapes the
-    // popover — only Esc or an outside click dismiss it. The panel is teleported to
-    // <body>, so the trigger ↔ panel transition is wired here rather than via DOM order.
     if (event.key === 'Tab') {
       const trigger = triggerRef.value
       const panel = panelRef.value
