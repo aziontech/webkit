@@ -89,7 +89,7 @@ jobs:
           extra_args: --only-verified
 
       - name: Check unused dependencies
-        run: npx depcheck --ignores="@types/*,eslint-*,semantic-release"
+        run: npx depcheck --ignores="@types/*,eslint-*"
         working-directory: packages/webkit
         continue-on-error: true
 
