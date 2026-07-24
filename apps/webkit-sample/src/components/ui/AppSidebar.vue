@@ -322,12 +322,15 @@
           <InputText
             v-model="searchQuery"
             placeholder="Search"
-            size="small"
+            size="medium"
             aria-label="Search navigation"
             @keydown.esc="clearSearch"
           >
             <template #iconLeft>
-              <i class="pi pi-search" aria-hidden="true" />
+              <i
+                class="pi pi-search"
+                aria-hidden="true"
+              />
             </template>
           </InputText>
         </div>
