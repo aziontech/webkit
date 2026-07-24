@@ -27,6 +27,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
+  import { useSidebar } from '../../sidebar.js'
   import { useTheme } from '../../theme.js'
 
   const props = defineProps({
@@ -39,7 +40,10 @@
     clientId: { type: String, default: '9757a' },
     ariaLabel: { type: String, default: 'Sidebar' },
     // Id of the nav item to render as selected.
-    active: { type: String, default: '' }
+    active: { type: String, default: '' },
+    // Shows the collapse toggle at the bottom of the rail (desktop rail only;
+    // off inside the mobile drawer).
+    collapsible: { type: Boolean, default: false }
   })
 
   // `logout` fires when the Logout entry is chosen; `select` fires for any other
@@ -53,7 +57,12 @@
     {
       items: [
         { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' },
-        { id: 'marketplace', label: 'Marketplace', icon: 'ai ai-marketplace', path: '/marketplace' },
+        {
+          id: 'marketplace',
+          label: 'Marketplace',
+          icon: 'ai ai-marketplace',
+          path: '/marketplace'
+        },
         { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
         { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' },
         { id: 'diagrams', label: 'Diagrams', icon: 'pi pi-share-alt', path: '/diagrams' }
@@ -135,6 +144,10 @@
   const { theme } = useTheme()
   const userName = computed(() => props.name || props.user.split('@')[0])
 
+  // Rail collapse: the shared singleton state, toggled by the control at the
+  // bottom of the rail.
+  const { collapsed } = useSidebar()
+
   // Sidebar nav search: a fixed field above the scrolling nav that filters the
   // baked-in groups by item label (case-insensitive). Groups with no surviving
   // item drop out entirely; when nothing matches, a compact muted line stands in
@@ -215,7 +228,9 @@
         <!-- Standalone reduced Azion brand + a team switcher pill. The name is a
              static label; only the icon button is interactive (opens the team
              popover — mirrors the console's team menu). -->
-        <div class="flex items-center gap-[var(--spacing-sm)] pl-[var(--spacing-xxs)] pr-[var(--spacing-xs)]">
+        <div
+          class="flex items-center gap-[var(--spacing-sm)] pl-[var(--spacing-xxs)] pr-[var(--spacing-xs)]"
+        >
           <div class="size-[var(--size-8)] flex items-center justify-center">
             <AzionLogoMin
               class="h-[var(--size-4)] w-auto shrink-0"
@@ -407,7 +422,10 @@
                 label="Account Settings"
               >
                 <template #right>
-                  <i class="pi pi-cog" aria-hidden="true" />
+                  <i
+                    class="pi pi-cog"
+                    aria-hidden="true"
+                  />
                 </template>
               </Dropdown.Option>
               <Dropdown.Option
@@ -415,7 +433,10 @@
                 label="Personal Tokens"
               >
                 <template #right>
-                  <i class="pi pi-key" aria-hidden="true" />
+                  <i
+                    class="pi pi-key"
+                    aria-hidden="true"
+                  />
                 </template>
               </Dropdown.Option>
             </Dropdown.Group>
@@ -443,7 +464,10 @@
                 label="Home Page"
               >
                 <template #right>
-                  <i class="pi pi-home" aria-hidden="true" />
+                  <i
+                    class="pi pi-home"
+                    aria-hidden="true"
+                  />
                 </template>
               </Dropdown.Option>
               <Dropdown.Option
@@ -451,7 +475,10 @@
                 label="Changelog"
               >
                 <template #right>
-                  <i class="pi pi-pencil" aria-hidden="true" />
+                  <i
+                    class="pi pi-pencil"
+                    aria-hidden="true"
+                  />
                 </template>
               </Dropdown.Option>
               <Dropdown.Option
@@ -459,7 +486,10 @@
                 label="Feedback"
               >
                 <template #right>
-                  <i class="pi pi-comment" aria-hidden="true" />
+                  <i
+                    class="pi pi-comment"
+                    aria-hidden="true"
+                  />
                 </template>
               </Dropdown.Option>
               <Dropdown.Option
@@ -467,7 +497,10 @@
                 label="Docs"
               >
                 <template #right>
-                  <i class="pi pi-book" aria-hidden="true" />
+                  <i
+                    class="pi pi-book"
+                    aria-hidden="true"
+                  />
                 </template>
               </Dropdown.Option>
             </Dropdown.Group>
@@ -479,14 +512,19 @@
                 label="Log Out"
               >
                 <template #right>
-                  <i class="pi pi-sign-out" aria-hidden="true" />
+                  <i
+                    class="pi pi-sign-out"
+                    aria-hidden="true"
+                  />
                 </template>
               </Dropdown.Option>
             </Dropdown.Group>
 
             <!-- Upgrade CTA + platform status -->
             <Dropdown.Group>
-              <div class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]">
+              <div
+                class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]"
+              >
                 <Button
                   label="Upgrade to Pro"
                   kind="secondary"
@@ -503,6 +541,22 @@
               </div>
             </Dropdown.Group>
           </Dropdown>
+
+          <Tooltip
+            v-if="collapsible"
+            key="sidebar-toggle"
+            :text="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            placement="top"
+          >
+            <IconButton
+              :icon="collapsed ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'"
+              :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+              kind="outlined"
+              size="small"
+              icon-transition
+              @click="collapsed = !collapsed"
+            />
+          </Tooltip>
         </div>
       </template>
     </Sidebar>

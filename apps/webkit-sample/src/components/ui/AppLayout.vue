@@ -52,12 +52,6 @@
   // survives navigation between modules and page reloads.
   const { collapsed } = useSidebar()
 
-  // Flip the rail's collapsed state; the toggle's IconButton cross-fades its
-  // glyph via the shipped `iconTransition`.
-  const toggleSidebar = () => {
-    collapsed.value = !collapsed.value
-  }
-
   // ── Sidebar slide timing — tweak these token keys and reload to test ──
   // They index the motion tokens from @aziontech/theme/animations (DESIGN.md
   // § Motion), so the resolved ms / cubic-bezier come from the design system,
@@ -211,7 +205,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh overflow-hidden bg-[var(--bg-canvas)]">
+  <div class="relative flex h-dvh overflow-hidden bg-[var(--bg-canvas)]">
     <!-- Single, full-height Azion app sidebar (hidden in focused flows). On a
          collapsible page the rail stays mounted and its width animates to 0
          while the inner sidebar slides out to the left; the content zone morphs
@@ -229,12 +223,42 @@
         :style="railInnerStyle"
         :user="userEmail"
         :active="activeItem"
+        :collapsible="collapsible && !isMobile"
         aria-label="Main navigation"
         @navigate="onNavigate"
         @select="onAccountSelect"
         @logout="signOut"
       />
     </div>
+
+    <!-- Expand affordance: the rail is inert when collapsed, so its own toggle
+         is unreachable. This floating button lives outside the rail, pinned to
+         the bottom-left, and dissolves in only while collapsed — without it the
+         user would be locked out of re-expanding. -->
+    <Transition
+      enter-active-class="transition-opacity duration-200 ease-out motion-reduce:transition-none"
+      leave-active-class="transition-opacity duration-200 ease-out motion-reduce:transition-none"
+      enter-from-class="opacity-0"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="sidebar && collapsible && !isMobile && collapsed"
+        class="absolute bottom-[var(--spacing-lg)] left-[var(--spacing-lg)] z-20"
+      >
+        <Tooltip
+          text="Expand sidebar"
+          placement="right"
+        >
+          <IconButton
+            icon="pi pi-angle-double-right"
+            aria-label="Expand sidebar"
+            kind="outlined"
+            size="medium"
+            @click="collapsed = false"
+          />
+        </Tooltip>
+      </div>
+    </Transition>
 
     <!-- Content zone: GlobalHeader (with module breadcrumb) + page content -->
     <div class="flex min-w-0 flex-1 flex-col">
@@ -256,24 +280,6 @@
                 kind="outlined"
                 size="medium"
                 @click="navOpen = true"
-              />
-            </Tooltip>
-            <!-- Sidebar toggle: outlined icon button whose glyph cross-fades on
-                 every flip via IconButton's shipped `iconTransition`. The
-                 aria-label carries the state (Expand / Collapse). Desktop only. -->
-            <Tooltip
-              v-if="sidebar && collapsible && !isMobile"
-              key="sidebar-toggle"
-              :text="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-              placement="bottom"
-            >
-              <IconButton
-                :icon="collapsed ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'"
-                :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-                kind="outlined"
-                size="medium"
-                icon-transition
-                @click="toggleSidebar"
               />
             </Tooltip>
             <Breadcrumb
