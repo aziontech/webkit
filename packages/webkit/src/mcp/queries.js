@@ -97,6 +97,21 @@ export function listTokens(catalog, { category } = {}) {
 
   if (category != null && String(category).length) {
     const key = String(category).toLowerCase().trim()
+    // Animations are their own catalog (utility classes, not CSS custom properties):
+    // each entry is `animate-<name>` + its timing value + when to reach for it.
+    if (key === 'animations' || key === 'animation' || key === 'animate' || key === 'motion') {
+      return {
+        ok: true,
+        available: true,
+        found: true,
+        category: 'animations',
+        tokens: (tokens.animations || []).map((name) => ({
+          class: `animate-${name}`,
+          ...(tokens.animationGuide?.[name] || {})
+        })),
+        hint: 'Every motion-bearing class pairs with a motion-reduce: fallback (e.g. `animate-slide-in-left motion-reduce:animate-none`). Panel/drawer open-close wraps the v-if region in a Vue Transition with enter-active-class / leave-active-class.'
+      }
+    }
     const group = tokens.groups[key]
     if (!group) {
       return {
@@ -104,8 +119,8 @@ export function listTokens(catalog, { category } = {}) {
         available: true,
         found: false,
         category: key,
-        groups: groupNames,
-        message: `No token group "${key}". Available groups: ${groupNames.join(', ')}.`
+        groups: [...groupNames, 'animations'],
+        message: `No token group "${key}". Available groups: ${groupNames.join(', ')}, animations.`
       }
     }
     return { ok: true, available: true, found: true, category: key, tokens: group }
@@ -114,10 +129,13 @@ export function listTokens(catalog, { category } = {}) {
   return {
     ok: true,
     available: true,
-    groups: groupNames.map((name) => ({ name, count: tokens.groups[name].length })),
+    groups: [
+      ...groupNames.map((name) => ({ name, count: tokens.groups[name].length })),
+      { name: 'animations', count: (tokens.animations || []).length }
+    ],
     typography: tokens.typography,
     vocabulary: catalog.vocabulary || null,
-    hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "spacing", "radius", "shadow") for the CSS custom properties in that group.'
+    hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "spacing", "radius", "shadow", "animations") for that group — "animations" returns each animate-* class with its timing and when to use it.'
   }
 }
 
@@ -157,6 +175,9 @@ export function getComponent(catalog, name) {
     rootOf: e.rootOf ?? null,
     // Usage guidance (B3) — helps the AI pick the RIGHT component, not just a valid one.
     purpose: e.purpose ?? null,
+    // One-time app-level wiring required before first use (null for most components).
+    // When set, apply it BEFORE emitting code that uses the component.
+    setup: e.setup ?? null,
     useWhen: e.useWhen ?? [],
     avoidWhen: e.avoidWhen ?? [],
     related: e.related ?? [],
@@ -192,6 +213,7 @@ export function getBestPractices(catalog, name) {
     found: true,
     name: key,
     purpose: e.purpose ?? null,
+    setup: e.setup ?? null,
     useWhen: e.useWhen ?? [],
     avoidWhen: e.avoidWhen ?? [],
     related: e.related ?? [],

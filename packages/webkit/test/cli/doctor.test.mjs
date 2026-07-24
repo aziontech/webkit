@@ -96,6 +96,63 @@ test('doctor warns when a toolkit dependency is pinned as "latest" and reports i
   }
 })
 
+test('doctor warns when @aziontech/icons is a dependency but not imported at the entry', () => {
+  const dir = makeProject({
+    name: 'demo',
+    version: '1.0.0',
+    dependencies: { '@aziontech/icons': 'latest' }
+  })
+  try {
+    mkdirSync(join(dir, 'src'))
+    writeFileSync(join(dir, 'src/main.ts'), "import { createApp } from 'vue'\n")
+    let report = planDoctor(dir)
+    assert.equal(statusOf(report, 'icons import'), 'warn')
+
+    writeFileSync(join(dir, 'src/main.ts'), "import '@aziontech/icons'\n")
+    report = planDoctor(dir)
+    assert.equal(statusOf(report, 'icons import'), 'ok')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('doctor flags toast usage with no wired region, and passes once wired', () => {
+  const dir = makeProject()
+  try {
+    mkdirSync(join(dir, 'src/components'), { recursive: true })
+
+    // No toast anywhere → the check does not even appear.
+    writeFileSync(join(dir, 'src/main.ts'), "import { createApp } from 'vue'\n")
+    assert.equal(statusOf(planDoctor(dir), 'toast setup'), undefined)
+
+    // toast imported, no region wired → warn with the fix.
+    writeFileSync(
+      join(dir, 'src/components/save.ts'),
+      "import { toast } from '@aziontech/webkit/toast'\ntoast.success('Saved')\n"
+    )
+    const warned = planDoctor(dir).find((c) => c.check === 'toast setup')
+    assert.equal(warned.status, 'warn')
+    assert.match(warned.detail, /\.use\(ToastPlugin\)/)
+
+    // Service wiring in the entry → ok.
+    writeFileSync(
+      join(dir, 'src/main.ts'),
+      "import { ToastPlugin } from '@aziontech/webkit/toast'\nimport { createApp } from 'vue'\ncreateApp({}).use(ToastPlugin).mount('#app')\n"
+    )
+    assert.equal(statusOf(planDoctor(dir), 'toast setup'), 'ok')
+
+    // A manually mounted Toaster also counts.
+    writeFileSync(join(dir, 'src/main.ts'), "import { createApp } from 'vue'\n")
+    writeFileSync(
+      join(dir, 'src/components/App.vue'),
+      "<script setup>\nimport Toaster from '@aziontech/webkit/toast-root'\n</script>\n<template>\n  <Toaster />\n</template>\n"
+    )
+    assert.equal(statusOf(planDoctor(dir), 'toast setup'), 'ok')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test('doctor reports a malformed .mcp.json as a failure, not a crash', () => {
   const dir = makeProject()
   try {

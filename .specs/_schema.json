@@ -82,6 +82,11 @@
       "type": "boolean",
       "description": "When true, this component is intentionally personalizable: the consumer may pass class/style to its root, so no-style-override allows it (a documented style seam, e.g. a layout/container wrapper)."
     },
+    "setup": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-time app-level wiring the component needs before first use (e.g. installing a plugin in the app entry). Surfaced by build-catalog.mjs into catalog.json so the MCP can steer consumers through it."
+    },
     "created": {
       "type": "string",
       "format": "date"
