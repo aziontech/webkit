@@ -5,6 +5,8 @@ import CommandMenuInput from '@aziontech/webkit/command-menu-input'
 import CommandMenuItem from '@aziontech/webkit/command-menu-item'
 import CommandMenuList from '@aziontech/webkit/command-menu-list'
 import CommandMenuSeparator from '@aziontech/webkit/command-menu-separator'
+import InputText from '@aziontech/webkit/input-text'
+import Kbd from '@aziontech/webkit/kbd'
 import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
@@ -18,7 +20,9 @@ const commandMenuStoryComponents = {
   CommandMenuGroup,
   CommandMenuItem,
   CommandMenuEmpty,
-  CommandMenuSeparator
+  CommandMenuSeparator,
+  InputText,
+  Kbd
 }
 
 /** @type {import('@storybook/vue3').Meta<typeof CommandMenu>} */
@@ -117,10 +121,16 @@ export default meta
 const DEFAULT_RENDER_TEMPLATE = `<CommandMenu v-bind="args" :open="open" @update:open="onUpdate">
   <CommandMenuInput placeholder="Search commands…" />
   <CommandMenuList>
-    <CommandMenuGroup heading="Actions">
+    <CommandMenuGroup heading="Suggestions">
       <CommandMenuItem value="deploy">Deploy Project</CommandMenuItem>
       <CommandMenuItem value="new-app">Create Application</CommandMenuItem>
       <CommandMenuItem value="settings">Go to Settings</CommandMenuItem>
+    </CommandMenuGroup>
+    <CommandMenuSeparator />
+    <CommandMenuGroup heading="Commands">
+      <CommandMenuItem value="search" shortcut="meta+k">Search Everything</CommandMenuItem>
+      <CommandMenuItem value="new-app-cmd" shortcut="meta+n">New Application</CommandMenuItem>
+      <CommandMenuItem value="toggle-theme" shortcut="meta+shift+l">Toggle Theme</CommandMenuItem>
     </CommandMenuGroup>
   </CommandMenuList>
 </CommandMenu>`
@@ -147,10 +157,16 @@ const Template = (args) => ({
 const DEFAULT_SNIPPET = `<CommandMenu open shortcut="meta+k">
   <CommandMenu.Input placeholder="Search commands…" />
   <CommandMenu.List>
-    <CommandMenu.Group heading="Actions">
+    <CommandMenu.Group heading="Suggestions">
       <CommandMenu.Item value="deploy">Deploy Project</CommandMenu.Item>
       <CommandMenu.Item value="new-app">Create Application</CommandMenu.Item>
       <CommandMenu.Item value="settings">Go to Settings</CommandMenu.Item>
+    </CommandMenu.Group>
+    <CommandMenu.Separator />
+    <CommandMenu.Group heading="Commands">
+      <CommandMenu.Item value="search" shortcut="meta+k">Search Everything</CommandMenu.Item>
+      <CommandMenu.Item value="new-app-cmd" shortcut="meta+n">New Application</CommandMenu.Item>
+      <CommandMenu.Item value="toggle-theme" shortcut="meta+shift+l">Toggle Theme</CommandMenu.Item>
     </CommandMenu.Group>
   </CommandMenu.List>
 </CommandMenu>`
@@ -161,7 +177,8 @@ export const Default = {
   parameters: {
     docs: {
       description: {
-        story: 'A controlled palette with one input, one group, and several items (no shortcuts).'
+        story:
+          'A controlled palette with a "Suggestions" group of plain-label items and a "Commands" group whose items carry ⌘ shortcut hints rendered via Kbd.'
       },
       source: { code: toSfc(IMPORT, DEFAULT_SNIPPET) }
     }
@@ -332,6 +349,104 @@ export const Disabled = {
         story: 'A disabled item alongside enabled ones — skipped by roving navigation.'
       },
       source: { code: toSfc(IMPORT, DISABLED_SNIPPET) }
+    }
+  }
+}
+
+// The real-world entry point: a large search `InputText` carrying a ⌘K `Kbd`
+// hint that opens the palette via `v-model:open`. The global `meta+k` shortcut
+// opens it too, so the closed palette starts here rather than being forced open.
+const TRIGGER_TEMPLATE = `<div class="flex min-h-[240px] items-start justify-center p-[var(--spacing-lg)]">
+  <InputText
+    model-value=""
+    placeholder="Search…"
+    size="large"
+    readonly
+    aria-keyshortcuts="Meta+K"
+    class="max-w-[360px] cursor-pointer"
+    @click="open = true"
+    @keydown.enter="open = true"
+  >
+    <template #iconLeft>
+      <span class="pi pi-search" aria-hidden="true" />
+    </template>
+    <template #iconRight>
+      <Kbd meta size="small">K</Kbd>
+    </template>
+  </InputText>
+
+  <CommandMenu :open="open" shortcut="meta+k" @update:open="open = $event">
+    <CommandMenuInput placeholder="Search commands…" />
+    <CommandMenuList>
+      <CommandMenuGroup heading="Actions">
+        <CommandMenuItem value="deploy">Deploy Project</CommandMenuItem>
+        <CommandMenuItem value="new-app">Create Application</CommandMenuItem>
+        <CommandMenuItem value="settings">Go to Settings</CommandMenuItem>
+      </CommandMenuGroup>
+    </CommandMenuList>
+  </CommandMenu>
+</div>`
+
+const TRIGGER_SNIPPET = `<div class="flex min-h-[240px] items-start justify-center p-[var(--spacing-lg)]">
+  <InputText
+    model-value=""
+    placeholder="Search…"
+    size="large"
+    readonly
+    aria-keyshortcuts="Meta+K"
+    class="max-w-[360px] cursor-pointer"
+    @click="open = true"
+    @keydown.enter="open = true"
+  >
+    <template #iconLeft>
+      <span class="pi pi-search" aria-hidden="true" />
+    </template>
+    <template #iconRight>
+      <Kbd meta size="small">K</Kbd>
+    </template>
+  </InputText>
+
+  <CommandMenu v-model:open="open" shortcut="meta+k">
+    <CommandMenu.Input placeholder="Search commands…" />
+    <CommandMenu.List>
+      <CommandMenu.Group heading="Actions">
+        <CommandMenu.Item value="deploy">Deploy Project</CommandMenu.Item>
+        <CommandMenu.Item value="new-app">Create Application</CommandMenu.Item>
+        <CommandMenu.Item value="settings">Go to Settings</CommandMenu.Item>
+      </CommandMenu.Group>
+    </CommandMenu.List>
+  </CommandMenu>
+</div>`
+
+export const WithTrigger = {
+  render: () => ({
+    components: commandMenuStoryComponents,
+    setup() {
+      const open = ref(false)
+      return { open }
+    },
+    template: TRIGGER_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A large search `InputText` with a ⌘K `Kbd` hint that opens the palette via `v-model:open`. The global `meta+k` (⌘K / Ctrl+K) shortcut opens it too.'
+      },
+      source: {
+        code: toSfc(
+          [
+            "import { ref } from 'vue'",
+            "import CommandMenu from '@aziontech/webkit/command-menu'",
+            "import InputText from '@aziontech/webkit/input-text'",
+            "import Kbd from '@aziontech/webkit/kbd'",
+            '',
+            'const open = ref(false)'
+          ],
+          TRIGGER_SNIPPET
+        )
+      }
     }
   }
 }

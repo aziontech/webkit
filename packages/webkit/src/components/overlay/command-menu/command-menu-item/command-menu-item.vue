@@ -103,7 +103,7 @@
     :data-testid="testId"
     :data-active="ctx.isActive(value) || undefined"
     :data-disabled="disabled || undefined"
-    class="flex items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none data-[active]:bg-[var(--bg-selected)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)]"
+    class="flex min-h-8 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none data-[active]:bg-[var(--bg-selected)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)]"
     @click="!disabled && activate($event)"
     @keydown.enter.prevent="!disabled && activate($event)"
     @keydown.space.prevent="!disabled && activate($event)"

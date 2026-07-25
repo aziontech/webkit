@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: a33b777d8c2a30dfa9725287ae39ff44aac0c1fdbff2a8bf862a0761089a9710
+checksum: 9ca1374683d5ce977792b211abd2ad4415b3e5b67be511701f8fb75e119fe682
 created: 2026-07-23
-last_updated: 2026-07-23
+last_updated: 2026-07-24
 ---
 # Kbd — Component Spec
 
@@ -81,12 +81,13 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography (medium) | `.text-label-md` + `leading-none` |
-| typography (small) | `.text-label-sm` + `leading-none` |
+| typography (medium) | `.text-overline-md` + `leading-none` |
+| typography (small) | `.text-overline-sm` + `leading-none` |
 | surface | `var(--bg-surface)` |
 | label | `var(--text-default)` |
 | border (keycap outline + thicker bottom edge) | `var(--border-default)` |
 | shape | `var(--shape-elements)` |
+| elevation (keycap lift) | `var(--shadow-sm)` |
 | spacing (medium) | `var(--spacing-xs)` horizontal padding |
 | spacing (small) | `var(--spacing-xs)` horizontal padding |
 

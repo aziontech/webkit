@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: f50f99e261bca417ba3d448ead73c41cd65bc242d392ebb5cfd4c009f5c3ca16
+checksum: a26f48d7758661352ab7091bf141fc4277be995e1a5f1544ff8d6e8895fd0e8d
 created: 2026-07-23
-last_updated: 2026-07-23
+last_updated: 2026-07-24
 ---
 
 # Command Menu — Component Spec
@@ -101,8 +101,8 @@ packages/webkit/src/components/overlay/command-menu/
 └── command-menu-separator/command-menu-separator.vue
 ```
 
-- `command-menu-input/command-menu-input.vue` — the search field. Context-aware: reads and writes the injected `query` (no consumer `v-model`). Renders a leading search icon and a bare `<input role="combobox">`. Autofocuses when the palette opens. Delegates `ArrowDown`/`ArrowUp`/`Enter`/`Home`/`End` to the context's roving navigation.
-  - Props: `placeholder: string` default `''` — input placeholder text.
+- `command-menu-input/command-menu-input.vue` — the search field. Context-aware: reads and writes the injected `query` (no consumer `v-model`). Builds on the `InputText` field (`size="large"`, full-width) with a leading search icon in its `iconLeft` slot and a decorative `ESC` `Kbd` hint in its `iconRight` slot, so the focus ring sits on the whole bar; the inner `<input>` carries `role="combobox"`. Autofocuses when the palette opens. Delegates `ArrowDown`/`ArrowUp`/`Enter`/`Home`/`End` to the context's roving navigation.
+  - Props: `placeholder: string` default `'Search Everything'` — input placeholder text.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
 - `command-menu-list/command-menu-list.vue` — the scrollable results region. `role="listbox"`; wraps the groups/items and renders the `Empty` part when the filter yields no visible items.
@@ -172,12 +172,13 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 | Region | Token (DESIGN.md) |
 |---|---|
 | panel surface / border / shape / shadow | inherited from `Dialog` (`var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`, `var(--shadow-sm)`) |
-| input divider | `border-b border-[var(--border-default)]` |
-| input text | `var(--text-default)` |
+| input header divider | `border-b border-[var(--border-default)]` |
+| input field chrome (border / surface / text / focus ring) | inherited from `InputText` (`var(--border-default)`, `var(--bg-surface)`, `var(--text-default)`, `var(--ring-color)`) |
 | input placeholder / search icon | `var(--text-muted)` |
 | group heading typography | `.text-overline-sm` + `text-[var(--text-muted)]` |
 | item label typography | `.text-label-sm` + `text-[var(--text-default)]` |
 | item shape | `var(--shape-button)` |
+| item min-height | `min-h-8` (32px) |
 | item spacing.x | `var(--spacing-sm)` |
 | item spacing.y | `var(--spacing-xxs)` |
 | item gap | `var(--spacing-xs)` |
@@ -213,6 +214,7 @@ Composition component with no `kind`/`size` axis; stories forced open (`open` ar
 - WithShortcuts — items carrying `shortcut` hints rendered via `Kbd`. Required because the `shortcut` prop and its `Kbd` rendering are public Item API with no other coverage.
 - Empty — the palette with a query that matches nothing, showing the `<CommandMenu.Empty>` state. Required because the empty state is a distinct visual state (the `empty` state in the States table) with no other coverage.
 - Disabled — a group containing a disabled item alongside enabled ones. Required because `disabled` is public Item API and the disabled row is a distinct state.
+- WithTrigger — a large search `InputText` carrying a ⌘K `Kbd` hint that opens the palette via `v-model:open` (the global `meta+k` shortcut opens it too). Required because every other story forces the palette open; this is the only coverage of the intended controlled entry point — opening from an app affordance (the "Best practices" controlled `v-model:open` pattern) rather than the closed→open transition being pre-set.
 
 ## Constraints — DO NOT
 

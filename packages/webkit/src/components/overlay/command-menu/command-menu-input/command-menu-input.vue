@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
+  import Kbd from '../../../content/kbd/kbd.vue'
+  import InputText from '../../../inputs/input-text/input-text.vue'
   import { useCommandMenuContext } from '../injection-key'
 
   defineOptions({
@@ -14,52 +16,61 @@
       placeholder?: string
     }>(),
     {
-      placeholder: ''
+      placeholder: 'Search Everything'
     }
   )
 
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()
-  const inputRef = ref<HTMLInputElement | null>(null)
+  const fieldRef = ref<InstanceType<typeof InputText> | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__input`
   )
 
-  function onInput(event: Event) {
-    ctx.setQuery((event.target as HTMLInputElement).value)
-  }
-
   watch(
     () => ctx.isOpen.value,
     (open) => {
-      if (open) nextTick(() => inputRef.value?.focus())
+      if (!open) return
+      nextTick(() => {
+        const root = fieldRef.value?.$el as HTMLElement | undefined
+        root?.querySelector('input')?.focus()
+      })
     }
   )
 </script>
 
 <template>
   <div
-    class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-sm)]"
+    class="w-full border-b border-[var(--border-default)] p-[var(--spacing-sm)]"
     :data-testid="testId"
   >
-    <span
-      class="pi pi-search text-[var(--text-muted)]"
-      aria-hidden="true"
-    />
-    <input
-      ref="inputRef"
+    <InputText
+      ref="fieldRef"
       v-bind="attrs"
-      :value="ctx.query.value"
+      :model-value="ctx.query.value"
       :placeholder="placeholder"
+      size="large"
       role="combobox"
-      type="text"
       autocomplete="off"
       :aria-expanded="ctx.isOpen.value"
       :aria-controls="ctx.listId"
-      class="w-full bg-transparent py-[var(--spacing-sm)] text-label-sm text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
-      @input="onInput"
+      @update:model-value="ctx.setQuery"
       @keydown="ctx.onInputKeydown"
-    />
+    >
+      <template #iconLeft>
+        <span
+          class="pi pi-search"
+          aria-hidden="true"
+        />
+      </template>
+      <template #iconRight>
+        <Kbd
+          size="small"
+          aria-hidden="true"
+          >ESC</Kbd
+        >
+      </template>
+    </InputText>
   </div>
 </template>
