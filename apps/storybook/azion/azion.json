@@ -45,7 +45,7 @@
   "workloads": {
     "id": 1773688858,
     "name": "webkit-storybook",
-    "domains": [],
+    "domains": ["webkit.azion.app"],
     "url": "https://iiirmefzrt4.map.azionedge.net",
     "deployment_id": [
       {

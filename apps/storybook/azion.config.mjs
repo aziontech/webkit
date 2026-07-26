@@ -131,6 +131,7 @@ export default {
       name: 'webkit-storybook',
       active: true,
       infrastructure: 1,
+      domains: ['webkit.azion.app'],
       deployments: [
         {
           name: 'webkit-storybook',
