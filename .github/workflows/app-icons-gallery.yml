@@ -10,6 +10,12 @@ on:
 
 permissions: {}
 
+# Never run two deploys at once; a queued run is replaced by a newer one,
+# and an in-flight azion deploy is never cancelled mid-way.
+concurrency:
+  group: deploy-icons-gallery
+  cancel-in-progress: false
+
 jobs:
   deploy:
     name: Deploy
