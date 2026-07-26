@@ -15,8 +15,8 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "pack:check": "! npm pack --dry-run 2>&1 | grep -E '\\.test\\.(ts|js)|src/test/'",
-    "format": "prettier --write src/",
-    "format:check": "prettier --check src/",
+    "format": "prettier --write \"**/*.{js,ts,vue,css,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,vue,css,json,md}\"",
     "lint": "eslint src --ext .js,.ts,.vue --max-warnings 0",
     "lint:fix": "eslint src --ext .js,.ts,.vue --fix",
     "lint:style": "stylelint \"src/**/*.{css,scss,vue}\"",

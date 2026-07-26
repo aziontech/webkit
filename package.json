@@ -42,8 +42,8 @@
     "webkit:test:coverage": "pnpm --filter webkit test:coverage",
     "webkit:test:watch": "pnpm --filter webkit test:watch",
     "webkit:test:ui": "pnpm --filter webkit test:ui",
-    "webkit:format": "prettier --write \"packages/webkit/**/*.{js,ts,vue,css,json,md}\"",
-    "webkit:format:check": "prettier --check \"packages/webkit/**/*.{js,ts,vue,css,json,md}\"",
+    "webkit:format": "pnpm --filter webkit format",
+    "webkit:format:check": "pnpm --filter webkit format:check",
     "security:audit": "pnpm audit",
     "governance": "pnpm run webkit:lint && pnpm run webkit:lint:style && pnpm run webkit:format:check && pnpm run webkit:type-check && pnpm run webkit:type-coverage && pnpm run security:audit"
   },
