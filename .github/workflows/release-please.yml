@@ -1,0 +1,31 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    name: Maintain Release PR / cut releases
+    runs-on: ubuntu-latest
+
+    steps:
+      # Maintains the single Release PR (version bumps + changelogs) while
+      # features land on main; when that PR merges, this same job creates the
+      # per-package tags and GitHub Releases — which trigger the publish
+      # workflows (package-*.yml) via `release: published`.
+      # GIT_PKG (PAT) is required so the Release PR triggers required checks
+      # and the created releases trigger the publish workflows.
+      - name: Run release-please
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: ${{ secrets.GIT_PKG }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
