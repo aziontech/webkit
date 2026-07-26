@@ -8,13 +8,14 @@
 // wired and healthy in this project?" — the fail-open toolkit is otherwise silent about
 // a half-broken install.
 
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
 import { readJsonStrict } from './apply.js'
 import {
   ALL_DEPS,
+  ENTRY_CANDIDATES,
   ESLINT_CONFIG_CANDIDATES,
   firstExisting,
   HUSKY_HOOK_MARKER,
@@ -25,7 +26,6 @@ import {
 } from './plan.js'
 
 const WEBKIT_PKGS = ['@aziontech/webkit']
-const ENTRY_CANDIDATES = ['src/main.ts', 'src/main.js', 'src/main.mts', 'src/main.mjs']
 
 /** Resolve the webkit catalog.json from the consumer project. */
 function resolveCatalog(projectDir) {
@@ -46,6 +46,29 @@ function resolveCatalog(projectDir) {
     }
   }
   return null
+}
+
+const SRC_EXTENSIONS = ['.vue', '.ts', '.js', '.mts', '.mjs', '.tsx', '.jsx']
+
+/** All source files under src/ (recursive; dotfolders skipped). */
+function listSrcFiles(projectDir) {
+  const files = []
+  const walk = (dir) => {
+    let entries = []
+    try {
+      entries = readdirSync(dir, { withFileTypes: true })
+    } catch {
+      return
+    }
+    for (const entry of entries) {
+      if (entry.name.startsWith('.') || entry.name === 'node_modules') continue
+      const path = join(dir, entry.name)
+      if (entry.isDirectory()) walk(path)
+      else if (SRC_EXTENSIONS.some((ext) => entry.name.endsWith(ext))) files.push(path)
+    }
+  }
+  walk(join(projectDir, 'src'))
+  return files
 }
 
 /** Installed version of `dep` under the project's node_modules, or null. */
@@ -114,17 +137,23 @@ export function planDoctor(projectDir) {
         : 'no stylelint config found — run `npx @aziontech/webkit init`.')
   )
 
-  // 3b. The CSS entry must `@source` webkit's source — under Tailwind v4 that is what compiles
-  //     webkit's component classes (node_modules is excluded from auto content-detection).
-  //     Without it the components render unstyled.
+  // 3b. The CSS entry must register webkit's source with Tailwind — under v4 that is what
+  //     compiles webkit's component classes (node_modules is excluded from auto
+  //     content-detection). The current form is `@import '@aziontech/webkit/styles'` (the
+  //     `@source` ships inside the package); a legacy inline `@source …@aziontech/webkit…`
+  //     still counts. Without either, the components render unstyled.
   const cssEntry = read(join(projectDir, 'src/webkit.css'))
-  const hasSource = Boolean(cssEntry && /@source\b[^\n]*@aziontech\/webkit/.test(cssEntry))
+  const hasSource = Boolean(
+    cssEntry &&
+    (/@import\b[^\n]*@aziontech\/webkit\/styles/.test(cssEntry) ||
+      /@source\b[^\n]*@aziontech\/webkit/.test(cssEntry))
+  )
   add(
     'webkit.css @source',
     hasSource ? 'ok' : 'fail',
     hasSource
-      ? 'src/webkit.css @sources @aziontech/webkit'
-      : 'src/webkit.css missing an @source for @aziontech/webkit — component classes will not compile (unstyled UI). Run `npx @aziontech/webkit init`.'
+      ? 'src/webkit.css registers webkit with Tailwind'
+      : "src/webkit.css does not register webkit with Tailwind (`@import '@aziontech/webkit/styles'`) — component classes will not compile (unstyled UI). Run `npx @aziontech/webkit init`."
   )
 
   // 3c. PostCSS config present — it runs Tailwind v4 (`@tailwindcss/postcss`) in the build.
@@ -187,7 +216,45 @@ export function planDoctor(projectDir) {
       styled ? 'ok' : 'warn',
       styled
         ? `imported in ${entry}`
-        : `add \`import './webkit.css'\` (theme tokens + fonts + Tailwind + the webkit @source) to ${entry}.`
+        : `add \`import './webkit.css'\` (theme tokens + fonts + Tailwind + the webkit source registration) to ${entry}.`
+    )
+    // Icon font — only meaningful when the project depends on @aziontech/icons.
+    const declaredIcons = Boolean(
+      pkg?.dependencies?.['@aziontech/icons'] || pkg?.devDependencies?.['@aziontech/icons']
+    )
+    if (declaredIcons) {
+      const iconsImported = src.includes('@aziontech/icons')
+      add(
+        'icons import',
+        iconsImported ? 'ok' : 'warn',
+        iconsImported
+          ? `imported in ${entry}`
+          : `@aziontech/icons is a dependency but not imported — add \`import '@aziontech/icons'\` to ${entry} (icon font).`
+      )
+    }
+  }
+
+  // 7b. Feature-scoped setup: toast. Only reported when the app actually imports the
+  //     toast family — then a region must exist (`.use(ToastPlugin)` in the entry, or a
+  //     manually mounted Toaster) or every `toast('…')` call silently renders nowhere.
+  const srcFiles = listSrcFiles(projectDir)
+  let usesToast = false
+  let toastWired = false
+  for (const file of srcFiles) {
+    const src = read(file) || ''
+    if (src.includes('@aziontech/webkit/toast')) usesToast = true
+    if (/\.use\(\s*ToastPlugin\s*[),]|<Toaster[\s/>]|<Toast\.Toaster/.test(src)) {
+      toastWired = true
+    }
+    if (usesToast && toastWired) break
+  }
+  if (usesToast) {
+    add(
+      'toast setup',
+      toastWired ? 'ok' : 'warn',
+      toastWired
+        ? 'toast region wired (ToastPlugin or a mounted Toaster)'
+        : "toast is imported but no region is wired — toasts will not render. Add `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto createApp() in your entry (the plugin mounts the region automatically)."
     )
   }
 

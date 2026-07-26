@@ -15,6 +15,7 @@
  * and the enter/leave transitions. See `.claude/rules/compound-api.md`.
  */
 import type { App, Plugin } from 'vue'
+import { createVNode, render } from 'vue'
 
 import ToastAction from './toast-action/toast-action.vue'
 import ToastClose from './toast-close/toast-close.vue'
@@ -56,18 +57,40 @@ export type {
   ToastStore,
   ToastType
 } from './use-toast-store'
+type ToasterProps = InstanceType<typeof Toaster>['$props']
+
 /**
  * Two ways to use the toast — both drive the SAME singleton stack:
  *  1. Direct: mount `<Toaster />` once, then `import { toast }`
  *     (or `useToast()`) and call it from anywhere.
- *  2. Service: `app.use(ToastPlugin)` in main.js registers `<Toaster>` globally
+ *  2. Service: `app.use(ToastPlugin)` in main.js MOUNTS the toast region
+ *     automatically (no manual `<Toaster />`), registers `<Toaster>` globally,
  *     and exposes the imperative API as `this.$toast` and via `inject`.
+ *     Region defaults ride the options arg: `app.use(ToastPlugin, { position: 'top-right' })`.
+ *
+ * A manually mounted `<Toaster />` alongside the plugin is harmless: the store
+ * activates only the first registered region, so toasts never render twice.
  */
 export const ToastPlugin: Plugin = {
-  install(app: App) {
+  install(app: App, options?: ToasterProps) {
     app.component('Toaster', Toaster)
     ;(app.config.globalProperties as { $toast: typeof toast }).$toast = toast
     app.provide('webkit-toast', toast)
+    // Auto-mount the region on a dedicated host, sharing the app's context so the
+    // region sees the app's provides/config. SSR-safe: skipped without a DOM.
+    if (typeof document === 'undefined') return
+    const host = document.createElement('div')
+    host.setAttribute('data-webkit-toaster', '')
+    // body can be null when use() runs from a non-deferred head script.
+    ;(document.body ?? document.documentElement).appendChild(host)
+    // The SFC $props type is readonly without an index signature; createVNode wants Data.
+    const vnode = createVNode(Toaster, options as Record<string, unknown> | undefined)
+    vnode.appContext = app._context
+    render(vnode, host)
+    app.onUnmount(() => {
+      render(null, host)
+      host.remove()
+    })
   }
 }
 
