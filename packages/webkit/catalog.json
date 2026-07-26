@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "4.2.0",
+  "webkitVersion": "4.2.1",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -671,7 +671,10 @@
       "--width-md",
       "--width-sm",
       "--width-xl",
-      "--width-xs"
+      "--width-xs",
+      "--z-input-field",
+      "--z-input-overlay",
+      "--z-input-popup"
     ],
     "typography": [
       "text-big-number-lg",
@@ -1408,6 +1411,11 @@
         "--width-sm",
         "--width-xl",
         "--width-xs"
+      ],
+      "z": [
+        "--z-input-field",
+        "--z-input-overlay",
+        "--z-input-popup"
       ]
     },
     "animations": [
