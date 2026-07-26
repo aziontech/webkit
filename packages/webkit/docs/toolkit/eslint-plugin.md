@@ -38,19 +38,20 @@ Nothing out of standard is ever a warning — **every rule in every preset is `e
 
 ## Rules
 
-| Rule                         | What it catches                                                                                                                      |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `valid-import-path`          | An import of a subpath that is **not** a published export of the installed webkit version (with typo / singular↔plural suggestions). |
-| `no-deep-internal-import`    | Reaching into internals — `@aziontech/webkit/src/**` or a path deeper than a published entry point.                                  |
-| `no-barrel-import`           | A barrel import / re-export / dynamic `import()` from the bare package, which defeats tree-shaking.                                  |
-| `no-whole-icon-set-import`   | Importing the entire `@aziontech/icons` set instead of per-icon subpaths.                                                            |
-| `no-hardcoded-color`         | Hardcoded colors / raw palette / raw typography in class & style strings — use design tokens.                                        |
-| `prefer-tree-shakeable-root` | Importing a compound entry (`…/table`) when only the root `<Table>` is used — suggests the tree-shakeable `…/table-root`.            |
-| `no-deprecated-component`    | Importing a component the installed catalog marks `@deprecated` — names the replacement.                                             |
-| `prefer-webkit-component`    | Reaching for a foreign UI library (or hand-rolling) where a webkit component exists.                                                 |
-| `prefer-define-model`        | Hand-rolled `modelValue` prop + `update:modelValue` emit instead of `defineModel`.                                                   |
-| `no-style-override`          | Utility classes that fight a webkit component's internals instead of composing its slots / style seams.                              |
-| `authoring-standards`        | The shipped construction standards (typed props/emits/slots, composable surface, deprecation shape) — same engine the DS hooks run.  |
+| Rule                         | What it catches                                                                                                                                                                                                                                            |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `valid-import-path`          | An import of a subpath that is **not** a published export of the installed webkit version (with typo / singular↔plural suggestions).                                                                                                                       |
+| `no-deep-internal-import`    | Reaching into internals — `@aziontech/webkit/src/**` or a path deeper than a published entry point.                                                                                                                                                        |
+| `no-barrel-import`           | A barrel import / re-export / dynamic `import()` from the bare package, which defeats tree-shaking.                                                                                                                                                        |
+| `no-whole-icon-set-import`   | Importing the entire `@aziontech/icons` set instead of per-icon subpaths.                                                                                                                                                                                  |
+| `no-hardcoded-color`         | Hardcoded colors / raw palette / raw typography in class & style strings — use design tokens.                                                                                                                                                              |
+| `no-hardcoded-motion`        | Motion outside the animation catalog: `duration-[…]`/`ease-[…]`/`animate-[…]`, literal ms / `cubic-bezier()` / `transition: all` in style strings, an `animate-*` name the catalog doesn't ship, or a static motion class with no `motion-reduce:` escape. |
+| `prefer-tree-shakeable-root` | Importing a compound entry (`…/table`) when only the root `<Table>` is used — suggests the tree-shakeable `…/table-root`.                                                                                                                                  |
+| `no-deprecated-component`    | Importing a component the installed catalog marks `@deprecated` — names the replacement.                                                                                                                                                                   |
+| `prefer-webkit-component`    | Reaching for a foreign UI library (or hand-rolling) where a webkit component exists.                                                                                                                                                                       |
+| `prefer-define-model`        | Hand-rolled `modelValue` prop + `update:modelValue` emit instead of `defineModel`.                                                                                                                                                                         |
+| `no-style-override`          | Utility classes that fight a webkit component's internals instead of composing its slots / style seams.                                                                                                                                                    |
+| `authoring-standards`        | The shipped construction standards (typed props/emits/slots, composable surface, deprecation shape) — same engine the DS hooks run.                                                                                                                        |
 
 Deterministic import rules (`valid-import-path`, `no-deep-internal-import`, `no-barrel-import`, `no-whole-icon-set-import`, `prefer-tree-shakeable-root`) are **autofixable**.
 

@@ -3,7 +3,7 @@ name: webkit-usage
 description: Consume the @aziontech/webkit design system correctly. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — how to find the right component, import it with the flat path, style with @aziontech/theme tokens, and keep bundles small.
 scope: general
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-07-22
 enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-performance]
 ---
 
@@ -21,6 +21,12 @@ Do not guess a component name or import path. Look it up.
    - `suggest_component` — describe what you need in plain words; it returns the matching component(s).
    - Import/validation tools — confirm a subpath is real and get the canonical path.
 2. Read the catalog directly. `node_modules/@aziontech/webkit/catalog.json` has an `imports` object; every key is a real published subpath (`button`, `empty-state`, `table`, ...). If a subpath is not a key there, it does not exist.
+
+## App-level setup (`setup` in the catalog)
+
+A few components need **one-time wiring in the app entry before first use** — the catalog entry (and `get_component` on the MCP) carries it in a `setup` field. When `setup` is non-null, apply it BEFORE emitting code that uses the component, and check whether the project already has it (do not duplicate).
+
+- **Toast**: fire-from-anywhere (`toast.success('Saved')`) only renders if a region is mounted. Wire the service once in the entry — `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto `createApp()`; the plugin mounts the region automatically (options: `app.use(ToastPlugin, { position: 'top-right' })`). A manually mounted Toaster also counts — never add both blindly (the store keeps only the first region active, but one wiring is enough). `npx webkit doctor` flags toast usage with no wired region.
 
 ## Must Have
 

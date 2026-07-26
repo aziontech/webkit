@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "separate-pull-requests": false,
+  "packages": {
+    "packages/webkit": {
+      "release-type": "node",
+      "component": "@aziontech/webkit",
+      "include-component-in-tag": true,
+      "include-v-in-tag": false,
+      "tag-separator": "@",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "catalog.json",
+          "jsonpath": "$.webkitVersion"
+        }
+      ]
+    },
+    "packages/theme": {
+      "release-type": "node",
+      "component": "@aziontech/theme",
+      "include-component-in-tag": true,
+      "include-v-in-tag": false,
+      "tag-separator": "@"
+    },
+    "packages/icons": {
+      "release-type": "node",
+      "component": "@aziontech/icons",
+      "include-component-in-tag": true,
+      "include-v-in-tag": false,
+      "tag-separator": "@"
+    }
+  }
+}

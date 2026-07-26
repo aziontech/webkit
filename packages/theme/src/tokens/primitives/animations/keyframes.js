@@ -14,47 +14,63 @@
 export const keyframes = {
   fadeIn: {
     '0%': 'opacity: 0',
-    '100%': 'opacity: 1',
+    '100%': 'opacity: 1'
   },
   fadeOut: {
     '0%': 'opacity: 1',
-    '100%': 'opacity: 0',
+    '100%': 'opacity: 0'
   },
   slideDown: {
     '0%': 'height: 0',
-    '100%': 'height: auto',
+    '100%': 'height: auto'
   },
   blink: {
     '0%, 100%': 'opacity: 1',
-    '50%': 'opacity: 0',
+    '50%': 'opacity: 0'
   },
   highlight: {
     '0%': 'background-color: var(--surface-hover); font-weight: 500',
-    '100%': 'background-color: var(--surface-hover); font-weight: 500',
+    '100%': 'background-color: var(--surface-hover); font-weight: 500'
   },
   shimmer: {
     '0%': 'background-position: 200% 0',
-    '100%': 'background-position: -200% 0',
+    '100%': 'background-position: -200% 0'
   },
   popupScaleIn: {
     '0%': 'opacity: 0; transform: scale(0.95)',
-    '100%': 'opacity: 1; transform: scale(1)',
+    '100%': 'opacity: 1; transform: scale(1)'
   },
   popupScaleOut: {
     '0%': 'opacity: 1; transform: scale(1)',
-    '100%': 'opacity: 0; transform: scale(0.95)',
+    '100%': 'opacity: 0; transform: scale(0.95)'
+  },
+  slideInLeft: {
+    '0%': 'transform: translateX(-100%)',
+    '100%': 'transform: translateX(0)'
+  },
+  slideOutLeft: {
+    '0%': 'transform: translateX(0)',
+    '100%': 'transform: translateX(-100%)'
+  },
+  slideInRight: {
+    '0%': 'transform: translateX(100%)',
+    '100%': 'transform: translateX(0)'
+  },
+  slideOutRight: {
+    '0%': 'transform: translateX(0)',
+    '100%': 'transform: translateX(100%)'
   },
   progressIndeterminate: {
     '0%': 'inset-inline-start: -35%; inset-inline-end: 100%',
     '60%': 'inset-inline-start: 100%; inset-inline-end: -90%',
-    '100%': 'inset-inline-start: 100%; inset-inline-end: -90%',
+    '100%': 'inset-inline-start: 100%; inset-inline-end: -90%'
   },
   progressIndeterminateShort: {
     '0%': 'inset-inline-start: -200%; inset-inline-end: 100%',
     '60%': 'inset-inline-start: 107%; inset-inline-end: -8%',
-    '100%': 'inset-inline-start: 107%; inset-inline-end: -8%',
-  },
-};
+    '100%': 'inset-inline-start: 107%; inset-inline-end: -8%'
+  }
+}
 
 /**
  * Utilities that need CSS properties beyond the `animation` shorthand
@@ -63,7 +79,7 @@ export const keyframes = {
  */
 export const animateExtras = {
   'animate-popup-scale-in': { 'transform-origin': 'var(--popup-origin, center)' },
-  'animate-popup-scale-out': { 'transform-origin': 'var(--popup-origin, center)' },
-};
+  'animate-popup-scale-out': { 'transform-origin': 'var(--popup-origin, center)' }
+}
 
-export default { keyframes, animateExtras };
+export default { keyframes, animateExtras }

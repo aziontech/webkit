@@ -1,0 +1,11 @@
+/*
+ * Registers webkit's source files with Tailwind v4 so the component utility classes
+ * (data-[kind=…]:bg-[var(--…)] …) compile in the consumer's build — node_modules is
+ * excluded from Tailwind's automatic content detection, so without this the components
+ * render UNSTYLED.
+ *
+ * `@source` resolves relative to THIS stylesheet, which lives inside the package, so the
+ * consumer imports it by name (`@import '@aziontech/webkit/styles'`) and never hardcodes
+ * a ../node_modules path — immune to hoisting, workspaces, and pnpm symlink layouts.
+ */
+@source './';
