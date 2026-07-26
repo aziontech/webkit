@@ -1,11 +1,11 @@
 import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, nextTick } from 'vue'
+import { createApp, defineComponent, nextTick } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/toast/Toast.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
-import Toast, { toast, Toaster, useToast, useToastStore } from './index'
+import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
 import ToastAction from './toast-action/toast-action.vue'
 import ToastClose from './toast-close/toast-close.vue'
 import ToastDescription from './toast-description/toast-description.vue'
@@ -321,6 +321,32 @@ describe('Toast (composition + imperative store)', () => {
 
       // The Default story renders a "Show toast" Button trigger in the canvas.
       expect(within(container).getByText('Show toast')).toBeTruthy()
+    })
+  })
+
+  describe('ToastPlugin (service mode)', () => {
+    it('app.use(ToastPlugin) auto-mounts the region, renders toasts, and tears down on unmount', async () => {
+      const app = createApp(defineComponent({ template: '<div />' }))
+      app.use(ToastPlugin, { position: 'bottom-right' })
+      const root = document.createElement('div')
+      document.body.appendChild(root)
+      app.mount(root)
+      await nextTick()
+      await nextTick()
+
+      // The plugin mounted the region itself — no manual Toaster anywhere.
+      expect(document.body.querySelector('[data-webkit-toaster]')).not.toBeNull()
+
+      toast('Raised through the service', { duration: 0 })
+      const region = await regionFor('bottom-right')
+      expect(region).not.toBeNull()
+      expect(within(region!).getByText('Raised through the service')).toBeTruthy()
+
+      // Unmounting the app removes the auto-mounted host (and its region with it).
+      app.unmount()
+      root.remove()
+      await nextTick()
+      expect(document.body.querySelector('[data-webkit-toaster]')).toBeNull()
     })
   })
 })

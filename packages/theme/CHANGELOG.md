@@ -1,3 +1,28 @@
+## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.1.0...@aziontech/theme@4.2.0) (2026-07-23)
+
+
+### Features
+
+* derive spec name from the Figma frame in /spec-create ([#791](https://github.com/aziontech/webkit/issues/791)) ([df59ab4](https://github.com/aziontech/webkit/commit/df59ab42c6ced1414ec0047abdfb9d5f067382ae))
+* **webkit:** overhaul EmptyState (icon tile, size-scaled type, dashed border) + Table empty state ([#786](https://github.com/aziontech/webkit/issues/786)) ([26ae5ee](https://github.com/aziontech/webkit/commit/26ae5ee6f6e878d85df5a3d9247e9936a00d405f))
+
+
+### Bug Fixes
+
+* [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
+
+## [4.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.0.0...@aziontech/theme@4.1.0) (2026-07-23)
+
+
+### Features
+
+* webkit init hardening, toast service auto-mount, and motion token adoption ([#772](https://github.com/aziontech/webkit/issues/772)) ([5534fb2](https://github.com/aziontech/webkit/commit/5534fb2f570729c79728b33b561082b65d5d44af))
+
+
+### Bug Fixes
+
+* bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
+
 ## [2.6.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.5.0...@aziontech/theme@2.6.0) (2026-06-17)
 
 ### Features

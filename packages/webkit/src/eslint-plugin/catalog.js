@@ -92,6 +92,9 @@ function build(json) {
     version: json.webkitVersion || null,
     deniedPrefixes: json.deniedPrefixes || [],
     tokenRules,
+    // Raw token inventory (animations, cssVars, …) for rules that validate against the
+    // catalog (e.g. no-hardcoded-motion checks animate-* names against tokens.animations).
+    tokens: json.tokens || {},
     has: (sub) => set.has(sub),
     getEntry: (sub) => imports[sub] || null,
     /** Nearest published ancestor of a slash path, e.g. `table/x/y` → `table` if published. */
@@ -128,6 +131,7 @@ function empty() {
     version: null,
     deniedPrefixes: [],
     tokenRules: [],
+    tokens: {},
     has: () => false,
     getEntry: () => null,
     nearestPublishedPrefix: () => null,

@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/icons",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Azion icon font library — azionicons + primeicons as CSS/woff2",
   "license": "MIT",
   "repository": {
@@ -21,17 +21,6 @@
   },
   "dependencies": {
     "fantasticon": "^4.1.0"
-  },
-  "devDependencies": {
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^10.0.1",
-    "@semantic-release/exec": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
-    "@semantic-release/npm": "^11.0.0",
-    "@semantic-release/release-notes-generator": "^12.1.0",
-    "conventional-changelog-conventionalcommits": "^7.0.0",
-    "semantic-release": "^23.0.0"
   },
   "main": "./dist/index.css",
   "exports": {
