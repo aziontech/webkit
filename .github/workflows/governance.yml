@@ -2,16 +2,16 @@ name: Governance Pipeline
 
 on:
   pull_request:
-    branches: [main, dev]
+    branches: [main]
   push:
-    branches: [main, dev]
+    branches: [main]
 
 permissions:
   contents: read
   pull-requests: read
 
 # Cancel superseded runs on the same PR (a new push obsoletes the old run's
-# 8 Playwright-sharded jobs); pushes to main/dev queue instead, so every
+# 8 Playwright-sharded jobs); pushes to main queue instead, so every
 # landed commit keeps its own complete status.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
