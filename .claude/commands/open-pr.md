@@ -26,7 +26,7 @@ Run `git diff` (staged + unstaged) and determine, from the change itself:
 If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTING: "one package per commit when possible").
 
 ### 2. Related issue (optional)
-- Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank for `NO-ISSUE`)". Blank → use `[NO-ISSUE]`.
+- Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank for `NO-ISSUE`)". Blank → use `[NO-ISSUE]`. The tag goes **in the subject, after the colon** (`fix(webkit): [NO-ISSUE] …`) — never before the type.
 
 ### 3. Ensure a `main`-based feature branch
 - If on `main` (or not on a `main`-based feature branch), run the `/create-branch` flow (type from step 1, issue from step 2), carrying the working changes over.
@@ -34,8 +34,9 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 
 ### 4. Commit by context
 - **Split shared docs/rules from code.** If the diff mixes code with shared docs/rules/templates (`.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md`, …), tell the user those belong in a **separate PR** and offer to split them out. A component's own new `.specs/<name>.md` stays with the component.
-- Header (commitlint-valid, ≤100 chars): `[<ISSUE|NO-ISSUE>] <type>(<scope>): <subject>`
-  - Breaking: `[…] <type>(<scope>)!: <subject>` plus a `BREAKING CHANGE: <what + migration>` footer.
+- Header (commitlint-valid, ≤100 chars): `<type>(<scope>): [<ISSUE|NO-ISSUE>] <subject>`
+  - Breaking: `<type>(<scope>)!: [<ISSUE|NO-ISSUE>] <subject>` plus a `BREAKING CHANGE: <what + migration>` footer.
+  - The header **starts with the bare type**. A leading ticket tag (`[NO-ISSUE] fix: …`) is unparseable by release-please — the merge would release **nothing** — and commitlint now rejects it.
 - **Never** add a `Co-Authored-By` trailer or any "Generated with Claude" / attribution footer.
 - Let the hooks run — `commit-msg` runs commitlint and the header must pass. **Do not** use `--no-verify` to skip commitlint. If `pre-commit` (lint-staged) fails for an environmental reason, report it and ask the user before retrying.
 
@@ -45,7 +46,7 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 ### 6. Push and open the PR
 - `git push -u origin <branch>`.
 - If a PR already exists for the branch, update it; otherwise `gh pr create --base main --head <branch>`.
-- **Title:** the conventional commit header (or `$ARGUMENTS`). Merges are **squash merges**, so the PR title is the commit release-please parses — keep it commitlint-valid, and put `!` in the title for a breaking change. **Body:** `## Summary` (what + why) and `## Notes`; call out any new dependency and any breaking change; reference the issue. No Figma links, no attribution footer.
+- **Title:** the conventional commit header (normalize `$ARGUMENTS` into that form when given). Merges are **squash merges**, so the PR title is the commit release-please parses — it must **start with the bare type**, ticket tag after the colon (`<type>(<scope>): [<ISSUE|NO-ISSUE>] <subject>`), and put `!` in the title for a breaking change. **Body:** `## Summary` (what + why) and `## Notes`; call out any new dependency and any breaking change; reference the issue. No Figma links, no attribution footer.
 - Report the PR URL.
 
 ## Rules

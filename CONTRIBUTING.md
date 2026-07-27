@@ -118,20 +118,21 @@ Types marked **none** never release on their own — they ride along in the next
 The commit parser accepts these forms:
 
 ```text
-[NO-ISSUE] fix(webkit): commit message
-[ENG-1231] fix(webkit): commit message
+fix(webkit): [NO-ISSUE] commit message
+fix(webkit): [ENG-1231] commit message
 fix(webkit): commit message
 fix: commit message
 ```
 
-- **Ticket prefix** is optional. Use `[NO-ISSUE]` when there is no tracking ticket, or `[<PROJECT-NUMBER>]` (e.g. `[ENG-1231]`) otherwise.
+- **The header starts with the bare type.** A leading ticket tag (`[NO-ISSUE] fix(webkit): …` — the pre-2026-07 convention) is unparseable by release-please, so the merge would silently release **nothing**; commitlint rejects it (`header-no-leading-ticket`).
+- **Ticket tag** is optional and lives at the start of the **subject**, right after the colon. Use `[NO-ISSUE]` when there is no tracking ticket, or `[<PROJECT>-<NUMBER>]` (e.g. `[ENG-1231]`) otherwise. A malformed tag (`[eng-123]`, or no text after it) is rejected (`subject-ticket-tag`). The tag is part of the subject, so it appears in changelogs.
 - **Scope** is the package name without the namespace: `webkit`, `theme`, `icons`.
 - **Breaking changes** use either the `!` marker (`feat(webkit)!: …`) or a `BREAKING CHANGE:` footer.
 
 Examples:
 
-- `[ENG-1231] feat(webkit): add Dropdown component`
-- `[NO-ISSUE] fix(theme): correct --ring-color for dark mode`
+- `feat(webkit): [ENG-1231] add Dropdown component`
+- `fix(theme): [NO-ISSUE] correct --ring-color for dark mode`
 - `chore(icons): regenerate after source update`
 - `feat(webkit)!: drop deprecated tone prop on Button`
 
@@ -145,6 +146,7 @@ A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`
 
 The config also enforces:
 
+- The header **starts with the bare type** — its pattern now matches release-please's parser exactly. A leading `[TICKET]` tag is rejected with a pointer to the new form (`header-no-leading-ticket`), and a subject-leading tag must be well-formed `[NO-ISSUE]` / `[ABC-123]` followed by a space and text (`subject-ticket-tag`).
 - `type` must be one of: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Only `feat` (minor) and `fix` (patch) produce a release; every other type is accepted for hygiene and produces **no** version bump on its own. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release on any type. (`hotfix` was removed 2026-07-26 — release-please never released it; use `fix`.)
 - `type` and `scope` must be lower-case.
 - `subject` cannot be empty.
@@ -179,13 +181,13 @@ Open an [issue](https://github.com/aziontech/webkit/issues/new) with:
 
 ## Releasing
 
-Releases are automated by `semantic-release` on merge to `main`. There is no manual release step. Three workflows publish independently:
+Releases are automated by [release-please](https://github.com/googleapis/release-please) ([`release-please.yml`](./.github/workflows/release-please.yml)) — the Release PR model. Merging `feat` / `fix` / breaking commits to `main` creates or updates a pending **Release PR** (version bumps + changelogs); merging that Release PR creates the per-package tags and GitHub Releases, which trigger the publish workflows via `release: published`:
 
 - [`package-icons.yml`](./.github/workflows/package-icons.yml) → `@aziontech/icons`
 - [`package-theme.yml`](./.github/workflows/package-theme.yml) → `@aziontech/theme`
 - [`package-webkit.yml`](./.github/workflows/package-webkit.yml) → `@aziontech/webkit`
 
-If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
+There is no manual release step. If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
 
 ## Questions
 

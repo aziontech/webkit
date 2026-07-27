@@ -1402,24 +1402,26 @@ Run `pnpm webkit:type-coverage` — `--detail` lists every offending expression.
 
 ## 10. commitlint — commit messages
 
-Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Header anatomy:
+Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Its parser is **not configurable**: the header must start with the bare type, so the ticket tag lives at the start of the **subject**. Header anatomy:
 
 ```
-[ENG-1231] feat(webkit)!: add table export
-└───┬────┘ └─┬┘└──┬───┘│  └──────┬───────┘
-  ticket   type  scope breaking subject
- (optional)      (opt.) (opt.)
+feat(webkit)!: [ENG-1231] add table export
+└─┬┘└──┬───┘│  └───┬────┘ └──────┬───────┘
+type  scope breaking ticket      subject
+      (opt.) (opt.)  (optional)
 ```
 
 **❌ Wrong**
 
 ```text
 Update button styles                      → no type
+[NO-ISSUE] fix(webkit): focus ring        → leading ticket tag releases NOTHING (header-no-leading-ticket)
+ENG-1231 fix(webkit): focus ring          → header must start with the type: fix(webkit): [ENG-1231] focus ring
+fix(webkit): [eng-123] focus ring         → malformed tag; use [NO-ISSUE] or [ABC-123] (subject-ticket-tag)
 Feat(webkit): add table export            → type must be lower-case
 feature(webkit): add table export         → "feature" is not in the enum; use feat
 feat(Webkit): add table export            → scope must be lower-case
 fix(webkit):                              → subject is required
-ENG-1231 fix(webkit): focus ring          → ticket must be bracketed: [ENG-1231]
 fix(webkit): correct the paginator focus ring so that it stays visible in dark mode and in high-contrast themes
                                           → header over 100 chars (111)
 ```
@@ -1428,8 +1430,8 @@ fix(webkit): correct the paginator focus ring so that it stays visible in dark m
 
 ```text
 fix(webkit): correct paginator focus ring
-[ENG-1231] feat(webkit): add table export
-[NO-ISSUE] chore: bump tooling
+feat(webkit): [ENG-1231] add table export
+chore: [NO-ISSUE] bump tooling
 docs: describe compound API exports
 feat(webkit)!: drop tone prop
 ```
