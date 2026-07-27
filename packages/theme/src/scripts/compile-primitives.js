@@ -33,7 +33,7 @@ import { fontWeight } from '../tokens/primitives/typography/font-weight.js'
 import { leading } from '../tokens/primitives/typography/leading.js'
 import { lineHeight } from '../tokens/primitives/typography/line-height.js'
 import { tracking } from '../tokens/primitives/typography/tracking.js'
-import { isTokenRef } from './refs.js'
+import { assertResolvedRefs, isTokenRef } from './refs.js'
 
 /**
  * Returns two trees:
@@ -123,17 +123,18 @@ const varNameFor = (path) => {
   return `--${segments.join('-')}`
 }
 
-export const flatten = (obj, refsTree, prefix = []) => {
+export const flatten = (obj, refsTree, prefix = [], unresolved = null) => {
   const result = {}
   Object.entries(obj).forEach(([key, value]) => {
     const nextPath = [...prefix, key]
     if (isTokenRef(value)) {
       const resolved = resolveRef(value.__ref, refsTree)
+      if (resolved == null) unresolved?.push(`${varNameFor(nextPath)} → ${value.__ref}`)
       result[varNameFor(nextPath)] = resolved ?? value.__ref
       return
     }
     if (value && typeof value === 'object' && !Array.isArray(value)) {
-      Object.assign(result, flatten(value, refsTree, nextPath))
+      Object.assign(result, flatten(value, refsTree, nextPath, unresolved))
       return
     }
     if (typeof value === 'string' || typeof value === 'number') {
@@ -145,7 +146,10 @@ export const flatten = (obj, refsTree, prefix = []) => {
 
 export const compilePrimitivesVars = () => {
   const { refsTree, varsTree } = buildTrees()
-  return flatten(varsTree, refsTree)
+  const unresolved = []
+  const vars = flatten(varsTree, refsTree, [], unresolved)
+  assertResolvedRefs('primitives', unresolved)
+  return vars
 }
 
 export const compilePrimitivesCss = () => {

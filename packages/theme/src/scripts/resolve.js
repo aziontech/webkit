@@ -2,7 +2,7 @@
  * Resolve token refs to CSS variable map.
  */
 
-import { isTokenRef } from './refs.js'
+import { assertResolvedRefs, isTokenRef } from './refs.js'
 
 const getValueByPath = (obj, path) =>
   path.split('.').reduce((acc, key) => {
@@ -12,16 +12,18 @@ const getValueByPath = (obj, path) =>
     return undefined
   }, obj)
 
-const flattenToCssVars = (obj, prefix = []) => {
+const flattenToCssVars = (obj, prefix = [], refKeys = null) => {
   const result = {}
   Object.entries(obj).forEach(([key, value]) => {
     const nextPath = [...prefix, key]
     if (value && typeof value === 'object' && !Array.isArray(value) && !isTokenRef(value)) {
-      Object.assign(result, flattenToCssVars(value, nextPath))
+      Object.assign(result, flattenToCssVars(value, nextPath, refKeys))
       return
     }
     if (isTokenRef(value)) {
-      result[`--${nextPath.join('-')}`] = value.__ref
+      const name = `--${nextPath.join('-')}`
+      refKeys?.add(name)
+      result[name] = value.__ref
       return
     }
     if (typeof value === 'string' || typeof value === 'number') {
@@ -75,33 +77,45 @@ export const resolveRefsToCssVars = (tokens) => {
     return null
   }
 
-  const resolveSemantic = (semantic) => {
-    const flattened = flattenToCssVars(semantic)
+  const resolveSemantic = (semantic, variant, unresolved) => {
+    const refKeys = new Set()
+    const flattened = flattenToCssVars(semantic, [], refKeys)
     return Object.fromEntries(
       Object.entries(flattened).map(([key, value]) => {
         if (value.startsWith('brand.')) {
-          return [key, resolveBrandRef(value) ?? value]
+          const resolved = resolveBrandRef(value)
+          if (resolved == null) unresolved.push(`[${variant}] ${key} → ${value}`)
+          return [key, resolved ?? value]
         }
         if (value.startsWith('primitives.') || value.startsWith('surfacePrimitives.')) {
           const resolved = getValueByPath(baseForResolve, value)
-          return [
-            key,
-            typeof resolved === 'string' || typeof resolved === 'number' ? String(resolved) : value
-          ]
+          const ok = typeof resolved === 'string' || typeof resolved === 'number'
+          if (!ok) unresolved.push(`[${variant}] ${key} → ${value}`)
+          return [key, ok ? String(resolved) : value]
         }
+        // A ref whose prefix no branch above understands is unresolved too.
+        if (refKeys.has(key)) unresolved.push(`[${variant}] ${key} → ${value}`)
         return [key, value]
       })
     )
   }
 
-  return {
+  const unresolved = []
+  const baseRefKeys = new Set()
+  const baseVars = flattenToCssVars(baseForVars, [], baseRefKeys)
+  // Nothing resolves refs in the base tree, so any ref there is a miss.
+  baseRefKeys.forEach((name) => unresolved.push(`${name} → ${baseVars[name]}`))
+
+  const result = {
     light: {
-      ...flattenToCssVars(baseForVars),
-      ...resolveSemantic(lightSemantic)
+      ...baseVars,
+      ...resolveSemantic(lightSemantic, 'light', unresolved)
     },
     dark: {
-      ...flattenToCssVars(baseForVars),
-      ...resolveSemantic(darkSemantic)
+      ...baseVars,
+      ...resolveSemantic(darkSemantic, 'dark', unresolved)
     }
   }
+  assertResolvedRefs('semantic colors', unresolved)
+  return result
 }
