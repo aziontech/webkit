@@ -41,7 +41,7 @@ For a whole component:
 ## Enforcement
 
 - **`webkit/no-deprecated-component`** (ESLint, `error` in `recommended`) flags a consumer importing a component marked deprecated in the catalog.
-- **`.releaserc`** (`releaseRules`) maps the bump; a `BREAKING CHANGE:` footer / `!` produces the `major` (see [`release-types.md`](./release-types.md)).
+- **release-please** maps the bump; a `BREAKING CHANGE:` footer / `!` produces the `major` (see [`release-types.md`](./release-types.md)).
 - **`catalog.json`** records `deprecated` per part; `build-catalog.mjs` stamps it and the MCP surfaces it.
 
 ## Why this rule exists

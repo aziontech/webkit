@@ -15,7 +15,7 @@ You are running `/create-branch`. Cut a fresh branch off the latest `main`, name
 
 1. **Sync.** Run `git fetch origin --prune`.
 2. **Read the change (if any).** If the working tree already has changes, run `git status` and `git diff` and use them to infer the branch `type` and a slug. If the tree is clean, derive both from `$ARGUMENTS` (ask for a 2–4 word description if none was given).
-3. **Type.** Pick from the same enum the repo's commit convention uses: `feat` (default — new component/prop/event/export), `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`.
+3. **Type.** Pick from the same enum the repo's commit convention uses: `feat` (default — new component/prop/event/export), `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Only `feat` / `fix` (or a breaking `!`) actually release (see [`release-types.md`](../rules/release-types.md)).
 4. **Related issue (optional).** Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank for `NO-ISSUE`)". A blank answer is fine — treat it as no issue. Do not block on it.
 5. **Create.**
    - With an issue: `git checkout -b <type>/<ISSUE>-<slug> origin/main`
