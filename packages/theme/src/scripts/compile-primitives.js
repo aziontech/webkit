@@ -3,7 +3,7 @@
  *
  * Imports every primitive module (colors, shape, typography, effects,
  * breakpoints, border-widths, ring-offset), resolves `tokenRef(...)` aliases,
- * and produces a `:root { ... }` block. Mirrors the `injectCssVars` helper
+ * and produces a `:root { ... }` block. Mirrors `injectThemeCss` (compile-theme.js)
  * but for primitives only — no semantic light/dark split.
  */
 

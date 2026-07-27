@@ -105,10 +105,10 @@ const textColor = textSemantic.light.textColorBase // tokenRef('primitives.neutr
 Inject CSS variables dynamically at runtime:
 
 ```javascript
-import { injectCssVars } from '@aziontech/theme/tokens'
+import { injectThemeCss } from '@aziontech/theme/theme-colors'
 
-// Injects <style data-azion-tokens> into document.head
-const styleElement = injectCssVars()
+// Injects <style data-azion-theme> into document.head
+const styleElement = injectThemeCss()
 ```
 
 ## Token Structure
@@ -368,8 +368,6 @@ export { borderSemantic } from './semantic/borders.js'
 
 // Build utilities
 export { tokenRef } from './build/refs.js'
-export { resolveRefsToCssVars } from './build/resolve.js'
-export { createCssVars, cssVarsString, injectCssVars } from './build/css-vars.js'
 export { preset } from './build/preset.js'
 export { tokenUtilities } from './build/tailwind-plugin'
 ```
@@ -382,12 +380,11 @@ Tokens use a reference system for maintainability:
 // Define token reference
 const textColor = tokenRef('primitives.neutral.900')
 
-// Resolve to actual value
-resolveRefsToCssVars({
-  primitives,
-  textSemantic
-})
-// Output: { '--text-textColorBase': '#171717' }
+// The compilers (scripts/compile-primitives.js, scripts/compile-theme.js)
+// resolve refs to literal values at build time — and throw, listing every
+// miss, if a ref does not resolve.
+compileThemeVars()
+// Output: { light: { '--text-default': '#171717', … }, dark: { … } }
 ```
 
 ## Development
@@ -431,7 +428,6 @@ packages/theme/
 │       ├── semantic/      # Context-aware tokens
 │       └── build/         # Build utilities
 │           ├── preset.js
-│           ├── css-vars.js
 │           └── tailwind-plugin
 └── package.json
 ```
