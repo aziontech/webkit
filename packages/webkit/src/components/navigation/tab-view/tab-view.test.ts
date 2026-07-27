@@ -64,6 +64,14 @@ describe('TabView (composition)', () => {
       expect(getByTestId('tv__content')).toBeTruthy()
     })
 
+    // The horizontal-scroll affordance (overflow-x + edge-fade overlays) is a
+    // visual-layer behavior: it depends on Tailwind utilities applying and on real
+    // layout-driven overflow measurement. This unit env deliberately runs no Tailwind
+    // and loads no theme CSS (see src/test/setup.ts), so overflow/scroll cannot be
+    // asserted here — that behavior is covered by the `Scrollable` story's visual
+    // regression snapshots (per .claude/rules/testing.md: pixels & layout live in
+    // Storybook visual, not the unit suite).
+
     it('renders each tab as role=tab and each panel as role=tabpanel', () => {
       const { getAllByRole } = render(Tree)
 

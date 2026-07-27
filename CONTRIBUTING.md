@@ -95,63 +95,65 @@ Opt a story out of the snapshot (it is still visited for render errors) with `pa
 
 ## Commit convention
 
-We use [Conventional Commits](https://www.conventionalcommits.org/). `semantic-release` parses commit messages to compute version bumps and changelogs, so the scope and type matter.
+We use [Conventional Commits](https://www.conventionalcommits.org/). Merges to `main` are **squash merges**, and [release-please](https://github.com/googleapis/release-please) parses the squashed commit — the **PR title** — to compute version bumps and changelogs through its Release PR, so the scope and type matter.
 
-| Type | When | Bump |
+| Type | When | Release |
 |---|---|---|
 | `feat` | New component, new prop/event/slot, new public export | minor |
-| `fix` | Bug fix, accessibility correction, visual regression | patch |
-| `hotfix` | Urgent production fix | patch |
-| `chore` | Tooling, dependency bumps, internal cleanup | patch |
-| `docs` | README, spec body, JSDoc | patch |
-| `style` | Formatting / whitespace only | patch |
-| `refactor` | Internal restructure with no API change | patch |
-| `perf` | Performance improvement | patch |
+| `fix` | Bug fix, accessibility correction, visual regression — anything that must ship (incl. urgent production fixes) | patch |
+| `chore` | Tooling, dependency bumps, internal cleanup | none |
+| `docs` | README, spec body, JSDoc | none |
+| `style` | Formatting / whitespace only | none |
+| `refactor` | Internal restructure with no API change | none |
+| `perf` | Performance improvement (use `fix` if it must ship on its own) | none |
 | `test` | Test additions or changes | none |
 | `ci` | CI/CD pipeline changes | none |
 | `revert` | Reverting a prior commit | none |
 | `!` after type or `BREAKING CHANGE:` footer | Removed/renamed prop, event, slot, or export | major |
 
+Types marked **none** never release on their own — they ride along in the next release cut by a `feat`/`fix`. Release-please cannot be configured to change this mapping; the full contract is [`.claude/rules/release-types.md`](./.claude/rules/release-types.md).
+
 ### Message shape
 
-The commit-analyzer regex in every `.releaserc` accepts these forms:
+The commit parser accepts these forms:
 
 ```text
-[NO-ISSUE] fix(webkit): commit message
-[ENG-1231] fix(webkit): commit message
+fix(webkit): [ENG-1231] commit message
 fix(webkit): commit message
 fix: commit message
 ```
 
-- **Ticket prefix** is optional. Use `[NO-ISSUE]` when there is no tracking ticket, or `[<PROJECT-NUMBER>]` (e.g. `[ENG-1231]`) otherwise.
+- **The header starts with the bare type.** A leading ticket tag (`[NO-ISSUE] fix(webkit): …` — the pre-2026-07 convention) is unparseable by release-please, so the merge would silently release **nothing**; commitlint rejects it (`header-no-leading-ticket`).
+- **Ticket tag** — only when a tracking ticket exists: `[<PROJECT>-<NUMBER>]` (e.g. `[ENG-1231]`) at the start of the **subject**, right after the colon. **No ticket → no tag** — never write `[NO-ISSUE]`; it is dead characters in the 100-char budget and in changelogs, and commitlint rejects it (`subject-ticket-tag`, which also rejects malformed tags like `[eng-123]`). The tag is part of the subject, so it appears in changelogs.
 - **Scope** is the package name without the namespace: `webkit`, `theme`, `icons`.
 - **Breaking changes** use either the `!` marker (`feat(webkit)!: …`) or a `BREAKING CHANGE:` footer.
 
 Examples:
 
-- `[ENG-1231] feat(webkit): add Dropdown component`
-- `[NO-ISSUE] fix(theme): correct --ring-color for dark mode`
+- `feat(webkit): [ENG-1231] add Dropdown component`
+- `fix(theme): correct --ring-color for dark mode`
 - `chore(icons): regenerate after source update`
 - `feat(webkit)!: drop deprecated tone prop on Button`
 
 Stay scoped: one package per commit when possible. Mixed-scope commits should use the broadest affected scope.
 
-> Note: the analyzer also gates by file path. A commit must touch files under `packages/<scope>/` for that package's `semantic-release` workflow to consider it. A `fix(webkit): …` commit that only edits theme files will not trigger a webkit release.
+> Note: release-please also gates by file path. A commit must touch files under `packages/<scope>/` to count toward that package's release. A `fix(webkit): …` commit that only edits theme files will not trigger a webkit release.
 
 ### Local enforcement
 
-A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`](./commitlint.config.js), which mirrors the regex in every `.releaserc`. A malformed message is rejected at commit time with a pointer to the failing rule — you cannot accidentally land a commit that the release analyzer would silently drop.
+A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`](./commitlint.config.js). A malformed message is rejected at commit time with a pointer to the failing rule. Because merges are squashed, keep the **PR title** commitlint-valid too — it is the commit release-please actually parses.
 
 The config also enforces:
 
-- `type` must be one of: `feat`, `fix`, `hotfix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Every type is enumerated in each `.releaserc` `releaseRules`: the first eight produce a release (`feat` → minor, the rest → patch); `test`, `ci`, `revert` carry `release: false` for hygiene and produce no version bump. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release.
+- The header **starts with the bare type** — its pattern now matches release-please's parser exactly. A leading `[TICKET]` tag is rejected with a pointer to the new form (`header-no-leading-ticket`), and a subject-leading tag must be a well-formed real ticket (`[ABC-123]` + space + text); `[NO-ISSUE]` is rejected — omit the tag instead (`subject-ticket-tag`).
+- `type` must be one of: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Only `feat` (minor) and `fix` (patch) produce a release; every other type is accepted for hygiene and produces **no** version bump on its own. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release on any type. (`hotfix` was removed 2026-07-26 — release-please never released it; use `fix`.)
 - `type` and `scope` must be lower-case.
 - `subject` cannot be empty.
 - Header (full first line) cannot exceed 100 characters.
 
 ## Pull requests
 
-- Title mirrors the lead commit (Conventional Commits).
+- Title mirrors the lead commit (Conventional Commits). Merges are squashed, so the **PR title is the commit** release-please parses — its type decides the release.
 - Body explains the **why** — screenshots for visual changes, before/after for behavior changes.
 - Link the spec (`.specs/<name>.md`) for component PRs.
 - One feature per PR. Refactors and cleanups go in their own PRs.
@@ -178,13 +180,13 @@ Open an [issue](https://github.com/aziontech/webkit/issues/new) with:
 
 ## Releasing
 
-Releases are automated by `semantic-release` on merge to `main`. There is no manual release step. Three workflows publish independently:
+Releases are automated by [release-please](https://github.com/googleapis/release-please) ([`release-please.yml`](./.github/workflows/release-please.yml)) — the Release PR model. Merging `feat` / `fix` / breaking commits to `main` creates or updates a pending **Release PR** (version bumps + changelogs); merging that Release PR creates the per-package tags and GitHub Releases, which trigger the publish workflows via `release: published`:
 
 - [`package-icons.yml`](./.github/workflows/package-icons.yml) → `@aziontech/icons`
 - [`package-theme.yml`](./.github/workflows/package-theme.yml) → `@aziontech/theme`
 - [`package-webkit.yml`](./.github/workflows/package-webkit.yml) → `@aziontech/webkit`
 
-If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
+There is no manual release step. If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
 
 ## Questions
 
