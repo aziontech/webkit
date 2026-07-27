@@ -12,7 +12,7 @@ These commands are the **source of truth** for the process. This rule exists onl
 ## Conventions (already embedded in the flows — repeated here because they are non-negotiable)
 
 - **Always base on `main`.** The branch comes off `origin/main`, the PR targets `main`.
-- **Branch name:** kebab-case `<type>/<ISSUE>-<slug>` (or `<type>/<slug>` without an issue). `type` comes from the same Conventional Commits enum ([`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention / [`commitlint.config.js`](../../commitlint.config.js)). That enum must match every `packages/*/.releaserc` — see [`release-types.md`](./release-types.md).
+- **Branch name:** kebab-case `<type>/<ISSUE>-<slug>` (or `<type>/<slug>` without an issue). `type` comes from the same Conventional Commits enum ([`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention / [`commitlint.config.js`](../../commitlint.config.js)). That enum must match the release-please mapping (only `feat`/`fix`/breaking release) — see [`release-types.md`](./release-types.md).
 - **Commit:** Conventional Commits, commitlint-valid header. **Never** add `Co-Authored-By` or an attribution footer ("Generated with Claude"). **Never** `--no-verify` to skip commitlint.
 - **Commit/push only as part of `/open-pr`** — running the command is the authorization. Do not commit unrelated changes.
 - **Shared docs/rules in a separate PR from code.** If the diff mixes code with `.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md`, etc., split them into another PR. A component's own `.specs/<name>.md` stays with the component.
