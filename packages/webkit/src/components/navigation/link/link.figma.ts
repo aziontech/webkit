@@ -9,7 +9,8 @@ figma.connect(FIGMA_NODE, {
     label: figma.string('label'),
     size: figma.enum('Size', {
       Large: 'large',
-      Medium: 'medium'
+      Medium: 'medium',
+      Small: 'small'
     }),
     showIcon: figma.boolean('showIcon')
   },
