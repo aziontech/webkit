@@ -189,3 +189,91 @@ export const Default = {
     }
   }
 }
+
+const SCROLLABLE_TABS = [
+  { value: 'tab-1', label: 'Overview' },
+  { value: 'tab-2', label: 'Metrics' },
+  { value: 'tab-3', label: 'Logs' },
+  { value: 'tab-4', label: 'Settings' },
+  { value: 'tab-5', label: 'Security' },
+  { value: 'tab-6', label: 'Integrations' },
+  { value: 'tab-7', label: 'Billing' },
+  { value: 'tab-8', label: 'Advanced' }
+]
+
+const SCROLLABLE_TEMPLATE = `
+  <TabView.Root v-model:value="active" class="w-full max-w-[20rem]">
+    <TabView.List>
+      <TabView.Item
+        v-for="tab in tabs"
+        :key="tab.value"
+        :value="tab.value"
+        :label="tab.label"
+      />
+    </TabView.List>
+    <TabView.Content class="mt-[var(--spacing-4)]">
+      <TabView.Panel
+        v-for="tab in tabs"
+        :key="tab.value"
+        :value="tab.value"
+        class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+      >
+        <p class="text-body-sm text-[var(--text-default)]">Content for {{ tab.label }}</p>
+      </TabView.Panel>
+    </TabView.Content>
+  </TabView.Root>
+`
+
+const SCROLLABLE_SOURCE = `<TabView.Root v-model:value="active" class="w-full max-w-[20rem]">
+  <TabView.List>
+    <TabView.Item
+      v-for="tab in tabs"
+      :key="tab.value"
+      :value="tab.value"
+      :label="tab.label"
+    />
+  </TabView.List>
+  <TabView.Content class="mt-[var(--spacing-4)]">
+    <TabView.Panel
+      v-for="tab in tabs"
+      :key="tab.value"
+      :value="tab.value"
+      class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+    >
+      <p class="text-body-sm text-[var(--text-default)]">Content for {{ tab.label }}</p>
+    </TabView.Panel>
+  </TabView.Content>
+</TabView.Root>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof TabView.Root>} */
+export const Scrollable = {
+  render: () => ({
+    components,
+    setup() {
+      const active = ref('tab-1')
+      return { active, tabs: SCROLLABLE_TABS }
+    },
+    template: SCROLLABLE_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'More tabs than fit the container: on narrow (mobile) widths the tab bar scrolls horizontally instead of overflowing or wrapping, the scrollbar is hidden, and the active indicator stays aligned while scrolling.'
+      },
+      source: {
+        code: toSfc(
+          [
+            IMPORT,
+            "import { ref } from 'vue'",
+            '',
+            `const tabs = ${JSON.stringify(SCROLLABLE_TABS, null, 2)}`,
+            "const active = ref('tab-1')"
+          ],
+          SCROLLABLE_SOURCE
+        )
+      }
+    }
+  }
+}

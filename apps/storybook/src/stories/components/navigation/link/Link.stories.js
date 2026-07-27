@@ -42,11 +42,11 @@ const meta = {
     },
     size: {
       control: 'select',
-      options: ['large', 'medium'],
-      description: 'Size token. Affects height, gap, and typography.',
+      options: ['small', 'medium', 'large'],
+      description: 'Size token. Affects height and typography, matching Button.',
       table: {
         category: 'props',
-        type: { summary: "'large' | 'medium'" },
+        type: { summary: "'small' | 'medium' | 'large'" },
         defaultValue: { summary: "'large'" }
       }
     },
@@ -127,6 +127,7 @@ export const Default = {
 const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
   <Link size="large" label="Learn More" />
   <Link size="medium" label="Learn More" />
+  <Link size="small" label="Learn More" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
