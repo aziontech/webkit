@@ -1,13 +1,22 @@
 /**
  * Commitlint config — the commit-message gate for the repo.
  * Merges to `main` are squash merges: release-please parses the squashed
- * commit (the PR title), so keep PR titles commitlint-valid too.
+ * commit header (the PR title), and its conventional-commit parser is NOT
+ * configurable — the header must START with the bare type. A leading ticket
+ * tag (`[NO-ISSUE] fix: …`) is unparseable there and silently produces no
+ * release, so that form is rejected here; the ticket tag lives in the
+ * subject instead, right after the colon — and only when a real ticket
+ * exists. No ticket → no tag (never write "[NO-ISSUE]" — dead characters).
  *
  * Accepted forms:
- *   [NO-ISSUE] fix(webkit): commit message
- *   [ENG-1231] fix(webkit): commit message
- *   fix(webkit): commit message
+ *   fix(theme): [ENG-1234] move vue-tsc to devDependencies
+ *   feat(webkit)!: [ENG-999] drop tone prop
+ *   fix(webkit): commit message               ← no ticket → no tag
  *   fix: commit message
+ *
+ * Rejected:
+ *   [NO-ISSUE] fix(webkit): commit message    ← pre-2026-07 form — invisible to release-please
+ *   fix(webkit): [NO-ISSUE] commit message    ← no ticket → omit the tag entirely
  *
  * Breaking changes (produce a major release):
  *   feat(webkit)!: drop tone prop                    ← `!` after type/scope
@@ -24,11 +33,42 @@
 export default {
   parserPreset: {
     parserOpts: {
-      headerPattern: /^(\[[\w-]+\]\s+)?(\w+)(?:\(([\w-]+)\))?!?:\s(.*)$/,
-      headerCorrespondence: ['ticket', 'type', 'scope', 'subject']
+      headerPattern: /^(\w+)(?:\(([\w-]+)\))?!?:\s(.*)$/,
+      headerCorrespondence: ['type', 'scope', 'subject']
     }
   },
+  plugins: [
+    {
+      rules: {
+        // Migration guard: the old `[TICKET] type: …` header parses as no
+        // type at all, so without this rule the only feedback would be a
+        // cryptic "type may not be empty". Point at the new form instead.
+        'header-no-leading-ticket': (parsed) => {
+          const header = parsed.header ?? ''
+          return [
+            !/^\[[^\]]*\]/.test(header),
+            'the ticket tag moved: write "type(scope): [TICKET] subject" — a leading "[TICKET] type: …" header is invisible to release-please and releases nothing'
+          ]
+        },
+        // When the subject opens with a bracket tag, it must be a real,
+        // well-formed ticket ([ABC-123]) followed by a space and the subject
+        // text. No ticket → no tag ("[NO-ISSUE]" is dead characters).
+        'subject-ticket-tag': (parsed) => {
+          const subject = parsed.subject ?? ''
+          if (!subject.startsWith('[')) return [true]
+          if (/^\[NO-ISSUE\]/i.test(subject)) {
+            return [false, 'no tracking ticket → omit the tag entirely (do not write "[NO-ISSUE]")']
+          }
+          return [
+            /^\[[A-Z]+-\d+\] \S/.test(subject),
+            'subject ticket tag must be "[ABC-123]" followed by a space and the subject text'
+          ]
+        }
+      }
+    }
+  ],
   rules: {
+    'header-no-leading-ticket': [2, 'always'],
     'type-empty': [2, 'never'],
     'type-case': [2, 'always', 'lower-case'],
     'type-enum': [
@@ -50,6 +90,7 @@ export default {
     'scope-case': [2, 'always', 'lower-case'],
     'subject-empty': [2, 'never'],
     'subject-case': [0],
+    'subject-ticket-tag': [2, 'always'],
     'header-max-length': [2, 'always', 100]
   }
 }

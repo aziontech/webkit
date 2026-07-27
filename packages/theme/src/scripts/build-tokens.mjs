@@ -29,7 +29,7 @@ import { fileURLToPath } from 'node:url';
 import { animate } from '../tokens/primitives/animations/animate.js';
 import { animateExtras, keyframes } from '../tokens/primitives/animations/keyframes.js';
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
-import { buildTrees, flatten } from './compile-primitives.js';
+import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
@@ -41,10 +41,8 @@ const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl'];
 const kebab = (s) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 
 // ─── 1. Primitives ──────────────────────────────────────────────────────────
-const flattenPrimitives = () => {
-  const { refsTree, varsTree } = buildTrees();
-  return flatten(varsTree, refsTree);
-};
+// compilePrimitivesVars throws on any unresolved tokenRef (see refs.js).
+const flattenPrimitives = () => compilePrimitivesVars();
 
 // ─── 2. Semantic flattening ─────────────────────────────────────────────────
 const splitResponsive = (value) => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  export type LinkSize = 'large' | 'medium'
+  export type LinkSize = 'small' | 'medium' | 'large'
   export type LinkTarget = '_self' | '_blank'
 
   defineOptions({
@@ -46,12 +46,13 @@
 
   const rootClasses = computed(() => [
     'group relative inline-flex shrink-0 items-center whitespace-nowrap',
-    'min-h-10 h-10 rounded-[var(--shape-button)] text-[var(--text-link)]',
+    'rounded-[var(--shape-button)] text-[var(--text-link)]',
     'transition-colors duration-150 ease-out motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]',
-    'data-[size=large]:text-button-lg',
-    'data-[size=medium]:text-button-md',
+    'data-[size=large]:h-10 data-[size=large]:min-h-10 data-[size=large]:text-button-lg',
+    'data-[size=medium]:h-8 data-[size=medium]:min-h-8 data-[size=medium]:text-button-md',
+    'data-[size=small]:h-7 data-[size=small]:min-h-7 data-[size=small]:text-button-md',
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed',
     'data-[disabled]:text-[var(--text-disabled)]! data-[disabled]:[&_.link-ghost]:hidden',
     attrs['class']
@@ -81,7 +82,7 @@
     @click="handleClick"
   >
     <span
-      class="link-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-[var(--spacing-xs)] -right-[var(--spacing-xs)] h-8 rounded-[var(--shape-button)] bg-[var(--bg-surface-raised)] opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 before:bg-[var(--bg-hover)] group-active:before:bg-[var(--bg-active)]"
+      class="link-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-[var(--spacing-xs)] -right-[var(--spacing-xs)] group-data-[size=large]:h-8 group-data-[size=medium]:h-6 group-data-[size=small]:h-5 rounded-[var(--shape-button)] bg-[var(--bg-surface-raised)] opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 before:bg-[var(--bg-hover)] group-active:before:bg-[var(--bg-active)]"
       aria-hidden="true"
       :data-testid="`${testId}__ghost`"
     />
