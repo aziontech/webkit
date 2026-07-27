@@ -361,7 +361,6 @@ describe('Dropdown (compound / overlay)', () => {
     expect(command?.textContent?.trim()).toBe('⌘P')
   })
 
-  // ---- ENG-46740: panel body clips overflowing content ---------------------
   it('clips horizontal overflow on the panel body so content respects the panel rounded borders', async () => {
     const { getByTestId } = render(Host)
     await fireEvent.click(getByTestId('navigation-dropdown__trigger'))
