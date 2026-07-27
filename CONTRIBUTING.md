@@ -118,21 +118,20 @@ Types marked **none** never release on their own — they ride along in the next
 The commit parser accepts these forms:
 
 ```text
-fix(webkit): [NO-ISSUE] commit message
 fix(webkit): [ENG-1231] commit message
 fix(webkit): commit message
 fix: commit message
 ```
 
 - **The header starts with the bare type.** A leading ticket tag (`[NO-ISSUE] fix(webkit): …` — the pre-2026-07 convention) is unparseable by release-please, so the merge would silently release **nothing**; commitlint rejects it (`header-no-leading-ticket`).
-- **Ticket tag** is optional and lives at the start of the **subject**, right after the colon. Use `[NO-ISSUE]` when there is no tracking ticket, or `[<PROJECT>-<NUMBER>]` (e.g. `[ENG-1231]`) otherwise. A malformed tag (`[eng-123]`, or no text after it) is rejected (`subject-ticket-tag`). The tag is part of the subject, so it appears in changelogs.
+- **Ticket tag** — only when a tracking ticket exists: `[<PROJECT>-<NUMBER>]` (e.g. `[ENG-1231]`) at the start of the **subject**, right after the colon. **No ticket → no tag** — never write `[NO-ISSUE]`; it is dead characters in the 100-char budget and in changelogs, and commitlint rejects it (`subject-ticket-tag`, which also rejects malformed tags like `[eng-123]`). The tag is part of the subject, so it appears in changelogs.
 - **Scope** is the package name without the namespace: `webkit`, `theme`, `icons`.
 - **Breaking changes** use either the `!` marker (`feat(webkit)!: …`) or a `BREAKING CHANGE:` footer.
 
 Examples:
 
 - `feat(webkit): [ENG-1231] add Dropdown component`
-- `fix(theme): [NO-ISSUE] correct --ring-color for dark mode`
+- `fix(theme): correct --ring-color for dark mode`
 - `chore(icons): regenerate after source update`
 - `feat(webkit)!: drop deprecated tone prop on Button`
 
@@ -146,7 +145,7 @@ A husky `commit-msg` hook runs `@commitlint/cli` against [`commitlint.config.js`
 
 The config also enforces:
 
-- The header **starts with the bare type** — its pattern now matches release-please's parser exactly. A leading `[TICKET]` tag is rejected with a pointer to the new form (`header-no-leading-ticket`), and a subject-leading tag must be well-formed `[NO-ISSUE]` / `[ABC-123]` followed by a space and text (`subject-ticket-tag`).
+- The header **starts with the bare type** — its pattern now matches release-please's parser exactly. A leading `[TICKET]` tag is rejected with a pointer to the new form (`header-no-leading-ticket`), and a subject-leading tag must be a well-formed real ticket (`[ABC-123]` + space + text); `[NO-ISSUE]` is rejected — omit the tag instead (`subject-ticket-tag`).
 - `type` must be one of: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `revert`. Only `feat` (minor) and `fix` (patch) produce a release; every other type is accepted for hygiene and produces **no** version bump on its own. Breaking changes use the `!` marker or `BREAKING CHANGE:` footer and produce a `major` release on any type. (`hotfix` was removed 2026-07-26 — release-please never released it; use `fix`.)
 - `type` and `scope` must be lower-case.
 - `subject` cannot be empty.
