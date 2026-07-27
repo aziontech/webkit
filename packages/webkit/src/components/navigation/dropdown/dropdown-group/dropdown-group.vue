@@ -49,7 +49,7 @@
       :aria-labelledby="hasLabel ? labelId : undefined"
       :data-testid="testId"
       :data-first="groupIndex === 0 || null"
-      class="flex flex-col data-[first]:pt-0 [&:not([data-first])]:mt-[var(--spacing-xxs)] [&:not([data-first])]:border-t [&:not([data-first])]:border-[var(--border-default)] [&:not([data-first])]:pt-[var(--spacing-xxs)]"
+      class="flex flex-col [&:not([data-first])]:border-t [&:not([data-first])]:border-[var(--border-default)]"
     >
       <div
         v-if="hasLabel"
