@@ -10,6 +10,12 @@ on:
 
 permissions: {}
 
+# Never run two deploys at once; a queued run is replaced by a newer one,
+# and an in-flight azion deploy is never cancelled mid-way.
+concurrency:
+  group: deploy-icons-gallery
+  cancel-in-progress: false
+
 jobs:
   deploy:
     name: Deploy
@@ -27,7 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 'lts/*'
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Setup pnpm
