@@ -1,6 +1,7 @@
 /**
- * Commitlint config — mirrors the headerPattern in every packages/*\/.releaserc
- * so a commit that passes locally also passes the semantic-release analyzer.
+ * Commitlint config — the commit-message gate for the repo.
+ * Merges to `main` are squash merges: release-please parses the squashed
+ * commit (the PR title), so keep PR titles commitlint-valid too.
  *
  * Accepted forms:
  *   [NO-ISSUE] fix(webkit): commit message
@@ -8,16 +9,17 @@
  *   fix(webkit): commit message
  *   fix: commit message
  *
- * Breaking changes (produce a major release per each .releaserc):
+ * Breaking changes (produce a major release):
  *   feat(webkit)!: drop tone prop                    ← `!` after type/scope
  *   feat(webkit): add x\n\nBREAKING CHANGE: drops y  ← footer form
  *
- * Type → release bump (final, after .releaserc rules + preset defaults):
+ * Type → release (stock release-please; not configurable per type):
  *   feat                            → minor
- *   fix | hotfix | chore | docs |
- *   style | refactor | perf         → patch
- *   test | ci | revert              → no release  (allowed for hygiene, no version bump)
+ *   fix                             → patch
+ *   chore | docs | style | refactor |
+ *   perf | test | ci | revert      → no release  (allowed for hygiene, no version bump)
  *   any-type with `!` or BREAKING:  → major
+ * Contract: .claude/rules/release-types.md
  */
 export default {
   parserPreset: {
@@ -35,7 +37,6 @@ export default {
       [
         'feat',
         'fix',
-        'hotfix',
         'chore',
         'docs',
         'style',

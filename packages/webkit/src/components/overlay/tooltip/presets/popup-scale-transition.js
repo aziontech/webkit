@@ -1,7 +1,4 @@
-import {
-  curve,
-  duration
-} from '../../../../../../theme/src/tokens/primitives/animations/animate.js'
+import { curve, duration } from '@aziontech/theme/animations'
 
 /**
  * Tooltip popup motion — timing from `animate.js` (`popup-scale-in` / `popup-scale-out`).

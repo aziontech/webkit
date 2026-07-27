@@ -1,7 +1,4 @@
-import {
-  curve,
-  duration
-} from '../../../../../../theme/src/tokens/primitives/animations/animate.js'
+import { curve, duration } from '@aziontech/theme/animations'
 
 export const POPUP_WIDTH = '--popup-width'
 export const POPUP_HEIGHT = '--popup-height'
