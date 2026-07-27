@@ -1402,7 +1402,7 @@ Run `pnpm webkit:type-coverage` — `--detail` lists every offending expression.
 
 ## 10. commitlint — commit messages
 
-Commits **drive releases**: `semantic-release` parses the same header to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Header anatomy:
+Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Header anatomy:
 
 ```
 [ENG-1231] feat(webkit)!: add table export
@@ -1442,14 +1442,14 @@ feat(webkit): rework button size scale
 BREAKING CHANGE: size "xlarge" was removed; use "large".
 ```
 
-**Type → release bump** (must stay identical across `commitlint.config.js`, every `packages/*/.releaserc`, `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
+**Type → release** (must stay identical across `commitlint.config.js`, release-please's stock semantics (`release-please-config.json`), `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
 
-| Type                                                                | Bump                |
-| ------------------------------------------------------------------- | ------------------- |
-| `feat`                                                              | **minor**           |
-| `fix` · `hotfix` · `chore` · `docs` · `style` · `refactor` · `perf` | **patch**           |
-| `test` · `ci` · `revert`                                            | none (hygiene only) |
-| any type with `!` or `BREAKING CHANGE:` footer                      | **major**           |
+| Type                                                                        | Release             |
+| --------------------------------------------------------------------------- | ------------------- |
+| `feat`                                                                      | **minor**           |
+| `fix`                                                                       | **patch**           |
+| `chore` · `docs` · `style` · `refactor` · `perf` · `test` · `ci` · `revert` | none (hygiene only) |
+| any type with `!` or `BREAKING CHANGE:` footer                              | **major**           |
 
 Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify` ([`git-workflow.md`](../../../.claude/rules/git-workflow.md)).
 
