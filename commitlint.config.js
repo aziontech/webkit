@@ -5,17 +5,18 @@
  * configurable — the header must START with the bare type. A leading ticket
  * tag (`[NO-ISSUE] fix: …`) is unparseable there and silently produces no
  * release, so that form is rejected here; the ticket tag lives in the
- * subject instead, right after the colon.
+ * subject instead, right after the colon — and only when a real ticket
+ * exists. No ticket → no tag (never write "[NO-ISSUE]" — dead characters).
  *
  * Accepted forms:
- *   feat(webkit): [NO-ISSUE] add segmented button component
  *   fix(theme): [ENG-1234] move vue-tsc to devDependencies
  *   feat(webkit)!: [ENG-999] drop tone prop
- *   fix(webkit): commit message
- *   fix: commit message                       ← ticket tag is optional
+ *   fix(webkit): commit message               ← no ticket → no tag
+ *   fix: commit message
  *
- * Rejected (the pre-2026-07 convention — invisible to release-please):
- *   [NO-ISSUE] fix(webkit): commit message
+ * Rejected:
+ *   [NO-ISSUE] fix(webkit): commit message    ← pre-2026-07 form — invisible to release-please
+ *   fix(webkit): [NO-ISSUE] commit message    ← no ticket → omit the tag entirely
  *
  * Breaking changes (produce a major release):
  *   feat(webkit)!: drop tone prop                    ← `!` after type/scope
@@ -49,14 +50,18 @@ export default {
             'the ticket tag moved: write "type(scope): [TICKET] subject" — a leading "[TICKET] type: …" header is invisible to release-please and releases nothing'
           ]
         },
-        // When the subject opens with a bracket tag, it must be well-formed:
-        // [NO-ISSUE] or [ABC-123], followed by a space and the subject text.
+        // When the subject opens with a bracket tag, it must be a real,
+        // well-formed ticket ([ABC-123]) followed by a space and the subject
+        // text. No ticket → no tag ("[NO-ISSUE]" is dead characters).
         'subject-ticket-tag': (parsed) => {
           const subject = parsed.subject ?? ''
           if (!subject.startsWith('[')) return [true]
+          if (/^\[NO-ISSUE\]/i.test(subject)) {
+            return [false, 'no tracking ticket → omit the tag entirely (do not write "[NO-ISSUE]")']
+          }
           return [
-            /^\[(NO-ISSUE|[A-Z]+-\d+)\] \S/.test(subject),
-            'subject ticket tag must be "[NO-ISSUE]" or "[ABC-123]" followed by a space and the subject text'
+            /^\[[A-Z]+-\d+\] \S/.test(subject),
+            'subject ticket tag must be "[ABC-123]" followed by a space and the subject text'
           ]
         }
       }
