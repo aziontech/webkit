@@ -24,7 +24,7 @@ import { ring } from '../tokens/theme/ring.js'
 import { secondary } from '../tokens/theme/secondary.js'
 import { surfaces } from '../tokens/theme/surfaces.js'
 import { text } from '../tokens/theme/text.js'
-import { isTokenRef } from './refs.js'
+import { assertResolvedRefs, isTokenRef } from './refs.js'
 
 const VARIANTS = ['light', 'dark']
 
@@ -58,23 +58,25 @@ const resolveRef = (ref, surfacesResolved) => {
   return null
 }
 
-const resolveGroup = (group, surfacesResolved) => {
+const resolveGroup = (group, surfacesResolved, variant, unresolved) => {
   const result = {}
   Object.entries(group).forEach(([key, value]) => {
     if (!isTokenRef(value)) return
     const resolved = resolveRef(value.__ref, surfacesResolved)
     if (resolved != null) result[`--${key}`] = String(resolved)
+    else unresolved.push(`[${variant}] --${key} → ${value.__ref}`)
   })
   return result
 }
 
-const compileVariant = (variant) => {
+const compileVariant = (variant, unresolved) => {
   // Surfaces resolved first — other groups depend on them.
   const surfacesResolved = {}
   Object.entries(surfaces[variant]).forEach(([key, value]) => {
     if (!isTokenRef(value)) return
     const v = resolveRef(value.__ref, {})
     if (v != null) surfacesResolved[key] = String(v)
+    else unresolved.push(`[${variant}] --${key} → ${value.__ref}`)
   })
 
   const vars = {}
@@ -96,12 +98,16 @@ const compileVariant = (variant) => {
     danger[variant],
     info[variant]
   ]
-  groups.forEach((g) => Object.assign(vars, resolveGroup(g, surfacesResolved)))
+  groups.forEach((g) => Object.assign(vars, resolveGroup(g, surfacesResolved, variant, unresolved)))
   return vars
 }
 
-export const compileThemeVars = () =>
-  Object.fromEntries(VARIANTS.map((v) => [v, compileVariant(v)]))
+export const compileThemeVars = () => {
+  const unresolved = []
+  const vars = Object.fromEntries(VARIANTS.map((v) => [v, compileVariant(v, unresolved)]))
+  assertResolvedRefs('semantic theme tokens', unresolved)
+  return vars
+}
 
 export const compileThemeCss = () => {
   const { light, dark } = compileThemeVars()
