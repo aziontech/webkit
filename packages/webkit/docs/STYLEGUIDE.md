@@ -625,11 +625,12 @@ Internal to the webkit repo — how its own components come to exist.
 
 ## 21. Releases & git
 
-- **Conventional Commits**, with one canonical type→bump set kept identical across
-  commitlint, every package `.releaserc`, CONTRIBUTING, and the PR commands:
-  `feat` → minor · `fix`/`hotfix`/`chore`/`docs`/`style`/`refactor`/`perf` → patch ·
-  `test`/`ci`/`revert` → no release · `!`/`BREAKING CHANGE:` → major.
-- Branch from **`dev`**, PR to `dev`; branches named `<type>/<ISSUE>-<slug>`; shared
+- **Conventional Commits**, with one canonical type→release set kept identical across
+  commitlint, release-please, CONTRIBUTING, and the PR commands:
+  `feat` → minor · `fix` → patch · `chore`/`docs`/`style`/`refactor`/`perf`/`test`/`ci`/`revert`
+  → no release on their own · `!`/`BREAKING CHANGE:` → major. Merges are squashed — the
+  **PR title** is the commit release-please parses.
+- Branch from **`main`**, PR to `main`; branches named `<type>/<ISSUE>-<slug>`; shared
   docs/rules in a separate PR from component code.
 - Reshaping any public contract (prop/event/model/payload) is a **major**, updating spec,
   argTypes, and "Show code" together.
