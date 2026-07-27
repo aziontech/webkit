@@ -122,25 +122,19 @@ describe('InputGroup', () => {
           default: `<span data-testid="addon-l">$</span>${LABELLED_INPUT}`
         }
       })
-      // The group's data-size is the single source of truth read by the addon's
-      // ancestor-scoped Tailwind variants ([[data-size=large]_&]:...). Assert
-      // the contract at the boundary the CSS reads.
       expect(getByTestId('input-group').getAttribute('data-size')).toBe('large')
     })
   })
 
-  describe('focus (single ring — ENG-46733)', () => {
+  describe('focus (single ring)', () => {
     it('suppresses focus rings on all descendant elements so only the group ring shows', () => {
       const { getByTestId } = render(InputGroup, {
         slots: { default: LABELLED_INPUT }
       })
       const root = getByTestId('input-group')
       const cls = root.getAttribute('class') ?? ''
-      // Descendant focus rings (buttons, links, comboboxes, input wrappers) are
-      // neutralized — the group owns the single visible focus indicator.
       expect(cls).toContain('[&_*]:focus-visible:!ring-0')
       expect(cls).toContain('[&_*]:focus-within:!ring-0')
-      // The group itself still renders its focus-within ring.
       expect(cls).toContain('focus-within:ring-2')
     })
   })
