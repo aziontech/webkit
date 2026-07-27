@@ -371,15 +371,11 @@ describe('Dropdown (compound / overlay)', () => {
     ) as HTMLElement
     expect(body).not.toBeNull()
 
-    // Body must declare horizontal clipping and vertical auto-scroll on the
-    // rendered class attribute (ENG-46740). Tests do not run Tailwind, so we
-    // assert the utility classnames that carry the behavior.
     const cls = body.className
     expect(cls).toContain('overflow-x-hidden')
     expect(cls).toContain('overflow-y-auto')
   })
 
-  // ---- ENG-46741: divider between groups is a flush hairline ---------------
   it('separates consecutive groups with a flush hairline (no vertical padding around the divider)', async () => {
     render(Host, { props: { open: true, grouped: true } })
     await waitForOpen(5)
@@ -390,18 +386,14 @@ describe('Dropdown (compound / overlay)', () => {
     const secondCls = groups[1].className
     const firstCls = groups[0].className
 
-    // The divider is a hairline top border applied only to non-first groups.
     expect(secondCls).toContain('[&:not([data-first])]:border-t')
     expect(secondCls).toContain('[&:not([data-first])]:border-[var(--border-default)]')
 
-    // No margin-top and no padding-top around the divider — must be flush.
     expect(secondCls).not.toMatch(/(?:^|[\s:])mt-\[/)
     expect(secondCls).not.toMatch(/(?:^|[\s:])pt-\[/)
     expect(secondCls).not.toMatch(/\[&:not\(\[data-first\]\)\]:mt-/)
     expect(secondCls).not.toMatch(/\[&:not\(\[data-first\]\)\]:pt-/)
 
-    // Both groups share the same base class; first group has data-first so the
-    // non-first variant never applies to it (no border, no spacing).
     expect(firstCls).toBe(secondCls)
     expect(groups[0].hasAttribute('data-first')).toBe(true)
   })
