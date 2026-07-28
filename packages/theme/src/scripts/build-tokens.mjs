@@ -359,6 +359,34 @@ const emitCssV4 = () => {
   ].join('\n');
 };
 
+// ─── 4b. Zero-unit guard ───────────────────────────────────────────────────
+/**
+ * A zero length is unit-less: `0`, never `0px` / `0rem` / `0em`. Stylelint's
+ * `length-zero-no-unit` guards authored CSS, but every token here is authored in
+ * JS and compiled — no linter sees it. So the build itself is the gate: any token
+ * value that emits a zero with a length unit fails `build:tokens` (and therefore
+ * `prepack`), naming the custom property so the fix is obvious.
+ *
+ * Only LENGTH units are listed, matching stylelint's scope — `0%`, `0s`, `0deg`
+ * and `0fr` are legitimate and untouched.
+ */
+const ZERO_WITH_UNIT =
+  /(?<![\w.])0(?:px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/;
+
+const assertNoZeroWithUnit = (cssText) => {
+  const offenders = cssText
+    .split('\n')
+    .map((line, i) => ({ line: line.trim(), n: i + 1 }))
+    .filter(({ line }) => ZERO_WITH_UNIT.test(line));
+  if (offenders.length === 0) return;
+  const detail = offenders.map(({ line, n }) => `  globals.css:${n}  ${line}`).join('\n');
+  throw new Error(
+    `build:tokens — ${offenders.length} token value(s) emit a zero with a unit.\n` +
+      `A zero length takes no unit: write '0', not '0px' / '0rem' / '0em'.\n` +
+      `Fix the token source under src/tokens/, not the generated CSS.\n${detail}`,
+  );
+};
+
 // ─── 5. Write to disk ──────────────────────────────────────────────────────
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distRoot = resolve(__dirname, '../../dist');
@@ -380,6 +408,7 @@ const importIdx = rawCss.indexOf(IMPORT_LINE);
 if (importIdx === -1) throw new Error('emitCssV4 output is missing the tailwind import line');
 const afterImport = importIdx + IMPORT_LINE.length;
 const css = `${rawCss.slice(0, afterImport)}\n\n${fontsCss}${rawCss.slice(afterImport)}`;
+assertNoZeroWithUnit(css);
 await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
 await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');
 console.log(`✓ v4 → ${dir}`);
