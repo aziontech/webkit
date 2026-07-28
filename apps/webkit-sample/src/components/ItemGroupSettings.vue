@@ -90,7 +90,7 @@ const submit = async () => {
       @submit.prevent="submit"
     >
       <div
-        class="flex w-full flex-1 flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+        class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
       >
         <PageHeading
           title-id="profile-title"
@@ -106,7 +106,7 @@ const submit = async () => {
           <legend class="sr-only">Profile settings</legend>
 
           <!-- Section: General — an section title over a flush CardBox. -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               General
             </p>
@@ -177,7 +177,7 @@ const submit = async () => {
           </section>
 
           <!-- Section: Preferences -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Preferences
             </p>
@@ -243,7 +243,7 @@ const submit = async () => {
           </section>
 
           <!-- Section: Notifications -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Notifications
             </p>
@@ -275,7 +275,7 @@ const submit = async () => {
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="flex w-full items-center justify-end gap-[var(--spacing-sm)] p-[var(--spacing-lg)]"
+          class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

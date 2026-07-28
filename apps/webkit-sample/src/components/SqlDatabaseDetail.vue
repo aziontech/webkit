@@ -551,7 +551,7 @@ const runQuery = async () => {
                      a dashed, raised EmptyState surface with a featured icon tile
                      (concentric translucent squares) + one clear action. -->
                 <EmptyState
-                  size="large"
+                  size="medium"
                   title="No tables yet"
                   description="Create your first table to store your data."
                   class="flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"

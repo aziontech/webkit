@@ -192,7 +192,7 @@ const submit = async () => {
       >
       <!-- Scrollable form body -->
       <div
-        class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-1 flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+        class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
       >
         <!-- One flag locks every control while the request is in flight. -->
         <fieldset
@@ -202,7 +202,7 @@ const submit = async () => {
           <legend class="sr-only">Create application</legend>
 
           <!-- Section: General -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               General
             </p>
@@ -244,7 +244,7 @@ const submit = async () => {
           </section>
 
           <!-- Section: Delivery Settings -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Delivery Settings
             </p>
@@ -345,7 +345,7 @@ const submit = async () => {
           </section>
 
           <!-- Section: Origins -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Origins
             </p>
@@ -453,7 +453,7 @@ const submit = async () => {
           </section>
 
           <!-- Section: Cache Expiration Policies -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Cache Expiration Policies
             </p>
@@ -539,7 +539,7 @@ const submit = async () => {
           </section>
 
           <!-- Section: Debug Rules -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Debug Rules
             </p>
@@ -575,7 +575,7 @@ const submit = async () => {
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="flex w-full items-center justify-end gap-[var(--spacing-sm)] p-[var(--spacing-lg)]"
+          class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

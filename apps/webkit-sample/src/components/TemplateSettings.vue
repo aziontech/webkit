@@ -243,7 +243,7 @@ const submit = async () => {
     >
       <!-- Scrollable form body -->
       <div
-        class="flex w-full flex-1 flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+        class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
       >
         <PageHeading
           title-id="template-settings-title"

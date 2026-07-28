@@ -163,7 +163,7 @@
     active="resources"
     :breadcrumb="[{ label: 'Manage Resources' }]"
   >
-    <main class="flex h-full min-h-0 flex-col gap-[var(--spacing-md)]">
+    <main class="flex h-full min-h-0 flex-col gap-[var(--layout-group-gap)]">
       <PageHeading
         title="Manage Resources"
         description="Organize accounts into a hierarchy of brands, resellers, groups, and clients."

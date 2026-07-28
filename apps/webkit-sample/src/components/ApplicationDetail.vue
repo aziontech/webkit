@@ -620,11 +620,11 @@ const submitFunction = async () => {
            Save so the two topic groups commit independently; every other tab
            renders the card + small-PageHeading + borderless Table pattern. Only
            this region scrolls. -->
-      <section class="min-h-0 flex-1 overflow-auto p-[var(--spacing-md)]">
+      <section class="min-h-0 flex-1 overflow-auto">
         <!-- Main Settings — two ItemGroups, each with its own independent Save. -->
         <div
           v-if="activeTab === 'main-settings'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Main Settings"
@@ -634,7 +634,7 @@ const submitFunction = async () => {
 
           <!-- Group 1 — General (section title, its own footer save). -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="General settings"
             novalidate
             @submit.prevent="saveGeneral"
@@ -708,7 +708,7 @@ const submitFunction = async () => {
                force-enabled account-wide, so its Switch stays on and disabled and
                its row carries a lock badge. One footer Save commits the group. -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="Module settings"
             novalidate
             @submit.prevent="saveModules"
@@ -806,7 +806,7 @@ const submitFunction = async () => {
              analog: it simulates a build+deploy and bumps the prefix live. -->
         <div
           v-else-if="activeTab === 'build'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Build"
@@ -827,7 +827,7 @@ const submitFunction = async () => {
 
           <!-- Git repository — the connection (actions/checkout in the workflow).
                A connection, not editable config, so this ItemGroup has no Save. -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Git repository
             </p>
@@ -879,7 +879,7 @@ const submitFunction = async () => {
                whole group locks off `savingBuildConfig` and stays disabled until a
                field diverges from its saved baseline. -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="Build configuration"
             novalidate
             @submit.prevent="saveBuildConfig"
@@ -1008,7 +1008,7 @@ const submitFunction = async () => {
           <!-- Group 2 — Branch control. Its own ItemGroup, its own independent Save
                (locks off `savingBranch`, disabled until `branchDirty`). -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="Branch control"
             novalidate
             @submit.prevent="saveBranch"
@@ -1078,7 +1078,7 @@ const submitFunction = async () => {
           <!-- Variables and secrets — the AZION_* set + app config injected into
                the build. Data-driven Table with a compact header and its action on
                the right (the AccountSettings list pattern), not an italic empty row. -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Variables and secrets
             </p>
@@ -1144,7 +1144,7 @@ const submitFunction = async () => {
 
           <!-- Deployment — the API token + build cache affordances (single values /
                toggles, so an ItemGroup rather than a table). -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Deployment
             </p>
@@ -1210,7 +1210,7 @@ const submitFunction = async () => {
                section carries no group Save. -->
           <section
             v-if="buildCacheEnabled"
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
           >
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Build cache settings
@@ -1351,7 +1351,7 @@ const submitFunction = async () => {
 
         <!-- Every other tab: a small PageHeading OUT of the card (matching Main
              Settings), then the flush CardBox wrapping the borderless Table. -->
-        <div v-else class="flex min-w-0 flex-col gap-[var(--spacing-lg)]">
+        <div v-else class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
           <PageHeading
             :title="activeLabel"
             :description="activeResource.description"

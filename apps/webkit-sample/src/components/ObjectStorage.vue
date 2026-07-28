@@ -104,7 +104,7 @@ const onRowAction = (event, value, row) => {
     active="object-storage"
     :breadcrumb="[{ label: 'Object Storage' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Object Storage"
         description="Store and serve static objects at the edge — buckets, folders, and files accessed by Applications, Functions, and APIs."
@@ -137,7 +137,7 @@ const onRowAction = (event, value, row) => {
         <CardBox class="w-full max-w-[var(--container-2xl)]">
           <template #content>
             <EmptyState
-              size="large"
+              size="medium"
               title="No buckets yet"
               description="Create your first bucket to store and serve static objects at the edge."
               class="flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"

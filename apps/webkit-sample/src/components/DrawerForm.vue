@@ -91,7 +91,7 @@ const submit = async () => {
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Drawer form' }]"
   >
-    <main class="flex h-full flex-col">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Environments"
         description="Drawer form — create a resource in context without leaving the list. The drawer owns one scoped save."
@@ -108,7 +108,7 @@ const submit = async () => {
       </PageHeading>
 
       <!-- The list the drawer creates into -->
-      <ul class="mt-[var(--spacing-md)] flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="flex flex-col gap-[var(--spacing-xs)]">
         <li
           v-for="env in environments"
           :key="env.id"

@@ -349,12 +349,13 @@
         </GlobalHeader.Right>
       </GlobalHeader>
 
-      <!-- Content inset matches the GlobalHeader's edge padding
-           (`--spacing-md`), so the page content aligns with the header's
-           breadcrumb / actions on every breakpoint. -->
+      <!-- Content inset comes from the app's layout tokens (`.layout-boundary`
+           in src/styles/layout.css): `--layout-boundary-inline` on the sides,
+           one step more at the top so the header's bottom border gets air
+           below it. Retuning the boundary is a one-line edit in that file. -->
       <div
         class="min-h-0 flex-1 overflow-auto"
-        :class="{ 'p-[var(--spacing-md)]': padded }"
+        :class="{ 'layout-boundary': padded }"
       >
         <slot />
       </div>

@@ -220,7 +220,7 @@ const breadcrumb = [
         @submit.prevent="submit"
       >
       <div
-        class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-1 flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+        class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
       >
         <div class="flex flex-col gap-[var(--spacing-xxs)]">
           <h1 class="text-heading-xs text-[var(--text-default)]">
@@ -428,7 +428,7 @@ const breadcrumb = [
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="mx-auto flex w-full max-w-[var(--container-7xl)] items-center gap-[var(--spacing-sm)] p-[var(--spacing-lg)]"
+          class="layout-column flex items-center gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             v-if="editing"
