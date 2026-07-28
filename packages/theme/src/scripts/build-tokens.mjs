@@ -29,21 +29,20 @@ import { fileURLToPath } from 'node:url';
 import { animate } from '../tokens/primitives/animations/animate.js';
 import { animateExtras, keyframes } from '../tokens/primitives/animations/keyframes.js';
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
-import { buildTrees, flatten } from './compile-primitives.js';
+import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
+import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
 
 const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl'];
 
 const kebab = (s) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 
 // ─── 1. Primitives ──────────────────────────────────────────────────────────
-const flattenPrimitives = () => {
-  const { refsTree, varsTree } = buildTrees();
-  return flatten(varsTree, refsTree);
-};
+// compilePrimitivesVars throws on any unresolved tokenRef (see refs.js).
+const flattenPrimitives = () => compilePrimitivesVars();
 
 // ─── 2. Semantic flattening ─────────────────────────────────────────────────
 const splitResponsive = (value) => {
@@ -91,6 +90,7 @@ const buildFlatModel = () => ({
   primitives: flattenPrimitives(),
   containers: flattenSingleValue(containersData, (k) => `--container-${k}`),
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
+  zIndices: flattenSingleValue(zIndicesData, (k) => `--${k}`),
   texts: flattenBundle(textsData),
 });
 
@@ -295,6 +295,7 @@ const emitCssV4 = () => {
     ...rootPrimitiveVars,
     ...(m.containers._ || {}),
     ...(m.spacings._ || {}),
+    ...(m.zIndices._ || {}),
     ...(m.texts._ || {}),
   };
 
@@ -303,6 +304,7 @@ const emitCssV4 = () => {
     const merged = {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
+      ...(m.zIndices[bp] || {}),
       ...(m.texts[bp] || {}),
     };
     if (Object.keys(merged).length === 0) continue;

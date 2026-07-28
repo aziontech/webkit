@@ -1,15 +1,15 @@
 {
-  "name": "webkit-storybook-dev",
-  "bucket": "webkit-storybook-dev",
+  "name": "webkit-storybook",
+  "bucket": "webkit-storybook",
   "preset": "html",
   "env": "production",
-  "prefix": "20260622162046",
+  "prefix": "20260316141821",
   "rotate-prefix": true,
   "not-first-run": true,
   "function": [],
   "application": {
-    "id": 1782150864,
-    "name": "webkit-storybook-dev"
+    "id": 1773684562,
+    "name": "webkit-storybook"
   },
   "domain": {
     "id": 0,
@@ -25,39 +25,39 @@
     "created": false,
     "rules": [
       {
-        "id": 605361,
-        "name": "Redirect to index.html",
+        "id": 524999,
+        "name": "Deliver Static Assets and Set Cache Policy",
         "phase": "request"
       },
       {
-        "id": 605360,
-        "name": "Deliver Static Assets and Set Cache Policy",
+        "id": 525000,
+        "name": "Redirect to index.html",
         "phase": "request"
       }
     ]
   },
   "cache-settings": [
     {
-      "id": 297448,
+      "id": 274966,
       "name": "webkit-storybook"
     }
   ],
   "workloads": {
-    "id": 1782157441,
-    "name": "webkit-storybook-dev",
-    "domains": ["dev-webkit.azion.app"],
-    "url": "https://btkatoztsbw.map.azionedge.net",
+    "id": 1773688858,
+    "name": "webkit-storybook",
+    "domains": ["webkit.azion.app"],
+    "url": "https://iiirmefzrt4.map.azionedge.net",
     "deployment_id": [
       {
-        "id": 235035,
-        "name": "webkit-storybook-dev"
+        "id": 186821,
+        "name": "webkit-storybook"
       }
     ]
   },
   "connectors": [
     {
-      "id": 48496,
-      "name": "webkit-storybook-dev"
+      "id": 10418,
+      "name": "webkit-storybook"
     }
   ]
 }

@@ -1,37 +1,56 @@
 name: Publish @aziontech/icons to NPM
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'packages/icons/**'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to publish (e.g. @aziontech/icons@4.2.0)'
+        required: true
+        type: string
 
 permissions: {}
 
+concurrency:
+  group: publish-icons
+  cancel-in-progress: false
+
 jobs:
-  release:
-    name: Semantic Release
+  publish:
+    name: Build and publish to npm
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, '@aziontech/icons@')
 
     permissions:
-      contents: write
-      issues: write
-      pull-requests: write
+      contents: read
       id-token: write
 
     steps:
-      - name: Checkout
+      - name: Resolve release tag
+        id: tag
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          DISPATCH_TAG: ${{ inputs.tag }}
+        run: |
+          TAG="${RELEASE_TAG:-$DISPATCH_TAG}"
+          case "$TAG" in
+            "@aziontech/icons@"*) ;;
+            *) echo "Not a @aziontech/icons release tag: $TAG" >&2; exit 1 ;;
+          esac
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG##*@}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 0
-          token: ${{ secrets.GIT_PKG }}
+          ref: ${{ steps.tag.outputs.tag }}
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 'lts/*'
+          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Setup pnpm
@@ -40,29 +59,23 @@ jobs:
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Semantic Release
+      - name: Verify package.json matches the tag
         working-directory: packages/icons
-        run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_PKG }}
-          NPM_CONFIG_PROVENANCE: true
-
-      - name: Open version bump PR
-        env:
-          GH_TOKEN: ${{ secrets.GIT_PKG }}
+          EXPECTED: ${{ steps.tag.outputs.version }}
         run: |
-          if git diff --quiet -- packages/icons/package.json; then
-            echo "No release published; skipping version bump PR."
-            exit 0
+          ACTUAL="$(node -p "require('./package.json').version")"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "package.json version ($ACTUAL) does not match the tag version ($EXPECTED)." >&2
+            exit 1
           fi
-          VERSION="$(node -p "require('./packages/icons/package.json').version")"
-          BRANCH="ci/release-icons-${VERSION}"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH"
-          git add packages/icons/package.json packages/icons/CHANGELOG.md
-          git commit -m "ci(release): bump @aziontech/icons to ${VERSION}"
-          git push --force origin "$BRANCH"
-          gh pr create --base main --head "$BRANCH" \
-            --title "ci(release): bump @aziontech/icons to ${VERSION} [skip ci]" \
-            --body "Automated follow-up to the @aziontech/icons@${VERSION} release: aligns package.json and CHANGELOG.md with the published version. Release notes: https://github.com/aziontech/webkit/releases/tag/%40aziontech%2Ficons%40${VERSION} — Merging this PR does not trigger a new release (ci commits produce no version bump)."
+
+      - name: Build
+        working-directory: packages/icons
+        run: node scripts/build.mjs
+
+      - name: Publish to npm
+        working-directory: packages/icons
+        run: npm publish ./dist --provenance --access public
+        env:
+          NPM_CONFIG_PROVENANCE: true

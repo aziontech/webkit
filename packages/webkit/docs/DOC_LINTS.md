@@ -1402,24 +1402,27 @@ Run `pnpm webkit:type-coverage` — `--detail` lists every offending expression.
 
 ## 10. commitlint — commit messages
 
-Commits **drive releases**: `semantic-release` parses the same header to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Header anatomy:
+Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Its parser is **not configurable**: the header must start with the bare type, so a ticket tag lives at the start of the **subject** — and only when a real ticket exists (no ticket → no tag). Header anatomy:
 
 ```
-[ENG-1231] feat(webkit)!: add table export
-└───┬────┘ └─┬┘└──┬───┘│  └──────┬───────┘
-  ticket   type  scope breaking subject
- (optional)      (opt.) (opt.)
+feat(webkit)!: [ENG-1231] add table export
+└─┬┘└──┬───┘│  └───┬────┘ └──────┬───────┘
+type  scope breaking ticket      subject
+      (opt.) (opt.)  (optional)
 ```
 
 **❌ Wrong**
 
 ```text
 Update button styles                      → no type
+[NO-ISSUE] fix(webkit): focus ring        → leading ticket tag releases NOTHING (header-no-leading-ticket)
+fix(webkit): [NO-ISSUE] focus ring        → no ticket → omit the tag entirely (subject-ticket-tag)
+ENG-1231 fix(webkit): focus ring          → header must start with the type: fix(webkit): [ENG-1231] focus ring
+fix(webkit): [eng-123] focus ring         → malformed tag; use [ABC-123] (subject-ticket-tag)
 Feat(webkit): add table export            → type must be lower-case
 feature(webkit): add table export         → "feature" is not in the enum; use feat
 feat(Webkit): add table export            → scope must be lower-case
 fix(webkit):                              → subject is required
-ENG-1231 fix(webkit): focus ring          → ticket must be bracketed: [ENG-1231]
 fix(webkit): correct the paginator focus ring so that it stays visible in dark mode and in high-contrast themes
                                           → header over 100 chars (111)
 ```
@@ -1428,8 +1431,8 @@ fix(webkit): correct the paginator focus ring so that it stays visible in dark m
 
 ```text
 fix(webkit): correct paginator focus ring
-[ENG-1231] feat(webkit): add table export
-[NO-ISSUE] chore: bump tooling
+feat(webkit): [ENG-1231] add table export
+chore: bump tooling
 docs: describe compound API exports
 feat(webkit)!: drop tone prop
 ```
@@ -1442,14 +1445,14 @@ feat(webkit): rework button size scale
 BREAKING CHANGE: size "xlarge" was removed; use "large".
 ```
 
-**Type → release bump** (must stay identical across `commitlint.config.js`, every `packages/*/.releaserc`, `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
+**Type → release** (must stay identical across `commitlint.config.js`, release-please's stock semantics (`release-please-config.json`), `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
 
-| Type                                                                | Bump                |
-| ------------------------------------------------------------------- | ------------------- |
-| `feat`                                                              | **minor**           |
-| `fix` · `hotfix` · `chore` · `docs` · `style` · `refactor` · `perf` | **patch**           |
-| `test` · `ci` · `revert`                                            | none (hygiene only) |
-| any type with `!` or `BREAKING CHANGE:` footer                      | **major**           |
+| Type                                                                        | Release             |
+| --------------------------------------------------------------------------- | ------------------- |
+| `feat`                                                                      | **minor**           |
+| `fix`                                                                       | **patch**           |
+| `chore` · `docs` · `style` · `refactor` · `perf` · `test` · `ci` · `revert` | none (hygiene only) |
+| any type with `!` or `BREAKING CHANGE:` footer                              | **major**           |
 
 Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify` ([`git-workflow.md`](../../../.claude/rules/git-workflow.md)).
 

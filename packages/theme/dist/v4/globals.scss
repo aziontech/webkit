@@ -669,6 +669,9 @@
   --spacing-sm: 0.75rem;
   --spacing-xs: 0.5rem;
   --spacing-xxs: 0.25rem;
+  --z-input-field: 1;
+  --z-input-popup: 10;
+  --z-input-overlay: 1100;
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
   --text-big-number-md-font-weight: 400;
@@ -978,13 +981,13 @@
 }
 
 @keyframes popupScaleIn {
-  0% { opacity: 0; transform: scale(0.95); }
+  0% { opacity: 0; transform: scale(0.9); }
   100% { opacity: 1; transform: scale(1); }
 }
 
 @keyframes popupScaleOut {
   0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 0; transform: scale(0.9); }
 }
 
 @keyframes slideInLeft {

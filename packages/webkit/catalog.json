@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "4.2.0",
+  "webkitVersion": "4.2.1",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -671,7 +671,10 @@
       "--width-md",
       "--width-sm",
       "--width-xl",
-      "--width-xs"
+      "--width-xs",
+      "--z-input-field",
+      "--z-input-overlay",
+      "--z-input-popup"
     ],
     "typography": [
       "text-big-number-lg",
@@ -1408,6 +1411,11 @@
         "--width-sm",
         "--width-xl",
         "--width-xs"
+      ],
+      "z": [
+        "--z-input-field",
+        "--z-input-overlay",
+        "--z-input-popup"
       ]
     },
     "animations": [
@@ -5061,6 +5069,13 @@
       "status": "approved",
       "props": [
         {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned."
+        },
+        {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
@@ -5101,6 +5116,13 @@
       "structure": "composition",
       "status": "approved",
       "props": [
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned."
+        },
         {
           "name": "invalid",
           "type": "boolean",
@@ -7835,10 +7857,10 @@
         },
         {
           "name": "size",
-          "type": "'large' | 'medium'",
+          "type": "'small' | 'medium' | 'large'",
           "default": "'large'",
           "required": "no",
-          "doc": "Size token; affects height, gap, and typography."
+          "doc": "Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button."
         },
         {
           "name": "disabled",
@@ -8428,7 +8450,7 @@
           "type": "boolean",
           "default": "true",
           "required": "no",
-          "doc": "Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
+          "doc": "Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
         }
       ],
       "events": [
@@ -8497,7 +8519,7 @@
           "type": "boolean",
           "default": "true",
           "required": "no",
-          "doc": "Light-dismiss: when `true`, the panel closes on outside-click, `Esc`, and focus leaving the panel. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
+          "doc": "Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it."
         }
       ],
       "events": [
