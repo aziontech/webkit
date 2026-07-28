@@ -38,7 +38,7 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
 
 <template>
   <AppLayout active="playground" :padded="false" :breadcrumb="[{ label: 'Playground' }]">
-    <div class="flex w-full flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]">
+    <div class="layout-column layout-boundary flex flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title-id="playground-title"
         title="Playground"
@@ -46,7 +46,7 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
       />
 
       <!-- Section: Appearance — an section title over a flush CardBox. -->
-      <section class="flex flex-col gap-[var(--spacing-sm)]">
+      <section class="flex flex-col gap-[var(--layout-group-gap)]">
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Appearance
         </p>
@@ -116,7 +116,7 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
 
       <!-- Section: Preview — shows the active font/theme across the type scale
            and a few components so the swap is immediately visible. -->
-      <section class="flex flex-col gap-[var(--spacing-sm)]">
+      <section class="flex flex-col gap-[var(--layout-group-gap)]">
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Preview · {{ fontLabel }}
         </p>

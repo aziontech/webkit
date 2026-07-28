@@ -122,7 +122,7 @@ const open = (example) =>
 
 <template>
   <AppLayout active="forms" :breadcrumb="[{ label: 'Forms' }]">
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Forms"
         description="The form types on @aziontech/webkit. Every form shares the same Form Layout (spacing + hierarchy); a type only changes the container and its save model. Open an example to see it in a real flow."

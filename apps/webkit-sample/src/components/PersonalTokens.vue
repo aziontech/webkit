@@ -253,7 +253,7 @@ watch(dialogOpen, (open) => {
 
 <template>
   <AppLayout :breadcrumb="[{ label: 'Personal Tokens' }]">
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Personal Tokens"
         description="Personal tokens securely access your account via API. Create one, then copy it — it's shown only once."

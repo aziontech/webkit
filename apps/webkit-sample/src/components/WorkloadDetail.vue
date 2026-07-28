@@ -229,11 +229,11 @@ const deleteWorkload = () => {
         </div>
       </div>
 
-      <section class="min-h-0 flex-1 overflow-auto p-[var(--spacing-md)]">
+      <section class="min-h-0 flex-1 overflow-auto">
         <!-- ── Overview ── -->
         <div
           v-if="activeTab === 'overview'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <!-- Active Deployment -->
           <CardBox :padded="false">
@@ -373,7 +373,7 @@ const deleteWorkload = () => {
           </CardBox>
 
           <!-- Version History -->
-          <div class="flex flex-col gap-[var(--spacing-sm)]">
+          <div class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Version History
             </p>
@@ -454,7 +454,7 @@ const deleteWorkload = () => {
         <!-- ── Deployments ── -->
         <div
           v-else-if="activeTab === 'deployments'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <CardBox :padded="false">
             <template #content>
@@ -534,7 +534,7 @@ const deleteWorkload = () => {
         <!-- ── Settings ── -->
         <div
           v-else
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Settings"
@@ -543,7 +543,7 @@ const deleteWorkload = () => {
           />
 
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="General settings"
             novalidate
             @submit.prevent="saveSettings"
@@ -595,7 +595,7 @@ const deleteWorkload = () => {
           </form>
 
           <!-- Danger zone -->
-          <div class="flex flex-col gap-[var(--spacing-sm)]">
+          <div class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Danger Zone
             </p>

@@ -70,7 +70,7 @@ const toastFailed = (error) =>
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Dialog form' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Dialog form"
         description="A short, blocking decision in a modal. This destructive delete stays disabled until the exact application name is typed."

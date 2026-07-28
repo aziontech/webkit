@@ -107,7 +107,7 @@ const onRowAction = (event, value, row) => {
     active="sql-database"
     :breadcrumb="[{ label: 'SQL Database' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="SQL Database"
         description="Create and manage SQL Database instances accessed by Applications, Functions, and APIs."
@@ -143,7 +143,7 @@ const onRowAction = (event, value, row) => {
                  dashed, raised EmptyState surface with a featured icon tile
                  (concentric translucent squares) + one clear action. -->
             <EmptyState
-              size="large"
+              size="medium"
               title="No databases yet"
               description="Create your first SQL Database to store relational and vector data at the edge."
               class="flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"

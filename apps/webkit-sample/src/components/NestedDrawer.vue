@@ -187,7 +187,7 @@ const submitChild = async () => {
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Nested drawer' }]"
   >
-    <main class="flex h-full flex-col">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Functions Instances"
         description="Create a resource whose Select needs a related resource that may not exist yet — the quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save."
@@ -204,7 +204,7 @@ const submitChild = async () => {
       </PageHeading>
 
       <!-- The list the parent drawer creates into -->
-      <ul class="mt-[var(--spacing-md)] flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="flex flex-col gap-[var(--spacing-xs)]">
         <li
           v-for="instance in instances"
           :key="instance.id"

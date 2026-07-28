@@ -68,14 +68,14 @@ const saveNotifications = () =>
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'ItemGroup with independent saves' }]"
   >
-    <main class="flex w-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex w-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Preferences"
         description="The same partitioned-save idea as CardBox, on the ItemGroup surface — Item rows in a flush card, each topic group owning its own save, so changes commit in parts."
       />
 
       <!-- Group 1 — General (section title, its own footer save). -->
-      <section class="flex flex-col gap-[var(--spacing-sm)]">
+      <section class="flex flex-col gap-[var(--layout-group-gap)]">
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           General
         </p>
@@ -147,7 +147,7 @@ const saveNotifications = () =>
       </section>
 
       <!-- Group 2 — Notifications (section title, its own footer save). -->
-      <section class="flex flex-col gap-[var(--spacing-sm)]">
+      <section class="flex flex-col gap-[var(--layout-group-gap)]">
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Notifications
         </p>

@@ -511,14 +511,12 @@ const onTeamAction = (event, value, row) => {
 
       <!-- Active tab body: only this region scrolls, between the bar and the
            (Account Settings) Save bar pinned below. -->
-      <div
-        class="flex min-h-0 w-full flex-1 flex-col gap-[var(--spacing-lg)] overflow-auto p-[var(--spacing-md)]"
-      >
+      <div class="min-h-0 flex-1 overflow-auto">
         <!-- Tab: Account Settings — the account identity form. One flag locks
              every control while the request is in flight. -->
         <form
           v-if="activeTab === 'account-settings'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
           aria-label="Account settings"
           novalidate
           @submit.prevent="submit"
@@ -535,7 +533,7 @@ const onTeamAction = (event, value, row) => {
             <legend class="sr-only">Account settings</legend>
 
             <!-- Section: General -->
-            <section class="flex flex-col gap-[var(--spacing-sm)]">
+            <section class="flex flex-col gap-[var(--layout-group-gap)]">
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 General
               </p>
@@ -582,7 +580,7 @@ const onTeamAction = (event, value, row) => {
             </section>
 
             <!-- Section: Company Information -->
-            <section class="flex flex-col gap-[var(--spacing-sm)]">
+            <section class="flex flex-col gap-[var(--layout-group-gap)]">
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 Company Information
               </p>
@@ -650,7 +648,7 @@ const onTeamAction = (event, value, row) => {
             </section>
 
             <!-- Section: Address Information -->
-            <section class="flex flex-col gap-[var(--spacing-sm)]">
+            <section class="flex flex-col gap-[var(--layout-group-gap)]">
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 Address Information
               </p>
@@ -798,7 +796,7 @@ const onTeamAction = (event, value, row) => {
             </section>
 
             <!-- Section: Login Settings -->
-            <section class="flex flex-col gap-[var(--spacing-sm)]">
+            <section class="flex flex-col gap-[var(--layout-group-gap)]">
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 Login Settings
               </p>
@@ -860,7 +858,7 @@ const onTeamAction = (event, value, row) => {
             </section>
 
             <!-- Section: Source Control -->
-            <section class="flex flex-col gap-[var(--spacing-sm)]">
+            <section class="flex flex-col gap-[var(--layout-group-gap)]">
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 Source Control
               </p>
@@ -914,7 +912,7 @@ const onTeamAction = (event, value, row) => {
 
             <!-- Section: Appearance — live preferences (font + theme), outside the
                  save scope. They drive the app singletons and persist on change. -->
-            <section class="flex flex-col gap-[var(--spacing-sm)]">
+            <section class="flex flex-col gap-[var(--layout-group-gap)]">
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 Appearance
               </p>
@@ -982,7 +980,7 @@ const onTeamAction = (event, value, row) => {
             </section>
 
             <!-- Section: Danger Zone -->
-            <section class="flex flex-col gap-[var(--spacing-sm)]">
+            <section class="flex flex-col gap-[var(--layout-group-gap)]">
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--danger-contrast)]">
                 Danger Zone
               </p>
@@ -1012,7 +1010,7 @@ const onTeamAction = (event, value, row) => {
         <!-- Tab: Users Management — the teammates with access to this account. -->
         <section
           v-else-if="activeTab === 'users-management'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Users Management"
@@ -1092,7 +1090,7 @@ const onTeamAction = (event, value, row) => {
         <!-- Tab: Billing — current plan, payment method, and invoices. -->
         <section
           v-else-if="activeTab === 'billing'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Billing"
@@ -1100,7 +1098,7 @@ const onTeamAction = (event, value, row) => {
           />
 
           <!-- Current plan -->
-          <div class="flex flex-col gap-[var(--spacing-sm)]">
+          <div class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Current Plan
             </p>
@@ -1142,7 +1140,7 @@ const onTeamAction = (event, value, row) => {
           </div>
 
           <!-- Payment method -->
-          <div class="flex flex-col gap-[var(--spacing-sm)]">
+          <div class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Payment Method
             </p>
@@ -1177,7 +1175,7 @@ const onTeamAction = (event, value, row) => {
           </div>
 
           <!-- Invoices -->
-          <div class="flex flex-col gap-[var(--spacing-sm)]">
+          <div class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Invoices
             </p>
@@ -1213,7 +1211,7 @@ const onTeamAction = (event, value, row) => {
         <!-- Tab: Credentials — the account's API tokens. -->
         <section
           v-else-if="activeTab === 'credentials'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Credentials"
@@ -1288,7 +1286,7 @@ const onTeamAction = (event, value, row) => {
         <!-- Tab: Activity History — the recent account audit log. -->
         <section
           v-else-if="activeTab === 'activity-history'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Activity History"
@@ -1322,7 +1320,7 @@ const onTeamAction = (event, value, row) => {
         <!-- Tab: Teams Permissions — the account's teams and their access. -->
         <section
           v-else-if="activeTab === 'teams-permissions'"
-          class="flex min-w-0 flex-col gap-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
         >
           <PageHeading
             title="Teams Permissions"
@@ -1457,7 +1455,7 @@ const onTeamAction = (event, value, row) => {
         class="shrink-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="flex w-full items-center justify-end gap-[var(--spacing-sm)] p-[var(--spacing-lg)]"
+          class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

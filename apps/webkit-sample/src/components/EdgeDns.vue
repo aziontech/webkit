@@ -132,7 +132,7 @@ const onRowAction = (event, value, row) => {
     active="edge-dns"
     :breadcrumb="[{ label: 'Edge DNS' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Edge DNS"
         description="Host authoritative DNS zones and serve authoritative DNS responses used to resolve domain names."
@@ -170,7 +170,7 @@ const onRowAction = (event, value, row) => {
         <CardBox class="w-full max-w-[var(--container-2xl)]">
           <template #content>
             <EmptyState
-              size="large"
+              size="medium"
               title="No zones yet"
               description="Create your first zone to host a domain on Azion's authoritative DNS."
               class="flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"

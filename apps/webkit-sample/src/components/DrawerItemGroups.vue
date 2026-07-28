@@ -145,7 +145,7 @@ const submit = async () => {
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'ItemGroups in a Drawer' }]"
   >
-    <main class="flex h-full flex-col">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Services"
         description="Drawer create whose body is several section-titled ItemGroup sections — the settings layout, in context, with one scoped save."
@@ -162,7 +162,7 @@ const submit = async () => {
       </PageHeading>
 
       <!-- The list the drawer creates into -->
-      <ul class="mt-[var(--spacing-md)] flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="flex flex-col gap-[var(--spacing-xs)]">
         <li
           v-for="service in services"
           :key="service.id"

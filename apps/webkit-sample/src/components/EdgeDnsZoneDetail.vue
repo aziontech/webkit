@@ -247,12 +247,12 @@ const onRecordAction = (event, value, row) => {
            independent Save. Only this region scrolls. -->
       <section
         v-if="activeTab === 'main-settings'"
-        class="min-h-0 flex-1 overflow-auto p-[var(--spacing-md)]"
+        class="min-h-0 flex-1 overflow-auto"
       >
-        <div class="flex min-w-0 flex-col gap-[var(--spacing-lg)]">
+        <div class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
           <!-- Group: General (own Save) -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="General settings"
             novalidate
             @submit.prevent="saveGeneral"
@@ -316,7 +316,7 @@ const onRecordAction = (event, value, row) => {
 
           <!-- Group: Domain (own Save) -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="Domain settings"
             novalidate
             @submit.prevent="saveDomain"
@@ -382,7 +382,7 @@ const onRecordAction = (event, value, row) => {
           <!-- Group: Configure your Nameserver (read-only copy-out — no Save).
                Each value is an InputText with a copy IconButton as an InputGroup
                addon. -->
-          <section class="flex flex-col gap-[var(--spacing-sm)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Configure your Nameserver
             </p>
@@ -428,7 +428,7 @@ const onRecordAction = (event, value, row) => {
           <!-- Group: DNSSEC (own Save on the enablement toggle; key material is
                read-only copy-out via InputGroup addons). -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="DNSSEC settings"
             novalidate
             @submit.prevent="saveDnssec"
@@ -586,7 +586,7 @@ const onRecordAction = (event, value, row) => {
 
           <!-- Group: Status (own Save) -->
           <form
-            class="flex flex-col gap-[var(--spacing-sm)]"
+            class="flex flex-col gap-[var(--layout-group-gap)]"
             aria-label="Status settings"
             novalidate
             @submit.prevent="saveStatus"
@@ -639,100 +639,102 @@ const onRecordAction = (event, value, row) => {
       </section>
 
       <!-- Records — a flush borderless Table; the create action is on the tab bar. -->
-      <section v-else class="min-h-0 flex-1 overflow-auto p-[var(--spacing-md)]">
-        <CardBox :padded="false">
-          <template #content>
-            <Table
-              :data="records"
-              :columns="recordColumns"
-              row-key="id"
-              enable-sorting
-              paginated
-              :page-size="8"
-              :border="false"
-            >
-              <template #toolbar>
-                <div class="flex w-full items-center gap-[var(--spacing-xs)]">
-                  <Table.Search
-                    size="large"
-                    placeholder="Search records..."
-                    class="flex-1"
-                  />
-                  <Table.RefreshButton />
-                  <Table.Export />
-                  <Table.ColumnSelector />
-                </div>
-              </template>
+      <section v-else class="min-h-0 flex-1 overflow-auto">
+        <div class="layout-column layout-boundary">
+          <CardBox :padded="false">
+            <template #content>
+              <Table
+                :data="records"
+                :columns="recordColumns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="8"
+                :border="false"
+              >
+                <template #toolbar>
+                  <div class="flex w-full items-center gap-[var(--spacing-xs)]">
+                    <Table.Search
+                      size="large"
+                      placeholder="Search records..."
+                      class="flex-1"
+                    />
+                    <Table.RefreshButton />
+                    <Table.Export />
+                    <Table.ColumnSelector />
+                  </div>
+                </template>
 
-              <template #cell-name="{ value }">
-                <span class="truncate text-label-sm text-[var(--text-default)]">{{ value }}</span>
-              </template>
+                <template #cell-name="{ value }">
+                  <span class="truncate text-label-sm text-[var(--text-default)]">{{ value }}</span>
+                </template>
 
-              <template #cell-id="{ value }">
-                <span class="text-label-code-sm text-[var(--text-muted)]">{{ value }}</span>
-              </template>
+                <template #cell-id="{ value }">
+                  <span class="text-label-code-sm text-[var(--text-muted)]">{{ value }}</span>
+                </template>
 
-              <template #cell-type="{ value }">
-                <Tag :label="value" severity="secondary" size="medium" />
-              </template>
+                <template #cell-type="{ value }">
+                  <Tag :label="value" severity="secondary" size="medium" />
+                </template>
 
-              <template #cell-value="{ value }">
-                <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
-                  <span class="min-w-0 truncate font-code text-label-code-sm text-[var(--text-default)]">
-                    {{ value }}
-                  </span>
-                  <CopyButton
-                    kind="outlined"
-                    :value="value"
-                    aria-label="Copy record value"
-                    class="ml-auto shrink-0"
-                    @click.stop
-                  />
-                </div>
-              </template>
+                <template #cell-value="{ value }">
+                  <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <span class="min-w-0 truncate font-code text-label-code-sm text-[var(--text-default)]">
+                      {{ value }}
+                    </span>
+                    <CopyButton
+                      kind="outlined"
+                      :value="value"
+                      aria-label="Copy record value"
+                      class="ml-auto shrink-0"
+                      @click.stop
+                    />
+                  </div>
+                </template>
 
-              <template #cell-policy="{ value }">
-                <span class="text-body-sm text-[var(--text-muted)]">{{ policyLabel(value) }}</span>
-              </template>
+                <template #cell-policy="{ value }">
+                  <span class="text-body-sm text-[var(--text-muted)]">{{ policyLabel(value) }}</span>
+                </template>
 
-              <template #cell-weight="{ value }">
-                <span class="text-body-sm text-[var(--text-muted)]">{{ value ?? "—" }}</span>
-              </template>
+                <template #cell-weight="{ value }">
+                  <span class="text-body-sm text-[var(--text-muted)]">{{ value ?? "—" }}</span>
+                </template>
 
-              <template #cell-description="{ value }">
-                <span class="truncate text-body-sm text-[var(--text-muted)]">{{ value || "—" }}</span>
-              </template>
+                <template #cell-description="{ value }">
+                  <span class="truncate text-body-sm text-[var(--text-muted)]">{{ value || "—" }}</span>
+                </template>
 
-              <template #cell-actions="{ row }">
-                <Dropdown
-                  placement="bottom-end"
-                  @select="(event, value) => onRecordAction(event, value, row)"
-                >
-                  <Dropdown.Trigger>
-                    <Tooltip text="Row actions">
-                      <IconButton
-                        icon="pi pi-ellipsis-h"
-                        kind="outlined"
-                        size="small"
-                        aria-label="Row actions"
-                      />
-                    </Tooltip>
-                  </Dropdown.Trigger>
-                  <Dropdown.Group>
-                    <Dropdown.Option value="edit" label="Edit">
-                      <template #left><i class="pi pi-pencil" aria-hidden="true" /></template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option value="delete" label="Delete">
-                      <template #left><i class="pi pi-trash" aria-hidden="true" /></template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                </Dropdown>
-              </template>
-            </Table>
-          </template>
-        </CardBox>
+                <template #cell-actions="{ row }">
+                  <Dropdown
+                    placement="bottom-end"
+                    @select="(event, value) => onRecordAction(event, value, row)"
+                  >
+                    <Dropdown.Trigger>
+                      <Tooltip text="Row actions">
+                        <IconButton
+                          icon="pi pi-ellipsis-h"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Row actions"
+                        />
+                      </Tooltip>
+                    </Dropdown.Trigger>
+                    <Dropdown.Group>
+                      <Dropdown.Option value="edit" label="Edit">
+                        <template #left><i class="pi pi-pencil" aria-hidden="true" /></template>
+                      </Dropdown.Option>
+                    </Dropdown.Group>
+                    <Dropdown.Group>
+                      <Dropdown.Option value="delete" label="Delete">
+                        <template #left><i class="pi pi-trash" aria-hidden="true" /></template>
+                      </Dropdown.Option>
+                    </Dropdown.Group>
+                  </Dropdown>
+                </template>
+              </Table>
+            </template>
+          </CardBox>
+        </div>
       </section>
     </main>
 

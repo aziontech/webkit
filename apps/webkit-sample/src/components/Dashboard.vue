@@ -163,251 +163,249 @@ const openZoneActions = (event, row) =>
 
 <template>
   <AppLayout active="home" :breadcrumb="[{ label: 'Home' }]">
-    <main class="min-w-0 flex-1">
-      <div class="flex flex-col gap-[var(--spacing-lg)] xl:flex-row xl:items-start">
-        <!-- Primary column -->
-        <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-lg)]">
-          <!-- Metrics -->
-          <section class="flex flex-col gap-[var(--spacing-md)]">
-            <div class="flex items-center gap-[var(--spacing-xs)]">
-              <h2 class="text-heading-xs text-[var(--text-default)]">Metrics</h2>
-              <IconButton
-                icon="pi pi-question-circle"
-                kind="transparent"
-                size="small"
-                aria-label="About metrics"
-              />
-            </div>
+    <main class="layout-column flex flex-col gap-[var(--layout-section-gap)] xl:flex-row xl:items-start">
+      <!-- Primary column -->
+      <div class="flex min-w-0 flex-1 flex-col gap-[var(--layout-section-gap)]">
+        <!-- Metrics -->
+        <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <div class="flex items-center gap-[var(--spacing-xs)]">
+            <h2 class="text-heading-xs text-[var(--text-default)]">Metrics</h2>
+            <IconButton
+              icon="pi pi-question-circle"
+              kind="transparent"
+              size="small"
+              aria-label="About metrics"
+            />
+          </div>
 
-            <div
-              class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 xl:grid-cols-4"
-            >
-              <CardBox v-for="metric in metrics" :key="metric.label">
-                <template #content>
-                  <div class="flex flex-col gap-[var(--spacing-md)]">
-                    <div class="flex items-center gap-[var(--spacing-xs)]">
-                      <span class="min-w-0 truncate text-label-sm text-[var(--text-default)]">
-                        {{ metric.label }}
-                      </span>
-                      <Tooltip :text="metric.hint">
-                        <i
-                          class="pi pi-info-circle text-body-sm text-[var(--text-muted)]"
-                          aria-hidden="true"
-                        />
-                      </Tooltip>
-                    </div>
-                    <div class="flex items-baseline gap-[var(--spacing-xxs)]">
-                      <span
-                        class="text-big-number-sm tabular-nums text-[var(--text-default)]"
-                      >
-                        {{ metric.value }}
-                      </span>
-                      <span
-                        v-if="metric.unit"
-                        class="text-body-xs text-[var(--text-muted)]"
-                      >
-                        {{ metric.unit }}
-                      </span>
-                    </div>
-                  </div>
-                </template>
-              </CardBox>
-            </div>
-
-            <p class="text-pretty text-right text-body-xxs text-[var(--text-muted)]">
-              {{ metricsRange }}
-            </p>
-          </section>
-
-          <!-- Resources -->
-          <section class="flex flex-col gap-[var(--spacing-md)]">
-            <div class="flex items-center gap-[var(--spacing-xs)]">
-              <h2 class="text-heading-xs text-[var(--text-default)]">Resources</h2>
-              <IconButton
-                icon="pi pi-question-circle"
-                kind="transparent"
-                size="small"
-                aria-label="About resources"
-              />
-            </div>
-
-            <CardBox :padded="false">
+          <div
+            class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 xl:grid-cols-4"
+          >
+            <CardBox v-for="metric in metrics" :key="metric.label">
               <template #content>
-                <Table :data="resources" :columns="resourceColumns" row-key="id">
-                  <template #cell-domain="{ value }">
-                    <!-- Domain link (truncates) + external-redirect arrow; copy button pinned to the cell's right edge so it aligns across rows. -->
-                    <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
-                      <a
-                        :href="`https://${value}`"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
-                        @click.stop
-                      >
-                        <span class="truncate">{{ value }}</span>
-                        <i class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]" aria-hidden="true" />
-                      </a>
-                      <CopyButton
-                        kind="outlined"
-                        :value="value"
-                        aria-label="Copy domain name"
-                        class="ml-auto shrink-0"
-                      />
-                    </div>
-                  </template>
-                  <template #cell-status="{ value }">
-                    <Tag :label="value" severity="success" size="small" />
-                  </template>
-                  <template #cell-lastModified="{ value, row }">
-                    <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
-                  </template>
-                  <template #cell-actions="{ row }">
-                    <Tooltip text="Zone actions">
-                      <IconButton
-                        icon="pi pi-ellipsis-h"
-                        kind="transparent"
-                        size="small"
-                        aria-label="Zone actions"
-                        @click="(event) => openZoneActions(event, row)"
+                <div class="flex flex-col gap-[var(--spacing-md)]">
+                  <div class="flex items-center gap-[var(--spacing-xs)]">
+                    <span class="min-w-0 truncate text-label-sm text-[var(--text-default)]">
+                      {{ metric.label }}
+                    </span>
+                    <Tooltip :text="metric.hint">
+                      <i
+                        class="pi pi-info-circle text-body-sm text-[var(--text-muted)]"
+                        aria-hidden="true"
                       />
                     </Tooltip>
-                  </template>
-                </Table>
-              </template>
-              <template #footer>
-                <Link
-                  label="View all Edge DNS..."
-                  size="medium"
-                  :show-icon="false"
-                  href="#"
-                />
-              </template>
-            </CardBox>
-          </section>
-
-          <!-- Recent Activity -->
-          <section class="flex flex-col gap-[var(--spacing-md)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Recent Activity</h2>
-
-            <CardBox :padded="false">
-              <template #content>
-                <Table :data="activity" :columns="activityColumns" row-key="id">
-                  <template #cell-operation="{ value }">
-                    <Tag
-                      v-if="operationSeverity(value)"
-                      :label="value"
-                      :severity="operationSeverity(value)"
-                      size="small"
-                    />
-                    <span v-else class="text-[var(--text-default)]">{{ value }}</span>
-                  </template>
-                </Table>
-              </template>
-              <template #footer>
-                <Link
-                  label="View all Activity..."
-                  size="medium"
-                  :show-icon="false"
-                  href="#"
-                />
+                  </div>
+                  <div class="flex items-baseline gap-[var(--spacing-xxs)]">
+                    <span
+                      class="text-big-number-sm tabular-nums text-[var(--text-default)]"
+                    >
+                      {{ metric.value }}
+                    </span>
+                    <span
+                      v-if="metric.unit"
+                      class="text-body-xs text-[var(--text-muted)]"
+                    >
+                      {{ metric.unit }}
+                    </span>
+                  </div>
+                </div>
               </template>
             </CardBox>
-          </section>
-        </div>
+          </div>
 
-        <!-- Right rail -->
-        <aside
-          class="flex w-full flex-col gap-[var(--spacing-lg)] xl:max-w-[var(--container-xs)] xl:shrink-0"
-        >
-          <!-- Monthly Usage -->
-          <CardBox>
-            <template #header>
-              <h2 class="text-heading-xs text-[var(--text-default)]">Monthly Usage</h2>
-            </template>
+          <p class="text-pretty text-right text-body-xxs text-[var(--text-muted)]">
+            {{ metricsRange }}
+          </p>
+        </section>
+
+        <!-- Resources -->
+        <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <div class="flex items-center gap-[var(--spacing-xs)]">
+            <h2 class="text-heading-xs text-[var(--text-default)]">Resources</h2>
+            <IconButton
+              icon="pi pi-question-circle"
+              kind="transparent"
+              size="small"
+              aria-label="About resources"
+            />
+          </div>
+
+          <CardBox :padded="false">
             <template #content>
-              <ul class="flex flex-col gap-[var(--spacing-sm)]">
-                <li
-                  v-for="usage in monthlyUsage"
-                  :key="usage.label"
-                  class="flex items-center justify-between gap-[var(--spacing-md)]"
-                >
-                  <span class="min-w-0 truncate text-body-sm text-[var(--text-muted)]">
-                    {{ usage.label }}
-                  </span>
-                  <span
-                    class="shrink-0 text-label-sm tabular-nums text-[var(--text-default)]"
-                  >
-                    {{ usage.value }}
-                  </span>
-                </li>
-              </ul>
+              <Table :data="resources" :columns="resourceColumns" row-key="id">
+                <template #cell-domain="{ value }">
+                  <!-- Domain link (truncates) + external-redirect arrow; copy button pinned to the cell's right edge so it aligns across rows. -->
+                  <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <a
+                      :href="`https://${value}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+                      @click.stop
+                    >
+                      <span class="truncate">{{ value }}</span>
+                      <i class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]" aria-hidden="true" />
+                    </a>
+                    <CopyButton
+                      kind="outlined"
+                      :value="value"
+                      aria-label="Copy domain name"
+                      class="ml-auto shrink-0"
+                    />
+                  </div>
+                </template>
+                <template #cell-status="{ value }">
+                  <Tag :label="value" severity="success" size="small" />
+                </template>
+                <template #cell-lastModified="{ value, row }">
+                  <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
+                </template>
+                <template #cell-actions="{ row }">
+                  <Tooltip text="Zone actions">
+                    <IconButton
+                      icon="pi pi-ellipsis-h"
+                      kind="transparent"
+                      size="small"
+                      aria-label="Zone actions"
+                      @click="(event) => openZoneActions(event, row)"
+                    />
+                  </Tooltip>
+                </template>
+              </Table>
             </template>
             <template #footer>
-              <Link label="View all Usage..." size="medium" :show-icon="false" href="#" />
+              <Link
+                label="View all Edge DNS..."
+                size="medium"
+                :show-icon="false"
+                href="#"
+              />
             </template>
           </CardBox>
+        </section>
 
-          <!-- Marketplace Trends -->
-          <CardBox>
-            <template #header>
-              <h2 class="text-heading-xs text-[var(--text-default)]">
-                Marketplace Trends
-              </h2>
-            </template>
+        <!-- Recent Activity -->
+        <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <h2 class="text-heading-xs text-[var(--text-default)]">Recent Activity</h2>
+
+          <CardBox :padded="false">
             <template #content>
-              <article class="flex flex-col gap-[var(--spacing-sm)]">
-                <div class="flex items-center gap-[var(--spacing-sm)]">
-                  <span
-                    class="flex size-6 shrink-0 items-center justify-center rounded-[var(--shape-elements)] bg-[var(--bg-surface-raised)] text-[var(--primary)]"
-                  >
-                    <i class="ai ai-marketplace text-body-sm" aria-hidden="true" />
-                  </span>
-                  <Link
-                    :label="featuredTemplate.name"
-                    size="medium"
-                    :show-icon="false"
-                    href="#"
+              <Table :data="activity" :columns="activityColumns" row-key="id">
+                <template #cell-operation="{ value }">
+                  <Tag
+                    v-if="operationSeverity(value)"
+                    :label="value"
+                    :severity="operationSeverity(value)"
+                    size="small"
                   />
-                </div>
-                <p class="text-pretty text-body-xs text-[var(--text-muted)]">
-                  {{ featuredTemplate.description }}
-                </p>
-                <p class="flex items-center gap-[var(--spacing-md)] text-body-xxs text-[var(--text-muted)]">
-                  <span>
-                    By
-                    <span class="text-[var(--text-default)]">{{ featuredTemplate.author }}</span>
-                  </span>
-                  <span>
-                    Version
-                    <span class="text-[var(--text-default)]">{{ featuredTemplate.version }}</span>
-                  </span>
-                </p>
-              </article>
+                  <span v-else class="text-[var(--text-default)]">{{ value }}</span>
+                </template>
+              </Table>
             </template>
             <template #footer>
+              <Link
+                label="View all Activity..."
+                size="medium"
+                :show-icon="false"
+                href="#"
+              />
+            </template>
+          </CardBox>
+        </section>
+      </div>
+
+      <!-- Right rail -->
+      <aside
+        class="flex w-full flex-col gap-[var(--layout-section-gap)] xl:max-w-[var(--container-xs)] xl:shrink-0"
+      >
+        <!-- Monthly Usage -->
+        <CardBox>
+          <template #header>
+            <h2 class="text-heading-xs text-[var(--text-default)]">Monthly Usage</h2>
+          </template>
+          <template #content>
+            <ul class="flex flex-col gap-[var(--spacing-sm)]">
+              <li
+                v-for="usage in monthlyUsage"
+                :key="usage.label"
+                class="flex items-center justify-between gap-[var(--spacing-md)]"
+              >
+                <span class="min-w-0 truncate text-body-sm text-[var(--text-muted)]">
+                  {{ usage.label }}
+                </span>
+                <span
+                  class="shrink-0 text-label-sm tabular-nums text-[var(--text-default)]"
+                >
+                  {{ usage.value }}
+                </span>
+              </li>
+            </ul>
+          </template>
+          <template #footer>
+            <Link label="View all Usage..." size="medium" :show-icon="false" href="#" />
+          </template>
+        </CardBox>
+
+        <!-- Marketplace Trends -->
+        <CardBox>
+          <template #header>
+            <h2 class="text-heading-xs text-[var(--text-default)]">
+              Marketplace Trends
+            </h2>
+          </template>
+          <template #content>
+            <article class="flex flex-col gap-[var(--spacing-sm)]">
               <div class="flex items-center gap-[var(--spacing-sm)]">
-                <IconButton
-                  icon="pi pi-chevron-left"
-                  kind="transparent"
-                  size="small"
-                  aria-label="Previous trend"
-                />
-                <div class="flex items-center gap-[var(--spacing-xs)]">
-                  <span class="size-2 rounded-full bg-[var(--text-default)]" />
-                  <span class="size-2 rounded-full bg-[var(--border-default)]" />
-                  <span class="size-2 rounded-full bg-[var(--border-default)]" />
-                </div>
-                <IconButton
-                  icon="pi pi-chevron-right"
-                  kind="transparent"
-                  size="small"
-                  aria-label="Next trend"
+                <span
+                  class="flex size-6 shrink-0 items-center justify-center rounded-[var(--shape-elements)] bg-[var(--bg-surface-raised)] text-[var(--primary)]"
+                >
+                  <i class="ai ai-marketplace text-body-sm" aria-hidden="true" />
+                </span>
+                <Link
+                  :label="featuredTemplate.name"
+                  size="medium"
+                  :show-icon="false"
+                  href="#"
                 />
               </div>
-            </template>
-          </CardBox>
-        </aside>
-      </div>
+              <p class="text-pretty text-body-xs text-[var(--text-muted)]">
+                {{ featuredTemplate.description }}
+              </p>
+              <p class="flex items-center gap-[var(--spacing-md)] text-body-xxs text-[var(--text-muted)]">
+                <span>
+                  By
+                  <span class="text-[var(--text-default)]">{{ featuredTemplate.author }}</span>
+                </span>
+                <span>
+                  Version
+                  <span class="text-[var(--text-default)]">{{ featuredTemplate.version }}</span>
+                </span>
+              </p>
+            </article>
+          </template>
+          <template #footer>
+            <div class="flex items-center gap-[var(--spacing-sm)]">
+              <IconButton
+                icon="pi pi-chevron-left"
+                kind="transparent"
+                size="small"
+                aria-label="Previous trend"
+              />
+              <div class="flex items-center gap-[var(--spacing-xs)]">
+                <span class="size-2 rounded-full bg-[var(--text-default)]" />
+                <span class="size-2 rounded-full bg-[var(--border-default)]" />
+                <span class="size-2 rounded-full bg-[var(--border-default)]" />
+              </div>
+              <IconButton
+                icon="pi pi-chevron-right"
+                kind="transparent"
+                size="small"
+                aria-label="Next trend"
+              />
+            </div>
+          </template>
+        </CardBox>
+      </aside>
     </main>
   </AppLayout>
 </template>

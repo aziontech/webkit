@@ -235,7 +235,7 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="variables" :breadcrumb="[{ label: 'Variables' }]">
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <!-- Module intro + primary action -->
       <PageHeading
         title="Variables"

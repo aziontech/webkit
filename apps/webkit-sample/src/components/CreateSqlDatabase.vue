@@ -95,7 +95,7 @@ const submit = async () => {
       >
         <!-- Scrollable form body -->
         <div
-          class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-1 flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+          class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
         >
           <p class="text-body-sm text-[var(--text-muted)]">
             Configure a SQL Database instance that can be accessed by
@@ -167,7 +167,7 @@ const submit = async () => {
           class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
         >
           <div
-            class="flex w-full items-center justify-end gap-[var(--spacing-sm)] p-[var(--spacing-lg)]"
+            class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
           >
             <Button
               type="button"

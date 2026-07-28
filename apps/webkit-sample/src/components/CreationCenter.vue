@@ -295,7 +295,7 @@ const createResource = (res) =>
     <!-- Flow content -->
     <main class="min-w-0 flex-1 overflow-auto">
       <div
-        class="mx-auto flex w-full flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+        class="layout-column layout-boundary flex flex-col gap-[var(--layout-section-gap)]"
       >
         <PageHeading
           size="large"
@@ -322,7 +322,7 @@ const createResource = (res) =>
                 <CardBox v-if="!gitConnected">
                   <template #content>
                     <EmptyState
-                      size="large"
+                      size="medium"
                       title="Connect your Repository"
                       description="Choose a Git provider to connect your repository and start the deployment process."
                       class=" flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"

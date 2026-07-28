@@ -71,7 +71,7 @@ const saveProtection = () =>
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'CardBox with independent saves' }]"
   >
-    <main class="flex w-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex w-full flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         title="Project Settings"
         description="A long configuration page split into cards — each card owns its own save, so changes commit in parts."
