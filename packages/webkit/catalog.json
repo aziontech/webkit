@@ -384,6 +384,7 @@
       "--inset-shadow-sm",
       "--inset-shadow-xs",
       "--leading-loose",
+      "--leading-none",
       "--leading-normal",
       "--leading-relaxed",
       "--leading-snug",
@@ -1089,6 +1090,7 @@
       ],
       "leading": [
         "--leading-loose",
+        "--leading-none",
         "--leading-normal",
         "--leading-relaxed",
         "--leading-snug",
