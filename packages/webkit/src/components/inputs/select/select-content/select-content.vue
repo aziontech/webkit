@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { getFixedFrame } from '../../../../utils/containing-block'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { selectContextKey } from '../injection-key'
 
@@ -26,10 +27,16 @@
     const trigger = ctx.triggerRef.value
     if (!trigger) return
     const rect = trigger.getBoundingClientRect()
+    // The panel is fixed inside the Teleport target, which may sit under a
+    // transformed ancestor (Storybook's zoom scales the preview body). Express
+    // the trigger's viewport rect in that frame's space so it is not scaled twice.
+    const frame = getFixedFrame(root.value)
     position.value = {
-      top: rect.bottom + 4,
-      left: rect.left,
-      width: rect.width
+      // The 4px gap is added after the conversion so it stays 4 layout pixels
+      // and scales with the frame, like the panel itself.
+      top: (rect.bottom - frame.top) / frame.scaleY + 4,
+      left: (rect.left - frame.left) / frame.scaleX,
+      width: rect.width / frame.scaleX
     }
   }
 
