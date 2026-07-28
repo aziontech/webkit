@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: a084ea5340b76e0a5664fd895a69ce39d6b1679fa243ba3dd7a4c14b9af913bc
+checksum: 2a6f539a2733213f73bb59cf27a14c1d6eb0a41016c1c6feaccbfcf217117668
 created: 2026-07-01
-last_updated: 2026-07-06
+last_updated: 2026-07-22
 ---
 
 # InputGroup — Component Spec
@@ -107,6 +107,7 @@ Root props:
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned. |
 | `invalid` | `boolean` | `false` | no | Renders the error border and sets `aria-invalid="true"` on the root. |
 | `required` | `boolean` | `false` | no | Renders the required (warning) border and sets `aria-required="true"` on the root. |
 | `disabled` | `boolean` | `false` | no | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `InputText`). |
@@ -126,6 +127,8 @@ Root props:
 ## States
 
 - Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`
+- `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`)
+- Only one focus indicator is visible when a descendant is focused: the group draws the single `focus-within` ring on its root, and the inner input primitives' own focus rings are suppressed via `[&_*]:focus-visible:!ring-0 [&_*]:focus-within:!ring-0` so `Button`, `Select.Trigger`, `InputText` wrappers, and raw `<input>` share the group's ring instead of stacking their own on top
 - `data-invalid` mirrors the `invalid` prop; sets `aria-invalid="true"`
 - `data-required` mirrors the `required` prop; sets `aria-required="true"`
 - `data-disabled` mirrors the `disabled` prop; sets `aria-disabled="true"`
@@ -160,7 +163,9 @@ Root props:
 | root text (disabled) | `var(--text-disabled)` |
 | root border width | `border` (Tailwind utility) |
 | root shape | `var(--shape-elements)` |
-| root height | `h-8` (Tailwind utility) |
+| root height (small) | `h-7` (Tailwind utility) |
+| root height (medium) | `h-8` (Tailwind utility) |
+| root height (large) | `h-10` (Tailwind utility) |
 | focus ring | `var(--ring-color)` |
 | focus ring offset | `var(--bg-canvas)` |
 | child seam | `border-r border-[color:var(--border-default)]` (applied via `[&>*:not(:last-child)]:border-r`) |
@@ -188,6 +193,7 @@ Root props:
 ## Stories (Storybook)
 
 - Default — root with a middle input, no addons or extra children.
+- Sizes — the three sizes stacked (small=28px, medium=32px, large=40px).
 - WithAddonLeft — `<InputGroup.Addon>https://</InputGroup.Addon>` + middle input.
 - WithAddonRight — middle input + `<InputGroup.Addon>.com</InputGroup.Addon>`.
 - BothAddons — addon + input + addon.
@@ -198,7 +204,7 @@ Root props:
 - Required — `required=true` (warning border, always visible).
 - Disabled — `disabled=true` (muted fill, not-allowed cursor, no focus ring).
 
-Justification for ten stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. Four addon-composition stories (Default, WithAddonLeft, WithAddonRight, BothAddons) document the static-content path. Three integration stories (WithButton, WithSelect, WithAll) prove Button/Select-as-children — the whole point of v4. Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.
+Justification for eleven stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind`, so `Types` does not apply. `Sizes` documents the three-height axis. Four addon-composition stories (Default, WithAddonLeft, WithAddonRight, BothAddons) document the static-content path. Three integration stories (WithButton, WithSelect, WithAll) prove Button/Select-as-children — the whole point of v4. Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.
 
 ## Constraints — DO NOT
 
