@@ -153,8 +153,27 @@ Some components let the consumer override internal token choices (e.g. `<Card cl
 
 The same rule applies to each sub-component. Each renders its own root with its own inline `class`. No shared `*Classes` import between siblings.
 
+## A zero length carries no unit
+
+A zero is the one value that is identical in every unit, so the unit is pure noise — and it makes the same zero read three different ways across the codebase (`0px` here, `0rem` there, `0em` in a token). **Write `0`.**
+
+```js
+// ❌ tokens, arbitrary values, inline styles — the unit says nothing
+const tracking = { normal: '0em' }
+node.style.height = '0px'
+class="p-[0rem] translate-y-[0px]"
+
+// ✅
+const tracking = { normal: '0' }
+node.style.height = '0'
+class="p-0 translate-y-0"
+```
+
+The rule covers **length** units only — `px`, `rem`, `em`, `ch`, `vw`/`vh`, `cqw`, `cm`/`in`/`pt`, and the rest of the CSS length set. Units that carry meaning (or are required) at zero are untouched: `0%`, `0s` / `0ms`, `0deg`, `0fr`.
+
 ## Hard prohibitions
 
+- No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS).
 - No `const sharedClasses = [...]`, `const kindClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
 - No `<style>` blocks (scoped or unscoped).
 - No `.css` / `.scss` files inside a component directory.
@@ -244,6 +263,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 
 - `scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
+- **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § 13.y "Styling discipline" supersedes any older example in the same file that still shows the JS-presets pattern. **The data-attribute approach is the canonical pattern for new components.**
 

@@ -269,6 +269,7 @@ packages/webkit/src/components/actions/button/
 - Use the canonicals (`button.vue`, `card-pricing.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
 - `withDefaults` mirrors the spec's Default column **exactly**. An optional string prop that holds renderable text defaults to `''` (`value: ''`, `label: ''`) — never `value: undefined`, never the literal `'undefined'`. Reserve `undefined` (unquoted) for props where absence ≠ empty: controlled state (`open`, `modelValue`) or an optional resource whose presence toggles rendering (`src`). When the spec's Default cell is wrong on this point, stop with `BLOCKED: prop <name> defaults to 'undefined' — should be '' (empty string)`; do not silently copy it.
 - All visual tokens come from [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md). No HEX, no Tailwind palette, no raw typography.
+- A zero length carries **no unit**: `0`, never `0px` / `0rem` / `0em` — in arbitrary values (`p-[0px]`), inline `style`, or any emitted value. Units that mean something at zero (`0%`, `0s`, `0deg`, `0fr`) are fine. See [`.claude/rules/styling.md`](../../rules/styling.md).
 - TypeScript only (`<script setup lang="ts">`); no `any`; no `@ts-ignore`; no `class` in `defineProps`.
 - `<script setup>` always before `<template>`.
 - BEM `data-testid` per [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md).
@@ -310,6 +311,7 @@ packages/webkit/src/components/actions/button/
 - [ ] Composition: `index.ts` written at the root level (sibling of `<name>.vue`), attaching every sub-component to the root via `Object.assign` (no hand-written `index.d.ts` — vue-tsc generates it at publish). Member names mirror the spec's anatomy (no invented `Trigger`/`Content` on a non-overlay component).
 - [ ] New entries added to `packages/webkit/package.json#exports`. Public paths stay flat (`./<name>-<part>`); right-hand paths reflect the folder nesting. The composition root export points at `index.ts`; a standalone `./<name>-root` export points at the root `.vue` (tree-shaking).
 - [ ] No HEX / Tailwind palette / raw typography / `any` / `@ts-ignore`.
+- [ ] No zero with a length unit (`0px` / `0rem` / `0em`) anywhere in the emitted files — a zero is written `0`.
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
 - [ ] `data-testid` fallback equals `'<category>-<name>'` on the root and `'<category>-<name>__<part>'` on each sub-component.
 - [ ] Starter `<name>.test.ts` written next to the root `.vue` (render + `data-testid` fallback + consumer override + axe; required props filled from the spec) — satisfies `enforce-test-exists.mjs`.

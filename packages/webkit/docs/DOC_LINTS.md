@@ -1110,6 +1110,35 @@ A duplicated property in one block means one of the two values is dead.
 }
 ```
 
+### `length-zero-no-unit`
+
+A zero is identical in every unit, so the unit is noise — and it lets the same value read three different ways (`0px` here, `0rem` there, `0em` in a token). Set to plain `true`, **dropping** the `stylelint-config-standard-scss` default `ignore: ['custom-properties']`: a design system is authored almost entirely as custom properties, which is exactly where the drift appeared (`--tracking-normal: 0em`). Only **length** units are in scope — `0%`, `0s`, `0deg`, `0fr` are untouched. Context: [`styling.md`](../../../.claude/rules/styling.md) § "A zero length carries no unit", which also lists the three non-CSS surfaces (token-checks engine, shipped stylelint config, theme `build:tokens` assertion).
+
+**❌ Wrong**
+
+```css
+:root {
+  --tracking-normal: 0em;
+}
+.chip {
+  margin: 0px;
+  padding: 0rem;
+}
+```
+
+**✅ Correct**
+
+```css
+:root {
+  --tracking-normal: 0;
+}
+.chip {
+  margin: 0;
+  padding: 0;
+  transition-duration: 0s; /* a unit that carries meaning at zero stays */
+}
+```
+
 ### `no-duplicate-selectors`
 
 The same selector twice in one sheet is a merge waiting to happen.
