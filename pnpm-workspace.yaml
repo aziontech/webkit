@@ -16,6 +16,18 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@aziontech/theme@4.0.0'
 
+packageExtensions:
+  # tailwind-gradient-mask-image does `require('tailwindcss/plugin')` but declares no
+  # dependency or peer on tailwindcss. Under pnpm's isolated layout it resolves from the
+  # virtual store, so it can only find tailwindcss if the ROOT package.json happens to
+  # declare it — an invisible coupling that broke the icons-gallery build when the dead
+  # root Tailwind v3 entries were removed. Declaring the missing peer lets pnpm link
+  # tailwindcss (owned by apps/icons-gallery) into the plugin's own store directory, so
+  # the only Tailwind v3 declaration lives in the one app that still uses v3.
+  tailwind-gradient-mask-image:
+    peerDependencies:
+      tailwindcss: '*'
+
 overrides:
   # Minimal validated set (2026-07-25): each entry guards a live advisory or a
   # proven resolution hazard; the tree is audit-clean without anything else.
