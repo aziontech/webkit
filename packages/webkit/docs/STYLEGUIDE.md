@@ -494,7 +494,7 @@ variant?: string
 
 **Enforced by:** `webkit/authoring-standards` (bare `@deprecated`) ·
 `webkit/no-deprecated-component` (imports of deprecated components, with the suggested
-replacement) · `.releaserc` maps removal to a major.
+replacement) · release-please maps removal (`!` / `BREAKING CHANGE:`) to a major.
 
 ---
 
