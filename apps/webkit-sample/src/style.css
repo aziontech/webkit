@@ -1,6 +1,8 @@
 /* Theme tokens + the Tailwind v4 entry are imported from src/main.js
    (`import '@aziontech/theme'`); see the note there. This file carries only
-   the app's own font faces, icon fonts and shell rules. */
+   the app's own layout tokens, font faces, icon fonts and shell rules. */
+/* Layout tokens — the container system (boundary / rhythm / measure). */
+@import './styles/layout.css';
 /* PrimeIcons — webkit components reference `pi pi-*` glyphs. */
 @import 'primeicons/primeicons.css';
 /* Azion icon library — monochrome brand/UI glyphs (`ai ai-*`, colored via

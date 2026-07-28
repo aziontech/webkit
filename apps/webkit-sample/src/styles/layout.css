@@ -1,0 +1,67 @@
+/* ---------------------------------------------------------------------------
+ * Layout tokens — the console's container system.
+ *
+ * Three decisions, expressed once: how far content sits from the app chrome
+ * (BOUNDARY), how far things sit from each other (RHYTHM), and how wide a
+ * reading column may get (MEASURE). Every value builds on @aziontech/theme's
+ * fluid --spacing-* / --container-* scales, so the whole system stays
+ * responsive without a single media query in this file.
+ *
+ * These are app-level tokens today, deliberately shaped like theme tokens
+ * (semantic names, zero raw values) so the set can be promoted into
+ * @aziontech/theme as `semantic/layouts`.
+ *
+ * Promotion path:
+ *   1. Move the `:root` block to packages/theme/src/tokens/semantic/
+ *      layouts.data.js, in the same breakpoint-map form as spacings.data.js /
+ *      containers.data.js — or keep the values as var(--spacing-*) references
+ *      so the layout scale stays derived rather than duplicated.
+ *   2. Register it in packages/theme/src/scripts/build-tokens.mjs beside
+ *      containers / spacings, so it lands in dist/v4/globals.css as responsive
+ *      cascade custom properties (exactly how --spacing-* already works).
+ *   3. Move .layout-boundary / .layout-column into the theme's own
+ *      Tailwind-processed CSS, where `@utility` IS available, so they gain
+ *      variant support (md:layout-column).
+ *   4. This file then goes away and every consuming app inherits the system.
+ *
+ * Why plain classes and not Tailwind `@utility`: this file is part of the
+ * src/style.css entry, while the Tailwind v4 directive lives in the theme's
+ * globals.css (imported from main.js) — so an `@utility` declared here would be
+ * outside Tailwind's stylesheet graph and never processed. Plain classes work
+ * unconditionally, and the theme is imported first, so on a specificity tie
+ * these win over the utilities.
+ * ------------------------------------------------------------------------ */
+:root {
+  /* BOUNDARY — content ↔ app chrome. The top is one step larger than the
+     sides: the header's bottom border reads as a hard edge, so the eye wants
+     more air below it than beside the content (optical alignment). */
+  --layout-boundary-inline: var(--spacing-lg); /* 16 → 24            */
+  --layout-boundary-end: var(--spacing-lg); /* 16 → 24            */
+  --layout-boundary-start: var(--spacing-xl); /* 24 → 32 → 48       */
+
+  /* RHYTHM — two levels, nothing else. */
+  --layout-section-gap: var(--spacing-xl); /* between sections   */
+  --layout-group-gap: var(--spacing-lg); /* within a section   */
+
+  /* MEASURE — the widest a configuration / form / dashboard column may get.
+     Table pages opt out and run full-bleed. */
+  --layout-measure: var(--container-7xl); /* 1280px             */
+}
+
+/* The page boundary. Padding, never margin: a top margin on an `h-full` child
+   of a padded scroll box overflows by exactly the margin (h-full resolves
+   against the parent's content box, the margin sits outside it) and the
+   overflow lands as a silent clip at the bottom of a table. */
+.layout-boundary {
+  padding-inline: var(--layout-boundary-inline);
+  padding-block-start: var(--layout-boundary-start);
+  padding-block-end: var(--layout-boundary-end);
+}
+
+/* A centered reading column at the measure. Table pages omit it — full-bleed
+   is the absence of this class, not a `w-full`. */
+.layout-column {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-measure);
+}
