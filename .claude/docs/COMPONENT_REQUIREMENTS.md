@@ -304,7 +304,7 @@ Components do **not** have a per-folder `package.json`. Module resolution goes t
 
 ## TypeScript Declarations
 
-TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by `packages/webkit/.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
+TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by the publish workflow (`.github/workflows/package-webkit.yml` runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
 
 **DO NOT manually edit `.d.ts` or `.d.ts.map` files.**
 
@@ -745,7 +745,7 @@ When creating a new component, ensure you've completed all requirements:
 
 **Problem:** `.d.ts` files are missing or outdated
 
-**Solution:** Declarations are generated at publish time by `packages/webkit/.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm webkit:type-check` to surface declaration errors.
+**Solution:** Declarations are generated at publish time by the publish workflow (`.github/workflows/package-webkit.yml`, `vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm webkit:type-check` to surface declaration errors.
 
 ### Export Not Found
 
