@@ -153,8 +153,6 @@ describe('InputText', () => {
   })
 
   describe('clickable area', () => {
-    // The bordered box is the wrapper: its padding, gaps and icon areas are outside the
-    // input's hit box, so a press there targets the chrome and must be delegated.
     const pressOn = (element: Element) =>
       element.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }))
 

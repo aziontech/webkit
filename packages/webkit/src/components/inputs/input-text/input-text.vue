@@ -73,8 +73,6 @@
     emit('update:modelValue', target.value)
   }
 
-  // The bordered box is the wrapper, so its padding, gaps and icon areas sit outside the
-  // input's own hit box. Delegate those presses to the field so the whole rectangle focuses.
   const handleChromeMouseDown = (event: globalThis.MouseEvent) => {
     if (props.disabled) return
     if (event.target === inputRef.value) return
