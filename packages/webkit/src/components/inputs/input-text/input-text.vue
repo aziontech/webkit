@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useSlots } from 'vue'
+  import { computed, ref, useAttrs, useSlots } from 'vue'
 
   export type InputTextSize = 'small' | 'medium' | 'large'
   export type InputTextType = 'text' | 'email' | 'number'
@@ -30,7 +30,7 @@
     invalid?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     modelValue: '',
     placeholder: '',
     size: 'medium',
@@ -54,6 +54,8 @@
   const attrs = useAttrs()
   const slots = useSlots()
 
+  const inputRef = ref<globalThis.HTMLInputElement | null>(null)
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-text')
 
   const passthroughAttrs = computed(() => {
@@ -70,6 +72,15 @@
     const target = event.target as globalThis.HTMLInputElement
     emit('update:modelValue', target.value)
   }
+
+  // The bordered box is the wrapper, so its padding, gaps and icon areas sit outside the
+  // input's own hit box. Delegate those presses to the field so the whole rectangle focuses.
+  const handleChromeMouseDown = (event: globalThis.MouseEvent) => {
+    if (props.disabled) return
+    if (event.target === inputRef.value) return
+    event.preventDefault()
+    inputRef.value?.focus()
+  }
 </script>
 
 <template>
@@ -81,7 +92,7 @@
     :data-has-icon-left="hasIconLeft || null"
     :data-has-icon-right="hasIconRight || null"
     :class="[
-      'relative inline-flex items-center w-full',
+      'relative inline-flex items-center w-full cursor-text',
       'gap-[var(--spacing-xs)] px-[var(--spacing-sm)]',
       'rounded-[var(--shape-elements)]',
       'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
@@ -94,6 +105,7 @@
       'data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-[var(--border-default)] data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs.class
     ]"
+    @mousedown="handleChromeMouseDown"
   >
     <span
       v-if="hasIconLeft"
@@ -104,6 +116,7 @@
     </span>
 
     <input
+      ref="inputRef"
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"

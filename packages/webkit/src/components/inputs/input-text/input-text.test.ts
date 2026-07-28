@@ -153,22 +153,42 @@ describe('InputText', () => {
   })
 
   describe('clickable area', () => {
-    it('input fills the wrapper vertically so padding-area clicks reach it', () => {
-      const { getByTestId } = render(InputText, { props: { size: 'large' } })
-      const input = getByTestId('input-text') as HTMLInputElement
-      expect(input.className).toMatch(/\bh-full\b/)
-      expect(input.className).toMatch(/\bself-stretch\b/)
-    })
+    // The bordered box is the wrapper: its padding, gaps and icon areas are outside the
+    // input's hit box, so a press there targets the chrome and must be delegated.
+    const pressOn = (element: Element) =>
+      element.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }))
 
-    it('resolves the input at the top edge of the wrapper (previous dead band)', () => {
+    it('focuses the input when the press lands on the wrapper chrome (padding band)', () => {
       const { getByTestId } = render(InputText, { props: { size: 'large' } })
       const input = getByTestId('input-text') as HTMLInputElement
       const wrapper = input.closest('[data-size]') as HTMLElement
-      const rect = wrapper.getBoundingClientRect()
-      const el = document.elementFromPoint(rect.left + rect.width / 2, rect.top + 2)
-      expect(el).toBe(input)
-      input.focus()
+      const notPrevented = pressOn(wrapper)
       expect(document.activeElement).toBe(input)
+      expect(notPrevented).toBe(false)
+    })
+
+    it('focuses the input when the press lands on a decorative icon', () => {
+      const { getByTestId, getByText } = render(InputText, {
+        props: { size: 'large' },
+        slots: { iconLeft: '<i>L</i>' }
+      })
+      const input = getByTestId('input-text') as HTMLInputElement
+      pressOn(getByText('L'))
+      expect(document.activeElement).toBe(input)
+    })
+
+    it('leaves a press on the input itself untouched so the native caret still lands', () => {
+      const { getByTestId } = render(InputText, { props: { modelValue: 'azion' } })
+      const input = getByTestId('input-text') as HTMLInputElement
+      expect(pressOn(input)).toBe(true)
+    })
+
+    it('does not focus from the wrapper chrome when disabled', () => {
+      const { getByTestId } = render(InputText, { props: { size: 'large', disabled: true } })
+      const input = getByTestId('input-text') as HTMLInputElement
+      const wrapper = input.closest('[data-size]') as HTMLElement
+      expect(pressOn(wrapper)).toBe(true)
+      expect(document.activeElement).not.toBe(input)
     })
   })
 
