@@ -54,6 +54,37 @@ test('flags a named color on a color property (declaration-property-value-disall
   assert.doesNotMatch(text, /animate-\*/, 'a color violation must not carry motion guidance')
 })
 
+test('flags a zero length carrying a unit (length-zero-no-unit)', async () => {
+  for (const value of ['0px', '0rem', '0em']) {
+    const warnings = await lint(`a{margin:${value}}`)
+    assert.ok(
+      firedBy(warnings, 'length-zero-no-unit'),
+      `expected length-zero-no-unit to fire for ${value}`
+    )
+  }
+})
+
+test('flags a zero length with a unit inside a custom property (no ignore)', async () => {
+  const warnings = await lint(':root{--tracking-normal:0em}')
+  assert.ok(
+    firedBy(warnings, 'length-zero-no-unit'),
+    'expected length-zero-no-unit to fire on a custom property — the default `ignore: [custom-properties]` must not be set'
+  )
+})
+
+// `0s` / `0deg` keep their unit because it carries meaning (or is required) at zero.
+// A literal duration is still owned by the motion discipline, so assert on this rule
+// alone rather than on a clean slate.
+test('allows a unit-less zero, and units that carry meaning at zero', async () => {
+  for (const decl of ['margin:0', 'opacity:0', 'transition-duration:0s', 'rotate:0deg']) {
+    const warnings = await lint(`a{${decl}}`)
+    assert.ok(
+      !firedBy(warnings, 'length-zero-no-unit'),
+      `expected length-zero-no-unit to stay silent for ${decl}, got: ${JSON.stringify(warnings)}`
+    )
+  }
+})
+
 test('leaves safe keyword values alone (currentColor / transparent / inherit)', async () => {
   for (const value of ['currentColor', 'transparent', 'inherit']) {
     const warnings = await lint(`a{color:${value}}`)
