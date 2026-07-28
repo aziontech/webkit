@@ -88,7 +88,7 @@
         :data-testid="`${testId}__main`"
       >
         <div
-          class="flex min-h-0 flex-1 flex-col gap-[var(--spacing-xl)] overflow-auto p-[var(--spacing-xl)]"
+          class="flex min-h-0 flex-1 flex-col gap-[var(--spacing-xl)] overflow-auto"
           :data-testid="`${testId}__main-inner`"
         >
           <div
