@@ -152,6 +152,44 @@ describe('InputText', () => {
     })
   })
 
+  describe('clickable area', () => {
+    const pressOn = (element: Element) =>
+      element.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }))
+
+    it('focuses the input when the press lands on the wrapper chrome (padding band)', () => {
+      const { getByTestId } = render(InputText, { props: { size: 'large' } })
+      const input = getByTestId('input-text') as HTMLInputElement
+      const wrapper = input.closest('[data-size]') as HTMLElement
+      const notPrevented = pressOn(wrapper)
+      expect(document.activeElement).toBe(input)
+      expect(notPrevented).toBe(false)
+    })
+
+    it('focuses the input when the press lands on a decorative icon', () => {
+      const { getByTestId, getByText } = render(InputText, {
+        props: { size: 'large' },
+        slots: { iconLeft: '<i>L</i>' }
+      })
+      const input = getByTestId('input-text') as HTMLInputElement
+      pressOn(getByText('L'))
+      expect(document.activeElement).toBe(input)
+    })
+
+    it('leaves a press on the input itself untouched so the native caret still lands', () => {
+      const { getByTestId } = render(InputText, { props: { modelValue: 'azion' } })
+      const input = getByTestId('input-text') as HTMLInputElement
+      expect(pressOn(input)).toBe(true)
+    })
+
+    it('does not focus from the wrapper chrome when disabled', () => {
+      const { getByTestId } = render(InputText, { props: { size: 'large', disabled: true } })
+      const input = getByTestId('input-text') as HTMLInputElement
+      const wrapper = input.closest('[data-size]') as HTMLElement
+      expect(pressOn(wrapper)).toBe(true)
+      expect(document.activeElement).not.toBe(input)
+    })
+  })
+
   describe('a11y (axe against styled DOM)', () => {
     it('Default has no violations', async () => {
       const { container } = render(InputText, {
