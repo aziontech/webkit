@@ -14,6 +14,8 @@
     value?: TabViewValue
     /** Visible label when the default slot is empty. */
     label?: string
+    /** Leading icon class (e.g. `pi pi-home`). Rendered before the label when the `leading` slot is empty. */
+    icon?: string
     /** Selected state for standalone usage (Highlight). */
     selected?: boolean
     /** Disables interaction. */
@@ -25,6 +27,7 @@
   const props = withDefaults(defineProps<Props>(), {
     value: undefined,
     label: 'Tab Item',
+    icon: '',
     selected: false,
     disabled: false,
     closable: false
@@ -46,6 +49,7 @@
   const resolvedValue = computed(() => props.value ?? props.label)
 
   const context = inject(TabViewInjectionKey, null) as TabViewContext | null
+  const hasContext = context !== null
 
   const isSelected = computed(() => {
     if (context) {
@@ -70,9 +74,9 @@
   const panelId = computed(() => (context ? context.panelId(resolvedValue.value) : undefined))
 
   const itemSharedClasses = [
-    'relative z-[1] inline-flex h-[30px] shrink-0 cursor-pointer items-center',
+    'relative z-[1] -mb-px inline-flex shrink-0 cursor-pointer items-center justify-center',
     'gap-[var(--spacing-xs)] rounded-[var(--shape-button)]',
-    'px-[var(--spacing-sm)] py-[var(--spacing-xs)]',
+    'px-0.5 py-3.5',
     'text-label-md transition-colors motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
@@ -81,28 +85,17 @@
   const itemClasses = computed(() =>
     cn(
       itemSharedClasses,
-      isDisabled.value &&
-        'pointer-events-none bg-[var(--bg-disabled)] text-[var(--text-disabled)] opacity-60',
+      isDisabled.value && 'pointer-events-none text-[var(--text-disabled)] opacity-60',
+      !isDisabled.value && isSelected.value && 'text-[var(--text-default)]',
       !isDisabled.value &&
-        context &&
         !isSelected.value &&
-        'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
-      !isDisabled.value &&
-        context &&
-        isSelected.value &&
-        'bg-transparent text-[var(--secondary-contrast)]',
-      !context &&
-        isSelected.value &&
-        'bg-[var(--secondary-selected)] text-[var(--secondary-contrast)]',
-      !context &&
-        !isSelected.value &&
-        'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
+        'text-[var(--text-muted)] hover:text-[var(--text-default)]',
       attrs.class as string | undefined
     )
   )
 
   const iconClasses =
-    'flex size-3.5 shrink-0 items-center justify-center text-[inherit] [&_i]:text-body-xs'
+    'flex size-[var(--size-4)] shrink-0 items-center justify-center text-[inherit] [&_i]:text-[length:var(--size-4)]'
 
   const closeClasses =
     'flex size-3.5 shrink-0 items-center justify-center rounded-[var(--shape-button)] text-[inherit] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]'
@@ -164,12 +157,17 @@
     @click="activate"
   >
     <span
-      v-if="$slots['leading']"
+      v-if="$slots['leading'] || icon"
       :class="iconClasses"
       aria-hidden="true"
       :data-testid="`${testId}__leading`"
     >
-      <slot name="leading" />
+      <slot name="leading">
+        <i
+          v-if="icon"
+          :class="icon"
+        />
+      </slot>
     </span>
     <span :data-testid="`${testId}__label`">
       <slot>{{ label }}</slot>
@@ -182,6 +180,12 @@
     >
       <slot name="trailing" />
     </span>
+    <span
+      v-if="!hasContext && isSelected && !isDisabled"
+      class="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[2px] rounded-full bg-[var(--border-selected)]"
+      aria-hidden="true"
+      :data-testid="`${testId}__indicator`"
+    />
     <span
       v-if="closable"
       :class="closeClasses"

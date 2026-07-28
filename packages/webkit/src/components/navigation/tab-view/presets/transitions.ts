@@ -10,7 +10,7 @@ export const tabViewPanelMotion = {
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-/** Tab list highlight pill — values read only from `animate.js`. */
+/** Tab list underline indicator — values read only from `animate.js`. */
 export const tabViewIndicatorMotion = {
   slide: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
@@ -28,7 +28,7 @@ export const getTabViewIndicatorTransitionStyle = (): { transition: string } => 
     tabViewIndicatorMotion.slide
 
   return {
-    transition: `transform ${transitionDuration} ${transitionTimingFunction}, width ${transitionDuration} ${transitionTimingFunction}, height ${transitionDuration} ${transitionTimingFunction}`
+    transition: `transform ${transitionDuration} ${transitionTimingFunction}, width ${transitionDuration} ${transitionTimingFunction}`
   }
 }
 

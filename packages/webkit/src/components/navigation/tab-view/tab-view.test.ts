@@ -331,6 +331,29 @@ describe('TabView (composition)', () => {
       expect(label.textContent).toContain('FromSlot')
       expect(label.textContent).not.toContain('FromProp')
     })
+
+    it('renders a leading icon from the icon prop, overridden by the leading slot', () => {
+      const withIcon = render(TabViewItem, {
+        props: { value: 'a', label: 'Alpha', icon: 'pi pi-home' }
+      })
+      const leading = withIcon.getByTestId('navigation-tab-view-item__leading')
+      expect(leading.querySelector('i.pi.pi-home')).toBeTruthy()
+      withIcon.unmount()
+
+      // The leading slot takes precedence over the icon prop's fallback glyph.
+      const withSlot = render(TabViewItem, {
+        props: { value: 'a', label: 'Alpha', icon: 'pi pi-home' },
+        slots: { leading: '<span data-testid="custom-leading">*</span>' }
+      })
+      const leadingSlot = withSlot.getByTestId('navigation-tab-view-item__leading')
+      expect(leadingSlot.querySelector('[data-testid="custom-leading"]')).toBeTruthy()
+      expect(leadingSlot.querySelector('i.pi.pi-home')).toBeNull()
+    })
+
+    it('renders no leading wrapper when neither icon prop nor leading slot is provided', () => {
+      const { queryByTestId } = render(TabViewItem, { props: { value: 'a', label: 'Alpha' } })
+      expect(queryByTestId('navigation-tab-view-item__leading')).toBeNull()
+    })
   })
 
   describe('accessibility', () => {

@@ -22,9 +22,7 @@
   const listRef = ref<HTMLElement | null>(null)
   const indicatorVisible = ref(false)
   const indicatorWidth = ref(0)
-  const indicatorHeight = ref(0)
   const indicatorOffsetX = ref(0)
-  const indicatorOffsetY = ref(0)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${context.testId}__list`
@@ -36,21 +34,20 @@
 
   const indicatorTransformStyle = computed(() => ({
     width: `${indicatorWidth.value}px`,
-    height: `${indicatorHeight.value}px`,
-    transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
+    transform: `translate3d(${indicatorOffsetX.value}px, 0, 0)`
   }))
 
   /** TODO: tokenizar — Figma `--tabview/tabviewnavbg` (transparent nav). */
   const listClasses = computed(() =>
     cn(
-      'relative flex shrink-0 items-end gap-[var(--spacing-xs)] bg-transparent',
+      'relative flex shrink-0 items-end gap-[var(--spacing-md)] border-b border-[var(--border-default)] bg-transparent',
       attrs.class as string | undefined
     )
   )
 
   const indicatorClasses = [
-    'pointer-events-none absolute left-0 top-0 z-0',
-    'rounded-[var(--shape-button)] bg-[var(--secondary-selected)]',
+    'pointer-events-none absolute bottom-0 left-0 z-[1] h-[2px]',
+    'rounded-full bg-[var(--border-selected)]',
     'motion-reduce:transition-none'
   ]
 
@@ -75,9 +72,7 @@
     const tabRect = tabEl.getBoundingClientRect()
 
     indicatorWidth.value = tabRect.width
-    indicatorHeight.value = tabRect.height
     indicatorOffsetX.value = tabRect.left - listRect.left
-    indicatorOffsetY.value = tabRect.top - listRect.top
     indicatorVisible.value = true
   }
 
