@@ -13,6 +13,7 @@
 //   { type: 'merge-json', path, merge, description }       // deep-merge into a JSON file
 //   { type: 'append',    path, content, marker }          // append once, guarded by a marker
 //   { type: 'copy',      from, to }                        // copy a template file (only if missing)
+//   { type: 'patch-entry', path, imports }                 // prepend missing import lines to the app entry
 //   { type: 'advise',    message }                         // print-only; never touches disk
 //
 // `advise` actions carry no filesystem effect — they surface reminders and
@@ -34,7 +35,9 @@ const DEP_VERSION = 'latest'
 // The eslint plugin, stylelint config and MCP all ship INSIDE @aziontech/webkit
 // (subpaths + bins), so the consumer installs only the design-system package + tooling
 // peers — no separate @aziontech/* toolkit packages.
-const RUNTIME_DEPS = ['@aziontech/webkit', '@aziontech/theme', '@aziontech/icons']
+const RUNTIME_DEPS = ['@aziontech/webkit', '@aziontech/theme']
+// The icon font is optional — `init` asks (or takes `--no-icons`); most apps want it.
+const ICONS_DEP = '@aziontech/icons'
 
 const DEV_DEPS = [
   'eslint',
@@ -192,16 +195,19 @@ function postcssConfig() {
 
 // The CSS entry the consumer imports once (e.g. from src/main). `@import '@aziontech/theme'`
 // pulls the design system's Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + web
-// fonts) in one line; the `@source` then points Tailwind at webkit's SOURCE so its component
-// utility classes (data-[kind=…]:bg-[var(--…)]) are generated in the consumer's build —
-// node_modules is excluded from Tailwind's auto content-detection, so without this `@source`
-// the webkit components render UNSTYLED. The consumer's own src is auto-detected.
+// fonts) in one line; `@import '@aziontech/webkit/styles'` then registers webkit's SOURCE
+// with Tailwind (its `@source` lives inside the package and resolves relative to it) so the
+// component utility classes (data-[kind=…]:bg-[var(--…)]) are generated in the consumer's
+// build — node_modules is excluded from Tailwind's auto content-detection, so without it the
+// webkit components render UNSTYLED. Both imports resolve by package name: no relative
+// ../node_modules path, immune to hoisting / workspace layouts. The consumer's own src is
+// auto-detected.
 function styleEntryContent() {
   return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
 @import '@aziontech/theme';
 
-/* webkit is consumed as source — scan it so its component utility classes compile. */
-@source '../node_modules/@aziontech/webkit/src';
+/* webkit is consumed as source — this registers it with Tailwind so its component classes compile. */
+@import '@aziontech/webkit/styles';
 `
 }
 
@@ -247,14 +253,19 @@ function claudeFragment() {
  * @param {string} projectDir absolute path to the consumer project
  * @param {object} [opts]
  * @param {boolean} [opts.recommended] use the `recommended` eslint preset instead of `strict`
+ * @param {boolean} [opts.icons] install @aziontech/icons + wire its import (default true)
+ * @param {boolean} [opts.wireEntry] add the style imports to the app entry file (default true)
  * @returns {Array<object>} ordered list of actions (no disk writes)
  */
 export function planInit(projectDir, opts = {}) {
   const actions = []
   const severity = opts.recommended ? 'recommended' : 'strict'
+  const icons = opts.icons !== false
+  const wireEntry = opts.wireEntry !== false
 
   // 1. Dependencies (recorded only; apply never runs a package manager).
-  for (const dep of RUNTIME_DEPS) {
+  const runtimeDeps = icons ? [...RUNTIME_DEPS, ICONS_DEP] : RUNTIME_DEPS
+  for (const dep of runtimeDeps) {
     actions.push({ type: 'add-dep', dep, version: DEP_VERSION, dev: false })
   }
   for (const dep of DEV_DEPS) {
@@ -409,24 +420,32 @@ export function planInit(projectDir, opts = {}) {
     marker: CLAUDE_FRAGMENT_MARKER
   })
 
-  // 8. Best-effort entry-file advice — never rewrites their entry file. Points at the
-  //    generated src/webkit.css (which `@import`s the theme's v4 stylesheet + `@source`s
-  //    webkit) plus the icon font. Import webkit.css (not `@aziontech/theme` bare) so the
-  //    `@source` that compiles webkit's component classes is included.
-  const entry = firstExisting(projectDir, [
-    'src/main.ts',
-    'src/main.js',
-    'src/main.mts',
-    'src/main.mjs'
-  ])
-  if (entry) {
+  // 8. Wire the design-system imports into the app entry. Importing the generated
+  //    src/webkit.css (not `@aziontech/theme` bare) is what includes the `@source` that
+  //    compiles webkit's component classes — skipping this step is exactly the "installed
+  //    but unstyled" failure. By default the imports are PATCHED into the entry file
+  //    (prepended once, idempotent); `wireEntry: false` (`--no-entry`) falls back to advice.
+  //    Feature-scoped setup (e.g. the toast service) is deliberately NOT wired here — it is
+  //    installed just-in-time at first use from the component's catalog `setup` recipe, and
+  //    `doctor` flags it when missing.
+  const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
+  const entryImports = ["import './webkit.css'"]
+  if (icons) entryImports.push("import '@aziontech/icons'")
+  if (entry && wireEntry) {
+    actions.push({ type: 'patch-entry', path: entry, imports: entryImports })
+  } else if (entry) {
     const src = read(join(projectDir, entry)) || ''
     if (!src.includes('webkit.css') && !src.includes('@aziontech/theme')) {
       actions.push({
         type: 'advise',
-        message: `Add the design-system styles to ${entry} (import once, near the top):\nimport './webkit.css'\nimport '@aziontech/icons'`
+        message: `Add the design-system imports to ${entry} (once, near the top):\n${entryImports.join('\n')}`
       })
     }
+  } else {
+    actions.push({
+      type: 'advise',
+      message: `No app entry found (src/main.ts|js|mts|mjs) — wire the design-system imports once at your entry:\n${entryImports.join('\n')}`
+    })
   }
 
   // 9. Theme selection — the tokens default to LIGHT (:root). Dark is opt-in via a
@@ -442,7 +461,13 @@ export function planInit(projectDir, opts = {}) {
 
 // Shared, side-effect-free helpers + constants reused by the doctor planner.
 export { firstExisting, read }
-export const ALL_DEPS = [...RUNTIME_DEPS, ...DEV_DEPS, ...STYLE_DEV_DEPS.map((d) => d.dep)]
+export const ALL_DEPS = [
+  ...RUNTIME_DEPS,
+  ICONS_DEP,
+  ...DEV_DEPS,
+  ...STYLE_DEV_DEPS.map((d) => d.dep)
+]
+export const ENTRY_CANDIDATES = ['src/main.ts', 'src/main.js', 'src/main.mts', 'src/main.mjs']
 export const TAILWIND_CONFIG_CANDIDATES = [
   'tailwind.config.js',
   'tailwind.config.cjs',
@@ -487,6 +512,7 @@ export const HUSKY_HOOK_MARKER = 'npx stylelint "**/*.{css,scss,vue}"'
 
 export const _internals = {
   RUNTIME_DEPS,
+  ICONS_DEP,
   DEV_DEPS,
   STYLE_DEV_DEPS,
   DEP_VERSION,

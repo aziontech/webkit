@@ -77,17 +77,17 @@ export const textsData = {
   'text-label-lg': {
     fontSize: fontSize.base,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.medium
   },
   'text-label-md': {
     fontSize: fontSize.sm,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.medium
   },
   'text-label-sm': {
     fontSize: fontSize.xs,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.medium
   },
   'text-label-code-sm': {
     fontFamily: fontFamily.code,

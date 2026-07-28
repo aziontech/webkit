@@ -10,16 +10,21 @@ It wires everything and then gets out of the way: after setup there are no extra
 
 ## What `init` does
 
-The plan is computed by reading your project first, then applied without ever clobbering your files — each step either writes something absent, merges/appends behind a marker, or just advises.
+The plan is computed by reading your project first, then applied without ever clobbering your files — each step either writes something absent, merges/appends behind a marker, patches once behind an idempotency check, or just advises.
 
-1. **Dependencies** recorded in `package.json` — `@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons`, plus dev tooling peers (`eslint`, `stylelint`, `vue-eslint-parser`, `@typescript-eslint/parser`, `postcss-html`, `postcss-scss`, `husky`). The ESLint plugin, Stylelint config, and MCP server all ship inside `@aziontech/webkit` (subpaths + bins), so no separate toolkit packages are added. It does not run an install — do that with your package manager.
+On a TTY (and without `--yes`), `init` first asks about the optional pieces — install the icon font? wire the entry imports automatically? — one Y/n question each. Piped/CI runs never prompt: they take the defaults (everything on) minus any `--no-*` flag.
+
+1. **Dependencies** recorded in `package.json` — `@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons` (unless `--no-icons`), plus dev tooling peers (`eslint`, `stylelint`, `vue-eslint-parser`, `@typescript-eslint/parser`, `postcss-html`, `postcss-scss`, `husky`). The ESLint plugin, Stylelint config, and MCP server all ship inside `@aziontech/webkit` (subpaths + bins), so no separate toolkit packages are added. It does not run an install — do that with your package manager.
 2. **`eslint.config.mjs`** (flat, ESM) wiring the webkit preset — or a merge snippet if an ESLint config already exists.
 3. **`.stylelintrc.json`** extending the webkit config, with the `.vue` / `.scss` custom syntaxes wired — or a merge snippet if a Stylelint config already exists.
-4. **`.mcp.json`** — the `webkit` MCP server merged in (other servers untouched).
-5. **`prepare` script + `.husky/pre-commit`** — lint on commit. The install runs `prepare` (husky), which activates the hooks.
-6. **`.claude/` bundle** — rules, the `webkit-usage` skill, and agents — only files that are missing.
-7. **`CLAUDE.md` fragment** — appended once, guarded by a marker.
-8. **Theme wiring advice** — if `src/main.*` lacks the theme import, it suggests adding it (never edits your entry file).
+4. **`src/webkit.css`** — the one CSS entry: `@import '@aziontech/theme'` (tokens + Tailwind v4 + fonts) and `@import '@aziontech/webkit/styles'`, which registers webkit's source with Tailwind so its component classes compile. Both resolve by package name — no `../node_modules` path in your CSS (the `@source` ships inside the package and resolves relative to it, so hoisting/workspace layouts can't break it).
+5. **`.mcp.json`** — the `webkit` MCP server merged in (other servers untouched).
+6. **`prepare` script + `.husky/pre-commit`** — lint on commit. The install runs `prepare` (husky), which activates the hooks.
+7. **`.claude/` bundle** — rules, the `webkit-usage` skill, and agents — only files that are missing.
+8. **`CLAUDE.md` fragment** — appended once, guarded by a marker.
+9. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file.
+
+Feature-scoped setup is deliberately **not** part of `init`. A component that needs one-time app wiring (e.g. toast: `.use(ToastPlugin)` on `createApp()` — the plugin mounts the region automatically) declares it in its catalog entry's `setup` field, surfaced by the MCP's `get_component` / `get_best_practices` — so it is wired **just-in-time at first use**, by you or your AI, instead of preloading unused code for everyone. `doctor` backstops it mechanically (see below).
 
 ## Options
 
@@ -28,6 +33,9 @@ The plan is computed by reading your project first, then applied without ever cl
 | `--dry-run`     | Print the plan; write nothing.                                  |
 | `--strict`      | Strict ESLint preset (default).                                 |
 | `--recommended` | Recommended preset — every rule is still `error`, never `warn`. |
+| `-y`, `--yes`   | Accept every default; never prompt (CI / scripted runs).        |
+| `--no-icons`    | Skip `@aziontech/icons` (the icon font) and its entry import.   |
+| `--no-entry`    | Do not edit `src/main.*`; print the imports to add instead.     |
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
 
@@ -41,9 +49,11 @@ The toolkit is fail-open by design (a missing catalog disables the lint rules ra
 
 - **webkit catalog** resolvable (`FAIL` = lint rules are disabled — install webkit or set `WEBKIT_CATALOG_PATH`);
 - **eslint / stylelint config** present;
+- **webkit.css** registers webkit with Tailwind (`@import '@aziontech/webkit/styles'`, or a legacy inline `@source`) — `FAIL` = unstyled components;
 - **mcp server** registered in `.mcp.json`;
 - **husky** `prepare` script + `.husky/pre-commit` lint block present;
-- **theme import** at the app entry;
+- **styles import** (`./webkit.css`) at the app entry, and the **icons import** when `@aziontech/icons` is a dependency;
+- **toast setup** — only when the source imports `@aziontech/webkit/toast`: a region must be wired (`.use(ToastPlugin)` in the entry, or a mounted Toaster), otherwise `WARN` with the exact fix;
 - **dependency versions** — the resolved installed version of each toolkit dependency, with a `WARN` for any still pinned as `latest` (and the suggested `^x.y.z` pin).
 
 It writes nothing and exits non-zero if any check is `FAIL` — safe to run in CI as a setup gate.

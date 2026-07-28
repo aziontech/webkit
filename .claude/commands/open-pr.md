@@ -1,16 +1,16 @@
 ---
-description: Open a PR to `dev`. Analyzes the diff to pick the Conventional Commit type/scope (drives the semantic-release bump), prompts for the related issue (optional), commits by context, pushes, and opens the PR.
+description: Open a PR to `main`. Analyzes the diff to pick the Conventional Commit type/scope (drives the release-please bump), prompts for the related issue (optional), commits by context, pushes, and opens the PR.
 argument-hint: [PR title or focus]
 ---
 
-You are running `/open-pr`. Land the current working changes as a pull request against `dev`, following the repo's commit + versioning conventions end to end.
+You are running `/open-pr`. Land the current working changes as a pull request against `main`, following the repo's commit + versioning conventions end to end.
 
 **User input:** $ARGUMENTS
 
 ## Source of truth
 
-- Commit format and type→bump: [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention and [`commitlint.config.js`](../../commitlint.config.js).
-- Release rules: `packages/<pkg>/.releaserc` (semantic-release; merges to `dev` cut the version).
+- Commit format and type→release mapping: [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention, [`commitlint.config.js`](../../commitlint.config.js), and [`release-types.md`](../rules/release-types.md).
+- Release automation: [`release-please-config.json`](../../release-please-config.json) — merges to `main` update the pending Release PR; merging the Release PR cuts the version. Stock release-please: only `feat` / `fix` / breaking release.
 
 ## Steps
 
@@ -19,37 +19,38 @@ You are running `/open-pr`. Land the current working changes as a pull request a
 
 ### 1. Analyze the diff (drives the version bump)
 Run `git diff` (staged + unstaged) and determine, from the change itself:
-- **type** → `feat` (new component / prop / event / slot / public export), `fix` / `hotfix` (bug, a11y, visual regression), `refactor`, `perf`, `docs`, `style`, `chore`, `test`, `ci`, `revert`. This sets the bump: `feat`→minor; `fix`/`hotfix`/`chore`/`docs`/`style`/`refactor`/`perf`→patch; `test`/`ci`/`revert`→no release.
+- **type** → `feat` (new component / prop / event / slot / public export), `fix` (bug, a11y, visual regression — anything that must ship), `refactor`, `perf`, `docs`, `style`, `chore`, `test`, `ci`, `revert`. Release effect (release-please): `feat`→minor; `fix`→patch; breaking→major; **every other type → no release on its own** (urgent production fixes are `fix` — there is no `hotfix` type).
 - **scope** → the package without its namespace (`webkit`, `theme`, `icons`), inferred from the changed paths.
 - **breaking?** → a removed or renamed public prop, event, slot, or export ⇒ major. Mark it with `!` and a `BREAKING CHANGE:` footer. **Confirm with the user before marking a change breaking.**
 
 If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTING: "one package per commit when possible").
 
 ### 2. Related issue (optional)
-- Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank for `NO-ISSUE`)". Blank → use `[NO-ISSUE]`.
+- Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank if none)". With an issue, the tag goes **in the subject, after the colon** (`fix(webkit): [ENG-1234] …`) — never before the type. **No issue → no tag** — never write `[NO-ISSUE]` (dead characters; commitlint rejects it).
 
-### 3. Ensure a `dev`-based branch
-- If on `dev`/`main` (or not on a `dev`-based feature branch), run the `/create-branch` flow (type from step 1, issue from step 2), carrying the working changes over.
-- **Never** open a PR directly from `main` or `dev`.
+### 3. Ensure a `main`-based feature branch
+- If on `main` (or not on a `main`-based feature branch), run the `/create-branch` flow (type from step 1, issue from step 2), carrying the working changes over.
+- **Never** open a PR directly from `main`.
 
 ### 4. Commit by context
 - **Split shared docs/rules from code.** If the diff mixes code with shared docs/rules/templates (`.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md`, …), tell the user those belong in a **separate PR** and offer to split them out. A component's own new `.specs/<name>.md` stays with the component.
-- Header (commitlint-valid, ≤100 chars): `[<ISSUE|NO-ISSUE>] <type>(<scope>): <subject>`
-  - Breaking: `[…] <type>(<scope>)!: <subject>` plus a `BREAKING CHANGE: <what + migration>` footer.
+- Header (commitlint-valid, ≤100 chars): `<type>(<scope>): [<ISSUE>] <subject>` — the `[<ISSUE>]` tag only when an issue exists; with none, plain `<type>(<scope>): <subject>`.
+  - Breaking: `<type>(<scope>)!: [<ISSUE>] <subject>` plus a `BREAKING CHANGE: <what + migration>` footer.
+  - The header **starts with the bare type**. A leading ticket tag (`[ENG-1234] fix: …`) is unparseable by release-please — the merge would release **nothing** — and commitlint now rejects it (as it rejects `[NO-ISSUE]` anywhere).
 - **Never** add a `Co-Authored-By` trailer or any "Generated with Claude" / attribution footer.
 - Let the hooks run — `commit-msg` runs commitlint and the header must pass. **Do not** use `--no-verify` to skip commitlint. If `pre-commit` (lint-staged) fails for an environmental reason, report it and ask the user before retrying.
 
 ### 5. Show the plan and confirm
-- Show the planned commit header(s), the implied version bump (minor/patch/major/none), and the target base (`dev`). Confirm with the user before pushing.
+- Show the planned commit header(s), the implied version bump (minor/patch/major/none), and the target base (`main`). Confirm with the user before pushing.
 
 ### 6. Push and open the PR
 - `git push -u origin <branch>`.
-- If a PR already exists for the branch, update it; otherwise `gh pr create --base dev --head <branch>`.
-- **Title:** the conventional commit header (or `$ARGUMENTS`). **Body:** `## Summary` (what + why) and `## Notes`; call out any new dependency and any breaking change; reference the issue. No Figma links, no attribution footer.
+- If a PR already exists for the branch, update it; otherwise `gh pr create --base main --head <branch>`.
+- **Title:** the conventional commit header (normalize `$ARGUMENTS` into that form when given). Merges are **squash merges**, so the PR title is the commit release-please parses — it must **start with the bare type**, with the ticket tag after the colon only when an issue exists (`<type>(<scope>): [<ISSUE>] <subject>`), and put `!` in the title for a breaking change. **Body:** `## Summary` (what + why) and `## Notes`; call out any new dependency and any breaking change; reference the issue. No Figma links, no attribution footer.
 - Report the PR URL.
 
 ## Rules
 
-- The base branch is always `dev`.
+- The base branch is always `main`.
 - Commit and push only as part of this command (running it is the authorization). Do not commit unrelated changes.
 - Keep imports/exports in the public flat form per [`.claude/rules/imports.md`](../rules/imports.md) when the diff touches `package.json#exports` or stories.

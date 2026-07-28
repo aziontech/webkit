@@ -24,26 +24,26 @@ export default {
   },
   storage: [
     {
-      name: 'webkit-storybook-dev',
-      prefix: '20260622162046',
+      name: 'webkit-storybook',
+      prefix: '20260316141821',
       dir: './dist',
       workloadsAccess: 'read_only'
     }
   ],
   connectors: [
     {
-      name: 'webkit-storybook-dev',
+      name: 'webkit-storybook',
       active: true,
       type: 'storage',
       attributes: {
-        bucket: 'webkit-storybook-dev',
-        prefix: '20260622162046'
+        bucket: 'webkit-storybook',
+        prefix: '20260316141821'
       }
     }
   ],
   applications: [
     {
-      name: 'webkit-storybook-dev',
+      name: 'webkit-storybook',
       cache: [
         {
           name: 'webkit-storybook',
@@ -58,37 +58,9 @@ export default {
       rules: {
         request: [
           {
-            name: 'Redirect to index.html',
-            description: 'Handle all routes by rewriting to index.html for client-side routing',
-            active: true,
-            criteria: [
-              [
-                {
-                  variable: '${uri}',
-                  conditional: 'if',
-                  operator: 'matches',
-                  argument: '^\/'
-                }
-              ]
-            ],
-            behaviors: [
-              {
-                type: 'set_connector',
-                attributes: {
-                  value: 'webkit-storybook-dev'
-                }
-              },
-              {
-                type: 'rewrite_request',
-                attributes: {
-                  value: '/index.html'
-                }
-              }
-            ]
-          },
-          {
             name: 'Deliver Static Assets and Set Cache Policy',
-            description: 'Deliver static assets directly from storage and set cache policy',
+            description:
+              'Deliver static assets directly from storage and set cache policy',
             active: true,
             criteria: [
               [
@@ -105,7 +77,7 @@ export default {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: 'webkit-storybook-dev'
+                  value: 'webkit-storybook'
                 }
               },
               {
@@ -118,6 +90,36 @@ export default {
                 type: 'deliver'
               }
             ]
+          },
+          {
+            name: 'Redirect to index.html',
+            description:
+              'Handle all routes by rewriting to index.html for client-side routing',
+            active: true,
+            criteria: [
+              [
+                {
+                  variable: '${uri}',
+                  conditional: 'if',
+                  operator: 'matches',
+                  argument: '^\/'
+                }
+              ]
+            ],
+            behaviors: [
+              {
+                type: 'set_connector',
+                attributes: {
+                  value: 'webkit-storybook'
+                }
+              },
+              {
+                type: 'rewrite_request',
+                attributes: {
+                  value: '/index.html'
+                }
+              }
+            ]
           }
         ],
         response: []
@@ -126,19 +128,19 @@ export default {
   ],
   workloads: [
     {
-      name: 'webkit-storybook-dev',
+      name: 'webkit-storybook',
       active: true,
       infrastructure: 1,
-      domains: ['dev-webkit.azion.app'],
+      domains: ['webkit.azion.app'],
       deployments: [
         {
-          name: 'webkit-storybook-dev',
+          name: 'webkit-storybook',
           current: true,
           active: true,
           strategy: {
             type: 'default',
             attributes: {
-              application: 'webkit-storybook-dev'
+              application: 'webkit-storybook'
             }
           }
         }

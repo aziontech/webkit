@@ -59,5 +59,20 @@
       "parent": "table",
       "treeShakeableImport": "@aziontech/webkit/table-row"
     }
+  },
+  "tokens": {
+    "animations": [
+      "fade-in",
+      "fade-out",
+      "slide-down",
+      "slide-in-left",
+      "slide-out-left",
+      "slide-in-right",
+      "slide-out-right",
+      "popup-scale-in",
+      "popup-scale-out",
+      "pulse",
+      "spin"
+    ]
   }
 }

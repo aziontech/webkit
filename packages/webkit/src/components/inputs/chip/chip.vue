@@ -109,7 +109,9 @@
       @click="onClick"
       @keydown="onKeydown"
     >
-      <span class="relative z-[1] inline-flex items-center justify-center gap-[var(--spacing-xxs)]">
+      <span
+        class="relative z-[var(--z-input-field)] inline-flex items-center justify-center gap-[var(--spacing-xxs)]"
+      >
         <slot v-if="$slots['default']" />
         <span
           v-else-if="label"

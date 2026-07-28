@@ -1,7 +1,4 @@
-import {
-  curve,
-  duration
-} from '../../../../../../theme/src/tokens/primitives/animations/animate.js'
+import { curve, duration } from '@aziontech/theme/animations'
 
 /** Selection highlight pill — values read only from `animate.js`. */
 export const segmentedButtonIndicatorMotion = {

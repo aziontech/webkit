@@ -126,7 +126,7 @@
   >
     <span
       v-if="$slots['prefix']"
-      class="relative z-[1] flex items-center pl-[var(--spacing-md)] text-[var(--text-muted)]"
+      class="relative z-[var(--z-input-field)] flex items-center pl-[var(--spacing-md)] text-[var(--text-muted)]"
     >
       <slot name="prefix" />
     </span>
@@ -145,21 +145,21 @@
       :aria-required="required || undefined"
       :data-testid="testId"
       v-bind="passthroughAttrs"
-      class="relative z-[1] w-full min-w-0 border-0 bg-transparent outline-none px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      class="relative z-[var(--z-input-field)] w-full min-w-0 border-0 bg-transparent outline-none px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       @input="handleInput"
       @change="handleChange"
     />
 
     <span
       v-if="$slots['suffix']"
-      class="relative z-[1] flex items-center pr-[var(--spacing-md)] text-[var(--text-muted)]"
+      class="relative z-[var(--z-input-field)] flex items-center pr-[var(--spacing-md)] text-[var(--text-muted)]"
     >
       <slot name="suffix" />
     </span>
 
     <span
       v-if="disabled"
-      class="relative z-[1] flex items-center pr-[var(--spacing-md)] text-[var(--text-disabled)]"
+      class="relative z-[var(--z-input-field)] flex items-center pr-[var(--spacing-md)] text-[var(--text-disabled)]"
       aria-hidden="true"
     >
       <i class="pi pi-lock text-label-sm leading-none" />
@@ -167,7 +167,7 @@
 
     <span
       v-if="showButtons"
-      class="relative z-[1] flex h-full w-12 shrink-0 flex-col self-stretch border-l border-[var(--border-default)]"
+      class="relative z-[var(--z-input-field)] flex h-full w-12 shrink-0 flex-col self-stretch border-l border-[var(--border-default)]"
     >
       <button
         type="button"

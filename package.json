@@ -8,6 +8,9 @@
     "url": "https://github.com/aziontech/webkit.git"
   },
   "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "prepare": "husky",
     "icons:gallery:build": "pnpm --filter icons-gallery run build",
@@ -31,8 +34,8 @@
     "theme:format": "pnpm --filter theme run format",
     "webkit:lint": "pnpm --filter webkit lint",
     "webkit:lint:fix": "pnpm --filter webkit lint:fix",
-    "webkit:lint:style": "pnpm --filter webkit lint:style",
-    "webkit:lint:style:fix": "pnpm --filter webkit lint:style:fix",
+    "webkit:lint:style": "stylelint \"packages/webkit/**/*.{css,scss,vue}\"",
+    "webkit:lint:style:fix": "stylelint \"packages/webkit/**/*.{css,scss,vue}\" --fix",
     "webkit:type-check": "pnpm --filter webkit type-check",
     "webkit:type-coverage": "pnpm --filter webkit type-coverage",
     "webkit:test": "pnpm --filter webkit test",
@@ -42,7 +45,7 @@
     "webkit:format": "pnpm --filter webkit format",
     "webkit:format:check": "pnpm --filter webkit format:check",
     "security:audit": "pnpm audit",
-    "governance": "pnpm run webkit:lint && pnpm run webkit:type-check && pnpm run webkit:format:check && pnpm run security:audit"
+    "governance": "pnpm run webkit:lint && pnpm run webkit:lint:style && pnpm run webkit:format:check && pnpm run webkit:type-check && pnpm run webkit:type-coverage && pnpm run security:audit"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
@@ -56,11 +59,6 @@
     "@commitlint/cli": "^21.0.2",
     "@eslint/js": "^9.39.3",
     "@rushstack/eslint-patch": "^1.16.1",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^10.0.4",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
-    "@semantic-release/release-notes-generator": "12.1.0",
     "@typescript-eslint/eslint-plugin": "^8.58.2",
     "@typescript-eslint/parser": "^8.58.2",
     "@vue/eslint-config-prettier": "^7.1.0",
@@ -76,13 +74,12 @@
     "lint-staged": "^16.4.0",
     "postcss": "^8.5.10",
     "prettier": "^3.9.4",
-    "semantic-release": "^23.1.1",
     "stylelint": "^17.7.0",
     "stylelint-config-recommended-vue": "^1.6.1",
     "stylelint-config-standard-scss": "^17.0.0",
     "stylelint-order": "^8.1.1",
     "type-coverage": "^2.29.7",
-    "vite": "^6.4.3",
+    "vite": "^8.1.5",
     "vue-eslint-parser": "^10.4.0"
   },
   "lint-staged": {
