@@ -5069,6 +5069,13 @@
       "status": "approved",
       "props": [
         {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned."
+        },
+        {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
@@ -5109,6 +5116,13 @@
       "structure": "composition",
       "status": "approved",
       "props": [
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned."
+        },
         {
           "name": "invalid",
           "type": "boolean",

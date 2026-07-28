@@ -45,6 +45,17 @@ const meta = {
     }
   },
   argTypes: {
+    size: {
+      control: 'inline-radio',
+      options: ['small', 'medium', 'large'],
+      description:
+        'Size token; affects the root height (28/32/40px) and inner addon padding. Match the same `size` on child controls.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" }
+      }
+    },
     invalid: {
       control: 'boolean',
       description: 'Renders the error border and sets `aria-invalid="true"` on the root.',
@@ -64,6 +75,7 @@ const meta = {
     }
   },
   args: {
+    size: 'medium',
     invalid: false,
     required: false,
     disabled: false
@@ -77,7 +89,7 @@ const Template = (args) => ({
   setup() {
     return { props: args }
   },
-  template: `<InputGroup :invalid="props.invalid" :required="props.required" :disabled="props.disabled">${MIDDLE_INPUT}</InputGroup>`
+  template: `<InputGroup :size="props.size" :invalid="props.invalid" :required="props.required" :disabled="props.disabled">${MIDDLE_INPUT}</InputGroup>`
 })
 
 const DEFAULT_MARKUP = `<InputGroup>
@@ -91,6 +103,42 @@ export const Default = {
     docs: {
       description: { story: 'Root with only a raw `<input>` as its single child.' },
       source: { code: toSfc(IMPORTS, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const SIZES_MARKUP = `<div class="flex flex-col gap-4">
+  <InputGroup size="small">
+    <InputGroupAddon>https://</InputGroupAddon>
+    ${MIDDLE_INPUT}
+    <InputGroupAddon>.com</InputGroupAddon>
+  </InputGroup>
+  <InputGroup size="medium">
+    <InputGroupAddon>https://</InputGroupAddon>
+    ${MIDDLE_INPUT}
+    <InputGroupAddon>.com</InputGroupAddon>
+  </InputGroup>
+  <InputGroup size="large">
+    <InputGroupAddon>https://</InputGroupAddon>
+    ${MIDDLE_INPUT}
+    <InputGroupAddon>.com</InputGroupAddon>
+  </InputGroup>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof InputGroup>} */
+export const Sizes = {
+  render: () => ({
+    components,
+    template: SIZES_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The three sizes stacked (`small`=28px, `medium`=32px, `large`=40px). Match the same `size` on child input controls to keep the inner content vertically centered.'
+      },
+      source: { code: toSfc(IMPORTS, toSource(SIZES_MARKUP)) }
     }
   }
 }
