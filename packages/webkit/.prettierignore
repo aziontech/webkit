@@ -5,3 +5,5 @@ node_modules
 *.d.ts.map
 coverage
 storybook-static
+catalog.json
+CHANGELOG.md

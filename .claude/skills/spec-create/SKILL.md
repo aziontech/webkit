@@ -2,7 +2,7 @@
 name: spec-create
 description: Interactively draft `.specs/<name>.md` for a new webkit component. Owns the questions, the cross-reference with DESIGN.md and Figma, and the initial `status: draft` write. Never writes component code.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-07-23
 scope: webkit
 enforced_by: [no-invention, props, styling]
 ---
@@ -20,7 +20,7 @@ Produce a `.specs/<name>.md` that is complete enough for `spec-validator` to fli
 
 ## Inputs & mode
 
-- `<name>` (kebab-case) — required in both modes.
+- `<name>` (kebab-case) — **required in Mode B; optional in Mode A.** In Mode A (Figma), when `<name>` is omitted the name is derived from the frame's component name (normalized to kebab) and **confirmed** with the user; a passed `<name>` **overrides** the frame. See **Name resolution** in the Mode A section.
 - The **mode** is chosen by input:
   - **Mode A — Figma-driven:** `--figma <url>` is present. The frame is the source of truth.
   - **Mode B — Name + Category:** no `--figma`. The user is building without a design; `--category <name>` is required (ask + confirm if missing). This mode is **more blocking** — see below.
@@ -29,7 +29,7 @@ Confirm the mode with the user before drafting. If it's ambiguous which one they
 
 ## Workflow — shared steps
 
-1. **Argument parsing.** Reject if `<name>` is missing or not kebab-case. Reject if `.specs/<name>.md` already exists with `status ∈ {approved, implemented, locked}` (the user is editing the wrong file).
+1. **Argument parsing & name resolution.** Parse the flags. A passed `<name>` must be kebab-case (reject otherwise) and always **wins** (explicit override). If `<name>` is absent: in **Mode B** reject (no frame to derive from); in **Mode A** defer — the name is resolved from the frame in **Name resolution** below, *before* any file path is computed. Only once the name is known: reject if `.specs/<name>.md` already exists with `status ∈ {approved, implemented, locked}` (the user is editing the wrong file) and ask for a different name.
 2. **Category.** Use the taxonomy in `.specs/_template.md` frontmatter. State the inferred/received category and **ask the user to confirm** (mandatory in Mode B — never assume).
 3. **Structure decision.** Call `structure-decide` with the regions/answers. Default to `monolithic` when in doubt.
 4. **Write the spec.** Copy `.specs/_template.md` to `.specs/<name>.md`, fill every section, frontmatter `status: draft`, `created`/`last_updated` = today, no `checksum`.
@@ -37,6 +37,7 @@ Confirm the mode with the user before drafting. If it's ambiguous which one they
 
 ## Mode A — Figma-driven (`--figma <url>`)
 
+- **Name resolution.** If the user passed `<name>`, use it verbatim (explicit override). Otherwise take the frame's component name from `figma-discover`'s `component_name` and **normalize it to kebab** per [`naming.md`](../../rules/naming.md) (Pascal/camel → kebab; drop variant/state/version qualifiers like `Variant=Primary` or `v2`; strip emojis, slashes, spaces). **Propose the normalized name and ask the user to confirm** — never bake the raw Figma name in (see [`migration.md`](../../rules/migration.md)). If the frame yields no usable name, ask the user for one (as in Mode B). Resolve the name **before** computing the `.specs/<name>.md` path and its collision check.
 - **Figma discovery.** Delegate to `figma-discover` via the `figma-extractor` sub-agent. Use the returned JSON to pre-populate the Tokens section.
 - **Token mapping.** Run `token-map` against the Figma output and DESIGN.md. Populate the Tokens table; flag Theme gaps.
 - **Confirm, don't assume.** Show the extracted props/regions/states/tokens and ask the user to confirm/correct.

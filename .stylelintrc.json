@@ -3,6 +3,10 @@
   "plugins": ["stylelint-order"],
   "rules": {
     "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": [
+      true,
+      { "ignoreAtRules": ["source", "theme", "utility", "custom-variant", "plugin", "reference"] }
+    ],
     "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
     "no-descending-specificity": [true, { "severity": "warning" }],
     "declaration-block-no-duplicate-properties": true,
@@ -12,5 +16,13 @@
     "value-no-vendor-prefix": [true, { "severity": "warning" }],
     "selector-max-id": 0
   },
+  "overrides": [
+    {
+      "files": ["**/*.vue"],
+      "rules": {
+        "no-invalid-position-declaration": null
+      }
+    }
+  ],
   "ignoreFiles": ["**/dist/**", "**/node_modules/**", "**/coverage/**"]
 }

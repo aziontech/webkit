@@ -39,8 +39,6 @@ tokens/theme/**               ─┤                                    dist/v4/
                                │
 scripts/{compile-primitives,  ─┘
         compile-theme,
-        resolve,
-        css-vars,
         refs}.js  (building blocks used by build-tokens.mjs)
 ```
 
@@ -115,17 +113,11 @@ src/
 │   │   └── animations.js
 │   ├── theme.js                 # Tailwind theme.extend (colors + semantic mappings)
 │   └── index.js                 # public re-exports
-├── scripts/
-│   ├── refs.js                  # tokenRef helper + isTokenRef guard
-│   ├── resolve.js               # resolves `tokenRef` paths to literal values
-│   ├── css-vars.js              # builds light/dark CSS var maps from semantic refs
-│   ├── compile-primitives.js    # flattens primitive trees into CSS vars
-│   ├── compile-theme.js         # legacy theme compiler (used by the harness pages)
-│   └── build-tokens.mjs         # main entrypoint: emits dist/v3 and dist/v4 bundles
-└── tests/
-    ├── primitives.html          # visual harness for all primitives
-    ├── theme.html               # semantic tokens with light/dark toggle
-    └── tokens.html              # combined view
+└── scripts/
+    ├── refs.js                  # tokenRef helper + isTokenRef guard + assertResolvedRefs
+    ├── compile-primitives.js    # flattens primitive trees into CSS vars
+    ├── compile-theme.js         # semantic light/dark compiler (exported as ./theme-colors)
+    └── build-tokens.mjs         # main entrypoint: emits the dist/v4 bundle
 ```
 
 ---
@@ -216,18 +208,18 @@ Utilities like `text-default`, `bg-surface`, `border-default`, `text-primary`, `
 ### As JS objects (Node / build steps)
 
 ```js
-import { createCssVars, cssVarsString } from '@aziontech/theme'
+import { compileThemeVars, compileThemeCss } from '@aziontech/theme/theme-colors'
 
-createCssVars() // → { light: { '--text-default': '#1A1A1A', … }, dark: { … } }
-cssVarsString() // → ':root, [data-theme=light], .azion.azion-light { … } [data-theme=dark], … { … }'
+compileThemeVars() // → { light: { '--primary': '…', … }, dark: { … } }
+compileThemeCss() // → ':root, [data-theme=light], .azion.azion-light { … }\n\n[data-theme=dark], … { … }'
 ```
 
 ### Injecting at runtime (browser)
 
 ```js
-import { injectCssVars } from '@aziontech/theme'
+import { injectThemeCss } from '@aziontech/theme/theme-colors'
 
-injectCssVars() // appends a <style data-azion-tokens> element to <head>
+injectThemeCss() // appends a <style data-azion-theme> element to <head>
 ```
 
 Only useful if you can't precompile and import `globals.css` — production usage should prefer the static stylesheet.
@@ -306,18 +298,17 @@ Bundles with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` pres
 
 ## 🔗 Token references (`tokenRef`)
 
-`tokenRef(path)` returns a marker object `{ __ref: path }` that the compiler resolves at build time. Supported path prefixes (see `scripts/resolve.js`):
+`tokenRef(path)` returns a marker object `{ __ref: path }` that the compilers resolve at build time. Primitive-tree refs (`scripts/compile-primitives.js`) resolve against the full primitives tree (e.g. `shape.container.3xs`). Semantic theme refs (`scripts/compile-theme.js`) support these prefixes:
 
-| Prefix                        | Looks up                                                                                               |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `primitives.X.Y.Z`            | `tokens/primitives/colors/colors.js` tree (e.g., `primitives.gray.900`, `primitives.alpha.orange.100`) |
-| `surfacePrimitives.surface.N` | the surface palette (used internally; usually referenced via `brand.surfaces.…`)                       |
-| `brand.surfaces.surface-N`    | `surfacePrimitives.surface[N]` (e.g., `brand.surfaces.surface-100` → `#F5F5F5`)                        |
-| `brand.primary.primary-N`     | `brandPrimitives.primary[N]` (e.g., `brand.primary.primary-500` → `#FE601F`)                           |
-| `brand.accent.accent-N`       | `brandPrimitives.accent[N]`                                                                            |
-| `brand.absolute.X`            | `brandPrimitives.absolute.X` (`black` / `white`)                                                       |
+| Prefix                    | Looks up                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `primitives.X.Y.Z`        | `tokens/primitives/colors/colors.js` tree (e.g., `primitives.gray.900`, `primitives.alpha.orange.100`) |
+| `brand.primary.primary-N` | `brandPrimitives.primary[N]` (e.g., `brand.primary.primary-500` → `#FE601F`)                           |
+| `brand.accent.accent-N`   | `brandPrimitives.accent[N]`                                                                            |
+| `brand.absolute.X`        | `brandPrimitives.absolute.X` (`black` / `white`)                                                       |
+| `theme.surfaces.X`        | the variant's pre-resolved surfaces group (`tokens/theme/surfaces.js`)                                 |
 
-Refs of unknown prefixes are left as the raw path string in the output — flag for "this needs resolver support".
+A ref that does not resolve — unknown prefix or dead path — **fails the build**: the compilers collect every miss and throw one aggregated `--var → ref` list (`assertResolvedRefs` in `scripts/refs.js`).
 
 ---
 

@@ -3,10 +3,10 @@ name: link
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 42815455514e846bb1b8f6825c1ab7a00e53d155ae890edd2ffd48898ed9aa0c
+spec_version: 2
+checksum: 82a01ef41214686b035f6f6f700873cd25b1c0f963f820bbd40220e27ece8c9a
 created: 2026-05-22
-last_updated: 2026-06-01
+last_updated: 2026-07-22
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
@@ -22,12 +22,12 @@ Helps users move between views or sections. Migrated from the existing implement
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `label` | `string` | `'Learn More'` | no | Visible label rendered inside the link. |
-| `size` | `'large' | 'medium'` | `'large'` | no | Size token; affects height, gap, and typography. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
 | `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
 | `showIcon` | `boolean` | `true` | no | When true, renders the trailing icon. |
 | `icon` | `string` | `'pi pi-external-link'` | no | PrimeIcons class for the trailing icon. |
 | `href` | `string` | `'#'` | no | Destination URL for the anchor. |
-| `target` | `'_blank' | '_self'` | `'_self'` | no | Link target when navigating. |
+| `target` | `'_blank' \| '_self'` | `'_self'` | no | Link target when navigating. |
 
 ## Events
 

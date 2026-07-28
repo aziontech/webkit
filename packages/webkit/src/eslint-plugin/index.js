@@ -11,6 +11,7 @@ import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
+import noHardcodedMotion from './rules/no-hardcoded-motion.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import preferDefineModel from './rules/prefer-define-model.js'
@@ -24,6 +25,7 @@ const rules = {
   'no-barrel-import': noBarrelImport,
   'no-whole-icon-set-import': noWholeIconSetImport,
   'no-hardcoded-color': noHardcodedColor,
+  'no-hardcoded-motion': noHardcodedMotion,
   'prefer-tree-shakeable-root': preferTreeShakeableRoot,
   'no-deprecated-component': noDeprecatedComponent,
   'prefer-webkit-component': preferWebkitComponent,
@@ -60,6 +62,7 @@ const RECOMMENDED = {
   'no-barrel-import': 'error',
   'no-deprecated-component': 'error',
   'no-hardcoded-color': 'error',
+  'no-hardcoded-motion': 'error',
   'prefer-tree-shakeable-root': 'error',
   'no-whole-icon-set-import': 'error',
   'prefer-webkit-component': 'error',
