@@ -6,6 +6,11 @@ import { toSfc } from '../../../_shared/story-source'
 const IMPORT = "import FieldSelect from '@aziontech/webkit/field-select'"
 const VUE_IMPORT = "import { ref } from 'vue'"
 
+// FieldSelect fills its container, so the container is what sets the width. The
+// stories give it a definite one; without it the field would size to its own
+// content and jump every time the selected value changes length.
+const FIELD_WIDTH = 'w-[320px]'
+
 const REGION_OPTIONS = [
   { value: 'us-east-1', label: 'US East (N. Virginia)' },
   { value: 'us-west-2', label: 'US West (Oregon)' },
@@ -123,7 +128,10 @@ const meta = {
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Re-emitted from the underlying `Select` on every selection change.',
-      table: { category: 'events', type: { summary: '(value: string | number | unknown[]) => void' } }
+      table: {
+        category: 'events',
+        type: { summary: '(value: string | number | unknown[]) => void' }
+      }
     }
   },
   args: {
@@ -159,10 +167,14 @@ const Template = (args) => ({
     }
     return { args, value, onUpdate }
   },
-  template: '<FieldSelect v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
+  template: `<div class="${FIELD_WIDTH}">
+  <FieldSelect v-bind="args" :model-value="value" @update:model-value="onUpdate" />
+</div>`
 })
 
-const DEFAULT_MARKUP = `<FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="Choose the closest region for lowest latency." :options="options" />`
+const DEFAULT_MARKUP = `<div class="${FIELD_WIDTH}">
+  <FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="Choose the closest region for lowest latency." :options="options" />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldSelect>} */
 export const Default = {
@@ -222,7 +234,9 @@ export const Sizes = {
   }
 }
 
-const REQUIRED_MARKUP = `<FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="This field is required." :options="options" required />`
+const REQUIRED_MARKUP = `<div class="${FIELD_WIDTH}">
+  <FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="This field is required." :options="options" required />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldSelect>} */
 export const Required = {
@@ -230,7 +244,10 @@ export const Required = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Required state — the `Label` shows the Required tag and the trigger receives `aria-required`.' },
+      description: {
+        story:
+          'Required state — the `Label` shows the Required tag and the trigger receives `aria-required`.'
+      },
       source: {
         code: toSfc(
           [VUE_IMPORT, IMPORT, '', "const region = ref('')", `const options = ${OPTIONS_LITERAL}`],
@@ -241,7 +258,9 @@ export const Required = {
   }
 }
 
-const INVALID_MARKUP = `<FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="Pick a valid region." :options="options" invalid />`
+const INVALID_MARKUP = `<div class="${FIELD_WIDTH}">
+  <FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="Pick a valid region." :options="options" invalid />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldSelect>} */
 export const Invalid = {
@@ -249,7 +268,10 @@ export const Invalid = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Invalid state — the helper adopts danger tokens and the trigger gets `aria-invalid`.' },
+      description: {
+        story:
+          'Invalid state — the helper adopts danger tokens and the trigger gets `aria-invalid`.'
+      },
       source: {
         code: toSfc(
           [VUE_IMPORT, IMPORT, '', "const region = ref('')", `const options = ${OPTIONS_LITERAL}`],
@@ -260,7 +282,9 @@ export const Invalid = {
   }
 }
 
-const DISABLED_MARKUP = `<FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="This field is locked." :options="options" disabled />`
+const DISABLED_MARKUP = `<div class="${FIELD_WIDTH}">
+  <FieldSelect v-model="region" label="Region" placeholder="Choose a region" helper-text="This field is locked." :options="options" disabled />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldSelect>} */
 export const Disabled = {
@@ -273,10 +297,18 @@ export const Disabled = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Disabled state — trigger disabled, helper switches to `kind="disabled"`.' },
+      description: {
+        story: 'Disabled state — trigger disabled, helper switches to `kind="disabled"`.'
+      },
       source: {
         code: toSfc(
-          [VUE_IMPORT, IMPORT, '', "const region = ref('us-east-1')", `const options = ${OPTIONS_LITERAL}`],
+          [
+            VUE_IMPORT,
+            IMPORT,
+            '',
+            "const region = ref('us-east-1')",
+            `const options = ${OPTIONS_LITERAL}`
+          ],
           DISABLED_MARKUP
         )
       }
@@ -284,7 +316,9 @@ export const Disabled = {
   }
 }
 
-const MULTIPLE_MARKUP = `<FieldSelect v-model="regions" label="Regions" placeholder="Choose regions" helper-text="Select every region." :options="options" multiple />`
+const MULTIPLE_MARKUP = `<div class="${FIELD_WIDTH}">
+  <FieldSelect v-model="regions" label="Regions" placeholder="Choose regions" helper-text="Select every region." :options="options" multiple />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldSelect>} */
 export const Multiple = {
@@ -298,7 +332,10 @@ export const Multiple = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Multi-select — `modelValue` becomes an array and the trigger displays joined labels.' },
+      description: {
+        story:
+          'Multi-select — `modelValue` becomes an array and the trigger displays joined labels.'
+      },
       source: {
         code: toSfc(
           [VUE_IMPORT, IMPORT, '', 'const regions = ref([])', `const options = ${OPTIONS_LITERAL}`],
