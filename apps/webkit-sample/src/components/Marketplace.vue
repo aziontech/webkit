@@ -14,6 +14,7 @@ import TabView from "@aziontech/webkit/tab-view";
 import { toast } from "@aziontech/webkit/toast";
 import { computed, ref } from "vue";
 
+import { filterDisplay } from "../lib/filters";
 import AppLayout from "./ui/AppLayout.vue";
 import IntegrationCard from "./ui/IntegrationCard.vue";
 import PageHeading from "./ui/PageHeading.vue";
@@ -366,17 +367,6 @@ const categoryOptions = [...new Set(integrations.map((i) => i.group))].map((grou
 
 const contextOptions = Object.entries(contextLabels).map(([value, label]) => ({ value, label }));
 
-// Trigger label: no selection means "all", so the placeholder ("All X") shows.
-// Once something is picked, show the single label or "N selected".
-const filterDisplay = (allLabel, options) => (values) => {
-  if (!values.length) return allLabel;
-  if (values.length === 1) {
-    const match = options.find((o) => o.value === values[0]);
-    return match ? match.label : values[0];
-  }
-  return `${values.length} selected`;
-};
-
 // Search across name/vendor/description, then apply each active filter axis.
 const filteredIntegrations = computed(() => {
   const term = integrationQuery.value.trim().toLowerCase();
@@ -406,7 +396,7 @@ const openIntegration = (item) =>
 
 <template>
   <AppLayout active="marketplace" :breadcrumb="[{ label: 'Marketplace' }]">
-    <main class="mx-auto flex w-full flex-col gap-[var(--spacing-lg)]">
+    <main class="layout-column flex flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
         size="large"
         title="Marketplace"

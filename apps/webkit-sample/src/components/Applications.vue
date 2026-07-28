@@ -3,22 +3,34 @@
 // (single sidebar + GlobalHeader with the module breadcrumb) comes from
 // AppLayout; this page renders only its content: a PageHeading (title +
 // description + primary actions) over a data-driven <Table> whose row actions
-// open a Dropdown menu and whose toolbar composes the table's own context-aware
-// filter / search / refresh / export / column controls. As a first-level module
-// list it carries no navigation tabs — the table's own filter builder handles
-// narrowing by infrastructure.
+// open a Dropdown menu. As a first-level module list it carries no navigation
+// tabs.
+//
+// Narrowing is a SELECTOR PER COLUMN, not a generic field/operator/value builder:
+// Authors (multiple Select), Last Modified (Calendar — a shortcut rail beside a
+// month grid for a custom range), Status (multiple Select). Each is always visible in
+// the toolbar, which is what a console list wants; the table's own filter state
+// could not host them (its `#filters` band only renders once a filter exists,
+// and `author` is not a column at all — it renders inside the Last Modified
+// cell). So the three refs pre-filter `:data` and the table sees only the rows
+// that survive. Table.Search still narrows further, through the table's own
+// global filter.
 import Button from "@aziontech/webkit/button";
+import Calendar from "@aziontech/webkit/calendar";
 import CardBox from "@aziontech/webkit/card-box";
 import CopyButton from "@aziontech/webkit/copy-button";
 import Dropdown from "@aziontech/webkit/dropdown";
 import IconButton from "@aziontech/webkit/icon-button";
+import Select from "@aziontech/webkit/select";
 import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
 import Tooltip from "@aziontech/webkit/tooltip";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { daysAgo, formatListDate, monthsAgo, withinRange } from "../lib/dates";
+import { filterDisplay } from "../lib/filters";
 import { authorAt } from "../lib/people";
 import AppLayout from "./ui/AppLayout.vue";
 import LastModifiedCell from "./ui/LastModifiedCell.vue";
@@ -52,6 +64,11 @@ const presetIcon = (preset) => presetMeta[preset]?.icon ?? "";
 // first row mirrors the real reference repo gab-az/webkit-sample-vue (id, preset,
 // domain from its azion/azion.json). The Last Modified avatar comes from the
 // shared team roster (src/lib/people.js), assigned round-robin per row.
+//
+// `modifiedAt` is the real instant — the Last Modified filter compares it, the
+// cell renders it relative, and `lastModified` (the sortable / exportable
+// display string) is derived from it by one formatter instead of being
+// hand-written per row.
 const applications = ref([
   {
     id: "1784552864",
@@ -62,7 +79,7 @@ const applications = ref([
     domainName: "e7b4verynr.map.azionedge.net",
     infrastructure: "Production",
     status: "Active",
-    lastModified: "July 20, 2026, 01:03:00 PM",
+    modifiedAt: daysAgo(2),
   },
   {
     id: "9823746510",
@@ -73,7 +90,7 @@ const applications = ref([
     domainName: "d9m8j2k4l5.map.azion.com",
     infrastructure: "Staging",
     status: "Active",
-    lastModified: "July 15, 2025, 11:30:00 AM",
+    modifiedAt: daysAgo(375),
   },
   {
     id: "7658392017",
@@ -84,7 +101,7 @@ const applications = ref([
     domainName: "q7w8e9r0t1.map.azion.com",
     infrastructure: "Production",
     status: "Active",
-    lastModified: "August 12, 2025, 09:15:00 AM",
+    modifiedAt: daysAgo(320),
   },
   {
     id: "4532109876",
@@ -95,7 +112,7 @@ const applications = ref([
     domainName: "y6u7i8o9p0.map.azion.com",
     infrastructure: "Development",
     status: "Inactive",
-    lastModified: "September 03, 2025, 04:45:00 PM",
+    modifiedAt: daysAgo(250),
   },
   {
     id: "1122334455",
@@ -106,7 +123,7 @@ const applications = ref([
     domainName: "a1s2d3f4g5.map.azion.com",
     infrastructure: "Production",
     status: "Active",
-    lastModified: "October 20, 2025, 02:10:00 PM",
+    modifiedAt: daysAgo(190),
   },
   {
     id: "9988776655",
@@ -117,7 +134,7 @@ const applications = ref([
     domainName: "z9x8c7v6b5.map.azion.com",
     infrastructure: "Production",
     status: "Active",
-    lastModified: "November 14, 2025, 08:00:00 AM",
+    modifiedAt: daysAgo(141),
   },
   {
     id: "3344556677",
@@ -128,7 +145,7 @@ const applications = ref([
     domainName: "n0m9b8v7c6.map.azion.com",
     infrastructure: "Development",
     status: "Active",
-    lastModified: "December 01, 2025, 03:30:00 PM",
+    modifiedAt: daysAgo(88),
   },
   {
     id: "5566778899",
@@ -139,7 +156,7 @@ const applications = ref([
     domainName: "k1l2m3n4o5.map.azion.com",
     infrastructure: "Staging",
     status: "Inactive",
-    lastModified: "January 18, 2026, 12:20:00 PM",
+    modifiedAt: daysAgo(63),
   },
   {
     id: "6677889900",
@@ -150,7 +167,7 @@ const applications = ref([
     domainName: "p9o8i7u6y5.map.azion.com",
     infrastructure: "Production",
     status: "Active",
-    lastModified: "February 22, 2026, 10:05:00 AM",
+    modifiedAt: daysAgo(47),
   },
   {
     id: "7788990011",
@@ -161,7 +178,7 @@ const applications = ref([
     domainName: "m4n5b6v7c8.map.azion.com",
     infrastructure: "Staging",
     status: "Active",
-    lastModified: "March 09, 2026, 06:40:00 PM",
+    modifiedAt: daysAgo(21),
   },
   {
     id: "8899001122",
@@ -172,7 +189,7 @@ const applications = ref([
     domainName: "t1r2e3w4q5.map.azion.com",
     infrastructure: "Production",
     status: "Active",
-    lastModified: "April 17, 2026, 09:55:00 AM",
+    modifiedAt: daysAgo(12),
   },
   {
     id: "9900112233",
@@ -183,11 +200,16 @@ const applications = ref([
     domainName: "g6h7j8k9l0.map.azion.com",
     infrastructure: "Development",
     status: "Inactive",
-    lastModified: "May 02, 2026, 01:15:00 PM",
+    modifiedAt: daysAgo(5),
   },
 ].map((app, index) => {
   const person = authorAt(index);
-  return { ...app, author: person.name, authorAvatar: person.avatar };
+  return {
+    ...app,
+    author: person.name,
+    authorAvatar: person.avatar,
+    lastModified: formatListDate(app.modifiedAt),
+  };
 }));
 
 // Column model. `name` is the principal (emphasized) column; the trailing
@@ -204,40 +226,46 @@ const columns = [
   { id: "actions", kind: "action", hideable: false },
 ];
 
-// Fields the built-in Table.Filter builder offers.
-const filterFields = [
-  { id: "name", label: "Name", type: "text" },
-  { id: "repository", label: "Repository", type: "text" },
-  {
-    id: "preset",
-    label: "Framework",
-    type: "select",
-    options: Object.entries(presetMeta).map(([value, meta]) => ({
-      label: meta.label,
-      value,
-    })),
-  },
-  { id: "domainName", label: "Domain Name", type: "text" },
-  {
-    id: "infrastructure",
-    label: "Infrastructure",
-    type: "select",
-    options: [
-      { label: "Production", value: "Production" },
-      { label: "Staging", value: "Staging" },
-      { label: "Development", value: "Development" },
-    ],
-  },
-  {
-    id: "status",
-    label: "Status",
-    type: "select",
-    options: [
-      { label: "Active", value: "Active" },
-      { label: "Inactive", value: "Inactive" },
-    ],
-  },
+// ── Column selectors ──────────────────────────────────────────────────────
+// Authors options come from the data itself, so the selector can never offer a
+// person who has nothing in the list.
+const authorOptions = [...new Set(applications.value.map((app) => app.author))]
+  .sort((a, b) => a.localeCompare(b))
+  .map((author) => ({ value: author, label: author }));
+
+const statusOptions = [
+  { value: "Active", label: "Active" },
+  { value: "Inactive", label: "Inactive" },
 ];
+
+// The Calendar's shortcut rail. Picking one applies a range in a single click;
+// the month grid beside it fine-tunes the same range value.
+const periodPresets = [
+  { label: "Last 7 Days", value: { start: daysAgo(7), end: new Date() } },
+  { label: "Last 30 Days", value: { start: daysAgo(30), end: new Date() } },
+  { label: "Last 3 Months", value: { start: monthsAgo(3), end: new Date() } },
+  { label: "Last 12 Months", value: { start: monthsAgo(12), end: new Date() } },
+];
+
+const authorFilter = ref([]);
+const statusFilter = ref([]);
+const modifiedRange = ref(null);
+
+const filteredApplications = computed(() =>
+  applications.value.filter((app) => {
+    if (authorFilter.value.length && !authorFilter.value.includes(app.author)) return false;
+    if (statusFilter.value.length && !statusFilter.value.includes(app.status)) return false;
+    return withinRange(app.modifiedAt, modifiedRange.value);
+  }),
+);
+
+// Filtering `:data` from outside the table does not trip TanStack's
+// `autoResetPageIndex`, so narrowing to fewer rows than the current page's
+// offset would render an empty table. Own the pagination state and rewind it.
+const pagination = ref({ pageIndex: 0, pageSize: 8 });
+watch([authorFilter, statusFilter, modifiedRange], () => {
+  pagination.value = { ...pagination.value, pageIndex: 0 };
+});
 
 // Entering the module and choosing "create" opens the dedicated create PAGE
 // (a form route), not a modal — see CreateApplication.vue.
@@ -273,7 +301,7 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="applications" :breadcrumb="[{ label: 'Applications' }]">
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
       <!-- First-level module list. The module name lives in the header breadcrumb
            crumb (AppLayout); the PageHeading sits OUT of the card (consistent with
            every list view) and carries the primary actions. The borderless Table
@@ -305,9 +333,9 @@ const onRowAction = (event, value, row) => {
         <CardBox :padded="false">
           <template #content>
         <Table
-          :data="applications"
+          v-model:pagination="pagination"
+          :data="filteredApplications"
           :columns="columns"
-          :filter-fields="filterFields"
           row-key="id"
           enable-sorting
           paginated
@@ -316,17 +344,86 @@ const onRowAction = (event, value, row) => {
           @row-click="openApp"
         >
           <template #toolbar>
-            <div class="flex w-full items-center gap-[var(--spacing-xs)]">
-              <Table.Filter :fields="filterFields" />
-              <Table.Search size="large" placeholder="Search..." class="flex-1" />
+            <!-- One selector per column, always visible: Authors, Last Modified,
+                 Status. Search takes the remaining width. -->
+            <div class="flex w-full flex-wrap items-center gap-[var(--spacing-xs)]">
+              <!-- Width lives on the wrapper: the Select root declares w-full in its own
+                   static class, which wins over a consumer w-[…] on a specificity tie. -->
+              <div class="w-[var(--container-2xs)] shrink-0">
+                <Select
+                  v-model="authorFilter"
+                  multiple
+                  size="medium"
+                  placeholder="All Authors"
+                  :display-value="filterDisplay('All Authors', authorOptions)"
+                >
+                  <Select.Trigger aria-label="Filter by author" />
+                  <Select.Content>
+                    <Select.Option
+                      v-for="option in authorOptions"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </Select.Option>
+                  </Select.Content>
+                </Select>
+              </div>
+
+              <!-- The shortcut rail (Last 7 Days …) plus the month grid for a custom
+                   range both come from :presets — with presets the component splits the
+                   trigger into a preset dropdown + the range itself. NOT `period`: that
+                   flag REPLACES the pair (`isTwoPart = hasPresets && !period`) with the
+                   relative-span parser, and takes the placeholder with it. -->
+              <Calendar
+                v-model="modifiedRange"
+                mode="range"
+                size="medium"
+                :presets="periodPresets"
+                placeholder="Last Modified"
+                class="shrink-0"
+              >
+                <!-- Resetting the filter is Calendar.Clear in the panel footer, not the
+                     `clearable` prop: that renders an X on the trigger only in the
+                     SINGLE-part branch, so alongside :presets it would be inert. Clear
+                     empties the draft; Apply Range commits the empty range, which reads
+                     as "no Last Modified filter". -->
+                <template #footer>
+                  <Calendar.Clear>Clear</Calendar.Clear>
+                </template>
+              </Calendar>
+
+              <!-- Width lives on the wrapper: the Select root declares w-full in its own
+                   static class, which wins over a consumer w-[…] on a specificity tie. -->
+              <div class="w-[var(--container-3xs)] shrink-0">
+                <Select
+                  v-model="statusFilter"
+                  multiple
+                  size="medium"
+                  placeholder="All Statuses"
+                  :display-value="filterDisplay('All Statuses', statusOptions)"
+                >
+                  <Select.Trigger aria-label="Filter by status" />
+                  <Select.Content>
+                    <Select.Option
+                      v-for="option in statusOptions"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </Select.Option>
+                  </Select.Content>
+                </Select>
+              </div>
+
+              <Table.Search
+                placeholder="Search..."
+                class="min-w-[var(--container-3xs)] flex-1"
+              />
               <Table.RefreshButton />
               <Table.Export />
               <Table.ColumnSelector />
             </div>
-          </template>
-
-          <template #filters>
-            <Table.AppliedFilters />
           </template>
 
           <template #cell-name="{ value, row }">
@@ -389,8 +486,12 @@ const onRowAction = (event, value, row) => {
             />
           </template>
 
-          <template #cell-lastModified="{ value, row }">
-            <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
+          <template #cell-lastModified="{ row }">
+            <LastModifiedCell
+              :author="row.author"
+              :avatar-src="row.authorAvatar"
+              :date="row.modifiedAt"
+            />
           </template>
 
           <template #cell-actions="{ row }">
