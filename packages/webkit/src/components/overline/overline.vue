@@ -30,13 +30,13 @@
   >
     <span
       v-if="prefix"
-      class="font-proto-mono text-default font-medium leading-1 tracking-tightest text-overline-md"
+      class="text-default font-medium text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >
       {{ prefix }}
     </span>
     <span
-      class="font-proto-mono text-pretty text-primary font-medium leading-1 tracking-tightest uppercase text-overline-md"
+      class="text-pretty text-primary font-medium uppercase text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >
       <slot />
