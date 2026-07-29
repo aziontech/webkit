@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 5ebe624103f06c4dcdc3fac32789b74cc7fd48142bd277515151e8c6d44e5423
+checksum: e62845a1427b073406d90b13110cc5d38a20b9025b7a8cd2d043b20db6c2cd04
 created: 2026-06-23
-last_updated: 2026-06-26
+last_updated: 2026-07-28
 ---
 
 # Skeleton — Component Spec
@@ -58,20 +58,21 @@ import Skeleton from '@aziontech/webkit/skeleton'
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| while loading (`animated`) | `animate-shimmer` (linear gradient sweep over the fill) | `--animate-shimmer` (`animate.js`) + `@keyframes shimmer` (`semantic/animations.js`) | gated behind `motion-safe:` (no sweep) + `motion-reduce:animate-none` (static) |
+| while loading (`animated`) | `animate-shimmer` (linear gradient sweep over the fill) | `--animate-shimmer` (`primitives/animations/animate.js`) + `@keyframes shimmer` (`primitives/animations/keyframes.js`) | gated behind `motion-safe:` (no sweep) + `motion-reduce:animate-none` (static) |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
+| fill | `var(--bg-placeholder)` |
+| shimmer sweep | `var(--bg-placeholder-highlight)` |
 | shape radius (`shape`) | `var(--shape-elements)` |
+
+`--bg-placeholder` and `--bg-placeholder-highlight` are **translucent** (alpha) by design: the fill composites over whatever surface the placeholder sits on (`--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`), so a single value per mode keeps the contrast correct everywhere. The sweep is a white alpha in both modes — it lightens the fill rather than replacing it, so the animated and static states share the same base tone.
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `--bg-surface-overlay` (skeleton fill, #4D4D4D dark / #FAFAFA light) | `bg-[var(--bg-surface-overlay)]` (real token, not yet in DESIGN.md) | `TODO: document --bg-surface-overlay in DESIGN.md` |
-| shimmer animation | `animate-shimmer` (`--animate-shimmer` preset in `animate.js` + `@keyframes shimmer` in `semantic/animations.js`) | `TODO: document --animate-shimmer in DESIGN.md § Animations` |
+| _none_ | — | Both prior gaps are closed: `--bg-placeholder` / `--bg-placeholder-highlight` are documented in `.claude/docs/DESIGN.md` § Colors → Loading placeholders, and `--animate-shimmer` in § Animations. |
 
 ## Accessibility (WCAG 2.1 AA)
 
