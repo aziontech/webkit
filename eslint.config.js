@@ -1,5 +1,6 @@
 import js from '@eslint/js'
 import vue from 'eslint-plugin-vue'
+import globals from 'globals'
 import typescript from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import vueParser from 'vue-eslint-parser'
@@ -22,44 +23,8 @@ export default [
         sourceType: 'module'
       },
       globals: {
-        // Browser globals
-        window: 'readonly',
-        document: 'readonly',
-        navigator: 'readonly',
-        console: 'readonly',
-        fetch: 'readonly',
-        localStorage: 'readonly',
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        ResizeObserver: 'readonly',
-        requestAnimationFrame: 'readonly',
-        cancelAnimationFrame: 'readonly',
-        Element: 'readonly',
-        SVGElement: 'readonly',
-        HTMLElement: 'readonly',
-        HTMLAnchorElement: 'readonly',
-        HTMLButtonElement: 'readonly',
-        HTMLSelectElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        HTMLOptionElement: 'readonly',
-        HTMLTextAreaElement: 'readonly',
-        HTMLLabelElement: 'readonly',
-        MouseEvent: 'readonly',
-        KeyboardEvent: 'readonly',
-        Event: 'readonly',
-        Node: 'readonly',
-        // Node globals
-        process: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        require: 'readonly',
-        module: 'readonly',
-        // ES2022 globals
-        Promise: 'readonly',
-        Symbol: 'readonly',
-        Reflect: 'readonly'
+        ...globals.browser,
+        ...globals.node
       }
     },
     plugins: {
