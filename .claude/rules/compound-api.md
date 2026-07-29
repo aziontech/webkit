@@ -10,7 +10,7 @@ It rests on three decisions, in priority order:
 
 ## The compound API shape
 
-Each composition component ships an **`index.ts`** next to the root `.vue`. The root is the default export with the sub-components attached via `Object.assign`. Because the package is consumed as source, the consumer's toolchain derives `<Table.Row>`'s type straight from `index.ts`; at publish time `.releaserc` also emits an adjacent `index.d.ts` for non-source consumers.
+Each composition component ships an **`index.ts`** next to the root `.vue`. The root is the default export with the sub-components attached via `Object.assign`. Because the package is consumed as source, the consumer's toolchain derives `<Table.Row>`'s type straight from `index.ts`; at publish time the publish workflow also emits an adjacent `index.d.ts` for non-source consumers.
 
 ```ts
 // index.ts — one source of truth (runtime + the type vue-tsc derives from it).
@@ -59,7 +59,7 @@ The dot-notation **must** use a PascalCase root binding (`Table`). `table` (lowe
   ```
   The compound path cannot be tree-shaken: `Object.assign(Table, { Row, Cell, ... })` in `index.ts` references every sub-component, so a bundler retains them all even when the consumer only renders `<Table>`. The `-root` key resolves straight to the root `.vue`, so a root-only import pulls in nothing else. Sub-components are already individually importable; this gives the **root** the same tree-shakeable path. The compound (`./table` → `index.ts`) still leads the docs — the `-root` key is the opt-in for consumers who want only the root.
 - **Sub-component exports stay flat and unchanged** — one entry per public sub-component pointing at its `.vue` (`"./data/table-row": ".../table-row/table-row.vue"`).
-- **The package ships source and is consumed as source** (the exports map points at `./src/...`, and `.vue` files already import `.ts` such as `injection-key.ts`). A `.ts` index is therefore safe — the consumer's build transpiles it the same way it transpiles every `.vue` and the shared `injection-key.ts`. `.d.ts` files are gitignored and generated at publish time by `.releaserc`'s `prepareCmd` (`vue-tsc --declaration --emitDeclarationOnly`), not in dev or CI.
+- **The package ships source and is consumed as source** (the exports map points at `./src/...`, and `.vue` files already import `.ts` such as `injection-key.ts`). A `.ts` index is therefore safe — the consumer's build transpiles it the same way it transpiles every `.vue` and the shared `injection-key.ts`. `.d.ts` files are gitignored and generated at publish time by the publish workflow ([`package-webkit.yml`](../../.github/workflows/package-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`), not in dev or CI.
 
 ## Naming — anatomy, not generic convention
 
@@ -99,7 +99,7 @@ Interactivity alone does not justify a sub-component. A clickable row is `@click
 - Do not export composition sub-components without also attaching them to the root compound (`index.ts` via `Object.assign`).
 - Do not ship the compound `index.ts` root export without **also** adding the standalone `<name>-root` export pointing at the root `.vue`. The compound path retains every sub-component (`Object.assign`), so a root-only consumer has no tree-shakeable way in without the `-root` key.
 - Do not make the index a plain `index.js` — `vue-tsc` cannot derive types from it (no `allowJs`), so `<Root.Part>` ends up untyped. It must be `index.ts`.
-- Do not hand-write `index.d.ts` — it is gitignored and generated at publish time (via `.releaserc`'s `prepareCmd`) from `index.ts`, not committed or built in dev.
+- Do not hand-write `index.d.ts` — it is gitignored and generated at publish time (by the publish workflow's `vue-tsc --declaration --emitDeclarationOnly` step) from `index.ts`, not committed or built in dev.
 - Do not invent a `Trigger` (or any overlay part name) on a component that has no `data-state="open|closed"`.
 - Do not turn a slot-shaped concern into a prop (config arrays of UI). Anatomy is elements; props are data + scalar config.
 - Do not require the consumer to wire shared state by hand when a context-aware sub-component can read it from `inject`.

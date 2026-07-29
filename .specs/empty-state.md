@@ -3,20 +3,20 @@ name: empty-state
 category: feedback
 structure: monolithic
 status: approved
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 29f1b8b4fe22c0f15d54fbc3611a02685f3d3cf8133ec27d7be66ce12549d023
+checksum: 4ee0f68c74c6046d625e69c006af16abf34e63dfac4b3d569eb229ac0207cd20
 created: 2026-06-25
-last_updated: 2026-06-25
+last_updated: 2026-07-22
 ---
 
 # Empty State — Component Spec
 
 ## Purpose
 
-Centered placeholder shown when a resource list or section has no content yet. Stacks a decorative illustration, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. Unlike `Message`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.
+Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Message`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.
 
 ## Usage
 
@@ -50,8 +50,9 @@ import MiniButton from '@aziontech/webkit/mini-button'
 |---|---|---|---|---|
 | `title` | `string` | `—` | yes | Primary heading announcing the empty resource. |
 | `description` | `string` | `''` | no | Supporting body copy below the title. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects the illustration size, the surrounding padding, and the gaps between illustration, text, and actions. |
-| `bordered` | `boolean` | `false` | no | When true, wraps the content in a bordered surface card; otherwise renders on a transparent background. |
+| `icon` | `string` | `''` | no | PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. |
+| `size` | `'small' \| 'medium'` | `'medium'` | no | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
+| `bordered` | `boolean` | `false` | no | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background. |
 
 ## Events
 
@@ -61,7 +62,7 @@ import MiniButton from '@aziontech/webkit/mini-button'
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `icon` | — | Decorative illustration centered above the title; rendered inside an `aria-hidden` container. Defaults to the bundled `EmptyStateIllustration` sub-component when not provided. |
+| `icon` | — | Custom adornment centered above the title, rendered inside an `aria-hidden` container. Overrides the `icon` prop's featured-icon tile. When neither this slot nor the `icon` prop is provided, no adornment renders. |
 | `actions` | — | Action area below the description; consumer composes buttons and the documentation link. |
 
 ## States
@@ -78,23 +79,36 @@ _none_
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| title typography | `.text-body-sm` |
-| description typography | `.text-body-xs` |
+| title typography | per-`size` — see harmonic scale below |
+| description typography | per-`size` — see harmonic scale below |
 | surface (bordered) | `var(--bg-surface)` |
-| border (bordered) | `var(--border-default)` |
+| border (bordered) | `var(--border-default)` (dashed, `var(--border-width-default)`) |
 | title text | `var(--text-default)` |
 | description text | `var(--text-muted)` |
+| adornment tile surface | `var(--bg-surface)` |
+| adornment tile border | `var(--border-default)` |
+| adornment decorative layers | `var(--bg-canvas)` · `var(--border-strong)` |
+| adornment shape | `var(--shape-card)` · `var(--shape-elements)` |
+| adornment icon | `var(--text-default)` |
 | shape (bordered) | `var(--shape-button)` |
-| spacing (padding, medium) | `var(--spacing-8)` (x) · `var(--spacing-12)` (y) |
-| spacing (stack gap, medium) | `var(--spacing-6)` |
 | spacing (title gap) | `var(--spacing-xs)` |
 | spacing (actions gap) | `var(--spacing-xs)` |
 
+### Harmonic scale (per `size`)
+
+Every axis steps up one rung per size on a single harmonic ramp. The title climbs the **heading** scale (`heading` tokens only — never `body`); the description climbs the **body** scale one rung below it, so the pair stays in proportion at every size.
+
+| Axis | `small` | `medium` |
+|---|---|---|
+| title typography | `.text-heading-xxs` (14px) | `.text-heading-sm` (14 → 18px) |
+| description typography | `.text-body-xs` (12px) | `.text-body-sm` (14px) |
+| adornment tile | `size-8` (32px) | `size-10` (40px) |
+| padding (x · y) | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` |
+| stack gap | `var(--spacing-4)` | `var(--spacing-6)` |
+
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `Typography/Heading/xss` (title, 14px regular) | `.text-body-sm` (14px regular — size/weight match) | `TODO: catalogar` — naming-only gap; no heading-named token exists at 14px. |
+_none_ — the title now uses `heading` tokens at every size (`.text-heading-xxs` is 14px regular, matching the Figma `Typography/Heading/xss` title), so the previous body-token workaround is retired.
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -107,8 +121,10 @@ _none_
 
 ## Stories (Storybook)
 
-- Default
-- Sizes — composite story rendering every `size` value side by side.
+- Default — renders the standardized featured-icon tile via the `icon` prop.
+- Sizes — composite story rendering every `size` value side by side (adornment scales with `size`).
+- Icon — the standardized featured-icon tile adornment driven by the `icon` prop; justified because the tile is the primary adornment path and must be documented distinctly from custom slot content.
+- NoAdornment — omits both the `icon` prop and the `icon` slot; justified because "no adornment" is a distinct rendered state (the adornment container does not render) that the default illustration previously masked.
 - Bordered — state story (args delta `bordered: true`); justified because the bordered surface card is a distinct top-level Figma frame (446:864) that materially changes the rendered container.
 
 ## Constraints — DO NOT

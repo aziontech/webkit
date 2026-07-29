@@ -7,9 +7,9 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: d07fae422a497cb00a24640d4a769d8606e356e43bb0f237420bc7a29c6afe1e
+checksum: d0c25d3560295ca270a2cd5f861fa667d3065be33ef85df51e018050a3f40bd8
 created: 2026-05-22
-last_updated: 2026-06-23
+last_updated: 2026-07-25
 ---
 
 # Switch — Component Spec
@@ -72,17 +72,22 @@ const enabled = ref(false)
 |---|---|
 | track (off) — background | `var(--bg-surface)` |
 | track (off) — border | `var(--border-default)` |
-| track (on) — background | `var(--success-contrast)` |
+| track (on) — background | `var(--accent)` |
+| handle (off) — fill | `var(--text-muted)` |
+| handle (on) — fill | `var(--color-base-white)` (theme-independent white knob on the `--accent` track) |
+| lock icon (off) | `var(--bg-surface)` |
+| lock icon (on) | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
 | track (hover) — overlay | `var(--bg-hover)` (applies to both off and on tracks) |
 | focus-visible / `data-focused` ring | `var(--ring-color)` |
-| shape | `rounded-full` (Tailwind native; pill — DESIGN.md § Shapes does not gate `rounded-full`) |
+| shape — track | `rounded-[var(--shape-elements)]` (6px) |
+| shape — handle | `rounded-[var(--radius)]` (4px — concentric with the track: track 6px − `px-0.5` inset 2px) |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
 | handle fill (off) — Figma `--surface-300` (#b2b2b2) | inline `bg-[var(--text-muted)]` (closest semantic) | `TODO: introduce semantic --fg-handle (or equivalent) in DESIGN.md` |
-| handle fill (on) — dark contrast over `--success-contrast` | inline `bg-[var(--bg-canvas)]` (closest semantic) | `TODO: introduce semantic --fg-handle-on in DESIGN.md` |
+| handle fill (on) — fixed white knob over `--accent` (must not flip with theme) | inline `bg-[var(--color-base-white)]` + lock icon `text-[var(--color-base-black)]` (base primitives, intentionally theme-independent) | `TODO: introduce semantic --fg-handle-on / --fg-handle-on-contrast in DESIGN.md` |
 
 ## Accessibility (WCAG 2.1 AA)
 

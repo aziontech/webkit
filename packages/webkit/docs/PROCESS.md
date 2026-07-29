@@ -46,7 +46,7 @@ exists so the standard is applied _by construction_, not remembered by disciplin
 | 4   | Write-time gates | every `Write`/`Edit`          | approved or `exit 2`                    | off-token, off-spec, phantom import, broken story |
 | 5   | PR + CI          | `/create-branch` + `/open-pr` | PR to `dev`                             | any governance job fails                          |
 | 6   | Review           | PR                            | 2 approvals (technical + design)        | review-only surfaces off-pattern                  |
-| 7   | Release          | merge to `main`               | semantic-release per package            | commit type ⇄ bump divergence                     |
+| 7   | Release          | merge to `main`               | release-please Release PR per package   | commit type ⇄ bump divergence                     |
 
 ### Stage 1 — Specify
 
@@ -261,30 +261,33 @@ Branch protection makes the approvals required; the PR cannot merge without them
 
 ### Stage 7 — Release
 
-Merging to `main` runs semantic-release per package (`webkit`, `theme`, `icons`). The
-Conventional Commit type decides the bump, and the type set is kept identical across
-commitlint, every `.releaserc`, CONTRIBUTING, and the PR flows.
+Merging to `main` updates a release-please Release PR per package (`webkit`, `theme`,
+`icons`); merging that Release PR cuts the versions. Merges are squash merges, so the
+Conventional Commit type in the **PR title** decides the bump, and the type set is kept
+identical across commitlint, release-please, CONTRIBUTING, and the PR flows.
 
 <details>
 <summary><b>▸ Details — type → bump mapping and the four synchronized sources</b></summary>
 
 Per [release-types](../../../.claude/rules/release-types.md):
 
-| Type                                                                | Bump                    |
-| ------------------------------------------------------------------- | ----------------------- |
-| `feat`                                                              | minor                   |
-| `fix` / `hotfix` / `chore` / `docs` / `style` / `refactor` / `perf` | patch                   |
-| `test` / `ci` / `revert`                                            | none (`release: false`) |
-| `!` or `BREAKING CHANGE:`                                           | major                   |
+| Type                                                                        | Release             |
+| --------------------------------------------------------------------------- | ------------------- |
+| `feat`                                                                      | minor               |
+| `fix`                                                                       | patch               |
+| `chore` / `docs` / `style` / `refactor` / `perf` / `test` / `ci` / `revert` | none (hygiene only) |
+| `!` or `BREAKING CHANGE:`                                                   | major               |
 
+Stock release-please cannot remap types — anything that must ship is a `fix`/`feat`.
 The four places that carry this mapping —
-[`commitlint.config.js`](../../../commitlint.config.js), every
-`packages/*/.releaserc`, [`CONTRIBUTING.md`](../../../CONTRIBUTING.md), and the
+[`commitlint.config.js`](../../../commitlint.config.js),
+release-please (stock `release-type: node` in `release-please-config.json`),
+[`CONTRIBUTING.md`](../../../CONTRIBUTING.md), and the
 `/open-pr` + `/create-branch` flows — must be edited **in the same PR** when a type is
-added or re-mapped. The analyzer only counts a commit toward a package when it touches
+added or removed. release-please only counts a commit toward a package when it touches
 files under that package.
 
-At publish time `.releaserc`'s `prepareCmd` generates `.d.ts` files (`vue-tsc`); the
+At publish time the publish workflow (`package-webkit.yml`) generates `.d.ts` files (`vue-tsc`); the
 repo itself ships source (`exports` points at `./src/...`) — `.d.ts` is never committed.
 The published package embeds [`catalog.json`](../catalog.json) — the version-locked
 manifest Part 2 runs on.

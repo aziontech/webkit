@@ -2,7 +2,7 @@
 name: figma-discover
 description: Pull design tokens, regions, and states from a Figma frame via the Figma MCP. Pure read; emits a structured JSON blob the rest of the pipeline consumes.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-07-23
 scope: webkit
 enforced_by: [dependencies, migration]
 ---
@@ -26,11 +26,12 @@ Convert a Figma URL or `nodeId` into a structured JSON blob: colors, typography,
 
 1. **Load prerequisite skill.** Invoke `figma:figma-use` before any MCP call (mandatory per Figma plugin instructions).
 2. **Extract variables.** Call `mcp__plugin_figma_figma__get_variable_defs` on the target node. Capture every named Figma variable along with its resolved value.
-3. **Extract design context.** Call `mcp__plugin_figma_figma__get_design_context` for the regions, states, and component anatomy.
+3. **Extract design context.** Call `mcp__plugin_figma_figma__get_design_context` for the regions, states, and component anatomy. Capture the frame's component/node name **raw** (do not kebab or rewrite it) for `component_name`.
 4. **Normalize.** Emit a single JSON object:
    ```json
    {
      "figma_node": "<url>",
+     "component_name": "...",
      "variables": [
        { "name": "color/surface", "value": "...", "kind": "color" },
        { "name": "text/heading-md", "value": "...", "kind": "typography" }
@@ -66,7 +67,7 @@ Output the behavior structurally; do not paraphrase Figma's documentation into t
 
 ## Migration fidelity
 
-When the same Figma frame names a component differently from our convention (e.g. `HeaderNavigationMenuItem` or `Tabs/Variant=Primary`), keep the original name in `figma_node`/`variables` for traceability, but do **not** propose component names that bake the Figma name in. Our naming (`kind`, `size`, kebab-case files) takes precedence — see [`migration.md`](../../rules/migration.md).
+Surface the frame's component name **raw** as `component_name` (e.g. `HeaderNavigationMenuItem`, `Tabs/Variant=Primary`) for traceability and so `spec-create` can *propose* a normalized kebab name from it. Do **not** kebab or rewrite it here, and never bake a raw Figma name into a decision: the canonical name is the normalized kebab that `spec-create` confirms with the user, and our naming (`kind`, `size`, kebab-case files) always takes precedence — see [`migration.md`](../../rules/migration.md). If the frame carries no usable component name, emit `component_name: null` — `spec-create` then asks the user.
 
 ## Fallbacks
 

@@ -442,6 +442,26 @@ export default {
 </script>
 ```
 
+### `vue/no-reserved-component-names` — no HTML / Vue built-in shadowing
+
+A component cannot take a name Vue or HTML already owns: Vue 2/3 built-ins are banned outright (`disallowVueBuiltInComponents` / `disallowVue3BuiltInComponents`), and HTML element names are checked **case-sensitively** (`htmlElementCaseSensitive: true`) — deliberate, so the DS's PascalCase roots (`Table`, `Button`, `Link`) stay valid while a literal lowercase `table` is rejected.
+
+**❌ Wrong**
+
+```vue
+<script setup lang="ts">
+  defineOptions({ name: 'Teleport' }) // shadows the Vue 3 built-in
+</script>
+```
+
+**✅ Correct**
+
+```vue
+<script setup lang="ts">
+  defineOptions({ name: 'Table' }) // PascalCase — no case-sensitive collision
+</script>
+```
+
 ### `vue/no-unused-vars`
 
 Unused `v-for` / scope variables are dead code in the template.
@@ -781,27 +801,24 @@ Anything clickable must be keyboard-operable.
 
 ## 4. ESLint — TypeScript
 
-### `@typescript-eslint/no-unused-vars` (`argsIgnorePattern: '^_'`)
+### `unused-imports/no-unused-vars` (`varsIgnorePattern: '^_'`, `argsIgnorePattern: '^_'`)
 
-Dead imports, variables, and parameters are errors. An **intentionally** unused argument is spelled with a leading underscore. (Core `no-unused-vars` is off in favor of this TS-aware version.)
+Dead variables and parameters are errors. An **intentionally** unused one is spelled with a leading underscore. (Core `no-unused-vars` and `@typescript-eslint/no-unused-vars` are both off in favor of the `unused-imports` pair, which splits unused **imports** into their own auto-fixable rule — §5.)
 
 **❌ Wrong**
 
 ```ts
-import { computed, ref } from 'vue' // computed never used
-
-function onSelect(event: MouseEvent, item: Item) {
-  select(item) // event unused → error
+function onSelect(item: Item, event: MouseEvent) {
+  const orphan = item.label // assigned, never used → error
+  return select(item) // trailing `event` unused → error
 }
 ```
 
 **✅ Correct**
 
 ```ts
-import { ref } from 'vue'
-
-function onSelect(_event: MouseEvent, item: Item) {
-  select(item)
+function onSelect(item: Item, _event: MouseEvent) {
+  return select(item)
 }
 ```
 
@@ -932,6 +949,26 @@ import { useAttrs } from 'vue'
 
 ```ts
 import { computed, useAttrs } from 'vue'
+```
+
+### `unused-imports/no-unused-imports`
+
+An import nothing uses is dead code — and the one unused-code case `lint:fix` deletes automatically (plain unused variables — §4 — only report; they are never auto-removed).
+
+**❌ Wrong**
+
+```ts
+import { computed, ref } from 'vue' // computed never used
+
+export const count = ref(0)
+```
+
+**✅ Correct**
+
+```ts
+import { ref } from 'vue'
+
+export const count = ref(0)
 ```
 
 ---
@@ -1402,24 +1439,27 @@ Run `pnpm webkit:type-coverage` — `--detail` lists every offending expression.
 
 ## 10. commitlint — commit messages
 
-Commits **drive releases**: `semantic-release` parses the same header to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Header anatomy:
+Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Its parser is **not configurable**: the header must start with the bare type, so a ticket tag lives at the start of the **subject** — and only when a real ticket exists (no ticket → no tag). Header anatomy:
 
 ```
-[ENG-1231] feat(webkit)!: add table export
-└───┬────┘ └─┬┘└──┬───┘│  └──────┬───────┘
-  ticket   type  scope breaking subject
- (optional)      (opt.) (opt.)
+feat(webkit)!: [ENG-1231] add table export
+└─┬┘└──┬───┘│  └───┬────┘ └──────┬───────┘
+type  scope breaking ticket      subject
+      (opt.) (opt.)  (optional)
 ```
 
 **❌ Wrong**
 
 ```text
 Update button styles                      → no type
+[NO-ISSUE] fix(webkit): focus ring        → leading ticket tag releases NOTHING (header-no-leading-ticket)
+fix(webkit): [NO-ISSUE] focus ring        → no ticket → omit the tag entirely (subject-ticket-tag)
+ENG-1231 fix(webkit): focus ring          → header must start with the type: fix(webkit): [ENG-1231] focus ring
+fix(webkit): [eng-123] focus ring         → malformed tag; use [ABC-123] (subject-ticket-tag)
 Feat(webkit): add table export            → type must be lower-case
 feature(webkit): add table export         → "feature" is not in the enum; use feat
 feat(Webkit): add table export            → scope must be lower-case
 fix(webkit):                              → subject is required
-ENG-1231 fix(webkit): focus ring          → ticket must be bracketed: [ENG-1231]
 fix(webkit): correct the paginator focus ring so that it stays visible in dark mode and in high-contrast themes
                                           → header over 100 chars (111)
 ```
@@ -1428,8 +1468,8 @@ fix(webkit): correct the paginator focus ring so that it stays visible in dark m
 
 ```text
 fix(webkit): correct paginator focus ring
-[ENG-1231] feat(webkit): add table export
-[NO-ISSUE] chore: bump tooling
+feat(webkit): [ENG-1231] add table export
+chore: bump tooling
 docs: describe compound API exports
 feat(webkit)!: drop tone prop
 ```
@@ -1442,14 +1482,14 @@ feat(webkit): rework button size scale
 BREAKING CHANGE: size "xlarge" was removed; use "large".
 ```
 
-**Type → release bump** (must stay identical across `commitlint.config.js`, every `packages/*/.releaserc`, `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
+**Type → release** (must stay identical across `commitlint.config.js`, release-please's stock semantics (`release-please-config.json`), `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
 
-| Type                                                                | Bump                |
-| ------------------------------------------------------------------- | ------------------- |
-| `feat`                                                              | **minor**           |
-| `fix` · `hotfix` · `chore` · `docs` · `style` · `refactor` · `perf` | **patch**           |
-| `test` · `ci` · `revert`                                            | none (hygiene only) |
-| any type with `!` or `BREAKING CHANGE:` footer                      | **major**           |
+| Type                                                                        | Release             |
+| --------------------------------------------------------------------------- | ------------------- |
+| `feat`                                                                      | **minor**           |
+| `fix`                                                                       | **patch**           |
+| `chore` · `docs` · `style` · `refactor` · `perf` · `test` · `ci` · `revert` | none (hygiene only) |
+| any type with `!` or `BREAKING CHANGE:` footer                              | **major**           |
 
 Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify` ([`git-workflow.md`](../../../.claude/rules/git-workflow.md)).
 
@@ -1541,6 +1581,3 @@ A `.vue` whose props / events / slots / name / testid / animations diverge from 
 Honest edges of the config:
 
 - **`vue/no-restricted-syntax`** is enabled with no selectors — it restricts nothing until selectors are added.
-- **`vue/no-reserved-component-names`** is commented out in `eslint.config.js`.
-- **`eslint-plugin-unused-imports`** is registered but none of its rules are enabled — unused imports are caught indirectly by `@typescript-eslint/no-unused-vars` (not auto-fixed on `lint:fix`).
-- **`packages/webkit` `lint` script** passes `--ext .js,.js,.vue` (`.ts` missing, `.js` doubled) — plain `.ts` files are still covered by lint-staged and CI, which pass explicit extensions.

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { getFixedFrame } from '../../../../utils/containing-block'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { selectContextKey } from '../injection-key'
 
@@ -26,10 +27,16 @@
     const trigger = ctx.triggerRef.value
     if (!trigger) return
     const rect = trigger.getBoundingClientRect()
+    // The panel is fixed inside the Teleport target, which may sit under a
+    // transformed ancestor (Storybook's zoom scales the preview body). Express
+    // the trigger's viewport rect in that frame's space so it is not scaled twice.
+    const frame = getFixedFrame(root.value)
     position.value = {
-      top: rect.bottom + 4,
-      left: rect.left,
-      width: rect.width
+      // The 4px gap is added after the conversion so it stays 4 layout pixels
+      // and scales with the frame, like the panel itself.
+      top: (rect.bottom - frame.top) / frame.scaleY + 4,
+      left: (rect.left - frame.left) / frame.scaleX,
+      width: rect.width / frame.scaleX
     }
   }
 
@@ -82,6 +89,11 @@
     const target = event.target as Node | null
     if (!el || !target) return
     if (el.contains(target)) return
+    // Bail when the pointer lands on the trigger — the trigger's own @click
+    // will toggle the state; closing here would race the reopen and either
+    // require a "double click" to close or emit update:open twice per press.
+    const trigger = ctx.triggerRef.value
+    if (trigger && trigger.contains(target)) return
     ctx.setOpen(false)
   }
 
@@ -136,7 +148,7 @@
         :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
         :class="attrs.class"
         :style="positionStyle"
-        class="fixed z-50 flex max-h-[20rem] flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-xs)]"
+        class="fixed z-[var(--z-input-overlay)] flex max-h-[20rem] flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-xs)]"
         @keydown="onKeydown"
       >
         <div

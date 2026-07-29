@@ -185,29 +185,29 @@ Two complementary gates:
 
 **Config:** [`commitlint.config.js`](../commitlint.config.js), run by husky on every `commit-msg`.
 
-Commits aren't just style here — they **drive releases**. `semantic-release` reads the same header format to compute version bumps, so commitlint's job is making sure a commit that passes locally also releases correctly.
+Commits aren't just style here — they **drive releases**. release-please reads the same header format to compute version bumps — and because merges to `main` are squash merges, the commit it parses is the **PR title**. commitlint's job is making sure a header that passes locally also releases correctly.
 
-**Header shape** (custom `headerPattern`, mirrored in every `packages/*/.releaserc`):
+**Header shape** (custom `headerPattern`; release-please's stock parser is not configurable, so the header must **start with the bare type** — a ticket tag goes in the subject, after the colon, and only when a real ticket exists):
 
 ```
-[ENG-1231] feat(webkit): add table export     ← optional ticket prefix
+feat(webkit): [ENG-1231] add table export     ← optional ticket tag, after the colon
 fix(webkit): correct paginator focus ring
 chore: bump tooling
 feat(webkit)!: drop tone prop                 ← “!” = breaking = major
 ```
 
-**Types and the release each produces:**
+**Types and the release each produces (stock release-please):**
 
 | Type | Release bump |
 |---|---|
 | `feat` | **minor** |
-| `fix` · `hotfix` · `chore` · `docs` · `style` · `refactor` · `perf` | **patch** |
-| `test` · `ci` · `revert` | **none** (allowed for hygiene) |
+| `fix` | **patch** |
+| `chore` · `docs` · `style` · `refactor` · `perf` · `test` · `ci` · `revert` | **none** on their own (allowed for hygiene; they ride along in the next `feat`/`fix` release) |
 | any type with `!` or a `BREAKING CHANGE:` footer | **major** |
 
-**Other rules:** type required and lower-case, scope lower-case, subject required, header ≤ 100 chars, subject-case unrestricted.
+**Other rules:** type required and lower-case, scope lower-case, subject required, header ≤ 100 chars, subject-case unrestricted. A **leading** ticket tag (`[ENG-…] feat: …`) is rejected — release-please cannot parse it, so it would release **nothing** (the #804 incident) — and `[NO-ISSUE]` is rejected anywhere: no ticket → no tag.
 
-**The sync invariant** ([`release-types.md`](../.claude/rules/release-types.md)): this type list must stay **identical** in four places — `commitlint.config.js`, every `packages/*/.releaserc` (`webkit`, `theme`, `icons`), `CONTRIBUTING.md`, and the `/open-pr` + `/create-branch` flows. A type added in one place and not the others produces commits that pass lint but silently don't release.
+**The sync invariant** ([`release-types.md`](../.claude/rules/release-types.md)): this type list must stay **identical** in four places — `commitlint.config.js`, [`release-please-config.json`](../release-please-config.json) (stock `node` release type, no per-type bump customization), `CONTRIBUTING.md`, and the `/open-pr` + `/create-branch` flows. A type added in one place and not the others produces commits that pass lint but silently don't release.
 
 ---
 
