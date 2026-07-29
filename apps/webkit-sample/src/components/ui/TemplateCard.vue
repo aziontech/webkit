@@ -39,8 +39,11 @@ const activate = (event) => emit("select", event);
         class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-hover:opacity-100 motion-reduce:transition-none"
         :style="{ background: glow(color) }"
       />
+      <!-- `my-auto` centers the content whenever the card is taller than it needs
+           to be — a min-height floor, or a row-mate with a longer description.
+           Without it a short card's content hangs off the top edge. -->
       <div
-        class="relative z-10 flex flex-col items-center gap-[var(--spacing-md)] py-[var(--spacing-sm)]"
+        class="relative z-10 my-auto flex flex-col items-center gap-[var(--spacing-md)] py-[var(--spacing-sm)]"
       >
         <i
           :class="icon"

@@ -243,7 +243,7 @@ const submit = async () => {
     >
       <!-- Scrollable form body -->
       <div
-        class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
+        class="layout-column-form layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
       >
         <PageHeading
           title-id="template-settings-title"
@@ -253,7 +253,7 @@ const submit = async () => {
 
         <!-- One flag locks every control while the request is in flight. -->
         <fieldset
-          class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+          class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Template settings</legend>
@@ -309,7 +309,7 @@ const submit = async () => {
           </div>
 
           <!-- Sub-section: Template Settings -->
-          <section class="flex flex-col gap-[var(--spacing-lg)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <h2 class="text-heading-xs text-[var(--text-default)]">Template Settings</h2>
 
             <!-- Required credential: label required always; amber only after an
@@ -379,7 +379,7 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Deployment — the radio family + MultiSelect. -->
-          <section class="flex flex-col gap-[var(--spacing-lg)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <h2 class="text-heading-xs text-[var(--text-default)]">Deployment</h2>
 
             <!-- Deployment type — RADIO BLOCK group. A group's accessible name is
@@ -454,7 +454,7 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Build & Runtime — input-group, password, textarea. -->
-          <section class="flex flex-col gap-[var(--spacing-lg)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <h2 class="text-heading-xs text-[var(--text-default)]">Build &amp; Runtime</h2>
 
             <!-- Build command — FieldInputGroup with a leading addon. Required:
@@ -516,7 +516,7 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Notifications & Alerts — phone + switch family. -->
-          <section class="flex flex-col gap-[var(--spacing-lg)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <h2 class="text-heading-xs text-[var(--text-default)]">Notifications &amp; Alerts</h2>
 
             <!-- Alert phone — FieldPhoneNumber. Required (amber) when empty;
@@ -566,7 +566,7 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Edge features — the checkbox BLOCK family. -->
-          <section class="flex flex-col gap-[var(--spacing-lg)]">
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
             <h2 class="text-heading-xs text-[var(--text-default)]">Edge features</h2>
 
             <div class="flex flex-col gap-[var(--spacing-sm)]">

@@ -32,6 +32,7 @@ import { computed, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import CreationHeader from "./ui/CreationHeader.vue";
+import PageHeading from "./ui/PageHeading.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -183,17 +184,26 @@ const submit = async () => {
     <main class="min-h-0 flex-1 overflow-auto">
       <form
         class="flex min-h-full flex-col"
-        aria-label="Create Application"
+        aria-labelledby="create-application-title"
         novalidate
         @submit.prevent="submit"
       >
       <!-- Scrollable form body -->
       <div
-        class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
+        class="layout-column-focused layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
       >
+        <!-- Same small PageHeading every other page in the module carries. It
+             titles the form, so `titleId` wires the form's accessible name to
+             this h1 instead of repeating the label in aria-label. -->
+        <PageHeading
+          title="Create Application"
+          description="Name the application, then set how it is delivered, where it pulls from, and how long it caches."
+          title-id="create-application-title"
+        />
+
         <!-- One flag locks every control while the request is in flight. -->
         <fieldset
-          class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+          class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Create application</legend>
@@ -572,7 +582,7 @@ const submit = async () => {
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+          class="layout-column-focused flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

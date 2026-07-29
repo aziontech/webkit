@@ -173,10 +173,10 @@ const saveAndDeploy = () => persist({ deploy: true });
         @submit.prevent="saveAndDeploy"
       >
         <div
-          class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
+          class="layout-column-focused layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
         >
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
             :disabled="submitting"
           >
             <legend class="sr-only">Create workload</legend>
@@ -252,7 +252,7 @@ const saveAndDeploy = () => persist({ deploy: true });
                           type="button"
                           label="Add new Domain"
                           kind="primary"
-                          size="medium"
+                          size="large"
                           icon="pi pi-plus"
                           @click="openAddDomain"
                         />
@@ -269,7 +269,7 @@ const saveAndDeploy = () => persist({ deploy: true });
                             type="button"
                             label="Add new Domain"
                             kind="secondary"
-                            size="medium"
+                            size="large"
                             icon="pi pi-plus"
                             @click="openAddDomain"
                           />
@@ -448,7 +448,7 @@ const saveAndDeploy = () => persist({ deploy: true });
           class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
         >
           <div
-            class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+            class="layout-column-focused flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
           >
             <Button
               type="button"

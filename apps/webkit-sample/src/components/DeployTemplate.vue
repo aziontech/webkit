@@ -15,6 +15,7 @@ import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { provisionDeployment, resourceChain } from "../lib/provisioning";
 import { getTemplate } from "../templates.js";
 import CreationHeader from "./ui/CreationHeader.vue";
 import DeploymentFlow from "./ui/DeploymentFlow.vue";
@@ -53,8 +54,13 @@ const template = computed(() => {
 const goToCreationCenter = () =>
   router.push({ path: "/create", query: { email: userEmail.value } });
 
-const goHome = () =>
-  router.push({ path: "/home", query: { email: userEmail.value } });
+// "Manage" opens the workload the deploy just created — the entry point of the
+// provisioned chain (see onDeployFinished).
+const manageWorkload = () =>
+  router.push({
+    path: `/workloads/${provisioned.value?.workload.id ?? ""}`,
+    query: { email: userEmail.value, name: provisioned.value?.workload.name },
+  });
 
 // Breadcrumb trail: clickable root back to the Creation Center, then the
 // current template as the active (last) crumb.
@@ -159,7 +165,23 @@ const onBeforeLeave = (el) => {
   el.style.transition = timing(duration["fast-02"], curve["productive-exit"]);
 };
 
+// A finished deploy provisions the resource chain — Workload → Application →
+// Connector → Storage (src/lib/provisioning.js) — so the created resources are
+// immediately real for the rest of the console: they show up in the Workloads /
+// Applications / Object Storage lists, and "Manage" opens the new workload.
+const provisioned = ref(null);
+const createdResources = computed(() =>
+  provisioned.value ? resourceChain(provisioned.value) : [],
+);
+
 const onDeployFinished = () => {
+  provisioned.value = provisionDeployment({
+    repoName: repoName.value,
+    scope: scope.value,
+    framework: template.value.framework,
+    isPublic: isPublic.value,
+    templateTitle: template.value.title,
+  });
   status.value = "success";
 };
 
@@ -188,6 +210,7 @@ const nextSteps = [
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-[var(--bg-canvas)]">
+
     <!-- Single creation header: back + brand + breadcrumb (hidden on success). -->
     <CreationHeader
       :show-back="status !== 'success'"
@@ -199,9 +222,27 @@ const nextSteps = [
 
     <!-- Centered single-column flow. Phases cross-fade with a translate-y
          offset using the theme easing tokens. -->
-    <main class="min-w-0 flex-1 overflow-auto">
+    <main class="relative min-w-0 flex-1 overflow-auto">
+      <!-- Success is the one moment in the flow worth marking as ours: a linear
+           primary glow on the content background behind the card — not on the
+           card, which keeps its own surface and borders untinted. The column
+           below is `relative z-10` so it paints over the wash. -->
+      <span
+        v-if="status === 'success'"
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-x-0 top-0 h-[560px] animate-fade-in bg-[linear-gradient(180deg,color-mix(in_srgb,var(--primary)_22%,transparent)_0%,color-mix(in_srgb,var(--primary)_7%,transparent)_45%,transparent_100%)] motion-reduce:animate-none"
+      />
+
+      <!-- The column widens on success: the form and deploy phases are a single
+           stack of fields, but the success card carries a two-up box (preview
+           beside the provisioned chain) that needs the extra measure to split. -->
       <div
-        class="mx-auto flex w-full max-w-[var(--container-2xl)] flex-col items-center gap-[var(--spacing-xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]"
+        class="relative z-10 mx-auto flex w-full flex-col items-center gap-[var(--spacing-xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]"
+        :class="
+          status === 'success'
+            ? 'max-w-[var(--container-4xl)]'
+            : 'max-w-[var(--container-2xl)]'
+        "
       >
         <!-- Preview strip for the form/deploy phases. On success it gives way
              to the in-card preview shown on the Congratulations card. -->
@@ -408,103 +449,164 @@ const nextSteps = [
 
             <!-- Success: Congratulations + deployed preview + Next Steps -->
             <template v-else>
+              <!-- The congratulation is the page's own heading, on the canvas
+                   and on the glow — not a card header. It announces the outcome;
+                   the card below is the record of it. Sized like a first-level
+                   page title, since the chrome carries no breadcrumb here. -->
+              <header class="flex w-full flex-col gap-[var(--spacing-xxs)]">
+                <h1 class="text-balance text-heading-lg text-[var(--text-default)]">
+                  Congratulations!
+                </h1>
+                <p
+                  class="flex flex-wrap items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
+                >
+                  You just deployed a new application into
+                  <Tag
+                    :label="scope"
+                    severity="secondary"
+                    icon="pi pi-github"
+                  />
+                </p>
+              </header>
+
               <CardBox class="w-full">
-                <template #header>
-                  <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                    <p class="text-heading-sm text-[var(--text-default)]">
-                      Congratulations!
-                    </p>
-                    <p
-                      class="flex flex-wrap items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
-                    >
-                      You just deployed a new application into
-                      <Tag
-                        :label="scope"
-                        severity="secondary"
-                        icon="pi pi-github"
-                      />
-                    </p>
-                  </div>
-                </template>
-
                 <template #content>
-                  <div
-                    class="flex flex-col gap-[var(--spacing-lg)] "
-                  >
-                    <!-- Deployed application preview -->
-                    <div
-                      class="h-[360px] w-full overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)]"
-                    >
-                      <img
-                        src="/template-nextjs-thumb.png"
-                        alt=""
-                        class="size-full object-cover"
-                      />
-                    </div>
+                  <div class="flex flex-col gap-[var(--spacing-lg)]">
+                    <!-- What was shipped, in one horizontal box: the deployed
+                         page on the left, the chain it provisioned on the right
+                         (Workload → Application → Connector → Storage, in
+                         creation order — the same records back the workload's
+                         deployment topology). Side by side because they are two
+                         readings of one outcome: what the user sees, and what
+                         Azion built to serve it. Stacks below `lg`, where the
+                         two halves would each be too narrow to read. -->
+                    <CardBox :padded="false">
+                      <template #content>
+                        <div class="flex flex-col lg:flex-row">
+                          <!-- Deployed application preview -->
+                          <div
+                            class="min-h-[220px] w-full overflow-hidden bg-[var(--bg-surface-raised)] lg:min-h-[320px] lg:w-1/2"
+                          >
+                            <img
+                              src="/template-nextjs-thumb.png"
+                              alt=""
+                              class="size-full object-cover"
+                            />
+                          </div>
 
-                    <!-- Next Steps -->
-                    <div class="flex flex-col gap-[var(--spacing-md)]">
-                      <p class="text-label-sm text-[var(--text-default)]">
-                        Next Steps
-                      </p>
-                      <CardBox :padded="false">
-                        <template #content>
-                          <Item.List>
-                            <!-- as-child: the row shell (layout + hover/active
-                                 ghost + focus ring) is merged onto the anchor,
-                                 so each Next Step is one real navigable <a>
-                                 instead of a <div> wrapping a link. -->
-                            <Item
-                              v-for="step in nextSteps"
-                              :key="step.title"
-                              as-child
-                              size="small"
+                          <!-- Resources created -->
+                          <div
+                            class="flex w-full min-w-0 flex-col border-t border-[var(--border-default)] lg:w-1/2 lg:border-l lg:border-t-0"
+                          >
+                            <p
+                              class="flex min-h-14 shrink-0 items-center border-b border-[var(--border-default)] px-[var(--spacing-md)] text-label-sm text-[var(--text-default)]"
                             >
-                              <a
-                                href="https://www.azion.com/en/documentation/"
-                                target="_blank"
-                                rel="noopener"
-                                class="text-left no-underline"
+                              Resources Created
+                            </p>
+                            <Item.List>
+                              <Item
+                                v-for="resource in createdResources"
+                                :key="resource.key"
+                                size="small"
                               >
                                 <Item.Media>
                                   <span
                                     class="flex size-8 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface)]"
                                   >
                                     <i
-                                      :class="step.icon"
+                                      :class="resource.icon"
                                       class="text-[14px] leading-none text-[var(--text-default)]"
                                       aria-hidden="true"
                                     />
                                   </span>
                                 </Item.Media>
                                 <Item.Content>
-                                  <Item.Title>{{ step.title }}</Item.Title>
-                                  <Item.Description>{{
-                                    step.description
-                                  }}</Item.Description>
+                                  <Item.Title>{{ resource.name }}</Item.Title>
+                                  <Item.Description>
+                                    {{ resource.kind }} · {{ resource.reference }}
+                                  </Item.Description>
                                 </Item.Content>
                                 <Item.Actions>
-                                  <i
-                                    class="pi pi-chevron-right text-[var(--text-muted)]"
-                                    aria-hidden="true"
+                                  <Tag
+                                    label="Created"
+                                    severity="success"
+                                    size="small"
                                   />
                                 </Item.Actions>
-                              </a>
-                            </Item>
-                          </Item.List>
-                        </template>
-                      </CardBox>
-                    </div>
+                              </Item>
+                            </Item.List>
+                          </div>
+                        </div>
+                      </template>
+                    </CardBox>
+
+                    <!-- Next Steps — its own box under the horizontal one: not
+                         part of what just happened, but what to do next. -->
+                    <CardBox :padded="false">
+                      <template #content>
+                        <p
+                          class="flex min-h-14 shrink-0 items-center border-b border-[var(--border-default)] px-[var(--spacing-md)] text-label-sm text-[var(--text-default)]"
+                        >
+                          Next Steps
+                        </p>
+                        <Item.List>
+                          <!-- as-child: the row shell (layout + hover/active
+                               ghost + focus ring) is merged onto the anchor,
+                               so each Next Step is one real navigable <a>
+                               instead of a <div> wrapping a link. -->
+                          <Item
+                            v-for="step in nextSteps"
+                            :key="step.title"
+                            as-child
+                            size="small"
+                          >
+                            <a
+                              href="https://www.azion.com/en/documentation/"
+                              target="_blank"
+                              rel="noopener"
+                              class="text-left no-underline"
+                            >
+                              <Item.Media>
+                                <span
+                                  class="flex size-8 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface)]"
+                                >
+                                  <i
+                                    :class="step.icon"
+                                    class="text-[14px] leading-none text-[var(--text-default)]"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </Item.Media>
+                              <Item.Content>
+                                <Item.Title>{{ step.title }}</Item.Title>
+                                <Item.Description>{{
+                                  step.description
+                                }}</Item.Description>
+                              </Item.Content>
+                              <Item.Actions>
+                                <i
+                                  class="pi pi-chevron-right text-[var(--text-muted)]"
+                                  aria-hidden="true"
+                                />
+                              </Item.Actions>
+                            </a>
+                          </Item>
+                        </Item.List>
+                      </template>
+                    </CardBox>
                   </div>
                 </template>
 
                 <template #footer>
+                  <!-- Manage opens the created workload — the chain's entry
+                       point — instead of dropping back on the home page. -->
                   <Button
                     class="w-full"
                     label="Manage"
                     kind="secondary"
                     size="large"
-                    @click="goHome"
+                    icon="pi pi-arrow-right"
+                    @click="manageWorkload"
                   />
                 </template>
               </CardBox>
