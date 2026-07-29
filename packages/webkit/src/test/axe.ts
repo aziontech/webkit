@@ -17,6 +17,10 @@ import { expect } from 'vitest'
  *   - scrollable-region-focusable              — needs real overflow / layout
  * Pixels & contrast belong to Storybook + visual regression, not to units.
  * See docs/TESTING_AUDIT_2026-07-02.md §2.0.
+ *
+ * On top of axe it also runs `expectNoPlaceholderOnlyLabels` (below) — a custom
+ * guard for a real defect axe cannot express. Every suite that asserts a11y
+ * through this helper gets that check for free.
  */
 export async function expectNoA11yViolations(container: Element): Promise<void> {
   const results = await axe.run(container, {
@@ -48,13 +52,15 @@ const LABELABLE = 'input:not([type="hidden"]):not([type="submit"]):not([type="bu
  * field loses its name mid-interaction, and a visible `<span>` that reads as a label
  * is not programmatically associated with anything. Every field needs a real name —
  * a `<label for>`, `aria-label`, or `aria-labelledby`.
+ *
+ * Known limit: this checks name SOURCES, not the full accname algorithm — an
+ * `aria-labelledby` target is only credited for its `textContent` (a target named
+ * solely by its own `aria-label` is not seen). If that false positive ever bites,
+ * swap `hasNonPlaceholderName` for `computeAccessibleName` from
+ * `dom-accessibility-api` (remove the placeholder, compute, restore).
  */
 export function expectNoPlaceholderOnlyLabels(container: Element): void {
-  const scope =
-    container instanceof globalThis.HTMLElement || container instanceof globalThis.Document
-      ? container
-      : container.ownerDocument
-  const controls = Array.from(scope.querySelectorAll<globalThis.HTMLInputElement>(LABELABLE))
+  const controls = Array.from(container.querySelectorAll<globalThis.HTMLInputElement>(LABELABLE))
 
   const offenders = controls
     .filter((el) => (el.getAttribute('placeholder') ?? '').trim() !== '')
