@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: bc6f6c9d9c59a6b729676a7b2ba8932cac7407d67d25fb2cd43da9e8e61b2018
+checksum: e1bd8e491813c57cbf6e64651363d6233522287cfce7605dd7380177bad7e2cf
 created: 2026-06-25
-last_updated: 2026-07-02
+last_updated: 2026-07-29
 ---
 
 # Calendar — Component Spec
@@ -124,6 +124,8 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `selected`, `in-range`, `disabled`, `today`, `outside` (adjacent-month), popover `open` / `closed`
+- **Field contract parity.** Every field-shaped surface — the trigger, the Start/End date+time fields, and the timezone selector — follows the shared `inputs` field contract used by `input-text`, `input-number`, `select-trigger` and `textarea`, so a Calendar reads identically to a text field placed beside it: heights are `small=28px` / `medium=32px` / `large=40px`, the value renders at `.text-label-sm`, and `disabled` applies `var(--bg-disabled)` + `var(--text-disabled)` + `cursor-not-allowed` rather than an opacity wash.
+- **Hover is identical to `input-text`.** The whole trigger is one field with one border, so hover raises **only** that border to `var(--border-strong)` — no background wash on any segment. It is suppressed while the control is focused (the focus ring is the active affordance) and while `disabled`, via the same selector `input-text` uses: `[&:not(:focus-within):not([data-disabled])]:hover:border-[var(--border-strong)]` (the timezone `<select>` is focusable itself, so it uses the `:not(:focus):not(:disabled)` form). Because the border lives on the trigger shell, hovering any segment — preset, calendar, clear, or split — raises the single shared border, exactly as hovering a text field's icon slot does. `hover:bg-[var(--bg-hover)]` survives only on the preset **dropdown menu rows**, which are menu items inside the popover, not field surfaces, and have no `input-text` counterpart.
 - `data-state` on the root and trigger mirrors the popover open state (`open` | `closed`)
 - `data-size` mirrors the `size` prop on the root, trigger, and each day cell (`small` | `medium` | `large`)
 - `data-selected` mirrors a fully-selected day cell (single value, or a range endpoint) and an active preset
@@ -140,6 +142,8 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 | popover open | `animate-popup-scale-in` | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 | popover close | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 | hover/focus state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| trigger chevron on open | `transition-transform duration-150 ease-out` + `data-[state=open]:rotate-180` | inline (matches catalog) | `motion-reduce:transition-none` |
+| month change (next / previous) | only the **month strip** slides horizontally — next enters from `translate-x-full` and the outgoing leaves to `-translate-x-full`, previous mirrors it; both strips are on screen at once so it reads as a continuous scroll rather than a fade. The month label and the prev/next controls are **outside** the transition and never move, so the control the user just pressed stays put (and keeps focus) while the days travel. | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog, via the shared TabView panel preset | `motion-safe:` gates both the offset and the fade, so a reduced-motion swap is instant with no movement |
 
 ## Tokens
 
@@ -150,15 +154,19 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 | popover shape | `var(--shape-card)` |
 | popover elevation | `var(--shadow-md)` |
 | trigger / field surface | `var(--bg-surface)` |
+| trigger / field surface (disabled) | `var(--bg-disabled)` |
 | trigger / field border | `var(--border-default)` |
+| trigger / field border (hover) | `var(--border-strong)` |
 | trigger / field shape | `var(--shape-elements)` |
 | section divider | `var(--border-default)` |
 | label typography | `.text-label-sm` |
+| trigger / field value typography | `.text-label-sm` |
 | weekday typography | `.text-label-sm` |
 | day typography (small) | `.text-body-xs` |
 | day typography (medium) | `.text-body-sm` |
 | day typography (large) | `.text-body-md` |
-| body / value typography | `.text-body-sm` |
+| option row (preset / period) typography | `.text-label-sm` |
+| month header typography | `.text-body-sm` |
 | header / muted text | `var(--text-muted)` |
 | default text | `var(--text-default)` |
 | disabled text | `var(--text-disabled)` |
@@ -175,11 +183,12 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `Typography/Heading/xss` (14px regular) | `.text-body-sm` (0.875rem / 14px regular — matches the Figma size and weight) | `TODO: catalogar` — no heading-named token exists at 14px; `.text-body-sm` matches the size/weight, so the gap is naming-only. |
+| `Typography/Heading/xss` (14px regular) | `.text-body-sm` (0.875rem / 14px regular — matches the Figma size and weight) | `TODO: catalogar` — no heading-named token exists at 14px; `.text-body-sm` matches the size/weight, so the gap is naming-only. Applies to the day grid and menu rows only: the **trigger / field value** deliberately uses `.text-label-sm` to match the shared inputs field contract (see § States), overriding the Figma frame's 14px on that region. |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the trigger and `focus-visible:ring-offset-[var(--bg-surface-raised)]` inside the popover.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the trigger and `focus-visible:ring-offset-[var(--bg-surface-raised)]` inside the popover. The Start/End date+time fields reuse `input-text`, whose ring offset resolves `var(--input-ring-offset, var(--bg-canvas))`; the fields container declares `--input-ring-offset: var(--bg-surface-raised)` once and it inherits to every field, so the ring gap matches the raised popover the fields sit on.
+- Field labels: each visible Start / End / Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Start time` / `End time` / `Time`), so every field has a programmatic accessible name.
 - Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible window when crossing its first/last month), `Enter`/`Space` selects, `PageUp`/`PageDown` change month. Apply, Clear, presets, fields, and the timezone control are all reachable by `Tab`.
 - ARIA: each month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; selected cells set `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the popover is labelled by the trigger; decorative icons are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
