@@ -190,17 +190,23 @@ describe('InputText', () => {
     })
   })
 
+  // This component is the FIELD ONLY — its label belongs to the wrapping form-field
+  // layer (`field-text` binds one with useId()). A bare field named solely by its
+  // placeholder loses that name the moment the user types, so these fixtures supply
+  // the accessible name the wrapper would, keeping the render realistic.
   describe('a11y (axe against styled DOM)', () => {
     it('Default has no violations', async () => {
       const { container } = render(InputText, {
-        props: { placeholder: 'Search' }
+        props: { placeholder: 'Search' },
+        attrs: { 'aria-label': 'Search' }
       })
       await expectNoA11yViolations(container)
     })
 
     it('Invalid + required has no violations', async () => {
       const { container } = render(InputText, {
-        props: { invalid: true, required: true, modelValue: 'bad', placeholder: 'Email' }
+        props: { invalid: true, required: true, modelValue: 'bad', placeholder: 'Email' },
+        attrs: { 'aria-label': 'Email' }
       })
       await expectNoA11yViolations(container)
     })
