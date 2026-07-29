@@ -57,15 +57,19 @@
     {
       items: [
         { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
+        {
+          id: 'deployments',
+          label: 'Deployments',
+          icon: 'ai ai-deploy-pillar',
+          path: '/deployments'
+        },
         {
           id: 'marketplace',
           label: 'Marketplace',
           icon: 'ai ai-marketplace',
           path: '/marketplace'
-        },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
-        { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' },
-        { id: 'diagrams', label: 'Diagrams', icon: 'pi pi-share-alt', path: '/diagrams' }
+        }
       ]
     },
     {
@@ -77,16 +81,24 @@
           icon: 'ai ai-edge-application',
           path: '/applications'
         },
+        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions' },
         { id: 'variables', label: 'Variables', icon: 'ai ai-variables', path: '/variables' },
-        { id: 'forms', label: 'Forms', icon: 'pi pi-file-edit', path: '/forms' }
+        { id: 'connectors', label: 'Connectors', icon: 'ai ai-edge-connectors' },
+        { id: 'custom-pages', label: 'Custom Pages', icon: 'ai ai-custom-pages' }
       ]
     },
     {
       label: 'Secure',
       items: [
-        { id: 'connectors', label: 'Connectors', icon: 'ai ai-edge-connectors' },
+        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall' },
         { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
-        { id: 'firewalls', label: 'Firewalls', icon: 'ai ai-edge-firewall' }
+        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules' },
+        {
+          id: 'certificate-manager',
+          label: 'Certificate Manager',
+          icon: 'ai ai-digital-certificates'
+        },
+        { id: 'network-lists', label: 'Network Lists', icon: 'ai ai-network-lists' }
       ]
     },
     {
@@ -126,17 +138,16 @@
     },
     {
       label: 'Edge Libraries',
+      items: [{ id: 'edge-services', label: 'Edge Services', icon: 'ai ai-edge-services' }]
+    },
+    // Demo-only pages that exercise the design system itself, kept last so they
+    // never read as console product areas.
+    {
+      label: 'Design stuff',
       items: [
-        {
-          id: 'certificate-manager',
-          label: 'Certificate Manager',
-          icon: 'ai ai-digital-certificates'
-        },
-        { id: 'custom-pages', label: 'Custom Pages', icon: 'ai ai-custom-pages' },
-        { id: 'edge-services', label: 'Edge Services', icon: 'ai ai-edge-services' },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions' },
-        { id: 'network-lists', label: 'Network Lists', icon: 'ai ai-network-lists' },
-        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules' }
+        { id: 'forms', label: 'Forms', icon: 'pi pi-file-edit', path: '/forms' },
+        { id: 'diagrams', label: 'Diagrams', icon: 'pi pi-share-alt', path: '/diagrams' },
+        { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' }
       ]
     }
   ]

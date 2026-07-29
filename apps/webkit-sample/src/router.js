@@ -14,6 +14,7 @@ import CreateZone from './components/CreateZone.vue'
 import CreationCenter from './components/CreationCenter.vue'
 import Dashboard from './components/Dashboard.vue'
 import DeployTemplate from './components/DeployTemplate.vue'
+import Deployments from './components/Deployments.vue'
 import Diagrams from './components/Diagrams.vue'
 import DialogForm from './components/DialogForm.vue'
 import DrawerForm from './components/DrawerForm.vue'
@@ -62,6 +63,7 @@ const routes = [
   { path: '/applications', name: 'applications', component: Applications },
   { path: '/marketplace', name: 'marketplace', component: Marketplace },
   { path: '/workloads', name: 'workloads', component: Workloads },
+  { path: '/deployments', name: 'deployments', component: Deployments },
   { path: '/workloads/new', name: 'workloads-new', component: CreateWorkload },
   { path: '/workloads/:id', name: 'workload-detail', component: WorkloadDetail },
   { path: '/applications/new', name: 'applications-new', component: CreateApplication },
