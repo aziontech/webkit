@@ -8,7 +8,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Calendar from './calendar.vue'
 
-const { Default, Single } = composeStories(stories)
+const { Default, Single, Open } = composeStories(stories)
 
 // A fixed anchor keeps every assertion deterministic — the visible month is
 // seeded from the committed value when the popover opens, so October 2026 is
@@ -735,6 +735,28 @@ describe('Calendar', () => {
     const { getByTestId } = render(Single())
 
     await openCalendar(getByTestId)
+    await expectNoA11yViolations(document.body)
+  })
+
+  // Every other story renders the CLOSED trigger, so the popover internals had no
+  // visual coverage at all before this fixture existed. It is pinned open via the
+  // controlled `open` prop, which means the panel mounts without an interaction —
+  // asserted here so a fixture that silently stops opening fails a test rather than
+  // quietly shooting an empty canvas.
+  it('renders the Open story fixture with the popover already mounted and labelled', async () => {
+    render(Open())
+
+    const popover = await waitFor(() => {
+      const el = getPopover()
+      expect(el).toBeTruthy()
+      return el as HTMLElement
+    })
+
+    expect(within(popover).getByLabelText('Start').tagName).toBe('INPUT')
+    expect(within(popover).getByLabelText('End').tagName).toBe('INPUT')
+    expect(within(popover).getByLabelText('Start time').tagName).toBe('INPUT')
+    expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe(OCT_2026_LABEL)
+
     await expectNoA11yViolations(document.body)
   })
 })

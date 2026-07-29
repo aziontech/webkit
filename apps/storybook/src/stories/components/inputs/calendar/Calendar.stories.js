@@ -277,6 +277,46 @@ export const Default = {
   }
 }
 
+// Every other story renders the CLOSED trigger, so nothing inside the popover —
+// the Start/End fields and their labels, the month strip, the preset rows, the
+// timezone selector — has ever been snapshotted. This story pins it open so the
+// field surfaces that are supposed to match the shared inputs contract are
+// actually compared. The wrapper is tall because the panel teleports to body and
+// is captured only where it overlaps #storybook-root's box.
+// The wrapper is sized, not just tall: the capture crops to #storybook-root's box,
+// so an unsized root shrink-wraps to the 256px trigger and slices the panel's right
+// edge (time fields, timezone chevron) out of the screenshot.
+const OPEN_TEMPLATE = `<div class="min-h-[640px] w-[560px]">
+  <Calendar v-model="range" mode="range" :open="true" show-time show-timezone clearable />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
+export const Open = {
+  render: () => ({
+    components: { Calendar },
+    setup() {
+      const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })
+      return { range }
+    },
+    template: OPEN_TEMPLATE
+  }),
+  parameters: {
+    // Desktop + tablet only: the panel is wider than the 375px mobile capture box,
+    // so the mobile modes would shoot a sliced panel and compare noise rather than
+    // the field surfaces this story exists to cover. A technical capture limit, not
+    // a way to dodge a mode — the closed-trigger stories still cover all six.
+    visual: { modes: ['dark-desktop', 'light-desktop', 'dark-tablet', 'light-tablet'] },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The popover pinned open, so the surfaces inside it are documented and visually compared: the Start/End date + time fields (each bound to its visible label), the month strip with its static header, the timezone selector, and the Apply/Clear footer. Every field here follows the same contract as a standalone `input-text` — same heights, same `.text-label-sm` value, same hover and disabled treatment.'
+      },
+      source: { code: toSfc(IMPORT, OPEN_TEMPLATE) }
+    }
+  }
+}
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Sizes = {
   parameters: {
