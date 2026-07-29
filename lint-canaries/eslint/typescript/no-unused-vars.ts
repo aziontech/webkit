@@ -1,8 +1,8 @@
-// CANARY — must keep failing @typescript-eslint/no-unused-vars.
-// `computed` is imported and never used; `event` is an unused parameter
-// without the `_` prefix that would mark it intentional.
-import { computed, ref } from 'vue'
-
-export function onSelect(event: MouseEvent, item: { label: string }) {
-  return ref(item.label)
+// CANARY — must keep failing unused-imports/no-unused-vars.
+// `orphan` is assigned and never used, without the `_` prefix that would
+// mark it intentional. (Unused IMPORTS are guarded separately by
+// eslint/import-hygiene/no-unused-imports.ts.)
+export function onSelect(item: { label: string }) {
+  const orphan = item.label
+  return item
 }

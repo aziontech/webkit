@@ -78,6 +78,10 @@ const ESLINT_CANARIES = [
   { file: 'eslint/vue-correctness/no-mutating-props.vue', rule: 'vue/no-mutating-props' },
   { file: 'eslint/vue-correctness/no-reserved-keys.vue', rule: 'vue/no-reserved-keys' },
   { file: 'eslint/vue-correctness/no-reserved-props.vue', rule: 'vue/no-reserved-props' },
+  {
+    file: 'eslint/vue-correctness/no-reserved-component-names.vue',
+    rule: 'vue/no-reserved-component-names'
+  },
   { file: 'eslint/vue-correctness/no-unused-vars.vue', rule: 'vue/no-unused-vars' },
   { file: 'eslint/vue-correctness/v-if-else-key.vue', rule: 'vue/v-if-else-key' },
   { file: 'eslint/vue-correctness/no-ref-as-operand.vue', rule: 'vue/no-ref-as-operand' },
@@ -98,7 +102,7 @@ const ESLINT_CANARIES = [
     rule: 'vuejs-accessibility/click-events-have-key-events'
   },
   // ESLint — TypeScript
-  { file: 'eslint/typescript/no-unused-vars.ts', rule: '@typescript-eslint/no-unused-vars' },
+  { file: 'eslint/typescript/no-unused-vars.ts', rule: 'unused-imports/no-unused-vars' },
   { file: 'eslint/typescript/no-explicit-any.ts', rule: '@typescript-eslint/no-explicit-any' },
   // ESLint — Import hygiene
   { file: 'eslint/import-hygiene/sorted-imports.ts', rule: 'simple-import-sort/imports' },
@@ -106,6 +110,10 @@ const ESLINT_CANARIES = [
   { file: 'eslint/import-hygiene/first.ts', rule: 'import/first' },
   { file: 'eslint/import-hygiene/newline-after-import.ts', rule: 'import/newline-after-import' },
   { file: 'eslint/import-hygiene/no-duplicates.ts', rule: 'import/no-duplicates' },
+  {
+    file: 'eslint/import-hygiene/no-unused-imports.ts',
+    rule: 'unused-imports/no-unused-imports'
+  },
   // ESLint — Clean code
   { file: 'eslint/clean-code/no-console.ts', rule: 'no-console' },
   { file: 'eslint/clean-code/no-debugger.ts', rule: 'no-debugger' },
