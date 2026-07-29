@@ -8,7 +8,10 @@ import assert from 'node:assert/strict'
 
 import { scanDoc, docFileKind } from '../../../../.claude/hooks/_lib/authoring-docs-checks.mjs'
 
-const ids = (rel, content) => scanDoc(rel, content).map((v) => v.id).sort()
+const ids = (rel, content) =>
+  scanDoc(rel, content)
+    .map((v) => v.id)
+    .sort()
 
 test('docFileKind resolves each population and skips non-governed paths', () => {
   assert.deepEqual(docFileKind('.claude/skills/add-animation/SKILL.md'), {
@@ -27,10 +30,12 @@ test('docFileKind resolves each population and skips non-governed paths', () => 
     docFileKind('packages/webkit/cli-templates/claude/skills/webkit-usage/SKILL.md'),
     { kind: 'skill', variant: 'consumer', scope: 'general', unit: 'webkit-usage' }
   )
-  assert.deepEqual(
-    docFileKind('packages/webkit/cli-templates/claude/agents/webkit-expert.md'),
-    { kind: 'agent', variant: 'consumer', scope: 'general', unit: 'webkit-expert' }
-  )
+  assert.deepEqual(docFileKind('packages/webkit/cli-templates/claude/agents/webkit-expert.md'), {
+    kind: 'agent',
+    variant: 'consumer',
+    scope: 'general',
+    unit: 'webkit-expert'
+  })
   // not governed
   assert.equal(docFileKind('.claude/agents/_README.md'), null)
   assert.equal(docFileKind('.claude/skills/add-animation/references/foo.md'), null)
