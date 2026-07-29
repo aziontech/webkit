@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Skeleton from './skeleton.vue'
 
-const { Default, Types, Static } = composeStories(stories)
+const { Default, Types, Static, OnSurfaces } = composeStories(stories)
 
 describe('Skeleton', () => {
   it('renders with the default data-testid and presentational a11y semantics', () => {
@@ -110,5 +110,16 @@ describe('Skeleton', () => {
     const { getByTestId } = render(Static())
 
     expect(getByTestId('feedback-skeleton').hasAttribute('data-animated')).toBe(false)
+  })
+
+  // The fill is a translucent role, so one value per theme reads correctly on every
+  // layer. Whether it *reads* is the visual layer's job (this story is snapshotted in
+  // both themes); here we only prove the fixture renders on all four surfaces and
+  // stays a11y-clean, so a broken story fails a test rather than a screenshot diff.
+  it('renders the composed OnSurfaces story on every surface layer', async () => {
+    const { getAllByTestId, container } = render(OnSurfaces())
+
+    expect(getAllByTestId('feedback-skeleton')).toHaveLength(8)
+    await expectNoA11yViolations(container)
   })
 })

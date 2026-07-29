@@ -258,17 +258,51 @@ bg-[var(--bg-surface)] text-[var(--text-default)] text-[var(--text-muted)] ring-
 | Role          | Examples                                                                                                  |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
 | Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                  |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
+| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                              |
 | Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                       |
 | Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                              |
 | Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
 | Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation` |
+
+### Loading placeholders
+
+A loading placeholder (skeleton, image stand-in, lazy block) does **not** use a surface token. Surface tokens
+are opaque and tuned for one background, so a placeholder built from one is only legible on the surface it was
+picked against — `--bg-surface-overlay` (`#FAFAFA`) on a `--bg-surface` card (`#FFFFFF`) is a contrast ratio of
+**1.02**, effectively invisible. Use the placeholder pair instead:
+
+| Token                        | light                  | dark                   | Role                                          |
+| ---------------------------- | ---------------------- | ---------------------- | --------------------------------------------- |
+| `--bg-placeholder`           | `#00000014` (8% black) | `#FFFFFF1A` (10% white) | The fill that reserves the content's space.   |
+| `--bg-placeholder-highlight` | `#FFFFFF99` (60% white) | `#FFFFFF1A` (10% white) | The sweep that passes over the fill while loading. |
+
+Both are **translucent by design** — that is what makes one value per mode correct everywhere. The fill
+composites over whatever sits behind it, so the same token holds its contrast on `--bg-canvas`, `--bg-surface`,
+`--bg-surface-raised` and `--bg-surface-overlay` alike (ratio `1.19`–`1.32` across all eight combinations)
+instead of being tuned for a single card color.
+
+The highlight is a white alpha in **both** modes: it *lightens* the fill rather than replacing it. Keep the fill
+as `background-color` and put the sweep in a `background-image` gradient whose other stops are `transparent`, so
+the animated and static states share the same base tone:
+
+```html
+class="bg-[var(--bg-placeholder)]
+       data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)]
+       data-[animated]:motion-safe:bg-[length:200%_100%]
+       data-[animated]:motion-safe:animate-[var(--animate-shimmer)]
+       motion-reduce:animate-none"
+```
+
+Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Motion primitives) and is gated behind
+`motion-safe:` with a `motion-reduce:animate-none` fallback.
 
 ### Do not
 
 - Hardcode hex/rgb/hsl in component class strings.
 - Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `components/webkit/`.
 - Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
+- Build a loading placeholder from an opaque surface token (`--bg-surface-overlay`, `--bg-surface-raised`) — it only reads on the one surface it was picked against. Use `--bg-placeholder` / `--bg-placeholder-highlight`.
 
 Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--secondary-contrast)]`, etc.).
 
@@ -293,17 +327,27 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 
 ## Animations
 
-Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. Defined in `packages/theme/src/tokens/semantic/animations.js`.
+Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/v4/globals.css`.
 
-| Utility                   | Behavior                  | Duration · Easing                                                             |
-| ------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
-| `animate-fade-in`         | opacity 0 → 1             | 220ms · `ease-in-out`                                                         |
-| `animate-fade-out`        | opacity 1 → 0             | 220ms · `ease-in-out`                                                         |
-| `animate-slide-down`      | height 0 → auto           | 220ms · `ease-in-out`                                                         |
-| `animate-popup-scale-in`  | scale 0.95 → 1 + fade in  | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
-| `animate-popup-scale-out` | scale 1 → 0.95 + fade out | `fast-02` · `productive-exit`                                                 |
-| `animate-blink`           | opacity 1/0 cycle         | 1s · `step-end` infinite                                                      |
-| `animate-highlight-fade`  | row-flash highlight       | `ease-in forwards`                                                            |
+| Utility                              | Behavior                                     | Duration · Easing                                                             |
+| ------------------------------------ | -------------------------------------------- | ----------------------------------------------------------------------------- |
+| `animate-fade-in`                    | opacity 0 → 1                                | 220ms · `ease-in-out`                                                         |
+| `animate-fade-out`                   | opacity 1 → 0                                | 220ms · `ease-in-out`                                                         |
+| `animate-slide-down`                 | height 0 → auto                              | 220ms · `ease-in-out`                                                         |
+| `animate-popup-scale-in`             | scale 0.9 → 1 + fade in                      | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
+| `animate-popup-scale-out`            | scale 1 → 0.9 + fade out                     | `fast-02` · `productive-exit`                                                 |
+| `animate-slide-in-left`              | translateX -100% → 0                         | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-left`             | translateX 0 → -100%                         | `moderate-01` · `productive-exit`                                             |
+| `animate-slide-in-right`             | translateX 100% → 0                          | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-right`            | translateX 0 → 100%                          | `moderate-01` · `productive-exit`                                             |
+| `animate-shimmer`                    | `background-position` 200% → -200% sweep      | 1.6s · `linear` infinite                                                      |
+| `animate-blink`                      | opacity 1/0 cycle                            | 1s · `step-end` infinite                                                      |
+| `animate-highlight-fade`             | row-flash highlight                          | `ease-in forwards`                                                            |
+| `animate-progress-indeterminate`     | indeterminate bar, primary sweep             | `slow-04` · `productive-entrance` infinite                                    |
+| `animate-progress-indeterminate-short` | indeterminate bar, secondary short sweep   | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
+| `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js` | see `animate.js`                    |
+
+`animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
 
 ### Easing primitives — `primitives/animations/ease.js`
 
