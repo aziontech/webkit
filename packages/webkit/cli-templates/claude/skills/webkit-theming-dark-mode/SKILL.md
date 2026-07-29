@@ -95,6 +95,25 @@ names from the theme package; never invent a `surface-3`.
 </div>
 ```
 
+## Loading placeholders use a translucent role, not a surface
+
+A surface token is opaque and tuned for one background, so a skeleton built from one is only legible on
+the surface it was picked against — and it inverts badly across themes. `--bg-placeholder` (the fill)
+and `--bg-placeholder-highlight` (the sweep) are **translucent**: they composite over whatever layer
+they sit on, so the same token holds its contrast on canvas, surface, raised and overlay alike, in both
+themes. Keep the fill as `background-color` and put the sweep in a gradient whose other stops are
+`transparent`, so the animated and static states share one base tone.
+
+```vue
+<!-- ❌ opaque surface as a placeholder: near-invisible on a card in light -->
+<div class="bg-[var(--bg-surface-overlay)]" />
+<!-- ✅ translucent placeholder role, correct on any layer in both themes -->
+<div class="bg-[var(--bg-placeholder)]" />
+```
+
+Prefer the design system's `Skeleton` component over hand-rolling this — it already pairs the tokens
+with the shimmer animation and its reduced-motion fallback.
+
 ## Don't fight the tokens with `dark:` overrides
 
 If a role has a token, the token already handles both themes — adding `dark:bg-…` on top is redundant
