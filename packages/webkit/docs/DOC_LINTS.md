@@ -1136,8 +1136,11 @@ A zero is identical in every unit, so the unit is noise — and it lets the same
   margin: 0;
   padding: 0;
   transition-duration: 0s; /* a unit that carries meaning at zero stays */
+  width: calc(100% - 0rem); /* a math function requires a unit — it is rem */
 }
 ```
+
+**Scope note.** The rule skips zeros inside `calc()` / `min()` / `max()` / `clamp()`, because CSS requires a unit there (a bare `0` is a number, not a length, and invalidates the expression). So stylelint accepts `calc(100% - 0px)`; the `zero-unit-in-calc` check in the token-checks engine — and the same assertion in the theme's `build:tokens` — is what forces that unit to be `rem`.
 
 ### `no-duplicate-selectors`
 

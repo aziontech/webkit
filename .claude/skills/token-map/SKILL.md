@@ -61,7 +61,7 @@ Transform the structured JSON from `figma-discover` into a deterministic mapping
 - **Do not** edit DESIGN.md, the spec, or any component file.
 - **Do not** restate the DESIGN.md catalog beyond the mapping — the mirror in [`tokens.md`](../../docs/DESIGN.md) is enough.
 - **Do not** suggest a HEX/RGB/HSL/Tailwind palette fallback. Always use a `var(--*)` primitive or a generated class.
-- **Do not** carry a Figma zero over with its unit. A Figma value of `0px` / `0em` maps to `0` — a zero length takes no unit (see [`.claude/rules/styling.md`](../../rules/styling.md)). Units that mean something at zero (`0%`, `0s`, `0deg`) map as-is.
+- **Do not** carry a Figma zero over with its unit. A Figma value of `0px` / `0em` maps to `0` — a zero length takes no unit (see [`.claude/rules/styling.md`](../../rules/styling.md)). Units that mean something at zero (`0%`, `0s`, `0deg`) map as-is, and a zero that lands inside `calc()`/`min()`/`max()`/`clamp()` maps to `0rem` (CSS requires a unit there).
 
 ## Fallbacks
 
@@ -74,4 +74,4 @@ Transform the structured JSON from `figma-discover` into a deterministic mapping
 - [ ] Theme gaps table produced (or empty-marker comment).
 - [ ] Every "Resolved to" cell is either a `.text-*` class or a `var(--*)` literal.
 - [ ] No HEX / RGB / Tailwind / external color utility in the output.
-- [ ] No zero carrying a length unit in the output — a zero resolves to `0`.
+- [ ] No zero carrying a length unit in the output — a zero resolves to `0` (`0rem` only inside a math function).

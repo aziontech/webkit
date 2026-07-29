@@ -70,15 +70,17 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'zero-with-unit',
-    // A zero length is unit-less: `0`, never `0px` / `0rem` / `0em`. Only LENGTH
-    // units are listed (the same scope as stylelint's `length-zero-no-unit`), so
-    // `0%`, `0s`, `0deg` and `0fr` — where the unit carries meaning or is required —
-    // are untouched. The leading (?<![\w.]) keeps `10px` / `1.0em` / `grid0px` out;
-    // the trailing (?![\w%]) keeps `0pxel`-style identifiers out.
     regex:
-      /(?<![\w.])0(?:px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/g,
+      /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)0(?:px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/g,
     message:
       'Zero with a unit. A zero length takes no unit — write `0`, not `0px` / `0rem` / `0em` (.claude/rules/styling.md).'
+  },
+  {
+    id: 'zero-unit-in-calc',
+    regex:
+      /(?<=(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)(?<![\w.])0(?!rem)(?:px|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/g,
+    message:
+      'Zero with the wrong unit inside a math function. `calc()`/`min()`/`max()`/`clamp()` require a unit on the zero — write `0rem`, not `0px` / `0em` (.claude/rules/styling.md).'
   },
   {
     id: 'class-in-defineprops',

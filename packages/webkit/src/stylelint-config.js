@@ -1,11 +1,16 @@
-// Shareable Stylelint config for the @aziontech/webkit design system: forbids
-// hardcoded colors in CSS/SCSS and Vue <style> blocks, steering authors to
-// @aziontech/theme tokens via `var(--*)`. Styles-side complement to
-// @aziontech/eslint-plugin-webkit, which owns JS/TS and <template> classes.
+// Shareable Stylelint config for the @aziontech/webkit design system.
 //
-// Built-in rules only — no runtime deps. `.vue` / `.scss` need a custom syntax
-// (postcss-html / postcss-scss), wired by the consumer via `overrides`.
+// It forbids hardcoded colors in CSS/SCSS and Vue <style> blocks and steers
+// authors to design tokens from @aziontech/theme, referenced as `var(--*)`.
+// This is the styles-side complement to @aziontech/eslint-plugin-webkit, which
+// owns JS/TS and Vue <template> class strings.
+//
+// Zero runtime dependencies: only Stylelint's BUILT-IN rules are used. Stylelint
+// itself is a peerDependency. `.vue` / `.scss` need a custom syntax
+// (postcss-html / postcss-scss); the consumer wires those via `overrides` — see
+// README. This config ships only the rules, never a syntax dependency.
 
+// One shared line every message points to, so the fix is always obvious.
 const USE_TOKEN =
   'Use a design token from @aziontech/theme via var(--*) instead of a hardcoded color.'
 
@@ -14,26 +19,30 @@ const USE_MOTION_TOKEN =
 
 export default {
   rules: {
+    // Bans hex colors: `#fff`, `#ffffff`, `#ffffffff`. The message tells the
+    // author to reach for a token instead of the literal.
     'color-no-hex': [true, { message: USE_TOKEN }],
 
-    // `ignore: ['custom-properties']` is deliberately NOT set — a design system
-    // is authored almost entirely as custom properties, which is exactly where
-    // the drift showed up (`--tracking-normal: 0em`).
     'length-zero-no-unit': [
       true,
       { message: 'A zero length takes no unit — write `0`, not `0px` / `0rem` / `0em`.' }
     ],
 
-    // A color out of `rgb()` / `hsl()` is a hardcoded value, not a token
-    // reference — tokens are consumed as `var(--*)`.
+    // Bans raw color functions. A color coming out of `rgb()` / `hsl()` (and
+    // their alpha variants) is a hardcoded value, not a token reference. Tokens
+    // are consumed as `var(--*)`, so these functions have no place in authored
+    // styles.
     'function-disallowed-list': [
       ['rgb', 'rgba', 'hsl', 'hsla'],
       { message: `${USE_TOKEN} Raw color functions (rgb/rgba/hsl/hsla) are not allowed.` }
     ],
 
-    // Named colors on color-bearing properties. Conservative by design: the
-    // `(?!.*var\()` lookahead lets token-based values through, and the word list
-    // stays unambiguous so `transparent` / `currentColor` / `inherit` pass.
+    // Catches the most common named CSS colors on color-bearing properties.
+    // Deliberately conservative: the negative lookahead `(?!.*var\()` lets any
+    // value that already uses a token through untouched, and the list is limited
+    // to unambiguous palette words to avoid false positives (e.g. `transparent`,
+    // `currentColor`, `inherit` are intentionally allowed). Extend the value
+    // list in a consumer override if a project needs a stricter palette.
     'declaration-property-value-disallowed-list': [
       {
         '/^(color|background|background-color|border|border-color|outline|outline-color|fill|stroke|box-shadow|text-shadow)$/':

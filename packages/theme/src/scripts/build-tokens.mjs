@@ -359,32 +359,34 @@ const emitCssV4 = () => {
   ].join('\n');
 };
 
-// ─── 4b. Zero-unit guard ───────────────────────────────────────────────────
-/**
- * A zero length is unit-less: `0`, never `0px` / `0rem` / `0em`. Stylelint's
- * `length-zero-no-unit` guards authored CSS, but every token here is authored in
- * JS and compiled — no linter sees it. So the build itself is the gate: any token
- * value that emits a zero with a length unit fails `build:tokens` (and therefore
- * `prepack`), naming the custom property so the fix is obvious.
- *
- * Only LENGTH units are listed, matching stylelint's scope — `0%`, `0s`, `0deg`
- * and `0fr` are legitimate and untouched.
- */
-const ZERO_WITH_UNIT =
-  /(?<![\w.])0(?:px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/;
+const MATH_FN = '(?:calc|min|max|clamp)\\((?:[^()]|\\([^()]*\\))*';
+const LENGTH_UNITS =
+  'px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc';
+
+const ZERO_WITH_UNIT = new RegExp(`(?<![\\w.])(?<!${MATH_FN})0(?:${LENGTH_UNITS})(?![\\w%])`);
+const ZERO_UNIT_IN_MATH = new RegExp(
+  `(?<=${MATH_FN})(?<![\\w.])0(?!rem)(?:${LENGTH_UNITS})(?![\\w%])`,
+);
 
 const assertNoZeroWithUnit = (cssText) => {
-  const offenders = cssText
-    .split('\n')
-    .map((line, i) => ({ line: line.trim(), n: i + 1 }))
-    .filter(({ line }) => ZERO_WITH_UNIT.test(line));
-  if (offenders.length === 0) return;
-  const detail = offenders.map(({ line, n }) => `  globals.css:${n}  ${line}`).join('\n');
-  throw new Error(
-    `build:tokens — ${offenders.length} token value(s) emit a zero with a unit.\n` +
-      `A zero length takes no unit: write '0', not '0px' / '0rem' / '0em'.\n` +
-      `Fix the token source under src/tokens/, not the generated CSS.\n${detail}`,
-  );
+  const lines = cssText.split('\n').map((line, i) => ({ line: line.trim(), n: i + 1 }));
+  const bare = lines.filter(({ line }) => ZERO_WITH_UNIT.test(line));
+  const inMath = lines.filter(({ line }) => ZERO_UNIT_IN_MATH.test(line));
+  if (bare.length === 0 && inMath.length === 0) return;
+  const detail = (rows) => rows.map(({ line, n }) => `  globals.css:${n}  ${line}`).join('\n');
+  const parts = [`build:tokens — ${bare.length + inMath.length} token value(s) misuse a zero.`];
+  if (bare.length > 0) {
+    parts.push(
+      `A zero length takes no unit: write '0', not '0px' / '0rem' / '0em'.\n${detail(bare)}`,
+    );
+  }
+  if (inMath.length > 0) {
+    parts.push(
+      `Inside calc()/min()/max()/clamp() the zero needs a unit, and that unit is rem: write '0rem'.\n${detail(inMath)}`,
+    );
+  }
+  parts.push('Fix the token source under src/tokens/, not the generated CSS.');
+  throw new Error(parts.join('\n'));
 };
 
 // ─── 5. Write to disk ──────────────────────────────────────────────────────

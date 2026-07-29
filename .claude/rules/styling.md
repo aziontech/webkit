@@ -171,9 +171,27 @@ class="p-0 translate-y-0"
 
 The rule covers **length** units only — `px`, `rem`, `em`, `ch`, `vw`/`vh`, `cqw`, `cm`/`in`/`pt`, and the rest of the CSS length set. Units that carry meaning (or are required) at zero are untouched: `0%`, `0s` / `0ms`, `0deg`, `0fr`.
 
+### The one place a zero keeps a unit: math functions
+
+Inside `calc()` / `min()` / `max()` / `clamp()` a bare `0` is a **number**, not a length, so the whole expression is invalid — CSS requires the unit there. When the unit is unavoidable it is **`rem`**, the one length unit this system scales in; never `px` / `em`.
+
+```css
+/* ✅ the unit is required here, and it is rem */
+width: calc(100% - 0rem);
+height: max(0rem, var(--content-height));
+
+/* ❌ same requirement, wrong unit */
+width: calc(100% - 0px);
+height: max(0em, var(--content-height));
+
+/* ✅ outside a math function the zero stays bare */
+margin: 0;
+padding: 0 var(--spacing-md);
+```
+
 ## Hard prohibitions
 
-- No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS).
+- No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
 - No `const sharedClasses = [...]`, `const kindClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
 - No `<style>` blocks (scoped or unscoped).
 - No `.css` / `.scss` files inside a component directory.
@@ -264,6 +282,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - `scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
+- **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § 13.y "Styling discipline" supersedes any older example in the same file that still shows the JS-presets pattern. **The data-attribute approach is the canonical pattern for new components.**
 

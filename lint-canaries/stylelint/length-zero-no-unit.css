@@ -1,7 +1,4 @@
-/* CANARY — must keep failing length-zero-no-unit (a zero length takes no unit).
-   The custom property is deliberate: stylelint-config-standard-scss ships
-   `ignore: ['custom-properties']`, and .stylelintrc.json overrides it away. If this
-   declaration stops being flagged, that override was lost. */
+/* CANARY — must keep failing length-zero-no-unit. */
 :root {
   --tracking-normal: 0em;
 }

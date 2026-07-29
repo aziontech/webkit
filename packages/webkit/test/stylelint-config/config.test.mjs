@@ -72,6 +72,20 @@ test('flags a zero length with a unit inside a custom property (no ignore)', asy
   )
 })
 
+// A bare `0` inside calc() is a number, not a length, so CSS requires the unit
+// there — stylelint skips math functions for that reason. Forcing that unit to be
+// `rem` is the `zero-unit-in-calc` token check's job, not this rule's.
+test('leaves a zero inside a math function alone (a unit is required there)', async () => {
+  for (const decl of ['width:calc(100% - 0rem)', 'height:max(0rem,var(--h))']) {
+    const warnings = await lint(`a{${decl}}`)
+    assert.equal(
+      warnings.length,
+      0,
+      `expected no warnings for ${decl}, got: ${JSON.stringify(warnings)}`
+    )
+  }
+})
+
 // `0s` / `0deg` keep their unit because it carries meaning (or is required) at zero.
 // A literal duration is still owned by the motion discipline, so assert on this rule
 // alone rather than on a clean slate.
