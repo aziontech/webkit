@@ -99,6 +99,9 @@ const DESCRIPTIONS = {
   '--bg-surface': 'Primary element background (cards, panels).',
   '--bg-surface-raised': 'Raised element background — one step above the surface.',
   '--bg-surface-overlay': 'Floating surface for menus, popovers and dropdowns.',
+  '--bg-placeholder':
+    'Translucent fill for loading placeholders (skeletons, image stand-ins) — composites over any surface.',
+  '--bg-placeholder-highlight': 'Sweep highlight passing over a loading placeholder.',
   '--bg-hover': 'Hover overlay for interactive surfaces.',
   '--bg-active': 'Active / pressed overlay for interactive surfaces.',
   '--bg-selected': 'Background for a selected element.',
