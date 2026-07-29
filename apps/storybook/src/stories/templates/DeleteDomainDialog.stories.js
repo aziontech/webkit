@@ -85,7 +85,7 @@ const SNIPPET_MARKUP = `<Dialog size="medium" v-model:open="open">
         <DialogClose />
       </PanelHeader>
       <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
-        <Message severity="warning" title="Once confirmed, this action can't be reversed." />
+        <Message severity="warning" label="Once confirmed, this action can't be reversed." />
         <p class="m-0 text-body-sm text-[var(--text-muted)]">
           The selected Domain will be deleted, along with all associated settings or instances. Check the
           <Link
@@ -136,7 +136,7 @@ const deleteDomainTemplate = `
         <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
           <Message
             severity="warning"
-            :title="args.warningTitle"
+            :label="args.warningLabel"
             data-testid="template-delete-domain-dialog__warning"
           />
           <p class="m-0 text-body-sm text-[var(--text-muted)]">
@@ -318,7 +318,7 @@ const meta = {
         defaultValue: { summary: "'Delete Domain'" }
       }
     },
-    warningTitle: {
+    warningLabel: {
       control: 'text',
       description: 'Warning message shown at the top of the body.',
       table: {
@@ -411,7 +411,7 @@ const meta = {
     size: 'medium',
     triggerLabel: 'Delete domain',
     title: 'Delete Domain',
-    warningTitle: "Once confirmed, this action can't be reversed.",
+    warningLabel: "Once confirmed, this action can't be reversed.",
     descriptionBeforeLink:
       'The selected Domain will be deleted, along with all associated settings or instances. Check the ',
     descriptionAfterLink: ' for more details.',
