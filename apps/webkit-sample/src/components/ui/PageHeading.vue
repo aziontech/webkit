@@ -11,9 +11,12 @@
     title: { type: String, default: '' },
     // Optional supporting line under the title.
     description: { type: String, default: '' },
-    // Title scale: 'large' for the top-level module (Home); 'small' for every
-    // second-level page (modules, resources, settings). 'medium' is kept on the
-    // scale but is not used by any page.
+    // Title scale: 'large' on a FIRST-LEVEL page — one the sidebar routes to
+    // directly (Applications, Workloads, Edge DNS, Marketplace, …) — because
+    // there the title is the page's entry point. 'small' everywhere below that:
+    // detail tabs, create pages, settings sub-pages, drawer bodies, where the
+    // breadcrumb already carries the context and the title only labels a
+    // section of it. 'medium' is kept on the scale but no page uses it.
     size: {
       type: String,
       default: 'small',
