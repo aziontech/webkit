@@ -120,6 +120,47 @@ export const Types = {
   }
 }
 
+const SURFACES_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-md)]">
+  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-canvas)] p-[var(--spacing-md)]">
+    <span class="text-label-sm text-[var(--text-muted)]">--bg-canvas</span>
+    <Skeleton kind="shape" width="100%" height="16px" />
+    <Skeleton kind="shape" width="60%" height="16px" />
+  </div>
+  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-md)]">
+    <span class="text-label-sm text-[var(--text-muted)]">--bg-surface</span>
+    <Skeleton kind="shape" width="100%" height="16px" />
+    <Skeleton kind="shape" width="60%" height="16px" />
+  </div>
+  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-surface-raised)] p-[var(--spacing-md)]">
+    <span class="text-label-sm text-[var(--text-muted)]">--bg-surface-raised</span>
+    <Skeleton kind="shape" width="100%" height="16px" />
+    <Skeleton kind="shape" width="60%" height="16px" />
+  </div>
+  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-surface-overlay)] p-[var(--spacing-md)]">
+    <span class="text-label-sm text-[var(--text-muted)]">--bg-surface-overlay</span>
+    <Skeleton kind="shape" width="100%" height="16px" />
+    <Skeleton kind="shape" width="60%" height="16px" />
+  </div>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */
+export const OnSurfaces = {
+  render: () => ({
+    components: { Skeleton },
+    template: SURFACES_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The same placeholder on all four surface layers. The fill is `var(--bg-placeholder)`, a translucent role rather than an opaque surface, so it composites over whatever sits behind it and holds its contrast on every layer — in both themes. Built from a surface token instead, a placeholder is only legible on the one surface it was picked against.'
+      },
+      source: { code: toSfc(IMPORT, SURFACES_TEMPLATE) }
+    }
+  }
+}
+
 const STATIC_MARKUP = '<Skeleton kind="shape" width="240px" height="100px" :animated="false" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Skeleton>} */

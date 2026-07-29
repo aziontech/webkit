@@ -409,7 +409,7 @@ const WIDTHS_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-xxl)] 
         <PopoverTitle>small</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-xs) (320px).</div>
+      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-xs) (348px).</div>
     </PopoverContent>
   </Popover>
 
@@ -422,7 +422,7 @@ const WIDTHS_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-xxl)] 
         <PopoverTitle>medium</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-sm) (384px).</div>
+      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-sm) (408px).</div>
     </PopoverContent>
   </Popover>
 
@@ -435,7 +435,7 @@ const WIDTHS_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-xxl)] 
         <PopoverTitle>large</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-md) (448px).</div>
+      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-md) (472px).</div>
     </PopoverContent>
   </Popover>
 </div>`
@@ -449,7 +449,7 @@ export const Widths = {
       controls: { disable: true },
       description: {
         story:
-          'The `width` prop presets — click a trigger to open each: `small` (`var(--container-xs)`, 320px), `medium` (`var(--container-sm)`, 384px), and `large` (`var(--container-md)`, 448px). When `width` is omitted the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`.'
+          'The `width` prop presets — click a trigger to open each: `small` (`var(--container-xs)`, 348px), `medium` (`var(--container-sm)`, 408px), and `large` (`var(--container-md)`, 472px). When `width` is omitted the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`.'
       },
       source: { code: toSfc(IMPORT, WIDTHS_TEMPLATE) }
     }

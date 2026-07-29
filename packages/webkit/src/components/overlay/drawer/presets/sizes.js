@@ -8,10 +8,15 @@ export const drawerSizePixels = {
   large: '1024px'
 }
 
+/**
+ * Literal panel widths, deliberately not container tokens: an edge panel is
+ * sized against the viewport it covers, not against a reading measure, so it
+ * does not move when the container scale is retuned.
+ */
 export const drawerSizeSummaries = {
-  small: '384px (container-sm)',
-  medium: '672px (container-2xl)',
-  large: '1024px (container-5xl)'
+  small: '384px',
+  medium: '672px',
+  large: '1024px'
 }
 
 /**
