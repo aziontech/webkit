@@ -26,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional text action.'
+          'Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -45,7 +45,8 @@ const meta = {
     size: {
       control: 'inline-radio',
       options: ['small', 'medium'],
-      description: 'Size token. Drives the banner height, inline padding, and copy scale.',
+      description:
+        'Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium'" },
@@ -64,7 +65,7 @@ const meta = {
     },
     actionLabel: {
       control: 'text',
-      description: 'Label for the built-in text action button; hidden when empty.',
+      description: 'Label for the built-in secondary action button; hidden when empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     closable: {
@@ -95,7 +96,7 @@ const meta = {
     },
     action: {
       control: false,
-      description: 'Custom action control; replaces the built-in text action button when provided.',
+      description: 'Custom action control; replaces the built-in Button when provided.',
       table: { category: 'slots' }
     }
   },
@@ -103,7 +104,7 @@ const meta = {
     severity: 'info',
     size: 'medium',
     label: 'Your workload finished deploying in 42 seconds.',
-    actionLabel: 'Label',
+    actionLabel: 'Action',
     icon: '',
     closable: false,
     life: 0
@@ -206,7 +207,7 @@ export const Sizes = {
       controls: { disable: true },
       description: {
         story:
-          'Both size tokens. `small` is a 32px banner with 8px inline padding and `.text-body-xs` copy; `medium` (the default) is 36px with 12px inline padding and `.text-body-sm`. Block padding stays 6px in both. A trailing action or close control tightens the end edge to 8px and lets the banner grow past the floor.'
+          'Both size tokens. `small` is a 32px banner with 8px inline padding and `.text-label-sm` copy; `medium` (the default) is 36px with 12px inline padding and `.text-label-md`. Block padding stays 6px in both, and the leading icon is 14px at either size. A trailing action or close control tightens the end edge to 8px, takes the matching Button/IconButton size, and lets the banner grow past the floor.'
       },
       source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }

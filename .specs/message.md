@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 636ae80a81e8781b3b41769e4f9c1faa8b72db808c4d4d7f61dcac481d4b4f04
+checksum: 0d839fb3512e4e880b75bdbcc58d286e2304a4ab23ef3f968c3d1a621647d696
 created: 2026-05-22
 last_updated: 2026-07-29
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-07-29
 
 ## Purpose
 
-Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional text action.
+Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button.
 
 ## Usage
 
@@ -45,10 +45,10 @@ import Message from '@aziontech/webkit/message'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `severity` | `'info' | 'success' | 'warning' | 'danger' | 'error'` | `'info'` | no | Visual severity variant (maps Error to danger). |
-| `size` | `'small' | 'medium'` | `'medium'` | no | Size token. Drives the banner height, inline padding, and copy scale. |
+| `size` | `'small' | 'medium'` | `'medium'` | no | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
 | `label` | `string` | `''` | no | Fallback message copy when the default slot is empty. |
 | `icon` | `string` | `''` | no | PrimeIcons class override for the leading icon. |
-| `actionLabel` | `string` | `''` | no | Label for the built-in text action button; hidden when empty. |
+| `actionLabel` | `string` | `''` | no | Label for the built-in secondary action button; hidden when empty. |
 | `closable` | `boolean` | `false` | no | When true, shows a close control that dismisses the message. |
 | `life` | `number` | `0` | no | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |
 
@@ -80,10 +80,18 @@ import Message from '@aziontech/webkit/message'
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| message typography (small) | `.text-body-xs` |
-| message typography (medium) | `.text-body-sm` |
+| message typography (small) | `.text-label-sm` — 12px |
+| message typography (medium) | `.text-label-md` — 14px |
 | inline link (anchor inside the message) | `.text-link` |
-| action typography | `.text-button-md` |
+| leading icon glyph | `.text-label-md` — 14px at both sizes; the icon does not scale with the banner |
+| leading icon box | `size-3.5` — 14px, matching the glyph so the row height is stable |
+| action typography | `.text-button-md` — both Button sizes use this step |
+| action size | tracks `size`: `small` → Button `small` (28px), `medium` → Button `medium` (32px) |
+| action surface | `var(--secondary)` — the built-in action is a `secondary` Button, so it reads as a control against every severity surface rather than as body copy |
+| action text | `var(--secondary-contrast)` |
+| close control size | tracks `size`: `small` → IconButton `small` (28px), `medium` → IconButton `medium` (32px) |
+| close control surface | transparent — the close is a `transparent` IconButton, so the severity surface shows through and the glyph does not compete with the action |
+| close control glyph | `var(--text-default)` |
 | surface (info) | `var(--info)` |
 | surface (success) | `var(--success)` |
 | surface (warning) | `var(--warning)` |
@@ -99,10 +107,10 @@ import Message from '@aziontech/webkit/message'
 | text | `var(--text-default)` |
 | muted text | `var(--text-muted)` |
 | spacing (padding block) | `py-1.5` — 6px; no semantic token sits between `--spacing-xxs` (4px) and `--spacing-xs` (8px) |
-| spacing (padding inline, small) | `var(--spacing-xs)` |
-| spacing (padding inline, medium) | `var(--spacing-sm)` |
-| spacing (padding inline end, with a trailing control) | `var(--spacing-xs)` — tightened; the trailing action/close control carries its own padding |
-| spacing (gap) | `var(--spacing-sm)` |
+| spacing (padding inline, small) | `var(--spacing-xs)` — 8px |
+| spacing (padding inline, medium) | `var(--spacing-sm)` — 12px |
+| spacing (padding inline end, with a trailing control) | `var(--spacing-xs)` — 8px, tightened; the trailing action/close control carries its own padding |
+| spacing (gap) | `var(--spacing-sm)` — 12px at every breakpoint; only the `lg`/`xl`/`xxl` steps scale responsively |
 | shape | `var(--shape-button)` — 6px, identical to `rounded-md` |
 | shadow | `var(--shadow-xs)` |
 | ring | `var(--ring-color)` |
@@ -114,6 +122,7 @@ import Message from '@aziontech/webkit/message'
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
 | block padding 6px | `py-1.5` (`calc(var(--spacing) * 1.5)`) | Add a 6px semantic spacing step if a second component needs it; today only this banner does. |
+| icon box 14px | `size-3.5` (`calc(var(--spacing) * 3.5)`) | The theme has no icon-size scale, so the box is spacing-derived while the glyph rides the `.text-label-md` font-size token. Add an icon-size scale when a second component needs a non-16px glyph. |
 
 ## Accessibility (WCAG 2.1 AA)
 

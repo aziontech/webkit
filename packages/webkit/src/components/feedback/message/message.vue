@@ -20,13 +20,13 @@
   interface Props {
     /** Visual severity variant (maps Error to danger). */
     severity?: MessageSeverity
-    /** Size token. Drives the banner height, inline padding, and copy scale. */
+    /** Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. */
     size?: MessageSize
     /** Fallback message copy when the default slot is empty. */
     label?: string
     /** PrimeIcons class override for the leading icon. */
     icon?: string
-    /** Label for the built-in text action button; hidden when empty. */
+    /** Label for the built-in secondary action button; hidden when empty. */
     actionLabel?: string
     /** When true, shows a close control that dismisses the message. */
     closable?: boolean
@@ -176,12 +176,12 @@
       <i
         :class="resolvedIcon"
         :data-severity="normalizedSeverity"
-        class="size-4 shrink-0 text-[length:inherit] leading-none data-[severity=info]:text-[var(--info-contrast)] data-[severity=success]:text-[var(--success-contrast)] data-[severity=warning]:text-[var(--warning-contrast)] data-[severity=danger]:text-[var(--danger-contrast)]"
+        class="size-3.5 shrink-0 text-label-md leading-none data-[severity=info]:text-[var(--info-contrast)] data-[severity=success]:text-[var(--success-contrast)] data-[severity=warning]:text-[var(--warning-contrast)] data-[severity=danger]:text-[var(--danger-contrast)]"
         aria-hidden="true"
       />
       <p
         :data-size="size"
-        class="m-0 min-w-0 flex-1 text-[var(--text-default)] data-[size=small]:text-body-xs data-[size=medium]:text-body-sm [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
+        class="m-0 min-w-0 flex-1 text-[var(--text-default)] data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
         :data-testid="`${testId}__content`"
       >
         <slot v-if="$slots['default']" />
@@ -190,8 +190,8 @@
       <slot name="action">
         <Button
           v-if="actionLabel"
-          kind="text"
-          size="medium"
+          kind="secondary"
+          :size="size"
           :label="actionLabel"
           :data-testid="`${testId}__action`"
           @click="handleAction"
@@ -201,7 +201,7 @@
         v-if="closable"
         icon="pi pi-times"
         kind="transparent"
-        size="small"
+        :size="size"
         ariaLabel="Close message"
         :data-testid="`${testId}__close`"
         @click="handleClose"
