@@ -257,7 +257,12 @@ export default meta
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Calendar>} */
 export const Default = {
-  args: { clearable: true, showTime: true, showTimezone: true },
+  args: {
+    clearable: true,
+    showTime: true,
+    showTimezone: true,
+    size: 'large'
+  },
   render: (args) => ({
     components: { Calendar },
     setup() {
@@ -308,6 +313,13 @@ export const Open = {
     visual: { modes: ['dark-desktop', 'light-desktop', 'dark-tablet', 'light-tablet'] },
     docs: {
       controls: { disable: true },
+      // The pinned-open panel teleports to body with position:fixed coordinates
+      // measured at mount. Rendered INLINE on the docs page those coordinates
+      // freeze before the page finishes laying out, so the panel drifts thousands
+      // of pixels away from its trigger and floats over the stories above it.
+      // An iframe (same treatment as Dropdown's forced-open stories) gives it a
+      // viewport of its own, where mount-time geometry is the real geometry.
+      story: { inline: false, iframeHeight: '720px' },
       description: {
         story:
           'The popover pinned open, so the surfaces inside it are documented and visually compared: the Start/End date + time fields (each bound to its visible label), the month strip with its static header, the timezone selector, and the Apply/Clear footer. Every field here follows the same contract as a standalone `input-text` — same heights, same `.text-label-sm` value, same hover and disabled treatment.'
