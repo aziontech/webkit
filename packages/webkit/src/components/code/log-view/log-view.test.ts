@@ -11,7 +11,7 @@ import LogViewContent from './log-view-content.vue'
 import LogViewFooter from './log-view-footer.vue'
 import LogViewHeader from './log-view-header.vue'
 
-const { Default } = composeStories(stories)
+const { Default, Flush } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium; stub writeText to resolve
 // so CopyButton's own logic (await write -> emit 'copy') runs. Not a layout mock.
@@ -111,6 +111,20 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(header.tagName).toBe('HEADER')
       expect(root.contains(header)).toBe(true)
       expect(root.contains(content)).toBe(true)
+    })
+
+    // The outline AND the corner radius hang off data-border (Tailwind
+    // `data-[border]:` variants), so dropping the attribute drops both.
+    it('sets data-border by default and drops it when border is false', () => {
+      const bordered = render(LogView, { props: { lines: LINES } })
+      expect(
+        within(bordered.container).getByTestId('code-log-view').getAttribute('data-border')
+      ).toBe('true')
+
+      const flush = render(LogView, { props: { lines: LINES, border: false } })
+      expect(within(flush.container).getByTestId('code-log-view').hasAttribute('data-border')).toBe(
+        false
+      )
     })
 
     it('throws a helpful error when a sub-component is used outside LogView', () => {
@@ -315,6 +329,16 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(getByTestId('code-log-view__content')).toBeTruthy()
       // The deploy log fixture has many lines.
       expect(getAllByTestId('code-log-view__line').length).toBeGreaterThan(0)
+    })
+
+    // The frame-inside-a-frame this story exists to prevent is only visible with
+    // real styling, so the pixels are the visual layer's job; here we prove the
+    // fixture composes and that it is the borderless shell being shot.
+    it('Flush story renders the shell without the outer border', () => {
+      const { getByTestId } = render(Flush)
+
+      expect(getByTestId('code-log-view').hasAttribute('data-border')).toBe(false)
+      expect(getByTestId('code-log-view__content')).toBeTruthy()
     })
   })
 })

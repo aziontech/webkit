@@ -59,6 +59,12 @@ const meta = {
         defaultValue: { summary: '[]' }
       }
     },
+    border: {
+      control: 'boolean',
+      description:
+        'Draws the outer card border and corner radius. Set to false to render flush inside a surface that already frames the shell.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
+    },
     searchPlaceholder: {
       control: 'text',
       description: 'Placeholder for the default header search field.',
@@ -125,6 +131,7 @@ const meta = {
     }
   },
   args: {
+    border: true,
     searchPlaceholder: 'Find in Logs',
     showCopy: true,
     disabled: false,
@@ -202,6 +209,37 @@ export const Default = {
           'LogViewHeader + LogViewContent over a realistic deploy log. Search filters lines and highlights matches in the body.'
       },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const FLUSH_TEMPLATE = `<div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-md)]">
+  <span class="text-label-sm text-[var(--text-muted)]">Deploy output</span>
+  <LogView :lines="lines" :border="false" v-model:search="search" v-model:warnings-only="warningsOnly" class="mt-[var(--spacing-sm)] h-[420px]">
+    <LogViewHeader />
+    <LogViewContent />
+  </LogView>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof LogView>} */
+export const Flush = {
+  render: () => ({
+    components,
+    setup() {
+      const search = ref('')
+      const warningsOnly = ref(false)
+      return { lines: completeDeployLog, search, warningsOnly }
+    },
+    template: FLUSH_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'With `:border="false"` the shell drops its own outline and corner radius so it sits flush inside a surface that already frames it — an accordion panel, a drawer, a card. Internal dividers (the header and footer edges) are unaffected. Left on, the two frames would nest and read as a box inside a box.'
+      },
+      source: { code: toSfc(IMPORT, FLUSH_TEMPLATE) }
     }
   }
 }
