@@ -41,7 +41,7 @@
     :data-testid="testId"
     :data-severity="severity"
     :data-loading="loading || null"
-    class="group inline-flex items-center gap-[var(--spacing-3)] rounded-[var(--shape-elements)] bg-[var(--bg-surface)] p-[var(--spacing-3)] text-body-sm text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+    class="group inline-flex items-center gap-[var(--spacing-3)] rounded-[var(--shape-elements)] text-body-sm text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
   >
     <Spinner
       v-if="loading"
