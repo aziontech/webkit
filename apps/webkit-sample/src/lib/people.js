@@ -15,3 +15,17 @@ export const people = [
 
 // Round-robin author for row `index` — spreads the team evenly across a list.
 export const authorAt = (index) => people[index % people.length];
+
+// A person's corporate address, derived from the name the roster already holds
+// so the two can never disagree: "Isaque Böck" → "isaque.bock@azion.com".
+// Accents are stripped (NFD + combining marks) the way a directory would issue
+// the address. Lists that identify the actor by email (Deployments) use this;
+// lists that identify them by face (LastModifiedCell) do not need it.
+export const emailOf = (name) =>
+  `${name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .join(".")}@azion.com`;

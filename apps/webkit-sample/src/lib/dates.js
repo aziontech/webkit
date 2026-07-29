@@ -46,6 +46,19 @@ export const daysAgo = (n, from = new Date()) => {
 };
 
 /**
+ * `n` hours before `from` (default: now).
+ *
+ * The finer-grained sibling of `daysAgo`, for histories that happen within a day
+ * or two (a deployment history, a build log) where a whole-day step would
+ * collapse every row onto the same relative timestamp.
+ *
+ * @param {number} n
+ * @param {Date} [from]
+ * @returns {Date}
+ */
+export const hoursAgo = (n, from = new Date()) => new Date(from.getTime() - n * 3_600_000);
+
+/**
  * `n` months before `from` (default: now). Uses the native month arithmetic, so
  * an overflowing day-of-month rolls forward the way `Date` defines it
  * (March 31 minus one month → March 3).
