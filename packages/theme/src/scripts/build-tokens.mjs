@@ -359,13 +359,18 @@ const emitCssV4 = () => {
   ].join('\n');
 };
 
+// Keep in sync with the `zero-with-unit` / `zero-unit-in-calc` checks in
+// packages/webkit/src/eslint-plugin/token-checks.js — theme sits below webkit in the
+// dependency graph, so the shared engine cannot be imported here. Same known limit:
+// the math-function lookbehind balances parens one level deep.
 const MATH_FN = '(?:calc|min|max|clamp)\\((?:[^()]|\\([^()]*\\))*';
 const LENGTH_UNITS =
   'px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc';
 
-const ZERO_WITH_UNIT = new RegExp(`(?<![\\w.])(?<!${MATH_FN})0(?:${LENGTH_UNITS})(?![\\w%])`);
+const ZERO_WITH_UNIT = new RegExp(`(?<![\\w.])(?<!${MATH_FN})0(?:${LENGTH_UNITS})(?![\\w%])`, 'i');
 const ZERO_UNIT_IN_MATH = new RegExp(
   `(?<=${MATH_FN})(?<![\\w.])0(?!rem)(?:${LENGTH_UNITS})(?![\\w%])`,
+  'i',
 );
 
 const assertNoZeroWithUnit = (cssText) => {
