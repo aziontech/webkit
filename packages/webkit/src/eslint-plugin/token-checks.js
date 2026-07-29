@@ -36,13 +36,19 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'leading-raw',
-    regex: /\bleading-(?:3|4|5|6|7|8|9|10|11|12|tight|snug|relaxed|loose|\[)/g,
+    // Any numeric step, not just 3-12: in Tailwind v4 `leading-<n>` resolves to
+    // calc(var(--spacing) * n), so `leading-1` is 0.25rem — not the line-height
+    // of 1 it reads as. `none` stays out of the alternation (allowed on icons).
+    regex: /\bleading-(?:\d+|tight|snug|relaxed|loose|\[)/g,
     message:
       'Raw leading-* class. Line-height is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'tracking-raw',
-    regex: /\btracking-(?:tighter|tight|wide|wider|widest|\[)/g,
+    // `tightest` is not a step on the tracking scale, so Tailwind emits nothing
+    // for it and the class silently does nothing. It belongs here so the dead
+    // override is reported rather than read as working code.
+    regex: /\btracking-(?:tightest|tighter|tight|wide|wider|widest|\[)/g,
     message:
       'Raw tracking-* class. Letter-spacing is part of the generated typography class (DESIGN.md); do not override.'
   },
