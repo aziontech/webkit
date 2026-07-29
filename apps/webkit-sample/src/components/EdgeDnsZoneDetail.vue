@@ -659,9 +659,6 @@ const onRecordAction = (event, value, row) => {
                       placeholder="Search records..."
                       class="flex-1"
                     />
-                    <Table.RefreshButton />
-                    <Table.Export />
-                    <Table.ColumnSelector />
                   </div>
                 </template>
 

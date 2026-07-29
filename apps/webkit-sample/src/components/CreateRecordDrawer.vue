@@ -139,13 +139,13 @@ const submit = async () => {
 
           <PanelContent>
             <fieldset
-              class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+              class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
               :disabled="submitting"
             >
               <legend class="sr-only">Create record</legend>
 
               <!-- Section: Settings -->
-              <section class="flex flex-col gap-[var(--spacing-sm)]">
+              <section class="flex flex-col gap-[var(--layout-group-gap)]">
                 <div class="flex flex-col gap-[var(--spacing-xxs)] px-[var(--spacing-xs)]">
                   <p class="text-heading-xxs text-[var(--text-default)]">Settings</p>
                   <p class="text-body-sm text-[var(--text-muted)]">
@@ -304,7 +304,7 @@ const submit = async () => {
               </section>
 
               <!-- Section: Policy -->
-              <section class="flex flex-col gap-[var(--spacing-sm)]">
+              <section class="flex flex-col gap-[var(--layout-group-gap)]">
                 <div class="flex flex-col gap-[var(--spacing-xxs)] px-[var(--spacing-xs)]">
                   <p class="text-heading-xxs text-[var(--text-default)]">Policy</p>
                   <p class="text-body-sm text-[var(--text-muted)]">

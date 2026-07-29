@@ -253,7 +253,7 @@ watch(dialogOpen, (open) => {
 
 <template>
   <AppLayout :breadcrumb="[{ label: 'Personal Tokens' }]">
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column layout-list h-full">
       <PageHeading
         title="Personal Tokens"
         description="Personal tokens securely access your account via API. Create one, then copy it — it's shown only once."
@@ -357,13 +357,13 @@ watch(dialogOpen, (open) => {
 
             <PanelContent>
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create personal token</legend>
 
                 <!-- Section: General -->
-                <section class="flex flex-col gap-[var(--spacing-sm)]">
+                <section class="flex flex-col gap-[var(--layout-group-gap)]">
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     General
                   </p>
@@ -426,7 +426,7 @@ watch(dialogOpen, (open) => {
                 </section>
 
                 <!-- Section: Token -->
-                <section class="flex flex-col gap-[var(--spacing-sm)]">
+                <section class="flex flex-col gap-[var(--layout-group-gap)]">
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     Token
                   </p>

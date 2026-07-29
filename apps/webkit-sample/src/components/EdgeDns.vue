@@ -132,8 +132,9 @@ const onRowAction = (event, value, row) => {
     active="edge-dns"
     :breadcrumb="[{ label: 'Edge DNS' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column layout-list h-full">
       <PageHeading
+        size="large"
         title="Edge DNS"
         description="Host authoritative DNS zones and serve authoritative DNS responses used to resolve domain names."
       >
@@ -225,15 +226,24 @@ const onRowAction = (event, value, row) => {
             >
               <template #toolbar>
                 <div class="flex w-full items-center gap-[var(--spacing-xs)]">
-                  <Table.Filter :fields="filterFields" />
+                  <!-- Search first, then the filter builder. -->
                   <Table.Search
                     size="large"
                     placeholder="Search zones..."
                     class="flex-1"
                   />
-                  <Table.RefreshButton />
-                  <Table.Export />
-                  <Table.ColumnSelector />
+                  <!-- Table.Filter's default trigger is a hardcoded medium IconButton;
+                       the trigger slot is what keeps it on the large field row. -->
+                  <Table.Filter :fields="filterFields">
+                    <template #trigger="{ open }">
+                      <IconButton
+                        icon="pi pi-filter"
+                        aria-label="Filter zones"
+                        kind="outlined"
+                        @click="open()"
+                      />
+                    </template>
+                  </Table.Filter>
                 </div>
               </template>
 

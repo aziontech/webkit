@@ -192,11 +192,11 @@ const submit = async () => {
       >
       <!-- Scrollable form body -->
       <div
-        class="layout-column layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
+        class="layout-column-form layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
       >
         <!-- One flag locks every control while the request is in flight. -->
         <fieldset
-          class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+          class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Create application</legend>
@@ -575,7 +575,7 @@ const submit = async () => {
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+          class="layout-column-form flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

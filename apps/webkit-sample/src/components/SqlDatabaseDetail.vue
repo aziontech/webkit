@@ -801,7 +801,7 @@ const runQuery = async () => {
             <!-- Definition view — the schema as a data-driven Table. -->
             <div
               v-else
-              class="flex min-h-0 flex-1 flex-col gap-[var(--spacing-sm)] overflow-auto p-[var(--spacing-md)]"
+              class="flex min-h-0 flex-1 flex-col gap-[var(--layout-group-gap)] overflow-auto p-[var(--spacing-md)]"
             >
               <div class="flex items-center justify-between gap-[var(--spacing-sm)]">
                 <p class="text-heading-xxs text-[var(--text-default)]">Columns</p>

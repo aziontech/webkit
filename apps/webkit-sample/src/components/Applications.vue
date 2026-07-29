@@ -15,12 +15,14 @@
 // cell). So the three refs pre-filter `:data` and the table sees only the rows
 // that survive. Table.Search still narrows further, through the table's own
 // global filter.
+import Avatar from "@aziontech/webkit/avatar";
 import Button from "@aziontech/webkit/button";
 import Calendar from "@aziontech/webkit/calendar";
 import CardBox from "@aziontech/webkit/card-box";
 import CopyButton from "@aziontech/webkit/copy-button";
 import Dropdown from "@aziontech/webkit/dropdown";
 import IconButton from "@aziontech/webkit/icon-button";
+import InputText from "@aziontech/webkit/input-text";
 import Select from "@aziontech/webkit/select";
 import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
@@ -32,6 +34,7 @@ import { useRoute, useRouter } from "vue-router";
 import { daysAgo, formatListDate, monthsAgo, withinRange } from "../lib/dates";
 import { filterDisplay } from "../lib/filters";
 import { authorAt } from "../lib/people";
+import { provisionedApplications, removeDeployment } from "../lib/provisioning";
 import AppLayout from "./ui/AppLayout.vue";
 import LastModifiedCell from "./ui/LastModifiedCell.vue";
 import PageHeading from "./ui/PageHeading.vue";
@@ -228,10 +231,28 @@ const columns = [
 
 // ── Column selectors ──────────────────────────────────────────────────────
 // Authors options come from the data itself, so the selector can never offer a
-// person who has nothing in the list.
-const authorOptions = [...new Set(applications.value.map((app) => app.author))]
-  .sort((a, b) => a.localeCompare(b))
-  .map((author) => ({ value: author, label: author }));
+// person who has nothing in the list. Each option carries that person's photo,
+// so the filter identifies them the same way the Last Modified cell does — by
+// face first, name second.
+const authorOptions = [
+  ...new Map(applications.value.map((app) => [app.author, app.authorAvatar])),
+]
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([author, avatar]) => ({ value: author, label: author, avatar }));
+
+// The roster is long enough that scanning it beats reading it: the panel gets
+// its own search field (Select.Content's `#search` slot), narrowing the options
+// by name. Cleared on close so the panel never reopens pre-filtered.
+const authorQuery = ref("");
+const authorOpen = ref(false);
+watch(authorOpen, (open) => {
+  if (!open) authorQuery.value = "";
+});
+const visibleAuthorOptions = computed(() => {
+  const query = authorQuery.value.trim().toLowerCase();
+  if (!query) return authorOptions;
+  return authorOptions.filter((option) => option.label.toLowerCase().includes(query));
+});
 
 const statusOptions = [
   { value: "Active", label: "Active" },
@@ -251,8 +272,15 @@ const authorFilter = ref([]);
 const statusFilter = ref([]);
 const modifiedRange = ref(null);
 
+// Applications provisioned by the deploy flow lead the list, newest first — the
+// second link of the chain a deploy creates (src/lib/provisioning.js).
+const allApplications = computed(() => [
+  ...provisionedApplications.value,
+  ...applications.value,
+]);
+
 const filteredApplications = computed(() =>
-  applications.value.filter((app) => {
+  allApplications.value.filter((app) => {
     if (authorFilter.value.length && !authorFilter.value.includes(app.author)) return false;
     if (statusFilter.value.length && !statusFilter.value.includes(app.status)) return false;
     return withinRange(app.modifiedAt, modifiedRange.value);
@@ -283,6 +311,7 @@ const openApp = (event, row) =>
 // Row action menu — Dropdown emits (event, value); `delete` removes the row.
 const onRowAction = (event, value, row) => {
   if (value === "delete") {
+    removeDeployment(row.id);
     applications.value = applications.value.filter((app) => app.id !== row.id);
     toast.success(`${row.name} deleted`);
     return;
@@ -301,26 +330,27 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="applications" :breadcrumb="[{ label: 'Applications' }]">
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column layout-list h-full">
       <!-- First-level module list. The module name lives in the header breadcrumb
            crumb (AppLayout); the PageHeading sits OUT of the card (consistent with
            every list view) and carries the primary actions. The borderless Table
            lives in a flush CardBox (padded=false), framed edge-to-edge. -->
       <PageHeading
+        size="large"
         title="Applications"
         description="Build, deploy, and manage your edge applications."
       >
         <template #actions>
           <Button
-            label="Examples"
+            label="Documentation"
             kind="outlined"
             size="medium"
-            icon="pi pi-github"
-            href="https://github.com/aziontech"
+            icon="pi pi-book"
+            href="https://www.azion.com/en/documentation/"
             target="_blank"
           />
           <Button
-            label="New Resource"
+            label="New Application"
             kind="primary"
             size="medium"
             icon="pi pi-plus"
@@ -344,28 +374,71 @@ const onRowAction = (event, value, row) => {
           @row-click="openApp"
         >
           <template #toolbar>
-            <!-- One selector per column, always visible: Authors, Last Modified,
-                 Status. Search takes the remaining width. -->
+            <!-- Search first, then one selector per column — Authors, Last Modified,
+                 Status — all always visible. Every field is `large`, so the row is
+                 one 40px band. -->
             <div class="flex w-full flex-wrap items-center gap-[var(--spacing-xs)]">
+              <Table.Search
+                size="large"
+                placeholder="Search..."
+                class="min-w-0 grow basis-full xl:basis-0"
+              />
+
               <!-- Width lives on the wrapper: the Select root declares w-full in its own
                    static class, which wins over a consumer w-[…] on a specificity tie. -->
-              <div class="w-[var(--container-2xs)] shrink-0">
+              <div class="w-[var(--container-3xs)] shrink-0">
                 <Select
                   v-model="authorFilter"
+                  v-model:open="authorOpen"
                   multiple
-                  size="medium"
+                  size="large"
                   placeholder="All Authors"
                   :display-value="filterDisplay('All Authors', authorOptions)"
                 >
                   <Select.Trigger aria-label="Filter by author" />
                   <Select.Content>
+                    <!-- `#search` renders above the scrolling list, so the field stays
+                         put while the options move. `@keydown.stop` keeps the panel's
+                         Arrow/Home/End handler from pulling focus onto an option while
+                         the user is still typing. -->
+                    <template #search>
+                      <InputText
+                        v-model="authorQuery"
+                        size="medium"
+                        class="w-full"
+                        placeholder="Search authors..."
+                        aria-label="Search authors"
+                        @keydown.stop
+                      >
+                        <template #iconLeft>
+                          <i class="pi pi-search" aria-hidden="true" />
+                        </template>
+                      </InputText>
+                    </template>
                     <Select.Option
-                      v-for="option in authorOptions"
+                      v-for="option in visibleAuthorOptions"
                       :key="option.value"
                       :value="option.value"
                     >
+                      <template #left>
+                        <Avatar
+                          :src="option.avatar || undefined"
+                          :alt="option.label"
+                          :label="option.label"
+                          size="small"
+                          kind="square"
+                        />
+                      </template>
                       {{ option.label }}
                     </Select.Option>
+                    <!-- A search that matches nothing must say so; an empty panel
+                         reads as a broken filter. -->
+                    <p
+                      v-if="!visibleAuthorOptions.length"
+                      class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
+                    >
+                      No author matches “{{ authorQuery }}”.
+                    </p>
                   </Select.Content>
                 </Select>
               </div>
@@ -378,7 +451,7 @@ const onRowAction = (event, value, row) => {
               <Calendar
                 v-model="modifiedRange"
                 mode="range"
-                size="medium"
+                size="large"
                 :presets="periodPresets"
                 placeholder="Last Modified"
                 class="shrink-0"
@@ -399,7 +472,7 @@ const onRowAction = (event, value, row) => {
                 <Select
                   v-model="statusFilter"
                   multiple
-                  size="medium"
+                  size="large"
                   placeholder="All Statuses"
                   :display-value="filterDisplay('All Statuses', statusOptions)"
                 >
@@ -416,13 +489,6 @@ const onRowAction = (event, value, row) => {
                 </Select>
               </div>
 
-              <Table.Search
-                placeholder="Search..."
-                class="min-w-[var(--container-3xs)] flex-1"
-              />
-              <Table.RefreshButton />
-              <Table.Export />
-              <Table.ColumnSelector />
             </div>
           </template>
 

@@ -1,7 +1,7 @@
 <script setup>
 // Workloads list — the Azion Console "Workloads" module. The app shell (sidebar +
 // GlobalHeader breadcrumb) comes from AppLayout; this page renders a PageHeading
-// (title + description + "Documentation" / "+ Workload") over a data-driven <Table>
+// (title + description + "Documentation" / "New Workload") over a data-driven <Table>
 // whose rows open the workload detail view. As a first-level module list it
 // carries no navigation tabs.
 //
@@ -10,12 +10,14 @@
 // Status, all always visible in the toolbar. They pre-filter `:data`; the table's
 // own Search narrows what is left. See Applications.vue for why the table's
 // filter state cannot host them.
+import Avatar from "@aziontech/webkit/avatar";
 import Button from "@aziontech/webkit/button";
 import Calendar from "@aziontech/webkit/calendar";
 import CardBox from "@aziontech/webkit/card-box";
 import CopyButton from "@aziontech/webkit/copy-button";
 import Dropdown from "@aziontech/webkit/dropdown";
 import IconButton from "@aziontech/webkit/icon-button";
+import InputText from "@aziontech/webkit/input-text";
 import Popover from "@aziontech/webkit/popover";
 import Select from "@aziontech/webkit/select";
 import Table from "@aziontech/webkit/table";
@@ -28,6 +30,7 @@ import { useRoute, useRouter } from "vue-router";
 import { daysAgo, formatListDate, monthsAgo, withinRange } from "../lib/dates";
 import { filterDisplay } from "../lib/filters";
 import { authorAt } from "../lib/people";
+import { provisionedWorkloads, removeDeployment } from "../lib/provisioning";
 import AppLayout from "./ui/AppLayout.vue";
 import LastModifiedCell from "./ui/LastModifiedCell.vue";
 import PageHeading from "./ui/PageHeading.vue";
@@ -58,7 +61,7 @@ const workloads = ref(
       domain: domains[0],
       domains,
       domainCount: extraCount,
-      status: n % 9 === 0 ? "Inactive" : "Active",
+      status: n % 9 === 0 ? "Inactive" : "Live",
       // Spread across ~12 months (18 days apart) so the Last Modified filter has
       // something to narrow — every row used to carry the identical timestamp.
       modifiedAt: modified,
@@ -81,12 +84,30 @@ const columns = [
 // Authors come from the data, so the selector can never offer someone with no
 // rows in the list. (The column is "Last Modified"; the person renders inside
 // that cell as `owner`.)
-const authorOptions = [...new Set(workloads.value.map((workload) => workload.owner))]
-  .sort((a, b) => a.localeCompare(b))
-  .map((owner) => ({ value: owner, label: owner }));
+// Each option carries that person's photo, so the filter identifies them the
+// same way the Last Modified cell does — by face first, name second.
+const authorOptions = [
+  ...new Map(workloads.value.map((workload) => [workload.owner, workload.ownerAvatar])),
+]
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([owner, avatar]) => ({ value: owner, label: owner, avatar }));
+
+// The roster is long enough that scanning it beats reading it: the panel gets
+// its own search field (Select.Content's `#search` slot), narrowing the options
+// by name. Cleared on close so the panel never reopens pre-filtered.
+const authorQuery = ref("");
+const authorOpen = ref(false);
+watch(authorOpen, (open) => {
+  if (!open) authorQuery.value = "";
+});
+const visibleAuthorOptions = computed(() => {
+  const query = authorQuery.value.trim().toLowerCase();
+  if (!query) return authorOptions;
+  return authorOptions.filter((option) => option.label.toLowerCase().includes(query));
+});
 
 const statusOptions = [
-  { value: "Active", label: "Active" },
+  { value: "Live", label: "Live" },
   { value: "Inactive", label: "Inactive" },
 ];
 
@@ -103,8 +124,12 @@ const authorFilter = ref([]);
 const statusFilter = ref([]);
 const modifiedRange = ref(null);
 
+// Workloads provisioned by the deploy flow lead the list, newest first, so a
+// just-deployed workload is the first thing on the page (src/lib/provisioning.js).
+const allWorkloads = computed(() => [...provisionedWorkloads.value, ...workloads.value]);
+
 const filteredWorkloads = computed(() =>
-  workloads.value.filter((workload) => {
+  allWorkloads.value.filter((workload) => {
     if (authorFilter.value.length && !authorFilter.value.includes(workload.owner)) return false;
     if (statusFilter.value.length && !statusFilter.value.includes(workload.status)) return false;
     return withinRange(workload.modifiedAt, modifiedRange.value);
@@ -121,11 +146,17 @@ watch([authorFilter, statusFilter, modifiedRange], () => {
 const createWorkload = () =>
   router.push({ path: "/workloads/new", query: { email: userEmail.value } });
 
+// The name rides along in the query so the detail view can title itself (and
+// derive its resource chain) without a workload endpoint to read from.
 const openWorkload = (event, row) =>
-  router.push({ path: `/workloads/${row.id}`, query: { email: userEmail.value } });
+  router.push({
+    path: `/workloads/${row.id}`,
+    query: { email: userEmail.value, name: row.name },
+  });
 
 const onRowAction = (event, value, row) => {
   if (value === "delete") {
+    removeDeployment(row.id);
     workloads.value = workloads.value.filter((workload) => workload.id !== row.id);
     toast.success(`${row.name} deleted`);
     return;
@@ -142,8 +173,9 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="workloads" :breadcrumb="[{ label: 'Workloads' }]">
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column layout-list h-full">
       <PageHeading
+        size="large"
         title="Workloads"
         description="View and manage your workloads."
       >
@@ -153,11 +185,11 @@ const onRowAction = (event, value, row) => {
             kind="outlined"
             size="medium"
             icon="pi pi-book"
-            target="_blank"
             href="https://www.azion.com/en/documentation/"
+            target="_blank"
           />
           <Button
-            label="Workload"
+            label="New Workload"
             kind="primary"
             size="medium"
             icon="pi pi-plus"
@@ -181,28 +213,71 @@ const onRowAction = (event, value, row) => {
               @row-click="openWorkload"
             >
               <template #toolbar>
-                <!-- One selector per column, always visible: Authors, Last Modified,
-                     Status. Search takes the remaining width. -->
+                <!-- Search first, then one selector per column — Authors, Last Modified,
+                     Status — all always visible. Every field is `large`, so the row is
+                     one 40px band. -->
                 <div class="flex w-full flex-wrap items-center gap-[var(--spacing-xs)]">
+                  <Table.Search
+                    size="large"
+                    placeholder="Search workloads..."
+                    class="min-w-0 grow basis-full xl:basis-0"
+                  />
+
                   <!-- Width lives on the wrapper: the Select root declares w-full in its own
                        static class, which wins over a consumer w-[…] on a specificity tie. -->
-                  <div class="w-[var(--container-2xs)] shrink-0">
+                  <div class="w-[var(--container-3xs)] shrink-0">
                     <Select
                       v-model="authorFilter"
+                      v-model:open="authorOpen"
                       multiple
-                      size="medium"
+                      size="large"
                       placeholder="All Authors"
                       :display-value="filterDisplay('All Authors', authorOptions)"
                     >
                       <Select.Trigger aria-label="Filter by author" />
                       <Select.Content>
+                        <!-- `#search` renders above the scrolling list, so the field stays
+                             put while the options move. `@keydown.stop` keeps the panel's
+                             Arrow/Home/End handler from pulling focus onto an option while
+                             the user is still typing. -->
+                        <template #search>
+                          <InputText
+                            v-model="authorQuery"
+                            size="medium"
+                            class="w-full"
+                            placeholder="Search authors..."
+                            aria-label="Search authors"
+                            @keydown.stop
+                          >
+                            <template #iconLeft>
+                              <i class="pi pi-search" aria-hidden="true" />
+                            </template>
+                          </InputText>
+                        </template>
                         <Select.Option
-                          v-for="option in authorOptions"
+                          v-for="option in visibleAuthorOptions"
                           :key="option.value"
                           :value="option.value"
                         >
+                          <template #left>
+                            <Avatar
+                              :src="option.avatar || undefined"
+                              :alt="option.label"
+                              :label="option.label"
+                              size="small"
+                              kind="square"
+                            />
+                          </template>
                           {{ option.label }}
                         </Select.Option>
+                        <!-- A search that matches nothing must say so; an empty panel
+                             reads as a broken filter. -->
+                        <p
+                          v-if="!visibleAuthorOptions.length"
+                          class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
+                        >
+                          No author matches “{{ authorQuery }}”.
+                        </p>
                       </Select.Content>
                     </Select>
                   </div>
@@ -215,7 +290,7 @@ const onRowAction = (event, value, row) => {
                   <Calendar
                     v-model="modifiedRange"
                     mode="range"
-                    size="medium"
+                    size="large"
                     :presets="periodPresets"
                     placeholder="Last Modified"
                     class="shrink-0"
@@ -236,7 +311,7 @@ const onRowAction = (event, value, row) => {
                     <Select
                       v-model="statusFilter"
                       multiple
-                      size="medium"
+                      size="large"
                       placeholder="All Statuses"
                       :display-value="filterDisplay('All Statuses', statusOptions)"
                     >
@@ -253,13 +328,6 @@ const onRowAction = (event, value, row) => {
                     </Select>
                   </div>
 
-                  <Table.Search
-                    placeholder="Search workloads..."
-                    class="min-w-[var(--container-3xs)] flex-1"
-                  />
-                  <Table.RefreshButton />
-                  <Table.Export />
-                  <Table.ColumnSelector />
                 </div>
               </template>
 
@@ -321,7 +389,7 @@ const onRowAction = (event, value, row) => {
               <template #cell-status="{ value }">
                 <Tag
                   :label="value"
-                  :severity="value === 'Active' ? 'success' : 'secondary'"
+                  :severity="value === 'Live' ? 'success' : 'secondary'"
                   size="medium"
                 />
               </template>

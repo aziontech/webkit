@@ -40,6 +40,7 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
   <AppLayout active="playground" :padded="false" :breadcrumb="[{ label: 'Playground' }]">
     <div class="layout-column layout-boundary flex flex-col gap-[var(--layout-section-gap)]">
       <PageHeading
+        size="large"
         title-id="playground-title"
         title="Playground"
         description="Test surface for appearance settings. Choose the primary font family and the system appearance — both apply live and are remembered across reloads. Only the sans face is swapped; the type scale, code, overlines, and icons keep their own faces."

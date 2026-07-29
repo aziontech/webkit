@@ -235,9 +235,10 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="variables" :breadcrumb="[{ label: 'Variables' }]">
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column layout-list h-full">
       <!-- Module intro + primary action -->
       <PageHeading
+        size="large"
         title="Variables"
         description="Configure variable names, values, and settings for use across Azion's products."
       >
@@ -268,10 +269,20 @@ const onRowAction = (event, value, row) => {
         >
           <template #toolbar>
             <div class="flex w-full items-center gap-[var(--spacing-xs)]">
-              <Table.Filter :fields="filterFields" />
+              <!-- Search first, then the filter builder. -->
               <Table.Search size="large" placeholder="Search..." class="flex-1" />
-              <Table.RefreshButton />
-              <Table.ColumnSelector />
+              <!-- Table.Filter's default trigger is a hardcoded medium IconButton;
+                   the trigger slot is what keeps it on the large field row. -->
+              <Table.Filter :fields="filterFields">
+                <template #trigger="{ open }">
+                  <IconButton
+                    icon="pi pi-filter"
+                    aria-label="Filter variables"
+                    kind="outlined"
+                    @click="open()"
+                  />
+                </template>
+              </Table.Filter>
             </div>
           </template>
 

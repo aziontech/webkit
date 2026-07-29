@@ -452,9 +452,9 @@ const openIntegration = (item) =>
 
           <!-- Integrations: a featured spotlight row, then a filterable grid -->
           <TabView.Panel value="integrations">
-            <div class="flex flex-col gap-[var(--spacing-xl)]">
+            <div class="flex flex-col gap-[var(--layout-section-gap)]">
               <!-- Featured row: the same card in its spotlight anatomy. -->
-              <section class="flex flex-col gap-[var(--spacing-md)]">
+              <section class="flex flex-col gap-[var(--layout-group-gap)]">
                 <p class="text-heading-xxs text-[var(--text-default)]">Featured</p>
                 <div class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
                   <IntegrationCard

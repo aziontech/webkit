@@ -107,8 +107,9 @@ const onRowAction = (event, value, row) => {
     active="sql-database"
     :breadcrumb="[{ label: 'SQL Database' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column layout-list h-full">
       <PageHeading
+        size="large"
         title="SQL Database"
         description="Create and manage SQL Database instances accessed by Applications, Functions, and APIs."
       >
@@ -202,9 +203,6 @@ const onRowAction = (event, value, row) => {
                     placeholder="Search databases..."
                     class="flex-1"
                   />
-                  <Table.RefreshButton />
-                  <Table.Export />
-                  <Table.ColumnSelector />
                 </div>
               </template>
 

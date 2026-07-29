@@ -13,6 +13,13 @@
 // every section is a section title over a flush CardBox whose body is an
 // Item.List — one Item row per field. One `submitting` flag locks the whole
 // form scope on save.
+//
+// Measure per tab, not per module: the bar is second-level nav, so each tab is
+// its own page and carries the column its own content earns (src/styles/
+// layout.css). "Account Settings" is a stacked form — `.layout-column-form`, on
+// the body and on the Save bar so the buttons stay under the fields they submit.
+// The other five tabs are each a Table, so they take the data measure every
+// other table page in the app uses — `.layout-column`.
 import Avatar from "@aziontech/webkit/avatar";
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
@@ -516,7 +523,7 @@ const onTeamAction = (event, value, row) => {
              every control while the request is in flight. -->
         <form
           v-if="activeTab === 'account-settings'"
-          class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+          class="layout-column-form layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
           aria-label="Account settings"
           novalidate
           @submit.prevent="submit"
@@ -527,7 +534,7 @@ const onTeamAction = (event, value, row) => {
           />
 
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
             :disabled="submitting"
           >
             <legend class="sr-only">Account settings</legend>
@@ -1032,7 +1039,7 @@ const onTeamAction = (event, value, row) => {
                 <Button
                   label="Invite User"
                   kind="primary"
-                  size="medium"
+                  size="large"
                   icon="pi pi-user-plus"
                   @click="inviteUser"
                 />
@@ -1233,7 +1240,7 @@ const onTeamAction = (event, value, row) => {
                 <Button
                   label="Create Credential"
                   kind="primary"
-                  size="medium"
+                  size="large"
                   icon="pi pi-plus"
                   @click="createCredential"
                 />
@@ -1305,7 +1312,6 @@ const onTeamAction = (event, value, row) => {
             <template #toolbar>
               <div class="flex w-full items-center gap-[var(--spacing-xs)]">
                 <Table.Search size="large" placeholder="Search activity..." class="flex-1" />
-                <Table.RefreshButton />
               </div>
             </template>
 
@@ -1342,7 +1348,7 @@ const onTeamAction = (event, value, row) => {
                 <Button
                   label="Create Team"
                   kind="primary"
-                  size="medium"
+                  size="large"
                   icon="pi pi-plus"
                   @click="createTeam"
                 />
@@ -1455,7 +1461,7 @@ const onTeamAction = (event, value, row) => {
         class="shrink-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="layout-column flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+          class="layout-column-form flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

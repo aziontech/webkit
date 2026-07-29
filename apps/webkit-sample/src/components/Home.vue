@@ -8,6 +8,7 @@
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
 import Dropdown from "@aziontech/webkit/dropdown";
+import EmptyState from "@aziontech/webkit/empty-state";
 import IconButton from "@aziontech/webkit/icon-button";
 import Item from "@aziontech/webkit/item";
 import ProgressBar from "@aziontech/webkit/progress-bar";
@@ -231,7 +232,15 @@ const onRowAction = (event, value, row) => {
 
 <template>
   <AppLayout active="home" :breadcrumb="[{ label: 'Home' }]">
-    <div class="layout-column flex flex-col gap-[var(--layout-section-gap)]">
+    <!-- Home is a short page — two stacked blocks that never fill a desktop
+         viewport — so it centers in the scroll area instead of hanging from the
+         top edge with a void below. `min-h-full`, never `h-full`: min-height
+         resolves against the padded scroll box, and once the content does
+         exceed it the box grows, justify-center runs out of free space, and
+         nothing gets clipped above the scroll origin. -->
+    <div
+      class="layout-column-focused flex min-h-full flex-col justify-center gap-[var(--layout-section-gap)]"
+    >
       <div class="flex justify-center">
         <ContrastBanner />
       </div>
@@ -336,9 +345,10 @@ const onRowAction = (event, value, row) => {
           </Dropdown>
         </header>
 
-        <!-- Empty state (Workloads on a fresh account): one CardBox holding a
-             centered lead and an Item.List of the ways to create a first resource
-             — each row an Item with a left icon, its title/description, and action. -->
+        <!-- Empty state (Workloads on a fresh account): one CardBox holding the
+             EmptyState lead and an Item.List of the ways to create a first
+             resource — each row an Item with a left icon, its title/description,
+             and action. -->
         <CardBox
           v-if="isEmpty"
           key="resource-empty"
@@ -346,40 +356,12 @@ const onRowAction = (event, value, row) => {
           class="grow"
         >
           <template #content>
-            <div class="flex grow flex-col items-center justify-center gap-[var(--spacing-sm)] px-[var(--spacing-lg)] py-[var(--spacing-xl)] text-center">
-              <!-- Featured icon (same pattern as CreationCenter's Git-provider
-                   tile): a solid box framed by two concentric translucent
-                   squares. -->
-              <span
-                class="mb-[var(--spacing-xs)] relative flex size-12 items-center justify-center"
-              >
-                <span
-                  aria-hidden="true"
-                  class="absolute left-1/2 top-1/2 size-16 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-5"
-                />
-                <span
-                  aria-hidden="true"
-                  class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-10"
-                />
-                <span
-                  class="relative flex size-12 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]"
-                >
-                  <i
-                    :class="[
-                      current.empty.icon,
-                      'text-[1.25rem] leading-none text-[var(--text-default)]',
-                    ]"
-                    aria-hidden="true"
-                  />
-                </span>
-              </span>
-              <h3 class="text-heading-md text-[var(--text-default)]">
-                {{ current.empty.title }}
-              </h3>
-              <p class="max-w-[var(--container-md)] text-pretty text-body-md text-[var(--text-muted)]">
-                {{ current.empty.description }}
-              </p>
-            </div>
+            <EmptyState
+              :icon="current.empty.icon"
+              :title="current.empty.title"
+              :description="current.empty.description"
+              class="grow"
+            />
 
             <Item.List class="border-t border-[var(--border-muted)]">
               <Item

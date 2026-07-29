@@ -1102,7 +1102,7 @@ const submitFunction = async () => {
                       <Button
                         label="Add Variable"
                         kind="primary"
-                        size="medium"
+                        size="large"
                         icon="pi pi-plus"
                         @click="addVariable"
                       />
@@ -1349,9 +1349,12 @@ const submitFunction = async () => {
           </CardBox>
         </div>
 
-        <!-- Every other tab: a small PageHeading OUT of the card (matching Main
-             Settings), then the flush CardBox wrapping the borderless Table. -->
-        <div v-else class="layout-column layout-boundary flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+        <!-- Every other tab (Device Groups, Cache Settings, Functions Instances,
+             Rules Engine): a small PageHeading OUT of the card (matching Main
+             Settings), then the flush CardBox wrapping the borderless Table.
+             The heading titles that one table, so this is a list — layout-list
+             (group gap), not the section gap the multi-section tabs use. -->
+        <div v-else class="layout-column layout-boundary layout-list min-w-0">
           <PageHeading
             :title="activeLabel"
             :description="activeResource.description"
@@ -1419,13 +1422,13 @@ const submitFunction = async () => {
 
             <PanelContent>
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">{{ createTitle }}</legend>
 
                 <!-- Section: General (all resources) -->
-                <section class="flex flex-col gap-[var(--spacing-sm)]">
+                <section class="flex flex-col gap-[var(--layout-group-gap)]">
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     General
                   </p>
@@ -1470,7 +1473,7 @@ const submitFunction = async () => {
                 <!-- Section: Match to User-Agent (Device Group) -->
                 <section
                   v-if="createType === 'device-groups'"
-                  class="flex flex-col gap-[var(--spacing-sm)]"
+                  class="flex flex-col gap-[var(--layout-group-gap)]"
                 >
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     Match to User-Agent
@@ -1515,7 +1518,7 @@ const submitFunction = async () => {
                 <!-- Section: Function (Functions Instance) — the nested-create case -->
                 <section
                   v-if="createType === 'functions-instances'"
-                  class="flex flex-col gap-[var(--spacing-sm)]"
+                  class="flex flex-col gap-[var(--layout-group-gap)]"
                 >
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     Function
@@ -1646,12 +1649,12 @@ const submitFunction = async () => {
 
             <PanelContent>
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
                 :disabled="functionSubmitting"
               >
                 <legend class="sr-only">Create function</legend>
 
-                <section class="flex flex-col gap-[var(--spacing-sm)]">
+                <section class="flex flex-col gap-[var(--layout-group-gap)]">
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     General
                   </p>

@@ -21,6 +21,7 @@ import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { authorAt } from "../lib/people";
+import { provisionedBuckets, removeDeployment } from "../lib/provisioning";
 import AppLayout from "./ui/AppLayout.vue";
 import LastModifiedCell from "./ui/LastModifiedCell.vue";
 import PageHeading from "./ui/PageHeading.vue";
@@ -66,6 +67,11 @@ const buckets = ref(
   }),
 );
 
+// Buckets provisioned by the deploy flow lead the list, newest first — the last
+// link of the chain a deploy creates (src/lib/provisioning.js): the connector's
+// origin, holding the assets that were uploaded.
+const allBuckets = computed(() => [...provisionedBuckets.value, ...buckets.value]);
+
 const columns = [
   { accessorKey: "name", header: "Name", enableSorting: true, principal: true, grow: 2 },
   { accessorKey: "access", header: "Access", enableSorting: true },
@@ -91,6 +97,7 @@ const onRowAction = (event, value, row) => {
     return;
   }
   if (value === "delete") {
+    removeDeployment(row.id);
     buckets.value = buckets.value.filter((b) => b.id !== row.id);
     toast.success(`Bucket "${row.name}" deleted.`);
     return;
@@ -104,8 +111,9 @@ const onRowAction = (event, value, row) => {
     active="object-storage"
     :breadcrumb="[{ label: 'Object Storage' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column layout-list h-full">
       <PageHeading
+        size="large"
         title="Object Storage"
         description="Store and serve static objects at the edge — buckets, folders, and files accessed by Applications, Functions, and APIs."
       >
@@ -131,7 +139,7 @@ const onRowAction = (event, value, row) => {
       <!-- Empty = one clear next action; otherwise the borderless Table in a
            flush CardBox, framed edge-to-edge. -->
       <section
-        v-if="!buckets.length"
+        v-if="!allBuckets.length"
         class="flex min-h-0 flex-1 items-center justify-center"
       >
         <CardBox class="w-full max-w-[var(--container-2xl)]">
@@ -180,7 +188,7 @@ const onRowAction = (event, value, row) => {
         <CardBox :padded="false">
           <template #content>
             <Table
-              :data="buckets"
+              :data="allBuckets"
               :columns="columns"
               row-key="id"
               enable-sorting
@@ -196,9 +204,6 @@ const onRowAction = (event, value, row) => {
                     placeholder="Search buckets..."
                     class="flex-1"
                   />
-                  <Table.RefreshButton />
-                  <Table.Export />
-                  <Table.ColumnSelector />
                 </div>
               </template>
 

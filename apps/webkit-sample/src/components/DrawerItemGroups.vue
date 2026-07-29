@@ -203,13 +203,13 @@ const submit = async () => {
               <!-- Sections are --spacing-lg apart; each section title sits --spacing-sm
                    above its flush CardBox (the Approach A section rhythm). -->
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create service</legend>
 
                 <!-- Section: General -->
-                <section class="flex flex-col gap-[var(--spacing-sm)]">
+                <section class="flex flex-col gap-[var(--layout-group-gap)]">
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     General
                   </p>
@@ -276,7 +276,7 @@ const submit = async () => {
                 </section>
 
                 <!-- Section: Runtime -->
-                <section class="flex flex-col gap-[var(--spacing-sm)]">
+                <section class="flex flex-col gap-[var(--layout-group-gap)]">
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     Runtime
                   </p>
@@ -364,7 +364,7 @@ const submit = async () => {
                 </section>
 
                 <!-- Section: Options -->
-                <section class="flex flex-col gap-[var(--spacing-sm)]">
+                <section class="flex flex-col gap-[var(--layout-group-gap)]">
                   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                     Options
                   </p>

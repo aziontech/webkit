@@ -229,13 +229,13 @@ const COLUMN_GRID =
 
           <PanelContent>
             <fieldset
-              class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+              class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
               :disabled="submitting"
             >
               <legend class="sr-only">Create table</legend>
 
               <!-- Section: General -->
-              <section class="flex flex-col gap-[var(--spacing-sm)]">
+              <section class="flex flex-col gap-[var(--layout-group-gap)]">
                 <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                   General
                 </p>
@@ -276,7 +276,7 @@ const COLUMN_GRID =
               </section>
 
               <!-- Section: Columns (drag-and-drop repeater) -->
-              <section class="flex flex-col gap-[var(--spacing-sm)]">
+              <section class="flex flex-col gap-[var(--layout-group-gap)]">
                 <div class="flex items-center justify-between gap-[var(--spacing-xs)] px-[var(--spacing-xs)]">
                   <p class="text-heading-xxs text-[var(--text-default)]">Columns</p>
                   <div class="flex items-center gap-[var(--spacing-xs)]">
@@ -481,7 +481,7 @@ const COLUMN_GRID =
               </section>
 
               <!-- Section: Foreign keys (demo affordance) -->
-              <section class="flex flex-col gap-[var(--spacing-sm)]">
+              <section class="flex flex-col gap-[var(--layout-group-gap)]">
                 <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                   Foreign keys
                 </p>

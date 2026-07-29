@@ -278,9 +278,6 @@ const onAddAction = (event, item) => runAddAction(item.value);
                       placeholder="Search in folder..."
                       class="flex-1"
                     />
-                    <Table.RefreshButton />
-                    <Table.Export />
-                    <Table.ColumnSelector />
                   </div>
 
                   <div class="flex w-full items-center justify-between gap-[var(--spacing-xs)]">
