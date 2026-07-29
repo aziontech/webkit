@@ -26,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action.'
+          'Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional text action.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -42,14 +42,19 @@ const meta = {
         defaultValue: { summary: "'info'" }
       }
     },
-    title: {
-      control: 'text',
-      description: 'Primary message heading.',
-      table: { category: 'props', type: { summary: 'string', required: true } }
+    size: {
+      control: 'inline-radio',
+      options: ['small', 'medium'],
+      description: 'Size token. Drives the banner height, inline padding, and copy scale.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium'" },
+        defaultValue: { summary: "'medium'" }
+      }
     },
-    description: {
+    label: {
       control: 'text',
-      description: 'Supporting body copy below the title.',
+      description: 'Fallback message copy when the default slot is empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     icon: {
@@ -84,7 +89,8 @@ const meta = {
     },
     default: {
       control: false,
-      description: 'Replaces the default icon + title + description layout.',
+      description:
+        'Message copy. Accepts inline content — plain text plus anchors, which the message region styles with the `.text-link` token. Falls back to `label` when empty.',
       table: { category: 'slots' }
     },
     action: {
@@ -95,8 +101,8 @@ const meta = {
   },
   args: {
     severity: 'info',
-    title: 'Info message',
-    description: 'A brief description of the message.',
+    size: 'medium',
+    label: 'Your workload finished deploying in 42 seconds.',
     actionLabel: 'Label',
     icon: '',
     closable: false,
@@ -114,8 +120,8 @@ const Template = (args) => ({
     const remountKey = computed(() =>
       JSON.stringify({
         severity: args.severity,
-        title: args.title,
-        description: args.description,
+        size: args.size,
+        label: args.label,
         icon: args.icon,
         actionLabel: args.actionLabel,
         closable: args.closable,
@@ -129,8 +135,7 @@ const Template = (args) => ({
 
 const DEFAULT_MARKUP = `<Message
   severity="info"
-  title="Info message"
-  description="A brief description of the message."
+  label="Your workload finished deploying in 42 seconds."
   action-label="Label"
 />`
 
@@ -139,7 +144,7 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Default info message with title, description, and action.' },
+      description: { story: 'Default info message: leading icon, one line of copy, and an action.' },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
@@ -148,26 +153,22 @@ export const Default = {
 const TYPES_TEMPLATE = `<div class="flex w-full flex-col gap-4">
   <Message
     severity="info"
-    title="Info message"
-    description="A brief description of the message."
+    label="Your workload finished deploying in 42 seconds."
     action-label="Label"
   />
   <Message
     severity="success"
-    title="Success message"
-    description="A brief description of the message."
+    label="The certificate was issued and is now serving traffic."
     action-label="Label"
   />
   <Message
     severity="warning"
-    title="Warning message"
-    description="A brief description of the message."
+    label="This edge function is close to its execution time limit."
     action-label="Label"
   />
   <Message
     severity="danger"
-    title="Error message"
-    description="A brief description of the message."
+    label="The last deploy failed before reaching the edge."
     action-label="Label"
   />
 </div>`
@@ -184,10 +185,66 @@ export const Types = {
   }
 }
 
+const SIZES_TEMPLATE = `<div class="flex w-full flex-col gap-4">
+  <Message
+    severity="info"
+    size="small"
+    label="A small note."
+  />
+  <Message
+    severity="info"
+    size="medium"
+    label="A medium note."
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Message>} */
+export const Sizes = {
+  render: () => ({ components: { Message }, template: SIZES_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Both size tokens. `small` is a 32px banner with 8px inline padding and `.text-body-xs` copy; `medium` (the default) is 36px with 12px inline padding and `.text-body-sm`. Block padding stays 6px in both. A trailing action or close control tightens the end edge to 8px and lets the banner grow past the floor.'
+      },
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
+    }
+  }
+}
+
+const WITH_LINKS_TEMPLATE = `<div class="flex w-full flex-col gap-4">
+  <Message severity="info">
+    Requests are now served from 4 new edge locations.
+    <a href="/docs/edge-locations">See the full list</a>.
+  </Message>
+  <Message severity="warning">
+    This workload is close to its request limit. Review the
+    <a href="/billing/usage">usage report</a>
+    or
+    <a href="/billing/plans">upgrade the plan</a>
+    to avoid throttling.
+  </Message>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Message>} */
+export const WithLinks = {
+  render: () => ({ components: { Message }, template: WITH_LINKS_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Copy passed through the default slot may carry inline anchors. The message region styles every descendant `a` with the `.text-link` token — underlined, token-colored, and focusable — so a plain `<a href>` needs no wrapper component.'
+      },
+      source: { code: toSfc(IMPORT, WITH_LINKS_TEMPLATE) }
+    }
+  }
+}
+
 const CLOSABLE_MARKUP = `<Message
   severity="info"
-  title="Info message"
-  description="A brief description of the message."
+  label="Your workload finished deploying in 42 seconds."
   action-label="Label"
   closable
 />`
@@ -206,8 +263,7 @@ export const Closable = {
 
 const AUTO_DISMISS_MARKUP = `<Message
   severity="info"
-  title="Info message"
-  description="A brief description of the message."
+  label="Your workload finished deploying in 42 seconds."
   :life="5000"
 />`
 
