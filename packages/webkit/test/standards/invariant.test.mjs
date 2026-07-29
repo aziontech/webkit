@@ -54,8 +54,7 @@ const frontmatterOf = (content) => {
   const m = content.match(/^---\n([\s\S]*?)\n---/)
   return m ? m[1] : ''
 }
-const enforcedByOf = (rel) =>
-  parseEnforcedBy(frontmatterOf(readFileSync(join(ROOT, rel), 'utf-8')))
+const enforcedByOf = (rel) => parseEnforcedBy(frontmatterOf(readFileSync(join(ROOT, rel), 'utf-8')))
 
 test('every rule doc is registered as a standard, and every standard has a rule doc', () => {
   const rules = new Set(ruleIds)
