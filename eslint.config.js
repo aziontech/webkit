@@ -79,7 +79,7 @@ export default [
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
       'vue/component-tags-order': ['error', { order: ['script[setup]', 'template', 'style'] }],
-      'vue/multi-word-component-names': 'off', // Allow flexibility in component naming
+      'vue/multi-word-component-names': 'off',
       'vue/no-arrow-functions-in-watch': 'error',
       'vue/no-async-in-computed-properties': 'error',
       'vue/no-child-content': 'error',
@@ -101,11 +101,11 @@ export default [
           shallowOnly: false
         }
       ],
-      // "vue/no-reserved-component-names": ['error', {
-      //   "disallowVueBuiltInComponents": false,
-      //   "disallowVue3BuiltInComponents": false,
-      //   "htmlElementCaseSensitive": false,
-      // }],
+      "vue/no-reserved-component-names": ['error', {
+        "disallowVueBuiltInComponents": true,
+        "disallowVue3BuiltInComponents": true,
+        "htmlElementCaseSensitive": true,
+      }],
       'vue/no-restricted-syntax': 'error',
       'vue/no-reserved-keys': [
         'error',
@@ -117,14 +117,14 @@ export default [
       'vue/no-reserved-props': [
         'error',
         {
-          vueVersion: 3 // or 2
+          vueVersion: 3
         }
       ],
       'vue/no-unused-vars': 'error',
       'vue/v-if-else-key': 'error',
       'vue/no-ref-as-operand': 'error',
       'vue/no-side-effects-in-computed-properties': 'error',
-      'vue/no-v-html': 'error', // Security
+      'vue/no-v-html': 'error',
       'vue/require-default-prop': 'error',
       'vue/require-explicit-emits': 'error',
       'vue/template-curly-spacing': 'error',
@@ -136,10 +136,20 @@ export default [
       'vuejs-accessibility/click-events-have-key-events': 'error',
 
       // TypeScript
-      'no-unused-vars': 'off', // 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
       // '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_'
+        }
+      ],
 
       // Import organization
       'simple-import-sort/imports': 'error',
@@ -149,7 +159,7 @@ export default [
       'import/no-duplicates': 'error',
 
       // Clean code
-      'no-console': ['error', { allow: ['warn', 'error'] }], // Prevent console.log in production code
+      'no-console': ['error', { allow: ['warn', 'error'] }],
       'no-debugger': 'error',
       'prefer-const': 'error'
     },
