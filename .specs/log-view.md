@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 49751f0a321eef939f1f251f761e293808202bfa2b51abdbff3ec61d05d3f251
+checksum: dbb57f28635a045c18062ab708abea14cf9a078fe280866d2abd19dac11b9157
 created: 2026-05-26
-last_updated: 2026-07-01
+last_updated: 2026-07-28
 ---
 
 # Log View — Component Spec
@@ -56,6 +56,7 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `lines` | `LogViewLine[]` | `[]` | no | Log entries; filtered in LogViewContent by search and warnings-only. |
+| `border` | `boolean` | `true` | no | Draw the outer card border and corner radius around the log shell. On by default; set `:border="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
 | `searchPlaceholder` | `string` | `'Find in Logs'` | no | Placeholder for the default header search field. |
 | `showCopy` | `boolean` | `true` | no | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). |
 | `disabled` | `boolean` | `false` | no | Disables toolbar controls in LogViewHeader. |
@@ -99,7 +100,7 @@ LogView ships flat, individually importable sub-components (each from its own `@
 ## States
 
 - Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`
-- `data-disabled` / `data-warnings-only` / `data-loading` on the LogView root
+- `data-disabled` / `data-warnings-only` / `data-loading` / `data-border` on the LogView root
 - `loading` state: LogViewContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type`
 
@@ -123,8 +124,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | text (timestamp) | `var(--text-muted)` |
 | text (warning line) | `var(--warning-contrast)` |
 | text (success line) | `var(--success-contrast)` |
-| border | `var(--border-muted)` |
-| shape | `var(--shape-elements)` |
+| border (outer card, `border` prop) | `var(--border-muted)` |
+| shape (outer card, `border` prop) | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
 
 ## Theme gaps

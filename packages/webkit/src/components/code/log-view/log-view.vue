@@ -16,6 +16,8 @@
   interface Props {
     /** Log entries (filtered in LogViewContent by search and warnings-only). */
     lines?: LogViewLine[]
+    /** Draw the outer card border and corner radius around the log shell. On by default; set to false to render flush inside a surface that already frames it. */
+    border?: boolean
     /** Placeholder for the default header search field. */
     searchPlaceholder?: string
     /** Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). */
@@ -30,6 +32,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     lines: () => [],
+    border: true,
     searchPlaceholder: 'Find in Logs',
     showCopy: true,
     disabled: false,
@@ -153,12 +156,13 @@
   <div
     v-bind="passthroughAttrs"
     :data-testid="testId"
+    :data-border="border || null"
     :data-disabled="disabled || null"
     :data-loading="loading || null"
     :data-warnings-only="warningsOnly || null"
     :class="
       cn(
-        'flex min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-muted)]',
+        'flex min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden data-[border]:rounded-[var(--shape-elements)] data-[border]:border data-[border]:border-[var(--border-muted)]',
         attrs.class
       )
     "

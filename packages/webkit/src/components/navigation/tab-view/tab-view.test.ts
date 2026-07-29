@@ -6,6 +6,7 @@ import { defineComponent, ref } from 'vue'
 import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/tab-view/TabView.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import TabView from './index'
+import { getTabViewPanelTransitionStyle } from './presets/transitions'
 import TabViewContent from './tab-view-content.vue'
 import TabViewItem from './tab-view-item.vue'
 import TabViewList from './tab-view-list.vue'
@@ -39,6 +40,21 @@ const Tree = defineComponent({
 })
 
 describe('TabView (composition)', () => {
+  // The panel slide offset is a Tailwind `translate-x-*` utility, which in v4 compiles to
+  // the standalone `translate` property — NOT to `transform`. If `translate` is dropped
+  // from this list the offset stops interpolating and the swap pops instead of sliding,
+  // in this component and in Calendar's month strip, which shares the preset. <Transition>
+  // is stubbed by Vue Test Utils, so the rendered animation cannot be asserted; this
+  // guards the css contract behind it. Verified in real Chromium: with only
+  // `transform, opacity`, a mid-flight sample is already at its final value.
+  describe('panel motion contract', () => {
+    it('transitions translate (not just transform) so translate-x offsets interpolate', () => {
+      const { transition } = getTabViewPanelTransitionStyle()
+      expect(transition).toContain('translate ')
+      expect(transition).toContain('opacity ')
+    })
+  })
+
   describe('compound API (index.js dot-notation)', () => {
     it('attaches every public sub-component to the root compound', () => {
       // Grounded in index.js: TabView === TabViewRoot with Root/List/Item/
