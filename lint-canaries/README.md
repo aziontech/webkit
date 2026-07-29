@@ -33,15 +33,15 @@ lint-canaries/
   eslint/
     vue-correctness/      # DOC_LINTS §2 — one .vue per vue/* rule
     accessibility/        # §3 — vuejs-accessibility/*
-    typescript/           # §4 — @typescript-eslint/*
-    import-hygiene/       # §5 — simple-import-sort/*, import/*
+    typescript/           # §4 — @typescript-eslint/*, unused-imports/no-unused-vars
+    import-hygiene/       # §5 — simple-import-sort/*, import/*, unused-imports/no-unused-imports
     clean-code/           # §6 — no-console, no-debugger, prefer-const
   stylelint/              # §7 — one .css per rule
   prettier/               # §8 — files that must stay "unformatted"
   commitlint/             # §10 — one wrong commit message per .txt
 ```
 
-54 canaries: 37 ESLint · 8 Stylelint · 2 Prettier · 7 commitlint.
+56 canaries: 39 ESLint · 8 Stylelint · 2 Prettier · 7 commitlint.
 
 ## Why these files never break the normal pipeline
 
