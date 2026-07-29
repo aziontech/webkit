@@ -2850,6 +2850,13 @@
           "doc": "Log entries; filtered in LogViewContent by search and warnings-only."
         },
         {
+          "name": "border",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Draw the outer card border and corner radius around the log shell. On by default; set `:border=\"false\"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected."
+        },
+        {
           "name": "searchPlaceholder",
           "type": "string",
           "default": "'Find in Logs'",
