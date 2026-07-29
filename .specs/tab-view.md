@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 9a23a13b0205624a780b6ac76086455a35d38ac2b266757cbf91080258308e6b
+checksum: 38b0be72fee4fa515e9917d1f931e6b0d567009d1e3fb46dd32d4e3ad86c6538
 created: 2026-05-22
-last_updated: 2026-07-22
+last_updated: 2026-07-28
 ---
 # Tab View — Component Spec
 
@@ -53,6 +53,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | open/close | `animate-none` | semantic | `motion-reduce:animate-none` |
 | scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out` | semantic | `motion-reduce:animate-none` |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| panel change | the incoming panel slides in from the side being navigated toward (`translate-x-[var(--spacing-md)]` / negative) while fading | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
 
 ## Tokens
 
