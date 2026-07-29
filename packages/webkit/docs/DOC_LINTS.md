@@ -442,6 +442,26 @@ export default {
 </script>
 ```
 
+### `vue/no-reserved-component-names` — no HTML / Vue built-in shadowing
+
+A component cannot take a name Vue or HTML already owns: Vue 2/3 built-ins are banned outright (`disallowVueBuiltInComponents` / `disallowVue3BuiltInComponents`), and HTML element names are checked **case-sensitively** (`htmlElementCaseSensitive: true`) — deliberate, so the DS's PascalCase roots (`Table`, `Button`, `Link`) stay valid while a literal lowercase `table` is rejected.
+
+**❌ Wrong**
+
+```vue
+<script setup lang="ts">
+  defineOptions({ name: 'Teleport' }) // shadows the Vue 3 built-in
+</script>
+```
+
+**✅ Correct**
+
+```vue
+<script setup lang="ts">
+  defineOptions({ name: 'Table' }) // PascalCase — no case-sensitive collision
+</script>
+```
+
 ### `vue/no-unused-vars`
 
 Unused `v-for` / scope variables are dead code in the template.
@@ -781,27 +801,24 @@ Anything clickable must be keyboard-operable.
 
 ## 4. ESLint — TypeScript
 
-### `@typescript-eslint/no-unused-vars` (`argsIgnorePattern: '^_'`)
+### `unused-imports/no-unused-vars` (`varsIgnorePattern: '^_'`, `argsIgnorePattern: '^_'`)
 
-Dead imports, variables, and parameters are errors. An **intentionally** unused argument is spelled with a leading underscore. (Core `no-unused-vars` is off in favor of this TS-aware version.)
+Dead variables and parameters are errors. An **intentionally** unused one is spelled with a leading underscore. (Core `no-unused-vars` and `@typescript-eslint/no-unused-vars` are both off in favor of the `unused-imports` pair, which splits unused **imports** into their own auto-fixable rule — §5.)
 
 **❌ Wrong**
 
 ```ts
-import { computed, ref } from 'vue' // computed never used
-
-function onSelect(event: MouseEvent, item: Item) {
-  select(item) // event unused → error
+function onSelect(item: Item, event: MouseEvent) {
+  const orphan = item.label // assigned, never used → error
+  return select(item) // trailing `event` unused → error
 }
 ```
 
 **✅ Correct**
 
 ```ts
-import { ref } from 'vue'
-
-function onSelect(_event: MouseEvent, item: Item) {
-  select(item)
+function onSelect(item: Item, _event: MouseEvent) {
+  return select(item)
 }
 ```
 
@@ -932,6 +949,26 @@ import { useAttrs } from 'vue'
 
 ```ts
 import { computed, useAttrs } from 'vue'
+```
+
+### `unused-imports/no-unused-imports`
+
+An import nothing uses is dead code — and the one unused-code case `lint:fix` deletes automatically (plain unused variables — §4 — only report; they are never auto-removed).
+
+**❌ Wrong**
+
+```ts
+import { computed, ref } from 'vue' // computed never used
+
+export const count = ref(0)
+```
+
+**✅ Correct**
+
+```ts
+import { ref } from 'vue'
+
+export const count = ref(0)
 ```
 
 ---
@@ -1544,6 +1581,3 @@ A `.vue` whose props / events / slots / name / testid / animations diverge from 
 Honest edges of the config:
 
 - **`vue/no-restricted-syntax`** is enabled with no selectors — it restricts nothing until selectors are added.
-- **`vue/no-reserved-component-names`** is commented out in `eslint.config.js`.
-- **`eslint-plugin-unused-imports`** is registered but none of its rules are enabled — unused imports are caught indirectly by `@typescript-eslint/no-unused-vars` (not auto-fixed on `lint:fix`).
-- **`packages/webkit` `lint` script** passes `--ext .js,.js,.vue` (`.ts` missing, `.js` doubled) — plain `.ts` files are still covered by lint-staged and CI, which pass explicit extensions.

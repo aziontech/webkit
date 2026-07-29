@@ -15,10 +15,12 @@
  *   old `mobile` (default, applied >768) → `md` (≥768)
  */
 
+import { curve, duration } from '../primitives/animations/animate.js'
 import { fontFamily } from '../primitives/typography/font-family.js'
 import { fontSize } from '../primitives/typography/font-size.js'
 import { fontWeight } from '../primitives/typography/font-weight.js'
 import { leading } from '../primitives/typography/leading.js'
+import { tracking } from '../primitives/typography/tracking.js'
 
 export const textsData = {
   'text-big-number-md': {
@@ -77,38 +79,38 @@ export const textsData = {
   'text-label-lg': {
     fontSize: fontSize.base,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.medium
+    fontWeight: fontWeight.normal
   },
   'text-label-md': {
     fontSize: fontSize.sm,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.medium
+    fontWeight: fontWeight.normal
   },
   'text-label-sm': {
     fontSize: fontSize.xs,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.medium
+    fontWeight: fontWeight.normal
   },
   'text-label-code-sm': {
     fontFamily: fontFamily.code,
-    fontSize: '0.75rem',
-    lineHeight: '1',
-    fontWeight: '400',
-    letterSpacing: '0'
+    fontSize: fontSize.xs,
+    lineHeight: leading.none,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.normal
   },
   'text-label-code-md': {
     fontFamily: fontFamily.code,
-    fontSize: '0.875rem',
-    lineHeight: '1',
-    fontWeight: '400',
-    letterSpacing: '0'
+    fontSize: fontSize.sm,
+    lineHeight: leading.none,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.normal
   },
   'text-label-code-lg': {
     fontFamily: fontFamily.code,
-    fontSize: '1rem',
-    lineHeight: '1',
-    fontWeight: '400',
-    letterSpacing: '0'
+    fontSize: fontSize.base,
+    lineHeight: leading.none,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.normal
   },
   'text-body-lg': {
     fontSize: { _: fontSize.base, md: fontSize.lg },
@@ -144,21 +146,21 @@ export const textsData = {
     fontFamily: fontFamily.display,
     fontSize: { _: fontSize.xs, sm: fontSize.sm },
     lineHeight: leading.snug,
-    letterSpacing: '0.08em',
+    letterSpacing: tracking.widest,
     textTransform: 'uppercase'
   },
   'text-overline-sm': {
     fontFamily: fontFamily.display,
     fontSize: fontSize.xs,
     lineHeight: leading.snug,
-    letterSpacing: '0.08em',
+    letterSpacing: tracking.widest,
     textTransform: 'uppercase'
   },
   'text-overline-xs': {
     fontFamily: fontFamily.display,
     fontSize: fontSize.xs,
     lineHeight: leading.snug,
-    letterSpacing: '0.08em',
+    letterSpacing: tracking.widest,
     textTransform: 'uppercase'
   },
   'text-button-lg': {
@@ -166,14 +168,14 @@ export const textsData = {
     fontSize: fontSize.sm,
     fontWeight: fontWeight.normal,
     lineHeight: leading.tight,
-    letterSpacing: '0'
+    letterSpacing: tracking.normal
   },
   'text-button-md': {
     fontFamily: fontFamily.sans,
     fontSize: fontSize.xs,
     fontWeight: fontWeight.normal,
     lineHeight: leading.tight,
-    letterSpacing: '0'
+    letterSpacing: tracking.normal
   },
   /** Inline `<a>` in body/heading — inherits parent size; not the navigation Link component. */
   'text-link': {
@@ -181,7 +183,7 @@ export const textsData = {
     lineHeight: 'inherit',
     color: 'var(--text-link)',
     borderRadius: 'var(--shape-elements)',
-    transition: 'all 110ms cubic-bezier(0.39, 0.57, 0.56, 1)',
+    transition: `all ${duration['fast-02']} ${curve['productive-entrance']}`,
     states: {
       hover: {
         color: 'var(--text-link-hover)',
