@@ -30,12 +30,11 @@
   const endDateText = ref('')
   const endTimeText = ref('')
 
-  /* Stable ids so each visible label is programmatically bound to its field; the
-     time inputs share a row with their date field and carry their own aria-label. */
+  /* Stable ids so each visible label is programmatically bound to its date field;
+     the time inputs share a row with their date field and are named by their own
+     aria-label instead, so they need no id. */
   const startDateId = useId()
-  const startTimeId = useId()
   const endDateId = useId()
-  const endTimeId = useId()
 
   const startLabel = computed(() => (mode.value === 'range' ? 'Start' : 'Date'))
   const startTimeLabel = computed(() => (mode.value === 'range' ? 'Start time' : 'Time'))
@@ -137,7 +136,6 @@
           class="w-24 shrink-0"
         >
           <InputText
-            :id="startTimeId"
             :model-value="startTimeText"
             :size="size"
             :disabled="disabled"
@@ -177,7 +175,6 @@
           class="w-24 shrink-0"
         >
           <InputText
-            :id="endTimeId"
             :model-value="endTimeText"
             :size="size"
             :disabled="disabled"
