@@ -68,6 +68,8 @@
       "--bg-disabled",
       "--bg-hover",
       "--bg-mask",
+      "--bg-placeholder",
+      "--bg-placeholder-highlight",
       "--bg-selected",
       "--bg-surface",
       "--bg-surface-overlay",
@@ -384,6 +386,7 @@
       "--inset-shadow-sm",
       "--inset-shadow-xs",
       "--leading-loose",
+      "--leading-none",
       "--leading-normal",
       "--leading-relaxed",
       "--leading-snug",
@@ -745,6 +748,8 @@
         "--bg-disabled",
         "--bg-hover",
         "--bg-mask",
+        "--bg-placeholder",
+        "--bg-placeholder-highlight",
         "--bg-selected",
         "--bg-surface",
         "--bg-surface-overlay",
@@ -1089,6 +1094,7 @@
       ],
       "leading": [
         "--leading-loose",
+        "--leading-none",
         "--leading-normal",
         "--leading-relaxed",
         "--leading-snug",
@@ -2821,6 +2827,77 @@
       ],
       "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/currency/`."
     },
+    "kbd": {
+      "import": "@aziontech/webkit/kbd",
+      "target": "./src/components/content/kbd/kbd.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/kbd",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "meta",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere)."
+        },
+        {
+          "name": "ctrl",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere)."
+        },
+        {
+          "name": "shift",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prepend the Shift modifier glyph (⇧)."
+        },
+        {
+          "name": "alt",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere)."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; `small` is a denser keycap for menus, command bars, and table cells."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The single key or glyph rendered after any modifier glyphs (`K`, `Enter`, `Esc`)."
+        }
+      ],
+      "purpose": "Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, Ctrl elsewhere), so consumers never hardcode platform symbols. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command-menu`).",
+      "useWhen": [
+        "Show a keyboard shortcut or a single key inline (a ⌘K hint on a search button, an `Esc` hint in a dialog, `/` to focus search).",
+        "Present a modifier combination whose glyph should adapt to the user's OS."
+      ],
+      "avoidWhen": [
+        "The token is a status/category label, not a key → use `tag` or `badge`.",
+        "You need an interactive control that fires on click → use `button` / `icon-button`; Kbd is a presentational hint only."
+      ],
+      "related": [
+        "command-menu` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.",
+        "badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys."
+      ],
+      "bestPractices": [
+        "Keep the default slot to a single key or glyph (`K`, `7`, `Enter`, `Esc`, `/`); avoid lowercase words or sentences.",
+        "Pass modifiers as boolean props rather than hardcoding `⌘`/`⇧` so the glyph adapts to the OS.",
+        "Place surrounding punctuation outside the element, not inside the keycap."
+      ]
+    },
     "log-view": {
       "import": "@aziontech/webkit/log-view",
       "target": "./src/components/code/log-view/log-view.vue",
@@ -2842,6 +2919,13 @@
           "default": "[]",
           "required": "no",
           "doc": "Log entries; filtered in LogViewContent by search and warnings-only."
+        },
+        {
+          "name": "border",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Draw the outer card border and corner radius around the log shell. On by default; set `:border=\"false\"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected."
         },
         {
           "name": "searchPlaceholder",
@@ -4159,18 +4243,18 @@
           "doc": "Visual severity variant (maps Error to danger)."
         },
         {
-          "name": "title",
-          "type": "string",
-          "default": "—",
-          "required": "yes",
-          "doc": "Primary message heading."
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes."
         },
         {
-          "name": "description",
+          "name": "label",
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Supporting body copy below the title."
+          "doc": "Fallback message copy when the default slot is empty."
         },
         {
           "name": "icon",
@@ -4184,7 +4268,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Label for the built-in text action button; hidden when empty."
+          "doc": "Label for the built-in secondary action button; hidden when empty."
         },
         {
           "name": "closable",
@@ -4222,10 +4306,10 @@
         {
           "name": "default",
           "scope": "—",
-          "notes": "Replaces the default icon + title + description layout."
+          "notes": "Message copy. Accepts inline content — plain text plus anchors, which the message region styles with the `.text-link` token. Falls back to `label` when empty."
         }
       ],
-      "purpose": "Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action aligned to Figma Message (478:892)."
+      "purpose": "Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button."
     },
     "empty-state": {
       "import": "@aziontech/webkit/empty-state",
@@ -5069,6 +5153,13 @@
       "status": "approved",
       "props": [
         {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned."
+        },
+        {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
@@ -5109,6 +5200,13 @@
       "structure": "composition",
       "status": "approved",
       "props": [
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned."
+        },
         {
           "name": "invalid",
           "type": "boolean",
@@ -5273,6 +5371,102 @@
         "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",
         "Use `inputmode=\"numeric\"` semantics for mobile keyboards."
       ]
+    },
+    "field-select": {
+      "import": "@aziontech/webkit/field-select",
+      "target": "./src/components/inputs/field-select/field-select.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/field-select",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array<{ value: unknown; label: string; disabled?: boolean }>",
+          "default": "[]",
+          "required": "no",
+          "doc": "Options rendered inside the dropdown. When empty, the dropdown renders no options."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Placeholder shown on the trigger when nothing is selected."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to the default disabled message so the lock icon always has matching copy."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size forwarded to the `Select` trigger. Heights: small=28px, medium=32px, large=40px."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Switches the component to multi-select; `modelValue` becomes an array."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables the select and switches the helper to `kind=\"disabled\"` (lock icon)."
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Marks the select read-only; value is visible but the dropdown is locked."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the `Required` tag to the `Label` and sets `aria-required` on the trigger."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Switches the helper to `kind=\"invalid\"` and applies invalid border/ring tokens on the trigger."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Optional override for the rendered options. When absent, the component renders one `Select.Option` per entry in `options`."
+        }
+      ],
+      "purpose": "Form field wrapper for `Select` that composes `Label`, `Select` (with its `Trigger` + `Content` + `Option` sub-components), and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a select needs a visible label or helper/error message — mirroring `FieldText`'s role for text inputs. Options are supplied via a data prop (`options: { value, label }[]`) so the field owns the rendering; consumers who need slot-based composition can drop to the underlying `Select` compound directly."
     },
     "field-text": {
       "import": "@aziontech/webkit/field-text",
@@ -8058,6 +8252,214 @@
         }
       ],
       "purpose": "Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `overlay/popover` instead."
+    },
+    "command-menu": {
+      "import": "@aziontech/webkit/command-menu",
+      "target": "./src/components/overlay/command-menu/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/command-menu-root",
+      "subcomponents": [
+        "@aziontech/webkit/command-menu-input",
+        "@aziontech/webkit/command-menu-list",
+        "@aziontech/webkit/command-menu-group",
+        "@aziontech/webkit/command-menu-item",
+        "@aziontech/webkit/command-menu-empty",
+        "@aziontech/webkit/command-menu-separator"
+      ],
+      "category": "overlay",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, backdrop click and Escape close the palette."
+        },
+        {
+          "name": "shortcut",
+          "type": "string",
+          "default": "'meta+k'",
+          "required": "no",
+          "doc": "Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires on every open/closed transition; supports `v-model:open`."
+        },
+        {
+          "name": "select",
+          "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+          "notes": "Fires when an enabled item is activated (click or `Enter`). `event` is the activation event; `value` is the item's identifier. The palette closes automatically and focus returns to the element that was focused before opening."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The palette content: a `<CommandMenu.Input>` followed by a `<CommandMenu.List>`. Rendered inside the teleported dialog panel."
+        }
+      ],
+      "purpose": "Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the substring filter, and roving active-item navigation. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.",
+      "useWhen": [
+        "Provide a global ⌘K launcher for navigating to pages or running actions across an app.",
+        "Let users filter a large, grouped list of commands by typing, then activate with the keyboard."
+      ],
+      "avoidWhen": [
+        "A small menu anchored to a trigger button → use `dropdown`.",
+        "Picking a value for a form field → use `select` / `multi-select`.",
+        "A confirmation or content modal without search/list semantics → use `dialog` directly."
+      ],
+      "related": [
+        "dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.",
+        "kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.",
+        "dropdown` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger."
+      ],
+      "bestPractices": [
+        "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",
+        "Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.",
+        "Group related actions with `<CommandMenu.Group heading=\"…\">` and separate distinct sections with `<CommandMenu.Separator>`."
+      ]
+    },
+    "command-menu-root": {
+      "import": "@aziontech/webkit/command-menu-root",
+      "target": "./src/components/overlay/command-menu/command-menu.vue",
+      "kind": "root",
+      "rootOf": "command-menu",
+      "treeShakeableImport": "@aziontech/webkit/command-menu-root",
+      "category": "overlay",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "no",
+          "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Initial open state when uncontrolled."
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "When true, backdrop click and Escape close the palette."
+        },
+        {
+          "name": "shortcut",
+          "type": "string",
+          "default": "'meta+k'",
+          "required": "no",
+          "doc": "Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:open",
+          "payload": "boolean",
+          "notes": "Fires on every open/closed transition; supports `v-model:open`."
+        },
+        {
+          "name": "select",
+          "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+          "notes": "Fires when an enabled item is activated (click or `Enter`). `event` is the activation event; `value` is the item's identifier. The palette closes automatically and focus returns to the element that was focused before opening."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The palette content: a `<CommandMenu.Input>` followed by a `<CommandMenu.List>`. Rendered inside the teleported dialog panel."
+        }
+      ],
+      "purpose": "Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the substring filter, and roving active-item navigation. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.",
+      "useWhen": [
+        "Provide a global ⌘K launcher for navigating to pages or running actions across an app.",
+        "Let users filter a large, grouped list of commands by typing, then activate with the keyboard."
+      ],
+      "avoidWhen": [
+        "A small menu anchored to a trigger button → use `dropdown`.",
+        "Picking a value for a form field → use `select` / `multi-select`.",
+        "A confirmation or content modal without search/list semantics → use `dialog` directly."
+      ],
+      "related": [
+        "dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.",
+        "kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.",
+        "dropdown` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger."
+      ],
+      "bestPractices": [
+        "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",
+        "Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.",
+        "Group related actions with `<CommandMenu.Group heading=\"…\">` and separate distinct sections with `<CommandMenu.Separator>`."
+      ]
+    },
+    "command-menu-input": {
+      "import": "@aziontech/webkit/command-menu-input",
+      "target": "./src/components/overlay/command-menu/command-menu-input/command-menu-input.vue",
+      "kind": "subcomponent",
+      "parent": "command-menu",
+      "treeShakeableImport": "@aziontech/webkit/command-menu-input"
+    },
+    "command-menu-list": {
+      "import": "@aziontech/webkit/command-menu-list",
+      "target": "./src/components/overlay/command-menu/command-menu-list/command-menu-list.vue",
+      "kind": "subcomponent",
+      "parent": "command-menu",
+      "treeShakeableImport": "@aziontech/webkit/command-menu-list"
+    },
+    "command-menu-group": {
+      "import": "@aziontech/webkit/command-menu-group",
+      "target": "./src/components/overlay/command-menu/command-menu-group/command-menu-group.vue",
+      "kind": "subcomponent",
+      "parent": "command-menu",
+      "treeShakeableImport": "@aziontech/webkit/command-menu-group"
+    },
+    "command-menu-item": {
+      "import": "@aziontech/webkit/command-menu-item",
+      "target": "./src/components/overlay/command-menu/command-menu-item/command-menu-item.vue",
+      "kind": "subcomponent",
+      "parent": "command-menu",
+      "treeShakeableImport": "@aziontech/webkit/command-menu-item"
+    },
+    "command-menu-empty": {
+      "import": "@aziontech/webkit/command-menu-empty",
+      "target": "./src/components/overlay/command-menu/command-menu-empty/command-menu-empty.vue",
+      "kind": "subcomponent",
+      "parent": "command-menu",
+      "treeShakeableImport": "@aziontech/webkit/command-menu-empty"
+    },
+    "command-menu-separator": {
+      "import": "@aziontech/webkit/command-menu-separator",
+      "target": "./src/components/overlay/command-menu/command-menu-separator/command-menu-separator.vue",
+      "kind": "subcomponent",
+      "parent": "command-menu",
+      "treeShakeableImport": "@aziontech/webkit/command-menu-separator"
     },
     "dialog": {
       "import": "@aziontech/webkit/dialog",

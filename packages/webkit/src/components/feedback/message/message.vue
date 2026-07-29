@@ -10,6 +10,7 @@
   } from './presets/transitions'
 
   export type MessageSeverity = 'info' | 'success' | 'warning' | 'danger' | 'error'
+  export type MessageSize = 'small' | 'medium'
 
   defineOptions({
     name: 'Message',
@@ -19,13 +20,13 @@
   interface Props {
     /** Visual severity variant (maps Error to danger). */
     severity?: MessageSeverity
-    /** Primary message heading. */
-    title: string
-    /** Supporting body copy below the title. */
-    description?: string
+    /** Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. */
+    size?: MessageSize
+    /** Fallback message copy when the default slot is empty. */
+    label?: string
     /** PrimeIcons class override for the leading icon. */
     icon?: string
-    /** Label for the built-in text action button; hidden when empty. */
+    /** Label for the built-in secondary action button; hidden when empty. */
     actionLabel?: string
     /** When true, shows a close control that dismisses the message. */
     closable?: boolean
@@ -35,7 +36,8 @@
 
   const props = withDefaults(defineProps<Props>(), {
     severity: 'info',
-    description: '',
+    size: 'medium',
+    label: '',
     icon: '',
     actionLabel: '',
     closable: false,
@@ -47,7 +49,7 @@
     close: []
   }>()
 
-  defineSlots<{
+  const slots = defineSlots<{
     default(): unknown
     action(): unknown
   }>()
@@ -85,6 +87,12 @@
   })
 
   const resolvedIcon = computed(() => props.icon || defaultIcons[normalizedSeverity.value])
+
+  // A trailing control (action button or close) brings its own inline padding, so the
+  // banner tightens its end edge to keep the optical inset even.
+  const hasTrailingControl = computed(() =>
+    Boolean(props.actionLabel || slots.action || props.closable)
+  )
 
   const role = computed(() =>
     normalizedSeverity.value === 'danger' || normalizedSeverity.value === 'warning'
@@ -158,40 +166,32 @@
       :role="role"
       :data-testid="testId"
       :data-severity="normalizedSeverity"
+      :data-size="size"
+      :data-trailing="hasTrailingControl || null"
       :style="dismissTransitionStyle"
       tabindex="-1"
-      class="flex min-h-14 items-center gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[length:var(--border-width-default,1px)] p-[var(--spacing-sm)] shadow-[var(--shadow-xs)] data-[severity=info]:border-[var(--info-border)] data-[severity=info]:bg-[var(--info)] data-[severity=success]:border-[var(--success-border)] data-[severity=success]:bg-[var(--success)] data-[severity=warning]:border-[var(--warning-border)] data-[severity=warning]:bg-[var(--warning)] data-[severity=danger]:border-[var(--danger-border)] data-[severity=danger]:bg-[var(--danger)]"
+      class="relative box-border flex w-full flex-wrap items-center gap-[var(--spacing-sm)] break-words rounded-[var(--shape-button)] border border-[length:var(--border-width-default,1px)] py-1.5 shadow-[var(--shadow-xs)] data-[size=small]:min-h-8 data-[size=small]:px-[var(--spacing-xs)] data-[size=medium]:min-h-9 data-[size=medium]:px-[var(--spacing-sm)] data-[trailing]:pr-[var(--spacing-xs)] data-[severity=info]:border-[var(--info-border)] data-[severity=info]:bg-[var(--info)] data-[severity=success]:border-[var(--success-border)] data-[severity=success]:bg-[var(--success)] data-[severity=warning]:border-[var(--warning-border)] data-[severity=warning]:bg-[var(--warning)] data-[severity=danger]:border-[var(--danger-border)] data-[severity=danger]:bg-[var(--danger)]"
       @keydown="handleEscape"
     >
-      <slot v-if="$slots['default']" />
-      <template v-else>
-        <i
-          :class="resolvedIcon"
-          :data-severity="normalizedSeverity"
-          class="size-4 mt-0.5 self-start shrink-0 text-[length:inherit] leading-none data-[severity=info]:text-[var(--info-contrast)] data-[severity=success]:text-[var(--success-contrast)] data-[severity=warning]:text-[var(--warning-contrast)] data-[severity=danger]:text-[var(--danger-contrast)]"
-          aria-hidden="true"
-        />
-        <div class="flex min-w-0 flex-1 flex-col">
-          <p
-            class="text-body-xs text-[var(--text-default)]"
-            :data-testid="`${testId}__title`"
-          >
-            {{ title }}
-          </p>
-          <p
-            v-if="description"
-            class="text-body-xs text-[var(--text-muted)]"
-            :data-testid="`${testId}__description`"
-          >
-            {{ description }}
-          </p>
-        </div>
-      </template>
+      <i
+        :class="resolvedIcon"
+        :data-severity="normalizedSeverity"
+        class="size-3.5 shrink-0 text-label-md leading-none data-[severity=info]:text-[var(--info-contrast)] data-[severity=success]:text-[var(--success-contrast)] data-[severity=warning]:text-[var(--warning-contrast)] data-[severity=danger]:text-[var(--danger-contrast)]"
+        aria-hidden="true"
+      />
+      <p
+        :data-size="size"
+        class="m-0 min-w-0 flex-1 text-[var(--text-default)] data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
+        :data-testid="`${testId}__content`"
+      >
+        <slot v-if="$slots['default']" />
+        <template v-else>{{ label }}</template>
+      </p>
       <slot name="action">
         <Button
           v-if="actionLabel"
-          kind="text"
-          size="medium"
+          kind="secondary"
+          :size="size"
           :label="actionLabel"
           :data-testid="`${testId}__action`"
           @click="handleAction"
@@ -201,7 +201,7 @@
         v-if="closable"
         icon="pi pi-times"
         kind="transparent"
-        size="small"
+        :size="size"
         ariaLabel="Close message"
         :data-testid="`${testId}__close`"
         @click="handleClose"

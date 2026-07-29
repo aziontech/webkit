@@ -163,7 +163,7 @@ The state-matrix render — Skeleton (data in), then Message / EmptyState / data
   <Message
     v-else-if="error"
     severity="danger"
-    :title="error"
+    :label="error"
   >
     <Button
       label="Retry"

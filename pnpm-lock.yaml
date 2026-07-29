@@ -65,7 +65,10 @@ importers:
         version: 9.33.0(eslint@9.39.5(jiti@2.7.0))
       eslint-plugin-vuejs-accessibility:
         specifier: ^2.5.0
-        version: 2.5.0(eslint@9.39.5(jiti@2.7.0))(globals@14.0.0)
+        version: 2.5.0(eslint@9.39.5(jiti@2.7.0))(globals@17.8.0)
+      globals:
+        specifier: ^17.8.0
+        version: 17.8.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -3954,6 +3957,10 @@ packages:
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
+
+  globals@17.8.0:
+    resolution: {integrity: sha512-Zz/LMDZScFmkakeL2cTHzf+PbWKdpU3uclqkZT7TjDG58j5WPt0PpA+n9uPI24fZtlw07q0OtEi84K+umsRzqQ==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -10525,11 +10532,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-vuejs-accessibility@2.5.0(eslint@9.39.5(jiti@2.7.0))(globals@14.0.0):
+  eslint-plugin-vuejs-accessibility@2.5.0(eslint@9.39.5(jiti@2.7.0))(globals@17.8.0):
     dependencies:
       aria-query: 5.3.2
       eslint: 9.39.5(jiti@2.7.0)
-      globals: 14.0.0
+      globals: 17.8.0
       vue-eslint-parser: 10.4.1(eslint@9.39.5(jiti@2.7.0))
     transitivePeerDependencies:
       - supports-color
@@ -11078,6 +11085,8 @@ snapshots:
       type-fest: 0.20.2
 
   globals@14.0.0: {}
+
+  globals@17.8.0: {}
 
   globalthis@1.0.4:
     dependencies:

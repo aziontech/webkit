@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/multi-select/MultiSelect.stories'
 import MultiSelect, {
@@ -105,6 +105,48 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(MultiSelect.Content).toBe(MultiSelectContent)
     expect(MultiSelect.Group).toBe(MultiSelectGroup)
     expect(MultiSelect.Option).toBe(MultiSelectOption)
+  })
+
+  // ---- panel anchoring under a transformed ancestor -----------------------
+  // The panel is `position: fixed` inside its Teleport target (document.body).
+  // A transform on an ancestor of that target makes it the panel's containing
+  // block, so viewport coordinates written to top/left get scaled a second time
+  // and the panel lands away from the trigger. Storybook's zoom control does
+  // exactly this — it scales the preview body.
+  it('anchors the panel to the trigger when the Teleport target is scaled', async () => {
+    const previousTransform = document.body.style.transform
+    const previousOrigin = document.body.style.transformOrigin
+    document.body.style.transformOrigin = 'top left'
+    document.body.style.transform = 'scale(1.25)'
+
+    try {
+      const { getByTestId } = render(Harness, { props: { open: false } })
+      cleanupTeleported()
+
+      const trigger = getByTestId('multi-select-trigger')
+      await fireEvent.click(trigger)
+
+      const panel = listbox()
+      expect(panel).not.toBeNull()
+      // The panel measures the trigger one tick after it renders, so let that
+      // continuation land before reading geometry.
+      await nextTick()
+
+      const triggerRect = trigger.getBoundingClientRect()
+      const panelRect = (panel as HTMLElement).getBoundingClientRect()
+
+      // Alignment, not absolute coordinates: the panel's left edge and width
+      // track the trigger's, and it sits just below it. Before the fix these
+      // were off by the scale factor (1.25x).
+      expect(Math.abs(panelRect.left - triggerRect.left)).toBeLessThanOrEqual(1)
+      expect(Math.abs(panelRect.width - triggerRect.width)).toBeLessThanOrEqual(1)
+      expect(panelRect.top).toBeGreaterThanOrEqual(triggerRect.bottom)
+      expect(panelRect.top - triggerRect.bottom).toBeLessThanOrEqual(8)
+    } finally {
+      document.body.style.transform = previousTransform
+      document.body.style.transformOrigin = previousOrigin
+      cleanupTeleported()
+    }
   })
 
   // ---- trigger opens the teleported panel ---------------------------------
