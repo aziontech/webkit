@@ -259,8 +259,11 @@ onBeforeUnmount(clearAll);
           </span>
         </Accordion.Trigger>
         <Accordion.Content>
+          <!-- Flush inside the accordion panel: the item already frames the
+               region, so LogView drops its own border and radius. -->
           <LogView
             :lines="linesByStep[i]"
+            :border="false"
             :loading="stepStatus(i) === 'pending'"
             loading-label="Waiting to start…"
             class="h-[260px]"

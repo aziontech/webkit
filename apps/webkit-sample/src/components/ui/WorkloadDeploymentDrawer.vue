@@ -49,15 +49,18 @@ const redeploy = () => {
   toast.info(`Redeploying version ${props.deployment?.versionId ?? ""}.`);
 };
 
-// The label/value metadata blocks, in the drawer's grid order.
+// The label/value metadata blocks, in the drawer's grid order. Only the
+// resources the deployment actually carries are rendered: a workload deployment
+// wires all three, while a deployment from the Deployments module targets a
+// single resource and must not claim the other two.
 const metaBlocks = computed(() => {
   const d = props.deployment;
   if (!d) return [];
   return [
-    { key: "application", label: "Application", icon: "ai ai-edge-application", value: d.application ?? "App name", version: "latest" },
-    { key: "firewall", label: "Firewall", icon: "ai ai-edge-firewall", value: d.firewall ?? "firewall_name", version: "latest" },
-    { key: "customPage", label: "Custom Page", icon: "ai ai-custom-pages", value: d.customPage ?? "Application", version: "latest" },
-  ];
+    { key: "application", label: "Application", icon: "ai ai-edge-application", value: d.application, version: "latest" },
+    { key: "firewall", label: "Firewall", icon: "ai ai-edge-firewall", value: d.firewall, version: "latest" },
+    { key: "customPage", label: "Custom Page", icon: "ai ai-custom-pages", value: d.customPage, version: "latest" },
+  ].filter((block) => Boolean(block.value));
 });
 </script>
 
@@ -90,14 +93,14 @@ const metaBlocks = computed(() => {
                 class="grid grid-cols-1 gap-[var(--spacing-lg)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-md)] sm:grid-cols-3"
               >
                 <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                  <span class="text-overline-sm uppercase text-[var(--text-muted)]">Environment</span>
+                  <span class="text-label-sm text-[var(--text-muted)]">Environment</span>
                   <div class="flex items-center gap-[var(--spacing-xs)]">
                     <span class="text-body-sm text-[var(--text-default)]">{{ deployment.environment }}</span>
                     <Tag v-if="deployment.current" label="Current" severity="info" size="small" />
                   </div>
                 </div>
                 <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                  <span class="text-overline-sm uppercase text-[var(--text-muted)]">Status</span>
+                  <span class="text-label-sm text-[var(--text-muted)]">Status</span>
                   <div class="flex items-center gap-[var(--spacing-xs)]">
                     <StatusIndicator
                       :severity="statusMeta.severity"
@@ -110,7 +113,7 @@ const metaBlocks = computed(() => {
                   </div>
                 </div>
                 <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                  <span class="text-overline-sm uppercase text-[var(--text-muted)]">Created</span>
+                  <span class="text-label-sm text-[var(--text-muted)]">Created</span>
                   <div class="flex items-center gap-[var(--spacing-xs)]">
                     <Avatar :label="deployment.author" size="small" kind="square" />
                     <span class="text-body-sm text-[var(--text-default)]">{{ deployment.author }}</span>
@@ -122,7 +125,7 @@ const metaBlocks = computed(() => {
                   :key="block.key"
                   class="flex flex-col gap-[var(--spacing-xxs)]"
                 >
-                  <span class="text-overline-sm uppercase text-[var(--text-muted)]">{{ block.label }}</span>
+                  <span class="text-label-sm text-[var(--text-muted)]">{{ block.label }}</span>
                   <div class="flex items-center gap-[var(--spacing-xs)]">
                     <i :class="[block.icon, 'text-[var(--text-muted)]']" aria-hidden="true" />
                     <span class="text-body-sm text-[var(--text-default)]">{{ block.value }}</span>
