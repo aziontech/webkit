@@ -4243,18 +4243,18 @@
           "doc": "Visual severity variant (maps Error to danger)."
         },
         {
-          "name": "title",
-          "type": "string",
-          "default": "—",
-          "required": "yes",
-          "doc": "Primary message heading."
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes."
         },
         {
-          "name": "description",
+          "name": "label",
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Supporting body copy below the title."
+          "doc": "Fallback message copy when the default slot is empty."
         },
         {
           "name": "icon",
@@ -4268,7 +4268,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Label for the built-in text action button; hidden when empty."
+          "doc": "Label for the built-in secondary action button; hidden when empty."
         },
         {
           "name": "closable",
@@ -4306,10 +4306,10 @@
         {
           "name": "default",
           "scope": "—",
-          "notes": "Replaces the default icon + title + description layout."
+          "notes": "Message copy. Accepts inline content — plain text plus anchors, which the message region styles with the `.text-link` token. Falls back to `label` when empty."
         }
       ],
-      "purpose": "Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action aligned to Figma Message (478:892)."
+      "purpose": "Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button."
     },
     "empty-state": {
       "import": "@aziontech/webkit/empty-state",

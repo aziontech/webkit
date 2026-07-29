@@ -167,7 +167,7 @@ Route: /workloads
 [✗] States     empty fetch → blank panel, no EmptyState rendered
 [✓] Interaction dialog traps + restores focus; success toast appears
 
-fix: pass :title to <Message>; darken the pill text token; add EmptyState to the no-data branch.
+fix: pass :label to <Message>; darken the pill text token; add EmptyState to the no-data branch.
 ```
 
 End with: `verified — ship` or `N findings — fix before ship`.

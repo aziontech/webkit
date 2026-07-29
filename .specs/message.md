@@ -7,15 +7,15 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 369176139640a950359df9192158948fc7e62777ee0c88b2f8fba00a1a0b3ced
+checksum: 0d839fb3512e4e880b75bdbcc58d286e2304a4ab23ef3f968c3d1a621647d696
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-07-29
 ---
 # Message — Component Spec
 
 ## Purpose
 
-Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action aligned to Figma Message (478:892).
+Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button.
 
 ## Usage
 
@@ -25,12 +25,18 @@ import Message from '@aziontech/webkit/message'
 </script>
 
 <template>
+  <!-- Plain copy via the label prop -->
   <Message
     severity="info"
-    title="Info message"
-    description="A brief description of the message."
-    action-label="Label"
+    label="Deployment finished in 42 seconds."
   />
+
+  <!-- Copy with inline links via the default slot -->
+  <Message severity="warning">
+    Your plan is close to its request limit.
+    <a href="/billing">Upgrade the plan</a>
+    to avoid throttling.
+  </Message>
 </template>
 ```
 
@@ -39,10 +45,10 @@ import Message from '@aziontech/webkit/message'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `severity` | `'info' | 'success' | 'warning' | 'danger' | 'error'` | `'info'` | no | Visual severity variant (maps Error to danger). |
-| `title` | `string` | `—` | yes | Primary message heading. |
-| `description` | `string` | `''` | no | Supporting body copy below the title. |
+| `size` | `'small' | 'medium'` | `'medium'` | no | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
+| `label` | `string` | `''` | no | Fallback message copy when the default slot is empty. |
 | `icon` | `string` | `''` | no | PrimeIcons class override for the leading icon. |
-| `actionLabel` | `string` | `''` | no | Label for the built-in text action button; hidden when empty. |
+| `actionLabel` | `string` | `''` | no | Label for the built-in secondary action button; hidden when empty. |
 | `closable` | `boolean` | `false` | no | When true, shows a close control that dismisses the message. |
 | `life` | `number` | `0` | no | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |
 
@@ -58,7 +64,7 @@ import Message from '@aziontech/webkit/message'
 | Slot | Scope | Notes |
 |---|---|---|
 | `action` | — | Custom action control; replaces the built-in Button when provided. |
-| `default` | — | Replaces the default icon + title + description layout. |
+| `default` | — | Message copy. Accepts inline content — plain text plus anchors, which the message region styles with the `.text-link` token. Falls back to `label` when empty. |
 
 ## States
 
@@ -74,9 +80,18 @@ import Message from '@aziontech/webkit/message'
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| title typography | `.text-label-sm` |
-| description typography | `.text-body-xs` |
-| action typography | `.text-button-md` |
+| message typography (small) | `.text-label-sm` — 12px |
+| message typography (medium) | `.text-label-md` — 14px |
+| inline link (anchor inside the message) | `.text-link` |
+| leading icon glyph | `.text-label-md` — 14px at both sizes; the icon does not scale with the banner |
+| leading icon box | `size-3.5` — 14px, matching the glyph so the row height is stable |
+| action typography | `.text-button-md` — both Button sizes use this step |
+| action size | tracks `size`: `small` → Button `small` (28px), `medium` → Button `medium` (32px) |
+| action surface | `var(--secondary)` — the built-in action is a `secondary` Button, so it reads as a control against every severity surface rather than as body copy |
+| action text | `var(--secondary-contrast)` |
+| close control size | tracks `size`: `small` → IconButton `small` (28px), `medium` → IconButton `medium` (32px) |
+| close control surface | transparent — the close is a `transparent` IconButton, so the severity surface shows through and the glyph does not compete with the action |
+| close control glyph | `var(--text-default)` |
 | surface (info) | `var(--info)` |
 | surface (success) | `var(--success)` |
 | surface (warning) | `var(--warning)` |
@@ -91,25 +106,30 @@ import Message from '@aziontech/webkit/message'
 | icon (danger) | `var(--danger-contrast)` |
 | text | `var(--text-default)` |
 | muted text | `var(--text-muted)` |
-| spacing (padding) | `var(--spacing-sm)` |
-| spacing (gap) | `var(--spacing-xs)` |
-| spacing (title stack) | `var(--spacing-xxs)` |
-| shape | `var(--shape-button)` |
+| spacing (padding block) | `py-1.5` — 6px; no semantic token sits between `--spacing-xxs` (4px) and `--spacing-xs` (8px) |
+| spacing (padding inline, small) | `var(--spacing-xs)` — 8px |
+| spacing (padding inline, medium) | `var(--spacing-sm)` — 12px |
+| spacing (padding inline end, with a trailing control) | `var(--spacing-xs)` — 8px, tightened; the trailing action/close control carries its own padding |
+| spacing (gap) | `var(--spacing-sm)` — 12px at every breakpoint; only the `lg`/`xl`/`xxl` steps scale responsively |
+| shape | `var(--shape-button)` — 6px, identical to `rounded-md` |
 | shadow | `var(--shadow-xs)` |
 | ring | `var(--ring-color)` |
-| min height | `min-h-14` |
+| height (small) | `min-h-8` — 32px floor; grows with wrapped copy or a trailing control |
+| height (medium) | `min-h-9` — 36px floor; grows with wrapped copy or a trailing control |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| block padding 6px | `py-1.5` (`calc(var(--spacing) * 1.5)`) | Add a 6px semantic spacing step if a second component needs it; today only this banner does. |
+| icon box 14px | `size-3.5` (`calc(var(--spacing) * 3.5)`) | The theme has no icon-size scale, so the box is spacing-derived while the glyph rides the `.text-label-md` font-size token. Add an icon-size scale when a second component needs a non-16px glyph. |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses the action and close controls when present; `Enter`/`Space` activates them; `Escape` dismisses when `closable` is true.
+- Keyboard map: `Tab` focuses inline links in the message copy, then the action and close controls when present; `Enter` follows a link, `Enter`/`Space` activates the controls; `Escape` dismisses when `closable` is true.
 - ARIA: root uses `role="alert"` for danger/warning severities and `role="status"` for info/success.
+- Inline links are underlined, not colour-only, so they stay distinguishable against every severity surface (WCAG 1.4.1); the `.text-link` token supplies the focus outline.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
@@ -118,6 +138,8 @@ import Message from '@aziontech/webkit/message'
 
 - Default
 - Types
+- Sizes
+- WithLinks — the inline-link anatomy is the reason this component was reshaped; the default slot's link handling is not reachable from any arg-driven story, so it needs its own composite story.
 - Closable
 - AutoDismiss
 
