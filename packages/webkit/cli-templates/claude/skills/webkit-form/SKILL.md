@@ -259,11 +259,11 @@ link on the left and Save on the right. Canonical pattern:
           </div>
         </div>
 
-        <Message
-          severity="info"
-          title="The toolbar needs the browser extension in production"
-          description="To use the toolbar in production your team members need the Chrome extension or to enable the toolbar for that domain in the toolbar menu."
-        />
+        <Message severity="info">
+          To use the toolbar in production your team members need the Chrome extension, or
+          <a href="/docs/toolbar">enable the toolbar for that domain</a>
+          in the toolbar menu.
+        </Message>
       </div>
     </template>
 
@@ -338,7 +338,7 @@ Canonical pattern:
         <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
           <Message
             severity="warning"
-            title="Once confirmed, this action can't be reversed."
+            label="Once confirmed, this action can't be reversed."
           />
           <p class="m-0 text-body-sm text-[var(--text-muted)]">
             The selected Application will be deleted, along with all associated settings or
