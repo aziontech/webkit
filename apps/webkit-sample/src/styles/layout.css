@@ -37,15 +37,33 @@
      more air below it than beside the content (optical alignment). */
   --layout-boundary-inline: var(--spacing-lg); /* 16 → 24            */
   --layout-boundary-end: var(--spacing-lg); /* 16 → 24            */
-  --layout-boundary-start: var(--spacing-xl); /* 24 → 32 → 48       */
+  --layout-boundary-start: var(--spacing-lg); /* 24 → 32 → 48       */
 
   /* RHYTHM — two levels, nothing else. */
   --layout-section-gap: var(--spacing-xl); /* between sections   */
   --layout-group-gap: var(--spacing-lg); /* within a section   */
 
-  /* MEASURE — the widest a configuration / form / dashboard column may get.
-     Table pages opt out and run full-bleed. */
-  --layout-measure: var(--container-7xl); /* 1280px             */
+  /* MEASURE — the widest a page column may get, by context. Three values, because
+     the reason a column is capped differs with how wide its payload actually is.
+
+     DATA pages (lists, detail dashboards) are capped so a table that runs to the
+     viewport edge on an ultrawide screen doesn't put its row actions a head-turn
+     away from the name that identifies the row. They still want every pixel they
+     can get: more columns visible is the point.
+
+     FOCUSED pages (home, the create flows) are one task, but that task still goes
+     multi-column — home is a rail plus a card grid, and a create flow lays its
+     fields out 2- and 3-up inside each section. So they stay wide enough for those
+     bands to breathe, and no wider.
+
+     FORM pages (settings, in-page edit forms) are a single stacked column of
+     fields. Past ~1200px the extra width lands entirely inside the controls: a
+     label sits at the far left of a 1600px row from the input it names, and the
+     eye has to travel the whole measure to pair them. Narrower reads as composed
+     rather than under-filled. */
+  --layout-measure: var(--container-7xl); /* 1620px — data pages */
+  --layout-measure-focused: var(--container-6xl); /* 1388px — home, create */
+  --layout-measure-form: var(--container-5xl); /* 1192px — settings, forms */
 }
 
 /* The page boundary. Padding, never margin: a top margin on an `h-full` child
@@ -58,10 +76,50 @@
   padding-block-end: var(--layout-boundary-end);
 }
 
-/* A centered reading column at the measure. Table pages omit it — full-bleed
-   is the absence of this class, not a `w-full`. */
-.layout-column {
+/* A list page: a level-1 nav page whose whole body is one table under its page
+   heading. The heading *titles* that table — they are one group, not two
+   sections — and the table opens with its own toolbar row (search, filters,
+   column selector), which reads as a continuation of the heading block. The
+   section gap therefore separates things the eye already reads as joined, and
+   costs a table row of vertical space above the fold. So a list page uses the
+   group gap, not the section gap.
+   Replaces `flex flex-col gap-[var(--layout-section-gap)]` on the page's own
+   column; `h-full` / `min-h-0` stay with the caller. Not for detail pages,
+   where a table is one section among several — those keep the section gap. */
+.layout-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-group-gap);
+}
+
+/* A centered column at the measure — every page carries one of these, list pages
+   included. Full-bleed is the absence of all three classes, not a `w-full`.
+
+   One class per context: `.layout-column` for data (tables, detail dashboards),
+   `.layout-column-focused` for home and the create flows, `.layout-column-form`
+   for settings and in-page edit forms.
+
+   The unit that picks a class is the *band*, not the file: a tabbed module whose
+   tab bar is second-level nav (Settings) is several pages in one route, and a tab
+   showing a table is measured as data even when the tab beside it is a form.
+   Within one band the class is the same everywhere it must align — the scrolling
+   body AND its sticky action bar — or the footer's buttons drift right of the
+   form they submit. */
+.layout-column,
+.layout-column-focused,
+.layout-column-form {
   margin-inline: auto;
   width: 100%;
+}
+
+.layout-column {
   max-width: var(--layout-measure);
+}
+
+.layout-column-focused {
+  max-width: var(--layout-measure-focused);
+}
+
+.layout-column-form {
+  max-width: var(--layout-measure-form);
 }
