@@ -312,7 +312,14 @@ export const Open = {
         story:
           'The popover pinned open, so the surfaces inside it are documented and visually compared: the Start/End date + time fields (each bound to its visible label), the month strip with its static header, the timezone selector, and the Apply/Clear footer. Every field here follows the same contract as a standalone `input-text` — same heights, same `.text-label-sm` value, same hover and disabled treatment.'
       },
-      source: { code: toSfc(IMPORT, OPEN_TEMPLATE) }
+      source: {
+        code: toSfc(
+          sfcScript(
+            'const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })'
+          ),
+          OPEN_TEMPLATE
+        )
+      }
     }
   }
 }
