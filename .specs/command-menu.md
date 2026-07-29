@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: a26f48d7758661352ab7091bf141fc4277be995e1a5f1544ff8d6e8895fd0e8d
+checksum: a4970d1f92ea5b9944f92866676ebe9f307f9fc8bc35357f725a0c10775de363
 created: 2026-07-23
-last_updated: 2026-07-24
+last_updated: 2026-07-29
 ---
 
 # Command Menu — Component Spec
@@ -207,14 +207,13 @@ _none_
 
 ## Stories (Storybook)
 
-Composition component with no `kind`/`size` axis; stories forced open (`open` arg) so the teleported panel renders, matching the `dialog` story pattern.
+Composition component with no `kind`/`size` axis. Every story starts **closed** and ships its own opening affordance, matching the `dialog` story pattern: the panel teleports to `document.body`, so a story that forced `open` would stack its panel on top of every other story's panel on the Docs page (leaving each story canvas empty). Only `Default` keeps the global `shortcut`; the remaining stories pass `shortcut=""` so the Docs page has a single ⌘K owner.
 
-- Default — a controlled palette with one input, one group, and several items (no shortcuts).
+- Default — the intended entry point: a large read-only search `InputText` carrying a ⌘K `Kbd` hint that opens the palette via `v-model:open` (the global `meta+k` shortcut opens it too), containing one input, two groups, a separator, and items with and without `shortcut` hints. Covers the "Best practices" controlled `v-model:open` pattern alongside the default composition.
 - Grouped — composite story with two `<CommandMenu.Group>` separated by a `<CommandMenu.Separator>`. Required because grouping + separators are central anatomy not covered by `Default`.
 - WithShortcuts — items carrying `shortcut` hints rendered via `Kbd`. Required because the `shortcut` prop and its `Kbd` rendering are public Item API with no other coverage.
-- Empty — the palette with a query that matches nothing, showing the `<CommandMenu.Empty>` state. Required because the empty state is a distinct visual state (the `empty` state in the States table) with no other coverage.
+- Empty — the palette with no matching items, showing the `<CommandMenu.Empty>` state. Required because the empty state is a distinct visual state (the `empty` state in the States table) with no other coverage.
 - Disabled — a group containing a disabled item alongside enabled ones. Required because `disabled` is public Item API and the disabled row is a distinct state.
-- WithTrigger — a large search `InputText` carrying a ⌘K `Kbd` hint that opens the palette via `v-model:open` (the global `meta+k` shortcut opens it too). Required because every other story forces the palette open; this is the only coverage of the intended controlled entry point — opening from an app affordance (the "Best practices" controlled `v-model:open` pattern) rather than the closed→open transition being pre-set.
 
 ## Constraints — DO NOT
 

@@ -1,3 +1,4 @@
+import Button from '@aziontech/webkit/button'
 import CommandMenu from '@aziontech/webkit/command-menu'
 import CommandMenuEmpty from '@aziontech/webkit/command-menu-empty'
 import CommandMenuGroup from '@aziontech/webkit/command-menu-group'
@@ -11,7 +12,23 @@ import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
-const IMPORT = "import CommandMenu from '@aziontech/webkit/command-menu'"
+// The palette panel teleports to `document.body`, so a story that forced `open`
+// would stack its panel on top of every other story's panel on the Docs page.
+// Every story therefore starts closed and ships its own opening affordance,
+// matching the `dialog` story pattern.
+const IMPORT_ROOT = "import CommandMenu from '@aziontech/webkit/command-menu'"
+const IMPORT_INPUT = "import CommandMenuInput from '@aziontech/webkit/command-menu-input'"
+const IMPORT_LIST = "import CommandMenuList from '@aziontech/webkit/command-menu-list'"
+const IMPORT_GROUP = "import CommandMenuGroup from '@aziontech/webkit/command-menu-group'"
+const IMPORT_ITEM = "import CommandMenuItem from '@aziontech/webkit/command-menu-item'"
+const IMPORT_EMPTY = "import CommandMenuEmpty from '@aziontech/webkit/command-menu-empty'"
+const IMPORT_SEPARATOR =
+  "import CommandMenuSeparator from '@aziontech/webkit/command-menu-separator'"
+const IMPORT_BUTTON = "import Button from '@aziontech/webkit/button'"
+const IMPORT_INPUT_TEXT = "import InputText from '@aziontech/webkit/input-text'"
+const IMPORT_KBD = "import Kbd from '@aziontech/webkit/kbd'"
+const IMPORT_VUE = "import { ref } from 'vue'"
+const OPEN_REF = ['', 'const open = ref(false)']
 
 const commandMenuStoryComponents = {
   CommandMenu,
@@ -21,6 +38,7 @@ const commandMenuStoryComponents = {
   CommandMenuItem,
   CommandMenuEmpty,
   CommandMenuSeparator,
+  Button,
   InputText,
   Kbd
 }
@@ -39,7 +57,7 @@ const meta = {
   },
   tags: ['autodocs'],
   parameters: {
-    layout: 'fullscreen',
+    layout: 'padded',
     backgrounds: {
       default: 'dark'
     },
@@ -54,11 +72,16 @@ const meta = {
     docs: {
       description: {
         component:
-          'A ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the Dialog primitive for panel, backdrop, focus trap, scroll-lock, and Escape, and adds a search input, a scrollable list of items organized into optional groups, an empty state, and separators.'
+          'A ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the Dialog primitive for panel, backdrop, focus trap, scroll-lock, and Escape, and adds a search input, a scrollable list of items organized into optional groups, an empty state, and separators. Every story below starts closed — open it from the affordance in the canvas, then filter by typing, move with ArrowUp / ArrowDown, activate with Enter, and close with Escape.'
       },
       canvas: { sourceState: 'shown' }
     }
   },
+  decorators: [
+    () => ({
+      template: '<div class="flex min-h-[180px] w-full items-center justify-center"><story /></div>'
+    })
+  ],
   argTypes: {
     open: {
       control: 'boolean',
@@ -82,7 +105,7 @@ const meta = {
     shortcut: {
       control: 'text',
       description:
-        "Global '+'-delimited keyboard shortcut that toggles the palette open (e.g. 'meta+k').",
+        "Global '+'-delimited keyboard shortcut that toggles the palette open (e.g. 'meta+k'). Pass an empty string to opt out of the global binding.",
       table: {
         category: 'props',
         type: { summary: 'string' },
@@ -105,12 +128,12 @@ const meta = {
     },
     default: {
       control: false,
-      description: 'The palette content: a CommandMenu.Input followed by a CommandMenu.List.',
+      description: 'The palette content: a CommandMenuInput followed by a CommandMenuList.',
       table: { category: 'slots' }
     }
   },
   args: {
-    open: true,
+    defaultOpen: false,
     dismissible: true,
     shortcut: 'meta+k'
   }
@@ -118,7 +141,28 @@ const meta = {
 
 export default meta
 
-const DEFAULT_RENDER_TEMPLATE = `<CommandMenu v-bind="args" :open="open" @update:open="onUpdate">
+// The real entry point: a large read-only search field carrying a ⌘K hint. It is
+// the only story that keeps the global `meta+k` binding, so pressing ⌘K on the
+// Docs page opens exactly one palette.
+const DEFAULT_RENDER_TEMPLATE = `<InputText
+  model-value=""
+  placeholder="Search…"
+  size="large"
+  readonly
+  aria-keyshortcuts="Meta+K"
+  class="max-w-[360px] cursor-pointer"
+  @click="onUpdate(true)"
+  @keydown.enter="onUpdate(true)"
+>
+  <template #iconLeft>
+    <span class="pi pi-search" aria-hidden="true" />
+  </template>
+  <template #iconRight>
+    <Kbd meta size="small">K</Kbd>
+  </template>
+</InputText>
+
+<CommandMenu v-bind="args" :open="open" @update:open="onUpdate">
   <CommandMenuInput placeholder="Search commands…" />
   <CommandMenuList>
     <CommandMenuGroup heading="Suggestions">
@@ -154,21 +198,39 @@ const Template = (args) => ({
   template: DEFAULT_RENDER_TEMPLATE
 })
 
-const DEFAULT_SNIPPET = `<CommandMenu open shortcut="meta+k">
-  <CommandMenu.Input placeholder="Search commands…" />
-  <CommandMenu.List>
-    <CommandMenu.Group heading="Suggestions">
-      <CommandMenu.Item value="deploy">Deploy Project</CommandMenu.Item>
-      <CommandMenu.Item value="new-app">Create Application</CommandMenu.Item>
-      <CommandMenu.Item value="settings">Go to Settings</CommandMenu.Item>
-    </CommandMenu.Group>
-    <CommandMenu.Separator />
-    <CommandMenu.Group heading="Commands">
-      <CommandMenu.Item value="search" shortcut="meta+k">Search Everything</CommandMenu.Item>
-      <CommandMenu.Item value="new-app-cmd" shortcut="meta+n">New Application</CommandMenu.Item>
-      <CommandMenu.Item value="toggle-theme" shortcut="meta+shift+l">Toggle Theme</CommandMenu.Item>
-    </CommandMenu.Group>
-  </CommandMenu.List>
+const DEFAULT_SNIPPET = `<InputText
+  model-value=""
+  placeholder="Search…"
+  size="large"
+  readonly
+  aria-keyshortcuts="Meta+K"
+  class="max-w-[360px] cursor-pointer"
+  @click="open = true"
+  @keydown.enter="open = true"
+>
+  <template #iconLeft>
+    <span class="pi pi-search" aria-hidden="true" />
+  </template>
+  <template #iconRight>
+    <Kbd meta size="small">K</Kbd>
+  </template>
+</InputText>
+
+<CommandMenu v-model:open="open" shortcut="meta+k">
+  <CommandMenuInput placeholder="Search commands…" />
+  <CommandMenuList>
+    <CommandMenuGroup heading="Suggestions">
+      <CommandMenuItem value="deploy">Deploy Project</CommandMenuItem>
+      <CommandMenuItem value="new-app">Create Application</CommandMenuItem>
+      <CommandMenuItem value="settings">Go to Settings</CommandMenuItem>
+    </CommandMenuGroup>
+    <CommandMenuSeparator />
+    <CommandMenuGroup heading="Commands">
+      <CommandMenuItem value="search" shortcut="meta+k">Search Everything</CommandMenuItem>
+      <CommandMenuItem value="new-app-cmd" shortcut="meta+n">New Application</CommandMenuItem>
+      <CommandMenuItem value="toggle-theme" shortcut="meta+shift+l">Toggle Theme</CommandMenuItem>
+    </CommandMenuGroup>
+  </CommandMenuList>
 </CommandMenu>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof CommandMenu>} */
@@ -178,14 +240,35 @@ export const Default = {
     docs: {
       description: {
         story:
-          'A controlled palette with a "Suggestions" group of plain-label items and a "Commands" group whose items carry ⌘ shortcut hints rendered via Kbd.'
+          'The intended entry point: a large search field with a ⌘K hint that opens the palette via `v-model:open`, plus the global `meta+k` (⌘K / Ctrl+K) shortcut. Inside, a "Suggestions" group of plain-label items and a "Commands" group whose items carry ⌘ shortcut hints rendered via Kbd.'
       },
-      source: { code: toSfc(IMPORT, DEFAULT_SNIPPET) }
+      source: {
+        code: toSfc(
+          [
+            IMPORT_VUE,
+            IMPORT_ROOT,
+            IMPORT_INPUT,
+            IMPORT_LIST,
+            IMPORT_GROUP,
+            IMPORT_ITEM,
+            IMPORT_SEPARATOR,
+            IMPORT_INPUT_TEXT,
+            IMPORT_KBD,
+            ...OPEN_REF
+          ],
+          DEFAULT_SNIPPET
+        )
+      }
     }
   }
 }
 
-const GROUPED_TEMPLATE = `<CommandMenu :open="open" shortcut="meta+k" @update:open="open = $event">
+// The stories below opt out of the global binding (`shortcut=""`) so the Docs
+// page has a single ⌘K owner — the Default story above. One template const per
+// story renders the canvas AND builds the snippet, so the two cannot drift.
+const GROUPED_TEMPLATE = `<Button label="Open grouped palette" kind="primary" @click="open = true" />
+
+<CommandMenu v-model:open="open" shortcut="">
   <CommandMenuInput placeholder="Search commands…" />
   <CommandMenuList>
     <CommandMenuGroup heading="Actions">
@@ -200,26 +283,11 @@ const GROUPED_TEMPLATE = `<CommandMenu :open="open" shortcut="meta+k" @update:op
   </CommandMenuList>
 </CommandMenu>`
 
-const GROUPED_SNIPPET = `<CommandMenu open shortcut="meta+k">
-  <CommandMenu.Input placeholder="Search commands…" />
-  <CommandMenu.List>
-    <CommandMenu.Group heading="Actions">
-      <CommandMenu.Item value="deploy">Deploy Project</CommandMenu.Item>
-      <CommandMenu.Item value="new-app">Create Application</CommandMenu.Item>
-    </CommandMenu.Group>
-    <CommandMenu.Separator />
-    <CommandMenu.Group heading="Navigation">
-      <CommandMenu.Item value="settings">Go to Settings</CommandMenu.Item>
-      <CommandMenu.Item value="billing">Go to Billing</CommandMenu.Item>
-    </CommandMenu.Group>
-  </CommandMenu.List>
-</CommandMenu>`
-
 export const Grouped = {
   render: () => ({
     components: commandMenuStoryComponents,
     setup() {
-      const open = ref(true)
+      const open = ref(false)
       return { open }
     },
     template: GROUPED_TEMPLATE
@@ -228,14 +296,32 @@ export const Grouped = {
     docs: {
       controls: { disable: true },
       description: {
-        story: 'Two labeled groups separated by a divider — the central grouping anatomy.'
+        story:
+          'Two labeled groups separated by a divider — the central grouping anatomy. Opens from a button; `shortcut=""` opts out of the global binding so only Default owns ⌘K on this page.'
       },
-      source: { code: toSfc(IMPORT, GROUPED_SNIPPET) }
+      source: {
+        code: toSfc(
+          [
+            IMPORT_VUE,
+            IMPORT_ROOT,
+            IMPORT_INPUT,
+            IMPORT_LIST,
+            IMPORT_GROUP,
+            IMPORT_ITEM,
+            IMPORT_SEPARATOR,
+            IMPORT_BUTTON,
+            ...OPEN_REF
+          ],
+          GROUPED_TEMPLATE
+        )
+      }
     }
   }
 }
 
-const SHORTCUTS_TEMPLATE = `<CommandMenu :open="open" shortcut="meta+k" @update:open="open = $event">
+const SHORTCUTS_TEMPLATE = `<Button label="Open palette with shortcuts" kind="primary" @click="open = true" />
+
+<CommandMenu v-model:open="open" shortcut="">
   <CommandMenuInput placeholder="Search commands…" />
   <CommandMenuList>
     <CommandMenuGroup heading="Actions">
@@ -246,22 +332,11 @@ const SHORTCUTS_TEMPLATE = `<CommandMenu :open="open" shortcut="meta+k" @update:
   </CommandMenuList>
 </CommandMenu>`
 
-const SHORTCUTS_SNIPPET = `<CommandMenu open shortcut="meta+k">
-  <CommandMenu.Input placeholder="Search commands…" />
-  <CommandMenu.List>
-    <CommandMenu.Group heading="Actions">
-      <CommandMenu.Item value="command-menu" shortcut="meta+k">Open Command Menu</CommandMenu.Item>
-      <CommandMenu.Item value="command-palette" shortcut="meta+shift+p">Open Command Palette</CommandMenu.Item>
-      <CommandMenu.Item value="close" shortcut="esc">Close Overlay</CommandMenu.Item>
-    </CommandMenu.Group>
-  </CommandMenu.List>
-</CommandMenu>`
-
 export const WithShortcuts = {
   render: () => ({
     components: commandMenuStoryComponents,
     setup() {
-      const open = ref(true)
+      const open = ref(false)
       return { open }
     },
     template: SHORTCUTS_TEMPLATE
@@ -270,32 +345,42 @@ export const WithShortcuts = {
     docs: {
       controls: { disable: true },
       description: {
-        story: 'Items carrying keyboard-shortcut hints rendered on the right via Kbd.'
+        story:
+          'Items carrying keyboard-shortcut hints rendered on the right via Kbd. The item `shortcut` is display only — it does not register a binding. Opens from a button; `shortcut=""` on the root opts out of the global binding.'
       },
-      source: { code: toSfc(IMPORT, SHORTCUTS_SNIPPET) }
+      source: {
+        code: toSfc(
+          [
+            IMPORT_VUE,
+            IMPORT_ROOT,
+            IMPORT_INPUT,
+            IMPORT_LIST,
+            IMPORT_GROUP,
+            IMPORT_ITEM,
+            IMPORT_BUTTON,
+            ...OPEN_REF
+          ],
+          SHORTCUTS_TEMPLATE
+        )
+      }
     }
   }
 }
 
-const EMPTY_TEMPLATE = `<CommandMenu :open="open" shortcut="meta+k" @update:open="open = $event">
+const EMPTY_TEMPLATE = `<Button label="Open empty palette" kind="primary" @click="open = true" />
+
+<CommandMenu v-model:open="open" shortcut="">
   <CommandMenuInput placeholder="Search commands…" />
   <CommandMenuList>
     <CommandMenuEmpty>No commands found.</CommandMenuEmpty>
   </CommandMenuList>
 </CommandMenu>`
 
-const EMPTY_SNIPPET = `<CommandMenu open shortcut="meta+k">
-  <CommandMenu.Input placeholder="Search commands…" />
-  <CommandMenu.List>
-    <CommandMenu.Empty>No commands found.</CommandMenu.Empty>
-  </CommandMenu.List>
-</CommandMenu>`
-
 export const Empty = {
   render: () => ({
     components: commandMenuStoryComponents,
     setup() {
-      const open = ref(true)
+      const open = ref(false)
       return { open }
     },
     template: EMPTY_TEMPLATE
@@ -304,14 +389,30 @@ export const Empty = {
     docs: {
       controls: { disable: true },
       description: {
-        story: 'The empty state, shown when the filter yields no visible items.'
+        story:
+          'The empty state, shown when the filter yields no visible items. Opens from a button; `shortcut=""` opts out of the global binding.'
       },
-      source: { code: toSfc(IMPORT, EMPTY_SNIPPET) }
+      source: {
+        code: toSfc(
+          [
+            IMPORT_VUE,
+            IMPORT_ROOT,
+            IMPORT_INPUT,
+            IMPORT_LIST,
+            IMPORT_EMPTY,
+            IMPORT_BUTTON,
+            ...OPEN_REF
+          ],
+          EMPTY_TEMPLATE
+        )
+      }
     }
   }
 }
 
-const DISABLED_TEMPLATE = `<CommandMenu :open="open" shortcut="meta+k" @update:open="open = $event">
+const DISABLED_TEMPLATE = `<Button label="Open palette with a disabled item" kind="primary" @click="open = true" />
+
+<CommandMenu v-model:open="open" shortcut="">
   <CommandMenuInput placeholder="Search commands…" />
   <CommandMenuList>
     <CommandMenuGroup heading="Actions">
@@ -322,22 +423,11 @@ const DISABLED_TEMPLATE = `<CommandMenu :open="open" shortcut="meta+k" @update:o
   </CommandMenuList>
 </CommandMenu>`
 
-const DISABLED_SNIPPET = `<CommandMenu open shortcut="meta+k">
-  <CommandMenu.Input placeholder="Search commands…" />
-  <CommandMenu.List>
-    <CommandMenu.Group heading="Actions">
-      <CommandMenu.Item value="deploy">Deploy Project</CommandMenu.Item>
-      <CommandMenu.Item value="publish" disabled>Publish Release</CommandMenu.Item>
-      <CommandMenu.Item value="new-app">Create Application</CommandMenu.Item>
-    </CommandMenu.Group>
-  </CommandMenu.List>
-</CommandMenu>`
-
 export const Disabled = {
   render: () => ({
     components: commandMenuStoryComponents,
     setup() {
-      const open = ref(true)
+      const open = ref(false)
       return { open }
     },
     template: DISABLED_TEMPLATE
@@ -346,105 +436,22 @@ export const Disabled = {
     docs: {
       controls: { disable: true },
       description: {
-        story: 'A disabled item alongside enabled ones — skipped by roving navigation.'
-      },
-      source: { code: toSfc(IMPORT, DISABLED_SNIPPET) }
-    }
-  }
-}
-
-// The real-world entry point: a large search `InputText` carrying a ⌘K `Kbd`
-// hint that opens the palette via `v-model:open`. The global `meta+k` shortcut
-// opens it too, so the closed palette starts here rather than being forced open.
-const TRIGGER_TEMPLATE = `<div class="flex min-h-[240px] items-start justify-center p-[var(--spacing-lg)]">
-  <InputText
-    model-value=""
-    placeholder="Search…"
-    size="large"
-    readonly
-    aria-keyshortcuts="Meta+K"
-    class="max-w-[360px] cursor-pointer"
-    @click="open = true"
-    @keydown.enter="open = true"
-  >
-    <template #iconLeft>
-      <span class="pi pi-search" aria-hidden="true" />
-    </template>
-    <template #iconRight>
-      <Kbd meta size="small">K</Kbd>
-    </template>
-  </InputText>
-
-  <CommandMenu :open="open" shortcut="meta+k" @update:open="open = $event">
-    <CommandMenuInput placeholder="Search commands…" />
-    <CommandMenuList>
-      <CommandMenuGroup heading="Actions">
-        <CommandMenuItem value="deploy">Deploy Project</CommandMenuItem>
-        <CommandMenuItem value="new-app">Create Application</CommandMenuItem>
-        <CommandMenuItem value="settings">Go to Settings</CommandMenuItem>
-      </CommandMenuGroup>
-    </CommandMenuList>
-  </CommandMenu>
-</div>`
-
-const TRIGGER_SNIPPET = `<div class="flex min-h-[240px] items-start justify-center p-[var(--spacing-lg)]">
-  <InputText
-    model-value=""
-    placeholder="Search…"
-    size="large"
-    readonly
-    aria-keyshortcuts="Meta+K"
-    class="max-w-[360px] cursor-pointer"
-    @click="open = true"
-    @keydown.enter="open = true"
-  >
-    <template #iconLeft>
-      <span class="pi pi-search" aria-hidden="true" />
-    </template>
-    <template #iconRight>
-      <Kbd meta size="small">K</Kbd>
-    </template>
-  </InputText>
-
-  <CommandMenu v-model:open="open" shortcut="meta+k">
-    <CommandMenu.Input placeholder="Search commands…" />
-    <CommandMenu.List>
-      <CommandMenu.Group heading="Actions">
-        <CommandMenu.Item value="deploy">Deploy Project</CommandMenu.Item>
-        <CommandMenu.Item value="new-app">Create Application</CommandMenu.Item>
-        <CommandMenu.Item value="settings">Go to Settings</CommandMenu.Item>
-      </CommandMenu.Group>
-    </CommandMenu.List>
-  </CommandMenu>
-</div>`
-
-export const WithTrigger = {
-  render: () => ({
-    components: commandMenuStoryComponents,
-    setup() {
-      const open = ref(false)
-      return { open }
-    },
-    template: TRIGGER_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      controls: { disable: true },
-      description: {
         story:
-          'A large search `InputText` with a ⌘K `Kbd` hint that opens the palette via `v-model:open`. The global `meta+k` (⌘K / Ctrl+K) shortcut opens it too.'
+          'A disabled item alongside enabled ones — skipped by roving navigation and never activated. Opens from a button; `shortcut=""` opts out of the global binding.'
       },
       source: {
         code: toSfc(
           [
-            "import { ref } from 'vue'",
-            "import CommandMenu from '@aziontech/webkit/command-menu'",
-            "import InputText from '@aziontech/webkit/input-text'",
-            "import Kbd from '@aziontech/webkit/kbd'",
-            '',
-            'const open = ref(false)'
+            IMPORT_VUE,
+            IMPORT_ROOT,
+            IMPORT_INPUT,
+            IMPORT_LIST,
+            IMPORT_GROUP,
+            IMPORT_ITEM,
+            IMPORT_BUTTON,
+            ...OPEN_REF
           ],
-          TRIGGER_SNIPPET
+          DISABLED_TEMPLATE
         )
       }
     }
