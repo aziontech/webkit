@@ -118,3 +118,45 @@ export const DefaultHeader = {
     }
   }
 }
+
+// All three regions carrying content at once, with a long resource path in the
+// start region. This is the case that decides whether the start region may
+// shrink: with every region populated there is no slack left, so at the narrow
+// viewports the path has to give way and truncate instead of pushing the bar
+// wider than the viewport. The Default story cannot show this — its center and
+// end regions are empty, so nothing ever competes for the width.
+const CROWDED_MARKUP = `<GlobalHeader aria-label="Global header">
+  <GlobalHeader.Left>
+    <GlobalHeader.Brand>
+      <a href="/" aria-label="Azion home">
+        <Default />
+      </a>
+    </GlobalHeader.Brand>
+    <span class="min-w-0 truncate text-label-sm text-[var(--text-muted)]">acme-production-infrastructure / edge-delivery-platform</span>
+  </GlobalHeader.Left>
+  <GlobalHeader.Middle>
+    <span class="text-label-sm text-[var(--text-default)]">Applications</span>
+  </GlobalHeader.Middle>
+  <GlobalHeader.Right>
+    <span class="text-label-sm text-[var(--text-muted)]">Docs</span>
+    <span class="text-label-sm text-[var(--text-muted)]">Support</span>
+  </GlobalHeader.Right>
+</GlobalHeader>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof GlobalHeader>} */
+export const Crowded = {
+  render: () => ({
+    components,
+    template: CROWDED_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Every region populated, with a long resource path at the start. The start region shrinks and its content truncates rather than forcing the bar past the viewport — visible at the tablet and mobile widths, where there is no slack to absorb it.'
+      },
+      source: { code: toSfc(IMPORT, CROWDED_MARKUP) }
+    }
+  }
+}

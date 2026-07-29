@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import GlobalHeader from './index.js'
 
-const { DefaultHeader } = composeStories(stories)
+const { DefaultHeader, Crowded } = composeStories(stories)
 
 /**
  * global-header is a COMPOSITION component: `index.js` attaches the region
@@ -227,6 +227,24 @@ describe('GlobalHeader', () => {
 
     it('Default story has no a11y violations', async () => {
       const { container } = render(DefaultHeader)
+      await expectNoA11yViolations(container)
+    })
+
+    // Whether the start region actually gives way is a layout outcome, so it is
+    // asserted in the visual matrix (this story is shot at 375 / 768 / 1280) —
+    // a width assertion here would be meaningless on an unstyled DOM. What this
+    // covers is that the fixture composes all three populated regions and stays
+    // axe-clean, so a broken story fails a test rather than a screenshot diff.
+    it('Crowded story renders every region populated and stays accessible', async () => {
+      const { getByTestId, getByRole, container } = render(Crowded)
+
+      expect(getByRole('banner', { name: 'Global header' })).toBeTruthy()
+      expect(getByTestId('layout-global-header__left').textContent).toContain(
+        'edge-delivery-platform'
+      )
+      expect(getByTestId('layout-global-header__middle').textContent).toContain('Applications')
+      expect(getByTestId('layout-global-header__right').textContent).toContain('Support')
+
       await expectNoA11yViolations(container)
     })
   })
