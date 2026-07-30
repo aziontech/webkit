@@ -520,8 +520,7 @@ watch(dialogOpen, (open) => {
 
             <Message
               severity="warning"
-              title="This token will only be displayed once."
-              description="Make sure to copy and store it safely before closing this dialog."
+              label="This token will only be displayed once. Make sure to copy and store it safely before closing this dialog."
             />
 
             <div class="flex w-full flex-col gap-[var(--spacing-xs)]">

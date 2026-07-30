@@ -104,8 +104,7 @@ const toastFailed = (error) =>
                 <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
                   <Message
                     severity="warning"
-                    title="Once confirmed, this action can't be reversed."
-                    description="The selected Application will be deleted, along with all associated settings or instances. Check the Help Center for more details."
+                    label="Once confirmed, this action can't be reversed. The selected Application will be deleted, along with all associated settings or instances. Check the Help Center for more details."
                   />
                   <FieldText
                     v-model="confirmation"

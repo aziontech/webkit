@@ -7,7 +7,7 @@
 // right-side controls disable and its Save shows loading, while the other cards stay
 // live. The save reports via toast. Each card's name is the
 // CardBox `title` (its Heading, in the header) — never a title inside the content;
-// the card's guidance is a Message (title + description). A per-card Save is
+// the card's guidance is a Message (`label` copy). A per-card Save is
 // `secondary` (the page has no primary), and the first card keeps the Azion Toolbar
 // layout (Save in the box footer, with a Learn-more link).
 import Button from "@aziontech/webkit/button";
@@ -88,8 +88,7 @@ const saveProtection = () =>
 
             <Message
               severity="info"
-              title="Enable the Azion Toolbar on your Deployments."
-              description="To use the toolbar in production your team members need the Chrome extension or to enable the toolbar for that domain in the toolbar menu."
+              label="Enable the Azion Toolbar on your Deployments. To use the toolbar in production your team members need the Chrome extension or to enable the toolbar for that domain in the toolbar menu."
             />
 
             <div class="grid grid-cols-1 gap-[var(--spacing-lg)] sm:grid-cols-2">
@@ -151,8 +150,7 @@ const saveProtection = () =>
 
             <Message
               severity="info"
-              title="Control who can access your Deployments."
-              description="Standard Protection challenges every visitor before a Deployment loads; shareable links let you grant bypass access with a generated URL."
+              label="Control who can access your Deployments. Standard Protection challenges every visitor before a Deployment loads; shareable links let you grant bypass access with a generated URL."
             />
 
             <div class="flex flex-col gap-[var(--spacing-xs)]">

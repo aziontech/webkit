@@ -192,8 +192,7 @@ const submit = async () => {
 
                     <Message
                       severity="info"
-                      title="Your workload is always accessible at an azion.app subdomain based on the workload name."
-                      description="Custom domains allow visitors to reach your project at your own domain."
+                      label="Your workload is always accessible at an azion.app subdomain based on the workload name. Custom domains allow visitors to reach your project at your own domain."
                     />
 
                     <div class="flex flex-col gap-[var(--spacing-xs)]">

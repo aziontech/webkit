@@ -493,8 +493,7 @@
            not owned by the workload that happens to use it. -->
       <Message
         severity="info"
-        title="Deployment Settings are reusable across Workloads"
-        description="Create and manage deployment configurations once, then apply them to multiple workloads and environments."
+        label="Deployment Settings are reusable across Workloads. Create and manage deployment configurations once, then apply them to multiple workloads and environments."
       />
 
       <section class="flex min-h-0 flex-col">

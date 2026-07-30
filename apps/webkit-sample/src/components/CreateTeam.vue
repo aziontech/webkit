@@ -348,7 +348,7 @@ const breadcrumb = [
                 <Message
                   v-if="errors.permissions"
                   severity="danger"
-                  :title="errors.permissions"
+                  :label="errors.permissions"
                 />
 
                 <div

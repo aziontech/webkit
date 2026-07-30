@@ -516,7 +516,7 @@
                 <Message
                   v-if="!hasSelection"
                   severity="info"
-                  title="Please select at least one resource."
+                  label="Please select at least one resource."
                 />
 
                 <!-- Permissions -->
@@ -552,7 +552,7 @@
                   <Message
                     v-else
                     severity="info"
-                    title="Select a single resource to view its role bindings."
+                    label="Select a single resource to view its role bindings."
                   />
                 </template>
 
@@ -573,12 +573,12 @@
                   <Message
                     v-else-if="focused"
                     severity="info"
-                    title="This resource has no labels."
+                    label="This resource has no labels."
                   />
                   <Message
                     v-else
                     severity="info"
-                    title="Select a single resource to view its labels."
+                    label="Select a single resource to view its labels."
                   />
                 </template>
               </div>

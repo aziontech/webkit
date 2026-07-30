@@ -334,13 +334,12 @@ const saveAndDeploy = () => persist({ deploy: true });
                   <div class="flex flex-col gap-[var(--spacing-md)] p-[var(--spacing-md)]">
                     <Message
                       severity="info"
-                      title="Workloads use Deployment Settings"
-                      description="Deployment Settings centralize the configuration shared across your environments, including applications, firewall policies, and custom pages."
+                      label="Workloads use Deployment Settings, which centralize the configuration shared across your environments, including applications, firewall policies, and custom pages."
                     />
                     <Message
                       v-if="!anyLinked"
                       severity="warning"
-                      title="Link Deployment Settings to enable workloads."
+                      label="Link Deployment Settings to enable workloads."
                     />
 
                     <div class="flex flex-col gap-[var(--spacing-sm)]">

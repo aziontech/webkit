@@ -1056,7 +1056,7 @@ const runQuery = async () => {
                     v-else-if="results && results.type === 'message'"
                     class="p-[var(--spacing-md)]"
                   >
-                    <Message severity="success" :title="results.text" />
+                    <Message severity="success" :label="results.text" />
                   </div>
                   <div
                     v-else

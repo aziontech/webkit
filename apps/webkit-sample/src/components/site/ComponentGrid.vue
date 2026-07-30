@@ -809,8 +809,7 @@
         <ComponentGridCell name="Message">
           <Message
             severity="info"
-            title="Deploy started"
-            description="Your edge function is rolling out to every point of presence."
+            label="Deploy started. Your edge function is rolling out to every point of presence."
             action-label="View"
             class="w-full"
           />
