@@ -33,7 +33,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Shows the page hierarchy so users can navigate back to parent views. Pass an `items` array for the common case, or compose `Breadcrumb.List`, `Breadcrumb.Item`, and `Breadcrumb.Separator` through the default slot. On viewports below `md`, only the first and current segments stay visible while the middle segments collapse into a dropdown menu opened by an ellipsis icon button.'
+          "Shows the page hierarchy so users can navigate back to parent views. Pass an `items` array for the common case, or compose `Breadcrumb.List`, `Breadcrumb.Item`, and `Breadcrumb.Separator` through the default slot. The trail is always a single row: a segment too wide for the space ellipsizes, and a trail that still does not fit scrolls horizontally. In `items` mode, viewports below `md` additionally collapse the middle segments into a dropdown menu opened by an ellipsis icon button; a hand-composed trail keeps every segment it was given, since the component cannot know which of the consumer's children are collapsible."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -164,6 +164,100 @@ export const ResponsiveCollapsed = {
           'Below `md` (768px), only the first and current segments show inline; the middle segments open from the ellipsis icon button via a dropdown menu.'
       },
       source: { code: toSfc([IMPORT, '', ...DEFAULT_ITEMS_LINES], DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const LONG_LABEL = 'production-edge-application-with-a-very-long-configuration-name'
+
+const LONG_LABEL_LINES = [
+  'const items = [',
+  "  { label: 'Page Name', href: '#' },",
+  `  { label: '${LONG_LABEL}', current: true }`,
+  ']'
+]
+
+const LONG_LABEL_MARKUP = '<Breadcrumb :items="items" class="max-w-[20rem]" />'
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Breadcrumb.Root>} */
+export const LongLabel = {
+  render: () => ({
+    components: { Breadcrumb },
+    setup() {
+      return { items: [ancestor, { label: LONG_LABEL, current: true }] }
+    },
+    template: LONG_LABEL_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A segment wider than the space available. It ellipsizes instead of pushing the trail off-screen, and the row stays a single line. Collapsing cannot help here: there are no middle segments to hide.'
+      },
+      source: { code: toSfc([IMPORT, '', ...LONG_LABEL_LINES], LONG_LABEL_MARKUP) }
+    }
+  }
+}
+
+const LONG_LABEL_MOBILE_LINES = [
+  'const items = [',
+  "  { label: 'Page Name', href: '#' },",
+  "  { label: 'Page Name', href: '#' },",
+  `  { label: '${LONG_LABEL}', current: true }`,
+  ']'
+]
+
+const LONG_LABEL_MOBILE_MARKUP = '<Breadcrumb :items="items" />'
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Breadcrumb.Root>} */
+export const LongLabelMobile = {
+  render: () => ({
+    components: { Breadcrumb },
+    setup() {
+      return { items: [ancestor, ancestor, { label: LONG_LABEL, current: true }] }
+    },
+    template: LONG_LABEL_MOBILE_MARKUP
+  }),
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The same long segment at a 375px viewport, with a middle segment so the collapse applies too: first segment, overflow menu, then the ellipsized current page. Nothing extends past the viewport.'
+      },
+      source: { code: toSfc([IMPORT, '', ...LONG_LABEL_MOBILE_LINES], LONG_LABEL_MOBILE_MARKUP) }
+    }
+  }
+}
+
+const COMPOSED_TEMPLATE = `<Breadcrumb>
+  <Breadcrumb.List>
+    <li><Breadcrumb.Item label="Home" href="#" /></li>
+    <Breadcrumb.Separator />
+    <li><Breadcrumb.Item label="Workspaces" href="#" /></li>
+    <Breadcrumb.Separator />
+    <li><Breadcrumb.Item label="Projects" href="#" /></li>
+    <Breadcrumb.Separator />
+    <li><Breadcrumb.Item label="Edge Applications" href="#" /></li>
+    <Breadcrumb.Separator />
+    <li><Breadcrumb.Item label="Settings" current /></li>
+  </Breadcrumb.List>
+</Breadcrumb>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Breadcrumb.Root>} */
+export const ComposedMobile = {
+  render: () => ({ components: { Breadcrumb }, template: COMPOSED_TEMPLATE }),
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A hand-composed trail at 375px. Every segment the consumer wrote is kept (there is no collapse in this mode), so the row scrolls horizontally once ellipsizing is exhausted rather than wrapping to a second line or bleeding off-screen.'
+      },
+      source: { code: toSfc(IMPORT, COMPOSED_TEMPLATE) }
     }
   }
 }

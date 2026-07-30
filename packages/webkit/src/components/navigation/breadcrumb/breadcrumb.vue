@@ -2,11 +2,11 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useOverlayMobile } from '../../overlay/composables/use-overlay-mobile'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
   import Dropdown from '../dropdown'
   import BreadcrumbList from './breadcrumb-list.vue'
   import BreadcrumbSeparator from './breadcrumb-separator.vue'
+  import { useBreadcrumbCollapse } from './composables/use-breadcrumb-collapse'
 
   defineOptions({
     name: 'Breadcrumb',
@@ -44,7 +44,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
   )
 
-  const isCollapsed = useOverlayMobile()
+  const isCollapsed = useBreadcrumbCollapse()
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
@@ -88,7 +88,7 @@
 <template>
   <nav
     v-bind="attrs"
-    :class="cn('inline-flex w-full items-center', attrs.class as string | undefined)"
+    :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
     aria-label="Breadcrumb"
     :data-testid="testId"
   >

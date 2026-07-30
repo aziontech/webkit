@@ -297,6 +297,44 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(getByText('Leaf')).toBeTruthy()
     })
 
+    it('keeps every hand-composed segment at this (mobile) viewport — no collapse in slot mode', () => {
+      // The Playwright viewport is below md, so the items-driven trail collapses
+      // here (see the header note). A hand-composed trail must NOT: the root
+      // cannot know which of the consumer's children are middle segments, so it
+      // renders exactly what it was given. What keeps that usable on a narrow
+      // screen is CSS (one row, ellipsized segment, row scrolls when even that
+      // is not enough), which this env cannot measure — see the ComposedMobile
+      // story for that half.
+      const { getByTestId, queryByTestId } = render({
+        components: {
+          BreadcrumbRoot: Breadcrumb,
+          BreadcrumbList: BreadcrumbList,
+          BreadcrumbItem: BreadcrumbItem,
+          BreadcrumbSeparator: BreadcrumbSeparator
+        },
+        template: `
+          <BreadcrumbRoot>
+            <BreadcrumbList data-testid="slot__list">
+              <li><BreadcrumbItem label="Home" href="/" data-testid="slot__item-0" /></li>
+              <BreadcrumbSeparator />
+              <li><BreadcrumbItem label="Workspaces" href="/w" data-testid="slot__item-1" /></li>
+              <BreadcrumbSeparator />
+              <li><BreadcrumbItem label="Projects" href="/p" data-testid="slot__item-2" /></li>
+              <BreadcrumbSeparator />
+              <li><BreadcrumbItem label="Settings" current data-testid="slot__item-3" /></li>
+            </BreadcrumbList>
+          </BreadcrumbRoot>
+        `
+      })
+
+      for (const index of [0, 1, 2, 3]) {
+        expect(getByTestId(`slot__item-${index}`)).toBeTruthy()
+      }
+      // None of the collapse machinery appears for a slot-composed trail.
+      expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+      expect(queryByTestId(`${TESTID}__segment-overflow`)).toBeNull()
+    })
+
     it('emits its own click on a manually composed BreadcrumbItem', async () => {
       const { getByTestId, emitted } = render(BreadcrumbItem, {
         props: { label: 'Standalone', href: '/x', 'data-testid': 'solo' }

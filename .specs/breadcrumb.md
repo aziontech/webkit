@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 3a8cdcdee5edffecac5713a4f76f342684c901399258047237b799fc7f8fb984
+checksum: 9e73cdaea0b630ccf35a43c0c99d9dc6cb3f4178f0497b19dc1835a423ef6326
 created: 2026-05-25
-last_updated: 2026-05-25
+last_updated: 2026-07-30
 ---
 
 # Breadcrumb — Component Spec
@@ -50,6 +50,12 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 - Visual states: inherited from `BreadcrumbItem` (default, hover, focus-visible, disabled)
 - Last segment in `items` is current when its `current` is not explicitly `false`
 
+### Responsive contract
+
+- The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
+- **`items` mode** additionally collapses below `md` (768px): first segment, an overflow menu holding the middle segments, then the current segment. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
+- **Slot (hand-composed) mode** keeps every segment it was given, since the root cannot know which of the consumer's children are middle segments, so on a narrow screen it degrades through the single-row rules above rather than through a collapse.
+
 ## Motion & Animations
 
 _none_
@@ -82,9 +88,11 @@ _none_
 ## Stories (Storybook)
 
 - Default
-- TwoItems — Figma Level=2 (one ancestor + current page).
-- SingleItem — Figma Level=1 (current page only).
-- FiveItems — Figma Level=5 (full depth demo).
+- Depths — single, two-level and full five-level trails.
+- ResponsiveCollapsed — below `md`, middle segments in the overflow menu.
+- LongLabel — a segment wider than its container ellipsizes.
+- LongLabelMobile — long segment plus collapse at a 375px viewport.
+- ComposedMobile — hand-composed trail at 375px (no collapse; row scrolls).
 
 ## Constraints — DO NOT
 

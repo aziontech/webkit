@@ -73,7 +73,7 @@
     :class="
       cn(
         [
-          'group/breadcrumb-item relative inline-flex min-h-6 shrink-0 items-center justify-center',
+          'group/breadcrumb-item relative inline-flex min-h-6 min-w-0 items-center justify-center',
           'gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]',
           'text-label-md transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
           'text-[var(--text-muted)] hover:text-[var(--text-default)]',
@@ -103,7 +103,7 @@
       :data-testid="`${testId}__icon`"
     />
     <span
-      class="relative z-[1] whitespace-nowrap"
+      class="relative z-[1] truncate"
       :data-testid="`${testId}__label`"
     >
       {{ label }}
