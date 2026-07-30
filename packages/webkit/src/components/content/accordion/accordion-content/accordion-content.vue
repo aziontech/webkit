@@ -39,7 +39,7 @@
       return
     }
     const target = node.scrollHeight
-    node.style.height = '0px'
+    node.style.height = '0'
     node.style.transition = 'height 150ms ease-out'
     void node.offsetHeight
     node.style.height = `${target}px`
@@ -60,7 +60,7 @@
     node.style.height = `${node.scrollHeight}px`
     node.style.transition = 'height 150ms ease-out'
     void node.offsetHeight
-    node.style.height = '0px'
+    node.style.height = '0'
     const finish = () => {
       node.style.transition = ''
       done()

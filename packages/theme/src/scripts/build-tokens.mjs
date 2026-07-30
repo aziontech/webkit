@@ -359,6 +359,41 @@ const emitCssV4 = () => {
   ].join('\n');
 };
 
+// Keep in sync with the `zero-with-unit` / `zero-unit-in-calc` checks in
+// packages/webkit/src/eslint-plugin/token-checks.js — theme sits below webkit in the
+// dependency graph, so the shared engine cannot be imported here. Same known limit:
+// the math-function lookbehind balances parens one level deep.
+const MATH_FN = '(?:calc|min|max|clamp)\\((?:[^()]|\\([^()]*\\))*';
+const LENGTH_UNITS =
+  'px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc';
+
+const ZERO_WITH_UNIT = new RegExp(`(?<![\\w.])(?<!${MATH_FN})0(?:${LENGTH_UNITS})(?![\\w%])`, 'i');
+const ZERO_UNIT_IN_MATH = new RegExp(
+  `(?<=${MATH_FN})(?<![\\w.])0(?!rem)(?:${LENGTH_UNITS})(?![\\w%])`,
+  'i',
+);
+
+const assertNoZeroWithUnit = (cssText) => {
+  const lines = cssText.split('\n').map((line, i) => ({ line: line.trim(), n: i + 1 }));
+  const bare = lines.filter(({ line }) => ZERO_WITH_UNIT.test(line));
+  const inMath = lines.filter(({ line }) => ZERO_UNIT_IN_MATH.test(line));
+  if (bare.length === 0 && inMath.length === 0) return;
+  const detail = (rows) => rows.map(({ line, n }) => `  globals.css:${n}  ${line}`).join('\n');
+  const parts = [`build:tokens — ${bare.length + inMath.length} token value(s) misuse a zero.`];
+  if (bare.length > 0) {
+    parts.push(
+      `A zero length takes no unit: write '0', not '0px' / '0rem' / '0em'.\n${detail(bare)}`,
+    );
+  }
+  if (inMath.length > 0) {
+    parts.push(
+      `Inside calc()/min()/max()/clamp() the zero needs a unit, and that unit is rem: write '0rem'.\n${detail(inMath)}`,
+    );
+  }
+  parts.push('Fix the token source under src/tokens/, not the generated CSS.');
+  throw new Error(parts.join('\n'));
+};
+
 // ─── 5. Write to disk ──────────────────────────────────────────────────────
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distRoot = resolve(__dirname, '../../dist');
@@ -380,6 +415,7 @@ const importIdx = rawCss.indexOf(IMPORT_LINE);
 if (importIdx === -1) throw new Error('emitCssV4 output is missing the tailwind import line');
 const afterImport = importIdx + IMPORT_LINE.length;
 const css = `${rawCss.slice(0, afterImport)}\n\n${fontsCss}${rawCss.slice(afterImport)}`;
+assertNoZeroWithUnit(css);
 await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
 await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');
 console.log(`✓ v4 → ${dir}`);

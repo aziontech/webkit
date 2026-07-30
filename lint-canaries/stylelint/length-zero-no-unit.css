@@ -1,0 +1,9 @@
+/* CANARY — must keep failing length-zero-no-unit. */
+:root {
+  --tracking-normal: 0rem;
+}
+
+.canary {
+  margin: 0rem;
+  padding: 0rem;
+}
