@@ -39,10 +39,10 @@
 
 <template>
   <InputText
+    size="small"
     v-bind="$attrs"
     :data-testid="testId"
     class="flex-1"
-    size="small"
     :model-value="globalFilter"
     :placeholder="placeholder"
     @update:model-value="setFilter"
