@@ -142,6 +142,7 @@ const STYLELINT_CANARIES = [
     rule: 'no-duplicate-selectors',
     severity: 'error'
   },
+  { file: 'stylelint/length-zero-no-unit.css', rule: 'length-zero-no-unit', severity: 'error' },
   {
     file: 'stylelint/order-properties-alphabetical-order.css',
     rule: 'order/properties-alphabetical-order',

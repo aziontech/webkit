@@ -10,6 +10,7 @@
     "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
     "no-descending-specificity": [true, { "severity": "warning" }],
     "declaration-block-no-duplicate-properties": true,
+    "length-zero-no-unit": true,
     "no-duplicate-selectors": true,
     "order/properties-alphabetical-order": true,
     "property-no-vendor-prefix": [true, { "severity": "warning" }],
