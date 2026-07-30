@@ -224,3 +224,63 @@ export const Default = {
     }
   }
 }
+
+const LONG_ROWS = Array.from(
+  { length: 18 },
+  (_, index) =>
+    `        <p>Setting ${index + 1} — the body is the only region that scrolls, so the title and the footer actions stay reachable.</p>`
+).join('\n')
+
+const LONG_CONTENT_TEMPLATE = `<Dialog default-open dismissible size="medium">
+  <DialogTrigger>
+    <Button label="Open dialog" kind="primary" />
+  </DialogTrigger>
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <DialogTitle>Domain settings</DialogTitle>
+        <DialogClose />
+      </PanelHeader>
+      <PanelContent>
+        <DialogDescription>Body taller than the sheet, so it has to scroll.</DialogDescription>
+${LONG_ROWS}
+      </PanelContent>
+      <PanelFooter class="flex-col md:flex-row md:justify-end">
+        <Button class="w-full md:w-auto" label="Cancel" kind="outlined" />
+        <Button class="w-full md:w-auto" label="Save" kind="primary" />
+      </PanelFooter>
+    </DialogContent>
+  </DialogPortal>
+</Dialog>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Dialog>} */
+export const LongContent = {
+  render: () => ({ components: dialogStoryComponents, template: LONG_CONTENT_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A body taller than the panel. The panel bounds the sheet, `PanelContent` scrolls, and the title and footer stay put.'
+      },
+      source: { code: toSfc(IMPORTS, LONG_CONTENT_TEMPLATE) }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Dialog>} */
+export const LongContentMobile = {
+  render: () => ({ components: dialogStoryComponents, template: LONG_CONTENT_TEMPLATE }),
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The same overflowing body at a 375px viewport, where the dialog is a bottom sheet capped at 80% of the visible viewport (`dvh`). This is the case reported as "the dialog does not scroll on mobile": the body must scroll to its end and the footer buttons must stay on screen.'
+      },
+      source: { code: toSfc(IMPORTS, LONG_CONTENT_TEMPLATE) }
+    }
+  }
+}

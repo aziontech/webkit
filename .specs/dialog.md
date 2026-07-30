@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 9603dc8041e4685b461146ebbe7d8e6a2545c84402df1b4036c78998febda6b3
+checksum: a38c60bc03941b78d4d11da81236c9d564b8c97d95709e994f53891799e09584
 created: 2026-05-22
-last_updated: 2026-07-15
+last_updated: 2026-07-30
 ---
 
 # Dialog — Component Spec
@@ -74,6 +74,12 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
 
+### Mobile sheet, height and scroll
+
+- Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
+- Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-content`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
+- The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
+
 ## Motion & Animations
 
 | Trigger      | Animation / Transition                    | Token    | Reduced-motion fallback         |
@@ -112,6 +118,8 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 ## Stories (Storybook)
 
 - Default
+- LongContent
+- LongContentMobile
 
 ## Constraints — DO NOT
 
