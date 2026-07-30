@@ -12,6 +12,7 @@
     "node": ">=24"
   },
   "scripts": {
+    "install:reset": "rm -rf pnpm-lock.yaml node_modules/ && pnpm install",
     "prepare": "husky",
     "icons:gallery:build": "pnpm --filter icons-gallery run build",
     "icons:gallery:build:azion": "pnpm --filter icons-gallery run build:azion",
