@@ -667,11 +667,12 @@
 
             <div
               v-if="!period"
+              :data-size="size"
               class="flex flex-col gap-[var(--spacing-sm)] p-[var(--spacing-sm)]"
               :class="
                 horizontal
                   ? 'min-w-[var(--container-3xs)] border-l border-[var(--border-default)]'
-                  : 'border-t border-[var(--border-default)]'
+                  : 'border-t border-[var(--border-default)] data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))]'
               "
             >
               <CalendarFields />
