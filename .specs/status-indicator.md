@@ -4,9 +4,9 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 3075d5cccdeaeefd787f9b51f02690a868e0eb969278caea79915517e3943529
+checksum: 39afb38b28af0204ddd14671bc3660e204be647480d82fc10511bf055fc6a53f
 created: 2026-05-22
-last_updated: 2026-05-28
+last_updated: 2026-07-28
 ---
 # Status Indicator — Component Spec
 
@@ -55,7 +55,6 @@ _none_
 | Region | Token (DESIGN.md) |
 |---|---|
 | typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
 | text | `var(--text-default)` |
 | spacing | `var(--spacing-3)` |
 | shape | `var(--shape-elements)` |

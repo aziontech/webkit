@@ -437,6 +437,33 @@ describe('Table (composition + data-driven)', () => {
       expect(bodyCells).toContain('Alpha')
       expect(bodyCells).not.toContain('Charlie')
     })
+
+    // `size` is bound BEFORE v-bind="$attrs" on the inner InputText, so the
+    // default is a default rather than a hard-code. Bound after, it would
+    // clobber the consumer's value and a search field could never sit level
+    // with a row of large toolbar controls.
+    it('defaults to the small field but lets a consumer override the size', () => {
+      const treeWith = (attrs: string) =>
+        defineComponent({
+          components: { Table, TableSearch },
+          setup: () => ({ rows, columns }),
+          template: `
+            <Table :data="rows" :columns="columns">
+              <template #toolbar>
+                <TableSearch ${attrs} />
+              </template>
+            </Table>
+          `
+        })
+
+      const bare = render(treeWith(''))
+      const defaulted = within(bare.container).getByTestId('data-table__search')
+      expect(defaulted.closest('[data-size]')?.getAttribute('data-size')).toBe('small')
+
+      const overridden = render(treeWith('size="large"'))
+      const large = within(overridden.container).getByTestId('data-table__search')
+      expect(large.closest('[data-size]')?.getAttribute('data-size')).toBe('large')
+    })
   })
 
   describe('story fixtures (composeStories)', () => {
