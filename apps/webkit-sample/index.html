@@ -2,7 +2,16 @@
 <html lang="en" class="azion">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- `maximum-scale=1` is what stops iOS WebKit from zooming the viewport
+         when a field is focused: it auto-zooms whenever the focused control
+         computes below 16px, and our field tokens are 12–14px
+         (`text-label-sm` / `text-body-xs`). Do not drop it — iOS still honors
+         it for that automatic zoom while force-enabling pinch-zoom itself
+         since iOS 10, so deliberate zoom stays available. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
     <!-- Azion brand fonts (Sora + Proto Mono) are declared via @font-face in
          src/style.css and served from this CDN. Proto Mono is not on Google Fonts. -->
     <link rel="preconnect" href="https://fonts.azion.com" crossorigin />
