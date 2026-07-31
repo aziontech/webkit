@@ -26,7 +26,18 @@ export const dialogShellPositionClasses = [
 export const dialogPanelPositionClasses = ['max-md:w-full']
 export const dialogPanelShapeClasses = [
   'max-md:rounded-b-[var(--shape-flat)] max-md:rounded-t-[var(--shape-card)]',
-  ...overlayMobileFluidClasses
+  // Below `md` the sheet is fluid and hugs its content up to the cap.
+  'max-md:w-full max-md:h-fit',
+  /*
+   * One cap, at every width. It used to be `max-md:`-only, so from `md` up the
+   * panel had no bound at all: a body taller than the viewport grew the modal
+   * past the screen (measured 771px tall in a 720px viewport), which centred it
+   * with the title above the top edge and the footer actions below the bottom
+   * one, and with nothing scrolling — `panel-content` can only scroll when the
+   * panel's own height is bounded. `dvh` rather than `vh` so a mobile browser's
+   * toolbars are excluded; on desktop the two are identical.
+   */
+  'max-h-[80dvh]'
 ]
 export const drawerShellPositionClasses = [
   'max-md:inset-x-0 max-md:bottom-0 max-md:top-auto',
