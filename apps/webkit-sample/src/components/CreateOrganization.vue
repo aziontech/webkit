@@ -18,6 +18,14 @@
   // control go :disabled, Create shows :loading, the handler is guarded against
   // re-entrancy and released in `finally`.
   //
+  // DISABLED YES, HELPER NO — the same rule Sign Up follows. While the scope is
+  // locked the guidance lines are withheld and `aria-describedby` drops with them,
+  // so nothing describes a field the user cannot type in and no input points at an
+  // element that has left the DOM. A requirement sentence under a field that takes
+  // no input instructs nobody, and the Create button's :loading is already the
+  // message that a wait is happening. Same reasoning as the FieldSelect note below,
+  // which is why those four selects mint no locked helper line either.
+  //
   // What it creates is what onboarding creates — the same `createOrganization`,
   // so an organization has one shape whichever door it came through: the creator
   // is its OWNER and first Organization User, its status is `active`, and it holds
@@ -215,19 +223,23 @@
                         :required="!!errors.name && !form.name.trim()"
                         :invalid="!!errors.name && !!form.name.trim()"
                         :aria-describedby="
-                          errors.name ? 'organization-name-error' : 'organization-name-help'
+                          submitting
+                            ? undefined
+                            : errors.name
+                              ? 'organization-name-error'
+                              : 'organization-name-help'
                         "
                         @update:model-value="errors.name = ''"
                       />
                       <HelperText
-                        v-if="errors.name"
+                        v-if="errors.name && !submitting"
                         id="organization-name-error"
                         key="name-error"
                         :kind="form.name.trim() ? 'invalid' : 'required'"
                         :label="errors.name"
                       />
                       <HelperText
-                        v-else
+                        v-else-if="!submitting"
                         id="organization-name-help"
                         key="name-help"
                         label="Usually your company's name. Everyone you invite will see it."
@@ -327,21 +339,23 @@
                       autocomplete="off"
                       :required="!!errors.workspace"
                       :aria-describedby="
-                        errors.workspace
-                          ? 'organization-workspace-error'
-                          : 'organization-workspace-help'
+                        submitting
+                          ? undefined
+                          : errors.workspace
+                            ? 'organization-workspace-error'
+                            : 'organization-workspace-help'
                       "
                       @update:model-value="errors.workspace = ''"
                     />
                     <HelperText
-                      v-if="errors.workspace"
+                      v-if="errors.workspace && !submitting"
                       id="organization-workspace-error"
                       key="workspace-error"
                       kind="required"
                       :label="errors.workspace"
                     />
                     <HelperText
-                      v-else
+                      v-else-if="!submitting"
                       id="organization-workspace-help"
                       key="workspace-help"
                       label="Where the organization's first workloads and resources will live."
@@ -403,7 +417,7 @@
           class="sticky bottom-0 z-10 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
         >
           <div
-            class="layout-form-create flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+            class="layout-form-create layout-boundary-inline flex items-center justify-end gap-[var(--spacing-sm)] py-[var(--spacing-md)]"
           >
             <Button
               type="button"

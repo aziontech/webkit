@@ -48,6 +48,16 @@
   // block. One `submitting` flag locks the whole scope (the `/usability` Pattern
   // 1): Create shows :loading, every control is :disabled off it, the handler is
   // guarded against re-entrancy and released in `finally`.
+  //
+  // DISABLED YES, HELPER NO — the same rule Sign Up and Create Organization follow.
+  // The lock is carried by ONE `<fieldset :disabled>` and nothing else: while it is
+  // on, every guidance line goes away (the FieldTexts take an empty `helper-text`,
+  // the mark picker's HelperText unmounts) and `aria-describedby` goes with it, so
+  // no line describes a field that takes no input and no input points outside the
+  // DOM. The selects deliberately do NOT take `:disabled` — see the note on them:
+  // the field-* wrappers answer a `disabled` prop with a locked helper line of their
+  // own ("This field is locked.", lock icon), which reads as permanent when the wait
+  // is 900ms. The button's :loading is the message that a wait exists.
   import { curve, duration } from '@aziontech/theme/animations'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -267,6 +277,12 @@
                     required
                     >Your full name</Label
                   >
+                  <!-- The helper goes empty while the scope is locked (see the
+                       DISABLED YES, HELPER NO note in the script): FieldText omits
+                       the row for an empty `helper-text` and drops its
+                       `aria-describedby` with it. Passing `:disabled` here as well
+                       would make it mint "This field is locked." instead — a
+                       permanent-lock claim for a 900ms wait. -->
                   <FieldText
                     v-model="form.fullName"
                     input-id="onboarding-full-name"
@@ -275,7 +291,9 @@
                     placeholder="Jane Doe"
                     autocomplete="name"
                     :required="!!errors.fullName"
-                    :helper-text="errors.fullName || 'How the console will greet you.'"
+                    :helper-text="
+                      submitting ? '' : errors.fullName || 'How the console will greet you.'
+                    "
                     @update:model-value="errors.fullName = ''"
                   />
                 </div>
@@ -298,7 +316,9 @@
                     placeholder="Acme Inc."
                     :required="!!errors.name"
                     :helper-text="
-                      errors.name || 'Usually your company. Everyone you invite will see it.'
+                      submitting
+                        ? ''
+                        : errors.name || 'Usually your company. Everyone you invite will see it.'
                     "
                     @update:model-value="errors.name = ''"
                   />
@@ -316,7 +336,10 @@
                     v-model="form.accent"
                     :disabled="submitting"
                   />
-                  <HelperText label="Generated from the organization's name. Pick its colour." />
+                  <HelperText
+                    v-if="!submitting"
+                    label="Generated from the organization's name. Pick its colour."
+                  />
                 </div>
 
                 <Divider />
@@ -337,6 +360,15 @@
                     </p>
                   </div>
 
+                  <!-- No :disabled here, deliberately — the enclosing
+                       `<fieldset :disabled>` already blocks these triggers (each is
+                       a native button, so an ancestor disabled fieldset covers it),
+                       exactly as it covers the text fields above. Passing the prop
+                       as well would make FieldSelect mint its own helper line — a
+                       lock icon over "This field is locked." — under all four
+                       selects for the 900ms of the request: layout shift, plus a
+                       claim of a permanent lock for a transient wait the button's
+                       :loading already states. -->
                   <FieldSelect
                     v-for="entry in additionalDataKeys"
                     :key="entry.key"
@@ -346,7 +378,6 @@
                     :input-id="`onboarding-${entry.key}`"
                     placeholder="Select an option"
                     size="large"
-                    :disabled="submitting"
                   />
                 </div>
               </fieldset>
