@@ -7,9 +7,10 @@
   // + a shortcut to Account Settings), then the Accounts List — a SegmentedButton
   // that picks WHICH level of the tree is browsed, above a data-driven Table whose
   // context-aware Table.Search filters by name or ID within that level. Selecting
-  // a row switches the logged-in account and closes the drawer; the top-rail pill
-  // then reflects the choice.
+  // a row switches the logged-in account and closes the drawer; the header pill
+  // that opened it then reflects the choice.
   import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -19,7 +20,6 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Button from '@aziontech/webkit/button'
   import IconButton from '@aziontech/webkit/icon-button'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -31,7 +31,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  import { accountTypeOf, accountTypes, useAccounts } from '../../accounts.js'
+  import { accountInitials, accountTypeOf, accountTypes, useAccounts } from '../../accounts.js'
 
   const open = defineModel('open', { type: Boolean, default: false })
 
@@ -124,7 +124,7 @@
             <template #content>
               <div class="flex items-center gap-[var(--spacing-sm)]">
                 <Avatar
-                  :label="currentAccount.name"
+                  :label="accountInitials(currentAccount.name)"
                   size="medium"
                   kind="square"
                 />
@@ -199,8 +199,19 @@
                     />
                   </template>
 
+                  <!-- A Group or a Client is a place you act as, so it carries
+                       an avatar — the same mark it wears in the header pill,
+                       which is how a row here and the pill up there read as the
+                       same account. Brands and Resellers are structure, not
+                       identity: their type tag is the only mark they need. -->
                   <template #cell-name="{ value, row }">
                     <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                      <Avatar
+                        v-if="row.type === 'group' || row.type === 'client'"
+                        :label="accountInitials(row.name)"
+                        size="small"
+                        kind="square"
+                      />
                       <span class="truncate text-[var(--text-link)] hover:underline">
                         {{ value }}
                       </span>
