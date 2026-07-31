@@ -58,9 +58,9 @@ const resend = async () => {
 const returnToSignIn = () => router.push({ name: "login" });
 
 // Prototype: simulate the user clicking the verification link in their inbox,
-// which continues into the personalization step.
+// which continues into onboarding — where the user's organization is created.
 const simulateVerification = () =>
-  router.push({ name: "signup-personalize", query: { email: email.value } });
+  router.push({ name: "signup-onboarding", query: { email: email.value } });
 </script>
 
 <template>

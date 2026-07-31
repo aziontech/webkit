@@ -8,17 +8,19 @@ import BucketBrowser from './components/BucketBrowser.vue'
 import CardBoxSaves from './components/CardBoxSaves.vue'
 import CheckInbox from './components/CheckInbox.vue'
 import CreateApplication from './components/CreateApplication.vue'
+import CreateOrganization from './components/CreateOrganization.vue'
 import CreateSqlDatabase from './components/CreateSqlDatabase.vue'
 import CreateTeam from './components/CreateTeam.vue'
 import CreateWorkload from './components/CreateWorkload.vue'
 import CreateZone from './components/CreateZone.vue'
 import CreationCenter from './components/CreationCenter.vue'
 import Dashboard from './components/Dashboard.vue'
-import DeployTemplate from './components/DeployTemplate.vue'
 import DeploymentDetail from './components/DeploymentDetail.vue'
 import Deployments from './components/Deployments.vue'
+import DeployTemplate from './components/DeployTemplate.vue'
 import Diagrams from './components/Diagrams.vue'
 import DialogForm from './components/DialogForm.vue'
+import AzionDocs from './components/docs/AzionDocs.vue'
 import DrawerForm from './components/DrawerForm.vue'
 import DrawerItemGroups from './components/DrawerItemGroups.vue'
 import EdgeDns from './components/EdgeDns.vue'
@@ -34,11 +36,10 @@ import ManageResources from './components/ManageResources.vue'
 import Marketplace from './components/Marketplace.vue'
 import NestedDrawer from './components/NestedDrawer.vue'
 import ObjectStorage from './components/ObjectStorage.vue'
-import Personalize from './components/Personalize.vue'
+import Onboarding from './components/Onboarding.vue'
 import PersonalTokens from './components/PersonalTokens.vue'
 import Playground from './components/Playground.vue'
 import SignUp from './components/SignUp.vue'
-import AzionDocs from './components/docs/AzionDocs.vue'
 import LandingAzion from './components/site/LandingAzion.vue'
 import WebkitHub from './components/site/WebkitHub.vue'
 import SqlDatabase from './components/SqlDatabase.vue'
@@ -60,8 +61,15 @@ const routes = [
   { path: '/login', name: 'login', component: LoginScreen },
   { path: '/signup', name: 'signup', component: SignUp },
   { path: '/signup/verify', name: 'signup-verify', component: CheckInbox },
-  { path: '/signup/personalize', name: 'signup-personalize', component: Personalize },
+  // The last step of signup: the user's organization is created here (and
+  // nowhere else — see Onboarding.vue), which is also their first access to the
+  // console.
+  { path: '/signup/onboarding', name: 'signup-onboarding', component: Onboarding },
   { path: '/home', name: 'home', component: Home },
+  // Creating an organization from inside the console (the header switcher's New
+  // organization entry). A focused creation flow on its own page, like every
+  // other module create.
+  { path: '/organizations/new', name: 'organizations-new', component: CreateOrganization },
   { path: '/dashboard', name: 'dashboard', component: Dashboard },
   { path: '/applications', name: 'applications', component: Applications },
   { path: '/marketplace', name: 'marketplace', component: Marketplace },

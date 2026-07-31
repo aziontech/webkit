@@ -2,6 +2,7 @@
 import { curve, duration } from "@aziontech/theme/animations";
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
+import Divider from "@aziontech/webkit/divider";
 import GlobalHeader from "@aziontech/webkit/global-header";
 import IconButton from "@aziontech/webkit/icon-button";
 import InputPassword from "@aziontech/webkit/input-password";
@@ -242,16 +243,6 @@ const handlePrimary = () => {
               </Transition>
 
               <div class="flex flex-col gap-[var(--spacing-lg)]">
-                <!-- "Or" separator — only frames the social alternatives below -->
-                <div
-                  v-if="step === 'email'"
-                  class="flex items-center gap-[var(--spacing-md)]"
-                >
-                  <span
-                    class="h-[var(--border-width-default)] flex-1 bg-[var(--border-default)]"
-                  />
-                </div>
-
                 <!-- Continue with Email + "Last used" tag -->
                 <div class="relative">
                   <Button
@@ -273,6 +264,13 @@ const handlePrimary = () => {
                     class="absolute right-[var(--spacing-sm)] top-0 -translate-y-1/2"
                   />
                 </div>
+
+                <!-- "or" separator — the same labelled Divider Sign Up uses, so
+                     both auth screens frame the social alternatives identically. -->
+                <Divider
+                  v-if="step === 'email'"
+                  label="or"
+                />
 
                 <!-- Social providers — hidden once the user commits to email sign-in -->
                 <div

@@ -1,6 +1,6 @@
 <script setup>
 // The shared chrome for every unauthenticated screen (Sign Up, Check Inbox,
-// Personalize): the black GlobalHeader with the Azion brand mark + a
+// Onboarding): the black GlobalHeader with the Azion brand mark + a
 // Documentation link and a flex-1 slotted body. Screens compose their own
 // two-column layout inside the default slot.
 //

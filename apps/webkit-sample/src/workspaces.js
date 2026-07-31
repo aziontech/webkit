@@ -16,6 +16,7 @@
 import { computed, ref } from "vue";
 
 import { useAccounts } from "./accounts.js";
+import { useOrganizations } from "./organizations.js";
 
 // Workspaces are seeded per account: the key is the account id from
 // accounts.js, so a workspace can never dangle off a tenant that isn't there.
@@ -65,13 +66,23 @@ const selectedWorkspaceId = ref(null);
 
 export function useWorkspaces() {
   const { currentAccount } = useAccounts();
+  const { currentOrganization } = useOrganizations();
 
-  // The workspaces of the account currently being operated. Switching account
-  // therefore switches the whole list — a workspace is meaningless outside the
+  // An organization created at signup carries its OWN workspaces — the one it
+  // was given at onboarding, and any it adds later. It has no client accounts
+  // beneath it (that Brand → Reseller → Group → Client tree is the hierarchy the
+  // organization model replaces), so the account-keyed seeds below have nothing
+  // to say about it, and the workspace the user just named must be what the
+  // header shows on their first access.
+  //
+  // Otherwise: the workspaces of the account currently being operated. Switching
+  // account switches the whole list — a workspace is meaningless outside the
   // account that owns it.
-  const workspaces = computed(
-    () => seedWorkspaces[currentAccount.value?.id] ?? [DEFAULT_WORKSPACE]
-  );
+  const workspaces = computed(() => {
+    const owned = currentOrganization.value?.workspaces;
+    if (owned?.length) return owned;
+    return seedWorkspaces[currentAccount.value?.id] ?? [DEFAULT_WORKSPACE];
+  });
 
   // Derived, not watched: the pick only counts while it belongs to the account
   // in scope, so switching account lands on that account's first workspace

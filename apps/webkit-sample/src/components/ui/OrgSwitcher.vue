@@ -11,14 +11,16 @@
   // account count, a checkmark on the current one, and the way to create
   // another.
   //
-  // "New organization" has nowhere to go yet: the Create Organization module —
-  // where the operator picks the org's name and its accent from `orgAccents` — is
-  // not built. It acknowledges with a toast, the same way every other
-  // not-in-the-demo entry does, and becomes a route the day that module lands.
+  // Two kinds of row end up in this list, and the footer names both: the ones the
+  // user was INVITED into — which is the whole reason a switcher exists — and the
+  // ones they created. "New organization" opens the console's Create Organization
+  // flow (/organizations/new); the first organization a user ever gets is created
+  // for them at signup instead (see Onboarding.vue).
   import InputText from '@aziontech/webkit/input-text'
   import Popover from '@aziontech/webkit/popover'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import { useOrganizations } from '../../organizations.js'
   import OrgAvatar from './OrgAvatar.vue'
@@ -26,10 +28,20 @@
   const { organizations, currentOrganization, currentOrganizationId, switchOrganization } =
     useOrganizations()
 
-  // Controlled, so picking a row — or handing off to the create flow — closes
-  // the panel instead of leaving it hanging over the page.
+  const route = useRoute()
+  const router = useRouter()
+
+  // Controlled, so picking a row closes the panel instead of leaving it hanging
+  // over the page.
   const open = ref(false)
   const query = ref('')
+
+  // The two facts that tell two same-named organizations apart. Pluralized
+  // because a freshly created organization holds exactly one tenant, and
+  // "1 accounts" in the first thing a new user reads about their own
+  // organization is the kind of detail that makes a product feel unfinished.
+  const orgSummary = (organization) =>
+    `${organization.plan} · ${organization.accounts} ${organization.accounts === 1 ? 'account' : 'accounts'}`
 
   // Filter on name AND plan: an operator who remembers "the enterprise one"
   // finds it without remembering what it was called.
@@ -56,17 +68,20 @@
     open.value = false
     if (changed) {
       toast.success(`Switched to ${organization.name}.`, {
-        description: `${organization.plan} · ${organization.accounts} accounts`
+        description: orgSummary(organization)
       })
     } else {
       toast.info(`You're already in ${organization.name}.`)
     }
   }
 
+  // The create flow is a focused page, so the panel closes behind it. The email
+  // rides along, like every other navigation out of the console shell.
   const createOrg = () => {
     open.value = false
-    toast.info('Creating an organization is not wired up in the demo.', {
-      description: 'Its name and accent colour are chosen in the Create Organization module.'
+    router.push({
+      path: '/organizations/new',
+      query: { email: route.query.email || 'myemail@azion.com' }
     })
   }
 </script>
@@ -148,7 +163,7 @@
                 {{ org.name }}
               </span>
               <span class="truncate text-body-xs text-[var(--text-muted)]">
-                {{ org.plan }} · {{ org.accounts }} accounts
+                {{ orgSummary(org) }}
               </span>
             </span>
             <i
@@ -166,8 +181,9 @@
           </p>
         </div>
 
-        <!-- Create: the last row, separated from the roster it adds to. -->
-        <div class="border-t border-[var(--border-muted)] p-[var(--spacing-xxs)]">
+        <!-- Create: the last row, separated from the roster it adds to, over the
+             line that says where the other rows came from. -->
+        <div class="flex flex-col border-t border-[var(--border-muted)] p-[var(--spacing-xxs)]">
           <button
             type="button"
             class="flex w-full items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
@@ -179,6 +195,11 @@
             />
             New organization
           </button>
+          <p
+            class="px-[var(--spacing-xs)] pb-[var(--spacing-xxs)] text-body-xs text-[var(--text-muted)]"
+          >
+            You also appear here in organizations you were invited to.
+          </p>
         </div>
       </div>
     </Popover.Content>
