@@ -1,80 +1,74 @@
 <script setup>
-// TopologyBindNode — the EMPTY node of the deployment topology: an
-// Application-level resource that CAN be bound to the deployment (Firewall,
-// Custom Page) but is not. Instead of hiding the slot, the chain keeps the
-// position visible as a dashed card carrying the CTA that fills it.
-//
-// It is the same card frame as TopologyNodeCard (same width, same header row),
-// so the Application level reads as one column: what is bound, and what is
-// still open. The CTA is a Dropdown of the resources available to bind — the
-// choice is the whole interaction, so it needs no drawer.
-import Button from "@aziontech/webkit/button";
-import Dropdown from "@aziontech/webkit/dropdown";
-import StatusIndicator from "@aziontech/webkit/status-indicator";
+  // TopologyBindNode — the EMPTY node of the deployment topology: an
+  // Application-level resource that CAN be bound to the deployment (Firewall,
+  // Custom Page) but is not. Instead of hiding the slot, the chain keeps the
+  // position visible as a dashed card carrying the CTA that fills it.
+  //
+  // It is the same TopologyNode frame as a provisioned node — same width, same
+  // disclosure header — so the Application level reads as one column: what is
+  // bound, and what is still open. It carries NO name, which is what collapses its
+  // header to a single line and, with the dashed border and the "Not bound" status,
+  // is what makes a free position legible while closed.
+  //
+  // The CTA is a Dropdown of the resources available to bind — the choice is the
+  // whole interaction, so it needs no drawer.
+  import Button from '@aziontech/webkit/button'
+  import Dropdown from '@aziontech/webkit/dropdown'
 
-defineProps({
-  // Resource kind shown in the header ("Firewall", "Custom Page").
-  kind: { type: String, required: true },
-  // Azion icon class, matching the module's sidebar icon.
-  icon: { type: String, default: "" },
-  // One line on what NOT binding this resource means for the deployment.
-  description: { type: String, default: "" },
-  // CTA label ("Bind Firewall").
-  ctaLabel: { type: String, required: true },
-  // Bindable resources: `{ value, label }`.
-  options: { type: Array, default: () => [] },
-});
+  import TopologyNode from './TopologyNode.vue'
 
-const emit = defineEmits(["bind"]);
+  defineProps({
+    // Resource kind shown in the header ("Firewall", "Custom Page").
+    kind: { type: String, required: true },
+    // Azion icon class, matching the module's sidebar icon.
+    icon: { type: String, default: '' },
+    // One line on what NOT binding this resource means for the deployment.
+    description: { type: String, default: '' },
+    // CTA label ("Bind Firewall").
+    ctaLabel: { type: String, required: true },
+    // Bindable resources: `{ value, label }`.
+    options: { type: Array, default: () => [] }
+  })
+
+  const emit = defineEmits(['bind'])
+
+  // Forwarded straight to TopologyNode so the PAGE decides which nodes start open.
+  const open = defineModel('open', { type: Boolean, default: false })
 </script>
 
 <template>
-  <div
-    class="w-full overflow-hidden rounded-[var(--shape-card)] border border-dashed border-[var(--border-strong)] bg-[var(--bg-surface)]"
+  <TopologyNode
+    v-model:open="open"
+    :kind="kind"
+    :icon="icon"
+    status="Not bound"
+    severity="neutral"
+    dashed
   >
-    <!-- Same wrap rule as TopologyNodeCard's header. -->
-    <div
-      class="flex flex-wrap items-center gap-x-[var(--spacing-xs)] gap-y-[var(--spacing-xxs)] border-b border-dashed border-[var(--border-muted)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+    <p class="text-body-sm text-[var(--text-muted)]">{{ description }}</p>
+
+    <Dropdown
+      placement="bottom-start"
+      @select="(event, value) => emit('bind', event, value)"
     >
-      <i
-        :class="icon"
-        class="shrink-0 text-[14px] leading-none text-[var(--text-muted)]"
-        aria-hidden="true"
-      />
-      <span class="whitespace-nowrap text-label-sm text-[var(--text-muted)]">{{ kind }}</span>
-      <StatusIndicator
-        class="ml-auto shrink-0"
-        severity="neutral"
-        label="Not bound"
-      />
-    </div>
+      <Dropdown.Trigger>
+        <Button
+          :label="ctaLabel"
+          kind="outlined"
+          size="medium"
+          icon="pi pi-plus"
+          class="w-full"
+        />
+      </Dropdown.Trigger>
 
-    <div class="flex flex-col gap-[var(--spacing-sm)] p-[var(--spacing-md)]">
-      <p class="text-body-sm text-[var(--text-muted)]">{{ description }}</p>
-
-      <Dropdown
-        placement="bottom-start"
-        @select="(event, value) => emit('bind', event, value)"
-      >
-        <Dropdown.Trigger>
-          <Button
-            :label="ctaLabel"
-            kind="outlined"
-            size="medium"
-            icon="pi pi-plus"
-            class="w-full"
-          />
-        </Dropdown.Trigger>
-
-        <Dropdown.Group>
-          <Dropdown.Option
-            v-for="option in options"
-            :key="option.value"
-            :value="option.value"
-            :label="option.label"
-          />
-        </Dropdown.Group>
-      </Dropdown>
-    </div>
-  </div>
+      <Dropdown.Group>
+        <Dropdown.Option
+          v-for="option in options"
+          :key="option.value"
+          :value="option.value"
+          :label="option.label"
+        />
+      </Dropdown.Group>
+    </Dropdown>
+  </TopologyNode>
 </template>
