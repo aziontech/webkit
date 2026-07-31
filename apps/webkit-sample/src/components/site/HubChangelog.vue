@@ -391,6 +391,88 @@
         }
       ],
       links: [{ label: 'Variables → Create Variable', path: '/variables' }]
+    },
+    {
+      id: 'submit-lock',
+      title: '13. Estado de submit — o que a tela diz enquanto espera',
+      summary:
+        'Um formulário travado por 900ms de request tinha duas telas dizendo a coisa errada. A regra passou a ser uma: durante a espera os campos ficam desabilitados, e nada que descreva um campo que o usuário não pode operar continua na tela.',
+      points: [
+        {
+          term: 'Desabilitado sim, helper não',
+          text: 'no Sign Up os dois campos vão a :disabled com o escopo, mas as linhas de helper são retiradas enquanto trava. Uma frase de requisito ("mínimo 8 caracteres") sob um campo que não aceita digitação não instrui nada, e o :loading do botão já é a mensagem de que a espera existe.'
+        },
+        {
+          term: 'Trava transitória não é cadeado',
+          text: 'FieldPassword e FieldSelect colocam disabled no TOPO da própria cadeia de helper: com o campo desabilitado a linha ganha um cadeado e, no caso do password, passa por cima do invalid — um erro vermelho virava texto cinza com cadeado por 900ms. Cadeado diz "travado para sempre"; a espera de um request não é isso.'
+        },
+        {
+          term: 'Por isso o password é composto',
+          text: 'o campo de senha do Sign Up passou a ser InputPassword + HelperText em vez de FieldPassword: pedir helper vazio ao FieldPassword faz ele inventar "This field is locked." no lugar. Composto por primitivas, quem decide o que descreve o campo é a tela.'
+        },
+        {
+          term: 'Nada aponta para o que não existe',
+          text: 'o aria-describedby dos dois campos sai junto com a linha, então nenhum input referencia um elemento fora do DOM enquanto o escopo está travado.'
+        },
+        {
+          term: 'Sign In segue o mesmo divisor do Sign Up',
+          text: 'o filete desenhado à mão entre e-mail e provedores sociais virou o Divider do pacote com label "or", posicionado ENTRE os dois caminhos — antes o botão Continue with Email ficava do lado social do separador, o que fazia o "or" separar a coisa errada.'
+        },
+        {
+          term: 'Create Organization — a coluna de texto encolheu',
+          text: 'as quatro bandas passaram de 50/50 para 40/60 (guia à esquerda, campos à direita), com minmax(0,…) em cada trilha para um nome longo sem espaço não estourar a coluna.'
+        }
+      ],
+      links: [
+        { label: 'Sign In', path: '/login' },
+        { label: 'Sign Up', path: '/signup' },
+        { label: 'Create organization', path: '/organizations/new' }
+      ]
+    },
+    {
+      id: 'boundary-measure',
+      title: '14. Boundary e measure — o inset não sai da medida',
+      summary:
+        'Deployments lia 1572px de conteúdo onde Workloads lia 1615px, na mesma viewport: a única listagem do console numa largura que nenhuma outra usava. A causa não era da página — era a ordem entre BOUNDARY e MEASURE, e valia para todas as páginas que aplicam o próprio boundary. Uma regra no sistema de layout no lugar de 24 correções de página.',
+      points: [
+        {
+          term: 'A measure descreve CONTEÚDO',
+          text: 'numa página `padded` o AppLayout põe o inset no scroll box, FORA do bloco com o cap — então --layout-measure chega inteira como largura de conteúdo. Em toda página :padded="false" (detalhe com tabs, a listagem de Deployments, os create flows, os formulários) o boundary é aplicado no MESMO bloco da measure, e com box-sizing: border-box o cap engole o inset: 1620px de cap menos 24px de cada lado = 1572px de conteúdo. A measure passava a descrever outra coisa que não conteúdo, que é o único trabalho dela.'
+        },
+        {
+          term: 'Quando o boundary viaja junto, o cap cresce o inset',
+          text: 'cada classe de coluna declara a sua medida em --layout-column-measure, e uma única regra soma o inset ao cap quando o bloco também carrega o boundary. As duas formas passam a resolver para a MESMA coluna de conteúdo em qualquer viewport — abaixo da measure ambas são 100% menos o mesmo inset, acima dela ambas são a measure, centradas no mesmo eixo. Uma página pode ganhar ou perder o próprio boundary (ganhar uma barra de tabs, virar padded) sem mudar de largura, e nenhuma página precisa saber em qual forma está.'
+        },
+        {
+          term: 'A barra sticky entrou no sistema',
+          text: 'os dez rodapés de ação escreviam px-[var(--layout-boundary-inline)] à mão: lia o token, mas ficava fora do sistema — nada amarrava o inset da barra ao da coluna que ela submete. Virou .layout-boundary-inline, uma classe que a regra da measure vê, então a barra alinha com o corpo por construção em vez de por coincidência (medido: corpo e barra no mesmo left/width nas seis páginas de criação e nos três formulários).'
+        },
+        {
+          term: 'Deployments manteve a marcação, mudou a geometria',
+          text: 'a barra de tabs segue full-bleed e o bloco segue com as duas classes, como toda página :padded="false" — o que mudou foi a largura resolvida. Medido a 1920px: listagens padded, listagem com tabs, detalhe com tabs e views de tab agora leem 281/1615 idênticos; a 2560px, 599/1620.'
+        },
+        {
+          term: 'Create Organization e Onboarding entraram na regra 13',
+          text: 'as duas telas que criam organização passaram a seguir "desabilitado sim, helper não": durante o request as linhas de guia saem e o aria-describedby sai com elas. No Onboarding isso também apagou os quatro "This field is locked." — a pendência registrada no item 13 — sem compor o select por primitivas: basta NÃO passar :disabled aos FieldSelect, porque o <fieldset :disabled> que envolve o formulário já bloqueia cada trigger (é um button nativo). O cadeado só aparecia porque o wrapper responde ao próprio prop disabled com uma linha de bloqueio permanente, para uma espera de 900ms.'
+        }
+      ],
+      table: {
+        head: ['Contexto (a 1920px)', 'Conteúdo antes', 'Conteúdo depois'],
+        rows: [
+          ['Listagem sem tabs (padded)', '1615px', '1615px — referência, não mudou'],
+          ['Deployments (listagem com tabs)', '1572px', '1615px'],
+          ['Detalhe com tabs e views de tab', '1572px', '1615px'],
+          ['Settings e formulários', '976px', '1024px'],
+          ['Create flows (corpo e barra sticky)', '1144px', '1192px']
+        ]
+      },
+      links: [
+        { label: 'Listagem com tabs', path: '/deployments' },
+        { label: 'Sem tabs (referência)', path: '/workloads' },
+        { label: 'Detalhe com tabs', path: '/applications/1784552864' },
+        { label: 'Create organization', path: '/organizations/new' },
+        { label: 'Onboarding', path: '/signup/onboarding' }
+      ]
     }
   ]
 </script>
