@@ -98,7 +98,7 @@
     <i
       v-if="showIcon"
       :class="icon"
-      class="relative z-[1] size-[0.875rem] shrink-0 text-[length:inherit] leading-none"
+      class="relative z-[1] size-[0.875rem] shrink-0 text-[0.875rem] leading-none"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
     />

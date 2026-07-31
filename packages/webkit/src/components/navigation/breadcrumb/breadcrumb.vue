@@ -162,7 +162,7 @@
                   class="h-7 min-w-7 items-center justify-center rounded-[var(--shape-button)] px-1 text-button-md text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-mask)] active:bg-[var(--bg-active)] motion-reduce:transition-none"
                 >
                   <i
-                    class="pi pi-ellipsis-h leading-none"
+                    class="pi pi-ellipsis-h size-[0.875rem] shrink-0 text-[0.875rem] leading-none"
                     aria-hidden="true"
                   />
                 </Dropdown.Trigger>
@@ -177,9 +177,13 @@
                   >
                     <template
                       v-if="item.showIcon && item.icon"
-                      #leading
+                      #left
                     >
-                      <i :class="item.icon" />
+                      <i
+                        :class="item.icon"
+                        class="size-[0.875rem] shrink-0 text-[0.875rem] leading-none"
+                        aria-hidden="true"
+                      />
                     </template>
                   </Dropdown.Option>
                 </Dropdown.Group>

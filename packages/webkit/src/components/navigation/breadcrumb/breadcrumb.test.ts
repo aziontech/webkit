@@ -135,6 +135,27 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(option?.textContent).toContain('Projects')
     })
 
+    it('renders a collapsed item icon inside its overflow option', async () => {
+      // Dropdown.Option declares `left` / `right` (not `leading`), so a mismatched
+      // slot name silently renders nothing — the icon has to be reachable here.
+      const { getByTestId } = render(Breadcrumb, {
+        props: {
+          items: [
+            { label: 'Home', href: '/home' },
+            { label: 'Projects', href: '/projects', showIcon: true, icon: 'pi pi-folder' },
+            { label: 'Settings' }
+          ]
+        }
+      })
+
+      await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+
+      const option = document.body.querySelector(
+        `[data-testid="${TESTID}__overflow-item-0"]`
+      ) as HTMLElement | null
+      expect(option?.querySelector('i.pi-folder')).toBeTruthy()
+    })
+
     // SKIP: selecting an overflow Dropdown option does not surface a `navigate`
     // emit under test interaction (neither fireEvent nor userEvent triggers the
     // option's @select in browser mode). The menu open + option render + href are
