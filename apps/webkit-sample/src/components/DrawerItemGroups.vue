@@ -145,7 +145,10 @@ const submit = async () => {
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'ItemGroups in a Drawer' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <!-- No `gap` on the stack: the band below owns its own top space via
+         `.layout-section-start` (= --layout-boundary-start, the same step
+         `.layout-boundary` puts above the heading). -->
+    <main class="flex h-full flex-col">
       <PageHeading
         title="Services"
         description="Drawer create whose body is several section-titled ItemGroup sections — the settings layout, in context, with one scoped save."
@@ -162,7 +165,7 @@ const submit = async () => {
       </PageHeading>
 
       <!-- The list the drawer creates into -->
-      <ul class="flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
         <li
           v-for="service in services"
           :key="service.id"
@@ -223,13 +226,13 @@ const submit = async () => {
                               A unique identifier. Lower-case letters, numbers, and hyphen.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                             <!-- No Label in an ItemGroup, so the validation message
                                  is a HelperText under the control (--spacing-xs
                                  apart); it appears on a failed submit and clears as
                                  the user edits. Empty → required (amber); filled but
                                  malformed → invalid (red). Required is NOT an error. -->
-                            <div class="flex w-full max-w-[var(--container-xs)] flex-col gap-[var(--spacing-xs)]">
+                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                               <InputText
                                 v-model="form.name"
                                 size="large"
@@ -259,12 +262,12 @@ const submit = async () => {
                               A short note about what this service does.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                             <InputText
                               v-model="form.description"
                               size="large"
                               :disabled="submitting"
-                              class="w-full max-w-[var(--container-xs)]"
+                              class="w-full"
                               aria-label="Description"
                               placeholder="Optional"
                             />
@@ -288,8 +291,8 @@ const submit = async () => {
                             <Item.Title>Runtime</Item.Title>
                             <Item.Description>The language the service runs on.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
-                            <div class="flex w-full max-w-[var(--container-xs)] flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                               <!-- Runtime is required-only: empty → amber required
                                    (no red). Select has no amber border, so the amber
                                    HelperText below carries the cue. -->
@@ -337,12 +340,12 @@ const submit = async () => {
                             <Item.Title>Region</Item.Title>
                             <Item.Description>Where the service is deployed.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                             <Select
                               v-model="form.region"
                               size="large"
                               :disabled="submitting"
-                              class="w-full max-w-[var(--container-xs)]"
+                              class="w-full"
                               :display-value="regionLabel"
                             >
                               <Select.Trigger id="service-region" aria-label="Region" />
@@ -376,7 +379,7 @@ const submit = async () => {
                             <Item.Title>Active</Item.Title>
                             <Item.Description>Start the service immediately after creation.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
+                          <Item.Actions class="justify-end">
                             <Switch
                               v-model="form.active"
                               aria-label="Active"
@@ -390,7 +393,7 @@ const submit = async () => {
                             <Item.Title>Request logging</Item.Title>
                             <Item.Description>Record incoming requests for this service.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
+                          <Item.Actions class="justify-end">
                             <Switch
                               v-model="form.logging"
                               aria-label="Request logging"

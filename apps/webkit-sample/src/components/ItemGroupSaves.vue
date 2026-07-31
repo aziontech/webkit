@@ -68,14 +68,19 @@ const saveNotifications = () =>
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'ItemGroup with independent saves' }]"
   >
-    <main class="flex w-full flex-col gap-[var(--layout-section-gap)]">
+    <!-- No `gap` on the stack: every band below owns its own top space via
+         `.layout-section-start` (= --layout-boundary-start, the same step
+         `.layout-boundary` puts above the heading). -->
+    <main class="flex w-full flex-col">
       <PageHeading
         title="Preferences"
         description="The same partitioned-save idea as CardBox, on the ItemGroup surface — Item rows in a flush card, each topic group owning its own save, so changes commit in parts."
       />
 
       <!-- Group 1 — General (section title, its own footer save). -->
-      <section class="flex flex-col gap-[var(--layout-group-gap)]">
+      <section
+        class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+      >
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           General
         </p>
@@ -92,12 +97,12 @@ const saveNotifications = () =>
                     <Item.Title>Full Name</Item.Title>
                     <Item.Description>The name shown across the console.</Item.Description>
                   </Item.Content>
-                  <Item.Actions class="flex-1 justify-end">
+                  <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                     <InputText
                       v-model="general.fullName"
                       size="large"
                       :disabled="savingGeneral"
-                      class="w-full max-w-[var(--container-2xs)]"
+                      class="w-full"
                       aria-label="Full Name"
                     />
                   </Item.Actions>
@@ -108,12 +113,12 @@ const saveNotifications = () =>
                     <Item.Title>Language</Item.Title>
                     <Item.Description>The console interface language.</Item.Description>
                   </Item.Content>
-                  <Item.Actions class="flex-1 justify-end">
+                  <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                     <Select
                       v-model="general.language"
                       size="large"
                       :disabled="savingGeneral"
-                      class="w-full max-w-[var(--container-2xs)]"
+                      class="w-full"
                       :display-value="languageLabel"
                     >
                       <Select.Trigger id="preferences-language" aria-label="Language" />
@@ -147,7 +152,9 @@ const saveNotifications = () =>
       </section>
 
       <!-- Group 2 — Notifications (section title, its own footer save). -->
-      <section class="flex flex-col gap-[var(--layout-group-gap)]">
+      <section
+        class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+      >
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Notifications
         </p>
@@ -164,7 +171,7 @@ const saveNotifications = () =>
                     <Item.Title>Product updates</Item.Title>
                     <Item.Description>Occasional emails about new features and changes.</Item.Description>
                   </Item.Content>
-                  <Item.Actions class="flex-1 justify-end">
+                  <Item.Actions class="justify-end">
                     <Switch
                       v-model="notifications.productUpdates"
                       aria-label="Product updates"
@@ -178,7 +185,7 @@ const saveNotifications = () =>
                     <Item.Title>Security alerts</Item.Title>
                     <Item.Description>Emails when a sign-in or key change is detected.</Item.Description>
                   </Item.Content>
-                  <Item.Actions class="flex-1 justify-end">
+                  <Item.Actions class="justify-end">
                     <Switch
                       v-model="notifications.securityAlerts"
                       aria-label="Security alerts"

@@ -321,8 +321,8 @@ const submit = async () => {
                             Give a unique and descriptive name to identify the rule.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
-                          <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                             <InputText
                               v-model="form.name"
                               size="large"
@@ -350,12 +350,12 @@ const submit = async () => {
                             Add a short description or comment to the rule.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <InputText
                             v-model="form.description"
                             size="large"
                             :disabled="submitting"
-                            class="w-full max-w-[var(--container-sm)]"
+                            class="w-full"
                             aria-label="Description"
                             placeholder="Optional"
                           />
@@ -784,7 +784,7 @@ const submit = async () => {
                           <Item.Title>Active</Item.Title>
                           <Item.Description>Turn the rule on right after it is created.</Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end">
                           <Switch
                             v-model="form.active"
                             aria-label="Active"

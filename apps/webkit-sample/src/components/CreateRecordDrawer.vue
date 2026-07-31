@@ -165,8 +165,8 @@ const submit = async () => {
                             Use @ to create a record for the root domain.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
-                          <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                             <InputGroup :disabled="submitting" :required="!!errors.name">
                               <InputText
                                 v-model="form.name"
@@ -205,11 +205,11 @@ const submit = async () => {
                             />
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <Select
                             v-model="form.type"
                             size="large"
-                            class="w-full max-w-[var(--container-sm)]"
+                            class="w-full"
                             :disabled="submitting"
                             :display-value="typeLabel"
                           >
@@ -238,11 +238,11 @@ const submit = async () => {
                             server.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <InputNumber
                             v-model="form.ttl"
                             size="large"
-                            class="w-full max-w-[var(--container-sm)]"
+                            class="w-full"
                             :min="0"
                             :disabled="submitting"
                             aria-label="TTL in seconds"
@@ -256,8 +256,8 @@ const submit = async () => {
                           <Item.Title>Value</Item.Title>
                           <Item.Description>{{ selectedType.valueHelper }}</Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
-                          <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                             <Textarea
                               v-model="form.value"
                               class="w-full"
@@ -286,11 +286,11 @@ const submit = async () => {
                             An optional note to help identify this record.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <InputText
                             v-model="form.description"
                             size="large"
-                            class="w-full max-w-[var(--container-sm)]"
+                            class="w-full"
                             placeholder="Optional description"
                             autocomplete="off"
                             aria-label="Description"
@@ -323,11 +323,11 @@ const submit = async () => {
                             to distribute answers across records by weight.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <Select
                             v-model="form.policy"
                             size="large"
-                            class="w-full max-w-[var(--container-sm)]"
+                            class="w-full"
                             :disabled="submitting"
                             :display-value="policyLabelOf"
                           >
@@ -354,11 +354,11 @@ const submit = async () => {
                             weighted set.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <InputNumber
                             v-model="form.weight"
                             size="large"
-                            class="w-full max-w-[var(--container-sm)]"
+                            class="w-full"
                             :min="0"
                             :max="255"
                             :disabled="submitting"

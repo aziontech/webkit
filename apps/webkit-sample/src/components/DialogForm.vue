@@ -70,14 +70,20 @@ const toastFailed = (error) =>
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Dialog form' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <!-- No `gap` on the stack: the band below owns its own top space via
+         `.layout-section-start` (= --layout-boundary-start, the same step
+         `.layout-boundary` puts above the heading). -->
+    <main class="flex h-full flex-col">
       <PageHeading
         title="Dialog form"
         description="A short, blocking decision in a modal. This destructive delete stays disabled until the exact application name is typed."
       />
 
       <!-- The trigger context: an outlined item with the delete action. -->
-      <Item kind="outline">
+      <Item
+        kind="outline"
+        class="layout-section-start"
+      >
         <Item.Content>
           <Item.Title>Delete this Application</Item.Title>
           <Item.Description>
@@ -87,7 +93,7 @@ const toastFailed = (error) =>
           </Item.Description>
         </Item.Content>
 
-        <Item.Actions class="flex-1 justify-end">
+        <Item.Actions class="justify-end">
           <Dialog v-model:open="open" size="medium">
             <DialogTrigger>
               <Button label="Delete Application" kind="danger" size="medium" icon="pi pi-trash" />

@@ -128,11 +128,11 @@ const submit = async () => {
                             {{ isAuto(column) ? "Automatically generated." : column.defaultValue ? `Default: ${column.defaultValue}` : "Optional — leave empty for NULL." }}
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <InputText
                             v-model="form[column.name]"
                             size="large"
-                            class="w-full max-w-[var(--container-xs)] font-code"
+                            class="w-full font-code"
                             :aria-label="column.name"
                             :placeholder="placeholderFor(column)"
                             :disabled="submitting || isAuto(column)"

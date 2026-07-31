@@ -285,9 +285,18 @@
          the page scrolls normally — a clamped stack would squeeze both halves
          into unusable slivers. -->
     <main class="flex min-w-0 flex-1 flex-col overflow-auto lg:min-h-0 lg:overflow-hidden">
-      <div
-        class="layout-measure flex flex-col gap-[var(--layout-section-gap)] px-[var(--layout-boundary-inline)] pt-[var(--layout-boundary-start)] lg:min-h-0 lg:flex-1 lg:pb-0"
-      >
+      <!-- `.layout-boundary` — the same inset every other page carries, instead of
+           the inline `px`/`pt` pair this used to spell out. That pair had no
+           `padding-block-end` at all, so below `lg` (where the page scrolls) the
+           last template ran flush into the viewport edge; the class brings the
+           bottom boundary with it. From `lg` up the layout is height-bounded and
+           only the template grid scrolls, so the same bottom inset simply ends that
+           scroll box one step above the edge — which is what the boundary is for.
+
+           No `gap` on the stack: the band below owns its own top space via
+           `.layout-section-start` (= --layout-boundary-start, the same step this
+           container's boundary puts above the heading). -->
+      <div class="layout-boundary flex flex-col lg:min-h-0 lg:flex-1">
         <PageHeading
           size="large"
           title="Build on the most reliable network on earth"
@@ -303,7 +312,12 @@
              content swaps. Stretching it padded a mostly-empty card down the
              viewport just to match the catalog beside it. The templates column
              keeps stretching — it is the one that owns the page's slack. -->
-        <div class="flex flex-col gap-[var(--layout-section-gap)] lg:min-h-0 lg:flex-1 lg:flex-row">
+        <!-- Stacked below `lg`, the `gap` is band rhythm and takes the boundary
+             step like every other band top; from `lg` up it is the column gutter
+             between the two halves, which wants the larger section step. -->
+        <div
+          class="layout-section-start flex flex-col gap-[var(--layout-boundary-start)] lg:min-h-0 lg:flex-1 lg:flex-row lg:gap-[var(--layout-section-gap)]"
+        >
           <section
             class="flex w-full min-w-0 flex-col gap-[var(--layout-group-gap)] lg:flex-1 lg:self-start"
           >
@@ -364,10 +378,13 @@
                           :loading="connecting"
                           @click="connectGit"
                         />
+                        <!-- Same `size` as the Button above it: the two are one
+                             stacked action group, so they sit on one step of the
+                             ramp (h-10 / text-button-lg) rather than two. -->
                         <Link
                           label="Manage connected providers"
                           href="#"
-                          size="small"
+                          size="large"
                           @click.prevent
                         />
                       </template>

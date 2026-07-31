@@ -219,9 +219,10 @@ const breadcrumb = [
         novalidate
         @submit.prevent="submit"
       >
-      <div
-        class="layout-column-focused layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
-      >
+      <!-- Heading block, then the `<fieldset>` as the bands wrapper — it carries
+           the band step and spaces its cards with the band gap (see
+           src/styles/layout.css). -->
+      <div class="layout-form-create layout-boundary flex flex-1 flex-col">
         <div class="flex flex-col gap-[var(--spacing-xxs)]">
           <h1 class="text-heading-xs text-[var(--text-default)]">
             {{ editing ? "Edit Team" : "Create Team" }}
@@ -233,7 +234,7 @@ const breadcrumb = [
         </div>
 
         <fieldset
-          class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+          class="layout-section-start mx-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Team details</legend>
@@ -374,10 +375,13 @@ const breadcrumb = [
                       <span class="flex-1 text-label-md text-[var(--text-default)]">
                         {{ group.label }}
                       </span>
-                      <span class="w-16 text-center text-label-code-sm text-[var(--text-muted)]">
+                      <!-- Column headers of the permission matrix: the same
+                           `text-label-sm` + --text-muted a webkit table head cell
+                           uses, so this grid's head reads like every other table's. -->
+                      <span class="w-16 text-center text-label-sm text-[var(--text-muted)]">
                         View
                       </span>
-                      <span class="w-16 text-center text-label-code-sm text-[var(--text-muted)]">
+                      <span class="w-16 text-center text-label-sm text-[var(--text-muted)]">
                         Edit
                       </span>
                     </div>
@@ -428,7 +432,7 @@ const breadcrumb = [
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="layout-column-focused flex items-center gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+          class="layout-form-create flex items-center gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             v-if="editing"

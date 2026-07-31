@@ -249,8 +249,8 @@ const COLUMN_GRID =
                             A unique name for the table in this database.
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
-                          <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                             <InputText
                               v-model="form.name"
                               size="large"

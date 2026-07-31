@@ -134,8 +134,8 @@ const submit = async () => {
                           <Item.Title>Name</Item.Title>
                           <Item.Description>A unique column name.</Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
-                          <div class="flex w-full max-w-[var(--container-xs)] flex-col gap-[var(--spacing-xs)]">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                             <InputText
                               v-model="form.name"
                               size="large"
@@ -161,11 +161,11 @@ const submit = async () => {
                           <Item.Title>Type</Item.Title>
                           <Item.Description>The column's data type.</Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <Select
                             v-model="form.type"
                             size="large"
-                            class="w-full max-w-[var(--container-xs)]"
+                            class="w-full"
                             :disabled="submitting"
                             :display-value="typeLabel"
                           >
@@ -232,11 +232,11 @@ const submit = async () => {
                             Optional. Leave empty for NULL, or use an expression like now().
                           </Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                           <InputText
                             v-model="form.defaultValue"
                             size="large"
-                            class="w-full max-w-[var(--container-xs)] font-code"
+                            class="w-full font-code"
                             aria-label="Default value"
                             placeholder="NULL"
                             :disabled="submitting"
@@ -249,7 +249,7 @@ const submit = async () => {
                           <Item.Title>Primary key</Item.Title>
                           <Item.Description>Use this column as the table's primary key.</Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end">
                           <Switch
                             v-model="form.primaryKey"
                             aria-label="Primary key"
@@ -263,7 +263,7 @@ const submit = async () => {
                           <Item.Title>Not null</Item.Title>
                           <Item.Description>Require a value for every row.</Item.Description>
                         </Item.Content>
-                        <Item.Actions class="flex-1 justify-end">
+                        <Item.Actions class="justify-end">
                           <Switch
                             v-model="form.notNull"
                             aria-label="Not null"

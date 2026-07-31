@@ -188,10 +188,10 @@ const submit = async () => {
         novalidate
         @submit.prevent="submit"
       >
-      <!-- Scrollable form body -->
-      <div
-        class="layout-column-focused layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
-      >
+      <!-- Scrollable form body: heading + ONE element below it. The `<fieldset>`
+           IS that element — the bands wrapper — so it carries the band step and
+           spaces its sections with the band gap (see src/styles/layout.css). -->
+      <div class="layout-form-create layout-boundary flex flex-1 flex-col">
         <!-- Same small PageHeading every other page in the module carries. It
              titles the form, so `titleId` wires the form's accessible name to
              this h1 instead of repeating the label in aria-label. -->
@@ -203,7 +203,7 @@ const submit = async () => {
 
         <!-- One flag locks every control while the request is in flight. -->
         <fieldset
-          class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+          class="layout-section-start mx-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Create application</legend>
@@ -223,9 +223,9 @@ const submit = async () => {
                         Give a unique and descriptive name to identify the Application.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="layout-field-control">
                       <!-- Empty-required → amber `required` HelperText (not red). -->
-                      <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                         <InputText
                           v-model="form.name"
                           size="large"
@@ -251,7 +251,9 @@ const submit = async () => {
           </section>
 
           <!-- Section: Delivery Settings -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Delivery Settings
             </p>
@@ -262,8 +264,8 @@ const submit = async () => {
                     <Item.Content>
                       <Item.Title>Protocol Usage</Item.Title>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
-                      <fieldset class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-sm)]">
+                    <Item.Actions class="layout-field-control">
+                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
                         <legend class="sr-only">Protocol Usage</legend>
                         <FieldRadioBlock
                           v-for="option in protocolUsageOptions"
@@ -282,8 +284,8 @@ const submit = async () => {
                     <Item.Content>
                       <Item.Title>HTTP Ports</Item.Title>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
-                      <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                    <Item.Actions class="layout-field-control">
+                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                         <MultiSelect
                           v-model="form.httpPorts"
                           size="large"
@@ -324,11 +326,11 @@ const submit = async () => {
                         Applies when the Application serves HTTPS traffic.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="layout-field-control">
                       <MultiSelect
                         v-model="form.httpsPorts"
                         size="large"
-                        class="w-full max-w-[var(--container-sm)]"
+                        class="w-full"
                         placeholder="443 (Default)"
                         :disabled="!httpsEnabled"
                         :display-value="portsLabel(httpsPortOptions)"
@@ -352,7 +354,9 @@ const submit = async () => {
           </section>
 
           <!-- Section: Origins -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Origins
             </p>
@@ -366,11 +370,11 @@ const submit = async () => {
                         The origin type is pre-defined and can't be customized.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="layout-field-control">
                       <InputText
                         model-value="Single Origin"
                         size="large"
-                        class="w-full max-w-[var(--container-sm)]"
+                        class="w-full"
                         aria-label="Origin Type"
                         readonly
                       />
@@ -384,8 +388,8 @@ const submit = async () => {
                         origin.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
-                      <fieldset class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-sm)]">
+                    <Item.Actions class="layout-field-control">
+                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
                         <legend class="sr-only">Protocol Policy</legend>
                         <FieldRadioBlock
                           v-for="option in protocolPolicyOptions"
@@ -406,8 +410,8 @@ const submit = async () => {
                         Define an origin for the content in FQDN format or an IPv4/IPv6 address.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
-                      <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                    <Item.Actions class="layout-field-control">
+                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                         <InputText
                           v-model="form.address"
                           size="large"
@@ -434,8 +438,8 @@ const submit = async () => {
                         Identify a virtualhost sent in the Host header to the origin.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
-                      <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                    <Item.Actions class="layout-field-control">
+                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                         <InputText
                           v-model="form.hostHeader"
                           size="large"
@@ -460,7 +464,9 @@ const submit = async () => {
           </section>
 
           <!-- Section: Cache Expiration Policies -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Cache Expiration Policies
             </p>
@@ -471,8 +477,8 @@ const submit = async () => {
                     <Item.Content>
                       <Item.Title>Browser Cache Settings</Item.Title>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
-                      <fieldset class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-sm)]">
+                    <Item.Actions class="layout-field-control">
+                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
                         <legend class="sr-only">Browser Cache Settings</legend>
                         <FieldRadioBlock
                           v-for="option in browserCacheOptions"
@@ -491,11 +497,11 @@ const submit = async () => {
                     <Item.Content>
                       <Item.Title>Maximum TTL (seconds)</Item.Title>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="layout-field-control">
                       <InputNumber
                         v-model="form.browserMaxTtl"
                         size="large"
-                        class="w-full max-w-[var(--container-sm)]"
+                        class="w-full"
                         :min="0"
                         aria-label="Browser maximum TTL in seconds"
                       />
@@ -505,8 +511,8 @@ const submit = async () => {
                     <Item.Content>
                       <Item.Title>Cache Settings</Item.Title>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
-                      <fieldset class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-sm)]">
+                    <Item.Actions class="layout-field-control">
+                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
                         <legend class="sr-only">Cache Settings</legend>
                         <FieldRadioBlock
                           v-for="option in edgeCacheOptions"
@@ -530,11 +536,11 @@ const submit = async () => {
                         cache TTL to be equal to or greater than 3 seconds.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="layout-field-control">
                       <InputNumber
                         v-model="form.edgeMaxTtl"
                         size="large"
-                        class="w-full max-w-[var(--container-sm)]"
+                        class="w-full"
                         :min="0"
                         aria-label="Edge maximum TTL in seconds"
                       />
@@ -546,7 +552,9 @@ const submit = async () => {
           </section>
 
           <!-- Section: Debug Rules -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Debug Rules
             </p>
@@ -562,7 +570,7 @@ const submit = async () => {
                         Events or the $stacktrace variable in GraphQL.
                       </Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="justify-end">
                       <Switch
                         v-model="form.debugRules"
                         aria-label="Active"
@@ -582,7 +590,7 @@ const submit = async () => {
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="layout-column-focused flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+          class="layout-form-create flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

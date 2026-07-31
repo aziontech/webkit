@@ -187,7 +187,10 @@ const submitChild = async () => {
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Nested drawer' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <!-- No `gap` on the stack: the band below owns its own top space via
+         `.layout-section-start` (= --layout-boundary-start, the same step
+         `.layout-boundary` puts above the heading). -->
+    <main class="flex h-full flex-col">
       <PageHeading
         title="Functions Instances"
         description="Create a resource whose Select needs a related resource that may not exist yet — the quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save."
@@ -204,7 +207,7 @@ const submitChild = async () => {
       </PageHeading>
 
       <!-- The list the parent drawer creates into -->
-      <ul class="flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
         <li
           v-for="instance in instances"
           :key="instance.id"
@@ -260,8 +263,8 @@ const submitChild = async () => {
                               Give a unique and descriptive name to identify the instance.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
-                            <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                               <InputText
                                 v-model="form.name"
                                 size="large"
@@ -303,8 +306,8 @@ const submitChild = async () => {
                               Pick the function to instantiate, or create a new one.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
-                            <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                               <!-- CONTROLLED (:model-value) so the sentinel never
                                    commits; @update:model-value routes the sentinel to
                                    the child drawer and otherwise assigns the value. -->
@@ -432,8 +435,8 @@ const submitChild = async () => {
                             <Item.Title>Name</Item.Title>
                             <Item.Description>A unique name for the function.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
-                            <div class="flex w-full max-w-[var(--container-xs)] flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                               <InputText
                                 v-model="childForm.name"
                                 size="large"
@@ -461,8 +464,8 @@ const submitChild = async () => {
                             <Item.Title>Runtime</Item.Title>
                             <Item.Description>The language the function runs on.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="flex-1 justify-end">
-                            <div class="flex w-full max-w-[var(--container-xs)] flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                               <Select
                                 v-model="childForm.runtime"
                                 size="large"

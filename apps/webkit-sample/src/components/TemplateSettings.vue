@@ -241,10 +241,10 @@ const submit = async () => {
       novalidate
       @submit.prevent="submit"
     >
-      <!-- Scrollable form body -->
-      <div
-        class="layout-column-form layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
-      >
+      <!-- Scrollable form body. No `gap`: every band below owns its own top space
+           via `.layout-section-start` (= --layout-boundary-start, the same step the
+           boundary puts above the first band). -->
+      <div class="layout-column-form layout-boundary flex flex-1 flex-col">
         <PageHeading
           title-id="template-settings-title"
           title="Import from Git"
@@ -253,7 +253,7 @@ const submit = async () => {
 
         <!-- One flag locks every control while the request is in flight. -->
         <fieldset
-          class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+          class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Template settings</legend>
@@ -309,7 +309,9 @@ const submit = async () => {
           </div>
 
           <!-- Sub-section: Template Settings -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <h2 class="text-heading-xs text-[var(--text-default)]">Template Settings</h2>
 
             <!-- Required credential: label required always; amber only after an
@@ -379,7 +381,9 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Deployment — the radio family + MultiSelect. -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <h2 class="text-heading-xs text-[var(--text-default)]">Deployment</h2>
 
             <!-- Deployment type — RADIO BLOCK group. A group's accessible name is
@@ -454,7 +458,9 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Build & Runtime — input-group, password, textarea. -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <h2 class="text-heading-xs text-[var(--text-default)]">Build &amp; Runtime</h2>
 
             <!-- Build command — FieldInputGroup with a leading addon. Required:
@@ -475,7 +481,7 @@ const submit = async () => {
                 "
               >
                 <template #left>
-                  <span class="font-mono text-label-sm text-[var(--text-muted)]">$</span>
+                  <span class="text-label-sm text-[var(--text-muted)]">$</span>
                 </template>
               </FieldInputGroup>
             </div>
@@ -516,7 +522,9 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Notifications & Alerts — phone + switch family. -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <h2 class="text-heading-xs text-[var(--text-default)]">Notifications &amp; Alerts</h2>
 
             <!-- Alert phone — FieldPhoneNumber. Required (amber) when empty;
@@ -566,7 +574,9 @@ const submit = async () => {
           </section>
 
           <!-- Sub-section: Edge features — the checkbox BLOCK family. -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <h2 class="text-heading-xs text-[var(--text-default)]">Edge features</h2>
 
             <div class="flex flex-col gap-[var(--spacing-sm)]">
@@ -594,7 +604,7 @@ const submit = async () => {
           <!-- Confirmation — a single inline FieldCheckbox that must be checked.
                Required (amber tag on its label) only after submit; the group-level
                HelperText spells out the requirement. -->
-          <div class="flex flex-col gap-[var(--spacing-xs)]">
+          <div class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
             <FieldCheckbox
               v-model="form.acceptDeploy"
               input-id="tpl-accept-deploy"
@@ -610,8 +620,9 @@ const submit = async () => {
             />
           </div>
 
-          <!-- A single button to simulate the submit. -->
-          <div class="flex justify-end">
+          <!-- A single button to simulate the submit. The confirmation above gates
+               it, so the two are one action group, not two bands. -->
+          <div class="layout-group-start flex justify-end">
             <Button
               label="Deploy"
               kind="primary"

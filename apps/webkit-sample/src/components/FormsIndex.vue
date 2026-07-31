@@ -105,6 +105,26 @@ const examples = [
     path: "/forms/cardbox",
   },
   {
+    id: "error-validation",
+    title: "Error validation",
+    description:
+      "A create form whose linked resource is deleted by another user mid-edit. The API rejects the save with a field-scoped error, so it renders as a Message inside the section that owns the broken reference — never a toast, never a validation summary.",
+    icon: "pi pi-exclamation-circle",
+    surface: "Page",
+    save: "One save",
+    path: "/forms/error-validation",
+  },
+  {
+    id: "async-deployment",
+    title: "Async action & error",
+    description:
+      "The counterpart of Error validation: a deploy that runs for half a minute, so the user leaves before it ends. The run lives outside the page, progress rides a loading toast, and the failure comes back as a closable toast carrying both ways out — redeploy, or jump to the Deployments module.",
+    icon: "pi pi-cloud-upload",
+    surface: "Toast",
+    save: "Async run",
+    path: "/forms/async-deployment",
+  },
+  {
     id: "itemgroup-saves",
     title: "ItemGroup with independent saves",
     description:
@@ -122,15 +142,18 @@ const open = (example) =>
 
 <template>
   <AppLayout active="forms" :breadcrumb="[{ label: 'Forms' }]">
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <!-- No `gap` on the stack: the band below owns its own top space via
+         `.layout-section-start` (= --layout-boundary-start, the same step
+         `.layout-boundary` puts above the heading). -->
+    <main class="flex h-full flex-col">
       <PageHeading
-        size="large"
+        size="medium"
         title="Forms"
         description="The form types on @aziontech/webkit. Every form shares the same Form Layout (spacing + hierarchy); a type only changes the container and its save model. Open an example to see it in a real flow."
       />
 
       <div
-        class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3"
+        class="layout-section-start grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3"
       >
         <button
           v-for="example in examples"

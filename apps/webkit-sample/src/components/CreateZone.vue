@@ -103,10 +103,10 @@ const submit = async () => {
         novalidate
         @submit.prevent="submit"
       >
-        <!-- Scrollable form body -->
-        <div
-          class="layout-column-focused layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
-        >
+        <!-- Scrollable form body: the guidance line, then the `<fieldset>` as the
+             bands wrapper — it carries the band step and spaces its cards with the
+             band gap (see src/styles/layout.css). -->
+        <div class="layout-form-create layout-boundary flex flex-1 flex-col">
           <p class="text-body-sm text-[var(--text-muted)]">
             Configure DNS records and zone settings used for authoritative domain
             resolution.
@@ -114,7 +114,7 @@ const submit = async () => {
 
           <!-- One flag locks every control while the request is in flight. -->
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+            class="layout-section-start mx-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
             :disabled="submitting"
           >
             <legend class="sr-only">Create zone</legend>
@@ -250,7 +250,7 @@ const submit = async () => {
           class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
         >
           <div
-            class="layout-column-focused flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+            class="layout-form-create flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
           >
             <Button
               type="button"

@@ -71,14 +71,20 @@ const saveProtection = () =>
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'CardBox with independent saves' }]"
   >
-    <main class="flex w-full flex-col gap-[var(--layout-section-gap)]">
+    <!-- No `gap` on the stack: every band below owns its own top space via
+         `.layout-section-start` (= --layout-boundary-start, the same step
+         `.layout-boundary` puts above the heading). -->
+    <main class="flex w-full flex-col">
       <PageHeading
         title="Project Settings"
         description="A long configuration page split into cards — each card owns its own save, so changes commit in parts."
       />
 
       <!-- Card 1 — Azion Toolbar (title = CardBox Heading; Save in the box footer). -->
-      <CardBox title="Azion Toolbar" class="w-full">
+      <CardBox
+        title="Azion Toolbar"
+        class="layout-section-start w-full"
+      >
         <template #content>
           <fieldset
             class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
@@ -140,7 +146,10 @@ const saveProtection = () =>
       </CardBox>
 
       <!-- Card 2 — Deployment Protection (title = CardBox Heading; its own save). -->
-      <CardBox title="Deployment Protection" class="w-full">
+      <CardBox
+        title="Deployment Protection"
+        class="layout-section-start w-full"
+      >
         <template #content>
           <fieldset
             class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"

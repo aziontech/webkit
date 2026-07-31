@@ -91,7 +91,10 @@ const submit = async () => {
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Drawer form' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--layout-section-gap)]">
+    <!-- No `gap` on the stack: the band below owns its own top space via
+         `.layout-section-start` (= --layout-boundary-start, the same step
+         `.layout-boundary` puts above the heading). -->
+    <main class="flex h-full flex-col">
       <PageHeading
         title="Environments"
         description="Drawer form — create a resource in context without leaving the list. The drawer owns one scoped save."
@@ -108,7 +111,7 @@ const submit = async () => {
       </PageHeading>
 
       <!-- The list the drawer creates into -->
-      <ul class="flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
         <li
           v-for="env in environments"
           :key="env.id"

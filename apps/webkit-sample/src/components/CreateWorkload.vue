@@ -172,11 +172,12 @@ const saveAndDeploy = () => persist({ deploy: true });
         novalidate
         @submit.prevent="saveAndDeploy"
       >
-        <div
-          class="layout-column-focused layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
-        >
+        <!-- The `<fieldset>` is the bands wrapper: it carries the band step (zeroed
+             by the `:first-child` rule, since it opens the page) and spaces its
+             sections with the band gap (see src/styles/layout.css). -->
+        <div class="layout-form-create layout-boundary flex flex-1 flex-col">
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+            class="layout-section-start mx-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
             :disabled="submitting"
           >
             <legend class="sr-only">Create workload</legend>
@@ -197,8 +198,8 @@ const saveAndDeploy = () => persist({ deploy: true });
                           serve it up securely with digital certificates.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="flex-1 justify-end">
-                        <div class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="layout-field-control">
+                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                           <InputText
                             v-model="form.name"
                             size="large"
@@ -229,7 +230,9 @@ const saveAndDeploy = () => persist({ deploy: true });
             <!-- Section: Domains — the Teams Permissions pattern: a flush CardBox
                  whose borderless Table carries a search + primary "add" toolbar and
                  a row-action Dropdown; empty state prompts the first domain. -->
-            <section class="flex flex-col gap-[var(--layout-group-gap)]">
+            <section
+              class="flex flex-col gap-[var(--layout-group-gap)]"
+            >
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 Domains
               </p>
@@ -325,7 +328,9 @@ const saveAndDeploy = () => persist({ deploy: true });
             </section>
 
             <!-- Section: Environments -->
-            <section class="flex flex-col gap-[var(--layout-group-gap)]">
+            <section
+              class="flex flex-col gap-[var(--layout-group-gap)]"
+            >
               <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
                 Environments
               </p>
@@ -447,7 +452,7 @@ const saveAndDeploy = () => persist({ deploy: true });
           class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
         >
           <div
-            class="layout-column-focused flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+            class="layout-form-create flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
           >
             <Button
               type="button"

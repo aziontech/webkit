@@ -89,9 +89,10 @@ const submit = async () => {
       novalidate
       @submit.prevent="submit"
     >
-      <div
-        class="layout-column-form layout-boundary flex flex-1 flex-col gap-[var(--layout-section-gap)]"
-      >
+      <!-- No `gap` on the stack: every band below owns its own top space via
+           `.layout-section-start` (= --layout-boundary-start, the same step the
+           boundary puts above the first band). -->
+      <div class="layout-column-form layout-boundary flex flex-1 flex-col">
         <PageHeading
           title-id="profile-title"
           title="Profile"
@@ -100,7 +101,7 @@ const submit = async () => {
 
         <!-- One flag locks every control while the request is in flight. -->
         <fieldset
-          class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+          class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Profile settings</legend>
@@ -118,11 +119,11 @@ const submit = async () => {
                       <Item.Title>Full Name</Item.Title>
                       <Item.Description>The name shown across the console.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                       <!-- No Label in an ItemGroup: the required feedback is an
                            amber `required` HelperText under the control (not red —
                            an empty required field is a prompt, not an error). -->
-                      <div class="flex w-full max-w-[var(--container-2xs)] flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                         <InputText
                           v-model="form.fullName"
                           size="large"
@@ -147,10 +148,10 @@ const submit = async () => {
                       <Item.Title>Email</Item.Title>
                       <Item.Description>Used for sign-in and notifications.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                       <!-- Empty → amber `required`; filled but malformed → red
                            `invalid`. The two are distinct states, never both. -->
-                      <div class="flex w-full max-w-[var(--container-2xs)] flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
                         <InputText
                           v-model="form.email"
                           type="email"
@@ -177,7 +178,9 @@ const submit = async () => {
           </section>
 
           <!-- Section: Preferences -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Preferences
             </p>
@@ -189,12 +192,12 @@ const submit = async () => {
                       <Item.Title>Timezone</Item.Title>
                       <Item.Description>Times across the console are shown in this zone.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                       <Select
                         v-model="form.timezone"
                         size="large"
                         :disabled="submitting"
-                        class="w-full max-w-[var(--container-2xs)]"
+                        class="w-full"
                         :display-value="labelOf(timezones)"
                       >
                         <Select.Trigger id="profile-timezone" aria-label="Timezone" />
@@ -216,12 +219,12 @@ const submit = async () => {
                       <Item.Title>Language</Item.Title>
                       <Item.Description>The console interface language.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                       <Select
                         v-model="form.language"
                         size="large"
                         :disabled="submitting"
-                        class="w-full max-w-[var(--container-2xs)]"
+                        class="w-full"
                         :display-value="labelOf(languages)"
                       >
                         <Select.Trigger id="profile-language" aria-label="Language" />
@@ -243,7 +246,9 @@ const submit = async () => {
           </section>
 
           <!-- Section: Notifications -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+          <section
+            class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+          >
             <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
               Notifications
             </p>
@@ -255,7 +260,7 @@ const submit = async () => {
                       <Item.Title>Product updates</Item.Title>
                       <Item.Description>Occasional emails about new features and changes.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="flex-1 justify-end">
+                    <Item.Actions class="justify-end">
                       <Switch
                         v-model="form.productUpdates"
                         aria-label="Product updates"
