@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AccountSettings from './components/AccountSettings.vue'
 import ApplicationDetail from './components/ApplicationDetail.vue'
 import Applications from './components/Applications.vue'
+import AsyncDeployment from './components/AsyncDeployment.vue'
 import BucketBrowser from './components/BucketBrowser.vue'
 import CardBoxSaves from './components/CardBoxSaves.vue'
 import CheckInbox from './components/CheckInbox.vue'
@@ -14,6 +15,7 @@ import CreateZone from './components/CreateZone.vue'
 import CreationCenter from './components/CreationCenter.vue'
 import Dashboard from './components/Dashboard.vue'
 import DeployTemplate from './components/DeployTemplate.vue'
+import DeploymentDetail from './components/DeploymentDetail.vue'
 import Deployments from './components/Deployments.vue'
 import Diagrams from './components/Diagrams.vue'
 import DialogForm from './components/DialogForm.vue'
@@ -21,6 +23,7 @@ import DrawerForm from './components/DrawerForm.vue'
 import DrawerItemGroups from './components/DrawerItemGroups.vue'
 import EdgeDns from './components/EdgeDns.vue'
 import EdgeDnsZoneDetail from './components/EdgeDnsZoneDetail.vue'
+import ErrorValidation from './components/ErrorValidation.vue'
 import FormsIndex from './components/FormsIndex.vue'
 import Home from './components/Home.vue'
 import InPageForm from './components/InPageForm.vue'
@@ -64,6 +67,10 @@ const routes = [
   { path: '/marketplace', name: 'marketplace', component: Marketplace },
   { path: '/workloads', name: 'workloads', component: Workloads },
   { path: '/deployments', name: 'deployments', component: Deployments },
+  // The deploy page for a container deployment. A URL, not a drawer: a container
+  // deployment's runtime and its six-step lifecycle are what a support thread
+  // links to and what a user reloads.
+  { path: '/deployments/:id', name: 'deployment-detail', component: DeploymentDetail },
   { path: '/workloads/new', name: 'workloads-new', component: CreateWorkload },
   { path: '/workloads/:id', name: 'workload-detail', component: WorkloadDetail },
   { path: '/applications/new', name: 'applications-new', component: CreateApplication },
@@ -87,6 +94,18 @@ const routes = [
   { path: '/forms/itemgroup', name: 'forms-itemgroup', component: ItemGroupSettings },
   { path: '/forms/itemgroup-saves', name: 'forms-itemgroup-saves', component: ItemGroupSaves },
   { path: '/forms/cardbox', name: 'forms-cardbox', component: CardBoxSaves },
+  {
+    path: '/forms/error-validation',
+    name: 'forms-error-validation',
+    component: ErrorValidation,
+  },
+  // The async counterpart of error-validation: a failure that arrives after the
+  // user has left the screen. `?outcome=success|error` picks the ending.
+  {
+    path: '/forms/async-deployment',
+    name: 'forms-async-deployment',
+    component: AsyncDeployment,
+  },
   { path: '/create', name: 'create', component: CreationCenter },
   { path: '/deploy', name: 'deploy', component: DeployTemplate },
   { path: '/account', name: 'account', component: AccountSettings },
@@ -101,4 +120,26 @@ const routes = [
 export const router = createRouter({
   history: createWebHistory(),
   routes,
+  // Section deep links. SectionHeading's `anchor` copy button hands out URLs like
+  // /applications/1784552864?tab=build#build-configuration, and opening one has to
+  // land ON that section. Returning `{ el }` is what makes that work here: the
+  // console never scrolls the window (body/#app are overflow-hidden) — it scrolls a
+  // nested container — and vue-router resolves `el` through `scrollIntoView()`,
+  // which scrolls the nearest scrollable ancestor whatever that happens to be.
+  //
+  // Only hash navigations are handled; everything else returns `false` (no scroll),
+  // which is exactly what the router did before this option existed. The guard
+  // keeps a stale or hand-typed hash from logging vue-router's "couldn't find
+  // element" warning, and `matchMedia` honours prefers-reduced-motion, since a
+  // smooth scroll is motion like any other.
+  scrollBehavior(to) {
+    if (!to.hash) return false
+    try {
+      if (!document.querySelector(to.hash)) return false
+    } catch {
+      return false // not a valid selector
+    }
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+    return { el: to.hash, behavior: reduced ? 'auto' : 'smooth' }
+  },
 })
