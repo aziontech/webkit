@@ -23,10 +23,10 @@
   import SectionContainer from './foundations/components/layout/SectionContainer.vue'
   import SectionModule from './foundations/components/layout/SectionModule.vue'
 
-  // The deploy this page documents. Shown in the header so a reader can tell
-  // whether the environment they are looking at is the one described here.
-  const DEPLOY_PREFIX = '20260731101149'
-  const DEPLOY_DATE = '31/07/2026'
+  // When this list was last revised. Deliberately NOT the deploy prefix: that
+  // rotates on every publish, so a prefix printed here is stale the moment the
+  // page ships — including on the very deploy that ships it.
+  const UPDATED_AT = '31/07/2026'
 
   // One entry per update. `points` is the substance — `term` is the decision, `text`
   // is why it went that way; `table` is used only where the decision IS a mapping
@@ -405,16 +405,10 @@
       description="O que mudou no sample do console — cada decisão com o link da tela onde ela está aplicada. Não é screenshot: os links abrem a app publicada, então o comportamento pode ser conferido no lugar onde vive."
     >
       <template #actions>
-        <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
-          <Tag
-            :label="`Atualizado em ${DEPLOY_DATE}`"
-            severity="info"
-          />
-          <Tag
-            :label="`Deploy ${DEPLOY_PREFIX}`"
-            severity="secondary"
-          />
-        </div>
+        <Tag
+          :label="`Atualizado em ${UPDATED_AT}`"
+          severity="info"
+        />
       </template>
     </PageHeader>
   </BannerContainer>
