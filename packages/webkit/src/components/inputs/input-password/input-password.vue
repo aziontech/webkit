@@ -93,7 +93,7 @@
     :data-visible="visible || null"
     :class="[
       'relative inline-flex items-center w-full h-10',
-      'gap-[var(--spacing-xs)] pl-[var(--spacing-md)] pr-[var(--spacing-xxs)]',
+      'gap-[var(--spacing-xs)] pl-[var(--spacing-md)] pr-[var(--spacing-xs)]',
       'rounded-[var(--shape-elements)]',
       'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
@@ -141,7 +141,7 @@
     <IconButton
       v-if="toggleable"
       kind="transparent"
-      size="medium"
+      size="small"
       :icon="toggleIcon"
       :ariaLabel="toggleLabel"
       :aria-pressed="visible"

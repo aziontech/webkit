@@ -1,6 +1,6 @@
 import Button from '@aziontech/webkit/button'
 import FieldPassword from '@aziontech/webkit/field-password'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -27,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.'
+          'Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern. It also owns the password-requirements row: a captioned, wrapping set of rule chips driven by the `requirements` array, each switching to a satisfied treatment when its `validated` flag is true. Evaluating the rules stays in the application — the field renders the outcome.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -114,6 +114,26 @@ const meta = {
       description: 'HTML name for the underlying input (form + vee-validate integration).',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
+    requirements: {
+      control: 'object',
+      description:
+        'Password rules rendered as a wrapping chip row under the field, one chip per entry. An entry with `validated: true` renders the satisfied treatment (check glyph + success tokens). Empty array omits the whole row. The application evaluates the rules; the field only renders them.',
+      table: {
+        category: 'props',
+        type: { summary: 'PasswordRequirement[]' },
+        defaultValue: { summary: '[]' }
+      }
+    },
+    requirementsTitle: {
+      control: 'text',
+      description:
+        'Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Must contain:'" }
+      }
+    },
     iconLeft: {
       control: false,
       description: 'Forwarded to the underlying `InputPassword` leading-icon slot.',
@@ -142,11 +162,31 @@ const meta = {
     required: false,
     invalid: false,
     toggleable: true,
-    autocomplete: 'current-password'
+    autocomplete: 'current-password',
+    requirements: [
+      { label: '8-128 characters', validated: false },
+      { label: 'Uppercase letter', validated: false },
+      { label: 'Special character', validated: false },
+      { label: 'Number', validated: false },
+      { label: 'Lowercase letter', validated: false }
+    ],
+    requirementsTitle: 'Must contain:'
   }
 }
 
 export default meta
+
+// The rule set the arg-driven stories render, mirrored verbatim into their "Show code"
+// snippets so the panel never drifts from the canvas.
+const RULES_SCRIPT = [
+  'const requirements = ref([',
+  "  { label: '8-128 characters', validated: false },",
+  "  { label: 'Uppercase letter', validated: false },",
+  "  { label: 'Special character', validated: false },",
+  "  { label: 'Number', validated: false },",
+  "  { label: 'Lowercase letter', validated: false }",
+  '])'
+]
 
 const Template = (args) => ({
   components: { FieldPassword },
@@ -167,12 +207,19 @@ const Template = (args) => ({
   template: '<FieldPassword v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
 })
 
-const DEFAULT_SCRIPT = ["import { ref } from 'vue'", IMPORT, '', "const password = ref('')"]
+const DEFAULT_SCRIPT = [
+  "import { ref } from 'vue'",
+  IMPORT,
+  '',
+  "const password = ref('')",
+  ...RULES_SCRIPT
+]
 const DEFAULT_MARKUP = `<FieldPassword
   v-model="password"
   label="Password"
   placeholder="Enter your password"
   helper-text="At least 8 characters."
+  :requirements="requirements"
 />`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldPassword>} */
@@ -264,12 +311,19 @@ export const Required = {
   }
 }
 
-const INVALID_SCRIPT = ["import { ref } from 'vue'", IMPORT, '', "const password = ref('weak')"]
+const INVALID_SCRIPT = [
+  "import { ref } from 'vue'",
+  IMPORT,
+  '',
+  "const password = ref('weak')",
+  ...RULES_SCRIPT
+]
 const INVALID_MARKUP = `<FieldPassword
   v-model="password"
   label="Password"
   placeholder="Enter your password"
   helper-text="Password must be at least 8 characters."
+  :requirements="requirements"
   invalid
 />`
 
@@ -297,13 +351,15 @@ const DISABLED_SCRIPT = [
   "import { ref } from 'vue'",
   IMPORT,
   '',
-  "const password = ref('locked-value')"
+  "const password = ref('locked-value')",
+  ...RULES_SCRIPT
 ]
 const DISABLED_MARKUP = `<FieldPassword
   v-model="password"
   label="Password"
   placeholder="Enter your password"
   helper-text="This field is locked."
+  :requirements="requirements"
   disabled
 />`
 
@@ -398,6 +454,76 @@ export const Icons = {
           '`#iconLeft` slot is forwarded to the underlying `InputPassword`. `#iconRight` is only honored when `toggleable=false` — the visibility toggle occupies that position by default.'
       },
       source: { code: toSfc(IMPORT, ICONS_TEMPLATE) }
+    }
+  }
+}
+
+const REQUIREMENTS_SCRIPT = [
+  "import { computed, ref } from 'vue'",
+  IMPORT,
+  '',
+  "const password = ref('')",
+  '',
+  '// The application owns the rules; the field only renders their outcome.',
+  'const requirements = computed(() => [',
+  "  { label: '8-128 characters', validated: password.value.length >= 8 && password.value.length <= 128 },",
+  "  { label: 'Uppercase letter', validated: /[A-Z]/.test(password.value) },",
+  "  { label: 'Special character', validated: /[^A-Za-z0-9]/.test(password.value) },",
+  "  { label: 'Number', validated: /\\d/.test(password.value) },",
+  "  { label: 'Lowercase letter', validated: /[a-z]/.test(password.value) }",
+  '])'
+]
+const REQUIREMENTS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
+  <FieldPassword
+    v-model="password"
+    label="Password"
+    placeholder="Type your password"
+    autocomplete="new-password"
+    :requirements="requirements"
+  />
+  <FieldPassword
+    label="Localized caption"
+    placeholder="Type your password"
+    autocomplete="new-password"
+    requirements-title="Deve conter:"
+    :requirements="[
+      { label: '8-128 caracteres', validated: true },
+      { label: 'Letra maiúscula', validated: true },
+      { label: 'Número', validated: false }
+    ]"
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FieldPassword>} */
+export const Requirements = {
+  render: () => ({
+    components: { FieldPassword },
+    setup() {
+      const password = ref('')
+
+      const requirements = computed(() => [
+        {
+          label: '8-128 characters',
+          validated: password.value.length >= 8 && password.value.length <= 128
+        },
+        { label: 'Uppercase letter', validated: /[A-Z]/.test(password.value) },
+        { label: 'Special character', validated: /[^A-Za-z0-9]/.test(password.value) },
+        { label: 'Number', validated: /\d/.test(password.value) },
+        { label: 'Lowercase letter', validated: /[a-z]/.test(password.value) }
+      ])
+
+      return { password, requirements }
+    },
+    template: REQUIREMENTS_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          "The requirements row. **Type in the first field** to watch each chip flip to the satisfied treatment (`pi pi-check` glyph + `var(--success)` surface) as its rule is met — the shape change, not just the color, is what keeps the state readable without relying on color alone. The row wraps at the field width, and its caption names the group for assistive tech. The second field shows a fixed, partially-satisfied set with an overridden `requirements-title`. Evaluating the rules is the application's job: the field renders whatever `validated` flags it is handed."
+      },
+      source: { code: toSfc(REQUIREMENTS_SCRIPT, REQUIREMENTS_TEMPLATE) }
     }
   }
 }

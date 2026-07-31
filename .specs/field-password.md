@@ -4,27 +4,37 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 332459d05ce3a734004e344565297cd88d42388129ea19ba6223149162e1cae0
+checksum: b80411dff8ffd8a5a3e415bad346f022112c28bd85b0ab044bf4af876e6b26af
 figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
-  node_id: 3714:10788
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
+  node_id: 2027:3212
 created: 2026-06-17
-last_updated: 2026-06-17
+last_updated: 2026-07-31
 ---
+
 # Field Password — Component Spec
 
 ## Purpose
 
 Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.
 
+It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per entry of the `requirements` array, each switching to a satisfied treatment (check glyph + success tokens) when its `validated` flag is true. This is the "strength meter" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The component renders the row; **evaluating** the rules against the current value stays in the consuming application, which passes the already-computed `validated` flags down (see `.claude/rules/component-states.md` — the DS renders states, the app supplies the trigger).
+
 ## Usage
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FieldPassword from '@aziontech/webkit/field-password'
+  import { computed, ref } from 'vue'
+  import FieldPassword from '@aziontech/webkit/field-password'
 
-const password = ref('')
+  const password = ref('')
+
+  // The application evaluates the rules; the field only renders them.
+  const requirements = computed(() => [
+    { label: '8-128 characters', validated: password.value.length >= 8 },
+    { label: 'Uppercase letter', validated: /[A-Z]/.test(password.value) },
+    { label: 'Number', validated: /\d/.test(password.value) }
+  ])
 </script>
 
 <template>
@@ -34,6 +44,7 @@ const password = ref('')
     placeholder="Enter your password"
     helper-text="At least 8 characters."
     autocomplete="new-password"
+    :requirements="requirements"
     required
   />
 </template>
@@ -41,34 +52,38 @@ const password = ref('')
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the underlying `InputPassword`. |
-| `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | no | Placeholder forwarded to the `InputPassword`. |
-| `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
-| `maxLength` | `number \| undefined` | `undefined` | no | Native `maxlength` forwarded to the `InputPassword`. |
-| `disabled` | `boolean` | `false` | no | Disables the input and switches the helper to `kind="disabled"` (lock icon). |
-| `readonly` | `boolean` | `false` | no | Marks the input read-only; value is visible but not editable. Native pass-through. |
-| `required` | `boolean` | `false` | no | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input. |
-| `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input. |
-| `toggleable` | `boolean` | `true` | no | Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input. |
-| `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows. |
-| `inputId` | `string` | `''` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. |
-| `name` | `string` | `''` | no | HTML name for the underlying input (form + vee-validate integration). |
+| Prop                | Type                                            | Default              | Required | JSDoc                                                                                                                                                                                                                                                                                                  |
+| ------------------- | ----------------------------------------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `modelValue`        | `string`                                        | `''`                 | no       | Two-way bound value of the underlying `InputPassword`.                                                                                                                                                                                                                                                 |
+| `label`             | `string`                                        | `''`                 | no       | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                                |
+| `placeholder`       | `string`                                        | `''`                 | no       | Placeholder forwarded to the `InputPassword`.                                                                                                                                                                                                                                                          |
+| `helperText`        | `string`                                        | `''`                 | no       | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy.                                                                 |
+| `maxLength`         | `number \| undefined`                           | `undefined`          | no       | Native `maxlength` forwarded to the `InputPassword`.                                                                                                                                                                                                                                                   |
+| `disabled`          | `boolean`                                       | `false`              | no       | Disables the input and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                                           |
+| `readonly`          | `boolean`                                       | `false`              | no       | Marks the input read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                                                                     |
+| `required`          | `boolean`                                       | `false`              | no       | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input.                                                                                                                                                                                                      |
+| `invalid`           | `boolean`                                       | `false`              | no       | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input.                                                                                                                                                                                                           |
+| `toggleable`        | `boolean`                                       | `true`               | no       | Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input.                                                                                                                                                   |
+| `autocomplete`      | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no       | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows.                                                                                                                                                                                 |
+| `inputId`           | `string`                                        | `''`                 | no       | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring.                                                                                                                                                                                                               |
+| `name`              | `string`                                        | `''`                 | no       | HTML name for the underlying input (form + vee-validate integration).                                                                                                                                                                                                                                  |
+| `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. An entry with `validated: true` renders the satisfied treatment (check glyph + success tokens); otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
+| `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
+
+`PasswordRequirement`: `{ label: string; validated: boolean }`
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes                                                                |
+| ------------------- | -------- | -------------------------------------------------------------------- |
 | `update:modelValue` | `string` | Re-emitted from the underlying `InputPassword` on every input event. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `iconLeft` | — | Forwarded to the underlying `InputPassword#iconLeft` slot. |
-| `iconRight` | — | Forwarded to the underlying `InputPassword#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled. |
+| Slot        | Scope | Notes                                                                                                                                                         |
+| ----------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `iconLeft`  | —     | Forwarded to the underlying `InputPassword#iconLeft` slot.                                                                                                    |
+| `iconRight` | —     | Forwarded to the underlying `InputPassword#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled. |
 
 ## States
 
@@ -76,26 +91,41 @@ const password = ref('')
 - `data-required` mirrors the `required` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-disabled` mirrors the `disabled` prop
+- `data-has-requirements` mirrors a non-empty `requirements` array; it is the presence flag for the requirements row
+- Per requirement chip: `data-validated` mirrors that entry's `validated` flag and drives the satisfied treatment
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| _none_ — motion is owned by the underlying `InputPassword` | — | — | — |
+| Trigger                                                                         | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ------------------------------------------------------------------------------- | ----------------------------------------- | ------ | ------------------------------- |
+| requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword` | —      | —                               |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| gap (between label / input / helper rows) | `var(--spacing-xs)` |
+| Region                                                              | Token (DESIGN.md)          |
+| ------------------------------------------------------------------- | -------------------------- |
+| gap (between label / input / helper / requirements rows)            | `var(--spacing-xs)`        |
+| requirements row — gap between caption and chips, and between chips | `var(--spacing-xs)`        |
+| requirements caption — typography                                   | `.text-label-sm`           |
+| requirements caption — text                                         | `var(--text-default)`      |
+| requirement chip — shape                                            | `var(--shape-elements)`    |
+| requirement chip — padding                                          | `var(--spacing-xxs)`       |
+| requirement chip — gap between check glyph and label                | `var(--spacing-xxs)`       |
+| requirement chip — typography                                       | `.text-label-sm`           |
+| requirement chip (unsatisfied) — surface                            | `var(--bg-surface-raised)` |
+| requirement chip (unsatisfied) — text                               | `var(--text-muted)`        |
+| requirement chip (satisfied) — surface                              | `var(--success)`           |
+| requirement chip (satisfied) — text                                 | `var(--text-default)`      |
+| requirement chip (satisfied) — check glyph                          | `var(--success-contrast)`  |
 
-(Typography and color tokens are owned by the children — `Label`, `InputPassword`, `HelperText` — and not redeclared here.)
+(Typography and color tokens of the field itself are owned by the children — `Label`, `InputPassword`, `HelperText` — and not redeclared here.)
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -104,8 +134,12 @@ const password = ref('')
 - When `required`, the input receives native `required` + `aria-required="true"`; the visual Required tag lives on the `Label`.
 - When `invalid`, the input receives `aria-invalid="true"` and the helper switches color tokens to `var(--danger-contrast)` — the helper text remains the human-readable error message.
 - When `disabled`, the input is disabled, the helper switches to `kind="disabled"` (lock icon) — if `helperText` is empty, the component falls back to the default disabled message `'This field is locked.'` so the lock icon never appears alone — and the label dims via inherited `var(--text-muted)`.
-- Contrast ≥4.5:1 (text) / ≥3:1 (icons), including all derived states.
-- Touch target: the underlying `InputPassword` owns the ≥40×40 px hit area for both the input and the visibility toggle button.
+- The requirements row is a named group: the container carries `role="group"` + `aria-labelledby` pointing at the caption's generated id, so assistive tech announces "Must contain:" as the group's name before walking the chips. The caption id derives from the same id base as the input, so it is stable and unique per instance.
+- Each requirement chip is static, non-interactive content (no `role`, no `tabindex`) — it reports state, it is not a control, so it never enters the tab order.
+- The satisfied state is carried by a **shape** change (the `pi pi-check` glyph appears) in addition to the color change, so it does not rely on color alone (WCAG 1.4.1). The glyph itself is `aria-hidden="true"`, matching how `HelperText` treats its lock icon.
+- **Known gap:** the per-chip satisfied/unsatisfied distinction is conveyed visually (glyph + tokens) but is not announced as text, because naming it needs microcopy ("met" / "not met") that the design does not define. It is deliberately not invented here; adding it is a follow-up that must ship the copy as a localizable prop.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons), including all derived states. Both requirement-chip treatments clear it in both themes: unsatisfied `var(--text-muted)` on `var(--bg-surface-raised)`, satisfied `var(--text-default)` on `var(--success)`.
+- Touch target: the underlying `InputPassword` owns the ≥40×40 px hit area for both the input and the visibility toggle button. The requirement chips are not interactive and so carry no touch-target minimum.
 
 ## Stories (Storybook)
 
@@ -115,6 +149,7 @@ const password = ref('')
 - Disabled — `disabled: true`; documents the lock-icon helper and disabled input tokens.
 - Toggle — composite story with `toggleable=true` (default) and `toggleable=false` side by side; documents the toggle pass-through.
 - Icons — documents the `#iconLeft` slot forwarded to the underlying `InputPassword` (with `pi pi-lock`).
+- Requirements — justification: the requirements row is a two-state axis (`validated` true/false) that no single-value story can show. This composite renders one field with a partially-satisfied rule set beside one with none satisfied, which is the only way to document both chip treatments and the wrapping behaviour of the row; it also documents the `requirementsTitle` override.
 
 ## Constraints — DO NOT
 

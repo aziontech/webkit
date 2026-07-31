@@ -30,6 +30,48 @@ describe('FieldPassword', () => {
     expect(input).toHaveAttribute('id', 'pw-1')
   })
 
+  it('auto-generates the input id when inputId is omitted, so the label association still works', () => {
+    const { getByTestId } = render(FieldPassword, {
+      props: { label: 'Password', helperText: 'Hint' }
+    })
+
+    const input = getByTestId('input-field-password__input')
+    const inputId = input.getAttribute('id')
+    // `inputId` defaults to '', which is NOT nullish — the fallback must still fire.
+    expect(inputId).toBeTruthy()
+
+    // Every derived id hangs off that base rather than collapsing to a bare suffix.
+    expect(getByTestId('input-field-password__label')).toHaveAttribute('for', inputId as string)
+    expect(getByTestId('input-field-password__helper')).toHaveAttribute('id', `${inputId}-helper`)
+    expect(input).toHaveAttribute('aria-describedby', `${inputId}-helper`)
+  })
+
+  it('gives two id-less instances distinct ids so nothing collides on the same page', () => {
+    // Both fields must live in ONE app: useId() is unique per app, which is the real
+    // scenario (a sign-up form with password + confirmation, no inputId on either).
+    const TwoFields = {
+      components: { FieldPassword },
+      template: `
+        <div>
+          <FieldPassword label="Password" helper-text="Hint" :requirements="[{ label: 'Number', validated: false }]" />
+          <FieldPassword label="Confirm" helper-text="Hint" :requirements="[{ label: 'Number', validated: false }]" />
+        </div>
+      `
+    }
+
+    const { getAllByTestId } = render(TwoFields)
+
+    const inputIds = getAllByTestId('input-field-password__input').map((el) => el.id)
+    expect(inputIds).toHaveLength(2)
+    expect(new Set(inputIds).size).toBe(2)
+
+    // The derived ids stay distinct too, so no aria-labelledby / describedby is ambiguous.
+    const captionIds = getAllByTestId('input-field-password__requirements-title').map((el) => el.id)
+    const helperIds = getAllByTestId('input-field-password__helper').map((el) => el.id)
+    expect(new Set(captionIds).size).toBe(2)
+    expect(new Set(helperIds).size).toBe(2)
+  })
+
   it('omits the label row when no label prop is given', () => {
     const { queryByTestId } = render(FieldPassword, { props: {} })
 
@@ -180,6 +222,123 @@ describe('FieldPassword', () => {
       expect(queryByRole('button', { name: 'Show password' })).toBeNull()
       // The field stays a plain password input.
       expect(getByTestId('input-field-password__input')).toHaveAttribute('type', 'password')
+    })
+  })
+
+  describe('requirements', () => {
+    const RULES = [
+      { label: '8-128 characters', validated: true },
+      { label: 'Uppercase letter', validated: false },
+      { label: 'Number', validated: false }
+    ]
+
+    it('omits the whole requirements row when the array is empty', () => {
+      const { queryByTestId, getByTestId } = render(FieldPassword, {
+        props: { label: 'Password' }
+      })
+
+      expect(queryByTestId('input-field-password__requirements')).toBeNull()
+      expect(queryByTestId('input-field-password__requirements-title')).toBeNull()
+      // The presence flag is absent too.
+      expect(getByTestId('input-field-password')).not.toHaveAttribute('data-has-requirements')
+    })
+
+    it('renders one chip per entry, in order, each carrying its label', () => {
+      const { getAllByTestId, getByTestId } = render(FieldPassword, {
+        props: { label: 'Password', requirements: RULES }
+      })
+
+      expect(getByTestId('input-field-password')).toHaveAttribute('data-has-requirements')
+
+      const chips = getAllByTestId('input-field-password__requirement')
+      expect(chips).toHaveLength(3)
+      expect(chips.map((chip) => chip.textContent?.trim())).toEqual([
+        '8-128 characters',
+        'Uppercase letter',
+        'Number'
+      ])
+    })
+
+    it('marks only the satisfied entries data-validated', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: { label: 'Password', requirements: RULES }
+      })
+
+      const chips = getAllByTestId('input-field-password__requirement')
+      // `validated || null` → the attribute exists only on satisfied entries.
+      expect(chips[0]).toHaveAttribute('data-validated')
+      expect(chips[1]).not.toHaveAttribute('data-validated')
+      expect(chips[2]).not.toHaveAttribute('data-validated')
+    })
+
+    it('re-renders the chip state when the validated flags change', async () => {
+      const { getAllByTestId, rerender } = render(FieldPassword, {
+        props: { label: 'Password', requirements: RULES }
+      })
+
+      expect(getAllByTestId('input-field-password__requirement')[1]).not.toHaveAttribute(
+        'data-validated'
+      )
+
+      await rerender({
+        requirements: RULES.map((rule) => ({ ...rule, validated: true }))
+      })
+
+      for (const chip of getAllByTestId('input-field-password__requirement')) {
+        expect(chip).toHaveAttribute('data-validated')
+      }
+    })
+
+    it('exposes the row as a group named by its caption', () => {
+      const { getByRole, getByTestId } = render(FieldPassword, {
+        props: { label: 'Password', requirements: RULES }
+      })
+
+      // role=group + aria-labelledby → the caption is the group's accessible name.
+      const group = getByRole('group', { name: 'Must contain:' })
+      expect(group).toBe(getByTestId('input-field-password__requirements'))
+
+      const caption = getByTestId('input-field-password__requirements-title')
+      const captionId = caption.getAttribute('id')
+      // The id must be a real, non-empty value even with no inputId supplied — otherwise
+      // aria-labelledby dangles and two instances would emit the same id.
+      expect(captionId).toBeTruthy()
+      expect(group).toHaveAttribute('aria-labelledby', captionId as string)
+    })
+
+    it('renders a custom requirementsTitle as the caption and the group name', () => {
+      const { getByRole, getByTestId } = render(FieldPassword, {
+        props: { label: 'Password', requirements: RULES, requirementsTitle: 'Deve conter:' }
+      })
+
+      expect(getByTestId('input-field-password__requirements-title')).toHaveTextContent(
+        'Deve conter:'
+      )
+      expect(getByRole('group', { name: 'Deve conter:' })).toBeInTheDocument()
+    })
+
+    it('keeps the chips out of the tab order (they report state, they are not controls)', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: { label: 'Password', requirements: RULES }
+      })
+
+      for (const chip of getAllByTestId('input-field-password__requirement')) {
+        expect(chip).not.toHaveAttribute('tabindex')
+        expect(chip).not.toHaveAttribute('role')
+      }
+    })
+
+    it('has no a11y violations with a partially satisfied requirements row', async () => {
+      const { container } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          inputId: 'pw-a11y-requirements',
+          helperText: 'At least 8 characters.',
+          requirements: RULES
+        }
+      })
+
+      await expectNoA11yViolations(container)
     })
   })
 

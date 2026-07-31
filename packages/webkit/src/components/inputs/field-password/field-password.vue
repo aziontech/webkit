@@ -12,6 +12,14 @@
     inheritAttrs: false
   })
 
+  /** One password rule rendered as a chip under the field. */
+  export interface PasswordRequirement {
+    /** Text shown inside the chip. */
+    label: string
+    /** When true the chip renders satisfied: check glyph plus success tokens. */
+    validated: boolean
+  }
+
   interface Props {
     /** Two-way bound value of the underlying InputPassword. */
     modelValue?: string
@@ -39,6 +47,10 @@
     inputId?: string
     /** HTML name for the underlying input (form + vee-validate integration). */
     name?: string
+    /** Password rules rendered as a wrapping chip row under the field, one chip per entry. */
+    requirements?: PasswordRequirement[]
+    /** Caption that opens the requirements row and names the group for assistive tech. */
+    requirementsTitle?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -54,7 +66,9 @@
     toggleable: true,
     autocomplete: 'current-password',
     inputId: '',
-    name: ''
+    name: '',
+    requirements: () => [],
+    requirementsTitle: 'Must contain:'
   })
 
   const emit = defineEmits<{
@@ -73,8 +87,14 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-field-password'
   )
 
-  const resolvedInputId = computed(() => props.inputId ?? generatedId)
+  // `inputId` defaults to '' — an empty string is not nullish, so `??` would keep it and
+  // every derived id would collapse to a bare suffix (duplicated across instances, and no
+  // real label/describedby association). `||` is what makes the useId() fallback fire.
+  const resolvedInputId = computed(() => props.inputId || generatedId)
   const helperId = computed(() => `${resolvedInputId.value}-helper`)
+  const requirementsTitleId = computed(() => `${resolvedInputId.value}-requirements-title`)
+
+  const hasRequirements = computed(() => props.requirements.length > 0)
 
   const helperKind = computed<HelperTextKind>(() => {
     if (props.disabled) return 'disabled'
@@ -99,6 +119,7 @@
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
+    :data-has-requirements="hasRequirements || null"
     class="flex flex-col gap-[var(--spacing-xs)] w-full"
   >
     <Label
@@ -144,5 +165,34 @@
       :kind="helperKind"
       :data-testid="`${testId}__helper`"
     />
+    <div
+      v-if="hasRequirements"
+      role="group"
+      :aria-labelledby="requirementsTitleId"
+      :data-testid="`${testId}__requirements`"
+      class="flex w-full flex-wrap content-center items-center gap-[var(--spacing-xs)]"
+    >
+      <span
+        :id="requirementsTitleId"
+        :data-testid="`${testId}__requirements-title`"
+        class="shrink-0 leading-none text-label-sm text-[var(--text-default)]"
+      >
+        {{ requirementsTitle }}
+      </span>
+      <span
+        v-for="requirement in requirements"
+        :key="requirement.label"
+        :data-validated="requirement.validated || null"
+        :data-testid="`${testId}__requirement`"
+        class="inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm bg-[var(--bg-surface-raised)] text-[var(--text-muted)] transition-colors duration-150 ease-out motion-reduce:transition-none data-[validated]:bg-[var(--success)] data-[validated]:text-[var(--text-default)]"
+      >
+        <i
+          v-if="requirement.validated"
+          class="pi pi-check flex shrink-0 items-center size-[14px] text-[var(--success-contrast)]"
+          aria-hidden="true"
+        />
+        {{ requirement.label }}
+      </span>
+    </div>
   </div>
 </template>
