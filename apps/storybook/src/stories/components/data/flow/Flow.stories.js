@@ -23,6 +23,14 @@ FlowNode.__docgenInfo = {
       type: { name: 'boolean' },
       defaultValue: { value: 'false' },
       required: false
+    },
+    {
+      name: 'terminal',
+      description:
+        'Ends its branch: the node receives an incoming connector but originates none.',
+      type: { name: 'boolean' },
+      defaultValue: { value: 'false' },
+      required: false
     }
   ],
   slots: [{ name: 'default', description: 'Node content.' }]
