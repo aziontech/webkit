@@ -4,12 +4,14 @@
   // Deployments / Settings) drives the active sub-page, with the active tab held in
   // the URL (`?tab=`) so it survives reload and is linkable.
   //
-  //  - Overview: two bands with the same anatomy — a PageHeading (`size="small"`, so
+  //  - Overview: three bands with the same anatomy — a PageHeading (`size="small"`, so
   //    the title keeps the heading-xs / `--text-default` weight it had as a card
-  //    header) over a flush CardBox, at the group gap. "Active Deployment", whose
-  //    deployment topology is a Flow diagram of the four resources a deploy
-  //    provisions — Workload → Application → Connector → Storage
-  //    (src/lib/provisioning.js) — inside an Accordion, and "Version History".
+  //    header) over a flush CardBox, at the group gap. "Active Deployment" (the
+  //    deployment's facts), "Deployment Topology" (a Flow diagram of the four
+  //    resources a deploy provisions — Workload → Application → Connector → Storage,
+  //    src/lib/provisioning.js) and "Version History". The topology used to live
+  //    inside the Active Deployment card, in an Accordion; it is a band of its own now,
+  //    so the chain reads as a peer of the deployment rather than a detail of it.
   //  - Deployments: the same history, unscoped by the Overview's framing.
   //  - Settings: a General ItemGroup with an independent Save + a danger delete row.
   //
@@ -33,7 +35,6 @@
   // Deployments module also uses, so a deployment reads identically whether it is
   // listed here or in the module list. A row (in either table) opens the read-only
   // WorkloadDeploymentDrawer.
-  import Accordion from '@aziontech/webkit/accordion'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -169,13 +170,19 @@
 
   // The Application level of the chain: the Application node itself, plus one
   // node per bindable slot — a filled card once bound, the empty node until then.
+  //
+  // Every slot is `terminal`, bound or not. A binding is not a link in the chain: the
+  // workload's relationship to each slot is a platform default, so a connector reaches
+  // it, but nothing flows onward from a binding to the Connector. Binding one fills the
+  // card; it does not promote the slot into a step. Only the Application carries the
+  // chain forward out of this level.
   const applicationLevel = computed(() => {
     const application = topology.value.find((node) => node.key === 'application')
     return [
       application,
       ...BINDABLE.map((slot) => {
         const boundName = bindings[slot.key]
-        if (!boundName) return { ...slot, empty: true }
+        if (!boundName) return { ...slot, empty: true, terminal: true }
         return {
           key: slot.key,
           kind: slot.kind,
@@ -183,6 +190,7 @@
           name: boundName,
           status: 'Active',
           href: '',
+          terminal: true,
           fields: [
             { label: 'Version', value: 'Latest' },
             { label: 'Bound to', value: application?.name ?? '' }
@@ -207,10 +215,10 @@
   // — not the card — decides which ones start open: NONE of them do. Closed, a node
   // still names its kind, its status and its resource, so the chain arrives as what
   // it IS — Workload → Application → Connector → Storage — and the fields are one
-  // click away. That is also what lets the diagram itself open on arrival (the
-  // Accordion below): every node open would put a ~380px wall of key/value pairs
-  // over the deployment's facts. Nodes are independent, so opening one never closes
-  // another.
+  // click away. That is also what keeps the Deployment Topology band short on arrival:
+  // every node open would put a ~380px wall of key/value pairs between the
+  // deployment's facts and its version history. Nodes are independent, so opening one
+  // never closes another.
   const openNodes = reactive({})
 
   const bindResource = (slotKey, value) => {
@@ -456,175 +464,182 @@
               </PageHeading>
               <CardBox :padded="false">
                 <template #content>
-                  <div class="flex flex-col">
-                    <!-- Meta row -->
-                    <div
-                      class="p-[var(--spacing-md)] grid grid-cols-2 gap-[var(--spacing-sm)] lg:grid-cols-4"
-                    >
-                      <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                        <span class="text-label-sm text-[var(--text-muted)]">Version ID</span>
-                        <div class="flex items-center gap-[var(--spacing-xs)]">
-                          <span class="text-body-sm text-[var(--text-default)]">{{
-                            activeDeployment.versionId
-                          }}</span>
-                          <CopyButton
-                            kind="outlined"
-                            :value="activeDeployment.versionId"
-                            aria-label="Copy version ID"
-                          />
-                        </div>
-                      </div>
-                      <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                        <span class="text-label-sm text-[var(--text-muted)]">Environment</span>
-                        <div class="flex items-center gap-[var(--spacing-xs)]">
-                          <span class="text-body-sm text-[var(--text-default)]">{{
-                            activeEnvironment
-                          }}</span>
-                          <Tag
-                            label="Current"
-                            severity="info"
-                            size="small"
-                          />
-                        </div>
-                      </div>
-                      <!-- Status reads horizontally: the StatusIndicator already
-                         carries its own label, so stacking a caption above it
-                         spends a second line on one short word. -->
-                      <div class="flex flex-col items-start gap-[var(--spacing-xs)] self-start">
-                        <span class="text-label-sm text-[var(--text-muted)]">Status</span>
-                        <StatusIndicator
-                          :severity="statusMeta(activeDeployment.status).severity"
-                          :loading="statusMeta(activeDeployment.status).loading"
-                          :label="activeDeployment.status"
-                        />
-                      </div>
-                      <div class="flex items-start justify-between gap-[var(--spacing-xs)]">
-                        <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                          <span class="text-label-sm text-[var(--text-muted)]">Deployed</span>
-                          <LastModifiedCell
-                            :author="activeDeployment.author"
-                            :avatar-src="activeDeployment.authorAvatar"
-                            :date="activeDeployment.deployedAt"
-                          />
-                        </div>
-                        <IconButton
-                          icon="pi pi-ellipsis-v"
-                          kind="transparent"
-                          size="small"
-                          aria-label="Active deployment actions"
+                  <!-- The deployment's four facts. The topology used to sit under this
+                       grid inside a collapsible; it is its own band now, so this card
+                       is the fact grid and nothing else. -->
+                  <div
+                    class="p-[var(--spacing-md)] grid grid-cols-2 gap-[var(--spacing-sm)] lg:grid-cols-4"
+                  >
+                    <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                      <span class="text-label-sm text-[var(--text-muted)]">Version ID</span>
+                      <div class="flex items-center gap-[var(--spacing-xs)]">
+                        <span class="text-body-sm text-[var(--text-default)]">{{
+                          activeDeployment.versionId
+                        }}</span>
+                        <CopyButton
+                          kind="outlined"
+                          :value="activeDeployment.versionId"
+                          aria-label="Copy version ID"
                         />
                       </div>
                     </div>
-
-                    <!-- Deployment topology: a Flow diagram inside an Accordion, OPEN
-                         by default (`default-value="topology"`). It used to start
-                         closed because a ~380px diagram opening over the deployment's
-                         facts — version, environment, status, who and when — pushed
-                         all of it out of view on arrival. That cost went away when the
-                         nodes themselves became disclosures (ui/TopologyNode.vue):
-                         collapsed, the chain is one row of headers, so it can show the
-                         relationship the card is about without burying the facts under
-                         it. Still `collapsible`, so it can be folded away. -->
-                    <Accordion
-                      type="single"
-                      collapsible
-                      default-value="topology"
-                    >
-                      <Accordion.Item value="topology">
-                        <Accordion.Trigger>
-                          <!-- Same treatment as the "Active Deployment" label above it
-                               (PageHeading `size="small"` → heading-xs on
-                               `--text-default`): this row is the only thing naming the
-                               section it holds — and the only thing left naming it
-                               once it is folded away — so a muted label-sm caption
-                               undersold it. The trigger already puts its content on
-                               the left and the chevron on the right. -->
-                          <span class="text-heading-xxs text-[var(--text-default)]">
-                            Deployment topology
-                          </span>
-                        </Accordion.Trigger>
-                        <Accordion.Content>
-                          <!-- The chain a deploy provisions, left to right:
-                             Workload → Application → Connector → Storage, with the
-                             Application level also carrying its bindable resources
-                             (Firewall, Custom Page) stacked in the same column via
-                             Flow.Parallel. Every node is the same card and every
-                             card is a DISCLOSURE (ui/TopologyNode.vue): the header
-                             names the node (kind + status + the resource's own
-                             name) and the fields sit behind it, so the diagram
-                             reads as one system instead of bespoke boxes — an
-                             unbound slot is that same card, dashed, holding the CTA
-                             that fills it. Every node arrives CLOSED (`openNodes`),
-                             and a closed node still says what it is — which is what
-                             keeps the chain legible collapsed, and what keeps the
-                             diagram short enough to open with the card.
-                             `align="start"` tops the levels against each other, so
-                             opening one node never nudges the others.
-                             Flow's own track is `w-fit`; `[&>div]:w-full` stretches
-                             it to the card, and each level takes an equal share of
-                             it (`flex-1`) so every node card is w-full inside its
-                             level instead of a fixed 256px box. -->
-                          <Flow
-                            align="start"
-                            class="[&>div]:w-full"
-                          >
-                            <Flow.Parallel
-                              v-for="level in topologyLevels"
-                              :key="level.key"
-                              align="start"
-                              class="min-w-0 flex-1"
-                            >
-                              <Flow.Node
-                                v-for="node in level.nodes"
-                                :key="node.key"
-                                unstyled
-                                class="w-full"
-                              >
-                                <!-- Empty node: the slot is open, so the card is the
-                                   bind CTA. -->
-                                <TopologyBindNode
-                                  v-if="node.empty"
-                                  v-model:open="openNodes[node.key]"
-                                  :kind="node.kind"
-                                  :icon="node.icon"
-                                  :description="node.description"
-                                  :cta-label="node.ctaLabel"
-                                  :options="node.options"
-                                  @bind="(event, value) => bindResource(node.key, value)"
-                                />
-                                <TopologyNodeCard
-                                  v-else
-                                  v-model:open="openNodes[node.key]"
-                                  :node="node"
-                                  :email="userEmail"
-                                >
-                                  <!-- Only the two bindable slots can be emptied
-                                     again; the provisioned chain cannot. Unbinding
-                                     sits in the node's BODY, not its header: the
-                                     header is one full-width disclosure button, and
-                                     a nested button is invalid — and a destructive
-                                     control one stray click from firing is the last
-                                     thing a collapsed row should carry. -->
-                                  <template
-                                    v-if="node.key in bindings"
-                                    #actions
-                                  >
-                                    <Button
-                                      :label="`Unbind ${node.kind}`"
-                                      kind="text"
-                                      size="small"
-                                      icon="pi pi-times"
-                                      @click="unbindResource(node.key)"
-                                    />
-                                  </template>
-                                </TopologyNodeCard>
-                              </Flow.Node>
-                            </Flow.Parallel>
-                          </Flow>
-                        </Accordion.Content>
-                      </Accordion.Item>
-                    </Accordion>
+                    <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                      <span class="text-label-sm text-[var(--text-muted)]">Environment</span>
+                      <div class="flex items-center gap-[var(--spacing-xs)]">
+                        <span class="text-body-sm text-[var(--text-default)]">{{
+                          activeEnvironment
+                        }}</span>
+                        <Tag
+                          label="Current"
+                          severity="info"
+                          size="small"
+                        />
+                      </div>
+                    </div>
+                    <!-- Status reads horizontally: the StatusIndicator already carries
+                         its own label, so stacking a caption above it spends a second
+                         line on one short word. -->
+                    <div class="flex flex-col items-start gap-[var(--spacing-xs)] self-start">
+                      <span class="text-label-sm text-[var(--text-muted)]">Status</span>
+                      <StatusIndicator
+                        :severity="statusMeta(activeDeployment.status).severity"
+                        :loading="statusMeta(activeDeployment.status).loading"
+                        :label="activeDeployment.status"
+                      />
+                    </div>
+                    <div class="flex items-start justify-between gap-[var(--spacing-xs)]">
+                      <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                        <span class="text-label-sm text-[var(--text-muted)]">Deployed</span>
+                        <LastModifiedCell
+                          :author="activeDeployment.author"
+                          :avatar-src="activeDeployment.authorAvatar"
+                          :date="activeDeployment.deployedAt"
+                        />
+                      </div>
+                      <IconButton
+                        icon="pi pi-ellipsis-v"
+                        kind="transparent"
+                        size="small"
+                        aria-label="Active deployment actions"
+                      />
+                    </div>
                   </div>
+                </template>
+              </CardBox>
+            </div>
+
+            <!-- Deployment Topology — its own band, with the same anatomy as the two
+                 around it: a small PageHeading over a flush CardBox at the group gap.
+                 It used to be an Accordion tucked under the Active Deployment fact
+                 grid, which cost it twice: a whole subsystem read as a DETAIL of that
+                 card, and the accordion trigger had to grow its own heading-xxs title
+                 to name it, competing with the PageHeading above. As a band it is named
+                 once, by the same component every other band uses, and it sits at the
+                 section gap as the peer of Active Deployment and Version History. No
+                 accordion: the bands around it do not fold, and a section that names
+                 itself does not need a second control to reveal it. -->
+            <div class="flex flex-col gap-[var(--layout-group-gap)]">
+              <PageHeading
+                title="Deployment Topology"
+                size="small"
+              />
+              <!-- `--bg-surface-raised` instead of CardBox's default `--bg-surface`:
+                   the node cards inside are themselves `--bg-surface` and now carry a
+                   `shadow-sm`, so the band needs to sit one step behind them for the
+                   chain to read as cards ON a surface rather than cards IN a box.
+                   CardBox merges a consumer class through `cn`, so the bg override
+                   wins over its default. -->
+              <CardBox
+                :padded="false"
+                class="bg-[var(--bg-surface-raised)]"
+              >
+                <template #content>
+                  <!-- The chain a deploy provisions, left to right:
+                       Workload → Application → Connector → Storage, with the
+                       Application level also carrying its bindable resources
+                       (Firewall, Custom Page) stacked in the same column via
+                       Flow.Parallel. Every node is the same card and every card is a
+                       DISCLOSURE (ui/TopologyNode.vue): the header names the node
+                       (kind + status + the resource's own name) and the fields sit
+                       behind it, so the diagram reads as one system instead of bespoke
+                       boxes — an unbound slot is that same card, dashed, holding the
+                       CTA that fills it. Every node arrives CLOSED (`openNodes`), and a
+                       closed node still says what it is, which is what keeps the chain
+                       legible collapsed and the band short on arrival.
+                       `align="start"` tops the levels against each other, so opening
+                       one node never nudges the others. Flow's own track is `w-fit`;
+                       `[&>div]:w-full` stretches it to the card, and each level takes
+                       an equal share of it (`flex-1`) so every node card is w-full
+                       inside its level instead of a fixed 256px box. Flow carries its
+                       own `--spacing-md` padding, which is why the CardBox stays
+                       `:padded="false"`. -->
+                  <Flow
+                    align="start"
+                    class="[&>div]:w-full"
+                  >
+                    <Flow.Parallel
+                      v-for="level in topologyLevels"
+                      :key="level.key"
+                      align="start"
+                      class="min-w-0 flex-1"
+                    >
+                      <!-- `terminal` marks the two BINDING slots (Firewall, Custom
+                           Page). They are not links in the provisioned chain: the
+                           workload's relationship to each slot is a platform default,
+                           so a connector reaches them, but nothing flows onward from a
+                           binding to the Connector. Flow's `terminal` says exactly
+                           that — the node receives an incoming connector and
+                           originates none — so the chain runs Workload → Application →
+                           Connector → Storage while the bindings hang off it as
+                           leaves. It applies bound OR unbound: binding one fills the
+                           card, it does not turn the slot into a step. -->
+                      <Flow.Node
+                        v-for="node in level.nodes"
+                        :key="node.key"
+                        unstyled
+                        :terminal="Boolean(node.terminal)"
+                        class="w-full"
+                      >
+                        <!-- Empty node: the slot is open, so the card is the bind
+                           CTA. -->
+                        <TopologyBindNode
+                          v-if="node.empty"
+                          v-model:open="openNodes[node.key]"
+                          :kind="node.kind"
+                          :icon="node.icon"
+                          :description="node.description"
+                          :cta-label="node.ctaLabel"
+                          :options="node.options"
+                          @bind="(event, value) => bindResource(node.key, value)"
+                        />
+                        <TopologyNodeCard
+                          v-else
+                          v-model:open="openNodes[node.key]"
+                          :node="node"
+                          :email="userEmail"
+                        >
+                          <!-- Only the two bindable slots can be emptied again; the
+                             provisioned chain cannot. Unbinding sits in the node's
+                             BODY, not its header: the header is one full-width
+                             disclosure button, and a nested button is invalid — and a
+                             destructive control one stray click from firing is the
+                             last thing a collapsed row should carry. -->
+                          <template
+                            v-if="node.key in bindings"
+                            #actions
+                          >
+                            <Button
+                              :label="`Unbind ${node.kind}`"
+                              kind="text"
+                              size="small"
+                              icon="pi pi-times"
+                              @click="unbindResource(node.key)"
+                            />
+                          </template>
+                        </TopologyNodeCard>
+                      </Flow.Node>
+                    </Flow.Parallel>
+                  </Flow>
                 </template>
               </CardBox>
             </div>

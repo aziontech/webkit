@@ -8,14 +8,15 @@
   // concerns are segregated: the header answers "who am I acting as", the rail
   // answers "where in this tenant am I".
   //
-  // What stays: the search field at the top (the ⌘K affordance for the
+  // What the rail carries: the search field at the top (the ⌘K affordance for the
   // CommandMenu palette, which carries the same navigation plus the app-level
-  // commands), the full Azion Console navigation as the default body (grouped by
-  // product area, mirroring the console; a page can override it via the default
-  // slot), and the footer — avatar + user name + the account menu, a Dropdown
-  // anchored to the overflow (⋮) button with a single account "Settings" entry
-  // (the per-category links are tabs on the /account page), a personal section
-  // with an identity header, the theme control, and Logout.
+  // commands — Create among them, even though the Create button itself lives in
+  // the global header), the full Azion Console navigation as the default body
+  // (grouped by product area, mirroring the console; a page can override it via
+  // the default slot), and the footer — avatar + user name + the account menu, a
+  // Dropdown anchored to the overflow (⋮) button with a single account "Settings"
+  // entry (the per-category links are tabs on the /account page), a personal
+  // section with an identity header, the theme control, and Logout.
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CommandMenu from '@aziontech/webkit/command-menu'
@@ -56,9 +57,11 @@
   })
 
   // `logout` fires when the Logout entry is chosen; `select` fires for any other
-  // account-menu entry; `navigate` fires when a nav item is activated. All are
-  // event-first per the activation-payload convention.
-  const emit = defineEmits(['logout', 'select', 'navigate'])
+  // account-menu entry; `navigate` fires when a nav item is activated; `create`
+  // fires from the header's Create button and the palette's Create command — one
+  // event for both, so the shell has a single way into the creation center. All
+  // are event-first per the activation-payload convention.
+  const emit = defineEmits(['logout', 'select', 'navigate', 'create'])
 
   // Azion Console navigation, grouped by product area — the full set mirroring
   // the console's left rail. Items with a `path` route; the rest highlight only.
@@ -201,7 +204,9 @@
       id: 'create',
       label: 'Create Resource',
       icon: 'pi pi-plus-circle',
-      run: (event) => emit('navigate', event, { id: 'create', label: 'Create', path: '/create' })
+      // Same event as the header's Create button — not a `navigate` with a
+      // synthetic nav item, which would also mark a non-existent rail item active.
+      run: (event) => emit('create', event)
     },
     {
       id: 'theme',
@@ -305,8 +310,8 @@
       <template #header>
         <!-- Search → CommandMenu. A read-only field carrying the ⌘K hint, in the
              fixed header region so it stays put while the nav below it scrolls.
-             It is the rail's whole header now: the brand and the account
-             switcher moved to the global header (see AppLayout.vue). The
+             It is the rail's whole header: the brand, the account switcher and
+             Create all live in the global header (see AppLayout.vue). The
              wrapper takes the click so the icons and the field itself are all
              part of the target; Enter on the focused field opens it too. The
              palette teleports to the body, so it works while the rail is

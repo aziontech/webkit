@@ -2,30 +2,38 @@
 // The Applications module "create" flow — a dedicated PAGE (route
 // /applications/new), sidebar hidden so the form is the only focus.
 //
+// The FIELDS are exactly the body of POST /v4/workspace/applications — `name`,
+// the four `modules` toggles, `active` and `debug`, nothing else. `form` is keyed
+// by the API's own names (snake_case inside `modules`) because this object IS the
+// request body; `payload()` only nests each module flag into its `{ enabled }`
+// object, so the shape sent is readable straight off the state.
+//
 // Layout is Cards + ItemGroups (the `/form` skill, Approach A): a single centered
 // column of sections, each an section title over a flush CardBox whose body is an
 // Item.List. Every field is a small Item row (`size="small"`) — in an ItemGroup the
 // Item.Title IS the label (name in Item.Title, guidance in Item.Description) on the
-// left via Item.Content, the control on the right via Item.Actions. Richer controls
-// that don't fit a one-line row — the radio groups — stay as full-width blocks.
+// left via Item.Content, the control on the right via Item.Actions.
 //
 // Accessibility (the `/form` skill):
 //   - the Item.Title names each field; the control carries an aria-label so it has
 //     an accessible name (no <Label for> — that's reserved for Fields-separated);
 //   - validation runs on submit only; with no Label the feedback is a HelperText
-//     under the control. These fields are required-only, so the state is amber
+//     under the control. `name` is the only required field, so the state is amber
 //     `required` (required is NOT an error — never the red `invalid`), rendered on
 //     submit and cleared as the user edits. No error-summary;
-//   - one `submitting` flag locks the whole scope (outer <fieldset :disabled> +
-//     Save :loading); request/API errors surface via toast.
+//   - one `submitting` flag locks the whole scope (the /webkit-ui-states Pattern 1
+//     lock): the outer <fieldset :disabled> is the NATIVE safety net, and every
+//     control ALSO takes :disabled off the same flag — a fieldset blocks
+//     interaction for the whole subtree but each webkit control renders its
+//     disabled VISUAL from its own prop, so the fieldset alone would leave the
+//     controls looking live mid-submit. The lock is the PROP everywhere; no page
+//     ever hand-styles a locked control. Save carries :loading (webkit Button
+//     suppresses its own click while loading); request errors toast.
 import Button from "@aziontech/webkit/button";
 import CardBox from "@aziontech/webkit/card-box";
-import FieldRadioBlock from "@aziontech/webkit/field-radio-block";
 import HelperText from "@aziontech/webkit/helper-text";
-import InputNumber from "@aziontech/webkit/input-number";
 import InputText from "@aziontech/webkit/input-text";
 import Item from "@aziontech/webkit/item";
-import MultiSelect from "@aziontech/webkit/multi-select";
 import Switch from "@aziontech/webkit/switch";
 import { toast } from "@aziontech/webkit/toast";
 import { computed, reactive, ref } from "vue";
@@ -33,6 +41,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import CreationHeader from "./ui/CreationHeader.vue";
 import PageHeading from "./ui/PageHeading.vue";
+import SectionHeading from "./ui/SectionHeading.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -40,91 +49,50 @@ const router = useRouter();
 // The email carried over from the login flow (falls back to a placeholder).
 const userEmail = computed(() => route.query.email || "myemail@azion.com");
 
-// --- Field option models -------------------------------------------------
-const protocolUsageOptions = [
-  {
-    value: "http",
-    label: "HTTP support",
-    description:
-      "Use only the HTTP protocol. Choose from the available HTTP ports.",
-  },
-  {
-    value: "https",
-    label: "HTTP and HTTPS support",
-    description:
-      "Use both HTTP and HTTPS protocols. Choose from the available HTTP and HTTPS ports.",
-  },
-  {
-    value: "http3",
-    label: "HTTP/3 support",
-    description:
-      "Use both HTTP and HTTPS protocols and enable HTTP/3 support. Only available for HTTP port 80 and HTTPS port 443.",
-  },
-];
-const httpPortOptions = [
-  { label: "80 (Default)", value: "80" },
-  { label: "8080", value: "8080" },
-  { label: "8008", value: "8008" },
-];
-const httpsPortOptions = [
-  { label: "443 (Default)", value: "443" },
-  { label: "8443", value: "8443" },
-];
-const protocolPolicyOptions = [
-  { value: "preserve", label: "Preserve HTTP/HTTPS" },
-  { value: "http", label: "Enforce HTTP" },
-  { value: "https", label: "Enforce HTTPS" },
-];
-const browserCacheOptions = [
-  { value: "override", label: "Override cache settings" },
-  {
-    value: "honor",
-    label: "Honor cache policies",
-    description:
-      "Honor cache policies from the origin or define a new maximum cache TTL for browsers.",
-  },
-];
-const edgeCacheOptions = [
-  { value: "override", label: "Override cache settings" },
-  {
-    value: "honor",
-    label: "Honor cache policies",
-    description:
-      "Honor cache policies from the origin or define a new maximum cache TTL for the edge. If a TTL isn't received from the origin, cache will be maintained at a default TTL.",
-  },
-];
-
-// Trigger label for the port multi-selects (maps stored values → labels).
-const portsLabel = (list) => (values) =>
-  (values ?? [])
-    .map((value) => list.find((option) => option.value === value)?.label ?? value)
-    .join(", ");
-
 // --- Form state ----------------------------------------------------------
+// One property per field the create endpoint accepts. The defaults are the
+// endpoint's own defaults: Cache and Functions ship on, the two paid-feature
+// modules ship off, the application is created active and undebugged.
 const form = reactive({
   name: "",
-  protocolUsage: "http",
-  httpPorts: ["80"],
-  httpsPorts: ["443"],
-  protocolPolicy: "preserve",
-  address: "",
-  hostHeader: "${host}",
-  browserCache: "override",
-  browserMaxTtl: 0,
-  edgeCache: "override",
-  edgeMaxTtl: 60,
-  debugRules: false,
+  modules: {
+    cache: true,
+    functions: true,
+    application_accelerator: false,
+    image_processor: false,
+  },
+  active: true,
+  debug: false,
 });
 
-// HTTPS ports only apply when the app serves HTTPS.
-const httpsEnabled = computed(() => form.protocolUsage !== "http");
+// The module rows, ordered the way the Main Settings tab lists them so a created
+// application reads the same when it is edited. `key` indexes `form.modules`.
+const moduleFields = [
+  {
+    key: "application_accelerator",
+    title: "Application Accelerator",
+    description: "Optimize protocols and manage dynamic content delivery.",
+  },
+  {
+    key: "cache",
+    title: "Cache",
+    description: "Customize advanced cache settings.",
+  },
+  {
+    key: "functions",
+    title: "Functions",
+    description: "Build ultra-low latency functions that run on the edge.",
+  },
+  {
+    key: "image_processor",
+    title: "Image Processor",
+    description: "Enable dynamic image editing options.",
+  },
+];
 
 // Per-field error messages. Empty string = valid.
 const errors = reactive({
   name: "",
-  httpPorts: "",
-  address: "",
-  hostHeader: "",
 });
 
 // One flag locks the whole scope while the request is in flight.
@@ -132,15 +100,23 @@ const submitting = ref(false);
 
 // --- Validation ----------------------------------------------------------
 // Runs on submit only. A non-empty error flag drives the field's `required`
-// indicator and `:invalid` state — the feedback IS the field, rendered as a
-// result of the submit and cleared as the user edits.
+// indicator — the feedback IS the field, rendered as a result of the submit and
+// cleared as the user edits. `name` is the endpoint's only required field.
 const validate = () => {
   errors.name = form.name.trim() ? "" : "This field is required.";
-  errors.httpPorts = form.httpPorts.length ? "" : "Select at least one HTTP port.";
-  errors.address = form.address.trim() ? "" : "This field is required.";
-  errors.hostHeader = form.hostHeader.trim() ? "" : "This field is required.";
-  return !errors.name && !errors.httpPorts && !errors.address && !errors.hostHeader;
+  return !errors.name;
 };
+
+// The request body, exactly as POST /v4/workspace/applications expects it: each
+// module flag nested under its own `{ enabled }` object.
+const payload = () => ({
+  name: form.name.trim(),
+  modules: Object.fromEntries(
+    Object.entries(form.modules).map(([key, enabled]) => [key, { enabled }]),
+  ),
+  active: form.active,
+  debug: form.debug,
+});
 
 const cancel = () =>
   router.push({ path: "/applications", query: { email: userEmail.value } });
@@ -155,8 +131,9 @@ const submit = async () => {
   // every field is :disabled while the create request is in flight.
   submitting.value = true;
   try {
+    const application = payload();
     await new Promise((resolve) => setTimeout(resolve, 900));
-    toast.success(`Application "${form.name}" created.`);
+    toast.success(`Application "${application.name}" created.`);
     router.push({ path: "/applications", query: { email: userEmail.value } });
   } catch (error) {
     // Request-level failure → toast with a way to recover. Never silent.
@@ -197,7 +174,7 @@ const submit = async () => {
              this h1 instead of repeating the label in aria-label. -->
         <PageHeading
           title="Create Application"
-          description="Name the application, then set how it is delivered, where it pulls from, and how long it caches."
+          description="Name the application, choose the modules it runs with, and whether it starts active."
           title-id="create-application-title"
         />
 
@@ -208,11 +185,12 @@ const submit = async () => {
         >
           <legend class="sr-only">Create application</legend>
 
-          <!-- Section: General -->
+          <!-- Section: General — the request body's top-level fields (`name`,
+               `active`, `debug`). The nested `modules` object is the section
+               below; a one-row "Debug" section titled the same as its only row
+               would just say the word twice. -->
           <section class="flex flex-col gap-[var(--layout-group-gap)]">
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
-              General
-            </p>
+            <SectionHeading title="General" />
             <CardBox :padded="false">
               <template #content>
                 <Item.List>
@@ -232,6 +210,7 @@ const submit = async () => {
                           class="w-full"
                           aria-label="Name"
                           placeholder="My Application"
+                          :disabled="submitting"
                           :required="!!errors.name"
                           :aria-describedby="errors.name ? 'app-name-error' : undefined"
                           @update:model-value="errors.name = ''"
@@ -245,335 +224,62 @@ const submit = async () => {
                       </div>
                     </Item.Actions>
                   </Item>
-                </Item.List>
-              </template>
-            </CardBox>
-          </section>
-
-          <!-- Section: Delivery Settings -->
-          <section
-            class="flex flex-col gap-[var(--layout-group-gap)]"
-          >
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
-              Delivery Settings
-            </p>
-            <CardBox :padded="false">
-              <template #content>
-                <Item.List>
-                  <Item size="small" class="items-start">
-                    <Item.Content>
-                      <Item.Title>Protocol Usage</Item.Title>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
-                        <legend class="sr-only">Protocol Usage</legend>
-                        <FieldRadioBlock
-                          v-for="option in protocolUsageOptions"
-                          :key="option.value"
-                          v-model="form.protocolUsage"
-                          :value="option.value"
-                          name="protocolUsage"
-                          :input-id="`app-protocolUsage-${option.value}`"
-                          :label="option.label"
-                          :description="option.description"
-                        />
-                      </fieldset>
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small">
-                    <Item.Content>
-                      <Item.Title>HTTP Ports</Item.Title>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                        <MultiSelect
-                          v-model="form.httpPorts"
-                          size="large"
-                          class="w-full"
-                          placeholder="Select ports"
-                          :required="!!errors.httpPorts"
-                          :display-value="portsLabel(httpPortOptions)"
-                          @update:model-value="errors.httpPorts = ''"
-                        >
-                          <MultiSelect.Trigger
-                            id="app-httpPorts"
-                            aria-label="HTTP Ports"
-                            :aria-describedby="errors.httpPorts ? 'app-httpPorts-error' : undefined"
-                          />
-                          <MultiSelect.Content>
-                            <MultiSelect.Option
-                              v-for="option in httpPortOptions"
-                              :key="option.value"
-                              :value="option.value"
-                            >
-                              {{ option.label }}
-                            </MultiSelect.Option>
-                          </MultiSelect.Content>
-                        </MultiSelect>
-                        <HelperText
-                          v-if="errors.httpPorts"
-                          id="app-httpPorts-error"
-                          kind="required"
-                          :label="errors.httpPorts"
-                        />
-                      </div>
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small">
-                    <Item.Content>
-                      <Item.Title>HTTPS Ports</Item.Title>
-                      <Item.Description>
-                        Applies when the Application serves HTTPS traffic.
-                      </Item.Description>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <MultiSelect
-                        v-model="form.httpsPorts"
-                        size="large"
-                        class="w-full"
-                        placeholder="443 (Default)"
-                        :disabled="!httpsEnabled"
-                        :display-value="portsLabel(httpsPortOptions)"
-                      >
-                        <MultiSelect.Trigger aria-label="HTTPS Ports" />
-                        <MultiSelect.Content>
-                          <MultiSelect.Option
-                            v-for="option in httpsPortOptions"
-                            :key="option.value"
-                            :value="option.value"
-                          >
-                            {{ option.label }}
-                          </MultiSelect.Option>
-                        </MultiSelect.Content>
-                      </MultiSelect>
-                    </Item.Actions>
-                  </Item>
-                </Item.List>
-              </template>
-            </CardBox>
-          </section>
-
-          <!-- Section: Origins -->
-          <section
-            class="flex flex-col gap-[var(--layout-group-gap)]"
-          >
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
-              Origins
-            </p>
-            <CardBox :padded="false">
-              <template #content>
-                <Item.List>
-                  <Item size="small">
-                    <Item.Content>
-                      <Item.Title>Origin Type</Item.Title>
-                      <Item.Description>
-                        The origin type is pre-defined and can't be customized.
-                      </Item.Description>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <InputText
-                        model-value="Single Origin"
-                        size="large"
-                        class="w-full"
-                        aria-label="Origin Type"
-                        readonly
-                      />
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small" class="items-start">
-                    <Item.Content>
-                      <Item.Title>Protocol Policy</Item.Title>
-                      <Item.Description>
-                        Select the protocol usage between the edge nodes and the
-                        origin.
-                      </Item.Description>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
-                        <legend class="sr-only">Protocol Policy</legend>
-                        <FieldRadioBlock
-                          v-for="option in protocolPolicyOptions"
-                          :key="option.value"
-                          v-model="form.protocolPolicy"
-                          :value="option.value"
-                          name="protocolPolicy"
-                          :input-id="`app-protocolPolicy-${option.value}`"
-                          :label="option.label"
-                        />
-                      </fieldset>
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small">
-                    <Item.Content>
-                      <Item.Title>Address</Item.Title>
-                      <Item.Description>
-                        Define an origin for the content in FQDN format or an IPv4/IPv6 address.
-                      </Item.Description>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                        <InputText
-                          v-model="form.address"
-                          size="large"
-                          class="w-full"
-                          aria-label="Address"
-                          placeholder="example.com"
-                          :required="!!errors.address"
-                          :aria-describedby="errors.address ? 'app-address-error' : undefined"
-                          @update:model-value="errors.address = ''"
-                        />
-                        <HelperText
-                          v-if="errors.address"
-                          id="app-address-error"
-                          kind="required"
-                          :label="errors.address"
-                        />
-                      </div>
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small">
-                    <Item.Content>
-                      <Item.Title>Host Header</Item.Title>
-                      <Item.Description>
-                        Identify a virtualhost sent in the Host header to the origin.
-                      </Item.Description>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                        <InputText
-                          v-model="form.hostHeader"
-                          size="large"
-                          class="w-full"
-                          aria-label="Host Header"
-                          :required="!!errors.hostHeader"
-                          :aria-describedby="errors.hostHeader ? 'app-hostHeader-error' : undefined"
-                          @update:model-value="errors.hostHeader = ''"
-                        />
-                        <HelperText
-                          v-if="errors.hostHeader"
-                          id="app-hostHeader-error"
-                          kind="required"
-                          :label="errors.hostHeader"
-                        />
-                      </div>
-                    </Item.Actions>
-                  </Item>
-                </Item.List>
-              </template>
-            </CardBox>
-          </section>
-
-          <!-- Section: Cache Expiration Policies -->
-          <section
-            class="flex flex-col gap-[var(--layout-group-gap)]"
-          >
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
-              Cache Expiration Policies
-            </p>
-            <CardBox :padded="false">
-              <template #content>
-                <Item.List>
-                  <Item size="small" class="items-start">
-                    <Item.Content>
-                      <Item.Title>Browser Cache Settings</Item.Title>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
-                        <legend class="sr-only">Browser Cache Settings</legend>
-                        <FieldRadioBlock
-                          v-for="option in browserCacheOptions"
-                          :key="option.value"
-                          v-model="form.browserCache"
-                          :value="option.value"
-                          name="browserCache"
-                          :input-id="`app-browserCache-${option.value}`"
-                          :label="option.label"
-                          :description="option.description"
-                        />
-                      </fieldset>
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small">
-                    <Item.Content>
-                      <Item.Title>Maximum TTL (seconds)</Item.Title>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <InputNumber
-                        v-model="form.browserMaxTtl"
-                        size="large"
-                        class="w-full"
-                        :min="0"
-                        aria-label="Browser maximum TTL in seconds"
-                      />
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small" class="items-start">
-                    <Item.Content>
-                      <Item.Title>Cache Settings</Item.Title>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
-                        <legend class="sr-only">Cache Settings</legend>
-                        <FieldRadioBlock
-                          v-for="option in edgeCacheOptions"
-                          :key="option.value"
-                          v-model="form.edgeCache"
-                          :value="option.value"
-                          name="edgeCache"
-                          :input-id="`app-edgeCache-${option.value}`"
-                          :label="option.label"
-                          :description="option.description"
-                        />
-                      </fieldset>
-                    </Item.Actions>
-                  </Item>
-                  <Item size="small">
-                    <Item.Content>
-                      <Item.Title>Maximum TTL (seconds)</Item.Title>
-                      <Item.Description>
-                        Enable Application Accelerator in the Main Settings tab to
-                        use values lower than 60 seconds. Tiered Cache requires
-                        cache TTL to be equal to or greater than 3 seconds.
-                      </Item.Description>
-                    </Item.Content>
-                    <Item.Actions class="layout-field-control">
-                      <InputNumber
-                        v-model="form.edgeMaxTtl"
-                        size="large"
-                        class="w-full"
-                        :min="0"
-                        aria-label="Edge maximum TTL in seconds"
-                      />
-                    </Item.Actions>
-                  </Item>
-                </Item.List>
-              </template>
-            </CardBox>
-          </section>
-
-          <!-- Section: Debug Rules -->
-          <section
-            class="flex flex-col gap-[var(--layout-group-gap)]"
-          >
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
-              Debug Rules
-            </p>
-            <CardBox :padded="false">
-              <template #content>
-                <Item.List>
                   <Item size="small">
                     <Item.Content>
                       <Item.Title>Active</Item.Title>
                       <Item.Description>
-                        Rules that were successfully executed will be shown under
-                        the $traceback field in Data Streaming and Real-Time
-                        Events or the $stacktrace variable in GraphQL.
+                        When disabled, the Application is created but stops serving
+                        traffic at the edge.
                       </Item.Description>
                     </Item.Content>
                     <Item.Actions class="justify-end">
                       <Switch
-                        v-model="form.debugRules"
+                        v-model="form.active"
                         aria-label="Active"
+                        :disabled="submitting"
+                      />
+                    </Item.Actions>
+                  </Item>
+                  <Item size="small">
+                    <Item.Content>
+                      <Item.Title>Debug</Item.Title>
+                      <Item.Description>
+                        Expose executed rules in $traceback and $stacktrace.
+                      </Item.Description>
+                    </Item.Content>
+                    <Item.Actions class="justify-end">
+                      <Switch
+                        v-model="form.debug"
+                        aria-label="Debug"
+                        :disabled="submitting"
+                      />
+                    </Item.Actions>
+                  </Item>
+                </Item.List>
+              </template>
+            </CardBox>
+          </section>
+
+          <!-- Section: Modules — the nested `modules` object, one row per flag. -->
+          <section class="flex flex-col gap-[var(--layout-group-gap)]">
+            <SectionHeading title="Modules" />
+            <CardBox :padded="false">
+              <template #content>
+                <Item.List>
+                  <Item
+                    v-for="mod in moduleFields"
+                    :key="mod.key"
+                    size="small"
+                  >
+                    <Item.Content>
+                      <Item.Title>{{ mod.title }}</Item.Title>
+                      <Item.Description>{{ mod.description }}</Item.Description>
+                    </Item.Content>
+                    <Item.Actions class="justify-end">
+                      <Switch
+                        v-model="form.modules[mod.key]"
+                        :aria-label="mod.title"
+                        :disabled="submitting"
                       />
                     </Item.Actions>
                   </Item>
@@ -584,8 +290,10 @@ const submit = async () => {
         </fieldset>
       </div>
 
-      <!-- Sticky action bar. Save is the native submit (Enter works); the
-           scope stays locked while the request is in flight. -->
+      <!-- Sticky action bar. The webkit Button renders a native type="button" and
+           does not forward a type, so submit is driven from its click; the sr-only
+           submit below keeps Enter working. The scope stays locked while the
+           request is in flight. -->
       <footer
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
@@ -600,9 +308,6 @@ const submit = async () => {
             :disabled="submitting"
             @click="cancel"
           />
-          <!-- webkit Button renders a native type="button" and does not forward
-               a type prop, so it can't submit the form implicitly — drive submit
-               from its click event instead. -->
           <Button
             label="Save"
             kind="primary"
@@ -612,6 +317,14 @@ const submit = async () => {
           />
         </div>
       </footer>
+      <button
+        type="submit"
+        class="sr-only"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        Save
+      </button>
       </form>
     </main>
   </div>

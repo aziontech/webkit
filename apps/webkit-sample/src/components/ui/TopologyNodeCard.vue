@@ -24,7 +24,9 @@
   // Forwarded straight to TopologyNode so the PAGE decides which nodes start open.
   const open = defineModel('open', { type: Boolean, default: false })
 
-  // A node's status word → StatusIndicator severity.
+  // A node's status word → severity. This stays the indicator vocabulary that
+  // TopologyNode's `severity` prop accepts; TopologyNode maps it to the Tag it
+  // renders the status with.
   const NODE_SEVERITY = {
     Live: 'success',
     Active: 'success',
@@ -55,13 +57,13 @@
           :href="field.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="truncate text-body-sm text-[var(--text-default)] hover:underline"
+          class="truncate text-body-xs text-[var(--text-default)] hover:underline"
         >
           {{ field.value }}
         </a>
         <span
           v-else
-          class="truncate text-body-sm text-[var(--text-default)]"
+          class="truncate text-body-xs text-[var(--text-default)]"
         >
           {{ field.value }}
         </span>

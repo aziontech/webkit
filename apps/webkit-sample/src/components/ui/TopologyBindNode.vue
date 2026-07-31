@@ -45,7 +45,7 @@
     severity="neutral"
     dashed
   >
-    <p class="text-body-sm text-[var(--text-muted)]">{{ description }}</p>
+    <p class="text-body-xs text-[var(--text-muted)]">{{ description }}</p>
 
     <Dropdown
       placement="bottom-start"

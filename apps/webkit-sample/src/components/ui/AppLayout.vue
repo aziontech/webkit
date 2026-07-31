@@ -16,7 +16,6 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -371,7 +370,12 @@
 
   const signOut = () => router.push('/login')
 
-  // Drawer variants of the account-menu / logout handlers — dismiss the nav first.
+  // Drawer variants of the create / account-menu / logout handlers — dismiss the
+  // nav first, so the mobile user lands on the target with the nav out of the way.
+  const onMobileCreate = () => {
+    closeNav()
+    openCreationCenter()
+  }
   const onMobileSelect = (event, value) => {
     closeNav()
     onAccountSelect(event, value)
@@ -489,7 +493,21 @@
       <GlobalHeader.Right>
         <!-- Below `md` the header actions collapse to icon-only buttons to fit
              the narrow bar; from `md` up they carry their labels. A Tooltip
-             names each icon on hover/focus, matching the left-side controls. -->
+             names each icon on hover/focus, matching the left-side controls.
+
+             Agent is `outlined`, so Create is the only filled control in the
+             header and stays the unambiguous primary action.
+
+             Its glyph is `ai-ask-azion` — the Azion assistant mark, a speech
+             bubble carrying a sparkle. It is deliberately NOT a sparkles-only
+             glyph: neither icon set this app loads has a working one.
+             `pi-sparkles` does not exist in the pinned `primeicons@6.0.1` (only
+             in the newer copy bundled inside @aziontech/icons, which
+             src/style.css does not import), and `ai-sparkles` IS declared but
+             its glyph is broken in azionicons.woff2 — it draws a solid filled
+             square, unlike every other azion icon. Neither set ships a cursor /
+             mouse-pointer glyph at all, and Button takes an icon CLASS, not a
+             slot, so an inline SVG is not an option here. -->
         <template v-if="isMobile">
           <Tooltip
             text="Create"
@@ -504,14 +522,14 @@
             />
           </Tooltip>
           <Tooltip
-            text="Copilot"
+            text="Agent"
             placement="bottom"
           >
             <IconButton
               icon="ai ai-ask-azion"
               kind="outlined"
               size="medium"
-              aria-label="Copilot"
+              aria-label="Agent"
             />
           </Tooltip>
         </template>
@@ -523,8 +541,9 @@
             icon="pi pi-plus-circle"
             @click="openCreationCenter"
           />
-          <ButtonHighlight
-            label="Copilot"
+          <Button
+            label="Agent"
+            kind="outlined"
             size="medium"
             icon="ai ai-ask-azion"
           />
@@ -567,6 +586,7 @@
           :collapsible="collapsible && !isMobile"
           aria-label="Main navigation"
           @navigate="onNavigate"
+          @create="openCreationCenter"
           @select="onAccountSelect"
           @logout="signOut"
         />
@@ -691,6 +711,7 @@
             aria-label="Main navigation"
             shortcut=""
             @navigate="onMobileNavigate"
+            @create="onMobileCreate"
             @select="onMobileSelect"
             @logout="onMobileLogout"
           />

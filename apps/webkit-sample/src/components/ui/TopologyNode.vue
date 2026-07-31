@@ -27,10 +27,10 @@
   // or anchor is invalid and unreachable. A node's ACTIONS (open its module page,
   // unbind the slot) belong to the body, which is where the platform puts them.
   import FlowAnchor from '@aziontech/webkit/flow-anchor'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import { useId } from 'vue'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed, useId } from 'vue'
 
-  defineProps({
+  const props = defineProps({
     // Resource kind — the eyebrow, and the node's place in the chain ("Workload",
     // "Application", "Firewall").
     kind: { type: String, required: true },
@@ -41,7 +41,10 @@
     name: { type: String, default: '' },
     // Status word shown in the header ("Live", "Active", "Not bound").
     status: { type: String, required: true },
-    // StatusIndicator severity for that word; the caller maps it.
+    // Severity for that word; the caller maps it. Stays the indicator vocabulary
+    // (success / info / warning / danger / neutral) that TopologyNodeCard and
+    // TopologyBindNode already speak — `tagSeverity` below translates it, so
+    // switching the header's rendering never rippled out to the callers.
     severity: { type: String, default: 'neutral' },
     // Dashed frame — the border an OPEN SLOT wears, so a position that is still
     // free reads as free without leaving the diagram.
@@ -52,6 +55,12 @@
   // to keep the workload open and everything else closed on arrival.
   const open = defineModel('open', { type: Boolean, default: false })
 
+  // The header renders status as a Tag. Tag and StatusIndicator already share the
+  // success / info / warning / danger vocabulary, so only `neutral` needs a word:
+  // Tag spells that `secondary` (bordered, canvas surface), the same neutral the
+  // workloads list gives a non-Live status.
+  const tagSeverity = computed(() => (props.severity === 'neutral' ? 'secondary' : props.severity))
+
   // `useId` (not a hand-rolled counter) so the trigger ↔ body association is
   // stable and unique across every node on the page.
   const uid = useId()
@@ -61,15 +70,35 @@
 
 <template>
   <!-- w-full: the card takes the width its Flow level hands it, so the levels
-       divide the diagram evenly instead of each node being a fixed box. -->
+       divide the diagram evenly instead of each node being a fixed box.
+
+       NO `overflow-hidden` here, deliberately. Flow's connector ports are absolutely
+       positioned OUTSIDE the FlowAnchor's box (that is what makes a line terminate on
+       a port instead of a bare edge), and the anchor lives inside this card — so
+       clipping this card renders every port invisible. The header button carries its
+       own rounding instead, which is the only thing the clip was buying: a hover
+       background that stays inside the card's corners. The collapsing body still has
+       its own `overflow-hidden` further down.
+
+       Hover and focus both raise the border to `--border-strong`, and both live HERE
+       rather than on the trigger, because the border being lit is a property of the
+       NODE — hovering its body should light it up the same as hovering its header.
+       Focus comes in through `has-[:focus-visible]` since the focusable element is the
+       trigger nested inside: `:focus-visible` (not `focus-within`) so a click that
+       moves focus does not leave the border lit behind the pointer. The trigger keeps
+       its own inset ring — that is the a11y indicator; this is the state. -->
   <div
     :data-state="open ? 'open' : 'closed'"
     :data-dashed="dashed || null"
-    class="w-full overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] data-[dashed]:border-dashed data-[dashed]:border-[var(--border-strong)]"
+    class="w-full rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-[var(--border-strong)] has-[:focus-visible]:border-[var(--border-strong)] data-[dashed]:border-dashed"
   >
     <!-- The connectors attach HERE rather than to the card: Flow measures an
-         anchor's own box, so every arrow stays pinned to the header row instead of
-         drifting to the middle of whichever node happens to be expanded. -->
+         anchor's own box, so every connector stays pinned to the header row instead
+         of drifting to the middle of whichever node happens to be expanded.
+
+         Every node gets one, bound or not: a binding slot still receives the default
+         Workload relationship, so it needs an attachment point. Whether it ORIGINATES
+         a connector is Flow's `terminal` prop, set by the page. -->
     <FlowAnchor>
       <button
         :id="triggerId"
@@ -77,7 +106,7 @@
         :aria-expanded="open"
         :aria-controls="bodyId"
         :data-state="open ? 'open' : 'closed'"
-        class="group flex w-full items-center gap-[var(--spacing-sm)] px-[var(--spacing-md)] py-[var(--spacing-sm)] text-left outline-none transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-inset motion-reduce:transition-none"
+        class="group flex w-full items-center gap-[var(--spacing-sm)] rounded-t-[var(--shape-card)] px-[var(--spacing-md)] py-[var(--spacing-sm)] text-left outline-none transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-inset motion-reduce:transition-none data-[state=closed]:rounded-b-[var(--shape-card)]"
         @click="open = !open"
       >
         <span class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)]">
@@ -86,22 +115,28 @@
           <span class="flex items-center gap-[var(--spacing-xs)]">
             <i
               :class="icon"
-              class="shrink-0 text-[14px] leading-none text-[var(--text-muted)]"
+              class="shrink-0 text-[12px] leading-none text-[var(--text-muted)]"
               aria-hidden="true"
             />
             <span class="truncate text-label-sm text-[var(--text-muted)]">{{ kind }}</span>
-            <StatusIndicator
+            <Tag
               class="ml-auto shrink-0"
-              :severity="severity"
+              :severity="tagSeverity"
               :label="status"
+              size="small"
             />
           </span>
           <!-- Identity: the resource's own name, truncated rather than wrapped so
                a long name cannot change the node's height and re-route the
-               diagram's connectors. Absent on an open slot. -->
+               diagram's connectors. Absent on an open slot.
+
+               `label-sm` (12px), not `label-md`: a node column is ~230px, so the whole
+               chain is read at a glance rather than sentence by sentence — the header
+               earns compactness more than it earns weight. Its muted `kind` eyebrow is
+               the same size, which is what makes the two lines read as one block. -->
           <span
             v-if="name"
-            class="truncate text-label-md text-[var(--text-default)]"
+            class="truncate text-label-sm text-[var(--text-default)]"
           >
             {{ name }}
           </span>
