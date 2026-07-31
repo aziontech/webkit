@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: a38c60bc03941b78d4d11da81236c9d564b8c97d95709e994f53891799e09584
+checksum: ca9a26f15e7861caced8ccf730ee9729134a9865fdc44e7e6d5e9acdf7c06cf3
 created: 2026-05-22
 last_updated: 2026-07-30
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-07-30
 
 ## Purpose
 
-Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`.
+Modal surface above the page, built on the shared Panel shell. The consumer composes a trigger, an overlay backdrop and the panel regions (header, body, footer); the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.
 
 ## When to use
 
@@ -118,8 +118,8 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 ## Stories (Storybook)
 
 - Default
-- LongContent
-- LongContentMobile
+- Sizes — the `size` axis (`small` | `medium` | `large`), one composite story.
+- ScrollContent — body taller than the dialog; the only region that scrolls is `panel-content`. Justified beyond the canonical set because the scrolling body is a documented behaviour of this component and the mobile bottom sheet depends on it; the visual matrix already shoots every story at the mobile viewport, so no viewport-specific twin is needed.
 
 ## Constraints — DO NOT
 
