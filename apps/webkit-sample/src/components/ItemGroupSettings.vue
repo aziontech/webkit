@@ -280,7 +280,7 @@ const submit = async () => {
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="layout-column-form flex items-center justify-end gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+          class="layout-column-form layout-boundary-inline flex items-center justify-end gap-[var(--spacing-sm)] py-[var(--spacing-md)]"
         >
           <Button
             type="button"

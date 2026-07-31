@@ -432,7 +432,7 @@ const breadcrumb = [
         class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
       >
         <div
-          class="layout-form-create flex items-center gap-[var(--spacing-sm)] px-[var(--layout-boundary-inline)] py-[var(--spacing-md)]"
+          class="layout-form-create layout-boundary-inline flex items-center gap-[var(--spacing-sm)] py-[var(--spacing-md)]"
         >
           <Button
             v-if="editing"

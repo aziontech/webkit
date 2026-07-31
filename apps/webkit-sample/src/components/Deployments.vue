@@ -395,8 +395,13 @@
       </PageTabs>
 
       <!-- Only this region scrolls, below the fixed bar; the page's own boundary and
-           MEASURE sit on the block inside it, exactly as every other first-level
-           module list carries them (`.layout-column` — the DATA measure, 1620px).
+           MEASURE sit on the block inside it, the shape every `:padded="false"` page
+           carries (`.layout-column` — the DATA measure, 1620px). That block lands at
+           the same inset and the same content width as a `padded` module list, because
+           the measure classes widen their cap by the boundary they contain — see
+           src/styles/layout.css § "THE BOUNDARY IS NOT PART OF THE MEASURE". Until
+           that rule existed this list read 48px narrower than Workloads at the same
+           viewport, the one module list in the console at its own width.
 
            This tab used to run full-bleed, on the argument that the Deployments
            tables are the module's widest (repo, domain, environment, author, two
