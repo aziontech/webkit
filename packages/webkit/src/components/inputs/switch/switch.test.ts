@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Switch from './switch.vue'
 
-const { Default, Types } = composeStories(stories)
+const { Default, Types, Disabled } = composeStories(stories)
 
 describe('Switch', () => {
   describe('data-testid', () => {
@@ -166,6 +166,88 @@ describe('Switch', () => {
     })
   })
 
+  describe('disabled', () => {
+    it('mirrors disabled on data-disabled, aria-disabled and the native button', () => {
+      const { getByTestId } = render(Switch, {
+        props: { disabled: true },
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+
+      const root = getByTestId('input-switch') as globalThis.HTMLButtonElement
+      expect(root.getAttribute('data-disabled')).toBe('true')
+      expect(root.getAttribute('aria-disabled')).toBe('true')
+      expect(root.disabled).toBe(true)
+    })
+
+    it('omits the disabled attributes when enabled', () => {
+      const { getByTestId } = render(Switch, {
+        props: { disabled: false },
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+
+      const root = getByTestId('input-switch') as globalThis.HTMLButtonElement
+      expect(root.getAttribute('data-disabled')).toBeNull()
+      expect(root.getAttribute('aria-disabled')).toBeNull()
+      expect(root.disabled).toBe(false)
+    })
+
+    it('does not emit update:modelValue on click when disabled', async () => {
+      const { getByTestId, emitted } = render(Switch, {
+        props: { modelValue: false, disabled: true },
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+
+      await fireEvent.click(getByTestId('input-switch'))
+
+      expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it.each([[' '], ['Enter']])(
+      'does not emit update:modelValue on %s when disabled',
+      async (key) => {
+        const { getByTestId, emitted } = render(Switch, {
+          props: { modelValue: false, disabled: true },
+          attrs: { 'aria-label': 'Toggle setting' }
+        })
+
+        await fireEvent.keyDown(getByTestId('input-switch'), { key })
+
+        expect(emitted()['update:modelValue']).toBeUndefined()
+      }
+    )
+
+    it('renders the locked visual in both positions — the track never keeps the checked accent', () => {
+      // Each render() mounts into the SAME document, so scope every query to its
+      // own container instead of the shared getByTestId.
+      const trackOf = (props: { modelValue: boolean; disabled?: boolean }) => {
+        const { container } = render(Switch, {
+          props,
+          attrs: { 'aria-label': 'Toggle setting' }
+        })
+        const root = container.querySelector('[data-testid="input-switch"]')
+        return globalThis.getComputedStyle(root as globalThis.Element).backgroundColor
+      }
+
+      const offLocked = trackOf({ modelValue: false, disabled: true })
+      const onLocked = trackOf({ modelValue: true, disabled: true })
+      const onEnabled = trackOf({ modelValue: true })
+
+      // Disabled wins over checked, so a locked switch reads the same either way...
+      expect(onLocked).toBe(offLocked)
+      // ...and the enabled checked track is genuinely a different colour.
+      expect(onEnabled).not.toBe(onLocked)
+    })
+
+    it('has no a11y violations when disabled', async () => {
+      const { container } = render(Switch, {
+        props: { modelValue: true, disabled: true },
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+
+      await expectNoA11yViolations(container)
+    })
+  })
+
   describe('a11y', () => {
     it('has no violations in the off state with an accessible name', async () => {
       const { container } = render(Switch, {
@@ -208,6 +290,15 @@ describe('Switch', () => {
       const { getAllByTestId } = render(Types())
       const switches = getAllByTestId('input-switch')
       expect(switches.length).toBe(4)
+    })
+
+    it('renders the Disabled story locked in both positions', () => {
+      const { getAllByTestId } = render(Disabled())
+      const switches = getAllByTestId('input-switch') as globalThis.HTMLButtonElement[]
+
+      expect(switches.length).toBe(2)
+      expect(switches.every((node) => node.disabled)).toBe(true)
+      expect(switches.map((node) => node.getAttribute('aria-checked'))).toEqual(['false', 'true'])
     })
   })
 })
