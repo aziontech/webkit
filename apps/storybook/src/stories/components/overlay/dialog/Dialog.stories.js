@@ -318,7 +318,7 @@ const SCROLL_ROWS = Array.from(
     `        <p>Setting ${index + 1} — the body is the only region that scrolls, so the title and the footer actions stay reachable.</p>`
 ).join('\n')
 
-const SCROLL_CONTENT_TEMPLATE = `<Dialog default-open dismissible size="medium">
+const SCROLL_CONTENT_TEMPLATE = `<Dialog v-model:open="open" dismissible size="medium">
   <DialogTrigger>
     <Button label="Open dialog" kind="primary" />
   </DialogTrigger>
@@ -334,7 +334,7 @@ const SCROLL_CONTENT_TEMPLATE = `<Dialog default-open dismissible size="medium">
 ${SCROLL_ROWS}
       </PanelContent>
       <PanelFooter class="flex-col md:flex-row md:justify-end">
-        <Button class="w-full md:w-auto" label="Cancel" kind="outlined" />
+        <Button class="w-full md:w-auto" label="Cancel" kind="outlined" @click="open = false" />
         <Button class="w-full md:w-auto" label="Save" kind="primary" />
       </PanelFooter>
     </DialogContent>
@@ -343,15 +343,28 @@ ${SCROLL_ROWS}
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Dialog>} */
 export const ScrollContent = {
-  render: () => ({ components: dialogStoryComponents, template: SCROLL_CONTENT_TEMPLATE }),
+  render: () => ({
+    components: dialogStoryComponents,
+    setup() {
+      const open = ref(false)
+
+      return { open }
+    },
+    template: SCROLL_CONTENT_TEMPLATE
+  }),
   parameters: {
     docs: {
       controls: { disable: true },
       description: {
         story:
-          'A body taller than the dialog. The panel bounds the surface and `PanelContent` scrolls, so the title and the footer actions stay put. Below `md` the same dialog is a bottom sheet capped at 80% of the visible viewport — switch the viewport to Mobile to check that the body still reaches its end and the footer stays on screen.'
+          'A body taller than the dialog. Open it from the trigger: the panel bounds the surface and `PanelContent` scrolls, so the title and the footer actions stay put. Below `md` the same dialog is a bottom sheet capped at 80% of the visible viewport — switch the viewport to Mobile to check that the body still reaches its end and the footer stays on screen.'
       },
-      source: { code: toSfc(IMPORTS, SCROLL_CONTENT_TEMPLATE) }
+      source: {
+        code: toSfc(
+          [...IMPORTS, "import { ref } from 'vue'", '', 'const open = ref(false)'],
+          SCROLL_CONTENT_TEMPLATE
+        )
+      }
     }
   }
 }
