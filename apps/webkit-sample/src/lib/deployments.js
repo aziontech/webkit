@@ -90,9 +90,13 @@ export const resourceHref = (row) => {
 
 export const environmentOptions = [
   { value: "Production", label: "Production" },
+  // Preview is the environment a workload deployment lands in before it is
+  // promoted (`azion.json#env`); it is an option here so the Environment selector
+  // can narrow to it.
+  { value: "Preview", label: "Preview" },
   { value: "Stage", label: "Stage" },
 ];
 
-/** Production is the live environment (info); Stage is the rehearsal (secondary). */
+/** Production is the live environment (info); everything else is a rehearsal (secondary). */
 export const environmentSeverity = (environment) =>
   environment === "Production" ? "info" : "secondary";

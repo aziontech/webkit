@@ -49,10 +49,12 @@ const redeploy = () => {
   toast.info(`Redeploying version ${props.deployment?.versionId ?? ""}.`);
 };
 
-// The label/value metadata blocks, in the drawer's grid order. Only the
-// resources the deployment actually carries are rendered: a workload deployment
-// wires all three, while a deployment from the Deployments module targets a
-// single resource and must not claim the other two.
+// The label/value metadata blocks, in the drawer's grid order. A deployment
+// targets exactly ONE resource (the model src/lib/deployments.js states), and the
+// row carries it under that type's own field name — so exactly one of these three
+// blocks renders, whichever resource this deployment deployed. It used to be
+// possible for a row to arrive with all three set, which claimed a single
+// deployment had shipped an application, a firewall and a custom page at once.
 const metaBlocks = computed(() => {
   const d = props.deployment;
   if (!d) return [];

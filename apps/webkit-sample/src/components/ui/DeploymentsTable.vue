@@ -1,7 +1,7 @@
 <script setup>
   // The deployment table — ONE table shape, reused by every surface that lists
   // deployments: the Deployments module, a workload's Version History, and a
-  // workload's Deployments tab. Same columns, same cells, same toolbar, so a
+  // workload's Deployments tab. Same columns, same cells, same controls, so a
   // deployment reads identically wherever it appears instead of each screen
   // re-deciding what a deployment row looks like.
   //
@@ -11,17 +11,27 @@
   //   deployedAt (Date) · date (display string)
   //   author · authorEmail (the Authors selector's key) · authorAvatar
   //
-  // Narrowing is a SELECTOR PER COLUMN, never a field/operator/value builder:
-  // Status, Environment and Authors are always visible here — they are what
-  // every deployment surface narrows by — and a page that needs more (the module
-  // list adds a date range) passes it through `#selectors` and pre-filters
-  // `:deployments` itself. Table.Search narrows further, through the table's own
-  // global filter.
-  import Avatar from '@aziontech/webkit/avatar'
+  // Narrowing is a SELECTOR PER COLUMN, never a field/operator/value builder: Status,
+  // Type, Environment and Authors — what every deployment surface narrows by — stacked
+  // in the filter popover behind one icon (ui/FilterPopover.vue), and a page that needs
+  // more (the module list adds a date range) passes it through `#selectors`, where it
+  // renders in the same panel, and pre-filters `:deployments` itself. The free-text
+  // search stays in the open, narrowing further through the table's global filter.
+  //
+  // WHERE those fields render depends on the nav level, and is the one thing this
+  // component is configured for:
+  //
+  //   `controls` (default) — the fields render in the table's own `#toolbar`, inside
+  //     the card. This is what an internal level uses (a workload's Version History /
+  //     Deployments tab), where the table is one band among several.
+  //   `:controls="false"` — no toolbar at all. A FIRST-LEVEL page hoists the same
+  //     fields into its ControlsHeader above the card (see ui/ControlsHeader.vue) and
+  //     owns their state, binding it here through the models below.
+  //
+  // Either way the fields themselves come from ONE file, ui/DeploymentTableControls.vue,
+  // so the two placements can never drift apart.
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
-  import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
@@ -29,29 +39,37 @@
   import { computed, ref, watch } from 'vue'
 
   import {
-    environmentOptions,
     environmentSeverity,
     resourceHref,
     resourceMeta,
-    statusMeta,
-    statusOptions
+    statusMeta
   } from '../../lib/deployments'
-  import { filterDisplay } from '../../lib/filters'
+  import { useTenancyReload } from '../../lib/tenancy-reload'
+  import DeploymentTableControls from './DeploymentTableControls.vue'
   import LastModifiedCell from './LastModifiedCell.vue'
 
   const props = defineProps({
     /** Deployment records, already narrowed by whatever the page's own selectors apply. */
     deployments: { type: Array, default: () => [] },
     pageSize: { type: Number, default: 10 },
-    exportFilename: { type: String, default: 'deployments.csv' },
-    // Short by design — the toolbar carries four selectors beside it, so the
-    // field is the first thing to shrink (Applications.vue uses the same text).
+    // Short by design, and it now has the row nearly to itself: the selectors moved
+    // into the filter popover, so only that one icon button sits beside the field
+    // (Applications.vue uses the same text).
     searchPlaceholder: { type: String, default: 'Search...' },
     /** Carried on the resource link so the detail page keeps the session's email. */
-    email: { type: String, default: '' }
+    email: { type: String, default: '' },
+    /** Render the controls in the table's own toolbar. `false` when the page hoists them. */
+    controls: { type: Boolean, default: true }
   })
 
   const emit = defineEmits(['row-click', 'action', 'clear'])
+
+  // Deployments belong to the scope that made them, so switching organization,
+  // account or workspace reloads this table wherever it renders — the module list
+  // or a workload's history. The flag is read here rather than passed in as a prop:
+  // every surface that shows deployments has the same answer, and a caller could
+  // not opt out truthfully (src/lib/tenancy-reload.js).
+  const { tenancyReloading } = useTenancyReload()
 
   // Column model. `versionId` is the principal column; it keeps the principal
   // default share (2) because the id and the "Current" tag sit on ONE line — at
@@ -70,52 +88,25 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // The table's own state, owned here so the "..." menu can clear it.
-  const search = ref('')
-  const statusFilter = ref([])
-  const environmentFilter = ref([])
-  const authorFilter = ref([])
+  // The filter state. Models, not plain refs, so a first-level page that hoists the
+  // controls out of the table can own the same four values and bind them here —
+  // `defineModel` gives the uncontrolled case (an internal level, which passes none of
+  // them) local state for free.
+  const search = defineModel('search', { type: String, default: '' })
+  const statusFilter = defineModel('statusFilter', { type: Array, default: () => [] })
+  const typeFilter = defineModel('typeFilter', { type: Array, default: () => [] })
+  const environmentFilter = defineModel('environmentFilter', { type: Array, default: () => [] })
+  const authorFilter = defineModel('authorFilter', { type: Array, default: () => [] })
   const pagination = ref({ pageIndex: 0, pageSize: props.pageSize })
 
-  // Author options come from the rows themselves, so the selector can never
-  // offer a person who has nothing in this table. Each option carries that
-  // person's photo, so the filter identifies them the same way the Deployed cell
-  // does — by face first, name second.
-  const authorOptions = computed(() =>
-    [
-      ...new Map(
-        props.deployments.map((deployment) => [
-          deployment.authorEmail,
-          { name: deployment.author, avatar: deployment.authorAvatar }
-        ])
-      )
-    ]
-      .sort(([, a], [, b]) => a.name.localeCompare(b.name))
-      .map(([email, person]) => ({ value: email, label: person.name, avatar: person.avatar }))
-  )
-
-  // The roster can be long enough that scanning it beats reading it, so the
-  // panel gets its own search field (Select.Content's `#search` slot). Cleared
-  // on close so it never reopens pre-filtered.
-  const authorQuery = ref('')
-  const authorOpen = ref(false)
-  watch(authorOpen, (open) => {
-    if (!open) authorQuery.value = ''
-  })
-  const visibleAuthorOptions = computed(() => {
-    const query = authorQuery.value.trim().toLowerCase()
-    if (!query) return authorOptions.value
-    return authorOptions.value.filter(
-      (option) =>
-        option.label.toLowerCase().includes(query) || option.value.toLowerCase().includes(query)
-    )
-  })
-
   // The selectors pre-filter the rows, so the Table only ever sees what survives
-  // them; `Table.Search` then narrows that further through the global filter.
+  // them; the search then narrows that further through the global filter.
   const visibleDeployments = computed(() =>
     props.deployments.filter((deployment) => {
       if (statusFilter.value.length && !statusFilter.value.includes(deployment.status)) {
+        return false
+      }
+      if (typeFilter.value.length && !typeFilter.value.includes(deployment.resourceType)) {
         return false
       }
       if (
@@ -138,28 +129,22 @@
     pagination.value = { ...pagination.value, pageIndex: 0 }
   })
 
-  // `clear` lets the page reset the selectors it owns in `#selectors` — this
-  // component can only clear its own (the search text, Status, Environment and
-  // Authors), and a menu item called "Clear filters" that leaves the page's
-  // selectors set would be lying.
+  // `clear` lets the page reset the selectors it owns in `#selectors` — this component
+  // can only clear the four it holds (Status, Type, Environment and Authors), and a
+  // "Clear all" that left the page's fields set would be lying. The search is not part
+  // of it: it sits outside the filter panel, in plain view, so the panel's footer has
+  // no business wiping it.
   const clearFilters = () => {
-    search.value = ''
     statusFilter.value = []
+    typeFilter.value = []
     environmentFilter.value = []
     authorFilter.value = []
     emit('clear')
   }
 
-  // `Table.Export` renders only its trigger slot, so wrapping the Dropdown in it
-  // is what hands the menu the table's own CSV export (visible columns + filtered
-  // rows) without a second button.
-  const onToolbarAction = (value, exportCsv) => {
-    if (value === 'export') {
-      exportCsv()
-      return
-    }
-    clearFilters()
-  }
+  // What a page needs when it hoists the controls: its filter panel's "Clear all" has
+  // to reach the four selectors this component holds.
+  defineExpose({ clearFilters })
 </script>
 
 <template>
@@ -173,180 +158,31 @@
     paginated
     :page-size="pageSize"
     :border="false"
-    :export-filename="exportFilename"
+    :loading="tenancyReloading"
     @row-click="(event, row) => emit('row-click', event, row)"
   >
-    <template #toolbar>
-      <!-- Search leads, then one selector per column — Status and Environment
-           here, plus whatever the page adds — then the table's own options.
-           Every control is `large`, so the row is one 40px band. -->
+    <!-- The same fields the page can hoist, rendered here for an internal level. One
+         row, `flex-wrap`, the tight `--spacing-xs` rhythm — the controls component
+         itself is `display: contents`, so its fields are direct children of this row. -->
+    <template
+      v-if="controls"
+      #toolbar
+    >
       <div class="flex w-full flex-wrap items-center gap-[var(--spacing-xs)]">
-        <!-- The search absorbs the slack (`grow`) and gives it all back when the
-             row is tight: `min-w-0` lets it shrink past its content so four
-             selectors and the page's own still fit one 40px band. A floor here
-             would wrap the row instead of squeezing it — `flex-wrap` wraps, it
-             does not shrink — which is why the placeholder is short. -->
-        <Table.Search
-          size="large"
-          :placeholder="searchPlaceholder"
-          class="min-w-0 grow basis-full 2xl:basis-0"
-        />
-
-        <!-- Width lives on the wrapper: the Select root declares w-full in its
-             own static class, which wins over a consumer w-[…] on a tie. -->
-        <div class="w-[var(--container-3xs)] shrink-0">
-          <Select
-            v-model="statusFilter"
-            multiple
-            size="large"
-            placeholder="Status"
-            :display-value="filterDisplay('Status', statusOptions)"
-          >
-            <Select.Trigger aria-label="Filter by status" />
-            <Select.Content>
-              <Select.Option
-                v-for="option in statusOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                <template #left>
-                  <StatusIndicator
-                    :severity="statusMeta(option.value).severity"
-                    :loading="statusMeta(option.value).loading"
-                  />
-                </template>
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </div>
-
-        <div class="w-[var(--container-3xs)] shrink-0">
-          <Select
-            v-model="environmentFilter"
-            multiple
-            size="large"
-            placeholder="Environment"
-            :display-value="filterDisplay('Environment', environmentOptions)"
-          >
-            <Select.Trigger aria-label="Filter by environment" />
-            <Select.Content>
-              <Select.Option
-                v-for="option in environmentOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </div>
-
-        <div class="w-[var(--container-3xs)] shrink-0">
-          <Select
-            v-model="authorFilter"
-            v-model:open="authorOpen"
-            multiple
-            size="large"
-            placeholder="Authors"
-            :display-value="filterDisplay('Authors', authorOptions)"
-          >
-            <Select.Trigger aria-label="Filter by author" />
-            <Select.Content>
-              <!-- `#search` renders above the scrolling list, so the field stays
-                   put while the options move. `@keydown.stop` keeps the panel's
-                   Arrow/Home/End handler from pulling focus onto an option while
-                   the user is still typing. -->
-              <template #search>
-                <InputText
-                  v-model="authorQuery"
-                  size="medium"
-                  class="w-full"
-                  placeholder="Search authors..."
-                  aria-label="Search authors"
-                  @keydown.stop
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </InputText>
-              </template>
-              <Select.Option
-                v-for="option in visibleAuthorOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                <template #left>
-                  <Avatar
-                    :src="option.avatar || undefined"
-                    :alt="option.label"
-                    :label="option.label"
-                    size="small"
-                    kind="square"
-                  />
-                </template>
-                {{ option.label }}
-              </Select.Option>
-              <!-- A search that matches nothing must say so; an empty panel reads
-                   as a broken filter. -->
-              <p
-                v-if="!visibleAuthorOptions.length"
-                class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
-              >
-                No author matches “{{ authorQuery }}”.
-              </p>
-            </Select.Content>
-          </Select>
-        </div>
-
-        <slot name="selectors" />
-
-        <Table.Export>
-          <template #trigger="{ export: exportCsv }">
-            <Dropdown
-              placement="bottom-end"
-              class="shrink-0"
-              @select="(event, value) => onToolbarAction(value, exportCsv)"
-            >
-              <Dropdown.Trigger>
-                <Tooltip text="Table options">
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    aria-label="Table options"
-                  />
-                </Tooltip>
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
-                  value="export"
-                  label="Export CSV"
-                >
-                  <template #left>
-                    <i
-                      class="pi pi-download"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Dropdown.Option>
-                <Dropdown.Option
-                  value="clear"
-                  label="Clear filters"
-                >
-                  <template #left>
-                    <i
-                      class="pi pi-filter-slash"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-            </Dropdown>
+        <DeploymentTableControls
+          v-model:search="search"
+          v-model:status-filter="statusFilter"
+          v-model:type-filter="typeFilter"
+          v-model:environment-filter="environmentFilter"
+          v-model:author-filter="authorFilter"
+          :deployments="deployments"
+          :search-placeholder="searchPlaceholder"
+          @clear="clearFilters"
+        >
+          <template #selectors>
+            <slot name="selectors" />
           </template>
-        </Table.Export>
+        </DeploymentTableControls>
       </div>
     </template>
 
