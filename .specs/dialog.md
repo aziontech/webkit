@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: ca9a26f15e7861caced8ccf730ee9729134a9865fdc44e7e6d5e9acdf7c06cf3
+checksum: 643a8c3f43d7cd9cf65e2f0b4d679ca0fee981f0ff67928527a68c31aac331e5
 created: 2026-05-22
 last_updated: 2026-07-30
 ---
@@ -119,7 +119,8 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 - Default
 - Sizes — the `size` axis (`small` | `medium` | `large`), one composite story.
-- ScrollContent — body taller than the dialog; the only region that scrolls is `panel-content`. Justified beyond the canonical set because the scrolling body is a documented behaviour of this component and the mobile bottom sheet depends on it; the visual matrix already shoots every story at the mobile viewport, so no viewport-specific twin is needed.
+- ScrollContent — body taller than the dialog, centered above the page. Justified beyond the canonical set because the scrolling body is documented behaviour of this component.
+- ScrollContentMobile — the same body below `md`, where the dialog is a bottom sheet with a different cap and position (`max-md:` classes), not merely a narrower canvas. Both scroll stories open from the trigger: a dialog that mounts open would cover the autodocs page.
 
 ## Constraints — DO NOT
 

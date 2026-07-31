@@ -341,30 +341,48 @@ ${SCROLL_ROWS}
   </DialogPortal>
 </Dialog>`
 
+const scrollRender = () => ({
+  components: dialogStoryComponents,
+  setup() {
+    const open = ref(false)
+
+    return { open }
+  },
+  template: SCROLL_CONTENT_TEMPLATE
+})
+
+const SCROLL_SOURCE = toSfc(
+  [...IMPORTS, "import { ref } from 'vue'", '', 'const open = ref(false)'],
+  SCROLL_CONTENT_TEMPLATE
+)
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Dialog>} */
 export const ScrollContent = {
-  render: () => ({
-    components: dialogStoryComponents,
-    setup() {
-      const open = ref(false)
-
-      return { open }
-    },
-    template: SCROLL_CONTENT_TEMPLATE
-  }),
+  render: scrollRender,
   parameters: {
     docs: {
       controls: { disable: true },
       description: {
         story:
-          'A body taller than the dialog. Open it from the trigger: the panel bounds the surface and `PanelContent` scrolls, so the title and the footer actions stay put. Below `md` the same dialog is a bottom sheet capped at 80% of the visible viewport — switch the viewport to Mobile to check that the body still reaches its end and the footer stays on screen.'
+          'A body taller than the dialog, centered above the page (from `md` up). Open it from the trigger: the panel bounds the surface and `PanelContent` is the only region that scrolls, so the title and the footer actions stay put while the body moves.'
       },
-      source: {
-        code: toSfc(
-          [...IMPORTS, "import { ref } from 'vue'", '', 'const open = ref(false)'],
-          SCROLL_CONTENT_TEMPLATE
-        )
-      }
+      source: { code: SCROLL_SOURCE }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Dialog>} */
+export const ScrollContentMobile = {
+  render: scrollRender,
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The same overflowing body below `md`, where the dialog is a full-width bottom sheet capped at 80% of the visible viewport (`dvh`, so the cap follows the browser toolbars instead of the largest viewport). Open it from the trigger and check three things: the body scrolls to its last row, the title stays at the top, and the footer actions stay on screen rather than sitting under the URL bar.'
+      },
+      source: { code: SCROLL_SOURCE }
     }
   }
 }
