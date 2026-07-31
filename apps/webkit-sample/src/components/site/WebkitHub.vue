@@ -9,6 +9,12 @@
   //   • Assets      — the Brand, Icons and Illustrations galleries.
   // The views aren't routes, so activating an item sets `active` and the shell
   // renders the matching view, resetting the scroll to the top.
+  //
+  // One view is HIDDEN — `changelog` (the console sample's updates). It has no
+  // HubSidebar entry and nothing here links to it, so the only way in is its own
+  // route (/site/hub/changelog), which seeds `view`. That is what makes it a link
+  // you hand to someone rather than a section of the library docs; it still
+  // renders in this shell so a reader who arrives by link can walk into the Hub.
   import Button from '@aziontech/webkit/button'
   import { computed, nextTick, ref } from 'vue'
 
@@ -22,9 +28,16 @@
   import SectionContainer from './foundations/components/layout/SectionContainer.vue'
   import SectionModule from './foundations/components/layout/SectionModule.vue'
   import HubAssets from './HubAssets.vue'
+  import HubChangelog from './HubChangelog.vue'
   import HubFoundations from './HubFoundations.vue'
   import HubSidebar from './HubSidebar.vue'
   import SiteFooter from './SiteFooter.vue'
+
+  const props = defineProps({
+    // Which view the shell opens on. The route supplies it (that is how the hidden
+    // `changelog` page is reachable); the sidebar owns it from then on.
+    view: { type: String, default: 'home' }
+  })
 
   // "Start" affordance in the hero — a one-click "copy prompt" pill (ContrastBanner)
   // that hands an AI coding tool everything it needs to build with the Azion Design
@@ -35,9 +48,10 @@
     'Vue components and design tokens instead of hand-rolling UI — following each ' +
     "component's documented props and compound API."
 
-  // The scrolling content column and the active view id (matches HubSidebar ids).
+  // The scrolling content column and the active view id (matches HubSidebar ids,
+  // plus the hidden `changelog`). Seeded from the route, then owned by the sidebar.
   const scrollRef = ref(null)
-  const active = ref('home')
+  const active = ref(props.view)
 
   // Component-category metadata for the category page headers — mirrors the
   // section subtitles in ComponentGrid. Keys match the sidebar's "Componentes" ids
@@ -369,6 +383,10 @@
         v-else-if="isAsset"
         :section="active"
       />
+
+      <!-- ── Changelog: the console sample's updates. Hidden — reached only by
+           /site/hub/changelog, never listed in the rail. ─────────────────── -->
+      <HubChangelog v-else-if="active === 'changelog'" />
 
       <SiteFooter />
     </main>

@@ -57,6 +57,15 @@ const routes = [
   { path: '/site', redirect: '/site/home' },
   { path: '/site/home', name: 'site-home', component: LandingAzion },
   { path: '/site/hub', name: 'site-hub', component: WebkitHub },
+  // The sample's changelog, rendered as a HIDDEN Hub view: no HubSidebar entry and
+  // nothing in the Hub links to it, so it exists only for whoever gets the URL.
+  // `props` seeds the shell's opening view (see WebkitHub.vue).
+  {
+    path: '/site/hub/changelog',
+    name: 'site-hub-changelog',
+    component: WebkitHub,
+    props: { view: 'changelog' },
+  },
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   { path: '/login', name: 'login', component: LoginScreen },
   { path: '/signup', name: 'signup', component: SignUp },
