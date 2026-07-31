@@ -38,7 +38,7 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
 
 <template>
   <AppLayout active="playground" :padded="false" :breadcrumb="[{ label: 'Playground' }]">
-    <div class="layout-column layout-boundary flex flex-col gap-[var(--layout-section-gap)]">
+    <div class="layout-column layout-boundary flex flex-col">
       <PageHeading
         size="large"
         title-id="playground-title"
@@ -47,7 +47,7 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
       />
 
       <!-- Section: Appearance — an section title over a flush CardBox. -->
-      <section class="flex flex-col gap-[var(--layout-group-gap)]">
+      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Appearance
         </p>
@@ -62,11 +62,11 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
                     faces load on demand from Google Fonts.
                   </Item.Description>
                 </Item.Content>
-                <Item.Actions class="flex-1 justify-end">
+                <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                   <Select
                     v-model="font"
                     size="large"
-                    class="w-full max-w-[var(--container-2xs)]"
+                    class="w-full"
                     :display-value="labelOf(fonts)"
                   >
                     <Select.Trigger id="playground-font" aria-label="Font family" />
@@ -90,11 +90,11 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
                     Follow the operating system, or force a light or dark theme.
                   </Item.Description>
                 </Item.Content>
-                <Item.Actions class="flex-1 justify-end">
+                <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
                   <Select
                     v-model="theme"
                     size="large"
-                    class="w-full max-w-[var(--container-2xs)]"
+                    class="w-full"
                     :display-value="labelOf(appearances)"
                   >
                     <Select.Trigger id="playground-appearance" aria-label="System appearance" />
@@ -117,7 +117,7 @@ const fontLabel = computed(() => labelOf(fonts)(font.value));
 
       <!-- Section: Preview — shows the active font/theme across the type scale
            and a few components so the swap is immediately visible. -->
-      <section class="flex flex-col gap-[var(--layout-group-gap)]">
+      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Preview · {{ fontLabel }}
         </p>

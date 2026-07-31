@@ -396,15 +396,15 @@ const openIntegration = (item) =>
 
 <template>
   <AppLayout active="marketplace" :breadcrumb="[{ label: 'Marketplace' }]">
-    <main class="layout-column flex flex-col gap-[var(--layout-section-gap)]">
+    <main class="layout-column flex flex-col">
       <PageHeading
-        size="large"
+        size="medium"
         title="Marketplace"
         description="Find, test, and deploy software that runs anywhere."
       />
 
       <!-- Top-level offerings: Templates | Integrations, centered. -->
-      <TabView v-model:value="activeTab">
+      <TabView v-model:value="activeTab" class="layout-section-start">
         <TabView.List class="justify-center mb-[var(--spacing-lg)]">
           <TabView.Item value="templates" label="Templates" />
           <TabView.Item value="integrations" label="Integrations" />
@@ -452,7 +452,7 @@ const openIntegration = (item) =>
 
           <!-- Integrations: a featured spotlight row, then a filterable grid -->
           <TabView.Panel value="integrations">
-            <div class="flex flex-col gap-[var(--layout-section-gap)]">
+            <div class="flex flex-col">
               <!-- Featured row: the same card in its spotlight anatomy. -->
               <section class="flex flex-col gap-[var(--layout-group-gap)]">
                 <p class="text-heading-xxs text-[var(--text-default)]">Featured</p>
@@ -473,7 +473,7 @@ const openIntegration = (item) =>
 
               <!-- Search + the three filter axes on one row: no label, multiple
                    selection, no checkbox (selection shown by highlight). -->
-              <div class="flex flex-col gap-[var(--spacing-sm)] md:flex-row md:items-center">
+              <div class="layout-section-start flex flex-col gap-[var(--spacing-sm)] md:flex-row md:items-center">
                 <InputText
                   v-model="integrationQuery"
                   size="large"
@@ -549,6 +549,7 @@ const openIntegration = (item) =>
 
               <EmptyState
                 v-if="noIntegrations"
+                class="layout-group-start"
                 bordered
                 title="No integrations found"
                 description="No integrations match your search or filters. Try clearing a filter."
@@ -556,7 +557,7 @@ const openIntegration = (item) =>
 
               <div
                 v-else
-                class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3"
+                class="layout-group-start grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3"
               >
                 <IntegrationCard
                   v-for="item in filteredIntegrations"

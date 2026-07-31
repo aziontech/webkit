@@ -9,6 +9,7 @@
   // holds the open node ids, `flattenTree` (accounts store) emits only the
   // visible rows tagged with depth + hasChildren, and the Name cell renders the
   // chevron + indentation. Selection rides the Table's own enableRowSelection.
+  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Checkbox from '@aziontech/webkit/checkbox'
@@ -23,7 +24,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  import { accountTypeOf, flattenTree, useAccounts } from '../accounts.js'
+  import { accountInitials, accountTypeOf, flattenTree, useAccounts } from '../accounts.js'
   import AppLayout from './ui/AppLayout.vue'
   import PageHeading from './ui/PageHeading.vue'
 
@@ -52,8 +53,7 @@
   const REVEAL_MS = 220
   const REVEAL_EASE = 'cubic-bezier(0.39, 0.57, 0.56, 1)'
   const reducedMotion = () =>
-    typeof window !== 'undefined' &&
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   const animateRowHeight = (el, done, reverse) => {
     if (reducedMotion()) return done()
@@ -163,7 +163,7 @@
     active="resources"
     :breadcrumb="[{ label: 'Manage Resources' }]"
   >
-    <main class="flex h-full min-h-0 flex-col gap-[var(--layout-group-gap)]">
+    <main class="flex h-full min-h-0 flex-col">
       <PageHeading
         title="Manage Resources"
         description="Organize accounts into a hierarchy of brands, resellers, groups, and clients."
@@ -189,7 +189,7 @@
       </PageHeading>
 
       <!-- Action toolbar: create on the left, bulk actions gated by selection. -->
-      <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
+      <div class="layout-section-start flex flex-wrap items-center gap-[var(--spacing-xs)]">
         <Button
           label="Create project"
           icon="pi pi-plus"
@@ -236,7 +236,7 @@
       </div>
 
       <!-- Split: the resource tree + the info panel. -->
-      <div class="flex min-h-0 flex-1 gap-[var(--spacing-lg)]">
+      <div class="layout-group-start flex min-h-0 flex-1 gap-[var(--spacing-lg)]">
         <section class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-sm)]">
           <div class="flex items-center justify-between">
             <h2 class="text-heading-xs text-[var(--text-default)]">Resources</h2>
@@ -269,9 +269,13 @@
                         @update:model-value="toggleSelectAll"
                       />
                     </Table.HeadCell>
+                    <!-- Widest column by a distance: it carries four levels of
+                         indentation, a chevron and a glyph BEFORE the name, so
+                         at depth 3 a `grow=3` column left a client account with
+                         no room to render its name at all. -->
                     <Table.HeadCell
                       principal
-                      :grow="3"
+                      :grow="5"
                       >Name</Table.HeadCell
                     >
                     <Table.HeadCell :grow="1">ID</Table.HeadCell>
@@ -318,162 +322,190 @@
                         class="cursor-pointer"
                         @click="toggleRow(row)"
                       >
-                      <Table.Cell kind="checkbox">
-                        <Checkbox
-                          binary
-                          :model-value="!!rowSelection[String(row.id)]"
-                          :aria-label="`Select ${row.name}`"
-                          @click.stop
-                          @update:model-value="(value) => setRowSelected(row, value)"
-                        />
-                      </Table.Cell>
+                        <Table.Cell kind="checkbox">
+                          <Checkbox
+                            binary
+                            :model-value="!!rowSelection[String(row.id)]"
+                            :aria-label="`Select ${row.name}`"
+                            @click.stop
+                            @update:model-value="(value) => setRowSelected(row, value)"
+                          />
+                        </Table.Cell>
 
-                      <!-- Name: chevron + indentation + type glyph + name. -->
-                      <Table.Cell
-                        principal
-                        :grow="3"
-                      >
-                        <span
-                          class="flex min-w-0 items-center gap-[var(--spacing-xxs)]"
-                          :style="{ paddingLeft: `calc(var(--spacing-lg) * ${row.depth})` }"
+                        <!-- Name: chevron + indentation + type glyph + name.
+                             One step per level is `--spacing-md`, not `-lg`:
+                             the glyph already marks the level, and 24px a level
+                             spent a third of the column on empty space by the
+                             time the tree reached a client. -->
+                        <Table.Cell
+                          principal
+                          :grow="5"
                         >
-                          <Tooltip
-                            v-if="row.hasChildren"
-                            :text="isExpanded(row.id) ? 'Collapse' : 'Expand'"
-                          >
-                            <IconButton
-                              :icon="isExpanded(row.id) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                              kind="outlined"
-                              size="small"
-                              :aria-label="isExpanded(row.id) ? 'Collapse' : 'Expand'"
-                              :aria-expanded="isExpanded(row.id)"
-                              @click.stop="toggle(row.id)"
-                            />
-                          </Tooltip>
                           <span
-                            v-else
-                            class="size-[var(--size-7)] shrink-0"
-                            aria-hidden="true"
-                          />
-                          <i
-                            :class="accountTypeOf(row.type).icon"
-                            class="shrink-0 text-body-sm text-[var(--text-muted)]"
-                            aria-hidden="true"
-                          />
-                          <span class="truncate text-label-sm text-[var(--text-default)]">
-                            {{ row.name }}
+                            class="flex min-w-0 items-center gap-[var(--spacing-xxs)]"
+                            :style="{ paddingLeft: `calc(var(--spacing-md) * ${row.depth})` }"
+                          >
+                            <Tooltip
+                              v-if="row.hasChildren"
+                              :text="isExpanded(row.id) ? 'Collapse' : 'Expand'"
+                            >
+                              <IconButton
+                                :icon="
+                                  isExpanded(row.id) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
+                                "
+                                kind="outlined"
+                                size="small"
+                                :aria-label="isExpanded(row.id) ? 'Collapse' : 'Expand'"
+                                :aria-expanded="isExpanded(row.id)"
+                                @click.stop="toggle(row.id)"
+                              />
+                            </Tooltip>
+                            <span
+                              v-else
+                              class="size-[var(--size-7)] shrink-0"
+                              aria-hidden="true"
+                            />
+                            <!-- Groups and Clients get an avatar: they are the
+                                 levels an operator acts as (a switch always
+                                 lands on a Client), so they carry the same mark
+                                 as the header pill. Organizations, Brands and
+                                 Resellers are structure — a type glyph is what
+                                 they are, and it keeps the tree scannable. -->
+                            <Avatar
+                              v-if="row.type === 'group' || row.type === 'client'"
+                              :label="accountInitials(row.name)"
+                              size="small"
+                              kind="square"
+                            />
+                            <i
+                              v-else
+                              :class="accountTypeOf(row.type).icon"
+                              class="shrink-0 text-body-sm text-[var(--text-muted)]"
+                              aria-hidden="true"
+                            />
+                            <span class="truncate text-label-sm text-[var(--text-default)]">
+                              {{ row.name }}
+                            </span>
+                            <i
+                              v-if="row.id === currentAccountId"
+                              class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
+                              aria-hidden="true"
+                            />
                           </span>
-                          <i
-                            v-if="row.id === currentAccountId"
-                            class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Table.Cell>
+                        </Table.Cell>
 
-                      <Table.Cell :grow="1">
-                        <span class="text-body-sm text-[var(--text-muted)]">
-                          {{ row.type === 'organization' ? '—' : row.id }}
-                        </span>
-                      </Table.Cell>
+                        <Table.Cell :grow="1">
+                          <span class="text-body-sm text-[var(--text-muted)]">
+                            {{ row.type === 'organization' ? '—' : row.id }}
+                          </span>
+                        </Table.Cell>
 
-                      <Table.Cell :grow="1">
-                        <Tag
-                          :label="row.typeLabel"
-                          :icon="accountTypeOf(row.type).icon"
-                          :severity="accountTypeOf(row.type).severity"
-                          size="small"
-                        />
-                      </Table.Cell>
-
-                      <Table.Cell :grow="1">
-                        <span class="text-body-sm text-[var(--text-muted)]">
-                          {{ row.lastAccessed || '—' }}
-                        </span>
-                      </Table.Cell>
-
-                      <Table.Cell :grow="1">
-                        <Tag
-                          v-if="row.status"
-                          :label="statusLabel(row.status)"
-                          :severity="statusSeverity(row.status)"
-                          size="medium"
-                        />
-                        <span
-                          v-else
-                          class="text-body-sm text-[var(--text-muted)]"
-                          >—</span
-                        >
-                      </Table.Cell>
-
-                      <Table.Cell
-                        :grow="1"
-                        align="end"
-                      >
-                        <Currency
-                          v-if="row.charges"
-                          :value="row.charges"
-                          size="small"
-                        />
-                        <span
-                          v-else
-                          class="text-body-sm text-[var(--text-muted)]"
-                          >—</span
-                        >
-                      </Table.Cell>
-
-                      <Table.Cell :grow="1">
-                        <span
-                          v-if="row.labels && row.labels.length"
-                          class="flex flex-wrap items-center gap-[var(--spacing-xxs)]"
-                        >
+                        <Table.Cell :grow="1">
                           <Tag
-                            v-for="label in row.labels"
-                            :key="label"
-                            :label="label"
-                            severity="secondary"
+                            :label="row.typeLabel"
+                            :icon="accountTypeOf(row.type).icon"
+                            :severity="accountTypeOf(row.type).severity"
                             size="small"
                           />
-                        </span>
-                        <span
-                          v-else
-                          class="text-body-sm text-[var(--text-muted)]"
-                          >—</span
-                        >
-                      </Table.Cell>
+                        </Table.Cell>
 
-                      <Table.Cell kind="action">
-                        <span @click.stop>
-                          <Dropdown
-                            placement="bottom-end"
-                            @select="(event, value) => onRowAction(event, value, row)"
+                        <Table.Cell :grow="1">
+                          <span class="text-body-sm text-[var(--text-muted)]">
+                            {{ row.lastAccessed || '—' }}
+                          </span>
+                        </Table.Cell>
+
+                        <Table.Cell :grow="1">
+                          <Tag
+                            v-if="row.status"
+                            :label="statusLabel(row.status)"
+                            :severity="statusSeverity(row.status)"
+                            size="medium"
+                          />
+                          <span
+                            v-else
+                            class="text-body-sm text-[var(--text-muted)]"
+                            >—</span
                           >
-                            <Dropdown.Trigger>
-                              <Tooltip text="Resource actions">
-                                <IconButton
-                                  icon="pi pi-ellipsis-v"
-                                  kind="outlined"
-                                  size="small"
-                                  aria-label="Resource actions"
+                        </Table.Cell>
+
+                        <Table.Cell
+                          :grow="1"
+                          align="end"
+                        >
+                          <Currency
+                            v-if="row.charges"
+                            :value="row.charges"
+                            size="small"
+                          />
+                          <span
+                            v-else
+                            class="text-body-sm text-[var(--text-muted)]"
+                            >—</span
+                          >
+                        </Table.Cell>
+
+                        <Table.Cell :grow="1">
+                          <span
+                            v-if="row.labels && row.labels.length"
+                            class="flex flex-wrap items-center gap-[var(--spacing-xxs)]"
+                          >
+                            <Tag
+                              v-for="label in row.labels"
+                              :key="label"
+                              :label="label"
+                              severity="secondary"
+                              size="small"
+                            />
+                          </span>
+                          <span
+                            v-else
+                            class="text-body-sm text-[var(--text-muted)]"
+                            >—</span
+                          >
+                        </Table.Cell>
+
+                        <Table.Cell kind="action">
+                          <span @click.stop>
+                            <Dropdown
+                              placement="bottom-end"
+                              @select="(event, value) => onRowAction(event, value, row)"
+                            >
+                              <Dropdown.Trigger>
+                                <Tooltip text="Resource actions">
+                                  <IconButton
+                                    icon="pi pi-ellipsis-v"
+                                    kind="outlined"
+                                    size="small"
+                                    aria-label="Resource actions"
+                                  />
+                                </Tooltip>
+                              </Dropdown.Trigger>
+                              <Dropdown.Group>
+                                <Dropdown.Option
+                                  value="view"
+                                  label="View details"
                                 />
-                              </Tooltip>
-                            </Dropdown.Trigger>
-                            <Dropdown.Group>
-                              <Dropdown.Option value="view" label="View details" />
-                              <Dropdown.Option
-                                v-if="row.hasChildren"
-                                value="expand"
-                                :label="isExpanded(row.id) ? 'Collapse' : 'Expand'"
-                              />
-                            </Dropdown.Group>
-                            <Dropdown.Group>
-                              <Dropdown.Option value="move" label="Move" />
-                              <Dropdown.Option value="delete" label="Delete" />
-                            </Dropdown.Group>
-                          </Dropdown>
-                        </span>
-                      </Table.Cell>
-                    </Table.Row>
+                                <Dropdown.Option
+                                  v-if="row.hasChildren"
+                                  value="expand"
+                                  :label="isExpanded(row.id) ? 'Collapse' : 'Expand'"
+                                />
+                              </Dropdown.Group>
+                              <Dropdown.Group>
+                                <Dropdown.Option
+                                  value="move"
+                                  label="Move"
+                                />
+                                <Dropdown.Option
+                                  value="delete"
+                                  label="Delete"
+                                />
+                              </Dropdown.Group>
+                            </Dropdown>
+                          </span>
+                        </Table.Cell>
+                      </Table.Row>
                     </div>
                   </TransitionGroup>
                 </Table.Body>
@@ -542,7 +574,9 @@
                         :key="binding.role"
                         class="flex items-center justify-between rounded-[var(--shape-elements)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]"
                       >
-                        <span class="text-label-sm text-[var(--text-default)]">{{ binding.role }}</span>
+                        <span class="text-label-sm text-[var(--text-default)]">{{
+                          binding.role
+                        }}</span>
                         <span class="text-body-xs text-[var(--text-muted)]">
                           {{ binding.members }} member{{ binding.members === 1 ? '' : 's' }}
                         </span>

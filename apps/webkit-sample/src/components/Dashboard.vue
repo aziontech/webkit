@@ -163,9 +163,9 @@ const openZoneActions = (event, row) =>
 
 <template>
   <AppLayout active="home" :breadcrumb="[{ label: 'Home' }]">
-    <main class="layout-column flex flex-col gap-[var(--layout-section-gap)] xl:flex-row xl:items-start">
+    <main class="layout-column flex flex-col gap-[var(--layout-boundary-start)] xl:flex-row xl:items-start xl:gap-[var(--layout-section-gap)]">
       <!-- Primary column -->
-      <div class="flex min-w-0 flex-1 flex-col gap-[var(--layout-section-gap)]">
+      <div class="flex min-w-0 flex-1 flex-col">
         <!-- Metrics -->
         <section class="flex flex-col gap-[var(--layout-group-gap)]">
           <div class="flex items-center gap-[var(--spacing-xs)]">
@@ -219,7 +219,7 @@ const openZoneActions = (event, row) =>
         </section>
 
         <!-- Resources -->
-        <section class="flex flex-col gap-[var(--layout-group-gap)]">
+        <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
           <div class="flex items-center gap-[var(--spacing-xs)]">
             <h2 class="text-heading-xs text-[var(--text-default)]">Resources</h2>
             <IconButton
@@ -255,7 +255,7 @@ const openZoneActions = (event, row) =>
                   </div>
                 </template>
                 <template #cell-status="{ value }">
-                  <Tag :label="value" severity="success" size="small" />
+                  <Tag :label="value" :severity="value === 'Active' ? 'success' : 'secondary'" size="medium" />
                 </template>
                 <template #cell-lastModified="{ value, row }">
                   <LastModifiedCell :author="row.author" :avatar-src="row.authorAvatar" :date="value" />
@@ -285,7 +285,7 @@ const openZoneActions = (event, row) =>
         </section>
 
         <!-- Recent Activity -->
-        <section class="flex flex-col gap-[var(--layout-group-gap)]">
+        <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
           <h2 class="text-heading-xs text-[var(--text-default)]">Recent Activity</h2>
 
           <CardBox :padded="false">
@@ -316,7 +316,7 @@ const openZoneActions = (event, row) =>
 
       <!-- Right rail -->
       <aside
-        class="flex w-full flex-col gap-[var(--layout-section-gap)] xl:max-w-[var(--container-xs)] xl:shrink-0"
+        class="flex w-full flex-col xl:max-w-[var(--container-xs)] xl:shrink-0"
       >
         <!-- Monthly Usage -->
         <CardBox>
@@ -347,7 +347,7 @@ const openZoneActions = (event, row) =>
         </CardBox>
 
         <!-- Marketplace Trends -->
-        <CardBox>
+        <CardBox class="layout-section-start">
           <template #header>
             <h2 class="text-heading-xs text-[var(--text-default)]">
               Marketplace Trends

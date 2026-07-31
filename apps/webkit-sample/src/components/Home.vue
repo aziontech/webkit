@@ -12,12 +12,14 @@ import EmptyState from "@aziontech/webkit/empty-state";
 import IconButton from "@aziontech/webkit/icon-button";
 import Item from "@aziontech/webkit/item";
 import ProgressBar from "@aziontech/webkit/progress-bar";
+import Skeleton from "@aziontech/webkit/skeleton";
 import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
 import Tooltip from "@aziontech/webkit/tooltip";
 import { computed, ref } from "vue";
 
+import { useTenancyReload } from "../lib/tenancy-reload";
 import AppLayout from "./ui/AppLayout.vue";
 import ContrastBanner from "./ui/ContrastBanner.vue";
 
@@ -204,6 +206,11 @@ const filterOptions = Object.entries(resources).map(([value, { label }]) => ({
 }));
 
 // Workloads is selected by default, so the fresh-account empty state leads.
+// Switching organization, account or workspace reloads Home: usage is metered for
+// the scope in force and the resources below are that scope's, so both go to
+// skeletons and come back re-read (src/lib/tenancy-reload.js).
+const { tenancyReloading } = useTenancyReload();
+
 const selected = ref("workloads");
 const current = computed(() => resources[selected.value]);
 const isEmpty = computed(() => current.value.rows.length === 0);
@@ -239,7 +246,7 @@ const onRowAction = (event, value, row) => {
          exceed it the box grows, justify-center runs out of free space, and
          nothing gets clipped above the scroll origin. -->
     <div
-      class="layout-column-focused flex min-h-full flex-col justify-center gap-[var(--layout-section-gap)]"
+      class="layout-column-focused flex min-h-full flex-col justify-center"
     >
       <div class="flex justify-center">
         <ContrastBanner />
@@ -252,7 +259,7 @@ const onRowAction = (event, value, row) => {
            pile up below the cards. `grow`, never `flex-1` — a zero flex-basis
            makes a column's intrinsic height contribution ill-defined, and that
            contribution is exactly what the row height derives from. -->
-      <main class="flex flex-col gap-[var(--layout-section-gap)] lg:flex-row">
+      <main class="layout-section-start flex flex-col gap-[var(--layout-boundary-start)] lg:flex-row lg:gap-[var(--layout-section-gap)]">
         <!-- Left (minor): account usage — one metric per card, its reading beside a
              small progress bar showing plan consumption. On mobile it spans the
              full width above the resources; on `md`+ it becomes the narrow rail. -->
@@ -283,19 +290,29 @@ const onRowAction = (event, value, row) => {
                     </Tooltip>
                   </div>
                   <div class="flex items-baseline gap-[var(--spacing-xxs)]">
-                    <span class="text-big-number-sm tabular-nums text-[var(--text-default)]">
-                      {{ metric.value }}
-                    </span>
-                    <span
-                      v-if="metric.unit"
-                      class="text-body-xs text-[var(--text-muted)]"
-                    >{{ metric.unit }}</span>
+                    <!-- A reading from the scope we just left is worse than no
+                         reading: while the switch reloads, the number is a
+                         placeholder the size of the number it replaces. -->
+                    <Skeleton
+                      v-if="tenancyReloading"
+                      width="4.5rem"
+                      height="1.75rem"
+                    />
+                    <template v-else>
+                      <span class="text-big-number-sm tabular-nums text-[var(--text-default)]">
+                        {{ metric.value }}
+                      </span>
+                      <span
+                        v-if="metric.unit"
+                        class="text-body-xs text-[var(--text-muted)]"
+                      >{{ metric.unit }}</span>
+                    </template>
                   </div>
                 </div>
                 <!-- Progress reads as a flush bar on the card's bottom edge — a
                      consumption "border" that costs no inline space. -->
                 <ProgressBar
-                  :value="metric.percent"
+                  :value="tenancyReloading ? 0 : metric.percent"
                   :max="100"
                   size="small"
                   shape="flat"
@@ -349,8 +366,11 @@ const onRowAction = (event, value, row) => {
              EmptyState lead and an Item.List of the ways to create a first
              resource — each row an Item with a left icon, its title/description,
              and action. -->
+        <!-- Not while reloading: "nothing here yet" is a claim about the new
+             scope, and we have not finished reading it. The table below takes
+             that window and shows its skeleton instead. -->
         <CardBox
-          v-if="isEmpty"
+          v-if="isEmpty && !tenancyReloading"
           key="resource-empty"
           :padded="false"
           class="grow"
@@ -409,11 +429,15 @@ const onRowAction = (event, value, row) => {
           class="grow"
         >
           <template #content>
+            <!-- `page-size` on an unpaginated table is only read for the skeleton:
+                 it is how many placeholder rows the reload window shows. -->
             <Table
               :data="current.rows"
               :columns="current.columns"
               row-key="id"
               enable-sorting
+              :loading="tenancyReloading"
+              :page-size="6"
             >
               <template #cell-status="{ value }">
                 <Tag
