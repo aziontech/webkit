@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 6fa60ded0795a24f72b15191966684df87b0df17fd27d6951d78f31c5a68ebff
+checksum: a2675906e498b02562d5948bf9220a563a4cbcc437a9ad01fd80bf37ad2650ca
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -70,7 +70,7 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 | `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
 | `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
 | `requirementsIcon` | `string` | `'pi pi-check'` | no | Glyph for a satisfied rule chip. |
-| `requirementsPendingIcon` | `string` | `''` | no | Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so there is no gap before the label. The field still never changes width because the row declares `contain: inline-size`: its inline size is computed without its contents, so the chips contribute nothing to any ancestor's intrinsic width (measured on the input in an auto-width host: 353.4px to 368.0px without containment, 203.0px to 203.0px with it). The field is sized by its label and input, never by the rule chips. |
+| `requirementsPendingIcon` | `string` | `''` | no | Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so a chip never carries an empty space. The chip does grow when its glyph mounts. In a field with a definite width both guarantees hold together (measured: the input stays at 274.0px through the whole transition, with no empty box). In an auto-width host the field's width is derived from the row's own content, so the growth reaches it (353.4px to 368.0px); giving the field a width is what resolves that, and `contain: inline-size` on the row was tried and rejected because it changed the field's resting width. |
 | `requirementsInvalidIcon` | `string` | `'pi pi-times'` | no | Glyph for an unmet rule chip while `invalid` is set. |
 
 `PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean); icon?: string; pendingIcon?: string; invalidIcon?: string }`

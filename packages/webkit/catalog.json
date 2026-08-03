@@ -6172,7 +6172,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so there is no gap before the label. The field still never changes width because the row declares `contain: inline-size`: its inline size is computed without its contents, so the chips contribute nothing to any ancestor's intrinsic width (measured on the input in an auto-width host: 353.4px to 368.0px without containment, 203.0px to 203.0px with it). The field is sized by its label and input, never by the rule chips."
+          "doc": "Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so a chip never carries an empty space. The chip does grow when its glyph mounts. In a field with a definite width both guarantees hold together (measured: the input stays at 274.0px through the whole transition, with no empty box). In an auto-width host the field's width is derived from the row's own content, so the growth reaches it (353.4px to 368.0px); giving the field a width is what resolves that, and `contain: inline-size` on the row was tried and rejected because it changed the field's resting width."
         },
         {
           "name": "requirementsInvalidIcon",

@@ -109,16 +109,7 @@
         // visibly changed width as rules started passing. `w-0` drops the row's own width
         // contribution to nothing while `min-w-full` still stretches it across the field,
         // so the width authority stays with the input and the label.
-        // `contain: inline-size` is what lets the glyph be conditional AND the field hold
-        // its width. A chip necessarily changes width when its glyph mounts, and without
-        // containment that fed the ancestor's intrinsic width: measured 353.4px to 368.0px
-        // on the input in an auto-width host as the rules started passing. Containment
-        // computes this row's inline size without its contents, so it contributes nothing
-        // upward and takes its width from the field instead: measured 203.0px to 203.0px.
-        // `w-0 min-w-full` was tried first and does not work (the cyclic min-width is
-        // resolved from the content). The field is therefore sized by its label and input,
-        // never by the rule chips, and a rule showing no glyph leaves no gap.
-        'flex w-full [contain:inline-size] flex-wrap content-center items-center gap-[var(--spacing-xs)]',
+        'flex w-full flex-wrap content-center items-center gap-[var(--spacing-xs)]',
         attrs.class as string | undefined
       )
     "
