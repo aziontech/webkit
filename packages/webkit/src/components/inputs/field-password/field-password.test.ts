@@ -273,6 +273,32 @@ describe('FieldPassword', () => {
       expect(chips[2]).not.toHaveAttribute('data-validated')
     })
 
+    it('switches unmet rules to the failed state when the field is invalid', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          requirements: RULES,
+          modelValue: 'abcdefgh',
+          invalid: true
+        }
+      })
+
+      const chips = getAllByTestId('input-field-password__requirements-chip')
+      // The satisfied rule stays met; the two unmet ones move to the error treatment.
+      expect(chips[0]).toHaveAttribute('data-state', 'met')
+      expect(chips[1]).toHaveAttribute('data-state', 'failed')
+      expect(chips[2]).toHaveAttribute('data-state', 'failed')
+    })
+
+    it('keeps unmet rules neutral while the field is not invalid', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: { label: 'Password', requirements: RULES, modelValue: 'abcdefgh' }
+      })
+
+      const chips = getAllByTestId('input-field-password__requirements-chip')
+      expect(chips[1]).toHaveAttribute('data-state', 'unmet')
+    })
+
     it('accepts a predicate as the test, not only a RegExp', () => {
       const { getAllByTestId } = render(FieldPassword, {
         props: {

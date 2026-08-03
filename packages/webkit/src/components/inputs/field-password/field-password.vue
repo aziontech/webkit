@@ -53,6 +53,12 @@
     requirements?: PasswordRequirement[]
     /** Caption that opens the requirements row and names the group for assistive tech. */
     requirementsTitle?: string
+    /** Glyph for a satisfied rule chip. */
+    requirementsIcon?: string
+    /** Glyph for a rule chip not yet satisfied. */
+    requirementsPendingIcon?: string
+    /** Glyph for an unmet rule chip while the field is invalid. */
+    requirementsInvalidIcon?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -70,7 +76,10 @@
     inputId: '',
     name: '',
     requirements: () => [],
-    requirementsTitle: 'Must contain:'
+    requirementsTitle: 'Must contain:',
+    requirementsIcon: 'pi pi-check',
+    requirementsPendingIcon: 'pi pi-circle',
+    requirementsInvalidIcon: 'pi pi-times'
   })
 
   const emit = defineEmits<{
@@ -173,6 +182,10 @@
       :title="requirementsTitle"
       :value="modelValue"
       :title-id="requirementsTitleId"
+      :invalid="invalid"
+      :icon="requirementsIcon"
+      :pending-icon="requirementsPendingIcon"
+      :invalid-icon="requirementsInvalidIcon"
       :data-testid="`${testId}__requirements`"
     />
   </div>

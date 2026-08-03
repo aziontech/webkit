@@ -6159,6 +6159,27 @@
           "default": "'Must contain:'",
           "required": "no",
           "doc": "Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty."
+        },
+        {
+          "name": "requirementsIcon",
+          "type": "string",
+          "default": "'pi pi-check'",
+          "required": "no",
+          "doc": "Glyph for a satisfied rule chip."
+        },
+        {
+          "name": "requirementsPendingIcon",
+          "type": "string",
+          "default": "'pi pi-circle'",
+          "required": "no",
+          "doc": "Glyph for a rule chip not yet satisfied. Every state carries a glyph so the box is never blank and the chip never changes width."
+        },
+        {
+          "name": "requirementsInvalidIcon",
+          "type": "string",
+          "default": "'pi pi-times'",
+          "required": "no",
+          "doc": "Glyph for an unmet rule chip while `invalid` is set."
         }
       ],
       "events": [

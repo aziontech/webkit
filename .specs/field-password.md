@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 023525a5b521b101661ebc79596d5a2d97485b24ba1ee547fd8e93b1dc655b35
+checksum: 1217c9a0364c4f7e5af1325d3b4c61ba16c470775a76fdbf77dc682b32f75f0b
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -69,6 +69,9 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 | `name`              | `string`                                        | `''`                 | no       | HTML name for the underlying input (form + vee-validate integration).                                                                                                                                                                                                                                  |
 | `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
 | `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
+| `requirementsIcon` | `string` | `'pi pi-check'` | no | Glyph for a satisfied rule chip. |
+| `requirementsPendingIcon` | `string` | `'pi pi-circle'` | no | Glyph for a rule chip not yet satisfied. Every state carries a glyph so the box is never blank and the chip never changes width. |
+| `requirementsInvalidIcon` | `string` | `'pi pi-times'` | no | Glyph for an unmet rule chip while `invalid` is set. |
 
 `PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean) }`
 
@@ -92,14 +95,14 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 - `data-invalid` mirrors the `invalid` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-has-requirements` mirrors a non-empty `requirements` array; it is the presence flag for the requirements row
-- Per requirement chip: `data-validated` is present when the current value satisfies that entry's `test`, and drives the satisfied treatment
+- Per requirement chip: `data-state` is `met` / `unmet` / `failed` and drives the treatment; `failed` is an unmet rule while `invalid` is set (danger tokens + the X glyph), which is the after-a-failed-submit surface. `data-validated` is kept alongside it for satisfied chips
 
 ## Motion & Animations
 
 | Trigger                                                                         | Animation / Transition                    | Token  | Reduced-motion fallback         |
 | ------------------------------------------------------------------------------- | ----------------------------------------- | ------ | ------------------------------- |
 | requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
-| check glyph on a rule becoming satisfied (opacity + scale only) | `transition-[opacity,transform] duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
+| glyph on a rule changing state, unmet / met / failed (opacity + scale only) | `transition-[opacity,transform] duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
 | field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword` | —      | —                               |
 
 **No animation here changes a size or moves a line break.** The check glyph is always in
@@ -163,6 +166,7 @@ the prop, never by composing it.
 - Disabled — `disabled: true`; documents the lock-icon helper and disabled input tokens.
 - Toggle — composite story with `toggleable=true` (default) and `toggleable=false` side by side; documents the toggle pass-through.
 - Icons — documents the `#iconLeft` slot forwarded to the underlying `InputPassword` (with `pi pi-lock`).
+- RequirementsInvalid — justification: the error surface is a third chip state (`failed`) that no other story reaches; it is what a consumer sees after a submit blocked on unmet rules.
 - Requirements — justification: the requirements row is a two-state axis (satisfied / not) that no single-value story can show. This composite renders one field with a partially-satisfied rule set beside one with none satisfied, which is the only way to document both chip treatments and the wrapping behaviour of the row; it also documents the `requirementsTitle` override.
 
 ## Constraints — DO NOT

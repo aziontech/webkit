@@ -21,6 +21,9 @@
     test: RegExp | ((value: string) => boolean)
   }
 
+  /** Per-chip state. `failed` is an unmet rule once the field is showing errors. */
+  export type PasswordRequirementState = 'unmet' | 'met' | 'failed'
+
   interface Props {
     /** Rules rendered as chips, one per entry. An empty array renders nothing. */
     requirements?: PasswordRequirement[]
@@ -30,13 +33,25 @@
     value?: string
     /** Id the caption carries so the group can point at it with aria-labelledby. */
     titleId?: string
+    /** Switches every unmet rule to the error treatment; set it after a failed submit. */
+    invalid?: boolean
+    /** Glyph for a satisfied rule. */
+    icon?: string
+    /** Glyph for a rule not yet satisfied. */
+    pendingIcon?: string
+    /** Glyph for an unmet rule while `invalid` is set. */
+    invalidIcon?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     requirements: () => [],
     title: 'Must contain:',
     value: '',
-    titleId: ''
+    titleId: '',
+    invalid: false,
+    icon: 'pi pi-check',
+    pendingIcon: 'pi pi-circle',
+    invalidIcon: 'pi pi-times'
   })
 
   const attrs = useAttrs()
@@ -59,7 +74,11 @@
               : requirement.test
             ).test(props.value)
 
-      return { label: requirement.label, met }
+      const state: PasswordRequirementState = met ? 'met' : props.invalid ? 'failed' : 'unmet'
+      const icon =
+        state === 'met' ? props.icon : state === 'failed' ? props.invalidIcon : props.pendingIcon
+
+      return { label: requirement.label, met, state, icon }
     })
   )
 </script>
@@ -88,17 +107,19 @@
       v-for="requirement in evaluated"
       :key="requirement.label"
       :data-validated="requirement.met || null"
+      :data-state="requirement.state"
       :data-testid="`${testId}-chip`"
-      class="group inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm bg-[var(--bg-surface-raised)] text-[var(--text-muted)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[validated]:bg-[var(--success)] data-[validated]:text-[var(--text-default)]"
+      class="group inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=unmet]:bg-[var(--bg-surface-raised)] data-[state=unmet]:text-[var(--text-muted)] data-[state=met]:bg-[var(--success)] data-[state=met]:text-[var(--text-default)] data-[state=failed]:bg-[var(--danger)] data-[state=failed]:text-[var(--danger-contrast)]"
     >
-      <!-- The glyph is always in flow, never mounted on satisfaction, so a chip is the
-           same width whether its rule is met or not. Inserting it on demand is what made
-           the chip grow, push every chip after it, and re-wrap the row mid-animation. It
-           animates on `opacity` and `transform` only: both are composited and neither
-           takes part in layout, so no motion here can change a size or move a line
-           break. The box is reserved with a fixed `size`, not by the icon's content. -->
+      <!-- Every state carries a glyph, so the box is never blank and a chip is the same
+           width whichever state it is in. Mounting the glyph only on satisfaction is what
+           made a chip grow, push the row along, and re-wrap it mid-transition; leaving the
+           box empty for unmet rules read as a gap before the label. Only `opacity` and
+           `transform` animate: both composited, neither in layout, so no motion here can
+           change a size or move a line break. -->
       <i
-        class="pi pi-check flex shrink-0 items-center justify-center size-[14px] text-[var(--success-contrast)] scale-75 opacity-0 transition-[opacity,transform] duration-fast-02 ease-productive-entrance group-data-[validated]:scale-100 group-data-[validated]:opacity-100 motion-reduce:transition-none"
+        :class="requirement.icon"
+        class="flex shrink-0 items-center justify-center size-[14px] scale-75 opacity-60 transition-[opacity,transform] duration-fast-02 ease-productive-entrance group-data-[state=failed]:scale-100 group-data-[state=failed]:opacity-100 group-data-[state=met]:scale-100 group-data-[state=met]:opacity-100 motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ requirement.label }}
