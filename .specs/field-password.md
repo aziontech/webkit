@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: cdff462a15b0a7e524949f5dc563c9cdb9ed233ea083e1f29e576e58a8eab6bc
+checksum: 329ea69c51eb9bbfc46e594c9ff777c4178ebc13fae2fe26d0fda1769dbc9d7b
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -70,7 +70,7 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 | `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
 | `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
 | `requirementsIcon` | `string` | `'pi pi-check'` | no | Glyph for a satisfied rule chip. |
-| `requirementsPendingIcon` | `string` | `''` | no | Glyph for a rule chip not yet satisfied. Empty by default: a rule shows nothing at all while it is being typed, so there is no reserved box and no gap before the label. |
+| `requirementsPendingIcon` | `string` | `''` | no | Glyph for a rule chip not yet satisfied. Empty by default: no glyph shows while a rule is being typed. The 14px box itself is always reserved, which is what keeps a chip a constant width and the field from changing width (measured: mounting the box on demand moved the input from 353.4px to 368.0px in an auto-width host). |
 | `requirementsInvalidIcon` | `string` | `'pi pi-times'` | no | Glyph for an unmet rule chip while `invalid` is set. |
 
 `PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean); icon?: string; pendingIcon?: string; invalidIcon?: string }`

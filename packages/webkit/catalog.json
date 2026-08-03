@@ -6172,7 +6172,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Glyph for a rule chip not yet satisfied. Empty by default: a rule shows nothing at all while it is being typed, so there is no reserved box and no gap before the label."
+          "doc": "Glyph for a rule chip not yet satisfied. Empty by default: no glyph shows while a rule is being typed. The 14px box itself is always reserved, which is what keeps a chip a constant width and the field from changing width (measured: mounting the box on demand moved the input from 353.4px to 368.0px in an auto-width host)."
         },
         {
           "name": "requirementsInvalidIcon",

@@ -286,11 +286,14 @@ describe('FieldPassword', () => {
         }
       })
 
+      const glyph = (chip: HTMLElement) => chip.querySelector('i')?.className ?? ''
+
       const chips = getAllByTestId('input-field-password__requirements-chip')
-      // met -> the satisfied glyph; unmet -> nothing at all, unless the rule asks for one.
-      expect(chips[0].querySelector('i')).toBeTruthy()
-      expect(chips[1].querySelector('i')).toBeNull()
-      expect(chips[2].querySelector('i')?.className).toContain('pi-minus')
+      // met -> the satisfied glyph; unmet -> an empty box (constant chip width), unless
+      // the rule asks for one.
+      expect(glyph(chips[0])).toContain('pi-check')
+      expect(glyph(chips[1])).not.toContain('pi-')
+      expect(glyph(chips[2])).toContain('pi-minus')
     })
 
     it('lets a rule opt out of the satisfied glyph with an empty override', () => {
@@ -304,7 +307,8 @@ describe('FieldPassword', () => {
 
       const chip = getAllByTestId('input-field-password__requirements-chip')[0]
       expect(chip).toHaveAttribute('data-state', 'met')
-      expect(chip.querySelector('i')).toBeNull()
+      // The box stays (constant width); the glyph does not.
+      expect(chip.querySelector('i')?.className ?? '').not.toContain('pi-')
     })
 
     it('switches unmet rules to the failed state when the field is invalid', () => {
