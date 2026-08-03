@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 5da97f726db4f134471c14bc37e81f0a748571ba8d1bc6a5402fce3d60afd66c
+checksum: eba35c3cf36ca0d332b35c44804bd6196911319adb0247f6c6705d5e38f92d15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -18,63 +18,73 @@ last_updated: 2026-08-03
 
 Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.
 
-It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per entry of the `requirements` array, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that entry's `test`. This is the "strength meter" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The consumer supplies the **rules**; the field **evaluates** them against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: the rules are the trigger the app supplies, and applying them to the bound value is derived render state, not business logic the field invents.
+It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per rule, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that rule's `test`. This is the "strength meter" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The row exposes exactly **two** levers and nothing else: a bare `requirements` attribute turns it on with the built-in rule set, and passing an array replaces that set with the consumer's own rules. Appearance is not configurable — a chip has two treatments, both fixed by the design. The field **evaluates** the rules against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: enabling the row (or supplying rules) is the trigger the app provides, and applying them to the bound value is derived render state, not business logic the field invents.
 
 ## Usage
 
 ```vue
 <script setup>
-  import { computed, ref } from 'vue'
+  import { ref } from 'vue'
   import FieldPassword from '@aziontech/webkit/field-password'
+  import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
 
   const password = ref('')
 
-  // The application evaluates the rules; the field only renders them.
-  const requirements = computed(() => [
-    { label: '8-128 characters', test: /^.{8,128}$/ },
-    { label: 'Uppercase letter', test: /[A-Z]/ },
-    { label: 'Number', test: /\d/ }
-  ])
+  // Optional: start from the built-in set, drop one rule by its stable key, add your own.
+  const requirements = [
+    ...DEFAULT_PASSWORD_REQUIREMENTS.filter((rule) => rule.key !== 'special'),
+    { key: 'no-spaces', label: 'No spaces', test: (value) => !/\s/.test(value) }
+  ]
 </script>
 
 <template>
+  <!-- Built-in rule set: the bare attribute is the whole opt-in. -->
   <FieldPassword
     v-model="password"
     label="Password"
     placeholder="Enter your password"
     helper-text="At least 8 characters."
     autocomplete="new-password"
-    :requirements="requirements"
+    requirements
     required
+  />
+
+  <!-- Or bring your own rules; the array replaces the built-in set. -->
+  <FieldPassword
+    v-model="password"
+    label="Password"
+    :requirements="requirements"
   />
 </template>
 ```
 
 ## Props
 
-| Prop                | Type                                            | Default              | Required | JSDoc                                                                                                                                                                                                                                                                                                  |
-| ------------------- | ----------------------------------------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `modelValue`        | `string`                                        | `''`                 | no       | Two-way bound value of the underlying `InputPassword`.                                                                                                                                                                                                                                                 |
-| `label`             | `string`                                        | `''`                 | no       | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                                |
-| `placeholder`       | `string`                                        | `''`                 | no       | Placeholder forwarded to the `InputPassword`.                                                                                                                                                                                                                                                          |
-| `helperText`        | `string`                                        | `''`                 | no       | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy.                                                                 |
-| `maxLength`         | `number \| undefined`                           | `undefined`          | no       | Native `maxlength` forwarded to the `InputPassword`.                                                                                                                                                                                                                                                   |
-| `disabled`          | `boolean`                                       | `false`              | no       | Disables the input and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                                           |
-| `readonly`          | `boolean`                                       | `false`              | no       | Marks the input read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                                                                     |
-| `required`          | `boolean`                                       | `false`              | no       | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input.                                                                                                                                                                                                      |
-| `invalid`           | `boolean`                                       | `false`              | no       | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input.                                                                                                                                                                                                           |
-| `toggleable`        | `boolean`                                       | `true`               | no       | Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input.                                                                                                                                                   |
-| `autocomplete`      | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no       | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows.                                                                                                                                                                                 |
-| `inputId`           | `string`                                        | `''`                 | no       | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring.                                                                                                                                                                                                               |
-| `name`              | `string`                                        | `''`                 | no       | HTML name for the underlying input (form + vee-validate integration).                                                                                                                                                                                                                                  |
-| `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
-| `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
-| `requirementsIcon` | `string` | `'pi pi-check'` | no | Glyph for a satisfied rule chip. |
-| `requirementsPendingIcon` | `string` | `''` | no | Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so a chip never carries an empty space. The chip does grow when its glyph mounts. In a field with a definite width both guarantees hold together (measured: the input stays at 274.0px through the whole transition, with no empty box). In an auto-width host the field's width is derived from the row's own content, so the growth reaches it (353.4px to 368.0px); giving the field a width is what resolves that, and `contain: inline-size` on the row was tried and rejected because it changed the field's resting width. |
+| Prop                | Type                                            | Default              | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------- | ----------------------------------------------- | -------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`        | `string`                                        | `''`                 | no       | Two-way bound value of the underlying `InputPassword`.                                                                                                                                                                                                                                                                                                                                        |
+| `label`             | `string`                                        | `''`                 | no       | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                                                                                                                       |
+| `placeholder`       | `string`                                        | `''`                 | no       | Placeholder forwarded to the `InputPassword`.                                                                                                                                                                                                                                                                                                                                                 |
+| `helperText`        | `string`                                        | `''`                 | no       | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy.                                                                                                                                                        |
+| `maxLength`         | `number \| undefined`                           | `undefined`          | no       | Native `maxlength` forwarded to the `InputPassword`.                                                                                                                                                                                                                                                                                                                                          |
+| `disabled`          | `boolean`                                       | `false`              | no       | Disables the input and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                                                                                                                                  |
+| `readonly`          | `boolean`                                       | `false`              | no       | Marks the input read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                                                                                                                                                            |
+| `required`          | `boolean`                                       | `false`              | no       | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input.                                                                                                                                                                                                                                                                                             |
+| `invalid`           | `boolean`                                       | `false`              | no       | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input.                                                                                                                                                                                                                                                                                                  |
+| `toggleable`        | `boolean`                                       | `true`               | no       | Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input.                                                                                                                                                                                                                                          |
+| `autocomplete`      | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no       | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows.                                                                                                                                                                                                                                                                        |
+| `inputId`           | `string`                                        | `''`                 | no       | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring.                                                                                                                                                                                                                                                                                                      |
+| `name`              | `string`                                        | `''`                 | no       | HTML name for the underlying input (form + vee-validate integration).                                                                                                                                                                                                                                                                                                                         |
+| `requirements`      | `boolean \| PasswordRequirement[]`              | `false`              | no       | Enables the password-requirements row. `true` (a bare attribute) renders the built-in rule set; an array replaces that set entirely, one chip per entry. Each rule carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. `false` or an empty array omits the whole row, caption included. |
+| `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when the row is enabled.                                                                                                                                                                                                                                                                        |
 
-`PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean); icon?: string; pendingIcon?: string }`
+`PasswordRequirement`: `{ key?: string; label: string; test: RegExp | ((value: string) => boolean) }`
 
-Both glyphs are configurable on two levels: the `requirements*Icon` props set the default for the row, and any entry of the validation object overrides its own. An empty string means "render none", so a rule can opt out of a glyph entirely (`??` resolves the override, not `||`, so `''` is honoured). A chip has exactly two treatments — unsatisfied and satisfied — and the field's own `invalid` never reaches them: it drives the input border and the helper, while the chips keep reporting what the current value does and does not satisfy.
+The interface and the built-in rule set live in the co-located `password-requirements.ts`, published as `@aziontech/webkit/password-requirements` (`DEFAULT_PASSWORD_REQUIREMENTS`) — a `.ts` module because `export const` cannot live inside `<script setup>`. `FieldPassword` re-exports the type, so `PasswordRequirement` stays reachable from the component as well.
+
+The built-in set, in the design's order: `length` (`8-128 characters`), `uppercase` (`Uppercase letter`), `special` (`Special character`), `number` (`Number`), `lowercase` (`Lowercase letter`). Every entry carries a **stable `key`** so a consumer removes or replaces one by key and never by the localizable `label` — `DEFAULT_PASSWORD_REQUIREMENTS.filter((rule) => rule.key !== 'special')`. A consumer rule may omit `key`, in which case its `label` is the render identity.
+
+**Nothing about a chip's appearance is configurable.** A chip has exactly two treatments, both fixed by the design: unsatisfied is `var(--bg-surface-raised)` + `var(--text-muted)` with no glyph, satisfied is `var(--success)` + `var(--text-default)` with a hardcoded `pi pi-check`. The field's own `invalid` never reaches them either: it drives the input border and the helper, while the chips keep reporting what the current value does and does not satisfy.
 
 ## Events
 
@@ -95,43 +105,45 @@ Both glyphs are configurable on two levels: the `requirements*Icon` props set th
 - `data-required` mirrors the `required` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-disabled` mirrors the `disabled` prop
-- `data-has-requirements` mirrors a non-empty `requirements` array; it is the presence flag for the requirements row
+- `data-has-requirements` mirrors an enabled requirements row (`requirements` resolved to a non-empty rule set); it is the presence flag for the row
 - Per requirement chip: `data-validated` is present on a rule the current value satisfies and is the single switch between the two chip treatments — present is satisfied (check glyph + success tokens), absent is unsatisfied (muted tokens)
 
 ## Motion & Animations
 
-| Trigger                                                                         | Animation / Transition                    | Token  | Reduced-motion fallback         |
-| ------------------------------------------------------------------------------- | ----------------------------------------- | ------ | ------------------------------- |
+| Trigger                                                                         | Animation / Transition                                        | Token  | Reduced-motion fallback         |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------ | ------------------------------- |
 | requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
-| check glyph revealed when a rule becomes satisfied (opacity only) | `transition-opacity duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
-| field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword` | —      | —                               |
+| field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword`                     | —      | —                               |
 
-**No animation here changes a size or moves a line break.** The check glyph is rendered only for a satisfied rule, so an unsatisfied chip reserves no box and shows no empty space; the chip is wider once satisfied, which is what the design shows. Mounting the glyph on satisfaction was tried and rejected: it widened the chip,
-pushed every chip after it, and could re-wrap the row mid-transition. For the same reason
-the row animates neither `height` nor `width`.
+**Only color animates.** The check glyph is rendered only for a satisfied rule, so an
+unsatisfied chip reserves no box and shows no empty space; the chip is simply wider once
+satisfied, which is what the design shows. The glyph itself carries no transition — it has
+no unsatisfied counterpart to animate from — and the row animates neither `height` nor
+`width`.
 
 The row is rendered by an internal sub-component (`field-password-requirements`), mounted
-only when the `requirements` prop is non-empty. It owns the rule evaluation and declares
-`PasswordRequirement`, which `FieldPassword` re-exports as the public type. It is not a
+only when the resolved rule set is non-empty. It owns the rule evaluation; the
+`PasswordRequirement` interface and the built-in set live in the co-located
+`password-requirements.ts`, which `FieldPassword` re-exports the type from. The row is not a
 compound member: `FieldPassword` stays monolithic and the consumer drives the row through
 the prop, never by composing it.
 
 ## Tokens
 
-| Region                                                              | Token (DESIGN.md)          |
-| ------------------------------------------------------------------- | -------------------------- |
-| gap (between label / input / helper / requirements rows)            | `var(--spacing-xs)`        |
-| requirements row — gap between caption and chips, and between chips | `var(--spacing-xs)`        |
-| requirements caption — typography                                   | `.text-label-sm`           |
-| requirements caption — text                                         | `var(--text-default)`      |
-| requirement chip — shape                                            | `var(--shape-elements)`    |
-| requirement chip — padding                                          | `var(--spacing-xxs)`       |
-| requirement chip — gap between check glyph and label                | `var(--spacing-xxs)`       |
-| requirement chip — typography                                       | `.text-label-sm`           |
-| requirement chip (unsatisfied) — surface                            | `var(--bg-surface-raised)` |
-| requirement chip (unsatisfied) — text                               | `var(--text-muted)`        |
-| requirement chip (satisfied) — surface                              | `var(--success)`           |
-| requirement chip (satisfied) — text                                 | `var(--text-default)`      |
+| Region                                                              | Token (DESIGN.md)                            |
+| ------------------------------------------------------------------- | -------------------------------------------- |
+| gap (between label / input / helper / requirements rows)            | `var(--spacing-xs)`                          |
+| requirements row — gap between caption and chips, and between chips | `var(--spacing-xs)`                          |
+| requirements caption — typography                                   | `.text-label-sm`                             |
+| requirements caption — text                                         | `var(--text-default)`                        |
+| requirement chip — shape                                            | `var(--shape-elements)`                      |
+| requirement chip — padding                                          | `var(--spacing-xxs)`                         |
+| requirement chip — gap between check glyph and label                | `var(--spacing-xxs)`                         |
+| requirement chip — typography                                       | `.text-label-sm`                             |
+| requirement chip (unsatisfied) — surface                            | `var(--bg-surface-raised)`                   |
+| requirement chip (unsatisfied) — text                               | `var(--text-muted)`                          |
+| requirement chip (satisfied) — surface                              | `var(--success)`                             |
+| requirement chip (satisfied) — text                                 | `var(--text-default)`                        |
 | requirement chip (satisfied) — check glyph                          | inherits `var(--text-default)` from the chip |
 
 (Typography and color tokens of the field itself are owned by the children — `Label`, `InputPassword`, `HelperText` — and not redeclared here.)
@@ -158,13 +170,14 @@ the prop, never by composing it.
 
 ## Stories (Storybook)
 
-- Default
+- Default — includes the bare `requirements` attribute, so the built-in row is the documented default usage.
 - Required — `required: true`; documents the Label's Required tag plus the input's `aria-required` wiring.
-- Invalid — `invalid: true` with a sample `helperText`; documents the danger-tokened helper and invalid input border.
+- Invalid — `invalid: true` with a sample `helperText`; documents the danger-tokened helper and invalid input border, and that the chips are untouched by it.
 - Disabled — `disabled: true`; documents the lock-icon helper and disabled input tokens.
 - Toggle — composite story with `toggleable=true` (default) and `toggleable=false` side by side; documents the toggle pass-through.
 - Icons — documents the `#iconLeft` slot forwarded to the underlying `InputPassword` (with `pi pi-lock`).
-- Requirements — justification: the requirements row is a two-state axis (satisfied / not) that no single-value story can show. This composite renders one field with a partially-satisfied rule set beside one with none satisfied, which is the only way to document both chip treatments and the wrapping behaviour of the row; it also documents the `requirementsTitle` override.
+- Requirements — justification: the requirements row is a two-state axis (satisfied / not) that no single-value story can show. This composite renders one empty field beside one seeded with a partially-satisfying value, which is the only way to document both chip treatments at rest plus the wrapping behaviour; both fields use the bare `requirements` attribute, so the story is also the reference for the built-in rule set.
+- CustomRequirements — justification: the prop's second form (an array replacing the built-in set) cannot be shown by the arg-driven stories, because a RegExp / predicate is not expressible in a Storybook control. This composite documents the two customization paths side by side — the built-in set filtered by a rule's stable `key` plus an appended consumer rule, and a fully replaced localized set with a matching `requirementsTitle` — and makes it visible that customizing _which_ rules appear never changes how a chip looks.
 
 ## Constraints — DO NOT
 

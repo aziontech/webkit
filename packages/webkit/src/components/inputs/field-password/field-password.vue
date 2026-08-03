@@ -6,9 +6,11 @@
     type InputPasswordAutocomplete
   } from '../input-password/input-password.vue'
   import Label from '../label/label.vue'
-  import FieldPasswordRequirements, {
-    type PasswordRequirement as RowRequirement
-  } from './field-password-requirements/field-password-requirements.vue'
+  import FieldPasswordRequirements from './field-password-requirements/field-password-requirements.vue'
+  import {
+    DEFAULT_PASSWORD_REQUIREMENTS,
+    type PasswordRequirement as Requirement
+  } from './password-requirements'
 
   defineOptions({
     name: 'FieldPassword',
@@ -16,11 +18,11 @@
   })
 
   /**
-   * One password rule: its label plus the test the field evaluates against the current
-   * value. Declared by the requirements row and re-exported here, because this is the
-   * public entry a consumer types against.
+   * One password rule: its stable key, its label, and the test the field evaluates against
+   * the current value. Declared by the co-located rules module and re-exported here, because
+   * this is the public entry a consumer types against.
    */
-  export type PasswordRequirement = RowRequirement
+  export type PasswordRequirement = Requirement
 
   interface Props {
     /** Two-way bound value of the underlying InputPassword. */
@@ -49,14 +51,10 @@
     inputId?: string
     /** HTML name for the underlying input (form + vee-validate integration). */
     name?: string
-    /** Password rules rendered as a wrapping chip row under the field, one chip per entry. */
-    requirements?: PasswordRequirement[]
+    /** Enables the requirements row: true uses the built-in rule set, an array replaces it. */
+    requirements?: boolean | PasswordRequirement[]
     /** Caption that opens the requirements row and names the group for assistive tech. */
     requirementsTitle?: string
-    /** Glyph for a satisfied rule chip. */
-    requirementsIcon?: string
-    /** Glyph for a rule chip not yet satisfied. */
-    requirementsPendingIcon?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -73,10 +71,8 @@
     autocomplete: 'current-password',
     inputId: '',
     name: '',
-    requirements: () => [],
-    requirementsTitle: 'Must contain:',
-    requirementsIcon: 'pi pi-check',
-    requirementsPendingIcon: ''
+    requirements: false,
+    requirementsTitle: 'Must contain:'
   })
 
   const emit = defineEmits<{
@@ -102,7 +98,15 @@
   const helperId = computed(() => `${resolvedInputId.value}-helper`)
   const requirementsTitleId = computed(() => `${resolvedInputId.value}-requirements-title`)
 
-  const hasRequirements = computed(() => props.requirements.length > 0)
+  // `true` opts into the built-in rule set, an array replaces it, `false` (the default)
+  // renders no row — so the consumer's only two levers are "on" and "my own rules".
+  const resolvedRequirements = computed<PasswordRequirement[]>(() => {
+    if (props.requirements === true) return DEFAULT_PASSWORD_REQUIREMENTS
+    if (props.requirements === false) return []
+    return props.requirements
+  })
+
+  const hasRequirements = computed(() => resolvedRequirements.value.length > 0)
 
   const helperKind = computed<HelperTextKind>(() => {
     if (props.disabled) return 'disabled'
@@ -175,12 +179,10 @@
     />
     <FieldPasswordRequirements
       v-if="hasRequirements"
-      :requirements="requirements"
+      :requirements="resolvedRequirements"
       :title="requirementsTitle"
       :value="modelValue"
       :title-id="requirementsTitleId"
-      :icon="requirementsIcon"
-      :pending-icon="requirementsPendingIcon"
       :data-testid="`${testId}__requirements`"
     />
   </div>

@@ -6148,31 +6148,17 @@
         },
         {
           "name": "requirements",
-          "type": "PasswordRequirement[]",
-          "default": "() => []",
+          "type": "boolean | PasswordRequirement[]",
+          "default": "false",
           "required": "no",
-          "doc": "Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted."
+          "doc": "Enables the password-requirements row. `true` (a bare attribute) renders the built-in rule set; an array replaces that set entirely, one chip per entry. Each rule carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. `false` or an empty array omits the whole row, caption included."
         },
         {
           "name": "requirementsTitle",
           "type": "string",
           "default": "'Must contain:'",
           "required": "no",
-          "doc": "Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty."
-        },
-        {
-          "name": "requirementsIcon",
-          "type": "string",
-          "default": "'pi pi-check'",
-          "required": "no",
-          "doc": "Glyph for a satisfied rule chip."
-        },
-        {
-          "name": "requirementsPendingIcon",
-          "type": "string",
-          "default": "''",
-          "required": "no",
-          "doc": "Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so a chip never carries an empty space. The chip does grow when its glyph mounts. In a field with a definite width both guarantees hold together (measured: the input stays at 274.0px through the whole transition, with no empty box). In an auto-width host the field's width is derived from the row's own content, so the growth reaches it (353.4px to 368.0px); giving the field a width is what resolves that, and `contain: inline-size` on the row was tried and rejected because it changed the field's resting width."
+          "doc": "Caption that opens the requirements row and names the group for assistive tech. Rendered only when the row is enabled."
         }
       ],
       "events": [
@@ -6194,7 +6180,13 @@
           "notes": "Forwarded to the underlying `InputPassword#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled."
         }
       ],
-      "purpose": "Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern. It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per entry of the `requirements` array, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that entry's `test`. This is the \"strength meter\" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The consumer supplies the **rules**; the field **evaluates** them against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: the rules are the trigger the app supplies, and applying them to the bound value is derived render state, not business logic the field invents."
+      "purpose": "Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern. It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per rule, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that rule's `test`. This is the \"strength meter\" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The row exposes exactly **two** levers and nothing else: a bare `requirements` attribute turns it on with the built-in rule set, and passing an array replaces that set with the consumer's own rules. Appearance is not configurable — a chip has two treatments, both fixed by the design. The field **evaluates** the rules against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: enabling the row (or supplying rules) is the trigger the app provides, and applying them to the bound value is derived render state, not business logic the field invents."
+    },
+    "password-requirements": {
+      "import": "@aziontech/webkit/password-requirements",
+      "target": "./src/components/inputs/field-password/password-requirements.ts",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/password-requirements"
     },
     "box-grid-selection": {
       "import": "@aziontech/webkit/box-grid-selection",

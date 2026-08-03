@@ -23,5 +23,10 @@
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
     "limit": "48 KB"
+  },
+  {
+    "name": "password-requirements",
+    "path": "src/components/inputs/field-password/password-requirements.ts",
+    "limit": "0.3 KB"
   }
 ]

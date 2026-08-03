@@ -2,28 +2,12 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../../utils/cn'
+  import type { PasswordRequirement } from '../password-requirements'
 
   defineOptions({
     name: 'FieldPasswordRequirements',
     inheritAttrs: false
   })
-
-  /**
-   * One password rule. The rule carries its test, not its result: this component owns
-   * the value, so it evaluates every rule against the current one and re-renders as the
-   * user types. A pre-computed boolean would freeze the chips at whatever the consumer
-   * passed, which is decoration rather than validation.
-   */
-  export interface PasswordRequirement {
-    /** Text shown inside the chip. */
-    label: string
-    /** Pattern or predicate the current value must satisfy for the rule to be met. */
-    test: RegExp | ((value: string) => boolean)
-    /** Overrides the satisfied glyph for this rule alone. Empty string renders none. */
-    icon?: string
-    /** Overrides the not-yet-satisfied glyph for this rule alone. Empty string renders none. */
-    pendingIcon?: string
-  }
 
   interface Props {
     /** Rules rendered as chips, one per entry. An empty array renders nothing. */
@@ -34,19 +18,13 @@
     value?: string
     /** Id the caption carries so the group can point at it with aria-labelledby. */
     titleId?: string
-    /** Glyph for a satisfied rule. */
-    icon?: string
-    /** Glyph for a rule not yet satisfied. Empty by default: nothing shows while typing. */
-    pendingIcon?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     requirements: () => [],
     title: 'Must contain:',
     value: '',
-    titleId: '',
-    icon: 'pi pi-check',
-    pendingIcon: ''
+    titleId: ''
   })
 
   const attrs = useAttrs()
@@ -69,13 +47,9 @@
               : requirement.test
             ).test(props.value)
 
-      // A rule may override either of its two glyphs for itself; `''` means "render none",
-      // so `??` (not `||`) is what lets an entry opt out without falling back to the prop.
-      const icon = met
-        ? (requirement.icon ?? props.icon)
-        : (requirement.pendingIcon ?? props.pendingIcon)
-
-      return { label: requirement.label, met, icon }
+      // `key` is the stable identity a consumer removes a rule by; the label is localizable
+      // and only stands in when a rule carries no key of its own.
+      return { key: requirement.key || requirement.label, label: requirement.label, met }
     })
   )
 </script>
@@ -88,12 +62,8 @@
     :data-testid="testId"
     :class="
       cn(
-        // `w-0 min-w-full`, not `w-full`: the row must fill the field but never size it.
-        // A chip grows when its glyph arrives, which grows the row's max-content, and any
-        // ancestor that sizes to content would pass that on to the input — the field
-        // visibly changed width as rules started passing. `w-0` drops the row's own width
-        // contribution to nothing while `min-w-full` still stretches it across the field,
-        // so the width authority stays with the input and the label.
+        // `w-full`: the row spans the field, and the field keeps the width authority — the
+        // chips wrap inside it instead of widening it.
         'flex w-full flex-wrap content-center items-center gap-[var(--spacing-xs)]',
         attrs.class as string | undefined
       )
@@ -108,20 +78,19 @@
     </span>
     <span
       v-for="requirement in evaluated"
-      :key="requirement.label"
+      :key="requirement.key"
       :data-validated="requirement.met || null"
       :data-testid="`${testId}-chip`"
-      class="group inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none bg-[var(--bg-surface-raised)] text-[var(--text-muted)] data-[validated]:bg-[var(--success)] data-[validated]:text-[var(--text-default)]"
+      class="inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none bg-[var(--bg-surface-raised)] text-[var(--text-muted)] data-[validated]:bg-[var(--success)] data-[validated]:text-[var(--text-default)]"
     >
-      <!-- Two states, matching Figma: a satisfied rule gets `var(--success)` plus the check
-           glyph, an unsatisfied one gets `var(--bg-surface-raised)` and no glyph at all. The
-           glyph is conditional, so an unsatisfied chip reserves no box and carries no empty
-           space; the chip is therefore wider once it is satisfied, which is what the design
-           shows. Only `opacity` animates here, and it does not participate in layout. -->
+      <!-- Two treatments, matching Figma, and nothing about either is configurable: a
+           satisfied rule gets `var(--success)` plus the check glyph, an unsatisfied one gets
+           `var(--bg-surface-raised)` and no glyph at all. The glyph is conditional, so an
+           unsatisfied chip reserves no box and carries no empty space; the chip is therefore
+           wider once it is satisfied, which is what the design shows. -->
       <i
-        v-if="requirement.icon"
-        :class="requirement.icon"
-        class="flex shrink-0 items-center justify-center size-[14px] opacity-60 transition-opacity duration-fast-02 ease-productive-entrance group-data-[validated]:opacity-100 motion-reduce:transition-none"
+        v-if="requirement.met"
+        class="pi pi-check flex shrink-0 items-center justify-center size-[14px]"
         aria-hidden="true"
       />
       {{ requirement.label }}

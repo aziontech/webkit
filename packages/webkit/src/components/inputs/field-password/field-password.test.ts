@@ -5,8 +5,10 @@ import { describe, expect, it } from 'vitest'
 import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-password/FieldPassword.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldPassword from './field-password.vue'
+import { DEFAULT_PASSWORD_REQUIREMENTS } from './password-requirements'
 
-const { Default, Invalid, Disabled, Toggle } = composeStories(stories)
+const { Default, Invalid, Disabled, Toggle, Requirements, CustomRequirements } =
+  composeStories(stories)
 
 describe('FieldPassword', () => {
   it('renders a <div> root carrying the default data-testid', () => {
@@ -233,15 +235,102 @@ describe('FieldPassword', () => {
       { label: 'Number', test: /\d/ }
     ]
 
-    it('omits the whole requirements row when the array is empty', () => {
+    // The five built-in labels, in the order the design shows them.
+    const DEFAULT_LABELS = [
+      '8-128 characters',
+      'Uppercase letter',
+      'Special character',
+      'Number',
+      'Lowercase letter'
+    ]
+
+    it.each([
+      ['absent', {}],
+      ['false', { requirements: false }],
+      ['an empty array', { requirements: [] }]
+    ])('renders no requirements row when the prop is %s', (_label, extraProps) => {
       const { queryByTestId, getByTestId } = render(FieldPassword, {
-        props: { label: 'Password' }
+        props: { label: 'Password', ...extraProps }
       })
 
       expect(queryByTestId('input-field-password__requirements')).toBeNull()
       expect(queryByTestId('input-field-password__requirements-title')).toBeNull()
       // The presence flag is absent too.
       expect(getByTestId('input-field-password')).not.toHaveAttribute('data-has-requirements')
+    })
+
+    it('renders the built-in rule set when requirements is enabled with no array', () => {
+      const { getAllByTestId, getByTestId } = render(FieldPassword, {
+        // `requirements` as a bare attribute resolves to `true` — the only lever needed
+        // to opt into the built-in set.
+        props: { label: 'Password', requirements: true }
+      })
+
+      expect(getByTestId('input-field-password')).toHaveAttribute('data-has-requirements')
+
+      const chips = getAllByTestId('input-field-password__requirements-chip')
+      expect(chips.map((chip) => chip.textContent?.trim())).toEqual(DEFAULT_LABELS)
+    })
+
+    it('evaluates the built-in rules against the current value', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        // Length, uppercase, number and lowercase are satisfied; no special character is.
+        props: { label: 'Password', requirements: true, modelValue: 'Abcdefgh1' }
+      })
+
+      const validated = getAllByTestId('input-field-password__requirements-chip').map((chip) => [
+        chip.textContent?.trim(),
+        chip.hasAttribute('data-validated')
+      ])
+
+      expect(validated).toEqual([
+        ['8-128 characters', true],
+        ['Uppercase letter', true],
+        ['Special character', false],
+        ['Number', true],
+        ['Lowercase letter', true]
+      ])
+    })
+
+    it('exposes the built-in rules with stable keys so a consumer can drop one', () => {
+      expect(DEFAULT_PASSWORD_REQUIREMENTS.map((rule) => rule.key)).toEqual([
+        'length',
+        'uppercase',
+        'special',
+        'number',
+        'lowercase'
+      ])
+      expect(DEFAULT_PASSWORD_REQUIREMENTS.map((rule) => rule.label)).toEqual(DEFAULT_LABELS)
+    })
+
+    it('renders the built-in set minus a rule filtered out by its key', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          requirements: DEFAULT_PASSWORD_REQUIREMENTS.filter((rule) => rule.key !== 'special')
+        }
+      })
+
+      const chips = getAllByTestId('input-field-password__requirements-chip')
+      expect(chips.map((chip) => chip.textContent?.trim())).toEqual([
+        '8-128 characters',
+        'Uppercase letter',
+        'Number',
+        'Lowercase letter'
+      ])
+    })
+
+    it('replaces the built-in set entirely when an array is passed', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          requirements: [{ key: 'no-spaces', label: 'No spaces', test: /^\S*$/ }]
+        }
+      })
+
+      const chips = getAllByTestId('input-field-password__requirements-chip')
+      expect(chips).toHaveLength(1)
+      expect(chips[0]).toHaveTextContent('No spaces')
     })
 
     it('renders one chip per entry, in order, each carrying its label', () => {
@@ -273,27 +362,18 @@ describe('FieldPassword', () => {
       expect(chips[2]).not.toHaveAttribute('data-validated')
     })
 
-    it('renders no glyph for an unmet rule by default, and one per rule override', () => {
+    it('renders the check glyph on a satisfied chip and no glyph at all on an unmet one', () => {
       const { getAllByTestId } = render(FieldPassword, {
-        props: {
-          label: 'Password',
-          modelValue: 'abcdefgh',
-          requirements: [
-            { label: '8-128 characters', test: /^.{8,128}$/ },
-            { label: 'Uppercase letter', test: /[A-Z]/ },
-            { label: 'Number', test: /\d/, pendingIcon: 'pi pi-minus' }
-          ]
-        }
+        // 8 lowercase chars: the length rule passes, the other two do not.
+        props: { label: 'Password', modelValue: 'abcdefgh', requirements: RULES }
       })
 
-      const glyph = (chip: HTMLElement) => chip.querySelector('i')?.className ?? ''
-
       const chips = getAllByTestId('input-field-password__requirements-chip')
-      // met -> the satisfied glyph; unmet -> an empty box (constant chip width), unless
-      // the rule asks for one.
-      expect(glyph(chips[0])).toContain('pi-check')
-      expect(glyph(chips[1])).not.toContain('pi-')
-      expect(glyph(chips[2])).toContain('pi-minus')
+      // Two treatments and nothing configurable: satisfied gets `pi pi-check`, unsatisfied
+      // renders no glyph element at all (so the chip reserves no empty box).
+      expect(chips[0].querySelector('i')?.className ?? '').toContain('pi-check')
+      expect(chips[1].querySelector('i')).toBeNull()
+      expect(chips[2].querySelector('i')).toBeNull()
     })
 
     it('evaluates a g-flagged pattern consistently across re-renders', async () => {
@@ -336,21 +416,6 @@ describe('FieldPassword', () => {
       expect(allowed.getAllByTestId('input-field-password__requirements-chip')[0]).toHaveAttribute(
         'data-validated'
       )
-    })
-
-    it('lets a rule opt out of the satisfied glyph with an empty override', () => {
-      const { getAllByTestId } = render(FieldPassword, {
-        props: {
-          label: 'Password',
-          modelValue: 'abcdefgh',
-          requirements: [{ label: '8-128 characters', test: /^.{8,128}$/, icon: '' }]
-        }
-      })
-
-      const chip = getAllByTestId('input-field-password__requirements-chip')[0]
-      expect(chip).toHaveAttribute('data-validated')
-      // The box stays (constant width); the glyph does not.
-      expect(chip.querySelector('i')?.className ?? '').not.toContain('pi-')
     })
 
     it('leaves the chips untouched by the field being invalid', () => {
@@ -559,5 +624,42 @@ describe('FieldPassword', () => {
     expect(getAllByTestId('input-field-password__input')).toHaveLength(2)
     // Only the toggleable field contributes a visibility toggle button.
     expect(getAllByRole('button', { name: 'Show password' })).toHaveLength(1)
+  })
+
+  it('composes the Requirements story fixture (both fields on the built-in set)', () => {
+    const { getAllByTestId } = render(Requirements())
+
+    // Two fields, each with the five built-in chips and no array in sight.
+    const chips = getAllByTestId('input-field-password__requirements-chip')
+    expect(chips).toHaveLength(10)
+
+    const validated = chips.map((chip) => chip.hasAttribute('data-validated'))
+    // First field is empty → nothing satisfied; second seeds 'Abcdefgh1' → all but
+    // 'Special character' (index 2 of the set) satisfied.
+    expect(validated).toEqual([false, false, false, false, false, true, true, false, true, true])
+  })
+
+  it('composes the CustomRequirements story fixture (built-ins minus one, plus a local rule)', () => {
+    const { getAllByTestId, getByRole } = render(CustomRequirements())
+
+    const labels = getAllByTestId('input-field-password__requirements-chip').map((chip) =>
+      chip.textContent?.trim()
+    )
+
+    expect(labels).toEqual([
+      // 'Special character' filtered out by key, 'No spaces' appended.
+      '8-128 characters',
+      'Uppercase letter',
+      'Number',
+      'Lowercase letter',
+      'No spaces',
+      // Second field replaces the set outright.
+      '8-128 caracteres',
+      'Letra maiúscula',
+      'Número'
+    ])
+
+    // The localized field also renames the group.
+    expect(getByRole('group', { name: 'Deve conter:' })).toBeInTheDocument()
   })
 })
