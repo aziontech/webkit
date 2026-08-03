@@ -251,7 +251,7 @@ describe('FieldPassword', () => {
 
       expect(getByTestId('input-field-password')).toHaveAttribute('data-has-requirements')
 
-      const chips = getAllByTestId('input-field-password__requirement')
+      const chips = getAllByTestId('input-field-password__requirements-chip')
       expect(chips).toHaveLength(3)
       expect(chips.map((chip) => chip.textContent?.trim())).toEqual([
         '8-128 characters',
@@ -266,7 +266,7 @@ describe('FieldPassword', () => {
         props: { label: 'Password', requirements: RULES, modelValue: 'abcdefgh' }
       })
 
-      const chips = getAllByTestId('input-field-password__requirement')
+      const chips = getAllByTestId('input-field-password__requirements-chip')
       // `met || null` → the attribute exists only on satisfied entries.
       expect(chips[0]).toHaveAttribute('data-validated')
       expect(chips[1]).not.toHaveAttribute('data-validated')
@@ -282,7 +282,7 @@ describe('FieldPassword', () => {
         }
       })
 
-      expect(getAllByTestId('input-field-password__requirement')[0]).not.toHaveAttribute(
+      expect(getAllByTestId('input-field-password__requirements-chip')[0]).not.toHaveAttribute(
         'data-validated'
       )
     })
@@ -300,21 +300,21 @@ describe('FieldPassword', () => {
       const { getAllByTestId, getByTestId } = render(Host)
 
       // Empty value satisfies nothing.
-      for (const chip of getAllByTestId('input-field-password__requirement')) {
+      for (const chip of getAllByTestId('input-field-password__requirements-chip')) {
         expect(chip).not.toHaveAttribute('data-validated')
       }
 
       await fireEvent.update(getByTestId('input-field-password__input'), 'Abcdefg1')
 
       // 8 chars, an uppercase and a digit: all three flip, driven only by the value.
-      for (const chip of getAllByTestId('input-field-password__requirement')) {
+      for (const chip of getAllByTestId('input-field-password__requirements-chip')) {
         expect(chip).toHaveAttribute('data-validated')
       }
 
       await fireEvent.update(getByTestId('input-field-password__input'), 'abc')
 
       // And back down again when the value stops satisfying them.
-      for (const chip of getAllByTestId('input-field-password__requirement')) {
+      for (const chip of getAllByTestId('input-field-password__requirements-chip')) {
         expect(chip).not.toHaveAttribute('data-validated')
       }
     })
@@ -352,7 +352,7 @@ describe('FieldPassword', () => {
         props: { label: 'Password', requirements: RULES }
       })
 
-      for (const chip of getAllByTestId('input-field-password__requirement')) {
+      for (const chip of getAllByTestId('input-field-password__requirements-chip')) {
         expect(chip).not.toHaveAttribute('tabindex')
         expect(chip).not.toHaveAttribute('role')
       }

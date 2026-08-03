@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: df9be1ae838e57479865612bee1847785546dde5473e5b80540274e2ce15e99d
+checksum: 023525a5b521b101661ebc79596d5a2d97485b24ba1ee547fd8e93b1dc655b35
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -98,8 +98,22 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 
 | Trigger                                                                         | Animation / Transition                    | Token  | Reduced-motion fallback         |
 | ------------------------------------------------------------------------------- | ----------------------------------------- | ------ | ------------------------------- |
-| requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
+| check glyph on a rule becoming satisfied (opacity + scale only) | `transition-[opacity,transform] duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
 | field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword` | —      | —                               |
+
+**No animation here changes a size or moves a line break.** The check glyph is always in
+flow with a reserved fixed box, so a chip is the same width whether its rule is met or
+not, and only `opacity` / `transform` animate (both composited, neither participating in
+layout). Mounting the glyph on satisfaction was tried and rejected: it widened the chip,
+pushed every chip after it, and could re-wrap the row mid-transition. For the same reason
+the row animates neither `height` nor `width`.
+
+The row is rendered by an internal sub-component (`field-password-requirements`), mounted
+only when the `requirements` prop is non-empty. It owns the rule evaluation and declares
+`PasswordRequirement`, which `FieldPassword` re-exports as the public type. It is not a
+compound member: `FieldPassword` stays monolithic and the consumer drives the row through
+the prop, never by composing it.
 
 ## Tokens
 

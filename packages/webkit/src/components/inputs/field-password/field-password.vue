@@ -6,6 +6,9 @@
     type InputPasswordAutocomplete
   } from '../input-password/input-password.vue'
   import Label from '../label/label.vue'
+  import FieldPasswordRequirements, {
+    type PasswordRequirement as RowRequirement
+  } from './field-password-requirements/field-password-requirements.vue'
 
   defineOptions({
     name: 'FieldPassword',
@@ -13,19 +16,11 @@
   })
 
   /**
-   * One password rule rendered as a chip under the field.
-   *
-   * The rule carries the *test*, not its result: the field owns the value, so it
-   * evaluates every rule against the current one and re-renders as the user
-   * types. A pre-computed boolean would freeze the chips at whatever the
-   * consumer passed, which is not validation, only decoration.
+   * One password rule: its label plus the test the field evaluates against the current
+   * value. Declared by the requirements row and re-exported here, because this is the
+   * public entry a consumer types against.
    */
-  export interface PasswordRequirement {
-    /** Text shown inside the chip. */
-    label: string
-    /** Pattern or predicate the current value must satisfy for the rule to be met. */
-    test: RegExp | ((value: string) => boolean)
-  }
+  export type PasswordRequirement = RowRequirement
 
   interface Props {
     /** Two-way bound value of the underlying InputPassword. */
@@ -103,27 +98,6 @@
 
   const hasRequirements = computed(() => props.requirements.length > 0)
 
-  /**
-   * Evaluates each rule against the value currently in the field, so the chips
-   * track what is typed. A `g`-flagged pattern carries `lastIndex` between
-   * calls and would alternate true/false on the same value, so it is rebuilt
-   * without the flag.
-   */
-  const evaluatedRequirements = computed(() =>
-    props.requirements.map((requirement: PasswordRequirement) => {
-      const value = props.modelValue
-      const met =
-        typeof requirement.test === 'function'
-          ? requirement.test(value)
-          : (requirement.test.global
-              ? new RegExp(requirement.test.source, requirement.test.flags.replace('g', ''))
-              : requirement.test
-            ).test(value)
-
-      return { label: requirement.label, met }
-    })
-  )
-
   const helperKind = computed<HelperTextKind>(() => {
     if (props.disabled) return 'disabled'
     if (props.invalid) return 'invalid'
@@ -193,48 +167,13 @@
       :kind="helperKind"
       :data-testid="`${testId}__helper`"
     />
-    <div
+    <FieldPasswordRequirements
       v-if="hasRequirements"
-      role="group"
-      :aria-labelledby="requirementsTitleId"
+      :requirements="requirements"
+      :title="requirementsTitle"
+      :value="modelValue"
+      :title-id="requirementsTitleId"
       :data-testid="`${testId}__requirements`"
-      class="flex h-auto w-full flex-wrap content-center items-center gap-[var(--spacing-xs)] [interpolate-size:allow-keywords] transition-[height,width] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-    >
-      <span
-        :id="requirementsTitleId"
-        :data-testid="`${testId}__requirements-title`"
-        class="shrink-0 leading-none text-label-sm text-[var(--text-default)]"
-      >
-        {{ requirementsTitle }}
-      </span>
-      <!-- Satisfying a rule inserts its check glyph, which widens that chip and
-           pushes every chip after it along the row. That is a layout move, not a
-           style change, so a CSS transition cannot reach it — `move-class` is
-           Vue's FLIP hook, and it animates the shift with `transform`. Entering and
-           leaving chips slide in on the same axis so a changed rule set reads as one
-           motion instead of a jump. -->
-      <TransitionGroup
-        move-class="transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-        enter-active-class="transition-[opacity,transform] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-        enter-from-class="opacity-0 translate-x-[calc(var(--spacing-xs)*-1)]"
-        leave-active-class="absolute transition-[opacity,transform] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-        leave-to-class="opacity-0 translate-x-[calc(var(--spacing-xs)*-1)]"
-      >
-        <span
-          v-for="requirement in evaluatedRequirements"
-          :key="requirement.label"
-          :data-validated="requirement.met || null"
-          :data-testid="`${testId}__requirement`"
-          class="inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm bg-[var(--bg-surface-raised)] text-[var(--text-muted)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[validated]:bg-[var(--success)] data-[validated]:text-[var(--text-default)]"
-        >
-          <i
-            v-if="requirement.met"
-            class="pi pi-check flex shrink-0 items-center size-[14px] text-[var(--success-contrast)]"
-            aria-hidden="true"
-          />
-          {{ requirement.label }}
-        </span>
-      </TransitionGroup>
-    </div>
+    />
   </div>
 </template>
