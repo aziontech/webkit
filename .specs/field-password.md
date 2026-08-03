@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 1217c9a0364c4f7e5af1325d3b4c61ba16c470775a76fdbf77dc682b32f75f0b
+checksum: cdff462a15b0a7e524949f5dc563c9cdb9ed233ea083e1f29e576e58a8eab6bc
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -70,10 +70,12 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 | `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
 | `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
 | `requirementsIcon` | `string` | `'pi pi-check'` | no | Glyph for a satisfied rule chip. |
-| `requirementsPendingIcon` | `string` | `'pi pi-circle'` | no | Glyph for a rule chip not yet satisfied. Every state carries a glyph so the box is never blank and the chip never changes width. |
+| `requirementsPendingIcon` | `string` | `''` | no | Glyph for a rule chip not yet satisfied. Empty by default: a rule shows nothing at all while it is being typed, so there is no reserved box and no gap before the label. |
 | `requirementsInvalidIcon` | `string` | `'pi pi-times'` | no | Glyph for an unmet rule chip while `invalid` is set. |
 
-`PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean) }`
+`PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean); icon?: string; pendingIcon?: string; invalidIcon?: string }`
+
+The three glyphs are configurable on two levels: the `requirements*Icon` props set the default for the row, and any entry of the validation object overrides its own. An empty string means "render none", so a rule can opt out of a glyph entirely (`??` resolves the override, not `||`, so `''` is honoured). Nothing is red until `invalid` is set: while typing, an unmet rule carries neither glyph nor error colour.
 
 ## Events
 

@@ -273,6 +273,40 @@ describe('FieldPassword', () => {
       expect(chips[2]).not.toHaveAttribute('data-validated')
     })
 
+    it('renders no glyph for an unmet rule by default, and one per rule override', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          modelValue: 'abcdefgh',
+          requirements: [
+            { label: '8-128 characters', test: /^.{8,128}$/ },
+            { label: 'Uppercase letter', test: /[A-Z]/ },
+            { label: 'Number', test: /\d/, pendingIcon: 'pi pi-minus' }
+          ]
+        }
+      })
+
+      const chips = getAllByTestId('input-field-password__requirements-chip')
+      // met -> the satisfied glyph; unmet -> nothing at all, unless the rule asks for one.
+      expect(chips[0].querySelector('i')).toBeTruthy()
+      expect(chips[1].querySelector('i')).toBeNull()
+      expect(chips[2].querySelector('i')?.className).toContain('pi-minus')
+    })
+
+    it('lets a rule opt out of the satisfied glyph with an empty override', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          modelValue: 'abcdefgh',
+          requirements: [{ label: '8-128 characters', test: /^.{8,128}$/, icon: '' }]
+        }
+      })
+
+      const chip = getAllByTestId('input-field-password__requirements-chip')[0]
+      expect(chip).toHaveAttribute('data-state', 'met')
+      expect(chip.querySelector('i')).toBeNull()
+    })
+
     it('switches unmet rules to the failed state when the field is invalid', () => {
       const { getAllByTestId } = render(FieldPassword, {
         props: {

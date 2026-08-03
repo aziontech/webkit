@@ -78,7 +78,7 @@
     requirements: () => [],
     requirementsTitle: 'Must contain:',
     requirementsIcon: 'pi pi-check',
-    requirementsPendingIcon: 'pi pi-circle',
+    requirementsPendingIcon: '',
     requirementsInvalidIcon: 'pi pi-times'
   })
 

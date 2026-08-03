@@ -19,6 +19,12 @@
     label: string
     /** Pattern or predicate the current value must satisfy for the rule to be met. */
     test: RegExp | ((value: string) => boolean)
+    /** Overrides the satisfied glyph for this rule alone. Empty string renders none. */
+    icon?: string
+    /** Overrides the unmet-and-invalid glyph for this rule alone. Empty string renders none. */
+    invalidIcon?: string
+    /** Overrides the not-yet-satisfied glyph for this rule alone. Empty string renders none. */
+    pendingIcon?: string
   }
 
   /** Per-chip state. `failed` is an unmet rule once the field is showing errors. */
@@ -37,7 +43,7 @@
     invalid?: boolean
     /** Glyph for a satisfied rule. */
     icon?: string
-    /** Glyph for a rule not yet satisfied. */
+    /** Glyph for a rule not yet satisfied. Empty by default: nothing shows while typing. */
     pendingIcon?: string
     /** Glyph for an unmet rule while `invalid` is set. */
     invalidIcon?: string
@@ -50,7 +56,7 @@
     titleId: '',
     invalid: false,
     icon: 'pi pi-check',
-    pendingIcon: 'pi pi-circle',
+    pendingIcon: '',
     invalidIcon: 'pi pi-times'
   })
 
@@ -75,8 +81,14 @@
             ).test(props.value)
 
       const state: PasswordRequirementState = met ? 'met' : props.invalid ? 'failed' : 'unmet'
+      // A rule may override any of the three glyphs for itself; `''` means "render none",
+      // so `??` (not `||`) is what lets an entry opt out without falling back to the prop.
       const icon =
-        state === 'met' ? props.icon : state === 'failed' ? props.invalidIcon : props.pendingIcon
+        state === 'met'
+          ? (requirement.icon ?? props.icon)
+          : state === 'failed'
+            ? (requirement.invalidIcon ?? props.invalidIcon)
+            : (requirement.pendingIcon ?? props.pendingIcon)
 
       return { label: requirement.label, met, state, icon }
     })
@@ -111,15 +123,15 @@
       :data-testid="`${testId}-chip`"
       class="group inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=unmet]:bg-[var(--bg-surface-raised)] data-[state=unmet]:text-[var(--text-muted)] data-[state=met]:bg-[var(--success)] data-[state=met]:text-[var(--text-default)] data-[state=failed]:bg-[var(--danger)] data-[state=failed]:text-[var(--danger-contrast)]"
     >
-      <!-- Every state carries a glyph, so the box is never blank and a chip is the same
-           width whichever state it is in. Mounting the glyph only on satisfaction is what
-           made a chip grow, push the row along, and re-wrap it mid-transition; leaving the
-           box empty for unmet rules read as a gap before the label. Only `opacity` and
-           `transform` animate: both composited, neither in layout, so no motion here can
-           change a size or move a line break. -->
+      <!-- Rendered only when that state resolves to a glyph, so by default a rule shows
+           nothing at all while it is being typed: no glyph, no reserved box, no gap before
+           the label. The chip therefore grows when a glyph arrives, which is the accepted
+           trade for having no empty space. Only `opacity` and `transform` animate on the
+           glyph itself; neither participates in layout. -->
       <i
+        v-if="requirement.icon"
         :class="requirement.icon"
-        class="flex shrink-0 items-center justify-center size-[14px] scale-75 opacity-60 transition-[opacity,transform] duration-fast-02 ease-productive-entrance group-data-[state=failed]:scale-100 group-data-[state=failed]:opacity-100 group-data-[state=met]:scale-100 group-data-[state=met]:opacity-100 motion-reduce:transition-none"
+        class="flex shrink-0 items-center justify-center size-[14px] scale-75 opacity-0 transition-[opacity,transform] duration-fast-02 ease-productive-entrance group-data-[state=failed]:scale-100 group-data-[state=failed]:opacity-100 group-data-[state=met]:scale-100 group-data-[state=met]:opacity-100 group-data-[state=unmet]:scale-100 group-data-[state=unmet]:opacity-60 motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ requirement.label }}

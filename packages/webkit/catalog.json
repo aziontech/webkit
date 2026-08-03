@@ -6170,9 +6170,9 @@
         {
           "name": "requirementsPendingIcon",
           "type": "string",
-          "default": "'pi pi-circle'",
+          "default": "''",
           "required": "no",
-          "doc": "Glyph for a rule chip not yet satisfied. Every state carries a glyph so the box is never blank and the chip never changes width."
+          "doc": "Glyph for a rule chip not yet satisfied. Empty by default: a rule shows nothing at all while it is being typed, so there is no reserved box and no gap before the label."
         },
         {
           "name": "requirementsInvalidIcon",
