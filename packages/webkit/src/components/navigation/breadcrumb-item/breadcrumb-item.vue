@@ -73,7 +73,16 @@
     :class="
       cn(
         [
-          'group/breadcrumb-item relative inline-flex min-h-6 min-w-0 items-center justify-center',
+          // Block-level `flex`, not `inline-flex`: an inline-level box resolves its
+          // width shrink-to-fit against its own max-content, so inside a
+          // hand-composed `<li>` (which arrives with no class, hence a block) the
+          // anchor stayed at its text width and spilled out of the item the row had
+          // already shrunk — measured 134px of anchor inside a 92px `<li>`, with the
+          // label never ellipsizing. A block-level flex box takes the width its
+          // parent gives it, which is what lets the label below actually truncate.
+          // In the data-driven mode the `<li>` is a flex container, so its child is
+          // blockified either way and nothing changes there.
+          'group/breadcrumb-item relative flex min-h-6 min-w-0 items-center justify-center',
           'gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]',
           'text-label-md transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
           'text-[var(--text-muted)] hover:text-[var(--text-default)]',
@@ -98,12 +107,17 @@
     <i
       v-if="showIcon"
       :class="icon"
-      class="relative z-[1] size-[0.875rem] shrink-0 text-[0.875rem] leading-none"
+      class="relative z-[1] size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
     />
+    <!-- `min-w-0` is the last link in the shrink chain. Without it the span keeps
+         `min-width: auto`, refuses to go below its text width, and overflows the
+         anchor instead of ellipsizing: measured 118px of text inside a 92px item,
+         with no ellipsis. The list and the anchor already allow shrinking; this is
+         where it stopped. -->
     <span
-      class="relative z-[1] truncate"
+      class="relative z-[1] min-w-0 truncate"
       :data-testid="`${testId}__label`"
     >
       {{ label }}

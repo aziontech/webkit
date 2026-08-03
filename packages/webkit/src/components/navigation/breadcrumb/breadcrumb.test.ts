@@ -10,7 +10,7 @@ import BreadcrumbList from './breadcrumb-list.vue'
 import BreadcrumbSeparator from './breadcrumb-separator.vue'
 import Breadcrumb from './index.js'
 
-const { Default, Depths, ResponsiveCollapsed } = composeStories(stories)
+const { Default, Depths } = composeStories(stories)
 
 const TESTID = 'navigation-breadcrumb'
 
@@ -392,8 +392,23 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
     })
 
-    it('composes the ResponsiveCollapsed story with an overflow menu and a current last item', () => {
-      const { getByTestId } = render(ResponsiveCollapsed())
+    // The collapse no longer has a story of its own (the mobile-viewport stories were
+    // dropped so the set documents the versions and the viewport is exercised by hand),
+    // so it is rendered directly here. The behaviour is the component's, not a story's.
+    it('collapses the middle segments into an overflow menu below md', () => {
+      // The Playwright viewport in this file is already below md (see the note at the
+      // top), which is what puts the trail in its collapsed layout.
+      const { getByTestId } = render(Breadcrumb, {
+        props: {
+          items: [
+            { label: 'Page Name', href: '#' },
+            { label: 'Page Name', href: '#' },
+            { label: 'Page Name', href: '#' },
+            { label: 'Page Name', href: '#' },
+            { label: 'Current Page', current: true }
+          ]
+        }
+      })
 
       // 5 items -> 3 middle items collapse into the overflow menu.
       expect(getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()

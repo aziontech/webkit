@@ -30,12 +30,8 @@
         // if every flex level can go below its content width. The list owns the
         // rule for its own children so it holds for a hand-composed trail too,
         // where the <li> comes from the consumer.
+        //
         '[&>li]:min-w-0',
-        // Escalation for a trail that cannot fit even fully ellipsized (many
-        // segments on a narrow screen): scroll the row instead of bleeding it
-        // off-screen. Shrinking happens first, so the scrollbar only appears
-        // once truncation is exhausted.
-        'overflow-x-auto',
         attrs.class as string | undefined
       )
     "

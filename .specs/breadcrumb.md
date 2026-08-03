@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 9e73cdaea0b630ccf35a43c0c99d9dc6cb3f4178f0497b19dc1835a423ef6326
+checksum: 535a230037a41361418658625d1e9364b09fa090856f75d68bf18f8974f30b17
 created: 2026-05-25
 last_updated: 2026-07-30
 ---
@@ -89,10 +89,7 @@ _none_
 
 - Default
 - Depths — single, two-level and full five-level trails.
-- ResponsiveCollapsed — below `md`, middle segments in the overflow menu.
 - LongLabel — a segment wider than its container ellipsizes.
-- LongLabelMobile — long segment plus collapse at a 375px viewport.
-- ComposedMobile — hand-composed trail at 375px (no collapse; row scrolls).
 
 ## Constraints — DO NOT
 
