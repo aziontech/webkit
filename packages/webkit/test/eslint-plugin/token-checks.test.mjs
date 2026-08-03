@@ -76,6 +76,56 @@ test('the one-level nesting limit is pinned', () => {
   assert.ok(!found.includes('zero-unit-in-calc'), 'zero-unit-in-calc cannot see this deep')
 })
 
+// ENG-47001: the six `[`-keyed guardrails must catch the canonical v4 paren spelling
+// (`prop-(…)`) too — accepting the IntelliSense suggestion must not walk through the
+// typography / motion / animation gates. Each case is checked in both spellings.
+test('the arbitrary-value guardrails catch the paren spelling as well as the bracket spelling', () => {
+  const cases = [
+    ['typography-raw-length', 'text-[length:var(--text-body-md)]', 'text-(length:--text-body-md)'],
+    ['leading-raw', 'leading-[1.5]', 'leading-(--leading-body)'],
+    ['tracking-raw', 'tracking-[0.5px]', 'tracking-(--tracking-tight)'],
+    ['font-family-raw', 'font-[family-name:var(--font-sora)]', 'font-(family-name:--font-sora)'],
+    ['animate-arbitrary', 'animate-[spin_1s]', 'animate-(--animation-spin)'],
+    ['motion-hardcoded', 'duration-[200ms]', 'duration-(--duration-fast)']
+  ]
+  for (const [id, bracket, paren] of cases) {
+    assert.ok(ids(bracket).includes(id), `expected ${id} for bracket form: ${bracket}`)
+    assert.ok(ids(paren).includes(id), `expected ${id} for paren form: ${paren}`)
+  }
+})
+
+test('the paren spellings named in ENG-47001 acceptance are all caught', () => {
+  for (const [content, id] of [
+    ['duration-(--duration-fast)', 'motion-hardcoded'],
+    ['animate-(--x)', 'animate-arbitrary'],
+    ['leading-(--y)', 'leading-raw'],
+    ['tracking-(--z)', 'tracking-raw'],
+    ['text-(length:--text-body-md)', 'typography-raw-length'],
+    ['font-(family-name:--font-sora)', 'font-family-raw']
+  ]) {
+    assert.ok(ids(content).includes(id), `expected ${id} for: ${content}`)
+  }
+})
+
+test('the widened guardrails do not fire on the canonical whole-value paren token', () => {
+  // `bg-(--primary)` and friends (family A) are the sanctioned canonical form — the
+  // motion/typography guards key on their own prefixes, so a plain color/spacing token
+  // in paren form must stay silent.
+  for (const content of ['bg-(--primary)', 'max-w-(--container-2xl)', 'ring-offset-(--bg-canvas)']) {
+    const found = ids(content)
+    for (const id of [
+      'typography-raw-length',
+      'leading-raw',
+      'tracking-raw',
+      'font-family-raw',
+      'animate-arbitrary',
+      'motion-hardcoded'
+    ]) {
+      assert.ok(!found.includes(id), `expected ${id} silent for canonical token: ${content}`)
+    }
+  }
+})
+
 test('tokenChecksApply scopes enforcement to component sources', () => {
   assert.ok(tokenChecksApply('packages/webkit/src/components/actions/button/button.vue'))
   assert.ok(tokenChecksApply('packages/webkit/src/components/data/table/injection-key.ts'))

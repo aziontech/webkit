@@ -30,7 +30,11 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'typography-raw-length',
-    regex: /text-\[length:var\(--text-/g,
+    // Both v4 spellings of the arbitrary typography token: the bracket form
+    // `text-[length:var(--text-…)]` and the canonical paren form
+    // `text-(length:--text-…)`. Keying on `[` alone let the paren spelling walk
+    // straight through the gate (ENG-47001).
+    regex: /text-(?:\[length:var\(|\(length:)--text-/g,
     message:
       'Raw typography token. Use generated class from DESIGN.md (text-heading-md, text-body-sm, text-button-lg, ...).'
   },
@@ -39,7 +43,8 @@ export const TOKEN_CHECKS = [
     // Any numeric step, not just 3-12: in Tailwind v4 `leading-<n>` resolves to
     // calc(var(--spacing) * n), so `leading-1` is 0.25rem — not the line-height
     // of 1 it reads as. `none` stays out of the alternation (allowed on icons).
-    regex: /\bleading-(?:\d+|tight|snug|relaxed|loose|\[)/g,
+    // `[` and `(` both open an arbitrary value (`leading-[…]` / `leading-(--…)`).
+    regex: /\bleading-(?:\d+|tight|snug|relaxed|loose|[[(])/g,
     message:
       'Raw leading-* class. Line-height is part of the generated typography class (DESIGN.md); do not override.'
   },
@@ -47,14 +52,17 @@ export const TOKEN_CHECKS = [
     id: 'tracking-raw',
     // `tightest` is not a step on the tracking scale, so Tailwind emits nothing
     // for it and the class silently does nothing. It belongs here so the dead
-    // override is reported rather than read as working code.
-    regex: /\btracking-(?:tightest|tighter|tight|wide|wider|widest|\[)/g,
+    // override is reported rather than read as working code. `[`/`(` both open an
+    // arbitrary value (`tracking-[…]` / `tracking-(--…)`).
+    regex: /\btracking-(?:tightest|tighter|tight|wide|wider|widest|[[(])/g,
     message:
       'Raw tracking-* class. Letter-spacing is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'font-family-raw',
-    regex: /\b(?:font-(?:sans|serif|mono|sora|proto-mono)\b|font-\[family-name:)/g,
+    // Both spellings of the arbitrary family: `font-[family-name:…]` and
+    // `font-(family-name:--…)`.
+    regex: /\b(?:font-(?:sans|serif|mono|sora|proto-mono)\b|font-[[(]family-name:)/g,
     message:
       'Raw font-family. Font family is part of the generated typography class (DESIGN.md); do not override.'
   },
@@ -126,13 +134,15 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'animate-arbitrary',
-    regex: /\banimate-\[/g,
+    // `animate-[…]` and the paren shorthand `animate-(--…)` are both arbitrary.
+    regex: /\banimate-[[(]/g,
     message:
       'Arbitrary animate-[…] value. Use a catalogued animate-* utility, or add one via /add-animation (semantic/animations.js).'
   },
   {
     id: 'motion-hardcoded',
-    regex: /\b(?:duration|delay|ease)-\[/g,
+    // `[` and `(` both open an arbitrary value (`duration-[…]` / `duration-(--…)`).
+    regex: /\b(?:duration|delay|ease)-[[(]/g,
     message:
       'Hardcoded duration/ease/delay. Use the duration/curve/ease tokens from primitives/animations (DESIGN.md § Animations).'
   }
