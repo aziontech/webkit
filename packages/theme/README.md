@@ -82,7 +82,8 @@ The entire public surface, from `package.json#exports`:
 import { primitives, brandPrimitives, surfacePrimitives } from '@aziontech/theme/colors'
 
 primitives.orange[500] // '#F3652B' — primary brand
-primitives.violet[500] // '#8A84EC' — accent
+primitives.blue[500] // '#0072F5' — accent
+primitives.violet[500] // '#8A84EC' — brand.accent palette
 primitives.gray[900] // '#141414'
 
 brandPrimitives.primary[500] // '#F3652B'
