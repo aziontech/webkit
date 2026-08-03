@@ -91,23 +91,23 @@
     :data-has-icon-right="hasIconRight || null"
     :class="[
       'relative inline-flex items-center w-full cursor-text',
-      'gap-[var(--spacing-xs)] px-[var(--spacing-sm)]',
-      'rounded-[var(--shape-elements)]',
-      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
+      'gap-(--spacing-xs) px-(--spacing-sm)',
+      'rounded-(--shape-elements)',
+      'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus-within):not([data-disabled])]:hover:border-[var(--border-strong)]',
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]',
+      '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
+      'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
-      'data-[invalid]:border-[var(--danger-border)]',
-      'data-[required]:border-[var(--warning-border)]',
-      'data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-[var(--border-default)] data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      'data-[invalid]:border-(--danger-border)',
+      'data-[required]:border-(--warning-border)',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs.class
     ]"
     @mousedown="handleChromeMouseDown"
   >
     <span
       v-if="hasIconLeft"
-      class="inline-flex shrink-0 items-center justify-center text-[var(--text-muted)]"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
       <slot name="iconLeft" />
@@ -125,14 +125,14 @@
       :aria-invalid="invalid || undefined"
       :aria-required="required || undefined"
       :data-testid="testId"
-      class="relative z-[var(--z-input-field)] h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default"
+      class="relative z-(--z-input-field) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
       v-bind="passthroughAttrs"
       @input="handleInput"
     />
 
     <span
       v-if="hasIconRight"
-      class="inline-flex shrink-0 items-center justify-center text-[var(--text-muted)]"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
       <slot name="iconRight" />

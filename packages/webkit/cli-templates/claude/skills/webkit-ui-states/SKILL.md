@@ -140,7 +140,7 @@ The state-matrix render — Skeleton (data in), then Message / EmptyState / data
   <!-- Loading: reserve the shape of the arriving content -->
   <div
     v-if="loading"
-    class="flex flex-col gap-[var(--spacing-sm)]"
+    class="flex flex-col gap-(--spacing-sm)"
   >
     <Skeleton
       kind="shape"
@@ -189,7 +189,7 @@ The state-matrix render — Skeleton (data in), then Message / EmptyState / data
   <!-- Success: the data -->
   <ul
     v-else
-    class="flex flex-col gap-[var(--spacing-xs)]"
+    class="flex flex-col gap-(--spacing-xs)"
   >
     <li
       v-for="r in rows"

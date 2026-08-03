@@ -172,15 +172,15 @@ export const Default = {
   }
 }
 
-const BUTTONS_TEMPLATE = `<div class="flex flex-col gap-[var(--spacing-md)]">
-  <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
+const BUTTONS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-md)">
+  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
     <Paginator.Button kind="previous">Previous</Paginator.Button>
     <Paginator.Button kind="number">1</Paginator.Button>
     <Paginator.Button kind="number" selected>2</Paginator.Button>
     <Paginator.Button kind="more" />
     <Paginator.Button kind="next">Next</Paginator.Button>
   </div>
-  <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
+  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
     <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
     <Paginator.Button kind="number" disabled>1</Paginator.Button>
     <Paginator.Button kind="next" disabled>Next</Paginator.Button>

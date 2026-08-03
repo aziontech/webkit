@@ -51,12 +51,12 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="relative inline-flex h-8 min-w-16 items-center rounded-[var(--shape-elements)] bg-[var(--bg-canvas)] text-body-sm text-[var(--text-muted)]"
+    class="relative inline-flex h-8 min-w-16 items-center rounded-(--shape-elements) bg-(--bg-canvas) text-body-sm text-(--text-muted)"
   >
     <select
       :value="modelValue"
       aria-label="Rows per page"
-      class="h-8 w-full cursor-pointer appearance-none rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-solid border-[var(--border-default)] bg-[var(--bg-surface)] pl-[var(--spacing-sm)] pr-7 text-label-sm text-[var(--text-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="h-8 w-full cursor-pointer appearance-none rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) pl-(--spacing-sm) pr-7 text-label-sm text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
       @change="handleChange"
     >
       <option
@@ -68,7 +68,7 @@
       </option>
     </select>
     <i
-      class="pi pi-chevron-down pointer-events-none absolute right-[var(--spacing-sm)] text-[length:inherit] leading-none"
+      class="pi pi-chevron-down pointer-events-none absolute right-(--spacing-sm) text-[length:inherit] leading-none"
       aria-hidden="true"
     />
   </div>

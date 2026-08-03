@@ -51,7 +51,7 @@
       v-if="hasHeading"
       :id="headingId"
       :data-testid="`${testId}__heading`"
-      class="px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-overline-sm uppercase text-[var(--text-muted)]"
+      class="px-(--spacing-sm) py-(--spacing-xxs) text-overline-sm uppercase text-(--text-muted)"
     >
       {{ heading }}
     </div>

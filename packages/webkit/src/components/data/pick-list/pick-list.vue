@@ -202,7 +202,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-disabled="disabled || null"
-    class="grid grid-cols-1 items-stretch gap-[var(--spacing-sm)] data-[disabled]:opacity-60 md:grid-cols-[1fr_auto_1fr]"
+    class="grid grid-cols-1 items-stretch gap-(--spacing-sm) data-[disabled]:opacity-60 md:grid-cols-[1fr_auto_1fr]"
   >
     <slot
       :move="move"

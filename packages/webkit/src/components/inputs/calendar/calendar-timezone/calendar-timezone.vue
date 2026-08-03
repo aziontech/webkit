@@ -29,16 +29,16 @@
 
 <template>
   <label
-    class="flex flex-col gap-[var(--spacing-xxs)]"
+    class="flex flex-col gap-(--spacing-xxs)"
     data-testid="input-calendar__timezone"
   >
-    <span class="text-label-sm text-[var(--text-muted)]"> Timezone </span>
+    <span class="text-label-sm text-(--text-muted)"> Timezone </span>
     <span class="relative inline-flex w-full items-center">
       <select
         :value="value"
         :disabled="disabled"
         :data-size="size"
-        class="text-body-sm w-full appearance-none rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-[var(--spacing-sm)] pr-[var(--spacing-lg)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:border-[var(--border-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:bg-[var(--bg-disabled)] disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+        class="text-body-sm w-full appearance-none rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) pl-(--spacing-sm) pr-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
         @change="onChange"
       >
         <option
@@ -50,7 +50,7 @@
         </option>
       </select>
       <i
-        class="pi pi-chevron-down pointer-events-none absolute right-[var(--spacing-sm)] text-[length:inherit] leading-none text-[var(--text-muted)]"
+        class="pi pi-chevron-down pointer-events-none absolute right-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
         aria-hidden="true"
       />
     </span>

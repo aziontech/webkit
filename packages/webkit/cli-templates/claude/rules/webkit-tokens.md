@@ -21,7 +21,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 
 ```html
 <div
-  class="bg-[var(--bg-surface)] text-[var(--text-default)] p-[var(--spacing-md)] rounded-[var(--shape-card)]"
+  class="bg-(--bg-surface) text-(--text-default) p-(--spacing-md) rounded-(--shape-card)"
 >
   ...
 </div>

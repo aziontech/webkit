@@ -46,7 +46,7 @@ webkit primitives.
 3. **Typography hierarchy** — only the `text-*` tokens, never inverted (`text-heading-* >
 text-body-* > text-label-* > text-overline-*`). See `/webkit-baseline-ui`.
 4. **Spacing rhythm** — one `--spacing-*` step, applied consistently. See `/webkit-baseline-ui`.
-5. **Contain the page** — cap reading/content width with `max-w-[var(--container-*)]`, keep
+5. **Contain the page** — cap reading/content width with `max-w-(--container-*)`, keep
    data-dense surfaces fluid; never a raw `px`/`rem` width. The full container doctrine (fluid-first
    shell, focused-flow centering) lives in `/webkit-baseline-ui`.
 6. **Token motion only** — `animate-*` utilities + `duration-*`/`ease-*` tokens, with a

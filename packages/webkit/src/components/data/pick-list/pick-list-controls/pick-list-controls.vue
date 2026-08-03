@@ -24,14 +24,14 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex flex-row items-center justify-center gap-[var(--spacing-xs)] md:flex-col"
+    class="flex flex-row items-center justify-center gap-(--spacing-xs) md:flex-col"
   >
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('source')"
       aria-label="Move selected to target"
       :data-testid="`${testId}__move-to-target`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.move('to-target')"
     >
       <svg
@@ -53,7 +53,7 @@
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('source') === 0"
       aria-label="Move all to target"
       :data-testid="`${testId}__move-all-to-target`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.moveAll('to-target')"
     >
       <svg
@@ -76,7 +76,7 @@
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('target')"
       aria-label="Move selected to source"
       :data-testid="`${testId}__move-to-source`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.move('to-source')"
     >
       <svg
@@ -98,7 +98,7 @@
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('target') === 0"
       aria-label="Move all to source"
       :data-testid="`${testId}__move-all-to-source`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.moveAll('to-source')"
     >
       <svg

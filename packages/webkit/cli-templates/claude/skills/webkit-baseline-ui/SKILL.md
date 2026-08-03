@@ -52,9 +52,9 @@ hand-rolled, nothing hardcoded.
 
 ### Color — tokens only
 
-- **MUST** use `@aziontech/theme` semantic vars: `bg-[var(--bg-surface)]`, `text-[var(--text-default)]`,
-  `text-[var(--text-muted)]`, `bg-[var(--primary)]`, `text-[var(--primary-contrast)]`,
-  `border-[var(--border-default)]`, `ring-[var(--ring-color)]`, feedback `var(--success|--warning|--danger|--info)`.
+- **MUST** use `@aziontech/theme` semantic vars: `bg-(--bg-surface)`, `text-(--text-default)`,
+  `text-(--text-muted)`, `bg-(--primary)`, `text-(--primary-contrast)`,
+  `border-(--border-default)`, `ring-(--ring-color)`, feedback `var(--success|--warning|--danger|--info)`.
 - **NEVER** HEX (`#0af`), `rgb()/rgba()/hsl()`, or Tailwind palette names (`bg-blue-500`, `text-gray-700`).
 - **SHOULD** limit accent color to one per view; the rest carries on surface + text + border tokens.
 
@@ -76,33 +76,33 @@ hand-rolled, nothing hardcoded.
 A **content section** (a titled block sitting above a `CardBox`, an `Item.List`, or a table) is
 labelled with a **small heading**, not an overline:
 
-- **MUST** title the section with `text-heading-xxs text-[var(--text-default)]` — the smallest heading
+- **MUST** title the section with `text-heading-xxs text-(--text-default)` — the smallest heading
   token. `text-overline-*` is **reserved for compact menu / popover group labels** (e.g.
   `Dropdown.Group`, a Popover section), **not** page section titles.
-- **MUST** give the title an optical inset of `px-[var(--spacing-xs)]` so it lines up with the card's
+- **MUST** give the title an optical inset of `px-(--spacing-xs)` so it lines up with the card's
   inner content directly below it (the card body pads at `--spacing-md`; the smaller `--spacing-xs`
   title inset reads as aligned, not indented).
 - **MUST** separate the title from the card it labels by `--spacing-sm` — the section wrapper is
-  `flex flex-col gap-[var(--spacing-sm)]`.
+  `flex flex-col gap-(--spacing-sm)`.
 - **SHOULD**, when the title row also carries a control (a filter dropdown, an action button), wrap it in
-  a `flex min-h-[var(--size-8)] items-center` row so the title baseline matches sibling section titles in
+  a `flex min-h-(--size-8) items-center` row so the title baseline matches sibling section titles in
   other columns (e.g. a two-column page where one title stands alone and the other sits beside a control).
 
 This is the canonical section-title treatment. A section title written as
-`text-overline-sm text-[var(--text-muted)]` is **legacy** — bring it to this pattern when you touch it.
+`text-overline-sm text-(--text-muted)` is **legacy** — bring it to this pattern when you touch it.
 
 ### Shape & elevation — tokens only
 
-- **MUST** use `rounded-[var(--shape-button)]` (buttons), `rounded-[var(--shape-elements)]` (inputs,
-  chips), `rounded-[var(--shape-card)]` (cards), `rounded-[var(--shape-flat)]` (none).
+- **MUST** use `rounded-(--shape-button)` (buttons), `rounded-(--shape-elements)` (inputs,
+  chips), `rounded-(--shape-card)` (cards), `rounded-(--shape-flat)` (none).
 - **NEVER** `rounded-md/lg` or a numeric radius.
-- **MUST** use `shadow-[var(--shadow-*)]` for elevation (`--shadow-sm` cards, `--shadow-md` overlays);
+- **MUST** use `shadow-(--shadow-*)` for elevation (`--shadow-sm` cards, `--shadow-md` overlays);
   never a bare Tailwind `shadow-md` or a hardcoded `box-shadow`.
 
 ### Spacing rhythm — one scale
 
 - **MUST** use only `--spacing-xxs … --spacing-xxl` for padding, gap, and margin:
-  `p-[var(--spacing-md)]`, `gap-[var(--spacing-sm)]`, `mt-[var(--spacing-xs)]`.
+  `p-(--spacing-md)`, `gap-(--spacing-sm)`, `mt-(--spacing-xs)`.
 - **NEVER** arbitrary values (`p-[13px]`, `gap-[7px]`), Tailwind's default scale (`p-4`, `gap-3`), or
   the primitive `--spacing-1 … --spacing-96`.
 - **SHOULD** keep one consistent step between sibling elements; don't alternate `--spacing-xs` and
@@ -122,35 +122,35 @@ This section is the **canonical container / max-width doctrine** for webkit apps
 `/webkit-ui-craft` skill defers here, so treat this as the authoritative and complete source.
 
 The default is **fluid**: content fills the space the shell gives it. A container
-(`max-w-[var(--container-*)]`) is the exception, applied only where unbounded width hurts legibility or
+(`max-w-(--container-*)`) is the exception, applied only where unbounded width hurts legibility or
 balance. Reach for it in this order.
 
 - **MUST** keep the **app shell fluid-first** — never cap it with a container. The **sidebar**, the
   **global header**, the **page heading**, and the **main content spacing** (the content zone's
-  `p-[var(--spacing-*)]` inset) all stay full-width and stretch with the viewport. These are chrome; a
+  `p-(--spacing-*)` inset) all stay full-width and stretch with the viewport. These are chrome; a
   max-width on them only creates dead gutters.
-- **MUST** cap **reading / input width** with `max-w-[var(--container-2xs … xl)]`: form fields, text
+- **MUST** cap **reading / input width** with `max-w-(--container-2xs … xl)`: form fields, text
   columns, focused auth/save cards, fixed side rails. Pick the tight end (`2xs … sm`) for compact
   settings rows and the loose end (up to `xl`, 576px) for a control column that must fit a longer value.
   A form input that spans a 2560px screen is a legibility bug, not a feature.
 - **MUST** give **focused create/edit flows** a centered page container — `mx-auto
-max-w-[var(--container-7xl)]` on the flow's content wrapper — so the column sits centered instead of
+max-w-(--container-7xl)` on the flow's content wrapper — so the column sits centered instead of
   drifting to the left edge on wide screens. This is the one place the _page section_ (not just a field)
   is capped.
 - **SHOULD** center a **landing / browse / catalog page** — a page of stacked sections, card grids, and
-  tabs (e.g. a Home or Marketplace page) — in a `mx-auto w-full max-w-[var(--container-7xl)]` container on
+  tabs (e.g. a Home or Marketplace page) — in a `mx-auto w-full max-w-(--container-7xl)` container on
   its root `main`, so the content sits centered instead of drifting to the left edge on wide screens; add
-  the page's top breathing room with `pt-[var(--spacing-*)]`. Keep the width **identical across sibling
+  the page's top breathing room with `pt-(--spacing-*)`. Keep the width **identical across sibling
   pages of the same kind** so moving between them never reflows the column. The shell around it (sidebar,
   header, content-zone inset) stays fluid per the first bullet — the cap lives on the page's own `main`,
   not the app layout content zone.
 - **MUST** cap a **wizard / multi-step deployment flow** tighter than a general create/edit page —
-  `mx-auto max-w-[var(--container-2xl)]` (672px) on the flow's content wrapper. A wizard is a single
+  `mx-auto max-w-(--container-2xl)` (672px) on the flow's content wrapper. A wizard is a single
   guided task with one thing to look at per step, so the step column stays narrow and centered; the `7xl`
   cap above is for broader create/edit pages, not step-by-step wizards.
 - **SHOULD** keep **data-dense surfaces fluid** — tables, dashboards, log/grid views breathe to the full
   content width; don't box them into a narrow container.
-- **MUST** express every cap as `max-w-[var(--container-<size>)]` — the `@aziontech/theme` container
+- **MUST** express every cap as `max-w-(--container-<size>)` — the `@aziontech/theme` container
   tokens, `--container-3xs … --container-7xl`. **NEVER** a raw `max-w-5xl` / `max-w-[768px]`, and never a
   legacy helper (`.max-container-width`, `--container-max-width`).
 
@@ -180,7 +180,7 @@ For `/webkit-baseline-ui <file>`, group findings by constraint section. Each fin
 ```
 ✗ <file>:<line>  `bg-[#0a0a0a] text-blue-500`
   why: hardcoded HEX + palette color bypass the theme; break dark mode and brand.
-  fix: bg-[var(--bg-surface)] text-[var(--primary)]
+  fix: bg-(--bg-surface) text-(--primary)
 ```
 
 End with a one-line verdict: `clean` or `N violations across <sections>`.
@@ -201,8 +201,8 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - [ ] Every interactive primitive is a `@aziontech/webkit` component.
 - [ ] No HEX / rgb / Tailwind palette / arbitrary spacing / `rounded-md|lg` / raw `text-*` size remains.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
-- [ ] Section titles use `text-heading-xxs text-[var(--text-default)]` with a `px-[var(--spacing-xs)]` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
+- [ ] Section titles use `text-heading-xxs text-(--text-default)` with a `px-(--spacing-xs)` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
-- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width, focused flows, and landing/browse pages are capped, always via `max-w-[var(--container-*)]` — wizards/deployment flows at `max-w-[var(--container-2xl)]`, broader create/edit and landing/browse pages centered at `7xl`.
+- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width, focused flows, and landing/browse pages are capped, always via `max-w-(--container-*)` — wizards/deployment flows at `max-w-(--container-2xl)`, broader create/edit and landing/browse pages centered at `7xl`.
 - [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.
 - [ ] (File mode) Every violation has a quoted line, a why, and a concrete fix.

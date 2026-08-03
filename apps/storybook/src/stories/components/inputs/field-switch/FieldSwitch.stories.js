@@ -115,7 +115,7 @@ export const Default = {
   }
 }
 
-const STATES_TEMPLATE = `<div class="flex max-w-xs flex-col gap-[var(--spacing-3)]">
+const STATES_TEMPLATE = `<div class="flex max-w-xs flex-col gap-(--spacing-3)">
   <FieldSwitch v-model="off" label="Switch label" description="Switch description" />
   <FieldSwitch v-model="on" label="Switch label" description="Switch description" />
 </div>`

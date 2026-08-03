@@ -48,7 +48,7 @@ conventions below are enforced by review.
 </script>
 
 <template>
-  <ul class="flex flex-col gap-[var(--spacing-xs)]">
+  <ul class="flex flex-col gap-(--spacing-xs)">
     <li v-for="(entry, i) in items" :key="entry.id">
       <slot name="prefix" />
       <slot name="item" :item="entry" :index="i">

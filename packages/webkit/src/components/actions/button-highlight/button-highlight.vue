@@ -56,17 +56,17 @@
 
   const ROOT_CLASS =
     'group/highlight relative inline-flex items-center justify-center isolate overflow-hidden whitespace-nowrap p-px ' +
-    'rounded-[var(--shape-button)] ' +
-    'border border-[length:var(--border-width-default)] border-[var(--secondary-mask)] ' +
+    'rounded-(--shape-button) ' +
+    'border border-(length:--border-width-default) border-(--secondary-mask) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] ' +
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
     'data-[size=large]:min-w-20 data-[size=large]:h-10 ' +
     'data-[size=medium]:min-w-16 data-[size=medium]:h-8 ' +
     'data-[size=small]:min-w-14 data-[size=small]:h-7 ' +
     'data-[loading]:cursor-wait ' +
     'data-[disabled]:cursor-not-allowed ' +
-    'data-[inactive]:border-transparent data-[inactive]:bg-[var(--bg-disabled)]'
+    'data-[inactive]:border-transparent data-[inactive]:bg-(--bg-disabled)'
 
   const GLOW_CLASS =
     'absolute inset-0 pointer-events-none ' +
@@ -82,23 +82,23 @@
     'transition-opacity duration-300 ease-out motion-reduce:transition-none ' +
     'group-hover/highlight:opacity-25 ' +
     'group-data-[inactive]/highlight:[background-image:none] ' +
-    'group-data-[inactive]/highlight:bg-[var(--bg-disabled)] ' +
+    'group-data-[inactive]/highlight:bg-(--bg-disabled) ' +
     'group-data-[inactive]/highlight:opacity-100'
 
   const SCRIM_CLASS =
     'absolute inset-px pointer-events-none rounded-[inherit] ' +
-    'bg-[var(--bg-backdrop)] ' +
+    'bg-(--bg-backdrop) ' +
     'transition-opacity duration-300 ease-out motion-reduce:transition-none ' +
     'group-hover/highlight:opacity-25 ' +
     'group-data-[inactive]/highlight:hidden'
 
   const CONTENT_CLASS =
-    'relative z-[1] inline-flex items-center justify-center gap-[var(--spacing-xs)] w-full h-full ' +
-    'text-[var(--color-base-white)] ' +
-    'data-[size=large]:px-[var(--spacing-md)] data-[size=large]:text-button-lg ' +
-    'data-[size=medium]:px-[var(--spacing-sm)] data-[size=medium]:text-button-md ' +
-    'data-[size=small]:px-[var(--spacing-xs)] data-[size=small]:text-button-md ' +
-    'group-data-[inactive]/highlight:text-[var(--text-disabled)]'
+    'relative z-1 inline-flex items-center justify-center gap-(--spacing-xs) w-full h-full ' +
+    'text-(--color-base-white) ' +
+    'data-[size=large]:px-(--spacing-md) data-[size=large]:text-button-lg ' +
+    'data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md ' +
+    'data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
+    'group-data-[inactive]/highlight:text-(--text-disabled)'
 
   const rootClasses = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 

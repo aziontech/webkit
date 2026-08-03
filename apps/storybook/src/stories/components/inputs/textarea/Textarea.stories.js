@@ -184,7 +184,7 @@ export const Required = {
   }
 }
 
-const RESIZABLE_MARKUP = `<div class="flex flex-col gap-[var(--spacing-md)]">
+const RESIZABLE_MARKUP = `<div class="flex flex-col gap-(--spacing-md)">
   <Textarea v-model="value" placeholder="resizable=vertical (default)" resizable="vertical" />
   <Textarea v-model="value" placeholder="resizable=horizontal" resizable="horizontal" />
   <Textarea v-model="value" placeholder="resizable=both" resizable="both" />

@@ -113,7 +113,7 @@
           :style="{ padding: activeValue }"
         >
           <div
-            class="bg-[var(--primary)]/20 rounded border-2 border-dashed border-[var(--border-selected)] bg-surface px-3 py-2 text-center"
+            class="bg-(--primary)/20 rounded border-2 border-dashed border-(--border-selected) bg-surface px-3 py-2 text-center"
           >
             <span class="font-code text-[11px] text-default">{{ activeValue }}</span>
           </div>

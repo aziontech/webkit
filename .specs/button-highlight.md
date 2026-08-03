@@ -100,7 +100,7 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` / `Space` activates.
 - ARIA: `<button>` role by default; renders `<a>` when `href` is set with `aria-disabled` / `aria-busy` mirroring `disabled` / `loading`.
 - Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.

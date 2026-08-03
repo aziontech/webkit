@@ -79,30 +79,30 @@
   const listItemClasses = computed(() => cn('relative w-full shrink-0', attrs.class))
 
   const focusRingClasses = [
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--menu-item-ring-offset,var(--bg-canvas))]'
   ]
 
   const interactiveClasses = computed(() =>
     cn(
       'group relative flex h-8 w-full shrink-0 items-center',
-      'gap-[var(--spacing-xs)] rounded-[var(--shape-elements)]',
-      'pl-[var(--spacing-xxs)] pr-[var(--spacing-xs)] py-[var(--spacing-xxs)]',
+      'gap-(--spacing-xs) rounded-(--shape-elements)',
+      'pl-(--spacing-xxs) pr-(--spacing-xs) py-(--spacing-xxs)',
       'transition-colors motion-reduce:transition-none',
       focusRingClasses,
       props.selected
-        ? 'bg-[var(--bg-selected)] text-[var(--text-default)]'
-        : 'text-[var(--text-default)] hover:bg-[var(--bg-hover)] focus-visible:bg-[var(--bg-hover)]',
+        ? 'bg-(--bg-selected) text-(--text-default)'
+        : 'text-(--text-default) hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover)',
       props.disabled &&
-        'pointer-events-none text-[var(--text-disabled)] hover:bg-transparent focus-visible:bg-transparent'
+        'pointer-events-none text-(--text-disabled) hover:bg-transparent focus-visible:bg-transparent'
     )
   )
 
   const groupRowClasses = computed(() =>
     cn(
       'relative flex h-7 w-full shrink-0 items-center',
-      'rounded-[var(--shape-elements)] pl-[var(--spacing-xxs)] pr-[var(--spacing-xs)] py-[var(--spacing-xxs)]',
-      'text-[var(--text-muted)]',
+      'rounded-(--shape-elements) pl-(--spacing-xxs) pr-(--spacing-xs) py-(--spacing-xxs)',
+      'text-(--text-muted)',
       attrs.class
     )
   )
@@ -113,10 +113,10 @@
     cn(
       'size-4 shrink-0 leading-none text-[length:inherit]',
       props.disabled
-        ? 'text-[var(--text-disabled)]'
+        ? 'text-(--text-disabled)'
         : props.selected
-          ? 'text-[var(--text-default)]'
-          : 'text-[var(--text-muted)] group-hover:text-[var(--text-default)] group-focus-visible:text-[var(--text-default)]'
+          ? 'text-(--text-default)'
+          : 'text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default)'
     )
   )
 

@@ -35,7 +35,7 @@
 
   const rootClasses = computed(() =>
     cn(
-      'relative z-[1] text-label-md text-[var(--text-default)] data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-[var(--shape-button)] data-[styled]:border data-[styled]:border-[var(--border-default)] data-[styled]:bg-[var(--bg-surface-raised)] data-[styled]:px-[var(--spacing-md)] data-[styled]:py-[var(--spacing-sm)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:opacity-60',
+      'relative z-1 text-label-md text-(--text-default) data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-(--shape-button) data-[styled]:border data-[styled]:border-(--border-default) data-[styled]:bg-(--bg-surface-raised) data-[styled]:px-(--spacing-md) data-[styled]:py-(--spacing-sm) data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60',
       attrs.class as string | undefined
     )
   )

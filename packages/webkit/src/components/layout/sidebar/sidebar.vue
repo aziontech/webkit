@@ -37,7 +37,7 @@
   const rootClasses = computed(() =>
     cn(
       'flex h-full min-h-0 w-full min-w-0 flex-col',
-      'border-r border-[var(--border-muted)] bg-[var(--bg-surface)]',
+      'border-r border-(--border-muted) bg-(--bg-surface)',
       attrs.class
     )
   )
@@ -45,13 +45,13 @@
   const navClasses =
     'flex h-full min-h-0 flex-1 flex-col [--menu-item-ring-offset:var(--bg-surface)]'
 
-  const headerRegionClasses = 'w-full shrink-0 p-[var(--spacing-md)]'
+  const headerRegionClasses = 'w-full shrink-0 p-(--spacing-md)'
 
-  const footerRegionClasses = 'w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)]'
+  const footerRegionClasses = 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
 
   const scrollClasses = computed(() =>
     cn(
-      'flex min-h-0 flex-1 flex-col gap-[var(--spacing-md)] p-[var(--spacing-md)]',
+      'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
       slots['header'] ? 'pt-0' : undefined
     )
   )

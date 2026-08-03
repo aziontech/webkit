@@ -53,7 +53,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | open/close | `animate-none` | semantic | `motion-reduce:animate-none` |
 | scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out` | semantic | `motion-reduce:animate-none` |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
-| panel change | the incoming panel slides in from the side being navigated toward (`translate-x-[var(--spacing-md)]` / negative) while fading | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
+| panel change | the incoming panel slides in from the side being navigated toward (`translate-x-(--spacing-md)` / negative) while fading | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -74,7 +74,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

@@ -97,14 +97,14 @@
 
 <template>
   <div
-    class="flex flex-col gap-[var(--spacing-sm)]"
+    class="flex flex-col gap-(--spacing-sm)"
     data-testid="input-calendar__fields"
   >
-    <div class="flex flex-col gap-[var(--spacing-xxs)]">
-      <span class="text-label-sm text-[var(--text-muted)]">
+    <div class="flex flex-col gap-(--spacing-xxs)">
+      <span class="text-label-sm text-(--text-muted)">
         {{ mode === 'range' ? 'Start' : 'Date' }}
       </span>
-      <div class="flex items-center gap-[var(--spacing-xs)]">
+      <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
           <InputText
             :model-value="startDateText"
@@ -133,10 +133,10 @@
 
     <div
       v-if="mode === 'range'"
-      class="flex flex-col gap-[var(--spacing-xxs)]"
+      class="flex flex-col gap-(--spacing-xxs)"
     >
-      <span class="text-label-sm text-[var(--text-muted)]"> End </span>
-      <div class="flex items-center gap-[var(--spacing-xs)]">
+      <span class="text-label-sm text-(--text-muted)"> End </span>
+      <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
           <InputText
             :model-value="endDateText"

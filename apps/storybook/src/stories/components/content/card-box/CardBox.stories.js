@@ -91,7 +91,7 @@ const Template = (args) => ({
   template: `
     <CardBox v-bind="args" class="w-full max-w-[512px]">
       <template #content>
-        <p class="text-body-sm text-[var(--text-muted)]">
+        <p class="text-body-sm text-(--text-muted)">
           Card body content. Place forms, tables, or any markup in the content slot.
         </p>
       </template>
@@ -101,7 +101,7 @@ const Template = (args) => ({
 
 const DEFAULT_MARKUP = `<CardBox title="Card Title" class="w-full max-w-[512px]">
   <template #content>
-    <p class="text-body-sm text-[var(--text-muted)]">
+    <p class="text-body-sm text-(--text-muted)">
       Card body content. Place forms, tables, or any markup in the content slot.
     </p>
   </template>
@@ -123,12 +123,12 @@ export const Default = {
 const HEADER_ACTION_TEMPLATE = `<CardBox class="w-full max-w-[512px]">
   <template #header>
     <div class="flex items-center justify-between w-full">
-      <h2 class="text-label-md text-[var(--text-default)]">Card Title</h2>
+      <h2 class="text-label-md text-(--text-default)">Card Title</h2>
       <IconButton icon="pi pi-chevron-right" aria-label="Expand" kind="outlined" size="small" />
     </div>
   </template>
   <template #content>
-    <p class="text-body-sm text-[var(--text-muted)]">
+    <p class="text-body-sm text-(--text-muted)">
       An action rendered in the header slot stays visible, aligned to the end of the header.
     </p>
   </template>
@@ -156,16 +156,16 @@ export const Header = {
 
 const FOOTER_TEMPLATE = `<CardBox title="Card Title" class="w-full max-w-[512px]">
   <template #content>
-    <p class="text-body-sm text-[var(--text-muted)]">
+    <p class="text-body-sm text-(--text-muted)">
       The footer bar renders only when the footer slot is filled.
     </p>
   </template>
   <template #footer>
-    <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
-      <span class="text-body-xs text-[var(--text-muted)]">
+    <div class="flex w-full items-center justify-between gap-(--spacing-sm)">
+      <span class="text-body-xs text-(--text-muted)">
         <a href="/docs" class="text-link">Check documentation:</a>
       </span>
-      <div class="flex gap-[var(--spacing-sm)]">
+      <div class="flex gap-(--spacing-sm)">
         <Button label="Cancel" kind="outlined" size="small" />
         <Button label="Save" kind="outlined" size="small" />
       </div>
@@ -195,7 +195,7 @@ export const Footer = {
 
 const FLUSH_MARKUP = `<CardBox title="Card Title" :padded="false" class="w-full max-w-[512px]">
   <template #content>
-    <p class="text-body-sm text-[var(--text-muted)] p-[var(--spacing-md)]">
+    <p class="text-body-sm text-(--text-muted) p-(--spacing-md)">
       With padded=false the content sits flush to the card edges; the content owns its own padding (or renders an ItemList with full-width dividers).
     </p>
   </template>
@@ -211,7 +211,7 @@ export const Flush = {
     template: `
       <CardBox v-bind="args" :padded="false" title="Card Title" class="w-full max-w-[512px]">
         <template #content>
-          <p class="text-body-sm text-[var(--text-muted)] p-[var(--spacing-md)]">
+          <p class="text-body-sm text-(--text-muted) p-(--spacing-md)">
             With padded=false the content sits flush to the card edges; the content owns its own padding (or renders an ItemList with full-width dividers).
           </p>
         </template>

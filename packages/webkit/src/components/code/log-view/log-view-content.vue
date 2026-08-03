@@ -24,7 +24,7 @@
   const segmentsFor = (text: string) => splitTextByQuery(text, searchQuery.value)
 
   const highlightMarkClass =
-    'rounded-[var(--shape-elements)] bg-[var(--bg-selected)] text-inherit motion-reduce:transition-none'
+    'rounded-(--shape-elements) bg-(--bg-selected) text-inherit motion-reduce:transition-none'
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`
@@ -106,7 +106,7 @@
   >
     <div
       v-if="ctx.showCopy.value && !ctx.loading.value"
-      class="absolute right-[var(--spacing-sm)] top-[var(--spacing-sm)] z-[3]"
+      class="absolute right-(--spacing-sm) top-(--spacing-sm) z-3"
       :data-testid="`${ctx.testId}__copy-anchor`"
     >
       <CopyButton
@@ -126,10 +126,10 @@
       role="status"
       aria-live="polite"
       :data-testid="`${testId}__loading`"
-      class="flex h-full min-h-0 flex-col items-center justify-center gap-[var(--spacing-md)] bg-[var(--bg-canvas)]"
+      class="flex h-full min-h-0 flex-col items-center justify-center gap-(--spacing-md) bg-(--bg-canvas)"
     >
-      <Spinner class="size-6 text-[var(--text-default)]" />
-      <span class="font-code text-label-sm text-[var(--text-muted)]">
+      <Spinner class="size-6 text-(--text-default)" />
+      <span class="font-code text-label-sm text-(--text-muted)">
         {{ ctx.loadingLabel.value }}
       </span>
     </div>
@@ -138,7 +138,7 @@
       v-else
       orientation="both"
       :data-testid="`${testId}__body`"
-      class="h-full min-h-0 bg-[var(--bg-canvas)] sm:overflow-x-hidden"
+      class="h-full min-h-0 bg-(--bg-canvas) sm:overflow-x-hidden"
       role="log"
       aria-live="polite"
     >
@@ -149,11 +149,11 @@
             :key="line.id"
             :data-testid="`${ctx.testId}__line`"
             :data-type="line.type"
-            class="font-code text-label-sm relative flex gap-[var(--spacing-md)] border-l-2 border-l-transparent px-[var(--spacing-md)] py-[var(--spacing-xxs)] transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-[var(--bg-hover)] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-l-[var(--ring-color)] hover:bg-[var(--bg-surface-raised)] hover:before:opacity-100 data-[type=warning]:bg-[var(--warning)] data-[type=warning]:hover:bg-[var(--warning)] motion-reduce:transition-none motion-reduce:before:transition-none"
+            class="font-code text-label-sm relative flex gap-(--spacing-md) border-l-2 border-l-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-l-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) motion-reduce:transition-none motion-reduce:before:transition-none"
           >
             <span
               :data-testid="`${ctx.testId}__line-time`"
-              class="relative z-[1] shrink-0 text-[var(--text-muted)]"
+              class="relative z-1 shrink-0 text-(--text-muted)"
             >
               {{ line.time }}
             </span>
@@ -161,7 +161,7 @@
             <span
               v-if="line.type !== 'folder'"
               :data-testid="`${ctx.testId}__line-message`"
-              class="relative z-[1] flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] text-[var(--text-default)] data-[type=success]:gap-[var(--spacing-xs)] data-[type=warning]:text-[var(--warning-contrast)] max-sm:whitespace-nowrap"
+              class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[type=success]:gap-(--spacing-xs) data-[type=warning]:text-(--warning-contrast) max-sm:whitespace-nowrap"
               :data-type="line.type"
             >
               <template v-if="line.type === 'framework-version'">
@@ -181,7 +181,7 @@
                 </span>
                 <span
                   v-if="line.suffix"
-                  class="shrink-0 whitespace-nowrap text-[var(--warning-contrast)]"
+                  class="shrink-0 whitespace-nowrap text-(--warning-contrast)"
                 >
                   <template
                     v-for="(segment, segmentIndex) in segmentsFor(line.suffix)"
@@ -207,7 +207,7 @@
                   ✓
                 </span>
                 <span
-                  class="min-w-0 max-sm:whitespace-nowrap break-words whitespace-pre-wrap text-[var(--success-contrast)]"
+                  class="min-w-0 max-sm:whitespace-nowrap break-words whitespace-pre-wrap text-(--success-contrast)"
                 >
                   <template
                     v-for="(segment, segmentIndex) in segmentsFor(line.message)"
@@ -245,7 +245,7 @@
             <template v-else>
               <span
                 :data-testid="`${ctx.testId}__line-message`"
-                class="relative z-[1] flex min-w-0 flex-1 items-center gap-[var(--spacing-xl)] text-[var(--text-default)] max-sm:whitespace-nowrap"
+                class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xl) text-(--text-default) max-sm:whitespace-nowrap"
               >
                 <span class="w-16 shrink-0 whitespace-nowrap">
                   <template
@@ -263,7 +263,7 @@
                 </span>
                 <span
                   v-if="line.folderType"
-                  class="shrink-0 whitespace-nowrap text-[var(--warning-contrast)]"
+                  class="shrink-0 whitespace-nowrap text-(--warning-contrast)"
                 >
                   <template
                     v-for="(segment, segmentIndex) in segmentsFor(line.folderType)"
@@ -282,7 +282,7 @@
                 <span
                   v-if="line.size"
                   :data-testid="`${ctx.testId}__line-size`"
-                  class="flex shrink-0 items-center gap-[var(--spacing-sm)] whitespace-nowrap tabular-nums"
+                  class="flex shrink-0 items-center gap-(--spacing-sm) whitespace-nowrap tabular-nums"
                 >
                   <span>
                     <template
@@ -299,11 +299,11 @@
                     </template>
                   </span>
                   <span
-                    class="text-[var(--text-muted)]"
+                    class="text-(--text-muted)"
                     aria-hidden="true"
                     >|</span
                   >
-                  <span class="text-[var(--text-muted)]">gzip:</span>
+                  <span class="text-(--text-muted)">gzip:</span>
                   <span>
                     <template
                       v-for="(segment, segmentIndex) in segmentsFor(line.gzipSize ?? '')"
@@ -328,7 +328,7 @@
       <div
         v-else
         :data-testid="`${ctx.testId}__empty`"
-        class="font-code px-[var(--spacing-md)] py-[var(--spacing-sm)] text-label-sm text-[var(--text-muted)]"
+        class="font-code px-(--spacing-md) py-(--spacing-sm) text-label-sm text-(--text-muted)"
       >
         <slot name="empty">No log lines match the current filters.</slot>
       </div>
@@ -338,7 +338,7 @@
       v-show="showBottomFade && ctx.filteredLines.value.length > 0"
       aria-hidden="true"
       :data-testid="`${testId}__fade-bottom`"
-      class="pointer-events-none absolute bottom-0 left-0 right-0 z-[2] h-[var(--spacing-xl)] bg-gradient-to-b from-transparent to-[var(--bg-canvas)] opacity-100 transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      class="pointer-events-none absolute bottom-0 left-0 right-0 z-2 h-(--spacing-xl) bg-gradient-to-b from-transparent to-(--bg-canvas) opacity-100 transition-opacity duration-150 ease-out motion-reduce:transition-none"
     />
   </div>
 </template>

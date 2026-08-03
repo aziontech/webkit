@@ -110,7 +110,7 @@
                 :current="item.current"
                 :show-icon="item.showIcon"
                 :icon="item.icon"
-                :class="item.current ? 'text-[var(--text-default)]' : undefined"
+                :class="item.current ? 'text-(--text-default)' : undefined"
                 :data-testid="`${testId}__item-${index}`"
                 @click="(event) => !item.current && handleItemClick(event, item.href ?? '#')"
               />
@@ -135,7 +135,7 @@
               :show-icon="firstItem.showIcon"
               :icon="firstItem.icon"
               :class="
-                firstItem.current && !showDistinctEnds ? 'text-[var(--text-default)]' : undefined
+                firstItem.current && !showDistinctEnds ? 'text-(--text-default)' : undefined
               "
               :data-testid="`${testId}__item-0`"
               @click="
@@ -159,7 +159,7 @@
                 <Dropdown.Trigger
                   aria-label="Show pages in between"
                   :data-testid="`${testId}__overflow-trigger`"
-                  class="h-7 min-w-7 items-center justify-center rounded-[var(--shape-button)] px-1 text-button-md text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-mask)] active:bg-[var(--bg-active)] motion-reduce:transition-none"
+                  class="h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-1 text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
                 >
                   <i
                     class="pi pi-ellipsis-h leading-none"
@@ -200,7 +200,7 @@
                 :current="lastItem.current"
                 :show-icon="lastItem.showIcon"
                 :icon="lastItem.icon"
-                class="text-[var(--text-default)]"
+                class="text-(--text-default)"
                 :data-testid="`${testId}__item-last`"
                 @click="
                   (event) => !lastItem.current && handleItemClick(event, lastItem.href ?? '#')

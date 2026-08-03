@@ -24,7 +24,7 @@
   <footer
     v-bind="attrs"
     :data-testid="testId"
-    class="text-label-sm flex shrink-0 flex-col items-stretch gap-[var(--spacing-md)] border-t border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-md)] sm:flex-row sm:flex-wrap sm:items-center"
+    class="text-label-sm flex shrink-0 flex-col items-stretch gap-(--spacing-md) border-t border-(--border-muted) bg-(--bg-surface) p-(--spacing-md) sm:flex-row sm:flex-wrap sm:items-center"
   >
     <slot />
   </footer>

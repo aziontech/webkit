@@ -75,22 +75,22 @@
 
   const rootClasses = computed(() => [
     'flex w-full flex-col items-start',
-    isMiddle.value ? 'min-h-[483px] justify-between' : 'gap-[var(--spacing-lg)]',
+    isMiddle.value ? 'min-h-[483px] justify-between' : 'gap-(--spacing-lg)',
     isContained.value
-      ? 'bg-[var(--bg-surface)] border-[length:var(--border-width-default)] border-[var(--border-muted)] rounded-[var(--shape-card)] p-[var(--spacing-lg)]'
-      : 'p-[var(--spacing-lg)]',
+      ? 'bg-(--bg-surface) border-(length:--border-width-default) border-(--border-muted) rounded-(--shape-card) p-(--spacing-lg)'
+      : 'p-(--spacing-lg)',
     attrs.class
   ])
 
   const headerContainerClasses = computed(() =>
     isMiddle.value
-      ? 'flex w-full shrink-0 flex-col items-start gap-[var(--spacing-xs)] max-w-[256px]'
-      : 'flex w-full shrink-0 flex-col items-start max-w-[256px] gap-[var(--spacing-xs)]'
+      ? 'flex w-full shrink-0 flex-col items-start gap-(--spacing-xs) max-w-[256px]'
+      : 'flex w-full shrink-0 flex-col items-start max-w-[256px] gap-(--spacing-xs)'
   )
 
   const actionsClasses = computed(() => [
-    'flex w-full gap-[var(--spacing-md)] items-start shrink-0',
-    isMiddle.value ? 'pt-[var(--spacing-md)]' : ''
+    'flex w-full gap-(--spacing-md) items-start shrink-0',
+    isMiddle.value ? 'pt-(--spacing-md)' : ''
   ])
 </script>
 
@@ -102,7 +102,7 @@
     <div
       :class="[
         'flex w-full flex-col items-start shrink-0',
-        isMiddle ? 'gap-[var(--spacing-lg)]' : ''
+        isMiddle ? 'gap-(--spacing-lg)' : ''
       ]"
     >
       <div
@@ -112,11 +112,11 @@
         <div
           :class="[
             'h-6 flex shrink-0 items-center',
-            isMiddle ? 'w-full gap-[var(--spacing-sm)]' : 'gap-[var(--spacing-xs)]'
+            isMiddle ? 'w-full gap-(--spacing-sm)' : 'gap-(--spacing-xs)'
           ]"
         >
           <h3
-            class="text-heading-md text-[var(--text-default)] [word-break:break-word]"
+            class="text-heading-md text-(--text-default) [word-break:break-word]"
             :data-testid="`${testId}__title`"
           >
             {{ planTitle }}
@@ -130,7 +130,7 @@
         </div>
         <p
           v-if="description"
-          class="text-body-sm text-[var(--text-muted)] h-9 [word-break:break-word]"
+          class="text-body-sm text-(--text-muted) h-9 [word-break:break-word]"
           :data-testid="`${testId}__description`"
         >
           {{ description }}
@@ -139,7 +139,7 @@
 
       <template v-if="isMiddle">
         <div
-          class="flex w-full flex-col gap-[var(--spacing-xxs)] items-start h-16 shrink-0"
+          class="flex w-full flex-col gap-(--spacing-xxs) items-start h-16 shrink-0"
           :data-testid="`${testId}__pricing`"
         >
           <Currency
@@ -153,7 +153,7 @@
           />
           <p
             v-if="showPricingDetails && pricingDetails"
-            class="text-body-xs text-[var(--text-muted)] h-8 [word-break:break-word]"
+            class="text-body-xs text-(--text-muted) h-8 [word-break:break-word]"
             :data-testid="`${testId}__pricing-details`"
           >
             {{ pricingDetails }}
@@ -171,7 +171,7 @@
 
     <div
       v-if="!isMiddle"
-      class="flex w-full flex-col gap-[var(--spacing-xxs)] items-start h-16 shrink-0"
+      class="flex w-full flex-col gap-(--spacing-xxs) items-start h-16 shrink-0"
       :data-testid="`${testId}__pricing`"
     >
       <Currency
@@ -185,7 +185,7 @@
       />
       <p
         v-if="showPricingDetails && pricingDetails"
-        class="text-body-xs text-[var(--text-muted)] h-8 [word-break:break-word]"
+        class="text-body-xs text-(--text-muted) h-8 [word-break:break-word]"
         :data-testid="`${testId}__pricing-details`"
       >
         {{ pricingDetails }}

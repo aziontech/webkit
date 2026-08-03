@@ -30,11 +30,11 @@ makes upgrades unpredictable. The `webkit/no-style-override` ESLint rule blocks 
 ```html
 <!-- compose in the slot: your markup, your classes -->
 <Button kind="primary" @click="submit">
-  <span class="inline-flex items-center gap-[var(--spacing-xs)]">Create account</span>
+  <span class="inline-flex items-center gap-(--spacing-xs)">Create account</span>
 </Button>
 
 <!-- a styleSeam component accepts consumer classes by design -->
-<CardBox class="bg-[var(--bg-canvas)]">…</CardBox>
+<CardBox class="bg-(--bg-canvas)">…</CardBox>
 ```
 
 ## Wrong

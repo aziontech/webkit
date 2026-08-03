@@ -7,13 +7,13 @@ export type CodeBlockHighlightToken = {
 }
 
 const TOKEN_CLASS: Record<CodeBlockHighlightTokenType, string> = {
-  keyword: 'text-[var(--code-sintax-keyword)]',
-  string: 'text-[var(--code-sintax-string)]',
-  function: 'text-[var(--code-sintax-function)]',
-  type: 'text-[var(--code-sintax-type)]',
-  punctuation: 'text-[var(--code-sintax-punctuation)]',
-  identifier: 'text-[var(--code-sintax-identifier)]',
-  comment: 'text-[var(--code-sintax-punctuation)]'
+  keyword: 'text-(--code-sintax-keyword)',
+  string: 'text-(--code-sintax-string)',
+  function: 'text-(--code-sintax-function)',
+  type: 'text-(--code-sintax-type)',
+  punctuation: 'text-(--code-sintax-punctuation)',
+  identifier: 'text-(--code-sintax-identifier)',
+  comment: 'text-(--code-sintax-punctuation)'
 }
 
 export const getHighlightTokenClass = (type: CodeBlockHighlightTokenType): string =>

@@ -34,7 +34,7 @@ const meta = {
 
 export default meta
 
-const DEFAULT_MARKUP = '<Spinner class="size-4 text-[var(--text-default)]" />'
+const DEFAULT_MARKUP = '<Spinner class="size-4 text-(--text-default)" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Spinner>} */
 export const Default = {
@@ -49,7 +49,7 @@ export const Default = {
   }
 }
 
-const SIZES_TEMPLATE = `<div class="flex items-center gap-4 text-[var(--text-default)]">
+const SIZES_TEMPLATE = `<div class="flex items-center gap-4 text-(--text-default)">
   <Spinner class="size-3" />
   <Spinner class="size-4" />
   <Spinner class="size-6" />

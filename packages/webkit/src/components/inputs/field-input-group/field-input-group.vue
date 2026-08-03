@@ -94,7 +94,7 @@
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
-    class="flex flex-col gap-[var(--spacing-xs)] w-full"
+    class="flex flex-col gap-(--spacing-xs) w-full"
   >
     <Label
       v-if="label"
@@ -127,7 +127,7 @@
         :aria-invalid="invalid || undefined"
         :aria-required="required || undefined"
         :aria-describedby="describedBy"
-        class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+        class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @input="onInput"
       />
       <InputGroupAddon

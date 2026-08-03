@@ -85,34 +85,34 @@
 
   const sharedClasses = [
     'relative inline-flex shrink-0 items-center justify-center',
-    'rounded-[var(--shape-button)]',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]',
+    'rounded-(--shape-button)',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
     ...ghostLayerClasses
   ]
 
   const kindClasses: Record<IconButtonKind, string> = {
     primary:
-      'bg-[var(--primary)] text-[var(--primary-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]',
+      'bg-(--primary) text-(--primary-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)',
     secondary:
-      'bg-[var(--secondary)] text-[var(--secondary-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]',
+      'bg-(--secondary) text-(--secondary-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)',
     outlined:
-      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+      'border border-(--border-default) bg-(--bg-surface) text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
     transparent:
-      'bg-transparent text-[var(--text-default)] before:bg-[var(--bg-mask)] after:bg-[var(--bg-active)]',
+      'bg-transparent text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
     danger:
-      'border border-[var(--danger-border)] bg-[var(--danger)] text-[var(--danger-contrast)] before:bg-[var(--bg-hover)] after:bg-[var(--bg-active)]'
+      'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
   }
 
   // Disabled shows the not-allowed cursor. Interaction is blocked natively (`<button :disabled>`)
   // and via the handleClick guard (anchor), so pointer-events stay on for the cursor to render.
   const disabledClasses =
-    'cursor-not-allowed border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
+    'cursor-not-allowed border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 
   // Loading reuses the disabled visual tokens (per design) but keeps the loading cursor
   // and the spinner. Interaction stays blocked via handleClick.
   const loadingClasses =
-    'cursor-wait border-transparent bg-[var(--bg-disabled)] text-[var(--text-disabled)] before:hidden after:hidden'
+    'cursor-wait border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 
   const iconClasses =
     'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none'
@@ -172,7 +172,7 @@
       :class="
         iconTransition
           ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
-          : 'relative z-[1] inline-flex items-center justify-center'
+          : 'relative z-1 inline-flex items-center justify-center'
       "
     >
       <Spinner
@@ -220,7 +220,7 @@
       :class="
         iconTransition
           ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
-          : 'relative z-[1] inline-flex items-center justify-center'
+          : 'relative z-1 inline-flex items-center justify-center'
       "
     >
       <Spinner

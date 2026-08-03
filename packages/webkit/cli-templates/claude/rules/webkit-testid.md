@@ -45,7 +45,7 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 </script>
 
 <template>
-  <div v-bind="$attrs" :data-testid="testId" class="inline-flex gap-[var(--spacing-xs)]">
+  <div v-bind="$attrs" :data-testid="testId" class="inline-flex gap-(--spacing-xs)">
     <slot />
   </div>
 </template>

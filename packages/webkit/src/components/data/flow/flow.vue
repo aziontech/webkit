@@ -37,7 +37,7 @@
   })
 
   const outerClasses = computed(() =>
-    cn('w-full overflow-x-auto p-[var(--spacing-md)]', attrs.class as string | undefined)
+    cn('w-full overflow-x-auto p-(--spacing-md)', attrs.class as string | undefined)
   )
 </script>
 
@@ -50,7 +50,7 @@
     <div
       ref="containerRef"
       :data-align="align"
-      class="relative flex w-fit flex-row gap-[var(--spacing-xl)] text-[var(--text-default)] data-[align=center]:items-center data-[align=start]:items-start"
+      class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start"
     >
       <svg
         v-if="paths.length"
@@ -67,13 +67,13 @@
           <path
             :d="path.d"
             stroke-width="1"
-            class="stroke-[var(--border-default)]"
+            class="stroke-(--border-default)"
             :class="{ 'opacity-50': path.faded }"
           />
           <polygon
             v-if="path.arrow"
             :points="`${path.arrow.x - 7},${path.arrow.y - 4} ${path.arrow.x},${path.arrow.y} ${path.arrow.x - 7},${path.arrow.y + 4}`"
-            class="fill-[var(--border-default)]"
+            class="fill-(--border-default)"
             :class="{ 'opacity-50': path.faded }"
           />
         </template>

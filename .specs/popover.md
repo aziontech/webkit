@@ -38,7 +38,7 @@ import Button from '@aziontech/webkit/button'
         <Popover.Close />
       </Popover.Header>
 
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
         Compose any content here — the body is a free-form slot.
       </div>
     </Popover.Content>
@@ -183,7 +183,7 @@ export default Object.assign(Popover, {
 | panel border | `var(--border-default)` |
 | panel shape | `var(--shape-elements)` |
 | panel shadow | `var(--shadow-sm)` |
-| header / footer divider | `border-[var(--border-default)]` |
+| header / footer divider | `border-(--border-default)` |
 | header / footer spacing.y | `var(--spacing-sm)` |
 | header / footer spacing.x | `var(--spacing-md)` |
 | title typography | `.text-body-sm` |
@@ -203,7 +203,7 @@ export default Object.assign(Popover, {
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the trigger and the close button.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger and the close button.
 - Keyboard map:
   - On the trigger: `Enter` / `Space` toggles the panel. When it opens, focus **stays on the trigger** — it is not moved into the panel.
   - `Esc` closes the panel and returns focus to the trigger, from anywhere (trigger or panel). `Tab` / `Shift+Tab` are **contained** within the trigger and the panel's focusable children: Tab from the trigger moves into the panel, Tab past the last panel child wraps back to the trigger, and Shift+Tab reverses. Tabbing **never** closes the panel — only `Esc` or an outside-click dismiss it.

@@ -105,7 +105,7 @@ type, options? }`) drives the `Table.Filter` builder.
 
 ```vue
 <template #toolbar>
-  <div class="flex w-full items-center gap-[var(--spacing-xs)]">
+  <div class="flex w-full items-center gap-(--spacing-xs)">
     <Table.Filter :fields="filterFields" />
     <Table.Search
       size="large"
@@ -153,7 +153,7 @@ recipes verbatim so a cell type looks identical across every table.
 
 ```vue
 <template #cell-name="{ value, row }">
-  <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
     <i
       :class="presetIcon(row.preset)"
       class="shrink-0 text-[1.15em]"
@@ -203,17 +203,17 @@ column (`w-full`) — so every copy button lines up vertically no matter how lon
 ```vue
 <template #cell-domainName="{ value }">
   <!-- Domain link (truncates) + external-redirect arrow; copy button pinned right so it aligns across rows. -->
-  <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
     <a
       :href="`https://${value}`"
       target="_blank"
       rel="noopener noreferrer"
-      class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+      class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
       @click.stop
     >
       <span class="truncate">{{ value }}</span>
       <i
-        class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
         aria-hidden="true"
       />
     </a>
@@ -245,11 +245,11 @@ copy (if any) still pins right.
     <Tag :label="`+${row.domainCount}`" severity="secondary" size="small" class="shrink-0 cursor-pointer" />
   </Popover.Trigger>
   <Popover.Content @click.stop>
-    <div class="flex max-h-[var(--container-xs)] flex-col overflow-auto p-[var(--spacing-xxs)]">
-      <p class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-overline-sm text-[var(--text-muted)]">
+    <div class="flex max-h-(--container-xs) flex-col overflow-auto p-(--spacing-xxs)">
+      <p class="px-(--spacing-xs) py-(--spacing-xxs) text-overline-sm text-(--text-muted)">
         {{ row.domains.length }} domains
       </p>
-      <span v-for="d in row.domains" :key="d" class="truncate px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-sm">
+      <span v-for="d in row.domains" :key="d" class="truncate px-(--spacing-xs) py-(--spacing-xxs) text-body-sm">
         {{ d }}
       </span>
     </div>
@@ -264,7 +264,7 @@ copy pinned to the right edge:
 
 ```vue
 <template #cell-value="{ value }">
-  <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
     <span class="min-w-0 truncate">{{ value }}</span>
     <CopyButton
       kind="outlined"
@@ -287,7 +287,7 @@ identical:
 ```vue
 <!-- your own LastModifiedCell — Avatar (tooltip = name) + relative time -->
 <template #cell-lastModified="{ value, row }">
-  <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
     <Tooltip
       v-if="row.author"
       :text="row.author"
@@ -297,7 +297,7 @@ identical:
         size="small"
       />
     </Tooltip>
-    <span class="truncate text-body-sm text-[var(--text-muted)]">{{ relativeTime(value) }}</span>
+    <span class="truncate text-body-sm text-(--text-muted)">{{ relativeTime(value) }}</span>
   </div>
 </template>
 ```

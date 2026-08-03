@@ -92,7 +92,7 @@
       :data-arrow="ctx.arrowPosition.value"
       :data-disabled="itemCtx.disabled.value || null"
       :class="attrs.class"
-      class="group flex w-full items-center justify-between border-b border-[var(--border-default)] bg-transparent px-[var(--spacing-md)] text-left text-[var(--text-default)] outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[size=medium]:min-h-8 data-[size=medium]:gap-[var(--spacing-sm)] data-[size=medium]:text-body-sm data-[size=large]:min-h-10 data-[size=large]:gap-[var(--spacing-sm)] data-[size=large]:text-body-md data-[arrow=left]:flex-row-reverse data-[arrow=left]:justify-end data-[arrow=left]:gap-[var(--spacing-xs)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)]"
+      class="group flex w-full items-center justify-between border-b border-(--border-default) bg-transparent px-(--spacing-md) text-left text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=medium]:min-h-8 data-[size=medium]:gap-(--spacing-sm) data-[size=medium]:text-body-sm data-[size=large]:min-h-10 data-[size=large]:gap-(--spacing-sm) data-[size=large]:text-body-md data-[arrow=left]:flex-row-reverse data-[arrow=left]:justify-end data-[arrow=left]:gap-(--spacing-xs) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
       @click="onClick"
       @keydown="onKeydown"
     >
@@ -100,7 +100,7 @@
         <slot />
       </span>
       <i
-        class="pi pi-chevron-down shrink-0 text-[var(--text-muted)] transition-transform duration-150 ease-out motion-reduce:transition-none group-data-[state=open]:rotate-180 group-data-[disabled]:text-[var(--text-disabled)]"
+        class="pi pi-chevron-down shrink-0 text-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none group-data-[state=open]:rotate-180 group-data-[disabled]:text-(--text-disabled)"
         aria-hidden="true"
         :data-testid="`${testId}__chevron`"
       />

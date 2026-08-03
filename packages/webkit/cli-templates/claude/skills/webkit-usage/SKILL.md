@@ -58,7 +58,7 @@ A few components need **one-time wiring in the app entry before first use** — 
 </script>
 
 <template>
-  <Button class="bg-[var(--primary)] text-[var(--primary-contrast)]">Save</Button>
+  <Button class="bg-(--primary) text-(--primary-contrast)">Save</Button>
 </template>
 ```
 

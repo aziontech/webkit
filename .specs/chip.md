@@ -117,7 +117,7 @@ import Chip from '@aziontech/webkit/chip'
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: both the clickable root (when `clickable`) and the remove button use `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`.
+- Visible focus: both the clickable root (when `clickable`) and the remove button use `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: when `clickable`, the root is focusable (`tabindex="0"`) and `Enter` / `Space` emit `click` (`Space` is `preventDefault`ed to avoid scrolling). When `removable`, `Tab` reaches the remove button and `Enter` / `Space` activate it and emit `remove`. Keystrokes that originate on the remove button do not bubble to the root activation (the handler ignores events whose `target` is not the root itself).
 - ARIA: when not `clickable`, the root is a non-interactive `<span>` container; when `clickable`, it is `role="button"` with `tabindex="0"`. The remove control is a real `<button type="button">` with `aria-label="Remove"`; the `pi pi-times` glyph is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.

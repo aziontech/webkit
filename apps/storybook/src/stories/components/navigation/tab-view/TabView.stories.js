@@ -99,24 +99,24 @@ const DEFAULT_TEMPLATE = `
       <TabView.Item value="tab-2" label="Tab Item" />
       <TabView.Item value="tab-3" label="Tab Item" />
     </TabView.List>
-    <TabView.Content class="mt-[var(--spacing-4)]">
+    <TabView.Content class="mt-(--spacing-4)">
       <TabView.Panel
         value="tab-1"
-        class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+        class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
       >
-        <p class="text-body-sm text-[var(--text-default)]">Content for tab 1</p>
+        <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
       </TabView.Panel>
       <TabView.Panel
         value="tab-2"
-        class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+        class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
       >
-        <p class="text-body-sm text-[var(--text-default)]">Content for tab 2</p>
+        <p class="text-body-sm text-(--text-default)">Content for tab 2</p>
       </TabView.Panel>
       <TabView.Panel
         value="tab-3"
-        class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+        class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
       >
-        <p class="text-body-sm text-[var(--text-default)]">Content for tab 3</p>
+        <p class="text-body-sm text-(--text-default)">Content for tab 3</p>
       </TabView.Panel>
     </TabView.Content>
   </TabView.Root>
@@ -149,24 +149,24 @@ const DEFAULT_SOURCE = `<TabView.Root v-model:value="active" class="w-full max-w
     <TabView.Item value="tab-2" label="Tab Item" />
     <TabView.Item value="tab-3" label="Tab Item" />
   </TabView.List>
-  <TabView.Content class="mt-[var(--spacing-4)]">
+  <TabView.Content class="mt-(--spacing-4)">
     <TabView.Panel
       value="tab-1"
-      class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+      class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
     >
-      <p class="text-body-sm text-[var(--text-default)]">Content for tab 1</p>
+      <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
     </TabView.Panel>
     <TabView.Panel
       value="tab-2"
-      class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+      class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
     >
-      <p class="text-body-sm text-[var(--text-default)]">Content for tab 2</p>
+      <p class="text-body-sm text-(--text-default)">Content for tab 2</p>
     </TabView.Panel>
     <TabView.Panel
       value="tab-3"
-      class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+      class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
     >
-      <p class="text-body-sm text-[var(--text-default)]">Content for tab 3</p>
+      <p class="text-body-sm text-(--text-default)">Content for tab 3</p>
     </TabView.Panel>
   </TabView.Content>
 </TabView.Root>`
@@ -211,14 +211,14 @@ const SCROLLABLE_TEMPLATE = `
         :label="tab.label"
       />
     </TabView.List>
-    <TabView.Content class="mt-[var(--spacing-4)]">
+    <TabView.Content class="mt-(--spacing-4)">
       <TabView.Panel
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
-        class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+        class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
       >
-        <p class="text-body-sm text-[var(--text-default)]">Content for {{ tab.label }}</p>
+        <p class="text-body-sm text-(--text-default)">Content for {{ tab.label }}</p>
       </TabView.Panel>
     </TabView.Content>
   </TabView.Root>
@@ -233,14 +233,14 @@ const SCROLLABLE_SOURCE = `<TabView.Root v-model:value="active" class="w-full ma
       :label="tab.label"
     />
   </TabView.List>
-  <TabView.Content class="mt-[var(--spacing-4)]">
+  <TabView.Content class="mt-(--spacing-4)">
     <TabView.Panel
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"
-      class="rounded-[var(--shape-card)] border border-[var(--border-default)] p-[var(--spacing-4)]"
+      class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
     >
-      <p class="text-body-sm text-[var(--text-default)]">Content for {{ tab.label }}</p>
+      <p class="text-body-sm text-(--text-default)">Content for {{ tab.label }}</p>
     </TabView.Panel>
   </TabView.Content>
 </TabView.Root>`

@@ -73,7 +73,7 @@
     :data-testid="testId"
     :data-selected="selected || null"
     :data-disabled="disabled || null"
-    class="text-body-sm inline-flex w-full items-center whitespace-nowrap rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-left text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[selected]:bg-[var(--secondary-selected)] data-[selected]:text-[var(--secondary-contrast)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)] motion-reduce:transition-none"
+    class="text-body-sm inline-flex w-full items-center whitespace-nowrap rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-left text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[selected]:bg-(--secondary-selected) data-[selected]:text-(--secondary-contrast) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
     @click="onClick"
   >
     <slot />

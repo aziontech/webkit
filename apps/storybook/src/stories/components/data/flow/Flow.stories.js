@@ -207,11 +207,11 @@ export const Branches = {
 }
 
 const CUSTOM_NODES_TEMPLATE = `<Flow align="center">
-  <Flow.Node unstyled class="size-4 rounded-full bg-[var(--border-default)]" />
+  <Flow.Node unstyled class="size-4 rounded-full bg-(--border-default)" />
   <Flow.Node>my-worker</Flow.Node>
   <Flow.Node
     unstyled
-    class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)] py-[var(--spacing-xl)] text-label-md text-[var(--text-default)]"
+    class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xl) text-label-md text-(--text-default)"
   >
     Taller node
   </Flow.Node>
@@ -235,15 +235,15 @@ export const CustomNodes = {
 const ANCHORED_TEMPLATE = `<Flow align="center">
   <Flow.Node>Load balancer</Flow.Node>
   <Flow.Node unstyled>
-    <div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)]">
+    <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay)">
       <Flow.Anchor type="end">
-        <div class="flex h-10 items-center px-[var(--spacing-sm)] text-label-md text-[var(--text-muted)]">
+        <div class="flex h-10 items-center px-(--spacing-sm) text-label-md text-(--text-muted)">
           my-worker
         </div>
       </Flow.Anchor>
       <Flow.Anchor type="start">
-        <div class="m-[var(--spacing-xxs)] mt-0 flex items-center gap-[var(--spacing-sm)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-md text-[var(--text-default)]">
-          Bindings <span class="text-[var(--text-muted)]">2</span>
+        <div class="m-(--spacing-xxs) mt-0 flex items-center gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default)">
+          Bindings <span class="text-(--text-muted)">2</span>
         </div>
       </Flow.Anchor>
     </div>

@@ -65,14 +65,14 @@
   }
 
   const ROOT_CLASS =
-    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[focused]:ring-2 data-[focused]:ring-[var(--ring-color)] data-[focused]:ring-offset-2 data-[focused]:ring-offset-[var(--bg-canvas)] hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-[var(--accent)]'
+    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-(--accent)'
 
   const HANDLE_CLASS =
-    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-[var(--radius)] bg-[var(--text-muted)] transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-4 group-data-[checked]:bg-[var(--color-base-white)]'
+    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-4 group-data-[checked]:bg-(--color-base-white)'
 
   const LOCK_ICON_CLASS = 'pi text-body-xxs leading-none'
-  const LOCK_OFF_CLASS = `${LOCK_ICON_CLASS} pi-lock text-[var(--bg-surface)]`
-  const LOCK_ON_CLASS = `${LOCK_ICON_CLASS} pi-lock-open text-[var(--color-base-black)]`
+  const LOCK_OFF_CLASS = `${LOCK_ICON_CLASS} pi-lock text-(--bg-surface)`
+  const LOCK_ON_CLASS = `${LOCK_ICON_CLASS} pi-lock-open text-(--color-base-black)`
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 </script>

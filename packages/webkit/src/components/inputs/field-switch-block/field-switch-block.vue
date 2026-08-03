@@ -57,20 +57,20 @@
 
   const cardClasses = cn(
     selectableBlockCardClasses,
-    'p-[var(--spacing-sm)]',
-    'data-[highlighted]:border-[var(--border-selected)] data-[highlighted]:bg-[var(--primary-selected)]',
+    'p-(--spacing-sm)',
+    'data-[highlighted]:border-(--border-selected) data-[highlighted]:bg-(--primary-selected)',
     'data-[highlighted]:before:hidden data-[highlighted]:after:hidden',
     'data-[disabled]:opacity-50'
   )
 
   const rowClasses =
-    'flex cursor-pointer items-start gap-[var(--spacing-sm)] data-[disabled]:cursor-not-allowed'
+    'flex cursor-pointer items-start gap-(--spacing-sm) data-[disabled]:cursor-not-allowed'
 
   const textsClasses =
-    'flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)] data-[disabled]:opacity-50'
+    'flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) data-[disabled]:opacity-50'
 
   const helperClasses =
-    'inline-flex items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-xs text-[var(--text-muted)] w-fit'
+    'inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-xxs) text-body-xs text-(--text-muted) w-fit'
 
   const rootClasses = computed(() => cn(sharedClasses, attrs.class))
 </script>
@@ -107,14 +107,14 @@
         >
           <span
             v-if="label"
-            class="text-body-sm text-[var(--text-default)]"
+            class="text-body-sm text-(--text-default)"
             :data-testid="`${testId}__label`"
           >
             {{ label }}
           </span>
           <span
             v-if="description"
-            class="text-body-xs text-[var(--text-muted)]"
+            class="text-body-xs text-(--text-muted)"
             :data-testid="`${testId}__description`"
           >
             {{ description }}

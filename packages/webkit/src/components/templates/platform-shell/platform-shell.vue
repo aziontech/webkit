@@ -54,7 +54,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex h-screen min-h-0 w-full flex-col bg-[var(--bg-canvas)]"
+    class="flex h-screen min-h-0 w-full flex-col bg-(--bg-canvas)"
   >
     <GlobalHeader
       :aria-label="props.headerAriaLabel"
@@ -84,11 +84,11 @@
       </aside>
 
       <main
-        class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[var(--bg-canvas)]"
+        class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-(--bg-canvas)"
         :data-testid="`${testId}__main`"
       >
         <div
-          class="flex min-h-0 flex-1 flex-col gap-[var(--spacing-xl)] overflow-auto p-[var(--spacing-xl)]"
+          class="flex min-h-0 flex-1 flex-col gap-(--spacing-xl) overflow-auto p-(--spacing-xl)"
           :data-testid="`${testId}__main-inner`"
         >
           <div

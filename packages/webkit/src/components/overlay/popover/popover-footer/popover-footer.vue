@@ -24,7 +24,7 @@
   <footer
     v-bind="attrs"
     :data-testid="testId"
-    class="flex items-center justify-end gap-[var(--spacing-xs)] border-t border-[var(--border-default)] py-[var(--spacing-sm)] px-[var(--spacing-md)]"
+    class="flex items-center justify-end gap-(--spacing-xs) border-t border-(--border-default) py-(--spacing-sm) px-(--spacing-md)"
   >
     <slot />
   </footer>

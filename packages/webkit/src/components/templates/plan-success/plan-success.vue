@@ -69,7 +69,7 @@
   const GlobalHeaderBrand = GlobalHeader['Brand']
 
   const ROOT_CLASS =
-    'flex min-h-full w-full flex-col bg-[var(--bg-canvas)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none'
+    'flex min-h-full w-full flex-col bg-(--bg-canvas) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none'
 </script>
 
 <template>
@@ -93,7 +93,7 @@
     </slot>
 
     <main
-      class="flex flex-1 flex-col items-center justify-center px-[var(--spacing-xxl)] py-[var(--spacing-xxl)]"
+      class="flex flex-1 flex-col items-center justify-center px-(--spacing-xxl) py-(--spacing-xxl)"
       :aria-labelledby="successHeadingId"
       :data-testid="`${testId}__main`"
     >
@@ -105,7 +105,7 @@
         <template #header>
           <slot name="success">
             <div
-              class="flex w-full flex-col items-center gap-[var(--spacing-xs)] px-[var(--spacing-xl)] py-[var(--spacing-md)] text-center"
+              class="flex w-full flex-col items-center gap-(--spacing-xs) px-(--spacing-xl) py-(--spacing-md) text-center"
               :data-testid="`${testId}__success`"
             >
               <span
@@ -113,22 +113,22 @@
                 :data-testid="`${testId}__success-icon`"
               >
                 <i
-                  class="pi pi-check text-heading-sm leading-none text-[var(--success)]"
+                  class="pi pi-check text-heading-sm leading-none text-(--success)"
                   aria-hidden="true"
                 />
               </span>
               <div
-                class="flex w-full max-w-[360px] flex-col gap-[var(--spacing-xxs)] [word-break:break-word]"
+                class="flex w-full max-w-[360px] flex-col gap-(--spacing-xxs) [word-break:break-word]"
               >
                 <h1
                   :id="successHeadingId"
-                  class="text-heading-sm text-[var(--text-default)]"
+                  class="text-heading-sm text-(--text-default)"
                   :data-testid="`${testId}__title`"
                 >
                   {{ title }}
                 </h1>
                 <p
-                  class="text-body-xs text-[var(--text-muted)]"
+                  class="text-body-xs text-(--text-muted)"
                   :data-testid="`${testId}__description`"
                 >
                   {{ description }}
@@ -141,44 +141,44 @@
         <template #content>
           <slot name="steps">
             <div
-              class="flex w-full flex-col gap-[var(--spacing-md)] px-[var(--spacing-xl)] py-[var(--spacing-xl)]"
+              class="flex w-full flex-col gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-xl)"
               :data-testid="`${testId}__steps`"
             >
               <p
-                class="w-full text-button-md text-[var(--text-muted)] [word-break:break-word]"
+                class="w-full text-button-md text-(--text-muted) [word-break:break-word]"
                 :data-testid="`${testId}__steps-label`"
               >
                 {{ stepsLabel }}
               </p>
               <ol
-                class="flex w-full list-none flex-col gap-[var(--spacing-md)] p-0"
+                class="flex w-full list-none flex-col gap-(--spacing-md) p-0"
                 :data-testid="`${testId}__steps-list`"
               >
                 <li
                   v-for="(step, index) in steps"
                   :key="index"
-                  class="flex w-full items-start justify-between gap-[var(--spacing-sm)]"
+                  class="flex w-full items-start justify-between gap-(--spacing-sm)"
                   :data-testid="`${testId}__step-${index + 1}`"
                 >
                   <div
-                    class="flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-button)] bg-[var(--bg-hover)] px-[var(--spacing-xs)] text-button-md text-[var(--text-default)]"
+                    class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-button) bg-(--bg-hover) px-(--spacing-xs) text-button-md text-(--text-default)"
                     :data-testid="`${testId}__step-${index + 1}-badge`"
                     aria-hidden="true"
                   >
                     {{ index + 1 }}
                   </div>
                   <div
-                    class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)] [word-break:break-word]"
+                    class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) [word-break:break-word]"
                     :data-testid="`${testId}__step-${index + 1}-content`"
                   >
                     <p
-                      class="text-body-sm text-[var(--text-default)]"
+                      class="text-body-sm text-(--text-default)"
                       :data-testid="`${testId}__step-${index + 1}-title`"
                     >
                       {{ step.title }}
                     </p>
                     <p
-                      class="text-body-xs text-[var(--text-muted)]"
+                      class="text-body-xs text-(--text-muted)"
                       :data-testid="`${testId}__step-${index + 1}-description`"
                     >
                       {{ step.description }}

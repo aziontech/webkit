@@ -33,7 +33,7 @@
     v-bind="attrs"
     :id="ctx.titleId"
     :data-testid="testId"
-    class="text-body-sm text-[var(--text-default)]"
+    class="text-body-sm text-(--text-default)"
   >
     <slot />
   </h2>

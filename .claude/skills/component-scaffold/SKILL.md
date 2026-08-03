@@ -122,14 +122,14 @@ packages/webkit/src/components/actions/button/
        class="
          relative inline-flex items-center justify-center whitespace-nowrap
          transition-colors duration-150 ease-out motion-reduce:transition-none
-         rounded-[var(--shape-button)]
-         focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]
-         data-[kind=primary]:bg-[var(--primary)] data-[kind=primary]:text-[var(--primary-contrast)]
-         data-[kind=secondary]:bg-[var(--secondary)] data-[kind=secondary]:text-[var(--secondary-contrast)]
-         data-[size=small]:h-7 data-[size=small]:px-[var(--spacing-2)] data-[size=small]:text-button-md
-         data-[size=medium]:h-8 data-[size=medium]:px-[var(--spacing-3)] data-[size=medium]:text-button-md
-         data-[size=large]:h-10 data-[size=large]:px-[var(--spacing-4)] data-[size=large]:text-button-lg
-         data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed
+         rounded-(--shape-button)
+         focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
+         data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
+         data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-contrast)
+         data-[size=small]:h-7 data-[size=small]:px-(--spacing-2) data-[size=small]:text-button-md
+         data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-3) data-[size=medium]:text-button-md
+         data-[size=large]:h-10 data-[size=large]:px-(--spacing-4) data-[size=large]:text-button-lg
+         data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed
        "
      >
        <slot />
@@ -144,7 +144,7 @@ packages/webkit/src/components/actions/button/
      <div
        :data-testid="testId"
        :class="
-         cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-4)]', attrs.class)
+         cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-4)', attrs.class)
        "
      />
    </template>

@@ -25,7 +25,7 @@
     aria-hidden="true"
     :class="
       cn(
-        'inline-flex shrink-0 items-center text-[var(--text-muted)]',
+        'inline-flex shrink-0 items-center text-(--text-muted)',
         attrs.class as string | undefined
       )
     "

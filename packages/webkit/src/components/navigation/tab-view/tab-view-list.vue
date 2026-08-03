@@ -62,14 +62,14 @@
    */
   const listClasses = computed(() =>
     cn(
-      'relative flex w-full shrink-0 items-end gap-[var(--spacing-xs)] overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+      'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
       attrs.class as string | undefined
     )
   )
 
   const indicatorClasses = [
     'pointer-events-none absolute left-0 top-0 z-0',
-    'rounded-[var(--shape-button)] bg-[var(--secondary-selected)]',
+    'rounded-(--shape-button) bg-(--secondary-selected)',
     'motion-reduce:transition-none'
   ]
 
@@ -164,7 +164,7 @@
         v-if="canScrollStart"
         :data-testid="`${testId}__fade-start`"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 left-0 z-10 w-[var(--spacing-6)] bg-gradient-to-r from-[var(--bg-canvas)] to-transparent"
+        class="pointer-events-none absolute inset-y-0 left-0 z-10 w-(--spacing-6) bg-gradient-to-r from-(--bg-canvas) to-transparent"
       />
     </Transition>
     <Transition
@@ -175,7 +175,7 @@
         v-if="canScrollEnd"
         :data-testid="`${testId}__fade-end`"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 right-0 z-10 w-[var(--spacing-6)] bg-gradient-to-l from-[var(--bg-canvas)] to-transparent"
+        class="pointer-events-none absolute inset-y-0 right-0 z-10 w-(--spacing-6) bg-gradient-to-l from-(--bg-canvas) to-transparent"
       />
     </Transition>
   </div>

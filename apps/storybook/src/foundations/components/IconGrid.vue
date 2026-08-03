@@ -89,7 +89,7 @@ function isCopied(name) {
             <i class="pi pi-search text-sm" />
           </template>
           <template v-if="searchQuery" #iconRight>
-            <span class="text-[11px] font-code text-[var(--text-muted)]">
+            <span class="text-[11px] font-code text-(--text-muted)">
               {{ filteredCount }} / {{ totalCount }}
             </span>
           </template>
@@ -124,7 +124,7 @@ function isCopied(name) {
         <button
           v-for="icon in azionIcons"
           :key="icon.name"
-          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-[var(--border-default)] bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-(--border-default) bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
@@ -152,7 +152,7 @@ function isCopied(name) {
         <button
           v-for="icon in filteredColorIcons"
           :key="icon.name"
-          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-[var(--border-default)] bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-(--border-default) bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
@@ -180,7 +180,7 @@ function isCopied(name) {
         <button
           v-for="icon in primeIcons"
           :key="icon.name"
-          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-[var(--border-default)] bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
+          class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-(--border-default) bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >

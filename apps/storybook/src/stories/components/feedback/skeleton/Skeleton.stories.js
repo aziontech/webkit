@@ -120,24 +120,24 @@ export const Types = {
   }
 }
 
-const SURFACES_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-md)]">
-  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-canvas)] p-[var(--spacing-md)]">
-    <span class="text-label-sm text-[var(--text-muted)]">--bg-canvas</span>
+const SURFACES_TEMPLATE = `<div class="grid grid-cols-2 gap-(--spacing-md)">
+  <div class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-canvas) p-(--spacing-md)">
+    <span class="text-label-sm text-(--text-muted)">--bg-canvas</span>
     <Skeleton kind="shape" width="100%" height="16px" />
     <Skeleton kind="shape" width="60%" height="16px" />
   </div>
-  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-md)]">
-    <span class="text-label-sm text-[var(--text-muted)]">--bg-surface</span>
+  <div class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)">
+    <span class="text-label-sm text-(--text-muted)">--bg-surface</span>
     <Skeleton kind="shape" width="100%" height="16px" />
     <Skeleton kind="shape" width="60%" height="16px" />
   </div>
-  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-surface-raised)] p-[var(--spacing-md)]">
-    <span class="text-label-sm text-[var(--text-muted)]">--bg-surface-raised</span>
+  <div class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-raised) p-(--spacing-md)">
+    <span class="text-label-sm text-(--text-muted)">--bg-surface-raised</span>
     <Skeleton kind="shape" width="100%" height="16px" />
     <Skeleton kind="shape" width="60%" height="16px" />
   </div>
-  <div class="flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] bg-[var(--bg-surface-overlay)] p-[var(--spacing-md)]">
-    <span class="text-label-sm text-[var(--text-muted)]">--bg-surface-overlay</span>
+  <div class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-overlay) p-(--spacing-md)">
+    <span class="text-label-sm text-(--text-muted)">--bg-surface-overlay</span>
     <Skeleton kind="shape" width="100%" height="16px" />
     <Skeleton kind="shape" width="60%" height="16px" />
   </div>

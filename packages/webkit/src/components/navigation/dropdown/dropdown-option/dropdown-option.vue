@@ -92,7 +92,7 @@
     :data-testid="testId"
     :data-selected="selected || null"
     :data-disabled="disabled || null"
-    class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-default)] outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:bg-[var(--bg-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[selected]:bg-[var(--bg-selected)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)]"
+    class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
     @click="onClick"
     @keydown="onKeydown"
   >
@@ -119,7 +119,7 @@
     <span
       v-else-if="hasCommand"
       :data-testid="`${testId}__command`"
-      class="flex shrink-0 items-center text-label-sm text-[var(--text-muted)]"
+      class="flex shrink-0 items-center text-label-sm text-(--text-muted)"
     >
       {{ command }}
     </span>

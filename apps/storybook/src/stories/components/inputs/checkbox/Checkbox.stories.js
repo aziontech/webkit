@@ -172,7 +172,7 @@ const DISABLED_SCRIPT = [
   'const checked = ref(true)',
   'const unchecked = ref(false)'
 ]
-const DISABLED_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-4)]">
+const DISABLED_TEMPLATE = `<div class="flex items-center gap-(--spacing-4)">
   <Checkbox v-model="checked" binary disabled input-id="webkit-checkbox-disabled-on" aria-label="Disabled checked" />
   <Checkbox v-model="unchecked" binary disabled input-id="webkit-checkbox-disabled-off" aria-label="Disabled unchecked" />
 </div>`

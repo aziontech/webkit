@@ -50,9 +50,9 @@ the answer, and using it is what makes light/dark theming work for free.
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | Color      | `var(--primary)` · `var(--bg-surface)` · `var(--text-default)` · `var(--border-default)` · feedback `--success/--warning/--danger/--info` (+ `-contrast`/`-border`) | `#f3652b` · `rgb(…)` · `hsl(…)` · Tailwind palette (`text-blue-600`, `bg-gray-500`)        |
 | Typography | generated classes — `text-heading-md`, `text-body-sm`, `text-button-lg`, `text-label-md`, `text-overline-md` (font + size + line-height + tracking bundled)         | `text-sm` · `leading-*` · `tracking-*` · `font-family` · `text-[length:…]`                 |
-| Spacing    | the semantic scale `var(--spacing-xxs…xxl)` — `p-[var(--spacing-md)]`, `gap-[var(--spacing-sm)]`                                                                    | the primitive numeric scale (`--spacing-1…-96`) · `p-4` when a token applies · `p-[13px]`  |
-| Shape      | `rounded-[var(--shape-button)]` · `--shape-card` · `--shape-elements` · `rounded-[inherit]` for pseudo-elements                                                     | `rounded-lg` · numeric radii                                                               |
-| Shadow     | `shadow-[var(--shadow-md)]`                                                                                                                                         | bare `shadow-md` · hex/rgb elevation · legacy `--card-shadow`                              |
+| Spacing    | the semantic scale `var(--spacing-xxs…xxl)` — `p-(--spacing-md)`, `gap-(--spacing-sm)`                                                                    | the primitive numeric scale (`--spacing-1…-96`) · `p-4` when a token applies · `p-[13px]`  |
+| Shape      | `rounded-(--shape-button)` · `--shape-card` · `--shape-elements` · `rounded-[inherit]` for pseudo-elements                                                     | `rounded-lg` · numeric radii                                                               |
+| Shadow     | `shadow-(--shadow-md)`                                                                                                                                         | bare `shadow-md` · hex/rgb elevation · legacy `--card-shadow`                              |
 | Motion     | catalogued `animate-*` utilities + `transition-*` with token durations; **every** motion class pairs with `motion-reduce:`                                          | local `@keyframes` · `animate-[…]` / `duration-[…]` arbitrary values · animation libraries |
 
 If a design needs a color/size that has no token, that is a **theme gap**: record it and
@@ -346,11 +346,11 @@ blocks, no component-local CSS.**
 <button
   :data-kind="kind"
   :data-disabled="disabled || null"
-  class="inline-flex items-center rounded-[var(--shape-button)]
+  class="inline-flex items-center rounded-(--shape-button)
     transition-colors duration-150 ease-out motion-reduce:transition-none
-    data-[kind=primary]:bg-[var(--primary)] data-[kind=primary]:text-[var(--primary-contrast)]
-    data-[kind=secondary]:bg-[var(--secondary)]
-    data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:cursor-not-allowed"
+    data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
+    data-[kind=secondary]:bg-(--secondary)
+    data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed"
 >
   <slot />
 </button>
@@ -359,7 +359,7 @@ blocks, no component-local CSS.**
 <!-- prettier-ignore -->
 ```ts
 // ❌ the whole class-map pattern is banned
-const kindClasses = { primary: 'bg-[var(--primary)]' }
+const kindClasses = { primary: 'bg-(--primary)' }
 const rootClasses = computed(() => [shared, kindClasses[props.kind]])
 ```
 
@@ -400,7 +400,7 @@ const attrs = useAttrs()
 
 <template>
   <div v-bind="$attrs" :data-testid="testId"
-    :class="cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)]', attrs.class as string)">
+    :class="cn('rounded-(--shape-card) bg-(--bg-surface)', attrs.class as string)">
     <slot />
   </div>
 </template>

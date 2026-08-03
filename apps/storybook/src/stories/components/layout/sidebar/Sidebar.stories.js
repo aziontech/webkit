@@ -61,15 +61,15 @@ const FOOTER_SLOT = `<template #footer>
         <Dropdown.Trigger class="block w-full">
           <button
             type="button"
-            class="flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-left transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
+            class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-canvas) px-(--spacing-sm) py-(--spacing-xs) text-left transition-colors hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
             aria-label="Open profile menu"
           >
             <Avatar kind="square" size="medium" src="${sampleImage}" alt="Rafael Umman" />
             <span class="flex min-w-0 flex-1 flex-col justify-center">
-              <span class="truncate text-label-sm text-[var(--text-default)]">Rafael Umman</span>
-              <span class="truncate text-label-sm text-[var(--text-muted)]">rafael.umman@example.com</span>
+              <span class="truncate text-label-sm text-(--text-default)">Rafael Umman</span>
+              <span class="truncate text-label-sm text-(--text-muted)">rafael.umman@example.com</span>
             </span>
-            <i class="pi pi-sort-alt text-[var(--text-muted)]" aria-hidden="true" />
+            <i class="pi pi-sort-alt text-(--text-muted)" aria-hidden="true" />
           </button>
         </Dropdown.Trigger>
         <Dropdown.Group>

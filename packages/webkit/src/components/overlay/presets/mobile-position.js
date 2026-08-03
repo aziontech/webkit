@@ -6,11 +6,11 @@
 export const overlayMobileFluidClasses = ['max-md:w-full', 'max-md:h-fit', 'max-md:max-h-[80vh]']
 export const dialogShellPositionClasses = [
   'max-md:items-end max-md:justify-center max-md:p-0',
-  'md:items-center md:justify-center md:p-[var(--spacing-md)]'
+  'md:items-center md:justify-center md:p-(--spacing-md)'
 ]
 export const dialogPanelPositionClasses = [...overlayMobileFluidClasses, 'max-md:overflow-y-auto']
 export const dialogPanelShapeClasses = [
-  'max-md:rounded-b-[var(--shape-flat)] max-md:rounded-t-[var(--shape-card)]',
+  'max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card)',
   ...overlayMobileFluidClasses
 ]
 export const drawerShellPositionClasses = [
@@ -22,6 +22,6 @@ export const drawerShellPositionClasses = [
 export const drawerPanelPositionClasses = [
   ...overlayMobileFluidClasses,
   'max-md:max-w-none',
-  'max-md:rounded-b-[var(--shape-flat)] max-md:rounded-t-[var(--shape-card)]',
+  'max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card)',
   'md:h-full md:min-h-0 md:max-h-full'
 ]

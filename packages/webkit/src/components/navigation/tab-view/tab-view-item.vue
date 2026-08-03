@@ -70,33 +70,33 @@
   const panelId = computed(() => (context ? context.panelId(resolvedValue.value) : undefined))
 
   const itemSharedClasses = [
-    'relative z-[1] inline-flex h-[30px] shrink-0 cursor-pointer items-center',
-    'gap-[var(--spacing-xs)] rounded-[var(--shape-button)]',
-    'px-[var(--spacing-sm)] py-[var(--spacing-xs)]',
+    'relative z-1 inline-flex h-[30px] shrink-0 cursor-pointer items-center',
+    'gap-(--spacing-xs) rounded-(--shape-button)',
+    'px-(--spacing-sm) py-(--spacing-xs)',
     'text-label-md transition-colors motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
   ]
 
   const itemClasses = computed(() =>
     cn(
       itemSharedClasses,
       isDisabled.value &&
-        'pointer-events-none bg-[var(--bg-disabled)] text-[var(--text-disabled)] opacity-60',
+        'pointer-events-none bg-(--bg-disabled) text-(--text-disabled) opacity-60',
       !isDisabled.value &&
         context &&
         !isSelected.value &&
-        'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
+        'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
       !isDisabled.value &&
         context &&
         isSelected.value &&
-        'bg-transparent text-[var(--secondary-contrast)]',
+        'bg-transparent text-(--secondary-contrast)',
       !context &&
         isSelected.value &&
-        'bg-[var(--secondary-selected)] text-[var(--secondary-contrast)]',
+        'bg-(--secondary-selected) text-(--secondary-contrast)',
       !context &&
         !isSelected.value &&
-        'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
+        'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
       attrs.class as string | undefined
     )
   )
@@ -105,7 +105,7 @@
     'flex size-3.5 shrink-0 items-center justify-center text-[inherit] [&_i]:text-body-xs'
 
   const closeClasses =
-    'flex size-3.5 shrink-0 items-center justify-center rounded-[var(--shape-button)] text-[inherit] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]'
+    'flex size-3.5 shrink-0 items-center justify-center rounded-(--shape-button) text-[inherit] hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 
   const activate = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) {

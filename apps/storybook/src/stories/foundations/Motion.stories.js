@@ -16,11 +16,11 @@ const curveRows = Object.entries(curve).map(([name, value]) => ({ name: `ease-${
 // inset-inline-* (needs a positioned bar inside the track), slide-down reveals height
 // (needs inner content to measure), and highlight-fade paints a background tint meant
 // for text rows. Each gets a preview shape that actually shows the motion.
-const DEFAULT_PREVIEW_CLASS = 'h-8 w-8 rounded-[var(--shape-elements)] bg-[var(--primary)]'
+const DEFAULT_PREVIEW_CLASS = 'h-8 w-8 rounded-(--shape-elements) bg-(--primary)'
 
 const PREVIEW_OVERRIDES = {
   shimmer: {
-    class: 'h-8 w-20 rounded-[var(--shape-elements)]',
+    class: 'h-8 w-20 rounded-(--shape-elements)',
     style: {
       background:
         'linear-gradient(90deg, var(--bg-surface) 25%, var(--surface-hover) 50%, var(--bg-surface) 75%)',
@@ -28,20 +28,20 @@ const PREVIEW_OVERRIDES = {
     }
   },
   'slide-down': {
-    class: 'w-8 overflow-hidden rounded-[var(--shape-elements)] bg-[var(--primary)]',
+    class: 'w-8 overflow-hidden rounded-(--shape-elements) bg-(--primary)',
     style: { interpolateSize: 'allow-keywords' },
     inner: true
   },
   'highlight-fade': {
     class:
-      'rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)]',
+      'rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default)',
     text: 'Updated row'
   },
   'progress-indeterminate': {
-    class: 'absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-[var(--primary)]'
+    class: 'absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-(--primary)'
   },
   'progress-indeterminate-short': {
-    class: 'absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-[var(--primary)]'
+    class: 'absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-(--primary)'
   }
 }
 
@@ -113,15 +113,15 @@ export const Overview = {
           <code>motion-reduce:*</code> escape on the same class string.
         </PageHeader>
 
-        <section class="mb-[var(--spacing-xxl)]">
-          <h2 class="m-0 mb-[var(--spacing-md)] text-heading-lg text-[var(--text-default)]">Animations</h2>
-          <div class="flex flex-col gap-[var(--spacing-sm)]">
+        <section class="mb-(--spacing-xxl)">
+          <h2 class="m-0 mb-(--spacing-md) text-heading-lg text-(--text-default)">Animations</h2>
+          <div class="flex flex-col gap-(--spacing-sm)">
             <div
               v-for="row in animationRows"
               :key="row.id"
-              class="flex items-center gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-sm)]"
+              class="flex items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
             >
-              <div class="relative flex h-16 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-canvas)]">
+              <div class="relative flex h-16 w-24 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) bg-(--bg-canvas)">
                 <div
                   :key="replayKeys[row.id] || 0"
                   class="motion-reduce:animate-none"
@@ -133,16 +133,16 @@ export const Overview = {
                 </div>
               </div>
               <div class="min-w-0 flex-1">
-                <div class="flex flex-wrap items-baseline gap-x-[var(--spacing-sm)]">
-                  <code class="text-body-md font-medium text-[var(--text-default)]">{{ row.className }}</code>
-                  <code class="text-body-sm text-[var(--text-secondary)]">{{ row.value }}</code>
+                <div class="flex flex-wrap items-baseline gap-x-(--spacing-sm)">
+                  <code class="text-body-md font-medium text-(--text-default)">{{ row.className }}</code>
+                  <code class="text-body-sm text-(--text-secondary)">{{ row.value }}</code>
                 </div>
-                <p class="m-0 mt-[var(--spacing-xxs)] text-body-sm text-[var(--text-secondary)]">{{ row.useWhen }}</p>
+                <p class="m-0 mt-(--spacing-xxs) text-body-sm text-(--text-secondary)">{{ row.useWhen }}</p>
               </div>
               <button
                 v-if="!row.loops"
                 type="button"
-                class="shrink-0 cursor-pointer rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-transparent px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)] hover:bg-[var(--bg-hover)]"
+                class="shrink-0 cursor-pointer rounded-(--shape-elements) border border-(--border-default) bg-transparent px-(--spacing-sm) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover)"
                 @click="replay(row.id)"
               >
                 Replay
@@ -151,9 +151,9 @@ export const Overview = {
           </div>
         </section>
 
-        <section class="mb-[var(--spacing-xxl)]">
-          <h2 class="m-0 mb-[var(--spacing-md)] text-heading-lg text-[var(--text-default)]">The panel recipe</h2>
-          <p class="m-0 mb-[var(--spacing-sm)] max-w-prose text-body-md text-[var(--text-secondary)]">
+        <section class="mb-(--spacing-xxl)">
+          <h2 class="m-0 mb-(--spacing-md) text-heading-lg text-(--text-default)">The panel recipe</h2>
+          <p class="m-0 mb-(--spacing-sm) max-w-prose text-body-md text-(--text-secondary)">
             A <code>v-if</code> region never animates by itself. Wrap it in a Vue Transition and hand the
             enter/leave phases to a catalogued pair — <code>animate-slide-in-left</code> /
             <code>animate-slide-out-left</code> for a sidebar, the <code>-right</code> pair for drawers,
@@ -162,30 +162,30 @@ export const Overview = {
           <CodeBlock :code="PANEL_RECIPE" language="html" />
         </section>
 
-        <section class="mb-[var(--spacing-xxl)]">
-          <h2 class="m-0 mb-[var(--spacing-md)] text-heading-lg text-[var(--text-default)]">Duration tokens</h2>
-          <div class="flex flex-col gap-[var(--spacing-xs)]">
+        <section class="mb-(--spacing-xxl)">
+          <h2 class="m-0 mb-(--spacing-md) text-heading-lg text-(--text-default)">Duration tokens</h2>
+          <div class="flex flex-col gap-(--spacing-xs)">
             <div
               v-for="row in durationRows"
               :key="row.name"
-              class="flex items-center gap-[var(--spacing-md)]"
+              class="flex items-center gap-(--spacing-md)"
             >
-              <code class="w-56 shrink-0 text-body-sm text-[var(--text-default)]">{{ row.name }}</code>
-              <code class="w-20 shrink-0 text-body-sm text-[var(--text-secondary)]">{{ row.value }}</code>
-              <div class="h-2 rounded-full bg-[var(--primary)]" :style="{ width: Math.min(row.ms / 8, 420) + 'px' }"></div>
+              <code class="w-56 shrink-0 text-body-sm text-(--text-default)">{{ row.name }}</code>
+              <code class="w-20 shrink-0 text-body-sm text-(--text-secondary)">{{ row.value }}</code>
+              <div class="h-2 rounded-full bg-(--primary)" :style="{ width: Math.min(row.ms / 8, 420) + 'px' }"></div>
             </div>
           </div>
         </section>
 
-        <section class="mb-[var(--spacing-xxl)]">
-          <h2 class="m-0 mb-[var(--spacing-md)] text-heading-lg text-[var(--text-default)]">Easing curves</h2>
-          <div class="flex flex-col gap-[var(--spacing-xs)]">
-            <div v-for="row in curveRows" :key="row.name" class="flex items-center gap-[var(--spacing-md)]">
-              <code class="w-56 shrink-0 text-body-sm text-[var(--text-default)]">{{ row.name }}</code>
-              <code class="text-body-sm text-[var(--text-secondary)]">{{ row.value }}</code>
+        <section class="mb-(--spacing-xxl)">
+          <h2 class="m-0 mb-(--spacing-md) text-heading-lg text-(--text-default)">Easing curves</h2>
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <div v-for="row in curveRows" :key="row.name" class="flex items-center gap-(--spacing-md)">
+              <code class="w-56 shrink-0 text-body-sm text-(--text-default)">{{ row.name }}</code>
+              <code class="text-body-sm text-(--text-secondary)">{{ row.value }}</code>
             </div>
           </div>
-          <p class="m-0 mt-[var(--spacing-sm)] max-w-prose text-body-sm text-[var(--text-secondary)]">
+          <p class="m-0 mt-(--spacing-sm) max-w-prose text-body-sm text-(--text-secondary)">
             Entrances decelerate (productive/expressive entrance), exits accelerate (productive/expressive exit).
             Interaction feedback stays at or under duration-moderate-01 (150ms).
           </p>

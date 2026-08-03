@@ -26,7 +26,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex min-w-0 shrink items-center justify-end gap-[var(--spacing-xs)]"
+    class="flex min-w-0 shrink items-center justify-end gap-(--spacing-xs)"
   >
     <slot />
   </div>

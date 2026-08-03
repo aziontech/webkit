@@ -224,7 +224,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1` on the action and close controls (inherited from `Button` / `IconButton`).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1` on the action and close controls (inherited from `Button` / `IconButton`).
 - Keyboard map: `Tab` reaches the action then the close control of each visible toast; `Enter`/`Space` activates them. The region itself is not a focus trap and is not focused on mount, so toasts never steal focus from the current task.
 - ARIA: the region carries `aria-live` (`polite`, or `assertive` while an `error` toast is present) and `aria-atomic="false"`; each item is `role="status"` (or `role="alert"` for `error`/`warning`); the close control has an `aria-label`; the severity icon is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted description text and severity icons.

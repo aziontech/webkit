@@ -51,22 +51,22 @@
   const rootClasses = computed(() =>
     cn(
       'flex flex-col overflow-clip',
-      'bg-[var(--bg-surface)]',
-      'border border-[length:var(--border-width-default)] border-[var(--border-default)]',
-      'rounded-[var(--shape-card)]',
+      'bg-(--bg-surface)',
+      'border border-(length:--border-width-default) border-(--border-default)',
+      'rounded-(--shape-card)',
       attrs.class as string | undefined
     )
   )
 
   const headerClasses =
-    'group flex min-h-14 shrink-0 items-center justify-between gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
+    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)'
 
-  const titleClasses = 'text-label-md text-[var(--text-default)]'
+  const titleClasses = 'text-label-md text-(--text-default)'
 
-  const contentClasses = 'flex min-h-0 flex-1 flex-col data-[padded]:p-[var(--spacing-md)]'
+  const contentClasses = 'flex min-h-0 flex-1 flex-col data-[padded]:p-(--spacing-md)'
 
   const footerClasses =
-    'flex min-h-14 shrink-0 items-center justify-center gap-[var(--spacing-sm)] border-t border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
+    'flex min-h-14 shrink-0 items-center justify-center gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)'
 </script>
 
 <template>

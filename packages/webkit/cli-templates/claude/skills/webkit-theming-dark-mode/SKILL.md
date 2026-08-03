@@ -65,9 +65,9 @@ at once. Bind a raw color and you have pinned one theme.
 ```vue
 <!-- ✅ role-based: correct in both themes, no branches -->
 <div
-  class="bg-[var(--bg-surface)] text-[var(--text-default)] border border-[var(--border-default)]"
+  class="bg-(--bg-surface) text-(--text-default) border border-(--border-default)"
 >
-  <span class="text-[var(--primary)]">Active</span>
+  <span class="text-(--primary)">Active</span>
 </div>
 
 <!-- ❌ value-based: legible in one theme, broken in the other -->
@@ -89,9 +89,9 @@ names from the theme package; never invent a `surface-3`.
 
 ```vue
 <!-- page → card → menu: each layer is a role, depth reads in both themes -->
-<div class="bg-[var(--bg-canvas)]">
-  <div class="bg-[var(--bg-surface)]">...</div>
-  <div class="bg-[var(--bg-surface-raised)]">popover / menu</div>
+<div class="bg-(--bg-canvas)">
+  <div class="bg-(--bg-surface)">...</div>
+  <div class="bg-(--bg-surface-raised)">popover / menu</div>
 </div>
 ```
 
@@ -106,9 +106,9 @@ themes. Keep the fill as `background-color` and put the sweep in a gradient whos
 
 ```vue
 <!-- ❌ opaque surface as a placeholder: near-invisible on a card in light -->
-<div class="bg-[var(--bg-surface-overlay)]" />
+<div class="bg-(--bg-surface-overlay)" />
 <!-- ✅ translucent placeholder role, correct on any layer in both themes -->
-<div class="bg-[var(--bg-placeholder)]" />
+<div class="bg-(--bg-placeholder)" />
 ```
 
 Prefer the design system's `Skeleton` component over hand-rolling this — it already pairs the tokens
@@ -125,7 +125,7 @@ full of `dark:` overrides is a screen that stopped trusting the tokens.
 <!-- ❌ re-implements what --bg-surface already does per theme -->
 <div class="bg-white dark:bg-zinc-900 text-black dark:text-white">
 <!-- ✅ one role, no per-theme branch -->
-<div class="bg-[var(--bg-surface)] text-[var(--text-default)]">
+<div class="bg-(--bg-surface) text-(--text-default)">
 ```
 
 ## A card that needs zero changes across themes
@@ -143,15 +143,15 @@ and accent all move together.
 
 <template>
   <article
-    class="rounded-[var(--shape-card)] p-[var(--spacing-md)]
-           bg-[var(--bg-surface)] text-[var(--text-default)]
-           border border-[var(--border-default)]"
+    class="rounded-(--shape-card) p-(--spacing-md)
+           bg-(--bg-surface) text-(--text-default)
+           border border-(--border-default)"
   >
-    <h3 class="text-[var(--text-default)]">Workload health</h3>
-    <p class="text-[var(--text-secondary)]">Requests are within normal range.</p>
-    <span class="text-[var(--primary)]">View details</span>
+    <h3 class="text-(--text-default)">Workload health</h3>
+    <p class="text-(--text-secondary)">Requests are within normal range.</p>
+    <span class="text-(--primary)">View details</span>
     <button
-      class="mt-[var(--spacing-sm)] text-[var(--primary)]"
+      class="mt-(--spacing-sm) text-(--primary)"
       @click="toggleTheme"
     >
       Toggle theme
@@ -195,7 +195,7 @@ For `/webkit-theming-dark-mode <file>`, list gaps grouped by element. Each:
 ```
 ✗ WorkloadCard.vue:14  class="bg-white text-zinc-900 border-slate-200"
   theme: hard-coded light values — dark renders white-on-dark, unreadable.
-  fix: bg-[var(--bg-surface)] text-[var(--text-default)] border-[var(--border-default)]
+  fix: bg-(--bg-surface) text-(--text-default) border-(--border-default)
 ```
 
 End with: `theme-safe (both themes)` or `N gaps — fix before verifying`.

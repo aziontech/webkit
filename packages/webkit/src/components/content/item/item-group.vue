@@ -29,7 +29,7 @@
     role="list"
     data-slot="item-group"
     :data-testid="testId"
-    class="group/item-group flex flex-col gap-[var(--spacing-lg)]"
+    class="group/item-group flex flex-col gap-(--spacing-lg)"
   >
     <slot />
   </div>

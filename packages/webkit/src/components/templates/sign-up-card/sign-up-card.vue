@@ -74,7 +74,7 @@
 
   const rootClass = computed(() => {
     const classes = [
-      'flex w-full max-w-[var(--container-sm)] flex-col items-center gap-[var(--spacing-xs)]'
+      'flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-xs)'
     ]
 
     if (attrs.class) {
@@ -86,48 +86,48 @@
 
   const cardClass = [
     'flex w-full shrink-0 flex-col items-start overflow-clip',
-    'rounded-[var(--shape-card)] border border-[length:var(--border-width-default,1px)]',
-    'border-[var(--border-default)] bg-[var(--bg-surface)]'
+    'rounded-(--shape-card) border border-[length:var(--border-width-default,1px)]',
+    'border-(--border-default) bg-(--bg-surface)'
   ]
 
   const contentClass = [
-    'flex w-full shrink-0 flex-col items-start gap-[var(--spacing-xl)]',
-    'px-[var(--spacing-xl)] py-[var(--spacing-xl)]'
+    'flex w-full shrink-0 flex-col items-start gap-(--spacing-xl)',
+    'px-(--spacing-xl) py-(--spacing-xl)'
   ]
 
   const headerClass = [
-    'flex w-full max-w-[var(--container-sm)] shrink-0 flex-col items-start',
-    'gap-[var(--spacing-xs)] [word-break:break-word]'
+    'flex w-full max-w-(--container-sm) shrink-0 flex-col items-start',
+    'gap-(--spacing-xs) [word-break:break-word]'
   ]
 
-  const titleClass = 'text-heading-sm w-full text-[var(--text-default)] [word-break:break-word]'
+  const titleClass = 'text-heading-sm w-full text-(--text-default) [word-break:break-word]'
 
-  const subtitleClass = 'text-body-sm w-full text-[var(--text-muted)] [word-break:break-word]'
+  const subtitleClass = 'text-body-sm w-full text-(--text-muted) [word-break:break-word]'
 
-  const actionsClass = ['flex w-full shrink-0 flex-col items-start gap-[var(--spacing-xl)]']
+  const actionsClass = ['flex w-full shrink-0 flex-col items-start gap-(--spacing-xl)']
 
-  const socialClass = 'flex w-full shrink-0 flex-col items-start gap-[var(--spacing-sm)]'
+  const socialClass = 'flex w-full shrink-0 flex-col items-start gap-(--spacing-sm)'
 
   const dividerClass = [
     'm-0 w-full shrink-0 border-0',
-    'border-t border-[length:var(--border-width-default,1px)] border-t-[var(--border-default)]'
+    'border-t border-[length:var(--border-width-default,1px)] border-t-(--border-default)'
   ]
 
   const legalClass =
-    'text-body-sm w-full shrink-0 text-center text-[var(--text-muted)] [word-break:break-word]'
+    'text-body-sm w-full shrink-0 text-center text-(--text-muted) [word-break:break-word]'
 
   const linkClass =
-    'text-[var(--text-link)] transition-colors hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)] rounded-[var(--shape-button)]'
+    'text-(--text-link) transition-colors hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) rounded-(--shape-button)'
 
-  const footerClass = 'flex w-full shrink-0 items-center justify-center gap-[var(--spacing-xs)]'
+  const footerClass = 'flex w-full shrink-0 items-center justify-center gap-(--spacing-xs)'
 
   const footerPromptClass =
-    'text-body-sm shrink-0 text-center text-[var(--text-muted)] whitespace-nowrap'
+    'text-body-sm shrink-0 text-center text-(--text-muted) whitespace-nowrap'
 
   const signInLinkClass = [
-    'text-body-sm inline-flex h-10 shrink-0 items-center text-[var(--text-link)]',
-    'rounded-[var(--shape-button)] transition-colors hover:text-[var(--text-default)]',
-    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)]'
+    'text-body-sm inline-flex h-10 shrink-0 items-center text-(--text-link)',
+    'rounded-(--shape-button) transition-colors hover:text-(--text-default)',
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color)'
   ]
 
   const onGithubClick = (event) => emit('github-click', event)
