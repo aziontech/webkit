@@ -21,14 +21,9 @@
     test: RegExp | ((value: string) => boolean)
     /** Overrides the satisfied glyph for this rule alone. Empty string renders none. */
     icon?: string
-    /** Overrides the unmet-and-invalid glyph for this rule alone. Empty string renders none. */
-    invalidIcon?: string
     /** Overrides the not-yet-satisfied glyph for this rule alone. Empty string renders none. */
     pendingIcon?: string
   }
-
-  /** Per-chip state. `failed` is an unmet rule once the field is showing errors. */
-  export type PasswordRequirementState = 'unmet' | 'met' | 'failed'
 
   interface Props {
     /** Rules rendered as chips, one per entry. An empty array renders nothing. */
@@ -39,14 +34,10 @@
     value?: string
     /** Id the caption carries so the group can point at it with aria-labelledby. */
     titleId?: string
-    /** Switches every unmet rule to the error treatment; set it after a failed submit. */
-    invalid?: boolean
     /** Glyph for a satisfied rule. */
     icon?: string
     /** Glyph for a rule not yet satisfied. Empty by default: nothing shows while typing. */
     pendingIcon?: string
-    /** Glyph for an unmet rule while `invalid` is set. */
-    invalidIcon?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -54,10 +45,8 @@
     title: 'Must contain:',
     value: '',
     titleId: '',
-    invalid: false,
     icon: 'pi pi-check',
-    pendingIcon: '',
-    invalidIcon: 'pi pi-times'
+    pendingIcon: ''
   })
 
   const attrs = useAttrs()
@@ -80,17 +69,13 @@
               : requirement.test
             ).test(props.value)
 
-      const state: PasswordRequirementState = met ? 'met' : props.invalid ? 'failed' : 'unmet'
-      // A rule may override any of the three glyphs for itself; `''` means "render none",
+      // A rule may override either of its two glyphs for itself; `''` means "render none",
       // so `??` (not `||`) is what lets an entry opt out without falling back to the prop.
-      const icon =
-        state === 'met'
-          ? (requirement.icon ?? props.icon)
-          : state === 'failed'
-            ? (requirement.invalidIcon ?? props.invalidIcon)
-            : (requirement.pendingIcon ?? props.pendingIcon)
+      const icon = met
+        ? (requirement.icon ?? props.icon)
+        : (requirement.pendingIcon ?? props.pendingIcon)
 
-      return { label: requirement.label, met, state, icon }
+      return { label: requirement.label, met, icon }
     })
   )
 </script>
@@ -125,23 +110,18 @@
       v-for="requirement in evaluated"
       :key="requirement.label"
       :data-validated="requirement.met || null"
-      :data-state="requirement.state"
       :data-testid="`${testId}-chip`"
-      class="group inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=unmet]:bg-[var(--bg-surface-raised)] data-[state=unmet]:text-[var(--text-muted)] data-[state=met]:bg-[var(--success)] data-[state=met]:text-[var(--text-default)] data-[state=failed]:bg-[var(--danger)] data-[state=failed]:text-[var(--danger-contrast)]"
+      class="group inline-flex shrink-0 items-center justify-center gap-[var(--spacing-xxs)] min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none bg-[var(--bg-surface-raised)] text-[var(--text-muted)] data-[validated]:bg-[var(--success)] data-[validated]:text-[var(--text-default)]"
     >
-      <!-- The 14px box is ALWAYS rendered; only the glyph inside it is conditional. That
-           is the one thing that keeps a chip a constant width, and a constant chip is the
-           only way the field never changes width: measured in an auto-width host, mounting
-           the box on demand took the input from 353.4px to 368.0px, and with the box
-           reserved it stays at 368.0px. `w-0 min-w-full` and `contain: inline-size` were
-           both tried on the row instead and neither helped, because the row's content
-           still feeds the ancestor's intrinsic width. The cost is a small gap before the
-           label while a rule shows no glyph, which is the price of the guarantee. Only
-           `opacity` and `transform` animate; neither participates in layout. -->
+      <!-- Two states, matching Figma: a satisfied rule gets `var(--success)` plus the check
+           glyph, an unsatisfied one gets `var(--bg-surface-raised)` and no glyph at all. The
+           glyph is conditional, so an unsatisfied chip reserves no box and carries no empty
+           space; the chip is therefore wider once it is satisfied, which is what the design
+           shows. Only `opacity` animates here, and it does not participate in layout. -->
       <i
         v-if="requirement.icon"
         :class="requirement.icon"
-        class="flex shrink-0 items-center justify-center size-[14px] scale-75 opacity-0 transition-[opacity,transform] duration-fast-02 ease-productive-entrance group-data-[state=failed]:scale-100 group-data-[state=failed]:opacity-100 group-data-[state=met]:scale-100 group-data-[state=met]:opacity-100 group-data-[state=unmet]:scale-100 group-data-[state=unmet]:opacity-60 motion-reduce:transition-none"
+        class="flex shrink-0 items-center justify-center size-[14px] opacity-60 transition-opacity duration-fast-02 ease-productive-entrance group-data-[validated]:opacity-100 motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ requirement.label }}

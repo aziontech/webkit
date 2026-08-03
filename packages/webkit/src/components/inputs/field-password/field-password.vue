@@ -57,8 +57,6 @@
     requirementsIcon?: string
     /** Glyph for a rule chip not yet satisfied. */
     requirementsPendingIcon?: string
-    /** Glyph for an unmet rule chip while the field is invalid. */
-    requirementsInvalidIcon?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -78,8 +76,7 @@
     requirements: () => [],
     requirementsTitle: 'Must contain:',
     requirementsIcon: 'pi pi-check',
-    requirementsPendingIcon: '',
-    requirementsInvalidIcon: 'pi pi-times'
+    requirementsPendingIcon: ''
   })
 
   const emit = defineEmits<{
@@ -182,10 +179,8 @@
       :title="requirementsTitle"
       :value="modelValue"
       :title-id="requirementsTitleId"
-      :invalid="invalid"
       :icon="requirementsIcon"
       :pending-icon="requirementsPendingIcon"
-      :invalid-icon="requirementsInvalidIcon"
       :data-testid="`${testId}__requirements`"
     />
   </div>

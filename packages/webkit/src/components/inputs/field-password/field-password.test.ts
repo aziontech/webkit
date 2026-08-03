@@ -296,6 +296,48 @@ describe('FieldPassword', () => {
       expect(glyph(chips[2])).toContain('pi-minus')
     })
 
+    it('evaluates a g-flagged pattern consistently across re-renders', async () => {
+      // A `g` RegExp carries `lastIndex` between `test()` calls, so without the rebuild
+      // guard the same value would alternate satisfied/unsatisfied as the row re-evaluates.
+      const Host = {
+        components: { FieldPassword },
+        data: () => ({ value: '', rules: [{ label: 'Number', test: /\d/g }] }),
+        template: '<FieldPassword v-model="value" label="Password" :requirements="rules" />'
+      }
+
+      const { getByTestId, getAllByTestId } = render(Host)
+      const input = getByTestId('input-field-password__input')
+      const chip = () => getAllByTestId('input-field-password__requirements-chip')[0]
+
+      await fireEvent.update(input, 'a1')
+      expect(chip()).toHaveAttribute('data-validated')
+
+      // Same value, another evaluation pass: a leaking lastIndex would flip it back.
+      await fireEvent.update(input, 'a1b')
+      expect(chip()).toHaveAttribute('data-validated')
+      await fireEvent.update(input, 'a1bc')
+      expect(chip()).toHaveAttribute('data-validated')
+    })
+
+    it('honours both branches of a predicate test', () => {
+      const rules = [{ label: 'Not your email', test: (value: string) => value !== 'a@b.co' }]
+
+      const blocked = render(FieldPassword, {
+        props: { label: 'Password', requirements: rules, modelValue: 'a@b.co' }
+      })
+      expect(
+        blocked.getAllByTestId('input-field-password__requirements-chip')[0]
+      ).not.toHaveAttribute('data-validated')
+      blocked.unmount()
+
+      const allowed = render(FieldPassword, {
+        props: { label: 'Password', requirements: rules, modelValue: 'something-else' }
+      })
+      expect(allowed.getAllByTestId('input-field-password__requirements-chip')[0]).toHaveAttribute(
+        'data-validated'
+      )
+    })
+
     it('lets a rule opt out of the satisfied glyph with an empty override', () => {
       const { getAllByTestId } = render(FieldPassword, {
         props: {
@@ -306,12 +348,12 @@ describe('FieldPassword', () => {
       })
 
       const chip = getAllByTestId('input-field-password__requirements-chip')[0]
-      expect(chip).toHaveAttribute('data-state', 'met')
+      expect(chip).toHaveAttribute('data-validated')
       // The box stays (constant width); the glyph does not.
       expect(chip.querySelector('i')?.className ?? '').not.toContain('pi-')
     })
 
-    it('switches unmet rules to the failed state when the field is invalid', () => {
+    it('leaves the chips untouched by the field being invalid', () => {
       const { getAllByTestId } = render(FieldPassword, {
         props: {
           label: 'Password',
@@ -321,20 +363,19 @@ describe('FieldPassword', () => {
         }
       })
 
-      const chips = getAllByTestId('input-field-password__requirements-chip')
-      // The satisfied rule stays met; the two unmet ones move to the error treatment.
-      expect(chips[0]).toHaveAttribute('data-state', 'met')
-      expect(chips[1]).toHaveAttribute('data-state', 'failed')
-      expect(chips[2]).toHaveAttribute('data-state', 'failed')
-    })
-
-    it('keeps unmet rules neutral while the field is not invalid', () => {
-      const { getAllByTestId } = render(FieldPassword, {
-        props: { label: 'Password', requirements: RULES, modelValue: 'abcdefgh' }
-      })
+      const glyph = (chip: HTMLElement) => chip.querySelector('i')?.className ?? ''
 
       const chips = getAllByTestId('input-field-password__requirements-chip')
-      expect(chips[1]).toHaveAttribute('data-state', 'unmet')
+      // The field's invalid drives the input border and the helper, never the chips: the
+      // satisfied rule keeps its check, and the unmet ones stay exactly as they are while
+      // typing — no extra state attribute and no error glyph.
+      expect(chips[0]).toHaveAttribute('data-validated')
+      expect(glyph(chips[0])).toContain('pi-check')
+
+      for (const chip of [chips[1], chips[2]]) {
+        expect(chip).not.toHaveAttribute('data-validated')
+        expect(glyph(chip)).not.toContain('pi-')
+      }
     })
 
     it('accepts a predicate as the test, not only a RegExp', () => {

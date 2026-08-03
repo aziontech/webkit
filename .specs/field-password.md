@@ -4,12 +4,12 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: a2675906e498b02562d5948bf9220a563a4cbcc437a9ad01fd80bf37ad2650ca
+checksum: 5da97f726db4f134471c14bc37e81f0a748571ba8d1bc6a5402fce3d60afd66c
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
 created: 2026-06-17
-last_updated: 2026-07-31
+last_updated: 2026-08-03
 ---
 
 # Field Password — Component Spec
@@ -71,11 +71,10 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 | `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
 | `requirementsIcon` | `string` | `'pi pi-check'` | no | Glyph for a satisfied rule chip. |
 | `requirementsPendingIcon` | `string` | `''` | no | Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so a chip never carries an empty space. The chip does grow when its glyph mounts. In a field with a definite width both guarantees hold together (measured: the input stays at 274.0px through the whole transition, with no empty box). In an auto-width host the field's width is derived from the row's own content, so the growth reaches it (353.4px to 368.0px); giving the field a width is what resolves that, and `contain: inline-size` on the row was tried and rejected because it changed the field's resting width. |
-| `requirementsInvalidIcon` | `string` | `'pi pi-times'` | no | Glyph for an unmet rule chip while `invalid` is set. |
 
-`PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean); icon?: string; pendingIcon?: string; invalidIcon?: string }`
+`PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean); icon?: string; pendingIcon?: string }`
 
-The three glyphs are configurable on two levels: the `requirements*Icon` props set the default for the row, and any entry of the validation object overrides its own. An empty string means "render none", so a rule can opt out of a glyph entirely (`??` resolves the override, not `||`, so `''` is honoured). Nothing is red until `invalid` is set: while typing, an unmet rule carries neither glyph nor error colour.
+Both glyphs are configurable on two levels: the `requirements*Icon` props set the default for the row, and any entry of the validation object overrides its own. An empty string means "render none", so a rule can opt out of a glyph entirely (`??` resolves the override, not `||`, so `''` is honoured). A chip has exactly two treatments — unsatisfied and satisfied — and the field's own `invalid` never reaches them: it drives the input border and the helper, while the chips keep reporting what the current value does and does not satisfy.
 
 ## Events
 
@@ -97,20 +96,17 @@ The three glyphs are configurable on two levels: the `requirements*Icon` props s
 - `data-invalid` mirrors the `invalid` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-has-requirements` mirrors a non-empty `requirements` array; it is the presence flag for the requirements row
-- Per requirement chip: `data-state` is `met` / `unmet` / `failed` and drives the treatment; `failed` is an unmet rule while `invalid` is set (danger tokens + the X glyph), which is the after-a-failed-submit surface. `data-validated` is kept alongside it for satisfied chips
+- Per requirement chip: `data-validated` is present on a rule the current value satisfies and is the single switch between the two chip treatments — present is satisfied (check glyph + success tokens), absent is unsatisfied (muted tokens)
 
 ## Motion & Animations
 
 | Trigger                                                                         | Animation / Transition                    | Token  | Reduced-motion fallback         |
 | ------------------------------------------------------------------------------- | ----------------------------------------- | ------ | ------------------------------- |
 | requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
-| glyph on a rule changing state, unmet / met / failed (opacity + scale only) | `transition-[opacity,transform] duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
+| check glyph revealed when a rule becomes satisfied (opacity only) | `transition-opacity duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
 | field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword` | —      | —                               |
 
-**No animation here changes a size or moves a line break.** The check glyph is always in
-flow with a reserved fixed box, so a chip is the same width whether its rule is met or
-not, and only `opacity` / `transform` animate (both composited, neither participating in
-layout). Mounting the glyph on satisfaction was tried and rejected: it widened the chip,
+**No animation here changes a size or moves a line break.** The check glyph is rendered only for a satisfied rule, so an unsatisfied chip reserves no box and shows no empty space; the chip is wider once satisfied, which is what the design shows. Mounting the glyph on satisfaction was tried and rejected: it widened the chip,
 pushed every chip after it, and could re-wrap the row mid-transition. For the same reason
 the row animates neither `height` nor `width`.
 
@@ -136,7 +132,7 @@ the prop, never by composing it.
 | requirement chip (unsatisfied) — text                               | `var(--text-muted)`        |
 | requirement chip (satisfied) — surface                              | `var(--success)`           |
 | requirement chip (satisfied) — text                                 | `var(--text-default)`      |
-| requirement chip (satisfied) — check glyph                          | `var(--success-contrast)`  |
+| requirement chip (satisfied) — check glyph                          | inherits `var(--text-default)` from the chip |
 
 (Typography and color tokens of the field itself are owned by the children — `Label`, `InputPassword`, `HelperText` — and not redeclared here.)
 
@@ -168,7 +164,6 @@ the prop, never by composing it.
 - Disabled — `disabled: true`; documents the lock-icon helper and disabled input tokens.
 - Toggle — composite story with `toggleable=true` (default) and `toggleable=false` side by side; documents the toggle pass-through.
 - Icons — documents the `#iconLeft` slot forwarded to the underlying `InputPassword` (with `pi pi-lock`).
-- RequirementsInvalid — justification: the error surface is a third chip state (`failed`) that no other story reaches; it is what a consumer sees after a submit blocked on unmet rules.
 - Requirements — justification: the requirements row is a two-state axis (satisfied / not) that no single-value story can show. This composite renders one field with a partially-satisfied rule set beside one with none satisfied, which is the only way to document both chip treatments and the wrapping behaviour of the row; it also documents the `requirementsTitle` override.
 
 ## Constraints — DO NOT

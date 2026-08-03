@@ -6173,13 +6173,6 @@
           "default": "''",
           "required": "no",
           "doc": "Glyph for a rule chip not yet satisfied. Empty by default: nothing shows while a rule is being typed, and no box is reserved, so a chip never carries an empty space. The chip does grow when its glyph mounts. In a field with a definite width both guarantees hold together (measured: the input stays at 274.0px through the whole transition, with no empty box). In an auto-width host the field's width is derived from the row's own content, so the growth reaches it (353.4px to 368.0px); giving the field a width is what resolves that, and `contain: inline-size` on the row was tried and rejected because it changed the field's resting width."
-        },
-        {
-          "name": "requirementsInvalidIcon",
-          "type": "string",
-          "default": "'pi pi-times'",
-          "required": "no",
-          "doc": "Glyph for an unmet rule chip while `invalid` is set."
         }
       ],
       "events": [
