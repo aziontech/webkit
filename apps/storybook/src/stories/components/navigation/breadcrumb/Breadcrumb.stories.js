@@ -160,7 +160,10 @@ const LONG_LABEL_LINES = [
   ']'
 ]
 
-const LONG_LABEL_MARKUP = '<Breadcrumb :items="items" class="max-w-[20rem]" />'
+// No width cap: the trail takes the space it is given, so the label ellipsizes only when
+// the viewport genuinely lacks room. A hardcoded `max-w` made it truncate at any window
+// size, which read as the component truncating with space to spare.
+const LONG_LABEL_MARKUP = '<Breadcrumb :items="items" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Breadcrumb.Root>} */
 export const LongLabel = {
@@ -176,7 +179,7 @@ export const LongLabel = {
       controls: { disable: true },
       description: {
         story:
-          'A segment wider than the space available. It ellipsizes instead of pushing the trail off-screen, and the row stays a single line. Collapsing cannot help here: there are no middle segments to hide.'
+          'A segment far wider than the trail. It ellipsizes only once the row runs out of space, and the row stays a single line; widen the viewport and the label grows back. Collapsing cannot help here: there are no middle segments to hide.'
       },
       source: { code: toSfc([IMPORT, '', ...LONG_LABEL_LINES], LONG_LABEL_MARKUP) }
     }
