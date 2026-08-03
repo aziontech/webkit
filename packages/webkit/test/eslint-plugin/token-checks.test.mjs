@@ -76,9 +76,6 @@ test('the one-level nesting limit is pinned', () => {
   assert.ok(!found.includes('zero-unit-in-calc'), 'zero-unit-in-calc cannot see this deep')
 })
 
-// ENG-47001: the six `[`-keyed guardrails must catch the canonical v4 paren spelling
-// (`prop-(…)`) too — accepting the IntelliSense suggestion must not walk through the
-// typography / motion / animation gates. Each case is checked in both spellings.
 test('the arbitrary-value guardrails catch the paren spelling as well as the bracket spelling', () => {
   const cases = [
     ['typography-raw-length', 'text-[length:var(--text-body-md)]', 'text-(length:--text-body-md)'],
@@ -108,9 +105,6 @@ test('the paren spellings named in ENG-47001 acceptance are all caught', () => {
 })
 
 test('the widened guardrails do not fire on the canonical whole-value paren token', () => {
-  // `bg-(--primary)` and friends (family A) are the sanctioned canonical form — the
-  // motion/typography guards key on their own prefixes, so a plain color/spacing token
-  // in paren form must stay silent.
   for (const content of ['bg-(--primary)', 'max-w-(--container-2xl)', 'ring-offset-(--bg-canvas)']) {
     const found = ids(content)
     for (const id of [
