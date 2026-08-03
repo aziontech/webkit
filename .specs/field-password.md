@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: b80411dff8ffd8a5a3e415bad346f022112c28bd85b0ab044bf4af876e6b26af
+checksum: df9be1ae838e57479865612bee1847785546dde5473e5b80540274e2ce15e99d
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -18,7 +18,7 @@ last_updated: 2026-07-31
 
 Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.
 
-It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per entry of the `requirements` array, each switching to a satisfied treatment (check glyph + success tokens) when its `validated` flag is true. This is the "strength meter" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The component renders the row; **evaluating** the rules against the current value stays in the consuming application, which passes the already-computed `validated` flags down (see `.claude/rules/component-states.md` — the DS renders states, the app supplies the trigger).
+It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per entry of the `requirements` array, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that entry's `test`. This is the "strength meter" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The consumer supplies the **rules**; the field **evaluates** them against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: the rules are the trigger the app supplies, and applying them to the bound value is derived render state, not business logic the field invents.
 
 ## Usage
 
@@ -31,9 +31,9 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 
   // The application evaluates the rules; the field only renders them.
   const requirements = computed(() => [
-    { label: '8-128 characters', validated: password.value.length >= 8 },
-    { label: 'Uppercase letter', validated: /[A-Z]/.test(password.value) },
-    { label: 'Number', validated: /\d/.test(password.value) }
+    { label: '8-128 characters', test: /^.{8,128}$/ },
+    { label: 'Uppercase letter', test: /[A-Z]/ },
+    { label: 'Number', test: /\d/ }
   ])
 </script>
 
@@ -67,10 +67,10 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 | `autocomplete`      | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no       | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows.                                                                                                                                                                                 |
 | `inputId`           | `string`                                        | `''`                 | no       | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring.                                                                                                                                                                                                               |
 | `name`              | `string`                                        | `''`                 | no       | HTML name for the underlying input (form + vee-validate integration).                                                                                                                                                                                                                                  |
-| `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. An entry with `validated: true` renders the satisfied treatment (check glyph + success tokens); otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
+| `requirements`      | `PasswordRequirement[]`                         | `() => []`           | no       | Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. When the array is empty the whole requirements row — caption included — is omitted. |
 | `requirementsTitle` | `string`                                        | `'Must contain:'`    | no       | Caption that opens the requirements row and names the group for assistive tech. Rendered only when `requirements` is non-empty.                                                                                                                                                                        |
 
-`PasswordRequirement`: `{ label: string; validated: boolean }`
+`PasswordRequirement`: `{ label: string; test: RegExp | ((value: string) => boolean) }`
 
 ## Events
 
@@ -92,7 +92,7 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 - `data-invalid` mirrors the `invalid` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-has-requirements` mirrors a non-empty `requirements` array; it is the presence flag for the requirements row
-- Per requirement chip: `data-validated` mirrors that entry's `validated` flag and drives the satisfied treatment
+- Per requirement chip: `data-validated` is present when the current value satisfies that entry's `test`, and drives the satisfied treatment
 
 ## Motion & Animations
 
@@ -149,7 +149,7 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 - Disabled — `disabled: true`; documents the lock-icon helper and disabled input tokens.
 - Toggle — composite story with `toggleable=true` (default) and `toggleable=false` side by side; documents the toggle pass-through.
 - Icons — documents the `#iconLeft` slot forwarded to the underlying `InputPassword` (with `pi pi-lock`).
-- Requirements — justification: the requirements row is a two-state axis (`validated` true/false) that no single-value story can show. This composite renders one field with a partially-satisfied rule set beside one with none satisfied, which is the only way to document both chip treatments and the wrapping behaviour of the row; it also documents the `requirementsTitle` override.
+- Requirements — justification: the requirements row is a two-state axis (satisfied / not) that no single-value story can show. This composite renders one field with a partially-satisfied rule set beside one with none satisfied, which is the only way to document both chip treatments and the wrapping behaviour of the row; it also documents the `requirementsTitle` override.
 
 ## Constraints — DO NOT
 

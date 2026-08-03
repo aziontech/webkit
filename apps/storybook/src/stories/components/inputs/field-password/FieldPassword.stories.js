@@ -1,6 +1,6 @@
 import Button from '@aziontech/webkit/button'
 import FieldPassword from '@aziontech/webkit/field-password'
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -27,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern. It also owns the password-requirements row: a captioned, wrapping set of rule chips driven by the `requirements` array, each switching to a satisfied treatment when its `validated` flag is true. Evaluating the rules stays in the application — the field renders the outcome.'
+          'Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern. It also owns the password-requirements row: a captioned, wrapping set of rule chips driven by the `requirements` array, each switching to a satisfied treatment as soon as the value in the field satisfies its `test`. The consumer supplies the rules; the field evaluates them against the value it already owns, so the chips track what is typed with no wiring.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -117,7 +117,7 @@ const meta = {
     requirements: {
       control: 'object',
       description:
-        'Password rules rendered as a wrapping chip row under the field, one chip per entry. An entry with `validated: true` renders the satisfied treatment (check glyph + success tokens). Empty array omits the whole row. The application evaluates the rules; the field only renders them.',
+        'Password rules rendered as a wrapping chip row under the field, one chip per entry. Each entry carries a `test` (a RegExp or a `(value) => boolean` predicate) that the field evaluates against the current value; a satisfied rule renders the check glyph plus success tokens. Empty array omits the whole row.',
       table: {
         category: 'props',
         type: { summary: 'PasswordRequirement[]' },
@@ -164,11 +164,11 @@ const meta = {
     toggleable: true,
     autocomplete: 'current-password',
     requirements: [
-      { label: '8-128 characters', validated: false },
-      { label: 'Uppercase letter', validated: false },
-      { label: 'Special character', validated: false },
-      { label: 'Number', validated: false },
-      { label: 'Lowercase letter', validated: false }
+      { label: '8-128 characters', test: /^.{8,128}$/ },
+      { label: 'Uppercase letter', test: /[A-Z]/ },
+      { label: 'Special character', test: /[^A-Za-z0-9]/ },
+      { label: 'Number', test: /\d/ },
+      { label: 'Lowercase letter', test: /[a-z]/ }
     ],
     requirementsTitle: 'Must contain:'
   }
@@ -180,12 +180,12 @@ export default meta
 // snippets so the panel never drifts from the canvas.
 const RULES_SCRIPT = [
   'const requirements = ref([',
-  "  { label: '8-128 characters', validated: false },",
-  "  { label: 'Uppercase letter', validated: false },",
-  "  { label: 'Special character', validated: false },",
-  "  { label: 'Number', validated: false },",
-  "  { label: 'Lowercase letter', validated: false }",
-  '])'
+  "  { label: '8-128 characters', test: /^.{8,128}$/ },",
+  "  { label: 'Uppercase letter', test: /[A-Z]/ },",
+  "  { label: 'Special character', test: /[^A-Za-z0-9]/ },",
+  "  { label: 'Number', test: /\\d/ },",
+  "  { label: 'Lowercase letter', test: /[a-z]/ }",
+  ']'
 ]
 
 const Template = (args) => ({
@@ -459,19 +459,19 @@ export const Icons = {
 }
 
 const REQUIREMENTS_SCRIPT = [
-  "import { computed, ref } from 'vue'",
+  "import { ref } from 'vue'",
   IMPORT,
   '',
   "const password = ref('')",
   '',
-  '// The application owns the rules; the field only renders their outcome.',
-  'const requirements = computed(() => [',
-  "  { label: '8-128 characters', validated: password.value.length >= 8 && password.value.length <= 128 },",
-  "  { label: 'Uppercase letter', validated: /[A-Z]/.test(password.value) },",
-  "  { label: 'Special character', validated: /[^A-Za-z0-9]/.test(password.value) },",
-  "  { label: 'Number', validated: /\\d/.test(password.value) },",
-  "  { label: 'Lowercase letter', validated: /[a-z]/.test(password.value) }",
-  '])'
+  '// The rules are plain data; the field evaluates them against its own value.',
+  'const requirements = [',
+  "  { label: '8-128 characters', test: /^.{8,128}$/ },",
+  "  { label: 'Uppercase letter', test: /[A-Z]/ },",
+  "  { label: 'Special character', test: /[^A-Za-z0-9]/ },",
+  "  { label: 'Number', test: /\\d/ },",
+  "  { label: 'Lowercase letter', test: /[a-z]/ }",
+  ']'
 ]
 const REQUIREMENTS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
   <FieldPassword
@@ -487,9 +487,9 @@ const REQUIREMENTS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
     autocomplete="new-password"
     requirements-title="Deve conter:"
     :requirements="[
-      { label: '8-128 caracteres', validated: true },
-      { label: 'Letra maiúscula', validated: true },
-      { label: 'Número', validated: false }
+      { label: '8-128 caracteres', test: /^.{8,128}$/ },
+      { label: 'Letra maiúscula', test: /[A-Z]/ },
+      { label: 'Número', test: /\\d/ }
     ]"
   />
 </div>`
@@ -501,16 +501,13 @@ export const Requirements = {
     setup() {
       const password = ref('')
 
-      const requirements = computed(() => [
-        {
-          label: '8-128 characters',
-          validated: password.value.length >= 8 && password.value.length <= 128
-        },
-        { label: 'Uppercase letter', validated: /[A-Z]/.test(password.value) },
-        { label: 'Special character', validated: /[^A-Za-z0-9]/.test(password.value) },
-        { label: 'Number', validated: /\d/.test(password.value) },
-        { label: 'Lowercase letter', validated: /[a-z]/.test(password.value) }
-      ])
+      const requirements = [
+        { label: '8-128 characters', test: /^.{8,128}$/ },
+        { label: 'Uppercase letter', test: /[A-Z]/ },
+        { label: 'Special character', test: /[^A-Za-z0-9]/ },
+        { label: 'Number', test: /\d/ },
+        { label: 'Lowercase letter', test: /[a-z]/ }
+      ]
 
       return { password, requirements }
     },
@@ -521,7 +518,7 @@ export const Requirements = {
       controls: { disable: true },
       description: {
         story:
-          "The requirements row. **Type in the first field** to watch each chip flip to the satisfied treatment (`pi pi-check` glyph + `var(--success)` surface) as its rule is met — the shape change, not just the color, is what keeps the state readable without relying on color alone. The row wraps at the field width, and its caption names the group for assistive tech. The second field shows a fixed, partially-satisfied set with an overridden `requirements-title`. Evaluating the rules is the application's job: the field renders whatever `validated` flags it is handed."
+          "The requirements row. **Type in the first field** to watch each chip flip to the satisfied treatment (`pi pi-check` glyph + `var(--success)` surface) as its rule is met — the shape change, not just the color, is what keeps the state readable without relying on color alone. The row wraps at the field width, and its caption names the group for assistive tech. The second field shows the same mechanism with a localized caption via `requirements-title`. Both fields pass plain rule data: the field evaluates each `test` against its own value, so nothing has to be recomputed by the consumer."
       },
       source: { code: toSfc(REQUIREMENTS_SCRIPT, REQUIREMENTS_TEMPLATE) }
     }

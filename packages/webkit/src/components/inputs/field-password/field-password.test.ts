@@ -53,8 +53,8 @@ describe('FieldPassword', () => {
       components: { FieldPassword },
       template: `
         <div>
-          <FieldPassword label="Password" helper-text="Hint" :requirements="[{ label: 'Number', validated: false }]" />
-          <FieldPassword label="Confirm" helper-text="Hint" :requirements="[{ label: 'Number', validated: false }]" />
+          <FieldPassword label="Password" helper-text="Hint" :requirements="[{ label: 'Number', test: /\\d/ }]" />
+          <FieldPassword label="Confirm" helper-text="Hint" :requirements="[{ label: 'Number', test: /\\d/ }]" />
         </div>
       `
     }
@@ -226,10 +226,11 @@ describe('FieldPassword', () => {
   })
 
   describe('requirements', () => {
+    // The rules carry their test; the field evaluates them against its own value.
     const RULES = [
-      { label: '8-128 characters', validated: true },
-      { label: 'Uppercase letter', validated: false },
-      { label: 'Number', validated: false }
+      { label: '8-128 characters', test: /^.{8,128}$/ },
+      { label: 'Uppercase letter', test: /[A-Z]/ },
+      { label: 'Number', test: /\d/ }
     ]
 
     it('omits the whole requirements row when the array is empty', () => {
@@ -259,33 +260,62 @@ describe('FieldPassword', () => {
       ])
     })
 
-    it('marks only the satisfied entries data-validated', () => {
+    it('marks data-validated only on the rules the current value satisfies', () => {
       const { getAllByTestId } = render(FieldPassword, {
-        props: { label: 'Password', requirements: RULES }
+        // 8 chars, lowercase only: satisfies the length rule, neither of the others.
+        props: { label: 'Password', requirements: RULES, modelValue: 'abcdefgh' }
       })
 
       const chips = getAllByTestId('input-field-password__requirement')
-      // `validated || null` → the attribute exists only on satisfied entries.
+      // `met || null` → the attribute exists only on satisfied entries.
       expect(chips[0]).toHaveAttribute('data-validated')
       expect(chips[1]).not.toHaveAttribute('data-validated')
       expect(chips[2]).not.toHaveAttribute('data-validated')
     })
 
-    it('re-renders the chip state when the validated flags change', async () => {
-      const { getAllByTestId, rerender } = render(FieldPassword, {
-        props: { label: 'Password', requirements: RULES }
+    it('accepts a predicate as the test, not only a RegExp', () => {
+      const { getAllByTestId } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          requirements: [{ label: 'Not your email', test: (value: string) => value !== 'a@b.co' }],
+          modelValue: 'a@b.co'
+        }
       })
 
-      expect(getAllByTestId('input-field-password__requirement')[1]).not.toHaveAttribute(
+      expect(getAllByTestId('input-field-password__requirement')[0]).not.toHaveAttribute(
         'data-validated'
       )
+    })
 
-      await rerender({
-        requirements: RULES.map((rule) => ({ ...rule, validated: true }))
-      })
+    it('re-evaluates every rule as the user types, with no consumer wiring', async () => {
+      // The field is controlled (a `modelValue` prop + `update:modelValue`, like the
+      // rest of the field-* family), so a realistic host binds `v-model`. That binding
+      // is the ONLY thing the consumer does — it never recomputes a rule.
+      const Host = {
+        components: { FieldPassword },
+        data: () => ({ value: '', rules: RULES }),
+        template: '<FieldPassword v-model="value" label="Password" :requirements="rules" />'
+      }
 
+      const { getAllByTestId, getByTestId } = render(Host)
+
+      // Empty value satisfies nothing.
+      for (const chip of getAllByTestId('input-field-password__requirement')) {
+        expect(chip).not.toHaveAttribute('data-validated')
+      }
+
+      await fireEvent.update(getByTestId('input-field-password__input'), 'Abcdefg1')
+
+      // 8 chars, an uppercase and a digit: all three flip, driven only by the value.
       for (const chip of getAllByTestId('input-field-password__requirement')) {
         expect(chip).toHaveAttribute('data-validated')
+      }
+
+      await fireEvent.update(getByTestId('input-field-password__input'), 'abc')
+
+      // And back down again when the value stops satisfying them.
+      for (const chip of getAllByTestId('input-field-password__requirement')) {
+        expect(chip).not.toHaveAttribute('data-validated')
       }
     })
 
