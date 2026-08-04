@@ -48,6 +48,8 @@
 // nothing on screen, while the Applications module lists this same app as
 // `webkit-sample-vue` (id 1784552864). Using the console's record is what lets
 // the deployment row link to a page that exists.
+import { ref } from 'vue'
+
 import { daysAgo, formatListDate, hoursAgo } from './dates'
 import { authorAt, emailOf } from './people'
 
@@ -605,8 +607,246 @@ export const DEPLOYMENTS = [
   }
 })
 
-/** A deployment by its id, or `undefined` — also the "has a deploy page?" test. */
-export const deployById = (id) => DEPLOYMENTS.find((deploy) => deploy.id === id)
+// ── Deployments started from the Console ───────────────────────────────────
+// The two seeded records above carry `trigger: 'console'` — a deployment the UI
+// started — but nothing in the console could start one: every "New Deployment"
+// button routed into the template/Git clone flow, which creates a whole new chain
+// instead of deploying a resource that already exists.
+//
+// These are those records. A deploy started from a resource page (Applications,
+// Workloads, the Deployments module) is registered here the moment it starts, so
+// it is a row in every deployment list immediately — Building, no duration, the
+// way the vocabulary already describes an unfinished run (./deployments.js) — and
+// it has a PAGE from the first second, because `deployById` reads this store too.
+// The run that advances it lives at module scope in ./deploy-runs.js, so leaving
+// the page never cancels it.
+//
+// Session-scoped, like ./provisioning.js: a deploy the operator started has to
+// survive a reload, and a new tab starts from the clean seed. A run that was still
+// in flight when the tab reloaded is revived as an Error rather than left
+// Building forever — its timer died with the page, and a row that spins for the
+// rest of the session is the one thing worse than a failure.
+const SESSION_STORAGE_KEY = 'webkit-sample:console-deploys'
+
+/** What each step of a console-started deploy takes, so a finished row can report it. */
+const CONSOLE_TIMINGS = {
+  build: '27s',
+  upload: '8.4s',
+  manifest: '1.8s',
+  function: '3.5s',
+  application: '2.7s',
+  connector: '1.9s',
+  rules: '4.6s',
+  workload: '3.6s',
+  purge: '3.3s',
+  finish: '0.9s'
+}
+
+const loadSessionDeploys = () => {
+  try {
+    const raw = globalThis.sessionStorage?.getItem(SESSION_STORAGE_KEY)
+    const parsed = raw ? JSON.parse(raw) : []
+    if (!Array.isArray(parsed)) return []
+    return parsed.map((deploy) => {
+      const revived = { ...deploy, createdAt: deploy.createdAt ? new Date(deploy.createdAt) : null }
+      if (revived.status !== 'Building') return revived
+      return {
+        ...revived,
+        status: 'Error',
+        activeStep: '',
+        failedAt: revived.activeStep || 'build',
+        error: {
+          message: 'The deployment was interrupted when the console was reloaded.',
+          detail:
+            'The run was still in flight and its progress was lost with the page. Nothing was published — the workload keeps serving its previous deployment, so a redeploy starts from the same commit.'
+        }
+      }
+    })
+  } catch {
+    return []
+  }
+}
+
+const sessionDeploys = ref(loadSessionDeploys())
+
+const persistSessionDeploys = () => {
+  try {
+    globalThis.sessionStorage?.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionDeploys.value))
+  } catch {
+    // A full or unavailable sessionStorage must not break the deploy flow.
+  }
+}
+
+/** An Azion-style deployment id (`d_` + 9 chars), the shape the seeded records use. */
+const consoleDeployId = () => {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  return `d_${Array.from({ length: 9 }, () => alphabet[Math.floor(Math.random() * alphabet.length)]).join('')}`
+}
+
+/** The storage prefix the upload step rotates (YYYYMMDDHHMMSS), as the CLI writes it. */
+const storagePrefix = (date) =>
+  [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+    String(date.getHours()).padStart(2, '0'),
+    String(date.getMinutes()).padStart(2, '0'),
+    String(date.getSeconds()).padStart(2, '0')
+  ].join('')
+
+/**
+ * Register a deployment the console just started.
+ *
+ * The record is the same shape as the seeded ones — the deploy page and the row
+ * cannot tell them apart — and it opens on the first step, so the page streams
+ * from `build` while the run works through the pipeline.
+ *
+ * @param {object} input
+ * @param {object} input.workload `{ id, name, domain }` — the workload publishing it.
+ * @param {object} input.application `{ id, name }` — the resource being deployed.
+ * @param {string} [input.environment] The workload's infrastructure (Production / Stage).
+ * @param {string} [input.preset] Build preset, for the build step's log line.
+ * @param {boolean} [input.current] Whether it serves traffic once Ready.
+ * @param {string} [input.deploymentName] The deployment's own `name` in the API body.
+ * @param {string} [input.strategyName] The strategy it applies (Deployment Settings).
+ * @param {object} [input.author] `{ name, avatar }` — who started it.
+ * @returns {object} The stored record.
+ */
+export function startConsoleDeploy({
+  workload,
+  application,
+  environment = 'Production',
+  preset = 'vue',
+  current = true,
+  deploymentName = '',
+  strategyName = '',
+  author
+} = {}) {
+  const createdAt = new Date()
+  const person = author ?? authorAt(0)
+  const bucket = `${application.name}`
+
+  const deploy = {
+    id: consoleDeployId(),
+    status: 'Building',
+    environment,
+    trigger: 'console',
+    createdAt,
+    duration: '',
+    failedAt: '',
+    // The pipeline opens on its first step: this deploy has a page from the
+    // moment it starts, and that page has to show something honest on arrival.
+    activeStep: AZION_DEPLOY_STEPS[0].key,
+    error: null,
+    url: '',
+    current,
+    deploymentName,
+    strategyName,
+    workload: { id: workload.id, name: workload.name, domain: workload.domain, deployment: '' },
+    application: { id: application.id, name: application.name },
+    edge: { ...EDGE, preset, bucket, prefix: storagePrefix(createdAt) },
+    // Empty on purpose: a step that has not finished has no duration to report,
+    // and every step is unfinished here.
+    timings: {},
+    author: person.name,
+    authorEmail: emailOf(person.name),
+    authorAvatar: person.avatar
+  }
+
+  sessionDeploys.value.unshift(deploy)
+  persistSessionDeploys()
+  return deploy
+}
+
+/** Move a console deploy onto `stepKey`, banking the timing of the step it leaves. */
+export function advanceConsoleDeploy(id, stepKey) {
+  const deploy = sessionDeploys.value.find((record) => record.id === id)
+  if (!deploy) return undefined
+  if (deploy.activeStep)
+    deploy.timings = {
+      ...deploy.timings,
+      [deploy.activeStep]: CONSOLE_TIMINGS[deploy.activeStep] ?? ''
+    }
+  deploy.activeStep = stepKey
+  persistSessionDeploys()
+  return deploy
+}
+
+/**
+ * Settle a console deploy.
+ *
+ * @param {string} id The record's id.
+ * @param {object} outcome
+ * @param {'Ready'|'Error'} outcome.status
+ * @param {string} [outcome.duration] Wall-clock of the whole run.
+ * @param {string} [outcome.url] What was published (Ready only).
+ * @param {string} [outcome.failedAt] The step that broke (Error only).
+ * @param {object} [outcome.error] `{ message, detail }` (Error only).
+ * @returns {object|undefined} The settled record.
+ */
+export function settleConsoleDeploy(
+  id,
+  { status, duration = '', url = '', failedAt = '', error = null } = {}
+) {
+  const deploy = sessionDeploys.value.find((record) => record.id === id)
+  if (!deploy) return undefined
+
+  if (status === 'Ready') {
+    // Every step ran, so every step reports its own number.
+    deploy.timings = { ...CONSOLE_TIMINGS }
+    deploy.activeStep = ''
+    deploy.failedAt = ''
+    deploy.error = null
+    deploy.url = url
+  } else {
+    // Only the steps that ran, plus the one that broke — a step that never ran has
+    // no duration to report.
+    const failIndex = AZION_DEPLOY_STEPS.findIndex((step) => step.key === failedAt)
+    deploy.timings = Object.fromEntries(
+      AZION_DEPLOY_STEPS.slice(0, failIndex + 1).map((step) => [
+        step.key,
+        CONSOLE_TIMINGS[step.key]
+      ])
+    )
+    deploy.activeStep = ''
+    deploy.failedAt = failedAt
+    deploy.error = error
+    // Nothing was published, so there is no address to offer.
+    deploy.url = ''
+  }
+
+  deploy.status = status
+  deploy.duration = duration
+  persistSessionDeploys()
+  return deploy
+}
+
+/** Restart a console deploy — the redeploy the failure toast offers. */
+export function restartConsoleDeploy(id) {
+  const deploy = sessionDeploys.value.find((record) => record.id === id)
+  if (!deploy) return undefined
+  deploy.status = 'Building'
+  deploy.activeStep = AZION_DEPLOY_STEPS[0].key
+  deploy.failedAt = ''
+  deploy.error = null
+  deploy.duration = ''
+  deploy.url = ''
+  deploy.timings = {}
+  deploy.createdAt = new Date()
+  deploy.edge = { ...deploy.edge, prefix: storagePrefix(deploy.createdAt) }
+  persistSessionDeploys()
+  return deploy
+}
+
+/**
+ * A deployment by its id, or `undefined` — also the "has a deploy page?" test.
+ *
+ * Reads the session store first: a deploy started in this session is the one the
+ * user is most likely to be opening, and it is the same kind of record.
+ */
+export const deployById = (id) =>
+  sessionDeploys.value.find((deploy) => deploy.id === id) ??
+  DEPLOYMENTS.find((deploy) => deploy.id === id)
 
 /**
  * A deployment as a Deployments-table ROW.
@@ -631,7 +871,14 @@ export const deployRow = (deploy) => ({
   // all refer to.
   versionId: deploy.id,
   environment: deploy.environment,
-  current: deploy.status === 'Ready' && deploy.environment === 'Production',
+  // A console-started deploy carries the `current` flag its request body did (the
+  // drawer's "Set as current"), and only earns it once it is Ready — a deployment
+  // that never finished is not serving anything. A seeded record has no flag of its
+  // own, so it falls back to what its status and environment say.
+  current:
+    deploy.current === undefined
+      ? deploy.status === 'Ready' && deploy.environment === 'Production'
+      : deploy.current && deploy.status === 'Ready',
   status: deploy.status,
   duration: deploy.duration,
   deployedAt: deploy.createdAt,
@@ -646,5 +893,32 @@ export const deployRow = (deploy) => ({
   authorAvatar: deploy.authorAvatar
 })
 
-/** Every deployment that has a page, as table rows. */
+/** The SEEDED deployments that have a page, as table rows. */
 export const deployRows = () => DEPLOYMENTS.map(deployRow)
+
+/**
+ * Every deploy this session started from the console, as table rows, newest first.
+ *
+ * Kept separate from the seed on purpose. A list PROJECTS its seed through the
+ * tenancy scope (src/lib/tenancy-scope.js) — a resource belongs to the account that
+ * owns it — but a deploy the operator just started is theirs and must never be
+ * projected away, so a page adds these rows beside the projection rather than
+ * through it.
+ *
+ * Call it inside a `computed`: the records are reactive, so a running deploy
+ * advances through Building → Ready | Error in every list showing it.
+ */
+export const consoleDeployRows = () => sessionDeploys.value.map(deployRow)
+
+/**
+ * The console-started deploys of one workload, as rows.
+ *
+ * A workload's own Deployments tab is a FILTER of the module's list, never a
+ * second fixture (src/lib/deployment-history.js) — so it reads the same records
+ * through the same mapper.
+ *
+ * @param {string} workloadId
+ * @returns {Array<object>} Rows for ui/DeploymentsTable.vue, newest first.
+ */
+export const consoleDeployRowsFor = (workloadId) =>
+  sessionDeploys.value.filter((deploy) => deploy.workload.id === String(workloadId)).map(deployRow)

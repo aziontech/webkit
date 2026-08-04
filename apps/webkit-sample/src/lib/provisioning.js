@@ -274,6 +274,16 @@ export const findDeploymentByWorkload = (workloadId) =>
   deployments.value.find((record) => record.workload.id === String(workloadId))
 
 /**
+ * The provisioned record an application id belongs to, or `undefined`.
+ *
+ * The chain is provisioned as one unit, so an application created here already
+ * knows the workload that publishes it — which is what lets the deploy drawer
+ * preselect that workload instead of asking for something it can derive.
+ */
+export const findDeploymentByApplication = (applicationId) =>
+  deployments.value.find((record) => record.application.id === String(applicationId))
+
+/**
  * Drop a provisioned record by any of its resource ids.
  *
  * The four resources are provisioned together, so the demo tears them down

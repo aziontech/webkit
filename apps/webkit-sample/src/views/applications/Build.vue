@@ -33,9 +33,10 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
 
+  import DeployResourceDrawer from '../../components/ui/DeployResourceDrawer.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
   import SectionHeading from '../../components/ui/SectionHeading.vue'
-  import { saveGroup, sleep, useBaseline } from '../../lib/forms'
+  import { saveGroup, useBaseline } from '../../lib/forms'
   import { presetIcon, presetLabel } from '../../lib/presets'
 
   const props = defineProps({
@@ -109,29 +110,41 @@
       : date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
   })
 
+  // ── Deploy ────────────────────────────────────────────────────────────────
+  // The page's Deploy button opens the ONE deploy interaction every resource page
+  // uses (components/ui/DeployResourceDrawer.vue), with this application already
+  // chosen. It used to run its own private simulation — a toast, a sleep, a bumped
+  // prefix — which meant a deploy from here left no deployment anywhere: no row in
+  // the Deployments module, no page, no history on the workload. Now it starts the
+  // same run every other entry point does, and this tab keeps what only it can show:
+  // the azion.json state that comes back when the run lands.
+  //
+  // `deploying` still exists for the tab row's spinner, but it only covers the moment
+  // the drawer is opening. The RUN itself is not this component's to own: it lives at
+  // module scope (src/lib/deploy-runs.js) and outlives the whole page.
+  const deployOpen = ref(false)
   const deploying = ref(false)
-  const deploy = async () => {
-    if (deploying.value) return
-    deploying.value = true
-    toast.info('Deploy triggered', {
+
+  const deployTarget = computed(() => ({
+    kind: 'application',
+    id: props.application.id,
+    name: props.application.name
+  }))
+
+  const deploy = () => {
+    deployOpen.value = true
+  }
+
+  // What the run leaves on THIS tab: the storage prefix the upload step rotated, so
+  // "Last deploy" reads the deploy that just happened — the azion.json ⇆ UI loop this
+  // section exists to close.
+  const onDeployed = (run) => {
+    const now = new Date()
+    const pad = (n) => String(n).padStart(2, '0')
+    azionState.prefix = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
+    toast.info(`Deployment ${run.deployId} started`, {
       description: `Building ${repository.value} (${branch.productionBranch}) with the ${presetLabel(buildConfig.preset)} preset.`
     })
-    try {
-      await sleep(1500)
-      const now = new Date()
-      const pad = (n) => String(n).padStart(2, '0')
-      azionState.prefix = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
-      toast.success('Deploy finished', {
-        description: `Live at ${azionState.domainUrl}`
-      })
-    } catch (error) {
-      toast.error('Deploy failed.', {
-        description: error?.message ?? 'Check your connection and try again.',
-        action: { label: 'Retry', onClick: () => deploy() }
-      })
-    } finally {
-      deploying.value = false
-    }
   }
 
   // Deploy is triggered from the page's tab row (ApplicationDetail), which also
@@ -631,5 +644,13 @@
         </CardBox>
       </section>
     </section>
+
+    <!-- The one deploy interaction, opened by the tab row's Deploy button with this
+         application already chosen. -->
+    <DeployResourceDrawer
+      v-model:open="deployOpen"
+      :resource="deployTarget"
+      @deployed="onDeployed"
+    />
   </div>
 </template>

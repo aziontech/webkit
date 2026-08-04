@@ -2,6 +2,16 @@
 // The Applications module "create" flow — a dedicated PAGE (route
 // /applications/new), sidebar hidden so the form is the only focus.
 //
+// WHERE SAVE LEADS. Creating an application creates a CHAIN: the application plus
+// the Workload that publishes it, the Connector it reads from and the Storage bucket
+// holding its assets (src/lib/provisioning.js — the four resources `azion deploy`
+// creates). Nothing about that chain is serving traffic until a DEPLOYMENT binds it,
+// so Save does not end on a list: it provisions the chain, starts a deployment of it
+// under Azion Default (the platform's strategy) and lands on that deployment's page,
+// where the pipeline is running. That is the whole journey in one click — create,
+// deploy, watch — instead of dropping the user on a list with a resource that does
+// not answer yet.
+//
 // The FIELDS are exactly the body of POST /v4/workspace/applications — `name`,
 // the four `modules` toggles, `active` and `debug`, nothing else. `form` is keyed
 // by the API's own names (snake_case inside `modules`) because this object IS the
@@ -39,6 +49,9 @@ import { toast } from "@aziontech/webkit/toast";
 import { computed, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { startResourceDeployRun } from "../lib/deploy-runs";
+import { azionDefaultStrategy } from "../lib/deployment-strategies";
+import { provisionDeployment } from "../lib/provisioning";
 import CreationHeader from "./ui/CreationHeader.vue";
 import PageHeading from "./ui/PageHeading.vue";
 import SectionHeading from "./ui/SectionHeading.vue";
@@ -133,8 +146,56 @@ const submit = async () => {
   try {
     const application = payload();
     await new Promise((resolve) => setTimeout(resolve, 900));
-    toast.success(`Application "${application.name}" created.`);
-    router.push({ path: "/applications", query: { email: userEmail.value } });
+
+    // CREATING AN APPLICATION CREATES A CHAIN. An application is code and
+    // configuration; on its own it serves nobody. What makes it reachable is the
+    // rest of what Azion provisions around it — a Workload (the public entry point:
+    // domain, TLS, infrastructure), a Connector (where it reads from) and a Storage
+    // bucket (its static assets) — the same four resources `azion deploy` creates
+    // and the same registry every list in this console reads
+    // (src/lib/provisioning.js). So Save does not end on a list: it ends on a
+    // running deployment.
+    const record = provisionDeployment({
+      repoName: application.name,
+      framework: "vue",
+      templateTitle: application.name,
+    });
+
+    // An application created INACTIVE has nothing to publish — it is created and
+    // parked on purpose — so the journey stops at the module list rather than
+    // deploying something the user just said should not serve traffic.
+    if (!application.active) {
+      toast.success(`Application "${application.name}" created.`, {
+        description: "Inactive, so nothing was deployed. Deploy it when you activate it.",
+      });
+      router.push({ path: "/applications", query: { email: userEmail.value } });
+      return;
+    }
+
+    // THE HAPPY PATH CONTINUES INTO A DEPLOY. Same run every resource page starts
+    // (src/lib/deploy-runs.js), applying Azion Default — the platform's strategy,
+    // which binds the application being deployed and nothing else. It is `current`,
+    // so the workload just created starts serving it the moment it is Ready.
+    const run = startResourceDeployRun({
+      workload: record.workload,
+      application: record.application,
+      strategy: { id: azionDefaultStrategy.id, name: azionDefaultStrategy.name },
+      deploymentName: `${record.application.name}-deploy`,
+      current: true,
+      environment: record.workload.environment,
+      preset: record.application.preset,
+    });
+
+    toast.success(`Application "${application.name}" created.`, {
+      description: `Workload ${record.workload.name} and its chain were created. Deploying now.`,
+    });
+
+    // The deployment's own page: the pipeline it is running, live. The run outlives
+    // this navigation — and every other one the user makes from here.
+    router.push({
+      path: `/deployments/${run.deployId}`,
+      query: { email: userEmail.value },
+    });
   } catch (error) {
     // Request-level failure → toast with a way to recover. Never silent.
     toast.error("Could not create the application.", {

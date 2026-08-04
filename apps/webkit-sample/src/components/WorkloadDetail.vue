@@ -49,6 +49,7 @@
   import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { consoleDeployRowsFor } from '../lib/azion-deploys'
   import { formatListDate } from '../lib/dates'
   import { deploymentRowsFor } from '../lib/deployment-history'
   import { environmentOptions, statusMeta } from '../lib/deployments'
@@ -58,6 +59,7 @@
   import ControlsHeader from './ui/ControlsHeader.vue'
   import DeploymentsTable from './ui/DeploymentsTable.vue'
   import DeploymentTableControls from './ui/DeploymentTableControls.vue'
+  import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
   import PageHeading from './ui/PageHeading.vue'
   import PageTabs from './ui/PageTabs.vue'
@@ -282,12 +284,31 @@
     }
   })
 
+  // Deploys started from the console this session — from this page's own New
+  // Deployment, from the Applications module, from anywhere — are the same records the
+  // Deployments module lists, filtered to this workload (src/lib/azion-deploys.js).
+  // They lead the history: they are the newest, and one of them may be the deployment
+  // now serving traffic.
+  const consoleDeployments = computed(() => consoleDeployRowsFor(workloadId))
+
   const deployments = computed(() => {
-    if (!provisionedDeployment.value) return historicDeployments.value
-    return [
-      provisionedDeployment.value,
-      ...historicDeployments.value.map((deployment) => ({ ...deployment, current: false }))
+    const rows = [
+      ...consoleDeployments.value,
+      ...(provisionedDeployment.value ? [provisionedDeployment.value] : []),
+      ...historicDeployments.value
     ]
+
+    // Exactly ONE deployment per workload serves traffic. The list is newest-first, so
+    // the first row that claims `current` keeps it and every row behind it loses the
+    // flag — which is what "Set as current" in the deploy drawer actually does to the
+    // deployment that held it until now.
+    let claimed = false
+    return rows.map((deployment) => {
+      if (!deployment.current) return deployment
+      if (claimed) return { ...deployment, current: false }
+      claimed = true
+      return deployment
+    })
   })
 
   // The current (active) deployment drives the Active Deployment card.
@@ -343,7 +364,32 @@
   }
 
   // --- Header actions ------------------------------------------------------
-  const newDeployment = () => router.push({ path: '/deploy', query: { email: userEmail.value } })
+  // ── Deploy ────────────────────────────────────────────────────────────────
+  // "New Deployment" opens the ONE deploy interaction (ui/DeployResourceDrawer.vue)
+  // with this workload already chosen — it used to route to /deploy, the Creation
+  // Center's template clone, which creates a whole new chain instead of deploying
+  // onto the workload the user is standing on.
+  // Authoring a missing strategy is the drawer's own nested flow (its Deployment
+  // Settings Select carries the quick-add), so this page hosts only the deploy drawer.
+  const deployOpen = ref(false)
+  const deployTarget = computed(() => ({
+    kind: 'workload',
+    id: workloadId,
+    name: workload.value.name
+  }))
+
+  const newDeployment = () => {
+    deployOpen.value = true
+  }
+
+  // The new deployment is already in this workload's own list (Building, on top), so
+  // the page stays put and the tab that lists it is the one that answers.
+  const onDeployed = (run) => {
+    activeTab.value = 'deployments'
+    toast.info(`Deployment ${run.deployId} started`, {
+      description: 'It leads this workload’s history, and keeps running if you leave.'
+    })
+  }
   const visit = () => toast.info('Opening the workload in a new tab.')
 
   // --- Settings ------------------------------------------------------------
@@ -847,6 +893,13 @@
     <WorkloadDeploymentDrawer
       v-model:open="drawerOpen"
       :deployment="selectedDeployment"
+    />
+
+    <!-- The one deploy interaction, with this workload already chosen. -->
+    <DeployResourceDrawer
+      v-model:open="deployOpen"
+      :resource="deployTarget"
+      @deployed="onDeployed"
     />
   </AppLayout>
 </template>

@@ -23,11 +23,25 @@
   //              far as it got: all the way through, stopped at `failAt` (the
   //              steps behind it never ran), or still on `activeAt`. Used by the
   //              read-only Workload deployment drawer and the deploy page.
+  //
+  // TWO VIEWS of that output, switched in the header (SegmentedButton):
+  //   • Phased   — the accordion above: one row per step, with its feedback Tag and
+  //                its timing, and only the step you open showing its log. The
+  //                synthetic read — WHERE the deployment is, or what broke.
+  //   • Complete — every revealed line of every step in one continuous LogView, in
+  //                pipeline order. The raw read — what the CLI actually printed,
+  //                which is what you scan when the step summary is not enough (and
+  //                what you copy into a support thread).
+  // The switch is a VIEW preference, not state: both views render the same lines
+  // from the same model, so flipping between them never changes what is true. The
+  // header's status, the progress bar and the copy payload are shared, because they
+  // describe the deployment rather than either view of it.
   import Accordion from '@aziontech/webkit/accordion'
   import CopyButton from '@aziontech/webkit/copy-button'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import ProgressBar from '@aziontech/webkit/progress-bar'
+  import SegmentedButton from '@aziontech/webkit/segmented-button'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag from '@aziontech/webkit/tag'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
@@ -201,6 +215,26 @@
     stepList.value.map((step, i) => step.logs.slice(0, revealed.value[i]).map(toLine))
   )
 
+  // ── The two views ──────────────────────────────────────────────────────────
+  // `phased` opens on purpose: arriving at a deployment, the question is which step
+  // it is on (or which one broke), and that is what the step rows answer in one
+  // glance. `complete` is the deliberate second step — the raw stream, for when the
+  // summary is not enough.
+  const view = ref('phased')
+  const views = [
+    { label: 'Phased', value: 'phased' },
+    { label: 'Complete', value: 'complete' }
+  ]
+
+  // Every revealed line, in pipeline order, as one stream. Ids are re-keyed across
+  // the whole run so LogView never sees two lines under the same id — the per-step
+  // ids restart at 0 in every step.
+  const allLines = computed(() =>
+    linesByStep.value.flatMap((lines, step) =>
+      lines.map((line) => ({ ...line, id: `${step}-${line.id}` }))
+    )
+  )
+
   // Overall progress across every step's log lines — feeds the bottom ProgressBar.
   const totalLines = computed(() => stepList.value.reduce((n, step) => n + step.logs.length, 0))
   const progress = computed(() => {
@@ -349,6 +383,14 @@
     >
       <p class="text-heading-xxs text-[var(--text-default)]">Deployment Logs</p>
       <div class="flex items-center gap-[var(--spacing-sm)]">
+        <!-- The view switch leads the group: it is the one CONTROL here, and what
+             follows it (status, spinner, copy) reports on the deployment itself and
+             reads the same in either view. -->
+        <SegmentedButton
+          v-model="view"
+          :options="views"
+          aria-label="Log view"
+        />
         <Tag
           v-if="phase === 'finished'"
           label="Completed"
@@ -377,10 +419,11 @@
       </div>
     </div>
 
-    <!-- One accordion item per deploy step. The running step is open and streams
-         its logs; queued steps read as loading; finished steps collapse to a
+    <!-- PHASED — one accordion item per deploy step. The running step is open and
+         streams its logs; queued steps read as loading; finished steps collapse to a
          success feedback + duration. -->
     <Accordion
+      v-if="view === 'phased'"
       v-model:value="openStep"
       type="single"
       collapsible
@@ -471,7 +514,6 @@
             :border="false"
             :loading="stepStatus(i) === 'pending'"
             loading-label="Waiting to start…"
-            class="h-[260px]"
           >
             <LogViewContent>
               <template #empty>
@@ -486,6 +528,23 @@
         </Accordion.Content>
       </Accordion.Item>
     </Accordion>
+
+    <!-- COMPLETE — the same lines as one continuous log, in pipeline order. No step
+         chrome: the CLI's own prefixes (`[build]`, `[upload]`, …) already say which
+         phase printed a line, so repeating the step title per row would only push the
+         message further from the timestamp. Flush, because the card around this view
+         already frames it. -->
+    <LogView
+      v-else
+      :lines="allLines"
+      :border="false"
+      :loading="!settled && !allLines.length"
+      loading-label="Waiting to start…"
+    >
+      <LogViewContent>
+        <template #empty>No log lines yet.</template>
+      </LogViewContent>
+    </LogView>
 
     <!-- Overall progress as a flush bar on the bottom edge — keeps the sense of
          forward motion regardless of which step is open. Removed once the

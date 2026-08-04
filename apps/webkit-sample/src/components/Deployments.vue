@@ -7,12 +7,22 @@
   // already IS the header breadcrumb crumb (see ui/ControlsHeader.vue).
   //
   // Unlike Applications, this module carries TWO sub-pages behind nav tabs —
-  // "All Deployments" (the deployment history) and "Settings" (the reusable
-  // deployment configurations) — so the active tab is held in the URL (`?tab=`)
+  // "All Deployments" (every deploy, from any resource) and "Settings" (the
+  // STRATEGIES those deploys apply) — so the active tab is held in the URL (`?tab=`)
   // the way WorkloadDetail does it: reloadable and linkable. Each tab brings its OWN
-  // controls row, because the two narrow different subjects and their create actions
-  // differ. The Message above them is what explains why Settings is a sibling of the
-  // history at all (a configuration is shared across workloads, not owned by one).
+  // controls row, because the two narrow different subjects, and its own create
+  // action, because the two create different things:
+  //
+  //   New Deployment → a real deploy of one resource, applying a strategy. The same
+  //     drawer every resource page opens (ui/DeployResourceDrawer.vue).
+  //   New Settings   → the strategy itself (ui/DeploymentSettingsDrawer.vue): which
+  //     application, firewall and custom page a deployment binds, authored once and
+  //     applied by deployments started anywhere.
+  //
+  // That split is the platform's own: Azion creates a deployment with one request,
+  // `POST /workloads/{id}/deployments`, whose body is `{ name, active, current,
+  // strategy }` — the strategy is the reusable half, the rest belongs to one deploy.
+  // The Message above the tables is what says so on screen.
   //
   // Narrowing on both tabs is a SELECTOR PER COLUMN (Applications.vue's model),
   // never a field/operator/value builder: the COLUMNS decide the fields — every
@@ -41,18 +51,27 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { deployById, deployRows } from '../lib/azion-deploys'
-  import { daysAgo, formatListDate, withinRange } from '../lib/dates'
+  import { consoleDeployRows, deployById, deployRows } from '../lib/azion-deploys'
+  import { withinRange } from '../lib/dates'
   import { DEPLOYMENT_HISTORY } from '../lib/deployment-history'
+  import {
+    azionDefaultStrategy,
+    bindingLabel,
+    removeStrategy,
+    strategyStatusOptions,
+    strategyTypeLabel,
+    workspaceStrategies
+  } from '../lib/deployment-strategies'
   import { resourceMeta } from '../lib/deployments'
   import { filterDisplay } from '../lib/filters'
-  import { authorAt } from '../lib/people'
   import { useTenancyReload } from '../lib/tenancy-reload'
   import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeploymentSettingsDrawer from './ui/DeploymentSettingsDrawer.vue'
   import DeploymentsTable from './ui/DeploymentsTable.vue'
   import DeploymentTableControls from './ui/DeploymentTableControls.vue'
+  import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import FilterPopover from './ui/FilterPopover.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
   import PageTabs from './ui/PageTabs.vue'
@@ -92,7 +111,10 @@
   //
   // `resourceId` is the deployed resource's real id: for an application it is the
   // id the Applications list uses, so the resource link lands on that detail page.
-  const deployments = ref(
+  const byNewest = (a, b) => b.deployedAt - a.deployedAt
+
+  // The seeded population, the part a tenancy scope owns.
+  const seededDeployments = computed(() =>
     [
       // The deployments that have a PAGE behind them: their whole `azion deploy`
       // pipeline is recorded — which step failed, which never ran — so a row of
@@ -105,7 +127,7 @@
       // (src/lib/deployment-history.js). A workload page lists the rows whose
       // `workloadId` is its own — the same rows, filtered, never a second fixture.
       ...DEPLOYMENT_HISTORY
-    ].sort((a, b) => b.deployedAt - a.deployedAt)
+    ].sort(byNewest)
   )
 
   // Every selector on this tab is owned HERE, because a first-level page hoists its
@@ -126,10 +148,14 @@
   // (src/lib/tenancy-scope.js).
   const { tenancyReloading } = useTenancyReload()
 
+  // A deploy started in THIS session — from here, or from any resource page — leads
+  // the list and is never projected away: it is the operator's own, and it is still
+  // moving (Building → Ready | Error), which is why this is a computed rather than a
+  // list seeded once at mount.
   const filteredDeployments = computed(() =>
-    tenancyRows(deployments.value, 'deployments').filter((deployment) =>
-      withinRange(deployment.deployedAt, deployedRange.value)
-    )
+    [...consoleDeployRows(), ...tenancyRows(seededDeployments.value, 'deployments')]
+      .sort(byNewest)
+      .filter((deployment) => withinRange(deployment.deployedAt, deployedRange.value))
   )
 
   // "Clear all" (the filter panel's footer) resets every field the panel holds — the
@@ -146,135 +172,70 @@
     toast.info('Filters cleared.')
   }
 
-  // ── Settings (deployment configurations) ───────────────────────────────────
-  // A configuration is authored once and applied to many workloads, which is what
-  // the Message above the card states. `Single Version` publishes one live URL;
-  // `Versioned URL` keeps every version addressable.
+  // ── Settings (deployment strategies) ───────────────────────────────────────
+  // What this tab lists is the `strategy` half of the one request Azion takes for a
+  // deployment: which application, firewall and custom page it binds
+  // (src/lib/deployment-strategies.js). A strategy is authored once here and applied
+  // by deployments started from any resource page — which is the difference between
+  // this tab's create action and the history tab's:
   //
-  // The COLUMNS decide this tab's fields too, exactly as on the history tab: Type and
-  // Status are its enumerable columns, so each gets a multiple Select, and Last
-  // Modified gets the same plain date picker.
-  const settingKindOptions = [
-    { value: 'Single Version', label: 'Single Version' },
-    { value: 'Versioned URL', label: 'Versioned URL' }
-  ]
+  //   New Settings   → a STRATEGY, reused across deployments
+  //   New Deployment → a real DEPLOY of one resource, applying a strategy
+  //
+  // AZION DEFAULT leads the list and is platform-owned: it binds whatever
+  // application is being deployed and nothing else, it cannot be edited or deleted,
+  // and it is exempt from the tenancy projection — it belongs to Azion, not to this
+  // workspace. Every deploy falls back to it, so the flow can never dead-end on a
+  // workspace with no strategies.
+  //
+  // The COLUMNS still decide this tab's fields, exactly as on the history tab —
+  // Status is its one enumerable column, so it gets a multiple Select, and Last
+  // Modified gets the same plain date picker. Type is a column but NOT a filter:
+  // `default` is the only strategy type the platform exposes, and a selector with one
+  // option narrows nothing.
+  const settingStatusOptions = strategyStatusOptions
 
-  const settingStatusOptions = [
-    { value: 'Active', label: 'Active' },
-    { value: 'Inactive', label: 'Inactive' }
-  ]
-
-  const deploymentSettings = ref(
-    [
-      {
-        id: 's1',
-        name: 'magalu-storefront',
-        kind: 'Single Version',
-        status: 'Active',
-        updatedAt: daysAgo(3)
-      },
-      {
-        id: 's2',
-        name: 'azion-storefront',
-        kind: 'Single Version',
-        status: 'Active',
-        updatedAt: daysAgo(11)
-      },
-      {
-        id: 's3',
-        name: 'azion-storefront-legacy',
-        kind: 'Single Version',
-        status: 'Inactive',
-        updatedAt: daysAgo(29)
-      },
-      {
-        id: 's4',
-        name: 'docs-preview',
-        kind: 'Versioned URL',
-        status: 'Inactive',
-        updatedAt: daysAgo(46)
-      },
-      {
-        id: 's5',
-        name: 'analytics-canary',
-        kind: 'Versioned URL',
-        status: 'Active',
-        updatedAt: daysAgo(58)
-      },
-      {
-        id: 's6',
-        name: 'auth-service-prod',
-        kind: 'Single Version',
-        status: 'Active',
-        updatedAt: daysAgo(73)
-      },
-      {
-        id: 's7',
-        name: 'marketing-site-prod',
-        kind: 'Single Version',
-        status: 'Active',
-        updatedAt: daysAgo(88)
-      },
-      {
-        id: 's8',
-        name: 'status-page-stage',
-        kind: 'Versioned URL',
-        status: 'Inactive',
-        updatedAt: daysAgo(120)
-      },
-      {
-        id: 's9',
-        name: 'internal-tools-dev',
-        kind: 'Single Version',
-        status: 'Active',
-        updatedAt: daysAgo(151)
-      },
-      {
-        id: 's10',
-        name: 'blog-platform-stage',
-        kind: 'Single Version',
-        status: 'Active',
-        updatedAt: daysAgo(183)
-      }
-    ].map((setting, index) => {
-      const person = authorAt(index)
-      return {
-        ...setting,
-        author: person.name,
-        authorAvatar: person.avatar,
-        lastModified: formatListDate(setting.updatedAt)
-      }
-    })
-  )
-
-  // Author and Last Modified are ONE column, the same as every other console list:
-  // the avatar identifies the person (name on its tooltip) and the timestamp reads
-  // relative beside it, so a separate Author column would only repeat what this one
-  // already says (see ui/LastModifiedCell.vue).
+  // The columns the CLI itself lists a workload's deployments by (`azion list
+  // workload-deployment` prints ID · CURRENT · EDGE APPLICATION · EDGE FIREWALL):
+  // what a strategy BINDS is the whole point of it, so the bindings are columns
+  // rather than something you open a row to discover. Author and Last Modified are
+  // ONE column, as in every other console list — the avatar identifies the person
+  // (name on its tooltip) and the timestamp reads relative beside it (see
+  // ui/LastModifiedCell.vue).
   const settingColumns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
-    { accessorKey: 'kind', header: 'Type', enableSorting: true },
+    { accessorKey: 'type', header: 'Type', enableSorting: true },
+    { accessorKey: 'firewall', header: 'Firewall', enableSorting: true },
+    { accessorKey: 'customPage', header: 'Custom Page', enableSorting: true },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // Narrowing here is a selector too — one per column, the same model the
+  // Narrowing here is a selector too — one per enumerable column, the same model the
   // deployment table follows — plus the table's own search.
   const settingSearch = ref('')
-  const settingKindFilter = ref([])
   const settingStatusFilter = ref([])
   const settingModifiedRange = ref(null)
+
+  // Azion Default leads and is never projected away: it is the platform's strategy,
+  // not this workspace's, and it is the fallback every deploy needs. Only the
+  // workspace's own strategies go through the tenancy projection.
   const filteredSettings = computed(() =>
-    tenancyRows(deploymentSettings.value, 'deployment-settings').filter((setting) => {
-      if (settingKindFilter.value.length && !settingKindFilter.value.includes(setting.kind)) {
-        return false
+    [azionDefaultStrategy, ...tenancyRows(workspaceStrategies.value, 'deployment-settings')].filter(
+      (setting) => {
+        if (
+          settingStatusFilter.value.length &&
+          !settingStatusFilter.value.includes(setting.status)
+        ) {
+          return false
+        }
+        // The platform default has no last-modified instant of its own, so a date
+        // range never narrows it away.
+        if (!setting.updatedAt) return true
+        return withinRange(setting.updatedAt, settingModifiedRange.value)
       }
-      if (settingStatusFilter.value.length && !settingStatusFilter.value.includes(setting.status)) {
-        return false
-      }
-      return withinRange(setting.updatedAt, settingModifiedRange.value)
-    })
+    )
   )
 
   // What the filter trigger's badge counts: FIELDS that are narrowing the table, not
@@ -282,24 +243,57 @@
   // never a hidden filter, which is also why "Clear all" no longer wipes it.
   const activeSettingFilterCount = computed(
     () =>
-      Number(settingKindFilter.value.length > 0) +
-      Number(settingStatusFilter.value.length > 0) +
-      Number(Boolean(settingModifiedRange.value))
+      Number(settingStatusFilter.value.length > 0) + Number(Boolean(settingModifiedRange.value))
   )
 
   const clearSettingFilters = () => {
-    settingKindFilter.value = []
     settingStatusFilter.value = []
     settingModifiedRange.value = null
     toast.info('Filters cleared.')
   }
 
   // ── Actions ────────────────────────────────────────────────────────────────
-  const newDeploy = () => router.push({ path: '/deploy', query: { email: userEmail.value } })
-  const newSettings = () =>
-    toast.info('New deployment settings', {
-      description: 'Creating a deployment configuration is out of scope for this demo.'
+  // The two create actions of this module, and the whole difference between them:
+  //
+  //   New Deployment → a real DEPLOY of a resource. The same drawer every resource
+  //     page opens (ui/DeployResourceDrawer.vue) — from here nothing is preselected,
+  //     so it asks which workload and which application; from an Applications row it
+  //     already knows. The run outlives this page (src/lib/deploy-runs.js).
+  //   New Settings   → a STRATEGY (ui/DeploymentSettingsDrawer.vue), reused by
+  //     deployments started anywhere.
+  //
+  // Neither routes to /deploy any more. That page is the Creation Center's template /
+  // Git clone flow: it CREATES a chain (workload + application + connector + storage)
+  // from a repository, which is a different action from deploying a resource that
+  // already exists — and with no `?template=`, it silently opened whichever template
+  // happened to be first.
+  const deployOpen = ref(false)
+  const settingsOpen = ref(false)
+  const newDeploy = () => {
+    deployOpen.value = true
+  }
+  const newSettings = () => {
+    settingsOpen.value = true
+  }
+
+  // This is the Settings TAB's own create action — a strategy authored on its own,
+  // not because a deploy needed one. (Inside the deploy drawer the same drawer opens
+  // as a nested child of it, so the deploy in progress is never lost.)
+  const onStrategyCreated = (strategy) => {
+    toast.success(`${strategy.name} created`, {
+      description: 'Deployments started from any resource can apply it.'
     })
+  }
+
+  // The deploy has a page from the second it starts, so the toast's shortcut and the
+  // row both land on the same place; this page stays put and shows the new row
+  // Building at the top of the list.
+  const onDeployed = (run) => {
+    activeTab.value = 'all'
+    toast.info(`Deployment ${run.deployId} started`, {
+      description: 'It is at the top of the list, and keeps running if you leave.'
+    })
+  }
 
   // A deployment row opens the read-only details drawer — the same one the
   // workload detail page uses, so a deployment reads identically from either
@@ -341,15 +335,18 @@
 
   const onSettingAction = (event, value, row) => {
     if (value === 'delete') {
-      deploymentSettings.value = deploymentSettings.value.filter((setting) => setting.id !== row.id)
-      toast.success(`${row.name} deleted`)
+      // Azion Default is platform-owned; the menu does not offer this on its row, so
+      // reaching here means the guard in the store is the one doing the work.
+      if (removeStrategy(row.id)) toast.success(`${row.name} deleted`)
       return
     }
     const copy = {
       edit: `Editing ${row.name}`,
       duplicate: `Duplicating ${row.name}`
     }
-    toast.info(copy[value] ?? row.name, { description: `${row.kind} · ${row.status}` })
+    toast.info(copy[value] ?? row.name, {
+      description: `${strategyTypeLabel(row.type)} · Firewall: ${bindingLabel(row.firewall)} · Custom Page: ${bindingLabel(row.customPage)}`
+    })
   }
 </script>
 
@@ -425,13 +422,17 @@
             <!-- ONE section, at --layout-group-gap: the Message frames the list, the
                  controls row narrows it, the table is what both are about. -->
             <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
-              <!-- Why Settings is a sibling of the history: a configuration is shared,
-                   not owned by the workload that happens to use it. -->
+              <!-- Why Settings is a sibling of the history: a strategy is the reusable
+                   half of a deployment (which application, firewall and custom page it
+                   binds), so it is authored once and applied by many deployments. Note
+                   what it is NOT: a deployment belongs to exactly one workload — the
+                   workload is the path parameter of the request that creates it — so it
+                   is the STRATEGY that travels, never the deployment. -->
               <Message
                 severity="info"
                 size="small"
                 closable
-                label="Deployment Settings are reusable across Workloads. Create and manage deployment configurations once, then apply them to multiple workloads and environments."
+                label="Deployment Settings are the strategy a deployment applies: the application it binds, and optionally a firewall and a custom page. Author one here and every deployment started from a resource can apply it — Azion Default is the platform's own."
               />
 
               <!-- ── All Deployments controls ── -->
@@ -487,32 +488,15 @@
                 <!-- The same filter the deployment tab (and every other module list)
                      carries: the column selectors stacked in a popover behind one icon,
                      so both tabs of this module narrow the same way — a Select per
-                     enumerable column (Type, Status) and the plain date picker for Last
-                     Modified. -->
+                     ENUMERABLE column (here: Status) and the plain date picker for Last
+                     Modified. Type is a column without a selector on purpose: `default`
+                     is the only strategy type the platform exposes, so a Select offering
+                     it would narrow nothing. -->
                 <FilterPopover
                   :count="activeSettingFilterCount"
-                  description="Narrow deployment settings by type, status or when they last changed."
+                  description="Narrow deployment settings by status or when they last changed."
                   @clear="clearSettingFilters"
                 >
-                  <Select
-                    v-model="settingKindFilter"
-                    multiple
-                    size="large"
-                    placeholder="Type"
-                    :display-value="filterDisplay('Type', settingKindOptions)"
-                  >
-                    <Select.Trigger aria-label="Filter by type" />
-                    <Select.Content>
-                      <Select.Option
-                        v-for="option in settingKindOptions"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Option>
-                    </Select.Content>
-                  </Select>
-
                   <Select
                     v-model="settingStatusFilter"
                     multiple
@@ -597,20 +581,51 @@
                       :border="false"
                       :loading="tenancyReloading"
                     >
-                      <template #cell-name="{ value }">
-                        <span class="truncate">{{ value }}</span>
+                      <!-- The platform's own strategy is marked as such: it is the one
+                           row nobody in this workspace authored, and the one row the
+                           actions menu offers nothing for. -->
+                      <template #cell-name="{ value, row }">
+                        <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                          <span class="truncate">{{ value }}</span>
+                          <Tag
+                            v-if="row.system"
+                            label="Azion"
+                            severity="secondary"
+                            size="medium"
+                          />
+                        </span>
                       </template>
 
-                      <!-- How the configuration publishes: one live URL, or one URL per
-                           version. Its own column rather than a chip crammed beside the
-                           name — an enumerable dimension is sortable and scans down the
-                           column, the way Applications reads Infrastructure / Status. -->
-                      <template #cell-kind="{ value }">
+                      <!-- The strategy TYPE — `default` is the only one the platform
+                           exposes today, so the column reads the same down the list and
+                           exists to say which kind of strategy this is at all. -->
+                      <template #cell-type="{ value }">
                         <Tag
-                          :label="value"
+                          :label="strategyTypeLabel(value)"
                           severity="info"
                           size="medium"
                         />
+                      </template>
+
+                      <!-- The two nullable bindings, plain text: "Not bound" is the
+                           common, unremarkable case and a Tag on every row would give
+                           the absence of a firewall the weight of a status. -->
+                      <template #cell-firewall="{ value }">
+                        <span
+                          class="truncate"
+                          :class="value ? '' : 'text-[var(--text-muted)]'"
+                        >
+                          {{ bindingLabel(value) }}
+                        </span>
+                      </template>
+
+                      <template #cell-customPage="{ value }">
+                        <span
+                          class="truncate"
+                          :class="value ? '' : 'text-[var(--text-muted)]'"
+                        >
+                          {{ bindingLabel(value) }}
+                        </span>
                       </template>
 
                       <template #cell-status="{ value }">
@@ -625,12 +640,16 @@
                         <LastModifiedCell
                           :author="row.author"
                           :avatar-src="row.authorAvatar"
-                          :date="row.updatedAt"
+                          :date="row.updatedAt || ''"
                         />
                       </template>
 
+                      <!-- The platform's strategy has no row actions: it cannot be
+                           edited or deleted, and a menu whose every option is disabled
+                           is worse than no menu. -->
                       <template #cell-actions="{ row }">
                         <Dropdown
+                          v-if="!row.system"
                           placement="bottom-end"
                           @select="(event, value) => onSettingAction(event, value, row)"
                         >
@@ -697,6 +716,21 @@
     <WorkloadDeploymentDrawer
       v-model:open="drawerOpen"
       :deployment="selectedDeployment"
+    />
+
+    <!-- The module-level entry into the ONE deploy interaction: nothing preselected,
+         so it asks for the workload and the application a resource page already knows.
+         Same drawer, same request body, same run. -->
+    <DeployResourceDrawer
+      v-model:open="deployOpen"
+      @deployed="onDeployed"
+    />
+
+    <!-- New Settings — the strategy, not a deployment. The Settings tab's own action;
+         the deploy drawer opens its own nested instance for the quick-add. -->
+    <DeploymentSettingsDrawer
+      v-model:open="settingsOpen"
+      @create="onStrategyCreated"
     />
   </AppLayout>
 </template>
