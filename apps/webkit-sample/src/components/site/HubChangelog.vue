@@ -68,7 +68,7 @@
         { label: 'Listagem', path: '/applications' },
         { label: 'Create', path: '/applications/new' },
         { label: 'Listagem 2º nível', path: '/applications/1784552864?tab=main-settings' },
-        { label: 'Settings', path: '/account?tab=account-settings' }
+        { label: 'Settings', path: '/account' }
       ]
     },
     {
@@ -96,7 +96,7 @@
       ],
       links: [
         { label: 'Item group', path: '/forms/itemgroup' },
-        { label: 'Account Settings', path: '/account?tab=account-settings' },
+        { label: 'Account Settings', path: '/account' },
         { label: 'In-page form', path: '/forms/in-page' }
       ]
     },
@@ -335,7 +335,7 @@
         { label: 'Sem tabs', path: '/applications' },
         { label: 'Com tabs', path: '/deployments' },
         { label: 'Interna com tabs', path: '/applications/1784552864?tab=build' },
-        { label: 'Settings', path: '/account?tab=account-settings' }
+        { label: 'Settings', path: '/account' }
       ]
     },
     {

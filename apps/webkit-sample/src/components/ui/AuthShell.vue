@@ -9,6 +9,17 @@
 // CreationHeader centralizes the header for the creation flows.
 import Button from "@aziontech/webkit/button";
 import GlobalHeader from "@aziontech/webkit/global-header";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+// Routed rather than followed, so the docs open without a full document load. A modified click
+// (new tab, new window) is left to the browser — that is what the real `href` is for.
+const onDocs = (event) => {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+  event.preventDefault();
+  router.push("/site/docs");
+};
 </script>
 
 <template>
@@ -62,13 +73,17 @@ import GlobalHeader from "@aziontech/webkit/global-header";
       </GlobalHeader.Brand>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
+        <!-- The demo's OWN documentation (/site/docs), not azion.com: it is a real page in
+             this app, so the link stays in the SPA and drops the external-link glyph and the
+             new tab that said otherwise. `href` keeps it a real anchor — middle-click and
+             "open in new tab" still work — while the click is routed. -->
         <Button
           label="Documentation"
           kind="outlined"
           size="medium"
-          icon="pi pi-external-link"
-          href="https://www.azion.com/en/documentation/"
-          target="_blank"
+          icon="pi pi-book"
+          href="/site/docs"
+          @click="onDocs"
         />
       </GlobalHeader.Right>
     </GlobalHeader>

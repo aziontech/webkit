@@ -22,6 +22,14 @@ const verifying = ref(false);
 
 const router = useRouter();
 
+// The header's Documentation link points at the demo's own /site/docs, so it is routed instead
+// of followed. A modified click (new tab, new window) is left to the browser and its real href.
+const onDocs = (event) => {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+  event.preventDefault();
+  router.push("/site/docs");
+};
+
 const canContinue = computed(() => email.value.trim() !== "");
 
 // Motion tokens — fast-02 (110ms) + productive-entrance curve, read from the
@@ -145,13 +153,15 @@ const handlePrimary = () => {
       </GlobalHeader.Brand>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
+        <!-- Same affordance as AuthShell's: the demo's own /site/docs, routed rather than
+             followed, with the real `href` left in place for a modified click. -->
         <Button
           label="Documentation"
           kind="outlined"
           size="medium"
           icon="pi pi-book"
-          href="https://www.azion.com/en/documentation/"
-          target="_blank"
+          href="/site/docs"
+          @click="onDocs"
         />
       </GlobalHeader.Right>
     </GlobalHeader>

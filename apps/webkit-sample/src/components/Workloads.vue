@@ -41,6 +41,7 @@
   import { WORKLOADS } from '../lib/workloads'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import FilterPopover from './ui/FilterPopover.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
@@ -166,7 +167,33 @@
       query: { email: userEmail.value, name: row.name }
     })
 
+  // ── Deploy ────────────────────────────────────────────────────────────────
+  // The same deploy interaction the Applications module and the Deployments module
+  // open (ui/DeployResourceDrawer.vue) — from here the WORKLOAD is the one already
+  // chosen, and the drawer asks which application to deploy onto it. A deployment
+  // belongs to exactly one workload (the workload is the path parameter of the
+  // request that creates it), so this is the entry point where that half is settled.
+  // Authoring a missing strategy is the drawer's own nested flow (its Deployment
+  // Settings Select carries the quick-add), so this page hosts only the deploy drawer.
+  const deployOpen = ref(false)
+  const deployTarget = ref(null)
+
+  const openDeploy = (row) => {
+    deployTarget.value = { kind: 'workload', id: row.id, name: row.name }
+    deployOpen.value = true
+  }
+
+  const onDeployed = (run) => {
+    toast.info(`Deployment ${run.deployId} started`, {
+      description: 'Follow it in Deployments — it keeps running if you leave.'
+    })
+  }
+
   const onRowAction = (event, value, row) => {
+    if (value === 'deploy') {
+      openDeploy(row)
+      return
+    }
     if (value === 'delete') {
       removeDeployment(row.id)
       workloads.value = workloads.value.filter((workload) => workload.id !== row.id)
@@ -446,6 +473,20 @@
                       </Dropdown.Trigger>
 
                       <Dropdown.Group>
+                        <!-- Deploy leads: it is the one action here that changes what
+                             this workload serves, and it is the same interaction every
+                             resource offers — the workload arrives already chosen. -->
+                        <Dropdown.Option
+                          value="deploy"
+                          label="Deploy"
+                        >
+                          <template #left>
+                            <i
+                              class="pi pi-cloud-upload"
+                              aria-hidden="true"
+                            />
+                          </template>
+                        </Dropdown.Option>
                         <Dropdown.Option
                           value="view"
                           label="View details"
@@ -492,5 +533,12 @@
         </section>
       </section>
     </main>
+
+    <!-- The one deploy interaction, with this row's workload already chosen. -->
+    <DeployResourceDrawer
+      v-model:open="deployOpen"
+      :resource="deployTarget"
+      @deployed="onDeployed"
+    />
   </AppLayout>
 </template>

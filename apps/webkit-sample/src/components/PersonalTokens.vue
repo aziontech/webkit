@@ -48,17 +48,11 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { reactive, ref, watch } from 'vue'
 
   import { useTenancyReload } from '../lib/tenancy-reload'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
-
-  const route = useRoute()
-
-  // The email carried over from the login flow (falls back to a placeholder).
-  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   // Switching organization, account or workspace reloads the page like every other
   // module list. The ROWS are not projected (src/lib/tenancy-scope.js): a personal
@@ -262,7 +256,12 @@
 </script>
 
 <template>
-  <AppLayout :breadcrumb="[{ label: 'Personal Tokens' }]">
+  <!-- Personal Tokens is a row in the sidebar's Settings level, so it reads like every
+       other settings page: that row active, and "Settings › Personal Tokens" above. -->
+  <AppLayout
+    active="settings-tokens"
+    :breadcrumb="[{ label: 'Settings', href: '/account' }, { label: 'Personal Tokens' }]"
+  >
     <main class="layout-column flex min-h-full flex-col">
       <!-- The page's parent section. A module list opens straight on it (no
            PageHeading — the module name is the breadcrumb crumb), so the

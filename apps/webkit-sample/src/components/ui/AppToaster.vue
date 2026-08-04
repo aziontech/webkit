@@ -69,12 +69,20 @@ const go = (path, query = {}) =>
 
 const retry = (run) => redeployRun(run.id);
 
-// Success shortcut: the provisioned workload, which is the thing that just went
-// live. Falls back to the module list if the record is somehow missing.
-const openDeployment = (run) =>
-  run.record
+// Success shortcut: whatever the run actually left behind.
+//
+//   a resource deploy → the DEPLOYMENT's own page (the pipeline it just ran); the
+//     resource already existed, so what is new is this deployment of it;
+//   a clone          → the provisioned workload, which is the thing that just
+//     went live.
+//
+// Falls back to the module list if the record is somehow missing.
+const openDeployment = (run) => {
+  if (run.kind === "resource") return go(`/deployments/${run.deployId}`);
+  return run.record
     ? go(`/workloads/${run.record.workload.id}`, { name: run.record.workload.name })
     : go("/deployments");
+};
 </script>
 
 <template>

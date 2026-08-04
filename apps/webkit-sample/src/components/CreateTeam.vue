@@ -38,16 +38,16 @@ const route = useRoute();
 const router = useRouter();
 
 const userEmail = computed(() => route.query.email || "myemail@azion.com");
-// The Teams Permissions list now lives as a tab under Account Settings; the
-// focused create/edit flow returns there.
+// The Teams & Permissions list is its own page under Settings; the focused
+// create/edit flow returns there.
 const goToList = () =>
   router.push({
-    path: "/account",
-    query: { email: userEmail.value, tab: "teams-permissions" },
+    path: "/account/teams",
+    query: { email: userEmail.value },
   });
 
-// Breadcrumb crumbs carry their own query (e.g. /account?tab=teams-permissions);
-// split it out and merge so the target tab is preserved alongside the email.
+// A crumb href may carry its own query (e.g. /deployments?tab=strategies); split it
+// out and merge so the target is preserved alongside the email.
 const onCrumb = (event, href) => {
   if (href && href !== "#") {
     const [path, queryString] = href.split("?");
@@ -199,7 +199,7 @@ const deleteTeam = () => {
 
 const breadcrumb = [
   { label: "Settings", href: "/account" },
-  { label: "Teams Permissions", href: "/account?tab=teams-permissions" },
+  { label: "Teams & Permissions", href: "/account/teams" },
   { label: editing ? "Edit" : "Create" },
 ];
 </script>

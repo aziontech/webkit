@@ -56,6 +56,7 @@
   import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import FilterPopover from './ui/FilterPopover.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
@@ -213,8 +214,33 @@
       query: { email: userEmail.value }
     })
 
+  // ── Deploy ────────────────────────────────────────────────────────────────
+  // The ONE deploy interaction, opened from a row with the application already
+  // chosen (ui/DeployResourceDrawer.vue). The run it starts lives at module scope
+  // (src/lib/deploy-runs.js), so this page can be left the moment the drawer closes;
+  // the deployment is a row in the Deployments module from that second, Building.
+  // Authoring a missing strategy is the drawer's own nested flow (its Deployment
+  // Settings Select carries the quick-add), so this page hosts only the deploy drawer.
+  const deployOpen = ref(false)
+  const deployTarget = ref(null)
+
+  const openDeploy = (row) => {
+    deployTarget.value = { kind: 'application', id: row.id, name: row.name }
+    deployOpen.value = true
+  }
+
+  const onDeployed = (run) => {
+    toast.info(`Deployment ${run.deployId} started`, {
+      description: 'Follow it in Deployments — it keeps running if you leave.'
+    })
+  }
+
   // Row action menu — Dropdown emits (event, value); `delete` removes the row.
   const onRowAction = (event, value, row) => {
+    if (value === 'deploy') {
+      openDeploy(row)
+      return
+    }
     if (value === 'delete') {
       removeDeployment(row.id)
       applications.value = applications.value.filter((app) => app.id !== row.id)
@@ -525,6 +551,21 @@
                       </Dropdown.Trigger>
 
                       <Dropdown.Group>
+                        <!-- Deploy leads the menu: it is the one action here that
+                             changes what the edge is serving, and it is the SAME
+                             interaction every other resource offers (ui/DeployResourceDrawer.vue)
+                             — the application arrives already chosen. -->
+                        <Dropdown.Option
+                          value="deploy"
+                          label="Deploy"
+                        >
+                          <template #left>
+                            <i
+                              class="pi pi-cloud-upload"
+                              aria-hidden="true"
+                            />
+                          </template>
+                        </Dropdown.Option>
                         <Dropdown.Option
                           value="view"
                           label="View details"
@@ -582,5 +623,12 @@
         </section>
       </section>
     </main>
+
+    <!-- The one deploy interaction, with this row's application already chosen. -->
+    <DeployResourceDrawer
+      v-model:open="deployOpen"
+      :resource="deployTarget"
+      @deployed="onDeployed"
+    />
   </AppLayout>
 </template>
