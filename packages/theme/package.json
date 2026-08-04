@@ -11,6 +11,7 @@
   },
   "scripts": {
     "pack:dry": "npm pack --dry-run",
+    "test": "node --test \"test/**/*.test.mjs\"",
     "format": "prettier --write scripts/ src/",
     "build": "pnpm build:tokens",
     "build:tokens": "node src/scripts/build-tokens.mjs",
