@@ -1,8 +1,6 @@
-// Pins the zero-with-unit / zero-unit-in-calc discipline that guards the compiled token
-// stylesheet (packages/theme/src/scripts/zero-unit.mjs) — the only gate that sees token
-// *values*, since they are authored in JS and no linter reads them. Covers both sides of
-// the rule (bare zero outside math; `0rem`-only inside math), the completed unit list, the
-// full-text (multi-line calc) scan, mutual exclusivity, and the assertion's message.
+// Pins the zero-with-unit gate (src/scripts/zero-unit.mjs): both sides of the rule (bare
+// zero outside math; `0rem`-only inside), the completed unit list, the multi-line calc scan,
+// mutual exclusivity, and the error message.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -92,9 +90,8 @@ test('a closed math function does not leak its exemption to a later zero', () =>
   assert.equal(findZeroMisuse(css, ZERO_UNIT_IN_MATH).length, 0, 'nothing inside the calc() misuses a unit');
 });
 
-// The reason the scan runs over the whole string, not line-by-line: a calc() split across
-// newlines must still be judged in context. A per-line scan mis-reads the tail as a bare
-// zero (wrong message) or misses it entirely.
+// Why the scan runs over the whole string: a per-line scan would mis-read the wrapped tail
+// (`- 0px);`) as a bare zero.
 test('a math function wrapping across lines is still judged in context', () => {
   const wrapped = '--x: calc(100%\n  - 0px);';
   assert.equal(findZeroMisuse(wrapped, ZERO_UNIT_IN_MATH).length, 1, 'the wrapped 0px is inside calc()');
