@@ -836,9 +836,9 @@
   --secondary-mask: #00000005;
   --secondary-selected: #0A0A0A;
   --secondary-contrast: #FFFFFF;
-  --accent: #756FE5;
-  --accent-mask: #8A84EC0D;
-  --accent-selected: #8A84EC;
+  --accent: #0072F5;
+  --accent-mask: #0072F51A;
+  --accent-selected: #0072F5;
   --accent-contrast: #000000;
   --bg-canvas: #FAFAFA;
   --bg-surface: #FFFFFF;
@@ -906,9 +906,9 @@
   --secondary-mask: #FFFFFF1A;
   --secondary-selected: #FFFFFF;
   --secondary-contrast: #000000;
-  --accent: #8A84EC;
-  --accent-mask: #8A84EC1A;
-  --accent-selected: #8A84EC;
+  --accent: #0072F5;
+  --accent-mask: #0072F51A;
+  --accent-selected: #0072F5;
   --accent-contrast: #000000;
   --bg-canvas: #000000;
   --bg-surface: #0A0A0A;
