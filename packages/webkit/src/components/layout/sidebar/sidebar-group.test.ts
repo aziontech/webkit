@@ -1,13 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/sidebar/Sidebar.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
-import MenuItem from '../../navigation/menu-item/menu-item.vue'
+import MenuItem from '../../navigation/menu/menu-item/menu-item.vue'
 import SidebarGroup from './sidebar-group.vue'
-
-const { Default } = composeStories(stories)
 
 // Without an injected Sidebar context the group falls back to this testid.
 const TESTID = 'layout-sidebar__group'
@@ -95,13 +91,26 @@ describe('SidebarGroup', () => {
     await expectNoA11yViolations(container)
   })
 
-  describe('stories', () => {
-    it('renders the Default story fixture with its sidebar groups', () => {
-      const { getAllByTestId } = render(Default())
+  // No story fixture: the Sidebar stories compose `Menu` now, and `Menu.Group` is what a new
+  // sidebar reaches for. `SidebarGroup` stays supported and unchanged, so it is exercised here
+  // directly rather than through a story that no longer renders it.
+  describe('composed the way a consumer still using it does', () => {
+    it('renders several groups, each with its own list', () => {
+      const { getAllByTestId } = render({
+        components: { SidebarGroup, MenuItem },
+        template: `
+          <div>
+            <SidebarGroup>
+              <MenuItem label="Home" href="/" />
+            </SidebarGroup>
+            <SidebarGroup label="Build">
+              <MenuItem label="Applications" href="/applications" />
+            </SidebarGroup>
+          </div>
+        `
+      })
 
-      // The Default sidebar composes multiple SidebarGroups; each renders a list.
-      const lists = getAllByTestId(`${TESTID}__list`)
-      expect(lists.length).toBeGreaterThan(0)
+      expect(getAllByTestId(`${TESTID}__list`)).toHaveLength(2)
     })
   })
 })

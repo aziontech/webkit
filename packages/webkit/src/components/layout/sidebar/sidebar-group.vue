@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import MenuItem from '../../navigation/menu-item/menu-item.vue'
+  import MenuItem from '../../navigation/menu/menu-item/menu-item.vue'
   import { SidebarInjectionKey } from './injection-key'
 
   defineOptions({
