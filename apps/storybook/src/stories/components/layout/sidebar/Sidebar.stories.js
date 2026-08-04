@@ -1,107 +1,265 @@
 import Avatar from '@aziontech/webkit/avatar'
+import CommandMenu from '@aziontech/webkit/command-menu'
+import CommandMenuEmpty from '@aziontech/webkit/command-menu-empty'
+import CommandMenuGroup from '@aziontech/webkit/command-menu-group'
+import CommandMenuInput from '@aziontech/webkit/command-menu-input'
+import CommandMenuItem from '@aziontech/webkit/command-menu-item'
+import CommandMenuList from '@aziontech/webkit/command-menu-list'
+import CommandMenuSeparator from '@aziontech/webkit/command-menu-separator'
 import Dropdown from '@aziontech/webkit/dropdown'
+import DropdownGroup from '@aziontech/webkit/dropdown-group'
+import DropdownOption from '@aziontech/webkit/dropdown-option'
+import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+import IconButton from '@aziontech/webkit/icon-button'
 import InputText from '@aziontech/webkit/input-text'
+import Kbd from '@aziontech/webkit/kbd'
+import Menu from '@aziontech/webkit/menu'
+import MenuBack from '@aziontech/webkit/menu-back'
+import MenuGroup from '@aziontech/webkit/menu-group'
 import MenuItem from '@aziontech/webkit/menu-item'
+import MenuSub from '@aziontech/webkit/menu-sub'
+import MenuSubContent from '@aziontech/webkit/menu-sub-content'
+import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
 import Sidebar from '@aziontech/webkit/sidebar'
 import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-import SidebarGroup from '@aziontech/webkit/sidebar-group'
 import SidebarHeader from '@aziontech/webkit/sidebar-header'
 import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
+// Every runtime template below uses FLAT sub-component tags (<MenuGroup>, <DropdownOption>, …)
+// registered in `components`. Dot-notation (Menu.Group) does not resolve in a Storybook runtime
+// template string, so the canvas would render nothing and clicks would do nothing. The snippets
+// use the very same flat imports, so "Show code" stays paste-and-run.
 const IMPORT_SIDEBAR = "import Sidebar from '@aziontech/webkit/sidebar'"
-const IMPORT_GROUP = "import SidebarGroup from '@aziontech/webkit/sidebar-group'"
 const IMPORT_HEADER = "import SidebarHeader from '@aziontech/webkit/sidebar-header'"
 const IMPORT_FOOTER = "import SidebarFooter from '@aziontech/webkit/sidebar-footer'"
-const IMPORT_MENU_ITEM = "import MenuItem from '@aziontech/webkit/menu-item'"
 const IMPORT_INPUT_TEXT = "import InputText from '@aziontech/webkit/input-text'"
+const IMPORT_KBD = "import Kbd from '@aziontech/webkit/kbd'"
 const IMPORT_AVATAR = "import Avatar from '@aziontech/webkit/avatar'"
+const IMPORT_ICON_BUTTON = "import IconButton from '@aziontech/webkit/icon-button'"
 const IMPORT_DROPDOWN = "import Dropdown from '@aziontech/webkit/dropdown'"
+const IMPORT_DROPDOWN_TRIGGER = "import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'"
+const IMPORT_DROPDOWN_GROUP = "import DropdownGroup from '@aziontech/webkit/dropdown-group'"
+const IMPORT_DROPDOWN_OPTION = "import DropdownOption from '@aziontech/webkit/dropdown-option'"
+const IMPORT_COMMAND_MENU = "import CommandMenu from '@aziontech/webkit/command-menu'"
+const IMPORT_COMMAND_MENU_INPUT =
+  "import CommandMenuInput from '@aziontech/webkit/command-menu-input'"
+const IMPORT_COMMAND_MENU_LIST = "import CommandMenuList from '@aziontech/webkit/command-menu-list'"
+const IMPORT_COMMAND_MENU_GROUP =
+  "import CommandMenuGroup from '@aziontech/webkit/command-menu-group'"
+const IMPORT_COMMAND_MENU_ITEM = "import CommandMenuItem from '@aziontech/webkit/command-menu-item'"
+const IMPORT_COMMAND_MENU_SEPARATOR =
+  "import CommandMenuSeparator from '@aziontech/webkit/command-menu-separator'"
+const IMPORT_COMMAND_MENU_EMPTY =
+  "import CommandMenuEmpty from '@aziontech/webkit/command-menu-empty'"
+const IMPORT_MENU = "import Menu from '@aziontech/webkit/menu'"
+const IMPORT_MENU_BACK = "import MenuBack from '@aziontech/webkit/menu-back'"
+const IMPORT_MENU_GROUP = "import MenuGroup from '@aziontech/webkit/menu-group'"
+const IMPORT_MENU_ITEM = "import MenuItem from '@aziontech/webkit/menu-item'"
+const IMPORT_MENU_SUB = "import MenuSub from '@aziontech/webkit/menu-sub'"
+const IMPORT_MENU_SUB_TRIGGER = "import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'"
+const IMPORT_MENU_SUB_CONTENT = "import MenuSubContent from '@aziontech/webkit/menu-sub-content'"
 const IMPORT_VUE_REF = "import { ref } from 'vue'"
+
+const sidebarStoryComponents = {
+  Sidebar,
+  SidebarHeader,
+  SidebarFooter,
+  InputText,
+  Kbd,
+  Avatar,
+  IconButton,
+  Dropdown,
+  DropdownTrigger,
+  DropdownGroup,
+  DropdownOption,
+  CommandMenu,
+  CommandMenuInput,
+  CommandMenuList,
+  CommandMenuGroup,
+  CommandMenuItem,
+  CommandMenuSeparator,
+  CommandMenuEmpty,
+  Menu,
+  MenuBack,
+  MenuGroup,
+  MenuItem,
+  MenuSub,
+  MenuSubContent,
+  MenuSubTrigger
+}
 
 const sampleImage =
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'
 
-// Navigation content shared by every story — root links plus grouped sections,
-// including a selected item and a trailing tag. Reused by both the render
-// template and the "Show code" snippet so canvas and source never drift.
-const NAV_CONTENT = `<SidebarGroup>
-    <MenuItem label="Home" icon="ai ai-home" href="/" selected />
-    <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />
-    <MenuItem label="Domains" icon="ai ai-workloads" href="/domains" />
-  </SidebarGroup>
-  <SidebarGroup label="Build">
-    <MenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />
-    <MenuItem label="Variables" icon="ai ai-variables" href="/variables" />
-  </SidebarGroup>
-  <SidebarGroup label="Secure">
-    <MenuItem label="Connectors" icon="ai ai-edge-connectors" href="/connectors" />
-    <MenuItem label="Edge DNS" icon="ai ai-edge-dns" href="/edge-dns" />
-    <MenuItem label="Firewalls" icon="ai ai-edge-firewall" href="/firewalls" />
-  </SidebarGroup>
-  <SidebarGroup label="Store">
-    <MenuItem label="Object Storage" icon="ai ai-edge-storage" href="/object-storage" />
-    <MenuItem label="SQL Database" icon="ai ai-edge-sql" href="/sql-database" tag-value="Preview" tag-severity="primary" />
-  </SidebarGroup>
-  <SidebarGroup label="Observe">
-    <MenuItem label="Data Stream" icon="ai ai-data-stream" href="/data-stream" />
-    <MenuItem label="Real-Time Metrics" icon="ai ai-real-time-metrics" href="/real-time-metrics" />
-  </SidebarGroup>`
-
+// ── The header: search that opens the palette ────────────────────────────────
+// A read-only field carrying the ⌘K hint, in the fixed header region so it stays put while the
+// nav below it scrolls. The wrapper takes the click, so the icons and the field are all part of
+// one target; Enter on the focused field opens it too. The palette teleports to the body, so it
+// keeps working while the rail is collapsed.
 const HEADER_SLOT = `<template #header>
     <SidebarHeader>
-      <InputText placeholder="Search" size="medium" />
+      <div class="cursor-pointer [&_input]:cursor-pointer" @click="paletteOpen = true" @keydown.enter="paletteOpen = true">
+        <InputText
+          model-value=""
+          placeholder="Search"
+          size="large"
+          readonly
+          aria-label="Search navigation and commands"
+          aria-keyshortcuts="Meta+K"
+        >
+          <template #iconLeft><i class="pi pi-search" aria-hidden="true" /></template>
+          <template #iconRight><Kbd meta size="small">K</Kbd></template>
+        </InputText>
+      </div>
+
+      <CommandMenu v-model:open="paletteOpen">
+        <CommandMenuInput placeholder="Search navigation and commands" />
+        <CommandMenuList>
+          <CommandMenuGroup heading="Build">
+            <CommandMenuItem value="nav:applications">
+              <template #prefix><i class="ai ai-edge-application" aria-hidden="true" /></template>
+              Applications
+            </CommandMenuItem>
+            <CommandMenuItem value="nav:variables">
+              <template #prefix><i class="ai ai-variables" aria-hidden="true" /></template>
+              Variables
+            </CommandMenuItem>
+          </CommandMenuGroup>
+
+          <CommandMenuSeparator />
+
+          <CommandMenuGroup heading="Account">
+            <CommandMenuItem value="cmd:settings">
+              <template #prefix><i class="pi pi-cog" aria-hidden="true" /></template>
+              Account Settings
+            </CommandMenuItem>
+          </CommandMenuGroup>
+
+          <CommandMenuEmpty>No navigation or command matches your search.</CommandMenuEmpty>
+        </CommandMenuList>
+      </CommandMenu>
     </SidebarHeader>
   </template>`
 
+// ── The navigation: Menu, grouped ────────────────────────────────────────────
+// `role="presentation"` because Sidebar already renders the <nav> landmark; the menu drops its
+// accessible name along with the role, so the sidebar's `ariaLabel` is the one name for the
+// region. `MenuBack` renders nothing until a drill level is pushed, so it needs no v-if.
+const MENU_CONTENT = `<Menu role="presentation">
+    <MenuBack />
+    <MenuGroup>
+      <MenuItem label="Home" icon="ai ai-home" href="/" selected />
+      <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />
+    </MenuGroup>
+    <MenuGroup label="Build">
+      <MenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />
+      <MenuSub default-open>
+        <MenuSubTrigger label="Edge Functions" kind="inline" />
+        <MenuSubContent>
+          <MenuItem label="Runtime APIs" href="/functions/runtime-apis" />
+          <MenuItem label="Bundlers" href="/functions/bundlers" />
+        </MenuSubContent>
+      </MenuSub>
+      <MenuItem label="Variables" icon="ai ai-variables" href="/variables" />
+    </MenuGroup>
+    <MenuGroup label="Store">
+      <MenuItem label="Object Storage" icon="ai ai-edge-storage" href="/object-storage" />
+      <MenuItem label="SQL Database" icon="ai ai-edge-sql" href="/sql-database" tag-value="Preview" tag-severity="primary" />
+    </MenuGroup>
+    <MenuGroup label="Account">
+      <MenuSub>
+        <MenuSubTrigger label="Settings" icon="pi pi-cog" kind="drill" />
+        <MenuSubContent>
+          <MenuGroup label="Organization">
+            <MenuItem label="General" href="/settings/general" />
+            <MenuItem label="Members" href="/settings/members" />
+            <MenuItem label="Billing" href="/settings/billing" />
+          </MenuGroup>
+        </MenuSubContent>
+      </MenuSub>
+    </MenuGroup>
+  </Menu>`
+
+// ── The footer: identity, then the account menu ──────────────────────────────
+// One row: avatar, name, and the account Dropdown opening above its trigger. With `collapsible`
+// set, Sidebar's own collapse trigger trails this content in the same row.
 const FOOTER_SLOT = `<template #footer>
-    <SidebarFooter>
-      <Dropdown v-model:open="profileMenuOpen" placement="top-start">
-        <Dropdown.Trigger class="block w-full">
-          <button
-            type="button"
-            class="flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-left transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
-            aria-label="Open profile menu"
-          >
-            <Avatar kind="square" size="medium" src="${sampleImage}" alt="Rafael Umman" />
-            <span class="flex min-w-0 flex-1 flex-col justify-center">
-              <span class="truncate text-label-sm text-[var(--text-default)]">Rafael Umman</span>
-              <span class="truncate text-label-sm text-[var(--text-muted)]">rafael.umman@example.com</span>
-            </span>
-            <i class="pi pi-sort-alt text-[var(--text-muted)]" aria-hidden="true" />
-          </button>
-        </Dropdown.Trigger>
-        <Dropdown.Group>
-          <Dropdown.Option value="account-settings" label="Account Settings" />
-          <Dropdown.Option value="billing" label="Billing" />
-          <Dropdown.Option value="credentials" label="Credentials" />
-        </Dropdown.Group>
-        <Dropdown.Group>
-          <Dropdown.Option value="logout" label="Log out">
-            <template #left>
-              <i class="pi pi-sign-out" aria-hidden="true" />
-            </template>
-          </Dropdown.Option>
-        </Dropdown.Group>
+    <SidebarFooter class="flex items-center gap-[var(--spacing-xs)]">
+      <Avatar kind="square" size="small" src="${sampleImage}" alt="Rafael Umman" />
+      <span class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)]">Rafael Umman</span>
+      <Dropdown v-model:open="accountMenuOpen" placement="top-end">
+        <DropdownTrigger>
+          <IconButton icon="pi pi-ellipsis-v" aria-label="Account menu" kind="outlined" size="small" />
+        </DropdownTrigger>
+        <DropdownGroup>
+          <template #top>
+            <div class="flex min-w-0 flex-col">
+              <span class="truncate text-label-md text-[var(--text-default)]">Rafael Umman</span>
+              <span class="truncate text-body-xs text-[var(--text-muted)]">rafael.umman@example.com</span>
+            </div>
+          </template>
+          <DropdownOption value="settings" label="Account Settings" />
+          <DropdownOption value="personal-tokens" label="Personal Tokens" />
+        </DropdownGroup>
+        <DropdownGroup>
+          <DropdownOption value="logout" label="Log Out">
+            <template #right><i class="pi pi-sign-out" aria-hidden="true" /></template>
+          </DropdownOption>
+        </DropdownGroup>
       </Dropdown>
     </SidebarFooter>
   </template>`
 
-const DEFAULT_SOURCE = `<Sidebar aria-label="Application" class="h-screen w-[280px]">
-  ${NAV_CONTENT}
-</Sidebar>`
+const CONSOLE_IMPORTS = [
+  IMPORT_SIDEBAR,
+  IMPORT_HEADER,
+  IMPORT_FOOTER,
+  IMPORT_INPUT_TEXT,
+  IMPORT_KBD,
+  IMPORT_AVATAR,
+  IMPORT_ICON_BUTTON,
+  IMPORT_DROPDOWN,
+  IMPORT_DROPDOWN_TRIGGER,
+  IMPORT_DROPDOWN_GROUP,
+  IMPORT_DROPDOWN_OPTION,
+  IMPORT_COMMAND_MENU,
+  IMPORT_COMMAND_MENU_INPUT,
+  IMPORT_COMMAND_MENU_LIST,
+  IMPORT_COMMAND_MENU_GROUP,
+  IMPORT_COMMAND_MENU_ITEM,
+  IMPORT_COMMAND_MENU_SEPARATOR,
+  IMPORT_COMMAND_MENU_EMPTY,
+  IMPORT_MENU,
+  IMPORT_MENU_BACK,
+  IMPORT_MENU_GROUP,
+  IMPORT_MENU_ITEM,
+  IMPORT_MENU_SUB,
+  IMPORT_MENU_SUB_TRIGGER,
+  IMPORT_MENU_SUB_CONTENT,
+  IMPORT_VUE_REF
+]
 
-const HEADER_SOURCE = `<Sidebar aria-label="Application" class="h-screen w-[280px]">
+const DEFAULT_SOURCE = `<Sidebar aria-label="Console" class="h-screen w-[280px]">
   ${HEADER_SLOT}
-  ${NAV_CONTENT}
-</Sidebar>`
-
-const FOOTER_SOURCE = `<Sidebar aria-label="Application" class="h-screen w-[280px]">
-  ${HEADER_SLOT}
-  ${NAV_CONTENT}
+  ${MENU_CONTENT}
   ${FOOTER_SLOT}
 </Sidebar>`
+
+const RESIZABLE_SOURCE = `<div class="relative flex h-screen min-h-0">
+  <Sidebar v-model:collapsed="collapsed" v-model:width="width" resizable collapsible aria-label="Console">
+    ${HEADER_SLOT}
+    ${MENU_CONTENT}
+    ${FOOTER_SLOT}
+  </Sidebar>
+
+  <main class="min-w-0 flex-1 p-[var(--spacing-lg)]">
+    <p class="text-body-sm text-[var(--text-muted)]">
+      The page morphs as the rail animates — it is a flex sibling, so it fills the freed space on the same frames.
+    </p>
+  </main>
+</div>`
 
 /** @type {import('@storybook/vue3').Meta<typeof Sidebar>} */
 const meta = {
@@ -109,9 +267,8 @@ const meta = {
   component: Sidebar,
   subcomponents: {
     SidebarHeader,
-    SidebarGroup,
     SidebarFooter,
-    MenuItem
+    Menu
   },
   tags: ['autodocs'],
   parameters: {
@@ -130,7 +287,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`.'
+          'Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns the rail gesture — `resizable` adds a drag handle on the trailing edge, `collapsible` adds the collapse trigger at the bottom and the affordance that brings a collapsed rail back. Both are opt-in and independent: with neither set the sidebar renders exactly as it always has, with the host owning the width. Navigation is composed with [`Menu`](/docs/components-navigation-menu--docs), which fills the width the sidebar gives it and adds no outer margin.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -145,10 +302,89 @@ const meta = {
         defaultValue: { summary: "'Sidebar'" }
       }
     },
+    resizable: {
+      control: 'boolean',
+      description:
+        'Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    collapsible: {
+      control: 'boolean',
+      description:
+        'Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    minWidthToken: {
+      control: 'text',
+      description:
+        'Theme container token the sized width is clamped up to, read off the document at runtime.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'--container-3xs'" }
+      }
+    },
+    maxWidthToken: {
+      control: 'text',
+      description:
+        'Theme container token the sized width is clamped down to, read off the document at runtime.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'--container-sm'" }
+      }
+    },
+    collapseAriaLabel: {
+      control: 'text',
+      description: 'Accessible name for the collapse trigger.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Collapse sidebar'" }
+      }
+    },
+    expandAriaLabel: {
+      control: 'text',
+      description:
+        'Accessible name for the control and the grab bar that bring a collapsed rail back.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Expand sidebar'" }
+      }
+    },
+    resizeAriaLabel: {
+      control: 'text',
+      description: 'Accessible name for the drag handle separator.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Resize sidebar'" }
+      }
+    },
+    'onUpdate:collapsed': {
+      action: 'update:collapsed',
+      description:
+        'The rail entered or left the layout (`v-model:collapsed`) — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle.',
+      table: { category: 'events', type: { summary: 'boolean' } }
+    },
+    'onUpdate:width': {
+      action: 'update:width',
+      description:
+        'The sized width in px (`v-model:width`), already clamped to the token bounds. Emitted continuously during a drag.',
+      table: { category: 'events', type: { summary: 'number | null' } }
+    },
     default: {
       control: false,
-      description:
-        'Navigation groups and menu items; region padding and group gap are applied by `Sidebar`.',
+      description: 'The navigation — a `Menu`. Region padding is applied by `Sidebar`.',
       table: { category: 'slots', type: { summary: 'VNode' } }
     },
     header: {
@@ -158,103 +394,94 @@ const meta = {
     },
     footer: {
       control: false,
-      description: 'Optional bottom region (profile, actions).',
+      description:
+        'Optional bottom region (profile, actions). With `collapsible`, the collapse trigger trails this content in the same row.',
       table: { category: 'slots', type: { summary: 'VNode' } }
     }
   },
   args: {
-    ariaLabel: 'Application'
+    ariaLabel: 'Console',
+    resizable: false,
+    collapsible: false
   }
 }
 
 export default meta
 
-// The `ariaLabel` control drives the root landmark name; the header/footer
-// slots are toggled per story. `profileMenuOpen` backs the footer Dropdown's
-// v-model:open so the account menu opens above its trigger.
-const makeSidebar =
-  ({ withHeader = false, withFooter = false } = {}) =>
-  (args) => ({
-    components: {
-      Sidebar,
-      SidebarHeader,
-      SidebarGroup,
-      SidebarFooter,
-      MenuItem,
-      InputText,
-      Avatar,
-      Dropdown
-    },
-    setup() {
-      const profileMenuOpen = ref(false)
-      return { args, profileMenuOpen }
-    },
-    template: `
-      <Sidebar v-bind="args" class="h-screen w-[280px]">
-        ${withHeader ? HEADER_SLOT : ''}
-        ${NAV_CONTENT}
-        ${withFooter ? FOOTER_SLOT : ''}
-      </Sidebar>
-    `
-  })
+// `paletteOpen` backs the header search's CommandMenu; `accountMenuOpen` backs the footer
+// Dropdown so the account menu opens above its trigger.
+const consoleState = () => {
+  const paletteOpen = ref(false)
+  const accountMenuOpen = ref(false)
+  return { paletteOpen, accountMenuOpen }
+}
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Sidebar>} */
 export const Default = {
-  render: makeSidebar(),
+  render: (args) => ({
+    components: sidebarStoryComponents,
+    setup: () => ({ args, ...consoleState() }),
+    template: `
+      <Sidebar v-bind="args" class="h-screen w-[280px]">
+        ${HEADER_SLOT}
+        ${MENU_CONTENT}
+        ${FOOTER_SLOT}
+      </Sidebar>
+    `
+  }),
   parameters: {
     docs: {
       description: {
         story:
-          'Content-only sidebar (no header and no footer); navigation groups scroll inside the built-in ScrollArea.'
+          'The console rail, whole: a header whose search field opens a ⌘K palette, grouped navigation composed with `Menu`, and a footer carrying the account identity and its menu. The navigation scrolls inside the built-in `ScrollArea` while the header and footer stay put. `Menu` takes `role="presentation"` because the sidebar is already the `<nav>` landmark — it drops its accessible name with the role, so the region has exactly one name. Expand "Edge Functions" for a level that opens in place behind the indent rail; activate "Settings" for a drill level that replaces the menu.'
       },
-      source: { code: toSfc([IMPORT_SIDEBAR, IMPORT_GROUP, IMPORT_MENU_ITEM], DEFAULT_SOURCE) }
+      source: { code: toSfc(CONSOLE_IMPORTS, DEFAULT_SOURCE) }
     }
   }
 }
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Sidebar>} */
-export const WithHeaderSearch = {
-  render: makeSidebar({ withHeader: true }),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Adds the header region with a search input wrapped in SidebarHeader.'
-      },
-      source: {
-        code: toSfc(
-          [IMPORT_SIDEBAR, IMPORT_HEADER, IMPORT_GROUP, IMPORT_MENU_ITEM, IMPORT_INPUT_TEXT],
-          HEADER_SOURCE
-        )
-      }
-    }
-  }
-}
+export const Resizable = {
+  render: (args) => ({
+    components: sidebarStoryComponents,
+    setup() {
+      const collapsed = ref(false)
+      const width = ref(null)
+      return { args, collapsed, width, ...consoleState() }
+    },
+    // The rail gesture needs three things a static story cannot fake: a `relative` host row (the
+    // affordance that brings a collapsed rail back is positioned against it), a `flex-1` sibling
+    // to morph as the width animates, and real state behind the two models.
+    template: `
+      <div class="relative flex h-[560px] min-h-0">
+        <Sidebar v-bind="args" v-model:collapsed="collapsed" v-model:width="width">
+          ${HEADER_SLOT}
+          ${MENU_CONTENT}
+          ${FOOTER_SLOT}
+        </Sidebar>
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Sidebar>} */
-export const WithHeaderAndProfileFooter = {
-  render: makeSidebar({ withHeader: true, withFooter: true }),
+        <main class="min-w-0 flex-1 p-[var(--spacing-lg)]">
+          <p class="text-body-sm text-[var(--text-muted)]">
+            The page morphs as the rail animates — it is a flex sibling, so it fills the freed space on the same frames.
+          </p>
+        </main>
+      </div>
+    `
+  }),
+  args: {
+    resizable: true,
+    collapsible: true
+  },
   parameters: {
     docs: {
       description: {
         story:
-          'Header search plus a profile footer whose account Dropdown opens above the trigger (placement="top-start").'
+          'The same console rail with the gesture on. Drag the trailing edge to size it between `--container-3xs` and `--container-sm`; keep pulling past the minimum and it drops out of the layout, keeping the width it had for when it comes back. The handle is a focusable separator that reports its position, so arrows nudge it and `ArrowLeft` past the boundary collapses — double-click does too. The collapse trigger sits at the bottom, trailing the account row so the two read as one footer. While collapsed the rail is `inert` and `aria-hidden` (it stays mounted so its width can animate), which is exactly why the way back is a sibling: hover the left edge for the grab bar and the expand button.'
       },
       source: {
         code: toSfc(
-          [
-            IMPORT_SIDEBAR,
-            IMPORT_HEADER,
-            IMPORT_GROUP,
-            IMPORT_MENU_ITEM,
-            IMPORT_INPUT_TEXT,
-            IMPORT_FOOTER,
-            IMPORT_AVATAR,
-            IMPORT_DROPDOWN,
-            IMPORT_VUE_REF,
-            '',
-            'const profileMenuOpen = ref(false)'
-          ],
-          FOOTER_SOURCE
+          [...CONSOLE_IMPORTS, '', 'const collapsed = ref(false)', 'const width = ref(null)'],
+          RESIZABLE_SOURCE
         )
       }
     }
