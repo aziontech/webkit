@@ -134,9 +134,7 @@
               :current="firstItem.current && !showDistinctEnds"
               :show-icon="firstItem.showIcon"
               :icon="firstItem.icon"
-              :class="
-                firstItem.current && !showDistinctEnds ? 'text-(--text-default)' : undefined
-              "
+              :class="firstItem.current && !showDistinctEnds ? 'text-(--text-default)' : undefined"
               :data-testid="`${testId}__item-0`"
               @click="
                 (event) => !firstItem.current && handleItemClick(event, firstItem.href ?? '#')

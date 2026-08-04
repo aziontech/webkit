@@ -37,9 +37,9 @@ typography) are **blocked** by lint and hooks — the token is always the answer
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | **Color**      | `var(--primary)` · `var(--bg-surface)` · `var(--text-default)` · `var(--border-default)` · feedback `--success/--warning/--danger/--info`   | `#f3652b` · `text-blue-600` · `rgb(…)`                    |
 | **Typography** | the generated classes — `text-heading-md`, `text-body-sm`, `text-button-lg`, `text-label-md` (font + size + line-height + tracking bundled) | `text-sm` · `leading-*` · `tracking-*` · `font-family`    |
-| **Spacing**    | the semantic scale — `p-(--spacing-md)` · `gap-(--spacing-sm)` (`xxs…xxl`)                                                        | primitive `--spacing-1…-96` · `p-4` when a token applies  |
-| **Shape**      | `rounded-(--shape-button)` · `--shape-card` · `--shape-elements`                                                                       | `rounded-lg` · numeric radii                              |
-| **Shadow**     | `shadow-(--shadow-md)`                                                                                                                 | bare `shadow-md` · hex/rgb elevation                      |
+| **Spacing**    | the semantic scale — `p-(--spacing-md)` · `gap-(--spacing-sm)` (`xxs…xxl`)                                                                  | primitive `--spacing-1…-96` · `p-4` when a token applies  |
+| **Shape**      | `rounded-(--shape-button)` · `--shape-card` · `--shape-elements`                                                                            | `rounded-lg` · numeric radii                              |
+| **Shadow**     | `shadow-(--shadow-md)`                                                                                                                      | bare `shadow-md` · hex/rgb elevation                      |
 | **Motion**     | catalogued `animate-*` utilities + `transition-*` with token durations; **every** motion class pairs with `motion-reduce:`                  | local `@keyframes` · `duration-[…]` · animation libraries |
 
 Tokens are light/dark aware — using them is what makes a component theme correctly for free.
@@ -61,7 +61,7 @@ Each is a `scope: general` standard. Follow ✅, avoid ❌.
 | **Event payloads**      | `emit('click', item)` · `{ value, event }` payload objects           | activation events emit `(event, item?)` — DOM event always first                        |
 | **Slots**               | `<slot/>` with no declaration                                        | `defineSlots<{ default():unknown }>()`                                                  |
 | **Composables**         | `return reactive({…})`                                               | `return { value: readonly(v), set }` · args via `toValue` · cleanup in `onScopeDispose` |
-| **Styling**             | `const kindClasses = {…}` · `#f3652b` · `text-blue-600`              | `data-[kind=primary]:bg-(--primary)` inline · tokens only                          |
+| **Styling**             | `const kindClasses = {…}` · `#f3652b` · `text-blue-600`              | `data-[kind=primary]:bg-(--primary)` inline · tokens only                               |
 | **Component structure** | random `<script setup>` order                                        | fixed order: options → props → emits → models → slots → state                           |
 | **Root element**        | wrapper `<div>` that swallows attrs · `as` prop                      | own the root · `inheritAttrs:false` + `$attrs` + `cn` · polymorphism via `href`         |
 | **States**              | ad-hoc spinner / "no results" string                                 | `data-*` + `Skeleton` / `EmptyState`                                                    |
@@ -116,7 +116,7 @@ export default [...webkit.configs.recommended]
 | **Tree-shaking**          | `import Table` (compound) when you only render the root | `import TableRoot from '@aziontech/webkit/table-root'`   |
 | **Don't override styles** | `<Button class="p-8" />`                                | compose inside its slots, or use a `styleSeam` component |
 | **No deprecated**         | importing a deprecated component                        | the suggested replacement                                |
-| **Tokens, not colors**    | `class="text-[#fff]"`                                   | `class="text-(--text-default)"`                     |
+| **Tokens, not colors**    | `class="text-[#fff]"`                                   | `class="text-(--text-default)"`                          |
 | **Icons**                 | `import Icons from '@aziontech/icons'`                  | `import '@aziontech/icons'` (side-effect)                |
 
 **Discover the API before you write it:** the webkit MCP server (`npx webkit-mcp`, wired

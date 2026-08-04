@@ -772,10 +772,7 @@ Each section is a **group of related controls**. Give it programmatic grouping w
 attribute, which is how you lock the scope on submit.
 
 ```vue
-<fieldset
-  class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-  :disabled="submitting"
->
+<fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0" :disabled="submitting">
   <legend class="sr-only">Account settings</legend>
   <!-- sections: CardBox + Item.List (Approach A) OR stacked field-* (Approach B) -->
 </fieldset>

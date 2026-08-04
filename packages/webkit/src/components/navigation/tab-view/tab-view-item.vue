@@ -91,9 +91,7 @@
         context &&
         isSelected.value &&
         'bg-transparent text-(--secondary-contrast)',
-      !context &&
-        isSelected.value &&
-        'bg-(--secondary-selected) text-(--secondary-contrast)',
+      !context && isSelected.value && 'bg-(--secondary-selected) text-(--secondary-contrast)',
       !context &&
         !isSelected.value &&
         'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',

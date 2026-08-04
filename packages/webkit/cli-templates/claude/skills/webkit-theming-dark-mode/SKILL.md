@@ -64,9 +64,7 @@ at once. Bind a raw color and you have pinned one theme.
 
 ```vue
 <!-- ✅ role-based: correct in both themes, no branches -->
-<div
-  class="bg-(--bg-surface) text-(--text-default) border border-(--border-default)"
->
+<div class="bg-(--bg-surface) text-(--text-default) border border-(--border-default)">
   <span class="text-(--primary)">Active</span>
 </div>
 

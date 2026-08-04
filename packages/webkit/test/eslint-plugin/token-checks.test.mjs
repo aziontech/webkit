@@ -105,7 +105,11 @@ test('the paren spellings named in ENG-47001 acceptance are all caught', () => {
 })
 
 test('the widened guardrails do not fire on the canonical whole-value paren token', () => {
-  for (const content of ['bg-(--primary)', 'max-w-(--container-2xl)', 'ring-offset-(--bg-canvas)']) {
+  for (const content of [
+    'bg-(--primary)',
+    'max-w-(--container-2xl)',
+    'ring-offset-(--bg-canvas)'
+  ]) {
     const found = ids(content)
     for (const id of [
       'typography-raw-length',

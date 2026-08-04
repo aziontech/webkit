@@ -20,9 +20,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 ## Correct
 
 ```html
-<div
-  class="bg-(--bg-surface) text-(--text-default) p-(--spacing-md) rounded-(--shape-card)"
->
+<div class="bg-(--bg-surface) text-(--text-default) p-(--spacing-md) rounded-(--shape-card)">
   ...
 </div>
 ```

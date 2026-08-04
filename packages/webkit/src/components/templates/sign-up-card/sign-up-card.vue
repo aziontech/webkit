@@ -73,9 +73,7 @@
   const testId = computed(() => attrs['data-testid'] ?? 'template-sign-up-card')
 
   const rootClass = computed(() => {
-    const classes = [
-      'flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-xs)'
-    ]
+    const classes = ['flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-xs)']
 
     if (attrs.class) {
       classes.push(attrs.class)

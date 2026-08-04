@@ -100,10 +100,7 @@
     :data-testid="testId"
   >
     <div
-      :class="[
-        'flex w-full flex-col items-start shrink-0',
-        isMiddle ? 'gap-(--spacing-lg)' : ''
-      ]"
+      :class="['flex w-full flex-col items-start shrink-0', isMiddle ? 'gap-(--spacing-lg)' : '']"
     >
       <div
         :class="headerContainerClasses"

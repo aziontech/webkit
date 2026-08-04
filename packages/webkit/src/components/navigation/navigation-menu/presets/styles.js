@@ -40,8 +40,7 @@ export const navigationMenuEntryTitleClasses = [
   'data-[featured]:text-(--text-link) data-[featured]:group-hover:text-(--text-link)'
 ]
 export const navigationMenuEntryDescriptionClasses = 'text-body-xs text-(--text-muted)'
-export const navigationMenuListGroupClasses =
-  'm-0 flex list-none flex-col gap-(--spacing-xs) p-0'
+export const navigationMenuListGroupClasses = 'm-0 flex list-none flex-col gap-(--spacing-xs) p-0'
 export const navigationMenuListRootClasses = [
   'relative z-1 m-0 flex list-none items-center gap-(--spacing-xs) p-0'
 ]

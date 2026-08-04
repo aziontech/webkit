@@ -66,8 +66,7 @@
   const rowClasses =
     'flex cursor-pointer items-start gap-(--spacing-sm) data-[disabled]:cursor-not-allowed'
 
-  const textsClasses =
-    'flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) data-[disabled]:opacity-50'
+  const textsClasses = 'flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) data-[disabled]:opacity-50'
 
   const helperClasses =
     'inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-xxs) text-body-xs text-(--text-muted) w-fit'

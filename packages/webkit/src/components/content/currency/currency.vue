@@ -46,9 +46,7 @@
       <span
         v-if="prefix"
         :class="[
-          isLarge
-            ? 'text-heading-md text-(--text-default)'
-            : 'text-label-lg text-(--text-default)'
+          isLarge ? 'text-heading-md text-(--text-default)' : 'text-label-lg text-(--text-default)'
         ]"
         :data-testid="`${testId}__prefix`"
       >
@@ -56,9 +54,7 @@
       </span>
       <span
         :class="[
-          isLarge
-            ? 'text-heading-md text-(--text-default)'
-            : 'text-label-lg text-(--text-default)'
+          isLarge ? 'text-heading-md text-(--text-default)' : 'text-label-lg text-(--text-default)'
         ]"
         :data-testid="`${testId}__value`"
       >
@@ -67,11 +63,7 @@
     </span>
     <span
       v-if="suffix"
-      :class="[
-        isLarge
-          ? 'text-label-md text-(--text-muted)'
-          : 'text-label-sm text-(--text-muted)'
-      ]"
+      :class="[isLarge ? 'text-label-md text-(--text-muted)' : 'text-label-sm text-(--text-muted)']"
       :data-testid="`${testId}__suffix`"
     >
       {{ suffix }}

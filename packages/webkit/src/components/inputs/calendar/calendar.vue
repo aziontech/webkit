@@ -550,9 +550,7 @@
               class="text-body-sm inline-flex min-w-0 flex-1 items-stretch text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
               @click="toggleOpen"
             >
-              <span
-                class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm)"
-              >
+              <span class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm)">
                 <i
                   class="pi pi-clock shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
                   aria-hidden="true"
