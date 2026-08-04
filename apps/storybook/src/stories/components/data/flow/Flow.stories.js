@@ -99,7 +99,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Flow renders a directed flow diagram: a horizontal sequence of steps (`Flow.Node`) joined by decorative connectors, with optional parallel branches (`Flow.Parallel`) and custom connector-attachment points (`Flow.Anchor`). Steps are direct children of `Flow`; mark a node `unstyled` to let its slot content define the node entirely. Import only `Flow` and reach the parts via dot-notation.'
+          'Flow renders a directed flow diagram: a horizontal sequence of steps (`Flow.Node`) joined by decorative connectors, with optional parallel branches (`Flow.Parallel`) and custom connector-attachment points (`Flow.Anchor`). Steps are direct children of `Flow`; mark a node `unstyled` to let its slot content define the node entirely. Import only `Flow` and reach the parts via dot-notation. Every connector **marches**: a dashed stroke animated with `animate-flow-dash`, so a connection reads as a live link rather than a static rule. A connector whose endpoint node is `disabled` keeps the dashes and drops the motion — a disabled step is not carrying anything — and `motion-reduce` stops all of it.'
       },
       canvas: {
         sourceState: 'shown'

@@ -60,7 +60,16 @@
       class="relative flex w-fit flex-row gap-[var(--spacing-xl)] text-[var(--text-default)] data-[align=center]:items-center data-[align=start]:items-start [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
     >
       <!-- Connectors run port-to-port: each end terminates under a node's connector port,
-           which paints over it (the nodes sit at z-[1], this layer behind them). -->
+           which paints over it (the nodes sit at z-[1], this layer behind them).
+
+           The stroke marches: `stroke-dasharray="4 4"` plus `animate-flow-dash` (which
+           drives `stroke-dashoffset` 24 → 0) reads as the connection carrying something,
+           the way a node-based / network diagram shows a live link. The dash cycle is 8
+           and the travel is 24, so the pattern lands where it started and the loop has no
+           visible seam. A FADED connector — one whose endpoint node is disabled — holds
+           still: a disabled step is not flowing, so it keeps the dashes and drops the
+           motion. `motion-reduce:animate-none` is what an endlessly moving line owes
+           anyone who asked the OS for less motion. -->
       <svg
         v-if="paths.length"
         :viewBox="viewBox"
@@ -74,8 +83,9 @@
           :key="index"
           :d="path.d"
           stroke-width="1"
+          stroke-dasharray="4 4"
           :data-faded="path.faded || null"
-          class="stroke-[var(--accent)] data-[faded]:opacity-50"
+          class="animate-flow-dash stroke-[var(--accent)] motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
         />
       </svg>
       <slot />

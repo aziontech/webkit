@@ -46,6 +46,7 @@
       "--animate-bounce",
       "--animate-fade-in",
       "--animate-fade-out",
+      "--animate-flow-dash",
       "--animate-highlight-fade",
       "--animate-ping",
       "--animate-popup-scale-in",
@@ -722,6 +723,7 @@
         "--animate-bounce",
         "--animate-fade-in",
         "--animate-fade-out",
+        "--animate-flow-dash",
         "--animate-highlight-fade",
         "--animate-ping",
         "--animate-popup-scale-in",
@@ -1429,6 +1431,7 @@
       "bounce",
       "fade-in",
       "fade-out",
+      "flow-dash",
       "highlight-fade",
       "ping",
       "popup-scale-in",
@@ -1460,6 +1463,10 @@
       "fade-out": {
         "value": "fadeOut 220ms ease-in-out",
         "useWhen": "Content or backdrop leaving in place (pair of fade-in)."
+      },
+      "flow-dash": {
+        "value": "flowDash 700ms linear infinite",
+        "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
       "highlight-fade": {
         "value": "highlight ease-in forwards",
