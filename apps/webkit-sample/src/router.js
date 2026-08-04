@@ -125,7 +125,16 @@ const routes = [
   },
   { path: '/create', name: 'create', component: CreationCenter },
   { path: '/deploy', name: 'deploy', component: DeployTemplate },
+  // Settings: ONE ROUTE PER CATEGORY, all mounting the same shell (which picks the
+  // view from the path — see AccountSettings.vue). The categories are rows in the
+  // sidebar's Settings level, so each one is a page with its own URL instead of a
+  // `?tab=` on a single page. `/account` is the level's landing (General).
   { path: '/account', name: 'account', component: AccountSettings },
+  { path: '/account/users', name: 'account-users', component: AccountSettings },
+  { path: '/account/teams', name: 'account-teams', component: AccountSettings },
+  { path: '/account/credentials', name: 'account-credentials', component: AccountSettings },
+  { path: '/account/billing', name: 'account-billing', component: AccountSettings },
+  { path: '/account/activity', name: 'account-activity', component: AccountSettings },
   { path: '/resources', name: 'resources', component: ManageResources },
   { path: '/personal-tokens', name: 'personal-tokens', component: PersonalTokens },
   { path: '/playground', name: 'playground', component: Playground },

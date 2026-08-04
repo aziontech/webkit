@@ -15,8 +15,9 @@
   // (grouped by product area, mirroring the console; a page can override it via
   // the default slot), and the footer — avatar + user name + the account menu, a
   // Dropdown anchored to the overflow (⋮) button with a single account "Settings"
-  // entry (the per-category links are tabs on the /account page), a personal
-  // section with an identity header, the theme control, and Logout.
+  // entry (the per-category links are rows in the rail's own Settings level, each
+  // one its own page), a personal section with an identity header, the theme
+  // control, and Logout.
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CommandMenu from '@aziontech/webkit/command-menu'
@@ -24,16 +25,16 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Kbd from '@aziontech/webkit/kbd'
-  import MenuItem from '@aziontech/webkit/menu-item'
+  import Menu from '@aziontech/webkit/menu'
   import Sidebar from '@aziontech/webkit/sidebar'
-  import SidebarGroup from '@aziontech/webkit/sidebar-group'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  import { useSidebar } from '../../sidebar.js'
+  import { menuLeaves, menuPath } from '../../lib/menu-tree.js'
+  import { reportNavLevel, setNavPath, useSidebar } from '../../sidebar.js'
   import { useTheme } from '../../theme.js'
 
   const props = defineProps({
@@ -47,8 +48,11 @@
     ariaLabel: { type: String, default: 'Sidebar' },
     // Id of the nav item to render as selected.
     active: { type: String, default: '' },
-    // Shows the collapse toggle at the bottom of the rail (desktop rail only;
-    // off inside the mobile drawer).
+    // Turns this instance into the RAIL: `Sidebar` then owns its own width and the
+    // whole gesture — the drag handle on its trailing edge, the collapse trigger at
+    // the bottom of the footer, the keyboard nudge, and the edge affordance that
+    // brings a collapsed rail back. Off inside the mobile drawer, where there is
+    // nothing to collapse and the drawer owns the width.
     collapsible: { type: Boolean, default: false },
     // Global shortcut that opens the command palette. Only ONE mounted sidebar
     // may own it — the shell passes an empty string to the drawer copy so ⌘K
@@ -63,9 +67,16 @@
   // are event-first per the activation-payload convention.
   const emit = defineEmits(['logout', 'select', 'navigate', 'create'])
 
-  // Azion Console navigation, grouped by product area — the full set mirroring
-  // the console's left rail. Items with a `path` route; the rest highlight only.
-  const navGroups = [
+  // Azion Console navigation.
+  //
+  // Four top-level destinations, then the product areas as LABELLED GROUPS, then Settings as
+  // a drill. A product area is a section title, not a control: every product in the console
+  // is one click from the rail, so the areas exist to separate the rows — not to fold them.
+  // Nothing at the root nests, so nothing has to be opened before it can be reached.
+  // Items with a `path` route; the rest highlight only.
+  const NAV_TREE = [
+    // The destinations come first, unlabeled — the block itself carries the separation from
+    // the titled areas below it.
     {
       items: [
         { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' },
@@ -84,6 +95,8 @@
         }
       ]
     },
+    // One group per product area, its name as the section title. The rows are flat, so each
+    // product keeps its icon and sits in the same column as every other row in the rail.
     {
       label: 'Build',
       items: [
@@ -97,6 +110,24 @@
         { id: 'variables', label: 'Variables', icon: 'ai ai-variables', path: '/variables' },
         { id: 'connectors', label: 'Connectors', icon: 'ai ai-edge-connectors' },
         { id: 'custom-pages', label: 'Custom Pages', icon: 'ai ai-custom-pages' }
+      ]
+    },
+    {
+      label: 'Store',
+      items: [
+        {
+          id: 'object-storage',
+          label: 'Object Storage',
+          icon: 'ai ai-edge-storage',
+          path: '/object-storage'
+        },
+        {
+          id: 'sql-database',
+          label: 'SQL Database',
+          icon: 'ai ai-edge-sql',
+          path: '/sql-database',
+          tagValue: 'Preview'
+        }
       ]
     },
     {
@@ -114,64 +145,113 @@
       ]
     },
     {
-      label: 'Store',
-      items: [
-        {
-          id: 'object-storage',
-          label: 'Object Storage',
-          icon: 'ai ai-edge-storage',
-          path: '/object-storage'
-        },
-        {
-          id: 'sql-database',
-          label: 'SQL Database',
-          icon: 'ai ai-edge-sql',
-          path: '/sql-database',
-          tag: 'Preview'
-        }
-      ]
-    },
-    {
-      label: 'Deploy',
-      items: [{ id: 'edge-nodes', label: 'Edge Nodes', icon: 'ai ai-edge-nodes' }]
-    },
-    {
       label: 'Observe',
       items: [
         { id: 'data-stream', label: 'Data Stream', icon: 'ai ai-data-stream' },
         { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse' },
         { id: 'real-time-metrics', label: 'Real-Time Metrics', icon: 'ai ai-real-time-metrics' },
-        { id: 'real-time-events', label: 'Real-Time Events', icon: 'ai ai-real-time-events' }
+        { id: 'real-time-events', label: 'Real-Time Events', icon: 'ai ai-real-time-events' },
+        { id: 'real-time-purge', label: 'Real-Time Purge', icon: 'ai ai-real-time-purge' }
       ]
     },
+    // Drill: `kind: 'drill'` replaces the whole menu with Settings' own menu instead of
+    // expanding under it — the console's second-level pattern. The Back row that returns from
+    // it is declared once on the Menu below and renders nothing at the root level.
+    //
+    // Settings is a DESTINATION as well as a level: activating it opens the level and routes to
+    // its landing row (General) in the same action, so nobody is left reading the page they came
+    // from while a new menu is on screen. It carries an icon for the same reason the rows above
+    // it do — it is one of the rail's destinations, on their column. An inline trigger would
+    // not: that one heads the rows it expands beneath it, and the column belongs to them.
     {
-      label: 'Tools',
-      items: [{ id: 'real-time-purge', label: 'Real-Time Purge', icon: 'ai ai-real-time-purge' }]
-    },
-    {
-      label: 'Edge Libraries',
-      items: [{ id: 'edge-services', label: 'Edge Services', icon: 'ai ai-edge-services' }]
-    },
-    // Demo-only pages that exercise the design system itself, kept last so they
-    // never read as console product areas.
-    {
-      label: 'Design stuff',
       items: [
-        { id: 'forms', label: 'Forms', icon: 'pi pi-file-edit', path: '/forms' },
-        { id: 'diagrams', label: 'Diagrams', icon: 'pi pi-share-alt', path: '/diagrams' },
-        { id: 'playground', label: 'Playground', icon: 'pi pi-palette', path: '/playground' }
+        {
+          id: 'settings',
+          label: 'Settings',
+          icon: 'pi pi-cog',
+          kind: 'drill',
+          // A drilled level takes the same `groups` shape as the root, so the second level is
+          // a real menu with its own sections. Its rows are FLAT and icon-less: a second level
+          // is already a narrowed context, so condensing inside it would ask for a third
+          // decision to reach a setting, and an icon column there competes with the titles
+          // that do the separating.
+          // Every row that names a real settings category carries its own `path`: the
+          // categories are PAGES (`/account`, `/account/users`, …), not tabs on one page, so
+          // this level is the only second-level navigation the module has. The rows without a
+          // path are the areas the prototype does not build yet; they highlight and stay put.
+          groups: [
+            {
+              items: [
+                // The level's LANDING row: activating Settings itself routes here (see
+                // `onNavigate`), so opening the level and arriving somewhere are one action.
+                { id: 'settings-general', label: 'General', path: '/account' },
+                { id: 'settings-users', label: 'Users Management', path: '/account/users' },
+                { id: 'settings-teams', label: 'Teams & Permissions', path: '/account/teams' }
+              ]
+            },
+            {
+              label: 'Access',
+              items: [
+                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                {
+                  id: 'settings-credentials',
+                  label: 'Credentials',
+                  path: '/account/credentials'
+                },
+                { id: 'settings-security-mfa', label: 'Multi-Factor Auth' },
+                { id: 'settings-security-sessions', label: 'Active Sessions' },
+                // The audit trail this level pointed at IS the Activity History page, so the
+                // row takes that page's name rather than a second name for one thing.
+                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+              ]
+            },
+            {
+              label: 'Billing',
+              items: [
+                { id: 'settings-billing', label: 'Billing & Plan', path: '/account/billing' },
+                { id: 'settings-invoices', label: 'Invoices' }
+              ]
+            }
+          ]
+        }
       ]
     }
   ]
 
+  // No row in this rail expands in place any more: the product areas are titles, and the
+  // Settings level is flat — so the whole navigation is reachable without opening anything
+  // first, and the only view state left is the drill stack, which `Menu` owns.
+  //
+  // The `expanded` model stays bound to the sidebar singleton because that is the integration
+  // `Menu` asks for: the root owns the set, and a shell whose rail remounts on every route
+  // (this one does — each page renders its own AppLayout) has to hand it back or a condensed
+  // row would collapse on navigation. It is empty today; wiring it is what keeps adding one
+  // back a data change rather than a plumbing change.
+  // `navPath` is the drill stack, and it lives in the singleton because activating Settings
+  // also navigates: the rail remounts on that navigation, so a level held in the component
+  // would close the instant it opened. `navEntering` says whether that remount is an ENTRANCE
+  // (Settings itself) or a move between rows inside the level — the one thing `Menu` cannot
+  // work out for itself, and what stops the slide replaying on every settings page.
+  // `collapsed` and `railWidth` are handed straight to `Sidebar`'s own models: the rail
+  // gesture belongs to the component now, and this shell only persists its outcome. They stay
+  // in the singleton because every page renders its own AppLayout — held here, the reader's
+  // rail width and collapsed state would reset on every navigation.
+  const { collapsed, railWidth, expanded, navPath, navEntering } = useSidebar()
+
+  // The app theme singleton — read by the footer's ThemeSwitcher and by the
+  // palette's theme command, which names the outcome rather than the toggle.
   const { theme } = useTheme()
+
+  // The display name for the footer row and the account menu's identity block: the `name` prop
+  // when the shell supplies one, otherwise the email's local part.
   const userName = computed(() => props.name || props.user.split('@')[0])
 
-  // Rail collapse: the shared singleton state. Collapsing is driven from the
-  // control at the bottom of the rail (below); bringing the rail BACK is the
-  // shell's job — its own toggle goes inert with the rail, so AppLayout owns the
-  // hover-revealed trigger on the collapsed edge.
-  const { collapsed } = useSidebar()
+  const navGroups = computed(() => NAV_TREE)
+
+  // Forwarded from `Sidebar`: a rail measured while `display: none` reports 0, so the shell
+  // re-measures once a viewport change brings it back on screen.
+  const sidebarRef = ref(null)
+  defineExpose({ measure: () => sidebarRef.value?.measure() })
 
   // Sidebar search → CommandMenu. The field above the scrolling nav is a
   // read-only ⌘K affordance: clicking it (or pressing the global shortcut) opens
@@ -183,8 +263,85 @@
     paletteOpen.value = true
   }
 
-  // Flat lookup for resolving a `nav:<id>` palette value back to its nav item.
-  const navItems = navGroups.flatMap((group) => group.items)
+  // Flat lookup for resolving a `nav:<id>` palette value back to its nav item. Containers are
+  // not destinations — offering "Build" or "Settings" as a result would navigate nowhere — so
+  // this walks to the leaves (`menuLeaves`, shared with the docs shell's palette).
+  const navItems = computed(() => navGroups.value.flatMap((group) => menuLeaves(group.items)))
+
+  // The rail's LEVEL follows the page, derived from the active row rather than remembered.
+  // Every row of the Settings level is its own page now, so a settings page can be linked,
+  // reloaded, or reached from the ⌘K palette — and on a cold arrival the stack is empty, which
+  // would show the root menu with nothing marked while the reader is looking at Billing. So the
+  // rail walks the tree to the active id and pushes the drill levels above it; a root-level page
+  // resolves to an empty stack, which pops the level back. `Menu` restores a stack supplied this
+  // way with its Back label and its trigger intact, so this costs nothing at the level itself.
+  const drillIds = computed(() => {
+    const ids = new Set()
+    const walk = (nodes) =>
+      nodes.forEach((node) => {
+        if (node.kind === 'drill') ids.add(node.id)
+        if (node.children) walk(node.children)
+        if (node.groups) walk(node.groups.flatMap((group) => group.items))
+      })
+    navGroups.value.forEach((group) => walk(group.items))
+    return ids
+  })
+
+  watch(
+    () => props.active,
+    (id) => {
+      const ancestors = id
+        ? navGroups.value.flatMap((group) => menuPath(group.items, id) ?? [])
+        : []
+      const levels = ancestors.filter((ancestorId) => drillIds.value.has(ancestorId))
+      // The singleton owns the comparison, because it is the only thing that outlives this
+      // remount: it sets the stack and derives whether arriving here was a journey between
+      // levels (which animates) or a move inside one (which does not).
+      reportNavLevel(id, levels)
+    },
+    { immediate: true }
+  )
+
+  // A drill row is a destination as well as a level: `Menu` emits `navigate` for it, and the
+  // rail resolves it to the level's LANDING row — the first leaf inside it — before handing it
+  // up. So hitting Settings opens the Settings menu AND lands on General, instead of opening a
+  // second-level menu while the user is still looking at the page they came from. Resolving to
+  // the leaf (not the container) is also what makes the right row read as active on arrival:
+  // the shell highlights whatever id it is given, and a container is not a destination.
+  const landingOf = (node) => (node.groups || node.children ? menuLeaves([node])[0] : node)
+
+  // Nothing here decides whether the level animates: that is derived from the PAGE the shell
+  // routes to (see the `reportNavLevel` watch above), so the header's account menu, the palette
+  // and a pasted link all animate the same entrance this row does.
+  const onNavigate = (event, node) => {
+    const target = landingOf(node)
+    if (target) emit('navigate', event, target)
+  }
+
+  // The palette mirrors the rail: a titled group carries its title straight through as the
+  // heading, and inside an untitled one consecutive plain destinations share an unheaded
+  // block while each container (the Settings drill) becomes its own heading.
+  const paletteGroups = computed(() =>
+    navGroups.value.flatMap((group, groupIndex) => {
+      if (group.label) {
+        return [{ key: `area-${groupIndex}`, heading: group.label, items: menuLeaves(group.items) }]
+      }
+      const blocks = []
+      let run = []
+      const flush = () => {
+        if (run.length) blocks.push({ key: `top-${blocks.length}`, heading: '', items: run })
+        run = []
+      }
+      for (const item of group.items) {
+        if (item.children || item.groups) {
+          flush()
+          blocks.push({ key: item.id, heading: item.label, items: menuLeaves([item]) })
+        } else run.push(item)
+      }
+      flush()
+      return blocks
+    })
+  )
 
   // The theme mode resolved to a concrete value, so the palette's theme command
   // can name the outcome ("Switch to Dark Theme") instead of the toggle.
@@ -268,7 +425,7 @@
   const onPaletteSelect = (event, value) => {
     const [scope, id] = String(value).split(':')
     if (scope === 'nav') {
-      const item = navItems.find((entry) => entry.id === id)
+      const item = navItems.value.find((entry) => entry.id === id)
       if (item) emit('navigate', event, item)
       return
     }
@@ -305,10 +462,27 @@
 </script>
 
 <template>
-  <aside class="w-[var-(--container-xl)] shrink-0">
-    <Sidebar :aria-label="ariaLabel">
-      <template #header>
-        <!-- Search → CommandMenu. A read-only field carrying the ⌘K hint, in the
+  <!--
+    `Sidebar` IS the rail: it owns its width, the drag on its trailing edge, the collapse
+    trigger at the bottom of the footer, and the affordance that brings it back — so there is
+    no wrapper here and no gesture code in this app. The width class is only the NATURAL width
+    the rail is seeded with before the reader ever drags it; once sized, the model's inline
+    width takes over. `h-full` because the shell's row owns the height.
+  -->
+  <Sidebar
+    ref="sidebarRef"
+    v-model:collapsed="collapsed"
+    v-model:width="railWidth"
+    :resizable="collapsible"
+    :collapsible="collapsible"
+    :aria-label="ariaLabel"
+    collapse-aria-label="Collapse sidebar"
+    expand-aria-label="Expand sidebar"
+    resize-aria-label="Resize sidebar"
+    class="h-full w-[var(--container-2xs)]"
+  >
+    <template #header>
+      <!-- Search → CommandMenu. A read-only field carrying the ⌘K hint, in the
              fixed header region so it stays put while the nav below it scrolls.
              It is the rail's whole header: the brand, the account switcher and
              Create all live in the global header (see AppLayout.vue). The
@@ -316,308 +490,299 @@
              part of the target; Enter on the focused field opens it too. The
              palette teleports to the body, so it works while the rail is
              collapsed and inside the mobile drawer. -->
-        <div>
-          <div
-            class="cursor-pointer [&_input]:cursor-pointer"
-            @click="openPalette"
-            @keydown.enter="openPalette"
+      <div>
+        <div
+          class="cursor-pointer [&_input]:cursor-pointer"
+          @click="openPalette"
+          @keydown.enter="openPalette"
+        >
+          <InputText
+            model-value=""
+            placeholder="Search"
+            size="large"
+            readonly
+            aria-label="Search navigation and commands"
+            aria-keyshortcuts="Meta+K"
           >
-            <InputText
-              model-value=""
-              placeholder="Search"
-              size="large"
-              readonly
-              aria-label="Search navigation and commands"
-              aria-keyshortcuts="Meta+K"
+            <template #iconLeft>
+              <i
+                class="pi pi-search"
+                aria-hidden="true"
+              />
+            </template>
+            <template #iconRight>
+              <Kbd
+                meta
+                size="small"
+                >K</Kbd
+              >
+            </template>
+          </InputText>
+        </div>
+
+        <!-- The palette: the rail's navigation groups first (same labels, same
+               order), then the app-level commands. Groups whose items are all
+               filtered out hide themselves. -->
+        <CommandMenu
+          v-model:open="paletteOpen"
+          :shortcut="shortcut"
+          @select="onPaletteSelect"
+        >
+          <CommandMenu.Input placeholder="Search navigation and commands" />
+          <CommandMenu.List>
+            <CommandMenu.Group
+              v-for="group in paletteGroups"
+              :key="group.key"
+              :heading="group.heading"
             >
-              <template #iconLeft>
+              <CommandMenu.Item
+                v-for="item in group.items"
+                :key="item.id"
+                :value="`nav:${item.id}`"
+              >
+                <template #prefix>
+                  <i
+                    :class="item.icon"
+                    aria-hidden="true"
+                  />
+                </template>
+                {{ item.label }}
+              </CommandMenu.Item>
+            </CommandMenu.Group>
+
+            <CommandMenu.Separator />
+
+            <CommandMenu.Group heading="Actions">
+              <CommandMenu.Item
+                v-for="command in actionCommands"
+                :key="command.id"
+                :value="`cmd:${command.id}`"
+              >
+                <template #prefix>
+                  <i
+                    :class="command.icon"
+                    aria-hidden="true"
+                  />
+                </template>
+                {{ command.label }}
+              </CommandMenu.Item>
+            </CommandMenu.Group>
+
+            <CommandMenu.Group heading="Account">
+              <CommandMenu.Item
+                v-for="command in accountCommands"
+                :key="command.id"
+                :value="`cmd:${command.id}`"
+              >
+                <template #prefix>
+                  <i
+                    :class="command.icon"
+                    aria-hidden="true"
+                  />
+                </template>
+                {{ command.label }}
+              </CommandMenu.Item>
+            </CommandMenu.Group>
+
+            <CommandMenu.Empty>No navigation or command matches your search.</CommandMenu.Empty>
+          </CommandMenu.List>
+        </CommandMenu>
+      </div>
+    </template>
+
+    <slot>
+      <!-- Data-driven mode: `navGroups` is already the tree shape Menu takes, and
+             hand-composing it would mean re-implementing the recursion here.
+             `role="presentation"` because Sidebar already renders the <nav> landmark. -->
+      <Menu
+        :path="navPath"
+        v-model:expanded="expanded"
+        @update:path="setNavPath"
+        :groups="navGroups"
+        :active-id="active"
+        :enter-on-mount="navEntering"
+        role="presentation"
+        @navigate="onNavigate"
+      >
+        <!-- Renders nothing until a drill level is pushed. -->
+        <Menu.Back />
+      </Menu>
+    </slot>
+
+    <template #footer>
+      <!--
+          No `pt` here. `Sidebar`'s footer region is the row, and its collapse trigger is a
+          SIBLING of this content centred in that row — top padding on this side alone drops
+          the avatar and the ⋮ button below the trigger they are supposed to line up with.
+          The spacing above the footer belongs to the region, not to one item inside it.
+        -->
+      <div class="flex items-center gap-[var(--spacing-xs)]">
+        <Avatar
+          :label="user"
+          size="small"
+          kind="square"
+        />
+        <span class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)]">
+          {{ userName }}
+        </span>
+
+        <Dropdown
+          v-model:open="accountMenuOpen"
+          placement="top-end"
+          @select="onSelect"
+        >
+          <Dropdown.Trigger>
+            <Tooltip text="Account menu">
+              <IconButton
+                icon="pi pi-ellipsis-v"
+                aria-label="Account menu"
+                kind="outlined"
+                size="small"
+              />
+            </Tooltip>
+          </Dropdown.Trigger>
+
+          <!-- Account identity + the account's own links: Account Settings and
+                 Personal Tokens (the account's tokens) sit directly under the
+                 identity block. -->
+          <Dropdown.Group>
+            <template #top>
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate text-label-md text-[var(--text-default)]">
+                  {{ userName }}
+                </span>
+                <span class="truncate text-body-xs text-[var(--text-muted)]">
+                  {{ user }}
+                </span>
+              </div>
+            </template>
+
+            <Dropdown.Option
+              value="settings"
+              label="Account Settings"
+            >
+              <template #right>
                 <i
-                  class="pi pi-search"
+                  class="pi pi-cog"
                   aria-hidden="true"
                 />
               </template>
-              <template #iconRight>
-                <Kbd
-                  meta
-                  size="small"
-                  >K</Kbd
-                >
-              </template>
-            </InputText>
-          </div>
-
-          <!-- The palette: the rail's navigation groups first (same labels, same
-               order), then the app-level commands. Groups whose items are all
-               filtered out hide themselves. -->
-          <CommandMenu
-            v-model:open="paletteOpen"
-            :shortcut="shortcut"
-            @select="onPaletteSelect"
-          >
-            <CommandMenu.Input placeholder="Search navigation and commands" />
-            <CommandMenu.List>
-              <CommandMenu.Group
-                v-for="(group, i) in navGroups"
-                :key="group.label ?? `nav-group-${i}`"
-                :heading="group.label ?? ''"
-              >
-                <CommandMenu.Item
-                  v-for="item in group.items"
-                  :key="item.id"
-                  :value="`nav:${item.id}`"
-                >
-                  <template #prefix>
-                    <i
-                      :class="item.icon"
-                      aria-hidden="true"
-                    />
-                  </template>
-                  {{ item.label }}
-                </CommandMenu.Item>
-              </CommandMenu.Group>
-
-              <CommandMenu.Separator />
-
-              <CommandMenu.Group heading="Actions">
-                <CommandMenu.Item
-                  v-for="command in actionCommands"
-                  :key="command.id"
-                  :value="`cmd:${command.id}`"
-                >
-                  <template #prefix>
-                    <i
-                      :class="command.icon"
-                      aria-hidden="true"
-                    />
-                  </template>
-                  {{ command.label }}
-                </CommandMenu.Item>
-              </CommandMenu.Group>
-
-              <CommandMenu.Group heading="Account">
-                <CommandMenu.Item
-                  v-for="command in accountCommands"
-                  :key="command.id"
-                  :value="`cmd:${command.id}`"
-                >
-                  <template #prefix>
-                    <i
-                      :class="command.icon"
-                      aria-hidden="true"
-                    />
-                  </template>
-                  {{ command.label }}
-                </CommandMenu.Item>
-              </CommandMenu.Group>
-
-              <CommandMenu.Empty>No navigation or command matches your search.</CommandMenu.Empty>
-            </CommandMenu.List>
-          </CommandMenu>
-        </div>
-      </template>
-
-      <slot>
-        <SidebarGroup
-          v-for="(group, i) in navGroups"
-          :key="group.label ?? `group-${i}`"
-          :label="group.label"
-        >
-          <MenuItem
-            v-for="item in group.items"
-            :key="item.id"
-            :label="item.label"
-            :icon="item.icon"
-            :selected="active === item.id"
-            :tag-value="item.tag"
-            @click="(event) => emit('navigate', event, item)"
-          />
-        </SidebarGroup>
-      </slot>
-
-      <template #footer>
-        <div class="flex items-center pt-[var(--spacing-sm)] gap-[var(--spacing-xs)]">
-          <Avatar
-            :label="user"
-            size="small"
-            kind="square"
-          />
-          <span class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)]">
-            {{ userName }}
-          </span>
-
-          <Dropdown
-            v-model:open="accountMenuOpen"
-            placement="top-end"
-            @select="onSelect"
-          >
-            <Dropdown.Trigger>
-              <Tooltip text="Account menu">
-                <IconButton
-                  icon="pi pi-ellipsis-v"
-                  aria-label="Account menu"
-                  kind="outlined"
-                  size="small"
+            </Dropdown.Option>
+            <Dropdown.Option
+              value="personal-tokens"
+              label="Personal Tokens"
+            >
+              <template #right>
+                <i
+                  class="pi pi-key"
+                  aria-hidden="true"
                 />
-              </Tooltip>
-            </Dropdown.Trigger>
-
-            <!-- Account identity + the account's own links: Account Settings and
-                 Personal Tokens (the account's tokens) sit directly under the
-                 identity block. -->
-            <Dropdown.Group>
-              <template #top>
-                <div class="flex min-w-0 flex-col">
-                  <span class="truncate text-label-md text-[var(--text-default)]">
-                    {{ userName }}
-                  </span>
-                  <span class="truncate text-body-xs text-[var(--text-muted)]">
-                    {{ user }}
-                  </span>
-                </div>
               </template>
+            </Dropdown.Option>
+          </Dropdown.Group>
 
-              <Dropdown.Option
-                value="settings"
-                label="Account Settings"
-              >
-                <template #right>
-                  <i
-                    class="pi pi-cog"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-              <Dropdown.Option
-                value="personal-tokens"
-                label="Personal Tokens"
-              >
-                <template #right>
-                  <i
-                    class="pi pi-key"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-            </Dropdown.Group>
-
-            <!-- Theme row: not a selectable menuitem, but mirrors the Option's
+          <!-- Theme row: not a selectable menuitem, but mirrors the Option's
                  height/padding so its inline control aligns with the rows. -->
-            <Dropdown.Group>
-              <div
-                class="flex h-8 min-h-8 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
-              >
-                <span class="flex-1 truncate text-left text-label-sm text-[var(--text-default)]">
-                  Theme
-                </span>
-                <ThemeSwitcher
-                  v-model:value="theme"
-                  aria-label="Theme"
+          <Dropdown.Group>
+            <div
+              class="flex h-8 min-h-8 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
+            >
+              <span class="flex-1 truncate text-left text-label-sm text-[var(--text-default)]">
+                Theme
+              </span>
+              <ThemeSwitcher
+                v-model:value="theme"
+                aria-label="Theme"
+              />
+            </div>
+          </Dropdown.Group>
+
+          <!-- Resources -->
+          <Dropdown.Group>
+            <Dropdown.Option
+              value="home"
+              label="Home Page"
+            >
+              <template #right>
+                <i
+                  class="pi pi-home"
+                  aria-hidden="true"
+                />
+              </template>
+            </Dropdown.Option>
+            <Dropdown.Option
+              value="changelog"
+              label="Changelog"
+            >
+              <template #right>
+                <i
+                  class="pi pi-pencil"
+                  aria-hidden="true"
+                />
+              </template>
+            </Dropdown.Option>
+            <Dropdown.Option
+              value="feedback"
+              label="Feedback"
+            >
+              <template #right>
+                <i
+                  class="pi pi-comment"
+                  aria-hidden="true"
+                />
+              </template>
+            </Dropdown.Option>
+            <Dropdown.Option
+              value="docs"
+              label="Docs"
+            >
+              <template #right>
+                <i
+                  class="pi pi-book"
+                  aria-hidden="true"
+                />
+              </template>
+            </Dropdown.Option>
+          </Dropdown.Group>
+
+          <!-- Logout -->
+          <Dropdown.Group>
+            <Dropdown.Option
+              value="logout"
+              label="Log Out"
+            >
+              <template #right>
+                <i
+                  class="pi pi-sign-out"
+                  aria-hidden="true"
+                />
+              </template>
+            </Dropdown.Option>
+          </Dropdown.Group>
+
+          <!-- Upgrade CTA + platform status -->
+          <Dropdown.Group>
+            <div
+              class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]"
+            >
+              <Button
+                label="Upgrade to Pro"
+                kind="secondary"
+                size="medium"
+                class="w-full"
+                @click="(event) => onShortcut(event, 'upgrade')"
+              />
+              <div class="flex justify-center px-[var(--spacing-xs)]">
+                <StatusIndicator
+                  status="positive"
+                  label="All systems normal"
                 />
               </div>
-            </Dropdown.Group>
-
-            <!-- Resources -->
-            <Dropdown.Group>
-              <Dropdown.Option
-                value="home"
-                label="Home Page"
-              >
-                <template #right>
-                  <i
-                    class="pi pi-home"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-              <Dropdown.Option
-                value="changelog"
-                label="Changelog"
-              >
-                <template #right>
-                  <i
-                    class="pi pi-pencil"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-              <Dropdown.Option
-                value="feedback"
-                label="Feedback"
-              >
-                <template #right>
-                  <i
-                    class="pi pi-comment"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-              <Dropdown.Option
-                value="docs"
-                label="Docs"
-              >
-                <template #right>
-                  <i
-                    class="pi pi-book"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-            </Dropdown.Group>
-
-            <!-- Logout -->
-            <Dropdown.Group>
-              <Dropdown.Option
-                value="logout"
-                label="Log Out"
-              >
-                <template #right>
-                  <i
-                    class="pi pi-sign-out"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-            </Dropdown.Group>
-
-            <!-- Upgrade CTA + platform status -->
-            <Dropdown.Group>
-              <div
-                class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]"
-              >
-                <Button
-                  label="Upgrade to Pro"
-                  kind="secondary"
-                  size="medium"
-                  class="w-full"
-                  @click="(event) => onShortcut(event, 'upgrade')"
-                />
-                <div class="flex justify-center px-[var(--spacing-xs)]">
-                  <StatusIndicator
-                    status="positive"
-                    label="All systems normal"
-                  />
-                </div>
-              </div>
-            </Dropdown.Group>
-          </Dropdown>
-
-          <Tooltip
-            v-if="collapsible"
-            key="sidebar-toggle"
-            text="Collapse sidebar"
-            placement="top"
-          >
-            <IconButton
-              icon="pi pi-angle-double-left"
-              aria-label="Collapse sidebar"
-              kind="outlined"
-              size="small"
-              icon-transition
-              @click="collapsed = true"
-            />
-          </Tooltip>
-        </div>
-      </template>
-    </Sidebar>
-  </aside>
+            </div>
+          </Dropdown.Group>
+        </Dropdown>
+        <!-- No collapse button here: `Sidebar` renders its own, trailing this row. -->
+      </div>
+    </template>
+  </Sidebar>
 </template>
