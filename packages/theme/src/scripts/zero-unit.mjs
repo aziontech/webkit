@@ -1,30 +1,21 @@
 /**
- * Zero-with-unit gate for the compiled token stylesheet.
- *
- * Token values are authored in JS and compiled, so no linter sees them — this is the only
- * check that does, run on the final CSS before build-tokens.mjs writes globals.css. Rule
- * (.claude/rules/styling.md): a zero length is `0`, never `0px`/`0rem`/`0em`; the sole
- * exception is inside calc()/min()/max()/clamp(), where CSS requires a unit and it is `rem`.
- *
- * Kept in sync with token-checks.js in packages/webkit — theme sits below webkit in the
- * dependency graph and cannot import it, so LENGTH_UNITS is the same string there. Pure
- * module: node built-ins only, no imports.
+ * Zero-with-unit gate for the compiled token stylesheet — the only check that sees token
+ * values (authored in JS, so no linter does), run on the final CSS before globals.css is
+ * written. A zero length is `0`; inside calc()/min()/max()/clamp() it must carry a unit, and
+ * that unit is `rem` (.claude/rules/styling.md). Mirror of the zero checks in packages/webkit
+ * token-checks.js, kept in sync — LENGTH_UNITS is the same string. Pure: node built-ins only.
  */
 
-// Opens a math function and consumes its interior, balancing parens ONE level deep — a zero
-// nested ≥2 calls in falls back to the bare-zero check (pinned limit).
+// Opens a math function; balances parens one level deep (a zero nested deeper falls back to
+// the bare-zero check).
 const MATH_FN = '(?:calc|min|max|clamp)\\((?:[^()]|\\([^()]*\\))*';
 
-// The complete CSS length-unit set. Order is irrelevant: the trailing (?![\w%]) rejects a
-// candidate that is only a prefix of a longer real unit, so a missing unit only causes a
-// miss — hence the list must be complete. `%`, `s`/`ms`, `deg`, `fr` mean something at zero
-// and stay out.
+// Complete CSS length-unit set — must be complete, since a missing unit silently passes.
 export const LENGTH_UNITS =
   'px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc';
 
-// Mutually exclusive, so nothing is reported twice: the bare check excludes a zero preceded
-// by an open math function, the in-math check requires one and exempts `0rem`. `i` = units
-// are case-insensitive. Non-global so `.test()` is stateless — findZeroMisuse adds `g` locally.
+// Mutually exclusive, so a value is reported once. Non-global so `.test()` is stateless —
+// findZeroMisuse adds `g` locally to enumerate matches.
 export const ZERO_WITH_UNIT = new RegExp(`(?<![\\w.])(?<!${MATH_FN})0(?:${LENGTH_UNITS})(?![\\w%])`, 'i');
 export const ZERO_UNIT_IN_MATH = new RegExp(
   `(?<=${MATH_FN})(?<![\\w.])0(?!rem)(?:${LENGTH_UNITS})(?![\\w%])`,
@@ -32,10 +23,8 @@ export const ZERO_UNIT_IN_MATH = new RegExp(
 );
 
 /**
- * Every match of `regex` in `cssText` as `{ line, n }` (trimmed source line + 1-based line).
- * Scans the whole string, not line-by-line, so a calc() wrapped across newlines is judged in
- * context (`[^()]` in the lookbehind matches the newline). Clones with `g` locally to keep
- * the exported regexes non-global.
+ * Matches of `regex` in `cssText` as `{ line, n }`. Scans the whole string, not line-by-line,
+ * so a calc() wrapped across newlines is still seen as in-math.
  */
 export const findZeroMisuse = (cssText, regex) => {
   const scan = new RegExp(regex.source, `${regex.flags.replace('g', '')}g`);
@@ -49,14 +38,10 @@ export const findZeroMisuse = (cssText, regex) => {
   return out;
 };
 
-// The custom property a line declares, so the error names the token to fix. Null when the
-// zero is not on a `--token:` line (continuation line, keyframe step) — the line number locates those.
+// The `--custom-property` a line declares, to name the token to fix; null off a `--token:` line.
 const tokenOf = (line) => line.match(/(--[\w-]+)\s*:/)?.[1] ?? null;
 
-/**
- * Throw if any token value in `cssText` misuses a zero length. `source` names the artifact the
- * lines are numbered against — passed in, never hardcoded, so a reuse reports an honest path.
- */
+/** Throw if `cssText` misuses a zero length. `source` names the artifact in the message. */
 export const assertNoZeroWithUnit = (cssText, source = 'globals.css') => {
   const bare = findZeroMisuse(cssText, ZERO_WITH_UNIT);
   const inMath = findZeroMisuse(cssText, ZERO_UNIT_IN_MATH);
