@@ -7,7 +7,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import { SidebarInjectionKey } from './injection-key'
 import SidebarFooter from './sidebar-footer.vue'
 
-const { WithHeaderAndProfileFooter } = composeStories(stories)
+const { Default } = composeStories(stories)
 
 describe('SidebarFooter', () => {
   describe('rendering (structure grounded in the template)', () => {
@@ -88,10 +88,10 @@ describe('SidebarFooter', () => {
   })
 
   describe('composeStories (the story fixture that composes a SidebarFooter runs in-test)', () => {
-    it('WithHeaderAndProfileFooter renders the SidebarFooter region inside the Sidebar', () => {
+    it('the console sidebar renders the SidebarFooter region inside the Sidebar', () => {
       // The story mounts <SidebarFooter> in the Sidebar #footer slot; with the
       // Sidebar's default testId ("layout-sidebar"), the footer-region testid resolves.
-      const { getByTestId } = render(WithHeaderAndProfileFooter)
+      const { getByTestId } = render(Default)
       expect(getByTestId('layout-sidebar__footer-region').tagName).toBe('DIV')
     })
   })
