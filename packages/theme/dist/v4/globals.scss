@@ -413,6 +413,7 @@
   --animate-slide-out-right: slideOutRight 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
+  --animate-flow-dash: flowDash 700ms linear infinite;
 }
 
 :root, [data-theme=light], .azion.azion-light {
@@ -659,6 +660,7 @@
   --animate-slide-out-right: slideOutRight 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
+  --animate-flow-dash: flowDash 700ms linear infinite;
   --ring-offset: 0.5px;
   --container-px: 1rem;
   --container-py: 4rem;
@@ -868,6 +870,7 @@
   --code-sintax-line-number: #808080;
   --code-sintax-keyword: #005FCC;
   --code-sintax-punctuation: #808080;
+  --code-sintax-comment: #808080;
   --code-sintax-function: #F3652B;
   --code-sintax-type: #947105;
   --code-sintax-string: #005FCC;
@@ -881,7 +884,7 @@
   --danger-border: #E51A1A66;
   --danger-contrast: #891010;
   --info: #CCE4FF;
-  --info-border: #8A84EC66;
+  --info-border: #0072F566;
   --info-contrast: #004799;
 }
 
@@ -917,8 +920,8 @@
   --bg-surface-overlay: #4D4D4D;
   --bg-placeholder: #FFFFFF1A;
   --bg-placeholder-highlight: #FFFFFF1A;
-  --bg-hover: #00000033;
-  --bg-active: #00000014;
+  --bg-hover: #FFFFFF1A;
+  --bg-active: #FFFFFF0D;
   --bg-backdrop: #000000CC;
   --bg-selected: #1A1A1A;
   --bg-contrast: #FAFAFA;
@@ -938,6 +941,7 @@
   --code-sintax-line-number: #999999;
   --code-sintax-keyword: #3392FF;
   --code-sintax-punctuation: #999999;
+  --code-sintax-comment: #999999;
   --code-sintax-function: #F3652B;
   --code-sintax-type: #FAD76B;
   --code-sintax-string: #3392FF;
@@ -951,7 +955,7 @@
   --danger-border: #E51A1A66;
   --danger-contrast: #ED7878;
   --info: #001833;
-  --info-border: #0072F580;
+  --info-border: #0072F566;
   --info-contrast: #66ADFF;
 }
 
@@ -1025,6 +1029,11 @@
   0% { inset-inline-start: -200%; inset-inline-end: 100%; }
   60% { inset-inline-start: 107%; inset-inline-end: -8%; }
   100% { inset-inline-start: 107%; inset-inline-end: -8%; }
+}
+
+@keyframes flowDash {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
 }
 
 @layer components {
