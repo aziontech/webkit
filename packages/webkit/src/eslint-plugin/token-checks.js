@@ -74,19 +74,19 @@ export const TOKEN_CHECKS = [
     // nested calls in — calc(min(max(1px, 2px), 3px) - 0px) — or behind grouping parens
     // is reported here (as a bare-zero violation) instead of by zero-unit-in-calc, so
     // the message will say `0` where the position actually requires `0rem`. Keep in
-    // sync with ZERO_WITH_UNIT in packages/theme/src/scripts/build-tokens.mjs (theme
+    // sync with ZERO_WITH_UNIT in packages/theme/src/scripts/zero-unit.mjs (theme
     // sits below webkit in the dependency graph, so it cannot import this engine).
     regex:
-      /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)0(?:px|rem|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
+      /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)0(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
       'Zero with a unit. A zero length takes no unit — write `0`, not `0px` / `0rem` / `0em` (.claude/rules/styling.md).'
   },
   {
     id: 'zero-unit-in-calc',
     // Same one-level nesting limit as zero-with-unit above; keep in sync with
-    // ZERO_UNIT_IN_MATH in packages/theme/src/scripts/build-tokens.mjs.
+    // ZERO_UNIT_IN_MATH in packages/theme/src/scripts/zero-unit.mjs.
     regex:
-      /(?<=(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)(?<![\w.])0(?!rem)(?:px|em|ex|ch|cap|ic|lh|rlh|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
+      /(?<=(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)(?<![\w.])0(?!rem)(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
       'Zero with the wrong unit inside a math function. `calc()`/`min()`/`max()`/`clamp()` require a unit on the zero — write `0rem`, not `0px` / `0em` (.claude/rules/styling.md).'
   },
