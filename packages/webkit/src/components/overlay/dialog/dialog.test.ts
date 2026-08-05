@@ -290,6 +290,28 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 
+  describe('page scroll lock while open', () => {
+    // DialogContent locks the page behind the overlay via useScrollLock(body).
+    // Asserted through the inline style the lock writes, which is real in this
+    // env — unlike the panel's own scrolling, which is Tailwind layout and so
+    // lives in the Storybook / visual layer (see LongContentMobile).
+    it('locks body scroll while open and restores it on close', async () => {
+      const before = document.body.style.overflow
+
+      const { getByTestId } = render(composed())
+      await settle()
+      expect(document.body.style.overflow).toBe(before)
+
+      await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+      await settle()
+      expect(document.body.style.overflow).toBe('hidden')
+
+      await fireEvent.keyDown(document, { key: 'Escape' })
+      await settle()
+      expect(document.body.style.overflow).toBe(before)
+    })
+  })
+
   describe('accessibility (axe on the open, Teleported dialog)', () => {
     it('has no WCAG violations while open', async () => {
       // DialogTrigger is itself a role=button span, so the trigger slot must be

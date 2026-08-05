@@ -8530,7 +8530,7 @@
           "notes": "—"
         }
       ],
-      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`.",
+      "purpose": "Modal surface above the page, built on the shared Panel shell. The consumer composes a trigger, an overlay backdrop and the panel regions (header, body, footer); the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.",
       "useWhen": [
         "A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.",
         "The interaction must be completed or dismissed before returning to the page."
