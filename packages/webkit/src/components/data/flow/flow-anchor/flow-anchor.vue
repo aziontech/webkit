@@ -25,15 +25,37 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'data-flow'}__anchor`
   )
 
-  const rootClasses = computed(() => cn('block', attrs.class as string | undefined))
+  // Same port as flow-node, sitting outside the edge this anchor attaches to, so a connector
+  // reaching into an unstyled node lands on a port instead of a bare edge. Inherits the
+  // dashed treatment from the enclosing node's `group`.
+  //
+  // Unlike flow-node this uses a plain `left-0` / `right-0`: the anchor is an unbordered
+  // block, so its padding box and border box coincide and no pull-back is needed. Adding
+  // one here would push the port a pixel past the edge connectors.ts attaches to.
+  const PORT_CLASS =
+    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-[var(--radius-sm)] border-solid border-[length:var(--border-width-default,1px)] border-[var(--border-muted)] bg-[var(--accent)] data-[flow-port=end]:left-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:right-0 data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
+
+  const rootClass = computed(() => cn('relative block', attrs.class as string | undefined))
 </script>
 
 <template>
   <div
     :data-flow-anchor="props.type ?? 'both'"
     :data-testid="testId"
-    :class="rootClasses"
+    :class="rootClass"
   >
+    <span
+      v-if="props.type !== 'start'"
+      aria-hidden="true"
+      data-flow-port="end"
+      :class="PORT_CLASS"
+    />
     <slot />
+    <span
+      v-if="props.type !== 'end'"
+      aria-hidden="true"
+      data-flow-port="start"
+      :class="PORT_CLASS"
+    />
   </div>
 </template>

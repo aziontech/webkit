@@ -219,6 +219,40 @@ describe('Toast (composition + imperative store)', () => {
 
       expect(within(region!).queryByTestId('feedback-toast__close')).toBeNull()
     })
+
+    it('honours a per-toast closable over a Toaster that closes nothing', async () => {
+      // Source: `item.entry.closable ?? closable` — the per-toast option wins.
+      // It only can if the region's projection of the store entry carries
+      // `closable`; when it did not, this option was silently inert.
+      await mountToaster({ position: 'bottom-right', duration: 0, closable: false })
+
+      toast.error('Deployment failed', { closable: true })
+      const region = await regionFor('bottom-right')
+      const scope = within(region!)
+
+      expect(scope.getByText('Deployment failed')).toBeTruthy()
+      expect(scope.getByTestId('feedback-toast__close')).toBeTruthy()
+    })
+
+    it('keeps a per-toast closable through an in-place update', async () => {
+      // The async pattern: a `loading` toast is raised first and only becomes
+      // closable when it settles into its error state under the SAME id.
+      await mountToaster({ position: 'bottom-right', duration: 0, closable: false })
+
+      const id = toast.loading('Deploying…')
+      let region = await regionFor('bottom-right')
+      expect(within(region!).queryByTestId('feedback-toast__close')).toBeNull()
+
+      useToastStore().update(id, {
+        type: 'error',
+        message: 'Deployment failed',
+        duration: 0,
+        closable: true
+      })
+      region = await regionFor('bottom-right')
+
+      expect(within(region!).getByTestId('feedback-toast__close')).toBeTruthy()
+    })
   })
 
   describe('per-toast position overrides the Toaster default', () => {
