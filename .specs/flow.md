@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: dbde98f9ae69da56b1679088ec94ea0ee3d140c96562815f90477003252823cb
+checksum: d2f63e195f987c1389469b6e22288c1f9bc99cb0b48d53cf42493d9294bebcb9
 created: 2026-06-25
-last_updated: 2026-07-31
+last_updated: 2026-08-04
 ---
 
 # Flow — Component Spec
@@ -114,7 +114,12 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 ## Motion & Animations
 
-_none_
+| Trigger | Animation / Transition | Token | Reduced-motion fallback |
+|---|---|---|---|
+| connector at rest (always, on every drawn connector) | `stroke-dasharray="4 4"` + `animate-flow-dash` — marching dashes along the stroke (`stroke-dashoffset` 24 → 0, 700ms linear infinite), so a connection reads as a live link rather than a static rule | `animate-flow-dash` (catalog) | `motion-reduce:animate-none` |
+| connector whose endpoint node is `disabled` | motion suppressed via `data-[faded]:animate-none` — the dashes stay, the flow stops, because a disabled step is not carrying anything | — | already static |
+
+> The dash cycle (8) divides the keyframe's travel (24), so the loop repeats seamlessly. A `stroke-dasharray` whose cycle does not divide 24 would visibly jump on each repeat. `linear` is deliberate: an endlessly looping animation must not accelerate, or the seam between repeats becomes visible (same reasoning as `spin` / `shimmer` in the catalog).
 
 ## Tokens
 
@@ -139,6 +144,7 @@ _none_
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
+| `flow-dash` animation | added to `primitives/animations/{keyframes,animate}.js` (`--animate-flow-dash`) | done (this change) — the catalog had no stroke-dash animation |
 | raised node surface (`bg-surface-raised`) | `var(--bg-surface-raised)` | TODO: confirm `--bg-surface-raised` is the canonical raised token |
 
 ## Accessibility (WCAG 2.1 AA)

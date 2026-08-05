@@ -46,6 +46,7 @@
       "--animate-bounce",
       "--animate-fade-in",
       "--animate-fade-out",
+      "--animate-flow-dash",
       "--animate-highlight-fade",
       "--animate-ping",
       "--animate-popup-scale-in",
@@ -96,6 +97,7 @@
       "--breakpoint-md",
       "--breakpoint-sm",
       "--breakpoint-xl",
+      "--code-sintax-comment",
       "--code-sintax-function",
       "--code-sintax-identifier",
       "--code-sintax-keyword",
@@ -722,6 +724,7 @@
         "--animate-bounce",
         "--animate-fade-in",
         "--animate-fade-out",
+        "--animate-flow-dash",
         "--animate-highlight-fade",
         "--animate-ping",
         "--animate-popup-scale-in",
@@ -784,6 +787,7 @@
         "--breakpoint-xl"
       ],
       "code": [
+        "--code-sintax-comment",
         "--code-sintax-function",
         "--code-sintax-identifier",
         "--code-sintax-keyword",
@@ -1429,6 +1433,7 @@
       "bounce",
       "fade-in",
       "fade-out",
+      "flow-dash",
       "highlight-fade",
       "ping",
       "popup-scale-in",
@@ -1460,6 +1465,10 @@
       "fade-out": {
         "value": "fadeOut 220ms ease-in-out",
         "useWhen": "Content or backdrop leaving in place (pair of fade-in)."
+      },
+      "flow-dash": {
+        "value": "flowDash 700ms linear infinite",
+        "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
       "highlight-fade": {
         "value": "highlight ease-in forwards",
@@ -3071,7 +3080,7 @@
           "notes": "Fires after the active tab code is copied to the clipboard."
         }
       ],
-      "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab."
+      "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of three tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:"
     },
     "table": {
       "import": "@aziontech/webkit/table",
@@ -4722,6 +4731,13 @@
           "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
         },
         {
+          "name": "showFields",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered."
+        },
+        {
           "name": "showTime",
           "type": "boolean",
           "default": "false",
@@ -4829,7 +4845,7 @@
           "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
         }
       ],
-      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
+      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
     },
     "calendar-root": {
       "import": "@aziontech/webkit/calendar-root",
@@ -4905,6 +4921,13 @@
           "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
         },
         {
+          "name": "showFields",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered."
+        },
+        {
           "name": "showTime",
           "type": "boolean",
           "default": "false",
@@ -5012,7 +5035,7 @@
           "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
         }
       ],
-      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
+      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
     },
     "calendar-preset": {
       "import": "@aziontech/webkit/calendar-preset",
