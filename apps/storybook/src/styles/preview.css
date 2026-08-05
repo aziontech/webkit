@@ -76,12 +76,6 @@ h1, h2, h3, h4, h5, h6 {
   color-scheme: light;
 }
 
-/* https://aziontech.atlassian.net/browse/UXE-1798 */
-/* child scroll behaviour is affecting the parent scroll behaviour */
-* {
-  overscroll-behavior: auto !important;
-}
-
 .font-proto-mono {
   font-family: 'Proto Mono', sans-serif;
 }
