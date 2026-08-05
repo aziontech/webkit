@@ -45,9 +45,16 @@
     both: 'overflow-auto'
   }
 
+  // No `overscroll-contain` here. `overscroll-behavior: contain` stops scroll
+  // chaining on EVERY axis of a scroll container, including an axis the viewport
+  // cannot actually scroll — so a ScrollArea whose content does not overflow
+  // (a table with no maxHeight, a select with two options) swallowed the wheel
+  // and froze the page while the pointer was over it. Chaining is the platform
+  // default and the right behaviour for content embedded in a page; an overlay
+  // that must stop the page behind it owns that lock itself.
   const rootClasses = computed(() =>
     cn(
-      'relative min-h-0 min-w-0 overscroll-contain',
+      'relative min-h-0 min-w-0',
       '[scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent]',
       overflowClasses[props.orientation],
       'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--border-default)]',
