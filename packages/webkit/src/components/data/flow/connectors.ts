@@ -1,18 +1,11 @@
 import { useMutationObserver, useResizeObserver } from '@vueuse/core'
 import { onMounted, type Ref, ref } from 'vue'
 
-export interface FlowPoint {
-  x: number
-  y: number
-}
-
 export interface FlowPath {
   /** SVG path `d` for the connector (straight when endpoints share a row, rounded elbow otherwise). */
   d: string
   /** Reduced opacity when either endpoint is a disabled node. */
   faded: boolean
-  /** Arrowhead tip position, or null when the connector carries no head. */
-  arrow: FlowPoint | null
 }
 
 /** An attachment point on the left (incoming) or right (outgoing) edge of a node. */
@@ -72,9 +65,15 @@ const measureRect = (el: HTMLElement, base: Origin) => {
 }
 
 /** Resolve a node's incoming (`end` anchor) and outgoing (`start` anchor) attachment points.
-    Falls back to the node's left/right edge when no matching anchor is present. */
-const readNode = (nodeEl: HTMLElement, base: Origin): { entry: Endpoint; exit: Endpoint } => {
+    Falls back to the node's left/right edge when no matching anchor is present.
+    `terminal` marks a node that ends its branch: it still reports an exit point, but
+    readChild drops it, so nothing is ever drawn leaving the node. */
+const readNode = (
+  nodeEl: HTMLElement,
+  base: Origin
+): { entry: Endpoint; exit: Endpoint; terminal: boolean } => {
   const disabled = nodeEl.dataset['flowDisabled'] === 'true'
+  const terminal = nodeEl.dataset['flowTerminal'] === 'true'
   const endEl =
     nodeEl.querySelector<HTMLElement>('[data-flow-anchor="end"], [data-flow-anchor="both"]') ??
     nodeEl
@@ -86,11 +85,14 @@ const readNode = (nodeEl: HTMLElement, base: Origin): { entry: Endpoint; exit: E
 
   return {
     entry: { x: endRect.left, y: endRect.cy, disabled },
-    exit: { x: startRect.right, y: startRect.cy, disabled }
+    exit: { x: startRect.right, y: startRect.cy, disabled },
+    terminal
   }
 }
 
-/** Build a FlowChild from a direct container child (a node, or a parallel group of nodes). */
+/** Build a FlowChild from a direct container child (a node, or a parallel group of nodes).
+    A `terminal` branch contributes an entry but NO exit, so the chain continues through
+    its siblings while the branch itself ends there. */
 const readChild = (el: HTMLElement, base: Origin): FlowChild => {
   if (el.dataset['flowKind'] === 'parallel') {
     const branches = Array.from(
@@ -98,13 +100,13 @@ const readChild = (el: HTMLElement, base: Origin): FlowChild => {
     ).map((branch) => readNode(branch, base))
 
     return {
-      exits: branches.map((b) => b.exit),
+      exits: branches.filter((b) => !b.terminal).map((b) => b.exit),
       entries: branches.map((b) => b.entry)
     }
   }
 
-  const { entry, exit } = readNode(el, base)
-  return { exits: [exit], entries: [entry] }
+  const { entry, exit, terminal } = readNode(el, base)
+  return { exits: terminal ? [] : [exit], entries: [entry] }
 }
 
 /** Pair the exits of one child with the entries of the next: 1→1, fan-out (1→N), fan-in (N→1), or zip (N→M). */
@@ -135,9 +137,26 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
     }
 
     const base = container.getBoundingClientRect()
-    const children = Array.from(
+    const elements = Array.from(
       container.querySelectorAll<HTMLElement>(':scope > [data-flow-kind]')
-    ).map((el) => readChild(el, base))
+    )
+
+    // Mark the two ends of the sequence. Connectors run only BETWEEN consecutive
+    // children, so the first child has no incoming connector and the last has no
+    // outgoing one — a port on either of those edges would attach to nothing, and
+    // flow.vue hides them off these attributes. A lone child gets both.
+    //
+    // It has to be an attribute rather than a `:first-child` / `:last-child` rule:
+    // the connector <svg> is a sibling of the nodes in this same container, so the
+    // positional pseudo-classes address the svg instead of the first node. These two
+    // are outside the MutationObserver's attributeFilter, so stamping them cannot
+    // re-enter measure().
+    elements.forEach((el, index) => {
+      el.toggleAttribute('data-flow-leading', index === 0)
+      el.toggleAttribute('data-flow-trailing', index === elements.length - 1)
+    })
+
+    const children = elements.map((el) => readChild(el, base))
 
     const out: FlowPath[] = []
 
@@ -155,8 +174,7 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       for (const [exit, entry] of pairEndpoints(from.exits, to.entries)) {
         out.push({
           d: elbow(exit.x, exit.y, entry.x, entry.y, busX),
-          faded: exit.disabled || entry.disabled,
-          arrow: { x: entry.x, y: entry.y }
+          faded: exit.disabled || entry.disabled
         })
       }
     }
