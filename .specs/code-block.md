@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 2a59538bb1ac5d21812069fe362232ea9af4e421cd04a1b7d9b8f3eeecd9246b
+checksum: e1ac860ac941cf30b3d15fb44450bcbba981e6d6d539cfa26b74938ad8053051
 created: 2026-05-28
-last_updated: 2026-07-13
+last_updated: 2026-08-04
 ---
 
 
@@ -25,6 +25,15 @@ Read-only code viewer for docs, API examples, and configuration previews. Suppor
 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar.
 
 Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
+
+**Syntax highlighting** is driven by the active tab's `language` and resolves to one of three tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:
+
+| `language` | Tokenised as |
+|---|---|
+| `javascript`, `js`, `typescript`, `ts` | Expressions: keywords, strings, function calls, punctuation. |
+| `bash`, `sh`, `shell`, `zsh`, `console` | **Commands.** A command line has a different shape from an expression, so it is read as one: the **first word is the program** being run (`function`), and so is any program after an operator that starts a new command (`\|`, `&&`, `\|\|`, `;`); every `-f` / `--flag` and every shell language word (`if`, `for`, `export`, …) is a `keyword`; quoted text is a `string`; a `$VAR` / `${VAR}` expansion is a `type` — the one thing on the line that is a value; the operators joining commands are `punctuation`; and sub-commands, paths, URLs and whitespace are `identifier`. A `#` at line start or after whitespace runs to end of line as a `comment`. This adds **no** new syntax token: a CLI snippet gets the same palette a JS snippet does. |
+| `markdown`, `md` | One `comment` token per line. Prose inside a code block (a markdown snippet, an agent prompt) is commentary, not code, so it takes the comment colour rather than being tokenised as identifiers. |
+| anything else, or unset | Flat — one `identifier` token per line, no highlighting. |
 
 ## Usage
 
@@ -154,6 +163,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 | syntax type | `var(--code-sintax-type)` |
 | syntax punctuation | `var(--code-sintax-punctuation)` |
 | syntax identifier | `var(--code-sintax-identifier)` |
+| syntax comment | `var(--code-sintax-comment)` |
 | syntax line number | `var(--code-sintax-line-number)` |
 | diff removed row | `var(--danger)` |
 | diff removed leading bar | `var(--danger-border)` |
@@ -186,6 +196,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 - WithDiff — single tab with `lineChanges` for added/removed rows (Figma: Diff).
 - WithHighlightedLine — single tab with `highlightedLine={6}` (Figma: Highlighted).
 - WithAnimatedLines — single tab with `animateLines={true}` for staggered website entrance.
+- Shell — single tab with `language: 'bash'`; justified because the command tokeniser is a distinct rendered surface from the expression one (program, flags, operator hand-off, expansion, trailing comment) that no JavaScript sample exercises.
 - Borderless — Default sample with `border={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
 
 ## Constraints — DO NOT

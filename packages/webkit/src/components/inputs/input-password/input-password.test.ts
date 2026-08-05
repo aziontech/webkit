@@ -243,9 +243,13 @@ describe('InputPassword', () => {
 
   // --- a11y ---
 
+  // Field-only component: the label belongs to the wrapping form-field layer, so these
+  // fixtures supply the accessible name a placeholder alone cannot hold (it disappears
+  // as soon as the user types).
   it('has no a11y violations in the default toggleable render', async () => {
     const { container } = render(InputPassword, {
-      props: { placeholder: 'Password' }
+      props: { placeholder: 'Password' },
+      attrs: { 'aria-label': 'Password' }
     })
 
     await expectNoA11yViolations(container)
@@ -253,7 +257,8 @@ describe('InputPassword', () => {
 
   it('has no a11y violations when invalid and required (differing a11y semantics)', async () => {
     const { container } = render(InputPassword, {
-      props: { invalid: true, required: true, modelValue: 'weak', placeholder: 'Password' }
+      props: { invalid: true, required: true, modelValue: 'weak', placeholder: 'Password' },
+      attrs: { 'aria-label': 'Password' }
     })
 
     await expectNoA11yViolations(container)
@@ -262,6 +267,7 @@ describe('InputPassword', () => {
   it('has no a11y violations when toggleable is false with an iconRight slot', async () => {
     const { container } = render(InputPassword, {
       props: { toggleable: false, placeholder: 'Password' },
+      attrs: { 'aria-label': 'Password' },
       slots: { iconRight: '<i class="pi pi-key" aria-hidden="true" />' }
     })
 
@@ -271,7 +277,9 @@ describe('InputPassword', () => {
   // --- story fixture proves composeStories wiring ---
 
   it('renders the Default story fixture cleanly', async () => {
-    const { getByTestId, container } = render(Default())
+    // The story documents the bare field (its label is the form-field layer's job), so
+    // the accessible name is supplied here rather than baked into the canonical story.
+    const { getByTestId, container } = render(Default({ 'aria-label': 'Password' }))
 
     expect(getByTestId('input-password')).toBeTruthy()
     await expectNoA11yViolations(container)

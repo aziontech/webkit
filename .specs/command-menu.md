@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: a4970d1f92ea5b9944f92866676ebe9f307f9fc8bc35357f725a0c10775de363
+checksum: 58132be21304e3e5081516ea32882e7b21f1f0d58e01a9ed438e0a7b47ffd28f
 created: 2026-07-23
-last_updated: 2026-07-29
+last_updated: 2026-07-30
 ---
 
 # Command Menu — Component Spec
@@ -102,7 +102,7 @@ packages/webkit/src/components/overlay/command-menu/
 ```
 
 - `command-menu-input/command-menu-input.vue` — the search field. Context-aware: reads and writes the injected `query` (no consumer `v-model`). Builds on the `InputText` field (`size="large"`, full-width) with a leading search icon in its `iconLeft` slot and a decorative `ESC` `Kbd` hint in its `iconRight` slot, so the focus ring sits on the whole bar; the inner `<input>` carries `role="combobox"`. Autofocuses when the palette opens. Delegates `ArrowDown`/`ArrowUp`/`Enter`/`Home`/`End` to the context's roving navigation.
-  - Props: `placeholder: string` default `'Search Everything'` — input placeholder text.
+  - Props: `placeholder: string` default `'Search Everything'` — input placeholder text. `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
 - `command-menu-list/command-menu-list.vue` — the scrollable results region. `role="listbox"`; wraps the groups/items and renders the `Empty` part when the filter yields no visible items.
@@ -199,7 +199,7 @@ _none_
 - Keyboard map:
   - Global: the `shortcut` combo (⌘K / Ctrl+K) toggles the palette open from anywhere.
   - Inside the palette: `ArrowDown` / `ArrowUp` move the active item (skipping disabled, wrap-around); `Home` / `End` jump to first/last enabled item; `Enter` activates the active item; `Esc` closes (via `Dialog`); `Tab` is trapped within the panel (via `Dialog`).
-- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list; the list is `role="listbox"`; each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`.
+- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list, and carries its own accessible name via `aria-label` (`ariaLabel`, falling back to `placeholder`) so the name survives the first keystroke; the list is `role="listbox"`; each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled`).
 - `motion-reduce:animate-none` on the inherited `animate-popup-scale-*`; `motion-reduce:transition-none` on item `transition-colors`.
 - Focus management: opening moves focus to the input; closing returns focus to the element focused before the palette opened. Focus trap and scroll-lock are inherited from `Dialog`.

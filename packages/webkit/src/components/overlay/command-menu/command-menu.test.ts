@@ -28,7 +28,7 @@ const panel = () => byTestId('overlay-command-menu__panel')
  * (one holding a disabled item) separated by a Separator, plus an Empty state.
  * Flat sub-component tags (never dot-notation) so runtime templates resolve.
  */
-const composed = (props: Record<string, unknown> = {}) =>
+const composed = (props: Record<string, unknown> = {}, inputProps: Record<string, unknown> = {}) =>
   defineComponent({
     components: {
       CommandMenu,
@@ -42,11 +42,11 @@ const composed = (props: Record<string, unknown> = {}) =>
     setup() {
       const open = ref<boolean>(Boolean(props.defaultOpen ?? false))
       const onSelect = props.onSelect as ((...args: unknown[]) => void) | undefined
-      return { props, open, onSelect }
+      return { props, inputProps, open, onSelect }
     },
     template: `
       <CommandMenu v-bind="props" v-model:open="open" @select="onSelect">
-        <CommandMenuInput placeholder="Search commands…" />
+        <CommandMenuInput placeholder="Search commands…" v-bind="inputProps" />
         <CommandMenuList>
           <CommandMenuGroup heading="Actions">
             <CommandMenuItem value="deploy">Deploy Project</CommandMenuItem>
@@ -93,6 +93,26 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
       expect(input.getAttribute('role')).toBe('combobox')
       expect(input.getAttribute('aria-expanded')).toBe('true')
       expect(input.getAttribute('aria-controls')).toBe(byTestId('overlay-command-menu__list')!.id)
+    })
+  })
+
+  describe('search field accessible name', () => {
+    it('names the field with its placeholder text when no ariaLabel is given', async () => {
+      render(composed({ defaultOpen: true }))
+      await settle()
+
+      const input = byTestId('overlay-command-menu__input')!.querySelector('input')!
+      expect(screen.getByLabelText('Search commands…')).toBe(input)
+      expect(input.getAttribute('aria-label')).toBe('Search commands…')
+    })
+
+    it('an explicit ariaLabel wins over the placeholder', async () => {
+      render(composed({ defaultOpen: true }, { ariaLabel: 'Search actions' }))
+      await settle()
+
+      const input = byTestId('overlay-command-menu__input')!.querySelector('input')!
+      expect(screen.getByLabelText('Search actions')).toBe(input)
+      expect(input.getAttribute('placeholder')).toBe('Search commands…')
     })
   })
 
