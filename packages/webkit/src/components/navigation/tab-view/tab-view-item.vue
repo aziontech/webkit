@@ -70,9 +70,9 @@
   const panelId = computed(() => (context ? context.panelId(resolvedValue.value) : undefined))
 
   const itemSharedClasses = [
-    'relative z-[1] inline-flex h-[30px] shrink-0 cursor-pointer items-center',
+    'relative z-[1] inline-flex h-[var(--size-8)] shrink-0 cursor-pointer items-center',
     'gap-[var(--spacing-xs)] rounded-[var(--shape-button)]',
-    'px-[var(--spacing-sm)] py-[var(--spacing-xs)]',
+    'px-[var(--spacing-xs)] py-[var(--spacing-xs)]',
     'text-label-md transition-colors motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
@@ -87,13 +87,18 @@
         context &&
         !isSelected.value &&
         'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
+      // Selected label stays `--text-default` (Figma). `--secondary-contrast` is the
+      // on-`--secondary` pair (black on dark / white on light) and only reads correctly
+      // against a solid `--secondary-selected` fill, which the pill is not.
       !isDisabled.value &&
         context &&
         isSelected.value &&
-        'bg-transparent text-[var(--secondary-contrast)]',
+        'bg-transparent text-[var(--text-default)]',
+      // Standalone (no TabView context): the item paints its own pill, so it carries the
+      // mask + hairline + xs shadow the List's indicator provides in the composed case.
       !context &&
         isSelected.value &&
-        'bg-[var(--secondary-selected)] text-[var(--secondary-contrast)]',
+        'border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--secondary-mask)] text-[var(--text-default)] shadow-[var(--shadow-xs)]',
       !context &&
         !isSelected.value &&
         'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',

@@ -38,7 +38,7 @@
         :value="value"
         :disabled="disabled"
         :data-size="size"
-        class="text-body-sm w-full appearance-none rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-[var(--spacing-sm)] pr-[var(--spacing-lg)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:border-[var(--border-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:bg-[var(--bg-disabled)] disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+        class="text-label-sm w-full appearance-none rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] pl-[var(--spacing-sm)] pr-[var(--spacing-lg)] text-[var(--text-default)] transition-colors duration-150 ease-out [&:not(:focus):not(:disabled)]:hover:border-[var(--border-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:bg-[var(--bg-disabled)] disabled:text-[var(--text-disabled)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
         @change="onChange"
       >
         <option

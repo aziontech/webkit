@@ -69,6 +69,15 @@ export const keyframes = {
     '0%': 'inset-inline-start: -200%; inset-inline-end: 100%',
     '60%': 'inset-inline-start: 107%; inset-inline-end: -8%',
     '100%': 'inset-inline-start: 107%; inset-inline-end: -8%'
+  },
+  // Marching dashes along an SVG stroke — the "flowing connection" of a node-based
+  // diagram. The travel distance is 24, so the loop is seamless for any
+  // `stroke-dasharray` whose cycle DIVIDES 24 (`4 4` = 8, `2 4` = 6, `8 4` = 12): the
+  // pattern lands exactly where it started. A cycle that does not divide 24 (`5 5` = 10)
+  // visibly jumps on repeat.
+  flowDash: {
+    '0%': 'stroke-dashoffset: 24',
+    '100%': 'stroke-dashoffset: 0'
   }
 }
 
