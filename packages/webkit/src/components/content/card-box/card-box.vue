@@ -59,7 +59,7 @@
   )
 
   const headerClasses =
-    'group flex min-h-14 shrink-0 items-center justify-between gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]'
+    'group flex min-h-14 shrink-0 items-center justify-between gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-sm)] py-[var(--spacing-sm)]'
 
   const titleClasses = 'text-label-md text-[var(--text-default)]'
 

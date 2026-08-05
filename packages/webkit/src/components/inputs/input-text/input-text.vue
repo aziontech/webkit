@@ -96,7 +96,13 @@
       'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
       '[&:not(:focus-within):not([data-disabled])]:hover:border-[var(--border-strong)]',
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]',
+      // The ring offset must match the surface BEHIND the field, so a host that
+      // puts the field on something other than the canvas (a raised popover, a
+      // drawer) retunes it by setting --input-ring-offset on any ancestor. A CSS
+      // variable, not a class the host has to out-specify: custom properties
+      // inherit, so one declaration covers a whole group of fields, and it costs
+      // no extra utility to resolve.
+      'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))]',
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[invalid]:border-[var(--danger-border)]',
       'data-[required]:border-[var(--warning-border)]',
