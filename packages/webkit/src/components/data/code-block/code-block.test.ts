@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as stories from '../../../../../../apps/storybook/src/stories/components/code/code-block/CodeBlock.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CodeBlock from './code-block.vue'
+import { highlightCodeLine } from './utils/highlight-code'
 
 const { Default } = composeStories(stories)
 
@@ -390,6 +391,71 @@ describe('CodeBlock', () => {
 
       expect(getByTestId('data-code-block')).toBeTruthy()
       await expectNoA11yViolations(container)
+    })
+  })
+
+  // Shell is tokenised so a CLI snippet gets the same code-sintax palette as JS —
+  // asserted on the token stream, never on class strings.
+  describe('shell highlighting', () => {
+    // Adjacent same-type chunks are merged by design (whitespace rides along with the
+    // identifier next to it), so a token is matched on its trimmed text.
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('tokenises a command line: program, flag, operator', () => {
+      const line = 'curl -fsSL https://cli.azion.app/install.sh | bash'
+
+      expect(typeOf('bash', line, 'curl')).toBe('function')
+      expect(typeOf('bash', line, '-fsSL')).toBe('keyword')
+      expect(typeOf('bash', line, '|')).toBe('punctuation')
+      // the program after a pipe starts a new command
+      expect(typeOf('bash', line, 'bash')).toBe('function')
+      expect(typeOf('bash', line, 'https://cli.azion.app/install.sh')).toBe('identifier')
+    })
+
+    it('marks a sub-command as data, not as a second program', () => {
+      expect(typeOf('bash', 'azion deploy', 'azion')).toBe('function')
+      expect(typeOf('bash', 'azion deploy', 'deploy')).toBe('identifier')
+    })
+
+    it('treats a full-line # as a comment', () => {
+      const tokens = highlightCodeLine('bash', '# Install the Azion CLI')
+
+      expect(tokens).toHaveLength(1)
+      expect(tokens[0]).toEqual({ text: '# Install the Azion CLI', type: 'comment' })
+    })
+
+    it('keeps a trailing comment separate from the command before it', () => {
+      const line = 'azion link # link this project'
+
+      expect(typeOf('bash', line, 'azion')).toBe('function')
+      expect(typeOf('bash', line, '# link this project')).toBe('comment')
+    })
+
+    it('reads quoted text as a string and an expansion as a type', () => {
+      const line = 'export TOKEN="$AZION_TOKEN"'
+
+      expect(typeOf('bash', line, 'export')).toBe('keyword')
+      expect(typeOf('bash', line, '"$AZION_TOKEN"')).toBe('string')
+      expect(typeOf('bash', 'echo $HOME', '$HOME')).toBe('type')
+    })
+
+    it('covers every shell alias, and leaves an unknown language flat', () => {
+      for (const lang of ['bash', 'sh', 'shell', 'zsh', 'console']) {
+        expect(typeOf(lang, 'azion deploy', 'azion')).toBe('function')
+      }
+
+      expect(highlightCodeLine('json', 'azion deploy')).toEqual([
+        { text: 'azion deploy', type: 'identifier' }
+      ])
+    })
+
+    it('renders markdown prose as a single comment token', () => {
+      for (const lang of ['markdown', 'md']) {
+        expect(highlightCodeLine(lang, '1. Install the Azion CLI:')).toEqual([
+          { text: '1. Install the Azion CLI:', type: 'comment' }
+        ])
+      }
     })
   })
 })

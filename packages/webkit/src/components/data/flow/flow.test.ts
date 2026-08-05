@@ -139,6 +139,93 @@ describe('Flow (composition compound)', () => {
       const { getByText } = renderTree(`<Flow><FlowNode>Transform</FlowNode></Flow>`)
       expect(getByText('Transform')).toBeTruthy()
     })
+
+    it('renders a connector port on each edge of a styled node, hidden from the a11y tree', () => {
+      const { getByTestId } = renderTree(`<Flow><FlowNode>N</FlowNode></Flow>`)
+      const node = getByTestId('data-flow__node')
+      const ports = Array.from(node.querySelectorAll<HTMLElement>('[data-flow-port]'))
+      expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(['end', 'start'])
+      // Decorative — the connector affordance carries no meaning for AT.
+      expect(ports.every((p) => p.getAttribute('aria-hidden') === 'true')).toBe(true)
+    })
+
+    it('renders no ports on an unstyled node (its slot content owns the appearance)', () => {
+      const { getByTestId } = renderTree(`<Flow><FlowNode unstyled>N</FlowNode></Flow>`)
+      expect(getByTestId('data-flow__node').querySelectorAll('[data-flow-port]').length).toBe(0)
+    })
+
+    it('marks a terminal node and gives it no outgoing port', () => {
+      const { getAllByTestId } = renderTree(`
+        <Flow>
+          <FlowNode>Source</FlowNode>
+          <FlowParallel>
+            <FlowNode>Chain</FlowNode>
+            <FlowNode terminal>Leaf</FlowNode>
+          </FlowParallel>
+        </Flow>
+      `)
+      const [, chain, leaf] = getAllByTestId('data-flow__node')
+      expect(leaf.getAttribute('data-flow-terminal')).toBe('true')
+      // A terminal node receives a connector but originates none, so only the end port.
+      expect(
+        Array.from(leaf.querySelectorAll<HTMLElement>('[data-flow-port]')).map((p) =>
+          p.getAttribute('data-flow-port')
+        )
+      ).toEqual(['end'])
+      // Its non-terminal sibling keeps both.
+      expect(chain.querySelectorAll('[data-flow-port]').length).toBe(2)
+      expect(chain.hasAttribute('data-flow-terminal')).toBe(false)
+    })
+  })
+
+  describe('terminal branches — a leaf receives a connector but originates none', () => {
+    // Two parallel branches, one terminal. Source fans out to BOTH entries, but only
+    // the non-terminal branch carries the chain into the next child: 2 in + 1 out = 3.
+    // With no terminal branch the same tree draws 4 (2 in + 2 out).
+    const tree = (terminal: boolean) => `
+      <Flow>
+        <FlowNode>Source</FlowNode>
+        <FlowParallel>
+          <FlowNode>Chain</FlowNode>
+          <FlowNode ${terminal ? 'terminal' : ''}>Leaf</FlowNode>
+        </FlowParallel>
+        <FlowNode>Sink</FlowNode>
+      </Flow>
+    `
+
+    it('draws no connector leaving a terminal branch', async () => {
+      const { getByTestId } = renderTree(tree(true))
+      const root = getByTestId('data-flow')
+      await waitFor(() => {
+        expect(root.querySelectorAll('svg path').length).toBeGreaterThan(0)
+      })
+      await waitFor(() => {
+        expect(root.querySelectorAll('svg path').length).toBe(3)
+      })
+    })
+
+    it('draws the outgoing connector when the same branch is not terminal', async () => {
+      const { getByTestId } = renderTree(tree(false))
+      const root = getByTestId('data-flow')
+      await waitFor(() => {
+        expect(root.querySelectorAll('svg path').length).toBe(4)
+      })
+    })
+
+    it('draws nothing out of a terminal node that is a direct child', async () => {
+      // A terminal direct child ends the sequence: Source -> Terminal, and no Terminal -> Sink.
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode>Source</FlowNode>
+          <FlowNode terminal>Terminal</FlowNode>
+          <FlowNode>Sink</FlowNode>
+        </Flow>
+      `)
+      const root = getByTestId('data-flow')
+      await waitFor(() => {
+        expect(root.querySelectorAll('svg path').length).toBe(1)
+      })
+    })
   })
 
   describe('Flow.Parallel — flow-parallel.vue align prop', () => {
@@ -192,6 +279,37 @@ describe('Flow (composition compound)', () => {
       `)
       // props.type ?? 'both'
       expect(getByTestId('data-flow__anchor').getAttribute('data-flow-anchor')).toBe('both')
+    })
+
+    it.each([
+      ['end', ['end']],
+      ['start', ['start']]
+    ])('places a port only on the edge type=%s attaches to', (type, expected) => {
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode unstyled>
+            <FlowAnchor type="${type}">x</FlowAnchor>
+          </FlowNode>
+        </Flow>
+      `)
+      const ports = Array.from(
+        getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-flow-port]')
+      )
+      expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(expected)
+    })
+
+    it('places ports on both edges when the anchor has no type', () => {
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode unstyled>
+            <FlowAnchor>x</FlowAnchor>
+          </FlowNode>
+        </Flow>
+      `)
+      const ports = Array.from(
+        getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-flow-port]')
+      )
+      expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(['end', 'start'])
     })
   })
 

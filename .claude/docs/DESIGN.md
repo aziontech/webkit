@@ -345,9 +345,12 @@ Use **only** the named utilities below; they ship with `motion-safe` / `motion-r
 | `animate-highlight-fade`             | row-flash highlight                          | `ease-in forwards`                                                            |
 | `animate-progress-indeterminate`     | indeterminate bar, primary sweep             | `slow-04` · `productive-entrance` infinite                                    |
 | `animate-progress-indeterminate-short` | indeterminate bar, secondary short sweep   | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
+| `animate-flow-dash`                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0) | `slow-02` · `linear` infinite                            |
 | `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js` | see `animate.js`                    |
 
 `animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
+
+`animate-flow-dash` animates an **SVG stroke** and expects a `stroke-dasharray` whose cycle **divides 24** (`4 4` = 8, `2 4` = 6, `8 4` = 12), because 24 is the keyframe's travel: the pattern lands exactly where it started and the loop has no visible seam. A cycle that does not divide 24 (`5 5` = 10) jumps on every repeat. Like `animate-shimmer` and `animate-spin` it is `linear` — an endlessly looping animation must not accelerate, or the seam between repeats becomes visible.
 
 ### Easing primitives — `primitives/animations/ease.js`
 

@@ -2,7 +2,7 @@
 name: webkit-ui-craft
 description: Umbrella entry for building product UI on @aziontech/webkit with taste and PRO UX. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, tables, navigation), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
 status: active
-last_updated: 2026-07-21
+last_updated: 2026-08-03
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-tokens, webkit-accessibility, ui-verify]
 ---
@@ -46,14 +46,36 @@ webkit primitives.
 3. **Typography hierarchy** — only the `text-*` tokens, never inverted (`text-heading-* >
 text-body-* > text-label-* > text-overline-*`). See `/webkit-baseline-ui`.
 4. **Spacing rhythm** — one `--spacing-*` step, applied consistently. See `/webkit-baseline-ui`.
-5. **Contain the page** — cap reading/content width with `max-w-(--container-*)`, keep
+5. **One content column** — inside a vertical list (nav rail, menu, settings list, any stack of rows),
+   **every row's content starts on the same x**, whatever the row is. A section title's text, a row's
+   leading glyph, and a row with no glyph at all all begin on that one column; a row that reserves a
+   glyph box pads by the column minus the glyph's own centring, so the glyph — not the box — lands on
+   it. Nesting shifts the whole column by exactly one indent step, so the alignment cascades at every
+   depth instead of being re-derived per level.
+   Three things follow, and each is a real bug when skipped:
+   - **Never reserve an empty glyph box.** A box with no glyph in it misreports where the row's
+     content starts: the label sits off the column its siblings hold, and anything drawn from that
+     content (a tree rail, a hover surface) anchors to blank space. Render the box only when there is
+     a glyph.
+   - **Derive the indent from tokens, never a literal.** Hold the step and the column in two custom
+     properties and compute everything else from them, so an elbow or rail cannot come unstuck from
+     the rows it connects. Avoid any `--spacing-*` token that is redefined at a breakpoint — the
+     column would drift as the viewport grows.
+   - **Structure lines live in the gutter, never over a row.** A tree rail, elbow or depth guide
+     stops at the row's box edge — not at its text. The row's hover and selected surfaces fill that
+     box, so a line drawn any further is painted underneath them and reads as a glitch on exactly
+     the states a user interacts with.
+   - **Verify it by measuring, not by looking.** Read the rendered `x` of each row type and assert
+     they are equal, and assert a rail's right edge never exceeds the row surface's left edge. A 4px
+     break is invisible in review and obvious in production.
+6. **Contain the page** — cap reading/content width with `max-w-(--container-*)`, keep
    data-dense surfaces fluid; never a raw `px`/`rem` width. The full container doctrine (fluid-first
    shell, focused-flow centering) lives in `/webkit-baseline-ui`.
-6. **Token motion only** — `animate-*` utilities + `duration-*`/`ease-*` tokens, with a
+7. **Token motion only** — `animate-*` utilities + `duration-*`/`ease-*` tokens, with a
    `motion-reduce:*` escape; no animation library. See `/webkit-motion-polish`.
-7. **Accessible by construction** — labels, focus, ARIA state, target size. See `/webkit-form`,
+8. **Accessible by construction** — labels, focus, ARIA state, target size. See `/webkit-form`,
    `/webkit-ui-verify`.
-8. **Works in both themes** — style through role tokens so light and dark need no per-theme edits.
+9. **Works in both themes** — style through role tokens so light and dark need no per-theme edits.
    See `/webkit-theming-dark-mode`.
 
 > Accessibility is enforced by the shipped `accessibility` rule and verified at runtime by

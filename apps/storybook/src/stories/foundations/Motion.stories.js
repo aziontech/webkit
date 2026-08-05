@@ -14,8 +14,10 @@ const curveRows = Object.entries(curve).map(([name, value]) => ({ name: `ease-${
 // Some utilities are invisible on the default primary square: shimmer animates
 // background-position (needs a gradient + background-size), the progress pair animates
 // inset-inline-* (needs a positioned bar inside the track), slide-down reveals height
-// (needs inner content to measure), and highlight-fade paints a background tint meant
-// for text rows. Each gets a preview shape that actually shows the motion.
+// (needs inner content to measure), highlight-fade paints a background tint meant
+// for text rows, and flow-dash drives stroke-dashoffset — an SVG presentation attribute a
+// <div> does not have, so it previews on a real stroke (`stroke:` = its dasharray).
+// Each gets a preview shape that actually shows the motion.
 const DEFAULT_PREVIEW_CLASS = 'h-8 w-8 rounded-(--shape-elements) bg-(--primary)'
 
 const PREVIEW_OVERRIDES = {
@@ -42,7 +44,9 @@ const PREVIEW_OVERRIDES = {
   },
   'progress-indeterminate-short': {
     class: 'absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-(--primary)'
-  }
+  },
+  // A dash cycle of 8 divides the keyframe's 24 travel, so the loop is seamless.
+  'flow-dash': { stroke: '4 4' }
 }
 
 const animationRows = Object.entries(animate).map(([name, value]) => ({
@@ -122,7 +126,29 @@ export const Overview = {
               class="flex items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
             >
               <div class="relative flex h-16 w-24 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) bg-(--bg-canvas)">
+                <!-- An animation that drives an SVG presentation attribute (stroke-dashoffset)
+                     shows nothing on a div, so it previews on a real stroke instead. -->
+                <svg
+                  v-if="row.preview?.stroke"
+                  :key="replayKeys[row.id] || 0"
+                  width="72"
+                  height="2"
+                  viewBox="0 0 72 2"
+                  aria-hidden="true"
+                >
+                  <line
+                    x1="0"
+                    y1="1"
+                    x2="72"
+                    y2="1"
+                    stroke-width="1"
+                    :stroke-dasharray="row.preview.stroke"
+                    class="stroke-(--accent) motion-reduce:animate-none"
+                    :class="row.className"
+                  />
+                </svg>
                 <div
+                  v-else
                   :key="replayKeys[row.id] || 0"
                   class="motion-reduce:animate-none"
                   :class="[row.preview?.class || DEFAULT_PREVIEW_CLASS, row.className]"

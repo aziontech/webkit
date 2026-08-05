@@ -126,7 +126,7 @@
       role="status"
       aria-live="polite"
       :data-testid="`${testId}__loading`"
-      class="flex h-full min-h-0 flex-col items-center justify-center gap-(--spacing-md) bg-(--bg-canvas)"
+      class="flex h-full min-h-0 flex-col items-center justify-center gap-(--spacing-md) bg-(--bg-canvas) py-(--spacing-xl)"
     >
       <Spinner class="size-6 text-(--text-default)" />
       <span class="font-code text-label-sm text-(--text-muted)">
