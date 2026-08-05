@@ -63,7 +63,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | surface | `var(--bg-surface)` |
 | text | `var(--text-default)` |
 | spacing | `var(--spacing-3)` |
-| height (tab item) | `var(--size-8)` — 32 px, applied as `h-[var(--size-8)]` |
+| height (tab item) | `var(--size-8)` — 32 px, applied as `h-(--size-8)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
 

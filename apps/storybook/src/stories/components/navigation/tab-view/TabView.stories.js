@@ -193,14 +193,14 @@ export const Default = {
 // No TabView.Root: each item reads its own `selected` instead of the injected context, and
 // paints its own pill because there is no List indicator behind it to do that.
 const STANDALONE_TEMPLATE = `
-  <div class="flex items-center gap-[var(--spacing-xxs)]">
+  <div class="flex items-center gap-(--spacing-xxs)">
     <TabView.Item label="Selected" selected />
     <TabView.Item label="Idle" />
     <TabView.Item label="Disabled" disabled />
   </div>
 `
 
-const STANDALONE_SOURCE = `<div class="flex items-center gap-[var(--spacing-xxs)]">
+const STANDALONE_SOURCE = `<div class="flex items-center gap-(--spacing-xxs)">
   <TabView.Item label="Selected" selected />
   <TabView.Item label="Idle" />
   <TabView.Item label="Disabled" disabled />

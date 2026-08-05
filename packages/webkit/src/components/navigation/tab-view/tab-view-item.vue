@@ -70,9 +70,9 @@
   const panelId = computed(() => (context ? context.panelId(resolvedValue.value) : undefined))
 
   const itemSharedClasses = [
-    'relative z-1 inline-flex h-[30px] shrink-0 cursor-pointer items-center',
+    'relative z-1 inline-flex h-(--size-8) shrink-0 cursor-pointer items-center',
     'gap-(--spacing-xs) rounded-(--shape-button)',
-    'px-(--spacing-sm) py-(--spacing-xs)',
+    'px-(--spacing-xs) py-(--spacing-xs)',
     'text-label-md transition-colors motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
@@ -87,11 +87,15 @@
         context &&
         !isSelected.value &&
         'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
-      !isDisabled.value &&
-        context &&
+      // Selected label stays `--text-default` (Figma). `--secondary-contrast` is the
+      // on-`--secondary` pair (black on dark / white on light) and only reads correctly
+      // against a solid `--secondary-selected` fill, which the pill is not.
+      !isDisabled.value && context && isSelected.value && 'bg-transparent text-(--text-default)',
+      // Standalone (no TabView context): the item paints its own pill, so it carries the
+      // mask + hairline + xs shadow the List's indicator provides in the composed case.
+      !context &&
         isSelected.value &&
-        'bg-transparent text-(--secondary-contrast)',
-      !context && isSelected.value && 'bg-(--secondary-selected) text-(--secondary-contrast)',
+        'border-(length:--border-width-default) border-(--border-muted) bg-(--secondary-mask) text-(--text-default) shadow-(--shadow-xs)',
       !context &&
         !isSelected.value &&
         'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',

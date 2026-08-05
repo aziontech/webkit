@@ -73,7 +73,9 @@
   // (dark) / near-black (light) and reads as an inverted chip.
   const indicatorClasses = [
     'pointer-events-none absolute left-0 top-0 z-0',
-    'rounded-(--shape-button) bg-(--secondary-selected)',
+    'rounded-(--shape-button) bg-(--secondary-mask)',
+    'border-(length:--border-width-default) border-(--border-muted)',
+    'shadow-(--shadow-xs)',
     'motion-reduce:transition-none'
   ]
 
