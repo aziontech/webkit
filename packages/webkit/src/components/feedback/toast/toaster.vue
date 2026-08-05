@@ -223,7 +223,7 @@
     const vis = region.live.slice(0, visibleCount.value)
     const frontHeight = heights.value[region.live[0]?.entry.id] ?? 0
 
-    let height = '0px'
+    let height = '0'
     if (vis.length) {
       if (isExpanded(region)) {
         let total = (vis.length - 1) * GAP

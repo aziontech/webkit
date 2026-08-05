@@ -23,6 +23,11 @@ export default {
     // author to reach for a token instead of the literal.
     'color-no-hex': [true, { message: USE_TOKEN }],
 
+    'length-zero-no-unit': [
+      true,
+      { message: 'A zero length takes no unit — write `0`, not `0px` / `0rem` / `0em`.' }
+    ],
+
     // Bans raw color functions. A color coming out of `rgb()` / `hsl()` (and
     // their alpha variants) is a hardcoded value, not a token reference. Tokens
     // are consumed as `var(--*)`, so these functions have no place in authored

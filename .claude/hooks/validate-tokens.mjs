@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/components/**
+// (excluding test files — the same tokenChecksApply scope the CI ratchet uses)
 // when the content violates DESIGN.md /
 // COMPONENT_REQUIREMENTS.md rules: hex/rgb/hsl colors, Tailwind palette, raw
 // typography, legacy color utils, `class` in defineProps, `any`, `@ts-ignore`.
@@ -7,10 +8,9 @@
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
-import { TOKEN_CHECKS as VIOLATIONS } from './_lib/token-checks.mjs'
+import { TOKEN_CHECKS as VIOLATIONS, tokenChecksApply } from './_lib/token-checks.mjs'
 
 const ROOT = process.cwd()
-const TARGET_PREFIX = 'packages/webkit/src/components/'
 
 function readStdin() {
   return new Promise((resolveStdin) => {
@@ -79,9 +79,12 @@ async function main() {
   const filePath = input.tool_input?.file_path
   if (!filePath) process.exit(0)
 
-  const relPath = relative(ROOT, resolve(filePath))
-  if (!relPath.startsWith(TARGET_PREFIX)) process.exit(0)
-  if (!/\.(vue|css|scss|ts)$/.test(filePath)) process.exit(0)
+  // Same scope as the CI ratchet (tokenChecksApply): component sources minus
+  // *.test.* / *.spec.* — tests legitimately contain values the checks forbid (the
+  // browser serializes a collapsed height as the string '0px', type tests use
+  // @ts-expect-error), so the token discipline must not block writing them.
+  const relPath = relative(ROOT, resolve(filePath)).split('\\').join('/')
+  if (!tokenChecksApply(relPath)) process.exit(0)
 
   // For Edit/MultiEdit, baseline = existing file. For Write of new file, baseline = ''.
   const baseline = tool === 'Write' ? '' : readExistingFile(filePath)

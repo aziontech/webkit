@@ -35,6 +35,7 @@ import { containersData } from '../tokens/semantic/containers.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
 import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
+import { assertNoZeroWithUnit } from './zero-unit.mjs';
 
 const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl'];
 
@@ -380,6 +381,7 @@ const importIdx = rawCss.indexOf(IMPORT_LINE);
 if (importIdx === -1) throw new Error('emitCssV4 output is missing the tailwind import line');
 const afterImport = importIdx + IMPORT_LINE.length;
 const css = `${rawCss.slice(0, afterImport)}\n\n${fontsCss}${rawCss.slice(afterImport)}`;
+assertNoZeroWithUnit(css, 'globals.css');
 await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
 await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');
 console.log(`✓ v4 → ${dir}`);
