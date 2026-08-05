@@ -5,6 +5,10 @@
    * One column on mobile, fanning out to `columns` at the large breakpoint. Two
    * visual variants:
    *
+   * `mobileColumns` opts a band out of the one-column mobile default: a grid of
+   * short, glyph-led cells (a framework mark plus one word) reads better two-up on
+   * a phone than as a tall single file. Cells with a description keep one column.
+   *
    *   • 'gap'     — spaced cards separated by gutters (default). Each child is a
    *                 self-contained card (border + radius + bg of its own).
    *   • 'divider' — a hairline box grid: 1px gaps reveal the wrapper's border
@@ -20,11 +24,22 @@
     4: 'sm:grid-cols-2 lg:grid-cols-4'
   }
 
+  const MOBILE_COLS = {
+    1: 'grid-cols-1',
+    2: 'grid-cols-2'
+  }
+
   defineProps({
     // One of the COLS keys (2, 3, 4).
     columns: {
       type: Number,
       default: 3
+    },
+    // Columns below `sm` — 1 (default) or 2.
+    mobileColumns: {
+      type: Number,
+      default: 1,
+      validator: (v) => [1, 2].includes(v)
     },
     variant: {
       type: String,
@@ -43,10 +58,14 @@
 <template>
   <div
     :class="[
-      'grid grid-cols-1',
+      'grid',
+      MOBILE_COLS[mobileColumns],
       COLS[columns],
       variant === 'divider'
-        ? ['gap-px', dividerColor === 'muted' ? 'bg-[var(--border-muted)]' : 'bg-[var(--border-default)]']
+        ? [
+            'gap-px',
+            dividerColor === 'muted' ? 'bg-[var(--border-muted)]' : 'bg-[var(--border-default)]'
+          ]
         : 'gap-[var(--spacing-md)]'
     ]"
   >

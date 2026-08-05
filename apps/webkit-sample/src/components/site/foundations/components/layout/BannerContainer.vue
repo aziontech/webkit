@@ -22,11 +22,11 @@
    * backdrops (the ASCII field, scrims); the default slot is the z-10 copy.
    */
   const MAX_W = {
-    '3xl': 'max-w-[var(--container-3xl)]',
-    '4xl': 'max-w-[var(--container-4xl)]',
-    '5xl': 'max-w-[var(--container-5xl)]',
-    '6xl': 'max-w-[var(--container-6xl)]',
-    '7xl': 'max-w-[var(--container-7xl)]',
+    '3xl': 'max-w-[var(--container-xl)]',
+    '4xl': 'max-w-[var(--container-2xl)]',
+    '5xl': 'max-w-[var(--container-3xl)]',
+    '6xl': 'max-w-[var(--container-4xl)]',
+    '7xl': 'max-w-[var(--container-5xl)]',
     full: 'max-w-none'
   }
 
@@ -59,7 +59,7 @@
     <div
       :class="[
         MAX_W[maxWidth],
-        'relative z-10 mx-auto w-full px-[var(--spacing-xl)] py-[var(--spacing-xxl)]'
+        'relative z-10 mx-auto w-full px-[var(--spacing-xl)] py-[var(--spacing-xl)]'
       ]"
     >
       <slot />

@@ -308,7 +308,6 @@ azion deploy`
     globalThis.open(url, '_blank', 'noopener')
     globalThis.setTimeout(() => globalThis.URL.revokeObjectURL(url), 10000)
   }
-
 </script>
 
 <template>
@@ -325,11 +324,20 @@ azion deploy`
          48px are folded into the hero's `--banner-offset` below so the hero underneath
          is still exactly one screen. -->
     <div
-      class="sticky top-0 z-20 flex h-12 items-center gap-[var(--spacing-md)] border-b border-[var(--border-default)] bg-[var(--bg-canvas)] px-[var(--spacing-xl)]"
+      class="sticky top-0 z-20 flex h-12 items-center gap-[var(--spacing-sm)] border-b border-[var(--border-default)] bg-[var(--bg-canvas)] px-[var(--spacing-md)] md:gap-[var(--spacing-md)] md:px-[var(--spacing-xl)]"
     >
+      <!-- The trail wraps rather than truncates (BreadcrumbList is `flex-wrap`), and a
+           two-line trail would double a bar that is pinned for the whole scroll. So the
+           bar carries the full trail from `md` up and the current page alone below it —
+           where the only ancestor is "Documentation", which the shell's own brand and
+           the sheet already say. -->
       <Breadcrumb
         :items="crumbs"
-        class="min-w-0 flex-1"
+        class="hidden min-w-0 flex-1 md:inline-flex"
+      />
+      <Breadcrumb
+        :items="crumbs.slice(-1)"
+        class="min-w-0 flex-1 md:hidden"
       />
       <SplitButton
         :label="copied ? 'Copied' : 'Copy page'"
@@ -344,19 +352,20 @@ azion deploy`
     </div>
 
     <!-- ══ Hero band ═══════════════════════════════════════════════════════════
-         Full-bleed and exactly one screen tall: `max-width="full"` drops the inner
-         column so the band spans the whole content region (only its padding insets
-         the copy), and `hero` centers that copy in `100dvh - --banner-offset` — the
-         offset being the docs top bar (h-14) plus the page bar above (h-12) = 6.5rem,
-         so "one screen" means the region actually left for the hero. The reader gets
-         the hero alone on load; everything below it goes back inside the container.
+         Full-bleed and exactly one screen tall: the band spans the whole content
+         region while its copy keeps the 7xl column (1024px at a 1440 window, once the
+         rail's 300px and the band's own p-xl are off), and `hero` centers that copy in
+         `100dvh - --banner-offset` — the offset reading the docs top bar's and the page
+         bar's own heights, so "one screen" means the region actually left for the hero.
+         The reader gets the hero alone on load; everything below it goes back inside
+         the container.
 
          Its border-b is the top edge of the framed column below, so the page frame
          still reads as one continuous border. -->
     <BannerContainer
       hero
-      max-width="full"
-      class="[--banner-offset:6.5rem]"
+      max-width="7xl"
+      class="[--banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem))]"
     >
       <!-- The Hub hero's backdrop, same asset and same two layers, so the docs hero and
            the Hub hero read as one pattern: the animated ASCII contour field faded off
@@ -374,39 +383,62 @@ azion deploy`
         />
       </template>
 
-      <div class="grid items-center gap-[var(--spacing-xl)] lg:grid-cols-2">
+      <!-- The docs card-grid geometry, on the tokens: one column that splits at `xl`
+           (not `lg` — the 300px rail leaves a laptop's content region ~700px, where a
+           half-width headline beside a half-width code block is two cramped columns
+           instead of one readable stack), no `items-*` so the cells keep the grid's
+           default stretch — which is what gives the code block's own `xl:self-center`
+           an area to centre in (the block is the shorter of the two cells), and the
+           `--spacing-xl` gutter, which reaches the 48px the reference asks for at `xl`
+           and steps down to 32/24 on the narrower windows the reference never had.
+           The margins are the same token, so `mt` and `mb` equalise from `lg` up and
+           the band's vertical centering is preserved exactly where the two columns are.
+
+           `min-w-0` on both cells: a grid item's default `min-width: auto` sizes the
+           column to its content's min-content width, and the code block's longest line
+           is wider than a phone — without it the whole hero column grows past the
+           viewport and the headline stops wrapping. -->
+      <div
+        class="mt-[var(--spacing-xs)] mb-[var(--spacing-xl)] grid grid-cols-1 gap-[var(--spacing-xxl)] lg:mt-[var(--spacing-xl)] xl:grid-cols-2"
+      >
         <PageHeader
           id="overview"
+          class="min-w-0"
           margin-bottom=""
           size="hero"
-          title="Welcome to Azion Docs"
+          title="Build into the most reliable edge network"
           description="We make every application fast and reliable. Deploy your projects instantly on the most reliable global network, leverage enterprise-grade security, and scale from zero to peak without cold starts."
         >
-          <!-- `flex-wrap` + `shrink-0`: three long labels in a half-width hero column
-               have to wrap to a second line, not compress until their text spills out
-               of the button. -->
+          <!-- Below `sm` the three actions STACK, each full width: a phone column fits
+               one of these labels per line anyway, and three ragged part-width buttons
+               read as debris where one full-width stack reads as a list of three ways in.
+               From `sm` up they are a wrapping row again — `flex-wrap` + `shrink-0`, so
+               three long labels in a half-width hero column wrap to a second line
+               instead of compressing until their text spills out of the button. -->
           <template #actions>
-            <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
+            <div
+              class="flex flex-col items-stretch gap-[var(--spacing-md)] sm:flex-row sm:flex-wrap sm:items-center"
+            >
               <Button
-                label="First deploy in a few minutes"
+                label="First deploy"
                 kind="primary"
-                size="medium"
+                size="large"
                 href="#first-deploy"
-                class="shrink-0"
+                class="w-full shrink-0 sm:w-auto"
               />
               <Button
                 label="Create an account"
                 kind="outlined"
-                size="medium"
+                size="large"
                 href="#create-account"
-                class="shrink-0"
+                class="w-full shrink-0 sm:w-auto"
               />
               <Button
                 label="Platform overview"
                 kind="outlined"
-                size="medium"
+                size="large"
                 href="#platform-overview"
-                class="shrink-0"
+                class="w-full shrink-0 sm:w-auto"
               />
             </div>
           </template>
@@ -421,8 +453,22 @@ azion deploy`
 
              `animate-lines` is CodeBlock's own staggered line entrance (opacity + an
              8px slide, with a motion-reduce fallback it ships), so the snippet arrives
-             line by line with the hero rather than all at once. -->
-        <div class="rounded-[var(--shape-elements)] shadow-[var(--shadow-sm)]">
+             line by line with the hero rather than all at once.
+
+             `my-[--spacing-lg]` is the reference's 1.5rem of vertical room around the
+             block, on the token that carries that value from `sm` up (1rem below it).
+             It reads on the stacked column, where the margin is real space between the
+             actions and the block; from `xl` up `self-center` is what places it, and
+             the margins only inset the area it centres in.
+
+             `xl:self-center` is the alignment: the grid stretches its cells, so left
+             alone the block would either fill the row or hang from its top edge. Centred
+             in its area it keeps its natural height (275px against the headline column's
+             422 at 1440) and sits on the column's optical middle, so neither edge is
+             flush and the ragged one reads as deliberate. -->
+        <div
+          class="my-[var(--spacing-lg)] min-w-0 rounded-[var(--shape-elements)] shadow-[var(--shadow-sm)] xl:self-center"
+        >
           <CodeBlock
             :tabs="heroTabs"
             default-value="ai-prompt"
@@ -524,9 +570,13 @@ azion deploy`
            Same band anatomy as every other section — header row over an edge-to-edge
            divider grid — so the frameworks read as cards in the same column, on the
            same padding, as the three bands above. 16 frameworks divides evenly by the
-           grid's 1 / 2 / 4 columns, so no breakpoint ever leaves a ragged row of
+           grid's 2 / 2 / 4 columns, so no breakpoint ever leaves a ragged row of
            divider-coloured holes; the band's two onward destinations are LINKS in the
-           closing "Also useful" row, not cards — they are not stacks to pick from. -->
+           closing "Also useful" row, not cards — they are not stacks to pick from.
+
+           This is the one band that stays TWO-up on a phone (`mobile-columns`): its
+           cells are a mark plus one word, so a single file of 16 would be a screen and
+           a half of scrolling to say what two columns say in half the height. -->
       <SectionModule
         id="build-with-your-framework"
         :padded="false"
@@ -535,6 +585,7 @@ azion deploy`
       >
         <CardGrid
           :columns="4"
+          :mobile-columns="2"
           variant="divider"
         >
           <a

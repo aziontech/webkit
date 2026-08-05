@@ -71,7 +71,7 @@
     <p
       v-if="description || $slots.default"
       :class="[
-        'text-muted m-0 mt-3 text-pretty leading-relaxed',
+        'text-muted m-0 mt-4 text-pretty leading-relaxed',
         size === 'hero' ? 'max-w-[var(--container-2xl)] text-body-lg' : 'max-w-[620px] text-body-md'
       ]"
     >
