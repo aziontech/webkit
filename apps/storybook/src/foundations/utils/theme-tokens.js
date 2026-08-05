@@ -153,6 +153,7 @@ const DESCRIPTIONS = {
   '--code-sintax-line-number': 'Gutter line numbers.',
   '--code-sintax-keyword': 'Language keywords.',
   '--code-sintax-punctuation': 'Punctuation and operators.',
+  '--code-sintax-comment': 'Comments, and prose rendered inside a code block.',
   '--code-sintax-function': 'Function and method names.',
   '--code-sintax-type': 'Types and classes.',
   '--code-sintax-string': 'String literals.'

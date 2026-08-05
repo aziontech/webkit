@@ -46,6 +46,7 @@
       "--animate-bounce",
       "--animate-fade-in",
       "--animate-fade-out",
+      "--animate-flow-dash",
       "--animate-highlight-fade",
       "--animate-ping",
       "--animate-popup-scale-in",
@@ -96,6 +97,7 @@
       "--breakpoint-md",
       "--breakpoint-sm",
       "--breakpoint-xl",
+      "--code-sintax-comment",
       "--code-sintax-function",
       "--code-sintax-identifier",
       "--code-sintax-keyword",
@@ -722,6 +724,7 @@
         "--animate-bounce",
         "--animate-fade-in",
         "--animate-fade-out",
+        "--animate-flow-dash",
         "--animate-highlight-fade",
         "--animate-ping",
         "--animate-popup-scale-in",
@@ -784,6 +787,7 @@
         "--breakpoint-xl"
       ],
       "code": [
+        "--code-sintax-comment",
         "--code-sintax-function",
         "--code-sintax-identifier",
         "--code-sintax-keyword",
@@ -1429,6 +1433,7 @@
       "bounce",
       "fade-in",
       "fade-out",
+      "flow-dash",
       "highlight-fade",
       "ping",
       "popup-scale-in",
@@ -1460,6 +1465,10 @@
       "fade-out": {
         "value": "fadeOut 220ms ease-in-out",
         "useWhen": "Content or backdrop leaving in place (pair of fade-in)."
+      },
+      "flow-dash": {
+        "value": "flowDash 700ms linear infinite",
+        "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
       "highlight-fade": {
         "value": "highlight ease-in forwards",
@@ -3071,7 +3080,7 @@
           "notes": "Fires after the active tab code is copied to the clipboard."
         }
       ],
-      "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab."
+      "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of three tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:"
     },
     "table": {
       "import": "@aziontech/webkit/table",
@@ -4020,7 +4029,7 @@
           "notes": "Diagram content: `flow-node` and `flow-parallel`, in flow order."
         }
       ],
-      "purpose": "Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Design source (rewritten to our conventions, never inherited as-is): the kumo \"Flow\" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). There is no Figma frame for this component; tokens are inferred from intent and recorded in the Theme gaps table."
+      "purpose": "Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Connectors run port-to-port: a styled node renders a small square **connector port** just outside each of its edges, and a `flow-anchor` renders one outside the edge it attaches to, so a line always terminates on a visible attachment point instead of a bare edge (the port is the endpoint treatment — connectors carry no arrowheads). The port sits fully clear of the box rather than overlapping it, so neither the node's surface nor its focus ring crops it. A port is only rendered where a connector actually attaches: the leading child has no incoming connector and the trailing child no outgoing one, so those two edges show no port and the chain opens and closes on a node rather than on a stub. An `unstyled` node renders no ports, because its slot content owns its appearance; put a `flow-anchor` inside it to place ports on the parts a connector should touch. Design source (rewritten to our conventions, never inherited as-is): the kumo \"Flow\" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). The connector port is specified by the Figma frame in the frontmatter; the remaining tokens are inferred from intent and recorded in the Theme gaps table."
     },
     "flow-root": {
       "import": "@aziontech/webkit/flow-root",
@@ -4047,7 +4056,7 @@
           "notes": "Diagram content: `flow-node` and `flow-parallel`, in flow order."
         }
       ],
-      "purpose": "Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Design source (rewritten to our conventions, never inherited as-is): the kumo \"Flow\" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). There is no Figma frame for this component; tokens are inferred from intent and recorded in the Theme gaps table."
+      "purpose": "Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Connectors run port-to-port: a styled node renders a small square **connector port** just outside each of its edges, and a `flow-anchor` renders one outside the edge it attaches to, so a line always terminates on a visible attachment point instead of a bare edge (the port is the endpoint treatment — connectors carry no arrowheads). The port sits fully clear of the box rather than overlapping it, so neither the node's surface nor its focus ring crops it. A port is only rendered where a connector actually attaches: the leading child has no incoming connector and the trailing child no outgoing one, so those two edges show no port and the chain opens and closes on a node rather than on a stub. An `unstyled` node renders no ports, because its slot content owns its appearance; put a `flow-anchor` inside it to place ports on the parts a connector should touch. Design source (rewritten to our conventions, never inherited as-is): the kumo \"Flow\" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). The connector port is specified by the Figma frame in the frontmatter; the remaining tokens are inferred from intent and recorded in the Theme gaps table."
     },
     "flow-node": {
       "import": "@aziontech/webkit/flow-node",
