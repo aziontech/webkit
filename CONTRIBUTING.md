@@ -151,6 +151,60 @@ The config also enforces:
 - `subject` cannot be empty.
 - Header (full first line) cannot exceed 100 characters.
 
+### Signed commits
+
+Every commit that lands on `main` must carry a **verified signature**. The repository ruleset (`Protected branchs`) enforces it server-side, so an unsigned commit makes a PR unmergeable even when it is approved and every check is green — GitHub reports the merge as blocked with no failing gate to point at.
+
+Commits **GitHub** creates for you are already signed with its own key: web-UI edits, the **Update branch** button, and the squash commit produced on merge. Commits you create locally are signed only if you configure signing, so this is a one-time setup on every machine you commit from.
+
+#### One-time setup (SSH signing)
+
+SSH signing reuses the key you already push with, so it is the shortest path. It needs **git 2.34+** (`git --version`):
+
+```bash
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true
+```
+
+Then register that **same public key a second time** on GitHub, under [SSH and GPG keys](https://github.com/settings/keys) → **New SSH key** → **Key type: `Signing Key`**. An authentication key does not verify signatures: without the signing-key entry your commits are signed but arrive as *Unverified*, which the ruleset rejects exactly like an unsigned one. Registering the key re-verifies existing commits retroactively, so a branch you pushed before adding it does not need to be re-signed. The commit e-mail (`git config user.email`) must be a verified e-mail on your GitHub account.
+
+> **macOS:** on git < 2.34, `gpg.format ssh` fails hard — `error: unsupported value for gpg.format: ssh` on *every* git command, including `git status`. The usual cause is a stale `/usr/local/bin/git` (from the git-scm installer) shadowing the newer `/usr/bin/git` in `PATH`. Diagnose with `git --version` and `which -a git`; fix by installing a current git (`brew install git`) or removing the stale symlink.
+
+#### Checking your own signatures locally
+
+Verifying locally is a separate concern from GitHub's verification: `git log --show-signature` needs to be told which keys to trust, or it reports `gpg.ssh.allowedSignersFile needs to be configured and exist` and prints `No signature` for a commit that is in fact signed. GitHub never reads this file (it verifies against the key you registered), so the step is optional — but without it you cannot inspect your own signatures:
+
+```bash
+mkdir -p ~/.config/git
+echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> ~/.config/git/allowed_signers
+git config --global gpg.ssh.allowedSignersFile ~/.config/git/allowed_signers
+```
+
+The check that needs no configuration at all is the commit object itself — a signed commit carries a `gpgsig` header:
+
+```bash
+git cat-file commit HEAD | head -6
+```
+
+Pushed commits show a **Verified** badge on GitHub once the signing key is registered.
+
+#### Recovering a branch that already has unsigned commits
+
+A signature is part of the commit object, so an existing branch has to be rewritten. Closing and reopening the PR, or opening a new PR from the same commits, changes nothing.
+
+```bash
+# one commit
+git commit --amend --no-edit -S
+
+# several commits — re-signs every commit on top of main
+git rebase --exec 'git commit --amend --no-edit -S' origin/main
+
+git push --force-with-lease
+```
+
+Two consequences worth planning for: the rewrite **dismisses existing approvals** (the ruleset sets `dismiss_stale_reviews_on_push`), so the PR needs review again; and `--no-verify` does not help here — it skips commitlint without producing a signature.
+
 ## Pull requests
 
 - Title mirrors the lead commit (Conventional Commits). Merges are squashed, so the **PR title is the commit** release-please parses — its type decides the release.
