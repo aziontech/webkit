@@ -46,7 +46,21 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 ### 6. Push and open the PR
 - `git push -u origin <branch>`.
 - If a PR already exists for the branch, update it; otherwise `gh pr create --base main --head <branch>`.
-- **Title:** the conventional commit header (normalize `$ARGUMENTS` into that form when given). Merges are **squash merges**, so the PR title is the commit release-please parses — it must **start with the bare type**, with the ticket tag after the colon only when an issue exists (`<type>(<scope>): [<ISSUE>] <subject>`), and put `!` in the title for a breaking change. **Body:** `## Summary` (what + why) and `## Notes`; call out any new dependency and any breaking change; reference the issue. No Figma links, no attribution footer.
+- **Title:** the conventional commit header (normalize `$ARGUMENTS` into that form when given). Merges are **squash merges**, so the PR title is the commit release-please parses — it must **start with the bare type**, with the ticket tag after the colon only when an issue exists (`<type>(<scope>): [<ISSUE>] <subject>`), and put `!` in the title for a breaking change.
+- **Body — fixed structure.** Exactly these three sections, in this order, nothing else (the same skeleton as [`PULL_REQUEST_TEMPLATE.md`](../../.github/PULL_REQUEST_TEMPLATE.md)):
+
+  ```md
+  ## Summary
+  - <1–3 bullets: what changed and why>
+
+  ## How to test
+  1. <numbered, concrete steps to verify THIS PR: the command to run (`pnpm storybook:dev`, `pnpm webkit:test`, …), where to look (story / page / component), and the expected result>
+
+  ## Notes
+  - <breaking change (what + migration), new dependency, related issue — `None` when there is nothing>
+  ```
+
+  Keep it terse: Summary never restates the diff (max 3 bullets); "How to test" is the minimum end-to-end path a reviewer can follow, each step with its expected result; no intro prose. No Figma links, no attribution footer.
 - Report the PR URL.
 
 ## Rules
