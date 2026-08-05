@@ -175,6 +175,32 @@
     closeNav()
     signOut()
   }
+
+  // Drawer search: the palette REPLACES the nav rather than stacking over it — two
+  // overlays would trap focus in the one underneath, and the reader asked for search,
+  // not search on top of the thing they were searching.
+  //
+  // The palette opened is the RAIL's, not the drawer copy's: closing the drawer unmounts
+  // everything inside it, and a palette that unmounted a beat after opening is no palette
+  // at all. The rail stays mounted below `md` (it is CSS-hidden, not removed) and its
+  // palette teleports to the body, so it is the copy that can outlive the drawer. Hence
+  // `:palette="false"` on the drawer copy — it announces `search`, it does not own one.
+  const onMobileSearch = () => {
+    closeNav()
+    rail.value?.showPalette()
+  }
+
+  // The DS focus trap moves initial focus to the panel's FIRST focusable, which here is
+  // the search field — that reads as if the drawer opened mid-search, and a focused input
+  // is what makes mobile Safari zoom the viewport in. Park focus on the panel itself
+  // instead (`role="dialog"`, `tabindex="-1"`), which is the conventional initial focus for
+  // a dialog; Tab from there still walks into the nav from the top. Scheduled on a frame
+  // because the trap's own focus call runs in the microtask after open.
+  const navPanel = ref(null)
+  watch(navOpen, (open) => {
+    if (!open) return
+    globalThis.requestAnimationFrame(() => navPanel.value?.$el?.focus?.())
+  })
 </script>
 
 <template>
@@ -409,16 +435,22 @@
     >
       <DrawerPortal>
         <DrawerOverlay />
-        <DrawerContent aria-label="Navigation">
+        <DrawerContent
+          ref="navPanel"
+          aria-label="Navigation"
+        >
           <AppSidebar
             :user="userEmail"
             :active="activeItem"
             aria-label="Main navigation"
+            fluid
+            :palette="false"
             shortcut=""
             @navigate="onMobileNavigate"
             @create="onMobileCreate"
             @select="onMobileSelect"
             @logout="onMobileLogout"
+            @search="onMobileSearch"
           />
         </DrawerContent>
       </DrawerPortal>

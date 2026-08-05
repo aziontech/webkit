@@ -54,6 +54,14 @@
     // brings a collapsed rail back. Off inside the mobile drawer, where there is
     // nothing to collapse and the drawer owns the width.
     collapsible: { type: Boolean, default: false },
+    // Fills its host's width instead of carrying the rail's own. On for the copy inside
+    // the mobile drawer, where the drawer panel is what decides how wide navigation is.
+    fluid: { type: Boolean, default: false },
+    // Whether this copy OWNS the ⌘K palette. Off for the copy inside the mobile drawer:
+    // its search field still fires `search`, but the palette it opens has to outlive the
+    // drawer (closing the drawer unmounts everything inside it, palette included), so the
+    // shell opens the RAIL copy's palette instead — see AppLayout's `onMobileSearch`.
+    palette: { type: Boolean, default: true },
     // Global shortcut that opens the command palette. Only ONE mounted sidebar
     // may own it — the shell passes an empty string to the drawer copy so ⌘K
     // never opens two palettes at once.
@@ -65,7 +73,7 @@
   // fires from the header's Create button and the palette's Create command — one
   // event for both, so the shell has a single way into the creation center. All
   // are event-first per the activation-payload convention.
-  const emit = defineEmits(['logout', 'select', 'navigate', 'create'])
+  const emit = defineEmits(['logout', 'select', 'navigate', 'create', 'search'])
 
   // Azion Console navigation.
   //
@@ -251,7 +259,6 @@
   // Forwarded from `Sidebar`: a rail measured while `display: none` reports 0, so the shell
   // re-measures once a viewport change brings it back on screen.
   const sidebarRef = ref(null)
-  defineExpose({ measure: () => sidebarRef.value?.measure() })
 
   // Sidebar search → CommandMenu. The field above the scrolling nav is a
   // read-only ⌘K affordance: clicking it (or pressing the global shortcut) opens
@@ -259,9 +266,20 @@
   // — same groups, same order as the rail — plus the app-level commands, so the
   // rail itself always shows the full nav instead of a second filtered list.
   const paletteOpen = ref(false)
-  const openPalette = () => {
+  const showPalette = () => {
     paletteOpen.value = true
   }
+  // `search` is announced whether or not this copy owns the palette, so the shell can
+  // react to it (the drawer copy uses it to close the drawer and hand the palette to the
+  // rail). Event-first, like every other activation event here.
+  const openPalette = (event) => {
+    emit('search', event)
+    if (props.palette) showPalette()
+  }
+
+  // `showPalette` is exposed so the SHELL can open this copy's palette — that is how the
+  // mobile drawer's search reaches the rail's palette after the drawer closes.
+  defineExpose({ measure: () => sidebarRef.value?.measure(), showPalette })
 
   // Flat lookup for resolving a `nav:<id>` palette value back to its nav item. Containers are
   // not destinations — offering "Build" or "Settings" as a result would navigate nowhere — so
@@ -468,6 +486,10 @@
     no wrapper here and no gesture code in this app. The width class is only the NATURAL width
     the rail is seeded with before the reader ever drags it; once sized, the model's inline
     width takes over. `h-full` because the shell's row owns the height.
+
+    The rail width belongs to the RAIL. A `fluid` copy takes `w-full` instead: inside the
+    mobile drawer the PANEL owns the width — full-bleed below `md`, 384px at `md` — and a
+    288px rail in it would leave dead panel beside every nav row.
   -->
   <Sidebar
     ref="sidebarRef"
@@ -479,7 +501,7 @@
     collapse-aria-label="Collapse sidebar"
     expand-aria-label="Expand sidebar"
     resize-aria-label="Resize sidebar"
-    class="h-full w-[var(--container-2xs)]"
+    :class="['h-full', fluid ? 'w-full' : 'w-[var(--container-2xs)]']"
   >
     <template #header>
       <!-- Search → CommandMenu. A read-only field carrying the ⌘K hint, in the
@@ -522,8 +544,10 @@
 
         <!-- The palette: the rail's navigation groups first (same labels, same
                order), then the app-level commands. Groups whose items are all
-               filtered out hide themselves. -->
+               filtered out hide themselves. Only the copy that OWNS it renders it
+               (see the `palette` prop) — one palette per app, never one per copy. -->
         <CommandMenu
+          v-if="palette"
           v-model:open="paletteOpen"
           :shortcut="shortcut"
           @select="onPaletteSelect"
