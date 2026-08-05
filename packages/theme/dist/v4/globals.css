@@ -836,9 +836,9 @@
   --secondary-mask: #00000005;
   --secondary-selected: #0A0A0A;
   --secondary-contrast: #FFFFFF;
-  --accent: #756FE5;
-  --accent-mask: #8A84EC0D;
-  --accent-selected: #8A84EC;
+  --accent: #0072F5;
+  --accent-mask: #0072F51A;
+  --accent-selected: #0072F5;
   --accent-contrast: #000000;
   --bg-canvas: #FAFAFA;
   --bg-surface: #FFFFFF;
@@ -868,6 +868,7 @@
   --code-sintax-line-number: #808080;
   --code-sintax-keyword: #005FCC;
   --code-sintax-punctuation: #808080;
+  --code-sintax-comment: #808080;
   --code-sintax-function: #F3652B;
   --code-sintax-type: #947105;
   --code-sintax-string: #005FCC;
@@ -906,9 +907,9 @@
   --secondary-mask: #FFFFFF1A;
   --secondary-selected: #FFFFFF;
   --secondary-contrast: #000000;
-  --accent: #8A84EC;
-  --accent-mask: #8A84EC1A;
-  --accent-selected: #8A84EC;
+  --accent: #0072F5;
+  --accent-mask: #0072F51A;
+  --accent-selected: #0072F5;
   --accent-contrast: #000000;
   --bg-canvas: #000000;
   --bg-surface: #0A0A0A;
@@ -938,6 +939,7 @@
   --code-sintax-line-number: #999999;
   --code-sintax-keyword: #3392FF;
   --code-sintax-punctuation: #999999;
+  --code-sintax-comment: #999999;
   --code-sintax-function: #F3652B;
   --code-sintax-type: #FAD76B;
   --code-sintax-string: #3392FF;
