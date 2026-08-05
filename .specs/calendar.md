@@ -7,16 +7,16 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: e1bd8e491813c57cbf6e64651363d6233522287cfce7605dd7380177bad7e2cf
+checksum: 38ab752a76919d45a23184bfefdd6e9027c3b1cfe1acd23ee5178d54ef53db25
 created: 2026-06-25
-last_updated: 2026-07-29
+last_updated: 2026-07-30
 ---
 
 # Calendar — Component Spec
 
 ## Purpose
 
-Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).
+Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).
 
 ## Usage
 
@@ -93,6 +93,7 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 | `open` | `boolean \| undefined` | `undefined` | no | Controlled open state of the popover. Use with v-model:open; omit for uncontrolled. |
 | `placeholder` | `string` | `'Select a Date Range'` | no | Trigger text shown when there is no selection. |
 | `presets` | `CalendarPresetItem[]` | `[]` | no | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
+| `showFields` | `boolean` | `true` | no | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered. |
 | `showTime` | `boolean` | `false` | no | Shows Start/End time fields alongside the date fields. |
 | `showTimezone` | `boolean` | `false` | no | Shows the timezone selector below the fields. |
 | `timezone` | `string` | `''` | no | Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone. |

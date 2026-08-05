@@ -59,6 +59,8 @@
     placeholder?: string
     /** Data-driven shortcuts rendered in the presets rail; each is { label, value }. */
     presets?: CalendarPresetItem[]
+    /** Shows the Start/End date fields in the panel. */
+    showFields?: boolean
     /** Shows Start/End time fields alongside the date fields. */
     showTime?: boolean
     /** Shows the timezone selector below the fields. */
@@ -89,6 +91,7 @@
     open: undefined,
     placeholder: 'Select a Date Range',
     presets: () => [],
+    showFields: true,
     showTime: false,
     showTimezone: false,
     timezone: '',
@@ -639,6 +642,14 @@
     </span>
 
     <Teleport to="body">
+      <!-- The panel is content-sized, so its WIDEST child sets its width — and one of
+           those children is the consumer's `#footer` slot. A row of shortcut chips (or
+           any wide footer content) would otherwise stretch the panel without bound and
+           spread the month grid across it. `max-w` is the hard stop: `44rem` rather than
+           a px container token because the content that grows is text, so the cap has to
+           grow with the root font the same way the grid and the chips do; `90vw` keeps it
+           inside a narrow viewport. It sits above every built-in layout, including
+           `horizontal` (grid + fields column), so nothing that ships is clipped by it. -->
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
@@ -652,7 +663,7 @@
           :data-state="isOpen ? 'open' : 'closed'"
           :data-placement="resolvedPlacement"
           :style="panelStyle"
-          class="flex flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex max-w-[min(90vw,44rem)] flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"
         >
           <div
@@ -675,7 +686,7 @@
                   : 'border-t border-[var(--border-default)] data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))]'
               "
             >
-              <CalendarFields />
+              <CalendarFields v-if="showFields" />
 
               <span
                 v-if="$slots['footer']"

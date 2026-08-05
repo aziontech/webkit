@@ -541,6 +541,35 @@ describe('Calendar', () => {
     expect(events[0][0]).toEqual({ start: null, end: null })
   })
 
+  // ---- show-fields ----------------------------------------------------------------
+
+  it('show-fields=false hides the Start/End fields but keeps the grid and Apply', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'range', modelValue: { start: OCT_8, end: null }, showFields: false }
+    })
+
+    await fireEvent.click(getByTestId('input-calendar__trigger'))
+    await waitFor(() => expect(getPopover()).not.toBeNull())
+
+    const popover = getPopover() as HTMLElement
+    expect(popover.querySelector('[data-testid="input-calendar__fields"]')).toBeNull()
+    expect(popover.querySelector('[data-testid="input-calendar__grid"]')).not.toBeNull()
+    expect(popover.querySelector('[data-testid="input-calendar__apply"]')).not.toBeNull()
+  })
+
+  it('show-fields defaults to true: the Start/End fields render in the panel', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'range', modelValue: { start: OCT_8, end: null } }
+    })
+
+    await fireEvent.click(getByTestId('input-calendar__trigger'))
+    await waitFor(() => expect(getPopover()).not.toBeNull())
+
+    expect(
+      (getPopover() as HTMLElement).querySelector('[data-testid="input-calendar__fields"]')
+    ).not.toBeNull()
+  })
+
   // ---- Presets (two-part trigger) -------------------------------------------------
 
   const PRESETS = [
