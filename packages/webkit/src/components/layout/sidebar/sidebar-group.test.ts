@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/sidebar/Sidebar.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
-import MenuItem from '../../navigation/menu-item/menu-item.vue'
+import MenuItem from '../../navigation/menu/menu-item/menu-item.vue'
 import SidebarGroup from './sidebar-group.vue'
 
 const { Default } = composeStories(stories)
