@@ -10,6 +10,7 @@ export const codeSintax = {
     'code-sintax-line-number': tokenRef('primitives.gray.500'),
     'code-sintax-keyword': tokenRef('primitives.blue.600'),
     'code-sintax-punctuation': tokenRef('primitives.gray.500'),
+    'code-sintax-comment': tokenRef('primitives.gray.500'),
     'code-sintax-function': tokenRef('brand.primary.primary-500'),
     'code-sintax-type': tokenRef('primitives.yellow.700'),
     'code-sintax-string': tokenRef('primitives.blue.600')
@@ -19,6 +20,7 @@ export const codeSintax = {
     'code-sintax-line-number': tokenRef('primitives.gray.400'),
     'code-sintax-keyword': tokenRef('primitives.blue.400'),
     'code-sintax-punctuation': tokenRef('primitives.gray.400'),
+    'code-sintax-comment': tokenRef('primitives.gray.400'),
     'code-sintax-function': tokenRef('brand.primary.primary-500'),
     'code-sintax-type': tokenRef('primitives.yellow.300'),
     'code-sintax-string': tokenRef('primitives.blue.400')
