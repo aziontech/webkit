@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: dbb57f28635a045c18062ab708abea14cf9a078fe280866d2abd19dac11b9157
+checksum: 167a0d8ef4577f4bb879bbe0111ba4b754a52d24b5f8e18db72c208a660d2e24
 created: 2026-05-26
-last_updated: 2026-07-28
+last_updated: 2026-08-04
 ---
 
 # Log View — Component Spec
@@ -126,7 +126,17 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | text (success line) | `var(--success-contrast)` |
 | border (outer card, `border` prop) | `var(--border-muted)` |
 | shape (outer card, `border` prop) | `var(--shape-elements)` |
+| spacing (loading block, vertical) | `var(--spacing-xl)` |
 | ring | `var(--ring-color)` |
+
+**The root sizes to its content, not to its parent.** It takes `h-fit` alongside `min-h-0`, so a
+short log occupies the height of the lines it has instead of stretching to fill a flex or grid
+parent and leaving the canvas empty below the last line. A host that *wants* the full height gives
+the root its own `class="h-full"` — that is the consumer's call to make, and `$attrs` carries it.
+
+The **loading** state has no lines to give it height, so it carries `py-[var(--spacing-xl)]` of its
+own: the spinner and its label sit in a block with real vertical presence rather than collapsing to
+the height of a single row the moment the root stopped stretching.
 
 ## Theme gaps
 
