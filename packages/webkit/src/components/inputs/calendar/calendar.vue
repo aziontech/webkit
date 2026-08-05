@@ -497,7 +497,7 @@
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="disabled || null"
           :data-two-part="isTwoPart || null"
-          class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) data-[disabled]:opacity-60 data-[two-part]:w-(--container-xs)"
+          class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[two-part]:w-(--container-xs) motion-reduce:transition-none"
         >
           <template v-if="isTwoPart">
             <button
@@ -508,7 +508,7 @@
               :data-testid="`${testId}__presets-trigger`"
               aria-haspopup="menu"
               :aria-expanded="isPresetsOpen"
-              class="text-body-sm inline-flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+              class="text-label-sm inline-flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
               @click="togglePresets"
             >
               <i
@@ -517,7 +517,8 @@
               />
               <span class="min-w-0 truncate text-left">{{ presetLabel }}</span>
               <i
-                class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                :data-state="isPresetsOpen ? 'open' : 'closed'"
+                class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
                 aria-hidden="true"
               />
             </button>
@@ -530,7 +531,7 @@
               :data-testid="`${testId}__trigger`"
               aria-haspopup="dialog"
               :aria-expanded="isOpen"
-              class="text-body-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) border-l border-(--border-default) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+              class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) border-l border-(--border-default) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
               @click="toggleOpen"
             >
               <i
@@ -550,7 +551,7 @@
               :data-testid="`${testId}__trigger`"
               aria-haspopup="dialog"
               :aria-expanded="isOpen"
-              class="text-body-sm inline-flex min-w-0 flex-1 items-stretch text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+              class="text-label-sm inline-flex min-w-0 flex-1 items-stretch text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
               @click="toggleOpen"
             >
               <span class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm)">
@@ -560,7 +561,8 @@
                 />
                 <span class="min-w-0 truncate text-left">{{ committedPeriodLabel }}</span>
                 <i
-                  class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                  :data-state="isOpen ? 'open' : 'closed'"
+                  class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
                   aria-hidden="true"
                 />
               </span>
@@ -584,7 +586,7 @@
               :data-testid="`${testId}__trigger`"
               aria-haspopup="dialog"
               :aria-expanded="isOpen"
-              class="text-body-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+              class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
               @click="toggleOpen"
             >
               <i
@@ -595,7 +597,8 @@
               <span class="min-w-0 flex-1 truncate text-left">{{ triggerText }}</span>
               <i
                 v-if="!split && !(clearable && hasCommitted)"
-                class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                :data-state="isOpen ? 'open' : 'closed'"
+                class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
                 aria-hidden="true"
               />
             </button>
@@ -606,7 +609,7 @@
               :disabled="disabled"
               aria-label="Clear selection"
               :data-testid="`${testId}__clear-trigger`"
-              class="inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+              class="inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               @click="clearCommitted"
             >
               <i
@@ -622,11 +625,12 @@
               aria-label="Open calendar"
               :aria-expanded="isOpen"
               :data-testid="`${testId}__split`"
-              class="inline-flex shrink-0 items-center justify-center border-l border-(--border-default) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+              class="inline-flex shrink-0 items-center justify-center border-l border-(--border-default) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               @click="toggleOpen"
             >
               <i
-                class="pi pi-chevron-down text-[length:inherit] leading-none"
+                :data-state="isOpen ? 'open' : 'closed'"
+                class="pi pi-chevron-down text-[length:inherit] leading-none transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
                 aria-hidden="true"
               />
             </button>
@@ -672,11 +676,12 @@
 
             <div
               v-if="!period"
+              :data-size="size"
               class="flex flex-col gap-(--spacing-sm) p-(--spacing-sm)"
               :class="
                 horizontal
                   ? 'min-w-(--container-3xs) border-l border-(--border-default)'
-                  : 'border-t border-(--border-default)'
+                  : 'border-t border-(--border-default) data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))]'
               "
             >
               <CalendarFields v-if="showFields" />
@@ -721,7 +726,7 @@
           :data-state="isPresetsOpen ? 'open' : 'closed'"
           :data-placement="presetsPlacement"
           :style="presetsPanelStyle"
-          class="flex min-w-(--container-4xs) flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-4xs) flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPresetsKeydown"
         >
           <slot name="presets">
@@ -733,7 +738,7 @@
               :disabled="disabled"
               :data-selected="preset.label === committedPeriodLabel || null"
               :data-testid="`${testId}__preset`"
-              class="text-body-sm inline-flex w-full items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-left text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[selected]:bg-(--bg-selected) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
+              class="text-label-sm inline-flex h-8 min-h-8 w-full items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-left text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[selected]:bg-(--bg-selected) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
               @click="applyPreset(preset.value, preset.label)"
             >
               <span class="min-w-0 truncate">{{ preset.label }}</span>

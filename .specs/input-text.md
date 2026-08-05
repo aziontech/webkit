@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 2
-checksum: 8246d8ce93c14e5de391a509eb927c41e9de1aaaff0ee4258189a3c42fd22a0f
+checksum: a53fa5037285b3c2450483ad3bc13e226192992341cf6dd9e2798fd25fbde447
 created: 2026-05-22
-last_updated: 2026-06-16
+last_updated: 2026-07-29
 ---
 # Input Text — Component Spec
 
@@ -95,6 +95,7 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 | border (invalid) | `var(--danger-border)` |
 | border (required) | `var(--warning-border)` |
 | ring (focus) | `var(--ring-color)` |
+| ring offset (focus) | `var(--input-ring-offset, var(--bg-canvas))` — host-tunable via the inherited `--input-ring-offset` custom property |
 | spacing (horizontal padding) | `var(--spacing-sm)` |
 | spacing (gap between icon and input) | `var(--spacing-xs)` |
 | shape | `var(--shape-elements)` |
@@ -107,7 +108,7 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2`, with the offset color resolving `var(--input-ring-offset, var(--bg-canvas))` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots. A host that places the field on a surface other than the canvas (a raised popover, a drawer) declares `--input-ring-offset` on any ancestor; custom properties inherit, so one declaration retunes the ring gap of every field inside it (this is how `calendar`'s fields panel matches its raised popover).
 - Keyboard map: `Tab` focuses the input; standard text-editing keys apply.
 - ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.

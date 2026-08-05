@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, ref, watch } from 'vue'
+  import { computed, inject, ref, useId, watch } from 'vue'
 
   import InputText from '../../input-text/input-text.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
@@ -29,6 +29,15 @@
   const startTimeText = ref('')
   const endDateText = ref('')
   const endTimeText = ref('')
+
+  /* Stable ids so each visible label is programmatically bound to its date field;
+     the time inputs share a row with their date field and are named by their own
+     aria-label instead, so they need no id. */
+  const startDateId = useId()
+  const endDateId = useId()
+
+  const startLabel = computed(() => (mode.value === 'range' ? 'Start' : 'Date'))
+  const startTimeLabel = computed(() => (mode.value === 'range' ? 'Start time' : 'Time'))
 
   const syncFromDraft = () => {
     startDateText.value = startDate.value ? formatDate(startDate.value) : ''
@@ -96,17 +105,24 @@
 </script>
 
 <template>
+  <!-- These fields sit on the popover's raised surface, not the canvas, so the
+       focus ring's offset has to match it. --input-ring-offset is InputText's hook
+       for that; declared once here it inherits to every field below. -->
   <div
-    class="flex flex-col gap-(--spacing-sm)"
+    class="flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)]"
     data-testid="input-calendar__fields"
   >
     <div class="flex flex-col gap-(--spacing-xxs)">
-      <span class="text-label-sm text-(--text-muted)">
-        {{ mode === 'range' ? 'Start' : 'Date' }}
-      </span>
+      <label
+        :for="startDateId"
+        class="text-label-sm text-(--text-muted)"
+      >
+        {{ startLabel }}
+      </label>
       <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
           <InputText
+            :id="startDateId"
             :model-value="startDateText"
             :size="size"
             :disabled="disabled"
@@ -123,6 +139,7 @@
             :model-value="startTimeText"
             :size="size"
             :disabled="disabled"
+            :aria-label="startTimeLabel"
             placeholder="00:00"
             @update:model-value="startTimeText = $event"
             @change="commitTime('start', startTimeText)"
@@ -135,10 +152,16 @@
       v-if="mode === 'range'"
       class="flex flex-col gap-(--spacing-xxs)"
     >
-      <span class="text-label-sm text-(--text-muted)"> End </span>
+      <label
+        :for="endDateId"
+        class="text-label-sm text-(--text-muted)"
+      >
+        End
+      </label>
       <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
           <InputText
+            :id="endDateId"
             :model-value="endDateText"
             :size="size"
             :disabled="disabled"
@@ -155,6 +178,7 @@
             :model-value="endTimeText"
             :size="size"
             :disabled="disabled"
+            aria-label="End time"
             placeholder="23:59"
             @update:model-value="endTimeText = $event"
             @change="commitTime('end', endTimeText)"

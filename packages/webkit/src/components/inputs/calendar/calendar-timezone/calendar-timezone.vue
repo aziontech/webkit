@@ -38,7 +38,7 @@
         :value="value"
         :disabled="disabled"
         :data-size="size"
-        class="text-body-sm w-full appearance-none rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) pl-(--spacing-sm) pr-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+        class="text-label-sm w-full appearance-none rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) pl-(--spacing-sm) pr-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus):not(:disabled)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
         @change="onChange"
       >
         <option

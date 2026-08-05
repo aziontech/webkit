@@ -14,9 +14,12 @@
     defineProps<{
       /** Input placeholder text. */
       placeholder?: string
+      /** Accessible name for the search field. Falls back to the placeholder text. */
+      ariaLabel?: string
     }>(),
     {
-      placeholder: 'Search Everything'
+      placeholder: 'Search Everything',
+      ariaLabel: ''
     }
   )
 
@@ -50,6 +53,7 @@
       v-bind="attrs"
       :model-value="ctx.query.value"
       :placeholder="placeholder"
+      :aria-label="ariaLabel || placeholder"
       size="large"
       role="combobox"
       autocomplete="off"
