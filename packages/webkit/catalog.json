@@ -8110,34 +8110,267 @@
       ],
       "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS)."
     },
-    "menu-item": {
-      "import": "@aziontech/webkit/menu-item",
-      "target": "./src/components/navigation/menu-item/menu-item.vue",
+    "menu": {
+      "import": "@aziontech/webkit/menu",
+      "target": "./src/components/navigation/menu/index.ts",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/menu-item",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/menu-root",
+      "subcomponents": [
+        "@aziontech/webkit/menu-group",
+        "@aziontech/webkit/menu-sub",
+        "@aziontech/webkit/menu-sub-trigger",
+        "@aziontech/webkit/menu-sub-content",
+        "@aziontech/webkit/menu-back",
+        "@aziontech/webkit/menu-item"
+      ],
       "category": "navigation",
-      "structure": "monolithic",
+      "structure": "composition",
       "status": "implemented",
+      "props": [
+        {
+          "name": "groups",
+          "type": "MenuGroupNode[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it."
+        },
+        {
+          "name": "activeId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Id of the node rendered as selected in data-driven mode."
+        },
+        {
+          "name": "enterOnMount",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Menu'",
+          "required": "no",
+          "doc": "Accessible name for the navigation region."
+        }
+      ],
       "events": [
         {
-          "name": "click",
-          "payload": "(event: MouseEvent, item: { label: string; href: string })",
-          "notes": "item` carries the menu item's `label` and `href`, identifying which item was activated."
+          "name": "navigate",
+          "payload": "(event: MouseEvent, node: MenuNode)",
+          "notes": "A leaf row — or a `kind: 'drill'` row, which is a destination as well as a level — was activated in data-driven mode; `node` is the activated tree node. An inline trigger does not emit it: toggling a disclosure is not a navigation."
+        },
+        {
+          "name": "update:path",
+          "payload": "string[]",
+          "notes": "v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so `Menu.Back` still names the level and popping still returns focus to the row that owns it; and the level *arrives* rather than simply being there — see the restored-level row in Motion."
+        },
+        {
+          "name": "update:expanded",
+          "payload": "string[]",
+          "notes": "v-model:expanded` — ids of the inline subs currently open. Persist it when the host remounts, or expansion resets and one sub appearing to close another."
         }
       ],
       "slots": [
         {
           "name": "default",
           "scope": "—",
-          "notes": "—"
-        },
-        {
-          "name": "tag",
-          "scope": "—",
-          "notes": "Named slot."
+          "notes": "The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back)."
         }
       ],
-      "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/menu-item/`."
+      "purpose": "A vertical, hierarchical navigation menu. It owns no shell and no layout of its own: it is **injected into** a host — usually `Sidebar`, but any scroll container works — and renders three structures through one compound: **groups** that separate rows under a title, **condensed rows** that own children and expand in place behind an indent rail, and **drill rows** that replace the menu with a second-level menu. Unlike `navigation-menu` — the horizontal megamenu — this menu is vertical, recursive, and owns a view stack. Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>): full-width rows, padding inside the row rather than on the list, and indentation carried by the nested list's `padding-left`. Per [`migration.md`](../.claude/rules/migration.md) only that *structure* is adopted — every *value* is expressed in our own tokens per [`DESIGN.md`](../.claude/docs/DESIGN.md). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`, `gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things DESIGN.md forbids outright; the mapping is in Tokens, and the single value with no token behind it is in Theme gaps.",
+      "useWhen": [
+        "Any navigation region grouped by product or concern — placed inside `Sidebar`, a drawer, or a plain container.",
+        "A documentation tree that nests two or three levels and must show its indentation structurally.",
+        "A settings-style area where activating a row should replace the menu with that row's own menu, then return.",
+        "Navigation whose tree comes from a manifest or route config rather than hand-authored markup (use `groups`)."
+      ],
+      "avoidWhen": [
+        "Horizontal top-of-page navigation with hover-opened panels → use `navigation-menu` instead.",
+        "A menu that floats over the page from a trigger → use `dropdown` (rows + selection) or `popover` (arbitrary content) instead.",
+        "A searchable flat command palette → use `command-menu` instead.",
+        "A single collapsible content region that is not navigation → use `accordion` instead.",
+        "Mutually exclusive in-page view switching → use `tab-view` (or `segmented-button` for a compact control) instead.",
+        "The surrounding shell itself (brand header, scroll region, user footer) → that is `Sidebar`; this menu goes inside it."
+      ],
+      "related": [
+        "sidebar` — the most common host. It supplies the landmark, the scroll region, and the header/footer; this menu is placed in its default slot. The two are independent — neither imports the other.",
+        "menu-item` — **is** `Menu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.",
+        "sidebar-group` — functionally **superseded by `Menu.Group`**, which adds collapsing and shares the root's context. It keeps working untouched; no `@deprecated` tag is added here, because `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's lint green→red on a minor. Deprecating it is a separate, announced change.",
+        "navigation-menu` — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.",
+        "accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the *shape* of its collapse (a `:css=\"false\"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates DESIGN.md § Forbidden in animations).",
+        "tag` — renders the optional trailing badge on a row via `menu-item`'s `tagValue`."
+      ],
+      "bestPractices": [
+        "Put every `Menu.Item` and `Menu.Sub` inside a `Menu.Group` or an **inline** `Menu.SubContent`. Those own the `<ul>`; a row outside one is a `<li>` with no list, which is invalid HTML. A group with no `label` is the correct way to express an unlabeled block — including inside a **drill** `Menu.SubContent`, which is a level container rather than a list precisely so it can hold groups.",
+        "Treat a drilled level as a whole menu, because it is one: give it groups and labels the way the root has them. A second-level nav that is only flat rows is a missed opportunity, not a constraint of the component.",
+        "Let the host own width, padding and scrolling. The menu fills the width it is given and adds no outer margin, so it drops into `Sidebar`, a drawer, or a bare `<div>` unchanged.",
+        "Keep padding **inside the row**, never on the list. Every list (`Group`'s `<ul>`, `SubContent`'s `<ul>`) is a bare `m-0 list-none p-0 flex flex-col`; the row owns `px-(--spacing-sm)` and `min-h-8`. That is what lets a row's hover surface span the full menu width instead of stopping short of a list inset.",
+        "**The rail means parentage, not membership.** It is drawn only by an inline `Menu.SubContent`, where it ties children to the row above them. A `Menu.Group` draws none and indents nothing: its label already marks the section, so a rail there would spend the same ink saying something the label has said and dilute what the rail means everywhere else. A grouped row therefore sits flush with an ungrouped one.",
+        "Indentation is the nested list's `padding-left`, not a margin on each row — so the rail, which is drawn relative to that padding box, stays aligned no matter what a row contains.",
+        "One step of nesting is `--menu-indent` = `calc(var(--spacing-sm) + var(--spacing-md))` (28 px), the step the reference sidebar uses. It is deliberately **narrower than the row's own icon column** (40 px), which is a chosen trade: a tighter tree, at the cost of a child's label landing slightly left of its parent's rather than aligned with it. Widening it to 40 px would align the columns and read as more indentation.",
+        "**One content column, `var(--spacing-sm)`.** Every row type starts its content on it, whatever the row is: a group title's text, an icon-bearing row's **glyph** (its box pads by `var(--spacing-xxs)`, and the glyph's centring inside a `size-8` box carries it the rest of the way), and an icon-less row's label — a `SubTrigger` without a glyph included — (`pl-(--spacing-sm)` directly). A `SubTrigger` that does carry one (drill only) switches to the icon-bearing inset, so both cases land on the column. Nesting shifts the whole column by exactly one `--menu-indent`, so the alignment cascades at every depth. Measured: level 1 content at 12 px for all four row types, level 2 at 40 px.",
+        "**The rail descends from that column**, so `--menu-rail-x` is `var(--spacing-sm)` — one value for every parent, not a per-row calculation. The elbow spans from that line to the child **row's left edge** (`--menu-indent - --menu-rail-x`) and stops there: it must never reach the child's content, because the row's box begins at the indent and its hover and selected surfaces fill that box, so a wider elbow would be drawn underneath them. **The rail lives in the gutter beside the rows, never on top of one.** Every token involved is fixed at all breakpoints, unlike `--spacing-lg` / `--spacing-xl`, which would drift the elbow.",
+        "**A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.",
+        "Hover and active are `::before` / `::after` **ghost layers** per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.",
+        "Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.",
+        "**The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item`, `Menu.SubTrigger` and `Menu.Back` alike — are `.text-label-md` (14 px) in `var(--text-default)`. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.",
+        "Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.",
+        "Draw the elbow with borders, not a glyph: `w-(--spacing-sm) h-4 -left-(--spacing-sm) border-l border-b border-(--border-default) rounded-bl-(--shape-elements)` on the row's `::before`, and the continuation on its `::after`, hidden on `:last-child`. All tokens, no SVG, and it scales with the row.",
+        "Do not nest more than three levels. Past that the indent eats the rail's readable width; restructure with a drill row instead.",
+        "A drill row navigates **on its one activation**, not through a second target. Splitting the row into a link plus a drill affordance is what costs a second tab stop and nests interactive elements — that shape stays rejected. Instead the single button both pushes the level and emits `navigate`, so the consumer routes to the level's landing page as it opens: one target, one tab stop, and the user never opens a second-level menu while still looking at the page they came from. The landing page is still the first item inside the level, so the level reads complete on its own."
+      ]
+    },
+    "menu-root": {
+      "import": "@aziontech/webkit/menu-root",
+      "target": "./src/components/navigation/menu/menu.vue",
+      "kind": "root",
+      "rootOf": "menu",
+      "treeShakeableImport": "@aziontech/webkit/menu-root",
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "groups",
+          "type": "MenuGroupNode[]",
+          "default": "[]",
+          "required": "no",
+          "doc": "Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it."
+        },
+        {
+          "name": "activeId",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Id of the node rendered as selected in data-driven mode."
+        },
+        {
+          "name": "enterOnMount",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Menu'",
+          "required": "no",
+          "doc": "Accessible name for the navigation region."
+        }
+      ],
+      "events": [
+        {
+          "name": "navigate",
+          "payload": "(event: MouseEvent, node: MenuNode)",
+          "notes": "A leaf row — or a `kind: 'drill'` row, which is a destination as well as a level — was activated in data-driven mode; `node` is the activated tree node. An inline trigger does not emit it: toggling a disclosure is not a navigation."
+        },
+        {
+          "name": "update:path",
+          "payload": "string[]",
+          "notes": "v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so `Menu.Back` still names the level and popping still returns focus to the row that owns it; and the level *arrives* rather than simply being there — see the restored-level row in Motion."
+        },
+        {
+          "name": "update:expanded",
+          "payload": "string[]",
+          "notes": "v-model:expanded` — ids of the inline subs currently open. Persist it when the host remounts, or expansion resets and one sub appearing to close another."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back)."
+        }
+      ],
+      "purpose": "A vertical, hierarchical navigation menu. It owns no shell and no layout of its own: it is **injected into** a host — usually `Sidebar`, but any scroll container works — and renders three structures through one compound: **groups** that separate rows under a title, **condensed rows** that own children and expand in place behind an indent rail, and **drill rows** that replace the menu with a second-level menu. Unlike `navigation-menu` — the horizontal megamenu — this menu is vertical, recursive, and owns a view stack. Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>): full-width rows, padding inside the row rather than on the list, and indentation carried by the nested list's `padding-left`. Per [`migration.md`](../.claude/rules/migration.md) only that *structure* is adopted — every *value* is expressed in our own tokens per [`DESIGN.md`](../.claude/docs/DESIGN.md). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`, `gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things DESIGN.md forbids outright; the mapping is in Tokens, and the single value with no token behind it is in Theme gaps.",
+      "useWhen": [
+        "Any navigation region grouped by product or concern — placed inside `Sidebar`, a drawer, or a plain container.",
+        "A documentation tree that nests two or three levels and must show its indentation structurally.",
+        "A settings-style area where activating a row should replace the menu with that row's own menu, then return.",
+        "Navigation whose tree comes from a manifest or route config rather than hand-authored markup (use `groups`)."
+      ],
+      "avoidWhen": [
+        "Horizontal top-of-page navigation with hover-opened panels → use `navigation-menu` instead.",
+        "A menu that floats over the page from a trigger → use `dropdown` (rows + selection) or `popover` (arbitrary content) instead.",
+        "A searchable flat command palette → use `command-menu` instead.",
+        "A single collapsible content region that is not navigation → use `accordion` instead.",
+        "Mutually exclusive in-page view switching → use `tab-view` (or `segmented-button` for a compact control) instead.",
+        "The surrounding shell itself (brand header, scroll region, user footer) → that is `Sidebar`; this menu goes inside it."
+      ],
+      "related": [
+        "sidebar` — the most common host. It supplies the landmark, the scroll region, and the header/footer; this menu is placed in its default slot. The two are independent — neither imports the other.",
+        "menu-item` — **is** `Menu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.",
+        "sidebar-group` — functionally **superseded by `Menu.Group`**, which adds collapsing and shares the root's context. It keeps working untouched; no `@deprecated` tag is added here, because `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's lint green→red on a minor. Deprecating it is a separate, announced change.",
+        "navigation-menu` — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.",
+        "accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the *shape* of its collapse (a `:css=\"false\"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates DESIGN.md § Forbidden in animations).",
+        "tag` — renders the optional trailing badge on a row via `menu-item`'s `tagValue`."
+      ],
+      "bestPractices": [
+        "Put every `Menu.Item` and `Menu.Sub` inside a `Menu.Group` or an **inline** `Menu.SubContent`. Those own the `<ul>`; a row outside one is a `<li>` with no list, which is invalid HTML. A group with no `label` is the correct way to express an unlabeled block — including inside a **drill** `Menu.SubContent`, which is a level container rather than a list precisely so it can hold groups.",
+        "Treat a drilled level as a whole menu, because it is one: give it groups and labels the way the root has them. A second-level nav that is only flat rows is a missed opportunity, not a constraint of the component.",
+        "Let the host own width, padding and scrolling. The menu fills the width it is given and adds no outer margin, so it drops into `Sidebar`, a drawer, or a bare `<div>` unchanged.",
+        "Keep padding **inside the row**, never on the list. Every list (`Group`'s `<ul>`, `SubContent`'s `<ul>`) is a bare `m-0 list-none p-0 flex flex-col`; the row owns `px-(--spacing-sm)` and `min-h-8`. That is what lets a row's hover surface span the full menu width instead of stopping short of a list inset.",
+        "**The rail means parentage, not membership.** It is drawn only by an inline `Menu.SubContent`, where it ties children to the row above them. A `Menu.Group` draws none and indents nothing: its label already marks the section, so a rail there would spend the same ink saying something the label has said and dilute what the rail means everywhere else. A grouped row therefore sits flush with an ungrouped one.",
+        "Indentation is the nested list's `padding-left`, not a margin on each row — so the rail, which is drawn relative to that padding box, stays aligned no matter what a row contains.",
+        "One step of nesting is `--menu-indent` = `calc(var(--spacing-sm) + var(--spacing-md))` (28 px), the step the reference sidebar uses. It is deliberately **narrower than the row's own icon column** (40 px), which is a chosen trade: a tighter tree, at the cost of a child's label landing slightly left of its parent's rather than aligned with it. Widening it to 40 px would align the columns and read as more indentation.",
+        "**One content column, `var(--spacing-sm)`.** Every row type starts its content on it, whatever the row is: a group title's text, an icon-bearing row's **glyph** (its box pads by `var(--spacing-xxs)`, and the glyph's centring inside a `size-8` box carries it the rest of the way), and an icon-less row's label — a `SubTrigger` without a glyph included — (`pl-(--spacing-sm)` directly). A `SubTrigger` that does carry one (drill only) switches to the icon-bearing inset, so both cases land on the column. Nesting shifts the whole column by exactly one `--menu-indent`, so the alignment cascades at every depth. Measured: level 1 content at 12 px for all four row types, level 2 at 40 px.",
+        "**The rail descends from that column**, so `--menu-rail-x` is `var(--spacing-sm)` — one value for every parent, not a per-row calculation. The elbow spans from that line to the child **row's left edge** (`--menu-indent - --menu-rail-x`) and stops there: it must never reach the child's content, because the row's box begins at the indent and its hover and selected surfaces fill that box, so a wider elbow would be drawn underneath them. **The rail lives in the gutter beside the rows, never on top of one.** Every token involved is fixed at all breakpoints, unlike `--spacing-lg` / `--spacing-xl`, which would drift the elbow.",
+        "**A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.",
+        "Hover and active are `::before` / `::after` **ghost layers** per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.",
+        "Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.",
+        "**The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item`, `Menu.SubTrigger` and `Menu.Back` alike — are `.text-label-md` (14 px) in `var(--text-default)`. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.",
+        "Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.",
+        "Draw the elbow with borders, not a glyph: `w-(--spacing-sm) h-4 -left-(--spacing-sm) border-l border-b border-(--border-default) rounded-bl-(--shape-elements)` on the row's `::before`, and the continuation on its `::after`, hidden on `:last-child`. All tokens, no SVG, and it scales with the row.",
+        "Do not nest more than three levels. Past that the indent eats the rail's readable width; restructure with a drill row instead.",
+        "A drill row navigates **on its one activation**, not through a second target. Splitting the row into a link plus a drill affordance is what costs a second tab stop and nests interactive elements — that shape stays rejected. Instead the single button both pushes the level and emits `navigate`, so the consumer routes to the level's landing page as it opens: one target, one tab stop, and the user never opens a second-level menu while still looking at the page they came from. The landing page is still the first item inside the level, so the level reads complete on its own."
+      ]
+    },
+    "menu-group": {
+      "import": "@aziontech/webkit/menu-group",
+      "target": "./src/components/navigation/menu/menu-group/menu-group.vue",
+      "kind": "subcomponent",
+      "parent": "menu",
+      "treeShakeableImport": "@aziontech/webkit/menu-group"
+    },
+    "menu-sub": {
+      "import": "@aziontech/webkit/menu-sub",
+      "target": "./src/components/navigation/menu/menu-sub/menu-sub.vue",
+      "kind": "subcomponent",
+      "parent": "menu",
+      "treeShakeableImport": "@aziontech/webkit/menu-sub"
+    },
+    "menu-sub-trigger": {
+      "import": "@aziontech/webkit/menu-sub-trigger",
+      "target": "./src/components/navigation/menu/menu-sub-trigger/menu-sub-trigger.vue",
+      "kind": "subcomponent",
+      "parent": "menu",
+      "treeShakeableImport": "@aziontech/webkit/menu-sub-trigger"
+    },
+    "menu-sub-content": {
+      "import": "@aziontech/webkit/menu-sub-content",
+      "target": "./src/components/navigation/menu/menu-sub-content/menu-sub-content.vue",
+      "kind": "subcomponent",
+      "parent": "menu",
+      "treeShakeableImport": "@aziontech/webkit/menu-sub-content"
+    },
+    "menu-back": {
+      "import": "@aziontech/webkit/menu-back",
+      "target": "./src/components/navigation/menu/menu-back/menu-back.vue",
+      "kind": "subcomponent",
+      "parent": "menu",
+      "treeShakeableImport": "@aziontech/webkit/menu-back"
+    },
+    "menu-item": {
+      "import": "@aziontech/webkit/menu-item",
+      "target": "./src/components/navigation/menu/menu-item/menu-item.vue",
+      "kind": "subcomponent",
+      "parent": "menu",
+      "treeShakeableImport": "@aziontech/webkit/menu-item"
     },
     "tab-view": {
       "import": "@aziontech/webkit/tab-view",
