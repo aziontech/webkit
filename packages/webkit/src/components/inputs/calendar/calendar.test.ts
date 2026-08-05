@@ -8,7 +8,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Calendar from './calendar.vue'
 
-const { Default, Single } = composeStories(stories)
+const { Default, Single, Open } = composeStories(stories)
 
 // A fixed anchor keeps every assertion deterministic — the visible month is
 // seeded from the committed value when the popover opens, so October 2026 is
@@ -311,6 +311,31 @@ describe('Calendar', () => {
   })
 
   // ---- Month navigation -------------------------------------------------------
+
+  // The month label and the prev/next controls sit OUTSIDE the <Transition>, so a
+  // month change swaps only the day strip. Inside it, Vue would tear the pressed
+  // button down mid-click and focus would fall back to the body — a keyboard user
+  // would have to re-find the control to page a second month.
+  it('keeps the month controls mounted and focused across a month change', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'single', modelValue: OCT_8 }
+    })
+
+    const popover = await openCalendar(getByTestId)
+    const next = within(popover).getByRole('button', { name: 'Next month' })
+
+    next.focus()
+    expect(document.activeElement).toBe(next)
+
+    await fireEvent.click(next)
+    await waitFor(() =>
+      expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe('November 2026')
+    )
+
+    // Same node, not a re-created one — and it still holds focus.
+    expect(within(popover).getByRole('button', { name: 'Next month' })).toBe(next)
+    expect(document.activeElement).toBe(next)
+  })
 
   it('emits month-change and updates the grid label when Next / Previous are clicked', async () => {
     const { getByTestId, emitted } = render(Calendar, {
@@ -631,7 +656,67 @@ describe('Calendar', () => {
     expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe(OCT_2026_LABEL)
   })
 
+  // ---- Field labels ------------------------------------------------------------------
+
+  // The Start/End labels used to be bare <span>s, leaving each field named only by its
+  // placeholder — which vanishes on the first keystroke. axe cannot see this (placeholder
+  // is a valid accname fallback), so it is asserted directly.
+  it('binds each date field to its visible label', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'range', modelValue: { start: OCT_8, end: new Date(2026, 9, 12) } }
+    })
+
+    const popover = await openCalendar(getByTestId)
+
+    const start = within(popover).getByLabelText('Start') as HTMLInputElement
+    const end = within(popover).getByLabelText('End') as HTMLInputElement
+    expect(start.tagName).toBe('INPUT')
+    expect(end.tagName).toBe('INPUT')
+    expect(start.id).toBeTruthy()
+    expect(start.id).not.toBe(end.id)
+  })
+
+  it('names the time fields independently of their date field', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: {
+        mode: 'range',
+        modelValue: { start: OCT_8, end: new Date(2026, 9, 12) },
+        showTime: true
+      }
+    })
+
+    const popover = await openCalendar(getByTestId)
+
+    expect(within(popover).getByLabelText('Start time').tagName).toBe('INPUT')
+    expect(within(popover).getByLabelText('End time').tagName).toBe('INPUT')
+  })
+
+  it('single mode labels the field Date and its time field Time', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'single', modelValue: OCT_8, showTime: true }
+    })
+
+    const popover = await openCalendar(getByTestId)
+
+    expect(within(popover).getByLabelText('Date').tagName).toBe('INPUT')
+    expect(within(popover).getByLabelText('Time').tagName).toBe('INPUT')
+  })
+
   // ---- Axe --------------------------------------------------------------------------
+
+  it('has no a11y violations with the popover open and the time fields shown', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: {
+        mode: 'range',
+        modelValue: { start: OCT_8, end: new Date(2026, 9, 12) },
+        showTime: true,
+        showTimezone: true
+      }
+    })
+
+    await openCalendar(getByTestId)
+    await expectNoA11yViolations(document.body)
+  })
 
   it('has no a11y violations with the popover closed', async () => {
     const { container } = render(Calendar, {
@@ -679,6 +764,28 @@ describe('Calendar', () => {
     const { getByTestId } = render(Single())
 
     await openCalendar(getByTestId)
+    await expectNoA11yViolations(document.body)
+  })
+
+  // Every other story renders the CLOSED trigger, so the popover internals had no
+  // visual coverage at all before this fixture existed. It is pinned open via the
+  // controlled `open` prop, which means the panel mounts without an interaction —
+  // asserted here so a fixture that silently stops opening fails a test rather than
+  // quietly shooting an empty canvas.
+  it('renders the Open story fixture with the popover already mounted and labelled', async () => {
+    render(Open())
+
+    const popover = await waitFor(() => {
+      const el = getPopover()
+      expect(el).toBeTruthy()
+      return el as HTMLElement
+    })
+
+    expect(within(popover).getByLabelText('Start').tagName).toBe('INPUT')
+    expect(within(popover).getByLabelText('End').tagName).toBe('INPUT')
+    expect(within(popover).getByLabelText('Start time').tagName).toBe('INPUT')
+    expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe(OCT_2026_LABEL)
+
     await expectNoA11yViolations(document.body)
   })
 })
