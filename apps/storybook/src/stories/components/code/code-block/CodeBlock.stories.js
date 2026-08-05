@@ -116,6 +116,25 @@ const animatedTabs = [
   }
 ]
 
+// A CLI snippet exercises every shape the shell tokeniser recognises: a full-line
+// comment, a program, its flags, a pipe handing off to a second program, a sub-command,
+// a shell keyword, a quoted string, and a variable expansion.
+const shellSampleCode = `# Install the Azion CLI
+curl -fsSL https://cli.azion.app/install.sh | bash
+
+export AZION_TOKEN="$MY_TOKEN"
+azion link --preset vue
+azion deploy --auto # ship it`
+
+const shellTabs = [
+  {
+    label: 'Shell',
+    value: 'shell',
+    language: 'bash',
+    code: shellSampleCode
+  }
+]
+
 // Serialize a tabs array into a runnable `const tabs = …` script line so the
 // "Show code" snippet carries the exact data the canvas renders (zero drift).
 const tabsConst = (tabs) => `const tabs = ${JSON.stringify(tabs, null, 2)}`
@@ -365,6 +384,23 @@ export const WithAnimatedLines = {
     docs: {
       description: { story: 'Staggered line entrance for website layouts via `animateLines`.' },
       source: { code: snippet(animatedTabs, 'default-value="js" show-line-numbers animate-lines') }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
+export const Shell = {
+  args: {
+    tabs: shellTabs
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A CLI snippet under `language: "bash"`. A command line has a different shape from an expression, so it is read as one: the first word is the program being run, flags modify it, an operator hands off to the next program, and the rest is data — mapped onto the same code-sintax palette JavaScript uses, with no new syntax token. `sh`, `shell`, `zsh` and `console` resolve here too.'
+      },
+      source: { code: snippet(shellTabs, 'default-value="shell" show-line-numbers') }
     }
   }
 }
