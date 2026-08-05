@@ -105,12 +105,16 @@ const restored = (options: { enterOnMount?: boolean } = {}) =>
 describe('Menu (composition, drill stack + data mode)', () => {
   // ---- Compound API ------------------------------------------------------------
   it('attaches every sub-component to the compound root for dot-notation', () => {
-    expect(Menu.Group).toBe(MenuGroup)
-    expect(Menu.Item).toBe(MenuItem)
-    expect(Menu.Sub).toBe(MenuSub)
-    expect(Menu.SubTrigger).toBe(MenuSubTrigger)
-    expect(Menu.SubContent).toBe(MenuSubContent)
-    expect(Menu.Back).toBe(MenuBack)
+    // The compound root is a `.vue` import, which CodeQL's JS extractor cannot resolve —
+    // it reads `Menu` as undefined and flags each member access. The guard plus `?.` keeps
+    // the dereference safe for the scanner; a member that goes missing still fails below.
+    expect(Menu).toBeDefined()
+    expect(Menu?.Group).toBe(MenuGroup)
+    expect(Menu?.Item).toBe(MenuItem)
+    expect(Menu?.Sub).toBe(MenuSub)
+    expect(Menu?.SubTrigger).toBe(MenuSubTrigger)
+    expect(Menu?.SubContent).toBe(MenuSubContent)
+    expect(Menu?.Back).toBe(MenuBack)
   })
 
   // ---- Root anatomy ------------------------------------------------------------
