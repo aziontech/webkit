@@ -34,7 +34,10 @@ export const animate = {
   'slide-in-right': `slideInRight ${duration['moderate-02']} ${curve['productive-entrance']}`,
   'slide-out-right': `slideOutRight ${duration['moderate-01']} ${curve['productive-exit']}`,
   'progress-indeterminate': `progressIndeterminate ${duration['slow-04']} ${curve['productive-entrance']} infinite`,
-  'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`
+  'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
+  // `linear` (not a curve token) for the same reason as spin/shimmer: an endlessly
+  // looping animation must not accelerate, or the seam between repeats is visible.
+  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`
 }
 
 export const useWhen = {
@@ -58,7 +61,9 @@ export const useWhen = {
   'slide-in-right': 'Right-anchored panel entering (settings/detail drawer).',
   'slide-out-right': 'Right-anchored panel leaving (pair of slide-in-right).',
   'progress-indeterminate': 'Indeterminate linear progress bar (primary sweep).',
-  'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).'
+  'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
+  'flow-dash':
+    'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.'
 }
 
 export default { animate, curve, duration, useWhen }

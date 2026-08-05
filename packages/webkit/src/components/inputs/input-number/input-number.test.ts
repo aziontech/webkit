@@ -261,9 +261,12 @@ describe('InputNumber', () => {
   })
 
   describe('accessibility', () => {
+    // Field-only component: the label belongs to the wrapping form-field layer, so
+    // the fixture supplies the accessible name a placeholder alone cannot hold.
     it('has no axe violations in the default render', async () => {
       const { container } = render(InputNumber, {
-        props: { placeholder: 'Quantity', modelValue: 1 }
+        props: { placeholder: 'Quantity', modelValue: 1 },
+        attrs: { 'aria-label': 'Quantity' }
       })
       await expectNoA11yViolations(container)
     })

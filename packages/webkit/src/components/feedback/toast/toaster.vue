@@ -118,6 +118,11 @@
     if (changed) heights.value = nextHeights
   }
 
+  // This projection IS the entry the region renders (`item.entry` below), not
+  // just a change-detection key — so every field the template or the default
+  // slot reads has to be carried here. `closable` in particular: without it the
+  // per-toast override is dropped and every toast falls back to the Toaster's
+  // prop. (`onClose` is deliberately absent: the store owns invoking it.)
   watch(
     () =>
       store.toasts.map((t) => ({
@@ -127,7 +132,8 @@
         description: t.description,
         action: t.action,
         duration: t.duration,
-        position: t.position
+        position: t.position,
+        closable: t.closable
       })),
     (next) => {
       const nextIds = new Set(next.map((t) => t.id))

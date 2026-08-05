@@ -39,7 +39,14 @@
 
   const rootClasses = computed(() =>
     cn(
-      'flex w-full flex-col overflow-hidden',
+      // `max-h-full` is what makes `overflow-hidden` mean something. The shell
+      // clips its own overflow, but with no height bound it simply grows to fit
+      // its content, so nothing is ever clipped and `panel-content`'s
+      // `overflow-y-auto` never fires. Measured inside a 400px-tall container the
+      // shell rendered 771px with the body not scrolling; with the cap it is
+      // 400px and the body scrolls. Dialog and Drawer already bound it from the
+      // outside, so this only changes the case where nothing else does.
+      'flex w-full max-h-full flex-col overflow-hidden',
       'rounded-[var(--shape-card)] border border-[length:var(--border-width-default)]',
       'border-[var(--border-muted)]',
       'bg-[var(--bg-surface)] shadow-[var(--shadow-2xl)]',
