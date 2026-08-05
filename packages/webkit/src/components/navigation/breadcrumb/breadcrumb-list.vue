@@ -25,12 +25,6 @@
     :class="
       cn(
         'flex min-w-0 flex-nowrap items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)]',
-        // A long segment has to be able to shrink and ellipsize instead of
-        // pushing the trail past the viewport, and the shrink chain only works
-        // if every flex level can go below its content width. The list owns the
-        // rule for its own children so it holds for a hand-composed trail too,
-        // where the <li> comes from the consumer.
-        //
         '[&>li]:min-w-0',
         attrs.class as string | undefined
       )
