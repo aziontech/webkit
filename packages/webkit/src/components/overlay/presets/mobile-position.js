@@ -2,16 +2,42 @@
  * Responsive overlay positioning — mobile-first bottom sheet below `md` (768px),
  * matching `tokens/primitives/breakpoints.js`.
  */
-/** Fluid full-width bottom sheet on mobile; height follows content up to 80vh. */
-export const overlayMobileFluidClasses = ['max-md:w-full', 'max-md:h-fit', 'max-md:max-h-[80vh]']
+/**
+ * Fluid full-width bottom sheet on mobile; height follows content up to 80% of
+ * the *visible* viewport.
+ *
+ * The cap is `dvh`, not `vh`: on mobile browsers `vh` is the largest viewport
+ * (toolbars retracted), so an `80vh` sheet can extend under the URL bar and its
+ * bottom edge, footer included, sits off-screen with nothing to scroll it back
+ * into view. `dvh` tracks the currently visible area instead.
+ */
+export const overlayMobileFluidClasses = ['max-md:w-full', 'max-md:h-fit', 'max-md:max-h-[80dvh]']
 export const dialogShellPositionClasses = [
   'max-md:items-end max-md:justify-center max-md:p-0',
   'md:items-center md:justify-center md:p-(--spacing-md)'
 ]
-export const dialogPanelPositionClasses = [...overlayMobileFluidClasses, 'max-md:overflow-y-auto']
+/**
+ * The motion wrapper only positions and animates: it declares no height cap and
+ * no scroll, so the panel below is the single element that bounds the sheet and
+ * the panel body is the single element that scrolls. The wrapper used to repeat
+ * the same cap plus `overflow-y-auto`, which could never fire — the panel clips
+ * itself at the identical height, leaving the wrapper nothing to scroll.
+ */
+export const dialogPanelPositionClasses = ['max-md:w-full']
 export const dialogPanelShapeClasses = [
-  'max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card)',
-  ...overlayMobileFluidClasses
+  'max-md:rounded-b-[var(--shape-flat)] max-md:rounded-t-[var(--shape-card)]',
+  // Below `md` the sheet is fluid and hugs its content up to the cap.
+  'max-md:w-full max-md:h-fit',
+  /*
+   * One cap, at every width. It used to be `max-md:`-only, so from `md` up the
+   * panel had no bound at all: a body taller than the viewport grew the modal
+   * past the screen (measured 771px tall in a 720px viewport), which centred it
+   * with the title above the top edge and the footer actions below the bottom
+   * one, and with nothing scrolling — `panel-content` can only scroll when the
+   * panel's own height is bounded. `dvh` rather than `vh` so a mobile browser's
+   * toolbars are excluded; on desktop the two are identical.
+   */
+  'max-h-[80dvh]'
 ]
 export const drawerShellPositionClasses = [
   'max-md:inset-x-0 max-md:bottom-0 max-md:top-auto',
