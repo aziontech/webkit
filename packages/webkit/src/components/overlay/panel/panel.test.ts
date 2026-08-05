@@ -86,10 +86,16 @@ describe('Panel', () => {
     expect(() => getByTestId('overlay-panel__header')).toThrow()
   })
 
-  it('renders content as a plain scrollable div when no drawer scroll host is present', () => {
+  it('renders content as a plain div (no ScrollArea) when no drawer scroll host is present', () => {
     const { getByTestId, queryByTestId, getByText } = render(composed())
 
     // Outside a drawer, DrawerPanelScrollInjectionKey is false → no ScrollArea.
+    // This asserts the BRANCH only. The previous name claimed the div was
+    // "scrollable", which nothing here checks: whether it scrolls is a layout
+    // fact, and this env runs no Tailwind (see src/test/setup.ts), so the
+    // utility classes never apply and any scroll measurement would be a false
+    // negative. Scrolling is exercised through Drawer and Dialog, which are the
+    // contexts that mount this shell.
     expect(getByTestId('overlay-panel__content').tagName).toBe('DIV')
     expect(queryByTestId('overlay-panel__scroll')).toBeNull()
     expect(getByText('Adjust the domain configuration below.')).toBeTruthy()
