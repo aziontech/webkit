@@ -67,6 +67,10 @@
     )
   )
 
+  // Figma `TabViewItem` (selected): the pill is a translucent mask over the nav
+  // (`--secondary-mask`), hairline-bordered with `--border-muted` and lifted by the xs
+  // shadow — not the solid `--secondary-selected` fill, which resolves to pure white
+  // (dark) / near-black (light) and reads as an inverted chip.
   const indicatorClasses = [
     'pointer-events-none absolute left-0 top-0 z-0',
     'rounded-(--shape-button) bg-(--secondary-selected)',

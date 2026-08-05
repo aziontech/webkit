@@ -190,6 +190,37 @@ export const Default = {
   }
 }
 
+// No TabView.Root: each item reads its own `selected` instead of the injected context, and
+// paints its own pill because there is no List indicator behind it to do that.
+const STANDALONE_TEMPLATE = `
+  <div class="flex items-center gap-[var(--spacing-xxs)]">
+    <TabView.Item label="Selected" selected />
+    <TabView.Item label="Idle" />
+    <TabView.Item label="Disabled" disabled />
+  </div>
+`
+
+const STANDALONE_SOURCE = `<div class="flex items-center gap-[var(--spacing-xxs)]">
+  <TabView.Item label="Selected" selected />
+  <TabView.Item label="Idle" />
+  <TabView.Item label="Disabled" disabled />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof TabView.Item>} */
+export const Standalone = {
+  render: () => ({ components, template: STANDALONE_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A `TabView.Item` used on its own, outside a `TabView.Root` — a highlight chip rather than a tab. With no context to inject, the item reads its own `selected` prop, and it carries the pill treatment itself: the translucent mask, the hairline border and the small shadow that the List’s sliding indicator supplies in the composed case. This is the only story that renders that branch.'
+      },
+      source: { code: toSfc(IMPORT, STANDALONE_SOURCE) }
+    }
+  }
+}
+
 const SCROLLABLE_TABS = [
   { value: 'tab-1', label: 'Overview' },
   { value: 'tab-2', label: 'Metrics' },

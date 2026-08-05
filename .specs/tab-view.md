@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 38b0be72fee4fa515e9917d1f931e6b0d567009d1e3fb46dd32d4e3ad86c6538
+checksum: 2f9b6eecead3aa34b041a12faff5dc142a39ebb07ffcbcf739d0ff4935b47e46
 created: 2026-05-22
-last_updated: 2026-07-28
+last_updated: 2026-08-04
 ---
 # Tab View — Component Spec
 
@@ -63,6 +63,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | surface | `var(--bg-surface)` |
 | text | `var(--text-default)` |
 | spacing | `var(--spacing-3)` |
+| height (tab item) | `var(--size-8)` — 32 px, applied as `h-[var(--size-8)]` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
 
@@ -79,12 +80,13 @@ Helps users move between views or sections. Migrated from the existing implement
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
 
 ## Stories (Storybook)
 
 - Default
 - Scrollable — many tabs in a width-constrained container; justified because the horizontal-scroll (mobile) behavior of `TabView.List` is a distinct rendered state that the Default story (few tabs, no overflow) does not exercise.
+- Standalone — a `TabView.Item` outside a `TabView.Root`, selected / idle / disabled; justified because a context-free item reads its own `selected` prop and paints the pill itself (mask + hairline + `--shadow-xs`) rather than sitting on the List's sliding indicator, which no composed story renders.
 
 ## Constraints — DO NOT
 
