@@ -96,6 +96,7 @@
   "packages/webkit/src/components/inputs/textarea/textarea.vue::manual-v-model",
   "packages/webkit/src/components/layout/scroll-area/scroll-area.vue::spec:Props in .vue not in spec: orientation, ariaLabel",
   "packages/webkit/src/components/layout/scroll-area/scroll-area.vue::token:js-class-preset",
+  "packages/webkit/src/components/layout/sidebar/composables/use-sidebar-rail.ts::token:zero-with-unit",
   "packages/webkit/src/components/layout/sidebar/sidebar-footer.vue::token:js-class-preset",
   "packages/webkit/src/components/layout/sidebar/sidebar-group.vue::token:js-class-preset",
   "packages/webkit/src/components/layout/sidebar/sidebar-header.vue::token:js-class-preset",
