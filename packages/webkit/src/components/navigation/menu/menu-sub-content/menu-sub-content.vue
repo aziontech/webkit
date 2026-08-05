@@ -125,7 +125,7 @@
    */
   const INLINE_CLASS =
     'relative m-0 flex w-full list-none flex-col p-0 ' +
-    '[--menu-indent:calc(var(--spacing-sm)+var(--spacing-md))] ' +
+    '[--menu-indent:calc(var(--spacing-sm)+var(--spacing-xs))] ' +
     '[--menu-rail-x:var(--spacing-sm)] ' +
     'pl-[var(--menu-indent)] ' +
     '[&>li]:relative ' +
