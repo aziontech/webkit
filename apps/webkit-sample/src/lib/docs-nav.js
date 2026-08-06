@@ -2,12 +2,12 @@
 // same eight sections, the same collapsible groups, the same rows, in the same
 // order.
 //
-// Shape: each entry is a webkit `Menu` GROUP — `{ label, items }` — so a docs
-// section maps onto the group's own anatomy: a title over its rows that does not fold
-// them, which is what the documentation's section headers are. Within `items`, a node
-// with `children` renders as an inline sub-menu, the condensed row the docs use for
-// product groups (`Migrate`, `Modules`, `Guides`, `Reference`), nesting up to five
-// levels deep.
+// Shape: each entry is a docs SECTION — `{ label, items }`. A section is not a group
+// header in the rail any more: it is a LEVEL the reader drills into (see
+// `docsNavGroups` below), so its label names that level and the row that opens it.
+// Within `items`, a node with `children` renders as an inline sub-menu, the
+// condensed row the docs use for product groups (`Migrate`, `Modules`, `Guides`,
+// `Reference`), nesting four more levels deep inside the section's own.
 //
 // Rows carry no `href`: the prototype is self-contained, so activating a row moves
 // the selection rather than leaving the app. Ids derive from the docs path each row
@@ -1297,3 +1297,45 @@ export const docsNavSections = [
 
 /** The row the Get Started page renders as current. */
 export const DOCS_GET_STARTED_ID = 'get-started'
+
+/** `Updates & Policies` → `section-updates-policies`; sections carry no id of their own. */
+const sectionId = (label) =>
+  `section-${label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}`
+
+/**
+ * The rail's ROOT level: the eight sections as drill rows.
+ *
+ * A section used to be a group — a header titling its rows without folding them — which
+ * put all 275 links in one column and asked the reader to scroll past seven pillars they
+ * are not in to reach the eighth. As a DRILL, each section is a level: the root is the
+ * eight pillars, and choosing one replaces the rail with that pillar's own menu (`groups`
+ * is the same shape the root takes, so a level is a menu, not a nested list). Everything
+ * below stays exactly as the documentation has it — the inline `children` rows still
+ * expand in place inside the level, four more levels deep.
+ *
+ * No glyphs, at any level. Eight rows with a chevron each are already unambiguous, and a
+ * documentation pillar is a subject rather than an object — the icons a `Cache` or a
+ * `Firewall` earns in the console do not exist for `Resources` or `Updates & Policies`,
+ * so the column would be filled with approximations that say less than the labels do.
+ */
+export const docsNavGroups = [
+  {
+    items: docsNavSections.map((section) => ({
+      id: sectionId(section.label),
+      label: section.label,
+      kind: 'drill',
+      groups: [{ items: section.items }]
+    }))
+  }
+]
+
+/**
+ * Which ids are drill LEVELS rather than inline subs. A jump from the palette has to open
+ * every container above the page it selected, and the two kinds are opened by two different
+ * models — the drill stack (`path`) and the expansion set (`expanded`) — so the ancestor
+ * chain is split against this.
+ */
+export const docsSectionIds = new Set(docsNavGroups[0].items.map((item) => item.id))

@@ -52,7 +52,9 @@
             class="size-7 shrink-0 rounded-[var(--shape-elements)] border border-[var(--border-muted)]"
             :style="{ background: row.preview }"
           />
-          <code class="truncate font-code text-body-sm text-[var(--text-default)]">{{ row.name }}</code>
+          <code class="truncate font-code text-body-sm text-[var(--text-default)]">{{
+            row.name
+          }}</code>
         </span>
       </template>
       <template #cell-usage="{ value }">

@@ -162,7 +162,8 @@ const DESCRIPTIONS = {
 // (text / -contrast) roles render an "Aa" glyph on the surface (or on their base).
 function swatchKind(name) {
   if (/^--border-/.test(name) || /-border$/.test(name) || name === '--ring-color') return 'border'
-  if (/^--text-/.test(name) || /-contrast$/.test(name) || /^--code-sintax-/.test(name)) return 'text'
+  if (/^--text-/.test(name) || /-contrast$/.test(name) || /^--code-sintax-/.test(name))
+    return 'text'
   return 'fill'
 }
 

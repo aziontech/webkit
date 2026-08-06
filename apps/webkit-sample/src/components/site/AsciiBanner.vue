@@ -291,10 +291,15 @@
         if (k > 0) {
           ctx.shadowColor = props.accent
           ctx.shadowBlur = props.glow * 14 * (k === 1 ? 1 : 0.6)
-          ctx.fillStyle = 'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',' + (0.55 + 0.45 * b) + ')'
+          ctx.fillStyle =
+            'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',' + (0.55 + 0.45 * b) + ')'
         } else {
           ctx.shadowBlur = 0
-          const g = 0.14 + 0.5 * b
+          // Eased grey ramp (gamma < 1). A linear alpha ramp spends most of its
+          // range in the near-invisible bottom against a dark canvas, so the
+          // field read as one flat wash; the curve lifts the mid-tones — where
+          // almost every base cell sits — without clipping the top.
+          const g = 0.16 + 0.58 * Math.pow(b, 0.62)
           ctx.fillStyle = 'rgba(150,166,182,' + g + ')'
         }
         ctx.fillText(ch, col * cellW, row * cellH)

@@ -55,11 +55,11 @@
   import { environmentOptions, statusMeta } from '../lib/deployments'
   import { emailOf } from '../lib/people'
   import { demoDeployment, findDeploymentByWorkload, resourceChain } from '../lib/provisioning'
+  import { releaseSeedForWorkload } from '../lib/releases'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
   import DeploymentsTable from './ui/DeploymentsTable.vue'
   import DeploymentTableControls from './ui/DeploymentTableControls.vue'
-  import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
   import PageHeading from './ui/PageHeading.vue'
   import PageTabs from './ui/PageTabs.vue'
@@ -365,31 +365,26 @@
 
   // --- Header actions ------------------------------------------------------
   // ── Deploy ────────────────────────────────────────────────────────────────
-  // "New Deployment" opens the ONE deploy interaction (ui/DeployResourceDrawer.vue)
-  // with this workload already chosen — it used to route to /deploy, the Creation
-  // Center's template clone, which creates a whole new chain instead of deploying
-  // onto the workload the user is standing on.
-  // Authoring a missing strategy is the drawer's own nested flow (its Deployment
-  // Settings Select carries the quick-add), so this page hosts only the deploy drawer.
-  const deployOpen = ref(false)
-  const deployTarget = computed(() => ({
-    kind: 'workload',
-    id: workloadId,
-    name: workload.value.name
-  }))
-
+  // Deploying opens the RELEASE COMPOSER (../ReleaseComposer.vue) PINNED to what this
+  // workload already deploys: its own Deployment settings, selected, and the application it
+  // is already serving, so nothing this page already knows is asked again. It is a page, not
+  // a drawer: what a release reaches (environments · workloads · domains) is reviewed before
+  // it is deployed, and that review has to be linkable and survive a reload, which is why
+  // the entry context rides the query string.
   const newDeployment = () => {
-    deployOpen.value = true
-  }
-
-  // The new deployment is already in this workload's own list (Building, on top), so
-  // the page stays put and the tab that lists it is the one that answers.
-  const onDeployed = (run) => {
-    activeTab.value = 'deployments'
-    toast.info(`Deployment ${run.deployId} started`, {
-      description: 'It leads this workload’s history, and keeps running if you leave.'
+    const { settingsIds } = releaseSeedForWorkload(workloadId)
+    router.push({
+      path: '/deployments/releases/new',
+      query: {
+        email: userEmail.value,
+        workload: workload.value.name,
+        workloadId,
+        ...(settingsIds.length ? { deploymentIds: settingsIds.join(',') } : {}),
+        ...(settingsIds.length > 1 ? { pickTarget: 'true' } : {})
+      }
     })
   }
+
   const visit = () => toast.info('Opening the workload in a new tab.')
 
   // --- Settings ------------------------------------------------------------
@@ -893,13 +888,6 @@
     <WorkloadDeploymentDrawer
       v-model:open="drawerOpen"
       :deployment="selectedDeployment"
-    />
-
-    <!-- The one deploy interaction, with this workload already chosen. -->
-    <DeployResourceDrawer
-      v-model:open="deployOpen"
-      :resource="deployTarget"
-      @deployed="onDeployed"
     />
   </AppLayout>
 </template>

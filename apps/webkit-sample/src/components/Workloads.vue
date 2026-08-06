@@ -36,12 +36,12 @@
   import { withinRange } from '../lib/dates'
   import { filterDisplay } from '../lib/filters'
   import { provisionedWorkloads, removeDeployment } from '../lib/provisioning'
+  import { releaseSeedForWorkload } from '../lib/releases'
   import { useTenancyReload } from '../lib/tenancy-reload'
   import { tenancyRows } from '../lib/tenancy-scope'
   import { WORKLOADS } from '../lib/workloads'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
-  import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import FilterPopover from './ui/FilterPopover.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
@@ -168,24 +168,33 @@
     })
 
   // ── Deploy ────────────────────────────────────────────────────────────────
-  // The same deploy interaction the Applications module and the Deployments module
-  // open (ui/DeployResourceDrawer.vue) — from here the WORKLOAD is the one already
-  // chosen, and the drawer asks which application to deploy onto it. A deployment
-  // belongs to exactly one workload (the workload is the path parameter of the
-  // request that creates it), so this is the entry point where that half is settled.
-  // Authoring a missing strategy is the drawer's own nested flow (its Deployment
-  // Settings Select carries the quick-add), so this page hosts only the deploy drawer.
-  const deployOpen = ref(false)
-  const deployTarget = ref(null)
-
+  // Deploying a workload opens the RELEASE COMPOSER (../ReleaseComposer.vue), not a drawer.
+  // A workload publishes with a Deployment setting per environment, so deploying it is a
+  // multi-target action whose blast radius (environments · workloads · domains) has to be
+  // reviewed before it happens — a review that does not fit in a panel, and that has to be
+  // linkable and reloadable.
+  //
+  // NOTHING THE WORKLOAD ALREADY ANSWERS IS ASKED. The composer opens PINNED to what this
+  // workload already deploys: its own Deployment settings, selected, and the application it
+  // is already serving. Landing on a screen that asks you to re-pick the target you just
+  // clicked from is the friction this removes.
+  //
+  // The whole context rides the query string, so a reload lands in the same scenario:
+  //
+  //   several settings  ?deploymentIds=a,b&pickTarget=true — both selected, deselect to skip
+  //   one setting       ?deploymentIds=a                   — settled, no picker
+  //   none yet          no ids                             — the operator selects the target
   const openDeploy = (row) => {
-    deployTarget.value = { kind: 'workload', id: row.id, name: row.name }
-    deployOpen.value = true
-  }
-
-  const onDeployed = (run) => {
-    toast.info(`Deployment ${run.deployId} started`, {
-      description: 'Follow it in Deployments — it keeps running if you leave.'
+    const { settingsIds } = releaseSeedForWorkload(row.id)
+    router.push({
+      path: '/deployments/releases/new',
+      query: {
+        email: userEmail.value,
+        workload: row.name,
+        workloadId: row.id,
+        ...(settingsIds.length ? { deploymentIds: settingsIds.join(',') } : {}),
+        ...(settingsIds.length > 1 ? { pickTarget: 'true' } : {})
+      }
     })
   }
 
@@ -533,12 +542,5 @@
         </section>
       </section>
     </main>
-
-    <!-- The one deploy interaction, with this row's workload already chosen. -->
-    <DeployResourceDrawer
-      v-model:open="deployOpen"
-      :resource="deployTarget"
-      @deployed="onDeployed"
-    />
   </AppLayout>
 </template>

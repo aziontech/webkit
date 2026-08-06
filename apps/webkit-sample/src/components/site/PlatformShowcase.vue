@@ -6,6 +6,13 @@
   // (constant across themes, so text on the orange fills is `--color-base-white`);
   // everything structural uses semantic surface / border / text tokens so both
   // light and dark themes stay correct.
+  //
+  // Layout follows CONTAINERS.md: the component is a single SectionModule — the host page's
+  // SectionContainer owns the frame (`border-x`), this module owns its top rule (`border-t`) and
+  // its header's `border-b`, and the four panels are an edge-to-edge `CardGrid variant="divider"`
+  // whose 1px gaps are the internal rules. No panel draws a border of its own, and none is rounded.
+  import { CardGrid, SectionModule } from './foundations/components/layout/index.js'
+  import { SectionTitle } from './ui/index.js'
 
   // Panel 1 — commit nodes sitting on the `main` line (left %, on the mid rule).
   const commitNodes = [18, 26, 42, 60, 78]
@@ -54,45 +61,53 @@
     {
       key: 'branch',
       title: 'Branch Overview',
-      lead: 'Mais rápido para publicar.',
-      body: 'Do código à API no ar em minutos. Teste com segurança, promova quando quiser e reverta se precisar.'
+      lead: 'Faster to ship.',
+      body: 'From code to a live API in minutes. Test safely, promote when you choose, and roll back if you need to.'
     },
     {
       key: 'tokens',
       title: 'Personal Tokens',
-      lead: 'Seguro por padrão.',
-      body: 'Acesse a API com tokens pessoais escopados, com expiração definida e revogação instantânea. A chave aparece uma única vez.'
+      lead: 'Secure by default.',
+      body: 'Reach the API with scoped personal tokens — a set expiry and instant revocation. The key is shown exactly once.'
     },
     {
       key: 'control',
       title: 'Control Plane',
-      lead: 'Mais simples de operar.',
-      body: 'Uma única plataforma unificada para deploys, gateways e observabilidade completa.'
+      lead: 'Simpler to operate.',
+      body: 'One unified platform for deploys, gateways, and full observability.'
     },
     {
       key: 'usage',
       title: 'Usage 30 Days',
-      lead: 'Visível desde o primeiro dia.',
-      body: 'Cada requisição registrada. Cada decisão rastreada. Depure antes que o usuário perceba.'
+      lead: 'Visible from day one.',
+      body: 'Every request recorded. Every decision traced. Debug it before the user notices.'
     }
   ]
 </script>
 
 <template>
-  <section class="mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
-    <div class="mb-[var(--spacing-xl)] flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-sm)]">
-      <p class="text-overline-sm text-[var(--text-muted)]">Por que Azion</p>
-      <h2 class="text-balance text-heading-xl text-[var(--text-default)]">
-        Do commit à observabilidade, em uma só plataforma
-      </h2>
-    </div>
+  <SectionModule
+    :divided="false"
+    :padded="false"
+  >
+    <template #header>
+      <SectionTitle
+        eyebrow="Why Azion"
+        title="From commit to observability, on a single platform"
+        description="Four surfaces of the platform, from the first push to the usage chart — shipping, credentials, control plane, and observability."
+      />
+    </template>
 
-    <div class="grid grid-cols-1 overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-muted)] bg-[var(--bg-canvas)] lg:grid-cols-4">
+    <!-- The grid's 1px gaps ARE the internal rules; each panel fills its own background. -->
+    <CardGrid
+      variant="divider"
+      divider-color="muted"
+      :columns="4"
+    >
       <article
-        v-for="(panel, index) in panels"
+        v-for="panel in panels"
         :key="panel.key"
-        class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)] border-[var(--border-muted)]"
-        :class="index > 0 ? 'border-t lg:border-t-0 lg:border-l' : ''"
+        class="flex flex-col gap-[var(--spacing-lg)] bg-[var(--bg-canvas)] p-[var(--spacing-lg)]"
       >
         <header class="text-label-code-md text-[var(--text-muted)]">{{ panel.title }}</header>
 
@@ -185,7 +200,9 @@
           class="flex h-48 flex-col"
         >
           <div class="border-b border-[var(--border-default)]" />
-          <div class="flex flex-1 flex-col justify-center gap-[var(--spacing-xxs)] pt-[var(--spacing-sm)]">
+          <div
+            class="flex flex-1 flex-col justify-center gap-[var(--spacing-xxs)] pt-[var(--spacing-sm)]"
+          >
             <div
               v-for="row in tokens"
               :key="row.token"
@@ -204,7 +221,10 @@
         </div>
 
         <!-- Panel 3: control plane selection diagram -->
-        <div class="flex h-48 items-center justify-center" v-else-if="panel.key === 'control'">
+        <div
+          class="flex h-48 items-center justify-center"
+          v-else-if="panel.key === 'control'"
+        >
           <svg
             viewBox="0 0 100 100"
             class="h-full w-auto"
@@ -288,7 +308,10 @@
         </div>
 
         <!-- Panel 4: usage chart -->
-        <div v-else-if="panel.key === 'usage'" class="flex h-48 flex-col gap-[var(--spacing-sm)]">
+        <div
+          v-else-if="panel.key === 'usage'"
+          class="flex h-48 flex-col gap-[var(--spacing-sm)]"
+        >
           <div class="text-big-number-sm tabular-nums text-[var(--text-default)]">12</div>
 
           <div class="relative flex-1">
@@ -340,11 +363,14 @@
           </div>
 
           <!-- x-axis labels -->
-          <div class="flex items-center justify-between text-label-code-sm text-[var(--text-muted)]">
+          <div
+            class="flex items-center justify-between text-label-code-sm text-[var(--text-muted)]"
+          >
             <span
               v-for="(bar, i) in usageBars"
               :key="`x-${i}`"
-            >{{ bar.label }}</span>
+              >{{ bar.label }}</span
+            >
           </div>
         </div>
 
@@ -354,6 +380,6 @@
           {{ ' ' }}{{ panel.body }}
         </p>
       </article>
-    </div>
-  </section>
+    </CardGrid>
+  </SectionModule>
 </template>

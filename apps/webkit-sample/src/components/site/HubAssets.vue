@@ -123,11 +123,11 @@
             >
               <div class="flex flex-col gap-[var(--spacing-xxs)]">
                 <h3 class="text-heading-xxs text-white">{{ lockup.label }}</h3>
-                <p class="max-w-sm text-pretty text-body-xs text-white/60">{{ lockup.description }}</p>
+                <p class="max-w-sm text-pretty text-body-xs text-white/60">
+                  {{ lockup.description }}
+                </p>
               </div>
-              <span class="shrink-0 text-overline-xs text-white/40">
-                @aziontech/webkit/brand
-              </span>
+              <span class="shrink-0 text-overline-xs text-white/40"> @aziontech/webkit/brand </span>
             </div>
 
             <!-- The lockup, rendered large and centered (override the size token's
@@ -152,8 +152,8 @@
         margin-bottom=""
       >
         The Azion icon system combines custom product icons with the PrimeIcons library, distributed
-        via @aziontech/icons. Search by name, adjust the preview size, and click any icon to copy its
-        class name.
+        via @aziontech/icons. Search by name, adjust the preview size, and click any icon to copy
+        its class name.
       </PageHeader>
     </BannerContainer>
 
@@ -180,9 +180,9 @@
         title="Illustrations"
         margin-bottom=""
       >
-        Two illustration systems: the platform scenes that retell build, deploy, network, AI,
-        secure and observe in one token-driven visual language, and the theme-aware SVGs
-        @aziontech/webkit ships for empty, error and onboarding states.
+        Two illustration systems: the platform scenes that retell build, deploy, network, AI, secure
+        and observe in one token-driven visual language, and the theme-aware SVGs @aziontech/webkit
+        ships for empty, error and onboarding states.
       </PageHeader>
     </BannerContainer>
 
@@ -218,7 +218,9 @@
             </div>
             <div class="flex flex-col gap-[var(--spacing-xxs)]">
               <h3 class="text-heading-xxs text-[var(--text-default)]">{{ illustration.label }}</h3>
-              <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ illustration.description }}</p>
+              <p class="text-pretty text-body-sm text-[var(--text-muted)]">
+                {{ illustration.description }}
+              </p>
             </div>
           </div>
         </CardGrid>

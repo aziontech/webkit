@@ -53,7 +53,8 @@
         v-if="row.link"
         :class="[row.parentClass, 'min-w-0 truncate text-[var(--text-default)]']"
       >
-        {{ row.before }}<span :class="row.name">{{ row.sample }}</span>{{ row.after }}
+        {{ row.before }}<span :class="row.name">{{ row.sample }}</span
+        >{{ row.after }}
       </span>
       <span
         v-else

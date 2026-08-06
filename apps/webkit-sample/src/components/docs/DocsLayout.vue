@@ -12,8 +12,13 @@
   //   · the rail is RESIZABLE and collapsible — the same drag / snap / keyboard
   //     gesture, which `Sidebar` itself owns, backed by its own persisted state
   //     (docs-sidebar.js) so sizing the docs tree never moves the console rail;
+  //   · the eight documentation sections are DRILL levels, the console's second-level
+  //     pattern: the root of the rail is the eight pillars, and choosing one replaces the
+  //     rail with that pillar's own menu behind a Back row. 275 links do not fit one
+  //     column, and a reader inside `Secure` should not scroll past `Store` to get there;
   //   · ⌘K opens a COMMAND PALETTE over the whole documentation — 275 pages, the
-  //     eight sections as its groups, plus the shell's own commands.
+  //     eight sections as its groups, plus the shell's own commands. Selecting a page
+  //     drills the rail to its pillar and opens the inline subs above it.
   //
   // Search lives at the TOP OF THE RAIL, not in the top bar: the rail is what the
   // documentation tree is, so its search belongs to it. It is a single large button
@@ -60,7 +65,12 @@
   import { useRouter } from 'vue-router'
 
   import { useDocsSidebar } from '../../docs-sidebar.js'
-  import { DOCS_GET_STARTED_ID, docsNavSections } from '../../lib/docs-nav.js'
+  import {
+    DOCS_GET_STARTED_ID,
+    docsNavGroups,
+    docsNavSections,
+    docsSectionIds
+  } from '../../lib/docs-nav.js'
   import { menuLeaves, menuPath } from '../../lib/menu-tree.js'
   import { useTheme } from '../../theme.js'
   import DocsSearchTrigger from './DocsSearchTrigger.vue'
@@ -84,17 +94,40 @@
   ]
 
   // The docs navigation itself lives in `lib/docs-nav.js` — the real Azion
-  // documentation sidebar, transcribed section for section. Each section is a static
-  // header with its pillar glyph plus a recursive tree of `Menu` rows, where a row
-  // with `children` is a condensed (inline) sub-menu that expands in place behind the
-  // indent rail rather than navigating. `Secure → Firewall → Modules → WAF → Guides`
-  // nests five levels deep, which is the depth the rail is designed to stay readable at.
+  // documentation sidebar, transcribed section for section.
+  //
+  // The eight sections are DRILL rows (`docsNavGroups`), not group headers: the root of
+  // the rail is the eight pillars, and choosing one replaces the rail with that pillar's
+  // own menu, with a Back row heading it. That is what keeps a 275-link tree navigable in
+  // 300px — a reader inside `Secure` is not scrolling past `Store` and `Observe` to reach
+  // it. Inside a level, a row with `children` is still the condensed (inline) sub-menu the
+  // documentation uses for product groups, expanding in place behind the indent rail:
+  // `Secure → Firewall → Modules → WAF → Guides` is one drill plus four inline levels.
   const active = ref(DOCS_GET_STARTED_ID)
 
-  // Which sub-menus are open. Held here rather than left to each row's `defaultOpen`
-  // because the palette has to be able to OPEN a path: jumping to a page five levels
-  // down means expanding the four containers above it (see `onPaletteSelect`).
-  const expanded = ref([])
+  /**
+   * The containers above a page, split by the model that opens each: drill sections into the
+   * stack, inline subs into the expansion set. A jump has to open all of them — landing on a
+   * row five levels down that nobody can see looks like nothing happened.
+   */
+  const ancestorsOf = (id) => {
+    const ancestors = menuPath(docsNavGroups[0].items, id) ?? []
+    return {
+      levels: ancestors.filter((ancestorId) => docsSectionIds.has(ancestorId)),
+      inline: ancestors.filter((ancestorId) => !docsSectionIds.has(ancestorId))
+    }
+  }
+
+  const initial = ancestorsOf(active.value)
+
+  // Which level the rail is showing, as `Menu`'s stack of ancestor ids. Seeded from the page
+  // that is current, so the rail opens ON the reader's page rather than at a root level where
+  // nothing is selected — the same rule the console rail follows.
+  const path = ref(initial.levels)
+
+  // Which inline sub-menus are open. Held here rather than left to each row's `defaultOpen`
+  // because the palette has to be able to OPEN a path (see `onPaletteSelect`).
+  const expanded = ref(initial.inline)
   // The scroll target lives inside the tree, so the ref is on `Menu` rather than on the rail:
   // `Sidebar` renders two roots (the rail, plus the affordance that brings a collapsed one
   // back), so its `$el` is not a single element to query into.
@@ -116,11 +149,20 @@
     globalThis.requestAnimationFrame(() => navPanel.value?.$el?.focus?.())
   })
 
-  // Any jump — a row in the sheet, a page in the palette — closes the sheet, because
-  // the destination is behind it.
+  // A pillar row is a destination as well as a level: `Menu` emits `navigate` for it, and the
+  // shell resolves it to the level's LANDING page — the first leaf inside it — so opening
+  // `Secure` lands on "About Security" instead of leaving the reader on the page they came
+  // from while a new menu appears. Resolving to the leaf (not the container) is also what
+  // makes a row read as current on arrival: a container is not a destination.
+  //
+  // Only a LEAF closes the sheet. A jump to a page puts the destination behind the overlay, so
+  // the overlay goes; a pillar row merely pushed a level, and the reader who opened navigation
+  // to find a page has not finished choosing one yet.
   const onNavigate = (event, node) => {
-    active.value = node.id
-    navOpen.value = false
+    const isLevel = docsSectionIds.has(node.id)
+    const target = isLevel ? menuLeaves([node])[0] : node
+    if (target) active.value = target.id
+    if (!isLevel) navOpen.value = false
   }
 
   // ── ⌘K palette ──────────────────────────────────────────────────────────────
@@ -228,8 +270,12 @@
       if (!item) return
       active.value = item.id
       if (hasRail.value && collapsed.value) collapsed.value = false
-      const ancestors = docsNavSections.flatMap((section) => menuPath(section.items, item.id) ?? [])
-      expanded.value = [...new Set([...expanded.value, ...ancestors])]
+      const { levels, inline } = ancestorsOf(item.id)
+      // The stack is REPLACED, not merged: a page in another pillar is in another level, and
+      // the rail can only be in one. Expansion merges — a sub the reader opened by hand in a
+      // level they will come back to is theirs to close.
+      path.value = levels
+      expanded.value = [...new Set([...expanded.value, ...inline])]
       nextTick(() => {
         menuRef.value?.$el
           ?.querySelector('[aria-current="page"]')
@@ -379,20 +425,25 @@
             />
           </template>
 
-          <!-- The whole sidebar is one Menu: each docs section is a Menu GROUP, whose
-               label is the section header — a group titles its rows without folding
-               them, which is exactly what the documentation's headers do. The rows come
-               from a manifest, so data-driven mode renders the five levels of recursion
-               rather than us re-implementing it here. `role="presentation"` because
-               Sidebar already renders the nav landmark. -->
+          <!-- The whole sidebar is one Menu, and its ROOT is the eight pillars: each docs
+               section is a DRILL row, so choosing one replaces the rail with that section's
+               menu instead of unfolding 275 links into one column. The rows come from a
+               manifest, so data-driven mode renders the drill plus the four inline levels
+               below it rather than us re-implementing the recursion here.
+               `role="presentation"` because Sidebar already renders the nav landmark. -->
           <Menu
             ref="menuRef"
+            v-model:path="path"
             v-model:expanded="expanded"
-            :groups="docsNavSections"
+            :groups="docsNavGroups"
             :active-id="active"
             role="presentation"
             @navigate="onNavigate"
-          />
+          >
+            <!-- Renders nothing at the root level; heads a pushed one, naming the pillar it
+                 returns to. -->
+            <Menu.Back />
+          </Menu>
         </Sidebar>
       </div>
 
@@ -511,13 +562,16 @@
 
           <ScrollArea class="min-h-0 min-w-0 w-full flex-1">
             <Menu
+              v-model:path="path"
               v-model:expanded="expanded"
-              :groups="docsNavSections"
+              :groups="docsNavGroups"
               :active-id="active"
               aria-label="Documentation"
               class="w-full p-[var(--spacing-md)]"
               @navigate="onNavigate"
-            />
+            >
+              <Menu.Back />
+            </Menu>
           </ScrollArea>
 
           <!-- From `lg` up the tree is the rail, and the rail carries this same footer, so

@@ -199,7 +199,8 @@
         if (k > 0) {
           ctx.shadowColor = props.accent
           ctx.shadowBlur = 10 * (k === 1 ? 1 : 0.6)
-          ctx.fillStyle = 'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',' + (0.55 + 0.45 * b) + ')'
+          ctx.fillStyle =
+            'rgba(' + ac[0] + ',' + ac[1] + ',' + ac[2] + ',' + (0.55 + 0.45 * b) + ')'
         } else {
           ctx.shadowBlur = 0
           const g = 0.14 + 0.5 * b

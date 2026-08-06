@@ -26,7 +26,7 @@
   // When this list was last revised. Deliberately NOT the deploy prefix: that
   // rotates on every publish, so a prefix printed here is stale the moment the
   // page ships — including on the very deploy that ships it.
-  const UPDATED_AT = '31/07/2026'
+  const UPDATED_AT = 'July 31, 2026'
 
   // One entry per update. `points` is the substance — `term` is the decision, `text`
   // is why it went that way; `table` is used only where the decision IS a mapping
@@ -34,64 +34,63 @@
   const entries = [
     {
       id: 'containers',
-      title: '1. Padrão de containers',
+      title: '1. Container standard',
       summary:
-        'Espaçamento e largura deixaram de ser decisão de cada tela e viraram tokens de layout, com três decisões declaradas uma única vez — e derivadas das escalas fluidas do theme, sem uma única media query.',
+        'Spacing and width stopped being a per-screen decision and became layout tokens, with three decisions declared exactly once — derived from the theme fluid scales, without a single media query.',
       points: [
         {
           term: 'Boundary',
-          text: 'distância do conteúdo até o chrome da app. O topo é um passo maior que as laterais, porque a borda do header lê como aresta dura e o olho pede mais respiro ali.'
+          text: 'the distance from content to the app chrome. The top is one step larger than the sides, because the header border reads as a hard edge and the eye asks for more room there.'
         },
         {
           term: 'Rhythm',
-          text: 'distância entre seções (passo xl) e dentro de uma banda (passo md). O gap pertence sempre ao pai, nunca ao filho, então mover um não arrasta o outro.'
+          text: 'the distance between sections (step xl) and inside a band (step md). The gap always belongs to the parent, never to the child, so moving one does not drag the other.'
         },
         {
           term: 'Measure',
-          text: 'até onde a coluna de leitura pode crescer — e isso varia por contexto: uma tabela de dados quer largura, um formulário não.'
+          text: 'how far the reading column may grow — and that varies by context: a data table wants width, a form does not.'
         },
         {
-          term: 'Manutenção em massa',
-          text: 'mudar o respiro de todas as páginas de settings, ou a largura de todas as listagens, é um token — não uma varredura por dezenas de telas. O conjunto foi escrito com nome semântico e zero valor cru para poder ser promovido ao @aziontech/theme como semantic/layouts e valer para qualquer app consumidora.'
+          term: 'Bulk maintenance',
+          text: 'changing the breathing room of every settings page, or the width of every listing, is one token — not a sweep across dozens of screens. The set was written with semantic names and zero raw values so it can be promoted to @aziontech/theme as semantic/layouts and hold for any consuming app.'
         }
       ],
       table: {
-        head: ['Tipo de layout', 'Measure'],
+        head: ['Layout type', 'Measure'],
         rows: [
-          ['Listagem (dados, tabela larga)', '1620px'],
-          ['Create (fluxo de criação)', '1024px'],
-          ['Configurações / Settings', '876px'],
-          ['Focado (home, creation center)', '1024px']
+          ['Listing (data, wide table)', '1620px'],
+          ['Create (creation flow)', '1024px'],
+          ['Settings', '876px'],
+          ['Focused (home, creation center)', '1024px']
         ]
       },
       links: [
-        { label: 'Listagem', path: '/applications' },
+        { label: 'Listing', path: '/applications' },
         { label: 'Create', path: '/applications/new' },
-        { label: 'Listagem 2º nível', path: '/applications/1784552864?tab=main-settings' },
+        { label: '2nd-level listing', path: '/applications/1784552864?tab=main-settings' },
         { label: 'Settings', path: '/account' }
       ]
     },
     {
       id: 'switch',
-      title: '2. Switch — cor e shape',
-      summary:
-        'Atualizado no pacote @aziontech/webkit e refletido em toda a sample.',
+      title: '2. Switch — color and shape',
+      summary: 'Updated in the @aziontech/webkit package and reflected across the whole sample.',
       points: [
         {
-          term: 'Track ligado',
-          text: 'passou de --success-contrast para --accent: mais contraste, e alinhado ao resto dos controles ativos.'
+          term: 'On track',
+          text: 'moved from --success-contrast to --accent: more contrast, and aligned with the rest of the active controls.'
         },
         {
-          term: 'Raio concêntrico',
-          text: 'track em --shape-elements (6px) e handle em --radius (4px). 6px menos o inset de 2px dá exatamente o raio interno, então o handle acompanha a curva do track em vez de ser um pill dentro de outro pill.'
+          term: 'Concentric radius',
+          text: 'track on --shape-elements (6px) and handle on --radius (4px). 6px minus the 2px inset is exactly the inner radius, so the handle follows the curve of the track instead of being a pill inside another pill.'
         },
         {
-          term: 'Handle estável entre temas',
-          text: 'knob branco fixo com o ícone de lock preto fixo. Sobre o track --accent esses dois não podem inverter com light/dark, senão o estado ligado perde legibilidade em um dos temas.'
+          term: 'Handle stable across themes',
+          text: 'a fixed white knob with a fixed black lock icon. Over the --accent track those two cannot invert with light/dark, or the on state loses legibility in one of the themes.'
         },
         {
           term: 'Baselines',
-          text: '34 baselines visuais regeradas (Switch, FieldSwitch, FieldSwitchBlock, FieldTextSwitch).'
+          text: '34 visual baselines regenerated (Switch, FieldSwitch, FieldSwitchBlock, FieldTextSwitch).'
         }
       ],
       links: [
@@ -102,128 +101,127 @@
     },
     {
       id: 'command-menu',
-      title: '3. Command Menu (busca global)',
+      title: '3. Command Menu (global search)',
       summary:
-        'O campo de busca no topo da sidebar virou a afordância do ⌘K: um campo read-only que abre a paleta, em vez de filtrar a nav no lugar.',
+        'The search field at the top of the sidebar became the affordance for ⌘K: a read-only field that opens the palette, instead of filtering the nav in place.',
       points: [
         {
-          term: 'O que a paleta carrega',
-          text: 'a navegação inteira (mesmos grupos e labels do rail) mais os comandos de app, com os valores namespaced para o handler distinguir navegar de executar.'
+          term: 'What the palette carries',
+          text: 'the whole navigation (the same groups and labels as the rail) plus the app commands, with namespaced values so the handler can tell navigating from executing.'
         },
         {
-          term: 'Funciona com o rail recolhido',
-          text: 'a paleta teleporta para o body, então não depende da sidebar estar presente.'
+          term: 'Works with the rail collapsed',
+          text: 'the palette teleports to the body, so it does not depend on the sidebar being present.'
         },
         {
-          term: 'Um único dono do atalho',
-          text: 'a cópia da sidebar dentro do drawer mobile recebe o atalho vazio, para o ⌘K nunca abrir duas paletas ao mesmo tempo.'
+          term: 'A single owner for the shortcut',
+          text: 'the copy of the sidebar inside the mobile drawer gets an empty shortcut, so ⌘K never opens two palettes at once.'
         }
       ],
-      links: [{ label: 'Abra e tecle ⌘K', path: '/home' }]
+      links: [{ label: 'Open it and press ⌘K', path: '/home' }]
     },
     {
       id: 'tenancy',
-      title: '4. Cadeia Organization / Account / Workspace',
+      title: '4. Organization / Account / Workspace chain',
       summary:
-        'O header global passou a carregar a cadeia de identidade inteira — Azion / Organization / Account / Workspace — separada da localização por um filete, e só então o breadcrumb.',
+        'The global header now carries the entire identity chain — Azion / Organization / Account / Workspace — separated from location by a hairline, and only then the breadcrumb.',
       points: [
         {
-          term: 'Identidade ≠ localização',
-          text: 'a cadeia responde “por quem estou atuando”; o breadcrumb responde “onde estou”. Por isso identidade saiu do rail e subiu para o header: ela é global e não pode desaparecer quando o rail recolhe.'
+          term: 'Identity ≠ location',
+          text: 'the chain answers “who am I acting as”; the breadcrumb answers “where am I”. That is why identity left the rail and moved up to the header: it is global and cannot disappear when the rail collapses.'
         },
         {
-          term: 'Três níveis, três perguntas',
-          text: 'a organização é a quem você pertence, a account é a infraestrutura que você opera, o workspace é a fatia dela que você está olhando.'
+          term: 'Three levels, three questions',
+          text: 'the organization is who you belong to, the account is the infrastructure you operate, the workspace is the slice of it you are looking at.'
         },
         {
-          term: 'Degradação definida',
-          text: 'abaixo de md o workspace é o primeiro elo a sair (três marcas mais o hamburger e as ações não caberiam); abaixo de lg o breadcrumb dá lugar, porque a página repete o último crumb e a cadeia não se repete em lugar nenhum.'
+          term: 'Defined degradation',
+          text: 'below md the workspace is the first link to go (three marks plus the hamburger and the actions would not fit); below lg the breadcrumb gives way, because the page repeats the last crumb and the chain is not repeated anywhere.'
         },
         {
-          term: 'Accent por organização',
-          text: 'é o único lugar em que um tenant se colore, e existe para o operador que vive em três organizações distingui-las antes de ler um caractere.'
+          term: 'Accent per organization',
+          text: 'it is the only place a tenant takes on color, and it exists so the operator who lives in three organizations can tell them apart before reading a single character.'
         }
       ],
-      links: [{ label: 'Cadeia no header', path: '/home' }]
+      links: [{ label: 'Chain in the header', path: '/home' }]
     },
     {
       id: 'onboarding',
-      title: '5. Onboarding — a organização nasce no signup',
+      title: '5. Onboarding — the organization is born at signup',
       summary:
-        'O /signup/personalize deixou de existir e virou /signup/onboarding: uma tela única, onde a primeira organização passa a existir. Ela nasce aqui porque um usuário não pode estar em lugar nenhum — se não fosse criada com a conta, o console abriria num empty state cuja única ação é o que o signup deveria ter feito.',
+        '/signup/personalize stopped existing and became /signup/onboarding: a single screen, where the first organization comes into being. It is born here because a user cannot be nowhere — if it were not created with the account, the console would open on an empty state whose only action is what signup should have done.',
       points: [
         {
-          term: 'Três decisões',
-          text: 'o nome do usuário, o nome da organização — pergunta separada, porque uma empresa não se chama como o seu primeiro usuário, e ecoar um no outro lê como bug na primeira vez que divergem — e a marca (accent). Mais additional data, opcional.'
+          term: 'Three decisions',
+          text: 'the user name, the organization name — asked separately, because a company is not named after its first user, and echoing one into the other reads as a bug the first time they diverge — and the brand (accent). Plus additional data, optional.'
         },
         {
-          term: 'O que não é perguntado',
-          text: 'o primeiro workspace (nasce como “My Workspace” e é renomeado depois, mas aparece no wire, porque o console realmente abre escopado nele), o owner e o status. São consequência: quem cria é owner e primeiro Organization User, e a org nasce ativa.'
+          term: 'What is not asked',
+          text: 'the first workspace (born as “My Workspace” and renamed later, but shown in the wire, because the console really does open scoped to it), the owner, and the status. They are consequences: whoever creates is owner and first Organization User, and the org is born active.'
         },
         {
-          term: 'Dois caminhos, um fim',
-          text: 'o signup por e-mail cai aqui pelo link de verificação; um provedor social — que autentica e atesta o endereço — vem direto, pulando a verificação. O lock é a união das duas flags: só o controle pressionado mostra loading, e nenhum segundo caminho começa enquanto um está em voo.'
+          term: 'Two paths, one end',
+          text: 'email signup lands here through the verification link; a social provider — which authenticates and vouches for the address — comes straight in, skipping verification. The lock is the union of both flags: only the pressed control shows loading, and no second path starts while one is in flight.'
         },
         {
-          term: 'O wire',
-          text: 'ao lado do formulário, o console desenhado como wireframe, com as partes que o formulário decide renderizadas de verdade e todo o resto em cinza. “Organization name” é abstrato; “Azion / Acme Inc.” num header não é. E o wire nunca pode parecer uma tela usável, senão o usuário lê como produto carregando e espera.'
+          term: 'The wire',
+          text: 'beside the form, the console drawn as a wireframe, with the parts the form decides rendered for real and everything else in gray. “Organization name” is abstract; “Azion / Acme Inc.” in a header is not. And the wire can never look like a usable screen, or the user reads it as a product loading and waits.'
         }
       ],
       links: [
         { label: 'Onboarding', path: '/signup/onboarding' },
-        { label: 'Sign up (caminho social)', path: '/signup' }
+        { label: 'Sign up (social path)', path: '/signup' }
       ]
     },
     {
       id: 'create-organization',
-      title: '6. Criar organização de dentro do console',
+      title: '6. Creating an organization from inside the console',
       summary:
-        'Organizações seguintes são criadas deliberadamente, em /organizations/new, pela entrada New organization do switcher do header. As demais chegam por convite — é isso que faz o Switch Account existir.',
+        'Subsequent organizations are created deliberately, at /organizations/new, through the New organization entry in the header switcher. The rest arrive by invitation — that is what makes Switch Account exist.',
       points: [
         {
-          term: 'Página, não modal',
-          text: 'pelo mesmo motivo de todo create de módulo: tem começo e fim, e a URL precisa ser linkável e segura no botão voltar. Shell de criação focada, sem sidebar.'
+          term: 'A page, not a modal',
+          text: 'for the same reason as every module create: it has a beginning and an end, and the URL has to be linkable and safe under the back button. A focused creation shell, no sidebar.'
         },
         {
-          term: 'Uma forma só',
-          text: 'roda o mesmo createOrganization do onboarding, então uma organização tem a mesma forma por qualquer porta que tenha entrado: owner, status ativo, um workspace.'
+          term: 'One single shape',
+          text: 'it runs the same createOrganization as onboarding, so an organization has the same shape whichever door it came in through: owner, active status, one workspace.'
         },
         {
-          term: 'Criar também entra',
-          text: 'o fluxo termina na home, não de volta onde começou — o escopo mudou, e voltar para uma página ainda mostrando as linhas da organização anterior seria mentira.'
+          term: 'Creating also enters',
+          text: 'the flow ends on home, not back where it started — the scope changed, and returning to a page still showing the previous organization rows would be a lie.'
         },
         {
-          term: 'Required ≠ conflito',
-          text: 'vazio revela o required âmbar; um nome que colide com organização da qual o usuário já participa é o invalid vermelho, porque conflito não é omissão.'
+          term: 'Required ≠ conflict',
+          text: 'empty reveals the amber required; a name that collides with an organization the user already belongs to is the red invalid, because a conflict is not an omission.'
         },
         {
-          term: 'Seletor de marca compartilhado',
-          text: 'os dois fluxos usam o mesmo picker, com swatches em vez de previews da arte gerada: a marca é gerada a partir do nome, então opções pintadas com o nome vivo repintariam a cada tecla. A cor é a escolha; a arte é assunto do nome.'
+          term: 'Shared brand picker',
+          text: 'both flows use the same picker, with swatches instead of previews of the generated art: the brand is generated from the name, so options painted with the live name would repaint on every keystroke. The color is the choice; the art is the name business.'
         }
       ],
       links: [{ label: 'Create Organization', path: '/organizations/new' }]
     },
     {
       id: 'filters',
-      title: '7. Filtro unificado nas listagens',
-      summary:
-        'Todas as listagens passaram a narrar do mesmo jeito, com duas decisões.',
+      title: '7. Unified filter across listings',
+      summary: 'Every listing now narrates the same way, on two decisions.',
       points: [
         {
-          term: 'Seletor por coluna, nunca construtor',
-          text: 'são as colunas que decidem os campos: cada coluna enumerável ganha um Select múltiplo, a coluna de data ganha um date picker de intervalo, e as colunas de texto livre ficam com a busca em vez de um campo cada.'
+          term: 'A picker per column, never a query builder',
+          text: 'the columns decide the fields: each enumerable column gets a multi Select, the date column gets a range date picker, and the free-text columns are left to search instead of a field each.'
         },
         {
-          term: 'Tudo atrás de um popover',
-          text: 'um IconButton com badge de contagem, à esquerda da busca. Antes eram quatro selects sempre visíveis competindo com a busca e com as ações numa banda de 40px: a busca — o controle que as pessoas de fato usam — era a primeira a perder largura, e uma quinta coluna não tinha para onde ir.'
+          term: 'Everything behind a popover',
+          text: 'an IconButton with a count badge, to the left of search. Before there were four always-visible selects competing with search and with the actions in a 40px band: search — the control people actually use — was the first to lose width, and a fifth column had nowhere to go.'
         },
         {
-          term: 'Aplica ao escolher',
-          text: 'não há draft nem Apply: cada seletor é independentemente significativo, então adiar a aplicação só somaria um passo e uma segunda cópia do estado. O rodapé carrega o que o painel realmente deve — desfazer tudo de uma vez, e a saída.'
+          term: 'Applies on pick',
+          text: 'there is no draft and no Apply: each picker is independently meaningful, so deferring application would only add a step and a second copy of the state. The footer carries what the panel really owes — undo everything at once, and the way out.'
         },
         {
-          term: 'O badge é o que salva',
-          text: 'um filtro que você não vê é um filtro que você esquece que ligou — a contagem no gatilho é o que impede um filtro recolhido de virar um filtro esquecido.'
+          term: 'The badge is what saves you',
+          text: 'a filter you cannot see is a filter you forget you turned on — the count on the trigger is what keeps a collapsed filter from becoming a forgotten one.'
         }
       ],
       links: [
@@ -236,191 +234,205 @@
     },
     {
       id: 'field-error',
-      title: '8. Retorno de erro em campos',
+      title: '8. Reporting errors on fields',
       summary:
-        'Cenário: referência obsoleta na criação. Dois usuários no mesmo módulo; o segundo deleta o Edge Connector que o primeiro acabou de selecionar. O navegador do primeiro nunca é avisado, e o erro só aparece no submit.',
+        'Scenario: a stale reference during creation. Two users in the same module; the second deletes the Edge Connector the first just selected. The first user browser is never told, and the error only surfaces on submit.',
       table: {
-        head: ['Falha', 'Onde é reportada'],
+        head: ['Failure', 'Where it is reported'],
         rows: [
-          ['Input vazio ou malformado (client-side)', 'no próprio campo — required âmbar / invalid vermelho'],
-          ['Request falhou, sem vínculo com campo (5xx)', 'toast de erro com Retry'],
-          ['Request rejeitado, escopado a um campo', 'Message dentro da seção que o contém']
+          [
+            'Empty or malformed input (client-side)',
+            'on the field itself — amber required / red invalid'
+          ],
+          ['Request failed, tied to no field (5xx)', 'error toast with Retry'],
+          ['Request rejected, scoped to one field', 'Message inside the section that holds it']
         ]
       },
       points: [
         {
-          term: 'Por que não toast no terceiro caso',
-          text: 'o toast se dispensa e não aponta para lugar nenhum, enquanto a recuperação está em um Select, seis seções abaixo.'
+          term: 'Why not a toast in the third case',
+          text: 'a toast dismisses itself and points nowhere, while the recovery sits in a Select six sections down.'
         },
         {
-          term: 'Âncora posicional',
-          text: 'o formulário é longo de propósito para a recuperação ser real: quando a rejeição chega, a seção com erro é rolada até o topo, respeitando prefers-reduced-motion. O Message entra animando altura, então nada abaixo salta.'
+          term: 'Positional anchor',
+          text: 'the form is long on purpose so the recovery is real: when the rejection arrives, the section holding the error is scrolled to the top, respecting prefers-reduced-motion. The Message animates its height in, so nothing below jumps.'
         },
         {
-          term: 'Invalid, não required',
-          text: 'o valor está preenchido, só não é mais válido — então o campo assume o vermelho, nunca o prompt âmbar.'
+          term: 'Invalid, not required',
+          text: 'the value is filled in, it is just no longer valid — so the field takes the red, never the amber prompt.'
         }
       ],
       links: [{ label: 'Error validation', path: '/forms/error-validation' }]
     },
     {
       id: 'async-action',
-      title: '9. Ação assíncrona com erro e sucesso',
+      title: '9. Async action with error and success',
       summary:
-        'O cenário oposto: uma ação que sobrevive à tela (um deploy de ~30s), e como a falha encontra um usuário que já saiu dali.',
+        'The opposite scenario: an action that outlives the screen (a ~30s deploy), and how the failure finds a user who has already left.',
       table: {
-        head: ['A falha chega…', 'Reportar em…'],
+        head: ['The failure arrives…', 'Report it in…'],
         rows: [
-          ['com o usuário no formulário, escopada a um campo', 'Message na seção + invalid no campo'],
-          ['depois que ele saiu, de um job em background', 'toast — a única superfície global']
+          [
+            'with the user on the form, scoped to one field',
+            'Message in the section + invalid on the field'
+          ],
+          ['after they left, from a background job', 'toast — the only global surface']
         ]
       },
       points: [
         {
-          term: 'A execução não vive no componente',
-          text: 'timer, estado e toast ficam em escopo de módulo, então navegar para outra tela não cancela o deploy: o unmount da página não é um evento que o deploy escuta.'
+          term: 'The execution does not live in the component',
+          text: 'timer, state, and toast sit at module scope, so navigating to another screen does not cancel the deploy: the page unmount is not an event the deploy listens to.'
         },
         {
-          term: 'O progresso é um toast de loading',
-          text: 'spinner, sem auto-dismiss — a única coisa que viaja com o usuário pelo console inteiro.'
+          term: 'Progress is a loading toast',
+          text: 'a spinner, with no auto-dismiss — the one thing that travels with the user across the whole console.'
         },
         {
-          term: 'O erro é permanente e closable',
-          text: 'uma falha que o usuário não presenciou não pode expirar sem ser vista; e o que não expira precisa poder ser fechado à mão. A anatomia carrega as duas saídas (Redeploy e um atalho para Deployments), porque uma vez dispensado o toast era a única referência à falha na tela.'
+          term: 'The error is permanent and closable',
+          text: 'a failure the user did not witness cannot expire unseen; and what does not expire has to be closable by hand. The anatomy carries both exits (Redeploy and a shortcut to Deployments), because once dismissed the toast was the only reference to the failure on screen.'
         },
         {
-          term: 'O card é uma vista, não o dono',
-          text: 'ele lê o ponto atual da execução, então quem volta no meio do deploy pega os logs onde eles realmente estão em vez de vê-los rebobinar.'
+          term: 'The card is a view, not the owner',
+          text: 'it reads the current point of the execution, so whoever comes back mid-deploy picks up the logs where they actually are instead of watching them rewind.'
         }
       ],
       links: [
-        { label: 'Sucesso', path: '/forms/async-deployment?outcome=success' },
-        { label: 'Erro', path: '/forms/async-deployment?outcome=error' }
+        { label: 'Success', path: '/forms/async-deployment?outcome=success' },
+        { label: 'Error', path: '/forms/async-deployment?outcome=error' }
       ]
     },
     {
       id: 'buttons',
-      title: '10. Posição e tamanho de botões, por tipo de página',
+      title: '10. Button position and size, by page type',
       summary:
-        'A regra passou a ser derivada de como a página é nomeada, não do módulo. Onde as Tabs existem, os botões são relativos a elas; na listagem, o PageHeading sai e sobra o botão de criar no nível da tabela com filtros.',
+        'The rule is now derived from how the page is named, not from the module. Where Tabs exist, buttons are relative to them; on a listing the PageHeading goes and what remains is the create button at the level of the table with its filters.',
       points: [
         {
-          term: 'Listagem primária sem tabs',
-          text: 'sem PageHeading — o nome do módulo já é o crumb do header, e um h1 repetindo-o só empurra a tabela e come a primeira linha acima da dobra. A página abre com o que o usuário veio fazer: narrowing à esquerda (onde o olho começa), ações à direita, tabela abaixo, as duas como uma banda. Os controles ficam fora do toolbar da tabela porque pertencem à página: o botão de criar age sobre o módulo, não sobre a tabela.'
+          term: 'Primary listing without tabs',
+          text: 'no PageHeading — the module name is already the header crumb, and an h1 repeating it only pushes the table down and eats the first row above the fold. The page opens with what the user came to do: narrowing on the left (where the eye starts), actions on the right, table below, the two reading as one band. The controls sit outside the table toolbar because they belong to the page: the create button acts on the module, not on the table.'
         },
         {
-          term: 'Listagem primária com tabs',
-          text: 'as tabs são a nav de 2º nível e carregam as ações no próprio slot, à direita. Cada tab traz o seu conjunto de controles, porque tabs diferentes narram sujeitos diferentes e criam coisas diferentes. A tab ativa mora na URL, então é recarregável e linkável. A linha é centralizada, não alinhada pela base: um botão de 32px centraliza contra itens de 30px — alinhar as bases faz o botão pender 2px e obriga um empurrão manual.'
+          term: 'Primary listing with tabs',
+          text: 'the tabs are the 2nd-level nav and carry the actions in their own slot, on the right. Each tab brings its own set of controls, because different tabs narrate different subjects and create different things. The active tab lives in the URL, so it is reloadable and linkable. The row is centered, not baseline-aligned: a 32px button centers against 30px items — aligning baselines makes the button hang 2px low and forces a manual nudge.'
         },
         {
-          term: 'Páginas internas',
-          text: 'detalhe não tem PageHeading: as tabs são a borda inferior do header e a ação principal acompanha a barra. A ação pode ser da tab e não da página (o Deploy vive na tab Build), declarada junto dela e sabendo o próprio estado pendente.'
+          term: 'Inner pages',
+          text: 'a detail page has no PageHeading: the tabs are the bottom edge of the header and the primary action rides the bar. The action can belong to the tab rather than the page (Deploy lives on the Build tab), declared alongside it and aware of its own pending state.'
         },
         {
-          term: 'Escala do título, quando existe',
-          text: 'amarrada à profundidade de nav, não ao módulo: medium na listagem de 1º nível, small de detalhe para baixo (o breadcrumb já carrega o contexto), large reservado à página cujo título é o conteúdo. Um TabView sob uma barra de nav de 2º nível mantém seu título: a barra é navegação, não heading.'
+          term: 'Title scale, when there is one',
+          text: 'tied to nav depth, not to the module: medium on a 1st-level listing, small from detail downward (the breadcrumb already carries the context), large reserved for the page whose title is the content. A TabView under a 2nd-level nav bar keeps its title: the bar is navigation, not a heading.'
         }
       ],
       table: {
-        head: ['Contexto', 'Heading', 'Onde ficam os botões'],
+        head: ['Context', 'Heading', 'Where the buttons go'],
         rows: [
-          ['Listagem 1º nível, sem tabs', 'nenhum (o crumb nomeia)', 'no nível da tabela, junto do filtro e da busca'],
-          ['Listagem 1º nível, com tabs', 'nenhum', 'na barra de tabs; cada tab tem as suas'],
-          ['Página interna (detalhe)', 'nenhum (tabs full-bleed)', 'na barra de tabs; a ação pode ser da tab'],
-          ['Settings / formulário', 'PageHeading small', 'no rodapé do formulário'],
-          ['Página cujo título é o conteúdo', 'PageHeading large', 'junto do conteúdo']
+          [
+            '1st-level listing, no tabs',
+            'none (the crumb names it)',
+            'at table level, next to the filter and search'
+          ],
+          ['1st-level listing, with tabs', 'none', 'on the tab bar; each tab has its own'],
+          [
+            'Inner page (detail)',
+            'none (full-bleed tabs)',
+            'on the tab bar; the action can belong to the tab'
+          ],
+          ['Settings / form', 'PageHeading small', 'in the form footer'],
+          ['Page whose title is the content', 'PageHeading large', 'next to the content']
         ]
       },
       links: [
-        { label: 'Sem tabs', path: '/applications' },
-        { label: 'Com tabs', path: '/deployments' },
-        { label: 'Interna com tabs', path: '/applications/1784552864?tab=build' },
+        { label: 'No tabs', path: '/applications' },
+        { label: 'With tabs', path: '/deployments' },
+        { label: 'Inner page with tabs', path: '/applications/1784552864?tab=build' },
         { label: 'Settings', path: '/account' }
       ]
     },
     {
       id: 'sidebar-drag',
-      title: '11. Sidebar — recolher agora é um gesto de drag',
+      title: '11. Sidebar — collapsing is now a drag gesture',
       summary:
-        'O rail deixou de ter apenas um toggle: a borda direita é um handle focável, e o arraste é o gesto. Zero biblioteca — pointer events nativos.',
+        'The rail no longer has only a toggle: its right edge is a focusable handle, and dragging is the gesture. Zero libraries — native pointer events.',
       points: [
         {
-          term: 'Redimensionar',
-          text: 'arraste entre 256px e 408px. Os limites vêm de tokens lidos em runtime, não de números mágicos.'
+          term: 'Resize',
+          text: 'drag between 256px and 408px. The bounds come from tokens read at runtime, not from magic numbers.'
         },
         {
-          term: 'Recolher',
-          text: 'puxe 56px além do mínimo e o rail sai do layout em vez de travar no mínimo — o puxão é o collapse, e a largura que ele tinha é guardada para quando voltar.'
+          term: 'Collapse',
+          text: 'pull 56px past the minimum and the rail leaves the layout instead of sticking at the minimum — the pull is the collapse, and the width it had is kept for when it comes back.'
         },
         {
-          term: 'Reabrir',
-          text: 'puxe a borda de volta: enquanto o ponteiro está pressionado o rail espia, crescendo sob o cursor com a borda exatamente sob o dedo, e commita ao passar do snap. Abrir parece pegar o rail na aresta e trazê-lo, não apertar um botão que revela um painel.'
+          term: 'Reopen',
+          text: 'pull the edge back: while the pointer is held the rail peeks, growing under the cursor with the edge exactly under the finger, and commits once it passes the snap. Opening feels like grabbing the rail by its edge and bringing it out, not pressing a button that reveals a panel.'
         },
         {
-          term: 'Teclado e persistência',
-          text: 'setas nudge de 16px, esquerda além do snap recolhe, direita restaura, duplo clique recolhe. Largura e estado sobrevivem à navegação e ao reload. A linha do handle só aparece em hover, foco ou arraste, para o rail ler como aresta lisa em repouso.'
+          term: 'Keyboard and persistence',
+          text: 'arrows nudge by 16px, left past the snap collapses, right restores, double-click collapses. Width and state survive navigation and reload. The handle line only appears on hover, focus, or drag, so the rail reads as a clean edge at rest.'
         }
       ],
-      links: [{ label: 'Arraste a borda do rail', path: '/home' }]
+      links: [{ label: 'Drag the rail edge', path: '/home' }]
     },
     {
       id: 'variables',
-      title: '12. Variables — drawer de criação com import de .env',
+      title: '12. Variables — creation drawer with .env import',
       summary:
-        'A listagem carregava o formulário de criação dentro do próprio arquivo. O formulário saiu para um drawer dedicado e a página ficou só com o que uma lista possui: os registros, o narrowing, e anexar o que o drawer criou.',
+        'The listing carried the creation form inside its own file. The form moved out into a dedicated drawer and the page kept only what a list owns: the records, the narrowing, and attaching whatever the drawer created.',
       points: [
         {
-          term: 'Formulário plano',
-          text: 'um trio Key / Value / Note repetido acima de um divider full-bleed, e abaixo dele as três configurações. Com um grupo repetido e três settings não há o que um título de seção desambiguar — o divider já lê como a fronteira entre o que as variáveis são e como são guardadas.'
+          term: 'A flat form',
+          text: 'a Key / Value / Note trio repeated above a full-bleed divider, and the three settings below it. With one repeated group and three settings there is nothing for a section title to disambiguate — the divider already reads as the boundary between what the variables are and how they are stored.'
         },
         {
-          term: 'Variável raramente vem sozinha',
-          text: 'o trio é um repeater: Add Another acrescenta um vazio e foca o Key, cada linha além da primeira pode ser removida, e a lista faz morph nas duas ações, cronometrada pelos tokens de animação.'
+          term: 'A variable rarely comes alone',
+          text: 'the trio is a repeater: Add Another appends an empty one and focuses the Key, every row past the first can be removed, and the list morphs on both actions, timed by the animation tokens.'
         },
         {
-          term: 'Duas entradas em massa, um parser',
-          text: 'o Import do rodapé lê um .env escolhido, e colar o conteúdo de um arquivo em qualquer input de Key expande em uma linha por par — em vez de despejar o arquivo inteiro numa única key, que é exatamente o que a dica do rodapé promete.'
+          term: 'Two bulk entries, one parser',
+          text: 'Import in the footer reads a chosen .env, and pasting a file body into any Key input expands into one row per pair — instead of dumping the whole file into a single key, which is exactly what the footer hint promises.'
         },
         {
-          term: 'Tolerante, mas honesto',
-          text: 'lê o que um .env real tem (prefixo export, aspas, comentários) e pula o que não consegue ler como par, para uma linha perdida nunca virar variável batizada com meia frase. Sem expansão de variável e sem valores multi-linha: o formulário não faz round-trip de nenhum dos dois, e suportar pela metade em silêncio seria pior que pular.'
+          term: 'Tolerant, but honest',
+          text: 'it reads what a real .env has (export prefix, quotes, comments) and skips what it cannot read as a pair, so a stray line never becomes a variable named after half a sentence. No variable expansion and no multi-line values: the form round-trips neither, and half-supporting them in silence would be worse than skipping.'
         },
         {
-          term: 'Sem Cancel',
-          text: 'o X do painel, o overlay e o Escape já fecham; um segundo descarte no rodapé só competiria com o Save pelo olhar.'
+          term: 'No Cancel',
+          text: 'the panel X, the overlay, and Escape already close it; a second discard in the footer would only compete with Save for attention.'
         }
       ],
       links: [{ label: 'Variables → Create Variable', path: '/variables' }]
     },
     {
       id: 'submit-lock',
-      title: '13. Estado de submit — o que a tela diz enquanto espera',
+      title: '13. Submit state — what the screen says while it waits',
       summary:
-        'Um formulário travado por 900ms de request tinha duas telas dizendo a coisa errada. A regra passou a ser uma: durante a espera os campos ficam desabilitados, e nada que descreva um campo que o usuário não pode operar continua na tela.',
+        'A form locked by a 900ms request had two screens saying the wrong thing. The rule is now one: while waiting the fields are disabled, and nothing describing a field the user cannot operate stays on screen.',
       points: [
         {
-          term: 'Desabilitado sim, helper não',
-          text: 'no Sign Up os dois campos vão a :disabled com o escopo, mas as linhas de helper são retiradas enquanto trava. Uma frase de requisito ("mínimo 8 caracteres") sob um campo que não aceita digitação não instrui nada, e o :loading do botão já é a mensagem de que a espera existe.'
+          term: 'Disabled yes, helper no',
+          text: 'on Sign Up both fields go :disabled with the scope, but the helper lines are removed while it is locked. A requirement line ("minimum 8 characters") under a field that accepts no typing instructs nothing, and the button :loading is already the message that a wait is happening.'
         },
         {
-          term: 'Trava transitória não é cadeado',
-          text: 'FieldPassword e FieldSelect colocam disabled no TOPO da própria cadeia de helper: com o campo desabilitado a linha ganha um cadeado e, no caso do password, passa por cima do invalid — um erro vermelho virava texto cinza com cadeado por 900ms. Cadeado diz "travado para sempre"; a espera de um request não é isso.'
+          term: 'A transient lock is not a padlock',
+          text: 'FieldPassword and FieldSelect put disabled at the TOP of their own helper chain: with the field disabled the line gains a padlock and, in the password case, overrides invalid — a red error turned into gray padlocked text for 900ms. A padlock says "locked forever"; waiting on a request is not that.'
         },
         {
-          term: 'Por isso o password é composto',
-          text: 'o campo de senha do Sign Up passou a ser InputPassword + HelperText em vez de FieldPassword: pedir helper vazio ao FieldPassword faz ele inventar "This field is locked." no lugar. Composto por primitivas, quem decide o que descreve o campo é a tela.'
+          term: 'Which is why the password is composed',
+          text: 'the Sign Up password field became InputPassword + HelperText instead of FieldPassword: asking FieldPassword for an empty helper makes it invent "This field is locked." in its place. Composed from primitives, the screen decides what describes the field.'
         },
         {
-          term: 'Nada aponta para o que não existe',
-          text: 'o aria-describedby dos dois campos sai junto com a linha, então nenhum input referencia um elemento fora do DOM enquanto o escopo está travado.'
+          term: 'Nothing points at what does not exist',
+          text: 'the aria-describedby of both fields leaves with the line, so no input references an element outside the DOM while the scope is locked.'
         },
         {
-          term: 'Sign In segue o mesmo divisor do Sign Up',
-          text: 'o filete desenhado à mão entre e-mail e provedores sociais virou o Divider do pacote com label "or", posicionado ENTRE os dois caminhos — antes o botão Continue with Email ficava do lado social do separador, o que fazia o "or" separar a coisa errada.'
+          term: 'Sign In follows the same divider as Sign Up',
+          text: 'the hand-drawn hairline between email and social providers became the package Divider with the label "or", positioned BETWEEN the two paths — before, the Continue with Email button sat on the social side of the separator, which made the "or" separate the wrong thing.'
         },
         {
-          term: 'Create Organization — a coluna de texto encolheu',
-          text: 'as quatro bandas passaram de 50/50 para 40/60 (guia à esquerda, campos à direita), com minmax(0,…) em cada trilha para um nome longo sem espaço não estourar a coluna.'
+          term: 'Create Organization — the text column shrank',
+          text: 'the four bands moved from 50/50 to 40/60 (guide on the left, fields on the right), with minmax(0,…) on each track so a long unbroken name cannot blow out the column.'
         }
       ],
       links: [
@@ -431,45 +443,45 @@
     },
     {
       id: 'boundary-measure',
-      title: '14. Boundary e measure — o inset não sai da medida',
+      title: '14. Boundary and measure — the inset does not come out of the measure',
       summary:
-        'Deployments lia 1572px de conteúdo onde Workloads lia 1615px, na mesma viewport: a única listagem do console numa largura que nenhuma outra usava. A causa não era da página — era a ordem entre BOUNDARY e MEASURE, e valia para todas as páginas que aplicam o próprio boundary. Uma regra no sistema de layout no lugar de 24 correções de página.',
+        'Deployments read 1572px of content where Workloads read 1615px, in the same viewport: the one listing in the console at a width no other used. The cause was not the page — it was the order between BOUNDARY and MEASURE, and it held for every page that applies its own boundary. One rule in the layout system instead of 24 page fixes.',
       points: [
         {
-          term: 'A measure descreve CONTEÚDO',
-          text: 'numa página `padded` o AppLayout põe o inset no scroll box, FORA do bloco com o cap — então --layout-measure chega inteira como largura de conteúdo. Em toda página :padded="false" (detalhe com tabs, a listagem de Deployments, os create flows, os formulários) o boundary é aplicado no MESMO bloco da measure, e com box-sizing: border-box o cap engole o inset: 1620px de cap menos 24px de cada lado = 1572px de conteúdo. A measure passava a descrever outra coisa que não conteúdo, que é o único trabalho dela.'
+          term: 'The measure describes CONTENT',
+          text: 'on a `padded` page AppLayout puts the inset on the scroll box, OUTSIDE the block carrying the cap — so --layout-measure arrives whole as content width. On every :padded="false" page (detail with tabs, the Deployments listing, the create flows, the forms) the boundary is applied on the SAME block as the measure, and with box-sizing: border-box the cap swallows the inset: 1620px of cap minus 24px per side = 1572px of content. The measure was describing something other than content, which is its only job.'
         },
         {
-          term: 'Quando o boundary viaja junto, o cap cresce o inset',
-          text: 'cada classe de coluna declara a sua medida em --layout-column-measure, e uma única regra soma o inset ao cap quando o bloco também carrega o boundary. As duas formas passam a resolver para a MESMA coluna de conteúdo em qualquer viewport — abaixo da measure ambas são 100% menos o mesmo inset, acima dela ambas são a measure, centradas no mesmo eixo. Uma página pode ganhar ou perder o próprio boundary (ganhar uma barra de tabs, virar padded) sem mudar de largura, e nenhuma página precisa saber em qual forma está.'
+          term: 'When the boundary travels along, the cap grows by the inset',
+          text: 'each column class declares its measure in --layout-column-measure, and a single rule adds the inset to the cap when the block also carries the boundary. Both forms now resolve to the SAME content column at any viewport — below the measure both are 100% minus the same inset, above it both are the measure, centered on the same axis. A page can gain or lose its own boundary (gain a tab bar, become padded) without changing width, and no page needs to know which form it is in.'
         },
         {
-          term: 'A barra sticky entrou no sistema',
-          text: 'os dez rodapés de ação escreviam px-[var(--layout-boundary-inline)] à mão: lia o token, mas ficava fora do sistema — nada amarrava o inset da barra ao da coluna que ela submete. Virou .layout-boundary-inline, uma classe que a regra da measure vê, então a barra alinha com o corpo por construção em vez de por coincidência (medido: corpo e barra no mesmo left/width nas seis páginas de criação e nos três formulários).'
+          term: 'The sticky bar joined the system',
+          text: 'the ten action footers wrote px-[var(--layout-boundary-inline)] by hand: it read the token, but sat outside the system — nothing tied the bar inset to that of the column it submits. It became .layout-boundary-inline, a class the measure rule sees, so the bar aligns with the body by construction rather than by coincidence (measured: body and bar at the same left/width across the six creation pages and the three forms).'
         },
         {
-          term: 'Deployments manteve a marcação, mudou a geometria',
-          text: 'a barra de tabs segue full-bleed e o bloco segue com as duas classes, como toda página :padded="false" — o que mudou foi a largura resolvida. Medido a 1920px: listagens padded, listagem com tabs, detalhe com tabs e views de tab agora leem 281/1615 idênticos; a 2560px, 599/1620.'
+          term: 'Deployments kept its markup, changed its geometry',
+          text: 'the tab bar is still full-bleed and the block still carries both classes, like every :padded="false" page — what changed is the resolved width. Measured at 1920px: padded listings, listing with tabs, detail with tabs, and tab views now all read an identical 281/1615; at 2560px, 599/1620.'
         },
         {
-          term: 'Create Organization e Onboarding entraram na regra 13',
-          text: 'as duas telas que criam organização passaram a seguir "desabilitado sim, helper não": durante o request as linhas de guia saem e o aria-describedby sai com elas. No Onboarding isso também apagou os quatro "This field is locked." — a pendência registrada no item 13 — sem compor o select por primitivas: basta NÃO passar :disabled aos FieldSelect, porque o <fieldset :disabled> que envolve o formulário já bloqueia cada trigger (é um button nativo). O cadeado só aparecia porque o wrapper responde ao próprio prop disabled com uma linha de bloqueio permanente, para uma espera de 900ms.'
+          term: 'Create Organization and Onboarding joined rule 13',
+          text: 'the two screens that create an organization now follow "disabled yes, helper no": during the request the guide lines leave and aria-describedby leaves with them. On Onboarding that also erased the four "This field is locked." lines — the gap recorded in item 13 — without composing the select from primitives: it is enough NOT to pass :disabled to the FieldSelect, because the <fieldset :disabled> wrapping the form already blocks each trigger (it is a native button). The padlock only appeared because the wrapper answers its own disabled prop with a permanent blocking line, for a 900ms wait.'
         }
       ],
       table: {
-        head: ['Contexto (a 1920px)', 'Conteúdo antes', 'Conteúdo depois'],
+        head: ['Context (at 1920px)', 'Content before', 'Content after'],
         rows: [
-          ['Listagem sem tabs (padded)', '1615px', '1615px — referência, não mudou'],
-          ['Deployments (listagem com tabs)', '1572px', '1615px'],
-          ['Detalhe com tabs e views de tab', '1572px', '1615px'],
-          ['Settings e formulários', '976px', '1024px'],
-          ['Create flows (corpo e barra sticky)', '1144px', '1192px']
+          ['Listing without tabs (padded)', '1615px', '1615px — reference, unchanged'],
+          ['Deployments (listing with tabs)', '1572px', '1615px'],
+          ['Detail with tabs and tab views', '1572px', '1615px'],
+          ['Settings and forms', '976px', '1024px'],
+          ['Create flows (body and sticky bar)', '1144px', '1192px']
         ]
       },
       links: [
-        { label: 'Listagem com tabs', path: '/deployments' },
-        { label: 'Sem tabs (referência)', path: '/workloads' },
-        { label: 'Detalhe com tabs', path: '/applications/1784552864' },
+        { label: 'Listing with tabs', path: '/deployments' },
+        { label: 'Without tabs (reference)', path: '/workloads' },
+        { label: 'Detail with tabs', path: '/applications/1784552864' },
         { label: 'Create organization', path: '/organizations/new' },
         { label: 'Onboarding', path: '/signup/onboarding' }
       ]
@@ -484,11 +496,11 @@
       eyebrow="Console sample"
       title="Changelog"
       margin-bottom=""
-      description="O que mudou no sample do console — cada decisão com o link da tela onde ela está aplicada. Não é screenshot: os links abrem a app publicada, então o comportamento pode ser conferido no lugar onde vive."
+      description="What changed in the console sample — each decision with a link to the screen where it is applied. These are not screenshots: the links open the published app, so the behavior can be checked where it lives."
     >
       <template #actions>
         <Tag
-          :label="`Atualizado em ${UPDATED_AT}`"
+          :label="`Updated ${UPDATED_AT}`"
           severity="info"
         />
       </template>
@@ -560,7 +572,9 @@
 
         <!-- The screens. Relative paths, new tab: the reader keeps the changelog
              open while walking through what it describes. -->
-        <div class="flex flex-wrap items-center gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-xs)]">
+        <div
+          class="flex flex-wrap items-center gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-xs)]"
+        >
           <Link
             v-for="link in entry.links"
             :key="link.path"

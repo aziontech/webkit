@@ -78,7 +78,9 @@
           >
             <span v-if="row.kind === 'text'">Aa</span>
           </span>
-          <code class="truncate font-code text-body-sm text-[var(--text-default)]">{{ row.name }}</code>
+          <code class="truncate font-code text-body-sm text-[var(--text-default)]">{{
+            row.name
+          }}</code>
         </span>
       </template>
       <template #cell-description="{ value }">

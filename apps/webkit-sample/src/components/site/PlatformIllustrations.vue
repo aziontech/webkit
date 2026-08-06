@@ -1,315 +1,216 @@
 <script setup>
-  // "Da origem ao destino" — a six-panel platform showcase built in the same visual
-  // language as PlatformShowcase.vue: schematic routing graphs drawn entirely with
-  // theme tokens (no hex, no Tailwind palette), so both light and dark themes stay
-  // correct. Every scene shares one grammar — a ruled grid, an accent main line, gray
-  // branch connectors, accent commit nodes, and labeled chips — and each retells a
-  // different chapter of the Azion Web Platform: Version, Deploy, Network, AI, Secure
-  // and Observe.
+  // "From origin to destination" — six platform scenes retelling Build, Store, Protect, Observe and
+  // the release path, each composed from the webkit Illustration parts.
   //
-  // Accents use the theme's global `--color-<hue>-*` palettes (constant across themes,
-  // so text on the filled chips is `--color-base-white`); everything structural uses
-  // the semantic surface / border / text tokens. Coordinates are percentages so the
-  // chips stay pinned to the connector paths regardless of the panel's aspect ratio.
+  // This file used to carry its own illustration engine: ~200 lines of inline SVG, hand-rolled
+  // chips and nodes, and raw `--color-<hue>-500` palette tokens picked per scene. All of that
+  // now comes from `@aziontech/webkit/illustration`, so the scenes speak the same visual language
+  // as every other illustration in the system and follow light and dark for free. The per-scene
+  // hues are gone on purpose: the language has exactly three line roles — resting, active
+  // (brand), and accent — and a scene says what it means by which parts it lights, not by
+  // inventing a colour.
+  //
+  // Coordinates are percentages so the parts stay pinned to their connector paths regardless of
+  // the panel's aspect ratio.
+  import DeployExample from './DeployExample.vue'
+  import {
+    CardGrid,
+    SectionContainer,
+    SectionModule
+  } from './foundations/components/layout/index.js'
+  import IllustrationScene from './IllustrationScene.vue'
 
   defineProps({
     // When false, render only the bordered grid — no section max-width / padding
     // or heading — so a host page can supply its own frame (e.g. the Hub's
     // PageContainer + PageHeader). Framed (default) renders the standalone
     // home-page section with its own overline + heading.
-    framed: { type: Boolean, default: true }
+    framed: { type: Boolean, default: true },
+    // Keep only the closing pair — the drawn Deploy scene beside the deploy actually
+    // running — and drop the catalogue of six scenes with its heading. The home page
+    // wants the proof; the Hub, which documents the visual language itself, wants all
+    // six, so the scenes stay in this file rather than being deleted from it.
+    deployOnly: { type: Boolean, default: false }
   })
 
-  // The six ruled guide lines every panel shares (percent of the 0–100 viewBox).
-  const guideLines = [12, 26, 40, 55, 69, 83]
-
-  // Resolve an accent color from a hue name to its global token.
-  const accent = (hue, shade = 500) => `var(--color-${hue}-${shade})`
+  // The trunk every scene routes along. Scene geometry itself lives in
+  // IllustrationScene; this is only here because the scene data below quotes it.
+  const TRUNK_Y = 55
 
   const scenes = [
     {
       key: 'version',
       title: 'Version',
-      hue: 'orange',
-      main: { kind: 'line' },
+      icon: 'ai ai-deploy-pillar',
       nodes: [18, 26, 42, 60, 78],
-      connectors: [
-        { d: 'M30 55 C40 55 40 33 50 33 L64 33' },
-        { d: 'M42 55 C58 55 58 20 68 20 L84 20' },
-        { d: 'M22 55 C34 55 34 80 44 80 L60 80' }
+      branches: [
+        { left: 30, top: 33, width: 20, direction: 'up' },
+        { left: 44, top: 20, width: 24, direction: 'up' },
+        { left: 22, top: 55, width: 22, direction: 'down', to: 80 }
       ],
-      chips: [
-        { label: 'main', left: '8%', top: '55%', variant: 'primary' },
-        { label: 'feat/edge', left: '52%', top: '33%', variant: 'plain' },
-        { label: 'v2.4.0', left: '70%', top: '20%', variant: 'plain' },
-        { label: 'hotfix', left: '33%', top: '80%', variant: 'plain' }
+      pills: [
+        { label: 'main', left: 8, top: TRUNK_Y, active: true },
+        { label: 'feat/edge', left: 52, top: 33 },
+        { label: 'v2.4.0', left: 70, top: 20 },
+        { label: 'hotfix', left: 33, top: 80 }
       ],
-      lead: 'Mais rápido para publicar.',
-      body: 'Do código à API no ar em minutos — teste com segurança, promova quando quiser e reverta se precisar.'
+      lead: 'Faster to ship.',
+      body: 'From code to a live API in minutes. Test safely, promote when you choose, and roll back if you need to.'
     },
     {
       key: 'deploy',
       title: 'Deploy',
-      hue: 'green',
-      main: { kind: 'line' },
+      icon: 'ai ai-build-pillar',
       nodes: [16, 40, 64],
-      connectors: [{ d: 'M42 55 C54 55 54 33 64 33 L78 33' }],
-      chips: [
-        { label: 'build', left: '14%', top: '55%', variant: 'plain' },
-        { label: 'deploy', left: '42%', top: '55%', variant: 'plain' },
-        { label: 'live', left: '84%', top: '55%', variant: 'primary' },
-        { label: 'preview', left: '70%', top: '33%', variant: 'plain' }
+      branches: [{ left: 42, top: 33, width: 22, direction: 'up' }],
+      pills: [
+        { label: 'build', left: 14, top: TRUNK_Y },
+        { label: 'deploy', left: 42, top: TRUNK_Y },
+        { label: 'live', left: 84, top: TRUNK_Y, active: true },
+        { label: 'preview', left: 70, top: 33 }
       ],
-      lead: 'Publique uma vez.',
-      body: 'Um único deploy propaga o build para toda a borda global — sem cold starts, sem espera.'
+      lead: 'Publish once.',
+      body: 'A single deploy propagates the build across the whole global edge, with no cold starts and no waiting.'
     },
     {
       key: 'network',
       title: 'Network',
-      hue: 'blue',
-      main: { kind: 'line' },
+      icon: 'ai ai-edge-nodes',
       nodes: [12, 22],
-      connectors: [
-        { d: 'M42 55 C54 55 54 26 64 26 L78 26' },
-        { d: 'M40 55 C50 55 50 40 60 40 L74 40' },
-        { d: 'M40 55 C50 55 50 69 60 69 L74 69' },
-        { d: 'M42 55 C54 55 54 83 64 83 L78 83' }
+      branches: [
+        { left: 42, top: 26, width: 22, direction: 'up' },
+        { left: 40, top: 40, width: 20, direction: 'up' },
+        { left: 40, top: 55, width: 20, direction: 'down', to: 69 },
+        { left: 42, top: 55, width: 22, direction: 'down', to: 83 }
       ],
-      chips: [
-        { label: 'anycast', left: '30%', top: '55%', variant: 'primary' },
-        { label: 'gru', left: '80%', top: '26%', variant: 'plain' },
-        { label: 'iad', left: '76%', top: '40%', variant: 'plain' },
-        { label: 'fra', left: '76%', top: '69%', variant: 'plain' },
-        { label: 'gig', left: '80%', top: '83%', variant: 'plain' }
+      pills: [
+        { label: 'anycast', left: 30, top: TRUNK_Y, active: true },
+        { label: 'gru', left: 80, top: 26 },
+        { label: 'iad', left: 76, top: 40 },
+        { label: 'fra', left: 76, top: 69 },
+        { label: 'gig', left: 80, top: 83 }
       ],
-      lead: 'Sempre no ponto mais próximo.',
-      body: 'Roteamento anycast entrega cada requisição no PoP de menor latência, em toda a rede distribuída.'
+      lead: 'Always at the nearest point.',
+      body: 'Anycast routing delivers every request to the lowest-latency PoP, across the whole distributed network.'
     },
     {
       key: 'ai',
       title: 'AI',
-      hue: 'violet',
-      main: { kind: 'line' },
+      icon: 'ai ai-ask-azion',
       nodes: [12, 20],
-      connectors: [
-        { d: 'M40 55 C52 55 52 33 62 33 L76 33' },
-        { d: 'M46 55 C60 55 60 20 70 20 L84 20' },
-        { d: 'M40 55 C52 55 52 80 62 80 L76 80' }
+      branches: [
+        { left: 40, top: 33, width: 22, direction: 'up' },
+        { left: 46, top: 20, width: 24, direction: 'up' },
+        { left: 40, top: 55, width: 22, direction: 'down', to: 80 }
       ],
-      chips: [
-        { label: 'model', left: '28%', top: '55%', variant: 'primary' },
-        { label: 'embed', left: '66%', top: '33%', variant: 'plain' },
-        { label: 'rag', left: '74%', top: '20%', variant: 'plain' },
-        { label: 'agent', left: '66%', top: '80%', variant: 'plain' }
+      pills: [
+        { label: 'model', left: 28, top: TRUNK_Y, active: true },
+        { label: 'embed', left: 66, top: 33 },
+        { label: 'rag', left: 74, top: 20 },
+        { label: 'agent', left: 66, top: 80 }
       ],
-      lead: 'IA na mesma plataforma.',
-      body: 'Inferência, embeddings e agentes executados na borda, próximos ao usuário e aos seus dados.'
+      lead: 'AI on the same platform.',
+      body: 'Inference, embeddings, and agents running at the edge, close to the user and to your data.'
     },
     {
       key: 'secure',
       title: 'Secure',
-      hue: 'red',
-      main: { kind: 'split', at: 55, before: 'red', after: 'green' },
-      nodes: [14, 26, { x: 55, emphasis: true }],
-      connectors: [
-        { d: 'M55 55 C60 55 60 33 66 33 L78 33', stroke: 'red', dashed: true },
-        { d: 'M55 55 C62 55 62 20 70 20 L84 20', stroke: 'red', dashed: true },
-        { d: 'M55 55 C60 55 60 80 66 80 L78 80', stroke: 'red', dashed: true }
+      icon: 'ai ai-waf-rules',
+      nodes: [14, 26, 55],
+      // Threats leave the trunk and stop at a label; the trunk itself carries straight on.
+      branches: [
+        { left: 55, top: 33, width: 12, direction: 'up', kind: 'dashed' },
+        { left: 57, top: 20, width: 14, direction: 'up', kind: 'dashed' },
+        { left: 55, top: 55, width: 12, direction: 'down', to: 80, kind: 'dashed' }
       ],
-      chips: [
-        { label: 'app 200', left: '82%', top: '55%', variant: 'primary', colorHue: 'green' },
-        { label: 'SQLi', left: '70%', top: '33%', variant: 'blocked' },
-        { label: 'DDoS', left: '78%', top: '20%', variant: 'blocked' },
-        { label: 'bot', left: '70%', top: '80%', variant: 'blocked' }
+      pills: [
+        { label: 'app 200', left: 82, top: TRUNK_Y, active: true },
+        { label: 'SQLi', left: 70, top: 33 },
+        { label: 'DDoS', left: 78, top: 20 },
+        { label: 'bot', left: 70, top: 80 }
       ],
-      lead: 'Protegido por padrão.',
-      body: 'WAF, mitigação de DDoS e proteção contra bots aplicados antes da sua origem — o tráfego limpo segue.'
+      lead: 'Protected by default.',
+      body: 'WAF, DDoS mitigation, and bot protection applied ahead of your origin, so only clean traffic gets through.'
     },
     {
       key: 'observe',
       title: 'Observe',
-      hue: 'yellow',
-      main: { kind: 'spark', points: '4,60 14,54 24,62 34,46 44,56 54,40 64,52 74,38 86,46' },
+      icon: 'ai ai-real-time-metrics',
+      // The one scene whose trunk is a series rather than a line.
+      chart: { data: [40, 46, 38, 54, 44, 60, 48, 62], highlight: -1 },
       nodes: [],
-      connectors: [
-        { d: 'M28 50 C40 50 40 26 50 26 L64 26' },
-        { d: 'M42 45 C56 45 56 33 66 33 L80 33' },
-        { d: 'M24 56 C36 56 36 80 46 80 L60 80' }
+      branches: [
+        { left: 28, top: 26, width: 22, direction: 'up' },
+        { left: 42, top: 33, width: 24, direction: 'up' },
+        { left: 24, top: 55, width: 22, direction: 'down', to: 80 }
       ],
-      chips: [
-        { label: 'p99 · 24ms', left: '84%', top: '46%', variant: 'primary' },
-        { label: 'events', left: '52%', top: '26%', variant: 'plain' },
-        { label: 'logs', left: '68%', top: '33%', variant: 'plain' },
-        { label: 'errors', left: '33%', top: '80%', variant: 'blocked' }
+      pills: [
+        { label: 'p99 · 24ms', left: 84, top: 46, active: true },
+        { label: 'events', left: 52, top: 26 },
+        { label: 'logs', left: 68, top: 33 },
+        { label: 'errors', left: 33, top: 80 }
       ],
-      lead: 'Visível desde o primeiro dia.',
-      body: 'Métricas, eventos e logs em tempo real — cada requisição registrada e cada decisão rastreável.'
+      lead: 'Visible from day one.',
+      body: 'Metrics, events, and logs in real time. Every request is recorded and every decision is traceable.'
     }
   ]
 
-  // Normalize a node entry (a bare number sits on the mid line at y=55).
-  const nodeOf = (node) => (typeof node === 'number' ? { x: node } : node)
-
-  // Chip presentation from its variant (primary fill / plain outline / blocked).
-  const chipStyle = (chip, hue) => {
-    if (chip.variant === 'primary') {
-      return { backgroundColor: accent(chip.colorHue || hue), color: 'var(--color-base-white)' }
-    }
-    if (chip.variant === 'blocked') return { borderColor: accent('red') }
-    return {}
-  }
+  // The Deploy scene leaves the main grid to close the bento beside the live deploy
+  // log — drawn deploy next to running deploy, 50/50. That leaves five scenes above,
+  // so `observe` (a chart, which reads better wide anyway) spans two columns and both
+  // rows stay full.
+  const deployScene = scenes.find((scene) => scene.key === 'deploy')
+  const gridScenes = scenes.filter((scene) => scene.key !== 'deploy')
 </script>
 
 <template>
-  <component
-    :is="framed ? 'section' : 'div'"
-    :class="
-      framed ? 'mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]' : ''
-    "
-  >
-    <div
-      v-if="framed"
-      class="mb-[var(--spacing-xl)] flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-sm)]"
+  <component :is="framed ? SectionContainer : 'div'">
+    <SectionModule
+      :divided="framed && !deployOnly"
+      :padded="false"
+      :title="framed && !deployOnly ? 'From origin to destination, in one visual language' : ''"
+      :description="
+        framed && !deployOnly
+          ? 'Six scenes of the platform, all drawn from the same pieces: rule, trunk, branch, node, and label.'
+          : ''
+      "
     >
-      <p class="text-overline-sm text-[var(--text-muted)]">Ilustrações da plataforma</p>
-      <h2 class="text-balance text-heading-xl text-[var(--text-default)]">
-        Da origem ao destino, em uma só linguagem visual
-      </h2>
-    </div>
-
-    <!-- One bordered surface; the gap-px reveals the muted divider between panels. -->
-    <div class="overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-muted)]">
-      <div class="grid grid-cols-1 gap-px bg-[var(--border-muted)] sm:grid-cols-2 lg:grid-cols-3">
-        <article
-          v-for="scene in scenes"
-          :key="scene.key"
-          class="flex flex-col gap-[var(--spacing-lg)] bg-[var(--bg-canvas)] p-[var(--spacing-lg)]"
+      <!-- Two divider grids stacked in one hairline column: `gap-px` over the border
+           colour makes the seam between them read as the same 1px rule the grids draw
+           internally. Grid one is the scenes (3 columns, `observe` spanning two so the
+           rows stay full); grid two is the closing 50/50 pair. -->
+      <div class="flex flex-col gap-px bg-[var(--border-muted)]">
+        <CardGrid
+          v-if="!deployOnly"
+          variant="divider"
+          divider-color="muted"
+          :columns="3"
         >
-          <header class="flex items-center gap-[var(--spacing-xs)] text-label-code-md text-[var(--text-muted)]">
-            <span
-              class="size-2 shrink-0 rounded-[var(--shape-flat)]"
-              :style="{ backgroundColor: accent(scene.hue) }"
-              aria-hidden="true"
-            />
-            {{ scene.title }}
-          </header>
+          <IllustrationScene
+            v-for="scene in gridScenes"
+            :key="scene.key"
+            :scene="scene"
+            :class="{ 'lg:col-span-2': scene.key === 'observe' }"
+          />
+        </CardGrid>
 
-          <!-- ── Visual ─────────────────────────────────────────────────── -->
-          <div class="relative h-48">
-            <svg
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              class="absolute inset-0 h-full w-full"
-              aria-hidden="true"
-            >
-              <!-- ruled guide lines -->
-              <line
-                v-for="y in guideLines"
-                :key="`rule-${scene.key}-${y}`"
-                x1="3"
-                :y1="y"
-                x2="97"
-                :y2="y"
-                stroke="var(--border-muted)"
-                stroke-width="1"
-                vector-effect="non-scaling-stroke"
-              />
-
-              <!-- branch connectors (neutral, or accent + dashed when blocked) -->
-              <path
-                v-for="(c, i) in scene.connectors"
-                :key="`conn-${scene.key}-${i}`"
-                :d="c.d"
-                fill="none"
-                :stroke="c.stroke ? accent(c.stroke) : 'var(--border-strong)'"
-                stroke-width="1"
-                :stroke-dasharray="c.dashed ? '3 3' : undefined"
-                vector-effect="non-scaling-stroke"
-              />
-
-              <!-- main line — straight, split (secure), or a sparkline (observe) -->
-              <template v-if="scene.main.kind === 'split'">
-                <line
-                  x1="4"
-                  y1="55"
-                  :x2="scene.main.at"
-                  y2="55"
-                  :stroke="accent(scene.main.before)"
-                  stroke-width="1.5"
-                  vector-effect="non-scaling-stroke"
-                />
-                <line
-                  :x1="scene.main.at"
-                  y1="55"
-                  x2="94"
-                  y2="55"
-                  :stroke="accent(scene.main.after)"
-                  stroke-width="1.5"
-                  vector-effect="non-scaling-stroke"
-                />
-              </template>
-              <polyline
-                v-else-if="scene.main.kind === 'spark'"
-                :points="scene.main.points"
-                fill="none"
-                :stroke="accent(scene.hue)"
-                stroke-width="1.5"
-                stroke-linejoin="round"
-                vector-effect="non-scaling-stroke"
-              />
-              <line
-                v-else
-                x1="4"
-                y1="55"
-                x2="94"
-                y2="55"
-                :stroke="accent(scene.hue)"
-                stroke-width="1.5"
-                vector-effect="non-scaling-stroke"
-              />
-            </svg>
-
-            <!-- commit / hop nodes on the mid line -->
-            <span
-              v-for="(node, i) in scene.nodes.map(nodeOf)"
-              :key="`node-${scene.key}-${i}`"
-              class="absolute -translate-x-1/2 -translate-y-1/2"
-              :class="node.emphasis ? 'size-2.5' : 'size-1.5'"
-              :style="{
-                backgroundColor: accent(node.hue || scene.hue),
-                left: node.x + '%',
-                top: (node.y || 55) + '%'
-              }"
-              aria-hidden="true"
-            />
-
-            <!-- labeled chips pinned to the connector endpoints -->
-            <span
-              v-for="chip in scene.chips"
-              :key="`chip-${scene.key}-${chip.label}`"
-              class="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-code-sm"
-              :class="{
-                'border border-[var(--border-default)] bg-[var(--bg-surface-raised)] text-[var(--text-default)]':
-                  chip.variant === 'plain',
-                'border bg-[var(--bg-surface)] text-[var(--text-muted)]': chip.variant === 'blocked'
-              }"
-              :style="[{ left: chip.left, top: chip.top }, chipStyle(chip, scene.hue)]"
-            >
-              <span
-                v-if="chip.variant === 'blocked'"
-                aria-hidden="true"
-                :style="{ color: accent('red') }"
-              >✕ </span>{{ chip.label }}
-            </span>
-          </div>
-
-          <!-- ── Caption ────────────────────────────────────────────────── -->
-          <p class="text-pretty text-body-sm text-[var(--text-muted)]">
-            <span class="font-medium text-[var(--text-default)]">{{ scene.lead }}</span>
-            {{ ' ' }}{{ scene.body }}
-          </p>
-        </article>
+        <!-- The bento's closing row: the Deploy scene as drawn, beside the same deploy
+             actually running. Two 1:1 cells, 50/50. -->
+        <CardGrid
+          variant="divider"
+          divider-color="muted"
+          :columns="2"
+        >
+          <!-- No caption on the drawn scene: the live cell next to it already says what
+               a deploy does, and two captions under one pair read as the same sentence
+               twice. The drawing carries the label pills; the words stay on the right. -->
+          <IllustrationScene
+            :scene="deployScene"
+            :captioned="false"
+          />
+          <DeployExample />
+        </CardGrid>
       </div>
-    </div>
+    </SectionModule>
   </component>
 </template>

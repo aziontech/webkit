@@ -31,7 +31,9 @@
 <template>
   <div
     class="cell group relative flex items-center justify-center rounded-[var(--shape-flat)] border border-[var(--border-default)]"
-    :class="compact ? 'min-h-[7.5rem] p-[var(--spacing-sm)]' : 'min-h-[200px] p-[var(--spacing-md)]'"
+    :class="
+      compact ? 'min-h-[7.5rem] p-[var(--spacing-sm)]' : 'min-h-[200px] p-[var(--spacing-md)]'
+    "
   >
     <!-- Dashed accent ring sitting on the node's border + a soft accent glow ring. -->
     <span

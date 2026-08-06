@@ -1,579 +1,586 @@
 <script setup>
-  // Landing-page example: a faithful recreation of the azion.com/pt-br homepage
+  // Landing-page example: a faithful recreation of the azion.com homepage
   // structure, composed entirely from @aziontech/webkit components and theme
   // tokens. Rendered inside SiteLayout (website nav + footer, no console
   // sidebar). Sections, top to bottom: hero → framework strip → platform pillars
   // → feature highlights → stats band → developer/CLI section → customers
-  // (#clientes) → pricing teaser (#precos) → final CTA (#contato).
+  // (#customers) → pricing teaser (#pricing) → final CTA (#contact).
+  //
+  // Layout is the framed grid of CONTAINERS.md, the same three-layer skeleton the
+  // Hub and Docs homes use — no hand-rolled section wrappers:
+  //
+  //   BannerContainer hero  → the full-bleed hero band, exactly one viewport tall,
+  //                           owning the page's top rule (border-b).
+  //   SectionContainer      → the centered column below it, owning border-x.
+  //   SectionModule         → each brick inside it, owning its own border-t and
+  //                           its own padding (which is why the column is unpadded).
+  //
+  // The footer owns border-t, so every edge of the frame is drawn exactly once.
+  //
+  // That "exactly once" is the page's border discipline, and it holds two ways.
+  // Where a brick meets a rule it does not own, it does not draw a second one: a
+  // frame stacked under another is `flush` (its top rule lands ON the rule above
+  // instead of beside it), a row of cells takes its seams from the grid's own
+  // `gap-px` rather than from four sets of borders, and a component that would wrap
+  // itself in its own bordered column is given `:framed="false"` inside this one.
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
-  import CardPricing from '@aziontech/webkit/card-pricing'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import Item from '@aziontech/webkit/item'
+  import Overline from '@aziontech/webkit/overline'
   import { useRouter } from 'vue-router'
 
-  import AsciiGlobe from './AsciiGlobe.vue'
+  import BrandCarousel from './BrandCarousel.vue'
+  import ClientStories from './ClientStories.vue'
+  import DeveloperSection from './DeveloperSection.vue'
+  import {
+    BannerContainer,
+    CardGrid,
+    SectionContainer,
+    SectionModule
+  } from './foundations/components/layout/index.js'
   import PlatformIllustrations from './PlatformIllustrations.vue'
   import PlatformShowcase from './PlatformShowcase.vue'
+  import SiteCta from './SiteCta.vue'
+  // Imported directly rather than through BannerContainer's `banner` prop: this
+  // band is a FrameBox, not a BannerContainer, so there is no container to name
+  // it on. The registry still owns it — this is its named export.
+  import { MapBanner } from './ui/banners/index.js'
+  import { ClientMark, CLIENTS, FrameBox, HeroTitle, SectionGap, SectionTitle } from './ui/index.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
 
-  // Frameworks the platform deploys — rendered as a quiet trust strip under the
-  // hero. Uses the multicolor brand glyphs (`ai-cor ai-*`, background-image) from
-  // @aziontech/icons so each framework keeps its real brand colors.
-  const frameworks = [
-    { icon: 'ai-cor ai-next', label: 'Next.js' },
-    { icon: 'ai-cor ai-vue', label: 'Vue' },
-    { icon: 'ai-cor ai-react', label: 'React' },
-    { icon: 'ai-cor ai-astro', label: 'Astro' },
-    { icon: 'ai-cor ai-svelte', label: 'Svelte' },
-    { icon: 'ai-cor ai-angular', label: 'Angular' },
-    { icon: 'ai-cor ai-nuxt', label: 'Nuxt' },
-    { icon: 'ai-cor ai-solidjs', label: 'SolidJS' }
-  ]
+  const clientNamed = (name) => CLIENTS.find((client) => client.name === name)
 
-  // Compact capability strip sitting under the hero CTA (bold lead-in + one
-  // supporting line each), mirroring the azion.com-style hero footer row.
-  const heroFeatures = [
-    { title: 'Edge Functions', description: 'Serverless na borda, sem cold starts nem timeouts.' },
-    { title: 'Object Storage', description: 'Armazenamento S3-compatível, distribuído globalmente.' },
-    { title: 'Edge SQL', description: 'Banco de dados distribuído com latência de milissegundos.' },
-    { title: 'Edge Firewall', description: 'WAF e mitigação de DDoS aplicados antes da origem.' },
-    { title: 'AI Inference', description: 'Modelos de IA executados próximos ao usuário.' }
-  ]
-
-  // The four platform pillars from azion.com, each with its product line-up.
-  const pillars = [
+  // The platform primitives, grouped by capability. Each row renders as an
+  // <Item kind="muted"> — the webkit row component — so the icon frame, the
+  // title/description pairing and the muted surface all come from the DS.
+  const primitiveGroups = [
     {
-      icon: 'ai ai-build-pillar',
-      title: 'Build',
-      description: 'Crie e execute aplicações serverless na borda, próximas ao usuário.',
-      products: ['Functions', 'Cache', 'Application Accelerator', 'AI Inference']
+      label: 'Compute',
+      blurb: 'Code that runs at the edge, in the same hop as the request.',
+      items: [
+        {
+          icon: 'ai ai-edge-functions',
+          title: 'Functions',
+          description: 'Run code globally, low latency'
+        },
+        { icon: 'pi pi-sitemap', title: 'Rules', description: 'Control traffic routing' },
+        {
+          icon: 'ai ai-load-balancer',
+          title: 'Load Balancer',
+          description: 'High availability across origins'
+        },
+        {
+          icon: 'pi pi-image',
+          title: 'Image Processor',
+          description: 'Optimize and modify images'
+        }
+      ]
     },
     {
-      icon: 'ai ai-store',
-      title: 'Store',
-      description: 'Armazene e sirva dados com baixa latência, distribuídos globalmente.',
-      products: ['SQL Database', 'Object Storage', 'KV Store']
+      label: 'AI',
+      blurb: 'Inference and gateways that sit beside your data, not a region away.',
+      items: [
+        {
+          icon: 'ai ai-edge-ai',
+          title: 'AI Inference',
+          description: 'Low-latency distributed inference'
+        },
+        { icon: 'ai ai-gateway', title: 'AI Gateway', description: 'Govern and route LLMs' }
+      ]
     },
     {
-      icon: 'ai ai-secure-pillar',
-      title: 'Protect',
-      description: 'Proteja aplicações e redes com segurança nativa da plataforma.',
-      products: ['WAF', 'Network Shield', 'Edge DNS', 'Load Balancer']
+      label: 'Data',
+      blurb: 'State that lives where the request lands, not behind a round trip.',
+      items: [
+        {
+          icon: 'ai ai-edge-storage',
+          title: 'Object Storage',
+          description: 'Store and deliver globally'
+        },
+        {
+          icon: 'ai ai-edge-sql',
+          title: 'SQL Database',
+          description: 'Distributed SQL with low latency'
+        },
+        { icon: 'ai ai-edge-kv', title: 'KV Store', description: 'Keep state close, fast' },
+        {
+          icon: 'ai ai-tiered-cache',
+          title: 'Cache',
+          description: 'Accelerate delivery, boost reliability'
+        }
+      ]
     },
     {
-      icon: 'ai ai-observe-pillar',
-      title: 'Observe',
-      description: 'Meça e monitore tudo em tempo real, com dados acionáveis.',
-      products: ['Data Stream', 'Real-Time Metrics', 'Edge Pulse']
+      label: 'Security',
+      blurb: 'Traffic inspected and mitigated before it ever reaches your origin.',
+      items: [
+        {
+          icon: 'ai ai-waf-rules',
+          title: 'Web Application Firewall',
+          description: 'Smart way to block threats'
+        },
+        {
+          icon: 'ai ai-azion-api',
+          title: 'API Gateway',
+          description: 'Authenticate and protect APIs'
+        },
+        {
+          icon: 'pi pi-android',
+          title: 'Bot Management',
+          description: 'Stop bots, prevent abuse'
+        },
+        { icon: 'ai ai-edge-dns', title: 'DNS', description: 'Resilient DNS with performance' }
+      ]
     }
   ]
 
-  // Alternating feature highlights (text + supporting metric card).
-  const features = [
+  // Network section — the infrastructure claims, as chips beside the globe.
+  const networkClaims = [
+    '100+ data centers',
+    '100+ Tbps throughput',
+    'High availability',
+    '30 ms median latency',
+    'PCI and SOC 2/3 compliant'
+  ]
+
+  // The outcome row under the network panel: one benefit per registration-framed
+  // cell, written as a single sentence — the claim itself in the default colour, the
+  // rest of the line muted — and signed with the client mark of the workload it came
+  // from. Reads as proof rather than as a scoreboard of loose numbers.
+  //
+  // PLACEHOLDER PAIRING: the numbers are the platform's published claims; which
+  // client each is signed with is illustrative, the same placeholder convention
+  // ClientStories already carries. Real attributions before this ships.
+  const benefits = [
+    { claim: '7x faster', line: 'page loads under peak retail traffic.', client: 'Magalu' },
+    { claim: '90% lower', line: 'cloud spend after moving workloads to the edge.', client: 'GPA' },
+    { claim: '40x more', line: 'simultaneous connections held per origin.', client: 'Itaú' },
     {
-      overline: 'Performance',
-      title: 'Deploy global instantâneo, com zero downtime',
+      claim: '100% of',
+      line: 'OWASP Top 10 threats mitigated before the origin.',
+      client: 'Coca-Cola'
+    }
+  ].map((benefit) => ({ ...benefit, mark: clientNamed(benefit.client) }))
+
+  // Platform section — the six things the platform is, as a hairline grid beside the
+  // headline. Each cell is one shape: a glyph-led label in the muted token, then the
+  // claim itself in the default one, so the eye reads the six labels first and drops
+  // into whichever paragraph it wants. Every cell carries a single paragraph of
+  // comparable length, which is what lets the row tops line up without a fixed height.
+  const platformPillars = [
+    {
+      icon: 'pi pi-globe',
+      label: 'Infraestrutura global',
       description:
-        'Publique em toda a rede distribuída em segundos. Cada release entra no ar simultaneamente em centenas de pontos de presença, sem janelas de manutenção.',
-      bullets: ['Rollout atômico em toda a rede', 'Rollback em um clique', 'Cache inteligente na borda'],
-      stat: { value: '<10', unit: 'ms', label: 'Latência mediana até o usuário' }
+        'Totalmente gerenciada com mais de 100 datacenters globais, roteamento inteligente e failover automático para garantir alta disponibilidade.'
     },
     {
-      overline: 'Segurança',
-      title: 'Segurança nativa em cada requisição',
+      icon: 'ai ai-edge-functions',
+      label: 'Arquitetura serverless',
       description:
-        'WAF, mitigação de DDoS e regras de firewall aplicadas na borda, antes que o tráfego chegue à sua origem. Configurável por aplicação, observável em tempo real.',
-      bullets: ['WAF com regras gerenciadas', 'Mitigação de DDoS sempre ativa', 'TLS e certificados automáticos'],
-      stat: { value: '99.999', unit: '%', label: 'Disponibilidade da plataforma' }
-    }
-  ]
-
-  const stats = [
-    { value: '100+', label: 'Pontos de presença' },
-    { value: '<10ms', label: 'Latência mediana' },
-    { value: '99.999%', label: 'Uptime da plataforma' },
-    { value: '25B+', label: 'Requisições por dia' }
-  ]
-
-  const deployTabs = [
-    {
-      label: 'Terminal',
-      value: 'cli',
-      language: 'bash',
-      fileName: 'deploy.sh',
-      fileIcon: 'pi pi-desktop',
-      code: [
-        '# Instale a CLI e faça o deploy do seu projeto',
-        'npm install -g azion',
-        '',
-        'azion login',
-        'azion deploy',
-        '',
-        '✓ Build concluído',
-        '✓ Publicado em 100+ pontos de presença',
-        '✓ Aplicação no ar: https://my-app.azion.app'
-      ].join('\n')
+        'Execução sob demanda, sem servidores para gerenciar, com escalabilidade automática, eliminação de cold start e eficiência de recursos.'
     },
     {
-      label: 'azion.config',
-      value: 'config',
-      language: 'javascript',
-      fileName: 'azion.config.js',
-      fileIcon: 'pi pi-code',
-      code: [
-        'export default {',
-        '  build: {',
-        "    preset: 'vue',",
-        '  },',
-        '  functions: [',
-        "    { name: 'handler', path: './src/index.js' },",
-        '  ],',
-        '  rules: {',
-        "    request: [{ match: '/api/*', behavior: { runFunction: 'handler' } }],",
-        '  },',
-        '}'
-      ].join('\n')
-    }
-  ]
-
-  const customers = [
-    {
-      quote:
-        'Migramos para a Azion e cortamos a latência pela metade. O deploy global deixou de ser um projeto de infraestrutura e virou parte do nosso fluxo diário.',
-      name: 'Head de Engenharia',
-      company: 'Fintech · América Latina'
+      icon: 'ai ai-waf-rules',
+      label: 'Segurança integrada e programável',
+      description:
+        'Proteção em tempo real para aplicações e APIs, com mitigação de DDoS, gestão de bots e políticas de segurança extensíveis por código.'
     },
     {
-      quote:
-        'A segurança na borda nos deu tranquilidade em picos de tráfego. WAF e mitigação de DDoS funcionam sem que a gente precise pensar nisso.',
-      name: 'CTO',
-      company: 'Varejo digital'
-    }
-  ]
-
-  // Pricing plans mapped to the CardPricing component's contract: title +
-  // description, a Currency reading (prefix/value/suffix + details line), an
-  // optional "popular" tag, the feature list (default slot) and the CTA (#actions
-  // slot). Enterprise hides the numeric affordances and shows a text value.
-  const plans = [
-    {
-      title: 'Free',
-      description: 'Para começar a construir na borda hoje mesmo.',
-      prefix: 'US$',
-      value: '0',
-      suffix: '/mês',
-      showPrefix: true,
-      showSuffix: true,
-      details: 'Grátis para sempre, sem cartão.',
-      features: ['Deploy global', 'Functions e Cache', 'Certificados TLS automáticos'],
-      cta: 'Começar Gratuitamente',
-      highlight: false
+      icon: 'pi pi-code',
+      label: 'Construa e implante onde quiser',
+      description:
+        'Arquitetura baseada em padrões abertos, compatível com seu stack atual. Sem lock-in, com portabilidade para executar workloads onde fizer mais sentido.'
     },
     {
-      title: 'Business',
-      description: 'Para equipes em produção com escala e suporte.',
-      prefix: 'US$',
-      value: '300',
-      suffix: '/mês',
-      showPrefix: true,
-      showSuffix: true,
-      details: 'Cobrado mensalmente, cancele quando quiser.',
-      features: ['Tudo do Free', 'WAF e Network Shield', 'Observabilidade em tempo real', 'Suporte prioritário'],
-      cta: 'Falar com Vendas',
-      highlight: true
+      icon: 'ai ai-edge-storage',
+      label: 'Armazenamento distribuído',
+      description:
+        'Armazenamento de objetos, banco de dados SQL e Key-Value serverless e distribuídos, que reduzem a latência e aumentam a performance.'
     },
     {
-      title: 'Enterprise',
-      description: 'Para requisitos de compliance, SLA e escala global.',
-      prefix: '',
-      value: 'Sob consulta',
-      suffix: '',
-      showPrefix: false,
-      showSuffix: false,
-      details: 'Faturamento e SLA personalizados.',
-      features: ['SLA de 99.999%', 'Onboarding dedicado', 'Suporte 24/7', 'Faturamento personalizado'],
-      cta: 'Contato',
-      highlight: false
+      icon: 'pi pi-verified',
+      label: 'Plataforma moderna e confiável',
+      description:
+        'Arquitetura resiliente, com conformidade SOC 2 & 3, certificação PCI DSS 4.0.1 Nível 1 e 100% de disponibilidade garantida por SLA.'
     }
   ]
 </script>
 
 <template>
-  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
-  <!-- Left-aligned hierarchy: a full-bleed animated globe fills the top band,
-       the eyebrow → headline → CTAs overlap its lower edge, and a compact
-       capability strip closes the section — mirroring the azion.com hero. -->
-  <section class="relative overflow-hidden border-b border-[var(--border-default)]">
-    <!-- Animated ASCII globe backdrop, concentrated in the top band. -->
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 top-0 h-[clamp(360px,52vh,620px)] overflow-hidden"
+  <!-- ── Hero — the fluid banner band, exactly one viewport tall ───────────
+       BannerContainer owns the full-bleed band and the page's top rule; the
+       backdrop goes in #background (z-0), the copy in the default slot (z-10).
+       `--banner-offset` is the sticky SiteNav's height (h-14 = 3.5rem), so the
+       hero still measures one screen with the nav above it. -->
+  <BannerContainer
+    hero
+    max-width="7xl"
+    banner="mesh"
+    class="[--banner-offset:3.5rem]"
+  >
+    <!-- Hero copy anatomy: headline → description → actions. No eyebrow here — the
+         headline opens the page on its own, and its accent phrase carries the brand
+         colour the overline used to. -->
+    <HeroTitle
+      centered
+      highlight="Distributed Infrastructure"
+      title="for Modern Workloads"
+      description="Networking, compute, AI, data, and security that autonomously scale up and down instantly.
+And it stays up when others go down."
     >
-      <AsciiGlobe class="size-full opacity-80" />
-      <!-- Fade the lower half into the canvas so the headline reads on solid. -->
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-canvas)]" />
-    </div>
-
-    <div class="relative z-10 mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)]">
-      <!-- Copy block, pushed down to overlap the globe's lower edge. -->
-      <div class="flex flex-col items-start gap-[var(--spacing-md)] pb-[var(--spacing-xl)] pt-[clamp(260px,40vh,500px)]">
-        <div class="flex items-center gap-[var(--spacing-xs)]">
-          <span
-            aria-hidden="true"
-            class="size-2.5 rounded-[var(--shape-elements)] bg-[var(--color-orange-500)]"
-          />
-          <span class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
-            Plataforma de Edge Computing
-          </span>
-        </div>
-        <h1 class="max-w-[var(--container-4xl)] text-balance text-left text-heading-2xl text-[var(--text-default)]">
-          A borda programável para aplicações e agentes.
-        </h1>
-        <div class="mt-[var(--spacing-xs)] flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center">
+      <template #actions>
+        <div
+          class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
+        >
           <Button
-            label="Começar agora"
+            label="Get started"
             kind="primary"
             size="large"
             @click="goSignup"
           />
           <Button
-            label="Ler a documentação"
-            kind="secondary"
+            label="Read the docs"
+            kind="outlined"
             size="large"
-            href="#contato"
+            href="#contact"
           />
         </div>
-      </div>
+      </template>
+    </HeroTitle>
 
-      <!-- Capability strip. -->
-      <div class="grid grid-cols-2 gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-md)] border-t border-[var(--border-muted)] py-[var(--spacing-lg)] md:grid-cols-3 lg:grid-cols-5">
-        <p
-          v-for="feature in heroFeatures"
-          :key="feature.title"
-          class="text-pretty text-body-sm text-[var(--text-muted)]"
-        >
-          <span class="font-semibold text-[var(--text-default)]">{{ feature.title }}.</span>
-          {{ feature.description }}
-        </p>
-      </div>
-    </div>
-  </section>
+    <!-- Client marks close the hero, divided from the copy by their own muted
+         rule (the band's border-b belongs to BannerContainer). The old capability
+         strip lived here; every line of it now has a row in the primitives grid
+         below, so the hero keeps the headline and the proof, nothing else.
 
-  <!-- ══ Bordered content column ═══════════════════════════════════════════
-       Everything after the fluid hero lives in one centered column with
-       continuous vertical rules on its left and right edges (the azion.com
-       "framed grid"). The column carries only `border-x`: its top edge is the
-       hero's `border-b` and its bottom edge is the footer's `border-t`, so the
-       four sides read as one frame with no doubled lines. Sections inside
-       divide with their own `border-b` horizontal rules. -->
-  <div class="mx-auto w-full max-w-[var(--container-7xl)] border-x border-[var(--border-default)]">
-  <!-- ── Framework trust strip ────────────────────────────────────────── -->
-  <section class="border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
-    <div class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)] py-[var(--spacing-xl)]">
-      <p class="text-overline-sm text-[var(--text-muted)]">Compatível com o seu framework</p>
-      <ul class="flex flex-wrap items-center justify-center gap-x-[var(--spacing-xl)] gap-y-[var(--spacing-md)]">
-        <li
-          v-for="framework in frameworks"
-          :key="framework.label"
-          class="flex items-center gap-[var(--spacing-xs)] text-[var(--text-muted)] transition-colors duration-fast-02 ease-productive-entrance hover:text-[var(--text-default)] motion-reduce:transition-none"
-        >
-          <i
-            :class="[framework.icon, 'size-6']"
-            aria-hidden="true"
-          />
-          <span class="text-label-md">{{ framework.label }}</span>
-        </li>
-      </ul>
-    </div>
-  </section>
+         The top margin composes two tokens because `xxl` is the top of the semantic
+         scale and, on its own, sat the rule too close under the CTAs. Composed this
+         way it still scales with the breakpoints (56px → 96px → 144px) instead of
+         freezing at one raw value. -->
+    <BrandCarousel
+      class="mt-[calc(var(--spacing-xxl)+var(--spacing-xl))] border-t border-[var(--border-muted)] pt-[var(--spacing-xl)]"
+      label="Trusted by mission-critical workloads"
+      :clients="CLIENTS"
+    />
+  </BannerContainer>
 
-  <!-- ── Platform pillars ─────────────────────────────────────────────── -->
-  <section class="mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
-    <div class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-sm)]">
-      <p class="text-overline-sm text-[var(--text-muted)]">A plataforma completa</p>
-      <h2 class="text-balance text-heading-xl text-[var(--text-default)]">
-        Tudo o que você precisa para construir, armazenar, proteger e observar
-      </h2>
-      <p class="text-pretty text-body-md text-[var(--text-muted)]">
-        Uma única plataforma distribuída, com produtos que trabalham juntos e escalam com você.
-      </p>
-    </div>
+  <!-- ══ The framed column ═════════════════════════════════════════════════
+       Everything after the hero is a stack of SectionModule bricks inside one
+       centered column. The column carries only `border-x`; its top edge is the
+       hero's `border-b` and its bottom edge the SiteFooter's `border-t`, so the
+       four sides read as one frame with no doubled lines. Each module owns its
+       own `border-t` and its own padding — which is why the column is unpadded
+       and no module ever draws a side border. -->
+  <SectionContainer max-width="5xl">
+    <!-- ── Platform primitives ──────────────────────────────────────────────
+         First module in the column: `:divided="false"`, because its top edge is
+         already the hero's border-b.
 
-    <div class="mt-[var(--spacing-xl)] grid gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-4">
-      <CardBox
-        v-for="pillar in pillars"
-        :key="pillar.title"
-        class="h-full transition-[transform,border-color] duration-moderate-01 ease-productive-entrance hover:-translate-y-1 hover:border-[var(--border-default)] motion-reduce:transform-none motion-reduce:transition-none"
-      >
-        <template #content>
-          <div class="flex flex-col gap-[var(--spacing-md)]">
-            <span class="flex size-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]">
-              <i
-                :class="[pillar.icon, 'text-heading-sm text-[var(--text-default)]']"
-                aria-hidden="true"
-              />
-            </span>
-            <div class="flex flex-col gap-[var(--spacing-xxs)]">
-              <h3 class="text-heading-sm text-[var(--text-default)]">{{ pillar.title }}</h3>
-              <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ pillar.description }}</p>
-            </div>
-            <ul class="flex flex-col gap-[var(--spacing-xs)] border-t border-[var(--border-muted)] pt-[var(--spacing-md)]">
-              <li
-                v-for="product in pillar.products"
-                :key="product"
-                class="flex items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-default)]"
-              >
-                <i
-                  class="pi pi-check text-body-xs text-[var(--success)]"
-                  aria-hidden="true"
-                />
-                {{ product }}
-              </li>
-            </ul>
-          </div>
-        </template>
-      </CardBox>
-    </div>
-  </section>
+         A framed headline block over a four-column hairline grid, one column per
+         capability. Every row is a webkit <Item kind="muted"> — the DS owns the
+         icon frame, the title/description pairing and the muted row surface, so
+         this page composes rows instead of restyling them. -->
+    <SectionModule
+      :divided="false"
+      :padded="false"
+    >
+      <template #header>
+        <SectionTitle
+          height="tall"
+          title="Serverless AI-Native Primitives for Autonomous Workloads"
+          description="Every primitive stands on its own and shares the same network, identity, and observability. Compose only what a workload needs, and add the rest without moving anything."
+        />
+      </template>
 
-  <!-- ── Feature highlights ───────────────────────────────────────────── -->
-  <section class="border-y border-[var(--border-default)] bg-[var(--bg-surface)]">
-    <div class="mx-auto flex w-full max-w-[var(--container-7xl)] flex-col gap-[var(--spacing-xxl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
-      <div
-        v-for="(feature, index) in features"
-        :key="feature.title"
-        class="grid items-center gap-[var(--spacing-xl)] lg:grid-cols-2"
+      <CardGrid
+        variant="divider"
+        :columns="4"
+        :mobile-columns="2"
       >
         <div
-          class="flex flex-col gap-[var(--spacing-md)]"
-          :class="{ 'lg:order-2': index % 2 === 1 }"
+          v-for="group in primitiveGroups"
+          :key="group.label"
+          class="flex flex-col bg-[var(--bg-canvas)]"
         >
-          <p class="text-overline-sm text-[var(--text-muted)]">{{ feature.overline }}</p>
-          <h2 class="text-balance text-heading-lg text-[var(--text-default)]">{{ feature.title }}</h2>
-          <p class="text-pretty text-body-md text-[var(--text-muted)]">{{ feature.description }}</p>
-          <ul class="flex flex-col gap-[var(--spacing-xs)]">
-            <li
-              v-for="bullet in feature.bullets"
-              :key="bullet"
-              class="flex items-center gap-[var(--spacing-xs)] text-body-md text-[var(--text-default)]"
-            >
-              <i
-                class="pi pi-check-circle text-body-md text-[var(--success)]"
-                aria-hidden="true"
-              />
-              {{ bullet }}
-            </li>
-          </ul>
-        </div>
+          <!-- Column head: label over a one-line blurb. Both blocks share the body's
+               horizontal padding so the column reads as one left edge.
 
-        <div :class="{ 'lg:order-1': index % 2 === 1 }">
-          <CardBox class="bg-[var(--bg-canvas)]">
-            <template #content>
-              <div class="flex flex-col items-start gap-[var(--spacing-sm)] py-[var(--spacing-lg)]">
-                <div class="flex items-baseline gap-[var(--spacing-xxs)]">
-                  <span class="text-big-number-lg tabular-nums text-[var(--text-default)]">{{ feature.stat.value }}</span>
-                  <span class="text-heading-sm text-[var(--text-muted)]">{{ feature.stat.unit }}</span>
-                </div>
-                <p class="text-body-sm text-[var(--text-muted)]">{{ feature.stat.label }}</p>
+               `-ml-1` on the Overline cancels the 4px `pl-1` the component carries of
+               its own — without it the label sits 4px right of everything beneath it.
+               Padding belongs to the layout here, not to the label. -->
+          <div
+            class="flex flex-col gap-[var(--spacing-xxs)] px-[var(--spacing-md)] pb-[var(--spacing-md)] pt-[var(--spacing-lg)]"
+          >
+            <Overline class="-ml-1">{{ group.label }}</Overline>
+            <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ group.blurb }}</p>
+          </div>
+
+          <!-- The primitives, as rows in one list — not as cards inside a card. The
+               previous shape stacked a filled `muted` pill and a bordered icon frame
+               inside a column that is already a cell of a hairline grid: three nested
+               boxes for one line of text, and a row whose title started 90px right of
+               the column's own label.
+
+               `Item.List` is the DS's answer to exactly that: it forces every row to the
+               `default` kind (transparent, no per-row border) and divides them with the
+               muted hairline the rest of the page uses. With `size="small"` a row pads
+               itself by `md` — the same inset as the column head above it — so the
+               glyph, the heading and the blurb all start on ONE content column. The
+               media loses its `icon` box for the same reason: the glyph itself lands on
+               that column instead of a frame around it. -->
+          <Item.List class="flex-1 border-t border-[var(--border-default)]">
+            <Item
+              v-for="primitive in group.items"
+              :key="primitive.title"
+              size="small"
+            >
+              <Item.Media>
+                <i
+                  :class="[primitive.icon, 'text-body-md text-[var(--text-muted)]']"
+                  aria-hidden="true"
+                />
+              </Item.Media>
+              <Item.Content>
+                <Item.Title>{{ primitive.title }}</Item.Title>
+                <Item.Description>{{ primitive.description }}</Item.Description>
+              </Item.Content>
+            </Item>
+          </Item.List>
+        </div>
+      </CardGrid>
+    </SectionModule>
+
+    <SectionGap />
+
+    <!-- ── Network ──────────────────────────────────────────────────────────
+         The infrastructure claim, framed: copy + claim chips on the left, the
+         animated globe on the right, then the outcome numbers as their own row of
+         registration-framed cells.
+
+         Every rule here is drawn exactly once. `border-x-0` on the full-width panel
+         hands the vertical rules back to the column; `flush` lands its top rule on
+         the section gap's bottom one instead of beside it; and the benefit row below
+         it carries no borders at all — its seams are the grid's own `gap-px` over the
+         border colour, so four adjacent cells produce three hairlines rather than six.
+         Padding lives inside the frames only. -->
+    <SectionModule
+      :divided="false"
+      :padded="false"
+    >
+      <div class="flex flex-col">
+        <FrameBox
+          flush
+          class="overflow-hidden border-x-0"
+        >
+          <!-- The network itself, as the frame's backdrop: the pixel world map,
+               its route picked out in the accent. It parks in the RIGHT part of
+               the band (see --map-inset-inline-start in MapBanner), so it reads
+               as the art half beside the copy rather than spanning the whole
+               frame behind it; its scrims stay full-bleed and wash left-to-right
+               into the artwork's leading edge. The min-height is what the globe
+               used to hold open. -->
+          <MapBanner />
+          <div class="relative z-10 grid items-center gap-[var(--spacing-xl)] lg:grid-cols-2">
+            <!-- Copy hangs from the top edge rather than centring in the band: the map
+                 behind it is a full-height backdrop, so a centred block floated in the
+                 middle of the frame with no edge to hold onto. -->
+            <div
+              class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-start gap-[var(--spacing-xl)] p-[var(--spacing-xl)] lg:py-[var(--spacing-xxl)]"
+            >
+              <h2 class="text-balance text-heading-xl text-[var(--text-default)]">
+                The most reliable infrastructure
+              </h2>
+              <ul class="flex flex-wrap gap-[var(--spacing-xs)]">
+                <!-- Soft-accent claim chips. No Tag severity ships this treatment
+                     (accent is a solid blue fill, primary a solid orange), so the
+                     page composes it from the primary token — a DS gap worth a
+                     `subtle` severity on Tag. -->
+                <li
+                  v-for="claim in networkClaims"
+                  :key="claim"
+                  class="inline-flex h-8 items-center rounded-[var(--shape-elements)] border border-[color-mix(in_srgb,var(--primary)_45%,transparent)] bg-[color-mix(in_srgb,var(--primary)_16%,transparent)] px-[var(--spacing-xs)] text-label-md text-[var(--text-default)]"
+                >
+                  {{ claim }}
+                </li>
+              </ul>
+            </div>
+            <!-- Second cell intentionally empty: the map behind IS the art half. -->
+          </div>
+        </FrameBox>
+
+        <!-- The benefit row: claim on top, client mark on the floor of every cell.
+             `justify-between` is what aligns the marks with each other — the copy
+             hangs from the top edge, the mark sits on the bottom one, so the row
+             reads as a single baseline no matter how long a sentence runs.
+
+             The cells are marked but borderless (`border-0`): the seams between them
+             are the grid's `gap-px` showing the wrapper's border colour, the way every
+             other hairline grid on this page is built. Four bordered boxes butted
+             together would draw each internal seam twice, and the outer two a third
+             time against the column's own `border-x`. The row's top rule is the
+             panel's `border-b` above it, so it draws none of its own. -->
+        <div class="grid grid-cols-2 gap-px bg-[var(--border-default)] lg:grid-cols-4">
+          <FrameBox
+            v-for="benefit in benefits"
+            :key="benefit.client"
+            class="min-w-0 border-0 bg-[var(--bg-canvas)]"
+          >
+            <div
+              class="flex h-full flex-col justify-between gap-[var(--spacing-xl)] p-[var(--spacing-xl)]"
+            >
+              <p class="m-0 text-pretty text-heading-sm text-[var(--text-muted)]">
+                <span class="font-medium text-[var(--text-default)]">{{ benefit.claim }}</span>
+                {{ benefit.line }}
+              </p>
+              <!-- The signature strip: a fixed 24px band every cell reserves, so the
+                   four marks land on exactly one line and one left edge however long
+                   the sentence above them runs. The band is also what keeps a flex
+                   column from stretching a `w-auto` image sideways. -->
+              <div
+                v-if="benefit.mark"
+                class="flex h-6 items-center"
+              >
+                <ClientMark
+                  colored
+                  :client="benefit.mark"
+                  mark="h-full w-auto max-w-32 object-contain object-left"
+                />
               </div>
-            </template>
-          </CardBox>
+            </div>
+          </FrameBox>
         </div>
       </div>
-    </div>
-  </section>
+    </SectionModule>
 
-  <!-- ── Platform showcase (git graph · API keys · control plane · usage) ─ -->
-  <PlatformShowcase />
+    <SectionGap />
 
-  <!-- ── Platform illustrations (version · deploy · network · ai · secure · observe) ─ -->
-  <PlatformIllustrations />
+    <!-- ── Plataforma ───────────────────────────────────────────────────────
+         The one section whose title does NOT sit centred over its body: headline
+         left, the six pillars as a hairline grid to its right. SectionTitle is the
+         centred opener and would fight that, so this module composes its own header
+         cell — the same anatomy (overline → h2 → actions), turned on its side.
 
-  <!-- ── Stats band ───────────────────────────────────────────────────── -->
-  <section class="mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
-    <dl class="grid grid-cols-2 gap-[var(--spacing-lg)] lg:grid-cols-4">
+         The whole module is one hairline grid: `gap-px` over the border colour, every
+         cell filling `--bg-canvas`, so the rule between the copy and the pillars is
+         the same 1px the pillars divide each other with. That is also why the actions
+         hang off the BOTTOM of the header cell (`justify-between`): the copy holds the
+         top edge, the buttons hold the bottom one, and the header column ends up the
+         same visual weight as the three grid rows beside it. -->
+    <SectionModule
+      :divided="false"
+      :padded="false"
+    >
       <div
-        v-for="stat in stats"
-        :key="stat.label"
-        class="flex flex-col items-center gap-[var(--spacing-xxs)] text-center"
+        class="grid gap-px bg-[var(--border-default)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
       >
-        <dt class="text-big-number-md tabular-nums text-[var(--text-default)]">{{ stat.value }}</dt>
-        <dd class="text-body-sm text-[var(--text-muted)]">{{ stat.label }}</dd>
-      </div>
-    </dl>
-  </section>
-
-  <!-- ── Developer / CLI section ──────────────────────────────────────── -->
-  <section class="border-y border-[var(--border-default)] bg-[var(--bg-surface)]">
-    <div class="mx-auto grid w-full max-w-[var(--container-7xl)] items-center gap-[var(--spacing-xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)] lg:grid-cols-2">
-      <div class="flex flex-col gap-[var(--spacing-md)]">
-        <p class="text-overline-sm text-[var(--text-muted)]">Feito para desenvolvedores</p>
-        <h2 class="text-balance text-heading-lg text-[var(--text-default)]">Do commit ao deploy global, sem sair do terminal</h2>
-        <p class="text-pretty text-body-md text-[var(--text-muted)]">
-          Uma CLI, um arquivo de configuração e integração nativa com Git. Traga seu framework
-          favorito e publique na borda com um único comando.
-        </p>
-        <div class="mt-[var(--spacing-xs)] flex flex-col gap-[var(--spacing-sm)] sm:flex-row">
-          <Button
-            label="Ler a Documentação"
-            kind="secondary"
-            size="medium"
-            icon="pi pi-book"
-            href="#"
-          />
-          <Button
-            label="Ver no GitHub"
-            kind="text"
-            size="medium"
-            icon="pi pi-github"
-            href="#"
-          />
-        </div>
-      </div>
-
-      <CodeBlock
-        :tabs="deployTabs"
-        default-value="cli"
-        :show-line-numbers="false"
-        copy-aria-label="Copiar comando de deploy"
-      />
-    </div>
-  </section>
-
-  <!-- ── Customers (#clientes) ────────────────────────────────────────── -->
-  <section
-    id="clientes"
-    class="mx-auto w-full max-w-[var(--container-7xl)] scroll-mt-[var(--spacing-xxl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]"
-  >
-    <div class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-sm)]">
-      <p class="text-overline-sm text-[var(--text-muted)]">Clientes</p>
-      <h2 class="text-balance text-heading-xl text-[var(--text-default)]">Equipes de engenharia constroem sobre a Azion</h2>
-    </div>
-
-    <div class="mt-[var(--spacing-xl)] grid gap-[var(--spacing-md)] lg:grid-cols-2">
-      <CardBox
-        v-for="customer in customers"
-        :key="customer.company"
-        class="h-full"
-      >
-        <template #content>
-          <figure class="flex h-full flex-col gap-[var(--spacing-md)]">
-            <i
-              class="pi pi-verified text-heading-sm text-[var(--text-muted)]"
-              aria-hidden="true"
-            />
-            <blockquote class="flex-1 text-pretty text-body-lg text-[var(--text-default)]">
-              “{{ customer.quote }}”
-            </blockquote>
-            <figcaption class="flex flex-col gap-[var(--spacing-xxs)] border-t border-[var(--border-muted)] pt-[var(--spacing-md)]">
-              <span class="text-label-md text-[var(--text-default)]">{{ customer.name }}</span>
-              <span class="text-body-sm text-[var(--text-muted)]">{{ customer.company }}</span>
-            </figcaption>
-          </figure>
-        </template>
-      </CardBox>
-    </div>
-  </section>
-
-  <!-- ── Pricing teaser (#precos) ─────────────────────────────────────── -->
-  <!-- Canvas band so the `contained` (surface) CardPricing cards contrast
-       against it — same figure/ground as the pillars and customers sections.
-       On a surface band the cards share the band's fill and read flat. -->
-  <section
-    id="precos"
-    class="border-t border-[var(--border-default)] bg-[var(--bg-canvas)]"
-  >
-    <div class="mx-auto w-full max-w-[var(--container-7xl)] scroll-mt-[var(--spacing-xxl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
-      <div class="flex flex-col items-center gap-[var(--spacing-sm)] text-center">
-        <p class="text-overline-sm text-[var(--text-muted)]">Preços</p>
-        <h2 class="text-balance text-heading-xl text-[var(--text-default)]">Pague apenas pelo que usar</h2>
-        <p class="max-w-[var(--container-2xl)] text-pretty text-body-md text-[var(--text-muted)]">
-          Comece de graça e escale conforme cresce. Sem taxas de setup, sem surpresas.
-        </p>
-      </div>
-
-      <div class="mt-[var(--spacing-xl)] grid gap-[var(--spacing-md)] lg:grid-cols-3">
-        <CardPricing
-          v-for="plan in plans"
-          :key="plan.title"
-          slot-position="middle"
-          kind="contained"
-          :plan-title="plan.title"
-          :description="plan.description"
-          :prefix="plan.prefix"
-          :value="plan.value"
-          :suffix="plan.suffix"
-          :show-prefix="plan.showPrefix"
-          :show-suffix="plan.showSuffix"
-          :pricing-details="plan.details"
-          :show-tag="plan.highlight"
-          tag-label="Mais popular"
-          :class="plan.highlight ? 'ring-1 ring-[var(--border-selected)]' : ''"
+        <div
+          class="flex flex-col justify-between gap-[var(--spacing-xxl)] bg-[var(--bg-canvas)] p-[var(--spacing-xl)]"
         >
-          <ul class="flex flex-col gap-[var(--spacing-xs)]">
-            <li
-              v-for="item in plan.features"
-              :key="item"
-              class="flex items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-default)]"
+          <div class="flex flex-col gap-[var(--spacing-md)]">
+            <Overline
+              prefix="//"
+              show-cursor
+              >Plataforma</Overline
             >
-              <i
-                class="pi pi-check text-body-xs text-[var(--success)]"
-                aria-hidden="true"
-              />
-              {{ item }}
-            </li>
-          </ul>
+            <!-- `text-heading-lg` is the section-title token — the same size SectionTitle
+                 sets on every other section's h2, so this left-aligned opener carries the
+                 same weight as the centred ones. -->
+            <h2 class="m-0 text-balance text-heading-lg text-[var(--text-default)]">
+              Plataforma Completa de Desenvolvimento e Segurança de Aplicações
+            </h2>
+          </div>
 
-          <template #actions>
+          <div
+            class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
+          >
             <Button
-              :label="plan.cta"
-              :kind="plan.highlight ? 'primary' : 'secondary'"
-              size="large"
-              class="w-full"
-              @click="goSignup"
-            />
-          </template>
-        </CardPricing>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Final CTA (#contato) ─────────────────────────────────────────── -->
-  <section
-    id="contato"
-    class="border-t border-[var(--border-default)]"
-  >
-    <div class="mx-auto w-full max-w-[var(--container-7xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]">
-      <!-- Azion "registration frame" — corner crosshair marks + vertical hatch. -->
-      <FrameBox hatch>
-        <div class="flex scroll-mt-[var(--spacing-xxl)] flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-md)] py-[var(--spacing-xxl)] text-center">
-          <h2 class="max-w-[var(--container-3xl)] text-balance text-heading-xl text-[var(--text-default)]">
-            Pronto para levar seus workloads para a borda?
-          </h2>
-          <p class="max-w-[var(--container-2xl)] text-pretty text-body-lg text-[var(--text-muted)]">
-            Crie sua conta gratuita e faça o primeiro deploy global em minutos. Precisa de ajuda para
-            escalar? Fale com nossos especialistas.
-          </p>
-          <div class="flex flex-col items-center gap-[var(--spacing-sm)] sm:flex-row">
-            <Button
-              label="Começar Gratuitamente"
+              label="Comece agora"
               kind="primary"
               size="large"
               @click="goSignup"
             />
             <Button
-              label="Falar com um Especialista"
-              kind="secondary"
+              label="Fale com um especialista"
+              kind="outlined"
               size="large"
-              href="#"
+              href="#contact"
             />
           </div>
         </div>
-      </FrameBox>
-    </div>
-  </section>
-  </div>
-  <!-- ══ End bordered content column ═══════════════════════════════════════ -->
+
+        <!-- Two columns, three rows. Every cell is the same shape — glyph-led label
+             over one paragraph — and `items-start` is what the design asks for by
+             "aligned on top": the copy hangs from each cell's top edge rather than
+             centring inside whatever height the tallest paragraph forces.
+
+             The cells carry the SAME `xl` padding as the header cell beside them, so
+             the first pillar's label starts on the header's overline and every cell's
+             copy shares one inset. Anything smaller here and the two halves of the
+             module would open on different lines. -->
+        <CardGrid
+          variant="divider"
+          :columns="2"
+        >
+          <div
+            v-for="pillar in platformPillars"
+            :key="pillar.label"
+            class="flex flex-col items-start gap-[var(--spacing-sm)] bg-[var(--bg-canvas)] p-[var(--spacing-xl)]"
+          >
+            <p class="m-0 flex items-center gap-[var(--spacing-xs)] text-body-sm">
+              <i
+                :class="[pillar.icon, 'text-body-md text-[var(--text-muted)]']"
+                aria-hidden="true"
+              />
+              <span class="text-[var(--text-muted)]">{{ pillar.label }}</span>
+            </p>
+            <p class="m-0 text-pretty text-body-md text-[var(--text-default)]">
+              {{ pillar.description }}
+            </p>
+          </div>
+        </CardGrid>
+      </div>
+    </SectionModule>
+
+    <SectionGap />
+
+    <!-- ── Deploy — drawn beside running ─────────────────────────────────────
+         The Deploy scene as illustrated, next to the same deploy actually playing back
+         in the LogView widget, 50/50. The catalogue of six scenes this section used to
+         open with is gone from the home page — it documents the illustration language
+         rather than the product, so it now lives only where that is the subject (the
+         Hub's assets page renders the full set). -->
+    <!-- `:framed="false"`: the component wraps itself in its own SectionContainer by
+         default (it is also used as a standalone page band). Inside this page's column
+         that would nest one bordered column in another at the same width, drawing both
+         side rules twice for the whole height of the block. -->
+    <PlatformIllustrations
+      deploy-only
+      :framed="false"
+    />
+
+    <SectionGap />
+
+    <!-- ── Why Azion — the four-panel proof grid (Figma node 365:113958) ─────
+         Branch graph, credentials table, control plane, usage chart. The component
+         already implemented this design; it carries the Figma's overline now. -->
+    <PlatformShowcase />
+
+    <SectionGap />
+
+    <!-- ── Client stories (Figma node 365:114155) ──────────────────────────── -->
+    <ClientStories />
+
+    <SectionGap />
+
+    <!-- ── Developer / AI band (Figma node 365:114094) ─────────────────────── -->
+    <DeveloperSection />
+
+    <SectionGap />
+
+    <!-- ── Closing CTA (Figma node 365:114207) ─────────────────────────────── -->
+    <SiteCta />
+  </SectionContainer>
+  <!-- ══ End framed column ═════════════════════════════════════════════════ -->
 </template>

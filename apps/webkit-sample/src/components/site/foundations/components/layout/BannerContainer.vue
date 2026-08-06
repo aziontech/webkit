@@ -18,9 +18,18 @@
    * pass the bar's height as `class="[--banner-offset:3.5rem]"`. Unset ⇒ 0, so a
    * banner that owns the whole viewport needs nothing.
    *
-   * A `#background` slot renders behind the content (z-0) for full-bleed
-   * backdrops (the ASCII field, scrims); the default slot is the z-10 copy.
+   * The backdrop behind the content (z-0) comes from one of two places:
+   *
+   *   • banner="<key>" — a registered backdrop from `site/ui/banners/index.js`
+   *                      ('globe', 'contour', 'mesh', …). The page names one; it
+   *                      never imports the backdrop itself.
+   *   • #background     — a one-off backdrop passed as markup. When both are
+   *                      given the slot wins, so a page can always override.
+   *
+   * The default slot is the z-10 copy.
    */
+  import { BANNER_NAMES, BANNERS } from '../../../ui/banners/index.js'
+
   const MAX_W = {
     '3xl': 'max-w-[var(--container-xl)]',
     '4xl': 'max-w-[var(--container-2xl)]',
@@ -43,6 +52,12 @@
     hero: {
       type: Boolean,
       default: false
+    },
+    // A registered backdrop key from site/ui/banners/index.js — '' for none.
+    banner: {
+      type: String,
+      default: '',
+      validator: (v) => v === '' || BANNER_NAMES.includes(v)
     }
   })
 </script>
@@ -55,7 +70,12 @@
       hero && 'flex min-h-[calc(100dvh-var(--banner-offset,0px))] flex-col justify-center'
     ]"
   >
-    <slot name="background" />
+    <slot name="background">
+      <component
+        :is="BANNERS[banner]"
+        v-if="banner"
+      />
+    </slot>
     <div
       :class="[
         MAX_W[maxWidth],

@@ -39,6 +39,7 @@ import ObjectStorage from './components/ObjectStorage.vue'
 import Onboarding from './components/Onboarding.vue'
 import PersonalTokens from './components/PersonalTokens.vue'
 import Playground from './components/Playground.vue'
+import ReleaseComposer from './components/ReleaseComposer.vue'
 import SignUp from './components/SignUp.vue'
 import LandingAzion from './components/site/LandingAzion.vue'
 import WebkitHub from './components/site/WebkitHub.vue'
@@ -84,6 +85,17 @@ const routes = [
   { path: '/marketplace', name: 'marketplace', component: Marketplace },
   { path: '/workloads', name: 'workloads', component: Workloads },
   { path: '/deployments', name: 'deployments', component: Deployments },
+  // Review and deploy — the release composer. A page rather than a drawer because a
+  // release's blast radius is bigger than the thing being deployed: the review has to be
+  // linkable, reloadable, and wide enough to hold the release beside what it reaches. Its
+  // whole entry context rides the query string (`deploymentIds`, `pickTarget`,
+  // `scopedType`, `resourceId`, `versionId`) so a reload lands in the same scenario. It is
+  // declared BEFORE `/deployments/:id` so `releases` is never read as a deployment id.
+  {
+    path: '/deployments/releases/new',
+    name: 'release-composer',
+    component: ReleaseComposer
+  },
   // The deploy page for a container deployment. A URL, not a drawer: a container
   // deployment's runtime and its six-step lifecycle are what a support thread
   // links to and what a user reloads.

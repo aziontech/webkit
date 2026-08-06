@@ -56,7 +56,6 @@
   import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
-  import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import FilterPopover from './ui/FilterPopover.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
@@ -215,23 +214,23 @@
     })
 
   // ── Deploy ────────────────────────────────────────────────────────────────
-  // The ONE deploy interaction, opened from a row with the application already
-  // chosen (ui/DeployResourceDrawer.vue). The run it starts lives at module scope
-  // (src/lib/deploy-runs.js), so this page can be left the moment the drawer closes;
-  // the deployment is a row in the Deployments module from that second, Building.
-  // Authoring a missing strategy is the drawer's own nested flow (its Deployment
-  // Settings Select carries the quick-add), so this page hosts only the deploy drawer.
-  const deployOpen = ref(false)
-  const deployTarget = ref(null)
-
+  // Deploying an application opens the RELEASE COMPOSER (../ReleaseComposer.vue) SCOPED to
+  // this application: only its version changes, and every Deployment setting the release
+  // lands on keeps the firewall and the custom page it binds. That scope is the difference
+  // between this entry and the workload one — here the resource is settled and the target is
+  // the question; from a workload both are already answered.
+  //
+  // The whole scope rides the query string, so the review is linkable and survives a reload.
   const openDeploy = (row) => {
-    deployTarget.value = { kind: 'application', id: row.id, name: row.name }
-    deployOpen.value = true
-  }
-
-  const onDeployed = (run) => {
-    toast.info(`Deployment ${run.deployId} started`, {
-      description: 'Follow it in Deployments — it keeps running if you leave.'
+    router.push({
+      path: '/deployments/releases/new',
+      query: {
+        email: userEmail.value,
+        scopedType: 'application',
+        // A Deployment setting binds resources by NAME (`strategy.attributes`), so the
+        // release is scoped by name too — the same key on both sides, never translated.
+        resourceId: row.name
+      }
     })
   }
 
@@ -551,10 +550,11 @@
                       </Dropdown.Trigger>
 
                       <Dropdown.Group>
-                        <!-- Deploy leads the menu: it is the one action here that
-                             changes what the edge is serving, and it is the SAME
-                             interaction every other resource offers (ui/DeployResourceDrawer.vue)
-                             — the application arrives already chosen. -->
+                        <!-- Deploy leads the menu: it is the one action here that changes
+                             what the edge is serving. It opens the release composer scoped
+                             to this application (../ReleaseComposer.vue), so only its
+                             version changes and the review of what that reaches happens
+                             before anything ships. -->
                         <Dropdown.Option
                           value="deploy"
                           label="Deploy"
@@ -624,11 +624,5 @@
       </section>
     </main>
 
-    <!-- The one deploy interaction, with this row's application already chosen. -->
-    <DeployResourceDrawer
-      v-model:open="deployOpen"
-      :resource="deployTarget"
-      @deployed="onDeployed"
-    />
   </AppLayout>
 </template>

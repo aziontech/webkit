@@ -79,7 +79,14 @@
     // Milliseconds already elapsed when this view mounts, so a run that outlived
     // the page (see src/lib/deploy-runs.js) is picked up where it actually is
     // rather than restarted from the first line when the user comes back.
-    seek: { type: Number, default: 0 }
+    seek: { type: Number, default: 0 },
+    // Draw the header row — the title, the Phased/Complete switch, the outcome tag
+    // and the copy control. Off leaves only the steps and the progress bar, for a
+    // surface that shows a deployment as an ILLUSTRATION of one rather than as a
+    // thing to operate (the home page's deploy cell). With no switch there is no
+    // second view, so `phased` is the only one rendered, and the per-step copy
+    // control goes with it — nothing here is for taking away.
+    header: { type: Boolean, default: true }
   })
 
   const emit = defineEmits(['finished', 'failed'])
@@ -379,6 +386,7 @@
   <div class="flex w-full flex-col">
     <!-- Header: label + live status / completed tag + running total time -->
     <div
+      v-if="header"
       class="flex items-center justify-between gap-[var(--spacing-sm)] border-b border-[var(--border-default)] px-[var(--spacing-sm)] py-[var(--spacing-sm)]"
     >
       <p class="text-heading-xxs text-[var(--text-default)]">Deployment Logs</p>
@@ -512,6 +520,7 @@
           <LogView
             :lines="linesByStep[i]"
             :border="false"
+            :show-copy="header"
             :loading="stepStatus(i) === 'pending'"
             loading-label="Waiting to start…"
           >

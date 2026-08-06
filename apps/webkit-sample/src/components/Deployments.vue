@@ -276,6 +276,14 @@
     settingsOpen.value = true
   }
 
+  // A RELEASE is the third thing this module creates, and the one with the widest reach:
+  // it binds a version of every resource and publishes it into one or more Deployment
+  // settings. It is a page rather than a drawer because it has to be reviewed before it
+  // happens (see ./ReleaseComposer.vue).
+  const newRelease = () => {
+    router.push({ path: '/deployments/releases/new', query: { email: userEmail.value } })
+  }
+
   // This is the Settings TAB's own create action — a strategy authored on its own,
   // not because a deploy needed one. (Inside the deploy drawer the same drawer opens
   // as a nested child of it, so the deploy in progress is never lost.)
@@ -369,6 +377,19 @@
         :tabs="tabs"
       >
         <template #actions>
+          <!-- The release composer, entered with nothing settled: no Deployment setting
+               and no scoped resource, so the operator selects the targets first and then
+               composes (../ReleaseComposer.vue § the `global` scenario). From a Workload
+               or a resource the same page opens with that context in its URL. -->
+          <Button
+            key="button-0"
+            v-if="activeTab === 'all'"
+            label="New release"
+            kind="outlined"
+            size="medium"
+            icon="pi pi-cloud-upload"
+            @click="newRelease"
+          />
           <Button
             key="button-1"
             v-if="activeTab === 'all'"
