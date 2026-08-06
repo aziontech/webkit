@@ -1,15 +1,95 @@
 [
    {
+    "name": ".edge/storage/assets/ai-inference-CQtm0ASR.js",
+    "hash": "355295022d1b83df1f1d8f858f51e7c2e69e604fe2bbde754fcc79a519348c52"
+   },
+   {
+    "name": ".edge/storage/assets/americamovil-DWQ7PDp_.svg",
+    "hash": "e6afd542494717f97eadb7eaefa821d6f49289e2e6592617fb5aad4d1310eaa4"
+   },
+   {
+    "name": ".edge/storage/assets/api-keys-DqFHffzn.js",
+    "hash": "6984c9069b71d78493e3635db62d2fde69fb05ec25204bab40288b40376b1fae"
+   },
+   {
+    "name": ".edge/storage/assets/azion-highlight-0j4tT5_b.js",
+    "hash": "704f144e09ade5c095ea6ccf603e7bada165074e676b6de06ee0e887452adab3"
+   },
+   {
     "name": ".edge/storage/assets/azionicons-BYf41jcl.woff2",
     "hash": "b9119ec318a9d7f272516a1ad1a9d0203f0caf6aa8d869bb334b742e2ae25f7c"
    },
    {
-    "name": ".edge/storage/assets/index-DHx-KGc4.js",
-    "hash": "53b94f1ba00344007cad3c1a78259803bffb4e913af6c4de29856092cc088040"
+    "name": ".edge/storage/assets/bot-manager-DUupIQPP.js",
+    "hash": "15dc8f5f404e555df7df700acd668e1a38f67aaa97c92b9b5490bf3e42728d02"
    },
    {
-    "name": ".edge/storage/assets/index-DvDJNKrQ.css",
-    "hash": "77a087798ed5669838488be06abe1c3a8f84949efdecf0b323dd00f45c293345"
+    "name": ".edge/storage/assets/build-BLFCwy7G.js",
+    "hash": "b76255655786b8791648ec8243d1cd24d5befd34684e665e5e0fa8fe0819c7df"
+   },
+   {
+    "name": ".edge/storage/assets/cocacola-logo-pmX9QCzI.svg",
+    "hash": "b2e6eb486b0fc1255763bb75b6e44727997ae7fcf64fa26c01a8e1437b6b6dda"
+   },
+   {
+    "name": ".edge/storage/assets/deploy-DtsmtMGA.js",
+    "hash": "334d8e17d0cfd600cc0524759c5fc72a4ffff0cdcf3a65665d924ca13821ac7f"
+   },
+   {
+    "name": ".edge/storage/assets/edge-storage-DWBz1hsq.js",
+    "hash": "18e22a7fec6f137d4d4152ee0ece57ec544666fa3e87793831523ef671102821"
+   },
+   {
+    "name": ".edge/storage/assets/fourbank-logo-nehfTvNJ.svg",
+    "hash": "15d7d93d280204269109ec9f5544e5ede6a0cade67bc9f68008cdb3f59f67293"
+   },
+   {
+    "name": ".edge/storage/assets/functions-DiERPZQ5.js",
+    "hash": "f51c9168bda46eea12f46377b719a9e1a8591616594502b575bb7f828a51c5a1"
+   },
+   {
+    "name": ".edge/storage/assets/gfg-global-fashion-group-BdL4_W1p.svg",
+    "hash": "9e1291c1bbb47590828e7ad766046fa2aa25f38dfa4b8fbdce49ee6621c08c20"
+   },
+   {
+    "name": ".edge/storage/assets/gpa-logo-ZsdREsrC.svg",
+    "hash": "eeca1e8d9ed5f7d2cf8e39b9df3afa291c26d9e8b8205bcc52aa5bf67263c22a"
+   },
+   {
+    "name": ".edge/storage/assets/image-processor-BI5AfEF9.js",
+    "hash": "7fa6bb285e02c296e6d0aa17a4e85a2e0777dc31462cb4467a67f93616153623"
+   },
+   {
+    "name": ".edge/storage/assets/index-Coc8OgTs.css",
+    "hash": "6d55e94724229051bab178308636dd872164f5bdc5998a7db9be313a0373804a"
+   },
+   {
+    "name": ".edge/storage/assets/index-URZQ-w3e.js",
+    "hash": "9f15e928bcfc2c16b0d862236f65df310502cdcf3001ecaacafca412b786bc38"
+   },
+   {
+    "name": ".edge/storage/assets/itau-logo-BV5EofDT.webp",
+    "hash": "0fb00a532cc5a13996d70e221efb7e158157c7f202d62f9dc37ac1a0dda46eaf"
+   },
+   {
+    "name": ".edge/storage/assets/madeira-logo-CR7wTLqb.svg",
+    "hash": "696deb62af68a43d926fb12a7139aeab213b449694d1d39b3256efd03abb1ee1"
+   },
+   {
+    "name": ".edge/storage/assets/magalu-symbol-Baq-hPju.png",
+    "hash": "6964f6ce7b96af238baf608cf9cc0238b6b0f4b25704d15b51a84b08f688ad06"
+   },
+   {
+    "name": ".edge/storage/assets/netshoes-logo-BN1tjjLh.svg",
+    "hash": "ecdfb0008704d17dc1c22b285272a699db326f1ebbf2a3a65ec7083454f4e1cb"
+   },
+   {
+    "name": ".edge/storage/assets/optimize-application-5Phzzk7E.js",
+    "hash": "405b4f75269f72df4be1ef86e45cbbdde7c6370415536b7c809056e3a7efea3a"
+   },
+   {
+    "name": ".edge/storage/assets/path-DuYPYc0x.js",
+    "hash": "3ff3451320df7deeb12f20b55a384a526f48c8f62924e37edffd1f26ee26e1c3"
    },
    {
     "name": ".edge/storage/assets/primeicons-BubJZjaf.svg",
@@ -32,12 +112,44 @@
     "hash": "131bc3bfb18180990842d86b491fe604118a9e7a83d2bb495afdadccba8b9ff4"
    },
    {
+    "name": ".edge/storage/assets/primevideo-logo-D0X2OJpS.svg",
+    "hash": "5c6179a317f731ea483aab8f16a6dae35150ebed100c27fc3695404fe4dbbab4"
+   },
+   {
+    "name": ".edge/storage/assets/radware-logo-DnOZ-eB_.svg",
+    "hash": "b8e7e2e2e89645469c966973d98a54e40579e87df7ffaeb1685a0618d2e8f781"
+   },
+   {
+    "name": ".edge/storage/assets/renner-logo-C7DQrL02.svg",
+    "hash": "7b04b6cff714aeb8f2697dbb8ce2a09ef7a2175f9a41d8fd6bdf65ba89855770"
+   },
+   {
+    "name": ".edge/storage/assets/renner-logo-CvU_qC2w.svg",
+    "hash": "31cdbabf78675a53f81fdfe0b7e034ef049407c9fbc2414d10d033ab9438acb6"
+   },
+   {
+    "name": ".edge/storage/assets/ship-DIXujGvV.js",
+    "hash": "7529f29a6ad208d8191d6dfdba0de2fb082b01cb0590fc92a33e65cce5ee76c1"
+   },
+   {
+    "name": ".edge/storage/assets/sql-database-B-v34Ik8.js",
+    "hash": "dc91dedce8ba84e2f091367c9d729137b6656ae68e00c0623fafec835dfcc446"
+   },
+   {
+    "name": ".edge/storage/assets/traffic-chart-DXHs4E1N.js",
+    "hash": "a21df46771a8426908f3c74dcf185285bc1ae38683e62d59250804bfcf9b23e0"
+   },
+   {
+    "name": ".edge/storage/assets/waf-rules-CuuxmBbw.js",
+    "hash": "dc397d307441554efb3cda2000aafc543b0706272559a5efb7483e5662ad44be"
+   },
+   {
     "name": ".edge/storage/avatars/README.md",
     "hash": "85382fda9a327d789ec28d5088cf06cef9ac6de84eec9bc58a8e3c457cc9c86a"
    },
    {
     "name": ".edge/storage/index.html",
-    "hash": "a79acfb7712341948d792e2d60d73d427dd25a0cc3b4142a2ddd2ae98082afa4"
+    "hash": "105af43c4ae9517f5055aeb852b5045247b38ad244ba71f57a91844ec79621cf"
    },
    {
     "name": ".edge/storage/template-nextjs-thumb.png",
