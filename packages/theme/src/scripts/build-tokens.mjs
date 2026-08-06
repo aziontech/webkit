@@ -12,7 +12,7 @@
  * Inputs:
  *   - `tokens/primitives/**`    declarative primitives (colors, spacings,
  *                               typography, breakpoints, animations, …)
- *   - `tokens/semantic/{containers,spacings,texts}.data.js`
+ *   - `tokens/semantic/{containers,spacings,texts,z-indices,illustrations}.data.js`
  *                               responsive-shaped semantic tokens
  *   - `tokens/primitives/animations/{animate,keyframes}.js`
  *                               animation utilities (`--animate-*`) + `@keyframes`
@@ -32,6 +32,7 @@ import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
+import { illustrationsData } from '../tokens/semantic/illustrations.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
 import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
@@ -92,6 +93,7 @@ const buildFlatModel = () => ({
   containers: flattenSingleValue(containersData, (k) => `--container-${k}`),
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
   zIndices: flattenSingleValue(zIndicesData, (k) => `--${k}`),
+  illustrations: flattenSingleValue(illustrationsData, (k) => `--${k}`),
   texts: flattenBundle(textsData),
 });
 
@@ -297,6 +299,7 @@ const emitCssV4 = () => {
     ...(m.containers._ || {}),
     ...(m.spacings._ || {}),
     ...(m.zIndices._ || {}),
+    ...(m.illustrations._ || {}),
     ...(m.texts._ || {}),
   };
 
@@ -306,6 +309,7 @@ const emitCssV4 = () => {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
       ...(m.zIndices[bp] || {}),
+      ...(m.illustrations[bp] || {}),
       ...(m.texts[bp] || {}),
     };
     if (Object.keys(merged).length === 0) continue;
