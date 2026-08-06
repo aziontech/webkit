@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: a0ded78bd69aceed40baffb930c4f23f4a085b00aac20c325e2ba757b4d8f9f1
+checksum: 6a739520830f4b45fe7964794548a30ac41ac0bf56a57f2544fdeb31d18ff50b
 created: 2026-05-22
 last_updated: 2026-08-06
 ---
@@ -154,7 +154,7 @@ the rail back in to `--size-10`** and morphs the page beside it on the same fram
 is something the user *sees happen* rather than a 2 px line they have to find and trust. Leaving
 the zone carries the sliver out again on the exit curve.
 
-Four things make it hold together:
+Five things make it hold together:
 
 - **The zone grows with the sliver.** It is `--size-6` at rest and `--size-10` while previewing, so
   it always spans exactly what it opened. A fixed narrow zone would end where the sliver begins and
@@ -165,15 +165,20 @@ Four things make it hold together:
 - **The sliver shows the rail's surface, not its content.** The panel stays parked off the leading
   edge and only the rail's own fill and padding come in. A `--size-10` window onto a panel laid out
   for its committed width would cut every row mid-glyph — icons sit at 28–44 px, so 40 px clips all
-  of them — and a chopped column reads as a rendering fault rather than an invitation. The
-  affordance rides in on that clean strip, centred in it (`--spacing-xxs` either side of the 32 px
-  button).
-- **The affordance moves with the sliver, it does not appear on top of it.** The expand button is
-  parked a full width past the leading edge and shares the rail's own `transition` string, so the
-  two are one movement: its trailing edge tracks the sliver's exactly, frame for frame. That timing
-  has to be inline — the rail's `duration['moderate-02']` / `curve['expressive-entrance']` live in
-  `presets/transitions.ts` as JS values, and `duration-*` / `ease-*` utilities only resolve steps
-  the theme registers as CSS variables (`duration-fast-02` is not one, and silently emits nothing).
+  of them — and a chopped column reads as a rendering fault rather than an invitation.
+- **The button sits after the line, not on the sliver.** The line marks the edge; the button is
+  what you reach for beyond it. It is placed at the zone's `left-full`, and because the zone's
+  width *is* the sliver's width, `100%` tracks that trailing edge frame for frame with no
+  transition of its own. Its leading `--spacing-xxs` is **padding inside the container, never a
+  margin**: the container has to stay flush against the zone so the two boxes touch. A gap there
+  belongs to neither, and a pointer crossing it fires `pointerleave` — retracting the sliver out
+  from under the very button it was travelling to.
+- **The affordance moves with the sliver, it does not appear on top of it.** The button is parked
+  `--size-10` past the leading edge and shares the rail's own `transition` string, so the two are
+  one movement rather than two that overlap. That timing has to be inline — the rail's
+  `duration['moderate-02']` / `curve['expressive-entrance']` live in `presets/transitions.ts` as JS
+  values, and `duration-*` / `ease-*` utilities only resolve steps the theme registers as CSS
+  variables (`duration-fast-02` is not one, and silently emits nothing).
 - **The accent line marks the rail's own trailing edge, in every state.** It lives inside the rail
   rather than in the zone, so it is the same mark whether the rail is sized, being dragged, or
   previewing, and it travels with that edge by construction. A line drawn on the zone's leading
@@ -319,7 +324,7 @@ continuous values a gesture writes frame by frame, not variants.
 | collapsed edge affordance appears | `opacity` 0 → 1 | `duration['moderate-01']` · `curve['productive-entrance']` | `motion-reduce:transition-none` |
 | collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | `duration['moderate-02']` · `curve['expressive-entrance']` in, `['expressive-exit']` out | `prefers-reduced-motion` short-circuit — `transition: none`, the sliver is simply there or not |
 | preview zone widens to the sliver | `width` `--size-6` ↔ `--size-10` | shares `railTransition` | inherited — the preset returns `none` |
-| expand affordance rides the sliver in | `transform` `translateX(calc(-100% - --spacing-xxs))` ↔ 0, `opacity` 0 ↔ 1 | shares `railTransition` | inherited — the preset returns `none` |
+| expand affordance rides the sliver in | `transform` `translateX(calc(-1 * --size-10))` ↔ 0, `opacity` 0 ↔ 1 | shares `railTransition` | inherited — the preset returns `none` |
 | rail trailing-edge line on hover / focus / drag / preview | `transition-opacity` | Tailwind default (see note) | `motion-reduce:transition-none` |
 
 An eased width would lag behind the cursor and read as a broken handle, so the transition is
@@ -341,6 +346,7 @@ pulled to then animates to fully in or fully out.
 | rail width bounds | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |
 | collapsed preview sliver | `var(--size-10)` |
 | collapsed edge zone | `var(--size-6)` at rest, `var(--size-10)` while previewing |
+| expand button offset past the edge | `var(--spacing-xxs)` (container padding, so the boxes stay flush) |
 
 The `<nav>` region hands its own fill down to the rows inside it as
 `--menu-item-ring-offset` and `--menu-ring-offset`, both `var(--bg-surface)`. That is what makes a

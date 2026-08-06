@@ -165,7 +165,7 @@
   const affordanceStyle = computed(() => ({
     transform: previewing.value
       ? 'translateY(-50%)'
-      : 'translateY(-50%) translateX(calc(-100% - var(--spacing-xxs)))',
+      : 'translateY(-50%) translateX(calc(-1 * var(--size-10)))',
     opacity: previewing.value ? '1' : '0',
     transition: railTransition.value
   }))
@@ -371,12 +371,23 @@
         @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
       />
 
-      <!-- Slides in with the sliver (see `affordanceStyle`), and is `pointer-events-none` until
-           the preview is open: an invisible button parked on the page's leading edge would
-           otherwise swallow every click that lands there while the rail is collapsed. -->
+      <!--
+        `left-full` puts the button immediately AFTER the accent line, past the sliver rather
+        than on top of it — the line marks the edge, the button is what you reach for beyond it.
+        Because the zone's width is the sliver's width, `100%` tracks that trailing edge frame
+        for frame with no transition of its own.
+
+        The leading `pl` is inside the container, not a margin: the container has to stay flush
+        against the zone so the two boxes touch. A gap there is a strip belonging to neither, and
+        the pointer crossing it would fire `pointerleave` and retract the sliver out from under
+        the very button it was travelling to.
+
+        `pointer-events-none` until the preview is open, so an invisible button parked over the
+        page does not swallow clicks that land there while the rail is collapsed.
+      -->
       <div
         :style="affordanceStyle"
-        class="pointer-events-none absolute left-[var(--spacing-xxs)] top-1/2 group-data-[preview]:pointer-events-auto"
+        class="pointer-events-none absolute left-full top-1/2 pl-[var(--spacing-xxs)] group-data-[preview]:pointer-events-auto"
       >
         <!-- `right`: this control sits on the host's leading edge, so the only room is
              towards the page. -->
