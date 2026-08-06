@@ -87,6 +87,9 @@
   const {
     railEl,
     resizing,
+    previewing,
+    startPreview,
+    endPreview,
     valueNow,
     valueMin,
     valueMax,
@@ -147,6 +150,24 @@
    */
   const INNER_CLASS = 'flex h-full min-h-0 w-full flex-col'
 
+  /**
+   * While previewing, the sliver is a `--size-10` window onto a full-width panel, so group
+   * labels and row text meet the clip mid-word. Fading the last few px turns that cut into an
+   * edge that reads as "there is more behind this" — which is the whole message of a preview.
+   * The gradient stops are ABSOLUTE, not percentages: the mask box is the panel's own width
+   * (the rail's committed width), so a percentage would put the fade off-screen. It runs over
+   * the last `--size-9` → `--size-10`, which is the widest fade the row icons tolerate — they
+   * sit at 28–44 px, so anything earlier ghosts the glyph instead of just its cut edge.
+   */
+  const innerClass = computed(() =>
+    cn(
+      INNER_CLASS,
+      previewing.value
+        ? '[mask-image:linear-gradient(to_right,black_var(--size-9),transparent_var(--size-10))]'
+        : undefined
+    )
+  )
+
   const FOOTER_REGION_CLASS = 'w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)]'
 
   /**
@@ -205,7 +226,7 @@
     :aria-hidden="isOut ? 'true' : undefined"
   >
     <div
-      :class="INNER_CLASS"
+      :class="innerClass"
       :style="innerStyle"
       :data-testid="`${testId}__panel`"
     >
@@ -303,6 +324,11 @@
     the host's leading edge while the rail is out; hovering it, or focusing anything inside it,
     reveals the two ways back: the grab bar (pull the rail out from under the cursor) and the
     button. Both stay hidden at rest so a collapsed layout is genuinely clean.
+
+    Resting in the zone also PREVIEWS the rail — it animates back in to `--size-10` and the page
+    morphs with it, so the way back is something you see happen rather than a line you have to
+    find and trust. The zone grows to the sliver's own width for the duration, so it stays under
+    the pointer instead of ending where the sliver begins and flickering the preview on and off.
   -->
   <Transition
     enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
@@ -313,8 +339,13 @@
     <div
       v-if="collapsible && collapsed"
       :data-resizing="resizing ? '' : undefined"
+      :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
-      class="group absolute inset-y-0 left-0 z-20"
+      class="group absolute inset-y-0 left-0 z-20 w-[var(--size-6)] transition-[width] duration-fast-02 ease-productive-entrance data-[preview]:w-[var(--size-10)] motion-reduce:transition-none"
+      @pointerenter="startPreview"
+      @pointerleave="endPreview"
+      @focusin="startPreview"
+      @focusout="endPreview"
     >
       <!-- `grab` rather than `col-resize`: from here the gesture is picking the rail up, not
            sizing one that is already in place. -->
@@ -327,7 +358,7 @@
         :aria-valuenow="valueNow"
         :aria-valuemin="valueMin"
         :aria-valuemax="valueMax"
-        class="absolute inset-y-0 left-0 w-[var(--spacing-sm)] cursor-grab outline-none active:cursor-grabbing"
+        class="absolute inset-y-0 left-0 w-full cursor-grab outline-none active:cursor-grabbing"
         @pointerdown="startResize"
         @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
       >
@@ -336,8 +367,11 @@
         />
       </div>
 
+      <!-- `pointer-events-none` until it is actually shown: an invisible button parked on the
+           page's leading edge would otherwise swallow every click that lands there while the
+           rail is collapsed. -->
       <div
-        class="absolute left-[var(--spacing-xs)] top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover:opacity-100 group-focus-within:opacity-100 group-data-[resizing]:opacity-0 motion-reduce:transition-none"
+        class="pointer-events-none absolute left-[var(--spacing-xs)] top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-data-[resizing]:pointer-events-none group-data-[resizing]:opacity-0 motion-reduce:transition-none"
       >
         <!-- `right`: this control sits on the host's leading edge, so the only room is
              towards the page. -->

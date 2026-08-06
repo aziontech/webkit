@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: b0db41a3d29108b17dd7f7c8d0554932e620b72edb77b5bdbfad18a12103fd0b
+checksum: 1a65b581997c437b685b9eca9dca3b7b6e79789659d8286b51e44c330c1960e7
 created: 2026-05-22
 last_updated: 2026-08-06
 ---
@@ -146,6 +146,31 @@ Both icon-only controls (the collapse trigger and the expand button) carry a **`
 text is the same string as their accessible name, so a pointer user gets the label a screen reader
 already had, and the two cannot drift.
 
+#### The collapsed rail previews itself
+
+A collapsed rail leaves nothing on the page, so the way back has to be discoverable without being
+visible at rest. Resting the pointer in the leading-edge zone — or landing focus in it — **animates
+the rail back in to `--size-10`** and morphs the page beside it on the same frames, so the way back
+is something the user *sees happen* rather than a 2 px line they have to find and trust. Leaving
+the zone carries the sliver out again on the exit curve.
+
+Three things make it hold together:
+
+- **The zone grows with the sliver.** It is `--size-6` at rest and `--size-10` while previewing, so
+  it always spans exactly what it opened. A fixed narrow zone would end where the sliver begins and
+  flicker the preview on and off as the pointer crossed that seam. Both widths come from the
+  **fixed** `--size-*` scale, never `--spacing-lg`/`xl`/`xxl`, which are breakpoint-responsive — an
+  `--spacing-xl` zone is 48 px on desktop, far more of the page's leading edge than a hit target
+  should claim.
+- **The sliver is a window, not a resize.** The panel keeps its committed width and the rail clips
+  it, so nothing re-wraps and there is no second layout to design. Row content meets that clip
+  mid-glyph (icons sit at 28–44 px), so the panel's last `--size-9` → `--size-10` is masked to
+  transparent: the cut reads as "there is more behind this edge" instead of as a rendering bug.
+- **A preview is not a restore.** The rail stays `inert` + `aria-hidden` throughout. Bringing it
+  back for real is still the expand button (or the drag), which is why the preview is additive to
+  the affordance rather than a replacement for it — it costs a keyboard user nothing and gives a
+  pointer user the whole rail as the target.
+
 A collapsed rail also **drops its trailing border**: `width: 0` still paints a border, so without
 this the only trace of a fully collapsed rail would be a 1 px line down the page.
 
@@ -257,6 +282,7 @@ and the host's own `class="w-[280px]"` governs exactly as before.
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-collapsed` on the root while the rail is out of the layout
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
+- `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
 - Region testids derived from the root: `__panel` (the fixed-width inner panel), `__header`,
   `__nav`, `__scroll`, `__footer`, `__collapse` (the trigger), `__handle` (the drag separator),
   `__expand` / `__expand-button` (the collapsed affordance)
@@ -278,6 +304,8 @@ continuous values a gesture writes frame by frame, not variants.
 | rail collapses | `width` sized → 0, `translate-x` 0 → -100%, `opacity` → floor | `duration['moderate-02']` · `curve['expressive-exit']` | same short-circuit |
 | drag in flight | none — width tracks the pointer frame for frame | — | — |
 | collapsed edge affordance appears | `opacity` 0 → 1 | `duration['moderate-01']` · `curve['productive-entrance']` | `motion-reduce:transition-none` |
+| collapsed rail previews / retracts | `width` 0 ↔ `--size-10`, `translate-x` -100% ↔ 0, `opacity` → 1 | `duration['moderate-02']` · `curve['expressive-entrance']` in, `['expressive-exit']` out | `prefers-reduced-motion` short-circuit — `transition: none`, the sliver is simply there or not |
+| preview zone widens to the sliver | `transition-[width]` `--size-6` → `--size-10` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | handle line on hover / focus / drag | `transition-opacity` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 
 An eased width would lag behind the cursor and read as a broken handle, so the transition is
@@ -297,6 +325,8 @@ pulled to then animates to fully in or fully out.
 | resize handle line | `var(--accent)`, `var(--border-2)` wide |
 | resize handle hit area | `var(--spacing-xs)` |
 | rail width bounds | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |
+| collapsed preview sliver | `var(--size-10)` |
+| collapsed edge zone | `var(--size-6)` at rest, `var(--size-10)` while previewing |
 
 The `<nav>` region hands its own fill down to the rows inside it as
 `--menu-item-ring-offset` and `--menu-ring-offset`, both `var(--bg-surface)`. That is what makes a

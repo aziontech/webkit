@@ -260,6 +260,66 @@ describe('Sidebar', () => {
       expect(rail.contains(expand)).toBe(false)
     })
 
+    it('previewing: resting in the edge zone brings the collapsed rail back to --size-10', async () => {
+      const { getByTestId } = render(Sidebar, {
+        props: { collapsible: true, collapsed: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const rail = getByTestId('layout-sidebar')
+      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      expect(rail.style.width).toBe('0px')
+
+      await fireEvent.pointerEnter(zone)
+      expect(zone.getAttribute('data-preview')).toBe('')
+      // --size-10 read off the document by the composable; the theme sheet is loaded in setup.
+      expect(rail.style.width).toBe('40px')
+
+      await fireEvent.pointerLeave(zone)
+      expect(zone.hasAttribute('data-preview')).toBe(false)
+      expect(rail.style.width).toBe('0px')
+    })
+
+    it('previewing: focus reaching the edge zone opens the same sliver as the pointer', async () => {
+      const { getByTestId } = render(Sidebar, {
+        props: { collapsible: true, collapsed: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const rail = getByTestId('layout-sidebar')
+      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+
+      await fireEvent.focusIn(zone)
+      expect(rail.style.width).toBe('40px')
+
+      await fireEvent.focusOut(zone)
+      expect(rail.style.width).toBe('0px')
+    })
+
+    it('previewing: the sliver stays out of the tab order — it is a preview, not a restore', async () => {
+      const { getByTestId } = render(Sidebar, {
+        props: { collapsible: true, collapsed: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const rail = getByTestId('layout-sidebar')
+      await fireEvent.pointerEnter(await waitFor(() => getByTestId('layout-sidebar__expand')))
+
+      expect(rail.style.width).toBe('40px')
+      // Still formally collapsed: the way back is the button, not the sliver.
+      expect(rail.hasAttribute('inert')).toBe(true)
+      expect(rail.getAttribute('aria-hidden')).toBe('true')
+      expect(rail.getAttribute('data-collapsed')).toBe('')
+    })
+
+    it('previewing: an expanded rail has nothing to preview, so the zone is not even rendered', () => {
+      const { queryByTestId } = render(Sidebar, {
+        props: { collapsible: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+      expect(queryByTestId('layout-sidebar__expand')).toBeNull()
+    })
+
     it('the expand button brings a collapsed rail back', async () => {
       const { getByTestId, emitted } = render(Sidebar, {
         props: { collapsible: true, collapsed: true },

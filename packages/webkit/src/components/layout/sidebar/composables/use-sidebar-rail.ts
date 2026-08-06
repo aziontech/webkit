@@ -23,6 +23,15 @@ const COLLAPSE_SNAP = 56
 export const SIDEBAR_NUDGE_STEP = 16
 
 /**
+ * How wide the collapsed rail comes back in while the pointer rests in its edge zone. A size
+ * token, not a container token: this is a sliver the rail shows OF itself, not a width anyone
+ * works in — the container scale starts at `--container-3xs` (256 px), an order of magnitude
+ * past what a preview should take from the page.
+ */
+export const SIDEBAR_PREVIEW_WIDTH_TOKEN = '--size-10'
+const SIDEBAR_PREVIEW_WIDTH_FALLBACK = 40
+
+/**
  * How faint the rail gets at zero presence. Not 0: a rail being pulled in or dropped out
  * should stay legible enough to read as the same object moving, and the width and translate
  * already carry the "gone".
@@ -47,6 +56,16 @@ export interface UseSidebarRailReturn {
   railEl: Ref<globalThis.HTMLElement | null>
   /** True while a pointer drag is in flight. */
   resizing: Readonly<Ref<boolean>>
+  /**
+   * True while the collapsed rail is showing its preview sliver — the pointer (or focus) is
+   * resting in the edge zone. Drives the zone's own width, so the zone never slips out from
+   * under the pointer as the sliver it opened arrives beneath it.
+   */
+  previewing: Readonly<Ref<boolean>>
+  /** Pointer entered / focus landed in the collapsed rail's edge zone. */
+  startPreview: () => void
+  /** Pointer left / focus left the edge zone — the sliver animates back out. */
+  endPreview: () => void
   /**
    * The separator's reported position, in px. A focusable `role="separator"` is a window
    * splitter, so it is required to say where it sits between its bounds — without these a
@@ -116,6 +135,28 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   /** The sliver a pull has revealed while the rail is still formally collapsed. */
   const peekWidth = ref(0)
   const peeking = computed(() => resizing.value && collapsed.value)
+
+  /** Raw pointer/focus presence in the collapsed rail's edge zone. */
+  const previewHover = ref(false)
+  const previewWidth = ref(SIDEBAR_PREVIEW_WIDTH_FALLBACK)
+
+  /**
+   * The preview is only ever a state of a COLLAPSED rail that is not being dragged: a drag
+   * already owns the width frame by frame, and an expanded rail has nothing to preview. Gating
+   * it here rather than at the call site means the pointer may stay in the zone across an
+   * expand — the sliver simply stops applying.
+   */
+  const previewing = computed(
+    () => previewHover.value && collapsed.value && !resizing.value && toValue(options.enabled)
+  )
+
+  const startPreview = () => {
+    previewHover.value = true
+  }
+
+  const endPreview = () => {
+    previewHover.value = false
+  }
 
   let startX = 0
   let startWidth = 0
@@ -204,6 +245,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   onMounted(() => {
     railMin.value = readTokenPx(toValue(options.minWidthToken), railMin.value)
     railMax.value = readTokenPx(toValue(options.maxWidthToken), railMax.value)
+    previewWidth.value = readTokenPx(SIDEBAR_PREVIEW_WIDTH_TOKEN, previewWidth.value)
     if (width.value != null) width.value = clamp(width.value)
     measure()
   })
@@ -212,7 +254,10 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
 
   const transition = computed(() =>
     getSidebarRailTransition({
-      phase: collapsed.value ? 'leave' : 'enter',
+      // A preview is the rail coming IN, so it eases on the entrance curve even though the rail
+      // is formally collapsed. Letting go flips this back to `leave`, which is what carries the
+      // sliver out on the exit curve — one computed, both directions.
+      phase: collapsed.value && !previewing.value ? 'leave' : 'enter',
       animated: !resizing.value && !prefersReducedMotion()
     })
   )
@@ -222,6 +267,11 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     // While a pull is in flight the width IS the pulled distance, so the page reflows under
     // the gesture in real time.
     if (peeking.value) return { width: `${peekWidth.value}px`, transition: 'none' }
+    // The preview takes over the width of a collapsed rail — the sliver is a real animated
+    // length, so the page beside it morphs on the same frames the sliver arrives on.
+    if (previewing.value) {
+      return { width: `${previewWidth.value}px`, transition: transition.value }
+    }
     return {
       width: width.value == null ? undefined : collapsed.value ? '0px' : `${width.value}px`,
       transition: transition.value
@@ -231,6 +281,10 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   /** How present the rail is, as one number the whole animation reads from. */
   const presence = computed(() => {
     if (resizing.value) return pullProgress.value
+    // Fully present: the sliver shows the rail's own leading edge — its surface and the first
+    // column of whatever it holds — rather than a faded ghost of it. The rail's `overflow-hidden`
+    // is what makes that a sliver; the panel itself is not what shrinks.
+    if (previewing.value) return 1
     return collapsed.value ? 0 : 1
   })
 
@@ -251,6 +305,9 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   return {
     railEl,
     resizing: computed(() => resizing.value),
+    previewing,
+    startPreview,
+    endPreview,
     // A collapsed rail sits at 0 — outside the bounds on purpose, because "out of the layout"
     // is a real position of this splitter and not the minimum width.
     valueNow: computed(() => (collapsed.value ? 0 : (width.value ?? railMin.value))),
