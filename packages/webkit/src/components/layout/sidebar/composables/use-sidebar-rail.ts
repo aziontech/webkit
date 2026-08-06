@@ -82,6 +82,14 @@ export interface UseSidebarRailReturn {
   valueMax: Readonly<Ref<number>>
   /** Inline style for the rail root: the width the page beside it morphs against. */
   railStyle: ComputedRef<Record<string, string | undefined>>
+  /**
+   * The rail's current `transition` shorthand, phase-aware and already reduced-motion-aware
+   * (`'none'`). Exposed so anything that has to move WITH the rail — the collapsed affordance
+   * riding in on the preview sliver — shares one timing instead of re-deriving it. The motion
+   * tokens are JS-side (`presets/transitions.ts`), so there is no `duration-*` utility to reach
+   * for; this is the only honest way to keep the two locked together.
+   */
+  railTransition: ComputedRef<string | undefined>
   /** Inline style for the inner panel: fixed width, slide and fade. */
   innerStyle: ComputedRef<Record<string, string | undefined>>
   /** Pointer-down on either separator — the handle, or the collapsed grab bar. */
@@ -278,13 +286,17 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     }
   })
 
-  /** How present the rail is, as one number the whole animation reads from. */
+  /**
+   * How present the rail is, as one number the whole animation reads from.
+   *
+   * A preview deliberately does NOT bring the panel with it. The sliver is `--size-10` of a
+   * panel laid out for its committed width, so any content it exposed would be cut mid-glyph
+   * (row icons sit at 28–44 px) — a chopped column reads as a rendering fault, not as an
+   * invitation. The panel therefore stays parked off the leading edge and the preview shows
+   * the rail's own surface: its fill and its padding, with the affordance riding in on top.
+   */
   const presence = computed(() => {
     if (resizing.value) return pullProgress.value
-    // Fully present: the sliver shows the rail's own leading edge — its surface and the first
-    // column of whatever it holds — rather than a faded ghost of it. The rail's `overflow-hidden`
-    // is what makes that a sliver; the panel itself is not what shrinks.
-    if (previewing.value) return 1
     return collapsed.value ? 0 : 1
   })
 
@@ -314,6 +326,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     valueMin: computed(() => 0),
     valueMax: computed(() => railMax.value),
     railStyle,
+    railTransition: transition,
     innerStyle,
     startResize,
     nudge,

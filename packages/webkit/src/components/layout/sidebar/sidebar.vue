@@ -94,6 +94,7 @@
     valueMin,
     valueMax,
     railStyle,
+    railTransition,
     innerStyle,
     startResize,
     nudge,
@@ -151,22 +152,23 @@
   const INNER_CLASS = 'flex h-full min-h-0 w-full flex-col'
 
   /**
-   * While previewing, the sliver is a `--size-10` window onto a full-width panel, so group
-   * labels and row text meet the clip mid-word. Fading the last few px turns that cut into an
-   * edge that reads as "there is more behind this" — which is the whole message of a preview.
-   * The gradient stops are ABSOLUTE, not percentages: the mask box is the panel's own width
-   * (the rail's committed width), so a percentage would put the fade off-screen. It runs over
-   * the last `--size-9` → `--size-10`, which is the widest fade the row icons tolerate — they
-   * sit at 28–44 px, so anything earlier ghosts the glyph instead of just its cut edge.
+   * The affordance rides IN with the sliver instead of fading in on top of it. It shares the
+   * rail's own transition string, so the two are the same movement rather than two animations
+   * that happen to overlap — parked a full width past the leading edge while the rail is out,
+   * arriving at its resting offset exactly as the sliver finishes.
+   *
+   * Inline rather than Tailwind utilities because the timing has to come from the motion
+   * tokens: `duration-*` / `ease-*` only accept steps the theme registers as CSS variables, and
+   * the rail's `duration['moderate-02']` / `curve['expressive-entrance']` are JS-side values in
+   * `presets/transitions.ts` with no utility of their own.
    */
-  const innerClass = computed(() =>
-    cn(
-      INNER_CLASS,
-      previewing.value
-        ? '[mask-image:linear-gradient(to_right,black_var(--size-9),transparent_var(--size-10))]'
-        : undefined
-    )
-  )
+  const affordanceStyle = computed(() => ({
+    transform: previewing.value
+      ? 'translateY(-50%)'
+      : 'translateY(-50%) translateX(calc(-100% - var(--spacing-xxs)))',
+    opacity: previewing.value ? '1' : '0',
+    transition: railTransition.value
+  }))
 
   const FOOTER_REGION_CLASS = 'w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)]'
 
@@ -226,7 +228,7 @@
     :aria-hidden="isOut ? 'true' : undefined"
   >
     <div
-      :class="innerClass"
+      :class="INNER_CLASS"
       :style="innerStyle"
       :data-testid="`${testId}__panel`"
     >
@@ -305,6 +307,7 @@
       :aria-valuemin="valueMin"
       :aria-valuemax="valueMax"
       :data-resizing="resizing ? '' : undefined"
+      :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__handle`"
       class="group absolute inset-y-0 right-0 z-10 w-[var(--spacing-xs)] cursor-col-resize outline-none"
       @pointerdown="startResize"
@@ -312,8 +315,12 @@
       @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
       @dblclick="collapsed = true"
     >
+      <!-- The line marks the rail's OWN trailing edge, so it is the same mark whether the rail is
+           sized, being dragged, or previewing — and because it lives inside the rail it travels
+           with that edge by construction, instead of being left behind at the page edge the rail
+           just moved away from. -->
       <span
-        class="pointer-events-none absolute inset-y-0 right-0 w-[var(--border-2)] bg-[var(--accent)] opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
+        class="pointer-events-none absolute inset-y-0 right-0 w-[var(--border-2)] bg-[var(--accent)] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
       />
     </div>
   </aside>
@@ -341,7 +348,8 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
-      class="group absolute inset-y-0 left-0 z-20 w-[var(--size-6)] transition-[width] duration-fast-02 ease-productive-entrance data-[preview]:w-[var(--size-10)] motion-reduce:transition-none"
+      :style="{ transition: railTransition }"
+      class="group absolute inset-y-0 left-0 z-20 w-[var(--size-6)] data-[preview]:w-[var(--size-10)]"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -361,17 +369,14 @@
         class="absolute inset-y-0 left-0 w-full cursor-grab outline-none active:cursor-grabbing"
         @pointerdown="startResize"
         @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
-      >
-        <span
-          class="pointer-events-none absolute inset-y-0 left-0 w-[var(--border-2)] bg-[var(--accent)] opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover:opacity-100 group-focus-within:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
-        />
-      </div>
+      />
 
-      <!-- `pointer-events-none` until it is actually shown: an invisible button parked on the
-           page's leading edge would otherwise swallow every click that lands there while the
-           rail is collapsed. -->
+      <!-- Slides in with the sliver (see `affordanceStyle`), and is `pointer-events-none` until
+           the preview is open: an invisible button parked on the page's leading edge would
+           otherwise swallow every click that lands there while the rail is collapsed. -->
       <div
-        class="pointer-events-none absolute left-[var(--spacing-xs)] top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-data-[resizing]:pointer-events-none group-data-[resizing]:opacity-0 motion-reduce:transition-none"
+        :style="affordanceStyle"
+        class="pointer-events-none absolute left-[var(--spacing-xxs)] top-1/2 group-data-[preview]:pointer-events-auto"
       >
         <!-- `right`: this control sits on the host's leading edge, so the only room is
              towards the page. -->
