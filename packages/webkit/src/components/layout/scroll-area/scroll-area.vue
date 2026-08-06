@@ -39,6 +39,14 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-scroll-area'
   )
 
+  // A scroll region has to be reachable by keyboard, which is why the viewport is a tab stop by
+  // default: with nothing focusable inside it, that is the only way to scroll it. A host that
+  // fills it with focusable rows — a sidebar whose content is a Menu — has already satisfied
+  // that, and the viewport is then one tab stop in front of the first row for no gain. Such a
+  // host passes `tabindex="-1"`: the region stays programmatically focusable (scroll-into-view),
+  // and Tab lands on the content.
+  const tabIndex = computed(() => (attrs['tabindex'] as string | number | undefined) ?? 0)
+
   const overflowClasses: Record<ScrollAreaOrientation, string> = {
     vertical: 'overflow-y-auto overflow-x-hidden',
     horizontal: 'overflow-x-auto overflow-y-hidden',
@@ -127,7 +135,7 @@
     :data-orientation="orientation"
     :data-testid="testId"
     :aria-label="ariaLabel || undefined"
-    tabindex="0"
+    :tabindex="tabIndex"
     @keydown="handleKeyDown"
   >
     <slot />

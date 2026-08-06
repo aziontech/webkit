@@ -73,7 +73,12 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-sidebar')
 
   provide(SidebarInjectionKey, {
-    testId: testId.value
+    testId: testId.value,
+    // A getter rather than a snapshot: a host may toggle `collapsible`, and the footer band
+    // moves between the region and `SidebarFooter` with it.
+    get collapsible() {
+      return props.collapsible
+    }
   })
 
   /** The gesture is offered only when one of its two halves was asked for. */
@@ -142,25 +147,40 @@
    */
   const INNER_CLASS = 'flex h-full min-h-0 w-full flex-col'
 
-  const footerRegionClass = computed(() =>
-    cn(
-      'w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)]',
-      // With the trigger present the footer is a ROW — the profile block and the trigger read
-      // as one footer rather than as two stacked things. Without it the region is untouched,
-      // so an existing consumer's footer keeps its own layout exactly.
-      props.collapsible ? 'flex items-center gap-[var(--spacing-xs)]' : undefined,
-      // The trigger sits on the TRAILING edge whether or not there is footer content beside
-      // it: with content, the `flex-1` slot wrapper pushes it there; alone in the region it
-      // would otherwise fall to the leading edge and land in a different corner of the rail
-      // depending on what the consumer happened to put in the footer.
-      props.collapsible && !slots['footer'] ? 'justify-end' : undefined
-    )
+  const FOOTER_REGION_CLASS = 'w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)]'
+
+  /**
+   * With the trigger present the footer is ONE band — the profile block and the trigger read as
+   * one footer rather than as two stacked things. The separator and the space above it belong to
+   * the band, not to the footer content: that is what makes the line run the full width of the
+   * region (past the trigger, instead of stopping short of it) and what puts the trigger on the
+   * same line as the content rather than half a padding above it. `SidebarFooter` drops its own
+   * border and top padding inside a collapsible sidebar for exactly this reason. Without the
+   * trigger the band is nothing, so an existing consumer's footer keeps its own layout exactly.
+   */
+  const footerBandClass = computed(() =>
+    props.collapsible
+      ? cn(
+          'flex items-center gap-[var(--spacing-xs)]',
+          'border-t border-[var(--border-muted)] pt-[var(--spacing-md)]',
+          // The trigger sits on the TRAILING edge whether or not there is footer content beside
+          // it: with content, the `flex-1` slot wrapper pushes it there; alone in the band it
+          // would otherwise fall to the leading edge and land in a different corner of the rail
+          // depending on what the consumer happened to put in the footer.
+          !slots['footer'] ? 'justify-end' : undefined
+        )
+      : undefined
   )
 
   const scrollClass = computed(() =>
     cn(
       'flex min-h-0 flex-1 flex-col gap-[var(--spacing-md)] p-[var(--spacing-md)]',
-      slots['header'] ? 'pt-0' : undefined
+      // The viewport clips, so a row flush against its edge loses the outer 4 px of its focus
+      // ring (`ring-2` over `ring-offset-2`). The region therefore keeps that much room at the
+      // top even when the header has already spaced it, and reserves the same as SCROLL padding
+      // so a row the keyboard scrolls into view stops short of the edge instead of on it.
+      'scroll-py-[var(--spacing-xxs)]',
+      slots['header'] ? 'pt-[var(--spacing-xxs)]' : undefined
     )
   )
 </script>
@@ -200,8 +220,12 @@
         :class="NAV_CLASS"
         :data-testid="`${testId}__nav`"
       >
+        <!-- `tabindex="-1"`: the navigation inside is a list of focusable rows, so the viewport
+             that holds them has no business being a tab stop of its own — Tab goes straight from
+             the header to the first row. -->
         <ScrollArea
           :class="scrollClass"
+          tabindex="-1"
           :data-testid="`${testId}__scroll`"
         >
           <slot />
@@ -209,34 +233,38 @@
       </nav>
       <div
         v-if="$slots['footer'] || collapsible"
-        :class="footerRegionClass"
+        :class="FOOTER_REGION_CLASS"
         :data-testid="`${testId}__footer`"
       >
-        <!-- The footer content takes the row; the trigger trails it. `min-w-0` so a long
-             account name truncates instead of pushing the trigger off the rail. -->
-        <div
-          v-if="$slots['footer']"
-          :class="collapsible ? 'min-w-0 flex-1' : undefined"
-        >
-          <slot name="footer" />
+        <!-- The band owns the separator and the space above it, so the line spans the trigger
+             as well as the content and the two sit on one line. -->
+        <div :class="footerBandClass">
+          <!-- The footer content takes the row; the trigger trails it. `min-w-0` so a long
+               account name truncates instead of pushing the trigger off the rail. -->
+          <div
+            v-if="$slots['footer']"
+            :class="collapsible ? 'min-w-0 flex-1' : undefined"
+          >
+            <slot name="footer" />
+          </div>
+          <!-- An icon-only control says what it does on hover as well as to a screen reader:
+               the tooltip carries the same string as the accessible name, so the two cannot
+               drift. `top`, because the trigger sits on the rail's bottom edge. -->
+          <Tooltip
+            v-if="collapsible"
+            :text="collapseAriaLabel"
+            placement="top"
+          >
+            <IconButton
+              icon="pi pi-angle-double-left"
+              :ariaLabel="collapseAriaLabel"
+              kind="outlined"
+              size="small"
+              :data-testid="`${testId}__collapse`"
+              @click="collapsed = true"
+            />
+          </Tooltip>
         </div>
-        <!-- An icon-only control says what it does on hover as well as to a screen reader:
-             the tooltip carries the same string as the accessible name, so the two cannot
-             drift. `top`, because the trigger sits on the rail's bottom edge. -->
-        <Tooltip
-          v-if="collapsible"
-          :text="collapseAriaLabel"
-          placement="top"
-        >
-          <IconButton
-            icon="pi pi-angle-double-left"
-            :ariaLabel="collapseAriaLabel"
-            kind="outlined"
-            size="small"
-            :data-testid="`${testId}__collapse`"
-            @click="collapsed = true"
-          />
-        </Tooltip>
       </div>
     </div>
 

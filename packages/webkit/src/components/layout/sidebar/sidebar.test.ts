@@ -106,6 +106,32 @@ describe('Sidebar', () => {
     })
   })
 
+  describe('the scroll viewport is not a tab stop of its own', () => {
+    it('marks the built-in ScrollArea `tabindex="-1"`', () => {
+      // A scroll region earns a tab stop only when nothing inside it is focusable; the
+      // sidebar's is a list of rows, so the viewport steps out of the tab order.
+      const { getByTestId } = render(Sidebar, {
+        slots: { default: '<a href="/">Home</a>' }
+      })
+      expect(getByTestId('layout-sidebar__scroll').getAttribute('tabindex')).toBe('-1')
+    })
+
+    it('tabs from the header straight to the first navigation row', async () => {
+      const { getByTestId } = render(Sidebar, {
+        slots: {
+          header: '<input data-testid="search" aria-label="Search" />',
+          default: '<a href="/" data-testid="first-row">Home</a>'
+        }
+      })
+
+      getByTestId('search').focus()
+      await userEvent.tab()
+
+      // Without the -1 the viewport would take this stop and swallow the first Tab.
+      expect(document.activeElement).toBe(getByTestId('first-row'))
+    })
+  })
+
   describe('a11y (axe against styled DOM)', () => {
     it('content-only sidebar has no violations', async () => {
       const { container } = render(Sidebar, {
@@ -181,6 +207,22 @@ describe('Sidebar', () => {
       expect(
         getByTestId('ft').compareDocumentPosition(trigger) & Node.DOCUMENT_POSITION_FOLLOWING
       ).toBeTruthy()
+    })
+
+    it('puts the footer content and the trigger in ONE band inside the footer region', () => {
+      // The band — not the region, and not the footer content — carries the separator and the
+      // space above it, so the line spans the trigger too and the two sit on one line.
+      const { getByTestId } = render(Sidebar, {
+        props: { collapsible: true },
+        slots: { footer: '<span data-testid="ft">profile</span>' }
+      })
+
+      const region = getByTestId('layout-sidebar__footer')
+      expect(region.children).toHaveLength(1)
+
+      const band = region.firstElementChild
+      expect(band?.contains(getByTestId('ft'))).toBe(true)
+      expect(band?.contains(getByTestId('layout-sidebar__collapse'))).toBe(true)
     })
 
     it('renders the collapse trigger even with no footer slot', () => {

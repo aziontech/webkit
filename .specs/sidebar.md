@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 0353df27183d0171c817c5dd89476a78cd5eae132ae5ddd7b87fffb079125560
+checksum: b0db41a3d29108b17dd7f7c8d0554932e620b72edb77b5bdbfad18a12103fd0b
 created: 2026-05-22
-last_updated: 2026-08-04
+last_updated: 2026-08-06
 ---
 # Sidebar — Component Spec
 
@@ -133,8 +133,14 @@ slot holds — so the profile block and the trigger read as one row, which is th
 console rail wants. That is why the trigger belongs to the component and not to the footer content:
 it must survive whatever the consumer puts there, and it must go inert with the rail when the rail
 collapses. The footer region becomes a centred flex row when `collapsible` is set, and the slot
-content takes `min-w-0 flex-1` — so **the footer content must not add its own top padding**, which
-would drop it below the trigger it is meant to line up with.
+content takes `min-w-0 flex-1`.
+
+The **band** — the separator and the space above it — then belongs to that row rather than to the
+footer content, which is what makes the line run the full width of the region *past* the trigger
+instead of stopping short of it, and what keeps the trigger on the content's line instead of half a
+padding above it. `SidebarFooter` drops its own `border-t` / top padding whenever it is inside a
+collapsible sidebar for that reason, and **any other footer content must not add its own top
+padding** either.
 
 Both icon-only controls (the collapse trigger and the expand button) carry a **`Tooltip`** whose
 text is the same string as their accessible name, so a pointer user gets the label a screen reader
@@ -238,7 +244,7 @@ and the host's own `class="w-[280px]"` governs exactly as before.
 |---|---|---|
 | `default` | — | — |
 | `header` | — | Named slot. |
-| `footer` | — | Named slot. The collapse trigger renders after this content in the same row, so a profile block and the trigger read as one footer. |
+| `footer` | — | Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer. |
 
 ## Exposed
 
@@ -307,6 +313,12 @@ canvas the tokens fall back to.
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
+  The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll
+  region needs one only when nothing inside it is focusable, and this one holds a `Menu` of rows —
+  so `Tab` reaches the first row directly instead of the box around it.
+  The region also keeps `var(--spacing-xxs)` of padding — and the same as `scroll-padding` — inside
+  the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
+  row and a viewport flush against it would cut the ring off.
   The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:
   `ArrowLeft` / `ArrowRight` nudge the width, `ArrowLeft` past the snap boundary collapses, and
   `ArrowRight` from the collapsed grab bar brings the rail back.

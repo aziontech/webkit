@@ -7977,7 +7977,7 @@
         {
           "name": "footer",
           "scope": "—",
-          "notes": "Named slot. The collapse trigger renders after this content in the same row, so a profile block and the trigger read as one footer."
+          "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer."
         }
       ],
       "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected."
