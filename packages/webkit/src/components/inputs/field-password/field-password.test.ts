@@ -362,18 +362,18 @@ describe('FieldPassword', () => {
       expect(chips[2]).not.toHaveAttribute('data-validated')
     })
 
-    it('renders the check glyph on a satisfied chip and no glyph at all on an unmet one', () => {
+    it('marks the check glyph visible on a satisfied chip and collapsed on an unmet one', () => {
       const { getAllByTestId } = render(FieldPassword, {
         // 8 lowercase chars: the length rule passes, the other two do not.
         props: { label: 'Password', modelValue: 'abcdefgh', requirements: RULES }
       })
 
       const chips = getAllByTestId('input-field-password__requirements-chip')
-      // Two treatments and nothing configurable: satisfied gets `pi pi-check`, unsatisfied
-      // renders no glyph element at all (so the chip reserves no empty box).
-      expect(chips[0].querySelector('i')?.className ?? '').toContain('pi-check')
-      expect(chips[1].querySelector('i')).toBeNull()
-      expect(chips[2].querySelector('i')).toBeNull()
+      // The glyph box is always in the DOM so it can animate from zero width;
+      // `data-validated` on the box is the switch between collapsed and visible.
+      expect(chips[0].querySelector('i')).toHaveAttribute('data-validated')
+      expect(chips[1].querySelector('i')).not.toHaveAttribute('data-validated')
+      expect(chips[2].querySelector('i')).not.toHaveAttribute('data-validated')
     })
 
     it('evaluates a g-flagged pattern consistently across re-renders', async () => {
@@ -428,18 +428,18 @@ describe('FieldPassword', () => {
         }
       })
 
-      const glyph = (chip: HTMLElement) => chip.querySelector('i')?.className ?? ''
+      const glyph = (chip: HTMLElement) => chip.querySelector('i')
 
       const chips = getAllByTestId('input-field-password__requirements-chip')
       // The field's invalid drives the input border and the helper, never the chips: the
-      // satisfied rule keeps its check, and the unmet ones stay exactly as they are while
-      // typing — no extra state attribute and no error glyph.
+      // satisfied rule keeps its visible check, and the unmet ones stay exactly as they are
+      // while typing — no extra state attribute and no visible glyph.
       expect(chips[0]).toHaveAttribute('data-validated')
-      expect(glyph(chips[0])).toContain('pi-check')
+      expect(glyph(chips[0])).toHaveAttribute('data-validated')
 
       for (const chip of [chips[1], chips[2]]) {
         expect(chip).not.toHaveAttribute('data-validated')
-        expect(glyph(chip)).not.toContain('pi-')
+        expect(glyph(chip)).not.toHaveAttribute('data-validated')
       }
     })
 

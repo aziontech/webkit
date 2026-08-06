@@ -4,12 +4,12 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: eba35c3cf36ca0d332b35c44804bd6196911319adb0247f6c6705d5e38f92d15
+checksum: f7987dab3ee62bb221d27f09089ed246b8e334afa30137ff6d3fa3e3cf79a75f
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
 created: 2026-06-17
-last_updated: 2026-08-03
+last_updated: 2026-08-06
 ---
 
 # Field Password — Component Spec
@@ -113,13 +113,19 @@ The built-in set, in the design's order: `length` (`8-128 characters`), `upperca
 | Trigger                                                                         | Animation / Transition                                        | Token  | Reduced-motion fallback         |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------ | ------------------------------- |
 | requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-fast-02 ease-productive-entrance` | inline | `motion-reduce:transition-none` |
+| check glyph entering/leaving a chip (box width + slide-in)                      | `transition-[width,margin,translate,opacity] duration-fast-02 ease-productive-entrance` — the glyph box goes `w-0 opacity-0 -translate-x-1` to `w-[14px] opacity-100 translate-x-0` on `data-validated` | inline | `motion-reduce:transition-none` |
+| requirements row height when the widened chips rewrap                           | `transition-[height] duration-fast-02 ease-productive-entrance` on the row root, height pinned to the measured inner wrap (`useElementSize`) | inline | `motion-reduce:transition-none` |
 | field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword`                     | —      | —                               |
 
-**Only color animates.** The check glyph is rendered only for a satisfied rule, so an
-unsatisfied chip reserves no box and shows no empty space; the chip is simply wider once
-satisfied, which is what the design shows. The glyph itself carries no transition — it has
-no unsatisfied counterpart to animate from — and the row animates neither `height` nor
-`width`.
+**The glyph is always in the DOM; its box animates from zero.** An unsatisfied chip still
+reserves no visible space (the box is `w-0` with no margin), and the chip widens smoothly as
+the rule is satisfied while the glyph slides in from the left. The satisfied gap between
+glyph and label is the glyph's own transitioned margin — not a static `gap` on the chip —
+so it collapses together with the box. The row transitions its `height` between measured
+values: a wrap-driven `auto` height change cannot be transitioned in CSS, so the row pins
+its height to the inner wrap's measured content height (VueUse `useElementSize`) and lets
+the transition interpolate between measurements; until the first measurement the height
+stays `auto`, so mounting does not animate.
 
 The row is rendered by an internal sub-component (`field-password-requirements`), mounted
 only when the resolved rule set is non-empty. It owns the rule evaluation; the
