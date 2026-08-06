@@ -71,11 +71,31 @@
     collisionPadding: props.collisionPadding
   }))
 
-  const { floatingStyles, resolvedSide, resolvedAlign, arrowStyles } = useNavigationMenuPositioner(
+  const {
+    floatingStyles,
+    resolvedSide,
+    resolvedAlign,
+    arrowStyles,
+    placed,
+    popupOrigin,
+    resetPlacement
+  } = useNavigationMenuPositioner(
     anchorRef,
     positionerRef,
     arrowRef,
-    positionerOptions
+    positionerOptions,
+    root.popupSize
+  )
+
+  // Each open re-arms the un-animated first placement, so the panel appears at
+  // its trigger instead of gliding in from wherever the last one closed.
+  watch(
+    () => root.menuPopupMounted.value,
+    (mounted) => {
+      if (!mounted) {
+        resetPlacement()
+      }
+    }
   )
 
   provide(NAVIGATION_MENU_POSITIONER_KEY, {
@@ -95,13 +115,18 @@
 
   const positionerHidden = computed(() => !root.menuPopupMounted.value)
 
+  // No `--positioner-width` / `--positioner-height` here. Vue's patchStyle rewrites
+  // every key of a `:style` object on each re-render, so declaring the size vars
+  // alongside the imperative writes made the two fight: this object recomputes
+  // whenever the placement changes, which used to reset the morph to `auto`.
   const positionerStyle = computed(() => ({
     ...floatingStyles.value,
-    '--transform-origin': 'var(--transform-origin, center)',
+    // Inherited by the popup, which scales out of this point on open. Anchored at
+    // the active trigger's centre, so the panel grows from the item you pointed
+    // at rather than from its own middle.
+    '--popup-origin': popupOrigin.value,
     '--available-width': '100vw',
     '--available-height': '100vh',
-    '--positioner-width': 'auto',
-    '--positioner-height': 'auto',
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 
@@ -128,6 +153,9 @@
     role="presentation"
     :data-testid="testId"
     :data-instant="root.instant.value ? '' : undefined"
+    :data-starting-style="
+      !placed || root.popupTransitionStatus.value === 'starting' ? '' : undefined
+    "
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
     @pointerenter="onPointerEnter"

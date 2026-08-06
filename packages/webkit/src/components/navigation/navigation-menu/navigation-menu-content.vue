@@ -52,6 +52,12 @@
 
   const isExiting = computed(() => !contentOpen.value && mounted.value)
 
+  // Width this panel had while it was the one in flow. The viewport target is
+  // re-pinned to the INCOMING panel's width the moment the switch starts, so an
+  // exiting panel left on `100%` would re-wrap its text one frame before fading
+  // out. Holding its own width lets it leave looking exactly as it did.
+  const exitWidth = ref<number | null>(null)
+
   const contentDataAttrs = computed(() => ({
     'data-open': contentOpen.value ? '' : undefined,
     'data-closed': !contentOpen.value ? '' : undefined,
@@ -66,7 +72,7 @@
           position: 'absolute',
           top: '0',
           left: '0',
-          width: '100%'
+          width: exitWidth.value != null ? `${exitWidth.value}px` : '100%'
         }
       : undefined
   )
@@ -82,8 +88,16 @@
   })
 
   watch(contentOpen, (open) => {
-    if (open && resolveHostElement(contentRef.value)) {
-      root.currentContentEl.value = resolveHostElement(contentRef.value)
+    const element = resolveHostElement(contentRef.value)
+
+    if (open && element) {
+      root.currentContentEl.value = element
+      return
+    }
+
+    // Capture the width synchronously, before the viewport target is re-pinned.
+    if (!open && element) {
+      exitWidth.value = element.getBoundingClientRect().width || null
     }
   })
 

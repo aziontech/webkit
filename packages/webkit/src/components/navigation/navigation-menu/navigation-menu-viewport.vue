@@ -58,7 +58,7 @@
   >
     <div
       ref="viewportTargetRef"
-      class="relative h-full w-full"
+      class="relative h-full w-[var(--viewport-width,100%)]"
       :data-testid="`${testId}__target`"
     >
       <slot />

@@ -2,6 +2,7 @@ import { computed, nextTick, onUnmounted, ref, shallowRef, watch } from 'vue'
 
 import { waitForCloseTransition, waitForOpenTransition } from '../presets/animations.js'
 import { createChangeEventDetails } from './create-change-event-details.js'
+import { useNavigationMenuViewportSize } from './use-navigation-menu-viewport-size'
 import { useTransitionStatus } from './use-transition-status.js'
 
 /** @typedef {'trigger-press' | 'trigger-hover' | 'outside-press' | 'list-navigation' | 'focus-out' | 'escape-key' | 'link-press' | 'none'} ChangeReason */
@@ -98,6 +99,16 @@ export function useNavigationMenuRootState(
     setMounted: setPopupMounted,
     transitionStatus: popupTransitionStatus
   } = useTransitionStatus(() => open.value)
+
+  // ONE owner for the popup's morph, at the root. Instantiating it per trigger
+  // put N writers on the same element, each restarting the others' transition.
+  const { popupSize } = useNavigationMenuViewportSize({
+    activeValue: value,
+    popupEl,
+    currentContentEl,
+    viewportTargetEl,
+    popupMounted
+  })
 
   function cancelTimers() {
     if (openTimer) {
@@ -334,6 +345,7 @@ export function useNavigationMenuRootState(
     currentContentEl,
     popupMounted,
     popupTransitionStatus,
+    popupSize,
     setPopupMounted,
     instant,
     componentMounted,
