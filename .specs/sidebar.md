@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 6a739520830f4b45fe7964794548a30ac41ac0bf56a57f2544fdeb31d18ff50b
+checksum: d973e4db1612def7b15004f222de876c16ed4c8cbfb6b688ddbb77e848312cdc
 created: 2026-05-22
 last_updated: 2026-08-06
 ---
@@ -154,7 +154,7 @@ the rail back in to `--size-10`** and morphs the page beside it on the same fram
 is something the user *sees happen* rather than a 2 px line they have to find and trust. Leaving
 the zone carries the sliver out again on the exit curve.
 
-Five things make it hold together:
+Six things make it hold together:
 
 - **The zone grows with the sliver.** It is `--size-6` at rest and `--size-10` while previewing, so
   it always spans exactly what it opened. A fixed narrow zone would end where the sliver begins and
@@ -184,10 +184,24 @@ Five things make it hold together:
   previewing, and it travels with that edge by construction. A line drawn on the zone's leading
   edge instead would be left standing at the page edge the sliver had just moved away from —
   pointing at nothing.
-- **A preview is not a restore.** The rail stays `inert` + `aria-hidden` throughout. Bringing it
-  back for real is still the expand button (or the drag), which is why the preview is additive to
-  the affordance rather than a replacement for it — it costs a keyboard user nothing and gives a
-  pointer user the whole rail as the target.
+- **Clicking the splitter brings the rail back.** The preview has already shown what is behind
+  that edge; making the user travel to a button to accept it is a step the gesture does not need.
+  So the collapsed edge is one control with two readings — press and pull to size the rail, press
+  and release to restore it — and it wears **`cursor: col-resize`** in both, the same splitter
+  cursor as the expanded rail's handle. (It was `grab`/`grabbing`, which promised picking the rail
+  up and moving it; what the pointer is on is a splitter.) The click sits on the `role="separator"`
+  element itself, not on the zone wrapper: a bare `div` with a click handler and no key handler
+  fails `vuejs-accessibility/click-events-have-key-events`, and the separator already answers
+  `ArrowRight`. A collapsible-only rail therefore has no click target — without `resizable` there
+  is no splitter — and keeps the expand button as its affordance. A drag is told from a click by
+  `TAP_SLOP` (3 px): the browser fires `click` after every `pointerup`, so without that guard a
+  pull the user aborted below the commit threshold would be answered by expanding the rail anyway
+  — the opposite of what they did.
+- **A preview is not a restore.** The rail stays `inert` + `aria-hidden` throughout, so the sliver
+  itself is never the thing that is clicked — the click lands on the splitter zone in front of it.
+  The button and the drag remain, so the preview is additive to the affordance rather than a
+  replacement for it: it costs a keyboard user nothing and gives a pointer user the whole edge as
+  the target.
 
 A collapsed rail also **drops its trailing border**: `width: 0` still paints a border, so without
 this the only trace of a fully collapsed rail would be a 1 px line down the page.
@@ -345,7 +359,7 @@ pulled to then animates to fully in or fully out.
 | resize handle hit area | `var(--spacing-xs)` |
 | rail width bounds | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |
 | collapsed preview sliver | `var(--size-10)` |
-| collapsed edge zone | `var(--size-6)` at rest, `var(--size-10)` while previewing |
+| collapsed edge zone | `var(--size-6)` at rest, `var(--size-10)` while previewing; `cursor: col-resize` |
 | expand button offset past the edge | `var(--spacing-xxs)` (container padding, so the boxes stay flush) |
 
 The `<nav>` region hands its own fill down to the rows inside it as
@@ -371,7 +385,8 @@ canvas the tokens fall back to.
   row and a viewport flush against it would cut the ring off.
   The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:
   `ArrowLeft` / `ArrowRight` nudge the width, `ArrowLeft` past the snap boundary collapses, and
-  `ArrowRight` from the collapsed grab bar brings the rail back.
+  `ArrowRight` from the collapsed splitter brings the rail back. Pointer-wise that same collapsed
+  splitter is click-to-restore as well as drag-to-size, so the edge is never a drag-only control.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component. Each
   separator is named (`resizeAriaLabel` / `expandAriaLabel`) because a bare separator announces
   nothing about what it sizes; the collapse trigger is named by `collapseAriaLabel`.

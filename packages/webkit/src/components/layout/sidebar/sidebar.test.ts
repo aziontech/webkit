@@ -312,6 +312,42 @@ describe('Sidebar', () => {
       expect(rail.getAttribute('data-collapsed')).toBe('')
     })
 
+    it('previewing: a click on the collapsed splitter brings the rail back', async () => {
+      const { getByTestId, emitted } = render(Sidebar, {
+        props: { collapsible: true, resizable: true, collapsed: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      await fireEvent.pointerEnter(zone)
+      // The click lives on the splitter itself (role="separator", already keyboard-operable),
+      // not on the zone wrapper — a bare div with a click handler and no key handler is an
+      // a11y violation the lint config blocks.
+      await fireEvent.click(zone.querySelector('[role="separator"]') as HTMLElement)
+
+      expect(emitted()['update:collapsed']?.at(-1)).toEqual([false])
+    })
+
+    it('previewing: a drag that MOVED is not also answered as a click', async () => {
+      const { getByTestId, emitted } = render(Sidebar, {
+        props: { collapsible: true, resizable: true, collapsed: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      const splitter = zone.querySelector('[role="separator"]') as HTMLElement
+
+      // Pull past the tap slop but well short of the minimum width, then release: the rail
+      // stays out. The browser still fires `click` after `pointerup`, and answering it would
+      // expand the rail the user had just decided not to pull out.
+      await fireEvent.pointerDown(splitter, { clientX: 0 })
+      window.dispatchEvent(new PointerEvent('pointermove', { clientX: 24 }))
+      window.dispatchEvent(new PointerEvent('pointerup'))
+      await fireEvent.click(splitter)
+
+      expect(emitted()['update:collapsed']).toBeUndefined()
+    })
+
     it('previewing: an expanded rail has nothing to preview, so the zone is not even rendered', () => {
       const { queryByTestId } = render(Sidebar, {
         props: { collapsible: true },

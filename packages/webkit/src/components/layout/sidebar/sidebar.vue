@@ -97,6 +97,7 @@
     railTransition,
     innerStyle,
     startResize,
+    tapToExpand,
     nudge,
     measure
   } = useSidebarRail({
@@ -366,8 +367,9 @@
         :aria-valuenow="valueNow"
         :aria-valuemin="valueMin"
         :aria-valuemax="valueMax"
-        class="absolute inset-y-0 left-0 w-full cursor-grab outline-none active:cursor-grabbing"
+        class="absolute inset-y-0 left-0 w-full cursor-col-resize outline-none"
         @pointerdown="startResize"
+        @click="tapToExpand"
         @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
       />
 

@@ -23,6 +23,13 @@ const COLLAPSE_SNAP = 56
 export const SIDEBAR_NUDGE_STEP = 16
 
 /**
+ * How far the pointer may travel and still count as a click rather than a drag. A press on a
+ * splitter is never perfectly still — without a little slop, the smallest tremor between
+ * `pointerdown` and `pointerup` would turn a click into a one-pixel resize.
+ */
+const TAP_SLOP = 3
+
+/**
  * How wide the collapsed rail comes back in while the pointer rests in its edge zone. A size
  * token, not a container token: this is a sliver the rail shows OF itself, not a width anyone
  * works in — the container scale starts at `--container-3xs` (256 px), an order of magnitude
@@ -92,8 +99,13 @@ export interface UseSidebarRailReturn {
   railTransition: ComputedRef<string | undefined>
   /** Inline style for the inner panel: fixed width, slide and fade. */
   innerStyle: ComputedRef<Record<string, string | undefined>>
-  /** Pointer-down on either separator — the handle, or the collapsed grab bar. */
+  /** Pointer-down on either separator — the handle, or the collapsed one. */
   startResize: (event: globalThis.PointerEvent) => void
+  /**
+   * Click on the collapsed splitter: brings the rail back. Ignores the `click` the browser
+   * fires at the end of a real drag, so an aborted pull is not answered by expanding.
+   */
+  tapToExpand: () => void
   /** Keyboard equivalent of the drag. */
   nudge: (delta: number) => void
   /** Re-read the rail's natural width; exposed so a host that reveals it late can call it. */
@@ -169,6 +181,14 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   let startX = 0
   let startWidth = 0
   let restoreWidth = 0
+  /**
+   * Whether the pointer travelled far enough for this to be a DRAG rather than a click. The
+   * splitter is both: press and pull to size the rail, press and release to bring it back. The
+   * browser fires `click` after `pointerup` either way, so the tap path needs a way to tell that
+   * a drag already consumed the interaction — otherwise a drag the user aborted below the commit
+   * threshold would be answered by expanding the rail anyway, the opposite of what they did.
+   */
+  let dragMoved = false
 
   const measure = () => {
     if (width.value == null && railEl.value?.offsetWidth) {
@@ -178,6 +198,8 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
 
   const onPointerMove = (event: globalThis.PointerEvent) => {
     const next = startWidth + (event.clientX - startX)
+
+    if (Math.abs(event.clientX - startX) > TAP_SLOP) dragMoved = true
 
     // Appearance is ONE monotonic function of how far out the rail is, so the fade never
     // inverts as the gesture crosses a commit point.
@@ -218,9 +240,20 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     globalThis.removeEventListener('pointerup', endResize)
   }
 
+  /**
+   * A click on the splitter — as opposed to a drag of it — brings a collapsed rail back. The
+   * preview already showed the user what is behind that edge; asking them to travel to a button
+   * to accept it is a second step the gesture does not need.
+   */
+  const tapToExpand = () => {
+    if (dragMoved) return
+    if (collapsed.value) collapsed.value = false
+  }
+
   const startResize = (event: globalThis.PointerEvent) => {
     const fromCollapsed = collapsed.value
     resizing.value = true
+    dragMoved = false
     startX = event.clientX
     // From collapsed the gesture starts at zero, so the rail's edge tracks the pointer's
     // distance from the viewport edge — pull, and the rail comes out from under the cursor.
@@ -228,10 +261,11 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     restoreWidth = width.value ?? railMin.value
     pullProgress.value = fromCollapsed ? 0 : 1
     peekWidth.value = 0
-    // The drag crosses the whole page — kill text selection, and keep a cursor that matches
-    // the gesture: picking the rail up off the edge is a grab, sizing it in place is a resize.
+    // The drag crosses the whole page — kill text selection, and hold the splitter cursor for
+    // its duration. One cursor in both directions: whether the rail is being sized or brought
+    // back out of the layout, the thing under the pointer is the same splitter.
     globalThis.document.body.style.userSelect = 'none'
-    globalThis.document.body.style.cursor = fromCollapsed ? 'grabbing' : 'col-resize'
+    globalThis.document.body.style.cursor = 'col-resize'
     globalThis.addEventListener('pointermove', onPointerMove)
     globalThis.addEventListener('pointerup', endResize)
     event.preventDefault()
@@ -329,6 +363,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     railTransition: transition,
     innerStyle,
     startResize,
+    tapToExpand,
     nudge,
     measure
   }
