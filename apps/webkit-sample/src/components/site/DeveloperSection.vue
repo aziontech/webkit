@@ -121,7 +121,7 @@ azion deploy`
         <!-- The sample. The rule between the halves lives here; the frame owns the
              outer edges. -->
         <div
-          class="flex items-center border-t border-[var(--border-muted)] p-[var(--spacing-xl)] lg:border-l lg:border-t-0"
+          class="flex items-center border-t border-[var(--border-muted)] p-[var(--spacing-xl)] bg-[var(--bg-surface)] lg:border-l lg:border-t-0"
         >
           <!-- Wrapped so the elevation is cast by a shell of the block's own shape:
                CodeBlock rounds to --shape-elements and clips its overflow, so the
@@ -141,7 +141,6 @@ azion deploy`
               :show-line-numbers="false"
               animate-lines
               copy-aria-label="Copy setup prompt"
-              class="bg-[var(--bg-surface-raised)]"
             />
           </div>
         </div>
