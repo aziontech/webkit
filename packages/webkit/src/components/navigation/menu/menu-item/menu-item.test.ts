@@ -1,13 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/menu-item/MenuItem.stories'
-import { expectNoA11yViolations } from '../../../test/axe'
+import { expectNoA11yViolations } from '../../../../test/axe'
 import MenuItem from './menu-item.vue'
-
-const { Default } = composeStories(stories)
 
 const KINDS = ['option', 'group'] as const
 
@@ -187,13 +183,17 @@ describe('MenuItem', () => {
     expect(glyph?.classList.contains('pi-cog')).toBe(true)
   })
 
-  it('does not render an icon glyph when icon is empty', () => {
-    const { getByTestId } = render(MenuItem, {
+  it('renders no icon box at all when icon is empty', () => {
+    const { getByTestId, queryByTestId } = render(MenuItem, {
       props: { label: 'Home', icon: '' }
     })
 
-    // The icon box still renders; the <i> glyph inside is guarded by v-if="icon".
-    expect(getByTestId('navigation-menu-item__icon').querySelector('i')).toBeNull()
+    // Not just the glyph — the BOX is gone too. An empty 32px box would reserve a column the
+    // row does not use, putting its label off the column its siblings hold and leaving a
+    // nesting rail anchored to blank space.
+    expect(queryByTestId('navigation-menu-item__icon')).toBeNull()
+    // The label then takes the menu's content column directly.
+    expect(getByTestId('navigation-menu-item__label').textContent?.trim()).toBe('Home')
   })
 
   it('renders a trailing tag from tagValue on an option row', () => {
@@ -263,8 +263,13 @@ describe('MenuItem', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('renders the Default story fixture cleanly', async () => {
-    const { getByTestId, container } = render(Default())
+  // `MenuItem` no longer has a story of its own: it is `Menu.Item`, documented and exercised
+  // through the Menu compound (and through Sidebar, which composes Menu). The row's own
+  // rendering is covered directly above, so nothing is lost with the fixture.
+  it('renders cleanly in the shape the Menu compound puts it in', async () => {
+    const { getByTestId, container } = render(
+      InList({ label: 'Home', icon: 'ai ai-home', href: '/', selected: true })
+    )
 
     expect(getByTestId('navigation-menu-item')).toBeTruthy()
     await expectNoA11yViolations(container)
