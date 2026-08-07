@@ -71,11 +71,29 @@
     collisionPadding: props.collisionPadding
   }))
 
-  const { floatingStyles, resolvedSide, resolvedAlign, arrowStyles } = useNavigationMenuPositioner(
+  const {
+    floatingStyles,
+    resolvedSide,
+    resolvedAlign,
+    arrowStyles,
+    placed,
+    popupOrigin,
+    resetPlacement
+  } = useNavigationMenuPositioner(
     anchorRef,
     positionerRef,
     arrowRef,
-    positionerOptions
+    positionerOptions,
+    root.popupSize
+  )
+
+  watch(
+    () => root.menuPopupMounted.value,
+    (mounted) => {
+      if (!mounted) {
+        resetPlacement()
+      }
+    }
   )
 
   provide(NAVIGATION_MENU_POSITIONER_KEY, {
@@ -97,11 +115,9 @@
 
   const positionerStyle = computed(() => ({
     ...floatingStyles.value,
-    '--transform-origin': 'var(--transform-origin, center)',
+    '--popup-origin': popupOrigin.value,
     '--available-width': '100vw',
     '--available-height': '100vh',
-    '--positioner-width': 'auto',
-    '--positioner-height': 'auto',
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 
@@ -128,6 +144,9 @@
     role="presentation"
     :data-testid="testId"
     :data-instant="root.instant.value ? '' : undefined"
+    :data-starting-style="
+      !placed || root.popupTransitionStatus.value === 'starting' ? '' : undefined
+    "
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
     @pointerenter="onPointerEnter"

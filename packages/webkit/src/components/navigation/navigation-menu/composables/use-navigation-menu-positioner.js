@@ -1,5 +1,5 @@
 import { useEventListener, useResizeObserver } from '@vueuse/core'
-import { computed, onBeforeUnmount, ref, unref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, toValue, unref, watch } from 'vue'
 
 const OPPOSITE_SIDE = {
   top: 'bottom',
@@ -117,9 +117,13 @@ function computePlacement({
  *   arrowPadding?: number
  *   collisionPadding?: number
  * }>} options
+ * @param {import('vue').MaybeRefOrGetter<{ width: number; height: number } | null>} [targetSize]
  */
-export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, options) {
+export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, options, targetSize) {
   const state = ref({ x: 0, y: 0, side: 'bottom', align: 'center' })
+  const hasPlacement = ref(false)
+  const placed = ref(false)
+  const popupOrigin = ref('top left')
 
   const opts = computed(() => {
     const raw = unref(options) ?? {}
@@ -137,10 +141,11 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     const anchorEl = unref(anchorRef)
     const floatingEl = unref(floatingRef)
     const anchorRect = readRect(anchorEl)
-    const floatingRect = readRect(floatingEl)
+    const settledSize = targetSize ? toValue(targetSize) : null
+    const floatingRect = settledSize ?? readRect(floatingEl)
     if (!anchorRect || !floatingRect) return
     const { side, align, sideOffset, alignOffset, collisionPadding } = opts.value
-    state.value = computePlacement({
+    const next = computePlacement({
       anchorRect,
       floatingRect,
       side,
@@ -149,24 +154,63 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
       alignOffset,
       collisionPadding
     })
+    state.value = next
+
+    const clamp = (value, max) => Math.min(Math.max(value, 0), Math.max(max, 0))
+
+    popupOrigin.value =
+      next.side === 'top' || next.side === 'bottom'
+        ? `${clamp(anchorRect.left + anchorRect.width / 2 - next.x, floatingRect.width).toFixed(2)}px ${next.side === 'bottom' ? 'top' : 'bottom'}`
+        : `${next.side === 'right' ? 'left' : 'right'} ${clamp(anchorRect.top + anchorRect.height / 2 - next.y, floatingRect.height).toFixed(2)}px`
+
+    hasPlacement.value = true
   }
+
+  const resetPlacement = () => {
+    hasPlacement.value = false
+    placed.value = false
+  }
+
+  const nextFrame = (cb) =>
+    typeof globalThis.requestAnimationFrame === 'function'
+      ? globalThis.requestAnimationFrame(cb)
+      : setTimeout(cb, 16)
 
   let rafId = null
   const scheduleUpdate = () => {
     if (rafId !== null) return
-    const raf =
-      typeof globalThis.requestAnimationFrame === 'function'
-        ? globalThis.requestAnimationFrame
-        : (cb) => setTimeout(cb, 16)
-    rafId = raf(() => {
+    rafId = nextFrame(() => {
       rafId = null
       update()
     })
   }
 
-  watch([() => unref(anchorRef), floatingRef, opts], scheduleUpdate, {
-    flush: 'post',
-    immediate: true
+  watch(
+    [() => unref(anchorRef), floatingRef, opts, () => (targetSize ? toValue(targetSize) : null)],
+    () => {
+      if (!hasPlacement.value) {
+        update()
+        return
+      }
+
+      scheduleUpdate()
+    },
+    {
+      flush: 'post',
+      immediate: true
+    }
+  )
+
+  watch(hasPlacement, (value) => {
+    if (!value) {
+      return
+    }
+
+    nextFrame(() => {
+      if (hasPlacement.value) {
+        placed.value = true
+      }
+    })
   })
 
   useEventListener(typeof window !== 'undefined' ? window : null, 'scroll', scheduleUpdate, {
@@ -177,7 +221,10 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     passive: true
   })
 
-  useResizeObserver(floatingRef, scheduleUpdate)
+  if (!targetSize) {
+    useResizeObserver(floatingRef, scheduleUpdate)
+  }
+
   useResizeObserver(
     computed(() => unref(anchorRef)),
     scheduleUpdate
@@ -207,7 +254,8 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     const floatingEl = unref(floatingRef)
     const anchorEl = unref(anchorRef)
     const arrowEl = unref(arrowRef)
-    const floatingRect = readRect(floatingEl)
+    const settledSize = targetSize ? toValue(targetSize) : null
+    const floatingRect = settledSize ?? readRect(floatingEl)
     const anchorRect = readRect(anchorEl)
     if (!floatingRect || !anchorRect) return {}
 
@@ -231,6 +279,9 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     floatingStyles,
     resolvedSide,
     resolvedAlign,
-    arrowStyles
+    arrowStyles,
+    placed,
+    popupOrigin,
+    resetPlacement
   }
 }
