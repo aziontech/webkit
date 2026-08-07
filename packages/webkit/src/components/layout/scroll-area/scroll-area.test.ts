@@ -66,8 +66,6 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
   })
 
   it('a consumer tabindex override wins over the default tab stop', () => {
-    // A host whose content is already a list of focusable rows takes the viewport out of the
-    // tab order with `tabindex="-1"`, so Tab reaches the rows and not the box around them.
     const view = render(host({ tabindex: '-1' }))
     expect(area(view).getAttribute('tabindex')).toBe('-1')
   })

@@ -27,10 +27,6 @@ import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
-// Every runtime template below uses FLAT sub-component tags (<MenuGroup>, <DropdownOption>, …)
-// registered in `components`. Dot-notation (Menu.Group) does not resolve in a Storybook runtime
-// template string, so the canvas would render nothing and clicks would do nothing. The snippets
-// use the very same flat imports, so "Show code" stays paste-and-run.
 const IMPORT_SIDEBAR = "import Sidebar from '@aziontech/webkit/sidebar'"
 const IMPORT_HEADER = "import SidebarHeader from '@aziontech/webkit/sidebar-header'"
 const IMPORT_FOOTER = "import SidebarFooter from '@aziontech/webkit/sidebar-footer'"
@@ -93,11 +89,6 @@ const sidebarStoryComponents = {
 const sampleImage =
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'
 
-// ── The header: search that opens the palette ────────────────────────────────
-// A read-only field carrying the ⌘K hint, in the fixed header region so it stays put while the
-// nav below it scrolls. The wrapper takes the click, so the icons and the field are all part of
-// one target; Enter on the focused field opens it too. The palette teleports to the body, so it
-// keeps working while the rail is collapsed.
 const HEADER_SLOT = `<template #header>
     <SidebarHeader>
       <div class="cursor-pointer [&_input]:cursor-pointer" @click="paletteOpen = true" @keydown.enter="paletteOpen = true">
@@ -143,10 +134,6 @@ const HEADER_SLOT = `<template #header>
     </SidebarHeader>
   </template>`
 
-// ── The navigation: Menu, grouped ────────────────────────────────────────────
-// `role="presentation"` because Sidebar already renders the <nav> landmark; the menu drops its
-// accessible name along with the role, so the sidebar's `ariaLabel` is the one name for the
-// region. `MenuBack` renders nothing until a drill level is pushed, so it needs no v-if.
 const MENU_CONTENT = `<Menu role="presentation">
     <MenuBack />
     <MenuGroup>
@@ -182,9 +169,6 @@ const MENU_CONTENT = `<Menu role="presentation">
     </MenuGroup>
   </Menu>`
 
-// ── The footer: identity, then the account menu ──────────────────────────────
-// One row: avatar, name, and the account Dropdown opening above its trigger. With `collapsible`
-// set, Sidebar's own collapse trigger trails this content in the same row.
 const FOOTER_SLOT = `<template #footer>
     <SidebarFooter class="flex items-center gap-[var(--spacing-xs)]">
       <Avatar kind="square" size="small" src="${sampleImage}" alt="Rafael Umman" />
@@ -408,8 +392,6 @@ const meta = {
 
 export default meta
 
-// `paletteOpen` backs the header search's CommandMenu; `accountMenuOpen` backs the footer
-// Dropdown so the account menu opens above its trigger.
 const consoleState = () => {
   const paletteOpen = ref(false)
   const accountMenuOpen = ref(false)
@@ -449,9 +431,6 @@ export const Resizable = {
       const width = ref(null)
       return { args, collapsed, width, ...consoleState() }
     },
-    // The rail gesture needs three things a static story cannot fake: a `relative` host row (the
-    // affordance that brings a collapsed rail back is positioned against it), a `flex-1` sibling
-    // to morph as the width animates, and real state behind the two models.
     template: `
       <div class="relative flex h-[560px] min-h-0">
         <Sidebar v-bind="args" v-model:collapsed="collapsed" v-model:width="width">

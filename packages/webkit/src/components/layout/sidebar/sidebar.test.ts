@@ -108,8 +108,6 @@ describe('Sidebar', () => {
 
   describe('the scroll viewport is not a tab stop of its own', () => {
     it('marks the built-in ScrollArea `tabindex="-1"`', () => {
-      // A scroll region earns a tab stop only when nothing inside it is focusable; the
-      // sidebar's is a list of rows, so the viewport steps out of the tab order.
       const { getByTestId } = render(Sidebar, {
         slots: { default: '<a href="/">Home</a>' }
       })
@@ -127,7 +125,6 @@ describe('Sidebar', () => {
       getByTestId('search').focus()
       await userEvent.tab()
 
-      // Without the -1 the viewport would take this stop and swallow the first Tab.
       expect(document.activeElement).toBe(getByTestId('first-row'))
     })
   })
@@ -164,7 +161,6 @@ describe('Sidebar', () => {
 
     it('Default story labels the landmark from its args (aria-label="Console")', () => {
       const { getByRole } = render(Default)
-      // The story sets args.ariaLabel = 'Console', bound to the <aside> (complementary) root.
       expect(getByRole('complementary', { name: 'Console' })).toBeTruthy()
     })
 
@@ -172,8 +168,6 @@ describe('Sidebar', () => {
       const { getByTestId, getAllByRole } = render(Default)
 
       const menu = getByTestId('navigation-menu')
-      // The sidebar is the `<nav>`; the menu suppresses its own role AND its name with it,
-      // so the region has exactly one landmark and one name.
       expect(menu.getAttribute('role')).toBe('presentation')
       expect(menu.getAttribute('aria-label')).toBeNull()
       expect(getAllByRole('navigation')).toHaveLength(1)
@@ -181,7 +175,6 @@ describe('Sidebar', () => {
     })
   })
 
-  // ---- The rail gesture --------------------------------------------------------
   describe('rail (resizable + collapsible)', () => {
     it('renders neither the handle nor the collapse trigger by default', () => {
       const { queryByTestId, getByTestId } = render(Sidebar, {
@@ -190,7 +183,6 @@ describe('Sidebar', () => {
 
       expect(queryByTestId('layout-sidebar__handle')).toBeNull()
       expect(queryByTestId('layout-sidebar__collapse')).toBeNull()
-      // With the gesture off the host still owns the width — nothing inline is applied.
       expect(getByTestId('layout-sidebar').getAttribute('style')).toBeNull()
     })
 
@@ -203,15 +195,12 @@ describe('Sidebar', () => {
       const footer = getByTestId('layout-sidebar__footer')
       const trigger = getByTestId('layout-sidebar__collapse')
       expect(footer.contains(trigger)).toBe(true)
-      // DOCUMENT_POSITION_FOLLOWING — the trigger trails the profile block in the same row.
       expect(
         getByTestId('ft').compareDocumentPosition(trigger) & Node.DOCUMENT_POSITION_FOLLOWING
       ).toBeTruthy()
     })
 
     it('puts the footer content and the trigger in ONE band inside the footer region', () => {
-      // The band — not the region, and not the footer content — carries the separator and the
-      // space above it, so the line spans the trigger too and the two sit on one line.
       const { getByTestId } = render(Sidebar, {
         props: { collapsible: true },
         slots: { footer: '<span data-testid="ft">profile</span>' }
@@ -272,7 +261,6 @@ describe('Sidebar', () => {
 
       await fireEvent.pointerEnter(zone)
       expect(zone.getAttribute('data-preview')).toBe('')
-      // --size-10 read off the document by the composable; the theme sheet is loaded in setup.
       expect(rail.style.width).toBe('40px')
 
       await fireEvent.pointerLeave(zone)
@@ -306,7 +294,6 @@ describe('Sidebar', () => {
       await fireEvent.pointerEnter(await waitFor(() => getByTestId('layout-sidebar__expand')))
 
       expect(rail.style.width).toBe('40px')
-      // Still formally collapsed: the way back is the button, not the sliver.
       expect(rail.hasAttribute('inert')).toBe(true)
       expect(rail.getAttribute('aria-hidden')).toBe('true')
       expect(rail.getAttribute('data-collapsed')).toBe('')
@@ -320,9 +307,6 @@ describe('Sidebar', () => {
 
       const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
       await fireEvent.pointerEnter(zone)
-      // The click lives on the splitter itself (role="separator", already keyboard-operable),
-      // not on the zone wrapper — a bare div with a click handler and no key handler is an
-      // a11y violation the lint config blocks.
       await fireEvent.click(zone.querySelector('[role="separator"]') as HTMLElement)
 
       expect(emitted()['update:collapsed']?.at(-1)).toEqual([false])
@@ -337,9 +321,6 @@ describe('Sidebar', () => {
       const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
       const splitter = zone.querySelector('[role="separator"]') as HTMLElement
 
-      // Pull past the tap slop but well short of the minimum width, then release: the rail
-      // stays out. The browser still fires `click` after `pointerup`, and answering it would
-      // expand the rail the user had just decided not to pull out.
       await fireEvent.pointerDown(splitter, { clientX: 0 })
       window.dispatchEvent(new PointerEvent('pointermove', { clientX: 24 }))
       window.dispatchEvent(new PointerEvent('pointerup'))
@@ -396,7 +377,6 @@ describe('Sidebar', () => {
 
     it('the nudge clamps to the token bounds instead of running past them', async () => {
       const { getByTestId, emitted } = render(Sidebar, {
-        // --container-sm is 408px; one nudge from 400 must not reach 416.
         props: { resizable: true, width: 400 },
         slots: { default: '<a href="/">Home</a>' }
       })
@@ -442,7 +422,6 @@ describe('Sidebar', () => {
 
       expect(getByTestId('layout-sidebar__handle')).toBeTruthy()
       expect(getByTestId('layout-sidebar__collapse')).toBeTruthy()
-      // `width` starts null and the rail seeds it from its own natural width on mount.
       await waitFor(() => expect(getByTestId('layout-sidebar').style.width).not.toBe(''))
     })
   })

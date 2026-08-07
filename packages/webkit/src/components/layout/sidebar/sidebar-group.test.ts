@@ -91,9 +91,6 @@ describe('SidebarGroup', () => {
     await expectNoA11yViolations(container)
   })
 
-  // No story fixture: the Sidebar stories compose `Menu` now, and `Menu.Group` is what a new
-  // sidebar reaches for. `SidebarGroup` stays supported and unchanged, so it is exercised here
-  // directly rather than through a story that no longer renders it.
   describe('composed the way a consumer still using it does', () => {
     it('renders several groups, each with its own list', () => {
       const { getAllByTestId } = render({

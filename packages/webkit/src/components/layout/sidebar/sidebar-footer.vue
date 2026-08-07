@@ -25,10 +25,6 @@
   const rootClasses = computed(() =>
     cn(
       'w-full shrink-0',
-      // Inside a collapsible sidebar the band — separator plus the space above it — is the
-      // sidebar's own footer region, which wraps the collapse trigger as well. Adding it here
-      // too would draw a line that stops short of the trigger and push this content half a
-      // padding below the trigger it is meant to line up with.
       ctx?.collapsible ? undefined : 'border-t border-[var(--border-muted)] pt-[var(--spacing-md)]',
       attrs.class
     )
