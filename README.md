@@ -1,7 +1,7 @@
 <h1 align="center">Azion Webkit Monorepo</h1>
 
 <p align="center">
-  <a href="https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain"><img src="https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main" alt="Governance"></a>
+  <a href="https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=event%3Apull_request"><img src="https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?event=pull_request" alt="Governance"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/node-%3E%3D22.18-brightgreen" alt="Node >=22.18">
   <img src="https://img.shields.io/badge/pnpm-10.x-orange" alt="pnpm 10.x">
