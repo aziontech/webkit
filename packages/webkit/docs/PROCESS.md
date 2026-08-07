@@ -287,6 +287,24 @@ release-please (stock `release-type: node` in `release-please-config.json`),
 added or removed. release-please only counts a commit toward a package when it touches
 files under that package.
 
+**Overriding the computed version.** When the computed bump is wrong for a release — a
+breaking marker already merged that has to ship as a minor, or a version the team needs to
+pin — the override is a `Release-As: <version>` footer on a commit, which wins over the
+type/`!` calculation. Two constraints follow from how release-please reads it:
+
+- the commit must **touch a file under that package's path**, or the footer never reaches
+  the package. An **empty** commit is applied to _every_ configured package, so it would
+  pin all three at once.
+- the footer must survive into the **squash commit on `main`** — that is the message
+  release-please parses — so it belongs in the squash body, not only in a branch commit.
+
+The override is one-shot: once the tag is cut, the commit leaves the unreleased range and
+the calculation returns to normal, so the next breaking marker computes a major again.
+Holding a package's line at a fixed track permanently is a different mechanism
+(`versioning` in `release-please-config.json`), not this footer. The footer is read from
+the commits of the range **before** the Release PR is computed; the Release PR itself
+carries the resolved version in its diff, so a footer added there arrives too late.
+
 At publish time the publish workflow (`package-webkit.yml`) generates `.d.ts` files (`vue-tsc`); the
 repo itself ships source (`exports` points at `./src/...`) — `.d.ts` is never committed.
 The published package embeds [`catalog.json`](../catalog.json) — the version-locked
