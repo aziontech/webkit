@@ -23,7 +23,6 @@
   import SplitButton from '@aziontech/webkit/split-button'
   import { ref } from 'vue'
 
-  import AsciiBanner from '../site/AsciiBanner.vue'
   import BannerContainer from '../site/foundations/components/layout/BannerContainer.vue'
   import CardGrid from '../site/foundations/components/layout/CardGrid.vue'
   import PageHeader from '../site/foundations/components/layout/PageHeader.vue'
@@ -367,21 +366,8 @@ azion deploy`
       max-width="7xl"
       class="[--banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem))]"
     >
-      <!-- The Hub hero's backdrop, same asset and same two layers, so the docs hero and
-           the Hub hero read as one pattern: the animated ASCII contour field faded off
-           at the edges, and a blurred diamond scrim between it and the copy so the
-           headline keeps its contrast. AsciiBanner draws a single static frame under
-           prefers-reduced-motion, so the motion is opt-out by construction. -->
-      <template #background>
-        <AsciiBanner
-          scene="contour"
-          class="pointer-events-none absolute inset-0 z-0 opacity-60 mask-[radial-gradient(ellipse_at_center,black,transparent_75%)]"
-        />
-        <div
-          aria-hidden="true"
-          class="pointer-events-none absolute right-[-12%] top-1/2 z-5 aspect-square w-[65%] -translate-y-1/2 rotate-45 bg-[linear-gradient(135deg,var(--bg-canvas),color-mix(in_srgb,var(--bg-canvas)_40%,transparent))] opacity-90 blur-2xl"
-        />
-      </template>
+      <!-- No `#background`: the hero sits on plain canvas, the same as the Hub hero, so
+           the two still read as one pattern. -->
 
       <!-- The docs card-grid geometry, on the tokens: one column that splits at `xl`
            (not `lg` — the 300px rail leaves a laptop's content region ~700px, where a

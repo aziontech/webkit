@@ -20,7 +20,6 @@
 
   import ContrastBanner from '../ui/ContrastBanner.vue'
   import AsciiAsterisk from './AsciiAsterisk.vue'
-  import AsciiBanner from './AsciiBanner.vue'
   import ComponentGrid from './ComponentGrid.vue'
   import BannerContainer from './foundations/components/layout/BannerContainer.vue'
   import CardGrid from './foundations/components/layout/CardGrid.vue'
@@ -201,24 +200,6 @@
           hero
           max-width="7xl"
         >
-          <template #background>
-            <!-- Animated ASCII banner backdrop: a topographic contour field in the
-               brand accent, layered under the hero copy and faded at the edges so
-               the text stays legible. -->
-            <AsciiBanner
-              scene="contour"
-              class="pointer-events-none absolute inset-0 z-0 opacity-60 mask-[radial-gradient(ellipse_at_center,black,transparent_75%)]"
-            />
-            <!-- Linear diamond scrim: a rhombus (rotated square) filled with a
-               linear gradient in the canvas color and soft-blurred. It sits between
-               the ASCII field and the copy, dimming the backdrop directly under the
-               headline so the text keeps its contrast. -->
-            <div
-              aria-hidden="true"
-              class="pointer-events-none absolute right-[-12%] top-1/2 z-5 aspect-square w-[65%] -translate-y-1/2 rotate-45 bg-[linear-gradient(135deg,var(--bg-canvas),color-mix(in_srgb,var(--bg-canvas)_40%,transparent))] opacity-90 blur-2xl"
-            />
-          </template>
-
           <PageHeader
             margin-bottom=""
             size="hero"

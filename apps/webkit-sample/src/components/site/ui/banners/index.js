@@ -2,7 +2,7 @@
 // from, keyed by name. A page never imports a backdrop directly: it names one on
 // the container and the container resolves it here.
 //
-//   <BannerContainer hero banner="globe">…</BannerContainer>
+//   <BannerContainer hero banner="map">…</BannerContainer>
 //
 // To add a banner (including a pasted HTML one):
 //
@@ -17,18 +17,12 @@
 //
 // BANNER_NAMES is what BannerContainer validates the `banner` prop against, so a
 // typo fails loudly in dev instead of rendering an empty band.
-import ContourBanner from './ContourBanner.vue'
-import GlobeBanner from './GlobeBanner.vue'
 import MapBanner from './MapBanner.vue'
-import MeshBanner from './MeshBanner.vue'
 
 export const BANNERS = {
-  globe: GlobeBanner,
-  contour: ContourBanner,
-  mesh: MeshBanner,
   map: MapBanner
 }
 
 export const BANNER_NAMES = Object.keys(BANNERS)
 
-export { ContourBanner, GlobeBanner, MapBanner, MeshBanner }
+export { MapBanner }

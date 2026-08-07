@@ -210,14 +210,13 @@
 
 <template>
   <!-- ── Hero — the fluid banner band, exactly one viewport tall ───────────
-       BannerContainer owns the full-bleed band and the page's top rule; the
-       backdrop goes in #background (z-0), the copy in the default slot (z-10).
-       `--banner-offset` is the sticky SiteNav's height (h-14 = 3.5rem), so the
-       hero still measures one screen with the nav above it. -->
+       BannerContainer owns the full-bleed band and the page's top rule; the copy
+       goes in the default slot (z-10) on plain canvas — the band carries no
+       backdrop. `--banner-offset` is the sticky SiteNav's height (h-14 =
+       3.5rem), so the hero still measures one screen with the nav above it. -->
   <BannerContainer
     hero
     max-width="7xl"
-    banner="mesh"
     class="[--banner-offset:3.5rem]"
   >
     <!-- Hero copy anatomy: headline → description → actions. No eyebrow here — the

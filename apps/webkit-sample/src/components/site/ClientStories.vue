@@ -20,9 +20,8 @@
   //     The two 354px ellipses the design floats over the fill (top-left and
   //     bottom-centre) are CSS radial-gradients in the same brand colour — one recipe,
   //     driven by data, rather than four exported PNGs.
-  //   • The contour ASCII field is the section's backdrop, from the banner registry. It
-  //     sits behind the cards; the cards themselves are opaque now that they carry a
-  //     brand fill, so the field reads around them rather than through them.
+  //   • The section sits on plain canvas — no textured backdrop behind the cards, which
+  //     carry a brand fill of their own and are the only colour the band needs.
   //   • Copy is the design's, in English (the design's own strings are Portuguese; the
   //     rest of this page is English, so the wording stays and only the design changes).
   //     The design authors two stories and repeats them across its cards; that
@@ -35,7 +34,6 @@
   import { ref } from 'vue'
 
   import { SectionModule } from './foundations/components/layout/index.js'
-  import { ContourBanner } from './ui/banners/index.js'
   import { CLIENTS } from './ui/index.js'
 
   const byName = (name) => CLIENTS.find((client) => client.name === name)
@@ -83,10 +81,6 @@
     :padded="false"
     class="relative overflow-hidden"
   >
-    <!-- The contour field, behind everything, masked and dimmed so it never competes
-         with the copy (CONTAINERS.md: texture is masked, never raw). -->
-    <ContourBanner />
-
     <div class="relative z-10 flex flex-col gap-[var(--spacing-xxl)] py-[var(--spacing-xxl)]">
       <!-- Section title: heading left, supporting line in the third column, action
            below — the design's 3-column split. -->
