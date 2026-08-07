@@ -46,8 +46,18 @@
    * Was this level ALREADY on the stack when this instance was created? Then it was restored
    * (the consumer handed back a persisted `path`) rather than pushed — captured at setup,
    * because by the next tick the two are indistinguishable.
+   *
+   * It stops being true the moment the level LEAVES the stack, because from then on every
+   * arrival was travelled to. The question is per ARRIVAL, and the instance outlives all of
+   * them: the level's sub-content is created with the root and only its teleported child mounts
+   * and unmounts. Answered once for the instance, a consumer that seeds `path` — so the menu
+   * opens on the level the reader's own page is in — would own the one level that never animates
+   * its entrance again, sliding the root out from under a level already sitting in place.
    */
-  const wasRestored = isMounted.value
+  const wasRestored = ref(isMounted.value)
+  watch(isMounted, (mounted) => {
+    if (!mounted) wasRestored.value = false
+  })
 
   /** Whether the Teleport below can render at all: this is a drill, and the host exists. */
   const canTeleport = computed(() => isDrill.value && ctx.levelHost.value !== null)
@@ -86,7 +96,7 @@
    * is already in re-renders the level without replaying its entrance.
    */
   const enterFromClass = computed(() =>
-    wasRestored && !ctx.enterOnMount.value
+    wasRestored.value && !ctx.enterOnMount.value
       ? ''
       : 'motion-safe:translate-x-full! motion-safe:opacity-0'
   )
