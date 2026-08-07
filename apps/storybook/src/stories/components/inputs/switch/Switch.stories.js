@@ -51,6 +51,11 @@ const meta = {
       description: 'Forces the focused visual state regardless of keyboard focus.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
+    disabled: {
+      control: 'boolean',
+      description: 'Disables interaction and applies the disabled tokens.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Emitted when the user toggles the switch.',
@@ -60,7 +65,8 @@ const meta = {
   args: {
     modelValue: false,
     kind: 'default',
-    focused: false
+    focused: false,
+    disabled: false
   }
 }
 
@@ -142,6 +148,42 @@ export const Types = {
           'Both kind variants in off and on states. Privacy adds a lock (off) / lock-open (on) icon inside the handle.'
       },
       source: { code: toSfc(TYPES_SCRIPT, TYPES_TEMPLATE) }
+    }
+  }
+}
+
+const DISABLED_SCRIPT = [
+  IMPORT,
+  "import { ref } from 'vue'",
+  '',
+  'const lockedOff = ref(false)',
+  'const lockedOn = ref(true)'
+]
+
+const DISABLED_TEMPLATE = `<div class="flex flex-wrap items-center gap-[var(--spacing-4)]">
+  <Switch v-model="lockedOff" disabled aria-label="Locked off" />
+  <Switch v-model="lockedOn" disabled aria-label="Locked on" />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Switch>} */
+export const Disabled = {
+  render: () => ({
+    components: { Switch },
+    setup() {
+      const lockedOff = ref(false)
+      const lockedOn = ref(true)
+      return { lockedOff, lockedOn }
+    },
+    template: DISABLED_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Disabled in both positions. The lock reads the same either way — the disabled track and handle tokens win over the checked ones — and neither click nor Space/Enter emits.'
+      },
+      source: { code: toSfc(DISABLED_SCRIPT, DISABLED_TEMPLATE) }
     }
   }
 }
