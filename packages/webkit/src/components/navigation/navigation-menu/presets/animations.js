@@ -17,11 +17,11 @@ const ENDING_STYLE_ATTR = 'data-ending-style'
 /** Tailwind class groups for popup / positioner / content (use on component roots). */
 export const navigationMenuTransitionClasses = {
   positioner:
-    'transition-[top,left,right,bottom,width,height] duration-slow-01 ease-productive-entrance data-[instant]:transition-none data-[starting-style]:transition-none',
+    'transition-[transform] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[instant]:transition-none data-[starting-style]:transition-none',
   popup:
-    'w-[var(--popup-width,auto)] h-[var(--popup-height,auto)] transition-[opacity,transform,width,height] duration-slow-01 ease-productive-entrance data-[starting-style]:-translate-y-2 data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:-translate-y-2 data-[ending-style]:opacity-0 data-[ending-style]:transition-[opacity,transform]',
+    'w-[var(--popup-width,auto)] h-[var(--popup-height,auto)] [transform-origin:var(--popup-origin,top_left)] transition-[opacity,scale,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[ending-style]:transition-[opacity,scale]',
   content:
-    'box-border transition-[opacity,transform] duration-slow-01 ease-productive-entrance data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:opacity-0 data-[starting-style]:data-[activation-direction=left]:-translate-x-1/2 data-[starting-style]:data-[activation-direction=right]:translate-x-1/2 data-[starting-style]:data-[activation-direction=up]:-translate-y-1/2 data-[starting-style]:data-[activation-direction=down]:translate-y-1/2 data-[ending-style]:data-[activation-direction=left]:translate-x-1/2 data-[ending-style]:data-[activation-direction=right]:-translate-x-1/2 data-[ending-style]:data-[activation-direction=up]:translate-y-1/2 data-[ending-style]:data-[activation-direction=down]:-translate-y-1/2',
+    'box-border transition-[opacity,translate] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:opacity-0 data-[starting-style]:data-[activation-direction=left]:-translate-x-6 data-[starting-style]:data-[activation-direction=right]:translate-x-6 data-[starting-style]:data-[activation-direction=up]:-translate-y-6 data-[starting-style]:data-[activation-direction=down]:translate-y-6 data-[ending-style]:data-[activation-direction=left]:translate-x-6 data-[ending-style]:data-[activation-direction=right]:-translate-x-6 data-[ending-style]:data-[activation-direction=up]:translate-y-6 data-[ending-style]:data-[activation-direction=down]:-translate-y-6',
   viewport: 'relative h-full w-full overflow-hidden'
 }
 
