@@ -3,26 +3,21 @@ name: Governance Pipeline
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
 
 permissions:
   contents: read
   pull-requests: read
 
 # Cancel superseded runs on the same PR (a new push obsoletes the old run's
-# 8 Playwright-sharded jobs); pushes to main queue instead, so every
-# landed commit keeps its own complete status.
+# 8 Playwright-sharded jobs).
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
-    # Release-please merges skip the pipeline: the same tree already passed the gate on the Release PR.
-    if: "github.event_name == 'pull_request' || !startsWith(github.event.head_commit.message, 'chore: release main')"
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
       toolkit: ${{ steps.filter.outputs.toolkit }}
