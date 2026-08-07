@@ -48,8 +48,6 @@
   }))
 
   const popupStyle = computed(() => ({
-    '--popup-width': 'auto',
-    '--popup-height': 'auto',
     '--transform-origin': 'var(--transform-origin, center)',
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
