@@ -11,6 +11,28 @@
 
 * [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [4.3.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.2.0...@aziontech/theme@4.3.0) (2026-08-07)
+
+
+### Features
+
+* **theme:** add a translucent loading-placeholder token role ([#824](https://github.com/aziontech/webkit/issues/824)) ([e9164d6](https://github.com/aziontech/webkit/commit/e9164d678b13a3e4f569381f935e3bd0d9b6d798))
+* **theme:** point the accent token family at the blue ramp ([#844](https://github.com/aziontech/webkit/issues/844)) ([aada908](https://github.com/aziontech/webkit/commit/aada908b3e089cd8311bf2d12149f089e8e7a271))
+* **theme:** retune the container scale to one geometric rhythm ([#825](https://github.com/aziontech/webkit/issues/825)) ([53ce7ad](https://github.com/aziontech/webkit/commit/53ce7add4d588c1c1693a76a2f35c0e2781c322e))
+* **webkit:** component fixes batch — Link, TabView, Popover, MiniButton, Dialog, theme ([#785](https://github.com/aziontech/webkit/issues/785)) ([df71f75](https://github.com/aziontech/webkit/commit/df71f75db52e386511f412c9d7905c7fcd2ac320))
+* **webkit:** march the flow connectors with a dashed stroke animation ([#860](https://github.com/aziontech/webkit/issues/860)) ([0fc047b](https://github.com/aziontech/webkit/commit/0fc047b04a58fa43efebf57a046ba03ac694caee))
+* **webkit:** tokenise shell and markdown snippets in CodeBlock ([#858](https://github.com/aziontech/webkit/issues/858)) ([96c9b7a](https://github.com/aziontech/webkit/commit/96c9b7a9af1bc31c88e50f6b264b986ac06111e9))
+
+
+### Bug Fixes
+
+* **theme:** [ENG-46996] harden the zero-with-unit token gate ([#850](https://github.com/aziontech/webkit/issues/850)) ([a0a63c8](https://github.com/aziontech/webkit/commit/a0a63c88031633dfa65320eaa14d23fdb87afcee))
+* **theme:** align text tokens with typography primitives ([#817](https://github.com/aziontech/webkit/issues/817)) ([10e2190](https://github.com/aziontech/webkit/commit/10e219047b86e168d4ee711b0a3a1e63c642d34a))
+* **theme:** emit the named duration and ease utilities the system already writes ([#865](https://github.com/aziontech/webkit/issues/865)) ([ae66662](https://github.com/aziontech/webkit/commit/ae6666211fb8ac85f4bf441e443d164818e0dc16))
+* **theme:** lighten dark interaction overlays and unify the info border ([#855](https://github.com/aziontech/webkit/issues/855)) ([c5a4e6f](https://github.com/aziontech/webkit/commit/c5a4e6fa08dd4ae065d2c57443fcb2f9bda0da96))
+* **theme:** use gray.500 for text-muted in both light and dark ([#840](https://github.com/aziontech/webkit/issues/840)) ([33cf2b8](https://github.com/aziontech/webkit/commit/33cf2b875bd6e7a28a917663dd8933cf8f7a8f2c))
+* use @aziontech/theme/animations imports; move vue-tsc to devDependencies ([b3795d2](https://github.com/aziontech/webkit/commit/b3795d2f4b9de580d4175fb2b870b959ceefaf69))
+
 ## [4.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.0.0...@aziontech/theme@4.1.0) (2026-07-23)
 
 
