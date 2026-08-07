@@ -414,6 +414,18 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
+  --transition-duration-fast-01: 70ms;
+  --transition-duration-fast-02: 110ms;
+  --transition-duration-moderate-01: 150ms;
+  --transition-duration-moderate-02: 240ms;
+  --transition-duration-slow-01: 400ms;
+  --transition-duration-slow-02: 700ms;
+  --transition-duration-slow-03: 1100ms;
+  --transition-duration-slow-04: 2100ms;
+  --ease-productive-entrance: cubic-bezier(0.39, 0.57, 0.56, 1);
+  --ease-productive-exit: cubic-bezier(0.55, 0.09, 0.68, 0.53);
+  --ease-expressive-entrance: cubic-bezier(0.17, 0.84, 0.44, 1);
+  --ease-expressive-exit: cubic-bezier(0.95, 0.05, 0.8, 0.04);
 }
 
 :root, [data-theme=light], .azion.azion-light {
@@ -884,7 +896,7 @@
   --danger-border: #E51A1A66;
   --danger-contrast: #891010;
   --info: #CCE4FF;
-  --info-border: #8A84EC66;
+  --info-border: #0072F566;
   --info-contrast: #004799;
 }
 
@@ -920,8 +932,8 @@
   --bg-surface-overlay: #4D4D4D;
   --bg-placeholder: #FFFFFF1A;
   --bg-placeholder-highlight: #FFFFFF1A;
-  --bg-hover: #00000033;
-  --bg-active: #00000014;
+  --bg-hover: #FFFFFF1A;
+  --bg-active: #FFFFFF0D;
   --bg-backdrop: #000000CC;
   --bg-selected: #1A1A1A;
   --bg-contrast: #FAFAFA;
@@ -955,7 +967,7 @@
   --danger-border: #E51A1A66;
   --danger-contrast: #ED7878;
   --info: #001833;
-  --info-border: #0072F580;
+  --info-border: #0072F566;
   --info-contrast: #66ADFF;
 }
 

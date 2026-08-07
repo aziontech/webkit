@@ -338,9 +338,13 @@
       "--drop-shadow-sm",
       "--drop-shadow-xl",
       "--drop-shadow-xs",
+      "--ease-expressive-entrance",
+      "--ease-expressive-exit",
       "--ease-in",
       "--ease-in-out",
       "--ease-out",
+      "--ease-productive-entrance",
+      "--ease-productive-exit",
       "--font-code",
       "--font-display",
       "--font-sans",
@@ -661,6 +665,14 @@
       "--tracking-wide",
       "--tracking-wider",
       "--tracking-widest",
+      "--transition-duration-fast-01",
+      "--transition-duration-fast-02",
+      "--transition-duration-moderate-01",
+      "--transition-duration-moderate-02",
+      "--transition-duration-slow-01",
+      "--transition-duration-slow-02",
+      "--transition-duration-slow-03",
+      "--transition-duration-slow-04",
       "--warning",
       "--warning-border",
       "--warning-contrast",
@@ -1038,9 +1050,13 @@
         "--drop-shadow-xs"
       ],
       "ease": [
+        "--ease-expressive-entrance",
+        "--ease-expressive-exit",
         "--ease-in",
         "--ease-in-out",
-        "--ease-out"
+        "--ease-out",
+        "--ease-productive-entrance",
+        "--ease-productive-exit"
       ],
       "font": [
         "--font-code",
@@ -1401,6 +1417,16 @@
         "--tracking-wide",
         "--tracking-wider",
         "--tracking-widest"
+      ],
+      "transition": [
+        "--transition-duration-fast-01",
+        "--transition-duration-fast-02",
+        "--transition-duration-moderate-01",
+        "--transition-duration-moderate-02",
+        "--transition-duration-slow-01",
+        "--transition-duration-slow-02",
+        "--transition-duration-slow-03",
+        "--transition-duration-slow-04"
       ],
       "warning": [
         "--warning",
@@ -6905,6 +6931,13 @@
           "default": "false",
           "required": "no",
           "doc": "Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Disables interaction and applies the disabled tokens."
         }
       ],
       "events": [
@@ -6914,7 +6947,7 @@
           "notes": "Emitted when the user toggles the switch. Paired with `v-model`."
         }
       ],
-      "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts."
+      "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state."
     },
     "theme-switcher": {
       "import": "@aziontech/webkit/theme-switcher",
