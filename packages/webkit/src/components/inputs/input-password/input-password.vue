@@ -92,8 +92,8 @@
     :data-toggleable="toggleable || null"
     :data-visible="visible || null"
     :class="[
-      'relative inline-flex items-center w-full h-10',
-      'gap-[var(--spacing-xs)] pl-[var(--spacing-md)] pr-[var(--spacing-xxs)]',
+      'group relative inline-flex items-center w-full h-10',
+      'gap-[var(--spacing-xs)] pr-[var(--spacing-xs)]',
       'rounded-[var(--shape-elements)]',
       'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
@@ -107,7 +107,7 @@
   >
     <span
       v-if="hasIconLeft"
-      class="inline-flex shrink-0 items-center justify-center text-[var(--text-muted)]"
+      class="inline-flex shrink-0 items-center justify-center pl-[var(--spacing-md)] text-[var(--text-muted)]"
       aria-hidden="true"
     >
       <slot name="iconLeft" />
@@ -125,7 +125,7 @@
       :aria-invalid="invalid || undefined"
       :aria-required="required || undefined"
       :data-testid="testId"
-      class="relative z-[var(--z-input-field)] w-full min-w-0 border-0 bg-transparent p-0 outline-none text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      class="relative z-[var(--z-input-field)] w-full min-w-0 border-0 bg-transparent py-0 pr-0 pl-[var(--spacing-md)] group-data-[has-icon-left]:pl-0 outline-none text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
       @input="handleInput"
     />
@@ -141,7 +141,7 @@
     <IconButton
       v-if="toggleable"
       kind="transparent"
-      size="medium"
+      size="small"
       :icon="toggleIcon"
       :ariaLabel="toggleLabel"
       :aria-pressed="visible"
