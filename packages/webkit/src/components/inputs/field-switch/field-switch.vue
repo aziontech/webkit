@@ -76,7 +76,6 @@
       :disabled="disabled"
       :aria-disabled="disabled || undefined"
       :aria-required="required || undefined"
-      :class="disabled ? 'opacity-50' : ''"
       :data-testid="`${testId}__control`"
     />
     <div
