@@ -68,7 +68,7 @@ text-body-* > text-label-* > text-overline-*`). See `/webkit-baseline-ui`.
    - **Verify it by measuring, not by looking.** Read the rendered `x` of each row type and assert
      they are equal, and assert a rail's right edge never exceeds the row surface's left edge. A 4px
      break is invisible in review and obvious in production.
-6. **Contain the page** — cap reading/content width with `max-w-[var(--container-*)]`, keep
+6. **Contain the page** — cap reading/content width with `max-w-(--container-*)`, keep
    data-dense surfaces fluid; never a raw `px`/`rem` width. The full container doctrine (fluid-first
    shell, focused-flow centering) lives in `/webkit-baseline-ui`.
 7. **Token motion only** — `animate-*` utilities + `duration-*`/`ease-*` tokens, with a

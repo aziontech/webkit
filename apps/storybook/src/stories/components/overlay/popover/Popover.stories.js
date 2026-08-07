@@ -152,7 +152,7 @@ const Template = (args) => ({
           <PopoverClose />
         </PopoverHeader>
 
-        <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
           This content is rendered inside the popover panel.
         </div>
       </PopoverContent>
@@ -171,7 +171,7 @@ const DEFAULT_MARKUP = `<Popover>
       <PopoverClose />
     </PopoverHeader>
 
-    <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">
+    <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
       This content is rendered inside the popover panel.
     </div>
   </PopoverContent>
@@ -191,7 +191,7 @@ export const Default = {
   }
 }
 
-const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-xxl)] place-items-center min-h-[24rem] p-[var(--spacing-xxl)]">
+const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-(--spacing-xxl) place-items-center min-h-[24rem] p-(--spacing-xxl)">
   <Popover placement="bottom-start">
     <PopoverTrigger>
       <Button kind="secondary" label="bottom-start" />
@@ -201,7 +201,7 @@ const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-xxl
         <PopoverTitle>bottom-start</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
     </PopoverContent>
   </Popover>
 
@@ -214,7 +214,7 @@ const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-xxl
         <PopoverTitle>bottom-end</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
     </PopoverContent>
   </Popover>
 
@@ -227,7 +227,7 @@ const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-xxl
         <PopoverTitle>top-start</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
     </PopoverContent>
   </Popover>
 
@@ -240,7 +240,7 @@ const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-xxl
         <PopoverTitle>top-end</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
     </PopoverContent>
   </Popover>
 </div>`
@@ -260,12 +260,12 @@ export const Placements = {
   }
 }
 
-const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border border-dashed border-[var(--border-muted)]">
-  <p class="absolute top-[var(--spacing-md)] left-1/2 -translate-x-1/2 text-body-sm text-[var(--text-muted)] text-center max-w-md">
+const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border border-dashed border-(--border-muted)">
+  <p class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md">
     All triggers use placement="auto". Each panel resolves to the best-fitting corner based on its position in the viewport.
   </p>
 
-  <div class="absolute top-[var(--spacing-md)] left-[var(--spacing-md)]">
+  <div class="absolute top-(--spacing-md) left-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="top-left" />
@@ -275,12 +275,12 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
           <PopoverTitle>Popover</PopoverTitle>
           <PopoverClose />
         </PopoverHeader>
-        <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
     </Popover>
   </div>
 
-  <div class="absolute top-[var(--spacing-md)] right-[var(--spacing-md)]">
+  <div class="absolute top-(--spacing-md) right-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="top-right" />
@@ -290,12 +290,12 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
           <PopoverTitle>Popover</PopoverTitle>
           <PopoverClose />
         </PopoverHeader>
-        <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
     </Popover>
   </div>
 
-  <div class="absolute bottom-[var(--spacing-md)] left-[var(--spacing-md)]">
+  <div class="absolute bottom-(--spacing-md) left-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="bottom-left" />
@@ -305,12 +305,12 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
           <PopoverTitle>Popover</PopoverTitle>
           <PopoverClose />
         </PopoverHeader>
-        <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
     </Popover>
   </div>
 
-  <div class="absolute bottom-[var(--spacing-md)] right-[var(--spacing-md)]">
+  <div class="absolute bottom-(--spacing-md) right-(--spacing-md)">
     <Popover :open="true" placement="auto">
       <PopoverTrigger>
         <Button kind="secondary" label="bottom-right" />
@@ -320,7 +320,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[30rem] w-full border bo
           <PopoverTitle>Popover</PopoverTitle>
           <PopoverClose />
         </PopoverHeader>
-        <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Popover content.</div>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
     </Popover>
   </div>
@@ -342,7 +342,7 @@ export const AutoPlacement = {
   }
 }
 
-const ANATOMY_TEMPLATE = `<div class="flex flex-wrap items-start gap-[var(--spacing-xxl)] p-[var(--spacing-xxl)] min-h-[22rem]">
+const ANATOMY_TEMPLATE = `<div class="flex flex-wrap items-start gap-(--spacing-xxl) p-(--spacing-xxl) min-h-[22rem]">
   <Popover placement="bottom-start">
     <PopoverTrigger>
       <Button kind="secondary" label="Full" />
@@ -353,7 +353,7 @@ const ANATOMY_TEMPLATE = `<div class="flex flex-wrap items-start gap-[var(--spac
         <PopoverDescription>A short description of the popover.</PopoverDescription>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Body content composed by the consumer.</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Body content composed by the consumer.</div>
       <PopoverFooter>
         <Button kind="secondary" size="medium" label="Confirm" />
       </PopoverFooter>
@@ -369,7 +369,7 @@ const ANATOMY_TEMPLATE = `<div class="flex flex-wrap items-start gap-[var(--spac
         <PopoverTitle>Popover title</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Body content.</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Body content.</div>
     </PopoverContent>
   </Popover>
 
@@ -378,7 +378,7 @@ const ANATOMY_TEMPLATE = `<div class="flex flex-wrap items-start gap-[var(--spac
       <Button kind="secondary" label="Body only" />
     </PopoverTrigger>
     <PopoverContent>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Just body content — no header or footer.</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Just body content — no header or footer.</div>
     </PopoverContent>
   </Popover>
 </div>`
@@ -399,7 +399,7 @@ export const Anatomy = {
   }
 }
 
-const WIDTHS_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-xxl)] p-[var(--spacing-xxl)]">
+const WIDTHS_TEMPLATE = `<div class="flex items-center gap-(--spacing-xxl) p-(--spacing-xxl)">
   <Popover placement="bottom-start" width="small">
     <PopoverTrigger>
       <Button kind="secondary" label="small" />
@@ -409,7 +409,7 @@ const WIDTHS_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-xxl)] 
         <PopoverTitle>small</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-xs) (348px).</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Panel width is var(--container-xs) (348px).</div>
     </PopoverContent>
   </Popover>
 
@@ -422,7 +422,7 @@ const WIDTHS_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-xxl)] 
         <PopoverTitle>medium</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-sm) (408px).</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Panel width is var(--container-sm) (408px).</div>
     </PopoverContent>
   </Popover>
 
@@ -435,7 +435,7 @@ const WIDTHS_TEMPLATE = `<div class="flex items-center gap-[var(--spacing-xxl)] 
         <PopoverTitle>large</PopoverTitle>
         <PopoverClose />
       </PopoverHeader>
-      <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">Panel width is var(--container-md) (472px).</div>
+      <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Panel width is var(--container-md) (472px).</div>
     </PopoverContent>
   </Popover>
 </div>`
@@ -499,9 +499,9 @@ const FILTER_TEMPLATE = `<Popover v-model:open="open" :dismissible="false" width
       <PopoverClose />
     </PopoverHeader>
 
-    <div class="flex flex-col gap-[var(--spacing-xs)] p-[var(--spacing-md)]">
+    <div class="flex flex-col gap-(--spacing-xs) p-(--spacing-md)">
       <Label>New Filter</Label>
-      <div class="flex items-start gap-[var(--spacing-sm)]">
+      <div class="flex items-start gap-(--spacing-sm)">
         <div class="min-w-0 flex-1">
           <Select v-model="field" size="small" placeholder="Field">
             <SelectTrigger />

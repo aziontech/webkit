@@ -45,7 +45,7 @@
 
 <template>
   <div
-    class="w-full border-b border-[var(--border-default)] p-[var(--spacing-sm)]"
+    class="w-full border-b border-(--border-default) p-(--spacing-sm)"
     :data-testid="testId"
   >
     <InputText

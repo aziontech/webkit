@@ -25,7 +25,7 @@
     v-bind="$attrs"
     data-slot="item-footer"
     :data-testid="testId"
-    class="flex basis-full items-center justify-between gap-[var(--spacing-xs)]"
+    class="flex basis-full items-center justify-between gap-(--spacing-xs)"
   >
     <slot />
   </div>

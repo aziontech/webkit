@@ -242,7 +242,7 @@ export const States = {
   }
 }
 
-const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-[var(--spacing-xl)] place-items-center min-h-[24rem]">
+const PLACEMENTS_TEMPLATE = `<div class="grid grid-cols-2 gap-(--spacing-xl) place-items-center min-h-[24rem]">
   <Dropdown placement="bottom-start">
     <DropdownTrigger>
       <Button kind="outlined" label="bottom-start" />
@@ -299,13 +299,13 @@ export const Placements = {
   }
 }
 
-const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border border-dashed border-[var(--border-muted)]">
-  <p class="absolute top-[var(--spacing-md)] left-1/2 -translate-x-1/2 text-body-sm text-[var(--text-muted)] text-center max-w-md">
+const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border border-dashed border-(--border-muted)">
+  <p class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md">
     All four triggers use <code>placement="auto"</code>.<br />
     Each panel resolves to the best-fitting corner based on its position in the viewport.
   </p>
 
-  <div class="absolute top-[var(--spacing-md)] left-[var(--spacing-md)]">
+  <div class="absolute top-(--spacing-md) left-(--spacing-md)">
     <Dropdown placement="auto">
       <DropdownTrigger>
         <Button kind="outlined" label="top-left trigger" />
@@ -317,7 +317,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     </Dropdown>
   </div>
 
-  <div class="absolute top-[var(--spacing-md)] right-[var(--spacing-md)]">
+  <div class="absolute top-(--spacing-md) right-(--spacing-md)">
     <Dropdown placement="auto">
       <DropdownTrigger>
         <Button kind="outlined" label="top-right trigger" />
@@ -329,7 +329,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     </Dropdown>
   </div>
 
-  <div class="absolute bottom-[var(--spacing-md)] left-[var(--spacing-md)]">
+  <div class="absolute bottom-(--spacing-md) left-(--spacing-md)">
     <Dropdown placement="auto">
       <DropdownTrigger>
         <Button kind="outlined" label="bottom-left trigger" />
@@ -341,7 +341,7 @@ const AUTO_PLACEMENT_TEMPLATE = `<div class="relative h-[28rem] w-full border bo
     </Dropdown>
   </div>
 
-  <div class="absolute bottom-[var(--spacing-md)] right-[var(--spacing-md)]">
+  <div class="absolute bottom-(--spacing-md) right-(--spacing-md)">
     <Dropdown placement="auto">
       <DropdownTrigger>
         <Button kind="outlined" label="bottom-right trigger" />
@@ -417,7 +417,7 @@ const WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<Dropdown :open="true">
   </DropdownTrigger>
 
   <template #top>
-    <div class="p-[var(--spacing-xxs)]">
+    <div class="p-(--spacing-xxs)">
       <InputText placeholder="Search options…" size="small" />
     </div>
   </template>
@@ -429,7 +429,7 @@ const WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<Dropdown :open="true">
   </DropdownGroup>
 
   <template #bottom>
-    <div class="flex justify-end p-[var(--spacing-xxs)]">
+    <div class="flex justify-end p-(--spacing-xxs)">
       <Button kind="text" size="small" label="View all" />
     </div>
   </template>
@@ -463,7 +463,7 @@ const GROUPS_WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<Dropdown :open="true">
 
   <DropdownGroup label="Account">
     <template #top>
-      <span class="text-label-sm text-[var(--text-muted)]">Signed in as ib@azion.com</span>
+      <span class="text-label-sm text-(--text-muted)">Signed in as ib@azion.com</span>
     </template>
 
     <DropdownOption value="profile" label="Profile" command="⌘P" />
@@ -476,7 +476,7 @@ const GROUPS_WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<Dropdown :open="true">
 
   <DropdownGroup label="Workspace">
     <template #top>
-      <span class="text-label-sm text-[var(--text-muted)]">Azion · 12 members</span>
+      <span class="text-label-sm text-(--text-muted)">Azion · 12 members</span>
     </template>
 
     <DropdownOption value="invite" label="Invite members" />
@@ -509,7 +509,7 @@ export const GroupsWithTopAndBottomSlots = {
   }
 }
 
-const CUSTOM_TRIGGERS_TEMPLATE = `<div class="flex flex-wrap gap-[var(--spacing-lg)] items-center">
+const CUSTOM_TRIGGERS_TEMPLATE = `<div class="flex flex-wrap gap-(--spacing-lg) items-center">
   <Dropdown>
     <DropdownTrigger>
       <IconButton icon="pi pi-ellipsis-h" aria-label="More actions" />

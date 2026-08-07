@@ -26,7 +26,7 @@
 
   const rootClasses = computed(() =>
     cn(
-      'fixed inset-0 z-[1000] bg-[var(--bg-backdrop)]',
+      'fixed inset-0 z-1000 bg-(--bg-backdrop)',
       drawerOverlayTransitionClasses,
       attrs.class as string | undefined
     )

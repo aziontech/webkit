@@ -127,10 +127,10 @@
     'relative m-0 flex w-full list-none flex-col p-0 ' +
     '[--menu-indent:calc(var(--spacing-sm)+var(--spacing-xs))] ' +
     '[--menu-rail-x:var(--spacing-sm)] ' +
-    'pl-[var(--menu-indent)] ' +
+    'pl-(--menu-indent) ' +
     '[&>li]:relative ' +
-    "[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:left-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:before:h-4 [&>li]:before:w-[calc(var(--menu-indent)-var(--menu-rail-x))] [&>li]:before:rounded-bl-[var(--shape-elements)] [&>li]:before:border-b [&>li]:before:border-l [&>li]:before:border-[var(--border-default)] [&>li]:before:content-[''] " +
-    "[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:left-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:after:w-0 [&>li]:after:border-l [&>li]:after:border-[var(--border-default)] [&>li]:after:content-[''] " +
+    "[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:left-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:before:h-4 [&>li]:before:w-[calc(var(--menu-indent)-var(--menu-rail-x))] [&>li]:before:rounded-bl-(--shape-elements) [&>li]:before:border-b [&>li]:before:border-l [&>li]:before:border-(--border-default) [&>li]:before:content-[''] " +
+    "[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:left-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:after:w-0 [&>li]:after:border-l [&>li]:after:border-(--border-default) [&>li]:after:content-[''] " +
     '[&>li:last-child]:after:hidden'
 
   /**

@@ -114,7 +114,7 @@ const TYPES_SCRIPT = [
   'const privacyOn = ref(true)'
 ]
 
-const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-[var(--spacing-4)]">
+const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-(--spacing-4)">
   <Switch v-model="defaultOff" kind="default" aria-label="Default off" />
   <Switch v-model="defaultOn" kind="default" aria-label="Default on" />
   <Switch v-model="privacyOff" kind="privacy" aria-label="Privacy off" />

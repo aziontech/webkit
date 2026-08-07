@@ -79,19 +79,19 @@ const enabled = ref(false)
 | lock icon (on) | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
 | track (hover) — overlay | `var(--bg-hover)` (applies to both off and on tracks) |
 | focus-visible / `data-focused` ring | `var(--ring-color)` |
-| shape — track | `rounded-[var(--shape-elements)]` (6px) |
-| shape — handle | `rounded-[var(--radius)]` (4px — concentric with the track: track 6px − `px-0.5` inset 2px) |
+| shape — track | `rounded-(--shape-elements)` (6px) |
+| shape — handle | `rounded-(--radius)` (4px — concentric with the track: track 6px − `px-0.5` inset 2px) |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| handle fill (off) — Figma `--surface-300` (#b2b2b2) | inline `bg-[var(--text-muted)]` (closest semantic) | `TODO: introduce semantic --fg-handle (or equivalent) in DESIGN.md` |
-| handle fill (on) — fixed white knob over `--accent` (must not flip with theme) | inline `bg-[var(--color-base-white)]` + lock icon `text-[var(--color-base-black)]` (base primitives, intentionally theme-independent) | `TODO: introduce semantic --fg-handle-on / --fg-handle-on-contrast in DESIGN.md` |
+| handle fill (off) — Figma `--surface-300` (#b2b2b2) | inline `bg-(--text-muted)` (closest semantic) | `TODO: introduce semantic --fg-handle (or equivalent) in DESIGN.md` |
+| handle fill (on) — fixed white knob over `--accent` (must not flip with theme) | inline `bg-(--color-base-white)` + lock icon `text-(--color-base-black)` (base primitives, intentionally theme-independent) | `TODO: introduce semantic --fg-handle-on / --fg-handle-on-contrast in DESIGN.md` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`. The same ring is applied when `focused` is `true` (`data-[focused]` mirror).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`. The same ring is applied when `focused` is `true` (`data-[focused]` mirror).
 - Keyboard map: `Tab` focuses; `Space` / `Enter` toggles.
 - ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`. The lock icon in `type="privacy"` is decorative — `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).

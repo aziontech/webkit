@@ -56,7 +56,7 @@
     :data-testid="testId"
     :data-size="size"
     :class="attrs.class"
-    class="inline-flex items-center justify-center gap-[var(--spacing-xxs)] tabular-nums leading-none bg-[var(--bg-surface)] text-[var(--text-default)] border border-b-2 border-[var(--border-default)] rounded-[var(--shape-elements)] shadow-[var(--shadow-sm)] px-[var(--spacing-xs)] data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5"
+    class="inline-flex items-center justify-center gap-(--spacing-xxs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5"
   >
     <span
       v-for="modifier in modifierGlyphs"

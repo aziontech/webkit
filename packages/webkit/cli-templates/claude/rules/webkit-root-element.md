@@ -53,7 +53,7 @@ discipline inside class strings is enforced separately by the stylelint config a
     :is="isLink ? 'a' : 'button'"
     v-bind="$attrs"
     :href="isLink ? href : undefined"
-    :class="cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-md)]', attrs.class as string)"
+    :class="cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)', attrs.class as string)"
   >
     <slot />
   </component>

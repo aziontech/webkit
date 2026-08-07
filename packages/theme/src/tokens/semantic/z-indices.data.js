@@ -17,7 +17,7 @@
  *                          such as drawers, modals, and fixed headers.
  *
  * Values are intentionally small and well-spaced to make future additions
- * obvious. Consume as `z-[var(--z-input-*)]` in components — do not
+ * obvious. Consume as `z-(--z-input-*)` in components — do not
  * introduce ad-hoc numeric z-index in input `.vue` files.
  */
 

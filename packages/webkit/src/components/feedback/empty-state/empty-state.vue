@@ -47,7 +47,7 @@
     :data-testid="testId"
     :data-size="size"
     :data-bordered="bordered || null"
-    class="flex w-full flex-col items-center justify-center text-center data-[bordered]:rounded-[var(--shape-button)] data-[bordered]:border data-[bordered]:border-dashed data-[bordered]:border-[length:var(--border-width-default,1px)] data-[bordered]:border-[var(--border-default)] data-[bordered]:bg-[var(--bg-surface)] data-[size=small]:gap-[var(--spacing-4)] data-[size=small]:px-[var(--spacing-6)] data-[size=small]:py-[var(--spacing-8)] data-[size=medium]:gap-[var(--spacing-6)] data-[size=medium]:px-[var(--spacing-8)] data-[size=medium]:py-[var(--spacing-12)]"
+    class="flex w-full flex-col items-center justify-center text-center data-[bordered]:rounded-(--shape-button) data-[bordered]:border data-[bordered]:border-dashed data-[bordered]:border-[length:var(--border-width-default,1px)] data-[bordered]:border-(--border-default) data-[bordered]:bg-(--bg-surface) data-[size=small]:gap-(--spacing-4) data-[size=small]:px-(--spacing-6) data-[size=small]:py-(--spacing-8) data-[size=medium]:gap-(--spacing-6) data-[size=medium]:px-(--spacing-8) data-[size=medium]:py-(--spacing-12)"
   >
     <div
       v-if="$slots['icon'] || icon"
@@ -61,27 +61,27 @@
           class="relative flex items-center justify-center group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
         >
           <span
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-5 group-data-[size=small]:size-12 group-data-[size=medium]:size-14"
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-5 group-data-[size=small]:size-12 group-data-[size=medium]:size-14"
           />
           <span
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-10 group-data-[size=small]:size-10 group-data-[size=medium]:size-12"
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10 group-data-[size=small]:size-10 group-data-[size=medium]:size-12"
           />
           <span
-            class="relative flex items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
+            class="relative flex items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
           >
             <i
               :class="icon"
-              class="leading-none text-[var(--text-default)] group-data-[size=small]:text-[length:0.875rem] group-data-[size=medium]:text-[length:1rem]"
+              class="leading-none text-(--text-default) group-data-[size=small]:text-[length:0.875rem] group-data-[size=medium]:text-[length:1rem]"
             />
           </span>
         </span>
       </slot>
     </div>
-    <div class="flex max-w-[var(--container-xl)] flex-col items-center gap-[var(--spacing-xs)]">
+    <div class="flex max-w-(--container-xl) flex-col items-center gap-(--spacing-xs)">
       <p
         :data-testid="`${testId}__title`"
         :data-size="size"
-        class="text-[var(--text-default)] data-[size=small]:text-heading-xxs data-[size=medium]:text-heading-sm"
+        class="text-(--text-default) data-[size=small]:text-heading-xxs data-[size=medium]:text-heading-sm"
       >
         {{ title }}
       </p>
@@ -89,7 +89,7 @@
         v-if="description"
         :data-testid="`${testId}__description`"
         :data-size="size"
-        class="text-[var(--text-muted)] data-[size=small]:text-body-xs data-[size=medium]:text-body-sm"
+        class="text-(--text-muted) data-[size=small]:text-body-xs data-[size=medium]:text-body-sm"
       >
         {{ description }}
       </p>
@@ -97,7 +97,7 @@
     <div
       v-if="$slots['actions']"
       :data-testid="`${testId}__actions`"
-      class="flex flex-col items-center gap-[var(--spacing-xs)]"
+      class="flex flex-col items-center gap-(--spacing-xs)"
     >
       <slot name="actions" />
     </div>

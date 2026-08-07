@@ -220,7 +220,7 @@
 
   // ScrollArea (the project's scroll primitive) is the scroll viewport. It only
   // forwards `class`, so the dynamic max-height is published as a CSS variable on
-  // the root and consumed by a static `max-h-[var(--table-viewport-height)]` class.
+  // the root and consumed by a static `max-h-(--table-viewport-height)` class.
   const viewportHeightVar = computed<Record<string, string> | undefined>(() =>
     props.maxHeight ? { '--table-viewport-height': props.maxHeight } : undefined
   )
@@ -917,23 +917,23 @@
     :data-border="border || null"
     :aria-busy="loading || undefined"
     :style="viewportHeightVar"
-    class="flex w-full flex-col overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-surface)] text-[var(--text-default)] text-body-sm data-[border]:border-[length:var(--border-width-default)] data-[border]:border-solid data-[border]:border-[var(--border-default)]"
+    class="flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
       role="presentation"
       :data-testid="`${testId}__toolbar`"
-      class="flex items-center gap-[var(--spacing-xs)] border-b-[length:var(--border-width-default)] border-solid border-[var(--border-default)] p-[var(--spacing-sm)]"
+      class="flex items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-sm)"
     >
       <div
         v-if="$slots['title']"
-        class="text-label-md text-[var(--text-default)]"
+        class="text-label-md text-(--text-default)"
       >
         <slot name="title" />
       </div>
       <div
         v-if="$slots['toolbar']"
-        class="flex flex-1 items-center justify-end gap-[var(--spacing-xs)]"
+        class="flex flex-1 items-center justify-end gap-(--spacing-xs)"
       >
         <slot
           name="toolbar"
@@ -949,7 +949,7 @@
       v-if="$slots['filters'] && appliedFilters.length > 0"
       role="presentation"
       :data-testid="`${testId}__filters`"
-      class="flex flex-wrap items-center gap-[var(--spacing-xs)] border-b-[length:var(--border-width-default)] border-solid border-[var(--border-default)] p-[var(--spacing-sm)]"
+      class="flex flex-wrap items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-sm)"
     >
       <slot
         name="filters"
@@ -968,7 +968,7 @@
     <ScrollArea
       :orientation="maxHeight ? 'both' : 'horizontal'"
       :data-testid="`${testId}__viewport`"
-      class="min-w-0 max-h-[var(--table-viewport-height)]"
+      class="min-w-0 max-h-(--table-viewport-height)"
     >
       <!-- Single width-defining container: the header and body share ONE
            max-content box, so every row resolves to the same width and the
@@ -1147,7 +1147,7 @@
     </ScrollArea>
 
     <TableFooter v-if="dataDriven && paginated">
-      <div class="flex items-center px-[var(--spacing-sm)] py-[var(--spacing-xs)]">
+      <div class="flex items-center px-(--spacing-sm) py-(--spacing-xs)">
         <Paginator
           class="w-full"
           :page="pageIndex + 1"

@@ -800,7 +800,7 @@ This section describes the canonical pattern enforced for components living unde
 
 All visual rules (typography classes, spacing, max-width, shape, semantic colors) come from [DESIGN.md](./DESIGN.md). In any conflict, **DESIGN.md wins**.
 
-- **Typography** is always applied via the generated class from `texts.data.js` — `text-heading-md`, `text-body-sm`, `text-label-md`, `text-button-lg`, `text-overline-md`, `text-big-number-lg`, etc. Never use `text-[length:var(--text-*)]` raw, never `leading-*`/`tracking-*`/`font-family` directly. Full catalog in [DESIGN.md "Available text styles"](./DESIGN.md).
+- **Typography** is always applied via the generated class from `texts.data.js` — `text-heading-md`, `text-body-sm`, `text-label-md`, `text-button-lg`, `text-overline-md`, `text-big-number-lg`, etc. Never use `text-(length:--text-*)` raw, never `leading-*`/`tracking-*`/`font-family` directly. Full catalog in [DESIGN.md "Available text styles"](./DESIGN.md).
 - **Semantic colors:** `var(--primary)`, `var(--primary-contrast)`, `var(--secondary)`, `var(--secondary-contrast)`, `var(--bg-hover)`, `var(--bg-active)`, `var(--bg-disabled)`, `var(--bg-surface)`, `var(--bg-canvas)`, `var(--bg-mask)`, `var(--border-default)`, `var(--border-muted)`, `var(--border-strong)`, `var(--text-default)`, `var(--text-muted)`, `var(--text-disabled)`, `var(--ring-color)`, and feedback variants (`--success`/`--warning`/`--danger`/`--info` + `-contrast`/`-border`).
 - **Shape:** `var(--shape-button)`, `var(--shape-elements)`, `var(--shape-card)`, `var(--shape-flat)`. For pseudo-element inheritance use `rounded-[inherit]`.
 - **Spacing:** `var(--spacing-1)..(--spacing-N)` applied via `px-[...]` / `py-[...]` / `gap-[...]` / `m-[...]`. For section-level responsive spacing use the semantic utilities (`gap-spacing-elements-md`, `p-spacing-elements-lg`).
@@ -1027,7 +1027,7 @@ before:opacity-0 before:transition-opacity before:content-['']
 hover:before:opacity-100 active:before:opacity-100
 ```
 
-And `kindClasses` sets `before:bg-[var(--bg-hover)]` / `active:before:bg-[var(--bg-active)]`. See [button.vue:65-69](../src/components/webkit/actions/button/button.vue#L65-L69).
+And `kindClasses` sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)`. See [button.vue:65-69](../src/components/webkit/actions/button/button.vue#L65-L69).
 
 ### 6. Polimorfismo `<a>` / `<button>`
 
@@ -1050,7 +1050,7 @@ Sweep these locations before implementing. Create a new utility only when nothin
 ### 9. Acessibilidade (WCAG 2.1 AA)
 
 - **Semantics first:** prefer native `<button>` / `<a>` / `<input>` / `<dialog>` over `role=...`.
-- **Visible focus mandatory:** `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`. Never strip outline without a substitute.
+- **Visible focus mandatory:** `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`. Never strip outline without a substitute.
 - **Keyboard navigation:** Tab/Shift+Tab; Enter/Space on buttons; Esc closes overlays; arrows on menus/lists/radio groups; focus trap in modals; focus returns to the trigger when closing.
 - **ARIA minimum:** `aria-label`, `aria-labelledby`/`aria-describedby`, `aria-busy`, `aria-disabled`, `aria-hidden="true"` on decorative icons, `aria-current`/`aria-selected`/`aria-expanded` as appropriate, `aria-live="polite"` for dynamic feedback.
 - **Contrast:** >=4.5:1 (text) / >=3:1 (large/icons). Verify disabled, which often fails.
@@ -1283,7 +1283,7 @@ The webkit layer applies styles **inline on the template root element's `class` 
 - When the consumer must override an internal token choice, wrap the static class string with `cn` from `@aziontech/webkit/utils/cn`:
 
   ```vue
-  :class="cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)]', attrs.class)"
+  :class="cn('rounded-(--shape-card) bg-(--bg-surface)', attrs.class)"
   ```
 
 #### Canonical example
@@ -1327,16 +1327,16 @@ const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-butto
     class="
       relative inline-flex items-center justify-center whitespace-nowrap
       transition-colors duration-150 ease-out motion-reduce:transition-none
-      rounded-[var(--shape-button)]
-      focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]
-      data-[kind=primary]:bg-[var(--primary)] data-[kind=primary]:text-[var(--primary-contrast)]
-      data-[kind=secondary]:bg-[var(--secondary)] data-[kind=secondary]:text-[var(--secondary-contrast)]
-      data-[kind=outlined]:border data-[kind=outlined]:border-[var(--border-default)] data-[kind=outlined]:bg-transparent
+      rounded-(--shape-button)
+      focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
+      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
+      data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-contrast)
+      data-[kind=outlined]:border data-[kind=outlined]:border-(--border-default) data-[kind=outlined]:bg-transparent
       data-[kind=text]:bg-transparent
-      data-[size=small]:h-7 data-[size=small]:px-[var(--spacing-2)] data-[size=small]:text-button-md
-      data-[size=medium]:h-8 data-[size=medium]:px-[var(--spacing-3)] data-[size=medium]:text-button-md
-      data-[size=large]:h-10 data-[size=large]:px-[var(--spacing-4)] data-[size=large]:text-button-lg
-      data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed
+      data-[size=small]:h-7 data-[size=small]:px-(--spacing-2) data-[size=small]:text-button-md
+      data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-3) data-[size=medium]:text-button-md
+      data-[size=large]:h-10 data-[size=large]:px-(--spacing-4) data-[size=large]:text-button-lg
+      data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed
     "
   >
     <slot />

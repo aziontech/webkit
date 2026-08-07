@@ -25,7 +25,7 @@
     v-show="!ctx.hasVisibleItems.value"
     v-bind="attrs"
     :data-testid="testId"
-    class="p-[var(--spacing-sm)] text-label-sm text-[var(--text-muted)]"
+    class="p-(--spacing-sm) text-label-sm text-(--text-muted)"
   >
     <slot>No results found.</slot>
   </div>

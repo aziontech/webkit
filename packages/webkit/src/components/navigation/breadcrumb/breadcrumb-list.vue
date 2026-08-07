@@ -24,7 +24,7 @@
     v-bind="attrs"
     :class="
       cn(
-        'flex flex-wrap items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)]',
+        'flex flex-wrap items-center gap-(--spacing-xxs) rounded-(--shape-button)',
         attrs.class as string | undefined
       )
     "

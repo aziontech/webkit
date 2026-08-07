@@ -34,7 +34,7 @@ import MiniButton from '@aziontech/webkit/mini-button'
     bordered
   >
     <template #actions>
-      <div class="flex gap-[var(--spacing-3)]">
+      <div class="flex gap-(--spacing-3)">
         <Button kind="secondary" label="Secondary Item" />
         <Button kind="outlined" label="Create Item" />
       </div>
@@ -112,7 +112,7 @@ _none_ — the title now uses `heading` tokens at every size (`.text-heading-xxs
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses the consumer-supplied controls in the `actions` slot in DOM order; the region itself is non-interactive.
 - ARIA: root uses `role="status"` so assistive tech announces the empty-data message; the `icon` slot container is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.

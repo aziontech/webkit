@@ -37,16 +37,16 @@
   <header
     v-bind="attrs"
     :data-testid="testId"
-    class="flex shrink-0 flex-col gap-[var(--spacing-sm)] border-b border-[var(--border-muted)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-sm)] sm:h-[48px] sm:flex-row sm:items-center sm:justify-between sm:py-0"
+    class="flex shrink-0 flex-col gap-(--spacing-sm) border-b border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-sm) sm:h-[48px] sm:flex-row sm:items-center sm:justify-between sm:py-0"
   >
     <div
       :data-testid="`${testId}__left`"
-      class="flex w-full min-w-0 items-center gap-[var(--spacing-sm)] sm:w-auto"
+      class="flex w-full min-w-0 items-center gap-(--spacing-sm) sm:w-auto"
     >
       <slot name="left">
         <span
           :data-testid="`${testId}__line-count`"
-          class="font-code text-label-sm text-[var(--text-muted)]"
+          class="font-code text-label-sm text-(--text-muted)"
         >
           {{ ctx.lineCountLabel.value }}
         </span>
@@ -57,7 +57,7 @@
           :data-testid="`${testId}__warnings-filter`"
           :aria-pressed="ctx.warningsOnly.value"
           :disabled="ctx.disabled.value"
-          class="inline-flex h-8 min-w-8 items-center justify-center rounded-[var(--shape-elements)] p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] disabled:cursor-not-allowed disabled:opacity-60"
+          class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-elements) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60"
           @click="ctx.toggleWarningsOnly"
           @keydown="handleWarningsKeydown"
         >
@@ -72,7 +72,7 @@
 
     <div
       :data-testid="`${testId}__right`"
-      class="flex w-full min-w-0 flex-col gap-[var(--spacing-sm)] sm:flex-row sm:items-center sm:gap-[var(--spacing-sm)] sm:w-auto"
+      class="flex w-full min-w-0 flex-col gap-(--spacing-sm) sm:flex-row sm:items-center sm:gap-(--spacing-sm) sm:w-auto"
     >
       <slot name="right">
         <slot name="search">

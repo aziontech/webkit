@@ -50,7 +50,7 @@ export const getCodeBlockLineTransitionStyle = (
 }
 
 export const codeBlockEnterOffsetClasses = {
-  right: 'translate-x-[var(--spacing-md)]',
-  left: '-translate-x-[var(--spacing-md)]',
+  right: 'translate-x-(--spacing-md)',
+  left: '-translate-x-(--spacing-md)',
   none: 'translate-x-0'
 } as const

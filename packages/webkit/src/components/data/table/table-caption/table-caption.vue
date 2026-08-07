@@ -27,7 +27,7 @@
     v-bind="$attrs"
     role="caption"
     :data-testid="testId"
-    class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-label-sm text-[var(--text-muted)]"
+    class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
   >
     <slot />
   </div>

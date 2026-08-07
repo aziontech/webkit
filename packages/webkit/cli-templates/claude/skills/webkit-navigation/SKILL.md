@@ -119,7 +119,7 @@ the webkit primitives and reuse it on every browse page:
       </GlobalHeader>
 
       <!-- The shell owns the --spacing-md inset ONCE; pages never re-pad -->
-      <main class="min-h-0 flex-1 overflow-auto p-[var(--spacing-md)]">
+      <main class="min-h-0 flex-1 overflow-auto p-(--spacing-md)">
         <slot />
       </main>
     </div>
@@ -208,7 +208,7 @@ Again, **you compose this shell** — there is no `@aziontech/webkit/creation-he
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <!-- EXACTLY ONE GlobalHeader; it IS the whole chrome for a focused flow -->
     <GlobalHeader>
       <GlobalHeader.Brand><!-- Azion brand --></GlobalHeader.Brand>
@@ -287,8 +287,8 @@ never feels like a different app.
 The content zone's padding is `--spacing-md` — the same edge padding as `GlobalHeader` — so page
 content lines up with the breadcrumb and the header actions. Your persistent shell applies this inset
 **once** (e.g. on its `<main>`, as in `AppShell` above); **don't** re-pad the page with a bespoke
-inset (`p-[var(--spacing-lg)]`). A resource-detail page that opts out of the shell inset (to run a
-full-bleed tab bar) re-applies the same `p-[var(--spacing-md)]` on its own scrolling content region —
+inset (`p-(--spacing-lg)`). A resource-detail page that opts out of the shell inset (to run a
+full-bleed tab bar) re-applies the same `p-(--spacing-md)` on its own scrolling content region —
 never `lg`.
 
 ### List / module pages — heading out, table in a flush card
@@ -299,7 +299,7 @@ never `lg`.
     active="applications"
     :breadcrumb="[{ label: 'Applications' }]"
   >
-    <main class="flex h-full flex-col gap-[var(--spacing-lg)]">
+    <main class="flex h-full flex-col gap-(--spacing-lg)">
       <!-- PageHeading sits OUT of the card and carries the primary actions. -->
       <PageHeading
         title="Applications"
@@ -348,7 +348,7 @@ never `lg`.
 ### Resource-detail pages — a fluid tab bar over the same content
 
 A resource you navigate INTO, or a settings hub, opts out of the shell inset to run a **full-bleed tab
-bar** as the bottom of the header, then scrolls its content in a `p-[var(--spacing-md)]` region. Each
+bar** as the bottom of the header, then scrolls its content in a `p-(--spacing-md)` region. Each
 tab renders one of two bodies — and both lead with the heading OUT, `--spacing-lg` down to the content:
 
 - **A list tab** → the exact list pattern above (`PageHeading` out + flush borderless `Table`), with
@@ -381,8 +381,8 @@ The rhythm is invariant across both: the heading is always **out** of the card, 
   when the primitives exist, and never import a nonexistent `@aziontech/webkit/app-layout` or
   `/creation-header`.
 - **The content inset is `--spacing-md`** — the header's edge padding. Take it from your shell (applied
-  once); a page that runs a full-bleed tab bar re-applies `p-[var(--spacing-md)]` on its own content
-  region. Never a bespoke `p-[var(--spacing-lg)]` page inset.
+  once); a page that runs a full-bleed tab bar re-applies `p-(--spacing-md)` on its own content
+  region. Never a bespoke `p-(--spacing-lg)` page inset.
 - **A list table lives in a flush, borderless `CardBox` with the `PageHeading` out of the card.**
   `CardBox :padded="false"` + `Table :border="false"`; the heading (and its actions) sits above the
   card, `--spacing-lg` away. Never bury the heading in the card `#header`, never ship a bare bordered

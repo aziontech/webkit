@@ -39,7 +39,7 @@
         :data-placement="ctx.placement.value"
         :data-width="ctx.width.value || null"
         :style="ctx.panelStyle.value"
-        class="flex min-w-[var(--container-3xs)] max-w-[var(--container-xs)] flex-col rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-sm)] outline-none data-[width=small]:min-w-[var(--container-xs)] data-[width=small]:max-w-[var(--container-xs)] data-[width=medium]:min-w-[var(--container-sm)] data-[width=medium]:max-w-[var(--container-sm)] data-[width=large]:min-w-[var(--container-md)] data-[width=large]:max-w-[var(--container-md)]"
+        class="flex min-w-(--container-3xs) max-w-(--container-xs) flex-col rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none data-[width=small]:min-w-(--container-xs) data-[width=small]:max-w-(--container-xs) data-[width=medium]:min-w-(--container-sm) data-[width=medium]:max-w-(--container-sm) data-[width=large]:min-w-(--container-md) data-[width=large]:max-w-(--container-md)"
       >
         <div
           :data-testid="`${ctx.testId}__body`"

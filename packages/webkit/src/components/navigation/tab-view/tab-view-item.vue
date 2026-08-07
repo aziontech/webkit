@@ -70,38 +70,35 @@
   const panelId = computed(() => (context ? context.panelId(resolvedValue.value) : undefined))
 
   const itemSharedClasses = [
-    'relative z-[1] inline-flex h-[var(--size-8)] shrink-0 cursor-pointer items-center',
-    'gap-[var(--spacing-xs)] rounded-[var(--shape-button)]',
-    'px-[var(--spacing-xs)] py-[var(--spacing-xs)]',
+    'relative z-1 inline-flex h-(--size-8) shrink-0 cursor-pointer items-center',
+    'gap-(--spacing-xs) rounded-(--shape-button)',
+    'px-(--spacing-xs) py-(--spacing-xs)',
     'text-label-md transition-colors motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]'
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
   ]
 
   const itemClasses = computed(() =>
     cn(
       itemSharedClasses,
       isDisabled.value &&
-        'pointer-events-none bg-[var(--bg-disabled)] text-[var(--text-disabled)] opacity-60',
+        'pointer-events-none bg-(--bg-disabled) text-(--text-disabled) opacity-60',
       !isDisabled.value &&
         context &&
         !isSelected.value &&
-        'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
+        'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
       // Selected label stays `--text-default` (Figma). `--secondary-contrast` is the
       // on-`--secondary` pair (black on dark / white on light) and only reads correctly
       // against a solid `--secondary-selected` fill, which the pill is not.
-      !isDisabled.value &&
-        context &&
-        isSelected.value &&
-        'bg-transparent text-[var(--text-default)]',
+      !isDisabled.value && context && isSelected.value && 'bg-transparent text-(--text-default)',
       // Standalone (no TabView context): the item paints its own pill, so it carries the
       // mask + hairline + xs shadow the List's indicator provides in the composed case.
       !context &&
         isSelected.value &&
-        'border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--secondary-mask)] text-[var(--text-default)] shadow-[var(--shadow-xs)]',
+        'border-(length:--border-width-default) border-(--border-muted) bg-(--secondary-mask) text-(--text-default) shadow-(--shadow-xs)',
       !context &&
         !isSelected.value &&
-        'bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)]',
+        'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
       attrs.class as string | undefined
     )
   )
@@ -110,7 +107,7 @@
     'flex size-3.5 shrink-0 items-center justify-center text-[inherit] [&_i]:text-body-xs'
 
   const closeClasses =
-    'flex size-3.5 shrink-0 items-center justify-center rounded-[var(--shape-button)] text-[inherit] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]'
+    'flex size-3.5 shrink-0 items-center justify-center rounded-(--shape-button) text-[inherit] hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 
   const activate = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) {

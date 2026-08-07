@@ -108,7 +108,7 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2`, with the offset color resolving `var(--input-ring-offset, var(--bg-canvas))` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots. A host that places the field on a surface other than the canvas (a raised popover, a drawer) declares `--input-ring-offset` on any ancestor; custom properties inherit, so one declaration retunes the ring gap of every field inside it (this is how `calendar`'s fields panel matches its raised popover).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2`, with the offset color resolving `var(--input-ring-offset, var(--bg-canvas))` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots. A host that places the field on a surface other than the canvas (a raised popover, a drawer) declares `--input-ring-offset` on any ancestor; custom properties inherit, so one declaration retunes the ring gap of every field inside it (this is how `calendar`'s fields panel matches its raised popover).
 - Keyboard map: `Tab` focuses the input; standard text-editing keys apply.
 - ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.

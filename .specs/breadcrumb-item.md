@@ -74,7 +74,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses link segments; `Enter` activates.
 - ARIA: current segment uses `aria-current="page"`; disabled segments use `aria-disabled="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

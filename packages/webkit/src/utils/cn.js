@@ -8,7 +8,7 @@ const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
       // Default twMerge treats `text-body-*` as text-color, so pairing
-      // `text-body-sm` + `text-[var(--text-muted)]` drops the typography class.
+      // `text-body-sm` + `text-(--text-muted)` drops the typography class.
       'font-size': [{ text: [(part) => SEMANTIC_TEXT_SIZE_RE.test(part)] }]
     }
   }
@@ -21,8 +21,8 @@ const twMerge = extendTailwindMerge({
  * (token-aware deduplication). Consumer overrides win predictably:
  *
  *   cn('px-4 text-body-sm', 'px-6')                            -> 'text-body-sm px-6'
- *   cn('text-body-sm', 'text-[var(--text-muted)]')             -> both kept
- *   cn('text-[var(--text-default)]', cond && 'text-[var(--text-muted)]')
+ *   cn('text-body-sm', 'text-(--text-muted)')             -> both kept
+ *   cn('text-(--text-default)', cond && 'text-(--text-muted)')
  *
  * Use inside `rootClasses` computeds when consumer-provided `attrs.class`
  * may override internal token choices. For simple additive cases, plain

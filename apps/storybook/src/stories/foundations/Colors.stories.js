@@ -100,8 +100,8 @@ export const Overview = {
           Click a swatch value to copy it. Use semantic tokens in components and keep primitive shades for reference.
         </PageHeader>
 
-        <section class="mb-[var(--spacing-xxl)]">
-          <h2 class="m-0 mb-[var(--spacing-md)] text-heading-lg text-[var(--text-default)]">Primitives</h2>
+        <section class="mb-(--spacing-xxl)">
+          <h2 class="m-0 mb-(--spacing-md) text-heading-lg text-(--text-default)">Primitives</h2>
           <ColorPaletteSection
             v-for="section in shadePaletteSections"
             :key="section.id"
@@ -111,8 +111,8 @@ export const Overview = {
           />
         </section>
 
-        <section class="mb-[var(--spacing-xxl)]">
-          <h2 class="m-0 mb-[var(--spacing-md)] text-heading-lg text-[var(--text-default)]">Brand</h2>
+        <section class="mb-(--spacing-xxl)">
+          <h2 class="m-0 mb-(--spacing-md) text-heading-lg text-(--text-default)">Brand</h2>
           <ColorPaletteSection
             v-for="section in brandPaletteSections"
             :key="section.id"

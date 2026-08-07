@@ -26,7 +26,7 @@
     :id="ctx.listId"
     role="listbox"
     :data-testid="testId"
-    class="max-h-[24rem] overflow-y-auto p-[var(--spacing-xxs)]"
+    class="max-h-[24rem] overflow-y-auto p-(--spacing-xxs)"
   >
     <slot />
   </div>

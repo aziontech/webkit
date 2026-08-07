@@ -27,7 +27,7 @@
 
   const rootClasses = computed(() =>
     cn(
-      'flex flex-col gap-[var(--spacing-md)] data-[align=start]:items-start data-[align=end]:items-end',
+      'flex flex-col gap-(--spacing-md) data-[align=start]:items-start data-[align=end]:items-end',
       attrs.class as string | undefined
     )
   )

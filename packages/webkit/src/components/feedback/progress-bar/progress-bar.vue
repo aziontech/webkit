@@ -51,12 +51,12 @@
     :aria-valuemax="indeterminate ? undefined : max"
     :aria-valuenow="indeterminate ? undefined : value"
     :aria-busy="indeterminate || undefined"
-    class="relative block w-full overflow-hidden bg-[var(--bg-surface-raised)] data-[size=small]:h-2 data-[size=medium]:h-3 data-[size=large]:h-4 data-[shape=rounded]:rounded-[var(--shape-elements)] data-[shape=flat]:rounded-[var(--shape-flat)]"
+    class="relative block w-full overflow-hidden bg-(--bg-surface-raised) data-[size=small]:h-2 data-[size=medium]:h-3 data-[size=large]:h-4 data-[shape=rounded]:rounded-(--shape-elements) data-[shape=flat]:rounded-(--shape-flat)"
   >
     <div
       :data-indeterminate="indeterminate || null"
       :style="indeterminate ? undefined : { width: percent + '%' }"
-      class="absolute inset-y-0 left-0 rounded-[inherit] bg-[var(--primary)] transition-[width] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none motion-reduce:animate-none data-[indeterminate]:right-0 data-[indeterminate]:bg-transparent data-[indeterminate]:before:absolute data-[indeterminate]:before:inset-y-0 data-[indeterminate]:before:rounded-[inherit] data-[indeterminate]:before:bg-[var(--primary)] data-[indeterminate]:before:content-[''] data-[indeterminate]:before:animate-progress-indeterminate motion-reduce:before:animate-none motion-reduce:before:inset-x-0 data-[indeterminate]:after:absolute data-[indeterminate]:after:inset-y-0 data-[indeterminate]:after:rounded-[inherit] data-[indeterminate]:after:bg-[var(--primary)] data-[indeterminate]:after:content-[''] data-[indeterminate]:after:animate-progress-indeterminate-short motion-reduce:after:animate-none motion-reduce:after:hidden"
+      class="absolute inset-y-0 left-0 rounded-[inherit] bg-(--primary) transition-[width] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none motion-reduce:animate-none data-[indeterminate]:right-0 data-[indeterminate]:bg-transparent data-[indeterminate]:before:absolute data-[indeterminate]:before:inset-y-0 data-[indeterminate]:before:rounded-[inherit] data-[indeterminate]:before:bg-(--primary) data-[indeterminate]:before:content-[''] data-[indeterminate]:before:animate-progress-indeterminate motion-reduce:before:animate-none motion-reduce:before:inset-x-0 data-[indeterminate]:after:absolute data-[indeterminate]:after:inset-y-0 data-[indeterminate]:after:rounded-[inherit] data-[indeterminate]:after:bg-(--primary) data-[indeterminate]:after:content-[''] data-[indeterminate]:after:animate-progress-indeterminate-short motion-reduce:after:animate-none motion-reduce:after:hidden"
     />
   </div>
 </template>

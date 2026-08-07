@@ -449,7 +449,7 @@
   <div
     :class="
       cn(
-        'flex w-full flex-col overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-surface)] data-[border]:border data-[border]:border-[var(--border-default)]',
+        'flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
         attrs.class as string | undefined
       )
     "
@@ -458,18 +458,18 @@
   >
     <div
       v-if="showTabHeader"
-      class="relative shrink-0 border-b border-[var(--border-default)] px-[var(--spacing-sm)]"
+      class="relative shrink-0 border-b border-(--border-default) px-(--spacing-sm)"
       :data-testid="`${testId}__header`"
     >
       <div
         ref="tabListRef"
         role="tablist"
-        class="relative flex items-end gap-[var(--spacing-xs)]"
+        class="relative flex items-end gap-(--spacing-xs)"
         :data-testid="`${testId}__tabs`"
       >
         <span
           v-show="indicatorVisible"
-          class="pointer-events-none absolute bottom-0 left-0 z-[1] h-[2px] rounded-full bg-[var(--border-selected)] motion-reduce:transition-none"
+          class="pointer-events-none absolute bottom-0 left-0 z-1 h-[2px] rounded-full bg-(--border-selected) motion-reduce:transition-none"
           :style="[indicatorTransitionStyle, indicatorTransformStyle]"
           :data-testid="`${testId}__indicator`"
           aria-hidden="true"
@@ -483,12 +483,12 @@
           :id="`${testId}-tab-${tab.value}`"
           :class="
             cn(
-              'relative z-[2] inline-flex h-12 shrink-0 items-center justify-center px-[var(--spacing-xs)] py-[var(--spacing-xs)]',
+              'relative z-2 inline-flex h-12 shrink-0 items-center justify-center px-(--spacing-xs) py-(--spacing-xs)',
               'text-overline-sm uppercase transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
               tab.value === activeValue
-                ? 'text-[var(--text-default)]'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-default)]'
+                ? 'text-(--text-default)'
+                : 'text-(--text-muted) hover:text-(--text-default)'
             )
           "
           :aria-selected="tab.value === activeValue"
@@ -506,7 +506,7 @@
 
     <div
       v-if="showFileNameBar && activeTab"
-      class="flex h-10 shrink-0 items-center gap-[var(--spacing-xs)] overflow-hidden border-b border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-sm)]"
+      class="flex h-10 shrink-0 items-center gap-(--spacing-xs) overflow-hidden border-b border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm)"
       :data-testid="`${testId}__filename`"
     >
       <span
@@ -514,12 +514,12 @@
         :data-testid="`${testId}__filename-icon`"
       >
         <i
-          :class="cn(activeFileIcon, 'text-label-code-sm text-[var(--text-default)]')"
+          :class="cn(activeFileIcon, 'text-label-code-sm text-(--text-default)')"
           aria-hidden="true"
         />
       </span>
       <span
-        class="text-label-code-sm min-w-0 flex-1 text-[var(--text-muted)]"
+        class="text-label-code-sm min-w-0 flex-1 text-(--text-muted)"
         :data-testid="`${testId}__filename-label`"
       >
         {{ activeTab.fileName }}
@@ -531,7 +531,7 @@
       :data-testid="`${testId}__content`"
     >
       <div
-        class="absolute right-[var(--spacing-sm)] top-[var(--spacing-sm)] z-[2]"
+        class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2"
         :data-testid="`${testId}__copy-anchor`"
       >
         <CopyButton
@@ -547,10 +547,7 @@
       <ScrollArea
         orientation="both"
         :class="
-          cn(
-            'min-h-0 min-w-0 flex-1 py-[var(--spacing-sm)]',
-            'focus-visible:ring-offset-[var(--bg-surface)]'
-          )
+          cn('min-h-0 min-w-0 flex-1 py-(--spacing-sm)', 'focus-visible:ring-offset-(--bg-surface)')
         "
         :data-testid="`${testId}__scroll`"
       >
@@ -572,8 +569,8 @@
               :key="`${activeTab.value}-${lineIndex}`"
               :class="
                 cn(
-                  'group relative flex min-w-full w-max shrink-0 items-center gap-[var(--spacing-xs)] px-[var(--spacing-lg)] py-[var(--spacing-xxs)] text-label-code-sm',
-                  'data-[state=added]:bg-[var(--success)] data-[state=removed]:bg-[var(--danger)] data-[state=highlighted]:bg-[var(--info)]',
+                  'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm',
+                  'data-[state=added]:bg-(--success) data-[state=removed]:bg-(--danger) data-[state=highlighted]:bg-(--info)',
                   getLineMotionClasses()
                 )
               "
@@ -582,12 +579,12 @@
               :data-state="getLineState(lineIndex + 1)"
             >
               <span
-                class="pointer-events-none absolute inset-0 z-0 bg-[var(--bg-hover)] opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
+                class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
                 aria-hidden="true"
               />
               <span
                 v-if="showDiffGutter"
-                class="relative z-[1] w-2 shrink-0 text-center group-data-[state=added]:text-[var(--success-contrast)] group-data-[state=removed]:text-[var(--danger-contrast)]"
+                class="relative z-1 w-2 shrink-0 text-center group-data-[state=added]:text-(--success-contrast) group-data-[state=removed]:text-(--danger-contrast)"
                 :data-testid="`${testId}__diff-marker`"
                 aria-hidden="true"
               >
@@ -595,13 +592,13 @@
               </span>
               <span
                 v-if="showLineNumbers"
-                class="relative z-[1] w-4 shrink-0 text-center text-[var(--code-sintax-line-number)]"
+                class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
                 :data-testid="`${testId}__line-number`"
               >
                 {{ formatLineNumber(lineIndex + 1) }}
               </span>
               <code
-                class="text-label-code-sm relative z-[1] shrink-0 whitespace-pre pr-[var(--spacing-xl)]"
+                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-(--spacing-xl)"
                 :data-testid="`${testId}__line-content`"
               >
                 <span
@@ -616,8 +613,8 @@
                 v-if="getLineState(lineIndex + 1) !== 'default'"
                 :class="
                   cn(
-                    'pointer-events-none absolute bottom-0 left-0 top-0 z-[2] w-[2px]',
-                    'group-data-[state=added]:bg-[var(--success-border)] group-data-[state=removed]:bg-[var(--danger-border)] group-data-[state=highlighted]:bg-[var(--info-border)]'
+                    'pointer-events-none absolute bottom-0 left-0 top-0 z-2 w-[2px]',
+                    'group-data-[state=added]:bg-(--success-border) group-data-[state=removed]:bg-(--danger-border) group-data-[state=highlighted]:bg-(--info-border)'
                   )
                 "
                 aria-hidden="true"

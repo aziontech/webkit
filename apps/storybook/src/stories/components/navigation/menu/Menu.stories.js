@@ -127,7 +127,8 @@ const meta = {
     },
     default: {
       control: false,
-      description: 'The composed anatomy. Rendered before the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu.',
+      description:
+        'The composed anatomy. Rendered before the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu.',
       table: { category: 'slots' }
     }
   },
@@ -191,7 +192,7 @@ export const Default = {
 }
 
 // One template const per story: it renders the canvas AND builds the snippet.
-const TYPES_TEMPLATE = `<div class="flex flex-wrap items-start gap-[var(--spacing-md)]">
+const TYPES_TEMPLATE = `<div class="flex flex-wrap items-start gap-(--spacing-md)">
   <div class="${HOST_CLASS}">
     <Menu aria-label="Expands in place">
       <MenuGroup label="Expands in place">

@@ -22,7 +22,7 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
 - Generate ids with Vue's **`useId()`** for every `for` / `aria-labelledby` /
   `aria-describedby` association — stable across SSR.
 - Style focus with a **`focus-visible`** ring using the ring token
-  (`focus-visible:ring-[var(--ring-color)]`).
+  (`focus-visible:ring-(--ring-color)`).
 - Make overlays **trap focus and restore it**: focus moves into the overlay on open,
   stays trapped while open, and returns to the trigger on close — use a focus-trap
   composable (e.g. VueUse), not a hand-written trap.
@@ -52,9 +52,9 @@ const hintId = useId() // stable id for the ARIA association
 <template>
   <!-- native semantics, tokenized focus ring, reduced-motion fallback -->
   <button
-    class="inline-flex items-center gap-[var(--spacing-xs)]
+    class="inline-flex items-center gap-(--spacing-xs)
            transition-colors duration-150 motion-reduce:transition-none
-           focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+           focus-visible:ring-2 focus-visible:ring-(--ring-color)"
     :aria-expanded="open"
     :data-state="open ? 'open' : 'closed'"
     @click="toggle"

@@ -55,7 +55,7 @@ Not every component has every state — a button has `disabled` + `loading`; a d
 <div
   :data-loading="loading || null"
   :data-disabled="disabled || null"
-  class="flex flex-col gap-[var(--spacing-sm)]
+  class="flex flex-col gap-(--spacing-sm)
          data-[loading]:pointer-events-none
          data-[disabled]:cursor-not-allowed"
 >

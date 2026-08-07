@@ -33,7 +33,7 @@
     :data-testid="testId"
     :data-required="required || null"
     :class="attrs.class"
-    class="inline-flex items-center text-label-sm text-[var(--text-default)] data-[required]:gap-[var(--spacing-xxs)]"
+    class="inline-flex items-center text-label-sm text-(--text-default) data-[required]:gap-(--spacing-xxs)"
   >
     <span :data-testid="`${testId}__text`">
       <slot v-if="$slots['default']" />
@@ -42,11 +42,11 @@
     <span
       v-if="required"
       :data-testid="`${testId}__required`"
-      class="text-label-sm text-[var(--text-muted)]"
+      class="text-label-sm text-(--text-muted)"
     >
       <span
         aria-hidden="true"
-        class="text-[var(--primary)]"
+        class="text-(--primary)"
         >*</span
       >
       (Required)

@@ -159,7 +159,7 @@ const Template = (args) => ({
     return { args }
   },
   template: `
-    <div class="flex w-full flex-col gap-[var(--spacing-4)]">
+    <div class="flex w-full flex-col gap-(--spacing-4)">
       <Item v-bind="args">
         <ItemContent>
           <ItemTitle>Basic Item</ItemTitle>
@@ -251,7 +251,7 @@ export const WithIconMedia = {
       return { args }
     },
     template: `
-      <div class="flex w-full flex-col gap-[var(--spacing-4)]">
+      <div class="flex w-full flex-col gap-(--spacing-4)">
         <Item kind="outline" v-bind="args">
           <ItemMedia kind="icon">
             <i class="ai ai-edge-firewall text-[length:inherit] leading-none" aria-hidden="true" />
@@ -306,7 +306,7 @@ export const WithAvatar = {
       return { args, sampleAvatarSrc }
     },
     template: `
-      <div class="flex w-full flex-col gap-[var(--spacing-4)]">
+      <div class="flex w-full flex-col gap-(--spacing-4)">
         <Item kind="outline" v-bind="args">
           <ItemMedia>
             <Avatar
@@ -344,7 +344,7 @@ const IMAGE_MARKUP = `<Item kind="outline">
     <img
       src="${sampleThumbnailSrc}"
       alt="Midnight City Lights"
-      class="object-cover size-10 grayscale rounded-[var(--shape-card)]"
+      class="object-cover size-10 grayscale rounded-(--shape-card)"
     />
   </Item.Media>
   <Item.Content>
@@ -364,13 +364,13 @@ export const WithImageMedia = {
       return { args, sampleThumbnailSrc }
     },
     template: `
-      <div class="flex w-full flex-col gap-[var(--spacing-4)]">
+      <div class="flex w-full flex-col gap-(--spacing-4)">
         <Item kind="outline" v-bind="args">
           <ItemMedia kind="image">
             <img
               :src="sampleThumbnailSrc"
               alt="Midnight City Lights"
-              class="object-cover size-10 grayscale rounded-[var(--shape-card)]"
+              class="object-cover size-10 grayscale rounded-(--shape-card)"
             />
           </ItemMedia>
           <ItemContent>
@@ -397,7 +397,7 @@ export const WithImageMedia = {
 
 const AS_CHILD_IMPORTS = ["import Item from '@aziontech/webkit/item'"]
 
-const AS_CHILD_MARKUP = `<div class="flex w-full flex-col gap-[var(--spacing-4)]">
+const AS_CHILD_MARKUP = `<div class="flex w-full flex-col gap-(--spacing-4)">
   <Item kind="outline" as-child>
     <a href="#" class="no-underline text-inherit">
       <Item.Content>
@@ -429,7 +429,7 @@ export const WithAsChild = {
   render: () => ({
     components: itemSubcomponents,
     template: `
-      <div class="flex w-full flex-col gap-[var(--spacing-4)]">
+      <div class="flex w-full flex-col gap-(--spacing-4)">
         <Item kind="outline" as-child>
           <a href="#" class="no-underline text-inherit">
             <ItemContent>
@@ -482,7 +482,7 @@ const groupRow = (person) => `  <Item>
         .charAt(0)
         .toUpperCase()}" size="medium" />
     </Item.Media>
-    <Item.Content class="gap-[var(--spacing-1)]">
+    <Item.Content class="gap-(--spacing-1)">
       <Item.Title>${person.username}</Item.Title>
       <Item.Description>${person.email}</Item.Description>
     </Item.Content>
@@ -518,7 +518,7 @@ export const WithGroup = {
                 size="medium"
               />
             </ItemMedia>
-            <ItemContent class="gap-[var(--spacing-1)]">
+            <ItemContent class="gap-(--spacing-1)">
               <ItemTitle>{{ person.username }}</ItemTitle>
               <ItemDescription>{{ person.email }}</ItemDescription>
             </ItemContent>
@@ -623,7 +623,7 @@ const AS_CHILD_LIST_ROW = `      <Item as-child>
             <Item.Title>Basic Item</Item.Title>
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
-          <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
+          <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
         </a>
       </Item>`
 
@@ -654,7 +654,7 @@ export const WithListAsChild = {
                   <ItemTitle>Basic Item</ItemTitle>
                   <ItemDescription>A simple item with title and description.</ItemDescription>
                 </ItemContent>
-                <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
+                <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
               </a>
             </Item>
           </ItemList>
@@ -683,7 +683,7 @@ const inlineRow = (icon, title, description) => `  <Item kind="inline" size="sma
       <Item.Title>${title}</Item.Title>
       <Item.Description>${description}</Item.Description>
     </Item.Content>
-    <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
+    <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
   </Item>`
 
 const INLINE_MARKUP = `<Item.Group>
@@ -710,7 +710,7 @@ export const Inline = {
               <ItemTitle>Customize Domain</ItemTitle>
               <ItemDescription>Link custom domains and subdomains to Azion.</ItemDescription>
             </ItemContent>
-            <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
+            <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
           </Item>
           <Item kind="inline" size="small" v-bind="args">
             <ItemMedia kind="icon">
@@ -720,7 +720,7 @@ export const Inline = {
               <ItemTitle>Point Traffic</ItemTitle>
               <ItemDescription>Redirect domain traffic to Azion.</ItemDescription>
             </ItemContent>
-            <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
+            <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
           </Item>
           <Item kind="inline" size="small" v-bind="args">
             <ItemMedia kind="icon">
@@ -730,7 +730,7 @@ export const Inline = {
               <ItemTitle>View Analytics</ItemTitle>
               <ItemDescription>Monitor performance, availability, and security.</ItemDescription>
             </ItemContent>
-            <i class="pi pi-arrow-right text-[var(--text-muted)]" aria-hidden="true" />
+            <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
           </Item>
         </ItemGroup>
       </div>

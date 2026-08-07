@@ -69,7 +69,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

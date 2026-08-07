@@ -72,7 +72,7 @@
 
   const shellClasses = computed(() =>
     cn(
-      'fixed z-[1001] flex p-0',
+      'fixed z-1001 flex p-0',
       drawerShellPositionClasses,
       isLeft.value ? 'md:left-0 md:justify-start' : 'md:right-0 md:justify-end',
       'pointer-events-none',
@@ -92,8 +92,8 @@
       'pointer-events-auto flex min-h-0 h-full flex-col',
       drawerPanelPositionClasses,
       isLeft.value
-        ? 'md:rounded-r-[var(--shape-card)] md:rounded-l-[var(--shape-flat)]'
-        : 'md:rounded-l-[var(--shape-card)] md:rounded-r-[var(--shape-flat)]'
+        ? 'md:rounded-r-(--shape-card) md:rounded-l-(--shape-flat)'
+        : 'md:rounded-l-(--shape-card) md:rounded-r-(--shape-flat)'
     )
   )
 </script>

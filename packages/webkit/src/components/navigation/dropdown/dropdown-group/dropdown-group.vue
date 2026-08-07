@@ -49,13 +49,13 @@
       :aria-labelledby="hasLabel ? labelId : undefined"
       :data-testid="testId"
       :data-first="groupIndex === 0 || null"
-      class="flex flex-col [&:not([data-first])]:border-t [&:not([data-first])]:border-[var(--border-default)]"
+      class="flex flex-col [&:not([data-first])]:border-t [&:not([data-first])]:border-(--border-default)"
     >
       <div
         v-if="hasLabel"
         :id="labelId"
         :data-testid="`${testId}__label`"
-        class="px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-overline-sm uppercase text-[var(--text-muted)]"
+        class="px-(--spacing-sm) py-(--spacing-xxs) text-overline-sm uppercase text-(--text-muted)"
       >
         {{ label }}
       </div>
@@ -63,7 +63,7 @@
       <div
         v-if="$slots['top']"
         :data-testid="`${testId}__top`"
-        class="px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
+        class="px-(--spacing-sm) py-(--spacing-xxs)"
       >
         <slot name="top" />
       </div>
@@ -73,7 +73,7 @@
       <div
         v-if="$slots['bottom']"
         :data-testid="`${testId}__bottom`"
-        class="px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
+        class="px-(--spacing-sm) py-(--spacing-xxs)"
       >
         <slot name="bottom" />
       </div>

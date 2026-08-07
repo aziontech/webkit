@@ -84,9 +84,9 @@ const SNIPPET_MARKUP = `<Dialog size="medium" v-model:open="open">
         <DialogTitle>Delete Domain</DialogTitle>
         <DialogClose />
       </PanelHeader>
-      <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
+      <PanelContent class="flex flex-col gap-(--spacing-md)">
         <Message severity="warning" label="Once confirmed, this action can't be reversed." />
-        <p class="m-0 text-body-sm text-[var(--text-muted)]">
+        <p class="m-0 text-body-sm text-(--text-muted)">
           The selected Domain will be deleted, along with all associated settings or instances. Check the
           <Link
             class="!inline-flex !h-auto !min-h-0 align-baseline"
@@ -97,7 +97,7 @@ const SNIPPET_MARKUP = `<Dialog size="medium" v-model:open="open">
           />
           for more details.
         </p>
-        <p :id="confirmLabelId" class="m-0 text-body-sm text-[var(--text-default)]">
+        <p :id="confirmLabelId" class="m-0 text-body-sm text-(--text-default)">
           To confirm, type "{{ confirmationPhrase }}" in the box below:
         </p>
         <InputText
@@ -133,13 +133,13 @@ const deleteDomainTemplate = `
           <DialogTitle>{{ args.title }}</DialogTitle>
           <DialogClose />
         </PanelHeader>
-        <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
+        <PanelContent class="flex flex-col gap-(--spacing-md)">
           <Message
             severity="warning"
             :label="args.warningLabel"
             data-testid="template-delete-domain-dialog__warning"
           />
-          <p class="m-0 text-body-sm text-[var(--text-muted)]">
+          <p class="m-0 text-body-sm text-(--text-muted)">
             {{ args.descriptionBeforeLink }}
             <Link
               class="inline-flex! h-auto! min-h-0! align-baseline"
@@ -153,7 +153,7 @@ const deleteDomainTemplate = `
           </p>
           <p
             :id="confirmLabelId"
-            class="m-0 text-body-sm text-[var(--text-default)]"
+            class="m-0 text-body-sm text-(--text-default)"
             data-testid="template-delete-domain-dialog__confirm-label"
           >
             To confirm, type &quot;{{ args.confirmationPhrase }}&quot; in the box below:

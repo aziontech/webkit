@@ -1,6 +1,6 @@
 /*
  * Registers webkit's source files with Tailwind v4 so the component utility classes
- * (data-[kind=…]:bg-[var(--…)] …) compile in the consumer's build — node_modules is
+ * (data-[kind=…]:bg-(--…) …) compile in the consumer's build — node_modules is
  * excluded from Tailwind's automatic content detection, so without this the components
  * render UNSTYLED.
  *

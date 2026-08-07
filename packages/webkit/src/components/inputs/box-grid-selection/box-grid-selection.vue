@@ -54,7 +54,7 @@
 
   const rootClasses = computed(() =>
     cn(
-      'flex flex-wrap items-stretch gap-[var(--spacing-xs)]',
+      'flex flex-wrap items-stretch gap-(--spacing-xs)',
       'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
       attrs.class
     )
@@ -62,15 +62,15 @@
 
   const optionClasses = cn(
     selectableBlockCardClasses,
-    'flex shrink-0 cursor-pointer flex-col gap-[var(--spacing-xxs)]',
-    'px-[var(--spacing-sm)] py-[var(--spacing-sm)]',
+    'flex shrink-0 cursor-pointer flex-col gap-(--spacing-xxs)',
+    'px-(--spacing-sm) py-(--spacing-sm)',
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
-    'data-[selected]:border-[var(--border-selected)] data-[selected]:bg-[var(--primary-selected)]',
+    'data-[selected]:border-(--border-selected) data-[selected]:bg-(--primary-selected)',
     'data-[selected]:before:hidden data-[selected]:after:hidden',
     'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
   )
 
-  const labelRowClasses = 'flex items-center gap-[var(--spacing-xxs)]'
+  const labelRowClasses = 'flex items-center gap-(--spacing-xxs)'
 
   function isSelected(item: BoxGridSelectionItem): boolean {
     return props.modelValue === item.value
@@ -163,19 +163,19 @@
         :selected="isSelected(item)"
       >
         <div
-          class="flex flex-col gap-[var(--spacing-xxs)]"
+          class="flex flex-col gap-(--spacing-xxs)"
           :data-testid="`${testId}__content`"
         >
           <div :class="labelRowClasses">
             <i
               v-if="item.icon"
               :class="item.icon"
-              class="text-[length:inherit] leading-none text-[var(--text-default)]"
+              class="text-[length:inherit] leading-none text-(--text-default)"
               aria-hidden="true"
               :data-testid="`${testId}__icon`"
             />
             <span
-              class="text-body-sm text-[var(--text-default)]"
+              class="text-body-sm text-(--text-default)"
               :data-testid="`${testId}__label`"
             >
               {{ item.label }}
@@ -183,7 +183,7 @@
           </div>
           <p
             v-if="item.description"
-            class="text-body-xs text-[var(--text-muted)]"
+            class="text-body-xs text-(--text-muted)"
             :data-testid="`${testId}__description`"
           >
             {{ item.description }}

@@ -172,11 +172,11 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 | Region | Token (DESIGN.md) |
 |---|---|
 | panel surface / border / shape / shadow | inherited from `Dialog` (`var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`, `var(--shadow-sm)`) |
-| input header divider | `border-b border-[var(--border-default)]` |
+| input header divider | `border-b border-(--border-default)` |
 | input field chrome (border / surface / text / focus ring) | inherited from `InputText` (`var(--border-default)`, `var(--bg-surface)`, `var(--text-default)`, `var(--ring-color)`) |
 | input placeholder / search icon | `var(--text-muted)` |
-| group heading typography | `.text-overline-sm` + `text-[var(--text-muted)]` |
-| item label typography | `.text-label-sm` + `text-[var(--text-default)]` |
+| group heading typography | `.text-overline-sm` + `text-(--text-muted)` |
+| item label typography | `.text-label-sm` + `text-(--text-default)` |
 | item shape | `var(--shape-button)` |
 | item min-height | `min-h-8` (32px) |
 | item spacing.x | `var(--spacing-sm)` |
@@ -185,8 +185,8 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 | item active surface | `var(--bg-selected)` |
 | item hover surface | `var(--bg-hover)` |
 | item disabled text | `var(--text-disabled)` |
-| separator | `border-t border-[var(--border-default)]` |
-| empty-state text | `.text-label-sm` + `text-[var(--text-muted)]` |
+| separator | `border-t border-(--border-default)` |
+| empty-state text | `.text-label-sm` + `text-(--text-muted)` |
 | focus ring | `var(--ring-color)` |
 
 ## Theme gaps
@@ -195,7 +195,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the input; items use the roving `data-active` highlight (the input keeps DOM focus).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the input; items use the roving `data-active` highlight (the input keeps DOM focus).
 - Keyboard map:
   - Global: the `shortcut` combo (⌘K / Ctrl+K) toggles the palette open from anywhere.
   - Inside the palette: `ArrowDown` / `ArrowUp` move the active item (skipping disabled, wrap-around); `Home` / `End` jump to first/last enabled item; `Enter` activates the active item; `Esc` closes (via `Dialog`); `Tab` is trapped within the panel (via `Dialog`).

@@ -15,7 +15,7 @@ Blocks `Write`/`Edit`/`MultiEdit` on `.vue` / `.css` / `.scss` / `.ts` files und
 - Hex/RGB/HSL colors
 - Tailwind palette names (`bg-gray-500`, `text-violet-600`, ...)
 - Raw Tailwind text sizes (`text-xs|sm|base|lg|...`)
-- Raw typography tokens (`text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, `font-family`, `font-sora`, ...)
+- Raw typography tokens (`text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`, `font-sora`, ...)
 - External/legacy color utilities (`text-color`, `surface-*`)
 - `class` declared in `defineProps`
 - `any` type

@@ -53,7 +53,7 @@
     role="rowgroup"
     :data-testid="testId"
     :data-frozen="frozen || null"
-    class="flex w-full flex-col bg-[var(--bg-surface)] data-[frozen]:sticky data-[frozen]:top-0 data-[frozen]:z-20"
+    class="flex w-full flex-col bg-(--bg-surface) data-[frozen]:sticky data-[frozen]:top-0 data-[frozen]:z-20"
   >
     <slot />
   </div>

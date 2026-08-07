@@ -27,7 +27,7 @@
     v-bind="$attrs"
     data-slot="item-description"
     :data-testid="testId"
-    class="line-clamp-2 text-balance text-body-sm text-[var(--text-muted)]"
+    class="line-clamp-2 text-balance text-body-sm text-(--text-muted)"
   >
     <slot />
   </p>

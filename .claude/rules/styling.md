@@ -15,15 +15,15 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 <script setup lang="ts">
   const sharedClasses = ['flex', 'items-center', 'transition-colors' /* ... */]
   const kindClasses: Record<Kind, string> = {
-    primary: 'bg-[var(--primary)] text-[var(--primary-contrast)]',
-    secondary: 'bg-[var(--secondary)] text-[var(--secondary-contrast)]',
-    outlined: 'border border-[var(--border-default)]',
+    primary: 'bg-(--primary) text-(--primary-contrast)',
+    secondary: 'bg-(--secondary) text-(--secondary-contrast)',
+    outlined: 'border border-(--border-default)',
     text: 'bg-transparent'
   }
   const sizeClasses: Record<Size, string> = {
-    small: 'h-7 px-[var(--spacing-xs)] text-button-md',
-    medium: 'h-8 px-[var(--spacing-sm)] text-button-md',
-    large: 'h-10 px-[var(--spacing-md)] text-button-lg'
+    small: 'h-7 px-(--spacing-xs) text-button-md',
+    medium: 'h-8 px-(--spacing-sm) text-button-md',
+    large: 'h-10 px-(--spacing-md) text-button-lg'
   }
   const rootClasses = computed(() => [
     sharedClasses,
@@ -96,19 +96,19 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
     class="
       relative inline-flex items-center justify-center whitespace-nowrap
       transition-colors duration-150 ease-out motion-reduce:transition-none
-      rounded-[var(--shape-button)]
-      focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]
+      rounded-(--shape-button)
+      focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
 
-      data-[kind=primary]:bg-[var(--primary)] data-[kind=primary]:text-[var(--primary-contrast)]
-      data-[kind=secondary]:bg-[var(--secondary)] data-[kind=secondary]:text-[var(--secondary-contrast)]
-      data-[kind=outlined]:border data-[kind=outlined]:border-[var(--border-default)] data-[kind=outlined]:bg-transparent
+      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
+      data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-contrast)
+      data-[kind=outlined]:border data-[kind=outlined]:border-(--border-default) data-[kind=outlined]:bg-transparent
       data-[kind=text]:bg-transparent
 
-      data-[size=small]:h-7 data-[size=small]:px-[var(--spacing-xs)] data-[size=small]:text-button-md
-      data-[size=medium]:h-8 data-[size=medium]:px-[var(--spacing-sm)] data-[size=medium]:text-button-md
-      data-[size=large]:h-10 data-[size=large]:px-[var(--spacing-md)] data-[size=large]:text-button-lg
+      data-[size=small]:h-7 data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md
+      data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md
+      data-[size=large]:h-10 data-[size=large]:px-(--spacing-md) data-[size=large]:text-button-lg
 
-      data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed
+      data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed
     "
   >
     <slot />
@@ -120,13 +120,13 @@ Key choices:
 
 - **One `class` attribute on the root.** All utilities live there.
 - **`data-*` attributes mirror props** — `data-kind`, `data-size`, `data-disabled`, `data-state`, `data-orientation`.
-- **Tailwind variants do the switching.** `data-[kind=primary]:bg-[var(--primary)]` is one utility, not a JS branch.
+- **Tailwind variants do the switching.** `data-[kind=primary]:bg-(--primary)` is one utility, not a JS branch.
 - **`v-bind="$attrs"`** flows consumer-passed `class` (and other attrs) onto the root; Vue merges class strings automatically. No `cn()` needed for the basic case.
 - **No `computed` returning class arrays.** Computed values are reserved for derived state (e.g. `isAnchor`, `testId`), not for styles.
 
 ### When consumer classes must take precedence
 
-Some components let the consumer override internal token choices (e.g. `<Card class="bg-[var(--bg-canvas)]" />`). Tailwind class merging via `cn` solves this:
+Some components let the consumer override internal token choices (e.g. `<Card class="bg-(--bg-canvas)" />`). Tailwind class merging via `cn` solves this:
 
 ```vue
 <script setup lang="ts">
@@ -139,7 +139,7 @@ Some components let the consumer override internal token choices (e.g. `<Card cl
     :data-testid="testId"
     :class="
       cn(
-        'rounded-[var(--shape-card)] bg-[var(--bg-surface)] p-[var(--spacing-md)]',
+        'rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)',
         attrs.class as string
       )
     "
@@ -152,6 +152,33 @@ Some components let the consumer override internal token choices (e.g. `<Card cl
 ### Sub-components (Composition Pattern)
 
 The same rule applies to each sub-component. Each renders its own root with its own inline `class`. No shared `*Classes` import between siblings.
+
+## Token values: the canonical `prop-(--token)` syntax
+
+A design-token value on a utility is written with Tailwind v4's **paren shorthand** — `bg-(--primary)`, not `bg-[var(--primary)]`. This is the **single canonical form** (ENG-47001, decision A): it is what upstream v4 canonicalizes to, so Tailwind IntelliSense no longer flags every styled line with `suggestCanonicalClasses`, and it is what every rule, spec, story, scaffolder output and `cli-templates` copy now teaches. The two spellings compile to byte-identical CSS; we standardize on one so the codebase reads one way.
+
+```html
+<!-- ✅ canonical — paren shorthand -->
+<div class="bg-(--bg-surface) text-(--text-default) rounded-(--shape-card) focus-visible:ring-(--ring-color)">
+
+<!-- ❌ legacy bracket form — do not author -->
+<div class="bg-[var(--bg-surface)] text-[var(--text-default)] rounded-[var(--shape-card)]">
+```
+
+Three shapes:
+
+| Concern | Canonical | Notes |
+| --- | --- | --- |
+| **Whole-value var** | `prop-(--token)` | `bg-(--primary)`, `max-w-(--container-2xl)`, `focus-visible:ring-offset-(--bg-canvas)`. Variants compose (`data-[disabled]:bg-(--bg-disabled)`). |
+| **Typed value** | `prop-(type:--token)` | `text-(length:--text-body-md)`, `border-(color:--border-default)`, `font-(family-name:--font-sora)`. |
+| **Numeric arbitrary** | `z-1` | The bare-number utility, not `z-[1]`. |
+
+**Two cases stay bracketed — the paren form emits _no CSS_ for them, silently:**
+
+- **Custom-property declarations** — `[--table-row-bg:var(--bg-surface)]`, `data-[state=selected]:[--table-row-bg:var(--bg-selected)]`. There is no paren shorthand for _declaring_ a custom property; `(--x:--y)` compiles to nothing.
+- **Expression values** — anything whose arbitrary value is more than a lone `var(--x)`: `w-[calc(var(--a)*2)]`, gradients (`bg-[linear-gradient(...var(--x)...)]`), box-shadows, and a **var with a fallback** (`bg-[var(--x,var(--y))]`, `text-[length:var(--w,1px)]`). These must remain in brackets — converting them drops the style with **no build or lint error**.
+
+The guardrail token-checks (`typography-raw-length`, `leading-raw`, `tracking-raw`, `font-family-raw`, `animate-arbitrary`, `motion-hardcoded`) match **both** spellings, so accepting the IntelliSense suggestion cannot walk a raw value through the typography / motion / animation gates.
 
 ## A zero length carries no unit
 
@@ -209,7 +236,7 @@ The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline templa
   :class="
     cn(
       `
-      data-[kind=primary]:bg-[var(--primary)]
+      data-[kind=primary]:bg-(--primary)
       `,
       attrs.class
     )

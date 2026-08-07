@@ -142,7 +142,7 @@
   <span
     ref="triggerRef"
     v-bind="attrs"
-    class="inline-flex w-fit shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+    class="inline-flex w-fit shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="disabled || null"
@@ -173,7 +173,7 @@
         :data-placement="resolvedPlacementRef"
         :aria-hidden="!isOpen"
         :style="panelStyle"
-        class="pointer-events-none flex min-h-8 max-w-[var(--container-3xs)] items-center justify-center overflow-clip break-words rounded-[var(--shape-elements)] bg-[var(--bg-contrast)] p-[var(--spacing-xs)] text-center text-body-xs text-[var(--text-contrast)] [transform-origin:var(--popup-origin,center)]"
+        class="pointer-events-none flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-elements) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)]"
       >
         {{ text }}
       </div>

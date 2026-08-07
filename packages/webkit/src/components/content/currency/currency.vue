@@ -37,18 +37,16 @@
   <span
     :class="[
       'inline-flex items-center',
-      isLarge ? 'gap-[var(--spacing-xs)]' : 'gap-[var(--spacing-xxs)]',
+      isLarge ? 'gap-(--spacing-xs)' : 'gap-(--spacing-xxs)',
       attrs.class
     ]"
     :data-testid="testId"
   >
-    <span class="inline-flex items-center gap-[var(--spacing-xxs)]">
+    <span class="inline-flex items-center gap-(--spacing-xxs)">
       <span
         v-if="prefix"
         :class="[
-          isLarge
-            ? 'text-heading-md text-[var(--text-default)]'
-            : 'text-label-lg text-[var(--text-default)]'
+          isLarge ? 'text-heading-md text-(--text-default)' : 'text-label-lg text-(--text-default)'
         ]"
         :data-testid="`${testId}__prefix`"
       >
@@ -56,9 +54,7 @@
       </span>
       <span
         :class="[
-          isLarge
-            ? 'text-heading-md text-[var(--text-default)]'
-            : 'text-label-lg text-[var(--text-default)]'
+          isLarge ? 'text-heading-md text-(--text-default)' : 'text-label-lg text-(--text-default)'
         ]"
         :data-testid="`${testId}__value`"
       >
@@ -67,11 +63,7 @@
     </span>
     <span
       v-if="suffix"
-      :class="[
-        isLarge
-          ? 'text-label-md text-[var(--text-muted)]'
-          : 'text-label-sm text-[var(--text-muted)]'
-      ]"
+      :class="[isLarge ? 'text-label-md text-(--text-muted)' : 'text-label-sm text-(--text-muted)']"
       :data-testid="`${testId}__suffix`"
     >
       {{ suffix }}

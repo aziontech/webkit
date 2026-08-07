@@ -120,13 +120,13 @@
           :aria-label="title"
           :data-testid="`${testId}__panel`"
           :style="panelStyle"
-          class="flex min-w-[var(--container-3xs)] max-w-[var(--container-2xs)] flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-card)] border border-solid border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-sm)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         >
-          <p class="text-label-md text-[var(--text-default)]">{{ title }}</p>
+          <p class="text-label-md text-(--text-default)">{{ title }}</p>
           <label
             v-for="column in columns"
             :key="column.id"
-            class="flex items-center gap-[var(--spacing-sm)] text-body-sm text-[var(--text-default)]"
+            class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-default)"
           >
             <Checkbox
               binary
@@ -137,7 +137,7 @@
           </label>
           <p
             v-if="columns.length === 0"
-            class="text-body-sm text-[var(--text-muted)]"
+            class="text-body-sm text-(--text-muted)"
           >
             No hideable columns.
           </p>

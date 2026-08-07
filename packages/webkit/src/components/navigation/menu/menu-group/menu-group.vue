@@ -73,7 +73,7 @@
     // `relative z-10` / `aria-hidden:z-0`: the hidden level is absolutely positioned, and a
     // positioned element paints above an in-flow sibling by default — the current level has
     // to win, or the level being replaced sits on top of the one replacing it.
-    'relative z-10 flex w-full flex-col my-[var(--spacing-sm)] first-of-type:my-0 translate-x-0 ' +
+    'relative z-10 flex w-full flex-col my-(--spacing-sm) first-of-type:my-0 translate-x-0 ' +
     // `-translate-x-full` clears the group's own width but not the host's padding, so a
     // `Sidebar`-inset menu leaves a sliver of the outgoing level on screen. Fading it is
     // the only fix available to a component that cannot know its host's padding. Only the
@@ -139,7 +139,7 @@
         v-if="hasLabel"
         :id="labelId"
         :data-testid="`${testId}__label`"
-        class="flex min-h-8 w-full shrink-0 items-center px-[var(--spacing-sm)] text-label-sm text-[var(--text-muted)]"
+        class="flex min-h-8 w-full shrink-0 items-center px-(--spacing-sm) text-label-sm text-(--text-muted)"
       >
         <span class="min-w-0 flex-1 truncate">
           <slot name="label">{{ label }}</slot>

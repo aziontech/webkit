@@ -57,7 +57,7 @@
       'relative min-h-0 min-w-0',
       '[scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent]',
       overflowClasses[props.orientation],
-      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--border-default)]',
+      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default)',
       'motion-reduce:scroll-auto',
       attrs.class
     )

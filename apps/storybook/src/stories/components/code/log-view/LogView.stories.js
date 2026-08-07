@@ -213,9 +213,9 @@ export const Default = {
   }
 }
 
-const FLUSH_TEMPLATE = `<div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-md)]">
-  <span class="text-label-sm text-[var(--text-muted)]">Deploy output</span>
-  <LogView :lines="lines" :border="false" v-model:search="search" v-model:warnings-only="warningsOnly" class="mt-[var(--spacing-sm)] h-[420px]">
+const FLUSH_TEMPLATE = `<div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)">
+  <span class="text-label-sm text-(--text-muted)">Deploy output</span>
+  <LogView :lines="lines" :border="false" v-model:search="search" v-model:warnings-only="warningsOnly" class="mt-(--spacing-sm) h-[420px]">
     <LogViewHeader />
     <LogViewContent />
   </LogView>

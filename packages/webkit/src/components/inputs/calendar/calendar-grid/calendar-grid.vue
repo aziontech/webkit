@@ -323,23 +323,23 @@
   <div
     ref="gridRef"
     data-testid="input-calendar__grid"
-    class="flex flex-col items-start gap-[var(--spacing-md)]"
+    class="flex flex-col items-start gap-(--spacing-md)"
   >
     <!-- Static header. The month label and the prev/next controls live OUTSIDE the
          transition so they never travel with the sliding strip — only the month
          itself moves. Keeping the buttons mounted also means focus stays on the
          control the user just pressed instead of being torn down under them. -->
-    <div class="flex w-full items-center justify-between gap-[var(--spacing-xs)]">
-      <span class="text-body-sm text-[var(--text-default)]">
+    <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
+      <span class="text-body-sm text-(--text-default)">
         {{ monthGrid.label }}
       </span>
 
-      <div class="flex shrink-0 items-center gap-[var(--spacing-xxs)]">
+      <div class="flex shrink-0 items-center gap-(--spacing-xxs)">
         <button
           type="button"
           :disabled="disabledAll"
           aria-label="Previous month"
-          class="inline-flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToPreviousMonth"
         >
           <i
@@ -352,7 +352,7 @@
           type="button"
           :disabled="disabledAll"
           aria-label="Next month"
-          class="inline-flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToNextMonth"
         >
           <i
@@ -394,13 +394,13 @@
                 :key="`weekday-${index}`"
                 role="columnheader"
                 :data-size="size"
-                class="text-label-sm flex items-start justify-center text-[var(--text-muted)] data-[size=small]:w-8 data-[size=medium]:w-9 data-[size=large]:w-10"
+                class="text-label-sm flex items-start justify-center text-(--text-muted) data-[size=small]:w-8 data-[size=medium]:w-9 data-[size=large]:w-10"
               >
                 {{ weekday }}
               </span>
             </div>
 
-            <div class="flex flex-col items-start gap-[var(--spacing-xxs)]">
+            <div class="flex flex-col items-start gap-(--spacing-xxs)">
               <div
                 v-for="(week, weekIndex) in monthGrid.weeks"
                 :key="`week-${weekIndex}`"
@@ -426,7 +426,7 @@
                     :data-disabled="day.disabled || null"
                     data-testid="input-calendar__day"
                     :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
-                    class="flex items-center justify-center text-[var(--text-default)] transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-[var(--shape-elements)] data-[band=none]:hover:bg-[var(--bg-hover)] data-[band=single]:rounded-[var(--shape-elements)] data-[band=single]:bg-[var(--secondary-selected)] data-[band=single]:text-[var(--secondary-contrast)] data-[band=start]:rounded-l-[var(--shape-elements)] data-[band=start]:bg-[var(--secondary-selected)] data-[band=start]:text-[var(--secondary-contrast)] data-[band=end]:rounded-r-[var(--shape-elements)] data-[band=end]:bg-[var(--secondary-selected)] data-[band=end]:text-[var(--secondary-contrast)] data-[band=middle]:bg-[var(--bg-selected)] data-[outside]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)] motion-reduce:transition-none"
+                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-elements) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-elements) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-contrast) data-[band=start]:rounded-l-(--shape-elements) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-contrast) data-[band=end]:rounded-r-(--shape-elements) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-contrast) data-[band=middle]:bg-(--bg-selected) data-[outside]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
                     @click="selectDay(day)"
                     @keydown="onDayKeydown($event, day)"
                   >

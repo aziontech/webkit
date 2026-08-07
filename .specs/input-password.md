@@ -114,7 +114,7 @@ const password = ref('')
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
 - Keyboard map: `Tab` focuses the input, then the visibility toggle button (when `toggleable=true`); `Enter` / `Space` on the toggle flips visibility; standard text-editing keys apply to the input.
 - ARIA: the visibility toggle is a `<button type="button">` with `aria-pressed` reflecting the current visible state and an `aria-label` that switches between "Show password" and "Hide password"; `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; decorative icon slots and the eye glyph are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.

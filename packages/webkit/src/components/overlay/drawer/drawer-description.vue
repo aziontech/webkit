@@ -17,7 +17,7 @@
   const ctx = inject(DrawerInjectionKey)
 
   const rootClasses = computed(() =>
-    cn('text-body-sm text-[var(--text-muted)]', attrs.class as string | undefined)
+    cn('text-body-sm text-(--text-muted)', attrs.class as string | undefined)
   )
 </script>
 

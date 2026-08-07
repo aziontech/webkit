@@ -62,13 +62,13 @@
     :data-required="ctx.required.value || null"
     :data-filled="ctx.filled.value || null"
     :class="attrs.class"
-    class="group relative flex w-full items-center gap-[var(--spacing-xs)] overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] text-label-sm text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-[var(--border-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-[var(--danger-border)] data-[invalid]:focus-visible:ring-[var(--danger)] data-[disabled]:cursor-not-allowed data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:hover:border-[var(--border-default)] data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 data-[readonly]:cursor-default"
+    class="group relative flex w-full items-center gap-(--spacing-xs) overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 data-[readonly]:cursor-default"
     @click="onClick"
     @keydown="onKeydown"
   >
     <slot name="iconLeft" />
     <span
-      class="flex-1 truncate text-left data-[filled=false]:text-[var(--text-muted)] group-data-[disabled]:text-[var(--text-disabled)]"
+      class="flex-1 truncate text-left data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"
       :data-testid="`${testId}__value`"
     >
@@ -76,7 +76,7 @@
       <template v-else>{{ ctx.placeholder.value }}</template>
     </span>
     <i
-      class="pi pi-chevron-down shrink-0 text-[var(--text-muted)] group-data-[disabled]:text-[var(--text-disabled)] transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
+      class="pi pi-chevron-down shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
       :data-state="ctx.open.value ? 'open' : 'closed'"
       aria-hidden="true"
       :data-testid="`${testId}__chevron`"

@@ -92,7 +92,7 @@
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
-    class="flex flex-col gap-[var(--spacing-xs)] w-full"
+    class="flex flex-col gap-(--spacing-xs) w-full"
   >
     <Label
       v-if="label"

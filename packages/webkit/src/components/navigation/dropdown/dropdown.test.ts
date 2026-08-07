@@ -387,7 +387,7 @@ describe('Dropdown (compound / overlay)', () => {
     const firstCls = groups[0].className
 
     expect(secondCls).toContain('[&:not([data-first])]:border-t')
-    expect(secondCls).toContain('[&:not([data-first])]:border-[var(--border-default)]')
+    expect(secondCls).toContain('[&:not([data-first])]:border-(--border-default)')
 
     expect(secondCls).not.toMatch(/(?:^|[\s:])mt-\[/)
     expect(secondCls).not.toMatch(/(?:^|[\s:])pt-\[/)
