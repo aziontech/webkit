@@ -23,7 +23,11 @@
   )
 
   const rootClasses = computed(() =>
-    cn('w-full shrink-0 border-t border-[var(--border-muted)] pt-[var(--spacing-md)]', attrs.class)
+    cn(
+      'w-full shrink-0',
+      ctx?.collapsible ? undefined : 'border-t border-[var(--border-muted)] pt-[var(--spacing-md)]',
+      attrs.class
+    )
   )
 </script>
 

@@ -7953,6 +7953,67 @@
           "default": "'Sidebar'",
           "required": "no",
           "doc": "Accessible name for the navigation landmark."
+        },
+        {
+          "name": "resizable",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail."
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back."
+        },
+        {
+          "name": "minWidthToken",
+          "type": "string",
+          "default": "'--container-3xs'",
+          "required": "no",
+          "doc": "Theme container token the sized width is clamped up to, read off the document at runtime."
+        },
+        {
+          "name": "maxWidthToken",
+          "type": "string",
+          "default": "'--container-sm'",
+          "required": "no",
+          "doc": "Theme container token the sized width is clamped down to, read off the document at runtime."
+        },
+        {
+          "name": "collapseAriaLabel",
+          "type": "string",
+          "default": "'Collapse sidebar'",
+          "required": "no",
+          "doc": "Accessible name for the collapse trigger."
+        },
+        {
+          "name": "expandAriaLabel",
+          "type": "string",
+          "default": "'Expand sidebar'",
+          "required": "no",
+          "doc": "Accessible name for the control and the grab bar that bring a collapsed rail back."
+        },
+        {
+          "name": "resizeAriaLabel",
+          "type": "string",
+          "default": "'Resize sidebar'",
+          "required": "no",
+          "doc": "Accessible name for the drag handle separator."
+        }
+      ],
+      "events": [
+        {
+          "name": "update:collapsed",
+          "payload": "boolean",
+          "notes": "v-model:collapsed` — the rail entered or left the layout, by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle."
+        },
+        {
+          "name": "update:width",
+          "payload": "number",
+          "notes": "v-model:width` — the sized width in px, already clamped to the token bounds. Emitted continuously during a drag."
         }
       ],
       "slots": [
@@ -7969,10 +8030,10 @@
         {
           "name": "footer",
           "scope": "—",
-          "notes": "Named slot."
+          "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer."
         }
       ],
-      "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`."
+      "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected."
     },
     "sidebar-group": {
       "import": "@aziontech/webkit/sidebar-group",

@@ -39,6 +39,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-scroll-area'
   )
 
+  const tabIndex = computed(() => (attrs['tabindex'] as string | number | undefined) ?? 0)
+
   const overflowClasses: Record<ScrollAreaOrientation, string> = {
     vertical: 'overflow-y-auto overflow-x-hidden',
     horizontal: 'overflow-x-auto overflow-y-hidden',
@@ -127,7 +129,7 @@
     :data-orientation="orientation"
     :data-testid="testId"
     :aria-label="ariaLabel || undefined"
-    tabindex="0"
+    :tabindex="tabIndex"
     @keydown="handleKeyDown"
   >
     <slot />
