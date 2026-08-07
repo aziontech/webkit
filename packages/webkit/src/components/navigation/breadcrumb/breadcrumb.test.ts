@@ -10,7 +10,7 @@ import BreadcrumbList from './breadcrumb-list.vue'
 import BreadcrumbSeparator from './breadcrumb-separator.vue'
 import Breadcrumb from './index.js'
 
-const { Default, Depths, ResponsiveCollapsed } = composeStories(stories)
+const { Default, Depths } = composeStories(stories)
 
 const TESTID = 'navigation-breadcrumb'
 
@@ -133,6 +133,27 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(option).toBeTruthy()
       expect(option?.getAttribute('role')).toBe('menuitem')
       expect(option?.textContent).toContain('Projects')
+    })
+
+    it('renders a collapsed item icon inside its overflow option', async () => {
+      // Dropdown.Option declares `left` / `right` (not `leading`), so a mismatched
+      // slot name silently renders nothing — the icon has to be reachable here.
+      const { getByTestId } = render(Breadcrumb, {
+        props: {
+          items: [
+            { label: 'Home', href: '/home' },
+            { label: 'Projects', href: '/projects', showIcon: true, icon: 'pi pi-folder' },
+            { label: 'Settings' }
+          ]
+        }
+      })
+
+      await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+
+      const option = document.body.querySelector(
+        `[data-testid="${TESTID}__overflow-item-0"]`
+      ) as HTMLElement | null
+      expect(option?.querySelector('i.pi-folder')).toBeTruthy()
     })
 
     // SKIP: selecting an overflow Dropdown option does not surface a `navigate`
@@ -297,6 +318,44 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(getByText('Leaf')).toBeTruthy()
     })
 
+    it('keeps every hand-composed segment at this (mobile) viewport — no collapse in slot mode', () => {
+      // The Playwright viewport is below md, so the items-driven trail collapses
+      // here (see the header note). A hand-composed trail must NOT: the root
+      // cannot know which of the consumer's children are middle segments, so it
+      // renders exactly what it was given. What keeps that usable on a narrow
+      // screen is CSS (one row, ellipsized segment, row scrolls when even that
+      // is not enough), which this env cannot measure — see the ComposedMobile
+      // story for that half.
+      const { getByTestId, queryByTestId } = render({
+        components: {
+          BreadcrumbRoot: Breadcrumb,
+          BreadcrumbList: BreadcrumbList,
+          BreadcrumbItem: BreadcrumbItem,
+          BreadcrumbSeparator: BreadcrumbSeparator
+        },
+        template: `
+          <BreadcrumbRoot>
+            <BreadcrumbList data-testid="slot__list">
+              <li><BreadcrumbItem label="Home" href="/" data-testid="slot__item-0" /></li>
+              <BreadcrumbSeparator />
+              <li><BreadcrumbItem label="Workspaces" href="/w" data-testid="slot__item-1" /></li>
+              <BreadcrumbSeparator />
+              <li><BreadcrumbItem label="Projects" href="/p" data-testid="slot__item-2" /></li>
+              <BreadcrumbSeparator />
+              <li><BreadcrumbItem label="Settings" current data-testid="slot__item-3" /></li>
+            </BreadcrumbList>
+          </BreadcrumbRoot>
+        `
+      })
+
+      for (const index of [0, 1, 2, 3]) {
+        expect(getByTestId(`slot__item-${index}`)).toBeTruthy()
+      }
+      // None of the collapse machinery appears for a slot-composed trail.
+      expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+      expect(queryByTestId(`${TESTID}__segment-overflow`)).toBeNull()
+    })
+
     it('emits its own click on a manually composed BreadcrumbItem', async () => {
       const { getByTestId, emitted } = render(BreadcrumbItem, {
         props: { label: 'Standalone', href: '/x', 'data-testid': 'solo' }
@@ -333,8 +392,23 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
     })
 
-    it('composes the ResponsiveCollapsed story with an overflow menu and a current last item', () => {
-      const { getByTestId } = render(ResponsiveCollapsed())
+    // The collapse no longer has a story of its own (the mobile-viewport stories were
+    // dropped so the set documents the versions and the viewport is exercised by hand),
+    // so it is rendered directly here. The behaviour is the component's, not a story's.
+    it('collapses the middle segments into an overflow menu below md', () => {
+      // The Playwright viewport in this file is already below md (see the note at the
+      // top), which is what puts the trail in its collapsed layout.
+      const { getByTestId } = render(Breadcrumb, {
+        props: {
+          items: [
+            { label: 'Page Name', href: '#' },
+            { label: 'Page Name', href: '#' },
+            { label: 'Page Name', href: '#' },
+            { label: 'Page Name', href: '#' },
+            { label: 'Current Page', current: true }
+          ]
+        }
+      })
 
       // 5 items -> 3 middle items collapse into the overflow menu.
       expect(getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
