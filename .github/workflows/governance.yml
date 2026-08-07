@@ -21,6 +21,8 @@ jobs:
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
+    # Release-please merges skip the pipeline: the same tree already passed the gate on the Release PR.
+    if: "github.event_name == 'pull_request' || !startsWith(github.event.head_commit.message, 'chore: release main')"
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
       toolkit: ${{ steps.filter.outputs.toolkit }}
