@@ -4,6 +4,63 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [4.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.2.1...@aziontech/webkit@4.3.0) (2026-08-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **webkit:** Message no longer accepts title or description. Pass the copy as label, or in the default slot when it needs inline links: severity="warning" title="..." becomes severity="warning" label="...". A second description line has no replacement — fold it into the single copy line. The __title and __description testids are replaced by one __content testid.
+
+### Features
+
+* **theme:** add a translucent loading-placeholder token role ([#824](https://github.com/aziontech/webkit/issues/824)) ([e9164d6](https://github.com/aziontech/webkit/commit/e9164d678b13a3e4f569381f935e3bd0d9b6d798))
+* **theme:** retune the container scale to one geometric rhythm ([#825](https://github.com/aziontech/webkit/issues/825)) ([53ce7ad](https://github.com/aziontech/webkit/commit/53ce7add4d588c1c1693a76a2f35c0e2781c322e))
+* **webkit:** [ENG-47059] add the password-requirements row with default rules ([#848](https://github.com/aziontech/webkit/issues/848)) ([55b521b](https://github.com/aziontech/webkit/commit/55b521be6b8d5798c8608a467e0a41ce81b65553))
+* **webkit:** add a border prop to LogView ([#828](https://github.com/aziontech/webkit/issues/828)) ([83cd899](https://github.com/aziontech/webkit/commit/83cd899ccfd2ba77e041005a24907af796840da7))
+* **webkit:** add kbd and command-menu (Cmd+K palette) components ([#831](https://github.com/aziontech/webkit/issues/831)) ([84bc25d](https://github.com/aziontech/webkit/commit/84bc25d6561e4c62d5091ae7d553b76900ce1d81))
+* **webkit:** add show-fields to the calendar panel and cap the panel width ([#838](https://github.com/aziontech/webkit/issues/838)) ([7709293](https://github.com/aziontech/webkit/commit/770929328aefc38186730a2132e891fefe1c9717))
+* **webkit:** add the Menu compound and move MenuItem into it ([#853](https://github.com/aziontech/webkit/issues/853)) ([9a0adae](https://github.com/aziontech/webkit/commit/9a0adaecc627c27e1a13d257e4d377e5c173799c))
+* **webkit:** component fixes batch — Link, TabView, Popover, MiniButton, Dialog, theme ([#785](https://github.com/aziontech/webkit/issues/785)) ([df71f75](https://github.com/aziontech/webkit/commit/df71f75db52e386511f412c9d7905c7fcd2ac320))
+* **webkit:** give Sidebar a resizable, collapsible rail ([#854](https://github.com/aziontech/webkit/issues/854)) ([aec7f88](https://github.com/aziontech/webkit/commit/aec7f88de31c3716cfc6b5cb79075da68102bc3a))
+* **webkit:** give Switch its own disabled state ([#846](https://github.com/aziontech/webkit/issues/846)) ([3709df8](https://github.com/aziontech/webkit/commit/3709df80b1933a4cf02cf8e90fca4481c9c4d44c))
+* **webkit:** march the flow connectors with a dashed stroke animation ([#860](https://github.com/aziontech/webkit/issues/860)) ([0fc047b](https://github.com/aziontech/webkit/commit/0fc047b04a58fa43efebf57a046ba03ac694caee))
+* **webkit:** reshape Message onto slot-first copy with label and size ([#833](https://github.com/aziontech/webkit/issues/833)) ([792d880](https://github.com/aziontech/webkit/commit/792d880448fa3dd1f5b9fe1a1e5363067934b697))
+* **webkit:** switch contrast, concentric radius & theme-stable handle ([#799](https://github.com/aziontech/webkit/issues/799)) ([f9bcc4c](https://github.com/aziontech/webkit/commit/f9bcc4c3dcfe1b8c3cecf9be9cb00cf69aca9635))
+* **webkit:** tokenise shell and markdown snippets in CodeBlock ([#858](https://github.com/aziontech/webkit/issues/858)) ([96c9b7a](https://github.com/aziontech/webkit/commit/96c9b7a9af1bc31c88e50f6b264b986ac06111e9))
+
+
+### Bug Fixes
+
+* [Dropdown/DropdownPanel] refinements (ENG-46740, ENG-46741) ([#781](https://github.com/aziontech/webkit/issues/781)) ([e55906c](https://github.com/aziontech/webkit/commit/e55906c0ee4cf6bc544264c61b6dc13d9703226d))
+* [InputGroup] refinements (ENG-46733, ENG-46734) ([#784](https://github.com/aziontech/webkit/issues/784)) ([c016bcb](https://github.com/aziontech/webkit/commit/c016bcb322644e70c5a4ad186e1b1fac21efc4ee))
+* [InputText] extend clickable area (ENG-46736) ([#779](https://github.com/aziontech/webkit/issues/779)) ([d02ec9f](https://github.com/aziontech/webkit/commit/d02ec9f2977e04033f605e247ec9500a2a37924b))
+* [Select/MultiSelect/FieldSelect] refinements (ENG-46730, 46731, 46732, 46739) ([#782](https://github.com/aziontech/webkit/issues/782)) ([344f77c](https://github.com/aziontech/webkit/commit/344f77cd646631624a2c050dd2e4502f5d9a7587))
+* release withou format changelog file ([#816](https://github.com/aziontech/webkit/issues/816)) ([a7ad8f9](https://github.com/aziontech/webkit/commit/a7ad8f96415aa6bea7dfe1e3fe7d3d058fbf3956))
+* **theme:** [ENG-46996] harden the zero-with-unit token gate ([#850](https://github.com/aziontech/webkit/issues/850)) ([a0a63c8](https://github.com/aziontech/webkit/commit/a0a63c88031633dfa65320eaa14d23fdb87afcee))
+* **theme:** align text tokens with typography primitives ([#817](https://github.com/aziontech/webkit/issues/817)) ([10e2190](https://github.com/aziontech/webkit/commit/10e219047b86e168d4ee711b0a3a1e63c642d34a))
+* **theme:** emit the named duration and ease utilities the system already writes ([#865](https://github.com/aziontech/webkit/issues/865)) ([ae66662](https://github.com/aziontech/webkit/commit/ae6666211fb8ac85f4bf441e443d164818e0dc16))
+* use @aziontech/theme/animations imports; move vue-tsc to devDependencies ([b3795d2](https://github.com/aziontech/webkit/commit/b3795d2f4b9de580d4175fb2b870b959ceefaf69))
+* **webkit:** [ENG-47032] cap the dialog panel so its body scrolls at every width ([#836](https://github.com/aziontech/webkit/issues/836)) ([6c9e877](https://github.com/aziontech/webkit/commit/6c9e8774c60ed33f6005347557aa90359ca8590d))
+* **webkit:** [ENG-47033] bound the Panel shell so its own body can scroll ([#835](https://github.com/aziontech/webkit/issues/835)) ([23880e3](https://github.com/aziontech/webkit/commit/23880e356450a0db09ac32abb6e8bd129ff8b27e))
+* **webkit:** [ENG-47034] truncate the breadcrumb on one row and pin every glyph size ([#837](https://github.com/aziontech/webkit/issues/837)) ([83f4130](https://github.com/aziontech/webkit/commit/83f41300b0498342c852ea9fca32f5a4f9ea3e43))
+* **webkit:** [ENG-47058] stop ScrollArea from trapping the page scroll when it cannot scroll ([#847](https://github.com/aziontech/webkit/issues/847)) ([8e1fcee](https://github.com/aziontech/webkit/commit/8e1fcee13b7a02e0929cbc081f2af8e380c3a146))
+* **webkit:** bring the calendar onto the shared field contract ([#827](https://github.com/aziontech/webkit/issues/827)) ([8c0fe73](https://github.com/aziontech/webkit/commit/8c0fe7328a5597ee60147f2c5294bee562d0893c))
+* **webkit:** carry closable through the toaster's store projection ([#839](https://github.com/aziontech/webkit/issues/839)) ([4a63a65](https://github.com/aziontech/webkit/commit/4a63a65ccae3a0a946ad58e767cd7ddfbd4294f9))
+* **webkit:** interpolate translate so panel swaps slide instead of popping ([#826](https://github.com/aziontech/webkit/issues/826)) ([0f8bc2c](https://github.com/aziontech/webkit/commit/0f8bc2ca64aa723074aa84bacadcd5ddfda5cf20))
+* **webkit:** keep switch chrome intact inside an input-group ([#843](https://github.com/aziontech/webkit/issues/843)) ([d9d665b](https://github.com/aziontech/webkit/commit/d9d665bd20507bb32ce567210ae06eb4706bd2ca))
+* **webkit:** let item content fill the row and keep actions at their own width ([#841](https://github.com/aziontech/webkit/issues/841)) ([fcaf48d](https://github.com/aziontech/webkit/commit/fcaf48d3711baeba7af0159c0e16741e22e350bc))
+* **webkit:** let LogView size to its content and pad the loading state ([#856](https://github.com/aziontech/webkit/issues/856)) ([31c8fbe](https://github.com/aziontech/webkit/commit/31c8fbe7e018cdb4f2301c99db4386dcd27377f6))
+* **webkit:** let the host decide surface, size and width in three components ([#829](https://github.com/aziontech/webkit/issues/829)) ([8d494d7](https://github.com/aziontech/webkit/commit/8d494d7dd39a63ca80e17d347c4a1a447fde9f2f))
+* **webkit:** make the NavigationMenu open out of its trigger and morph between panels ([#864](https://github.com/aziontech/webkit/issues/864)) ([30ee839](https://github.com/aziontech/webkit/commit/30ee839306a67ab4fba54c221dd96d1c332efa26))
+* **webkit:** match the TabView selected pill and item height to Figma ([#857](https://github.com/aziontech/webkit/issues/857)) ([541d637](https://github.com/aziontech/webkit/commit/541d6371c1bac17cd4556f793b48fda5269ecba0))
+* **webkit:** re-arm the drill entrance once a Menu level leaves the stack ([#866](https://github.com/aziontech/webkit/issues/866)) ([4087a1d](https://github.com/aziontech/webkit/commit/4087a1d002adb5f44419327382547c4fd6b518de))
+* **webkit:** tighten the card-box header padding to spacing-sm ([#842](https://github.com/aziontech/webkit/issues/842)) ([81a8e27](https://github.com/aziontech/webkit/commit/81a8e27291b8e30f872d4711886168f002a80aae))
+
+
+### Documentation
+
+* **webkit:** document the Release-As version override ([#863](https://github.com/aziontech/webkit/issues/863)) ([672ae65](https://github.com/aziontech/webkit/commit/672ae654b63918b4e6e73c1eb3cba801cb834faa))
+
 ## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.1.0...@aziontech/webkit@4.2.0) (2026-07-23)
 
 ### Features
