@@ -14,27 +14,7 @@ export { NAVIGATION_MENU_CLOSE_DURATION_MS, NAVIGATION_MENU_DURATION_MS, NAVIGAT
 const STARTING_STYLE_ATTR = 'data-starting-style'
 const ENDING_STYLE_ATTR = 'data-ending-style'
 
-/**
- * Tailwind class groups for popup / positioner / content (use on component roots).
- *
- * The morph is a set of interpolations sharing one duration so they read as a
- * single object moving and reshaping:
- *
- * - positioner — `transform`, because placement is applied as an inline
- *   `translate3d`. It previously transitioned `top/left/right/bottom`, none of
- *   which the positioner sets, so the panel JUMPED between triggers.
- * - popup — `width` / `height` (the box morph) plus `opacity` / `scale` for the
- *   enter and exit, scaling out of `--popup-origin` (the active trigger).
- * - content — a short directional slide keyed on the side the new item sits on.
- *   It was `translate-x-1/2`, i.e. HALF THE PANEL WIDTH (~500px on a wide
- *   mega-menu), which would have flung content across the screen.
- *
- * **`scale` and `translate` are their own CSS properties, not `transform`.**
- * Tailwind v4's `scale-*` / `translate-*` utilities write the individual
- * `scale:` / `translate:` properties. A transition list naming `transform` does
- * NOT cover them, so every enter/exit here silently snapped instead of animating.
- * Only the positioner, whose placement is a literal inline `transform`, lists it.
- */
+/** Tailwind class groups for popup / positioner / content (use on component roots). */
 export const navigationMenuTransitionClasses = {
   positioner:
     'transition-[transform] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[instant]:transition-none data-[starting-style]:transition-none',

@@ -118,22 +118,11 @@ function computePlacement({
  *   collisionPadding?: number
  * }>} options
  * @param {import('vue').MaybeRefOrGetter<{ width: number; height: number } | null>} [targetSize]
- *   Size the popup is morphing TO. Placement is computed against this instead of
- *   the live rect, so the panel is placed once per switch and CSS interpolates the
- *   move; reading the live rect re-places it on every frame of the morph.
  */
 export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, options, targetSize) {
   const state = ref({ x: 0, y: 0, side: 'bottom', align: 'center' })
-  // `hasPlacement` — a real placement has been computed. `placed` — that placement
-  // has also been PAINTED, which is when it becomes safe to arm the transition.
-  // Arming it in the same render that first applies the transform makes the panel
-  // animate out of 0,0 (the viewport's top-left corner) instead of opening at its
-  // trigger, so `placed` deliberately lags `hasPlacement` by one frame.
   const hasPlacement = ref(false)
   const placed = ref(false)
-  // Where the panel visually grows from: the anchor's centre, expressed relative
-  // to the panel's own box, following the `--popup-origin` convention the other
-  // overlays use.
   const popupOrigin = ref('top left')
 
   const opts = computed(() => {
@@ -152,8 +141,6 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     const anchorEl = unref(anchorRef)
     const floatingEl = unref(floatingRef)
     const anchorRect = readRect(anchorEl)
-    // The size being morphed to, when the caller publishes one. Falls back to the
-    // live rect (first placement, and any consumer that does not morph).
     const settledSize = targetSize ? toValue(targetSize) : null
     const floatingRect = settledSize ?? readRect(floatingEl)
     if (!anchorRect || !floatingRect) return
@@ -179,7 +166,6 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     hasPlacement.value = true
   }
 
-  /** Re-arm the no-animation first placement (called when the popup unmounts). */
   const resetPlacement = () => {
     hasPlacement.value = false
     placed.value = false
@@ -202,10 +188,6 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
   watch(
     [() => unref(anchorRef), floatingRef, opts, () => (targetSize ? toValue(targetSize) : null)],
     () => {
-      // The FIRST placement runs synchronously so the popup's very first paint is
-      // already at its trigger. Deferring it to a frame (as every later update
-      // does, to coalesce scroll/resize churn) leaves one painted frame at 0,0 —
-      // and the panel visibly flies in from the corner.
       if (!hasPlacement.value) {
         update()
         return
@@ -219,7 +201,6 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     }
   )
 
-  // Arm the transition only once the first placement has been painted.
   watch(hasPlacement, (value) => {
     if (!value) {
       return
@@ -240,10 +221,6 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     passive: true
   })
 
-  // The floating element is deliberately NOT observed when the caller publishes a
-  // target size: it resizes on every frame of the morph, and re-placing from a
-  // half-animated rect is what makes the panel wobble. `targetSize` is watched
-  // above instead — one placement per switch, which CSS then interpolates.
   if (!targetSize) {
     useResizeObserver(floatingRef, scheduleUpdate)
   }

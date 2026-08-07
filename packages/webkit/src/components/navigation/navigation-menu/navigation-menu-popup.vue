@@ -47,11 +47,6 @@
     'data-ending-style': root.popupTransitionStatus.value === 'ending' ? '' : undefined
   }))
 
-  // No `--popup-width` / `--popup-height` here — the size-morph composable is the
-  // single writer. Vue's patchStyle re-applies every key of a `:style` object on
-  // each re-render, so declaring them meant every open/close re-render stamped
-  // `auto` over the pixel size mid-morph. The `w-[var(--popup-width,auto)]` class
-  // already carries `auto` as its fallback.
   const popupStyle = computed(() => ({
     '--transform-origin': 'var(--transform-origin, center)',
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })

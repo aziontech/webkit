@@ -87,8 +87,6 @@
     root.popupSize
   )
 
-  // Each open re-arms the un-animated first placement, so the panel appears at
-  // its trigger instead of gliding in from wherever the last one closed.
   watch(
     () => root.menuPopupMounted.value,
     (mounted) => {
@@ -115,15 +113,8 @@
 
   const positionerHidden = computed(() => !root.menuPopupMounted.value)
 
-  // No `--positioner-width` / `--positioner-height` here. Vue's patchStyle rewrites
-  // every key of a `:style` object on each re-render, so declaring the size vars
-  // alongside the imperative writes made the two fight: this object recomputes
-  // whenever the placement changes, which used to reset the morph to `auto`.
   const positionerStyle = computed(() => ({
     ...floatingStyles.value,
-    // Inherited by the popup, which scales out of this point on open. Anchored at
-    // the active trigger's centre, so the panel grows from the item you pointed
-    // at rather than from its own middle.
     '--popup-origin': popupOrigin.value,
     '--available-width': '100vw',
     '--available-height': '100vh',

@@ -100,8 +100,6 @@ export function useNavigationMenuRootState(
     transitionStatus: popupTransitionStatus
   } = useTransitionStatus(() => open.value)
 
-  // ONE owner for the popup's morph, at the root. Instantiating it per trigger
-  // put N writers on the same element, each restarting the others' transition.
   const { popupSize } = useNavigationMenuViewportSize({
     activeValue: value,
     popupEl,
