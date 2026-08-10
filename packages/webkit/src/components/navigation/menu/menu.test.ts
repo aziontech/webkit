@@ -105,12 +105,17 @@ const restored = (options: { enterOnMount?: boolean } = {}) =>
 describe('Menu (composition, drill stack + data mode)', () => {
   // ---- Compound API ------------------------------------------------------------
   it('attaches every sub-component to the compound root for dot-notation', () => {
-    expect(Menu.Group).toBe(MenuGroup)
-    expect(Menu.Item).toBe(MenuItem)
-    expect(Menu.Sub).toBe(MenuSub)
-    expect(Menu.SubTrigger).toBe(MenuSubTrigger)
-    expect(Menu.SubContent).toBe(MenuSubContent)
-    expect(Menu.Back).toBe(MenuBack)
+    // The root is asserted first, then read through `?.`: static analysis cannot resolve
+    // the default export of a `.vue` module, so it reads this base as undefined and every
+    // member access below as a null dereference. The guard is the real assertion — a
+    // missing member still fails on `undefined !== expected`.
+    expect(Menu).toBeDefined()
+    expect(Menu?.Group).toBe(MenuGroup)
+    expect(Menu?.Item).toBe(MenuItem)
+    expect(Menu?.Sub).toBe(MenuSub)
+    expect(Menu?.SubTrigger).toBe(MenuSubTrigger)
+    expect(Menu?.SubContent).toBe(MenuSubContent)
+    expect(Menu?.Back).toBe(MenuBack)
   })
 
   // ---- Root anatomy ------------------------------------------------------------

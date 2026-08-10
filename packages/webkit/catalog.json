@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "4.2.1",
+  "webkitVersion": "4.3.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -341,9 +341,13 @@
       "--drop-shadow-sm",
       "--drop-shadow-xl",
       "--drop-shadow-xs",
+      "--ease-expressive-entrance",
+      "--ease-expressive-exit",
       "--ease-in",
       "--ease-in-out",
       "--ease-out",
+      "--ease-productive-entrance",
+      "--ease-productive-exit",
       "--font-code",
       "--font-display",
       "--font-sans",
@@ -679,6 +683,14 @@
       "--tracking-wide",
       "--tracking-wider",
       "--tracking-widest",
+      "--transition-duration-fast-01",
+      "--transition-duration-fast-02",
+      "--transition-duration-moderate-01",
+      "--transition-duration-moderate-02",
+      "--transition-duration-slow-01",
+      "--transition-duration-slow-02",
+      "--transition-duration-slow-03",
+      "--transition-duration-slow-04",
       "--warning",
       "--warning-border",
       "--warning-contrast",
@@ -1059,9 +1071,13 @@
         "--drop-shadow-xs"
       ],
       "ease": [
+        "--ease-expressive-entrance",
+        "--ease-expressive-exit",
         "--ease-in",
         "--ease-in-out",
-        "--ease-out"
+        "--ease-out",
+        "--ease-productive-entrance",
+        "--ease-productive-exit"
       ],
       "font": [
         "--font-code",
@@ -1439,6 +1455,16 @@
         "--tracking-wide",
         "--tracking-wider",
         "--tracking-widest"
+      ],
+      "transition": [
+        "--transition-duration-fast-01",
+        "--transition-duration-fast-02",
+        "--transition-duration-moderate-01",
+        "--transition-duration-moderate-02",
+        "--transition-duration-slow-01",
+        "--transition-duration-slow-02",
+        "--transition-duration-slow-03",
+        "--transition-duration-slow-04"
       ],
       "warning": [
         "--warning",
@@ -5020,6 +5046,13 @@
           "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
         },
         {
+          "name": "showFields",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered."
+        },
+        {
           "name": "showTime",
           "type": "boolean",
           "default": "false",
@@ -5127,7 +5160,7 @@
           "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
         }
       ],
-      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
+      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
     },
     "calendar-root": {
       "import": "@aziontech/webkit/calendar-root",
@@ -5203,6 +5236,13 @@
           "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
         },
         {
+          "name": "showFields",
+          "type": "boolean",
+          "default": "true",
+          "required": "no",
+          "doc": "Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered."
+        },
+        {
           "name": "showTime",
           "type": "boolean",
           "default": "false",
@@ -5310,7 +5350,7 @@
           "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
         }
       ],
-      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields, an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
+      "purpose": "Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a \"Select Period\" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones)."
     },
     "calendar-preset": {
       "import": "@aziontech/webkit/calendar-preset",
@@ -6342,7 +6382,7 @@
           "notes": "Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden=\"true\"`)."
         }
       ],
-      "purpose": "Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `InputText` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer. Aligned with Figma frame `3714:10788` (Webkit / InputPassword). Token mapping inferred from the `input-text` sibling because the Figma MCP read tools were unreachable during spec authoring; reconciliation must verify against the frame at scaffold time."
+      "purpose": "Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `InputText` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer. Aligned with Figma frame `3714:10788` (Webkit / InputPassword). The token mapping was originally inferred from the `input-text` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside `FieldPassword` (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `InputText`'s borders and `InputText` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input."
     },
     "field-password": {
       "import": "@aziontech/webkit/field-password",
@@ -6443,6 +6483,20 @@
           "default": "''",
           "required": "no",
           "doc": "HTML name for the underlying input (form + vee-validate integration)."
+        },
+        {
+          "name": "requirements",
+          "type": "boolean | PasswordRequirement[]",
+          "default": "false",
+          "required": "no",
+          "doc": "Enables the password-requirements row. `true` (a bare attribute) renders the built-in rule set; an array replaces that set entirely, one chip per entry. Each rule carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. `false` or an empty array omits the whole row, caption included."
+        },
+        {
+          "name": "requirementsTitle",
+          "type": "string",
+          "default": "'Must contain:'",
+          "required": "no",
+          "doc": "Caption that opens the requirements row and names the group for assistive tech. Rendered only when the row is enabled."
         }
       ],
       "events": [
@@ -6464,7 +6518,13 @@
           "notes": "Forwarded to the underlying `InputPassword#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled."
         }
       ],
-      "purpose": "Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern."
+      "purpose": "Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern. It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per rule, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that rule's `test`. This is the \"strength meter\" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The row exposes exactly **two** levers and nothing else: a bare `requirements` attribute turns it on with the built-in rule set, and passing an array replaces that set with the consumer's own rules. Appearance is not configurable — a chip has two treatments, both fixed by the design. The field **evaluates** the rules against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: enabling the row (or supplying rules) is the trigger the app provides, and applying them to the bound value is derived render state, not business logic the field invents."
+    },
+    "password-requirements": {
+      "import": "@aziontech/webkit/password-requirements",
+      "target": "./src/components/inputs/field-password/password-requirements.ts",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/password-requirements"
     },
     "box-grid-selection": {
       "import": "@aziontech/webkit/box-grid-selection",
@@ -8259,7 +8319,7 @@
         {
           "name": "footer",
           "scope": "—",
-          "notes": "Named slot. The collapse trigger renders after this content in the same row, so a profile block and the trigger read as one footer."
+          "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer."
         }
       ],
       "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected."
@@ -9122,7 +9182,7 @@
           "notes": "—"
         }
       ],
-      "purpose": "Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/dialog/`.",
+      "purpose": "Modal surface above the page, built on the shared Panel shell. The consumer composes a trigger, an overlay backdrop and the panel regions (header, body, footer); the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.",
       "useWhen": [
         "A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.",
         "The interaction must be completed or dismissed before returning to the page."

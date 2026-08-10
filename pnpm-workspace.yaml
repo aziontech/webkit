@@ -38,3 +38,5 @@ overrides:
   "@babel/core": ">=7.29.1 <8" # bounded: peer ranges (^7 || ^8.0.0-0) would jump to Babel 8
   "@hono/node-server": ">=2.0.5" # GHSA-frvp-7c67-39w9; MCP SDK still pins ^1.19.x — drop when the SDK moves to ^2
   hono: ">=4.12.34 <5" # GHSA-8j4g-w8fx-2239 (ReDoS in CORS middleware), patched 4.12.34; bounded to 4.x — MCP SDK pins ^4
+  "js-yaml@3": ">=3.15.1 <4" # GHSA-5p4m-2wfm-xmqj (CVE-2026-59870, quadratic CPU in !!omap), patched 3.15.1; bounded — 4.x removed the legacy safeLoad API
+  "js-yaml@4": ">=4.3.1 <5" # GHSA-5p4m-2wfm-xmqj (CVE-2026-59870), patched 4.3.1; bounded to 4.x — 5.x is ESM-only

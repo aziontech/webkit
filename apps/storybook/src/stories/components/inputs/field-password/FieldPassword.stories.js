@@ -1,10 +1,13 @@
 import Button from '@aziontech/webkit/button'
 import FieldPassword from '@aziontech/webkit/field-password'
+import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
 import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import FieldPassword from '@aziontech/webkit/field-password'"
+const RULES_IMPORT =
+  "import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'"
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldPassword>} */
 const meta = {
@@ -26,8 +29,29 @@ const meta = {
     },
     docs: {
       description: {
-        component:
-          'Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.'
+        component: [
+          'Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.',
+          '',
+          '### The password-requirements row',
+          '',
+          'The field also owns the password-requirements row: a captioned, wrapping set of rule chips under the input. A chip has exactly two treatments and nothing about them is configurable — unsatisfied is the muted surface with no glyph, satisfied is the success surface with a `pi pi-check` glyph. The field evaluates every rule against the value it already owns, so the chips track what is typed with no wiring on the consumer side.',
+          '',
+          'The row has exactly two levers:',
+          '',
+          '1. **Turn it on** — a bare `requirements` attribute renders the built-in set: `8-128 characters`, `Uppercase letter`, `Special character`, `Number`, `Lowercase letter`.',
+          '2. **Bring your own rules** — passing an array to `requirements` replaces the built-in set entirely. Each entry is `{ key?, label, test }`; `test` is a RegExp or a `(value) => boolean` predicate.',
+          '',
+          '`false` (the default) or an empty array renders no row at all. To start from the built-in set and drop one rule, filter by its stable `key` — never by the `label`, which is localizable:',
+          '',
+          '```js',
+          RULES_IMPORT,
+          '',
+          'const requirements = [',
+          "  ...DEFAULT_PASSWORD_REQUIREMENTS.filter((rule) => rule.key !== 'special'),",
+          "  { key: 'no-spaces', label: 'No spaces', test: (value) => !/\\s/.test(value) }",
+          ']',
+          '```'
+        ].join('\n')
       },
       canvas: { sourceState: 'shown' }
     }
@@ -114,6 +138,42 @@ const meta = {
       description: 'HTML name for the underlying input (form + vee-validate integration).',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
+    requirements: {
+      control: 'boolean',
+      description: [
+        'Enables the password-requirements row. A bare `requirements` (`:requirements="true"`) renders the built-in set — `8-128 characters`, `Uppercase letter`, `Special character`, `Number`, `Lowercase letter`. Passing an array replaces that set entirely. `false` (the default) or an empty array renders no row.',
+        '',
+        'Each entry is `{ key?, label, test }`, where `test` is a RegExp or a `(value) => boolean` predicate the field evaluates against its own value. Nothing about a chip is configurable: the satisfied treatment is always the success surface plus a `pi pi-check` glyph.',
+        '',
+        'To keep the built-in rules and drop one, filter by its stable `key` (never by the localizable `label`); to add one, append your own entry:',
+        '',
+        '```js',
+        RULES_IMPORT,
+        '',
+        'const requirements = [',
+        "  ...DEFAULT_PASSWORD_REQUIREMENTS.filter((rule) => rule.key !== 'special'),",
+        "  { key: 'no-spaces', label: 'No spaces', test: (value) => !/\\s/.test(value) }",
+        ']',
+        '```',
+        '',
+        'The built-in keys are `length`, `uppercase`, `special`, `number` and `lowercase`.'
+      ].join('\n'),
+      table: {
+        category: 'props',
+        type: { summary: 'boolean | PasswordRequirement[]' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    requirementsTitle: {
+      control: 'text',
+      description:
+        'Caption that opens the requirements row and names the group for assistive tech. Rendered only when the row is enabled.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'Must contain:'" }
+      }
+    },
     iconLeft: {
       control: false,
       description: 'Forwarded to the underlying `InputPassword` leading-icon slot.',
@@ -142,7 +202,9 @@ const meta = {
     required: false,
     invalid: false,
     toggleable: true,
-    autocomplete: 'current-password'
+    autocomplete: 'current-password',
+    requirements: true,
+    requirementsTitle: 'Must contain:'
   }
 }
 
@@ -167,12 +229,13 @@ const Template = (args) => ({
   template: '<FieldPassword v-bind="args" :model-value="value" @update:model-value="onUpdate" />'
 })
 
-const DEFAULT_SCRIPT = ["import { ref } from 'vue'", IMPORT, '', "const password = ref('')"]
+const DEFAULT_SCRIPT = [IMPORT, "import { ref } from 'vue'", '', "const password = ref('')"]
 const DEFAULT_MARKUP = `<FieldPassword
   v-model="password"
   label="Password"
   placeholder="Enter your password"
   helper-text="At least 8 characters."
+  requirements
 />`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldPassword>} */
@@ -180,16 +243,19 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Default field with label, password input, and helper text.' },
+      description: {
+        story:
+          'Default field with label, password input, helper text, and the requirements row turned on by the bare `requirements` attribute.'
+      },
       source: { code: toSfc(DEFAULT_SCRIPT, DEFAULT_MARKUP) }
     }
   }
 }
 
 const REQUIRED_SCRIPT = [
-  "import { ref } from 'vue'",
   "import Button from '@aziontech/webkit/button'",
   IMPORT,
+  "import { ref } from 'vue'",
   '',
   "const value = ref('')",
   'const missing = ref(false)',
@@ -264,12 +330,13 @@ export const Required = {
   }
 }
 
-const INVALID_SCRIPT = ["import { ref } from 'vue'", IMPORT, '', "const password = ref('weak')"]
+const INVALID_SCRIPT = [IMPORT, "import { ref } from 'vue'", '', "const password = ref('weak')"]
 const INVALID_MARKUP = `<FieldPassword
   v-model="password"
   label="Password"
   placeholder="Enter your password"
   helper-text="Password must be at least 8 characters."
+  requirements
   invalid
 />`
 
@@ -286,7 +353,7 @@ export const Invalid = {
     docs: {
       description: {
         story:
-          'Invalid state — the helper switches to `kind="invalid"` (danger tokens) and the input gets the invalid border/ring plus `aria-invalid`.'
+          'Invalid state — the helper switches to `kind="invalid"` (danger tokens) and the input gets the invalid border/ring plus `aria-invalid`. The chips are untouched by it: they keep reporting what the current value does and does not satisfy, so the field\'s error and the rules never contradict each other.'
       },
       source: { code: toSfc(INVALID_SCRIPT, INVALID_MARKUP) }
     }
@@ -294,8 +361,8 @@ export const Invalid = {
 }
 
 const DISABLED_SCRIPT = [
-  "import { ref } from 'vue'",
   IMPORT,
+  "import { ref } from 'vue'",
   '',
   "const password = ref('locked-value')"
 ]
@@ -304,6 +371,7 @@ const DISABLED_MARKUP = `<FieldPassword
   label="Password"
   placeholder="Enter your password"
   helper-text="This field is locked."
+  requirements
   disabled
 />`
 
@@ -328,8 +396,8 @@ export const Disabled = {
 }
 
 const TOGGLE_SCRIPT = [
-  "import { ref } from 'vue'",
   IMPORT,
+  "import { ref } from 'vue'",
   '',
   "const withToggle = ref('hunter2')",
   "const withoutToggle = ref('hunter2')"
@@ -398,6 +466,127 @@ export const Icons = {
           '`#iconLeft` slot is forwarded to the underlying `InputPassword`. `#iconRight` is only honored when `toggleable=false` — the visibility toggle occupies that position by default.'
       },
       source: { code: toSfc(IMPORT, ICONS_TEMPLATE) }
+    }
+  }
+}
+
+const REQUIREMENTS_SCRIPT = [
+  IMPORT,
+  "import { ref } from 'vue'",
+  '',
+  "const password = ref('')",
+  "const partial = ref('Abcdefgh1')"
+]
+const REQUIREMENTS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
+  <FieldPassword
+    v-model="password"
+    label="Password"
+    placeholder="Type your password"
+    autocomplete="new-password"
+    requirements
+  />
+  <FieldPassword
+    v-model="partial"
+    label="Partially satisfied"
+    placeholder="Type your password"
+    autocomplete="new-password"
+    requirements
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FieldPassword>} */
+export const Requirements = {
+  render: () => ({
+    components: { FieldPassword },
+    setup() {
+      const password = ref('')
+      const partial = ref('Abcdefgh1')
+      return { password, partial }
+    },
+    template: REQUIREMENTS_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The built-in rule set, turned on by the bare `requirements` attribute — no array, nothing to configure. **Type in the first field** to watch each chip flip to the satisfied treatment (`pi pi-check` glyph + `var(--success)` surface) as its rule is met; the shape change, not just the color, is what keeps the state readable without relying on color alone. The second field starts on `Abcdefgh1`, so it shows both treatments at rest: four rules satisfied and `Special character` still muted. The row wraps at the field width, and its caption names the group for assistive tech.'
+      },
+      source: { code: toSfc(REQUIREMENTS_SCRIPT, REQUIREMENTS_TEMPLATE) }
+    }
+  }
+}
+
+const CUSTOM_REQUIREMENTS_SCRIPT = [
+  RULES_IMPORT,
+  IMPORT,
+  "import { ref } from 'vue'",
+  '',
+  "const password = ref('')",
+  "const localized = ref('')",
+  '',
+  '// Start from the built-in set, drop one rule by its stable key, add one of our own.',
+  'const requirements = [',
+  "  ...DEFAULT_PASSWORD_REQUIREMENTS.filter((rule) => rule.key !== 'special'),",
+  "  { key: 'no-spaces', label: 'No spaces', test: (value) => !/\\s/.test(value) }",
+  ']',
+  '',
+  '// Or replace the set entirely — here a localized one, matched by the caption.',
+  'const localizedRequirements = [',
+  "  { key: 'length', label: '8-128 caracteres', test: /^.{8,128}$/ },",
+  "  { key: 'uppercase', label: 'Letra maiúscula', test: /[A-Z]/ },",
+  "  { key: 'number', label: 'Número', test: /\\d/ }",
+  ']'
+]
+const CUSTOM_REQUIREMENTS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
+  <FieldPassword
+    v-model="password"
+    label="Built-ins minus one, plus our own"
+    placeholder="Type your password"
+    autocomplete="new-password"
+    :requirements="requirements"
+  />
+  <FieldPassword
+    v-model="localized"
+    label="Localized set"
+    placeholder="Digite sua senha"
+    autocomplete="new-password"
+    requirements-title="Deve conter:"
+    :requirements="localizedRequirements"
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FieldPassword>} */
+export const CustomRequirements = {
+  render: () => ({
+    components: { FieldPassword },
+    setup() {
+      const password = ref('')
+      const localized = ref('')
+
+      const requirements = [
+        ...DEFAULT_PASSWORD_REQUIREMENTS.filter((rule) => rule.key !== 'special'),
+        { key: 'no-spaces', label: 'No spaces', test: (value) => !/\s/.test(value) }
+      ]
+
+      const localizedRequirements = [
+        { key: 'length', label: '8-128 caracteres', test: /^.{8,128}$/ },
+        { key: 'uppercase', label: 'Letra maiúscula', test: /[A-Z]/ },
+        { key: 'number', label: 'Número', test: /\d/ }
+      ]
+
+      return { password, localized, requirements, localizedRequirements }
+    },
+    template: CUSTOM_REQUIREMENTS_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          "Bringing your own rules — the row's second lever. The first field imports `DEFAULT_PASSWORD_REQUIREMENTS`, filters `Special character` out **by its `key`** (`special`, not its localizable label), and appends a `No spaces` predicate rule. The second replaces the set entirely with a localized one and matches it with `requirements-title`. Both still render the same two chip treatments: an array changes *which rules* appear, never how a chip looks."
+      },
+      source: { code: toSfc(CUSTOM_REQUIREMENTS_SCRIPT, CUSTOM_REQUIREMENTS_TEMPLATE) }
     }
   }
 }

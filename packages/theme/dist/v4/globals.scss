@@ -417,6 +417,18 @@
   --animate-illustration-rim-sweep: illustrationRimSweep 2100ms linear infinite;
   --animate-illustration-chat-scroll: illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-illustration-chat-pop: illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite;
+  --transition-duration-fast-01: 70ms;
+  --transition-duration-fast-02: 110ms;
+  --transition-duration-moderate-01: 150ms;
+  --transition-duration-moderate-02: 240ms;
+  --transition-duration-slow-01: 400ms;
+  --transition-duration-slow-02: 700ms;
+  --transition-duration-slow-03: 1100ms;
+  --transition-duration-slow-04: 2100ms;
+  --ease-productive-entrance: cubic-bezier(0.39, 0.57, 0.56, 1);
+  --ease-productive-exit: cubic-bezier(0.55, 0.09, 0.68, 0.53);
+  --ease-expressive-entrance: cubic-bezier(0.17, 0.84, 0.44, 1);
+  --ease-expressive-exit: cubic-bezier(0.95, 0.05, 0.8, 0.04);
 }
 
 :root, [data-theme=light], .azion.azion-light {
@@ -881,7 +893,7 @@
   --border-strong: #000000;
   --border-selected: #F3652B;
   --text-default: #141414;
-  --text-muted: #666666;
+  --text-muted: #808080;
   --text-disabled: #999999;
   --text-link: #005FCC;
   --text-link-hover: #004799;
@@ -952,7 +964,7 @@
   --border-strong: #FFFFFF;
   --border-selected: #F3652B;
   --text-default: #FAFAFA;
-  --text-muted: #999999;
+  --text-muted: #808080;
   --text-disabled: #4D4D4D;
   --text-link: #3392FF;
   --text-link-hover: #66ADFF;

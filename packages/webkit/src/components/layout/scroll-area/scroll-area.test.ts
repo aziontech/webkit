@@ -65,6 +65,11 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
     expect(area(view, 'build-log')).toBeTruthy()
   })
 
+  it('a consumer tabindex override wins over the default tab stop', () => {
+    const view = render(host({ tabindex: '-1' }))
+    expect(area(view).getAttribute('tabindex')).toBe('-1')
+  })
+
   it.each(['vertical', 'horizontal', 'both'] as const)(
     'mirrors orientation=%s onto data-orientation',
     (orientation) => {

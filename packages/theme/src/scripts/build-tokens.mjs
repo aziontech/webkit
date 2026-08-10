@@ -29,7 +29,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { animate } from '../tokens/primitives/animations/animate.js';
+import { animate, curve, duration } from '../tokens/primitives/animations/animate.js';
 import { animateExtras, keyframes } from '../tokens/primitives/animations/keyframes.js';
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
@@ -339,6 +339,19 @@ const emitCssV4 = () => {
 
   for (const [name, shorthand] of Object.entries(animate)) {
     themeVars[`--animate-${name}`] = shorthand;
+  }
+
+  // Named `duration-*` / `ease-*` utilities. Without these the design system's
+  // own `duration-moderate-02` / `ease-productive-entrance` classes compile to
+  // NOTHING (Tailwind v4 silently drops an unknown named step), and every
+  // component that declares one falls back to Tailwind's default 150ms `ease`.
+  // The namespaces are fixed by Tailwind: `--transition-duration-*` backs
+  // `duration-*`, `--ease-*` backs `ease-*`.
+  for (const [name, value] of Object.entries(duration)) {
+    themeVars[`--transition-duration-${name}`] = value;
+  }
+  for (const [name, value] of Object.entries(curve)) {
+    themeVars[`--ease-${name}`] = value;
   }
 
   const semanticBase = {

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: eeac38ffbd59a75d8d8f19378b2b2e2c5a9a3cdae1315dd1a4a9d40af30c5ea3
+checksum: 3b87ac4152fea8d9c492b0f7aec924de2580c42e83b608edc24bda0f557727b8
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-08-05
 ---
 # Navigation Menu — Component Spec
 
@@ -56,9 +56,33 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Motion & Animations
 
+The menu **opens out of its trigger**: the popup is placed at the trigger before
+its first paint and scales up from `--popup-origin`, the trigger's centre. It
+never animates into place from elsewhere.
+
+Switching panels is a **morph**, not a re-open: the popup keeps an explicit pixel
+size for its whole open lifetime, so a switch writes one new size and the browser
+interpolates from the current one. Box size and placement share a duration and
+curve so they read as a single object moving and reshaping. Each panel is pinned
+to its own width (`--viewport-width`) so it never re-wraps mid-morph — the box
+reveals and crops a panel that is already laid out — while the two panels
+cross-fade over a shorter duration, sliding in from the side the new item sits on.
+
+**`scale` and `translate` are separate CSS properties from `transform`.** The
+`scale-*` / `translate-*` utilities write `scale:` / `translate:`, so a transition
+list must name those properties; naming `transform` does not cover them and the
+animation silently snaps. Only the positioner, whose placement is an inline
+`transform: translate3d(...)`, transitions `transform`.
+
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| trigger / entry hover, focus, press | `transition-colors` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| popup open / close | `transition-[opacity,scale]` — fade + `scale-95`, origin `--popup-origin` (the active trigger) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| popup box morph between panels | `transition-[width,height]` driven by `--popup-width` / `--popup-height` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| positioner move between triggers | `transition-[transform]` (placement is a `translate3d`); suppressed on the first placement | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| panel content swap | `transition-[opacity,translate]`, directional 24px slide keyed on `data-activation-direction` | `duration-moderate-01` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| chevron icon | `transition-transform` (180° on open) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| list sliding highlight | `transition-[left,top,width,height,opacity]` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 

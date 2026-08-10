@@ -33,7 +33,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Shows the page hierarchy so users can navigate back to parent views. Pass an `items` array for the common case, or compose `Breadcrumb.List`, `Breadcrumb.Item`, and `Breadcrumb.Separator` through the default slot. On viewports below `md`, only the first and current segments stay visible while the middle segments collapse into a dropdown menu opened by an ellipsis icon button.'
+          "Shows the page hierarchy so users can navigate back to parent views. Pass an `items` array for the common case, or compose `Breadcrumb.List`, `Breadcrumb.Item`, and `Breadcrumb.Separator` through the default slot. The trail is always a single row: segments shrink and ellipsize rather than wrapping or bleeding off-screen, whether one segment is too wide or the whole trail is. In `items` mode, viewports below `md` additionally collapse the middle segments into a dropdown menu opened by an ellipsis icon button. A hand-composed trail keeps every segment it was given: the root does not reach into the slot to decide which of the consumer's children are collapsible."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -150,20 +150,39 @@ export const Depths = {
   }
 }
 
+
+const LONG_LABEL = 'production-edge-application-with-a-very-long-configuration-name'
+
+const LONG_LABEL_LINES = [
+  'const items = [',
+  "  { label: 'Page Name', href: '#' },",
+  `  { label: '${LONG_LABEL}', current: true }`,
+  ']'
+]
+
+// No width cap: the trail takes the space it is given, so the label ellipsizes only when
+// the viewport genuinely lacks room. A hardcoded `max-w` made it truncate at any window
+// size, which read as the component truncating with space to spare.
+const LONG_LABEL_MARKUP = '<Breadcrumb :items="items" />'
+
 /** @type {import('@storybook/vue3').StoryObj<typeof Breadcrumb.Root>} */
-export const ResponsiveCollapsed = {
-  render: Template,
-  args: {
-    items: [ancestor, ancestor, ancestor, ancestor, current]
-  },
+export const LongLabel = {
+  render: () => ({
+    components: { Breadcrumb },
+    setup() {
+      return { items: [ancestor, { label: LONG_LABEL, current: true }] }
+    },
+    template: LONG_LABEL_MARKUP
+  }),
   parameters: {
-    viewport: { defaultViewport: 'mobile' },
     docs: {
+      controls: { disable: true },
       description: {
         story:
-          'Below `md` (768px), only the first and current segments show inline; the middle segments open from the ellipsis icon button via a dropdown menu.'
+          'A segment far wider than the trail. It ellipsizes only once the row runs out of space, and the row stays a single line; widen the viewport and the label grows back. Collapsing cannot help here: there are no middle segments to hide.'
       },
-      source: { code: toSfc([IMPORT, '', ...DEFAULT_ITEMS_LINES], DEFAULT_MARKUP) }
+      source: { code: toSfc([IMPORT, '', ...LONG_LABEL_LINES], LONG_LABEL_MARKUP) }
     }
   }
 }
+

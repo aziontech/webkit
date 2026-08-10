@@ -34,5 +34,10 @@
     "name": "illustration-box",
     "path": "src/components/content/illustration/illustration-box/illustration-box.vue",
     "limit": "12 KB"
+  },
+  {
+    "name": "password-requirements",
+    "path": "src/components/inputs/field-password/password-requirements.ts",
+    "limit": "0.3 KB"
   }
 ]

@@ -143,7 +143,6 @@
   "packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner-context.js::composable-js",
   "packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner.js::composable-js",
   "packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-root.js::composable-js",
-  "packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-viewport-size.js::composable-js",
   "packages/webkit/src/components/navigation/navigation-menu/composables/use-transition-status.js::composable-js",
   "packages/webkit/src/components/navigation/navigation-menu/navigation-menu-arrow.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/navigation-menu/navigation-menu-backdrop.vue::token:js-class-preset",

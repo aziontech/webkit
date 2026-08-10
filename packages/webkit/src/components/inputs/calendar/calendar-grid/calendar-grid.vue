@@ -322,114 +322,122 @@
 <template>
   <div
     ref="gridRef"
-    :data-transitioning="transitioning || null"
     data-testid="input-calendar__grid"
-    class="relative data-[transitioning]:overflow-hidden"
+    class="flex flex-col items-start gap-[var(--spacing-md)]"
   >
-    <Transition
-      :enter-from-class="monthsEnterFromClass"
-      :leave-to-class="monthsLeaveToClass"
-      enter-active-class="transform motion-reduce:transition-none"
-      leave-active-class="absolute inset-0 transform motion-reduce:transition-none"
-      @before-enter="transitioning = true"
-      @after-enter="transitioning = false"
-      @enter-cancelled="transitioning = false"
+    <!-- Static header. The month label and the prev/next controls live OUTSIDE the
+         transition so they never travel with the sliding strip — only the month
+         itself moves. Keeping the buttons mounted also means focus stays on the
+         control the user just pressed instead of being torn down under them. -->
+    <div class="flex w-full items-center justify-between gap-[var(--spacing-xs)]">
+      <span class="text-body-sm text-[var(--text-default)]">
+        {{ monthGrid.label }}
+      </span>
+
+      <div class="flex shrink-0 items-center gap-[var(--spacing-xxs)]">
+        <button
+          type="button"
+          :disabled="disabledAll"
+          aria-label="Previous month"
+          class="inline-flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+          @click="goToPreviousMonth"
+        >
+          <i
+            class="pi pi-chevron-left text-[length:inherit] leading-none"
+            aria-hidden="true"
+          />
+        </button>
+
+        <button
+          type="button"
+          :disabled="disabledAll"
+          aria-label="Next month"
+          class="inline-flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+          @click="goToNextMonth"
+        >
+          <i
+            class="pi pi-chevron-right text-[length:inherit] leading-none"
+            aria-hidden="true"
+          />
+        </button>
+      </div>
+    </div>
+
+    <!-- Only the month strip slides; it clips its two in-flight copies. -->
+    <div
+      :data-transitioning="transitioning || null"
+      class="relative w-full data-[transitioning]:overflow-hidden"
     >
-      <div
-        :key="monthsKey"
-        :style="monthsTransitionStyle"
-        class="flex flex-col items-start gap-[var(--spacing-md)]"
+      <Transition
+        :enter-from-class="monthsEnterFromClass"
+        :leave-to-class="monthsLeaveToClass"
+        enter-active-class="transform motion-reduce:transition-none"
+        leave-active-class="absolute inset-0 transform motion-reduce:transition-none"
+        @before-enter="transitioning = true"
+        @after-enter="transitioning = false"
+        @enter-cancelled="transitioning = false"
       >
-        <div class="flex w-full items-center justify-between gap-[var(--spacing-xs)]">
-          <span class="text-body-sm text-[var(--text-default)]">
-            {{ monthGrid.label }}
-          </span>
-
-          <div class="flex shrink-0 items-center gap-[var(--spacing-xxs)]">
-            <button
-              type="button"
-              :disabled="disabledAll"
-              aria-label="Previous month"
-              class="inline-flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
-              @click="goToPreviousMonth"
-            >
-              <i
-                class="pi pi-chevron-left text-[length:inherit] leading-none"
-                aria-hidden="true"
-              />
-            </button>
-
-            <button
-              type="button"
-              :disabled="disabledAll"
-              aria-label="Next month"
-              class="inline-flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
-              @click="goToNextMonth"
-            >
-              <i
-                class="pi pi-chevron-right text-[length:inherit] leading-none"
-                aria-hidden="true"
-              />
-            </button>
-          </div>
-        </div>
-
         <div
-          role="grid"
-          :aria-label="monthGrid.label"
+          :key="monthsKey"
+          :style="monthsTransitionStyle"
         >
           <div
-            role="row"
-            class="flex items-start"
+            role="grid"
+            :aria-label="monthGrid.label"
           >
-            <span
-              v-for="(weekday, index) in WEEKDAY_LABELS"
-              :key="`weekday-${index}`"
-              role="columnheader"
-              :data-size="size"
-              class="text-label-sm flex items-start justify-center text-[var(--text-muted)] data-[size=small]:w-8 data-[size=medium]:w-9 data-[size=large]:w-10"
-            >
-              {{ weekday }}
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-[var(--spacing-xxs)]">
             <div
-              v-for="(week, weekIndex) in monthGrid.weeks"
-              :key="`week-${weekIndex}`"
               role="row"
               class="flex items-start"
             >
-              <div
-                v-for="day in week"
-                :key="day.time"
-                role="gridcell"
-                :aria-selected="day.selected || undefined"
-                :aria-current="day.today ? 'date' : undefined"
-                class="leading-none"
+              <span
+                v-for="(weekday, index) in WEEKDAY_LABELS"
+                :key="`weekday-${index}`"
+                role="columnheader"
+                :data-size="size"
+                class="text-label-sm flex items-start justify-center text-[var(--text-muted)] data-[size=small]:w-8 data-[size=medium]:w-9 data-[size=large]:w-10"
               >
-                <button
-                  type="button"
-                  :disabled="day.disabled"
-                  :data-size="size"
-                  :data-band="day.band"
-                  :data-selected="day.selected || null"
-                  :data-today="day.today || null"
-                  :data-outside="day.outside || null"
-                  :data-disabled="day.disabled || null"
-                  data-testid="input-calendar__day"
-                  :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
-                  class="flex items-center justify-center text-[var(--text-default)] transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-[var(--shape-elements)] data-[band=none]:hover:bg-[var(--bg-hover)] data-[band=single]:rounded-[var(--shape-elements)] data-[band=single]:bg-[var(--secondary-selected)] data-[band=single]:text-[var(--secondary-contrast)] data-[band=start]:rounded-l-[var(--shape-elements)] data-[band=start]:bg-[var(--secondary-selected)] data-[band=start]:text-[var(--secondary-contrast)] data-[band=end]:rounded-r-[var(--shape-elements)] data-[band=end]:bg-[var(--secondary-selected)] data-[band=end]:text-[var(--secondary-contrast)] data-[band=middle]:bg-[var(--bg-selected)] data-[outside]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)] motion-reduce:transition-none"
-                  @click="selectDay(day)"
-                  @keydown="onDayKeydown($event, day)"
+                {{ weekday }}
+              </span>
+            </div>
+
+            <div class="flex flex-col items-start gap-[var(--spacing-xxs)]">
+              <div
+                v-for="(week, weekIndex) in monthGrid.weeks"
+                :key="`week-${weekIndex}`"
+                role="row"
+                class="flex items-start"
+              >
+                <div
+                  v-for="day in week"
+                  :key="day.time"
+                  role="gridcell"
+                  :aria-selected="day.selected || undefined"
+                  :aria-current="day.today ? 'date' : undefined"
+                  class="leading-none"
                 >
-                  {{ day.label }}
-                </button>
+                  <button
+                    type="button"
+                    :disabled="day.disabled"
+                    :data-size="size"
+                    :data-band="day.band"
+                    :data-selected="day.selected || null"
+                    :data-today="day.today || null"
+                    :data-outside="day.outside || null"
+                    :data-disabled="day.disabled || null"
+                    data-testid="input-calendar__day"
+                    :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
+                    class="flex items-center justify-center text-[var(--text-default)] transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-[var(--shape-elements)] data-[band=none]:hover:bg-[var(--bg-hover)] data-[band=single]:rounded-[var(--shape-elements)] data-[band=single]:bg-[var(--secondary-selected)] data-[band=single]:text-[var(--secondary-contrast)] data-[band=start]:rounded-l-[var(--shape-elements)] data-[band=start]:bg-[var(--secondary-selected)] data-[band=start]:text-[var(--secondary-contrast)] data-[band=end]:rounded-r-[var(--shape-elements)] data-[band=end]:bg-[var(--secondary-selected)] data-[band=end]:text-[var(--secondary-contrast)] data-[band=middle]:bg-[var(--bg-selected)] data-[outside]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)] motion-reduce:transition-none"
+                    @click="selectDay(day)"
+                    @keydown="onDayKeydown($event, day)"
+                  >
+                    {{ day.label }}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </div>
   </div>
 </template>
