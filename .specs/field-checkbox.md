@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7337
   node_id: 2027:7337
-checksum: 3543a99bc4a2cdb9e6a8d521d5dadafd82a451f83b7da97a1a9a45f4ef4896f7
+checksum: d9682f511857e6a1bb77bb46dead2bb2d9bf8a6246ec6160430b97b93434700e
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -22,15 +22,15 @@ Inline checkbox field with leading control, label, optional description, and opt
 
 | Prop          | Type      | Default     | Required | JSDoc                                             |
 | ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
-| `modelValue`  | `boolean` | `undefined` | no       | Selected value for v-model.                       |
-| `trueValue`   | `boolean` | `true`      | no       | Value emitted when checked.                       |
-| `falseValue`  | `boolean` | `false`     | no       | Value emitted when unchecked.                     |
-| `name`        | `string`  | `undefined` | no       | HTML name for form and vee-validate integration.  |
-| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
-| `inputId`     | `string`  | `undefined` | no       | id for the native input; links label to control.  |
-| `label`       | `string`  | `''`        | no       | Primary label text.                               |
-| `description` | `string`  | `''`        | no       | Secondary description.                            |
-| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
+| `modelValue`  | `boolean` | `undefined` | false    | Selected value for v-model.                       |
+| `trueValue`   | `boolean` | `true`      | false    | Value emitted when checked.                       |
+| `falseValue`  | `boolean` | `false`     | false    | Value emitted when unchecked.                     |
+| `name`        | `string`  | `undefined` | false    | HTML name for form and vee-validate integration.  |
+| `disabled`    | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens. |
+| `inputId`     | `string`  | `undefined` | false    | id for the native input; links label to control.  |
+| `label`       | `string`  | `''`        | false    | Primary label text.                               |
+| `description` | `string`  | `''`        | false    | Secondary description.                            |
+| `helperText`  | `string`  | `''`        | false    | Helper badge text shown when disabled.            |
 
 ## Events
 

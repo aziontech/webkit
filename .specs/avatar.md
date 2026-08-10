@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 74fceae77f52567d4f07658d096dbb34a6fbd36121eef949325809f5e96752e4
+checksum: 13f4fed9da5a838e97b034a2878dc931a235f7c30add98f6a3c0ba45b390b993
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -21,12 +21,12 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `src` | `string` | `undefined` | no | Image URL. When set, renders a photo and takes precedence over label and icon. |
-| `alt` | `string` | `undefined` | no | Accessible description for the image. Use when `src` is set. |
-| `label` | `string` | `undefined` | no | Initials shown when no image (normalized to two uppercase characters). |
-| `icon` | `string` | `undefined` | no | Icon class for the fallback when no image or label (PrimeIcons class). |
-| `kind` | `AvatarKind` | `undefined` | no | Visual shape of the avatar container. |
-| `size` | `AvatarSize` | `undefined` | no | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
+| `src` | `string` | `undefined` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
+| `alt` | `string` | `undefined` | false | Accessible description for the image. Use when `src` is set. |
+| `label` | `string` | `undefined` | false | Initials shown when no image (normalized to two uppercase characters). |
+| `icon` | `string` | `undefined` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
+| `kind` | `AvatarKind` | `undefined` | false | Visual shape of the avatar container. |
+| `size` | `AvatarSize` | `undefined` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 
 ## Events
 

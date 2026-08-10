@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: 2a688a8859634bc9d7aff56cd34b161effd8016f0b88259d53388ba6e1b67684
+checksum: 5b8184d8032f2b8b7d0ddb59fb16f70aac6340c048c5e0ec3cea229e73fa4304
 created: 2026-06-23
 last_updated: 2026-06-25
 ---
@@ -53,9 +53,9 @@ import Badge from '@aziontech/webkit/badge'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | no | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. |
+| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | false | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. |
 
 ## Events
 

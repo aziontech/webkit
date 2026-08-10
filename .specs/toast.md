@@ -8,7 +8,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 670bbe37a3def22fe7097d343118abf9def308caac8bdf3a044167decca9fc43
+checksum: 27f692b3c2a3b73dcd3e528cbf69ed98e063a057e282bf50a994137557450efc
 created: 2026-06-23
 last_updated: 2026-07-21
 ---
@@ -147,11 +147,11 @@ The imperative API is backed by a small reactive store composable, declared here
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `position` | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `'bottom-right'` | no | Corner (or edge-center) the stack is anchored to. |
-| `duration` | `number` | `4000` | no | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
-| `max` | `number` | `3` | no | Maximum simultaneously visible toasts per corner before the rest queue behind. |
-| `expand` | `boolean` | `false` | no | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek. |
-| `closable` | `boolean` | `false` | no | Show an always-visible close control on every toast; a per-toast `closable` option overrides it. |
+| `position` | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `'bottom-right'` | false | Corner (or edge-center) the stack is anchored to. |
+| `duration` | `number` | `4000` | false | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
+| `max` | `number` | `3` | false | Maximum simultaneously visible toasts per corner before the rest queue behind. |
+| `expand` | `boolean` | `false` | false | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek. |
+| `closable` | `boolean` | `false` | false | Show an always-visible close control on every toast; a per-toast `closable` option overrides it. |
 
 ## Events
 

@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: addaa6891fe2b9e523db05649c4828396a179c4ec2b19b672ac494296000a371
+checksum: 9cfa7dd5eee2ea794fb4b9d7568d9b46c8c016aaf0c7620f00d204e0def01d84
 created: 2026-06-25
 last_updated: 2026-07-30
 ---
@@ -84,25 +84,25 @@ import CalendarClear from '@aziontech/webkit/calendar-clear'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `Date \| null \| CalendarRange` | `null` | no | Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false). |
-| `mode` | `'single' \| 'range'` | `'range'` | no | Selection mode. Single picks one date; range picks a start and end date. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects the trigger, day-cell hit-area, and typography. |
-| `min` | `Date \| undefined` | `undefined` | no | Earliest selectable date; earlier days render disabled. |
-| `max` | `Date \| undefined` | `undefined` | no | Latest selectable date; later days render disabled. |
-| `disabled` | `boolean` | `false` | no | Disables the trigger, grid, and all controls, applying disabled tokens. |
-| `open` | `boolean \| undefined` | `undefined` | no | Controlled open state of the popover. Use with v-model:open; omit for uncontrolled. |
-| `placeholder` | `string` | `'Select a Date Range'` | no | Trigger text shown when there is no selection. |
-| `presets` | `CalendarPresetItem[]` | `[]` | no | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
-| `showFields` | `boolean` | `true` | no | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered. |
-| `showTime` | `boolean` | `false` | no | Shows Start/End time fields alongside the date fields. |
-| `showTimezone` | `boolean` | `false` | no | Shows the timezone selector below the fields. |
-| `timezone` | `string` | `''` | no | Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone. |
-| `timezones` | `string[]` | `[]` | no | Timezone options for the selector; empty falls back to a curated list derived from `Intl`. |
-| `horizontal` | `boolean` | `false` | no | Lays the fields/apply column beside the calendar instead of below it. |
-| `clearable` | `boolean` | `false` | no | Shows a clear control on the trigger that empties the committed selection. |
-| `showApply` | `boolean` | `true` | no | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. |
-| `period` | `boolean` | `false` | no | Enables the "Select Period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`. |
-| `split` | `boolean` | `false` | no | Renders the trigger as a split control with a separate chevron affordance. |
+| `modelValue` | `Date \| null \| CalendarRange` | `null` | false | Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false). |
+| `mode` | `'single' \| 'range'` | `'range'` | false | Selection mode. Single picks one date; range picks a start and end date. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects the trigger, day-cell hit-area, and typography. |
+| `min` | `Date \| undefined` | `undefined` | false | Earliest selectable date; earlier days render disabled. |
+| `max` | `Date \| undefined` | `undefined` | false | Latest selectable date; later days render disabled. |
+| `disabled` | `boolean` | `false` | false | Disables the trigger, grid, and all controls, applying disabled tokens. |
+| `open` | `boolean \| undefined` | `undefined` | false | Controlled open state of the popover. Use with v-model:open; omit for uncontrolled. |
+| `placeholder` | `string` | `'Select a Date Range'` | false | Trigger text shown when there is no selection. |
+| `presets` | `CalendarPresetItem[]` | `[]` | false | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
+| `showFields` | `boolean` | `true` | false | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered. |
+| `showTime` | `boolean` | `false` | false | Shows Start/End time fields alongside the date fields. |
+| `showTimezone` | `boolean` | `false` | false | Shows the timezone selector below the fields. |
+| `timezone` | `string` | `''` | false | Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone. |
+| `timezones` | `string[]` | `[]` | false | Timezone options for the selector; empty falls back to a curated list derived from `Intl`. |
+| `horizontal` | `boolean` | `false` | false | Lays the fields/apply column beside the calendar instead of below it. |
+| `clearable` | `boolean` | `false` | false | Shows a clear control on the trigger that empties the committed selection. |
+| `showApply` | `boolean` | `true` | false | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. |
+| `period` | `boolean` | `false` | false | Enables the "Select Period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`. |
+| `split` | `boolean` | `false` | false | Renders the trigger as a split control with a separate chevron affordance. |
 
 ## Events
 

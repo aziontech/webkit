@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 642d52b21ba6a756a0594f155282d0d58514bf6b75d6d6d28bbfdac78cf1a7a2
+checksum: 426124e1dca83c114d9bb44e713f87c7db802fe30281d6d4f27fa90dd202a86b
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -18,20 +18,20 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `planTitle` | `string` | `'Pro'` | no | plan Title. |
-| `description` | `string` | `''` | no | description. |
-| `pricingDetails` | `string` | `''` | no | pricing Details. |
-| `showPricingDetails` | `boolean` | `true` | no | show Pricing Details. |
-| `showTag` | `boolean` | `false` | no | show Tag. |
-| `tagLabel` | `string` | `'Popular'` | no | tag Label. |
-| `slotPosition` | `'bottom' | 'middle'` | `'bottom'` | no | slot Position. |
-| `kind` | `'contained' | 'transparent'` | `'contained'` | no | card Style. |
-| `value` | `string` | `'20'` | no | value. |
-| `prefix` | `string` | `'$'` | no | prefix. |
-| `suffix` | `string` | `'per month'` | no | suffix. |
-| `showPrefix` | `boolean` | `true` | no | show Prefix. |
-| `showSuffix` | `boolean` | `true` | no | show Suffix. |
-| `actionLabel` | `string` | `'Label'` | no | action Label. |
+| `planTitle` | `string` | `'Pro'` | false | plan Title. |
+| `description` | `string` | `''` | false | description. |
+| `pricingDetails` | `string` | `''` | false | pricing Details. |
+| `showPricingDetails` | `boolean` | `true` | false | show Pricing Details. |
+| `showTag` | `boolean` | `false` | false | show Tag. |
+| `tagLabel` | `string` | `'Popular'` | false | tag Label. |
+| `slotPosition` | `'bottom' \| 'middle'` | `'bottom'` | false | slot Position. |
+| `kind` | `'contained' \| 'transparent'` | `'contained'` | false | card Style. |
+| `value` | `string` | `'20'` | false | value. |
+| `prefix` | `string` | `'$'` | false | prefix. |
+| `suffix` | `string` | `'per month'` | false | suffix. |
+| `showPrefix` | `boolean` | `true` | false | show Prefix. |
+| `showSuffix` | `boolean` | `true` | false | show Suffix. |
+| `actionLabel` | `string` | `'Label'` | false | action Label. |
 
 ## Events
 

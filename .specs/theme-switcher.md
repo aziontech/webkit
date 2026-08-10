@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 1b303aaea45993230b0989f72fb5d9435a1ad62adbe8223165f52b2b50175e41
+checksum: e63b37d81836c498473d2036f253903a1491144b562aeb30b5110cfd0fabf22e
 created: 2026-07-13
 last_updated: 2026-07-13
 ---
@@ -37,9 +37,9 @@ const theme = ref('system')
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `'system' \| 'dark' \| 'light'` | `'system'` | no | Selected theme mode. Bind with `v-model:value`. |
-| `disabled` | `boolean` | `false` | no | Disables the whole control and applies disabled tokens. |
-| `ariaLabel` | `string` | `'Theme'` | no | Accessible name for the icon-only segmented group. |
+| `value` | `'system' \| 'dark' \| 'light'` | `'system'` | false | Selected theme mode. Bind with `v-model:value`. |
+| `disabled` | `boolean` | `false` | false | Disables the whole control and applies disabled tokens. |
+| `ariaLabel` | `string` | `'Theme'` | false | Accessible name for the icon-only segmented group. |
 
 ## Events
 

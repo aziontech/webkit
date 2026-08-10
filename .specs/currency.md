@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: bc3ef58b520999cd94fbffc953c987efe6795be01964da43570cad4241761097
+checksum: 53813253abbcfd426ec53c0109238dc88bd9dba0f8409df37614844b249d6a52
 created: 2026-05-22
 last_updated: 2026-05-27
 ---
@@ -18,10 +18,10 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `''` | no | value. |
-| `prefix` | `string` | `'$'` | no | prefix. |
-| `suffix` | `string` | `''` | no | suffix. |
-| `size` | `'small' | 'large'` | `'small'` | no | Size token; affects height, padding, and typography. |
+| `value` | `string` | `''` | false | value. |
+| `prefix` | `string` | `'$'` | false | prefix. |
+| `suffix` | `string` | `''` | false | suffix. |
+| `size` | `'small' \| 'large'` | `'small'` | false | Size token; affects height, padding, and typography. |
 
 ## Events
 

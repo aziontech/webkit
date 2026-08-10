@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: approved
 spec_version: 2
-checksum: 586d5d529dea2735c267b54e5aa3d183beeabd6eff04142b9792a13504f3e79c
+checksum: ce0709f80b255bc6f602f95eccbd823179248bbde27b7bd616fe2d1a6d795f74
 created: 2026-06-25
 last_updated: 2026-06-30
 ---
@@ -85,10 +85,10 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `[unknown[], unknown[]]` | `() => [[], []]` | no | Bound pair of lists as `[sourceItems, targetItems]` (v-model). |
-| `dataKey` | `string` | `''` | no | Item field that uniquely identifies a record; enables selection tracking and stable keys. |
-| `disabled` | `boolean` | `false` | no | Disables all selection and move controls and applies disabled tokens. |
-| `moveOnDoubleClick` | `boolean` | `true` | no | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
+| `modelValue` | `[unknown[], unknown[]]` | `() => [[], []]` | false | Bound pair of lists as `[sourceItems, targetItems]` (v-model). |
+| `dataKey` | `string` | `''` | false | Item field that uniquely identifies a record; enables selection tracking and stable keys. |
+| `disabled` | `boolean` | `false` | false | Disables all selection and move controls and applies disabled tokens. |
+| `moveOnDoubleClick` | `boolean` | `true` | false | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
 
 ## Events
 

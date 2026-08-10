@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 535a230037a41361418658625d1e9364b09fa090856f75d68bf18f8974f30b17
+checksum: 728bbd01a7023fbaeabf43380bb46a87440521f8eca7b39e4dd37618646c424e
 created: 2026-05-25
 last_updated: 2026-07-30
 ---
@@ -29,7 +29,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `items` | `BreadcrumbItemData[]` | `() => []` | no | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
+| `items` | `BreadcrumbItemData[]` | `() => []` | false | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
 
 `BreadcrumbItemData`: `{ label: string; href?: string; showIcon?: boolean; icon?: string; current?: boolean }`
 

@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 27bebab1033431270b3433f3c7bb150e547285b6e5dfcf20c7121487487e70fc
+checksum: ac8437bfa7867ea9f395f783c4c6635361be44fbdb7b6cbd7d5ea03863928f28
 created: 2026-05-22
 last_updated: 2026-07-31
 ---
@@ -37,10 +37,10 @@ const enabled = ref(false)
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `boolean` | `false` | no | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant. |
-| `kind` | `'default' \| 'privacy'` | `'default'` | no | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
-| `focused` | `boolean` | `false` | no | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies the disabled tokens. |
+| `modelValue` | `boolean` | `false` | false | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant. |
+| `kind` | `'default' \| 'privacy'` | `'default'` | false | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
+| `focused` | `boolean` | `false` | false | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies the disabled tokens. |
 
 ## Events
 

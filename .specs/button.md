@@ -4,7 +4,7 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 44aeadc217e8ff83c52050585dd47bc0cd2b18d6371b791e0e583584cfd89ff2
+checksum: 3cbfa4db22c67d61b7d022e6cada4ca3e77ec811aa9bd21e7d40ea6c7847074d
 created: 2026-05-22
 last_updated: 2026-05-29
 ---
@@ -18,14 +18,14 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `—` | yes | Visible label text. Use `IconButton` for icon-only controls. |
-| `kind` | `'primary' | 'secondary' | 'outlined' | 'text' | 'danger'` | `'primary'` | no | Visual variant. |
-| `size` | `'small' | 'medium' | 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
-| `icon` | `string` | `''` | no | PrimeIcons class for the leading/trailing icon. |
-| `href` | `string` | `''` | no | When set, renders as a link (`<a>`). |
-| `target` | `'_blank' | '_self'` | `'_self'` | no | Link target when `href` is set. |
+| `label` | `string` | `—` | true | Visible label text. Use `IconButton` for icon-only controls. |
+| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'text' \| 'danger'` | `'primary'` | false | Visual variant. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
+| `icon` | `string` | `''` | false | PrimeIcons class for the leading/trailing icon. |
+| `href` | `string` | `''` | false | When set, renders as a link (`<a>`). |
+| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 
 ## Events
 

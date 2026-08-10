@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: fb9dd7fa89d19dc40dffb4047f206e89720c02f2d51895bb322f1e65415a58bd
+checksum: f9b00aaa1d27f16f6d41bb47cba3363e5eb00cccdd29c05625d4321e3f425b80
 created: 2026-06-25
 last_updated: 2026-08-04
 ---
@@ -86,7 +86,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `align` | `'start' \\| 'center'` | `'start'` | no | Vertical alignment of nodes within the diagram. |
+| `align` | `'start' \\| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
 
 ## Events
 

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 7cf8ce287f2bb6405288f21b6b7adbe5dc0c42168771fc45860bcc35db23fa73
+checksum: 5c704379efc3736a1e965f972767b47e50dbe3dc8dc1da27c0e631602e8103d8
 created: 2026-05-22
 last_updated: 2026-08-06
 ---
@@ -268,14 +268,14 @@ between them is the ring-offset surface below.
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `ariaLabel` | `string` | `'Sidebar'` | no | Accessible name for the navigation landmark. |
-| `resizable` | `boolean` | `false` | no | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail. |
-| `collapsible` | `boolean` | `false` | no | Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back. |
-| `minWidthToken` | `string` | `'--container-3xs'` | no | Theme container token the sized width is clamped up to, read off the document at runtime. |
-| `maxWidthToken` | `string` | `'--container-sm'` | no | Theme container token the sized width is clamped down to, read off the document at runtime. |
-| `collapseAriaLabel` | `string` | `'Collapse sidebar'` | no | Accessible name for the collapse trigger. |
-| `expandAriaLabel` | `string` | `'Expand sidebar'` | no | Accessible name for the control and the grab bar that bring a collapsed rail back. |
-| `resizeAriaLabel` | `string` | `'Resize sidebar'` | no | Accessible name for the drag handle separator. |
+| `ariaLabel` | `string` | `'Sidebar'` | false | Accessible name for the navigation landmark. |
+| `resizable` | `boolean` | `false` | false | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail. |
+| `collapsible` | `boolean` | `false` | false | Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back. |
+| `minWidthToken` | `string` | `'--container-3xs'` | false | Theme container token the sized width is clamped up to, read off the document at runtime. |
+| `maxWidthToken` | `string` | `'--container-sm'` | false | Theme container token the sized width is clamped down to, read off the document at runtime. |
+| `collapseAriaLabel` | `string` | `'Collapse sidebar'` | false | Accessible name for the collapse trigger. |
+| `expandAriaLabel` | `string` | `'Expand sidebar'` | false | Accessible name for the control and the grab bar that bring a collapsed rail back. |
+| `resizeAriaLabel` | `string` | `'Resize sidebar'` | false | Accessible name for the drag handle separator. |
 
 The root also owns two models:
 

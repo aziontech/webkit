@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: e7026b0d39e726dcde33b5e89d71f09740091b091eeba4f79c1731ef41c84b8b
+checksum: ed48d496a5f7c61b7d4c353fd4985517567664a6cae6f9a770f245ecf4922ef4
 created: 2026-06-30
 last_updated: 2026-07-05
 ---
@@ -45,14 +45,14 @@ const items = [
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Visible label text on the primary command button. |
-| `icon` | `string` | `''` | no | PrimeIcons class for the primary button's leading icon. |
-| `model` | `SplitButtonItem[]` | `[]` | no | Actions rendered as rows in the attached overlay menu. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | no | Visual variant applied to both joined segments. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | no | Disables both segments and prevents the menu from opening. |
-| `loading` | `boolean` | `false` | no | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. |
-| `updateLabelOnSelect` | `boolean` | `false` | no | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
+| `label` | `string` | `''` | false | Visible label text on the primary command button. |
+| `icon` | `string` | `''` | false | PrimeIcons class for the primary button's leading icon. |
+| `model` | `SplitButtonItem[]` | `[]` | false | Actions rendered as rows in the attached overlay menu. |
+| `kind` | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false | Visual variant applied to both joined segments. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
+| `disabled` | `boolean` | `false` | false | Disables both segments and prevents the menu from opening. |
+| `loading` | `boolean` | `false` | false | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. |
+| `updateLabelOnSelect` | `boolean` | `false` | false | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
 
 `SplitButtonItem` is the menu-action shape: `{ label: string; value?: string; icon?: string; disabled?: boolean }`. When `value` is omitted, `label` identifies the action.
 

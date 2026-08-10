@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: ce9065f011c9ae77d93365dc2644d6b1bd82e7d8c5482147652adec1c45a2481
+checksum: 626f2f6487602359a433351e7f221cf119c3305354c27c19332068f49e42adea
 created: 2026-06-23
 last_updated: 2026-07-03
 ---
@@ -59,13 +59,13 @@ const value = ref('')
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Bound value (v-model). |
-| `placeholder` | `string` | `''` | no | Placeholder shown when the field is empty. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Marks the field as read-only; keeps focus styling, blocks edits. |
-| `invalid` | `boolean` | `false` | no | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
-| `required` | `boolean` | `false` | no | Marks the field as required and sets `aria-required`. |
-| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | no | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
+| `modelValue` | `string` | `''` | false | Bound value (v-model). |
+| `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `readonly` | `boolean` | `false` | false | Marks the field as read-only; keeps focus styling, blocks edits. |
+| `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
+| `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
+| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
 
 ## Events
 

@@ -160,16 +160,20 @@ export default Object.assign(Root, { Part: RootPart })
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Text content rendered inside the component. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'primary'` | no | Visual variant. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height, padding, typography. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
+| `label` | `string` | `''` | false | Text content rendered inside the component. |
+| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'primary'` | false | Visual variant. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, typography. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 <!-- Rules enforced by spec-validator:
      - kebab-case prop names; no `is`/`has` prefix on booleans.
      - Visual variants always named `kind`. Sizes always named `size`.
      - Every prop has a JSDoc one-liner; no empty cells.
      - Types are union literals or primitives; no `any`.
+     - Required is `true` / `false` — never `yes` / `no`, so the column reads as the
+       boolean it is, like the Type and Default columns beside it.
+     - Escape every `|` inside a union type (`'a' \| 'b'`), or the pipe closes the cell
+       and the row renders with extra columns.
      - Defaults — pick the value that makes rendering predictable, never the word "undefined":
          • An optional string holding renderable text (`label`, `value`, `placeholder`,
            `description`, `icon`, `href`) defaults to `''` (empty string).

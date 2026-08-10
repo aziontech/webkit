@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: e62845a1427b073406d90b13110cc5d38a20b9025b7a8cd2d043b20db6c2cd04
+checksum: 8b386405cb685ad4eafbf981fa27631dff0f7b1ae55f2bcca6ab05b90df18d89
 created: 2026-06-23
 last_updated: 2026-07-28
 ---
@@ -35,10 +35,10 @@ import Skeleton from '@aziontech/webkit/skeleton'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `'shape' \| 'circle'` | `'shape'` | no | Geometry: a rounded rectangular block (`shape`) or a circle. |
-| `width` | `string` | `'100%'` | no | CSS width (any length). |
-| `height` | `string` | `'1rem'` | no | CSS height (any length); for a circle, set equal to `width`. |
-| `animated` | `boolean` | `true` | no | Shimmer while loading; suppressed under reduced motion. |
+| `kind` | `'shape' \| 'circle'` | `'shape'` | false | Geometry: a rounded rectangular block (`shape`) or a circle. |
+| `width` | `string` | `'100%'` | false | CSS width (any length). |
+| `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
+| `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
 
 ## Events
 

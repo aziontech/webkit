@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 71c9e497979cb35460c5bbc6c42d632640caefda8eb5bcf0c01888fcd7e00dc1
+checksum: 54a5c6ef9f6dae107cf3fd0ba4bb865e493649c8b44d984dc15a1d771c5cf98a
 created: 2026-05-23
 last_updated: 2026-06-23
 ---
@@ -29,7 +29,7 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `ariaLabel` | `string` | `'Global header'` | no | Accessible name for the header landmark. |
+| `ariaLabel` | `string` | `'Global header'` | false | Accessible name for the header landmark. |
 
 ## Events
 

@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 962a702cfb26138d31701e2812ad7f9ab4b8de466920ed3edadaad4acb51fbcc
+checksum: d20ace4b300432fc06d3f523751f6e93678f20c6f695a582838f80046729cbae
 created: 2026-05-22
 last_updated: 2026-06-25
 ---
@@ -32,15 +32,15 @@ const checked = defineModel({ default: false })
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `unknown` | `undefined` | no | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
-| `value` | `unknown` | `undefined` | no | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
-| `binary` | `boolean` | `false` | no | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
-| `indeterminate` | `boolean` | `false` | no | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but cannot change via interaction. |
-| `inputId` | `string` | `''` | no | Forwarded to the inner `<input id>` for label association. |
-| `name` | `string` | `''` | no | HTML name for form submission. |
-| `tabindex` | `number` | `0` | no | Forwarded to the inner `<input tabindex>`. |
+| `modelValue` | `unknown` | `undefined` | false | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
+| `value` | `unknown` | `undefined` | false | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
+| `binary` | `boolean` | `false` | false | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
+| `indeterminate` | `boolean` | `false` | false | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but cannot change via interaction. |
+| `inputId` | `string` | `''` | false | Forwarded to the inner `<input id>` for label association. |
+| `name` | `string` | `''` | false | HTML name for form submission. |
+| `tabindex` | `number` | `0` | false | Forwarded to the inner `<input tabindex>`. |
 
 ## Events
 

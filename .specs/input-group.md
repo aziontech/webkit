@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 88d5a3a033269ac9563f6f96465e89e5877a3ac7e2a9c637f8cd939f072305fe
+checksum: 58464b4739d3177f09f8312f632be77da24509d8f97dc237c2f855427b73617a
 created: 2026-07-01
 last_updated: 2026-07-22
 ---
@@ -107,10 +107,10 @@ Root props:
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned. |
-| `invalid` | `boolean` | `false` | no | Renders the error border and sets `aria-invalid="true"` on the root. |
-| `required` | `boolean` | `false` | no | Renders the required (warning) border and sets `aria-required="true"` on the root. |
-| `disabled` | `boolean` | `false` | no | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `InputText`). |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned. |
+| `invalid` | `boolean` | `false` | false | Renders the error border and sets `aria-invalid="true"` on the root. |
+| `required` | `boolean` | `false` | false | Renders the required (warning) border and sets `aria-required="true"` on the root. |
+| `disabled` | `boolean` | `false` | false | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `InputText`). |
 
 `InputGroup.Addon` props: _none_ — the sub-component is a pure presentational span whose content is the default slot. `v-bind="$attrs"` on its root lets the consumer pass `data-testid`, `aria-hidden`, `class` (merged via `cn`), etc.
 

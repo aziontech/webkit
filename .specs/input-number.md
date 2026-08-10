@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 9e658eafe803f12abc68408a9c67e7c61946636694e4d3aba5858904ceb64260
+checksum: 5c2c74a877efdde66d8cf504299f002b4ffd3e1c0e4e704029754f444e2d1958
 created: 2026-06-22
 last_updated: 2026-06-22
 ---
@@ -55,17 +55,17 @@ const value = ref(1)
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `number` | `0` | no | v-model value (always numeric; cleared input falls back to `min ?? 0`). |
-| `placeholder` | `string` | `''` | no | Text shown when the input is empty. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Marks the field as read-only; spinner buttons are inert. |
-| `invalid` | `boolean` | `false` | no | Applies the invalid border/ring tokens. |
-| `required` | `boolean` | `false` | no | Marks the field as required for assistive tech. |
-| `min` | `number \| undefined` | `undefined` | no | Minimum allowed value; spinner stops at this bound. |
-| `max` | `number \| undefined` | `undefined` | no | Maximum allowed value; spinner stops at this bound. |
-| `step` | `number` | `1` | no | Increment used by the spinner buttons and arrow keys. |
-| `showButtons` | `boolean` | `true` | no | Renders the chevron-up/chevron-down spinner controls. |
+| `modelValue` | `number` | `0` | false | v-model value (always numeric; cleared input falls back to `min ?? 0`). |
+| `placeholder` | `string` | `''` | false | Text shown when the input is empty. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects height, padding, and typography. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `readonly` | `boolean` | `false` | false | Marks the field as read-only; spinner buttons are inert. |
+| `invalid` | `boolean` | `false` | false | Applies the invalid border/ring tokens. |
+| `required` | `boolean` | `false` | false | Marks the field as required for assistive tech. |
+| `min` | `number \| undefined` | `undefined` | false | Minimum allowed value; spinner stops at this bound. |
+| `max` | `number \| undefined` | `undefined` | false | Maximum allowed value; spinner stops at this bound. |
+| `step` | `number` | `1` | false | Increment used by the spinner buttons and arrow keys. |
+| `showButtons` | `boolean` | `true` | false | Renders the chevron-up/chevron-down spinner controls. |
 
 ## Events
 

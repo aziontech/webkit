@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
   node_id: 479:886
-checksum: 1c3b7ce48e64152edaa8661b91bbc11a6c04e7b6d4e0d8ee44d5f2918f8b7d90
+checksum: 7e8dd444b7da361f73be212a825b4c051ce4424b161cba0321f113107f892692
 created: 2026-06-25
 last_updated: 2026-06-30
 ---
@@ -36,8 +36,8 @@ import Divider from '@aziontech/webkit/divider'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | no | Layout axis of the separator line. |
-| `label` | `string` | `''` | no | Fallback centered text shown when the default slot is empty. |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false | Layout axis of the separator line. |
+| `label` | `string` | `''` | false | Fallback centered text shown when the default slot is empty. |
 
 ## Events
 
