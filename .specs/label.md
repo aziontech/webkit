@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: 46d15ae72d0f92c4197f0d9827edbf0f3f8e5a6c6724b115e053bb253fbcd65c
+checksum: 9c8c2ce8e1bda9a5c7d2af95001fdc7073aa206b5f5a55c3910f1125258b3f45
 created: 2026-06-15
 last_updated: 2026-08-10
 ---
@@ -41,9 +41,9 @@ Form-field label that pairs descriptive text with an optional required indicator
 
 | Prop       | Type      | Default | Required | JSDoc                                                                                                                                                                            |
 | ---------- | --------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`  | `''`    | no       | Fallback text when the default slot is empty.                                                                                                                                    |
-| `required` | `boolean` | `false` | no       | Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; "(Required)" inherits `var(--text-muted)`. |
-| `hint`     | `string`  | `''`    | no       | Short explanation appended as a `Hint` glyph that reveals it on hover or focus. Empty renders no glyph.                                                                          |
+| `label`    | `string`  | `''`    | false    | Fallback text when the default slot is empty.                                                                                                                                    |
+| `required` | `boolean` | `false` | false    | Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; "(Required)" inherits `var(--text-muted)`. |
+| `hint`     | `string`  | `''`    | false    | Short explanation appended as a `Hint` glyph that reveals it on hover or focus. Empty renders no glyph.                                                                          |
 
 ## Events
 

@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 9b4d33692c9e9ecdd8751688f20258864df9ea0e7eb0572238abdf11701e3091
+checksum: 3a1864aa7aab1536ab016d700899fba5e7d691e9455a171bc66f96331dd15c47
 created: 2026-06-30
 last_updated: 2026-07-22
 ---
@@ -138,12 +138,12 @@ export default Object.assign(Popover, {
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | no | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space. |
-| `offset` | `number` | `4` | no | Pixel gap between the trigger and the panel. |
-| `disabled` | `boolean` | `false` | no | Prevents the trigger from opening the panel and applies disabled tokens. |
-| `width` | `'small' \| 'medium' \| 'large'` | `undefined` | no | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
-| `dismissible` | `boolean` | `true` | no | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
+| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
+| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space. |
+| `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
+| `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
+| `width` | `'small' \| 'medium' \| 'large'` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
+| `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
 
 ## Events
 

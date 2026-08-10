@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: 6bf5184525e5cdbac948cf571b04d67c496d0968a2765908ca6d83bd14184c52
+checksum: cd1c2d8be58133cabc3e908c3e07c4d0b6b045549aec4b94128e778748c00e2f
 created: 2026-06-01
 last_updated: 2026-06-01
 ---
@@ -38,13 +38,13 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 | Prop       | Type                  | Default                 | Required | JSDoc                                             |
 | ---------- | --------------------- | ----------------------- | -------- | ------------------------------------------------- |
-| `label`    | `string`              | `'Learn More'`          | no       | Visible label rendered inside the control.        |
-| `size`     | `'large' \| 'medium'` | `'large'`               | no       | Size token; affects height, gap, and typography.  |
-| `disabled` | `boolean`             | `false`                 | no       | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean`             | `true`                  | no       | When true, renders the trailing icon.             |
-| `icon`     | `string`              | `'pi pi-external-link'` | no       | PrimeIcons class for the trailing icon.           |
-| `href`     | `string`              | `'#'`                   | no       | Destination URL for the anchor.                   |
-| `target`   | `'_blank' \| '_self'` | `'_self'`               | no       | Link target when navigating.                      |
+| `label`    | `string`              | `'Learn More'`          | false    | Visible label rendered inside the control.        |
+| `size`     | `'large' \| 'medium'` | `'large'`               | false    | Size token; affects height, gap, and typography.  |
+| `disabled` | `boolean`             | `false`                 | false    | Disables interaction and applies disabled tokens. |
+| `showIcon` | `boolean`             | `true`                  | false    | When true, renders the trailing icon.             |
+| `icon`     | `string`              | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.           |
+| `href`     | `string`              | `'#'`                   | false    | Destination URL for the anchor.                   |
+| `target`   | `'_blank' \| '_self'` | `'_self'`               | false    | Link target when navigating.                      |
 
 ## Events
 

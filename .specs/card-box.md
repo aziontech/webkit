@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 39ea8f907e53e6cfd3b69bbab8d7a27560a20128daafe96fd0a9ecb78ec563e3
+checksum: 1afca6d16383619faaefccea6da1ea7bc06d94701556d49d41930593f5b8165f
 created: 2026-05-22
 last_updated: 2026-07-13
 ---
@@ -21,8 +21,8 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `title` | `string` | `undefined` | no | Heading rendered in the header when the `header` slot is empty. |
-| `padded` | `boolean` | `true` | no | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
+| `title` | `string` | `undefined` | false | Heading rendered in the header when the `header` slot is empty. |
+| `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
 
 ## Events
 

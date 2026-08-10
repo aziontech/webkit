@@ -4,7 +4,7 @@ category: templates
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ce43ebbbac93ae575ed0fd00fe9da31f9b4f6c2942c3d317c6abe6862beb46bd
+checksum: 8546c90ed0e1d091dbeb418443804c9678c07732b4ae031d86a245bbe0bddbd8
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -18,18 +18,18 @@ Composed template block for a product flow. Migrated from the existing implement
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `title` | `string` | `'Sign Up for a Free Account'` | no | title. |
-| `subtitle` | `string` | `'US$ 300 credit to use over 12 months` | no | subtitle. |
-| `githubLabel` | `string` | `'Continue with Github'` | no | github Label. |
-| `googleLabel` | `string` | `'Continue with Google'` | no | google Label. |
-| `emailLabel` | `string` | `'Sign Up with Work Email'` | no | email Label. |
-| `signInPrompt` | `string` | `'Already have an account?'` | no | sign In Prompt. |
-| `signInLabel` | `string` | `'Sign in'` | no | sign In Label. |
-| `termsHref` | `string` | `'#'` | no | terms Href. |
-| `privacyHref` | `string` | `'#'` | no | privacy Href. |
-| `signInHref` | `string` | `'#'` | no | sign In Href. |
-| `showGithub` | `boolean` | `true` | no | show Github. |
-| `showGoogle` | `boolean` | `true` | no | show Google. |
+| `title` | `string` | `'Sign Up for a Free Account'` | false | title. |
+| `subtitle` | `string` | `'US$ 300 credit to use over 12 months` | false | subtitle. |
+| `githubLabel` | `string` | `'Continue with Github'` | false | github Label. |
+| `googleLabel` | `string` | `'Continue with Google'` | false | google Label. |
+| `emailLabel` | `string` | `'Sign Up with Work Email'` | false | email Label. |
+| `signInPrompt` | `string` | `'Already have an account?'` | false | sign In Prompt. |
+| `signInLabel` | `string` | `'Sign in'` | false | sign In Label. |
+| `termsHref` | `string` | `'#'` | false | terms Href. |
+| `privacyHref` | `string` | `'#'` | false | privacy Href. |
+| `signInHref` | `string` | `'#'` | false | sign In Href. |
+| `showGithub` | `boolean` | `true` | false | show Github. |
+| `showGoogle` | `boolean` | `true` | false | show Google. |
 
 ## Events
 

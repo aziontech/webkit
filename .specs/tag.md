@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 83fc4738dc837a77cae2d5446cf31c0ef0b7b45477613054018eb3c2da1d9cb9
+checksum: 91e02344ced4319f14cc42fc2e3d20d42fc5e83959dd774d967de8d91c73e2a5
 created: 2026-05-22
 last_updated: 2026-07-16
 ---
@@ -53,11 +53,11 @@ import Tag from '@aziontech/webkit/tag'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `severity` | `'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'` | `'primary'` | no | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
-| `size` | `'small' | 'medium'` | `'medium'` | no | Size token; `medium` is 24px tall, `small` is 20px. |
-| `rounded` | `boolean` | `false` | no | Pill shape when true. |
-| `icon` | `string` | `'undefined'` | no | PrimeIcons class for the leading icon. |
+| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast'` | `'primary'` | false | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
+| `rounded` | `boolean` | `false` | false | Pill shape when true. |
+| `icon` | `string` | `'undefined'` | false | PrimeIcons class for the leading icon. |
 
 ## Events
 

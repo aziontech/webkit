@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: e2a414a075b671f7e056cb66a965e2a7ba8630e10ada91b9dc3d1df714e46df6
+checksum: 9e2e526036aae654e8c39898ac3ee57127f97d8e7ba6ebaccf9526628dbdd56e
 created: 2026-05-25
 last_updated: 2026-05-25
 ---
@@ -22,12 +22,12 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `'Page Name'` | no | Visible segment label. |
-| `href` | `string` | `'#'` | no | Destination when the segment is a link (ignored when `current` is true). |
-| `current` | `boolean` | `false` | no | Marks the current page (last segment); renders as span with `aria-current="page"`. |
-| `showIcon` | `boolean` | `false` | no | When true, renders a leading PrimeIcons icon before the label. |
-| `icon` | `string` | `'pi pi-box'` | no | PrimeIcons class for the leading icon when `showIcon` is true. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
+| `label` | `string` | `'Page Name'` | false | Visible segment label. |
+| `href` | `string` | `'#'` | false | Destination when the segment is a link (ignored when `current` is true). |
+| `current` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
+| `showIcon` | `boolean` | `false` | false | When true, renders a leading PrimeIcons icon before the label. |
+| `icon` | `string` | `'pi pi-box'` | false | PrimeIcons class for the leading icon when `showIcon` is true. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 ## Events
 

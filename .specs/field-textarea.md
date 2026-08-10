@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=602-890
   node_id: 602:890
-checksum: b68a18e14032ad6caf2e151303a0ce9b54e22d062f2f145e82535ed835a1ffdf
+checksum: 1995aea5abc57f81cc70442080af571cb6e2a3477310a863e72ef086cfaed353
 created: 2026-06-23
 last_updated: 2026-07-03
 ---
@@ -43,17 +43,17 @@ const value = ref('')
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the underlying Textarea. |
-| `name` | `string` | `''` | no | HTML name for the underlying textarea (form integration). |
-| `label` | `string` | `''` | no | Text rendered inside the Label. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | no | Placeholder forwarded to the Textarea. |
-| `helperText` | `string` | `''` | no | Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. |
-| `disabled` | `boolean` | `false` | no | Disables the textarea and switches the helper to `kind=disabled` (lock icon). |
-| `readonly` | `boolean` | `false` | no | Marks the textarea read-only; value is visible but not editable. Native pass-through. |
-| `required` | `boolean` | `false` | no | Adds the Required tag to the Label and sets native required + aria-required on the textarea. |
-| `invalid` | `boolean` | `false` | no | Switches the helper to `kind=invalid` and applies invalid border tokens on the textarea. |
-| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | no | Forwarded to the underlying `Textarea`; controls which axes the user can drag to resize the field. |
-| `inputId` | `string` | `''` | no | id for the native textarea; consumed by Label via `for` and by `aria-describedby` wiring. |
+| `modelValue` | `string` | `''` | false | Two-way bound value of the underlying Textarea. |
+| `name` | `string` | `''` | false | HTML name for the underlying textarea (form integration). |
+| `label` | `string` | `''` | false | Text rendered inside the Label. When empty, the label row is omitted. |
+| `placeholder` | `string` | `''` | false | Placeholder forwarded to the Textarea. |
+| `helperText` | `string` | `''` | false | Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. |
+| `disabled` | `boolean` | `false` | false | Disables the textarea and switches the helper to `kind=disabled` (lock icon). |
+| `readonly` | `boolean` | `false` | false | Marks the textarea read-only; value is visible but not editable. Native pass-through. |
+| `required` | `boolean` | `false` | false | Adds the Required tag to the Label and sets native required + aria-required on the textarea. |
+| `invalid` | `boolean` | `false` | false | Switches the helper to `kind=invalid` and applies invalid border tokens on the textarea. |
+| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Forwarded to the underlying `Textarea`; controls which axes the user can drag to resize the field. |
+| `inputId` | `string` | `''` | false | id for the native textarea; consumed by Label via `for` and by `aria-describedby` wiring. |
 
 ## Events
 

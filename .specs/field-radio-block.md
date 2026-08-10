@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7582
   node_id: 2027:7582
-checksum: 922754c76551f092961634628f4b56732ad1d053c739ea5adfd87b18be32be55
+checksum: 31946bcc23a69391153c58621eed98cdc7247df91948af2c316e1f5203b2c752
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -22,14 +22,14 @@ Card-style radio option with selected border and background. Matches Figma Field
 
 | Prop          | Type      | Default     | Required | JSDoc                                               |
 | ------------- | --------- | ----------- | -------- | --------------------------------------------------- |
-| `modelValue`  | `string`  | `undefined` | no       | Selected value for v-model.                         |
-| `value`       | `string`  | `undefined` | no       | Option value for this radio instance.               |
-| `name`        | `string`  | `undefined` | no       | HTML name shared across a mutually exclusive group. |
-| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens.   |
-| `inputId`     | `string`  | `undefined` | no       | id for the native input; links label to control.    |
-| `label`       | `string`  | `''`        | no       | Primary label text.                                 |
-| `description` | `string`  | `''`        | no       | Secondary description.                              |
-| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.              |
+| `modelValue`  | `string`  | `undefined` | false    | Selected value for v-model.                         |
+| `value`       | `string`  | `undefined` | false    | Option value for this radio instance.               |
+| `name`        | `string`  | `undefined` | false    | HTML name shared across a mutually exclusive group. |
+| `disabled`    | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
+| `inputId`     | `string`  | `undefined` | false    | id for the native input; links label to control.    |
+| `label`       | `string`  | `''`        | false    | Primary label text.                                 |
+| `description` | `string`  | `''`        | false    | Secondary description.                              |
+| `helperText`  | `string`  | `''`        | false    | Helper badge text shown when disabled.              |
 
 ## Events
 

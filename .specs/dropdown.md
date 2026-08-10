@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 40c07f6e0c4250ee48e93d29e391fa62f76d1cc1e2f21142f2fb0151fc030269
+checksum: 5e5b8382be2f30e57c783e75c91422e75b9aa0d81b3ca2742f19f47dcc0225af
 created: 2026-06-26
 last_updated: 2026-06-29
 ---
@@ -81,10 +81,10 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | no | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
-| `offset` | `number` | `4` | no | Pixel gap between the trigger and the panel. |
-| `disabled` | `boolean` | `false` | no | Prevents the trigger from opening the panel and applies disabled tokens. |
+| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
+| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
+| `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
+| `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 
 ## Events
 

@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 1315bbb87cf3ae8f8b55e81759dfb0adb2fdfff064d013f6e2753dd3c2738ab5
+checksum: 221223d1c35abb62344f3706d5d8b94c4a520275da4cb4de6d74575a80ae88ed
 created: 2026-07-23
 last_updated: 2026-07-30
 ---
@@ -133,10 +133,10 @@ packages/webkit/src/components/overlay/command-menu/
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled. |
-| `defaultOpen` | `boolean` | `false` | no | Initial open state when uncontrolled. |
-| `dismissible` | `boolean` | `true` | no | When true, backdrop click and Escape close the palette. |
-| `shortcut` | `string` | `'meta+k'` | no | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
+| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled. |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
+| `dismissible` | `boolean` | `true` | false | When true, backdrop click and Escape close the palette. |
+| `shortcut` | `string` | `'meta+k'` | false | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
 
 ## Events
 

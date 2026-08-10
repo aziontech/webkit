@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 318b9538756df8c6e9e79df6f221c6737ac2167bc716f40b7fa5c94c7cf92ae7
+checksum: 83a39d29cf000f5e962a56f945bf1977f54bee2574ad3c9a2160ef76c396971b
 created: 2026-06-01
 last_updated: 2026-07-13
 ---
@@ -33,13 +33,13 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `—` | yes | Visible label text. Required — use `IconButton` for icon-only controls. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
-| `icon` | `string` | `''` | no | PrimeIcons class for the leading icon. |
-| `href` | `string` | `''` | no | When set, renders as an anchor link. |
-| `target` | `'_blank' \| '_self'` | `'_self'` | no | Link target when `href` is set. |
+| `label` | `string` | `—` | true | Visible label text. Required — use `IconButton` for icon-only controls. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
+| `icon` | `string` | `''` | false | PrimeIcons class for the leading icon. |
+| `href` | `string` | `''` | false | When set, renders as an anchor link. |
+| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 
 ## Events
 

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3996-39125
   node_id: 3996:39125
-checksum: 0b6f8348c840d626ebf69ebf6b68e3b96a67f000e1e8ccb3f8968eceff7cd9c2
+checksum: f5ddfcfc604b8e16c05bf7b04e8056e9d94ee3ab31e19015b8eb6b531f068196
 created: 2026-05-26
 last_updated: 2026-06-30
 ---
@@ -43,18 +43,18 @@ const lines = [
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `title` | `string` | `'Congratulations!'` | no | Main success heading in the card header region. |
-| `description` | `string` | `'You just deployed a new application into'` | no | Supporting copy before the scope tag. |
-| `scope` | `string` | `'mygithub-scope'` | no | Scope label rendered in the header tag. |
-| `appName` | `string` | `'myappname'` | no | Deployed application name above the build log. |
-| `lines` | `LogViewLine[]` | `[]` | no | Build log entries passed to LogView. |
-| `stepsLabel` | `string` | `'Next Steps'` | no | Section label above the next-steps list. |
-| `steps` | `DeploySuccessStep[]` | `[]` | yes | Ordered next-step entries (title, description, icon per row). |
-| `actionLabel` | `string` | `'Manage'` | no | Primary footer button label. |
-| `visitLabel` | `string` | `'Visit'` | no | Visit link label in the card header. |
-| `visitHref` | `string` | `'#'` | no | Visit link destination URL. |
-| `showHeader` | `boolean` | `true` | no | When true, renders the top GlobalHeader bar with the brand slot. |
-| `disabled` | `boolean` | `false` | no | Disables toolbar controls and the primary action button. |
+| `title` | `string` | `'Congratulations!'` | false | Main success heading in the card header region. |
+| `description` | `string` | `'You just deployed a new application into'` | false | Supporting copy before the scope tag. |
+| `scope` | `string` | `'mygithub-scope'` | false | Scope label rendered in the header tag. |
+| `appName` | `string` | `'myappname'` | false | Deployed application name above the build log. |
+| `lines` | `LogViewLine[]` | `[]` | false | Build log entries passed to LogView. |
+| `stepsLabel` | `string` | `'Next Steps'` | false | Section label above the next-steps list. |
+| `steps` | `DeploySuccessStep[]` | `[]` | true | Ordered next-step entries (title, description, icon per row). |
+| `actionLabel` | `string` | `'Manage'` | false | Primary footer button label. |
+| `visitLabel` | `string` | `'Visit'` | false | Visit link label in the card header. |
+| `visitHref` | `string` | `'#'` | false | Visit link destination URL. |
+| `showHeader` | `boolean` | `true` | false | When true, renders the top GlobalHeader bar with the brand slot. |
+| `disabled` | `boolean` | `false` | false | Disables toolbar controls and the primary action button. |
 
 ## Events
 

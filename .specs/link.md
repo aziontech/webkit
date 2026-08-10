@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 586b493523abe743ef8e580729b51cd2884ba645894b6839fddca0eb71299380
+checksum: 2c97ad82da3d4efcf717335ed42dc9d81a9f17c45da9c5880501b69a200bcbcd
 created: 2026-05-22
 last_updated: 2026-07-22
 figma:
@@ -21,13 +21,13 @@ Helps users move between views or sections. Migrated from the existing implement
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `'Learn More'` | no | Visible label rendered inside the link. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | no | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean` | `true` | no | When true, renders the trailing icon. |
-| `icon` | `string` | `'pi pi-external-link'` | no | PrimeIcons class for the trailing icon. |
-| `href` | `string` | `'#'` | no | Destination URL for the anchor. |
-| `target` | `'_blank' \| '_self'` | `'_self'` | no | Link target when navigating. |
+| `label` | `string` | `'Learn More'` | false | Visible label rendered inside the link. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `showIcon` | `boolean` | `true` | false | When true, renders the trailing icon. |
+| `icon` | `string` | `'pi pi-external-link'` | false | PrimeIcons class for the trailing icon. |
+| `href` | `string` | `'#'` | false | Destination URL for the anchor. |
+| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
 
 ## Events
 

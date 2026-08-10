@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: db9a4812152b1aa9fc41123baebc7b3b896d9bfd06ae34caa3c3aaa6587f511c
+checksum: 6b7bf9cef80d2dccf9bc42310856eab4ee74f6836c86718939429e456f57d97a
 created: 2026-05-28
 last_updated: 2026-08-07
 ---
@@ -71,13 +71,13 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `tabs` | `CodeBlockTab[]` | `[]` | no | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
-| `value` | `string` | `undefined` | no | Controlled active tab value (`v-model:value`). |
-| `defaultValue` | `string` | `undefined` | no | Initial active tab when uncontrolled. |
-| `showLineNumbers` | `boolean` | `true` | no | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
-| `copyAriaLabel` | `string` | `'Copy code'` | no | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
-| `animateLines` | `boolean` | `false` | no | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart. |
-| `border` | `boolean` | `true` | no | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
+| `tabs` | `CodeBlockTab[]` | `[]` | false | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
+| `value` | `string` | `undefined` | false | Controlled active tab value (`v-model:value`). |
+| `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
+| `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
+| `copyAriaLabel` | `string` | `'Copy code'` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
+| `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart. |
+| `border` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
 ## Type shapes
 
@@ -85,21 +85,21 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `label` | `string` | yes | Tab label (uppercase in UI via `.text-overline-sm`). |
-| `value` | `string` | yes | Stable tab id for `v-model:value`. |
-| `code` | `string` | yes | Raw source; split on `\n` for rendering. |
-| `language` | `string` | no | Drives syntax highlighting and default file icon when `fileIcon` is omitted. |
-| `fileName` | `string` | no | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden). |
-| `fileIcon` | `string` | no | Icon name for the filename bar (PrimeIcons class, e.g. `'pi pi-file'`). Falls back to a language-derived icon when omitted. |
-| `highlightedLine` | `number` | no | 1-based line index. Applies info background + leading bar on that row (Figma: Highlighted). |
-| `lineChanges` | `CodeBlockLineChange[]` | no | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff). |
+| `label` | `string` | true | Tab label (uppercase in UI via `.text-overline-sm`). |
+| `value` | `string` | true | Stable tab id for `v-model:value`. |
+| `code` | `string` | true | Raw source; split on `\n` for rendering. |
+| `language` | `string` | false | Drives syntax highlighting and default file icon when `fileIcon` is omitted. |
+| `fileName` | `string` | false | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden). |
+| `fileIcon` | `string` | false | Icon name for the filename bar (PrimeIcons class, e.g. `'pi pi-file'`). Falls back to a language-derived icon when omitted. |
+| `highlightedLine` | `number` | false | 1-based line index. Applies info background + leading bar on that row (Figma: Highlighted). |
+| `lineChanges` | `CodeBlockLineChange[]` | false | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff). |
 
 ### `CodeBlockLineChange`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `line` | `number` | yes | 1-based line index. |
-| `change` | `'added' \| 'removed'` | yes | `added` → success row + `+` marker; `removed` → danger row + `-` marker. |
+| `line` | `number` | true | 1-based line index. |
+| `change` | `'added' \| 'removed'` | true | `added` → success row + `+` marker; `removed` → danger row + `-` marker. |
 
 ## Events
 

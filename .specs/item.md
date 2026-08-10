@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-05-24
 last_updated: 2026-05-24
-checksum: 4fd88829b0fdbeec71294d6d04b89e95cc2ab159c9bee3e0a6c04fdd0e001f05
+checksum: d588ed3d479cfb5ebe3ba9c8cfc4e02b4938f38cade6f6bc4c1ce9c68e98a4c8
 ---
 # Item — Component Spec
 
@@ -32,9 +32,9 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `'default' \| 'outline' \| 'muted' \| 'inline'` | `'default'` | no | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
-| `size` | `'small' \| 'medium'` | `'medium'` | no | Item root density (padding and gap). |
-| `asChild` | `boolean` | `false` | no | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor). |
+| `kind` | `'default' \| 'outline' \| 'muted' \| 'inline'` | `'default'` | false | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Item root density (padding and gap). |
+| `asChild` | `boolean` | `false` | false | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor). |
 
 > `ItemMedia` carries its own `kind` prop (`'default' | 'icon' | 'image'`, default `'default'`) — see the Sub-components section. It is not a root `Item` prop.
 

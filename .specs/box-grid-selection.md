@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: bb113c89d3f8f2f4162663aa2240b2152bb8492cd046cdf67895ae326f862eb6
+checksum: c6dee6430c8986bfb97f301f679cef6c4a30b4a606d04ec99f45d43f4c54ae2b
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -18,9 +18,9 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string \| number \| undefined` | `undefined` | no | Currently selected item value (v-model). |
-| `items` | `BoxGridSelectionItem[]` | `undefined` | yes | Options rendered as selectable cards; each entry must include `value` and `label`. |
-| `disabled` | `boolean` | `false` | no | Disables all options and applies disabled tokens. |
+| `modelValue` | `string \| number \| undefined` | `undefined` | false | Currently selected item value (v-model). |
+| `items` | `BoxGridSelectionItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
+| `disabled` | `boolean` | `false` | false | Disables all options and applies disabled tokens. |
 
 ## Events
 

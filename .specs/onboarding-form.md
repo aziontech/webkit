@@ -4,7 +4,7 @@ category: templates
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ecbae09da710519bb89738bbecc54ec3991c39933a450f85c1aad560660e826f
+checksum: c6c73f874d6491e31bf5840c601f591dfd22bfb720bfbd921d700a7f29de1fee
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -18,28 +18,28 @@ Centered onboarding layout for post-signup flows, wrapped in `CardBox`: plan sum
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `title` | `string` | `'Your first global deployment is seconds away'` | no | Page title above the form sections. |
-| `planLabel` | `string` | `'Plan Selected'` | no | Label above the plan summary card. |
-| `planTitle` | `string` | `'Hobby'` | no | Selected plan name in the summary card. |
-| `planPrice` | `string` | `'Free'` | no | Price badge text beside the plan title. |
-| `planDescription` | `string` | `'For professional or commercial workloads.'` | no | Supporting copy under the plan title. |
-| `changeLabel` | `string` | `'Change'` | no | Label for the plan change action button. |
-| `usageLabel` | `string` | `'How are you planning to use Azion?'` | no | Label for the usage intent grid. |
-| `usageRequired` | `boolean` | `true` | no | When true, appends a required indicator to the usage label. |
-| `usageValue` | `string \| number \| undefined` | `undefined` | no | Selected usage option (v-model). |
-| `usageItems` | `BoxGridSelectionItem[]` | `undefined` | yes | Options for `BoxGridSelection`. |
-| `fullNameLabel` | `string` | `'Your Full Name'` | no | Label for the full name field. |
-| `fullNameRequired` | `boolean` | `true` | no | When true, appends a required indicator to the full name label. |
-| `fullName` | `string` | `''` | no | Full name value (v-model). |
-| `fullNamePlaceholder` | `string` | `'John Doe'` | no | Placeholder for the full name input. |
-| `scheduleLabel` | `string` | `'Schedule an onboarding session with an Azion expert'` | no | Label for the scheduling checkbox. |
-| `scheduleOnboarding` | `boolean` | `true` | no | Whether the scheduling checkbox is checked (v-model). |
-| `continueLabel` | `string` | `'Continue'` | no | Primary submit button label. |
-| `continueDisabled` | `boolean` | `false` | no | Disables the continue button. |
-| `disabled` | `boolean` | `false` | no | Disables all interactive fields in the template. |
-| `footerPrefix` | `string` | `'Have enterprise requirements?'` | no | Footer prompt before the contact link. |
-| `footerLinkLabel` | `string` | `'Get in touch'` | no | Footer contact link label. |
-| `footerLinkHref` | `string` | `'#'` | no | Footer contact link URL. |
+| `title` | `string` | `'Your first global deployment is seconds away'` | false | Page title above the form sections. |
+| `planLabel` | `string` | `'Plan Selected'` | false | Label above the plan summary card. |
+| `planTitle` | `string` | `'Hobby'` | false | Selected plan name in the summary card. |
+| `planPrice` | `string` | `'Free'` | false | Price badge text beside the plan title. |
+| `planDescription` | `string` | `'For professional or commercial workloads.'` | false | Supporting copy under the plan title. |
+| `changeLabel` | `string` | `'Change'` | false | Label for the plan change action button. |
+| `usageLabel` | `string` | `'How are you planning to use Azion?'` | false | Label for the usage intent grid. |
+| `usageRequired` | `boolean` | `true` | false | When true, appends a required indicator to the usage label. |
+| `usageValue` | `string \| number \| undefined` | `undefined` | false | Selected usage option (v-model). |
+| `usageItems` | `BoxGridSelectionItem[]` | `undefined` | true | Options for `BoxGridSelection`. |
+| `fullNameLabel` | `string` | `'Your Full Name'` | false | Label for the full name field. |
+| `fullNameRequired` | `boolean` | `true` | false | When true, appends a required indicator to the full name label. |
+| `fullName` | `string` | `''` | false | Full name value (v-model). |
+| `fullNamePlaceholder` | `string` | `'John Doe'` | false | Placeholder for the full name input. |
+| `scheduleLabel` | `string` | `'Schedule an onboarding session with an Azion expert'` | false | Label for the scheduling checkbox. |
+| `scheduleOnboarding` | `boolean` | `true` | false | Whether the scheduling checkbox is checked (v-model). |
+| `continueLabel` | `string` | `'Continue'` | false | Primary submit button label. |
+| `continueDisabled` | `boolean` | `false` | false | Disables the continue button. |
+| `disabled` | `boolean` | `false` | false | Disables all interactive fields in the template. |
+| `footerPrefix` | `string` | `'Have enterprise requirements?'` | false | Footer prompt before the contact link. |
+| `footerLinkLabel` | `string` | `'Get in touch'` | false | Footer contact link label. |
+| `footerLinkHref` | `string` | `'#'` | false | Footer contact link URL. |
 
 ## Events
 

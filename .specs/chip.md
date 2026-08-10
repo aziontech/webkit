@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 1bf789f53760f41ceaf45b2f06d1e66a85eccc3a64cf90c670724923950c3481
+checksum: fae500ac2489e389141cd94e93fdaa715f2b5ed73221b1a70231a407b97fb57f
 created: 2026-06-23
 last_updated: 2026-07-02
 ---
@@ -54,10 +54,10 @@ import Chip from '@aziontech/webkit/chip'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `size` | `'small' \| 'medium'` | `'medium'` | no | Size token; `small` is a fixed 20px, `medium`'s height is driven by its vertical padding (~30px). |
-| `removable` | `boolean` | `false` | no | When true, renders a trailing remove button that emits `remove`. |
-| `clickable` | `boolean` | `false` | no | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
+| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a fixed 20px, `medium`'s height is driven by its vertical padding (~30px). |
+| `removable` | `boolean` | `false` | false | When true, renders a trailing remove button that emits `remove`. |
+| `clickable` | `boolean` | `false` | false | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
 
 ## Events
 

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 3e1683953676e6b78579e6452f9aeb477104d67cc6dfdad2b637053c5631f062
+checksum: 7eb084f26d57f6a7e176936035f2f2871d6b15a536ec376a60da89d1a989e712
 created: 2026-05-22
 last_updated: 2026-07-29
 ---
@@ -44,13 +44,13 @@ import Message from '@aziontech/webkit/message'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `severity` | `'info' | 'success' | 'warning' | 'danger' | 'error'` | `'info'` | no | Visual severity variant (maps Error to danger). |
-| `size` | `'small' | 'medium'` | `'medium'` | no | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
-| `label` | `string` | `''` | no | Fallback message copy when the default slot is empty. |
-| `icon` | `string` | `''` | no | PrimeIcons class override for the leading icon. |
-| `actionLabel` | `string` | `''` | no | Label for the built-in secondary action button; hidden when empty. |
-| `closable` | `boolean` | `false` | no | When true, shows a close control that dismisses the message. |
-| `life` | `number` | `0` | no | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |
+| `severity` | `'info' \| 'success' \| 'warning' \| 'danger' \| 'error'` | `'info'` | false | Visual severity variant (maps Error to danger). |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
+| `label` | `string` | `''` | false | Fallback message copy when the default slot is empty. |
+| `icon` | `string` | `''` | false | PrimeIcons class override for the leading icon. |
+| `actionLabel` | `string` | `''` | false | Label for the built-in secondary action button; hidden when empty. |
+| `closable` | `boolean` | `false` | false | When true, shows a close control that dismisses the message. |
+| `life` | `number` | `0` | false | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |
 
 ## Events
 

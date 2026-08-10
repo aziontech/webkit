@@ -4,7 +4,7 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b75434f4ce96968b5244bd34b136d1d13ab435bdcd2b81415253499bce80d06a
+checksum: 3aca1bad70f318147fa29ef5fd87bebc8fead687ef297e912e1152572ab8df33
 created: 2026-06-02
 last_updated: 2026-06-30
 ---
@@ -18,12 +18,12 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `string` | `—` | yes | Text copied to the clipboard on activation. |
-| `ariaLabel` | `string` | `'Copy'` | no | Accessible name while idle. |
-| `copiedLabel` | `string` | `'Copied'` | no | Accessible name while the copied state is shown. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | no | Visual variant forwarded to `IconButton`. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'small'` | no | Size token forwarded to `IconButton`. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
+| `value` | `string` | `—` | true | Text copied to the clipboard on activation. |
+| `ariaLabel` | `string` | `'Copy'` | false | Accessible name while idle. |
+| `copiedLabel` | `string` | `'Copied'` | false | Accessible name while the copied state is shown. |
+| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false | Visual variant forwarded to `IconButton`. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'small'` | false | Size token forwarded to `IconButton`. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 ## Events
 

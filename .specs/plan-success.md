@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/eeX71MMNcfqKHoXWemUacK/-UXE-7875--Azion-Plans?node-id=833-23321
   node_id: 833:23321
-checksum: 0ed955dd94ba8c9ce9d3a90dd024d7468b49a34c79bf9f8c4d9eabd175153090
+checksum: dfa05f2633a7c654b71af0ac95378dc855c386a7cc4cb211b21398e3881d6da9
 created: 2026-05-25
 last_updated: 2026-05-25
 ---
@@ -21,13 +21,13 @@ Full-page post-checkout success screen for the Azion Plans flow ([Figma 833:2332
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `title` | `string` | `'Your Pro Plan is now Active'` | no | Main success heading in the card header region. |
-| `description` | `string` | `'A receipt has been sent to your email for your records.'` | no | Supporting copy under the success heading. |
-| `stepsLabel` | `string` | `'Next Steps'` | no | Section label above the numbered steps list. |
-| `steps` | `PlanSuccessStep[]` | `undefined` | yes | Ordered next-step entries (title + description per row). |
-| `actionLabel` | `string` | `'Start deploying'` | no | Primary footer button label. |
-| `showHeader` | `boolean` | `true` | no | When true, renders the top `GlobalHeader` bar with the brand slot. |
-| `disabled` | `boolean` | `false` | no | Disables the primary action button. |
+| `title` | `string` | `'Your Pro Plan is now Active'` | false | Main success heading in the card header region. |
+| `description` | `string` | `'A receipt has been sent to your email for your records.'` | false | Supporting copy under the success heading. |
+| `stepsLabel` | `string` | `'Next Steps'` | false | Section label above the numbered steps list. |
+| `steps` | `PlanSuccessStep[]` | `undefined` | true | Ordered next-step entries (title + description per row). |
+| `actionLabel` | `string` | `'Start deploying'` | false | Primary footer button label. |
+| `showHeader` | `boolean` | `true` | false | When true, renders the top `GlobalHeader` bar with the brand slot. |
+| `disabled` | `boolean` | `false` | false | Disables the primary action button. |
 
 ## Events
 

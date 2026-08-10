@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 2845590c403ee87681f16ab18cb46dead7533bde46422f6da0bfe4b3eed2e6bf
+checksum: fd6a7e9a88cc9cd812a76497ee6b6f2ceddea59bf8089c5805c824e7771731a4
 created: 2026-08-03
 last_updated: 2026-08-04
 ---
@@ -299,10 +299,10 @@ export type MenuGroupNode = {
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `groups` | `MenuGroupNode[]` | `[]` | no | Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it. |
-| `activeId` | `string` | `''` | no | Id of the node rendered as selected in data-driven mode. |
-| `enterOnMount` | `boolean` | `false` | no | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
-| `ariaLabel` | `string` | `'Menu'` | no | Accessible name for the navigation region. |
+| `groups` | `MenuGroupNode[]` | `[]` | false | Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it. |
+| `activeId` | `string` | `''` | false | Id of the node rendered as selected in data-driven mode. |
+| `enterOnMount` | `boolean` | `false` | false | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
+| `ariaLabel` | `string` | `'Menu'` | false | Accessible name for the navigation region. |
 
 The root also owns **`v-model:expanded`** — `string[]`, default `[]` — the ids of the inline subs
 currently open. Expansion belongs to the root, not to each sub, for two reasons: one sub opening
