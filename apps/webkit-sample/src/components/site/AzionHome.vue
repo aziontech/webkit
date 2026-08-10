@@ -29,6 +29,7 @@
   import { useRouter } from 'vue-router'
 
   import BrandCarousel from './BrandCarousel.vue'
+  import CapabilitiesSection from './CapabilitiesSection.vue'
   import ClientStories from './ClientStories.vue'
   import DeveloperSection from './DeveloperSection.vue'
   import {
@@ -229,23 +230,21 @@
       description="Networking, compute, AI, data, and security that autonomously scale up and down instantly.
 And it stays up when others go down."
     >
+      <!-- The stacking and the fluid width belong to HeroTitle's actions row, so the
+           CTAs go in bare. -->
       <template #actions>
-        <div
-          class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
-        >
-          <Button
-            label="Get started"
-            kind="primary"
-            size="large"
-            @click="goSignup"
-          />
-          <Button
-            label="Read the docs"
-            kind="outlined"
-            size="large"
-            href="#contact"
-          />
-        </div>
+        <Button
+          label="Get started"
+          kind="primary"
+          size="large"
+          @click="goSignup"
+        />
+        <Button
+          label="Read the docs"
+          kind="outlined"
+          size="large"
+          href="#contact"
+        />
       </template>
     </HeroTitle>
 
@@ -384,11 +383,18 @@ And it stays up when others go down."
           <div class="relative z-10 grid items-center gap-[var(--spacing-xl)] lg:grid-cols-2">
             <!-- Copy hangs from the top edge rather than centring in the band: the map
                  behind it is a full-height backdrop, so a centred block floated in the
-                 middle of the frame with no edge to hold onto. -->
+                 middle of the frame with no edge to hold onto.
+
+                 Below lg the map is no longer the art half beside the copy — it sits
+                 nearly full-bleed behind it — so the block splits instead: the title
+                 keeps a modest top pad and the claim chips are pushed to the floor of
+                 the band, which puts the map's own body between them rather than behind
+                 a solid stack of copy. From lg the copy has its own column again, hangs
+                 from the top edge, and falls back to the frame's vertical rhythm. -->
             <div
-              class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-start gap-[var(--spacing-xl)] p-[var(--spacing-xl)] lg:py-[var(--spacing-xxl)]"
+              class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-between gap-[var(--spacing-xl)] px-[var(--spacing-xl)] pt-[clamp(2rem,7vh,3.25rem)] pb-[var(--spacing-xl)] lg:justify-start lg:py-[var(--spacing-xxl)] lg:pt-[var(--spacing-xxl)]"
             >
-              <h2 class="text-balance text-heading-xl text-[var(--text-default)]">
+              <h2 class="text-balance text-heading-2xl text-[var(--text-default)]">
                 The most reliable infrastructure
               </h2>
               <ul class="flex flex-wrap gap-[var(--spacing-xs)]">
@@ -456,91 +462,154 @@ And it stays up when others go down."
     <SectionGap />
 
     <!-- ── Plataforma ───────────────────────────────────────────────────────
-         The one section whose title does NOT sit centred over its body: headline
-         left, the six pillars as a hairline grid to its right. SectionTitle is the
-         centred opener and would fight that, so this module composes its own header
-         cell — the same anatomy (overline → h2 → actions), turned on its side.
+         The one section whose title does NOT sit centred over its body: the header is
+         its own row — headline held against the left rule, description and actions
+         against the right one — and the six pillars run the full width underneath.
+         SectionTitle is the centred opener and would fight that, so this module
+         composes its own header band: the same anatomy (overline → h2 → description
+         → actions), laid on its side and pushed out to both edges.
+
+         The band is ONE cell, not two: `justify-between` over the module's full width
+         with no rule down the middle, so what separates the headline from the copy is
+         the empty span between them rather than a border. That is the industrial move
+         — the copy is registered to the frame's own edges, and the only lines in the
+         module are the ones the grid already draws.
+
+         Both blocks are `items-start`, and every line of type is left-aligned — the
+         house setting for a title. So the two hang from the band's top edge and open
+         on the same line, exactly like the pillar cells below them.
 
          The whole module is one hairline grid: `gap-px` over the border colour, every
-         cell filling `--bg-canvas`, so the rule between the copy and the pillars is
-         the same 1px the pillars divide each other with. That is also why the actions
-         hang off the BOTTOM of the header cell (`justify-between`): the copy holds the
-         top edge, the buttons hold the bottom one, and the header column ends up the
-         same visual weight as the three grid rows beside it. -->
+         cell filling `--bg-canvas`, so the rule between the header and the pillars is
+         the same 1px the pillars divide each other with.
+
+         Across the full width the pillars go three-up instead of two — six cells as two
+         rows of three, so no cell stretches to half the page.
+
+         Every cell of that grid is a registration frame, so the module reads as a lattice
+         of marked corners rather than one marked box: each FrameBox is `:bordered="false"`
+         — its four edges are already drawn by the grid's `gap-px` (or by the column, at the
+         module's outer edges), so it adds no second hairline and contributes only its
+         corner nodes.
+
+         The outer FrameBox is what remains of the band itself: it owns the module's top and
+         bottom rules — `flush` lands the top one ON the SectionGap above instead of beside
+         it, `border-x-0` hands the vertical rules back to the column, which is why
+         SectionModule passes `:divided="false"` — and it draws NO marks. Its four corners
+         are the corners of the outermost cells, which mark them already; leaving `marks` on
+         would stack a second square on exactly the same 6px. -->
     <SectionModule
       :divided="false"
       :padded="false"
     >
-      <div
-        class="grid gap-px bg-[var(--border-default)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+      <FrameBox
+        flush
+        :marks="false"
+        class="border-x-0"
       >
-        <div
-          class="flex flex-col justify-between gap-[var(--spacing-xxl)] bg-[var(--bg-canvas)] p-[var(--spacing-xl)]"
-        >
-          <div class="flex flex-col gap-[var(--spacing-md)]">
-            <Overline
-              prefix="//"
-              show-cursor
-              >Plataforma</Overline
+        <div class="grid gap-px bg-[var(--border-default)]">
+          <!-- Header band: headline at the start edge, description + actions at the end
+             edge. `gap-xxl` is the floor on the span between them — below `lg` the two
+             blocks stack and that same gap becomes the vertical air.
+
+             A frame like the cards under it: the band is the module's first cell, so it
+             registers its own two top corners. Without it the module would open on a bare
+             edge and only start marking corners halfway down. -->
+          <FrameBox
+            :bordered="false"
+            class="bg-[var(--bg-canvas)]"
+          >
+            <div
+              class="flex flex-col gap-[var(--spacing-xxl)] p-[var(--spacing-xl)] lg:flex-row lg:items-start lg:justify-between"
             >
-            <!-- `text-heading-lg` is the section-title token — the same size SectionTitle
+              <div class="flex flex-col gap-[var(--spacing-md)] lg:max-w-[52%]">
+                <Overline
+                  prefix="//"
+                  show-cursor
+                  >Plataforma</Overline
+                >
+                <!-- `text-heading-lg` is the section-title token — the same size SectionTitle
                  sets on every other section's h2, so this left-aligned opener carries the
                  same weight as the centred ones. -->
-            <h2 class="m-0 text-balance text-heading-lg text-[var(--text-default)]">
-              Plataforma Completa de Desenvolvimento e Segurança de Aplicações
-            </h2>
-          </div>
+                <h2 class="m-0 text-balance text-heading-lg text-[var(--text-default)]">
+                  Plataforma Completa de Desenvolvimento e Segurança de Aplicações
+                </h2>
+              </div>
 
-          <div
-            class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
-          >
-            <Button
-              label="Comece agora"
-              kind="primary"
-              size="large"
-              @click="goSignup"
-            />
-            <Button
-              label="Fale com um especialista"
-              kind="outlined"
-              size="large"
-              href="#contact"
-            />
-          </div>
-        </div>
+              <!-- The end block: pinned to the module's right rule by the band's
+               `justify-between`, but set left-aligned like every other block of copy on
+               the page — the edge is what the block registers to, not the ragged line. -->
+              <div class="flex flex-col items-start gap-[var(--spacing-lg)] lg:max-w-[36%]">
+                <p class="m-0 text-pretty text-body-lg text-[var(--text-muted)]">
+                  Infraestrutura, runtime, dados e segurança em um só lugar — para construir,
+                  distribuir e proteger aplicações modernas sem montar a plataforma peça por peça.
+                </p>
 
-        <!-- Two columns, three rows. Every cell is the same shape — glyph-led label
+                <div
+                  class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
+                >
+                  <Button
+                    label="Comece agora"
+                    kind="primary"
+                    size="large"
+                    @click="goSignup"
+                  />
+                  <Button
+                    label="Fale com um especialista"
+                    kind="outlined"
+                    size="large"
+                    href="#contact"
+                  />
+                </div>
+              </div>
+            </div>
+          </FrameBox>
+
+          <!-- Three columns, two rows. Every cell is the same shape — glyph-led label
              over one paragraph — and `items-start` is what the design asks for by
              "aligned on top": the copy hangs from each cell's top edge rather than
              centring inside whatever height the tallest paragraph forces.
 
-             The cells carry the SAME `xl` padding as the header cell beside them, so
-             the first pillar's label starts on the header's overline and every cell's
-             copy shares one inset. Anything smaller here and the two halves of the
+             The cells carry the SAME `xl` padding as the header cells above them, so
+             the first pillar's label sits on the header's own inset and every cell's
+             copy shares one left edge. Anything smaller here and the two halves of the
              module would open on different lines. -->
-        <CardGrid
-          variant="divider"
-          :columns="2"
-        >
-          <div
-            v-for="pillar in platformPillars"
-            :key="pillar.label"
-            class="flex flex-col items-start gap-[var(--spacing-sm)] bg-[var(--bg-canvas)] p-[var(--spacing-xl)]"
+          <CardGrid
+            variant="divider"
+            :columns="3"
           >
-            <p class="m-0 flex items-center gap-[var(--spacing-xs)] text-body-sm">
-              <i
-                :class="[pillar.icon, 'text-body-md text-[var(--text-muted)]']"
-                aria-hidden="true"
-              />
-              <span class="text-[var(--text-muted)]">{{ pillar.label }}</span>
-            </p>
-            <p class="m-0 text-pretty text-body-md text-[var(--text-default)]">
-              {{ pillar.description }}
-            </p>
-          </div>
-        </CardGrid>
-      </div>
+            <FrameBox
+              v-for="pillar in platformPillars"
+              :key="pillar.label"
+              :bordered="false"
+              class="bg-[var(--bg-canvas)]"
+            >
+              <div
+                class="flex h-full flex-col items-start gap-[var(--spacing-sm)] p-[var(--spacing-xl)]"
+              >
+                <p class="m-0 flex items-center gap-[var(--spacing-xs)] text-body-sm">
+                  <i
+                    :class="[pillar.icon, 'text-body-md text-[var(--text-muted)]']"
+                    aria-hidden="true"
+                  />
+                  <span class="text-[var(--text-muted)]">{{ pillar.label }}</span>
+                </p>
+                <p class="m-0 text-pretty text-body-md text-[var(--text-default)]">
+                  {{ pillar.description }}
+                </p>
+              </div>
+            </FrameBox>
+          </CardGrid>
+        </div>
+      </FrameBox>
     </SectionModule>
+
+    <SectionGap />
+
+    <!-- ── What you build on it (Figma node 1626:7014) ──────────────────────
+         The argument in a column that spans the band, and the four things the
+         platform is for as a bento beside it. -->
+    <CapabilitiesSection />
 
     <SectionGap />
 

@@ -414,6 +414,9 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
+  --animate-illustration-rim-sweep: illustrationRimSweep 2100ms linear infinite;
+  --animate-illustration-chat-scroll: illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
+  --animate-illustration-chat-pop: illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite;
 }
 
 :root, [data-theme=light], .azion.azion-light {
@@ -661,6 +664,9 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
+  --animate-illustration-rim-sweep: illustrationRimSweep 2100ms linear infinite;
+  --animate-illustration-chat-scroll: illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
+  --animate-illustration-chat-pop: illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite;
   --ring-offset: 0.5px;
   --container-px: 1rem;
   --container-py: 4rem;
@@ -675,6 +681,21 @@
   --z-input-field: 1;
   --z-input-popup: 10;
   --z-input-overlay: 1100;
+  --illustration-rim-angle: 135deg;
+  --illustration-rim: linear-gradient(135deg, var(--border-default) 0%, var(--border-default) 18%, transparent 45%, transparent 55%, var(--border-default) 82%, var(--border-default) 100%);
+  --illustration-rim-active: linear-gradient(135deg, var(--primary) 0%, var(--primary) 18%, transparent 45%, transparent 55%, var(--primary) 82%, var(--primary) 100%);
+  --illustration-rim-layers: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
+  --illustration-rim-layers-active: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim-active), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
+  --illustration-rim-boxes: padding-box, border-box, border-box;
+  --illustration-rim-width: var(--border-2);
+  --illustration-rim-width-hairline: var(--border-width-default);
+  --illustration-shape-node: var(--radius-sm);
+  --illustration-shape-small: var(--radius-lg);
+  --illustration-shape-medium: var(--radius-xl);
+  --illustration-shape-large: var(--radius-2xl);
+  --illustration-label-small: 0.5rem;
+  --illustration-canvas-width: 10.625rem;
+  --illustration-canvas-height: 8rem;
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
   --text-big-number-md-font-weight: 400;
@@ -959,6 +980,18 @@
   --info-contrast: #66ADFF;
 }
 
+@property --illustration-rim-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 135deg;
+}
+
+@property --illustration-gauge-value {
+  syntax: '<integer>';
+  inherits: true;
+  initial-value: 0;
+}
+
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -1034,6 +1067,25 @@
 @keyframes flowDash {
   0% { stroke-dashoffset: 24; }
   100% { stroke-dashoffset: 0; }
+}
+
+@keyframes illustrationRimSweep {
+  0% { --illustration-rim-angle: 135deg; }
+  100% { --illustration-rim-angle: 315deg; }
+}
+
+@keyframes illustrationChatScroll {
+  0%, 18% { transform: translateY(0); }
+  25%, 43% { transform: translateY(-12.5%); }
+  50%, 68% { transform: translateY(-25%); }
+  75%, 93% { transform: translateY(-37.5%); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes illustrationChatPop {
+  0% { opacity: 0; transform: scale(0.9); }
+  4% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 @layer components {
@@ -1257,6 +1309,20 @@
 
 @media (prefers-reduced-motion: reduce) {
   .text-link { transition: none; }
+}
+
+@utility illustration-rim-sweep {
+  --illustration-rim: linear-gradient(var(--illustration-rim-angle, 135deg), var(--illustration-rim-color, var(--border-default)) 0%, var(--illustration-rim-color, var(--border-default)) 18%, transparent 45%, transparent 55%, var(--illustration-rim-color, var(--border-default)) 82%, var(--illustration-rim-color, var(--border-default)) 100%);
+  --illustration-rim-active: linear-gradient(var(--illustration-rim-angle, 135deg), var(--illustration-rim-color-active, var(--primary)) 0%, var(--illustration-rim-color-active, var(--primary)) 18%, transparent 45%, transparent 55%, var(--illustration-rim-color-active, var(--primary)) 82%, var(--illustration-rim-color-active, var(--primary)) 100%);
+  --illustration-rim-layers: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
+  --illustration-rim-layers-active: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim-active), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
+  animation: var(--animate-illustration-rim-sweep);
+  animation-play-state: paused;
+}
+
+@utility illustration-gauge-readout {
+  counter-reset: illustration-gauge var(--illustration-gauge-value, 0);
+  &::before { content: counter(illustration-gauge); }
 }
 
 @utility bg-surface-0 { background-color: var(--surface-0); }

@@ -23,5 +23,16 @@
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
     "limit": "48 KB"
+  },
+  {
+    "name": "illustration-root",
+    "path": "src/components/content/illustration/illustration.vue",
+    "limit": "2 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "illustration-box",
+    "path": "src/components/content/illustration/illustration-box/illustration-box.vue",
+    "limit": "12 KB"
   }
 ]

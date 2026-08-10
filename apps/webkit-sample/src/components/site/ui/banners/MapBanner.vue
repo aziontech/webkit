@@ -34,7 +34,7 @@
 <template>
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-70 lg:opacity-100 [--map-inset-inline-start:0rem] lg:[--map-inset-inline-start:38%]"
+    class="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-70 lg:opacity-100 [--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]"
   >
     <!-- Both artwork layers share ONE box — the right part of the band, opened
          by --map-inset-inline-start — so the map reads as the art half beside

@@ -1,7 +1,10 @@
 <script setup>
 // The signup entry — a dedicated PAGE (route /signup) inside the shared
-// AuthShell, with the customer testimonial beside the form (two columns on
-// large screens, stacked on small).
+// AuthShell. One container split 8 / 4 on a 12-column grid: the form on the
+// eight, the network panel on the four, flush and both full height. Below lg it
+// collapses to a single column and the panel stacks under the form. There is no
+// CardBox any more — the container itself is the card, so a card inside it would
+// be a box drawn twice.
 //
 // The form is Fields-separated (the `/form` skill, Approach B): stacked
 // Label + field-* triads. Work Email and Password are validated on submit
@@ -22,7 +25,6 @@
 // Either way the flow ends in the same place: Onboarding, where the user's
 // organization is created (signup → [verify →] onboarding → the console).
 import Button from "@aziontech/webkit/button";
-import CardBox from "@aziontech/webkit/card-box";
 import Divider from "@aziontech/webkit/divider";
 import HelperText from "@aziontech/webkit/helper-text";
 import InputPassword from "@aziontech/webkit/input-password";
@@ -33,7 +35,7 @@ import { computed, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import AuthShell from "./ui/AuthShell.vue";
-import TestimonialPanel from "./ui/TestimonialPanel.vue";
+import NetworkPanel from "./ui/NetworkPanel.vue";
 
 const router = useRouter();
 
@@ -140,175 +142,195 @@ const goToSignIn = () => router.push({ name: "login" });
 
 <template>
   <AuthShell>
-    <div
-      class="mx-auto grid w-full max-w-[var(--container-7xl)] flex-1 grid-cols-1 items-center gap-[var(--spacing-xxl)] px-[var(--spacing-xl)] py-[var(--spacing-xl)] lg:grid-cols-2"
-    >
-      <!-- Left column: the signup card -->
-      <div class="flex flex-col items-center gap-[var(--spacing-md)]">
-        <CardBox class="w-full max-w-[var(--container-sm)]">
-          <template #content>
-            <form
-              class="flex flex-col gap-[var(--spacing-lg)]"
-              aria-label="Sign up for a free account"
-              novalidate
-              @submit.prevent="signUp"
-            >
-              <!-- Hidden native submit so Enter submits (webkit Button is type=button). -->
-              <button type="submit" class="sr-only" aria-hidden="true" tabindex="-1" />
-              <header class="flex flex-col gap-[var(--spacing-xs)]">
-                <h1 class="text-heading-sm text-[var(--text-default)]">
-                  Sign Up for a Free Account
-                </h1>
-                <p class="text-body-sm text-[var(--text-muted)]">
-                  US$ 300 credit to use over 12 months, no credit card is
-                  required.
-                </p>
-              </header>
+    <!-- ONE container, split 8 / 4 on a 12-column grid — not two cards beside
+         each other. The halves are flush and both run the full height of the
+         box: the seam between them IS the composition, so a gap (or a second
+         rounded card) would read as two unrelated panels that happen to sit
+         side by side.
 
-              <!-- Social providers. Each carries its OWN :loading (only the
-                   pressed one spins) while `locked` disables every other path in
-                   the card, including the email form below. -->
-              <div class="flex flex-col gap-[var(--spacing-sm)]">
-                <Button
-                  type="button"
-                  label="Continue with GitHub"
-                  kind="outlined"
+         The rounding, the border and the `overflow-hidden` live here, on the
+         container, exactly once. That is what lets the art half bleed to its
+         own edges — it carries no border and no radius of its own, and the
+         container clips it into the corner. -->
+    <div class="flex flex-1 px-[var(--spacing-xl)] py-[var(--spacing-xl)]">
+      <div
+        class="mx-auto grid w-full max-w-[var(--container-7xl)] grid-cols-1 overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] lg:grid-cols-12"
+      >
+        <!-- The form: 8 of 12. It centres in its own cell rather than filling
+             it — the cell is as tall as the container, the form is only as tall
+             as its fields, and a form pinned to the top of a full-height column
+             floats with nothing under it. -->
+        <div
+          class="flex flex-col items-center justify-center gap-[var(--spacing-md)] bg-[var(--bg-surface)] px-[var(--spacing-xl)] py-[var(--spacing-xxl)] lg:col-span-8"
+        >
+          <form
+            class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-lg)]"
+            aria-label="Sign up for a free account"
+            novalidate
+            @submit.prevent="signUp"
+          >
+            <!-- Hidden native submit so Enter submits (webkit Button is type=button). -->
+            <button type="submit" class="sr-only" aria-hidden="true" tabindex="-1" />
+            <header class="flex flex-col gap-[var(--spacing-xs)]">
+              <h1 class="text-heading-sm text-[var(--text-default)]">
+                Sign Up for a Free Account
+              </h1>
+              <p class="text-body-sm text-[var(--text-muted)]">
+                US$ 300 credit to use over 12 months, no credit card is
+                required.
+              </p>
+            </header>
+
+            <!-- Social providers. Each carries its OWN :loading (only the
+                 pressed one spins) while `locked` disables every other path in
+                 the card, including the email form below. -->
+            <div class="flex flex-col gap-[var(--spacing-sm)]">
+              <Button
+                type="button"
+                label="Continue with GitHub"
+                kind="outlined"
+                size="large"
+                icon="pi pi-github"
+                class="w-full"
+                :loading="provider === 'github'"
+                :disabled="locked && provider !== 'github'"
+                @click="continueWith('github')"
+              />
+              <Button
+                type="button"
+                label="Continue with Google"
+                kind="outlined"
+                size="large"
+                icon="ai-cor ai-google"
+                class="w-full"
+                :loading="provider === 'google'"
+                :disabled="locked && provider !== 'google'"
+                @click="continueWith('google')"
+              />
+            </div>
+
+            <!-- "or" separator -->
+            <Divider label="or" />
+
+            <fieldset
+              class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+              :disabled="locked"
+            >
+              <legend class="sr-only">Account credentials</legend>
+
+              <!-- Both fields go :disabled with the scope; only their HELPER
+                   lines are withheld while locked, so nothing describes a
+                   field the user cannot act on. -->
+
+              <!-- Work Email -->
+              <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <Label for="signup-email" required>Work Email</Label>
+                <InputText
+                  id="signup-email"
+                  v-model="form.email"
+                  type="email"
+                  name="email"
                   size="large"
-                  icon="pi pi-github"
+                  autocomplete="email"
                   class="w-full"
-                  :loading="provider === 'github'"
-                  :disabled="locked && provider !== 'github'"
-                  @click="continueWith('github')"
+                  placeholder="myemail@azion.com"
+                  :disabled="locked"
+                  :required="!!errors.email && !form.email.trim()"
+                  :invalid="!!errors.email && !!form.email.trim()"
+                  :aria-describedby="
+                    errors.email && !locked ? 'signup-email-error' : undefined
+                  "
+                  @update:model-value="errors.email = ''"
                 />
-                <Button
-                  type="button"
-                  label="Continue with Google"
-                  kind="outlined"
-                  size="large"
-                  icon="ai-cor ai-google"
-                  class="w-full"
-                  :loading="provider === 'google'"
-                  :disabled="locked && provider !== 'google'"
-                  @click="continueWith('google')"
+                <HelperText
+                  v-if="errors.email && !locked"
+                  id="signup-email-error"
+                  :kind="form.email.trim() ? 'invalid' : 'required'"
+                  :label="errors.email"
                 />
               </div>
 
-              <!-- "or" separator -->
-              <Divider label="or" />
+              <!-- Password -->
+              <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <Label for="signup-password" required>Password</Label>
+                <InputPassword
+                  id="signup-password"
+                  v-model="form.password"
+                  name="password"
+                  autocomplete="new-password"
+                  class="w-full"
+                  placeholder="Create a password"
+                  :disabled="locked"
+                  :required="!!errors.password && !form.password"
+                  :invalid="!!errors.password && !!form.password"
+                  :aria-describedby="
+                    locked ? undefined : 'signup-password-helper'
+                  "
+                  @update:model-value="errors.password = ''"
+                />
+                <HelperText
+                  v-if="!locked"
+                  id="signup-password-helper"
+                  :kind="passwordHelperKind"
+                  :label="
+                    errors.password ||
+                    'At least 8 characters, including a letter and a number.'
+                  "
+                />
+              </div>
+            </fieldset>
 
-              <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
-                :disabled="locked"
+            <Button
+              label="Sign Up"
+              kind="primary"
+              size="large"
+              class="w-full"
+              :loading="submitting"
+              :disabled="provider !== ''"
+              @click="signUp"
+            />
+
+            <p class="text-center text-body-sm text-[var(--text-muted)]">
+              By signing up, you agree to the
+              <a
+                class="text-link"
+                href="https://www.azion.com/en/documentation/"
+                target="_blank"
+                >Terms of Service</a
               >
-                <legend class="sr-only">Account credentials</legend>
+              and
+              <a
+                class="text-link"
+                href="https://www.azion.com/en/documentation/"
+                target="_blank"
+                >Privacy Policy.</a
+              >
+            </p>
+          </form>
 
-                <!-- Both fields go :disabled with the scope; only their HELPER
-                     lines are withheld while locked, so nothing describes a
-                     field the user cannot act on. -->
-
-                <!-- Work Email -->
-                <div class="flex flex-col gap-[var(--spacing-xs)]">
-                  <Label for="signup-email" required>Work Email</Label>
-                  <InputText
-                    id="signup-email"
-                    v-model="form.email"
-                    type="email"
-                    name="email"
-                    size="large"
-                    autocomplete="email"
-                    class="w-full"
-                    placeholder="myemail@azion.com"
-                    :disabled="locked"
-                    :required="!!errors.email && !form.email.trim()"
-                    :invalid="!!errors.email && !!form.email.trim()"
-                    :aria-describedby="
-                      errors.email && !locked ? 'signup-email-error' : undefined
-                    "
-                    @update:model-value="errors.email = ''"
-                  />
-                  <HelperText
-                    v-if="errors.email && !locked"
-                    id="signup-email-error"
-                    :kind="form.email.trim() ? 'invalid' : 'required'"
-                    :label="errors.email"
-                  />
-                </div>
-
-                <!-- Password -->
-                <div class="flex flex-col gap-[var(--spacing-xs)]">
-                  <Label for="signup-password" required>Password</Label>
-                  <InputPassword
-                    id="signup-password"
-                    v-model="form.password"
-                    name="password"
-                    autocomplete="new-password"
-                    class="w-full"
-                    placeholder="Create a password"
-                    :disabled="locked"
-                    :required="!!errors.password && !form.password"
-                    :invalid="!!errors.password && !!form.password"
-                    :aria-describedby="
-                      locked ? undefined : 'signup-password-helper'
-                    "
-                    @update:model-value="errors.password = ''"
-                  />
-                  <HelperText
-                    v-if="!locked"
-                    id="signup-password-helper"
-                    :kind="passwordHelperKind"
-                    :label="
-                      errors.password ||
-                      'At least 8 characters, including a letter and a number.'
-                    "
-                  />
-                </div>
-              </fieldset>
-
-              <Button
-                label="Sign Up"
-                kind="primary"
-                size="large"
-                class="w-full"
-                :loading="submitting"
-                :disabled="provider !== ''"
-                @click="signUp"
-              />
-
-              <p class="text-center text-body-sm text-[var(--text-muted)]">
-                By signing up, you agree to the
-                <a
-                  class="text-link"
-                  href="https://www.azion.com/en/documentation/"
-                  target="_blank"
-                  >Terms of Service</a
-                >
-                and
-                <a
-                  class="text-link"
-                  href="https://www.azion.com/en/documentation/"
-                  target="_blank"
-                  >Privacy Policy.</a
-                >
-              </p>
-            </form>
-          </template>
-        </CardBox>
-
-        <div class="flex items-center justify-center gap-[var(--spacing-xs)]">
-          <p class="text-body-sm text-[var(--text-default)]">
-            Already have an account?
-          </p>
-          <a
-            class="text-link text-body-sm"
-            href="/login"
-            @click.prevent="goToSignIn"
-            >Sign In</a
+          <!-- Inside the form cell now, not floating under the card: the box IS
+               the card, so anything parked below it would sit on the page
+               background outside the composition. -->
+          <div
+            class="flex w-full max-w-[var(--container-sm)] items-center justify-center gap-[var(--spacing-xs)]"
           >
+            <p class="text-body-sm text-[var(--text-default)]">
+              Already have an account?
+            </p>
+            <a
+              class="text-link text-body-sm"
+              href="/login"
+              @click.prevent="goToSignIn"
+              >Sign In</a
+            >
+          </div>
         </div>
-      </div>
 
-      <!-- Right column: testimonial (below the card when stacked) -->
-      <TestimonialPanel />
+        <!-- The art: 4 of 12, flush against the form half, full height. Stacks
+             under it below lg, where 4 columns is narrower than the copy it
+             carries. -->
+        <NetworkPanel class="lg:col-span-4" />
+      </div>
     </div>
   </AuthShell>
 </template>

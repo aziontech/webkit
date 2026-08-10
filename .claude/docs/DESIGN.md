@@ -183,6 +183,10 @@ Defined in `packages/theme/src/tokens/primitives/shape/container.js` (`3xs` … 
 
 ## Shapes (border radius)
 
+> Radii, border weights, and border colors combine into one visual language — bordered containers
+> and hairline rules. How to compose them (and the six roles a rule plays) is catalogued in
+> [`CONTAINERS.md`](./CONTAINERS.md).
+
 Use **semantic shape** tokens only:
 
 ```html
@@ -258,6 +262,7 @@ bg-[var(--bg-surface)] text-[var(--text-default)] text-[var(--text-muted)] ring-
 | Role          | Examples                                                                                                  |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
 | Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                  |
+| Accent        | `--accent`, `--accent-mask`, `--accent-selected`, `--accent-contrast` — the blue that marks a path or state as *other*, distinct from the brand orange. Mode-invariant. |
 | Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
 | Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                              |
 | Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                       |
@@ -308,6 +313,84 @@ Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--sec
 
 ---
 
+## Illustration system
+
+Illustrations in this design system are **built, not drawn** — composed from HTML primitives
+(box, node, connector, pill, window) styled entirely by tokens, so one theme drives both light
+and dark and every part can animate. Exported SVG artwork cannot do either.
+
+Source: `packages/theme/src/tokens/semantic/illustrations.data.js`.
+Consumer: the `content/illustration` component and its parts — these tokens are **not** for
+general component styling.
+
+### The rim light
+
+Every enclosing part carries a *rim light*: a 135° three-stop ramp, opaque at the two ends of the
+top-left→bottom-right axis and transparent through the middle, so an edge reads as lit from the
+top-left and again from the bottom-right. `--illustration-rim` is the resting rim, ramping
+**`--border-default`** — the same hairline role every bordered surface uses, so an illustration's
+edge reads at the weight of a border rather than as a drawn white outline. Only
+`--illustration-rim-active` goes to full strength, in `--primary`, for the part the illustration
+draws attention to. Both reference semantic roles, so the rim follows the theme; a hardcoded ramp
+would vanish in one mode, and `--border-strong` would read ~10× too hot.
+
+`border-image` cannot follow `border-radius`, so a rim is painted as **three** stacked background
+layers over a transparent border. Top to bottom: the part's fill clipped to the padding box (the
+interior, which hides the ramp from everything inside the border); the ramp across the border box
+(visible only in the ring the first layer leaves); and the fill again across the border box, an
+opaque backing so the ramp's transparent midpoint blends over the part's own surface instead of
+over whatever sits behind the element.
+
+`--illustration-rim-layers` is that stack and `--illustration-rim-boxes` the matching origin/clip
+list, so the layer count cannot drift between the two:
+
+```html
+class="border-[length:var(--illustration-rim-width)] border-solid border-transparent
+       [background-image:var(--illustration-rim-layers)]
+       [background-origin:var(--illustration-rim-boxes)]
+       [background-clip:var(--illustration-rim-boxes)]
+       data-[active]:[background-image:var(--illustration-rim-layers-active)]"
+```
+
+The fill resolves `--illustration-fill`, which a part sets when its surface is not `--bg-surface`:
+`class="[--illustration-fill:var(--bg-canvas)]"`.
+
+### Scale
+
+| Token                                | Value                                    | Use                                        |
+| ------------------------------------ | ---------------------------------------- | ------------------------------------------ |
+| `--illustration-rim`                 | 135° ramp of `--border-default`          | Resting rim on any enclosing part          |
+| `--illustration-rim-active`          | 135° ramp of `--primary`                 | Rim of the emphasized part                 |
+| `--illustration-rim-layers`          | fill · `--illustration-rim` · fill        | Drop into `background-image` (resting)     |
+| `--illustration-rim-layers-active`   | fill · `--illustration-rim-active` · fill | Drop into `background-image` (active)      |
+| `--illustration-rim-boxes`           | `padding-box, border-box, border-box`     | `background-origin` + `background-clip`     |
+| `--illustration-rim-width`           | `var(--border-2)` — 2px                  | Rim thickness, medium and large parts      |
+| `--illustration-rim-width-hairline`  | `var(--border-width-default)` — 0.8px    | Rim thickness, small parts                 |
+| `--illustration-shape-node`          | `var(--radius-sm)` — 2px                 | Corner radius, the 8px node                |
+| `--illustration-shape-small`         | `var(--radius-lg)` — 8px                 | Corner radius, 32px parts                  |
+| `--illustration-shape-medium`        | `var(--radius-xl)` — 12px                | Corner radius, 64px parts                  |
+| `--illustration-shape-large`         | `var(--radius-2xl)` — 16px               | Corner radius, 128px parts                 |
+| `--illustration-label-small`         | `0.5rem`                                 | The one label below the typography floor   |
+| `--illustration-canvas-width`        | `10.625rem` — 170px                      | The frame a registered asset composes on   |
+| `--illustration-canvas-height`       | `8rem` — 128px                           | The frame a registered asset composes on   |
+
+A connector is an SVG stroke, not a border, so it takes no rim — it strokes `--border-default`
+(resting) or `--primary` (active), and its dashed variant animates with `--animate-flow-dash`
+(see § Animations; the `stroke-dasharray` cycle must divide 24). Its length comes from the scene
+scale; a composition that needs an exact run overrides `--illustration-connector-length` **inline**
+(`:style="{ '--illustration-connector-length': '22px' }"`), the same per-instance escape
+`--popup-origin` uses on overlays — an inline custom property beats the `data-[size=…]` variant
+that sets the default.
+
+### Do not
+
+- Use `var(--illustration-*)` outside the illustration components — it is a private vocabulary.
+- Re-declare the ramp inline; compose `--illustration-rim-layers` so a change lands once.
+- Reach for `border-image` to get a gradient border — it ignores `border-radius`.
+- Add a new illustration primitive without a token here first.
+
+---
+
 ## Checklist for new or updated components
 
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
@@ -346,9 +429,26 @@ Use **only** the named utilities below; they ship with `motion-safe` / `motion-r
 | `animate-progress-indeterminate`     | indeterminate bar, primary sweep             | `slow-04` · `productive-entrance` infinite                                    |
 | `animate-progress-indeterminate-short` | indeterminate bar, secondary short sweep   | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
 | `animate-flow-dash`                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0) | `slow-02` · `linear` infinite                            |
+| `animate-illustration-rim-sweep`     | an illustration's rim light travelling around its edges (ramp angle 135° → 315°) | `slow-04` · `linear` infinite (apply through `.illustration-rim-sweep`; ships paused) |
+| `animate-illustration-chat-scroll`   | a conversation advancing inside an illustrated window, one message per step (translateY 0 → -50% in four 12.5% steps, with holds) | 9s · `productive-entrance` infinite      |
+| `animate-illustration-chat-pop`      | a message landing at the bottom of that scroll (scale 0.9 → 1 + fade, 4% of the cycle) | 9s · `expressive-entrance` infinite          |
 | `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js` | see `animate.js`                    |
 
 `animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
+
+`animate-illustration-chat-scroll` and `animate-illustration-chat-pop` are a **phase-locked pair**
+and must keep the same duration. The scroll moves a **track twice the height of its clipped
+viewport** (`h-[200%]`) holding **four equal-height messages per screenful, repeated in the second
+half**: each step is then exactly one message (12.5% of the track), and after four steps the track
+shows the copy — identical to where it started, so the one-way loop has no seam. Equal heights are
+load-bearing (the step is a fixed percentage); message length is carried by bubble **width**.
+
+The pop rides the same 9s cycle with a **negative `animation-delay` per message**
+(`-6.75s` / `-4.5s` / `-2.25s` / `0s`), which lands its 4% pop on a step boundary — the moment that
+message stops moving at the bottom. CSS cannot re-trigger an entrance once per pass; phase-locking
+one long loop to another is how you get one anyway. Fade the ends **unevenly**: deep at the top
+where messages leave (`mask-t-from-72%`), shallow at the bottom where they arrive
+(`mask-b-from-92%`) — a deep bottom fade is one message tall and lands every arrival half-faded.
 
 `animate-flow-dash` animates an **SVG stroke** and expects a `stroke-dasharray` whose cycle **divides 24** (`4 4` = 8, `2 4` = 6, `8 4` = 12), because 24 is the keyframe's travel: the pattern lands exactly where it started and the loop has no visible seam. A cycle that does not divide 24 (`5 5` = 10) jumps on every repeat. Like `animate-shimmer` and `animate-spin` it is `linear` — an endlessly looping animation must not accelerate, or the seam between repeats becomes visible.
 

@@ -449,7 +449,7 @@
   <div
     :class="
       cn(
-        'flex w-full flex-col overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-surface)] data-[border]:border data-[border]:border-[var(--border-default)]',
+        'flex w-full @container flex-col overflow-hidden rounded-[var(--shape-elements)] bg-[var(--bg-surface)] data-[border]:border data-[border]:border-[var(--border-default)]',
         attrs.class as string | undefined
       )
     "

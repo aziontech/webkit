@@ -98,7 +98,13 @@
       >
         <slot>{{ description }}</slot>
       </p>
-      <div v-if="$slots.actions">
+      <!-- Same actions row as HeroTitle: stacked and fluid below `sm`, a centered
+           content-width row above it. `[&>*]:w-full` is what reaches the slotted
+           Buttons — the wrapper going full width does not widen them on its own. -->
+      <div
+        v-if="$slots.actions"
+        class="flex w-full flex-col items-stretch gap-[var(--spacing-sm)] [&>*]:w-full sm:w-auto sm:flex-row sm:items-center sm:justify-center sm:[&>*]:w-auto"
+      >
         <slot name="actions" />
       </div>
     </div>

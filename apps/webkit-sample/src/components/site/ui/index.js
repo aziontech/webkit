@@ -2,6 +2,10 @@
 //
 // Everything the Site pages compose their bands out of, in one place:
 //
+//   AgentMark     one AI coding agent's brand mark (Claude, Cursor, Windsurf,
+//                 Codex, OpenCode), inline and theme-following
+//   AiAgentsScene the "agents on the platform" artwork — webkit Illustration
+//                 parts composed around those marks
 //   banners/      the hero backdrops, selected by name through BannerContainer's
 //                 `banner` prop (see ./banners/index.js to add one)
 //   clients/      the client marks for the trust strip, each tagged with the
@@ -17,6 +21,8 @@
 // These are Site components, not design-system ones: anything reusable across
 // products belongs in @aziontech/webkit instead. The page-composition rules they
 // follow are documented in .claude/docs/CONTAINERS.md.
+export { default as AgentMark } from './AgentMark.vue'
+export { default as AiAgentsScene } from './AiAgentsScene.vue'
 export { BANNER_NAMES, BANNERS } from './banners/index.js'
 export { default as ClientMark } from './ClientMark.vue'
 export { CLIENTS } from './clients/index.js'

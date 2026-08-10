@@ -78,6 +78,47 @@ export const keyframes = {
   flowDash: {
     '0%': 'stroke-dashoffset: 24',
     '100%': 'stroke-dashoffset: 0'
+  },
+  // The rim light travelling around an illustration's edges. The ramp is lit at both
+  // ends of its axis, so it repeats every HALF turn — 135° → 315° is one full visual
+  // cycle and lands exactly where it started. A full 360° would replay the same cycle
+  // twice per iteration, at double the speed for the same duration token.
+  illustrationRimSweep: {
+    '0%': '--illustration-rim-angle: 135deg',
+    '100%': '--illustration-rim-angle: 315deg'
+  },
+  // A conversation advancing inside an illustrated window — one direction, bottom to top, the
+  // way a chat moves when answers keep arriving.
+  //
+  // It STEPS rather than drifts: four holds, and between them a short slide of exactly one
+  // message. A chat does not glide; it sits still until something arrives and then jumps. The
+  // hold is also what the pop below needs — a message has to land somewhere still.
+  //
+  // The track it drives must be exactly TWICE its viewport (`h-[200%]`), hold FOUR messages per
+  // screenful, and repeat those messages in its second half: each step is then 12.5% of the
+  // track (one message), and after four steps the track shows the copy, pixel-identical to where
+  // it started, so the loop has no seam. Equal-height messages are load-bearing here — the step
+  // is a fixed 12.5%, so a taller message would drift out of phase with it. Length is carried by
+  // the bubbles' WIDTH instead.
+  illustrationChatScroll: {
+    '0%, 18%': 'transform: translateY(0)',
+    '25%, 43%': 'transform: translateY(-12.5%)',
+    '50%, 68%': 'transform: translateY(-25%)',
+    '75%, 93%': 'transform: translateY(-37.5%)',
+    '100%': 'transform: translateY(-50%)'
+  },
+  // Each message landing in the gap that step just opened at the bottom. It runs on the SAME
+  // duration as the scroll and is offset per message with a negative delay, so its pop fires on
+  // the step boundary — the instant the slide finishes and that message is standing still, whole
+  // and in view, at the bottom of the transcript. The rest of the cycle is a flat hold.
+  //
+  // One long keyframe with a 4% pop, rather than a short animation, because a short one would
+  // have to be re-triggered once per pass and CSS has nothing to trigger it with. Phase-locking
+  // two loops of equal duration is the same trick from the other side.
+  illustrationChatPop: {
+    '0%': 'opacity: 0; transform: scale(0.9)',
+    '4%': 'opacity: 1; transform: scale(1)',
+    '100%': 'opacity: 1; transform: scale(1)'
   }
 }
 

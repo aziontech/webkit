@@ -89,9 +89,18 @@
     >
       <slot>{{ description }}</slot>
     </p>
+    <!-- The actions row owns its own layout so a caller only drops Buttons in. Below
+         `sm` the CTAs stack and go fluid — a hero button is the page's primary target
+         and a thumb should not have to aim at a shrink-wrapped label — and `[&>*]:w-full`
+         is what carries that to the slotted children, since the wrapper's own width
+         says nothing about theirs. From `sm` up they return to a content-width row. -->
     <div
       v-if="$slots.actions"
-      class="mt-[var(--spacing-xs)]"
+      :class="[
+        'mt-[var(--spacing-xs)] flex w-full flex-col items-stretch gap-[var(--spacing-sm)] [&>*]:w-full',
+        'sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto',
+        centered && 'sm:justify-center'
+      ]"
     >
       <slot name="actions" />
     </div>

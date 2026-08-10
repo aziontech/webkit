@@ -51,6 +51,7 @@ Start with `/webkit-ui-craft` (the umbrella that routes the rest). Get structure
 before any polish:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-navigation`
+- **Words:** `/webkit-microcopy` (Azion product copy: punctuation, sentence case, label vs message, one word per concept)
 - **Foundation:** `/webkit-baseline-ui` (tokens, hierarchy, containers, responsive widths)
 - **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
 - **Polish:** `/webkit-motion-polish` · `/webkit-impeccable-polish` (finish + earned delight)

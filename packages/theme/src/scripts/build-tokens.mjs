@@ -14,6 +14,9 @@
  *                               typography, breakpoints, animations, …)
  *   - `tokens/semantic/{containers,spacings,texts}.data.js`
  *                               responsive-shaped semantic tokens
+ *   - `tokens/semantic/illustrations.data.js`
+ *                               illustration tokens + the `@property`
+ *                               registrations and `@utility` blocks they need
  *   - `tokens/primitives/animations/{animate,keyframes}.js`
  *                               animation utilities (`--animate-*`) + `@keyframes`
  *                               definitions + extra CSS (transform-origin) for
@@ -32,6 +35,11 @@ import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
+import {
+  illustrationsData,
+  illustrationsProperties,
+  illustrationsUtilities,
+} from '../tokens/semantic/illustrations.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
 import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
@@ -92,6 +100,7 @@ const buildFlatModel = () => ({
   containers: flattenSingleValue(containersData, (k) => `--container-${k}`),
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
   zIndices: flattenSingleValue(zIndicesData, (k) => `--${k}`),
+  illustrations: flattenSingleValue(illustrationsData, (k) => `--${k}`),
   texts: flattenBundle(textsData),
 });
 
@@ -245,6 +254,46 @@ const emitBaseLayer = () =>
     '}',
   ].join('\n');
 
+/**
+ * Emit `@property` registrations at the top level of the stylesheet.
+ *
+ * A custom property is an untyped token stream unless it is registered, and an
+ * untyped property cannot interpolate — a keyframe on it flips at 50% instead of
+ * animating. Registration is what makes a token animatable (and gives it an
+ * initial value when nothing declares it).
+ */
+const emitPropertyRegistrations = () =>
+  Object.entries(illustrationsProperties)
+    .map(([name, descriptors]) => {
+      const body = Object.entries(descriptors)
+        .map(([key, value]) => `  ${key}: ${value};`)
+        .join('\n');
+      return `@property ${name} {\n${body}\n}`;
+    })
+    .join('\n\n');
+
+/**
+ * Emit illustration classes as Tailwind v4 `@utility` blocks — same reason as the
+ * typography utilities: `@layer components` classes are opaque to the variant
+ * resolver, and these are applied through variants (`group-hover/card:…`,
+ * `motion-reduce:`).
+ */
+const emitIllustrationUtilities = () =>
+  Object.entries(illustrationsUtilities)
+    .map(([name, decls]) => {
+      // An object value is a nested rule (`&::before { … }`), the way the typography
+      // utilities nest their `&:hover`; a string value is a plain declaration.
+      const body = Object.entries(decls)
+        .map(([prop, value]) =>
+          typeof value === 'object'
+            ? `  ${prop} { ${formatStateDecls(value)}; }`
+            : `  ${prop}: ${value};`,
+        )
+        .join('\n');
+      return `@utility ${name} {\n${body}\n}`;
+    })
+    .join('\n\n');
+
 /** Emit `@keyframes` blocks at the top level of the stylesheet. */
 const emitKeyframes = () => {
   const blocks = [];
@@ -297,6 +346,7 @@ const emitCssV4 = () => {
     ...(m.containers._ || {}),
     ...(m.spacings._ || {}),
     ...(m.zIndices._ || {}),
+    ...(m.illustrations._ || {}),
     ...(m.texts._ || {}),
   };
 
@@ -306,6 +356,7 @@ const emitCssV4 = () => {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
       ...(m.zIndices[bp] || {}),
+      ...(m.illustrations[bp] || {}),
       ...(m.texts[bp] || {}),
     };
     if (Object.keys(merged).length === 0) continue;
@@ -345,6 +396,8 @@ const emitCssV4 = () => {
     '/* ── Theme semantics (primary, secondary, surfaces, feedback, …) ── */',
     compileThemeCss(),
     '',
+    emitPropertyRegistrations(),
+    '',
     emitKeyframes(),
     '',
     '@layer components {',
@@ -352,6 +405,8 @@ const emitCssV4 = () => {
     '}',
     '',
     emitTextUtilities(),
+    '',
+    emitIllustrationUtilities(),
     '',
     emitSemanticColorUtilities(),
     '',

@@ -48,6 +48,9 @@
       "--animate-fade-out",
       "--animate-flow-dash",
       "--animate-highlight-fade",
+      "--animate-illustration-chat-pop",
+      "--animate-illustration-chat-scroll",
+      "--animate-illustration-rim-sweep",
       "--animate-ping",
       "--animate-popup-scale-in",
       "--animate-popup-scale-out",
@@ -381,6 +384,21 @@
       "--height-80",
       "--height-9",
       "--height-96",
+      "--illustration-canvas-height",
+      "--illustration-canvas-width",
+      "--illustration-label-small",
+      "--illustration-rim",
+      "--illustration-rim-active",
+      "--illustration-rim-angle",
+      "--illustration-rim-boxes",
+      "--illustration-rim-layers",
+      "--illustration-rim-layers-active",
+      "--illustration-rim-width",
+      "--illustration-rim-width-hairline",
+      "--illustration-shape-large",
+      "--illustration-shape-medium",
+      "--illustration-shape-node",
+      "--illustration-shape-small",
       "--info",
       "--info-border",
       "--info-contrast",
@@ -726,6 +744,9 @@
         "--animate-fade-out",
         "--animate-flow-dash",
         "--animate-highlight-fade",
+        "--animate-illustration-chat-pop",
+        "--animate-illustration-chat-scroll",
+        "--animate-illustration-rim-sweep",
         "--animate-ping",
         "--animate-popup-scale-in",
         "--animate-popup-scale-out",
@@ -1086,6 +1107,23 @@
         "--height-9",
         "--height-96"
       ],
+      "illustration": [
+        "--illustration-canvas-height",
+        "--illustration-canvas-width",
+        "--illustration-label-small",
+        "--illustration-rim",
+        "--illustration-rim-active",
+        "--illustration-rim-angle",
+        "--illustration-rim-boxes",
+        "--illustration-rim-layers",
+        "--illustration-rim-layers-active",
+        "--illustration-rim-width",
+        "--illustration-rim-width-hairline",
+        "--illustration-shape-large",
+        "--illustration-shape-medium",
+        "--illustration-shape-node",
+        "--illustration-shape-small"
+      ],
       "info": [
         "--info",
         "--info-border",
@@ -1435,6 +1473,9 @@
       "fade-out",
       "flow-dash",
       "highlight-fade",
+      "illustration-chat-pop",
+      "illustration-chat-scroll",
+      "illustration-rim-sweep",
       "ping",
       "popup-scale-in",
       "popup-scale-out",
@@ -1473,6 +1514,18 @@
       "highlight-fade": {
         "value": "highlight ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
+      },
+      "illustration-chat-pop": {
+        "value": "illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite",
+        "useWhen": "Each message landing at the bottom of that scroll. Same duration as illustration-chat-scroll, with a negative animation-delay per message (-6.75s / -4.5s / -2.25s / 0s for the four) so its 4% pop fires on the step boundary, with the message standing still and in view."
+      },
+      "illustration-chat-scroll": {
+        "value": "illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite",
+        "useWhen": "A conversation advancing bottom-to-top inside an illustrated window, one message per step. Apply to a track exactly twice the height of its clipped viewport (h-[200%]) holding four EQUAL-height messages per screenful, repeated in the second half — each step is then one message and the loop lands on an identical frame, with no seam."
+      },
+      "illustration-rim-sweep": {
+        "value": "illustrationRimSweep 2100ms linear infinite",
+        "useWhen": "Rim light travelling around an illustration on hover. Apply through the .illustration-rim-sweep utility, which re-declares the ramp stack the angle drives; paused by default and set running from the hovered ancestor."
       },
       "ping": {
         "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
@@ -2835,6 +2888,242 @@
         }
       ],
       "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/currency/`."
+    },
+    "illustration": {
+      "import": "@aziontech/webkit/illustration",
+      "target": "./src/components/content/illustration/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/illustration-root",
+      "subcomponents": [
+        "@aziontech/webkit/illustration-box",
+        "@aziontech/webkit/illustration-node",
+        "@aziontech/webkit/illustration-connector",
+        "@aziontech/webkit/illustration-elbow",
+        "@aziontech/webkit/illustration-branch",
+        "@aziontech/webkit/illustration-pill",
+        "@aziontech/webkit/illustration-window",
+        "@aziontech/webkit/illustration-surface",
+        "@aziontech/webkit/illustration-gauge",
+        "@aziontech/webkit/illustration-chart",
+        "@aziontech/webkit/illustration-list"
+      ],
+      "category": "content",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Key of a registered asset to render; empty renders the composed default slot instead."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Scale of the whole scene; every part inherits it unless it sets its own."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Scene-level emphasis; parts inherit it and switch to the brand rim light."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Accessible name; empty keeps the illustration decorative and hidden from assistive tech."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The composed anatomy. Rendered when `name` is empty; ignored when `name` resolves an asset."
+        }
+      ],
+      "purpose": "Renders a product illustration that is **built, not drawn** — composed from token-styled HTML primitives (icon box, node, connector, pill, window) rather than an exported SVG. Pass `name` to render a registered asset, or compose the parts by hand. Because every part is HTML + design tokens, one illustration follows light and dark, scales with `size`, and can animate; an exported `.svg` can do none of those.",
+      "useWhen": [
+        "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
+        "The same illustration must read correctly in both light and dark themes without shipping two files.",
+        "The illustration should highlight one focal part (`active`) — for example the step a flow is currently on.",
+        "The illustration must scale to the container without rasterizing or re-exporting."
+      ],
+      "avoidWhen": [
+        "A single glyph is enough → use an icon from `@aziontech/icons` (`<i class=\"ai ai-…\">`).",
+        "The artwork is pictorial or brand-authored (a logo, a mascot, a photo) → use `svg/azion/*` or an `<img>`; those are drawn, not composed.",
+        "The whole component is \"no data here, with a title and an action\" → use `empty-state`, which already owns that layout and may embed an `Illustration`.",
+        "The graphic is a live data visualization → that is a chart, not an illustration."
+      ],
+      "related": [
+        "empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.",
+        "flow` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.",
+        "skeleton` — the loading placeholder; an illustration is never a loading state.",
+        "svg/azion/*` — drawn brand marks, for artwork that is not composable from primitives."
+      ],
+      "bestPractices": [
+        "Prefer `name` over hand-composition: a registered asset is reviewed once and reused everywhere, so the same concept never drifts between screens.",
+        "Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is `aria-hidden`, which keeps screen readers out of a graphic that adds nothing.",
+        "Set `active` on the one focal part, not on several — the rim light loses its meaning when everything is lit.",
+        "Size a hand-composed illustration through `size`, not a wrapper `width`; the parts pick coherent radii, rim thicknesses and connector lengths per step. A registered asset is fixed to its canvas — scale it with a CSS transform if a call site needs it smaller.",
+        "Compose assets only from the parts. A one-off `<div>` inside an asset is a token leak that will not follow the theme."
+      ]
+    },
+    "illustration-root": {
+      "import": "@aziontech/webkit/illustration-root",
+      "target": "./src/components/content/illustration/illustration.vue",
+      "kind": "root",
+      "rootOf": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-root",
+      "category": "content",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Key of a registered asset to render; empty renders the composed default slot instead."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "no",
+          "doc": "Scale of the whole scene; every part inherits it unless it sets its own."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "false",
+          "required": "no",
+          "doc": "Scene-level emphasis; parts inherit it and switch to the brand rim light."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Accessible name; empty keeps the illustration decorative and hidden from assistive tech."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The composed anatomy. Rendered when `name` is empty; ignored when `name` resolves an asset."
+        }
+      ],
+      "purpose": "Renders a product illustration that is **built, not drawn** — composed from token-styled HTML primitives (icon box, node, connector, pill, window) rather than an exported SVG. Pass `name` to render a registered asset, or compose the parts by hand. Because every part is HTML + design tokens, one illustration follows light and dark, scales with `size`, and can animate; an exported `.svg` can do none of those.",
+      "useWhen": [
+        "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
+        "The same illustration must read correctly in both light and dark themes without shipping two files.",
+        "The illustration should highlight one focal part (`active`) — for example the step a flow is currently on.",
+        "The illustration must scale to the container without rasterizing or re-exporting."
+      ],
+      "avoidWhen": [
+        "A single glyph is enough → use an icon from `@aziontech/icons` (`<i class=\"ai ai-…\">`).",
+        "The artwork is pictorial or brand-authored (a logo, a mascot, a photo) → use `svg/azion/*` or an `<img>`; those are drawn, not composed.",
+        "The whole component is \"no data here, with a title and an action\" → use `empty-state`, which already owns that layout and may embed an `Illustration`.",
+        "The graphic is a live data visualization → that is a chart, not an illustration."
+      ],
+      "related": [
+        "empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.",
+        "flow` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.",
+        "skeleton` — the loading placeholder; an illustration is never a loading state.",
+        "svg/azion/*` — drawn brand marks, for artwork that is not composable from primitives."
+      ],
+      "bestPractices": [
+        "Prefer `name` over hand-composition: a registered asset is reviewed once and reused everywhere, so the same concept never drifts between screens.",
+        "Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is `aria-hidden`, which keeps screen readers out of a graphic that adds nothing.",
+        "Set `active` on the one focal part, not on several — the rim light loses its meaning when everything is lit.",
+        "Size a hand-composed illustration through `size`, not a wrapper `width`; the parts pick coherent radii, rim thicknesses and connector lengths per step. A registered asset is fixed to its canvas — scale it with a CSS transform if a call site needs it smaller.",
+        "Compose assets only from the parts. A one-off `<div>` inside an asset is a token leak that will not follow the theme."
+      ]
+    },
+    "illustration-box": {
+      "import": "@aziontech/webkit/illustration-box",
+      "target": "./src/components/content/illustration/illustration-box/illustration-box.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-box"
+    },
+    "illustration-node": {
+      "import": "@aziontech/webkit/illustration-node",
+      "target": "./src/components/content/illustration/illustration-node/illustration-node.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-node"
+    },
+    "illustration-connector": {
+      "import": "@aziontech/webkit/illustration-connector",
+      "target": "./src/components/content/illustration/illustration-connector/illustration-connector.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-connector"
+    },
+    "illustration-elbow": {
+      "import": "@aziontech/webkit/illustration-elbow",
+      "target": "./src/components/content/illustration/illustration-elbow/illustration-elbow.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-elbow"
+    },
+    "illustration-branch": {
+      "import": "@aziontech/webkit/illustration-branch",
+      "target": "./src/components/content/illustration/illustration-branch/illustration-branch.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-branch"
+    },
+    "illustration-pill": {
+      "import": "@aziontech/webkit/illustration-pill",
+      "target": "./src/components/content/illustration/illustration-pill/illustration-pill.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-pill"
+    },
+    "illustration-window": {
+      "import": "@aziontech/webkit/illustration-window",
+      "target": "./src/components/content/illustration/illustration-window/illustration-window.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-window"
+    },
+    "illustration-surface": {
+      "import": "@aziontech/webkit/illustration-surface",
+      "target": "./src/components/content/illustration/illustration-surface/illustration-surface.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-surface"
+    },
+    "illustration-gauge": {
+      "import": "@aziontech/webkit/illustration-gauge",
+      "target": "./src/components/content/illustration/illustration-gauge/illustration-gauge.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-gauge"
+    },
+    "illustration-chart": {
+      "import": "@aziontech/webkit/illustration-chart",
+      "target": "./src/components/content/illustration/illustration-chart/illustration-chart.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-chart"
+    },
+    "illustration-list": {
+      "import": "@aziontech/webkit/illustration-list",
+      "target": "./src/components/content/illustration/illustration-list/illustration-list.vue",
+      "kind": "subcomponent",
+      "parent": "illustration",
+      "treeShakeableImport": "@aziontech/webkit/illustration-list"
     },
     "kbd": {
       "import": "@aziontech/webkit/kbd",

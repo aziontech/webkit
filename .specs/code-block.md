@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: e1ac860ac941cf30b3d15fb44450bcbba981e6d6d539cfa26b74938ad8053051
+checksum: fdceedef3d38e2f9aa6846848c25a0b79af73cef079beb9255fb3af03a8b9eae
 created: 2026-05-28
-last_updated: 2026-08-04
+last_updated: 2026-08-07
 ---
 
 
@@ -130,7 +130,9 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
 
-Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
+Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
+
+**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
 
 ## Motion & Animations
 
