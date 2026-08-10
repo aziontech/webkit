@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 3eef5bcfb41626dae8714fcbaad1a169ab9a5f18190e9bd89848ab6682017d3e
+checksum: 5b6a399d42b89549468a6f200e8f60970c511acc86c56998a3ff31f8cc7128ce
 created: 2026-08-10
 last_updated: 2026-08-10
 ---
@@ -56,8 +56,8 @@ Small info affordance — a muted `pi pi-info-circle` glyph on a focusable butto
 
 | Prop        | Type                                               | Default | Required | JSDoc                                                                         |
 | ----------- | -------------------------------------------------- | ------- | -------- | ----------------------------------------------------------------------------- |
-| `text`      | `string`                                           | `''`    | yes      | Guidance text revealed on hover or focus; also the trigger's accessible name. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | no       | Anchor side of the tooltip relative to the glyph.                             |
+| `text`      | `string`                                           | `''`    | true     | Guidance text revealed on hover or focus; also the trigger's accessible name. |
+| `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false    | Anchor side of the tooltip relative to the glyph.                             |
 
 ## Events
 
