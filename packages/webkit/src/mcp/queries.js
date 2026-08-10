@@ -397,8 +397,12 @@ function exampleProps(props) {
     return 'text'
   }
 
-  const required = props.filter((p) => String(p.required).toLowerCase() === 'yes')
-  const leading = props.filter((p) => String(p.required).toLowerCase() !== 'yes' && scalar(p.type))
+  // The spec's Required column says `true` / `false`; `yes` / `no` is the older
+  // spelling, still accepted so a half-migrated .specs tree reads the same.
+  const isRequired = (p) => ['true', 'yes'].includes(String(p.required).toLowerCase())
+
+  const required = props.filter(isRequired)
+  const leading = props.filter((p) => !isRequired(p) && scalar(p.type))
   const chosen = [...required, ...leading].slice(0, Math.max(required.length, 2)).slice(0, 3)
 
   return chosen.map((p) => {
