@@ -28,3 +28,4 @@ overrides:
   hono: ">=4.12.34 <5" # GHSA-8j4g-w8fx-2239 (ReDoS in CORS middleware), patched 4.12.34; bounded to 4.x — MCP SDK pins ^4
   "js-yaml@3": ">=3.15.1 <4" # GHSA-5p4m-2wfm-xmqj (CVE-2026-59870, quadratic CPU in !!omap), patched 3.15.1; bounded — 4.x removed the legacy safeLoad API
   "js-yaml@4": ">=4.3.1 <5" # GHSA-5p4m-2wfm-xmqj (CVE-2026-59870), patched 4.3.1; bounded to 4.x — 5.x is ESM-only
+  "nanoid@3": ">=3.3.17 <4" # GHSA-2v37-7h3g-55p8 (CVE-2026-67213, infinite loop with size 0), patched 3.3.17; bounded to 3.x (CJS) — postcss pins ^3; 4.x+ is ESM-only (5.x patched at 5.1.6, not in tree)
