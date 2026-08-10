@@ -239,13 +239,26 @@ describe('FieldTextSwitch', () => {
       expect(getByRole('textbox').getAttribute('aria-describedby')).toBeNull()
     })
 
-    it('shows the locked fallback helper when disabled with no helper text', () => {
-      const { getByTestId } = render(FieldTextSwitch, {
+    it('omits the helper row when disabled with no helper text', () => {
+      const { queryByTestId } = render(FieldTextSwitch, {
         props: { label: 'Custom domain', disabled: true }
       })
 
+      // The field writes no copy of its own, so a transient disable grows no padlock line.
+      expect(queryByTestId('input-field-text-switch__helper')).toBeNull()
+    })
+
+    it('renders a supplied helper with the disabled kind while disabled', () => {
+      const { getByTestId } = render(FieldTextSwitch, {
+        props: {
+          label: 'Custom domain',
+          disabled: true,
+          helperText: 'Managed by your identity provider.'
+        }
+      })
+
       const helper = getByTestId('input-field-text-switch__helper')
-      expect(helper.textContent).toContain('This field is locked.')
+      expect(helper.textContent).toContain('Managed by your identity provider.')
       expect(helper.getAttribute('data-kind')).toBe('disabled')
     })
 
@@ -388,7 +401,7 @@ describe('FieldTextSwitch', () => {
         true
       )
       expect(getByTestId('input-field-text-switch__helper').textContent).toContain(
-        'This field is locked.'
+        'Managed by your account owner.'
       )
     })
   })

@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 1997eb01d01f6f0c0808ee828de32c774d99b81098c421842cc902cde7a458e6
+checksum: fd3e4011508e04daad7fe0d785e03cf4920adc237bbdbab1d6403a30f4102cd7
 created: 2026-07-06
-last_updated: 2026-07-06
+last_updated: 2026-08-10
 ---
 
 # FieldTextSwitch — Component Spec
@@ -19,11 +19,11 @@ Form field wrapper that composes `Label`, an `InputGroup` (holding an internal `
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FieldTextSwitch from '@aziontech/webkit/field-text-switch'
+  import { ref } from 'vue'
+  import FieldTextSwitch from '@aziontech/webkit/field-text-switch'
 
-const domain = ref('mysite.com')
-const enabled = ref(true)
+  const domain = ref('mysite.com')
+  const enabled = ref(true)
 </script>
 
 <template>
@@ -40,26 +40,26 @@ const enabled = ref(true)
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the internal `<input>`. |
-| `enabled` | `boolean` | `false` | no | Two-way bound state of the trailing `Switch`. When `false`, the internal `<input>` becomes inert (rendered with `disabled` tokens and the native `disabled` attribute) regardless of the `disabled` prop; the switch itself remains focusable so the consumer can turn the field back on. |
-| `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | no | Placeholder forwarded to the internal `<input>`. |
-| `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
-| `disabled` | `boolean` | `false` | no | Disables the whole field: the internal `<input>`, the trailing `Switch`, and the `InputGroup` chrome; switches the helper to `kind="disabled"` (lock icon). Independent from `enabled` — `disabled=true` overrides everything, `enabled=false` only disables the text input while keeping the switch operable. |
-| `readonly` | `boolean` | `false` | no | Marks the internal input read-only; value is visible but not editable. Does not affect the switch. Native pass-through. |
-| `required` | `boolean` | `false` | no | Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`. Does not mark the switch as required. |
-| `invalid` | `boolean` | `false` | no | Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind="invalid"`. Also sets `aria-invalid` on the internal `<input>`. |
-| `inputId` | `string` | `''` | no | `id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty. |
-| `name` | `string` | `''` | no | HTML `name` for the internal `<input>` (form + vee-validate integration). |
+| Prop          | Type      | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                          |
+| ------------- | --------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`  | `string`  | `''`    | false    | Two-way bound value of the internal `<input>`.                                                                                                                                                                                                                                                                 |
+| `enabled`     | `boolean` | `false` | false    | Two-way bound state of the trailing `Switch`. When `false`, the internal `<input>` becomes inert (rendered with `disabled` tokens and the native `disabled` attribute) regardless of the `disabled` prop; the switch itself remains focusable so the consumer can turn the field back on.                      |
+| `label`       | `string`  | `''`    | false    | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                                        |
+| `placeholder` | `string`  | `''`    | false    | Placeholder forwarded to the internal `<input>`.                                                                                                                                                                                                                                                               |
+| `helperText`  | `string`  | `''`    | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say.                       |
+| `disabled`    | `boolean` | `false` | false    | Disables the whole field: the internal `<input>`, the trailing `Switch`, and the `InputGroup` chrome; switches the helper to `kind="disabled"` (lock icon). Independent from `enabled` — `disabled=true` overrides everything, `enabled=false` only disables the text input while keeping the switch operable. |
+| `readonly`    | `boolean` | `false` | false    | Marks the internal input read-only; value is visible but not editable. Does not affect the switch. Native pass-through.                                                                                                                                                                                        |
+| `required`    | `boolean` | `false` | false    | Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`. Does not mark the switch as required.                                                                                                                           |
+| `invalid`     | `boolean` | `false` | false    | Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind="invalid"`. Also sets `aria-invalid` on the internal `<input>`.                                                                                                                                                                |
+| `inputId`     | `string`  | `''`    | false    | `id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty.                                                                                                                                                                |
+| `name`        | `string`  | `''`    | false    | HTML `name` for the internal `<input>` (form + vee-validate integration).                                                                                                                                                                                                                                      |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:modelValue` | `string` | Re-emitted from the internal `<input>` on native `input` event. Enables `v-model`. |
-| `update:enabled` | `boolean` | Re-emitted from the trailing `<Switch>` on toggle. Enables `v-model:enabled`. |
+| Event               | Payload   | Notes                                                                              |
+| ------------------- | --------- | ---------------------------------------------------------------------------------- |
+| `update:modelValue` | `string`  | Re-emitted from the internal `<input>` on native `input` event. Enables `v-model`. |
+| `update:enabled`    | `boolean` | Re-emitted from the trailing `<Switch>` on toggle. Enables `v-model:enabled`.      |
 
 ## Slots
 
@@ -71,7 +71,7 @@ const enabled = ref(true)
 - On the field wrapper root: `data-disabled`, `data-invalid`, `data-required`, `data-enabled` mirror the props (for test/query targeting). `data-enabled` reflects the `enabled` prop verbatim.
 - Internal-input inertness precedence: `disabled` prop > `!enabled` > `readonly`. When `enabled=false` and `disabled=false`, the `<input>` receives native `disabled` (so the consumer cannot type into an off feature) but the `Switch` stays operable.
 - `HelperText.kind` computed by precedence: `disabled > invalid > required > 'helper'`.
-- When `disabled` is set and `helperText` is empty, the helper defaults to `'This field is locked.'` (parity with `FieldText` / `FieldInputGroup`).
+- When `disabled` is set and `helperText` is empty, no helper row renders (parity with `FieldText` / `FieldInputGroup`) — the field substitutes no copy, so a transient lock adds no padlock line.
 
 ## Motion & Animations
 
@@ -79,29 +79,29 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| stack gap (vertical) | `var(--spacing-xs)` |
-| internal input surface | `var(--bg-surface)` |
-| internal input text | `var(--text-default)` |
-| internal input placeholder | `var(--text-muted)` |
-| internal input padding.x | `var(--spacing-md)` |
-| internal input typography | `.text-label-sm` |
-| trailing switch padding.x | `var(--spacing-md)` |
+| Region                     | Token (DESIGN.md)     |
+| -------------------------- | --------------------- |
+| stack gap (vertical)       | `var(--spacing-xs)`   |
+| internal input surface     | `var(--bg-surface)`   |
+| internal input text        | `var(--text-default)` |
+| internal input placeholder | `var(--text-muted)`   |
+| internal input padding.x   | `var(--spacing-md)`   |
+| internal input typography  | `.text-label-sm`      |
+| trailing switch padding.x  | `var(--spacing-md)`   |
 
 Border / focus / hover / invalid / required / disabled tokens are owned by the nested `InputGroup`. Switch surface / thumb / on / off tokens are owned by the nested `Switch`.
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: delegated to `InputGroup` (focus-within ring on the group root) and to `Switch` (its own focus ring inside the group). The internal `<input>` renders `focus:ring-0 outline-none` so only the group ring shows around the text half.
 - Keyboard map: `Tab` moves from the internal `<input>` to the trailing `<Switch>` in DOM order; `Space` toggles the switch; typing edits the input; `Shift+Tab` moves back.
-- ARIA: internal `<input>` receives `aria-invalid`, `aria-required`, and `aria-describedby` pointing at the `HelperText` id when helper text is present or `disabled` forces the fallback. `Label` is linked via `for=<inputId>`. The trailing `<Switch>` receives an `aria-label` derived from the `label` prop (e.g. `Toggle {label}`) so screen readers announce it distinctly from the text input.
+- ARIA: internal `<input>` receives `aria-invalid`, `aria-required`, and `aria-describedby` pointing at the `HelperText` id when helper text is present. `Label` is linked via `for=<inputId>`. The trailing `<Switch>` receives an `aria-label` derived from the `label` prop (e.g. `Toggle {label}`) so screen readers announce it distinctly from the text input.
 - Contrast ≥4.5:1 for label / input text / helper text against their surfaces; ≥3:1 for the switch track / thumb in every state.
 - Motion: state color transitions come from `InputGroup` and `Switch` (`duration-150 ease-out`, `motion-reduce:transition-none`).
 - Touch target: the trailing `Switch` retains its own ≥32×32 px hit area inside the `h-8` group root.
@@ -112,7 +112,7 @@ Border / focus / hover / invalid / required / disabled tokens are owned by the n
 - SwitchOff — `enabled=false`, documents the auto-disabled text input while the switch remains operable.
 - Required — `required=true`, documents the Required tag on the label and the group's required border.
 - Invalid — `invalid=true` with a message in `helperText`.
-- Disabled — `disabled=true`, helper falls back to the disabled copy; both input and switch are inert.
+- Disabled — `disabled=true` with an explicit `helperText` (lock-icon helper); both input and switch are inert. With no `helperText` the row is absent.
 
 Justification for five stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. `Default` and `SwitchOff` document the two visual states of the switch-controlled input (the whole point of this wrapper). `Required`, `Invalid`, `Disabled` exercise the three state signals the wrapper propagates.
 

@@ -58,12 +58,26 @@ describe('FieldSelect', () => {
     expect(queryByTestId('input-field-select__helper')).toBeNull()
   })
 
-  it('shows the locked fallback helper when disabled with no explicit helper text', () => {
-    const { getByTestId } = render(FieldSelect, {
+  it('omits the helper row when disabled with no explicit helper text', () => {
+    const { queryByTestId } = render(FieldSelect, {
       props: { label: 'Region', disabled: true, options: OPTIONS }
     })
+    // The field writes no copy of its own, so a transient disable grows no padlock line.
+    expect(queryByTestId('input-field-select__helper')).toBeNull()
+  })
+
+  it('renders a supplied helper with the disabled kind while disabled', () => {
+    const { getByTestId } = render(FieldSelect, {
+      props: {
+        label: 'Region',
+        disabled: true,
+        options: OPTIONS,
+        helperText: 'Managed by your organization.'
+      }
+    })
     const helper = getByTestId('input-field-select__helper')
-    expect(helper.textContent).toContain('This field is locked.')
+    expect(helper.textContent).toContain('Managed by your organization.')
+    expect(helper.getAttribute('data-kind')).toBe('disabled')
   })
 
   it('wires the label to the trigger via matching for/id', () => {

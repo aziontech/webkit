@@ -6,7 +6,9 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Label from './label.vue'
 
-const { Default, Required } = composeStories(stories)
+const { Default, Required, Hinted } = composeStories(stories)
+
+const HINT = 'Values are encrypted at rest and never displayed again after saving.'
 
 describe('Label', () => {
   it('renders a <label> element carrying the default data-testid', () => {
@@ -92,6 +94,40 @@ describe('Label', () => {
     const { getByTestId } = render(Default)
     expect(getByTestId('input-label')).toHaveTextContent('Label')
     expect(getByTestId('input-label')).not.toHaveAttribute('data-required')
+  })
+
+  it('renders no hint glyph and no data-hinted by default', () => {
+    const { getByTestId, queryByTestId } = render(Label, { props: { label: 'Email' } })
+
+    expect(getByTestId('input-label')).not.toHaveAttribute('data-hinted')
+    expect(queryByTestId('input-label__hint')).toBeNull()
+  })
+
+  it('sets data-hinted and renders a Hint named by the hint text', () => {
+    const { getByTestId } = render(Label, { props: { label: 'Sensitive', hint: HINT } })
+
+    expect(getByTestId('input-label')).toHaveAttribute('data-hinted')
+    expect(getByTestId('input-label__hint')).toBeInTheDocument()
+    expect(getByTestId('input-label__hint__trigger')).toHaveAttribute('aria-label', HINT)
+  })
+
+  it('keeps the hint out of the label text span', () => {
+    const { getByTestId } = render(Label, { props: { label: 'Sensitive', hint: HINT } })
+
+    expect(getByTestId('input-label__text')).toHaveTextContent('Sensitive')
+    expect(getByTestId('input-label__text').querySelector('button')).toBeNull()
+  })
+
+  it('has no a11y violations with a hint', async () => {
+    const { container } = render(Label, { props: { label: 'Sensitive', hint: HINT } })
+    await expectNoA11yViolations(container)
+  })
+
+  it('composes the Hinted story fixture', () => {
+    const { getByTestId } = render(Hinted)
+
+    expect(getByTestId('input-label')).toHaveAttribute('data-hinted')
+    expect(getByTestId('input-label__hint__trigger')).toHaveAttribute('aria-label', HINT)
   })
 
   it('composes the Required story fixture with the Required tag', () => {

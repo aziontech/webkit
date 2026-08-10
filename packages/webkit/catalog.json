@@ -5434,77 +5434,77 @@
           "name": "options",
           "type": "Array<{ value: unknown; label: string; disabled?: boolean }>",
           "default": "[]",
-          "required": "no",
+          "required": "false",
           "doc": "Options rendered inside the dropdown. When empty, the dropdown renders no options."
         },
         {
           "name": "label",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
         },
         {
           "name": "placeholder",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Placeholder shown on the trigger when nothing is selected."
         },
         {
           "name": "helperText",
           "type": "string",
           "default": "''",
-          "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to the default disabled message so the lock icon always has matching copy."
+          "required": "false",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "size",
           "type": "'small' | 'medium' | 'large'",
           "default": "'medium'",
-          "required": "no",
+          "required": "false",
           "doc": "Size forwarded to the `Select` trigger. Heights: small=28px, medium=32px, large=40px."
         },
         {
           "name": "multiple",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Switches the component to multi-select; `modelValue` becomes an array."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Disables the select and switches the helper to `kind=\"disabled\"` (lock icon)."
         },
         {
           "name": "readonly",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Marks the select read-only; value is visible but the dropdown is locked."
         },
         {
           "name": "required",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Adds the `Required` tag to the `Label` and sets `aria-required` on the trigger."
         },
         {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Switches the helper to `kind=\"invalid\"` and applies invalid border/ring tokens on the trigger."
         },
         {
           "name": "inputId",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`."
         }
       ],
@@ -5530,77 +5530,77 @@
           "name": "modelValue",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Two-way bound value of the underlying `InputText`."
         },
         {
           "name": "label",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
         },
         {
           "name": "placeholder",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Placeholder forwarded to the `InputText`."
         },
         {
           "name": "helperText",
           "type": "string",
           "default": "''",
-          "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "required": "false",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "size",
           "type": "'small' | 'medium' | 'large'",
           "default": "'medium'",
-          "required": "no",
+          "required": "false",
           "doc": "Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Disables the input and switches the helper to `kind=\"disabled\"` (lock icon)."
         },
         {
           "name": "readonly",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Marks the input read-only; value is visible but not editable. Native pass-through."
         },
         {
           "name": "required",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input."
         },
         {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Switches the helper to `kind=\"invalid\"` and applies invalid border/ring tokens on the input."
         },
         {
           "name": "inputId",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`."
         },
         {
           "name": "name",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "HTML name for the underlying input (form + vee-validate integration)."
         }
       ],
@@ -5638,70 +5638,70 @@
           "name": "modelValue",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Two-way bound value of the internal `<input>`."
         },
         {
           "name": "label",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
         },
         {
           "name": "placeholder",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Placeholder forwarded to the internal `<input>`."
         },
         {
           "name": "helperText",
           "type": "string",
           "default": "''",
-          "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "required": "false",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Disables the input and the `InputGroup` chrome, and switches the helper to `kind=\"disabled\"` (lock icon)."
         },
         {
           "name": "readonly",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Marks the internal input read-only; value is visible but not editable. Native pass-through."
         },
         {
           "name": "required",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`."
         },
         {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind=\"invalid\"`. Also sets `aria-invalid` on the internal `<input>`."
         },
         {
           "name": "inputId",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty."
         },
         {
           "name": "name",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "HTML `name` for the internal `<input>` (form + vee-validate integration)."
         }
       ],
@@ -5739,77 +5739,77 @@
           "name": "modelValue",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Two-way bound value of the internal `<input>`."
         },
         {
           "name": "enabled",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Two-way bound state of the trailing `Switch`. When `false`, the internal `<input>` becomes inert (rendered with `disabled` tokens and the native `disabled` attribute) regardless of the `disabled` prop; the switch itself remains focusable so the consumer can turn the field back on."
         },
         {
           "name": "label",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
         },
         {
           "name": "placeholder",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Placeholder forwarded to the internal `<input>`."
         },
         {
           "name": "helperText",
           "type": "string",
           "default": "''",
-          "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "required": "false",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Disables the whole field: the internal `<input>`, the trailing `Switch`, and the `InputGroup` chrome; switches the helper to `kind=\"disabled\"` (lock icon). Independent from `enabled` — `disabled=true` overrides everything, `enabled=false` only disables the text input while keeping the switch operable."
         },
         {
           "name": "readonly",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Marks the internal input read-only; value is visible but not editable. Does not affect the switch. Native pass-through."
         },
         {
           "name": "required",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`. Does not mark the switch as required."
         },
         {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind=\"invalid\"`. Also sets `aria-invalid` on the internal `<input>`."
         },
         {
           "name": "inputId",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty."
         },
         {
           "name": "name",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "HTML `name` for the internal `<input>` (form + vee-validate integration)."
         }
       ],
@@ -5840,84 +5840,84 @@
           "name": "modelValue",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Two-way bound national number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Enables `v-model`."
         },
         {
           "name": "country",
           "type": "string",
           "default": "'BR'",
-          "required": "no",
+          "required": "false",
           "doc": "Two-way bound ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`). Drives the dial code shown in the `Select` and the mask applied to the input. Enables `v-model:country`."
         },
         {
           "name": "countries",
           "type": "Array<{ code: string; dialCode: string; mask: string; label: string }>",
           "default": "(built-in curated list — see Notes)",
-          "required": "no",
+          "required": "false",
           "doc": "Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). When omitted, the component uses its built-in list."
         },
         {
           "name": "label",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
         },
         {
           "name": "placeholder",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's mask literal (e.g. `(11) 99999-9999`)."
         },
         {
           "name": "helperText",
           "type": "string",
           "default": "''",
-          "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "required": "false",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Disables both the dial-code `Select` and the internal `<input>`, and switches the helper to `kind=\"disabled\"` (lock icon)."
         },
         {
           "name": "readonly",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Marks the internal `<input>` read-only; value is visible but not editable. The dial-code `Select` is also disabled while readonly (dial code cannot change without editing). Native pass-through on the input."
         },
         {
           "name": "required",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`."
         },
         {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind=\"invalid\"`. Also sets `aria-invalid` on the internal `<input>`."
         },
         {
           "name": "inputId",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty."
         },
         {
           "name": "name",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "HTML `name` for the internal `<input>` (form + vee-validate integration)."
         }
       ],
@@ -5968,6 +5968,53 @@
       ],
       "purpose": "Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it."
     },
+    "hint": {
+      "import": "@aziontech/webkit/hint",
+      "target": "./src/components/inputs/hint/hint.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/hint",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "''",
+          "required": "true",
+          "doc": "Guidance text revealed on hover or focus; also the trigger's accessible name."
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'right' | 'bottom' | 'left' | 'auto'",
+          "default": "'top'",
+          "required": "false",
+          "doc": "Anchor side of the tooltip relative to the glyph."
+        }
+      ],
+      "purpose": "Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a \"why does this matter?\" note to a field name without spending a line of vertical space on it, and it is what `Label`'s `hint` prop renders.",
+      "useWhen": [
+        "A field, switch or setting whose name is clear but whose consequence is not (what \"Sensitive\" does to a stored value).",
+        "A short, self-contained sentence — one that reads fine in a tooltip and is not needed to complete the field.",
+        "Beside a label, a section heading, or a table column header, where a permanent line of helper text would add noise."
+      ],
+      "avoidWhen": [
+        "Guidance the user needs while typing, or any validation message → use `helper-text` (it stays on screen and is wired with `aria-describedby`).",
+        "More than a sentence, links, or formatted content → use `popover`, which is dismissible and can hold real content.",
+        "A plain description of an action already labelled by a control → use `tooltip` directly on that control."
+      ],
+      "related": [
+        "tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.",
+        "helper-text` — persistent guidance under a field; the right choice when the text must always be visible.",
+        "label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component."
+      ],
+      "bestPractices": [
+        "One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.",
+        "Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.",
+        "The `text` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
+        "Place it immediately after the thing it explains, not at the end of a row."
+      ]
+    },
     "label": {
       "import": "@aziontech/webkit/label",
       "target": "./src/components/inputs/label/label.vue",
@@ -5981,15 +6028,22 @@
           "name": "label",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Fallback text when the default slot is empty."
         },
         {
           "name": "required",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; \"(Required)\" inherits `var(--text-muted)`."
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short explanation appended as a `Hint` glyph that reveals it on hover or focus. Empty renders no glyph."
         }
       ],
       "slots": [
@@ -5999,7 +6053,7 @@
           "notes": "Label text; falls back to `label` prop when empty."
         }
       ],
-      "purpose": "Form-field label that pairs descriptive text with an optional required indicator. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word \"(Required)\" in muted text — replacing the older `Tag` badge for a lighter typographic signal."
+      "purpose": "Form-field label that pairs descriptive text with an optional required indicator and an optional hint. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word \"(Required)\" in muted text — replacing the older `Tag` badge for a lighter typographic signal. Setting `hint` appends a `Hint` glyph after the text, so a field name and its one-sentence explanation stay one component instead of a hand-built row."
     },
     "input-password": {
       "import": "@aziontech/webkit/input-password",
@@ -6108,105 +6162,105 @@
           "name": "modelValue",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Two-way bound value of the underlying `InputPassword`."
         },
         {
           "name": "label",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Text rendered inside the `Label`. When empty, the label row is omitted."
         },
         {
           "name": "placeholder",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "Placeholder forwarded to the `InputPassword`."
         },
         {
           "name": "helperText",
           "type": "string",
           "default": "''",
-          "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "required": "false",
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "maxLength",
           "type": "number | undefined",
           "default": "undefined",
-          "required": "no",
+          "required": "false",
           "doc": "Native `maxlength` forwarded to the `InputPassword`."
         },
         {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
-          "required": "no",
-          "doc": "Disables the input and switches the helper to `kind=\"disabled\"` (lock icon)."
+          "required": "false",
+          "doc": "Disables the input; a supplied `helperText` switches to `kind=\"disabled\"` (lock icon)."
         },
         {
           "name": "readonly",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Marks the input read-only; value is visible but not editable. Native pass-through."
         },
         {
           "name": "required",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input."
         },
         {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Switches the helper to `kind=\"invalid\"` and applies invalid border/ring tokens on the input."
         },
         {
           "name": "toggleable",
           "type": "boolean",
           "default": "true",
-          "required": "no",
+          "required": "false",
           "doc": "Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input."
         },
         {
           "name": "autocomplete",
           "type": "'current-password' | 'new-password' | 'off'",
           "default": "'current-password'",
-          "required": "no",
+          "required": "false",
           "doc": "Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows."
         },
         {
           "name": "inputId",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring."
         },
         {
           "name": "name",
           "type": "string",
           "default": "''",
-          "required": "no",
+          "required": "false",
           "doc": "HTML name for the underlying input (form + vee-validate integration)."
         },
         {
           "name": "requirements",
           "type": "boolean | PasswordRequirement[]",
           "default": "false",
-          "required": "no",
+          "required": "false",
           "doc": "Enables the password-requirements row. `true` (a bare attribute) renders the built-in rule set; an array replaces that set entirely, one chip per entry. Each rule carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. `false` or an empty array omits the whole row, caption included."
         },
         {
           "name": "requirementsTitle",
           "type": "string",
           "default": "'Must contain:'",
-          "required": "no",
+          "required": "false",
           "doc": "Caption that opens the requirements row and names the group for assistive tech. Rendered only when the row is enabled."
         }
       ],

@@ -7,37 +7,43 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: 4c5f0a543f0cb424b3face89bc5f259b84bb801aab695411f4713dbbacda0ace
+checksum: 9c8c2ce8e1bda9a5c7d2af95001fdc7073aa206b5f5a55c3910f1125258b3f45
 created: 2026-06-15
-last_updated: 2026-06-15
+last_updated: 2026-08-10
 ---
 
 # Label — Component Spec
 
 ## Purpose
 
-Form-field label that pairs descriptive text with an optional required indicator. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word "(Required)" in muted text — replacing the older `Tag` badge for a lighter typographic signal.
+Form-field label that pairs descriptive text with an optional required indicator and an optional hint. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word "(Required)" in muted text — replacing the older `Tag` badge for a lighter typographic signal. Setting `hint` appends a `Hint` glyph after the text, so a field name and its one-sentence explanation stay one component instead of a hand-built row.
 
 ## Usage
 
 ```vue
 <script setup>
-import Label from '@aziontech/webkit/label'
-import InputText from '@aziontech/webkit/input-text'
+  import Label from '@aziontech/webkit/label'
+  import InputText from '@aziontech/webkit/input-text'
 </script>
 
 <template>
-  <Label for="email" label="Email" required />
+  <Label
+    for="email"
+    label="Email"
+    required
+    hint="We only use it for deploy notifications."
+  />
   <InputText id="email" />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `required` | `boolean` | `false` | no | Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; "(Required)" inherits `var(--text-muted)`. |
+| Prop       | Type      | Default | Required | JSDoc                                                                                                                                                                            |
+| ---------- | --------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`    | false    | Fallback text when the default slot is empty.                                                                                                                                    |
+| `required` | `boolean` | `false` | false    | Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; "(Required)" inherits `var(--text-muted)`. |
+| `hint`     | `string`  | `''`    | false    | Short explanation appended as a `Hint` glyph that reveals it on hover or focus. Empty renders no glyph.                                                                          |
 
 ## Events
 
@@ -45,14 +51,15 @@ import InputText from '@aziontech/webkit/input-text'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Label text; falls back to `label` prop when empty. |
+| Slot      | Scope | Notes                                              |
+| --------- | ----- | -------------------------------------------------- |
+| `default` | —     | Label text; falls back to `label` prop when empty. |
 
 ## States
 
-- Visual states: `default`, `required`
+- Visual states: `default`, `required`, `hinted`
 - `data-required` mirrors the `required` prop
+- `data-hinted` is set when `hint` is non-empty (the `Hint` glyph is rendered)
 
 ## Motion & Animations
 
@@ -60,24 +67,25 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-label-sm` |
-| color (text) | `var(--text-default)` |
-| color (required indicator "(Required)") | `var(--text-muted)` |
-| color (required indicator "*") | `var(--primary)` |
-| gap (required variant) | `var(--spacing-xxs)` |
+| Region                                  | Token (DESIGN.md)     |
+| --------------------------------------- | --------------------- |
+| typography                              | `.text-label-sm`      |
+| color (text)                            | `var(--text-default)` |
+| color (required indicator "(Required)") | `var(--text-muted)`   |
+| color (required indicator "*")          | `var(--primary)`      |
+| gap (required variant)                  | `var(--spacing-xxs)`  |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                                                | Temporary primitive                           | Follow-up                                                                           |
+| ------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `Components/Form Field/Label` (Sora 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-label semantic class to match Figma weight 400 + lh 1.3` |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Root is a native `<label>` element; consumers pass `for="<input-id>"` via attrs to associate it with the corresponding control.
-- Keyboard map: not focusable (decorative wrapper for native `<label>` semantics); clicking the label focuses the associated input via native browser behavior.
+- Keyboard map: the label itself is not focusable (native `<label>` semantics); clicking it focuses the associated input via native browser behavior. When `hint` is set, the `Hint` glyph inside it is the one focusable stop — it swallows its own click (`.prevent`), so activating the hint never toggles the labelled control.
+- With `hint` set, the hint sentence is the glyph's accessible name and therefore joins the associated control's accessible name — deliberate, since a hover-only tooltip would otherwise be invisible to a screen reader. Keep hints to one sentence for that reason.
 - ARIA: the required indicator is inline text (`* (Required)`). The `*` character is decorative and marked `aria-hidden="true"` so screen readers announce only "(Required)" together with the label text. Consumers that wire the input with `aria-required="true"` keep the programmatic state in sync.
 - Contrast ≥4.5:1 between `var(--text-default)` and `var(--bg-canvas)`; the warning tag inherits its own contrast guarantees.
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
@@ -87,6 +95,7 @@ _none_
 
 - Default
 - Required — args delta is `{ required: true }`; justified because the `required` prop is the only variant axis (the spec declares no `kind` and no `size`) and the Default vs Required side-by-side comparison is the component's primary documentation surface.
+- Hinted — args delta is `{ hint: '…' }`; justified because `hint` is the second (independent) axis and the only one that renders another component, so the consumer needs to see where the glyph sits relative to the text and the required indicator.
 
 ## Constraints — DO NOT
 

@@ -46,13 +46,22 @@ describe('FieldInputGroup', () => {
       expect(queryByTestId('input-field-input-group__helper')).toBeNull()
     })
 
-    it('shows the locked fallback helper with the lock icon when disabled with no helper text', () => {
-      const { getByTestId } = render(FieldInputGroup, {
+    it('omits the helper row when disabled with no helper text', () => {
+      const { queryByTestId } = render(FieldInputGroup, {
         props: { label: 'Website', disabled: true }
       })
 
+      // The field writes no copy of its own, so a transient disable grows no padlock line.
+      expect(queryByTestId('input-field-input-group__helper')).toBeNull()
+    })
+
+    it('renders a supplied helper with the lock icon while disabled', () => {
+      const { getByTestId } = render(FieldInputGroup, {
+        props: { label: 'Website', disabled: true, helperText: 'Managed by your DNS provider.' }
+      })
+
       const helper = getByTestId('input-field-input-group__helper')
-      expect(helper.textContent).toContain('This field is locked.')
+      expect(helper.textContent).toContain('Managed by your DNS provider.')
       expect(helper.getAttribute('data-kind')).toBe('disabled')
       expect(getByTestId('input-field-input-group__helper__icon')).toBeTruthy()
     })
@@ -178,12 +187,25 @@ describe('FieldInputGroup', () => {
       expect(getByRole('textbox').getAttribute('aria-describedby')).toBeNull()
     })
 
-    it('keeps aria-describedby pointing at the fallback helper when disabled', () => {
-      const { getByRole } = render(FieldInputGroup, {
+    it('drops aria-describedby when disabled with no helper text, and keeps it with one', () => {
+      // Disabling renders no helper of the field's own making, so there is nothing to describe.
+      const bare = render(FieldInputGroup, {
         props: { label: 'Website', disabled: true, inputId: 'site-field' }
       })
+      expect(bare.getByRole('textbox').getAttribute('aria-describedby')).toBeNull()
+      bare.unmount()
 
-      expect(getByRole('textbox').getAttribute('aria-describedby')).toBe('site-field-helper')
+      const described = render(FieldInputGroup, {
+        props: {
+          label: 'Website',
+          disabled: true,
+          inputId: 'site-field',
+          helperText: 'Managed by your DNS provider.'
+        }
+      })
+      expect(described.getByRole('textbox').getAttribute('aria-describedby')).toBe(
+        'site-field-helper'
+      )
     })
   })
 
@@ -308,12 +330,12 @@ describe('FieldInputGroup', () => {
       expect(getByRole('textbox').getAttribute('aria-invalid')).toBe('true')
     })
 
-    it('renders the Disabled story with the locked fallback helper', () => {
+    it('renders the Disabled story with its supplied disabled helper', () => {
       const { getByRole, getByTestId } = render(Disabled)
 
       expect((getByRole('textbox') as HTMLInputElement).disabled).toBe(true)
       expect(getByTestId('input-field-input-group__helper').textContent).toContain(
-        'This field is locked.'
+        'Managed by your DNS provider.'
       )
     })
 

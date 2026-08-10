@@ -156,15 +156,31 @@ describe('FieldPassword', () => {
   })
 
   describe('disabled', () => {
-    it('disables the input, marks the root data-disabled, and shows the locked helper fallback', () => {
-      const { getByTestId } = render(FieldPassword, {
+    it('disables the input, marks the root data-disabled, and writes no helper copy of its own', () => {
+      const { getByTestId, queryByTestId } = render(FieldPassword, {
         props: { label: 'Password', disabled: true }
       })
 
       expect(getByTestId('input-field-password')).toHaveAttribute('data-disabled')
       expect(getByTestId('input-field-password__input')).toBeDisabled()
-      // No explicit helperText → disabled fallback copy is rendered.
-      expect(getByTestId('input-field-password__helper')).toHaveTextContent('This field is locked.')
+      // No helperText → no helper row, disabled or not. The field never substitutes copy,
+      // so a field disabled for the length of a request grows no line (and no lock glyph).
+      expect(queryByTestId('input-field-password__helper')).toBeNull()
+      expect(getByTestId('input-field-password__input')).not.toHaveAttribute('aria-describedby')
+    })
+
+    it('renders the caller helper text with the disabled kind when one is supplied', () => {
+      const { getByTestId } = render(FieldPassword, {
+        props: {
+          label: 'Password',
+          disabled: true,
+          helperText: 'Managed by your identity provider.'
+        }
+      })
+
+      const helper = getByTestId('input-field-password__helper')
+      expect(helper).toHaveTextContent('Managed by your identity provider.')
+      expect(helper).toHaveAttribute('data-kind', 'disabled')
     })
   })
 
