@@ -17,7 +17,7 @@
   const ctx = inject(DrawerInjectionKey)
 
   const rootClasses = computed(() =>
-    cn('text-heading-sm text-[var(--text-default)]', attrs.class as string | undefined)
+    cn('text-heading-sm text-(--text-default)', attrs.class as string | undefined)
   )
 </script>
 

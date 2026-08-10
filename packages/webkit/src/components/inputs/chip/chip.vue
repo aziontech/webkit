@@ -105,12 +105,12 @@
       :tabindex="clickable ? 0 : undefined"
       :style="removeTransitionStyle"
       :class="attrs.class"
-      class="relative inline-flex items-center justify-center overflow-hidden border border-[var(--border-default)] border-[length:var(--border-width-default)] bg-[var(--bg-surface-raised)] text-[var(--text-default)] shadow-[var(--shadow-sm)] leading-none rounded-[var(--shape-elements)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[size=medium]:text-label-md data-[size=small]:text-label-sm data-[size=medium]:leading-none data-[size=small]:leading-none data-[size=small]:h-5 data-[size=medium]:py-[var(--spacing-xs)] data-[size=medium]:px-[var(--spacing-sm)] data-[size=small]:p-[var(--spacing-xs)] data-[size=medium]:data-[removable]:pr-[var(--spacing-xs)] data-[size=small]:data-[removable]:pr-[var(--spacing-xxs)] data-[clickable]:cursor-pointer data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-[var(--border-strong)] data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-[var(--ring-color)] data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="relative inline-flex items-center justify-center overflow-hidden border border-(--border-default) border-(length:--border-width-default) bg-(--bg-surface-raised) text-(--text-default) shadow-(--shadow-sm) leading-none rounded-(--shape-elements) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[size=medium]:text-label-md data-[size=small]:text-label-sm data-[size=medium]:leading-none data-[size=small]:leading-none data-[size=small]:h-5 data-[size=medium]:py-(--spacing-xs) data-[size=medium]:px-(--spacing-sm) data-[size=small]:p-(--spacing-xs) data-[size=medium]:data-[removable]:pr-(--spacing-xs) data-[size=small]:data-[removable]:pr-(--spacing-xxs) data-[clickable]:cursor-pointer data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas)"
       @click="onClick"
       @keydown="onKeydown"
     >
       <span
-        class="relative z-[var(--z-input-field)] inline-flex items-center justify-center gap-[var(--spacing-xxs)]"
+        class="relative z-(--z-input-field) inline-flex items-center justify-center gap-(--spacing-xxs)"
       >
         <slot v-if="$slots['default']" />
         <span
@@ -124,7 +124,7 @@
           type="button"
           aria-label="Remove"
           :data-testid="`${testId}__remove`"
-          class="inline-flex shrink-0 items-center justify-center rounded-[var(--shape-elements)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+          class="inline-flex shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
           @click.stop="onRemove"
         >
           <i

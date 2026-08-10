@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: d53778d233e5d52fb1bc04d4e12c5a45be65929cde48941c412ad4946977ce13
+checksum: ea010cc3dcfd2aafb81ac6dfb7fb45aa0a13aa439248914fb26f73229ea4e4cf
 created: 2026-05-22
 last_updated: 2026-05-23
 ---
@@ -70,7 +70,7 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses native input; `Space` selects within group.
 - ARIA: native `type="radio"` input with `aria-checked`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

@@ -25,7 +25,7 @@
   const rootClasses = computed(() =>
     cn(
       'w-full shrink-0',
-      ctx?.collapsible ? undefined : 'border-t border-[var(--border-muted)] pt-[var(--spacing-md)]',
+      ctx?.collapsible ? undefined : 'border-t border-(--border-muted) pt-(--spacing-md)',
       attrs.class
     )
   )

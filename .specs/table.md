@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 7570f96680bd5e96fcd4a783f81bf37c02f36998ae1b64e1a281c9e448010e0e
+checksum: a98c4e3e04fe82bcc57bf42fe70073f4f3ffa57a77347011460a024808e17687
 created: 2026-06-16
 last_updated: 2026-07-01
 ---
@@ -345,7 +345,7 @@ Per-column slots (data-driven mode) are name-computed at runtime, one per column
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the sort button and any interactive cell content.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the sort button and any interactive cell content.
 - Keyboard map: `Tab` focuses sortable headers and interactive cell content; `Enter`/`Space` toggles a sortable header; row click is mouse/touch (no keyboard trap).
 - ARIA: root `role="table"`; `table-header`/`table-body`/`table-footer` `role="rowgroup"`; `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.

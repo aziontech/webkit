@@ -37,7 +37,7 @@
     data-slot="item-media"
     :data-testid="testId"
     :data-kind="kind"
-    class="flex shrink-0 items-center justify-center gap-[var(--spacing-xs)] group-has-[[data-slot=item-description]]/item:translate-y-0.5 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none data-[kind=icon]:size-8 data-[kind=icon]:rounded-[var(--shape-button)] data-[kind=icon]:border data-[kind=icon]:border-[var(--border-default)] data-[kind=icon]:bg-[var(--bg-hover)] data-[kind=icon]:[&_svg:not([class*='size-'])]:size-4 data-[kind=image]:size-10 data-[kind=image]:overflow-hidden data-[kind=image]:rounded-[var(--shape-button)] data-[kind=image]:[&_img]:size-full data-[kind=image]:[&_img]:object-cover"
+    class="flex shrink-0 items-center justify-center gap-(--spacing-xs) group-has-[[data-slot=item-description]]/item:translate-y-0.5 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none data-[kind=icon]:size-8 data-[kind=icon]:rounded-(--shape-button) data-[kind=icon]:border data-[kind=icon]:border-(--border-default) data-[kind=icon]:bg-(--bg-hover) data-[kind=icon]:[&_svg:not([class*='size-'])]:size-4 data-[kind=image]:size-10 data-[kind=image]:overflow-hidden data-[kind=image]:rounded-(--shape-button) data-[kind=image]:[&_img]:size-full data-[kind=image]:[&_img]:object-cover"
   >
     <slot />
   </div>

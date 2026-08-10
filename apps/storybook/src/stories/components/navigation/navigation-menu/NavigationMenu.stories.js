@@ -153,11 +153,11 @@ const DEMO_COMPONENTS = { NavigationMenu, Button, ...subcomponents }
 // lookup, so the canvas registers each sub-component under a flat binding and
 // uses flat tags (`<NavigationMenuList>`); `v-bind="args"` lets Controls drive
 // the root and auto-wires the declared events into the Actions panel.
-const DEMO_TEMPLATE = `<div class="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-default)]">
-  <header class="border-b border-solid border-[var(--border-default)]">
+const DEMO_TEMPLATE = `<div class="min-h-screen bg-(--bg-canvas) text-(--text-default)">
+  <header class="border-b border-solid border-(--border-default)">
     <NavigationMenu
       v-bind="args"
-      class="mx-auto flex w-full max-w-[var(--container-xl)] items-center gap-[var(--spacing-6)] px-[var(--spacing-6)] py-[var(--spacing-4)]"
+      class="mx-auto flex w-full max-w-(--container-xl) items-center gap-(--spacing-6) px-(--spacing-6) py-(--spacing-4)"
       data-testid="navigation-menu-demo"
     >
       <NavigationMenuList>
@@ -171,7 +171,7 @@ const DEMO_TEMPLATE = `<div class="min-h-screen bg-[var(--bg-canvas)] text-[var(
             </NavigationMenuIcon>
           </NavigationMenuTrigger>
           <NavigationMenuContent class="w-full p-0">
-            <div class="grid grid-cols-2 gap-[var(--spacing-6)] p-[var(--spacing-2)]">
+            <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
               <NavigationMenuList label="Por Caso de Uso">
                 <NavigationMenuItem
                   layout="entry"
@@ -212,7 +212,7 @@ const DEMO_TEMPLATE = `<div class="min-h-screen bg-[var(--bg-canvas)] text-[var(
             </NavigationMenuIcon>
           </NavigationMenuTrigger>
           <NavigationMenuContent class="w-full p-0">
-            <div class="grid grid-cols-2 gap-[var(--spacing-6)] p-[var(--spacing-2)]">
+            <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
               <NavigationMenuList label="Construir">
                 <NavigationMenuItem
                   layout="entry"
@@ -248,7 +248,7 @@ const DEMO_TEMPLATE = `<div class="min-h-screen bg-[var(--bg-canvas)] text-[var(
         </NavigationMenuItem>
       </NavigationMenuList>
 
-      <div class="ml-auto flex items-center gap-[var(--spacing-2)]">
+      <div class="ml-auto flex items-center gap-(--spacing-2)">
         <NavigationMenuTrigger href="https://www.azion.com/pt-br/contato-vendas/">
           Contato
         </NavigationMenuTrigger>
@@ -266,16 +266,16 @@ const DEMO_TEMPLATE = `<div class="min-h-screen bg-[var(--bg-canvas)] text-[var(
   </header>
 
   <div
-    class="mx-auto flex max-w-2xl flex-col items-center px-[var(--spacing-6)] py-[var(--spacing-24)] text-center"
+    class="mx-auto flex max-w-2xl flex-col items-center px-(--spacing-6) py-(--spacing-24) text-center"
     aria-hidden="true"
   >
-    <h1 class="text-heading-lg text-[var(--text-default)]">
+    <h1 class="text-heading-lg text-(--text-default)">
       Navigation menu demo
     </h1>
-    <p class="mt-[var(--spacing-6)] text-body-sm text-[var(--text-muted)]">
+    <p class="mt-(--spacing-6) text-body-sm text-(--text-muted)">
       Hover top-level items to open panels. Keyboard: arrows, Enter, Escape.
     </p>
-    <div class="mt-[var(--spacing-10)] flex flex-wrap justify-center gap-[var(--spacing-3)]">
+    <div class="mt-(--spacing-10) flex flex-wrap justify-center gap-(--spacing-3)">
       <Button label="Primary action" />
       <Button label="Secondary" kind="secondary" />
     </div>

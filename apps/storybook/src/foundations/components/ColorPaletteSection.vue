@@ -34,20 +34,20 @@
 </script>
 
 <template>
-  <section class="mb-[var(--spacing-xxl)]">
-    <div class="mb-[var(--spacing-md)]">
+  <section class="mb-(--spacing-xxl)">
+    <div class="mb-(--spacing-md)">
       <h2
-        class="m-0 mb-[var(--spacing-xs)] border-b border-[var(--border-default)] pb-[var(--spacing-xs)] text-overline-md! text-[var(--text-muted)]"
+        class="m-0 mb-(--spacing-xs) border-b border-(--border-default) pb-(--spacing-xs) text-overline-md! text-(--text-muted)"
       >
         {{ title }}
       </h2>
     </div>
 
-    <div class="flex w-full flex-row flex-wrap gap-[var(--spacing-sm)]">
+    <div class="flex w-full flex-row flex-wrap gap-(--spacing-sm)">
       <article
         v-for="item in items"
         :key="item.id"
-        class="w-full min-w-[var(--container-3xs)] flex-1 cursor-pointer overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
+        class="w-full min-w-(--container-3xs) flex-1 cursor-pointer overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
         role="button"
         tabindex="0"
         :title="isCopied(`${item.id}-value`) ? 'Copied!' : 'Copy variable name'"
@@ -56,7 +56,7 @@
         @keydown.space.prevent="copyToClipboard(item.meta ?? item.value, `${item.id}-value`)"
       >
         <div
-          class="flex h-24 flex-col px-[var(--spacing-sm)] py-[var(--spacing-xs)] font-code"
+          class="flex h-24 flex-col px-(--spacing-sm) py-(--spacing-xs) font-code"
           :style="{ background: item.preview ?? item.value ?? 'transparent' }"
         >
           <span
@@ -74,9 +74,9 @@
         </div>
 
         <div
-          class="flex items-center justify-between gap-[var(--spacing-xs)] bg-[var(--bg-mask)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] font-code"
+          class="flex items-center justify-between gap-(--spacing-xs) bg-(--bg-mask) px-(--spacing-sm) py-(--spacing-xs) font-code"
         >
-          <span class="truncate text-body-xs text-[var(--text-muted)]">{{ item.meta }}</span>
+          <span class="truncate text-body-xs text-(--text-muted)">{{ item.meta }}</span>
         </div>
       </article>
     </div>

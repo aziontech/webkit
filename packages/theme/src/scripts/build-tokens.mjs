@@ -337,7 +337,7 @@ const emitCssV4 = () => {
     '@import "tailwindcss";',
     '',
     '/*',
-    ' * `@aziontech/webkit` components use arbitrary values (`bg-[var(--x)]`) that',
+    ' * `@aziontech/webkit` components use arbitrary values (`bg-(--x)`) that',
     ' * Tailwind v4 only picks up when the source files are inside the scan.',
     ' * Auto-detect scans the CWD only, so we point `@source` at the webkit',
     ' * package via a monorepo-relative path (this file is under',

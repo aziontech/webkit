@@ -67,7 +67,7 @@
     :data-disabled="disabled || null"
     :class="
       cn(
-        'flex flex-col border-b border-[var(--border-muted)] data-[state=open]:border-b-0',
+        'flex flex-col border-b border-(--border-muted) data-[state=open]:border-b-0',
         attrs.class as string | undefined
       )
     "

@@ -247,7 +247,7 @@ export default Object.assign(Root, { Part: RootPart })
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `<Tab focuses; Enter/Space activates; Esc closes; arrows navigate; ...>`
 - ARIA: `<aria-label / aria-busy / aria-disabled / aria-hidden / aria-current / aria-expanded as applicable>`
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state

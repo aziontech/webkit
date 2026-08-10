@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 2a6f539a2733213f73bb59cf27a14c1d6eb0a41016c1c6feaccbfcf217117668
+checksum: 88d5a3a033269ac9563f6f96465e89e5877a3ac7e2a9c637f8cd939f072305fe
 created: 2026-07-01
 last_updated: 2026-07-22
 ---
@@ -40,7 +40,7 @@ Composition container that joins an input primitive with any number of adjacent 
     <input
       v-model="url"
       placeholder="domain"
-      class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
+      class="w-full h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)"
     />
     <InputGroup.Addon>.com</InputGroup.Addon>
   </InputGroup>
@@ -54,7 +54,7 @@ Composition container that joins an input primitive with any number of adjacent 
     <input
       v-model="amount"
       placeholder="0.00"
-      class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
+      class="w-full h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)"
     />
   </InputGroup>
 
@@ -63,7 +63,7 @@ Composition container that joins an input primitive with any number of adjacent 
     <input
       v-model="url"
       placeholder="search"
-      class="w-full h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]"
+      class="w-full h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)"
     />
     <Button
       label="Search"
@@ -135,13 +135,13 @@ Root props:
 - Border semantics mirror `input-text` (independent, not compound):
   - `data-invalid` → `var(--danger-border)`
   - `data-required` → `var(--warning-border)`
-- Hover (only when not focus-within, not invalid, not required, not disabled): `border-[var(--border-strong)]`
+- Hover (only when not focus-within, not invalid, not required, not disabled): `border-(--border-strong)`
 - Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
-- Disabled: `bg-[var(--bg-disabled)]`, `text-[var(--text-disabled)]`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
+- Disabled: `bg-(--bg-disabled)`, `text-(--text-disabled)`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
 - Child seams (applied by the root via Tailwind child selectors):
-  - `[&>*:first-child]:rounded-l-[var(--shape-elements)]` and `[&>*:not(:first-child)]:rounded-l-none`
-  - `[&>*:last-child]:rounded-r-[var(--shape-elements)]` and `[&>*:not(:last-child)]:rounded-r-none`
-  - `[&>*:not(:last-child)]:border-r-[color:var(--border-default)] [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
+  - `[&>*:first-child]:rounded-l-(--shape-elements)` and `[&>*:not(:first-child)]:rounded-l-none`
+  - `[&>*:last-child]:rounded-r-(--shape-elements)` and `[&>*:not(:last-child)]:rounded-r-none`
+  - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
   - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the *inner-facing* border only
 
 ## Motion & Animations
@@ -168,7 +168,7 @@ Root props:
 | root height (large) | `h-10` (Tailwind utility) |
 | focus ring | `var(--ring-color)` |
 | focus ring offset | `var(--bg-canvas)` |
-| child seam | `border-r border-[color:var(--border-default)]` (applied via `[&>*:not(:last-child)]:border-r`) |
+| child seam | `border-r border-(color:--border-default)` (applied via `[&>*:not(:last-child)]:border-r`) |
 | addon surface | `var(--bg-canvas)` |
 | addon text | `var(--text-muted)` |
 | addon padding.x | `var(--spacing-md)` |
@@ -182,7 +182,7 @@ Root props:
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-[var(--ring-color)] ring-offset-2 ring-offset-[var(--bg-canvas)]`) whenever any descendant (any child control or the middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator. Suppressed when `data-disabled` is present. Child components (`Button`, `Select`) retain their own focus behavior internally but the group's ring is visually authoritative.
+- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-(--ring-color) ring-offset-2 ring-offset-(--bg-canvas)`) whenever any descendant (any child control or the middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator. Suppressed when `data-disabled` is present. Child components (`Button`, `Select`) retain their own focus behavior internally but the group's ring is visually authoritative.
 - Keyboard map: `Tab` moves through the children in DOM order. No custom keybindings on the group.
 - ARIA: root uses `role="group"`; `aria-invalid` and `aria-required` reflect the props. Each child keeps its own `aria-*` — the group does not duplicate.
 - `<InputGroup.Addon>` is decorative-by-default; when its content is not conveyed elsewhere the consumer should annotate it (`aria-hidden="true"` for pure decoration, or a visible-only label the middle input references via `aria-describedby`).

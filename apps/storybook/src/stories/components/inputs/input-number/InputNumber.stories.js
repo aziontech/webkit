@@ -180,7 +180,7 @@ const SIZES_SCRIPT = [
   'const medium = ref(10)',
   'const large = ref(100)'
 ]
-const SIZES_MARKUP = `<div class="flex w-[20rem] flex-col gap-[var(--spacing-md)]">
+const SIZES_MARKUP = `<div class="flex w-[20rem] flex-col gap-(--spacing-md)">
   <InputNumber v-model="small" size="small" :min="0" :max="9" :step="1" />
   <InputNumber v-model="medium" size="medium" :min="0" :max="99" :step="5" />
   <InputNumber v-model="large" size="large" :min="0" :max="1000" :step="50" />
@@ -198,7 +198,7 @@ export const Sizes = {
       return { small, medium, large, log }
     },
     template: `
-      <div class="flex w-[20rem] flex-col gap-[var(--spacing-md)]">
+      <div class="flex w-[20rem] flex-col gap-(--spacing-md)">
         <InputNumber v-model="small" size="small" :min="0" :max="9" :step="1" @update:model-value="log" />
         <InputNumber v-model="medium" size="medium" :min="0" :max="99" :step="5" @update:model-value="log" />
         <InputNumber v-model="large" size="large" :min="0" :max="1000" :step="50" @update:model-value="log" />

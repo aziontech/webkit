@@ -93,21 +93,21 @@
     :data-visible="visible || null"
     :class="[
       'group relative inline-flex items-center w-full h-10',
-      'gap-[var(--spacing-xs)] pr-[var(--spacing-xs)]',
-      'rounded-[var(--shape-elements)]',
-      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
+      'gap-(--spacing-xs) pr-(--spacing-xs)',
+      'rounded-(--shape-elements)',
+      'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus-within):not([data-disabled])]:hover:border-[var(--border-strong)]',
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]',
-      'data-[invalid]:border-[var(--danger-border)]',
-      'data-[required]:border-[var(--warning-border)]',
-      'data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-[var(--border-default)] data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
+      'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
+      'data-[invalid]:border-(--danger-border)',
+      'data-[required]:border-(--warning-border)',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs.class
     ]"
   >
     <span
       v-if="hasIconLeft"
-      class="inline-flex shrink-0 items-center justify-center pl-[var(--spacing-md)] text-[var(--text-muted)]"
+      class="inline-flex shrink-0 items-center justify-center pl-(--spacing-md) text-(--text-muted)"
       aria-hidden="true"
     >
       <slot name="iconLeft" />
@@ -125,14 +125,14 @@
       :aria-invalid="invalid || undefined"
       :aria-required="required || undefined"
       :data-testid="testId"
-      class="relative z-[var(--z-input-field)] w-full min-w-0 border-0 bg-transparent py-0 pr-0 pl-[var(--spacing-md)] group-data-[has-icon-left]:pl-0 outline-none text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pr-0 pl-(--spacing-md) group-data-[has-icon-left]:pl-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
       @input="handleInput"
     />
 
     <span
       v-if="hasIconRight"
-      class="inline-flex shrink-0 items-center justify-center text-[var(--text-muted)]"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
       <slot name="iconRight" />

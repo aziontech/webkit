@@ -14,7 +14,7 @@
 export const overlayMobileFluidClasses = ['max-md:w-full', 'max-md:h-fit', 'max-md:max-h-[80dvh]']
 export const dialogShellPositionClasses = [
   'max-md:items-end max-md:justify-center max-md:p-0',
-  'md:items-center md:justify-center md:p-[var(--spacing-md)]'
+  'md:items-center md:justify-center md:p-(--spacing-md)'
 ]
 /**
  * The motion wrapper only positions and animates: it declares no height cap and
@@ -25,7 +25,7 @@ export const dialogShellPositionClasses = [
  */
 export const dialogPanelPositionClasses = ['max-md:w-full']
 export const dialogPanelShapeClasses = [
-  'max-md:rounded-b-[var(--shape-flat)] max-md:rounded-t-[var(--shape-card)]',
+  'max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card)',
   // Below `md` the sheet is fluid and hugs its content up to the cap.
   'max-md:w-full max-md:h-fit',
   /*
@@ -48,6 +48,6 @@ export const drawerShellPositionClasses = [
 export const drawerPanelPositionClasses = [
   ...overlayMobileFluidClasses,
   'max-md:max-w-none',
-  'max-md:rounded-b-[var(--shape-flat)] max-md:rounded-t-[var(--shape-card)]',
+  'max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card)',
   'md:h-full md:min-h-0 md:max-h-full'
 ]

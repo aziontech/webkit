@@ -90,7 +90,7 @@ export const Default = {
   }
 }
 
-const STATUS_TEMPLATE = `<div class="flex flex-wrap items-center gap-[var(--spacing-3)]">
+const STATUS_TEMPLATE = `<div class="flex flex-wrap items-center gap-(--spacing-3)">
   <StatusIndicator severity="success" label="Status" />
   <StatusIndicator severity="info" label="Status" />
   <StatusIndicator severity="neutral" label="Status" />

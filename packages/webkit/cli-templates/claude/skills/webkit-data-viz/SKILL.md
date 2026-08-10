@@ -103,17 +103,17 @@ error rate is `--text-danger` even though the arrow points up.
 </script>
 
 <template>
-  <div class="grid grid-cols-3 gap-[var(--spacing-md)]">
+  <div class="grid grid-cols-3 gap-(--spacing-md)">
     <CardBox
       v-for="s in stats"
       :key="s.label"
-      class="flex flex-col gap-[var(--spacing-xs)]"
+      class="flex flex-col gap-(--spacing-xs)"
     >
-      <span class="text-body-sm text-[var(--text-muted)]">{{ s.label }}</span>
-      <span class="text-big-number-lg text-[var(--text-default)] tabular-nums">{{ s.value }}</span>
+      <span class="text-body-sm text-(--text-muted)">{{ s.label }}</span>
+      <span class="text-big-number-lg text-(--text-default) tabular-nums">{{ s.value }}</span>
       <span
         class="text-body-sm tabular-nums"
-        :class="s.good ? 'text-[var(--text-success)]' : 'text-[var(--text-danger)]'"
+        :class="s.good ? 'text-(--text-success)' : 'text-(--text-danger)'"
         >{{ s.delta }}</span
       >
     </CardBox>

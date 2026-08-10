@@ -22,6 +22,6 @@
     role="separator"
     aria-hidden="true"
     :data-testid="testId"
-    class="my-[var(--spacing-xxs)] border-t border-[var(--border-default)]"
+    class="my-(--spacing-xxs) border-t border-(--border-default)"
   />
 </template>

@@ -33,7 +33,7 @@
   // block, so its padding box and border box coincide and no pull-back is needed. Adding
   // one here would push the port a pixel past the edge connectors.ts attaches to.
   const PORT_CLASS =
-    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-[var(--radius-sm)] border-solid border-[length:var(--border-width-default,1px)] border-[var(--border-muted)] bg-[var(--accent)] data-[flow-port=end]:left-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:right-0 data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
+    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:left-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:right-0 data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
 
   const rootClass = computed(() => cn('relative block', attrs.class as string | undefined))
 </script>

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-05-24
 last_updated: 2026-05-24
-checksum: 23a3691909c8316cdbca93943c378e688d63820ea09555d076f489d8286a92d2
+checksum: 4fd88829b0fdbeec71294d6d04b89e95cc2ab159c9bee3e0a6c04fdd0e001f05
 ---
 # Item — Component Spec
 
@@ -89,7 +89,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: on slotted links and buttons. The Item shell draws no focus ring on its own, except with `asChild`, where the merged focusable child (e.g. an anchor) receives the `focus-visible` ring (`focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]`) and hover/active feedback.
+- Visible focus: on slotted links and buttons. The Item shell draws no focus ring on its own, except with `asChild`, where the merged focusable child (e.g. an anchor) receives the `focus-visible` ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`) and hover/active feedback.
 - Keyboard map: slotted links and buttons supply Tab order; use `asChild` to merge layout onto a single focusable child when the whole row is a link.
 - ARIA: `ItemGroup` uses `role="list"`; consumers may set `role="listitem"` on Item when inside a list; `ItemSeparator` uses `role="separator"`.
 - Contrast ≥4.5:1 for title and description text.

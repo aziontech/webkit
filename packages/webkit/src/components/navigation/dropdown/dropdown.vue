@@ -348,13 +348,13 @@
           :data-state="isOpenRef ? 'open' : 'closed'"
           :data-placement="resolvedPlacementRef"
           :style="panelStyle"
-          class="flex min-w-[var(--container-3xs)] max-w-[var(--container-2xs)] flex-col overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xxs)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xxs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"
         >
           <div
             v-if="$slots['top']"
             :data-testid="`${testId}__top`"
-            class="sticky top-0 z-10 bg-[var(--bg-surface)] pb-[var(--spacing-xxs)]"
+            class="sticky top-0 z-10 bg-(--bg-surface) pb-(--spacing-xxs)"
           >
             <slot name="top" />
           </div>
@@ -368,7 +368,7 @@
           <div
             v-if="$slots['bottom']"
             :data-testid="`${testId}__bottom`"
-            class="sticky bottom-0 z-10 bg-[var(--bg-surface)] pt-[var(--spacing-xxs)]"
+            class="sticky bottom-0 z-10 bg-(--bg-surface) pt-(--spacing-xxs)"
           >
             <slot name="bottom" />
           </div>

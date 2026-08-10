@@ -62,11 +62,11 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-loading="loading || null"
-    class="flex min-w-0 flex-col gap-[var(--spacing-xs)]"
+    class="flex min-w-0 flex-col gap-(--spacing-xs)"
   >
     <h3
       :data-testid="`${testId}__header`"
-      class="text-label-lg text-[var(--text-muted)]"
+      class="text-label-lg text-(--text-muted)"
     >
       <slot name="title">{{ title }}</slot>
     </h3>
@@ -86,7 +86,7 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
       :leave-active-class="itemTransitionActive"
-      class="m-0 flex min-h-[14rem] list-none flex-col gap-[var(--spacing-xxs)] overflow-auto rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-xs)] data-[disabled]:bg-[var(--bg-disabled)]"
+      class="m-0 flex min-h-[14rem] list-none flex-col gap-(--spacing-xxs) overflow-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) data-[disabled]:bg-(--bg-disabled)"
     >
       <li
         v-if="loading"
@@ -94,9 +94,9 @@
         role="presentation"
         :data-testid="`${testId}__loading`"
         :style="itemTransitionStyle"
-        class="flex flex-1 items-center justify-center py-[var(--spacing-md)]"
+        class="flex flex-1 items-center justify-center py-(--spacing-md)"
       >
-        <Spinner class="size-6 text-[var(--text-muted)]" />
+        <Spinner class="size-6 text-(--text-muted)" />
       </li>
       <li
         v-for="(item, index) in ctx.items(side)"
@@ -108,7 +108,7 @@
         :data-selected="ctx.isSelected(side, index) || null"
         :data-testid="`${testId}__option`"
         :style="itemTransitionStyle"
-        class="cursor-pointer select-none rounded-[var(--shape-elements)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-md text-[var(--text-default)] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[selected]:bg-[var(--bg-selected)] aria-disabled:cursor-not-allowed"
+        class="cursor-pointer select-none rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-md text-(--text-default) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) aria-disabled:cursor-not-allowed"
         @click="ctx.toggleSelection(side, index)"
         @dblclick="ctx.itemDoubleClick($event, side, index)"
         @keydown="onOptionKeydown(index, $event)"

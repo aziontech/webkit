@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 744eb43445f8bfba62546a4b43ece21ee5f8a58cea59e4e2433205294fb1e4cc
+checksum: e2a414a075b671f7e056cb66a965e2a7ba8630e10ada91b9dc3d1df714e46df6
 created: 2026-05-25
 last_updated: 2026-05-25
 ---
@@ -74,7 +74,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses link segments; `Enter` activates.
 - ARIA: current segment uses `aria-current="page"`; disabled segments use `aria-disabled="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

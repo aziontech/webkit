@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: b13da90c2c3e4c4965169d7174bd83fb0bfcaf1b437c35a03e47e4b53926a39e
+checksum: e41af99148584ab56c4eba12c388df37fc73d2d66bca970634fe8c554968d193
 created: 2026-06-02
 last_updated: 2026-06-02
 ---
@@ -91,12 +91,12 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `bg-contrast` | `bg-[var(--bg-surface)]` | `TODO: tokenizar` (add `--bg-contrast` to DESIGN.md when contrast surface diverges) |
-| `text-contrast` | `text-[var(--text-default)]` | `TODO: tokenizar` (add `--text-contrast` to DESIGN.md when contrast text diverges) |
+| `bg-contrast` | `bg-(--bg-surface)` | `TODO: tokenizar` (add `--bg-contrast` to DESIGN.md when contrast surface diverges) |
+| `text-contrast` | `text-(--text-default)` | `TODO: tokenizar` (add `--text-contrast` to DESIGN.md when contrast text diverges) |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the trigger wrapper.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
 - Keyboard map: `Tab` focuses the trigger → tooltip opens; `Escape` closes; tooltip never traps focus.
 - ARIA: `role="tooltip"` on the panel; the trigger references the panel via `aria-describedby`. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.

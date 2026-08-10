@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 0517cfcf2b5b071fe6acff002c1f48c351fce55a058249619bcb88f04cc0c391
+checksum: 63e139df8a7de006f84ee8c749dd6915815c69ee59a350d15426bb3bf7889c5d
 created: 2026-06-16
 last_updated: 2026-07-31
 ---
@@ -111,11 +111,11 @@ Aligned with Figma frame `3714:10788` (Webkit / InputPassword). The token mappin
 
 | Figma variable                                        | Temporary primitive              | Follow-up                                                                                                                                                                                                                                                                                  |
 | ----------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--border-width-default` (0.8 px) on the field border | the shared 1 px `border` utility | Not a missing token — the token exists; it is unadopted for consistency. Migrate every bordered input (`InputText`, `InputNumber`, `Select`, `Textarea`, `InputPassword`, …) to `border-[length:var(--border-width-default)]` in one coordinated PR, then regenerate the visual baselines. |
+| `--border-width-default` (0.8 px) on the field border | the shared 1 px `border` utility | Not a missing token — the token exists; it is unadopted for consistency. Migrate every bordered input (`InputText`, `InputNumber`, `Select`, `Textarea`, `InputPassword`, …) to `border-(length:--border-width-default)` in one coordinated PR, then regenerate the visual baselines. |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
 - Keyboard map: `Tab` focuses the input, then the visibility toggle button (when `toggleable=true`); `Enter` / `Space` on the toggle flips visibility; standard text-editing keys apply to the input.
 - ARIA: the visibility toggle is a `<button type="button">` with `aria-pressed` reflecting the current visible state and an `aria-label` that switches between "Show password" and "Hide password"; `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; decorative icon slots and the eye glyph are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.

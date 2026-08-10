@@ -112,21 +112,21 @@
     :data-required="required || null"
     :class="[
       'relative inline-flex w-full items-center overflow-hidden',
-      'rounded-[var(--shape-elements)]',
-      'border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-default)]',
+      'rounded-(--shape-elements)',
+      'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus-within):not([data-disabled])]:hover:border-[var(--border-strong)]',
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)]',
+      '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
+      'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
-      'data-[invalid]:border-[var(--danger-border)]',
-      'data-[required]:border-[var(--warning-border)]',
-      'data-[disabled]:bg-[var(--bg-disabled)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-[var(--border-default)] data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      'data-[invalid]:border-(--danger-border)',
+      'data-[required]:border-(--warning-border)',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs['class']
     ]"
   >
     <span
       v-if="$slots['prefix']"
-      class="relative z-[var(--z-input-field)] flex items-center pl-[var(--spacing-md)] text-[var(--text-muted)]"
+      class="relative z-(--z-input-field) flex items-center pl-(--spacing-md) text-(--text-muted)"
     >
       <slot name="prefix" />
     </span>
@@ -145,21 +145,21 @@
       :aria-required="required || undefined"
       :data-testid="testId"
       v-bind="passthroughAttrs"
-      class="relative z-[var(--z-input-field)] w-full min-w-0 border-0 bg-transparent outline-none px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       @input="handleInput"
       @change="handleChange"
     />
 
     <span
       v-if="$slots['suffix']"
-      class="relative z-[var(--z-input-field)] flex items-center pr-[var(--spacing-md)] text-[var(--text-muted)]"
+      class="relative z-(--z-input-field) flex items-center pr-(--spacing-md) text-(--text-muted)"
     >
       <slot name="suffix" />
     </span>
 
     <span
       v-if="disabled"
-      class="relative z-[var(--z-input-field)] flex items-center pr-[var(--spacing-md)] text-[var(--text-disabled)]"
+      class="relative z-(--z-input-field) flex items-center pr-(--spacing-md) text-(--text-disabled)"
       aria-hidden="true"
     >
       <i class="pi pi-lock text-label-sm leading-none" />
@@ -167,14 +167,14 @@
 
     <span
       v-if="showButtons"
-      class="relative z-[var(--z-input-field)] flex h-full w-12 shrink-0 flex-col self-stretch border-l border-[var(--border-default)]"
+      class="relative z-(--z-input-field) flex h-full w-12 shrink-0 flex-col self-stretch border-l border-(--border-default)"
     >
       <button
         type="button"
         tabindex="-1"
         aria-label="Increment"
         :disabled="disabled || readonly"
-        class="flex flex-1 items-center justify-center border-b border-[var(--border-default)] text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+        class="flex flex-1 items-center justify-center border-b border-(--border-default) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="handleIncrement"
       >
         <i
@@ -187,7 +187,7 @@
         tabindex="-1"
         aria-label="Decrement"
         :disabled="disabled || readonly"
-        class="flex flex-1 items-center justify-center text-[var(--text-default)] transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-hover)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+        class="flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="handleDecrement"
       >
         <i

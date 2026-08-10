@@ -4,7 +4,7 @@ category: templates
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: df218008e3302627d1fbd5e37c9f4889c574835093aec95898d57d382b835198
+checksum: ce43ebbbac93ae575ed0fd00fe9da31f9b4f6c2942c3d317c6abe6862beb46bd
 created: 2026-05-22
 last_updated: 2026-05-22
 ---
@@ -75,7 +75,7 @@ Composed template block for a product flow. Migrated from the existing implement
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

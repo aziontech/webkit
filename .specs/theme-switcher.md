@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: e80167c9153131f7a04f29912319657592b0f80453ffb93ae7ad2a5568d20203
+checksum: 1b303aaea45993230b0989f72fb5d9435a1ad62adbe8223165f52b2b50175e41
 created: 2026-07-13
 last_updated: 2026-07-13
 ---
@@ -83,11 +83,11 @@ const theme = ref('system')
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `--border-width-default` (0.8px) | `border-[length:var(--border-width-default)]` (real compiled theme token) | `TODO: document --border-width-default in DESIGN.md` |
+| `--border-width-default` (0.8px) | `border-(length:--border-width-default)` (real compiled theme token) | `TODO: document --border-width-default in DESIGN.md` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the focused segment.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the focused segment.
 - Keyboard map: `Tab` moves focus into the group (roving tabindex lands on the selected segment); `ArrowLeft`/`ArrowRight` (and `ArrowUp`/`ArrowDown`) move selection between segments; `Space`/`Enter` selects the focused segment.
 - ARIA: root is `role="radiogroup"` with `aria-label` from `ariaLabel`; each segment is `role="radio"` with `aria-checked` and its own `aria-label` (`System` / `Dark` / `Light`); the glyph is `aria-hidden`. `aria-disabled` mirrors `disabled`.
 - Each segment is wrapped in `@aziontech/webkit/tooltip` (`placement="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.

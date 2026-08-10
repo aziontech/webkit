@@ -248,7 +248,7 @@ export const Default = {
   }
 }
 
-const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center justify-center gap-[var(--spacing-4)]">
+const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center justify-center gap-(--spacing-4)">
   <Drawer
     v-for="size in sizes"
     :key="size"
@@ -358,7 +358,7 @@ const SCROLL_TEMPLATE = `<Drawer v-model:open="open" dismissible side="right" si
         <DrawerTitle>Scrollable drawer</DrawerTitle>
         <DrawerClose />
       </PanelHeader>
-      <PanelContent class="flex flex-col gap-[var(--spacing-4)]">
+      <PanelContent class="flex flex-col gap-(--spacing-4)">
         <DrawerDescription>
           Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
           ScrollArea while header and footer stay in the panel layout.
@@ -366,10 +366,10 @@ const SCROLL_TEMPLATE = `<Drawer v-model:open="open" dismissible side="right" si
         <section
           v-for="section in scrollSections"
           :key="section.title"
-          class="flex flex-col gap-[var(--spacing-2)] rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-[var(--border-muted)] p-[var(--spacing-4)]"
+          class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
         >
-          <h3 class="m-0 text-body-md text-[var(--text-default)]">{{ section.title }}</h3>
-          <p class="m-0 text-body-sm text-[var(--text-muted)]">{{ section.body }}</p>
+          <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
+          <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
         </section>
       </PanelContent>
       <PanelFooter class="flex-col md:flex-row md:justify-end">

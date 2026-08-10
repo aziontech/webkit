@@ -4,7 +4,7 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 0efc3a5b4ca3184da8c5b135eb2feb63cde2a997d8b8661c9fcd119d40e878de
+checksum: 44aeadc217e8ff83c52050585dd47bc0cd2b18d6371b791e0e583584cfd89ff2
 created: 2026-05-22
 last_updated: 2026-05-29
 ---
@@ -67,7 +67,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

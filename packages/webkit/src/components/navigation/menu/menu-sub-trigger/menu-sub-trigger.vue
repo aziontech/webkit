@@ -55,19 +55,19 @@
   // allowed to be smaller and muted; from there every row is 14px, a trigger included — a row
   // that owns children is still a row. The chevron sits on the trailing edge.
   const ROOT_CLASS =
-    'group relative flex h-8 w-full shrink-0 items-center gap-[var(--spacing-xs)] ' +
-    'rounded-[var(--shape-elements)] pr-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-left ' +
-    'text-[var(--text-default)] ' +
-    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
-    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-[var(--bg-active)] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
+    'group relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xs) ' +
+    'rounded-(--shape-elements) pr-(--spacing-xs) py-(--spacing-xxs) text-left ' +
+    'text-(--text-default) ' +
+    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
+    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
     'hover:before:opacity-100 active:after:opacity-100 ' +
     'motion-reduce:before:transition-none motion-reduce:after:transition-none ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))] ' +
-    'data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)] data-[disabled]:before:hidden data-[disabled]:after:hidden'
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))] ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:before:hidden data-[disabled]:after:hidden'
 
   // The chevron is a trailing affordance, not part of the icon column, so it keeps its own
   // smaller size. `text-label-sm` is the token that gets it there without a raw text-* class.
-  const CHEVRON_CLASS = 'size-3 shrink-0 leading-none text-label-sm text-[var(--text-muted)]'
+  const CHEVRON_CLASS = 'size-3 shrink-0 leading-none text-label-sm text-(--text-muted)'
 
   // Same box and glyph as `Menu.Item`, so the two land on the menu's one content column: the
   // 32px box supplies the inset and the glyph's centring carries it the rest of the way.
@@ -78,8 +78,8 @@
       props.icon,
       'size-4 shrink-0 leading-none text-[length:inherit]',
       props.disabled
-        ? 'text-[var(--text-disabled)]'
-        : 'text-[var(--text-muted)] group-hover:text-[var(--text-default)] group-focus-visible:text-[var(--text-default)]'
+        ? 'text-(--text-disabled)'
+        : 'text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default)'
     )
   )
 
@@ -88,7 +88,7 @@
       ROOT_CLASS,
       // The menu's ONE content column (`--spacing-sm`): a group title's text, an icon-bearing
       // row's glyph and an icon-less row's label all start on it.
-      showIcon.value ? 'pl-[var(--spacing-xxs)]' : 'pl-[var(--spacing-sm)]',
+      showIcon.value ? 'pl-(--spacing-xxs)' : 'pl-(--spacing-sm)',
       attrs.class as string | undefined
     )
   )

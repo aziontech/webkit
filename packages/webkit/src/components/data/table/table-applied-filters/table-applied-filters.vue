@@ -69,7 +69,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex flex-wrap items-center gap-[var(--spacing-xs)]"
+    class="flex flex-wrap items-center gap-(--spacing-xs)"
   >
     <template
       v-for="filter in filters"

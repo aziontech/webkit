@@ -23,12 +23,12 @@
 
 <template>
   <div
-    class="flex w-full flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] bg-[var(--bg-canvas)] p-[var(--spacing-xs)]"
+    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-elements) bg-(--bg-canvas) p-(--spacing-xs)"
   >
     <article
       v-for="item in typographyCatalog"
       :key="item.className"
-      class="w-full min-w-0 cursor-pointer overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="w-full min-w-0 cursor-pointer overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
       role="button"
       tabindex="0"
       :title="isCopied(item.className) ? 'Copied!' : 'Copy class name'"
@@ -36,23 +36,23 @@
       @keydown.enter.prevent="copyToClipboard(item.className, item.className)"
       @keydown.space.prevent="copyToClipboard(item.className, item.className)"
     >
-      <div class="flex min-h-24 w-full items-center px-[var(--spacing-lg)] py-[var(--spacing-md)]">
-        <p :class="[item.className, 'm-0 w-full break-words text-[var(--text-default)]']">
+      <div class="flex min-h-24 w-full items-center px-(--spacing-lg) py-(--spacing-md)">
+        <p :class="[item.className, 'm-0 w-full break-words text-(--text-default)']">
           {{ item.sample }}
         </p>
       </div>
 
       <div
-        class="flex items-center justify-between gap-[var(--spacing-xs)] bg-[var(--bg-mask)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] font-code"
+        class="flex items-center justify-between gap-(--spacing-xs) bg-(--bg-mask) px-(--spacing-sm) py-(--spacing-xs) font-code"
       >
-        <span class="truncate text-body-xs text-[var(--text-muted)]">{{
+        <span class="truncate text-body-xs text-(--text-muted)">{{
           isCopied(item.className) ? 'Copied' : item.className
         }}</span>
       </div>
     </article>
 
     <article
-      class="w-full min-w-0 cursor-pointer overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)]"
+      class="w-full min-w-0 cursor-pointer overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
       role="button"
       tabindex="0"
       :title="isCopied('text-link') ? 'Copied!' : 'Copy class name'"
@@ -60,11 +60,11 @@
       @keydown.enter.prevent="copyToClipboard(typographyLinkDemo.linkClass, 'text-link')"
       @keydown.space.prevent="copyToClipboard(typographyLinkDemo.linkClass, 'text-link')"
     >
-      <div class="flex min-h-24 w-full items-center px-[var(--spacing-lg)] py-[var(--spacing-md)]">
+      <div class="flex min-h-24 w-full items-center px-(--spacing-lg) py-(--spacing-md)">
         <p
           :class="[
             typographyLinkDemo.parentClass,
-            'm-0 w-full break-words text-[var(--text-default)]'
+            'm-0 w-full break-words text-(--text-default)'
           ]"
         >
           {{ typographyLinkDemo.beforeLink }}
@@ -74,9 +74,9 @@
       </div>
 
       <div
-        class="flex items-center justify-between gap-[var(--spacing-xs)] bg-[var(--bg-mask)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] font-code"
+        class="flex items-center justify-between gap-(--spacing-xs) bg-(--bg-mask) px-(--spacing-sm) py-(--spacing-xs) font-code"
       >
-        <span class="truncate text-body-xs text-[var(--text-muted)]">{{
+        <span class="truncate text-body-xs text-(--text-muted)">{{
           isCopied('text-link') ? 'Copied' : typographyLinkDemo.linkClass
         }}</span>
       </div>

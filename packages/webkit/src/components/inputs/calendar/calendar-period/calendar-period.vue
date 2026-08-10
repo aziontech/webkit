@@ -38,13 +38,13 @@
 
 <template>
   <div
-    class="flex gap-[var(--spacing-md)]"
+    class="flex gap-(--spacing-md)"
     :class="horizontal ? 'flex-row items-start' : 'flex-col items-stretch'"
     data-testid="input-calendar__period"
   >
     <div
-      class="flex min-w-[var(--container-4xs)] flex-col gap-[var(--spacing-xxs)]"
-      :class="horizontal ? '' : 'border-b border-[var(--border-default)] pb-[var(--spacing-sm)]'"
+      class="flex min-w-(--container-4xs) flex-col gap-(--spacing-xxs)"
+      :class="horizontal ? '' : 'border-b border-(--border-default) pb-(--spacing-sm)'"
     >
       <button
         v-for="preset in PRESETS"
@@ -52,28 +52,28 @@
         type="button"
         :disabled="disabled"
         :data-active="activeExpr === preset.expr || null"
-        class="text-label-sm inline-flex h-8 min-h-8 w-full items-center justify-between gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-left text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] data-[active]:bg-[var(--bg-selected)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+        class="text-label-sm inline-flex h-8 min-h-8 w-full items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-left text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[active]:bg-(--bg-selected) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
         @click="apply(preset.expr, preset.label)"
       >
         <span>{{ preset.label }}</span>
         <i
           v-if="activeExpr === preset.expr"
-          class="pi pi-check shrink-0 text-[length:inherit] leading-none text-[var(--text-muted)]"
+          class="pi pi-check shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
           aria-hidden="true"
         />
       </button>
     </div>
 
-    <div class="flex flex-col gap-[var(--spacing-sm)]">
-      <div class="flex flex-col gap-[var(--spacing-xxs)]">
-        <span class="text-label-sm text-[var(--text-muted)]"> Type relative times </span>
-        <div class="flex max-w-[var(--container-2xs)] flex-wrap gap-[var(--spacing-xxs)]">
+    <div class="flex flex-col gap-(--spacing-sm)">
+      <div class="flex flex-col gap-(--spacing-xxs)">
+        <span class="text-label-sm text-(--text-muted)"> Type relative times </span>
+        <div class="flex max-w-(--container-2xs) flex-wrap gap-(--spacing-xxs)">
           <button
             v-for="hint in RELATIVE_HINTS"
             :key="hint"
             type="button"
             :disabled="disabled"
-            class="text-label-sm inline-flex items-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+            class="text-label-sm inline-flex items-center rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
             @click="apply(hint, hint)"
           >
             {{ hint }}
@@ -81,15 +81,15 @@
         </div>
       </div>
 
-      <div class="flex flex-col gap-[var(--spacing-xxs)]">
-        <span class="text-label-sm text-[var(--text-muted)]"> Type fixed times </span>
-        <div class="flex max-w-[var(--container-2xs)] flex-wrap gap-[var(--spacing-xxs)]">
+      <div class="flex flex-col gap-(--spacing-xxs)">
+        <span class="text-label-sm text-(--text-muted)"> Type fixed times </span>
+        <div class="flex max-w-(--container-2xs) flex-wrap gap-(--spacing-xxs)">
           <button
             v-for="hint in FIXED_HINTS"
             :key="hint"
             type="button"
             :disabled="disabled"
-            class="text-label-sm inline-flex items-center rounded-[var(--shape-elements)] border border-[var(--border-default)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-[var(--text-default)] transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface-raised)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)] motion-reduce:transition-none"
+            class="text-label-sm inline-flex items-center rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
             @click="apply(hint, hint)"
           >
             {{ hint }}

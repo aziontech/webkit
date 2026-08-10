@@ -73,7 +73,7 @@ const Template = (args) => ({
   template: `
     <ScrollArea
       v-bind="args"
-      class="h-[200px] max-w-[var(--container-md)] rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-4)] text-body-sm text-[var(--text-default)]"
+      class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default) p-(--spacing-4) text-body-sm text-(--text-default)"
     >
       {{ longCopy }}
     </ScrollArea>
@@ -83,7 +83,7 @@ const Template = (args) => ({
 const DEFAULT_MARKUP = `<ScrollArea
   orientation="vertical"
   aria-label="Scrollable content"
-  class="h-[200px] max-w-[var(--container-md)] rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-4)] text-body-sm text-[var(--text-default)]"
+  class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default) p-(--spacing-4) text-body-sm text-(--text-default)"
 >
   ${longCopy}
 </ScrollArea>`
@@ -101,25 +101,25 @@ export const Default = {
   }
 }
 
-const ORIENTATIONS_TEMPLATE = `<div class="flex flex-wrap items-start gap-[var(--spacing-6)]">
+const ORIENTATIONS_TEMPLATE = `<div class="flex flex-wrap items-start gap-(--spacing-6)">
   <ScrollArea
     orientation="vertical"
     aria-label="Vertical scroll"
-    class="h-[160px] w-[240px] rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-3)] text-body-sm text-[var(--text-default)]"
+    class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)"
   >
     <div class="h-[320px]">Tall content that scrolls along the vertical axis.</div>
   </ScrollArea>
   <ScrollArea
     orientation="horizontal"
     aria-label="Horizontal scroll"
-    class="w-[240px] rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-3)] text-body-sm text-[var(--text-default)]"
+    class="w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)"
   >
     <p class="m-0 w-max whitespace-nowrap">This line is intentionally wider than the container so horizontal scrolling is required.</p>
   </ScrollArea>
   <ScrollArea
     orientation="both"
     aria-label="Two-axis scroll"
-    class="h-[160px] w-[240px] rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-3)] text-body-sm text-[var(--text-default)]"
+    class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default) p-(--spacing-3) text-body-sm text-(--text-default)"
   >
     <div class="h-[320px] w-[480px]">Tall and wide content for two-axis scrolling.</div>
   </ScrollArea>

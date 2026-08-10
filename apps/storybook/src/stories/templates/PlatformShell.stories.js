@@ -194,14 +194,14 @@ const SHELL_BODY = `  <template #header-left>
     </Sidebar>
   </template>
   <template #page-header>
-    <header class="flex w-full flex-wrap items-end justify-between gap-[var(--spacing-4)]">
-      <div class="flex min-w-0 flex-col gap-[var(--spacing-2)]">
-        <h1 class="text-heading-md text-[var(--text-default)]">Page Heading</h1>
-        <p class="text-body-xs text-[var(--text-muted)]">
+    <header class="flex w-full flex-wrap items-end justify-between gap-(--spacing-4)">
+      <div class="flex min-w-0 flex-col gap-(--spacing-2)">
+        <h1 class="text-heading-md text-(--text-default)">Page Heading</h1>
+        <p class="text-body-xs text-(--text-muted)">
           A brief description about this page
         </p>
       </div>
-      <div class="flex shrink-0 items-center gap-[var(--spacing-3)]">
+      <div class="flex shrink-0 items-center gap-(--spacing-3)">
         <Button label="Get Help" kind="text" size="medium" />
         <Button label="Add new Resource" kind="outlined" size="medium" />
       </div>
@@ -217,36 +217,36 @@ const SHELL_BODY = `  <template #header-left>
       <TabView.Item value="tab-6" label="Tab Item" />
       <TabView.Item value="tab-7" label="Tab Item" />
     </TabView.List>
-    <TabView.Content class="mt-[var(--spacing-4)] min-h-0 flex-1">
+    <TabView.Content class="mt-(--spacing-4) min-h-0 flex-1">
       <TabView.Panel value="tab-1">
         <div
-          class="grid min-h-[12rem] w-full grid-cols-3 gap-[var(--spacing-6)]"
+          class="grid min-h-[12rem] w-full grid-cols-3 gap-(--spacing-6)"
           data-testid="template-platform-shell-story__tab-grid"
         >
           <div
             v-for="index in 6"
             :key="index"
-            class="min-h-[8rem] rounded-[var(--shape-card)] border border-[var(--border-muted)] bg-[var(--bg-surface)]"
+            class="min-h-[8rem] rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface)"
           />
         </div>
       </TabView.Panel>
       <TabView.Panel value="tab-2">
-        <p class="text-body-sm text-[var(--text-muted)]">Content for tab 2</p>
+        <p class="text-body-sm text-(--text-muted)">Content for tab 2</p>
       </TabView.Panel>
       <TabView.Panel value="tab-3">
-        <p class="text-body-sm text-[var(--text-muted)]">Content for tab 3</p>
+        <p class="text-body-sm text-(--text-muted)">Content for tab 3</p>
       </TabView.Panel>
       <TabView.Panel value="tab-4">
-        <p class="text-body-sm text-[var(--text-muted)]">Content for tab 4</p>
+        <p class="text-body-sm text-(--text-muted)">Content for tab 4</p>
       </TabView.Panel>
       <TabView.Panel value="tab-5">
-        <p class="text-body-sm text-[var(--text-muted)]">Content for tab 5</p>
+        <p class="text-body-sm text-(--text-muted)">Content for tab 5</p>
       </TabView.Panel>
       <TabView.Panel value="tab-6">
-        <p class="text-body-sm text-[var(--text-muted)]">Content for tab 6</p>
+        <p class="text-body-sm text-(--text-muted)">Content for tab 6</p>
       </TabView.Panel>
       <TabView.Panel value="tab-7">
-        <p class="text-body-sm text-[var(--text-muted)]">Content for tab 7</p>
+        <p class="text-body-sm text-(--text-muted)">Content for tab 7</p>
       </TabView.Panel>
     </TabView.Content>
   </template>`

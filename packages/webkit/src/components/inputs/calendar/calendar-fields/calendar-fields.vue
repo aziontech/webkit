@@ -109,17 +109,17 @@
        focus ring's offset has to match it. --input-ring-offset is InputText's hook
        for that; declared once here it inherits to every field below. -->
   <div
-    class="flex flex-col gap-[var(--spacing-sm)] [--input-ring-offset:var(--bg-surface-raised)]"
+    class="flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)]"
     data-testid="input-calendar__fields"
   >
-    <div class="flex flex-col gap-[var(--spacing-xxs)]">
+    <div class="flex flex-col gap-(--spacing-xxs)">
       <label
         :for="startDateId"
-        class="text-label-sm text-[var(--text-muted)]"
+        class="text-label-sm text-(--text-muted)"
       >
         {{ startLabel }}
       </label>
-      <div class="flex items-center gap-[var(--spacing-xs)]">
+      <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
           <InputText
             :id="startDateId"
@@ -150,15 +150,15 @@
 
     <div
       v-if="mode === 'range'"
-      class="flex flex-col gap-[var(--spacing-xxs)]"
+      class="flex flex-col gap-(--spacing-xxs)"
     >
       <label
         :for="endDateId"
-        class="text-label-sm text-[var(--text-muted)]"
+        class="text-label-sm text-(--text-muted)"
       >
         End
       </label>
-      <div class="flex items-center gap-[var(--spacing-xs)]">
+      <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
           <InputText
             :id="endDateId"

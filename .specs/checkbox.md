@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 1f6e19b3c0419970b778bd61a4316627e13e43607aea53264f41d45acce8642f
+checksum: 962a702cfb26138d31701e2812ad7f9ab4b8de466920ed3edadaad4acb51fbcc
 created: 2026-05-22
 last_updated: 2026-06-25
 ---
@@ -94,7 +94,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in `FieldC
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Space` toggles. (The native `<input type="checkbox">` carries the semantics.)
 - ARIA: native `<input type="checkbox">` is the source of truth. `aria-checked` is set to `'mixed'` when `indeterminate` is true (with `indeterminate` DOM property also set on the input). The wrapping `<span>` is decorative.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.

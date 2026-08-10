@@ -33,7 +33,7 @@
     v-bind="attrs"
     :id="ctx.descriptionId"
     :data-testid="testId"
-    class="text-body-xs text-[var(--text-muted)]"
+    class="text-body-xs text-(--text-muted)"
   >
     <slot />
   </p>

@@ -23,6 +23,6 @@
     role="separator"
     data-slot="item-separator"
     :data-testid="testId"
-    class="my-0 h-px w-full shrink-0 bg-[var(--border-muted)]"
+    class="my-0 h-px w-full shrink-0 bg-(--border-muted)"
   />
 </template>

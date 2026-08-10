@@ -11,7 +11,7 @@ const IMPORTS = [
 ]
 
 const ACTIONS_MARKUP = `  <template #actions>
-    <div class="flex gap-[var(--spacing-3)]">
+    <div class="flex gap-(--spacing-3)">
       <Button kind="secondary" label="Secondary Item" />
       <Button kind="outlined" label="Create Item" />
     </div>
@@ -127,7 +127,7 @@ export const Default = {
   }
 }
 
-const SIZES_TEMPLATE = `<div class="flex w-full flex-col gap-[var(--spacing-xl)]">
+const SIZES_TEMPLATE = `<div class="flex w-full flex-col gap-(--spacing-xl)">
   <EmptyState
     v-for="size in ['small', 'medium']"
     :key="size"

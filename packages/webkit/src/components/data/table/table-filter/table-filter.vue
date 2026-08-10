@@ -239,9 +239,9 @@
           :aria-label="title"
           :data-testid="`${testId}__panel`"
           :style="panelStyle"
-          class="flex min-w-[var(--container-2xs)] max-w-[var(--container-xs)] flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] border border-solid border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-sm)] shadow-[var(--shadow-sm)] outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-2xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         >
-          <p class="text-label-md text-[var(--text-default)]">{{ title }}</p>
+          <p class="text-label-md text-(--text-default)">{{ title }}</p>
 
           <slot
             :fields="fields"
@@ -250,12 +250,12 @@
             :clear="clearAll"
             :remove="removeOne"
           >
-            <div class="flex flex-col gap-[var(--spacing-xs)]">
+            <div class="flex flex-col gap-(--spacing-xs)">
               <select
                 v-model="draftField"
                 :data-testid="`${testId}__field`"
                 aria-label="Field"
-                class="h-8 rounded-[var(--shape-elements)] border border-solid border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] text-body-sm text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+                class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
                 <option
                   v-for="field in fields"
@@ -271,7 +271,7 @@
                 :data-testid="`${testId}__operator`"
                 aria-label="Operator"
                 :disabled="!draftField"
-                class="h-8 rounded-[var(--shape-elements)] border border-solid border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] text-body-sm text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] disabled:cursor-not-allowed disabled:opacity-60"
+                class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:cursor-not-allowed disabled:opacity-60"
                 @change="
                   (event) =>
                     (draftOperator = (event.target as HTMLSelectElement).value as FilterOperator)
@@ -291,7 +291,7 @@
                 v-model="draftValue"
                 :data-testid="`${testId}__value`"
                 aria-label="Value"
-                class="h-8 rounded-[var(--shape-elements)] border border-solid border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] text-body-sm text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+                class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
                 <option
                   v-for="option in valueOptions"

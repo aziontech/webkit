@@ -37,7 +37,7 @@
   )
 
   const ROOT_CLASS =
-    'group relative z-[1] text-label-md text-[var(--text-default)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-[var(--shape-button)] data-[styled]:border-solid data-[styled]:border-[length:var(--border-width-default,1px)] data-[styled]:border-[var(--border-default)] data-[styled]:bg-[var(--bg-surface-raised)] data-[styled]:px-[var(--spacing-md)] data-[styled]:py-[var(--spacing-sm)] data-[styled]:shadow-[var(--shadow-xs)] data-[disabled]:text-[var(--text-disabled)] data-[disabled]:opacity-60'
+    'group relative z-1 text-label-md text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-(--shape-button) data-[styled]:border-solid data-[styled]:border-[length:var(--border-width-default,1px)] data-[styled]:border-(--border-default) data-[styled]:bg-(--bg-surface-raised) data-[styled]:px-(--spacing-md) data-[styled]:py-(--spacing-sm) data-[styled]:shadow-(--shadow-xs) data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60'
 
   // The connector port: an 8px square sitting entirely OUTSIDE the node box, flush against
   // the edge a connector attaches to. `data-flow-port` picks the edge; the border goes
@@ -50,7 +50,7 @@
   // focus-visible ring never crop it. The border-box edge is the exact point connectors.ts
   // attaches to, so the line meets the port's inner edge and the square occludes the rest.
   const PORT_CLASS =
-    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-[var(--radius-sm)] border-solid border-[length:var(--border-width-default,1px)] border-[var(--border-muted)] bg-[var(--accent)] data-[flow-port=end]:-left-px data-[flow-port=end]:-translate-x-full data-[flow-port=start]:-right-px data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
+    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:-left-px data-[flow-port=end]:-translate-x-full data-[flow-port=start]:-right-px data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 </script>

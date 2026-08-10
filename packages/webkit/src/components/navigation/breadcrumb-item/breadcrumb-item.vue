@@ -74,15 +74,15 @@
       cn(
         [
           'group/breadcrumb-item relative flex min-h-6 min-w-0 items-center justify-center',
-          'gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]',
+          'gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs)',
           'text-label-md transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
-          'text-[var(--text-muted)] hover:text-[var(--text-default)]',
-          'aria-[current=page]:text-[var(--text-default)] aria-[current=page]:hover:text-[var(--text-default)]',
-          'data-[current=true]:text-[var(--text-default)] data-[current=true]:hover:text-[var(--text-default)]',
-          'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-[var(--text-disabled)]',
+          'text-(--text-muted) hover:text-(--text-default)',
+          'aria-[current=page]:text-(--text-default) aria-[current=page]:hover:text-(--text-default)',
+          'data-[current=true]:text-(--text-default) data-[current=true]:hover:text-(--text-default)',
+          'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)',
           ...ghostLayerClasses,
           ...focusVisibleRingClasses,
-          'focus-visible:bg-[var(--bg-mask)] focus-visible:border focus-visible:border-[var(--border-default)]'
+          'focus-visible:bg-(--bg-mask) focus-visible:border focus-visible:border-(--border-default)'
         ],
         attrs.class as string | undefined
       )
@@ -98,12 +98,12 @@
     <i
       v-if="showIcon"
       :class="icon"
-      class="relative z-[1] size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+      class="relative z-1 size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
     />
     <span
-      class="relative z-[1] min-w-0 truncate"
+      class="relative z-1 min-w-0 truncate"
       :data-testid="`${testId}__label`"
     >
       {{ label }}

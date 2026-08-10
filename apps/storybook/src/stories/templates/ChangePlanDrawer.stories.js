@@ -33,7 +33,7 @@ const planFeatureItems = [
 // Shared markup fragments — used by BOTH the render template and the "Show code"
 // snippet so the canvas and the snippet can never drift.
 const planFeaturesSlot = `<ul class="m-0 flex w-full list-none flex-col gap-2 p-0">
-  <li class="text-label-sm text-[var(--text-muted)] leading-none">
+  <li class="text-label-sm text-(--text-muted) leading-none">
     Todas as funcionalidades disponíveis
   </li>
   <li
@@ -42,16 +42,16 @@ const planFeaturesSlot = `<ul class="m-0 flex w-full list-none flex-col gap-2 p-
     class="flex items-center gap-[10px]"
   >
     <span class="flex size-5 shrink-0 items-center justify-center" aria-hidden="true">
-      <i :class="feature.icon" class="text-[var(--text-default)]" />
+      <i :class="feature.icon" class="text-(--text-default)" />
     </span>
-    <span class="text-label-sm text-[var(--text-default)] leading-none">
+    <span class="text-label-sm text-(--text-default) leading-none">
       {{ feature.label }}
     </span>
   </li>
 </ul>`
 
 const plansMarkup = `<div
-  class="flex w-full min-w-0 flex-col items-stretch justify-center gap-[var(--spacing-6)] lg:flex-row"
+  class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-6) lg:flex-row"
   data-testid="template-change-plan-drawer__plans"
 >
   <CardPricing
@@ -122,7 +122,7 @@ const drawerInner = `  <DrawerTrigger>
         <DrawerTitle>Change Plan</DrawerTitle>
         <DrawerClose />
       </PanelHeader>
-      <PanelContent class="flex flex-col items-center gap-[var(--spacing-6)]">
+      <PanelContent class="flex flex-col items-center gap-(--spacing-6)">
         <SegmentedButton
           v-model="billingPeriod"
           :options="billingOptions"
@@ -173,7 +173,7 @@ const billingOptions = [
 
 const planFeaturesSlot = \`
   <ul class="m-0 flex w-full list-none flex-col gap-2 p-0">
-    <li class="text-label-sm text-[var(--text-muted)] leading-none">
+    <li class="text-label-sm text-(--text-muted) leading-none">
       Todas as funcionalidades disponíveis
     </li>
     <li
@@ -185,9 +185,9 @@ const planFeaturesSlot = \`
         class="flex size-5 shrink-0 items-center justify-center"
         aria-hidden="true"
       >
-        <i :class="feature.icon" class="text-[var(--text-default)]" />
+        <i :class="feature.icon" class="text-(--text-default)" />
       </span>
-      <span class="text-label-sm text-[var(--text-default)] leading-none">
+      <span class="text-label-sm text-(--text-default) leading-none">
         {{ feature.label }}
       </span>
     </li>
@@ -210,14 +210,14 @@ const changePlanTemplate = \`
           <DrawerTitle>Change Plan</DrawerTitle>
           <DrawerClose />
         </PanelHeader>
-        <PanelContent class="flex flex-col items-center gap-[var(--spacing-6)]">
+        <PanelContent class="flex flex-col items-center gap-(--spacing-6)">
           <SegmentedButton
             v-model="billingPeriod"
             :options="billingOptions"
             ariaLabel="Billing period"
           />
           <div
-            class="flex w-full min-w-0 flex-col items-stretch justify-center gap-[var(--spacing-6)] lg:flex-row"
+            class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-6) lg:flex-row"
             data-testid="template-change-plan-drawer__plans"
           >
             <CardPricing

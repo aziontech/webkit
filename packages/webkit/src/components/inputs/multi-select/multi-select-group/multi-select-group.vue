@@ -37,7 +37,7 @@
   >
     <div
       v-if="label"
-      class="flex items-center px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-overline-xs text-[var(--text-muted)] uppercase"
+      class="flex items-center px-(--spacing-xs) py-(--spacing-xxs) text-overline-xs text-(--text-muted) uppercase"
       :data-testid="`${testId}__label`"
     >
       {{ label }}

@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: approved
 spec_version: 2
-checksum: 953ae243aa49d08bd4b1b2a271e3a63ddd87dc1806e9099b82aeaf02a783173f
+checksum: 586d5d529dea2735c267b54e5aa3d183beeabd6eff04142b9792a13504f3e79c
 created: 2026-06-25
 last_updated: 2026-06-30
 ---
@@ -151,7 +151,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on each option and on every move control.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each option and on every move control.
 - Keyboard map: `Tab` moves between the two listboxes and the control column; within a listbox `Space`/`Enter` toggle the focused option's selection; the move controls are activated with `Enter`/`Space`. Double-click on an option is a pointer affordance for moving it to the opposite list; the same move is reachable via select + the move controls (no keyboard-only feature is double-click-only).
 - ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
