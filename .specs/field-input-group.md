@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 6e03ff3fb8fdf3f005031bc583ef44c78b670d4f95304248730cae0846a69c76
+checksum: 60c3e2cda0fccf0c3cd76f3d64b88ea6708c78c7452f589884f4b9d5472d4b62
 created: 2026-07-01
-last_updated: 2026-07-01
+last_updated: 2026-08-10
 ---
 
 # FieldInputGroup — Component Spec
@@ -22,10 +22,10 @@ Form field wrapper around `InputGroup` that composes `Label`, `InputGroup` (with
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FieldInputGroup from '@aziontech/webkit/field-input-group'
+  import { ref } from 'vue'
+  import FieldInputGroup from '@aziontech/webkit/field-input-group'
 
-const domain = ref('')
+  const domain = ref('')
 </script>
 
 <template>
@@ -44,38 +44,38 @@ const domain = ref('')
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the internal `<input>`. |
-| `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | no | Placeholder forwarded to the internal `<input>`. |
-| `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
-| `disabled` | `boolean` | `false` | no | Disables the input and the `InputGroup` chrome, and switches the helper to `kind="disabled"` (lock icon). |
-| `readonly` | `boolean` | `false` | no | Marks the internal input read-only; value is visible but not editable. Native pass-through. |
-| `required` | `boolean` | `false` | no | Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`. |
-| `invalid` | `boolean` | `false` | no | Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind="invalid"`. Also sets `aria-invalid` on the internal `<input>`. |
-| `inputId` | `string` | `''` | no | `id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty. |
-| `name` | `string` | `''` | no | HTML `name` for the internal `<input>` (form + vee-validate integration). |
+| Prop          | Type      | Default | Required | JSDoc                                                                                                                                                                                                                                                                                    |
+| ------------- | --------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`  | `string`  | `''`    | false    | Two-way bound value of the internal `<input>`.                                                                                                                                                                                                                                           |
+| `label`       | `string`  | `''`    | false    | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                  |
+| `placeholder` | `string`  | `''`    | false    | Placeholder forwarded to the internal `<input>`.                                                                                                                                                                                                                                         |
+| `helperText`  | `string`  | `''`    | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say. |
+| `disabled`    | `boolean` | `false` | false    | Disables the input and the `InputGroup` chrome, and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                |
+| `readonly`    | `boolean` | `false` | false    | Marks the internal input read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                                              |
+| `required`    | `boolean` | `false` | false    | Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`.                                                                                                                                           |
+| `invalid`     | `boolean` | `false` | false    | Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind="invalid"`. Also sets `aria-invalid` on the internal `<input>`.                                                                                                                                          |
+| `inputId`     | `string`  | `''`    | false    | `id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty.                                                                                                                                          |
+| `name`        | `string`  | `''`    | false    | HTML `name` for the internal `<input>` (form + vee-validate integration).                                                                                                                                                                                                                |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload           | Notes                                                                              |
+| ------------------- | ----------------- | ---------------------------------------------------------------------------------- |
 | `update:modelValue` | `[value: string]` | Re-emitted from the internal `<input>` on native `input` event. Enables `v-model`. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `left` | — | Forwarded verbatim to `InputGroup`'s `#left`. Optional prefix content (icon, static text, or a small control). |
-| `right` | — | Forwarded verbatim to `InputGroup`'s `#right`. Optional suffix content. |
+| Slot    | Scope | Notes                                                                                                          |
+| ------- | ----- | -------------------------------------------------------------------------------------------------------------- |
+| `left`  | —     | Forwarded verbatim to `InputGroup`'s `#left`. Optional prefix content (icon, static text, or a small control). |
+| `right` | —     | Forwarded verbatim to `InputGroup`'s `#right`. Optional suffix content.                                        |
 
 ## States
 
 - Visual states delegated to `InputGroup`: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`.
 - On the field wrapper root: `data-disabled`, `data-invalid`, `data-required` mirror the props (for test/query targeting).
 - `HelperText.kind` computed by precedence: `disabled > invalid > required > 'helper'`.
-- When `disabled` is set and `helperText` is empty, the helper defaults to `'This field is locked.'` (parity with `FieldText`).
+- When `disabled` is set and `helperText` is empty, no helper row renders (parity with `FieldText`) — the field substitutes no copy, so a transient lock adds no padlock line.
 
 ## Motion & Animations
 
@@ -83,28 +83,28 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| stack gap (vertical) | `var(--spacing-xs)` |
-| internal input surface | `var(--bg-surface)` |
-| internal input text | `var(--text-default)` |
-| internal input placeholder | `var(--text-muted)` |
-| internal input padding.x | `var(--spacing-md)` |
-| internal input typography | `.text-label-sm` |
+| Region                     | Token (DESIGN.md)     |
+| -------------------------- | --------------------- |
+| stack gap (vertical)       | `var(--spacing-xs)`   |
+| internal input surface     | `var(--bg-surface)`   |
+| internal input text        | `var(--text-default)` |
+| internal input placeholder | `var(--text-muted)`   |
+| internal input padding.x   | `var(--spacing-md)`   |
+| internal input typography  | `.text-label-sm`      |
 
 Border / focus / hover / invalid / required / disabled tokens are owned by the nested `InputGroup`.
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: delegated to `InputGroup` (focus-within ring on the group root). The internal `<input>` renders `focus:ring-0 outline-none` so only the group ring shows.
 - Keyboard map: `Tab` moves through any interactive side-slot content and then the internal `<input>`, in DOM order.
-- ARIA: internal `<input>` receives `aria-invalid`, `aria-required`, and `aria-describedby` pointing at the `HelperText` id when helper text is present or `disabled` forces the fallback. `Label` is linked via `for=<inputId>`.
+- ARIA: internal `<input>` receives `aria-invalid`, `aria-required`, and `aria-describedby` pointing at the `HelperText` id when helper text is present. `Label` is linked via `for=<inputId>`.
 - Contrast ≥4.5:1 for label / input text / helper text against their surfaces.
 - Motion: state color transitions come from `InputGroup` (`duration-150 ease-out`, `motion-reduce:transition-none`).
 - Touch target ≥32×32 px (matches the fixed `h-8` `InputGroup` root).
@@ -115,7 +115,7 @@ Border / focus / hover / invalid / required / disabled tokens are owned by the n
 - WithSlots — `#left` (`https://`) and `#right` (`.com`) filled.
 - Required — `required=true`, reactive validation flow (label shows Required tag, invalid switches on empty submission).
 - Invalid — `invalid=true` with a message in `helperText`.
-- Disabled — `disabled=true`, helper falls back to the disabled copy.
+- Disabled — `disabled=true` with an explicit `helperText`; documents the disabled treatment and the lock-icon helper the copy earns (with no `helperText` the row is absent).
 - Icons — PrimeIcons in both side slots (`pi pi-globe` left, `pi pi-times` right).
 
 Justification for six stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. `Default`, `WithSlots`, and `Icons` document the composition API (label + helper + side slots). `Required`, `Invalid`, `Disabled` exercise the three state signals the wrapper propagates.

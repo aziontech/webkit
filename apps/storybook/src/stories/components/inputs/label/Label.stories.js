@@ -41,6 +41,12 @@ const meta = {
       description: 'Appends an inline required indicator (`* (Required)`) next to the label text.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
+    hint: {
+      control: 'text',
+      description:
+        'Short explanation appended as a Hint glyph that reveals it on hover or focus. Empty renders no glyph.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
     default: {
       control: false,
       description: 'Label text; falls back to the `label` prop when empty.',
@@ -49,7 +55,8 @@ const meta = {
   },
   args: {
     label: 'Label',
-    required: false
+    required: false,
+    hint: ''
   }
 }
 
@@ -86,6 +93,27 @@ export const Required = {
     docs: {
       description: { story: 'Required label — appends the inline `* (Required)` indicator.' },
       source: { code: toSfc(IMPORT, REQUIRED_MARKUP) }
+    }
+  }
+}
+
+const HINTED_MARKUP =
+  '<Label label="Sensitive" hint="Values are encrypted at rest and never displayed again after saving." />'
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Label>} */
+export const Hinted = {
+  args: {
+    label: 'Sensitive',
+    hint: 'Values are encrypted at rest and never displayed again after saving.'
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Hinted label — `hint` appends a Hint glyph after the text. Hover or focus it to read the explanation.'
+      },
+      source: { code: toSfc(IMPORT, HINTED_MARKUP) }
     }
   }
 }

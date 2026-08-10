@@ -23,7 +23,7 @@
     placeholder?: string
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
-    /** Disables the whole field (input + switch); switches helper to kind=disabled. */
+    /** Disables the whole field (input + switch); a supplied helperText switches to kind=disabled. */
     disabled?: boolean
     /** Marks the internal input read-only; value is visible but not editable. */
     readonly?: boolean
@@ -73,13 +73,12 @@
     return 'helper'
   })
 
-  const effectiveHelperText = computed(() => {
-    if (props.helperText) return props.helperText
-    if (props.disabled) return 'This field is locked.'
-    return ''
-  })
-
-  const describedBy = computed(() => (effectiveHelperText.value ? helperId.value : undefined))
+  // The field never writes copy of its own. No `helperText` means no helper row — while
+  // disabled as much as anywhere else: a field that goes disabled for the length of a
+  // request would otherwise grow a padlock line the screen never asked for, in the one
+  // moment it has nothing to say. Disabling is already legible from the field's own
+  // treatment, and a caller who wants a reason passes one (it renders with the lock).
+  const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
 
   const inputInert = computed(() => props.disabled || !props.enabled)
 
@@ -154,9 +153,9 @@
       </InputGroupAddon>
     </InputGroup>
     <HelperText
-      v-if="effectiveHelperText"
+      v-if="helperText"
       :id="helperId"
-      :label="effectiveHelperText"
+      :label="helperText"
       :kind="helperKind"
       :data-testid="`${testId}__helper`"
     />
