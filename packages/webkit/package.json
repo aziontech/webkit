@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -211,6 +211,7 @@
     "./label": "./src/components/inputs/label/label.vue",
     "./input-password": "./src/components/inputs/input-password/input-password.vue",
     "./field-password": "./src/components/inputs/field-password/field-password.vue",
+    "./password-requirements": "./src/components/inputs/field-password/password-requirements.ts",
     "./box-grid-selection": "./src/components/inputs/box-grid-selection/box-grid-selection.vue",
     "./chip": "./src/components/inputs/chip/chip.vue",
     "./checkbox": "./src/components/inputs/checkbox/checkbox.vue",

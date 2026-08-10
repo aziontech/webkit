@@ -17,12 +17,15 @@
     kind?: SwitchType
     /** Forces the focused visual state regardless of keyboard focus. */
     focused?: boolean
+    /** Disables interaction and applies the disabled tokens. */
+    disabled?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     modelValue: false,
     kind: 'default',
-    focused: false
+    focused: false,
+    disabled: false
   })
 
   const emit = defineEmits<{
@@ -54,10 +57,12 @@
   )
 
   function handleToggle() {
+    if (props.disabled) return
     emit('update:modelValue', !isChecked.value)
   }
 
   function handleKeydown(event: globalThis.KeyboardEvent) {
+    if (props.disabled) return
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault()
       handleToggle()
@@ -65,10 +70,10 @@
   }
 
   const ROOT_CLASS =
-    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-(--accent)'
+    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-(--accent) data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none'
 
   const HANDLE_CLASS =
-    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 group-data-[checked]:bg-(--color-base-white)'
+    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 group-data-[checked]:bg-(--color-base-white) group-data-[disabled]:bg-(--text-disabled)'
 
   const LOCK_ICON_CLASS = 'pi text-body-xxs leading-none'
   const LOCK_OFF_CLASS = `${LOCK_ICON_CLASS} pi-lock text-(--bg-surface)`
@@ -83,10 +88,13 @@
     type="button"
     role="switch"
     :aria-checked="isChecked"
+    :aria-disabled="disabled || undefined"
+    :disabled="disabled"
     :data-testid="testId"
     :data-kind="kind"
     :data-checked="isChecked || null"
     :data-focused="focused || null"
+    :data-disabled="disabled || null"
     :class="rootClass"
     v-bind="passthroughAttrs"
     @click="handleToggle"

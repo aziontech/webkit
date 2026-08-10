@@ -17,7 +17,6 @@
   } from './composables/use-navigation-menu-context.js'
   import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context.js'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
-  import { useNavigationMenuViewportSize } from './composables/use-navigation-menu-viewport-size.js'
   import { getNavigationMenuTriggerClasses } from './presets/styles'
 
   interface NavigationMenuItemContext {
@@ -90,19 +89,6 @@
 
   const controlClasses = computed(() =>
     getNavigationMenuTriggerClasses(isLink.value, attrs.class as string | undefined)
-  )
-
-  const isActiveTrigger = computed(
-    () => !isLink.value && itemContext != null && root.menuOpen.value && itemOpen.value
-  )
-
-  useNavigationMenuViewportSize(
-    isActiveTrigger,
-    root.popupEl,
-    root.positionerEl,
-    root.currentContentEl,
-    root.menuValue,
-    itemValueResolved
   )
 
   const resolveElement = () => resolveHostElement(controlRef.value)

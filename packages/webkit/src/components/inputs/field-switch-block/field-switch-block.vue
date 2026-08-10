@@ -96,7 +96,7 @@
         <Switch
           :id="generatedId"
           v-model="model"
-          :class="disabled ? 'pointer-events-none opacity-50' : ''"
+          :disabled="disabled"
           :data-testid="`${testId}__control`"
         />
         <div

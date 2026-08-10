@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 2ab1423f2ed35e8bccd96238c5762b8ff4e026f5c21d58984fcaa8ce9875fe2d
+checksum: 0517cfcf2b5b071fe6acff002c1f48c351fce55a058249619bcb88f04cc0c391
 created: 2026-06-16
-last_updated: 2026-06-16
+last_updated: 2026-07-31
 ---
 
 # Input Password — Component Spec
@@ -18,16 +18,16 @@ last_updated: 2026-06-16
 
 Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `InputText` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer.
 
-Aligned with Figma frame `3714:10788` (Webkit / InputPassword). Token mapping inferred from the `input-text` sibling because the Figma MCP read tools were unreachable during spec authoring; reconciliation must verify against the frame at scaffold time.
+Aligned with Figma frame `3714:10788` (Webkit / InputPassword). The token mapping was originally inferred from the `input-text` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside `FieldPassword` (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `InputText`'s borders and `InputText` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input.
 
 ## Usage
 
 ```vue
 <script setup>
-import InputPassword from '@aziontech/webkit/input-password'
-import { ref } from 'vue'
+  import InputPassword from '@aziontech/webkit/input-password'
+  import { ref } from 'vue'
 
-const password = ref('')
+  const password = ref('')
 </script>
 
 <template>
@@ -41,30 +41,30 @@ const password = ref('')
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the field. |
-| `placeholder` | `string` | `''` | no | Placeholder shown when the field is empty. |
-| `maxLength` | `number \| undefined` | `undefined` | no | Native `maxlength` — maximum number of characters allowed. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state. |
-| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but not editable. Toggle button stays operable. |
-| `required` | `boolean` | `false` | no | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
-| `invalid` | `boolean` | `false` | no | Applies the invalid border + ring tokens and sets `aria-invalid`. |
-| `toggleable` | `boolean` | `true` | no | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
-| `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows. |
+| Prop           | Type                                            | Default              | Required | JSDoc                                                                                                                                                                                                 |
+| -------------- | ----------------------------------------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`   | `string`                                        | `''`                 | no       | Two-way bound value of the field.                                                                                                                                                                     |
+| `placeholder`  | `string`                                        | `''`                 | no       | Placeholder shown when the field is empty.                                                                                                                                                            |
+| `maxLength`    | `number \| undefined`                           | `undefined`          | no       | Native `maxlength` — maximum number of characters allowed.                                                                                                                                            |
+| `disabled`     | `boolean`                                       | `false`              | no       | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state.                                                                                                      |
+| `readonly`     | `boolean`                                       | `false`              | no       | Marks the field read-only; value is visible but not editable. Toggle button stays operable.                                                                                                           |
+| `required`     | `boolean`                                       | `false`              | no       | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component.                                      |
+| `invalid`      | `boolean`                                       | `false`              | no       | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                     |
+| `toggleable`   | `boolean`                                       | `true`               | no       | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
+| `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no       | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows.                                                                                           |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes                                               |
+| ------------------- | -------- | --------------------------------------------------- |
 | `update:modelValue` | `string` | Emitted on native `input` event with the new value. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `iconLeft` | — | Leading icon rendered inside the field, before the input. Hidden from assistive tech (`aria-hidden="true"`). |
-| `iconRight` | — | Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
+| Slot        | Scope | Notes                                                                                                                                                                                                          |
+| ----------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `iconLeft`  | —     | Leading icon rendered inside the field, before the input. Hidden from assistive tech (`aria-hidden="true"`).                                                                                                   |
+| `iconRight` | —     | Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
 
 ## States
 
@@ -81,45 +81,46 @@ const password = ref('')
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| state change (border/ring/bg) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| Trigger                             | Animation / Transition                     | Token  | Reduced-motion fallback         |
+| ----------------------------------- | ------------------------------------------ | ------ | ------------------------------- |
+| state change (border/ring/bg)       | `transition-colors duration-150 ease-out`  | inline | `motion-reduce:transition-none` |
 | toggle icon swap (visible ↔ hidden) | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-label-sm` |
-| surface | `var(--bg-surface)` |
-| surface (disabled) | `var(--bg-disabled)` |
-| text | `var(--text-default)` |
-| text (placeholder/muted) | `var(--text-muted)` |
-| text (disabled) | `var(--text-disabled)` |
-| border (default) | `var(--border-default)` |
-| border (hover) | `var(--border-strong)` |
-| border (invalid) | `var(--danger-border)` |
-| border (required) | `var(--warning-border)` |
-| ring (focus) | `var(--ring-color)` |
-| spacing (padding-left) | `var(--spacing-md)` |
-| spacing (padding-right) | `var(--spacing-xxs)` |
-| spacing (gap between icon and input) | `var(--spacing-xs)` |
-| shape | `var(--shape-elements)` |
+| Region                               | Token (DESIGN.md)                                                          |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| typography                           | `.text-label-sm`                                                           |
+| surface                              | `var(--bg-surface)`                                                        |
+| surface (disabled)                   | `var(--bg-disabled)`                                                       |
+| text                                 | `var(--text-default)`                                                      |
+| text (placeholder/muted)             | `var(--text-muted)`                                                        |
+| text (disabled)                      | `var(--text-disabled)`                                                     |
+| border (default)                     | `var(--border-default)`                                                    |
+| border (hover)                       | `var(--border-strong)`                                                     |
+| border (invalid)                     | `var(--danger-border)`                                                     |
+| border (required)                    | `var(--warning-border)`                                                    |
+| ring (focus)                         | `var(--ring-color)`                                                        |
+| spacing (padding-left)               | `var(--spacing-md)`                                                        |
+| spacing (padding-right)              | `var(--spacing-xs)`                                                        |
+| spacing (gap between icon and input) | `var(--spacing-xs)`                                                        |
+| shape                                | `var(--shape-elements)`                                                    |
+| visibility toggle                    | `IconButton` `kind="transparent"` `size="small"` (28 px — `var(--size-7)`) |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| Figma variable                                        | Temporary primitive              | Follow-up                                                                                                                                                                                                                                                                                  |
+| ----------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--border-width-default` (0.8 px) on the field border | the shared 1 px `border` utility | Not a missing token — the token exists; it is unadopted for consistency. Migrate every bordered input (`InputText`, `InputNumber`, `Select`, `Textarea`, `InputPassword`, …) to `border-[length:var(--border-width-default)]` in one coordinated PR, then regenerate the visual baselines. |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
 - Keyboard map: `Tab` focuses the input, then the visibility toggle button (when `toggleable=true`); `Enter` / `Space` on the toggle flips visibility; standard text-editing keys apply to the input.
 - ARIA: the visibility toggle is a `<button type="button">` with `aria-pressed` reflecting the current visible state and an `aria-label` that switches between "Show password" and "Hide password"; `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; decorative icon slots and the eye glyph are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target ≥40×40 px for both the input and the toggle button (the component renders at a single fixed height of 40px).
+- Touch target: the input fills the field's single fixed 40 px height. The visibility toggle is the 28×28 px `small` `IconButton` the Figma frame specifies — above WCAG 2.2 SC 2.5.8 Target Size (Minimum) at 24×24 px, and centred in the 40 px row so the practical vertical reach is the full field height. It is below the 44×44 px of SC 2.5.5 (AAA), which this AA-scoped spec does not claim.
 - The toggle button never submits the surrounding form (`type="button"`).
 
 ## Stories (Storybook)

@@ -92,8 +92,8 @@
     :data-toggleable="toggleable || null"
     :data-visible="visible || null"
     :class="[
-      'relative inline-flex items-center w-full h-10',
-      'gap-(--spacing-xs) pl-(--spacing-md) pr-(--spacing-xxs)',
+      'group relative inline-flex items-center w-full h-10',
+      'gap-(--spacing-xs) pr-(--spacing-xs)',
       'rounded-(--shape-elements)',
       'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
@@ -107,7 +107,7 @@
   >
     <span
       v-if="hasIconLeft"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
+      class="inline-flex shrink-0 items-center justify-center pl-(--spacing-md) text-(--text-muted)"
       aria-hidden="true"
     >
       <slot name="iconLeft" />
@@ -125,7 +125,7 @@
       :aria-invalid="invalid || undefined"
       :aria-required="required || undefined"
       :data-testid="testId"
-      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent p-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pr-0 pl-(--spacing-md) group-data-[has-icon-left]:pl-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
       @input="handleInput"
     />
@@ -141,7 +141,7 @@
     <IconButton
       v-if="toggleable"
       kind="transparent"
-      size="medium"
+      size="small"
       :icon="toggleIcon"
       :ariaLabel="toggleLabel"
       :aria-pressed="visible"

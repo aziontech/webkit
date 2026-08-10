@@ -2,11 +2,11 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useOverlayMobile } from '../../overlay/composables/use-overlay-mobile'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
   import Dropdown from '../dropdown'
   import BreadcrumbList from './breadcrumb-list.vue'
   import BreadcrumbSeparator from './breadcrumb-separator.vue'
+  import { useBreadcrumbCollapse } from './composables/use-breadcrumb-collapse'
 
   defineOptions({
     name: 'Breadcrumb',
@@ -44,7 +44,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
   )
 
-  const isCollapsed = useOverlayMobile()
+  const isCollapsed = useBreadcrumbCollapse()
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
@@ -88,7 +88,7 @@
 <template>
   <nav
     v-bind="attrs"
-    :class="cn('inline-flex w-full items-center', attrs.class as string | undefined)"
+    :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
     aria-label="Breadcrumb"
     :data-testid="testId"
   >
@@ -157,10 +157,10 @@
                 <Dropdown.Trigger
                   aria-label="Show pages in between"
                   :data-testid="`${testId}__overflow-trigger`"
-                  class="h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-1 text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
+                  class="h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
                 >
                   <i
-                    class="pi pi-ellipsis-h leading-none"
+                    class="pi pi-ellipsis-h size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
                     aria-hidden="true"
                   />
                 </Dropdown.Trigger>
@@ -175,9 +175,13 @@
                   >
                     <template
                       v-if="item.showIcon && item.icon"
-                      #leading
+                      #left
                     >
-                      <i :class="item.icon" />
+                      <i
+                        :class="item.icon"
+                        class="size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+                        aria-hidden="true"
+                      />
                     </template>
                   </Dropdown.Option>
                 </Dropdown.Group>

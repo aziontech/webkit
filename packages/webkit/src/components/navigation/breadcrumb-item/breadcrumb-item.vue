@@ -73,7 +73,7 @@
     :class="
       cn(
         [
-          'group/breadcrumb-item relative inline-flex min-h-6 shrink-0 items-center justify-center',
+          'group/breadcrumb-item relative flex min-h-6 min-w-0 items-center justify-center',
           'gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs)',
           'text-label-md transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
           'text-(--text-muted) hover:text-(--text-default)',
@@ -98,12 +98,12 @@
     <i
       v-if="showIcon"
       :class="icon"
-      class="relative z-1 size-[0.875rem] shrink-0 text-[length:inherit] leading-none"
+      class="relative z-1 size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
     />
     <span
-      class="relative z-1 whitespace-nowrap"
+      class="relative z-1 min-w-0 truncate"
       :data-testid="`${testId}__label`"
     >
       {{ label }}

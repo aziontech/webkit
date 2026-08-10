@@ -6,11 +6,23 @@
     type InputPasswordAutocomplete
   } from '../input-password/input-password.vue'
   import Label from '../label/label.vue'
+  import FieldPasswordRequirements from './field-password-requirements/field-password-requirements.vue'
+  import {
+    DEFAULT_PASSWORD_REQUIREMENTS,
+    type PasswordRequirement as Requirement
+  } from './password-requirements'
 
   defineOptions({
     name: 'FieldPassword',
     inheritAttrs: false
   })
+
+  /**
+   * One password rule: its stable key, its label, and the test the field evaluates against
+   * the current value. Declared by the co-located rules module and re-exported here, because
+   * this is the public entry a consumer types against.
+   */
+  export type PasswordRequirement = Requirement
 
   interface Props {
     /** Two-way bound value of the underlying InputPassword. */
@@ -39,6 +51,10 @@
     inputId?: string
     /** HTML name for the underlying input (form + vee-validate integration). */
     name?: string
+    /** Enables the requirements row: true uses the built-in rule set, an array replaces it. */
+    requirements?: boolean | PasswordRequirement[]
+    /** Caption that opens the requirements row and names the group for assistive tech. */
+    requirementsTitle?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -54,7 +70,9 @@
     toggleable: true,
     autocomplete: 'current-password',
     inputId: '',
-    name: ''
+    name: '',
+    requirements: false,
+    requirementsTitle: 'Must contain:'
   })
 
   const emit = defineEmits<{
@@ -73,8 +91,22 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-field-password'
   )
 
-  const resolvedInputId = computed(() => props.inputId ?? generatedId)
+  // `inputId` defaults to '' — an empty string is not nullish, so `??` would keep it and
+  // every derived id would collapse to a bare suffix (duplicated across instances, and no
+  // real label/describedby association). `||` is what makes the useId() fallback fire.
+  const resolvedInputId = computed(() => props.inputId || generatedId)
   const helperId = computed(() => `${resolvedInputId.value}-helper`)
+  const requirementsTitleId = computed(() => `${resolvedInputId.value}-requirements-title`)
+
+  // `true` opts into the built-in rule set, an array replaces it, `false` (the default)
+  // renders no row — so the consumer's only two levers are "on" and "my own rules".
+  const resolvedRequirements = computed<PasswordRequirement[]>(() => {
+    if (props.requirements === true) return DEFAULT_PASSWORD_REQUIREMENTS
+    if (props.requirements === false) return []
+    return props.requirements
+  })
+
+  const hasRequirements = computed(() => resolvedRequirements.value.length > 0)
 
   const helperKind = computed<HelperTextKind>(() => {
     if (props.disabled) return 'disabled'
@@ -99,6 +131,7 @@
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
+    :data-has-requirements="hasRequirements || null"
     class="flex flex-col gap-(--spacing-xs) w-full"
   >
     <Label
@@ -143,6 +176,14 @@
       :label="effectiveHelperText"
       :kind="helperKind"
       :data-testid="`${testId}__helper`"
+    />
+    <FieldPasswordRequirements
+      v-if="hasRequirements"
+      :requirements="resolvedRequirements"
+      :title="requirementsTitle"
+      :value="modelValue"
+      :title-id="requirementsTitleId"
+      :data-testid="`${testId}__requirements`"
     />
   </div>
 </template>
