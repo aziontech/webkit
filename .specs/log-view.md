@@ -134,7 +134,7 @@ short log occupies the height of the lines it has instead of stretching to fill 
 parent and leaving the canvas empty below the last line. A host that *wants* the full height gives
 the root its own `class="h-full"` — that is the consumer's call to make, and `$attrs` carries it.
 
-The **loading** state has no lines to give it height, so it carries `py-[var(--spacing-xl)]` of its
+The **loading** state has no lines to give it height, so it carries `py-(--spacing-xl)` of its
 own: the spinner and its label sit in a block with real vertical presence rather than collapsing to
 the height of a single row the moment the root stopped stretching.
 

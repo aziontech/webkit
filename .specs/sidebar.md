@@ -100,9 +100,9 @@ const accountMenuOpen = ref(false)
     </Menu>
 
     <template #footer>
-      <SidebarFooter class="flex items-center gap-[var(--spacing-xs)]">
+      <SidebarFooter class="flex items-center gap-(--spacing-xs)">
         <Avatar kind="square" size="small" src="/avatar.jpg" alt="Rafael Umman" />
-        <span class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)]">
+        <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">
           Rafael Umman
         </span>
         <Dropdown v-model:open="accountMenuOpen" placement="top-end">
@@ -236,7 +236,7 @@ const width = ref(null)
       </Menu>
 
       <template #footer>
-        <SidebarFooter class="flex items-center gap-[var(--spacing-xs)]">
+        <SidebarFooter class="flex items-center gap-(--spacing-xs)">
           <!-- the account block from Usage above; the collapse trigger trails it -->
         </SidebarFooter>
       </template>
@@ -375,7 +375,7 @@ canvas the tokens fall back to.
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
   The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll
   region needs one only when nothing inside it is focusable, and this one holds a `Menu` of rows —
