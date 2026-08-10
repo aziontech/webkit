@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: approved
 spec_version: 2
-checksum: 953ae243aa49d08bd4b1b2a271e3a63ddd87dc1806e9099b82aeaf02a783173f
+checksum: 586d5d529dea2735c267b54e5aa3d183beeabd6eff04142b9792a13504f3e79c
 created: 2026-06-25
 last_updated: 2026-06-30
 ---

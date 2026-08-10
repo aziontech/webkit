@@ -4,7 +4,7 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: f521a35330afd65396e0a0a355fa04f2eb9074619b1ad9dd2d474722e421de0a
+checksum: e04141e019143f144da49ca06c4298f98f6f650db5688265e7e38335c32d802f
 created: 2026-05-22
 last_updated: 2026-07-01
 ---

@@ -4,7 +4,7 @@ category: templates
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: df218008e3302627d1fbd5e37c9f4889c574835093aec95898d57d382b835198
+checksum: ce43ebbbac93ae575ed0fd00fe9da31f9b4f6c2942c3d317c6abe6862beb46bd
 created: 2026-05-22
 last_updated: 2026-05-22
 ---

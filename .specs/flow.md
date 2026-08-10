@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: d2f63e195f987c1389469b6e22288c1f9bc99cb0b48d53cf42493d9294bebcb9
+checksum: fb9dd7fa89d19dc40dffb4047f206e89720c02f2d51895bb322f1e65415a58bd
 created: 2026-06-25
 last_updated: 2026-08-04
 ---

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: 0aece9c0160c2aeb9b5e2a6113130750eb8d9f3d5845f654478366b1785d718e
+checksum: 6bf5184525e5cdbac948cf571b04d67c496d0968a2765908ca6d83bd14184c52
 created: 2026-06-01
 last_updated: 2026-06-01
 ---

@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 82a01ef41214686b035f6f6f700873cd25b1c0f963f820bbd40220e27ece8c9a
+checksum: 586b493523abe743ef8e580729b51cd2884ba645894b6839fddca0eb71299380
 created: 2026-05-22
 last_updated: 2026-07-22
 figma:
