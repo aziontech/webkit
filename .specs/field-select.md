@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=536-22
   node_id: 536:22
-checksum: cbcdd7ffe65fd2ec35b10dc3bd732b5ee82aad17371979bf0e616b6b1af3cfac
+checksum: baa01e2b9422a9b9a8c112420d3c0e6eb7714df967db3b026ce4ca04e9ba7fbe
 created: 2026-07-22
-last_updated: 2026-07-22
+last_updated: 2026-08-10
 ---
+
 # Field Select — Component Spec
 
 ## Purpose
@@ -21,15 +22,15 @@ Form field wrapper for `Select` that composes `Label`, `Select` (with its `Trigg
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FieldSelect from '@aziontech/webkit/field-select'
+  import { ref } from 'vue'
+  import FieldSelect from '@aziontech/webkit/field-select'
 
-const region = ref('')
-const options = [
-  { value: 'us-east-1', label: 'US East (N. Virginia)' },
-  { value: 'us-west-2', label: 'US West (Oregon)' },
-  { value: 'eu-west-1', label: 'EU (Ireland)' }
-]
+  const region = ref('')
+  const options = [
+    { value: 'us-east-1', label: 'US East (N. Virginia)' },
+    { value: 'us-west-2', label: 'US West (Oregon)' },
+    { value: 'eu-west-1', label: 'EU (Ireland)' }
+  ]
 </script>
 
 <template>
@@ -46,24 +47,24 @@ const options = [
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `options` | `Array<{ value: unknown; label: string; disabled?: boolean }>` | `[]` | no | Options rendered inside the dropdown. When empty, the dropdown renders no options. |
-| `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | no | Placeholder shown on the trigger when nothing is selected. |
-| `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to the default disabled message so the lock icon always has matching copy. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size forwarded to the `Select` trigger. Heights: small=28px, medium=32px, large=40px. |
-| `multiple` | `boolean` | `false` | no | Switches the component to multi-select; `modelValue` becomes an array. |
-| `disabled` | `boolean` | `false` | no | Disables the select and switches the helper to `kind="disabled"` (lock icon). |
-| `readonly` | `boolean` | `false` | no | Marks the select read-only; value is visible but the dropdown is locked. |
-| `required` | `boolean` | `false` | no | Adds the `Required` tag to the `Label` and sets `aria-required` on the trigger. |
-| `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the trigger. |
-| `inputId` | `string` | `''` | no | id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`. |
+| Prop          | Type                                                           | Default    | Required | JSDoc                                                                                                                                                                                                                                                                                    |
+| ------------- | -------------------------------------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`     | `Array<{ value: unknown; label: string; disabled?: boolean }>` | `[]`       | no       | Options rendered inside the dropdown. When empty, the dropdown renders no options.                                                                                                                                                                                                       |
+| `label`       | `string`                                                       | `''`       | no       | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                  |
+| `placeholder` | `string`                                                       | `''`       | no       | Placeholder shown on the trigger when nothing is selected.                                                                                                                                                                                                                               |
+| `helperText`  | `string`                                                       | `''`       | no       | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say. |
+| `size`        | `'small' \| 'medium' \| 'large'`                               | `'medium'` | no       | Size forwarded to the `Select` trigger. Heights: small=28px, medium=32px, large=40px.                                                                                                                                                                                                    |
+| `multiple`    | `boolean`                                                      | `false`    | no       | Switches the component to multi-select; `modelValue` becomes an array.                                                                                                                                                                                                                   |
+| `disabled`    | `boolean`                                                      | `false`    | no       | Disables the select and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                            |
+| `readonly`    | `boolean`                                                      | `false`    | no       | Marks the select read-only; value is visible but the dropdown is locked.                                                                                                                                                                                                                 |
+| `required`    | `boolean`                                                      | `false`    | no       | Adds the `Required` tag to the `Label` and sets `aria-required` on the trigger.                                                                                                                                                                                                          |
+| `invalid`     | `boolean`                                                      | `false`    | no       | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the trigger.                                                                                                                                                                                           |
+| `inputId`     | `string`                                                       | `''`       | no       | id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`.                                                                                                                                        |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
+| Model     | Type                            | Default     | Emits               | Notes                                                                                  |
+| --------- | ------------------------------- | ----------- | ------------------- | -------------------------------------------------------------------------------------- |
 | `v-model` | `string \| number \| unknown[]` | `undefined` | `update:modelValue` | Two-way bound selection via `defineModel`. Scalar in single mode; array in multi mode. |
 
 ## Events
@@ -72,9 +73,9 @@ _No plain events — activation flows through `v-model`._
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Optional override for the rendered options. When absent, the component renders one `Select.Option` per entry in `options`. |
+| Slot      | Scope | Notes                                                                                                                      |
+| --------- | ----- | -------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | Optional override for the rendered options. When absent, the component renders one `Select.Option` per entry in `options`. |
 
 ## States
 
@@ -87,14 +88,14 @@ _No plain events — activation flows through `v-model`._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| _none_ — motion is owned by the underlying `Select` | — | — | — |
+| Trigger                                             | Animation / Transition | Token | Reduced-motion fallback |
+| --------------------------------------------------- | ---------------------- | ----- | ----------------------- |
+| _none_ — motion is owned by the underlying `Select` | —                      | —     | —                       |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                                     | Token (DESIGN.md)   |
+| ------------------------------------------ | ------------------- |
 | gap (between label / select / helper rows) | `var(--spacing-xs)` |
 
 (Typography and color tokens are owned by the children — `Label`, `Select`, `HelperText` — and not redeclared here.)
@@ -102,16 +103,16 @@ _No plain events — activation flows through `v-model`._
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - The `Label`'s native `<label>` is wired to the trigger via `for="<inputId>"`; when the consumer omits `inputId`, the component auto-generates one so the association still works.
-- When `helperText` is set (or `disabled` falls back to the locked message), the trigger receives `aria-describedby="<helperId>"` so assistive tech announces the helper alongside the value.
+- When `helperText` is set, the trigger receives `aria-describedby="<helperId>"` so assistive tech announces the helper alongside the value.
 - When `required`, the trigger receives `aria-required="true"`; the visual asterisk/Required tag lives on the `Label`.
 - When `invalid`, the trigger receives `aria-invalid="true"` and the helper switches color tokens to the danger family — the helper text remains the human-readable error message.
-- When `disabled`, the trigger is disabled, the helper switches to `kind="disabled"` (lock icon) — if `helperText` is empty, the component falls back to the default disabled message `'This field is locked.'` so the lock icon never appears alone — and the label dims via inherited `var(--text-muted)`.
+- When `disabled`, the trigger is disabled and the label dims via inherited `var(--text-muted)`. A supplied `helperText` switches to `kind="disabled"` (lock icon), so the lock never appears alone; an empty `helperText` renders no helper row at all — the field writes no copy of its own, and `aria-describedby` is dropped with the row.
 - Keyboard model is owned by the underlying `Select`: Enter/Space/ArrowDown open the dropdown; Arrow keys move focus among options; Enter/Space commit; Escape closes and returns focus to the trigger.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including all derived states.
 - Touch target: the underlying `Select` trigger owns the ≥40×40 px hit area at `size="large"`.

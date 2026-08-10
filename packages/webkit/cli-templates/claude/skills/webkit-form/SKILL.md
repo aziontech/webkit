@@ -898,14 +898,14 @@ A `HelperText` with `kind="disabled"` (it prepends a lock glyph, muted text) is 
 whose only job is to explain **why a field is disabled** and how to lift the lock. It is **not**
 validation feedback and it is **not** required by the submit lock. Two cases:
 
-- **Submit lock — you don't need a helper.** The `:disabled="submitting"` applied to every control
-  during a save is transient (it clears in `finally`) and the Save button's `:loading` already says the
-  form is busy. **Don't add a disabled-reason helper just because fields are locked mid-submit.** A
-  `field-*` that already has a guidance `helper-text` keeps showing it (its `kind` flips to `disabled`
-  for the ~1s of the request); one with **no** `helper-text` briefly falls back to the built-in
-  `"This field is locked."`. Both are acceptable — the lock is momentary. If that transient text bothers
-  you, give the field a real guidance `helper-text` (Fields separated) or keep the guidance in
-  `Item.Description` (ItemGroup); do **not** invent a lock explanation for a lock that lasts a second.
+- **Submit lock — you don't need a helper, and you get none.** The `:disabled="submitting"` applied to
+  every control during a save is transient (it clears in `finally`) and the Save button's `:loading`
+  already says the form is busy. **Don't add a disabled-reason helper just because fields are locked
+  mid-submit.** A `field-*` that already has a guidance `helper-text` keeps showing it (its `kind` flips
+  to `disabled`, so the lock glyph joins it for the ~1s of the request); one with **no** `helper-text`
+  renders **no helper row at all** — the field writes no copy of its own, so nothing appears and
+  disappears under the field mid-save. Do **not** invent a lock explanation for a lock that lasts a
+  second.
 
 - **Persistent disable — use the disabled helper when the reason isn't obvious.** When a field is
   disabled by a **dependency** (a plan tier, a toggle that must be on first, a mode that doesn't apply),

@@ -229,6 +229,7 @@ const DISABLED_MARKUP = `<FieldPhoneNumber
   v-model:country="country"
   label="Phone"
   model-value="11999999999"
+  helper-text="Managed by your organization."
   disabled
 />`
 
@@ -237,14 +238,14 @@ export const Disabled = {
   args: {
     disabled: true,
     modelValue: '11999999999',
-    helperText: ''
+    helperText: 'Managed by your organization.'
   },
   render: Template,
   parameters: {
     docs: {
       description: {
         story:
-          'Disabled — helper falls back to "This field is locked." with the lock icon, `InputGroup` goes muted, dial-code Select and internal input are both disabled.'
+          "Disabled — `InputGroup` goes muted and the dial-code Select and internal input are both disabled. The helper copy is the **caller's**: a supplied `helper-text` renders with the lock icon, and with none the row is absent."
       },
       source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
     }

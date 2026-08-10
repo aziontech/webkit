@@ -243,6 +243,7 @@ const DISABLED_MARKUP = `<FieldTextSwitch
   v-model:enabled="enabled"
   label="Custom domain"
   model-value="mysite.com"
+  helper-text="Managed by your account owner."
   disabled
 />`
 
@@ -252,14 +253,14 @@ export const Disabled = {
     disabled: true,
     modelValue: 'mysite.com',
     enabled: true,
-    helperText: ''
+    helperText: 'Managed by your account owner.'
   },
   render: Template,
   parameters: {
     docs: {
       description: {
         story:
-          '`disabled=true` locks the whole field: input, switch, and helper. Helper falls back to `"This field is locked."` with the lock icon (`kind="disabled"`).'
+          '`disabled=true` locks the whole field: input, switch, and helper. The helper copy is the **caller\'s** — a supplied `helper-text` renders with the lock icon (`kind="disabled"`), and with none the row is absent, so a field disabled for the length of a request grows no line.'
       },
       source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
     }

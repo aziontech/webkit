@@ -277,13 +277,22 @@ describe('FieldPhoneNumber', () => {
       expect(getByRole('textbox').getAttribute('aria-describedby')).toBeNull()
     })
 
-    it('shows the locked fallback helper when disabled with no helper text', () => {
-      const { getByTestId } = render(FieldPhoneNumber, {
+    it('omits the helper row when disabled with no helper text', () => {
+      const { queryByTestId } = render(FieldPhoneNumber, {
         props: { label: 'Phone', disabled: true }
       })
 
+      // The field writes no copy of its own, so a transient disable grows no padlock line.
+      expect(queryByTestId('input-field-phone-number__helper')).toBeNull()
+    })
+
+    it('renders a supplied helper with the disabled kind while disabled', () => {
+      const { getByTestId } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', disabled: true, helperText: 'Managed by your organization.' }
+      })
+
       const helper = getByTestId('input-field-phone-number__helper')
-      expect(helper.textContent).toContain('This field is locked.')
+      expect(helper.textContent).toContain('Managed by your organization.')
       expect(helper.getAttribute('data-kind')).toBe('disabled')
     })
 
@@ -401,7 +410,7 @@ describe('FieldPhoneNumber', () => {
       expect((getByRole('textbox') as HTMLInputElement).disabled).toBe(true)
       expect((getByTestId('select-trigger') as HTMLButtonElement).disabled).toBe(true)
       expect(getByTestId('input-field-phone-number__helper').textContent).toContain(
-        'This field is locked.'
+        'Managed by your organization.'
       )
     })
 
