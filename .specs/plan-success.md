@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/eeX71MMNcfqKHoXWemUacK/-UXE-7875--Azion-Plans?node-id=833-23321
   node_id: 833:23321
-checksum: 1871b6c30798c92fc5ed7901d2bb76ac9339e5b7a2324f650efb56fde6f87796
+checksum: 0ed955dd94ba8c9ce9d3a90dd024d7468b49a34c79bf9f8c4d9eabd175153090
 created: 2026-05-25
 last_updated: 2026-05-25
 ---

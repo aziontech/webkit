@@ -28,7 +28,7 @@
     placeholder?: string
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
-    /** Disables both the dial-code Select and the internal input; switches helper to kind=disabled. */
+    /** Disables both the dial-code Select and the internal input; a supplied helperText switches to kind=disabled. */
     disabled?: boolean
     /** Marks the internal input read-only; dial-code Select is also disabled while readonly. */
     readonly?: boolean
@@ -87,13 +87,12 @@
     return 'helper'
   })
 
-  const effectiveHelperText = computed(() => {
-    if (props.helperText) return props.helperText
-    if (props.disabled) return 'This field is locked.'
-    return ''
-  })
-
-  const describedBy = computed(() => (effectiveHelperText.value ? helperId.value : undefined))
+  // The field never writes copy of its own. No `helperText` means no helper row — while
+  // disabled as much as anywhere else: a field that goes disabled for the length of a
+  // request would otherwise grow a padlock line the screen never asked for, in the one
+  // moment it has nothing to say. Disabling is already legible from the field's own
+  // treatment, and a caller who wants a reason passes one (it renders with the lock).
+  const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
 
   const onInput = (event: Event) => {
     const target = event.target as HTMLInputElement
@@ -121,7 +120,7 @@
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
-    class="flex flex-col gap-[var(--spacing-xs)] w-full"
+    class="flex flex-col gap-(--spacing-xs) w-full"
   >
     <Label
       v-if="label"
@@ -168,14 +167,14 @@
         :aria-invalid="invalid || undefined"
         :aria-required="required || undefined"
         :aria-describedby="describedBy"
-        class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]"
+        class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @input="onInput"
       />
     </InputGroup>
     <HelperText
-      v-if="effectiveHelperText"
+      v-if="helperText"
       :id="helperId"
-      :label="effectiveHelperText"
+      :label="helperText"
       :kind="helperKind"
       :data-testid="`${testId}__helper`"
     />

@@ -80,12 +80,12 @@
   >
     <div
       ref="contentEl"
-      class="flex w-full flex-wrap content-center items-center gap-[var(--spacing-xs)]"
+      class="flex w-full flex-wrap content-center items-center gap-(--spacing-xs)"
     >
       <span
         :id="titleId || undefined"
         :data-testid="`${testId}-title`"
-        class="shrink-0 leading-none text-label-sm text-[var(--text-default)]"
+        class="shrink-0 leading-none text-label-sm text-(--text-default)"
       >
         {{ title }}
       </span>
@@ -94,17 +94,17 @@
         :key="requirement.key"
         :data-validated="requirement.met || null"
         :data-testid="`${testId}-chip`"
-        class="inline-flex shrink-0 items-center justify-center min-h-5 p-[var(--spacing-xxs)] rounded-[var(--shape-elements)] leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none bg-[var(--bg-surface-raised)] text-[var(--text-muted)] data-[validated]:bg-[var(--success)] data-[validated]:text-[var(--text-default)]"
+        class="inline-flex shrink-0 items-center justify-center min-h-5 p-(--spacing-xxs) rounded-(--shape-elements) leading-none text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none bg-(--bg-placeholder) text-(--text-muted) data-[validated]:bg-(--success) data-[validated]:text-(--text-default)"
       >
         <!-- Two treatments, matching Figma, and nothing about either is configurable: a
              satisfied rule gets `var(--success)` plus the check glyph, an unsatisfied one
-             gets `var(--bg-surface-raised)` and no visible glyph. The glyph stays in the
+             gets `var(--bg-placeholder)` and no visible glyph. The glyph stays in the
              DOM so its box can animate from zero width: unsatisfied it is `w-0` with no
              margin (the chip reserves no empty space), satisfied it widens to 14px, gains
              the gap as its own margin, and slides in from the left. -->
         <i
           :data-validated="requirement.met || null"
-          class="pi pi-check flex h-[14px] w-0 shrink-0 -translate-x-1 items-center justify-center overflow-hidden opacity-0 transition-[width,margin,translate,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[validated]:mr-[var(--spacing-xxs)] data-[validated]:w-[14px] data-[validated]:translate-x-0 data-[validated]:opacity-100"
+          class="pi pi-check flex h-[14px] w-0 shrink-0 -translate-x-1 items-center justify-center overflow-hidden opacity-0 transition-[width,margin,translate,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[validated]:mr-(--spacing-xxs) data-[validated]:w-[14px] data-[validated]:translate-x-0 data-[validated]:opacity-100"
           aria-hidden="true"
         />
         {{ requirement.label }}

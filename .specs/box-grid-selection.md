@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6e2f27ab192e33d9d23a681042fb68d6045e42d111fc3ca33d29bd4a0e64a485
+checksum: bb113c89d3f8f2f4162663aa2240b2152bb8492cd046cdf67895ae326f862eb6
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -73,7 +73,7 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on each option.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each option.
 - Keyboard map: `Tab` / arrow keys move focus between options; `Enter` / `Space` selects the focused option.
 - ARIA: root `role="radiogroup"`; each option `role="radio"` with `aria-checked` and `aria-label` from `item.ariaLabel` or `item.label`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

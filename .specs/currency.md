@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 0e0907d6d09e7ec2e866ef8704cf2db9bd3c87477cc2a7f07612465ee7747fb0
+checksum: bc3ef58b520999cd94fbffc953c987efe6795be01964da43570cad4241761097
 created: 2026-05-22
 last_updated: 2026-05-27
 ---
@@ -58,7 +58,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

@@ -268,6 +268,7 @@ const DISABLED_MARKUP = `<FieldInputGroup
   v-model="value"
   label="Website"
   model-value="mysite"
+  helper-text="Managed by your DNS provider."
   disabled
 >
   <template #left>https://</template>
@@ -279,7 +280,7 @@ export const Disabled = {
   args: {
     disabled: true,
     modelValue: 'mysite',
-    helperText: ''
+    helperText: 'Managed by your DNS provider.'
   },
   render: (args) => ({
     components: { FieldInputGroup },

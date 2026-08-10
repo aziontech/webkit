@@ -71,18 +71,18 @@
     // as that group's first row — it heads the level, it is not part of it.
     // No motion of its own: it renders INSIDE the current level (see the teleport below), so
     // the level's slide carries it and its box never sits in the root's flow.
-    'group relative flex h-8 w-full shrink-0 items-center gap-[var(--spacing-xs)] ' +
-    'mb-[var(--spacing-sm)] ' +
+    'group relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xs) ' +
+    'mb-(--spacing-sm) ' +
     // Symmetric padding, unlike a nav row's: the label is centred against the whole row, so
     // the leading and trailing insets have to match or it lands off-centre by their difference.
     // The chevron still sits on the same column as an item's icon.
-    'rounded-[var(--shape-elements)] px-[var(--spacing-xxs)] ' +
-    'text-[var(--text-default)] ' +
-    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
-    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-[var(--bg-active)] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
+    'rounded-(--shape-elements) px-(--spacing-xxs) ' +
+    'text-(--text-default) ' +
+    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
+    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
     'hover:before:opacity-100 active:after:opacity-100 ' +
     'motion-reduce:before:transition-none motion-reduce:after:transition-none ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]'
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]'
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 
@@ -118,7 +118,7 @@
         :data-testid="`${testId}__icon`"
       >
         <i
-          class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-[var(--text-muted)]"
+          class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted)"
           aria-hidden="true"
         />
       </span>

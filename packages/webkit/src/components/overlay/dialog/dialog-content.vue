@@ -60,7 +60,7 @@
 
   const shellClasses = computed(() =>
     cn(
-      'fixed inset-0 z-[1001] flex',
+      'fixed inset-0 z-1001 flex',
       dialogShellPositionClasses,
       'pointer-events-none',
       attrs.class as string | undefined

@@ -190,7 +190,7 @@ The trigger logic now lives in the orchestrator command [`.claude/commands/compo
   - If a needed module does **not** exist yet, do not import it speculatively. Either (1) install it first (`pnpm --filter <ws> add ...`), (2) create the file and its `package.json` entry first, or (3) annotate the gap explicitly in the report as `TODO: create <path>` or `TODO: install <pkg>` and skip the dependent code. The `validate-references.mjs` hook physically blocks imports that resolve to nothing — see § 12.
 - New components use `<script setup lang="ts">` with `defineProps<...>()`, `defineEmits<...>()`, `defineSlots<...>()` and `defineModel<...>()` where applicable. JSDoc on every public prop. Zero `any`. Zero `// @ts-ignore`.
 - Variants are always exposed as `kind`. Sizes as `size` (`'small' | 'medium' | 'large'`). Boolean state props have no `is`/`has` prefix.
-- Typography is **always** applied via the generated class from DESIGN.md (`text-heading-md`, `text-body-sm`, etc.). Never `text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, or `font-family` directly.
+- Typography is **always** applied via the generated class from DESIGN.md (`text-heading-md`, `text-body-sm`, etc.). Never `text-(length:--text-*)`, `leading-*`, `tracking-*`, or `font-family` directly.
 - Colors, spacing, max-width, and shape come from semantic `var(--*)` tokens. No hex, no Tailwind palette names (`bg-gray-*`), no external/legacy color utilities (`text-color`, `surface-*`).
 - `defineOptions({ name, inheritAttrs: false })` + `useAttrs()` + `rootClasses` that merges `attrs.class`. Never declare `class` in `defineProps`.
 - `data-testid` hierarchical, BEM-style: root with fallback `'<category>-<name>'`, children with `${testId}__<part>` (two underscores).
@@ -231,7 +231,7 @@ Five hooks in [`.claude/hooks/`](.claude/hooks/) act as physical guard rails on 
 
 ### 12.1) Pre-existing (unchanged)
 
-- **[`.claude/hooks/validate-tokens.mjs`](.claude/hooks/validate-tokens.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks new content introducing hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-[length:var(--text-*)]`, `leading-*`, `tracking-*`, `font-family`), PrimeVue color utilities, `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations are not retroactively flagged.
+- **[`.claude/hooks/validate-tokens.mjs`](.claude/hooks/validate-tokens.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks new content introducing hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`), PrimeVue color utilities, `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations are not retroactively flagged.
 - **[`.claude/hooks/validate-references.mjs`](.claude/hooks/validate-references.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks imports that don't resolve: `@aziontech/webkit/<subpath>` without a matching `package.json#exports`, relative paths to no file, uninstalled npm packages, missing workspaces.
 - **[`.claude/hooks/enforce-component-create.mjs`](.claude/hooks/enforce-component-create.mjs)** (PreToolUse `Write`) — blocks the first `Write` of a new `.vue` under `packages/webkit/src/components/webkit/<category>/<name>/` when the session transcript shows no reference to the `component-create` skill/command. Forces the agent to invoke the orchestrator first.
 

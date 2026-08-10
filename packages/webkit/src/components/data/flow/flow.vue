@@ -37,7 +37,7 @@
   })
 
   const outerClass = computed(() =>
-    cn('w-full overflow-x-auto p-[var(--spacing-md)]', attrs.class as string | undefined)
+    cn('w-full overflow-x-auto p-(--spacing-md)', attrs.class as string | undefined)
   )
 </script>
 
@@ -57,10 +57,10 @@
     <div
       ref="containerRef"
       :data-align="align"
-      class="relative flex w-fit flex-row gap-[var(--spacing-xl)] text-[var(--text-default)] data-[align=center]:items-center data-[align=start]:items-start [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
+      class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
     >
       <!-- Connectors run port-to-port: each end terminates under a node's connector port,
-           which paints over it (the nodes sit at z-[1], this layer behind them).
+           which paints over it (the nodes sit at z-1, this layer behind them).
 
            The stroke marches: `stroke-dasharray="4 4"` plus `animate-flow-dash` (which
            drives `stroke-dashoffset` 24 → 0) reads as the connection carrying something,
@@ -85,7 +85,7 @@
           stroke-width="1"
           stroke-dasharray="4 4"
           :data-faded="path.faded || null"
-          class="animate-flow-dash stroke-[var(--accent)] motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
+          class="animate-flow-dash stroke-(--accent) motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
         />
       </svg>
       <slot />

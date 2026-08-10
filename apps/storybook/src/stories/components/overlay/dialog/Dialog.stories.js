@@ -227,7 +227,7 @@ export const Default = {
   }
 }
 
-const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-[var(--spacing-md)]">
+const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-(--spacing-md)">
   <Dialog v-for="size in sizes" :key="size" v-model:open="openBySize[size]" :size="size">
     <DialogTrigger>
       <Button :label="sizeLabels[size]" kind="outlined" />

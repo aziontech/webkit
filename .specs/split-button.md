@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: f80b6a31121b9fc587479a52a16fbc63ea41fd8a1c65c068fb62217657753d1e
+checksum: e7026b0d39e726dcde33b5e89d71f09740091b091eeba4f79c1731ef41c84b8b
 created: 2026-06-30
 last_updated: 2026-07-05
 ---
@@ -116,7 +116,7 @@ const items = [
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on both segments; the focused segment raises its z-index so the ring is not clipped by its neighbor.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on both segments; the focused segment raises its z-index so the ring is not clipped by its neighbor.
 - Keyboard map: `Tab` focuses each segment; `Enter`/`Space` activates the primary button; on the toggle `Enter`/`Space`/`Down` open the menu, arrows navigate items, `Esc` closes and returns focus to the toggle (behavior owned by `Dropdown`).
 - ARIA: the primary button is a native `button`; the toggle exposes `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` via `Dropdown.Trigger` and carries an `aria-label`; the chevron icon is `aria-hidden`; `aria-busy` reflects the loading state. While `loading`, the toggle is a natively disabled button, so the menu cannot be opened by pointer or keyboard and assistive tech perceives the whole control as non-interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.

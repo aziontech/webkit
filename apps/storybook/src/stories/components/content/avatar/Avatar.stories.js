@@ -128,11 +128,11 @@ export const Default = {
 const TYPES_TEMPLATE = `<div class="flex flex-wrap items-end gap-6">
   <div class="flex flex-col items-center gap-2">
     <Avatar kind="circle" label="AB" size="medium" />
-    <span class="text-body-xs text-[var(--text-muted)]">Circle</span>
+    <span class="text-body-xs text-(--text-muted)">Circle</span>
   </div>
   <div class="flex flex-col items-center gap-2">
     <Avatar kind="square" label="AB" size="medium" />
-    <span class="text-body-xs text-[var(--text-muted)]">Square</span>
+    <span class="text-body-xs text-(--text-muted)">Square</span>
   </div>
 </div>`
 
@@ -169,15 +169,15 @@ export const Sizes = {
 const FALLBACKS_TEMPLATE = `<div class="flex flex-wrap items-end gap-6">
   <div class="flex flex-col items-center gap-2">
     <Avatar src="${sampleImage}" alt="Portrait of a user" size="large" />
-    <span class="text-body-xs text-[var(--text-muted)]">Image</span>
+    <span class="text-body-xs text-(--text-muted)">Image</span>
   </div>
   <div class="flex flex-col items-center gap-2">
     <Avatar label="JD" size="large" />
-    <span class="text-body-xs text-[var(--text-muted)]">Initials</span>
+    <span class="text-body-xs text-(--text-muted)">Initials</span>
   </div>
   <div class="flex flex-col items-center gap-2">
     <Avatar icon="pi pi-user" size="large" />
-    <span class="text-body-xs text-[var(--text-muted)]">Icon</span>
+    <span class="text-body-xs text-(--text-muted)">Icon</span>
   </div>
 </div>`
 
@@ -198,18 +198,18 @@ export const Fallbacks = {
 
 const VARIANT_GRID_TEMPLATE = `<div class="flex flex-col gap-8">
   <section v-for="kind in kinds" :key="kind" class="flex flex-col gap-4">
-    <h3 class="text-heading-sm text-[var(--text-default)] capitalize">{{ kind }}</h3>
+    <h3 class="text-heading-sm text-(--text-default) capitalize">{{ kind }}</h3>
     <div class="flex flex-col gap-6">
       <div class="flex flex-wrap items-end gap-4">
-        <span class="w-16 text-body-xs text-[var(--text-muted)]">Text</span>
+        <span class="w-16 text-body-xs text-(--text-muted)">Text</span>
         <Avatar v-for="size in sizes" :key="'l-' + kind + size" :kind="kind" :size="size" label="AB" />
       </div>
       <div class="flex flex-wrap items-end gap-4">
-        <span class="w-16 text-body-xs text-[var(--text-muted)]">Icon</span>
+        <span class="w-16 text-body-xs text-(--text-muted)">Icon</span>
         <Avatar v-for="size in sizes" :key="'i-' + kind + size" :kind="kind" :size="size" />
       </div>
       <div class="flex flex-wrap items-end gap-4">
-        <span class="w-16 text-body-xs text-[var(--text-muted)]">Image</span>
+        <span class="w-16 text-body-xs text-(--text-muted)">Image</span>
         <Avatar
           v-for="size in sizes"
           :key="'img-' + kind + size"

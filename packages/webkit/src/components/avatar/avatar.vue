@@ -62,7 +62,7 @@
 
   const kindClasses: Record<AvatarKind, string> = {
     circle: 'rounded-full',
-    square: 'rounded-[var(--shape-button)]'
+    square: 'rounded-(--shape-button)'
   }
 
   const sizeClasses: Record<AvatarSize, string> = {
@@ -80,12 +80,12 @@
   const rootClasses = computed(() =>
     cn(
       'inline-flex shrink-0 items-center justify-center overflow-hidden',
-      'bg-[var(--bg-surface-raised)] text-[var(--text-default)]',
+      'bg-(--bg-surface-raised) text-(--text-default)',
       'uppercase select-none',
       kindClasses[props.kind],
       sizeClasses[props.size],
       !hasImage.value && typographyClasses[props.size],
-      showLabel.value && 'border border-[var(--border-default)]',
+      showLabel.value && 'border border-(--border-default)',
       attrs.class as string | undefined
     )
   )

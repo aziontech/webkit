@@ -95,34 +95,34 @@
 
   const rootClasses = computed(() =>
     cn(
-      'relative inline-flex w-fit items-center gap-[var(--spacing-xxs)]',
-      'rounded-[var(--shape-button)] border border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-xxs)]',
+      'relative inline-flex w-fit items-center gap-(--spacing-xxs)',
+      'rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-xxs)',
       attrs.class as string | undefined
     )
   )
 
   const indicatorClasses = [
     'pointer-events-none absolute left-0 top-0 z-0',
-    'rounded-[var(--shape-button)] bg-[var(--bg-selected)]',
+    'rounded-(--shape-button) bg-(--bg-selected)',
     'motion-reduce:transition-none'
   ]
 
   const sharedOptionClasses = [
-    'relative z-[1] inline-flex h-7 shrink-0 items-center justify-center gap-[var(--spacing-xs)] whitespace-nowrap',
-    'rounded-[var(--shape-button)] border border-transparent px-[var(--spacing-sm)]',
+    'relative z-1 inline-flex h-7 shrink-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap',
+    'rounded-(--shape-button) border border-transparent px-(--spacing-sm)',
     'text-label-sm',
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]',
-    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-[var(--bg-disabled)] disabled:text-[var(--text-disabled)]'
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)'
   ]
 
   const optionClasses = (value: string, disabled: boolean) =>
     cn(
       sharedOptionClasses,
       value === selectedValue.value
-        ? 'bg-transparent text-[var(--text-default)]'
-        : 'bg-transparent text-[var(--text-muted)]',
-      disabled && 'pr-[var(--spacing-xs)]'
+        ? 'bg-transparent text-(--text-default)'
+        : 'bg-transparent text-(--text-muted)',
+      disabled && 'pr-(--spacing-xs)'
     )
 
   const resolveOptionElement = (
@@ -312,7 +312,7 @@
       {{ option.label }}
       <i
         v-if="option.disabled"
-        class="pi pi-lock shrink-0 text-[var(--text-disabled)]"
+        class="pi pi-lock shrink-0 text-(--text-disabled)"
         aria-hidden="true"
         :data-testid="`${testId}__option-lock`"
       />

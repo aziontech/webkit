@@ -136,7 +136,7 @@ if a form seems to need a different rhythm, it's in the wrong container.
 ### Hierarchy (top → down, never inverted)
 
 form title (`text-heading-*` — `PageHeading size="medium"` on a page, a `CardBox` title / `text-heading-sm`
-in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-[var(--text-muted)]`)
+in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-(--text-muted)`)
 → section overline (`text-overline-sm`) or sub-heading (`text-heading-xs`) → **field label** (`Label`,
 which carries the required tag) → control → **helper** (`HelperText` — guidance, or the required/invalid
 feedback). A label is never smaller than its helper; a section title is never smaller than a field label.
@@ -215,13 +215,13 @@ link on the left and Save on the right. Canonical pattern:
   >
     <template #content>
       <!-- body rhythm: fields are --spacing-lg apart; each field triad is --spacing-xs -->
-      <div class="flex flex-col gap-[var(--spacing-lg)]">
-        <p class="text-body-sm text-[var(--text-muted)]">
+      <div class="flex flex-col gap-(--spacing-lg)">
+        <p class="text-body-sm text-(--text-muted)">
           Enable the Azion Toolbar on your Deployments.
         </p>
 
-        <div class="grid grid-cols-1 gap-[var(--spacing-lg)] sm:grid-cols-2">
-          <div class="flex flex-col gap-[var(--spacing-xs)]">
+        <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
+          <div class="flex flex-col gap-(--spacing-xs)">
             <Label for="tb-preprod">Pre-Production Deployments</Label>
             <Select
               v-model="form.preprod"
@@ -239,7 +239,7 @@ link on the left and Save on the right. Canonical pattern:
               </Select.Content>
             </Select>
           </div>
-          <div class="flex flex-col gap-[var(--spacing-xs)]">
+          <div class="flex flex-col gap-(--spacing-xs)">
             <Label for="tb-prod">Production Deployments</Label>
             <Select
               v-model="form.prod"
@@ -268,7 +268,7 @@ link on the left and Save on the right. Canonical pattern:
     </template>
 
     <template #footer>
-      <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
+      <div class="flex w-full items-center justify-between gap-(--spacing-sm)">
         <Link
           href="#"
           label="Learn more about the Azion Toolbar"
@@ -335,18 +335,18 @@ Canonical pattern:
         </PanelHeader>
 
         <!-- compact modal body: --spacing-md between blocks -->
-        <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
+        <PanelContent class="flex flex-col gap-(--spacing-md)">
           <Message
             severity="warning"
             label="Once confirmed, this action can't be reversed."
           />
-          <p class="m-0 text-body-sm text-[var(--text-muted)]">
+          <p class="m-0 text-body-sm text-(--text-muted)">
             The selected Application will be deleted, along with all associated settings or
             instances.
           </p>
           <label
             for="confirm-delete"
-            class="text-body-sm text-[var(--text-default)]"
+            class="text-body-sm text-(--text-default)"
           >
             To confirm, type "{{ phrase }}" in the box below:
           </label>
@@ -397,10 +397,10 @@ Three decisions make it safe:
   `v-model`) so picking the quick-add never commits a real value. The quick-add is a normal
   `Select.Option` in the `#footer` slot carrying a sentinel value; `@update:model-value` intercepts it,
   closes the dropdown, and opens the child instead of assigning `form.*`.
-- **Explicit stacking.** A webkit `Drawer` panel sits at `z-[1001]` and a `Select.Content` teleports to
+- **Explicit stacking.** A webkit `Drawer` panel sits at `z-1001` and a `Select.Content` teleports to
   `<body>` at `z-50`, so each layer must opt its overlay / content / popups **above** the layer beneath
-  it: the child drawer's overlay `z-[1002]` / content `z-[1003]`, any `Select.Content` inside the child
-  `z-[1004]`; a `Select.Content` in the **parent** drawer needs `z-[1002]` to clear the parent panel.
+  it: the child drawer's overlay `z-1002` / content `z-1003`, any `Select.Content` inside the child
+  `z-1004`; a `Select.Content` in the **parent** drawer needs `z-1002` to clear the parent panel.
   (These `!z-[…]` overrides are the current stopgap for a webkit bug where overlay popups render behind a
   `Drawer` — remove them once webkit stacks overlay content above `Drawer`.)
 
@@ -469,8 +469,8 @@ Canonical pattern:
       id="fi-function"
       aria-label="Edge Function"
     />
-    <Select.Content class="!z-[1002]">
-      <!-- above the parent drawer panel (z-[1001]) -->
+    <Select.Content class="!z-1002">
+      <!-- above the parent drawer panel (z-1001) -->
       <Select.Option
         v-for="fn in functions"
         :key="fn.value"
@@ -494,8 +494,8 @@ Canonical pattern:
     side="right"
   >
     <DrawerPortal>
-      <DrawerOverlay class="z-[1002]" />
-      <DrawerContent class="z-[1003]">
+      <DrawerOverlay class="z-1002" />
+      <DrawerContent class="z-1003">
         <form
           class="flex min-h-0 flex-1 flex-col"
           aria-label="Create Function"
@@ -503,11 +503,11 @@ Canonical pattern:
           @submit.prevent="submitFunction"
         >
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="functionSubmitting"
           >
             <legend class="sr-only">Create function</legend>
-            <!-- Approach A ItemGroup sections here; a nested Select uses !z-[1004] -->
+            <!-- Approach A ItemGroup sections here; a nested Select uses !z-1004 -->
           </fieldset>
           <!-- PanelFooter: Cancel + Save :loading="functionSubmitting" + sr-only submit -->
         </form>
@@ -530,8 +530,8 @@ Rules:
 - **On the child's save, wire the resource back into the parent** — append it to the `Select`'s options,
   set the parent's model to the new value, clear the parent's error for that field, `toast.success`, close
   the child. The parent form keeps everything else the user had typed.
-- **Stack every layer explicitly** — child overlay `z-[1002]`, child content `z-[1003]`, a `Select.Content`
-  inside the child `z-[1004]`, a `Select.Content` in the parent `z-[1002]` (temporary overrides for the
+- **Stack every layer explicitly** — child overlay `z-1002`, child content `z-1003`, a `Select.Content`
+  inside the child `z-1004`, a `Select.Content` in the parent `z-1002` (temporary overrides for the
   webkit `Drawer`/overlay-popup stacking bug).
 - Everything else follows the **Drawer form** rules: Approach A ItemGroup sections inside each drawer,
   validation on submit only (`Item.Title` as the label, `HelperText` under the control), Enter submits via
@@ -564,8 +564,8 @@ Canonical pattern:
 </script>
 
 <template>
-  <section class="flex flex-col gap-[var(--spacing-sm)]">
-    <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">General</p>
+  <section class="flex flex-col gap-(--spacing-sm)">
+    <p class="px-(--spacing-xs) text-overline-sm text-(--text-muted)">General</p>
     <CardBox :padded="false">
       <template #content>
         <Item.List>
@@ -584,7 +584,7 @@ Canonical pattern:
                    after a failed submit. An empty required field is amber
                    `required` (a prompt, NOT an error); a filled-but-malformed value
                    is red `invalid`. Emptiness picks the state — never both at once. -->
-              <div class="flex w-full max-w-[var(--container-xl)] flex-col gap-[var(--spacing-xs)]">
+              <div class="flex w-full max-w-(--container-xl) flex-col gap-(--spacing-xs)">
                 <InputText
                   v-model="form.name"
                   size="large"
@@ -620,7 +620,7 @@ Rules:
   inside an `Item` — validation feedback is the control's own `:required`/`:invalid` on submit.
 - **The validation message renders as a `HelperText` under the control.** Since there is no `Label` (so
   no `HelperText` triad) and no guidance region on the right, wrap the control in a field-width
-  `flex flex-col gap-[var(--spacing-xs)]` column — capped at `max-w-[var(--container-xl)]` (576px) so the
+  `flex flex-col gap-(--spacing-xs)` column — capped at `max-w-(--container-xl)` (576px) so the
   control column stays a legible field width on wide pages — and render a `<HelperText>` **below** it, shown only
   after a failed submit and linked to the control via `aria-describedby`. This is still the field saying
   what it needs, on the field — **not** a summary block or a `Message` callout. `Item.Description` stays
@@ -647,8 +647,8 @@ header. The `<section>` stacks the overline over the card with `--spacing-sm` (1
 card read as a single divided block of rows.
 
 ```vue
-<section class="flex flex-col gap-[var(--spacing-sm)]">
-  <p class="px-[var(--spacing-xs)] text-overline-sm text-[var(--text-muted)]">General</p>
+<section class="flex flex-col gap-(--spacing-sm)">
+  <p class="px-(--spacing-xs) text-overline-sm text-(--text-muted)">General</p>
   <CardBox :padded="false">
     <template #content>
       <Item.List>
@@ -661,12 +661,12 @@ card read as a single divided block of rows.
 
 Rules:
 
-- **The section title is `text-overline-sm text-[var(--text-muted)]`** with `px-[var(--spacing-xs)]`
+- **The section title is `text-overline-sm text-(--text-muted)`** with `px-(--spacing-xs)`
   inset so it aligns with the card's content; `--spacing-sm` gap to the card (per the spacing macro rule).
 - **The card is header-less** (`:padded="false"`, only `#content`). Don't also set a `CardBox` `title` —
   the overline is the section title; a card header would double it.
 - **A dangerous section** (Danger Zone) reuses the pattern with the danger tokens: overline in
-  `text-[var(--danger-contrast)]` above a `CardBox class="border-[var(--danger-border)] bg-[var(--danger)]"`.
+  `text-(--danger-contrast)` above a `CardBox class="border-(--danger-border) bg-(--danger)"`.
 - **Overline vs `CardBox` title — pick by role.** An **OVERLINE above** the card titles a _section of a
   larger page_ (multi-Card ItemGroup). A **`CardBox` `title`** (in the card header) names a _self-contained
   card that is the form_ — the "CardBox with its own save" / Contained form. Never use both on one card.
@@ -691,12 +691,12 @@ so only the field's amber (border + helper) is revealed on submit. Canonical pat
 </script>
 
 <template>
-  <div class="flex flex-col gap-[var(--spacing-md)]">
+  <div class="flex flex-col gap-(--spacing-md)">
     <!-- Label required ALWAYS (rendered here; the wrapper gets no `label`). Empty →
          :required (amber), the wrapper's helper flips to kind=required. A malformed
          value → :invalid (red). Never both at once. `errors.name` holds the message
          ("" = valid), so the helper falls back to guidance when clear. -->
-    <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+    <div class="flex w-full flex-col gap-(--spacing-xs)">
       <Label
         for="app-name"
         required
@@ -772,10 +772,7 @@ Each section is a **group of related controls**. Give it programmatic grouping w
 attribute, which is how you lock the scope on submit.
 
 ```vue
-<fieldset
-  class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
-  :disabled="submitting"
->
+<fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0" :disabled="submitting">
   <legend class="sr-only">Account settings</legend>
   <!-- sections: CardBox + Item.List (Approach A) OR stacked field-* (Approach B) -->
 </fieldset>
@@ -874,9 +871,9 @@ active mid-submit. Keep the `<fieldset :disabled="submitting">` as the native sa
 
 ```vue
 <footer
-  class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
+  class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
 >
-  <div class="mx-auto flex max-w-[var(--container-5xl)] items-center justify-end gap-[var(--spacing-sm)] px-[var(--spacing-xl)] py-[var(--spacing-sm)]">
+  <div class="mx-auto flex max-w-(--container-5xl) items-center justify-end gap-(--spacing-sm) px-(--spacing-xl) py-(--spacing-sm)">
     <Button type="button" label="Cancel" kind="outlined" size="medium" :disabled="submitting" @click="cancel" />
     <Button label="Save" kind="primary" size="medium" :loading="submitting" @click="submit" />
   </div>
@@ -901,14 +898,14 @@ A `HelperText` with `kind="disabled"` (it prepends a lock glyph, muted text) is 
 whose only job is to explain **why a field is disabled** and how to lift the lock. It is **not**
 validation feedback and it is **not** required by the submit lock. Two cases:
 
-- **Submit lock — you don't need a helper.** The `:disabled="submitting"` applied to every control
-  during a save is transient (it clears in `finally`) and the Save button's `:loading` already says the
-  form is busy. **Don't add a disabled-reason helper just because fields are locked mid-submit.** A
-  `field-*` that already has a guidance `helper-text` keeps showing it (its `kind` flips to `disabled`
-  for the ~1s of the request); one with **no** `helper-text` briefly falls back to the built-in
-  `"This field is locked."`. Both are acceptable — the lock is momentary. If that transient text bothers
-  you, give the field a real guidance `helper-text` (Fields separated) or keep the guidance in
-  `Item.Description` (ItemGroup); do **not** invent a lock explanation for a lock that lasts a second.
+- **Submit lock — you don't need a helper, and you get none.** The `:disabled="submitting"` applied to
+  every control during a save is transient (it clears in `finally`) and the Save button's `:loading`
+  already says the form is busy. **Don't add a disabled-reason helper just because fields are locked
+  mid-submit.** A `field-*` that already has a guidance `helper-text` keeps showing it (its `kind` flips
+  to `disabled`, so the lock glyph joins it for the ~1s of the request); one with **no** `helper-text`
+  renders **no helper row at all** — the field writes no copy of its own, so nothing appears and
+  disappears under the field mid-save. Do **not** invent a lock explanation for a lock that lasts a
+  second.
 
 - **Persistent disable — use the disabled helper when the reason isn't obvious.** When a field is
   disabled by a **dependency** (a plan tier, a toggle that must be on first, a mode that doesn't apply),

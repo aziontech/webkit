@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=536-22
   node_id: 536:22
-checksum: f42720d41e452876ff8c867f8ab2a37cf4ae6ea2c2b1d82aa258f653507d72d1
+checksum: 2e52ad0b0020b67ab7dbfb9daf017b3acfbd1eb3fcb63d3c84ef47c35aa4fbaf
 created: 2026-06-15
-last_updated: 2026-06-15
+last_updated: 2026-08-10
 ---
+
 # Field Text — Component Spec
 
 ## Purpose
@@ -21,10 +22,10 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FieldText from '@aziontech/webkit/field-text'
+  import { ref } from 'vue'
+  import FieldText from '@aziontech/webkit/field-text'
 
-const email = ref('')
+  const email = ref('')
 </script>
 
 <template>
@@ -40,32 +41,32 @@ const email = ref('')
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the underlying `InputText`. |
-| `label` | `string` | `''` | no | Text rendered inside the `Label`. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | no | Placeholder forwarded to the `InputText`. |
-| `helperText` | `string` | `''` | no | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px. |
-| `disabled` | `boolean` | `false` | no | Disables the input and switches the helper to `kind="disabled"` (lock icon). |
-| `readonly` | `boolean` | `false` | no | Marks the input read-only; value is visible but not editable. Native pass-through. |
-| `required` | `boolean` | `false` | no | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input. |
-| `invalid` | `boolean` | `false` | no | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input. |
-| `inputId` | `string` | `''` | no | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`. |
-| `name` | `string` | `''` | no | HTML name for the underlying input (form + vee-validate integration). |
+| Prop          | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                                                                                                    |
+| ------------- | -------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`  | `string`                         | `''`       | no       | Two-way bound value of the underlying `InputText`.                                                                                                                                                                                                                                       |
+| `label`       | `string`                         | `''`       | no       | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                  |
+| `placeholder` | `string`                         | `''`       | no       | Placeholder forwarded to the `InputText`.                                                                                                                                                                                                                                                |
+| `helperText`  | `string`                         | `''`       | no       | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say. |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'` | no       | Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px.                                                                                                                                                                                                         |
+| `disabled`    | `boolean`                        | `false`    | no       | Disables the input and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                             |
+| `readonly`    | `boolean`                        | `false`    | no       | Marks the input read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                                                       |
+| `required`    | `boolean`                        | `false`    | no       | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input.                                                                                                                                                                                        |
+| `invalid`     | `boolean`                        | `false`    | no       | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input.                                                                                                                                                                                             |
+| `inputId`     | `string`                         | `''`       | no       | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`.                                                                                                                                   |
+| `name`        | `string`                         | `''`       | no       | HTML name for the underlying input (form + vee-validate integration).                                                                                                                                                                                                                    |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes                                                            |
+| ------------------- | -------- | ---------------------------------------------------------------- |
 | `update:modelValue` | `string` | Re-emitted from the underlying `InputText` on every input event. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `iconLeft` | — | Forwarded to the underlying `InputText#iconLeft` slot. |
-| `iconRight` | — | Forwarded to the underlying `InputText#iconRight` slot. |
+| Slot        | Scope | Notes                                                   |
+| ----------- | ----- | ------------------------------------------------------- |
+| `iconLeft`  | —     | Forwarded to the underlying `InputText#iconLeft` slot.  |
+| `iconRight` | —     | Forwarded to the underlying `InputText#iconRight` slot. |
 
 ## States
 
@@ -77,14 +78,14 @@ const email = ref('')
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| _none_ — motion is owned by the underlying `InputText` | — | — | — |
+| Trigger                                                | Animation / Transition | Token | Reduced-motion fallback |
+| ------------------------------------------------------ | ---------------------- | ----- | ----------------------- |
+| _none_ — motion is owned by the underlying `InputText` | —                      | —     | —                       |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                                    | Token (DESIGN.md)   |
+| ----------------------------------------- | ------------------- |
 | gap (between label / input / helper rows) | `var(--spacing-xs)` |
 
 (Typography and color tokens are owned by the children — `Label`, `InputText`, `HelperText` — and not redeclared here.)
@@ -92,8 +93,8 @@ const email = ref('')
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -101,7 +102,7 @@ const email = ref('')
 - When `helperText` is set, the input receives `aria-describedby="<helperId>"` so assistive tech announces the helper alongside the value.
 - When `required`, the input receives native `required` + `aria-required="true"`; the visual asterisk/Required tag lives on the `Label`.
 - When `invalid`, the input receives `aria-invalid="true"` and the helper switches color tokens to `var(--danger-contrast)` — the helper text remains the human-readable error message.
-- When `disabled`, the input is disabled, the helper switches to `kind="disabled"` (lock icon) — if `helperText` is empty, the component falls back to the default disabled message `'This field is locked.'` so the lock icon never appears alone — and the label dims via inherited `var(--text-muted)`.
+- When `disabled`, the input is disabled and the label dims via inherited `var(--text-muted)`. A supplied `helperText` switches to `kind="disabled"` (lock icon), so the lock never appears alone; an empty `helperText` renders no helper row at all — the field writes no copy of its own, and `aria-describedby` is dropped with the row.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including all derived states.
 - Touch target: the underlying `InputText` owns the ≥40×40 px hit area at `size="large"`.
 

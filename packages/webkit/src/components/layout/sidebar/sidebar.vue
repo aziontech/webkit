@@ -109,7 +109,7 @@
   const rootClass = computed(() =>
     cn(
       'flex h-full min-h-0 w-full min-w-0 flex-col',
-      'border-r border-[var(--border-muted)] bg-[var(--bg-surface)]',
+      'border-r border-(--border-muted) bg-(--bg-surface)',
       railEnabled.value
         ? 'relative shrink-0 overflow-hidden data-[collapsed]:border-r-0'
         : undefined,
@@ -120,7 +120,7 @@
   const NAV_CLASS =
     'flex h-full min-h-0 flex-1 flex-col [--menu-item-ring-offset:var(--bg-surface)] [--menu-ring-offset:var(--bg-surface)]'
 
-  const HEADER_REGION_CLASS = 'w-full shrink-0 p-[var(--spacing-md)]'
+  const HEADER_REGION_CLASS = 'w-full shrink-0 p-(--spacing-md)'
 
   const INNER_CLASS = 'flex h-full min-h-0 w-full flex-col'
 
@@ -132,13 +132,13 @@
     transition: railTransition.value
   }))
 
-  const FOOTER_REGION_CLASS = 'w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)]'
+  const FOOTER_REGION_CLASS = 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
 
   const footerBandClass = computed(() =>
     props.collapsible
       ? cn(
-          'flex items-center gap-[var(--spacing-xs)]',
-          'border-t border-[var(--border-muted)] pt-[var(--spacing-md)]',
+          'flex items-center gap-(--spacing-xs)',
+          'border-t border-(--border-muted) pt-(--spacing-md)',
           !slots['footer'] ? 'justify-end' : undefined
         )
       : undefined
@@ -146,9 +146,9 @@
 
   const scrollClass = computed(() =>
     cn(
-      'flex min-h-0 flex-1 flex-col gap-[var(--spacing-md)] p-[var(--spacing-md)]',
-      'scroll-py-[var(--spacing-xxs)]',
-      slots['header'] ? 'pt-[var(--spacing-xxs)]' : undefined
+      'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
+      'scroll-py-(--spacing-xxs)',
+      slots['header'] ? 'pt-(--spacing-xxs)' : undefined
     )
   )
 </script>
@@ -232,14 +232,14 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__handle`"
-      class="group absolute inset-y-0 right-0 z-10 w-[var(--spacing-xs)] cursor-col-resize outline-none"
+      class="group absolute inset-y-0 right-0 z-10 w-(--spacing-xs) cursor-col-resize outline-none"
       @pointerdown="startResize"
       @keydown.left.prevent="nudge(-SIDEBAR_NUDGE_STEP)"
       @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
       @dblclick="collapsed = true"
     >
       <span
-        class="pointer-events-none absolute inset-y-0 right-0 w-[var(--border-2)] bg-[var(--accent)] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
+        class="pointer-events-none absolute inset-y-0 right-0 w-(--border-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
       />
     </div>
   </aside>
@@ -256,7 +256,7 @@
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
       :style="{ transition: railTransition }"
-      class="group absolute inset-y-0 left-0 z-20 w-[var(--size-6)] data-[preview]:w-[var(--size-10)]"
+      class="group absolute inset-y-0 left-0 z-20 w-(--size-6) data-[preview]:w-(--size-10)"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -279,7 +279,7 @@
 
       <div
         :style="affordanceStyle"
-        class="pointer-events-none absolute left-full top-1/2 pl-[var(--spacing-xxs)] group-data-[preview]:pointer-events-auto"
+        class="pointer-events-none absolute left-full top-1/2 pl-(--spacing-xxs) group-data-[preview]:pointer-events-auto"
       >
         <Tooltip
           :text="expandAriaLabel"

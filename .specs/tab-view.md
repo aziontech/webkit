@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 2f9b6eecead3aa34b041a12faff5dc142a39ebb07ffcbcf739d0ff4935b47e46
+checksum: 841b11eafda1509b27a6f13654b000bc440fb248c4f0b4b5cf863ed89bd166a6
 created: 2026-05-22
 last_updated: 2026-08-04
 ---
@@ -53,7 +53,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | open/close | `animate-none` | semantic | `motion-reduce:animate-none` |
 | scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out` | semantic | `motion-reduce:animate-none` |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
-| panel change | the incoming panel slides in from the side being navigated toward (`translate-x-[var(--spacing-md)]` / negative) while fading | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
+| panel change | the incoming panel slides in from the side being navigated toward (`translate-x-(--spacing-md)` / negative) while fading | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -63,7 +63,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | surface | `var(--bg-surface)` |
 | text | `var(--text-default)` |
 | spacing | `var(--spacing-3)` |
-| height (tab item) | `var(--size-8)` — 32 px, applied as `h-[var(--size-8)]` |
+| height (tab item) | `var(--size-8)` — 32 px, applied as `h-(--size-8)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
 
@@ -75,7 +75,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

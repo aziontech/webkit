@@ -134,7 +134,7 @@ export const Default = {
 }
 
 const DISABLED_SCRIPT = [IMPORT, "import { ref } from 'vue'", '', "const selected = ref('a')"]
-const DISABLED_TEMPLATE = `<fieldset class="flex items-center gap-[var(--spacing-4)] border-0 p-0 m-0">
+const DISABLED_TEMPLATE = `<fieldset class="flex items-center gap-(--spacing-4) border-0 p-0 m-0">
   <RadioButton
     v-model="selected"
     name="webkit-radio-disabled"

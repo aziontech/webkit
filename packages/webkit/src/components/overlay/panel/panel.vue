@@ -47,9 +47,9 @@
       // 400px and the body scrolls. Dialog and Drawer already bound it from the
       // outside, so this only changes the case where nothing else does.
       'flex w-full max-h-full flex-col overflow-hidden',
-      'rounded-[var(--shape-card)] border border-[length:var(--border-width-default)]',
-      'border-[var(--border-muted)]',
-      'bg-[var(--bg-surface)] shadow-[var(--shadow-2xl)]',
+      'rounded-(--shape-card) border border-(length:--border-width-default)',
+      'border-(--border-muted)',
+      'bg-(--bg-surface) shadow-(--shadow-2xl)',
       isFluid.value
         ? 'w-full max-w-none'
         : props.sizeAtMd

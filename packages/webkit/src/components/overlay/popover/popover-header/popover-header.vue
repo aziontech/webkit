@@ -24,7 +24,7 @@
   <header
     v-bind="attrs"
     :data-testid="testId"
-    class="relative border-b border-[var(--border-default)] py-[var(--spacing-sm)] px-[var(--spacing-md)]"
+    class="relative border-b border-(--border-default) py-(--spacing-sm) px-(--spacing-md)"
   >
     <!--
       min-h matches the absolute close button (IconButton small = 1.75rem): with no
@@ -32,7 +32,7 @@
       close, instead of centering in the header's symmetric padding.
     -->
     <div
-      class="flex min-h-[1.75rem] flex-col gap-[var(--spacing-xxs)] pr-[var(--spacing-xxl)] [&>button]:absolute [&>button]:right-[var(--spacing-md)] [&>button]:top-[var(--spacing-sm)]"
+      class="flex min-h-[1.75rem] flex-col gap-(--spacing-xxs) pr-(--spacing-xxl) [&>button]:absolute [&>button]:right-(--spacing-md) [&>button]:top-(--spacing-sm)"
     >
       <slot />
     </div>

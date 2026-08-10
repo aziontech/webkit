@@ -29,7 +29,7 @@ export const iconTransitionLeaveToClasses = 'opacity-0'
 
 /** Fixed box for swap motion; width/height come from IconButton size tokens. */
 export const iconTransitionHostClasses =
-  'relative z-[1] inline-flex shrink-0 items-center justify-center overflow-hidden'
+  'relative z-1 inline-flex shrink-0 items-center justify-center overflow-hidden'
 
 /** Keeps glyphs out of flow so copy/check metrics cannot resize the button. */
 export const iconTransitionIconClasses = iconTransitionLayerClasses

@@ -12,7 +12,7 @@ const IMPORTS = [
 ]
 
 const MIDDLE_INPUT =
-  '<input placeholder="domain" class="flex-1 min-w-0 h-full bg-[var(--bg-surface)] border-0 outline-none focus:ring-0 px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] placeholder:text-[var(--text-muted)]" />'
+  '<input placeholder="domain" class="flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)" />'
 
 // Runtime templates must use the FLAT sub-component name (<InputGroupAddon>) because
 // Vue's runtime template compiler can't reliably resolve dot-notation. The "Show code"

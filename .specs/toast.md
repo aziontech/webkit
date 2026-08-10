@@ -8,7 +8,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: cabba791be74b5dc7773877c1631197ead9fdb650779837aef9142427dd127ba
+checksum: 670bbe37a3def22fe7097d343118abf9def308caac8bdf3a044167decca9fc43
 created: 2026-06-23
 last_updated: 2026-07-21
 ---
@@ -224,7 +224,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1` on the action and close controls (inherited from `Button` / `IconButton`).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1` on the action and close controls (inherited from `Button` / `IconButton`).
 - Keyboard map: `Tab` reaches the action then the close control of each visible toast; `Enter`/`Space` activates them. The region itself is not a focus trap and is not focused on mount, so toasts never steal focus from the current task.
 - ARIA: the region carries `aria-live` (`polite`, or `assertive` while an `error` toast is present) and `aria-atomic="false"`; each item is `role="status"` (or `role="alert"` for `error`/`warning`); the close control has an `aria-label`; the severity icon is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted description text and severity icons.

@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: d2f63e195f987c1389469b6e22288c1f9bc99cb0b48d53cf42493d9294bebcb9
+checksum: fb9dd7fa89d19dc40dffb4047f206e89720c02f2d51895bb322f1e65415a58bd
 created: 2026-06-25
 last_updated: 2026-08-04
 ---
@@ -31,14 +31,14 @@ import Flow from '@aziontech/webkit/flow'
   <Flow align="center">
     <Flow.Node>Load balancer</Flow.Node>
     <Flow.Node unstyled>
-      <div class="rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)]">
+      <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay)">
         <Flow.Anchor type="end">
-          <div class="flex h-10 items-center px-[var(--spacing-sm)] text-label-md text-[var(--text-muted)]">
+          <div class="flex h-10 items-center px-(--spacing-sm) text-label-md text-(--text-muted)">
             my-worker
           </div>
         </Flow.Anchor>
         <Flow.Anchor type="start">
-          <div class="m-[var(--spacing-xxs)] mt-0 rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-md text-[var(--text-default)]">
+          <div class="m-(--spacing-xxs) mt-0 rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default)">
             Bindings
           </div>
         </Flow.Anchor>
@@ -149,7 +149,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` moves focus through focusable nodes in document order; no arrow-key roving (the diagram is a static list/group).
 - ARIA: root `flow` is `role="list"`; each `flow-node` is `role="listitem"` with accessible text content; `flow-parallel` is `role="group"`; the connector SVG is decorative and carries `aria-hidden="true"`, as does every connector port (`data-flow-port`) — the ports are a visual attachment affordance and carry no meaning for AT. A `flow-anchor` wraps meaningful node content and is therefore not hidden.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.

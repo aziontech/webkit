@@ -219,7 +219,7 @@ const Template = (args) => ({
     return { args, value, onUpdate }
   },
   template: `
-    <div class="max-w-[var(--container-xl)]">
+    <div class="max-w-(--container-xl)">
       <PickList
         :model-value="value"
         :data-key="args.dataKey"

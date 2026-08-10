@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 4ee0f68c74c6046d625e69c006af16abf34e63dfac4b3d569eb229ac0207cd20
+checksum: 2f5ca935c6acb69b9c71b4c79a9f7299b7caf17068d13e63a6798a6b441b379c
 created: 2026-06-25
 last_updated: 2026-07-22
 ---
@@ -34,7 +34,7 @@ import MiniButton from '@aziontech/webkit/mini-button'
     bordered
   >
     <template #actions>
-      <div class="flex gap-[var(--spacing-3)]">
+      <div class="flex gap-(--spacing-3)">
         <Button kind="secondary" label="Secondary Item" />
         <Button kind="outlined" label="Create Item" />
       </div>
@@ -112,7 +112,7 @@ _none_ — the title now uses `heading` tokens at every size (`.text-heading-xxs
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses the consumer-supplied controls in the `actions` slot in DOM order; the region itself is non-interactive.
 - ARIA: root uses `role="status"` so assistive tech announces the empty-data message; the `icon` slot container is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.

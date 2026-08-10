@@ -20,7 +20,7 @@ A component in this package is accessible **by construction**, not by the consum
 ### Focus
 
 - **`useId()`** for every id used in a `for`/`aria-labelledby`/`aria-describedby` association — stable across SSR, never a hand-rolled counter (see [`composables.md`](./composables.md)).
-- **`focus-visible`** ring using the ring token (`focus-visible:ring-[var(--ring-color)]`), never a raw color (see [`styling.md`](./styling.md)).
+- **`focus-visible`** ring using the ring token (`focus-visible:ring-(--ring-color)`), never a raw color (see [`styling.md`](./styling.md)).
 - **Overlays trap focus and restore it**: focus moves into the overlay on open, is trapped while open, and returns to the trigger on close — via the focus-trap composable (VueUse primitive, per [`dependencies.md`](./dependencies.md)), not a hand-written trap.
 
 ### Motion

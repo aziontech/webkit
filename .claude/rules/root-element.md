@@ -41,7 +41,7 @@ The consumer's attributes (including `class`) reach the **real** root element, e
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :class="cn('rounded-[var(--shape-card)] bg-[var(--bg-surface)]', attrs.class as string)"
+    :class="cn('rounded-(--shape-card) bg-(--bg-surface)', attrs.class as string)"
   >
     <slot />
   </div>

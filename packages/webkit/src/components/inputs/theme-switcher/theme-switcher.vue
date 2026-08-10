@@ -147,10 +147,10 @@
   watch(() => props.value, scheduleIndicatorSync)
 
   const ROOT_CLASS =
-    'relative inline-flex h-7 w-fit items-center gap-[var(--spacing-xxs)] p-[var(--spacing-xxs)] rounded-full border-solid border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)]'
+    'relative inline-flex h-7 w-fit items-center gap-(--spacing-xxs) p-(--spacing-xxs) rounded-full border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)'
 
   const SEGMENT_CLASS =
-    'relative z-[var(--z-input-field)] inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] [&:not([data-state=active])]:hover:bg-[var(--bg-hover)] disabled:cursor-not-allowed disabled:text-[var(--text-disabled)]'
+    'relative z-(--z-input-field) inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) [&:not([data-state=active])]:hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>
@@ -169,7 +169,7 @@
       aria-hidden="true"
       :data-testid="`${testId}__indicator`"
       :style="{ transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)` }"
-      class="pointer-events-none absolute left-0 top-0 z-0 h-5 w-7 rounded-full bg-[var(--bg-selected)] transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      class="pointer-events-none absolute left-0 top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     />
     <Tooltip
       v-for="(mode, index) in MODES"

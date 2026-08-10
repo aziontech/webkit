@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 82a01ef41214686b035f6f6f700873cd25b1c0f963f820bbd40220e27ece8c9a
+checksum: 586b493523abe743ef8e580729b51cd2884ba645894b6839fddca0eb71299380
 created: 2026-05-22
 last_updated: 2026-07-22
 figma:
@@ -69,7 +69,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

@@ -136,7 +136,7 @@
   const onFooterLinkClick = (event: MouseEvent) => emit('footer-link-click', event)
 
   const rootClass = computed(() =>
-    cn('flex w-full max-w-[var(--container-lg)] flex-col', attrs.class as string | undefined)
+    cn('flex w-full max-w-(--container-lg) flex-col', attrs.class as string | undefined)
   )
 </script>
 
@@ -156,23 +156,23 @@
     >
       <template #content>
         <div
-          class="flex w-full flex-col gap-[var(--spacing-xl)] p-[var(--spacing-xl)]"
+          class="flex w-full flex-col gap-(--spacing-xl) p-(--spacing-xl)"
           :data-testid="`${testId}__body`"
         >
           <h1
             :id="headingId"
-            class="text-center text-heading-md text-[var(--text-default)] [word-break:break-word]"
+            class="text-center text-heading-md text-(--text-default) [word-break:break-word]"
             :data-testid="`${testId}__title`"
           >
             {{ title }}
           </h1>
 
           <section
-            class="flex w-full flex-col gap-[var(--spacing-xxs)]"
+            class="flex w-full flex-col gap-(--spacing-xxs)"
             :data-testid="`${testId}__plan-section`"
           >
             <p
-              class="text-body-sm text-[var(--text-muted)]"
+              class="text-body-sm text-(--text-muted)"
               :data-testid="`${testId}__plan-label`"
             >
               {{ planLabel }}
@@ -185,7 +185,7 @@
                 :data-testid="`${testId}__plan-card`"
               >
                 <ItemContent>
-                  <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
+                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
                     <ItemTitle :data-testid="`${testId}__plan-title`">
                       {{ planTitle }}
                     </ItemTitle>
@@ -214,19 +214,19 @@
           </section>
 
           <section
-            class="flex w-full flex-col gap-[var(--spacing-xxs)]"
+            class="flex w-full flex-col gap-(--spacing-xxs)"
             :data-testid="`${testId}__usage-section`"
           >
             <label
               :id="`${usageFieldId}-label`"
               :for="usageFieldId"
-              class="text-body-sm text-[var(--text-muted)]"
+              class="text-body-sm text-(--text-muted)"
               :data-testid="`${testId}__usage-label`"
             >
               {{ usageLabel }}
               <span
                 v-if="usageRequired"
-                class="text-[var(--primary)]"
+                class="text-(--primary)"
                 aria-hidden="true"
               >
                 *
@@ -245,19 +245,19 @@
           </section>
 
           <section
-            class="flex w-full flex-col gap-[var(--spacing-xxs)]"
+            class="flex w-full flex-col gap-(--spacing-xxs)"
             :data-testid="`${testId}__full-name-section`"
           >
             <label
               :id="`${fullNameFieldId}-label`"
               :for="fullNameFieldId"
-              class="text-body-sm text-[var(--text-muted)]"
+              class="text-body-sm text-(--text-muted)"
               :data-testid="`${testId}__full-name-label`"
             >
               {{ fullNameLabel }}
               <span
                 v-if="fullNameRequired"
-                class="text-[var(--primary)]"
+                class="text-(--primary)"
                 aria-hidden="true"
               >
                 *
@@ -299,13 +299,13 @@
       <template #footer>
         <slot name="footer">
           <p
-            class="w-full text-center text-body-sm text-[var(--text-muted)] [word-break:break-word]"
+            class="w-full text-center text-body-sm text-(--text-muted) [word-break:break-word]"
             :data-testid="`${testId}__footer`"
           >
             {{ footerPrefix }}
             <a
               :href="footerLinkHref"
-              class="text-[var(--text-link)] transition-colors duration-fast-02 ease-productive-entrance hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+              class="text-(--text-link) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
               :data-testid="`${testId}__footer-link`"
               @click="onFooterLinkClick"
             >

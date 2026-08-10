@@ -388,7 +388,7 @@ export const Disabled = {
     docs: {
       description: {
         story:
-          'Disabled state — the input is disabled, the helper switches to `kind="disabled"` (lock icon), and the label dims via inherited muted text token.'
+          'Disabled state — the input is disabled, the helper switches to `kind="disabled"` (lock icon), and the label dims via inherited muted text token. The copy is the **caller\'s**: pass a `helperText` and it renders with the lock; pass none and a disabled field renders no helper row at all. The field never substitutes a padlock line of its own, so a field that goes disabled for the length of a request stays silent instead of growing one.'
       },
       source: { code: toSfc(DISABLED_SCRIPT, DISABLED_MARKUP) }
     }

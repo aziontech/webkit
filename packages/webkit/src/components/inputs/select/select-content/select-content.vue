@@ -148,25 +148,25 @@
         :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
         :class="attrs.class"
         :style="positionStyle"
-        class="fixed z-[var(--z-input-overlay)] flex max-h-[20rem] flex-col overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] shadow-[var(--shadow-xs)]"
+        class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
         @keydown="onKeydown"
       >
         <div
           v-if="$slots['search']"
-          class="flex shrink-0 items-center justify-center p-[var(--spacing-xxs)]"
+          class="flex shrink-0 items-center justify-center p-(--spacing-xxs)"
           :data-testid="`${testId}__search`"
         >
           <slot name="search" />
         </div>
         <ScrollArea
-          class="flex max-h-60 flex-col items-stretch p-[var(--spacing-xxs)]"
+          class="flex max-h-60 flex-col items-stretch p-(--spacing-xxs)"
           :data-testid="`${testId}__list`"
         >
           <slot />
         </ScrollArea>
         <div
           v-if="$slots['footer']"
-          class="flex shrink-0 items-center justify-center p-[var(--spacing-xxs)]"
+          class="flex shrink-0 items-center justify-center p-(--spacing-xxs)"
           :data-testid="`${testId}__footer`"
         >
           <slot name="footer" />

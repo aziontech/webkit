@@ -170,18 +170,18 @@
       :data-trailing="hasTrailingControl || null"
       :style="dismissTransitionStyle"
       tabindex="-1"
-      class="relative box-border flex w-full flex-wrap items-center gap-[var(--spacing-sm)] break-words rounded-[var(--shape-button)] border border-[length:var(--border-width-default,1px)] py-1.5 shadow-[var(--shadow-xs)] data-[size=small]:min-h-8 data-[size=small]:px-[var(--spacing-xs)] data-[size=medium]:min-h-9 data-[size=medium]:px-[var(--spacing-sm)] data-[trailing]:pr-[var(--spacing-xs)] data-[severity=info]:border-[var(--info-border)] data-[severity=info]:bg-[var(--info)] data-[severity=success]:border-[var(--success-border)] data-[severity=success]:bg-[var(--success)] data-[severity=warning]:border-[var(--warning-border)] data-[severity=warning]:bg-[var(--warning)] data-[severity=danger]:border-[var(--danger-border)] data-[severity=danger]:bg-[var(--danger)]"
+      class="relative box-border flex w-full flex-wrap items-center gap-(--spacing-sm) break-words rounded-(--shape-button) border border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) data-[trailing]:pr-(--spacing-xs) data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)"
       @keydown="handleEscape"
     >
       <i
         :class="resolvedIcon"
         :data-severity="normalizedSeverity"
-        class="size-3.5 shrink-0 text-label-md leading-none data-[severity=info]:text-[var(--info-contrast)] data-[severity=success]:text-[var(--success-contrast)] data-[severity=warning]:text-[var(--warning-contrast)] data-[severity=danger]:text-[var(--danger-contrast)]"
+        class="size-3.5 shrink-0 text-label-md leading-none data-[severity=info]:text-(--info-contrast) data-[severity=success]:text-(--success-contrast) data-[severity=warning]:text-(--warning-contrast) data-[severity=danger]:text-(--danger-contrast)"
         aria-hidden="true"
       />
       <p
         :data-size="size"
-        class="m-0 min-w-0 flex-1 text-[var(--text-default)] data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
+        class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
         :data-testid="`${testId}__content`"
       >
         <slot v-if="$slots['default']" />

@@ -385,7 +385,7 @@ describe('Select (compound / overlay)', () => {
   })
 
   // ---- Focus ring: arrow-key navigation focuses the option (ENG-46730) -----
-  // Options carry `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]`
+  // Options carry `focus-visible:ring-2 focus-visible:ring-(--ring-color)`
   // and `tabindex="-1"`, so the ring shows when the keyboard handler moves
   // focus to the option via `.focus()`. This regression test asserts the
   // handler actually moves DOM focus, which is the missing link when the ring

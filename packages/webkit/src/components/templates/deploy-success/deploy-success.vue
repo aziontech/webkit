@@ -109,7 +109,7 @@
   const ItemActions = Item['Actions']
 
   const ROOT_CLASS =
-    'flex min-h-full w-full flex-col bg-[var(--bg-canvas)] transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none'
+    'flex min-h-full w-full flex-col bg-(--bg-canvas) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none'
 
   const STEP_BUTTON_CLASS = cn(
     'cursor-pointer border-0 bg-transparent text-left text-inherit',
@@ -142,7 +142,7 @@
     </slot>
 
     <main
-      class="flex flex-1 flex-col items-center px-[var(--spacing-xxl)] py-[var(--spacing-xxl)]"
+      class="flex flex-1 flex-col items-center px-(--spacing-xxl) py-(--spacing-xxl)"
       :aria-labelledby="successHeadingId"
       :data-testid="`${testId}__main`"
     >
@@ -154,22 +154,22 @@
         <template #header>
           <slot name="success">
             <div
-              class="flex w-full items-start justify-between gap-[var(--spacing-md)]"
+              class="flex w-full items-start justify-between gap-(--spacing-md)"
               :data-testid="`${testId}__success`"
             >
-              <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                 <h1
                   :id="successHeadingId"
-                  class="text-heading-sm text-[var(--text-default)] [word-break:break-word]"
+                  class="text-heading-sm text-(--text-default) [word-break:break-word]"
                   :data-testid="`${testId}__title`"
                 >
                   {{ title }}
                 </h1>
                 <div
-                  class="flex flex-wrap items-center gap-[var(--spacing-xs)]"
+                  class="flex flex-wrap items-center gap-(--spacing-xs)"
                   :data-testid="`${testId}__description-row`"
                 >
-                  <p class="text-body-sm whitespace-nowrap text-[var(--text-muted)]">
+                  <p class="text-body-sm whitespace-nowrap text-(--text-muted)">
                     {{ description }}
                   </p>
                   <Tag
@@ -196,11 +196,11 @@
         <template #content>
           <slot name="logs">
             <div
-              class="flex w-full flex-col gap-[var(--spacing-lg)] px-[var(--spacing-lg)] py-[var(--spacing-lg)]"
+              class="flex w-full flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
               :data-testid="`${testId}__logs`"
             >
               <h2
-                class="text-heading-xs w-full text-[var(--text-default)] [word-break:break-word]"
+                class="text-heading-xs w-full text-(--text-default) [word-break:break-word]"
                 :data-testid="`${testId}__app-name`"
               >
                 {{ appName }}
@@ -221,22 +221,22 @@
 
         <template #footer>
           <div
-            class="flex w-full flex-col gap-[var(--spacing-md)] px-[var(--spacing-lg)] pb-[var(--spacing-sm)] pt-[var(--spacing-md)]"
+            class="flex w-full flex-col gap-(--spacing-md) px-(--spacing-lg) pb-(--spacing-sm) pt-(--spacing-md)"
           >
             <slot name="steps">
               <div
-                class="flex w-full flex-col gap-[var(--spacing-md)]"
+                class="flex w-full flex-col gap-(--spacing-md)"
                 :data-testid="`${testId}__steps`"
               >
                 <p
-                  class="w-full text-label-sm text-[var(--text-default)] [word-break:break-word]"
+                  class="w-full text-label-sm text-(--text-default) [word-break:break-word]"
                   :data-testid="`${testId}__steps-label`"
                 >
                   {{ stepsLabel }}
                 </p>
 
                 <div
-                  class="flex w-full flex-col gap-[var(--spacing-xs)]"
+                  class="flex w-full flex-col gap-(--spacing-xs)"
                   :data-testid="`${testId}__steps-list`"
                 >
                   <Item
@@ -254,7 +254,7 @@
                     >
                       <ItemMedia
                         media-kind="icon"
-                        class="relative z-[1] size-10! shrink-0 translate-y-0! self-center border-[var(--border-muted)] bg-[var(--bg-surface)]"
+                        class="relative z-1 size-10! shrink-0 translate-y-0! self-center border-(--border-muted) bg-(--bg-surface)"
                       >
                         <i
                           :class="step.icon"
@@ -262,13 +262,13 @@
                           aria-hidden="true"
                         />
                       </ItemMedia>
-                      <ItemContent class="relative z-[1]">
+                      <ItemContent class="relative z-1">
                         <ItemTitle>{{ step.title }}</ItemTitle>
                         <ItemDescription>{{ step.description }}</ItemDescription>
                       </ItemContent>
-                      <ItemActions class="relative z-[1]">
+                      <ItemActions class="relative z-1">
                         <i
-                          class="pi pi-chevron-right size-6 shrink-0 leading-none text-[var(--text-default)]"
+                          class="pi pi-chevron-right size-6 shrink-0 leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </ItemActions>

@@ -85,7 +85,7 @@
       :data-state="itemCtx.open.value ? 'open' : 'closed'"
       :data-size="ctx.size.value"
       :class="attrs.class"
-      class="overflow-hidden text-[var(--text-muted)] data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+      class="overflow-hidden text-(--text-muted) data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
     >
       <slot />
     </div>

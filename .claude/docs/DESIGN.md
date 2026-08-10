@@ -19,7 +19,7 @@ How to style components under `packages/webkit/src/components/webkit/` using tok
 @import '@aziontech/theme/globals.css';
 ```
 
-That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. Utility detection is done by the `@source "../../../webkit/src"` directive inside the emitted globals — that is what makes arbitrary utilities like `bg-[var(--primary)]` or `p-[var(--spacing-md)]` work in webkit components without any extra config on the consumer side.
+That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. Utility detection is done by the `@source "../../../webkit/src"` directive inside the emitted globals — that is what makes arbitrary utilities like `bg-(--primary)` or `p-(--spacing-md)` work in webkit components without any extra config on the consumer side.
 
 Integration points:
 
@@ -50,9 +50,9 @@ Add the class name as a Tailwind utility on the element or size variant:
 
 ```js
 const sizeClasses = {
-  large: 'min-w-20 h-10 px-[var(--spacing-md)] text-button-lg',
-  medium: 'min-w-16 h-8 px-[var(--spacing-sm)] text-button-md',
-  small: 'min-w-14 h-7 px-[var(--spacing-xs)] text-button-md'
+  large: 'min-w-20 h-10 px-(--spacing-md) text-button-lg',
+  medium: 'min-w-16 h-8 px-(--spacing-sm) text-button-md',
+  small: 'min-w-14 h-7 px-(--spacing-xs) text-button-md'
 }
 ```
 
@@ -81,11 +81,11 @@ Inside `packages/webkit/src/components/webkit/`, **never** set:
 - `line-height` / `leading-*` (except `leading-none` on icons aligned to `text-[length:inherit]`)
 - `letter-spacing` / `tracking-*`
 - Raw `text-xs`, `text-sm`, `text-base`, `text-lg`, etc.
-- `text-[length:var(--text-*-font-size)]` when a `text-*` class already exists for that role
+- `text-(length:--text-*-font-size)` when a `text-*` class already exists for that role
 
 Font family, line height, letter spacing, and responsive font size live in `texts.data.js` and the generated `.text-*` classes. Pick the semantic class that matches the design; if none fits, add a new entry in `texts.data.js` and rebuild the theme — do not hardcode typography in the component.
 
-**Allowed:** weight or color when not part of the text bundle and required for state (prefer semantic text colors like `text-[var(--text-muted)]`).
+**Allowed:** weight or color when not part of the text bundle and required for state (prefer semantic text colors like `text-(--text-muted)`).
 
 **Icons next to text:** inherit size from the parent text style:
 
@@ -124,8 +124,8 @@ Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/sp
 Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `components/webkit/`:
 
 ```html
-p-[var(--spacing-md)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] gap-[var(--spacing-sm)]
-gap-x-[var(--spacing-md)] m-[var(--spacing-lg)] mt-[var(--spacing-xs)] mb-[var(--spacing-md)]
+p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm)
+gap-x-(--spacing-md) m-(--spacing-lg) mt-(--spacing-xs) mb-(--spacing-md)
 ```
 
 Breakpoint growth is baked into the CSS variables; you do not duplicate responsive spacing in components.
@@ -153,8 +153,8 @@ If none of these fit the design, add a new entry in `spacings.data.js` and rebui
 Example from Button — horizontal padding and inner gap:
 
 ```js
-'px-[var(--spacing-md)]' // size large
-'gap-[var(--spacing-xs)]' // label + icon
+'px-(--spacing-md)' // size large
+'gap-(--spacing-xs)' // label + icon
 ```
 
 ---
@@ -166,7 +166,7 @@ Example from Button — horizontal padding and inner gap:
 Use primitive container width tokens with Tailwind max-width utilities:
 
 ```html
-max-w-[var(--container-md)] max-w-[var(--container-5xl)]
+max-w-(--container-md) max-w-(--container-5xl)
 ```
 
 ### Fixed content widths
@@ -174,7 +174,7 @@ max-w-[var(--container-md)] max-w-[var(--container-5xl)]
 Use **primitive container** sizes for cards, modals, columns, etc.:
 
 ```html
-max-w-[var(--container-md)] max-w-[var(--container-5xl)]
+max-w-(--container-md) max-w-(--container-5xl)
 ```
 
 Defined in `packages/theme/src/tokens/primitives/shape/container.js` (`3xs` … `7xl`). Always reference via `var(--container-*)`, not raw `px`/`rem`.
@@ -190,13 +190,13 @@ Defined in `packages/theme/src/tokens/primitives/shape/container.js` (`3xs` … 
 Use **semantic shape** tokens only:
 
 ```html
-rounded-[var(--shape-button)]
+rounded-(--shape-button)
 <!-- buttons -->
-rounded-[var(--shape-elements)]
+rounded-(--shape-elements)
 <!-- inputs, chips, small surfaces -->
-rounded-[var(--shape-card)]
+rounded-(--shape-card)
 <!-- cards -->
-rounded-[var(--shape-flat)]
+rounded-(--shape-flat)
 <!-- no radius -->
 ```
 
@@ -215,10 +215,10 @@ Use **primitive shadow** variables from `packages/theme/src/tokens/primitives/ef
 ### Pattern
 
 ```html
-shadow-[var(--shadow-sm)] shadow-[var(--shadow-md)] shadow-[var(--shadow-lg)]
+shadow-(--shadow-sm) shadow-(--shadow-md) shadow-(--shadow-lg)
 ```
 
-Apply on the element that should cast elevation (panel shell, floating surface, popover). Pair with semantic surface tokens (`bg-[var(--bg-surface)]`, borders) — shadows do not replace surface color.
+Apply on the element that should cast elevation (panel shell, floating surface, popover). Pair with semantic surface tokens (`bg-(--bg-surface)`, borders) — shadows do not replace surface color.
 
 ### Scale
 
@@ -232,7 +232,7 @@ Apply on the element that should cast elevation (panel shell, floating surface, 
 | `--shadow-xl`  | High emphasis overlays (use sparingly)                 |
 | `--shadow-2xl` | Maximum elevation (marketing hero cards, not forms)    |
 
-Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`shadow-[var(--shadow-md)]`).
+Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`shadow-(--shadow-md)`).
 
 ### Related effect primitives
 
@@ -253,8 +253,8 @@ Use **theme semantic** CSS variables so light/dark and brand stay consistent.
 ### Pattern
 
 ```html
-bg-[var(--primary)] text-[var(--primary-contrast)] border-[var(--border-default)]
-bg-[var(--bg-surface)] text-[var(--text-default)] text-[var(--text-muted)] ring-[var(--ring-color)]
+bg-(--primary) text-(--primary-contrast) border-(--border-default)
+bg-(--bg-surface) text-(--text-default) text-(--text-muted) ring-(--ring-color)
 ```
 
 ### Common semantic groups
@@ -292,10 +292,10 @@ as `background-color` and put the sweep in a `background-image` gradient whose o
 the animated and static states share the same base tone:
 
 ```html
-class="bg-[var(--bg-placeholder)]
+class="bg-(--bg-placeholder)
        data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)]
        data-[animated]:motion-safe:bg-[length:200%_100%]
-       data-[animated]:motion-safe:animate-[var(--animate-shimmer)]
+       data-[animated]:motion-safe:animate-(--animate-shimmer)
        motion-reduce:animate-none"
 ```
 
@@ -309,7 +309,7 @@ Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Moti
 - Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
 - Build a loading placeholder from an opaque surface token (`--bg-surface-overlay`, `--bg-surface-raised`) — it only reads on the one surface it was picked against. Use `--bg-placeholder` / `--bg-placeholder-highlight`.
 
-Reference: `button.vue` kind variants (`bg-[var(--secondary)]`, `text-[var(--secondary-contrast)]`, etc.).
+Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-contrast)`, etc.).
 
 ---
 
@@ -394,12 +394,12 @@ that sets the default.
 ## Checklist for new or updated components
 
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
-2. **Spacing** — `padding` / `margin` / `gap` via `p-[var(--spacing-*)]`, `gap-[var(--spacing-*)]`, `m-[var(--spacing-*)]`, etc. from `spacings.data.js`.
+2. **Spacing** — `padding` / `margin` / `gap` via `p-(--spacing-*)`, `gap-(--spacing-*)`, `m-(--spacing-*)`, etc. from `spacings.data.js`.
 3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
-4. **Container** — Use `max-w-[var(--container-<size>)]` for page sections and fixed content (cards, modals, columns), with sizes `3xs` … `7xl` from `primitives/shape/container.js`.
-5. **Radius** — `rounded-[var(--shape-*)]`.
-6. **Shadow** — `shadow-[var(--shadow-*)]` from `primitives/effects/shadow.js` when the surface elevates.
-7. **Color** — `bg-[var(--…)]`, `text-[var(--…)]`, `border-[var(--…)]`.
+4. **Container** — Use `max-w-(--container-<size>)` for page sections and fixed content (cards, modals, columns), with sizes `3xs` … `7xl` from `primitives/shape/container.js`.
+5. **Radius** — `rounded-(--shape-*)`.
+6. **Shadow** — `shadow-(--shadow-*)` from `primitives/effects/shadow.js` when the surface elevates.
+7. **Color** — `bg-(--…)`, `text-(--…)`, `border-(--…)`.
 8. **Interactive states** — `::before` / `::after` ghost layers for `--bg-hover` / `--bg-active`; `focus-visible:ring-2 focus-visible:ring-offset-1`; `duration-fast-02` + `ease-productive-*` (see § Interactive states).
 9. **Motion** — `duration` / `curve` from `animate.js` only; `data-state` overlays use a `presets/transitions.ts` module (see § Motion — reference: Drawer).
 10. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
@@ -552,11 +552,11 @@ Use semantic surface tokens from `theme/background.js` — never swap the root `
 
 ```html
 relative before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]
-before:bg-[var(--bg-hover)] before:opacity-0 before:content-[''] after:pointer-events-none
-after:absolute after:inset-0 after:rounded-[inherit] after:bg-[var(--bg-active)] after:opacity-0
+before:bg-(--bg-hover) before:opacity-0 before:content-[''] after:pointer-events-none
+after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0
 after:content-[''] hover:before:opacity-100 active:after:opacity-100 focus-visible:outline-none
-focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1
-focus-visible:ring-offset-[var(--bg-canvas)] disabled:before:hidden disabled:after:hidden
+focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1
+focus-visible:ring-offset-(--bg-canvas) disabled:before:hidden disabled:after:hidden
 ```
 
 Set `before:transition-opacity` / `after:transition-opacity` on the pseudo-elements (not a blanket `transition-colors` on the root).
@@ -609,9 +609,9 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hook blocks: **fix the value, do not work around it.**
 
 - **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), external/legacy color utilities (`text-color`, `surface-50`).
-- **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-[length:var(--text-*-font-size)]` when a generated class exists.
+- **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
-- **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-[var(--container-<size>)]` only (`3xs` … `7xl` from `primitives/shape/container.js`).
+- **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.

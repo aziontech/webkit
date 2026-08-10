@@ -198,7 +198,7 @@ function postcssConfig() {
 // pulls the design system's Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + web
 // fonts) in one line; `@import '@aziontech/webkit/styles'` then registers webkit's SOURCE
 // with Tailwind (its `@source` lives inside the package and resolves relative to it) so the
-// component utility classes (data-[kind=…]:bg-[var(--…)]) are generated in the consumer's
+// component utility classes (data-[kind=…]:bg-(--…)) are generated in the consumer's
 // build — node_modules is excluded from Tailwind's auto content-detection, so without it the
 // webkit components render UNSTYLED. Both imports resolve by package name: no relative
 // ../node_modules path, immune to hoisting / workspace layouts. The consumer's own src is

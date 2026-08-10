@@ -170,9 +170,9 @@ const MENU_CONTENT = `<Menu role="presentation">
   </Menu>`
 
 const FOOTER_SLOT = `<template #footer>
-    <SidebarFooter class="flex items-center gap-[var(--spacing-xs)]">
+    <SidebarFooter class="flex items-center gap-(--spacing-xs)">
       <Avatar kind="square" size="small" src="${sampleImage}" alt="Rafael Umman" />
-      <span class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)]">Rafael Umman</span>
+      <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">Rafael Umman</span>
       <Dropdown v-model:open="accountMenuOpen" placement="top-end">
         <DropdownTrigger>
           <IconButton icon="pi pi-ellipsis-v" aria-label="Account menu" kind="outlined" size="small" />
@@ -180,8 +180,8 @@ const FOOTER_SLOT = `<template #footer>
         <DropdownGroup>
           <template #top>
             <div class="flex min-w-0 flex-col">
-              <span class="truncate text-label-md text-[var(--text-default)]">Rafael Umman</span>
-              <span class="truncate text-body-xs text-[var(--text-muted)]">rafael.umman@example.com</span>
+              <span class="truncate text-label-md text-(--text-default)">Rafael Umman</span>
+              <span class="truncate text-body-xs text-(--text-muted)">rafael.umman@example.com</span>
             </div>
           </template>
           <DropdownOption value="settings" label="Account Settings" />
@@ -238,8 +238,8 @@ const RESIZABLE_SOURCE = `<div class="relative flex h-screen min-h-0">
     ${FOOTER_SLOT}
   </Sidebar>
 
-  <main class="min-w-0 flex-1 p-[var(--spacing-lg)]">
-    <p class="text-body-sm text-[var(--text-muted)]">
+  <main class="min-w-0 flex-1 p-(--spacing-lg)">
+    <p class="text-body-sm text-(--text-muted)">
       The page morphs as the rail animates — it is a flex sibling, so it fills the freed space on the same frames.
     </p>
   </main>
@@ -439,8 +439,8 @@ export const Resizable = {
           ${FOOTER_SLOT}
         </Sidebar>
 
-        <main class="min-w-0 flex-1 p-[var(--spacing-lg)]">
-          <p class="text-body-sm text-[var(--text-muted)]">
+        <main class="min-w-0 flex-1 p-(--spacing-lg)">
+          <p class="text-body-sm text-(--text-muted)">
             The page morphs as the rail animates — it is a flex sibling, so it fills the freed space on the same frames.
           </p>
         </main>

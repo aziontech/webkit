@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 29f3a5abd7a8e37062a7624b0a0f70f49f3fdbe1b1f7b1ddd97bf03baf2c2bd3
+checksum: 40c07f6e0c4250ee48e93d29e391fa62f76d1cc1e2f21142f2fb0151fc030269
 created: 2026-06-26
 last_updated: 2026-06-29
 ---
@@ -126,8 +126,8 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 | panel border | `var(--border-default)` |
 | panel shape | `var(--shape-card)` |
 | panel shadow | `var(--shadow-sm)` |
-| panel typography (group label) | `.text-overline-sm` + `text-[var(--text-muted)]` |
-| panel typography (option label) | `.text-label-sm` + `text-[var(--text-default)]` |
+| panel typography (group label) | `.text-overline-sm` + `text-(--text-muted)` |
+| panel typography (option label) | `.text-label-sm` + `text-(--text-default)` |
 | option shape | `var(--shape-button)` |
 | option spacing.x | `var(--spacing-sm)` |
 | option spacing.y | `var(--spacing-xxs)` |
@@ -135,8 +135,8 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 | option hover surface | `var(--bg-hover)` |
 | option selected surface | `var(--bg-selected)` |
 | option disabled text | `var(--text-disabled)` |
-| option command text | `text-[var(--text-muted)]` |
-| group divider | `border-t border-[var(--border-default)]` |
+| option command text | `text-(--text-muted)` |
+| group divider | `border-t border-(--border-default)` |
 | focus ring | `var(--ring-color)` |
 | popup origin | `var(--popup-origin)` |
 
@@ -149,7 +149,7 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on trigger and option.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and option.
 - Keyboard map:
   - On the trigger: `Enter` / `Space` opens the panel and focuses the first enabled option; `Down` opens and focuses the first option; `Up` opens and focuses the last option.
   - Inside the panel: `Down` / `Up` move between enabled options (wrap-around); `Home` / `End` jump to first/last enabled option; `Enter` / `Space` activate the focused option; `Esc` closes the panel and returns focus to the trigger; `Tab` closes the panel and lets focus proceed to the next focusable element.

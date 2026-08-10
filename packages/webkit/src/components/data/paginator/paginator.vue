@@ -142,7 +142,7 @@
     v-bind="$attrs"
     :aria-label="ariaLabel"
     :data-testid="testId"
-    class="flex w-full flex-wrap items-center justify-between gap-[var(--spacing-sm)] text-[var(--text-default)]"
+    class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm) text-(--text-default)"
   >
     <div class="flex min-w-0 items-center">
       <slot name="info">
@@ -152,9 +152,9 @@
       </slot>
     </div>
     <div
-      class="flex flex-auto flex-wrap items-center justify-end gap-x-[var(--spacing-sm)] gap-y-[var(--spacing-xs)]"
+      class="flex flex-auto flex-wrap items-center justify-end gap-x-(--spacing-sm) gap-y-(--spacing-xs)"
     >
-      <div class="flex flex-wrap items-center justify-center gap-[var(--spacing-xxs)]">
+      <div class="flex flex-wrap items-center justify-center gap-(--spacing-xxs)">
         <template v-if="dataDriven">
           <PaginationButton
             kind="previous"

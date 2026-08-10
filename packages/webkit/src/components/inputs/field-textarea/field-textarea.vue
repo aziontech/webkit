@@ -75,7 +75,7 @@
     :data-required="required || null"
     :data-readonly="readonly || null"
     :class="attrs.class as string"
-    class="flex w-full flex-col gap-[var(--spacing-xs)]"
+    class="flex w-full flex-col gap-(--spacing-xs)"
   >
     <Label
       v-if="label"
@@ -105,7 +105,7 @@
       :data-disabled="disabled || null"
       :data-invalid="invalid || null"
       :data-required="required || null"
-      class="inline-flex items-center gap-[var(--spacing-xxs)] w-fit text-body-xs text-[var(--text-muted)] data-[required]:text-[var(--warning)] data-[invalid]:text-[var(--danger)] data-[disabled]:rounded-[var(--shape-button)] data-[disabled]:border data-[disabled]:border-[var(--border-default)] data-[disabled]:bg-[var(--bg-surface)] data-[disabled]:px-[var(--spacing-xs)] data-[disabled]:py-[var(--spacing-xxs)] data-[disabled]:text-[var(--text-muted)]"
+      class="inline-flex items-center gap-(--spacing-xxs) w-fit text-body-xs text-(--text-muted) data-[required]:text-(--warning) data-[invalid]:text-(--danger) data-[disabled]:rounded-(--shape-button) data-[disabled]:border data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-surface) data-[disabled]:px-(--spacing-xs) data-[disabled]:py-(--spacing-xxs) data-[disabled]:text-(--text-muted)"
     >
       <i
         v-if="disabled"

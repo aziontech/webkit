@@ -92,11 +92,11 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `tooltip/arrow-fill` | inherits `bg-[var(--bg-canvas-inverted)]` | `TODO: tokenizar` (add `--tooltip-arrow` if it ever diverges from surface) |
+| `tooltip/arrow-fill` | inherits `bg-(--bg-canvas-inverted)` | `TODO: tokenizar` (add `--tooltip-arrow` if it ever diverges from surface) |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]` on the trigger.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger.
 - Keyboard map: `Tab` focuses the trigger → tooltip opens; `Escape` closes; tooltip never traps focus.
 - ARIA: `role="tooltip"` on the panel; the trigger references the panel via `aria-describedby`. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against inverted canvas verified in both light and dark modes.

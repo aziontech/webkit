@@ -138,7 +138,7 @@ const CELL_SLOTS = `
         <template #cell-name="{ row, value }">
           <a
             :href="'/workloads/' + row.id"
-            class="cursor-pointer truncate text-[var(--text-default)] no-underline hover:underline active:underline"
+            class="cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline"
             @click="(event) => onLink(event, row)"
           >{{ value }}</a>
         </template>
@@ -205,7 +205,7 @@ const baseArgs = {
 const SOURCE_CELL_SLOTS = `  <template #cell-name="{ row, value }">
     <a
       :href="'/workloads/' + row.id"
-      class="cursor-pointer truncate text-[var(--text-default)] no-underline hover:underline active:underline"
+      class="cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline"
     >{{ value }}</a>
   </template>
   <template #cell-status="{ value }">
