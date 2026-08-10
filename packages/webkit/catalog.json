@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "4.3.0",
+  "webkitVersion": "4.4.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
