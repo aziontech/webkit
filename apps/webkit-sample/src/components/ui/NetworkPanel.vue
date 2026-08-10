@@ -1,101 +1,143 @@
 <script setup>
-  // The art column beside the Sign Up card: the pixelate field as the ground,
-  // the network claim as the copy.
+  // The art half of the Sign Up split: the pixel world map as the ground, the
+  // network claim as the headline, and the client marks as the proof that closes
+  // it. Three blocks, top / middle / bottom, over one full-bleed backdrop.
   //
-  // It replaces the testimonial that used to sit here. A quote is social proof —
-  // it argues that other people trust the platform — and at the moment someone
-  // is typing an email address the more useful argument is what they are about
-  // to be standing on. The claims below are the same set the marketing site's
-  // Network section carries (AzionHome.vue), so the number a visitor read on the
-  // way in is the number they see while signing up. CheckInbox keeps the
-  // testimonial: by then the account exists and the pitch is over.
+  // It replaces the pixelate field that used to sit here. The map argues the one
+  // thing that is actually persuasive while you are typing an email address, which
+  // is scale you can see. The marks underneath say the same thing about the company
+  // instead of the network — and they are the reason the panel is the map and not
+  // the pixelate field: the trust strip needs a quiet floor to sit on, and the
+  // map's is quiet exactly where the strip lands.
   //
-  // The panel owns its own scrim rather than dimming the banner, because the
-  // banner is shared. The field is at full strength in the lower half, where the
-  // chips have their own fill to sit on, and washed out under the heading, which
-  // has nothing but the ground to hold it.
-  import PixelateBanner from '../site/ui/banners/PixelateBanner.vue'
+  // The claim chips came OUT of this panel once, on the argument that nobody is
+  // comparing specs at the moment they are typing an email address. They are back
+  // because the numbers are the Network section's whole case and the panel is where
+  // that case gets made to someone deciding — but they are back as a PROP with the
+  // list as its default, not as fixed furniture: a screen that wants the quieter
+  // panel passes `:tags="[]"` and gets exactly the map-and-marks version back.
+  //
+  // The backdrop is MapBanner in its 'panel' framing, not the hero one. A hero
+  // band is wide and holds its copy to one side; this column is portrait and
+  // holds its copy at the two ends. See MapBanner's own note for why that changes
+  // both the fit and the wash.
+  //
+  // The headline and the claims are PROPS, because they are the two things a screen
+  // has an opinion about: the claim that fits what it is asking for (signing up is
+  // sold on reach, signing in is not sold at all) and how much evidence to put under
+  // it. Everything else — the map, the trust strip, the proportions — is the panel's
+  // and is the same wherever it appears. `tags` are the site Network band's own claim
+  // chips, from the same list it reads (`site/ui/claims.js`) and through the same
+  // component (`ClaimChips`), so the two surfaces cannot argue different numbers.
+  import BrandCarousel from '../site/BrandCarousel.vue'
+  import MapBanner from '../site/ui/banners/MapBanner.vue'
+  import ClaimChips from '../site/ui/ClaimChips.vue'
+  import { NETWORK_CLAIMS } from '../site/ui/claims.js'
+  import { CLIENTS } from '../site/ui/clients/index.js'
 
-  // Same five claims as the site's Network section — one source of copy, quoted
-  // rather than re-invented.
-  const claims = [
-    '100+ data centers',
-    '100+ Tbps throughput',
-    'High availability',
-    '30 ms median latency',
-    'PCI and SOC 2/3 compliant'
-  ]
+  defineProps({
+    // The panel's headline.
+    title: {
+      type: String,
+      default: 'The most reliable distributed network on the planet'
+    },
+    // Claim chips under the headline, as plain strings. Pass `[]` for a panel that
+    // makes its case on the map and the client marks alone — which is what this
+    // panel did before the chips became configurable, and still the right call on a
+    // screen where the user has already decided to be here.
+    tags: {
+      type: Array,
+      default: () => NETWORK_CLAIMS
+    }
+  })
 </script>
 
 <template>
-  <!-- No radius, no outer border, no max-width: this is a CELL of the signup
-       container, and that container owns the rounding and clips the field into
-       the corner. The only rule drawn here is the seam against the form half —
-       a top edge while stacked, a leading edge once they sit side by side.
+  <!-- No radius and no outer border: this is one HALF of a full-bleed split, so
+       it runs to the page edges and the only rule it draws is the seam against
+       the form half — a top edge while stacked, a leading edge once they sit
+       side by side.
 
-       The min-height applies only while stacked. Side by side the grid row
-       stretches it to the form's height, and a min-height taller than that
-       would push the whole container down. -->
+       `overflow-hidden` is what makes the backdrop a backdrop: MapBanner is
+       absolutely positioned against this element (hence `relative isolate`) and
+       its artwork is deliberately wider than the column, so the column crops it.
+
+       The min-height applies only while stacked, where the panel has no form
+       beside it to take its height from. Side by side the grid row stretches it
+       to the taller half, and a min-height above that would push the page down. -->
   <aside
-    class="relative isolate flex min-h-[320px] overflow-hidden border-t border-[var(--border-default)] bg-[var(--bg-canvas)] lg:min-h-0 lg:border-t-0 lg:border-l"
+    class="relative isolate flex min-h-[420px] flex-col overflow-hidden border-t border-[var(--border-default)] bg-[var(--bg-surface)] py-[var(--spacing-xxl)] lg:min-h-0 lg:border-t-0 lg:border-l"
     aria-label="The Azion network"
   >
-    <PixelateBanner />
+    <MapBanner kind="panel" />
 
-    <!-- The scrim washes top-down: heaviest under the heading, clearing by the
-         floor, where the pool is and the only things over it are chips that
-         carry their own fill.
+    <!-- The headline, centred on the column and capped at container-md so it
+         breaks into two balanced lines instead of running the full width. It is
+         pinned to the top and the trust strip to the bottom (`justify-between`
+         via the spacer below), so the middle of the map — the dense part, the
+         part worth looking at — is left clear between them.
 
-         It follows the copy, and at 4 of 12 columns the copy runs the panel's
-         full width at every breakpoint — so there is no clear side to protect
-         and the wash has to travel the other axis. Two shapes tried earlier
-         failed for reasons worth keeping: a LEFT-TO-RIGHT wash ran its
-         transition straight down the grid, and a straight edge across a regular
-         lattice is a seam you can see — the dots stepped from dim to bright
-         along one column. A DIAGONAL fixed that (it crosses at an angle no row
-         or column shares) and was right while the panel was half the page wide
-         and the copy kept to one side of it; in a narrow column it clears the
-         corner the copy occupies and dims the corner it doesn't.
-
-         What stays true from both: never wash the whole field evenly. Dimming a
-         glow uniformly is how a lit field turns into a flat brown rectangle —
-         measured 0.12 alpha where the design calls for 0.70. -->
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(to_bottom,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_74%,transparent)_46%,color-mix(in_srgb,var(--bg-canvas)_18%,transparent)_100%)]"
-    />
-
-    <div
-      class="relative z-10 flex flex-1 flex-col justify-between gap-[var(--spacing-xxl)] p-[var(--spacing-xl)] lg:p-[var(--spacing-xxl)]"
+         The chips hang off the headline rather than sitting on their own, and they
+         share its container-md cap: claim and evidence are one block, and both wrap
+         on the same measure. They stay at the TOP with it for the same reason the
+         trust strip stays at the bottom — the clear middle of the map is the whole
+         composition, and a row of pills floated into it would be the one thing in
+         front of the part worth looking at. -->
+    <header
+      class="relative z-10 flex flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-xl)] text-center"
     >
-      <header class="flex flex-col gap-[var(--spacing-md)]">
-        <p
-          class="text-overline-md text-[var(--text-muted)] uppercase"
-        >
-          The Azion network
-        </p>
-        <h2 class="text-balance text-heading-xl text-[var(--text-default)]">
-          The most reliable infrastructure
-        </h2>
-        <p class="max-w-[var(--container-sm)] text-pretty text-body-md text-[var(--text-muted)]">
-          Every account runs on the same distributed network from the first
-          deploy — no tier to upgrade into, no region to pick.
-        </p>
-      </header>
+      <h2
+        class="max-w-[var(--container-md)] text-balance text-heading-lg text-[var(--text-default)]"
+      >
+        {{ title }}
+      </h2>
 
-      <ul class="flex flex-wrap gap-[var(--spacing-xs)]">
-        <!-- The soft-accent claim chip, matching the site's Network section
-             verbatim. No Tag severity ships this treatment (accent is a solid
-             blue fill, primary a solid orange), so both places compose it from
-             the primary token — a DS gap worth a `subtle` severity on Tag. -->
-        <li
-          v-for="claim in claims"
-          :key="claim"
-          class="inline-flex h-8 items-center rounded-[var(--shape-elements)] border border-[color-mix(in_srgb,var(--primary)_45%,transparent)] bg-[color-mix(in_srgb,var(--primary)_16%,transparent)] px-[var(--spacing-xs)] text-label-md text-[var(--text-default)] backdrop-blur-sm"
-        >
-          {{ claim }}
-        </li>
-      </ul>
-    </div>
+      <ClaimChips
+        v-if="tags.length"
+        :claims="tags"
+        class="max-w-[var(--container-md)] justify-center"
+      />
+    </header>
+
+    <div class="flex-1" />
+
+    <!-- The trust strip. The overline is rendered here rather than passed to
+         BrandCarousel's own `label`: that one is the site hero's treatment —
+         accent-coloured, `whitespace-nowrap`, with a blinking cursor — and this
+         line is a long muted sentence that has to wrap inside half a page and
+         must not blink next to a form someone is filling in. -->
+    <!-- The gap is a step above the one the frame drew (md), because the marks
+         are no longer the frame's: at 24px and one ink they are a quiet strip,
+         and the tracked mono line above them is nearly as light. Set 16px apart
+         the two read as one four-line block of small grey type. -->
+    <footer class="relative z-10 flex flex-col gap-[var(--spacing-xl)]">
+      <!-- The same overline the marketing hero puts over this row, so the strip
+           is captioned identically wherever it appears. It is short enough to
+           hold one line at any width the panel takes, which is why it needs
+           neither the balancing nor the tightened gutter the frame's longer
+           sentence did — it sits on the headline's own gutter. -->
+      <p
+        class="px-[var(--spacing-xl)] text-center text-overline-sm text-[var(--text-muted)] uppercase"
+      >
+        Trusted by mission-critical workloads
+      </p>
+
+      <!-- No `label` (see above) — the strip is just the moving row here — and
+           the small mark, because this is half a page, not a full-width hero.
+
+           `monochrome`: one ink for every mark. Here the row is a LIST — the claim
+           is the number of names, not any one of them — and rendered in their own
+           palettes the marks argued with each other and with the form beside them
+           (a coloured Agibank pulling harder than the Sign Up button). Flat
+           silhouettes let the eye count the row instead of reading it one brand at
+           a time, and they hold up identically on both themes. The marketing hero
+           keeps its true brand colours, where each mark is given room to be a
+           brand. -->
+      <BrandCarousel
+        :clients="CLIENTS"
+        size="small"
+        monochrome
+      />
+    </footer>
   </aside>
 </template>

@@ -4,6 +4,7 @@ import AccountSettings from './components/AccountSettings.vue'
 import ApplicationDetail from './components/ApplicationDetail.vue'
 import Applications from './components/Applications.vue'
 import AsyncDeployment from './components/AsyncDeployment.vue'
+import AuthErrors from './components/AuthErrors.vue'
 import BucketBrowser from './components/BucketBrowser.vue'
 import CardBoxSaves from './components/CardBoxSaves.vue'
 import CheckInbox from './components/CheckInbox.vue'
@@ -41,6 +42,7 @@ import PersonalTokens from './components/PersonalTokens.vue'
 import Playground from './components/Playground.vue'
 import ReleaseComposer from './components/ReleaseComposer.vue'
 import SignUp from './components/SignUp.vue'
+import SignupFlow from './components/SignupFlow.vue'
 import LandingAzion from './components/site/LandingAzion.vue'
 import WebkitHub from './components/site/WebkitHub.vue'
 import SqlDatabase from './components/SqlDatabase.vue'
@@ -65,15 +67,29 @@ const routes = [
     path: '/site/hub/changelog',
     name: 'site-hub-changelog',
     component: WebkitHub,
-    props: { view: 'changelog' },
+    props: { view: 'changelog' }
   },
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   { path: '/login', name: 'login', component: LoginScreen },
-  { path: '/signup', name: 'signup', component: SignUp },
-  { path: '/signup/verify', name: 'signup-verify', component: CheckInbox },
+  // The pre-verification signup flow, NESTED so it is one continuous screen.
+  // SignupFlow owns the split (and therefore the entrance), and vue-router keeps a
+  // parent instance alive across its children — so the header, the seam and the
+  // network panel hold still from /signup to /signup/verify and only the card
+  // cross-fades. As siblings, each step re-mounted the split and replayed the whole
+  // entrance, which read as three separate page loads.
+  {
+    path: '/signup',
+    component: SignupFlow,
+    children: [
+      { path: '', name: 'signup', component: SignUp },
+      { path: 'verify', name: 'signup-verify', component: CheckInbox }
+    ]
+  },
   // The last step of signup: the user's organization is created here (and
   // nowhere else — see Onboarding.vue), which is also their first access to the
-  // console.
+  // console. Deliberately OUTSIDE the flow above: this is where the flow arrives
+  // once the email is verified, on its own composition and its own entrance, so
+  // the full slide is spent on the one move that is a real scene change.
   { path: '/signup/onboarding', name: 'signup-onboarding', component: Onboarding },
   { path: '/home', name: 'home', component: Home },
   // Creating an organization from inside the console (the header switcher's New
@@ -117,7 +133,11 @@ const routes = [
   { path: '/forms/in-page', name: 'forms-in-page', component: InPageForm },
   { path: '/forms/fields-separated', name: 'forms-fields-separated', component: TemplateSettings },
   { path: '/forms/drawer', name: 'forms-drawer', component: DrawerForm },
-  { path: '/forms/drawer-itemgroups', name: 'forms-drawer-itemgroups', component: DrawerItemGroups },
+  {
+    path: '/forms/drawer-itemgroups',
+    name: 'forms-drawer-itemgroups',
+    component: DrawerItemGroups
+  },
   { path: '/forms/nested-drawer', name: 'forms-nested-drawer', component: NestedDrawer },
   { path: '/forms/dialog', name: 'forms-dialog', component: DialogForm },
   { path: '/forms/itemgroup', name: 'forms-itemgroup', component: ItemGroupSettings },
@@ -126,14 +146,24 @@ const routes = [
   {
     path: '/forms/error-validation',
     name: 'forms-error-validation',
-    component: ErrorValidation,
+    component: ErrorValidation
   },
   // The async counterpart of error-validation: a failure that arrives after the
   // user has left the screen. `?outcome=success|error` picks the ending.
   {
     path: '/forms/async-deployment',
     name: 'forms-async-deployment',
-    component: AsyncDeployment,
+    component: AsyncDeployment
+  },
+  // The auth counterpart of error-validation: the same "where does an error go"
+  // question asked on the signed-out screens, where the temptation to answer
+  // "a toast" is strongest and wrong most of the time. One picker arms the
+  // endpoint (401 / 503 / 500 / timeout / 409) and the card shows where each
+  // lands.
+  {
+    path: '/forms/auth-errors',
+    name: 'forms-auth-errors',
+    component: AuthErrors
   },
   { path: '/create', name: 'create', component: CreationCenter },
   { path: '/deploy', name: 'deploy', component: DeployTemplate },
@@ -152,7 +182,7 @@ const routes = [
   { path: '/playground', name: 'playground', component: Playground },
   { path: '/diagrams', name: 'diagrams', component: Diagrams },
   { path: '/teams/new', name: 'teams-new', component: CreateTeam },
-  { path: '/teams/:id', name: 'teams-edit', component: CreateTeam },
+  { path: '/teams/:id', name: 'teams-edit', component: CreateTeam }
 ]
 
 export const router = createRouter({
@@ -179,5 +209,5 @@ export const router = createRouter({
     }
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
     return { el: to.hash, behavior: reduced ? 'auto' : 'smooth' }
-  },
+  }
 })

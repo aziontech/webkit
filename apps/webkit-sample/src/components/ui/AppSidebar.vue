@@ -34,6 +34,7 @@
   import { computed, ref, watch } from 'vue'
 
   import { menuLeaves, menuPath } from '../../lib/menu-tree.js'
+  import { expireSession } from '../../lib/session.js'
   import { reportNavLevel, setNavPath, useSidebar } from '../../sidebar.js'
   import { useTheme } from '../../theme.js'
 
@@ -405,7 +406,20 @@
             }
           }
         ]
-      : [])
+      : []),
+    // The simulation, reachable from wherever the reader is: kill the token on
+    // THIS page and watch the console tear it down (wire → sign out → Sign In with
+    // "Session expired"). Nothing in this app expires on its own, so this command
+    // and the `?ttl=<seconds>` knob are the only two ways in — see
+    // ../../lib/session.js. It lives in the palette (and in the account menu
+    // beside Log Out) rather than on the page, because it is a thing you DO to the
+    // demo, not part of any screen it runs on.
+    {
+      id: 'expire-session',
+      label: 'Expire Session Token',
+      icon: 'pi pi-clock',
+      run: () => expireSession()
+    }
   ])
 
   // Account entries reuse the sidebar's existing events — the shell owns the
@@ -469,6 +483,9 @@
   // header gear and Upgrade CTA are plain buttons, so they close it by hand.
   const routeEntry = (event, value) => {
     if (value === 'logout') return emit('logout', event)
+    // Handled here, not bubbled: expiring the token needs no router — the session
+    // module owns the whole sequence and already holds it.
+    if (value === 'expire-session') return expireSession()
     if (value in demoEntries) return toast.info(demoEntries[value])
     emit('select', event, value)
   }
@@ -769,8 +786,23 @@
             </Dropdown.Option>
           </Dropdown.Group>
 
-          <!-- Logout -->
+          <!-- Ending the session, both ways: the one the operator chooses, and the
+               one that happens TO them. "Expire Session Token" is the sample's
+               simulation of a dead access token (wire → sign out → Sign In with
+               "Session expired"), and it sits here because it belongs to the same
+               question as Log Out — how this session ends. -->
           <Dropdown.Group>
+            <Dropdown.Option
+              value="expire-session"
+              label="Expire Session Token"
+            >
+              <template #right>
+                <i
+                  class="pi pi-clock"
+                  aria-hidden="true"
+                />
+              </template>
+            </Dropdown.Option>
             <Dropdown.Option
               value="logout"
               label="Log Out"

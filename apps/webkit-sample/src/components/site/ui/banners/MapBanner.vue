@@ -29,12 +29,121 @@
   // not share a coordinate.
   //
   // Registered in ./index.js under the key `map`.
+  //
+  // Two framings, because the artwork has to serve two very different boxes.
+  // `kind` picks one; everything else about the banner is identical.
+  //
+  //   'hero'  (default) — the wide marketing band. Copy sits on the left, so the
+  //           map is inset to the right of it and framed on the CROPPED viewBox
+  //           documented in the template (a 2.3x zoom onto the PoP field).
+  //   'panel' — a PORTRAIT column, the art half of the 50/50 auth split. Two
+  //           things have to change there, and both for the same reason: the box
+  //           is taller than it is wide. The inset goes to 0 (there is no copy
+  //           beside the map — the map IS the half), and the framing goes back
+  //           to the FULL artwork fitted with `slice` instead of the crop fitted
+  //           with `meet`. `meet` on a 0.78-ratio box fits the 1.70-ratio crop by
+  //           WIDTH, which lands the map as a letterboxed strip floating in the
+  //           middle of the column with empty bands above and below it. `slice`
+  //           fits by height and crops the width, so the artwork fills the column
+  //           edge to edge; on the full 1594x936 that leaves the Americas — the
+  //           densest part of the PoP field — in frame at roughly 1:1.
+  import { computed } from 'vue'
+
+  const props = defineProps({
+    kind: {
+      type: String,
+      default: 'hero',
+      validator: (value) => ['hero', 'panel'].includes(value)
+    }
+  })
+
+  const isPanel = computed(() => props.kind === 'panel')
+
+  // BOTH artwork layers bind these same two values — see the template note. The
+  // landmass and the route are registered to each other by nothing but a shared
+  // frame, so they are computed once here rather than written twice.
+  const viewBox = computed(() => (isPanel.value ? '0 0 1594 936' : '143 334 700 412'))
+  const fit = computed(() => (isPanel.value ? 'xMinYMid slice' : 'xMaxYMid meet'))
+
+  // Where the artwork sits in the box — the third thing both layers have to agree
+  // on, and the reason it is computed once here rather than written twice.
+  //
+  // The panel lifts it, and lifts it with `top` ALONE. `slice` on a portrait column
+  // covers the height exactly, so the Y alignment keyword does nothing and the
+  // landmass lands dead centre — which puts the PoP field, the 82 accent squares
+  // that are the whole reason this artwork is on a signup screen, low in the column
+  // with its densest cluster (South America) buried under the trust strip.
+  //
+  // Oversizing the box to lift it does not work, and the arithmetic is worth keeping
+  // so nobody retries it: `slice` derives its scale from the box, so a taller box
+  // zooms in by the same factor it rises, and the bottom of the field ends up back
+  // where it started. Measured on a 928px column, -6% / 106% moved the cluster's
+  // floor from 764px to 755px — nine pixels for a 6% zoom. Holding the height at
+  // 100% and hanging the box off the top edge is a pure translation: -13% raises
+  // the field ~120px and lands the cluster around mid-column, in the clear band
+  // between the headline and the marks.
+  //
+  // That leaves the bottom 13% of the column with no artwork, which is the point
+  // rather than a cost — it is the band the trust strip sits in, and it was already
+  // being erased there by the radial mask and the bottom of the wash.
+  const layerBox = computed(() => (isPanel.value ? '-top-[13%] h-full' : 'top-0 h-full'))
+
+  // The vignette, which has to be re-aimed whenever the box moves. It is a radial
+  // gradient in the LAYER's coordinate space, so lifting the layer lifts the mask
+  // with it — and the first cut of the panel lift did exactly that, carrying the
+  // bright centre up off the PoP field and fading the cluster it was raised to
+  // feature. Aiming it at 63% down the layer puts the centre back over the middle
+  // of the COLUMN (the panel's midpoint sits 585px into a 928px layer hung 121px
+  // above it), and the wider black stop keeps the whole accent field inside the
+  // opaque core instead of on the ramp.
+  const layerMask = computed(() =>
+    isPanel.value
+      ? 'mask-[radial-gradient(ellipse_at_50%_63%,black_72%,transparent_108%)]'
+      : 'mask-[radial-gradient(ellipse_at_center,black_62%,transparent_104%)]'
+  )
+
+  // The route's mask — the one thing the two layers do NOT share.
+  //
+  // The route is drawn ABOVE the scrims (see the template note on why), so no
+  // amount of wash can touch it: on the panel that means the accent squares at the
+  // bottom of the field keep their full brand saturation exactly where the trust
+  // strip's 24px marks are, and an orange square behind a flat silhouette is the
+  // one thing that costs those marks their edges. The panel therefore intersects
+  // the shared radial mask with a bottom cut, so the route ENDS just above where
+  // the wash goes solid instead of running under the strip.
+  //
+  // `intersect`, not the default `add`: a pixel survives only where both masks keep
+  // it, so the radial's own edge fade is preserved rather than being filled back in
+  // by the linear one.
+  //
+  // Its radial half must stay identical to `layerMask` — same centre, same stops —
+  // or the route fades on a different curve than the coastline it sits on and the
+  // accent squares dim out of a landmass that is still at full strength.
+  //
+  // Both stops are expressed in the LAYER's box, which the panel hangs 13% of the
+  // column above the column's own top, so a layer fraction f sits at
+  // `f * 928 - 121` down a 928px column. The cut is set from where the marks are,
+  // not from a round number: the accent field now ends at 647px (f = 0.83), the
+  // overline starts at 744 (f = 0.93), so holding black to 84% keeps every node and
+  // clearing by 93% guarantees no orange square can land behind a 24px silhouette.
+  // After the lift this is a guard rather than a crop — the field no longer reaches
+  // the strip on its own — and it is the guard that keeps it that way.
+  const routeMask = computed(() =>
+    isPanel.value
+      ? 'mask-[radial-gradient(ellipse_at_50%_63%,black_72%,transparent_108%),linear-gradient(to_bottom,black_0%,black_84%,transparent_93%)] [mask-composite:intersect]'
+      : 'mask-[radial-gradient(ellipse_at_center,black_62%,transparent_104%)]'
+  )
 </script>
 
 <template>
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-70 lg:opacity-100 [--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]"
+    class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+    :class="
+      isPanel
+        ? '[--map-inset-inline-start:0%]'
+        : 'opacity-70 lg:opacity-100 [--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]'
+    "
   >
     <!-- Both artwork layers share ONE box — the right part of the band, opened
          by --map-inset-inline-start — so the map reads as the art half beside
@@ -71,18 +180,22 @@
          global rather than regional. Tighten it further and the map stops
          being a map.
 
-         BOTH layers must carry this viewBox verbatim. They are registered to
-         each other by nothing but the shared frame; change one alone and the
-         route slides off its coastline.
+         BOTH layers must carry the same viewBox, the same fit and the same box.
+         They are registered to each other by nothing but the shared frame;
+         change one alone and the route slides off its coastline. That is why
+         both bind the `viewBox` / `fit` / `layerBox` computeds rather than
+         spelling the values out twice.
 
          `meet` fits the crop instead of cropping it further, and `xMax` parks
          it against the right edge. Either way the cells stay square; the grid
-         is never stretched into rectangles. -->
+         is never stretched into rectangles. The 'panel' framing swaps both
+         values (full artwork, `slice`) for the reason given in the script. -->
     <svg
-      viewBox="143 334 700 412"
-      preserveAspectRatio="xMaxYMid meet"
+      :viewBox="viewBox"
+      :preserveAspectRatio="fit"
       fill="currentColor"
-      class="absolute top-0 left-[var(--map-inset-inline-start)] h-full w-[calc(100%_-_var(--map-inset-inline-start))] text-[var(--text-muted)] opacity-60 mask-[radial-gradient(ellipse_at_center,black_62%,transparent_104%)]"
+      class="absolute left-[var(--map-inset-inline-start)] w-[calc(100%_-_var(--map-inset-inline-start))] text-[var(--text-muted)] opacity-60"
+      :class="[layerBox, layerMask]"
     >
       <path d="M42.3203 151.85V156.829H47.299V151.85H42.3203Z" />
       <path d="M32.3633 161.807V166.786H37.342V161.807H32.3633Z" />
@@ -5139,13 +5252,43 @@
          into the rule and read as a CUT, two stacked panels rather than one
          section. Dissolving from 46% means the map is already gone by the time
          it reaches the seam, which is what glues the panel to the cards below
-         it. Lengthen this, never shorten it. -->
-    <div
-      class="absolute inset-0 bg-[linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_70%,transparent)_24%,color-mix(in_srgb,var(--bg-canvas)_24%,transparent)_38%,transparent_50%)]"
-    />
-    <div
-      class="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_46%,color-mix(in_srgb,var(--bg-canvas)_45%,transparent)_72%,color-mix(in_srgb,var(--bg-canvas)_85%,transparent)_88%,var(--bg-canvas)_100%)]"
-    />
+         it. Lengthen this, never shorten it.
+
+         The PANEL framing washes the other axis, for the same reason the hero
+         washes this one: follow the copy. A portrait column carries its copy at
+         the two ENDS — a headline against the top edge, a trust strip against
+         the bottom — and nothing down either side, so a left-to-right wash would
+         dim a half that holds nothing and leave both blocks sitting on bare dot
+         grid. This one is heaviest at the two ends and clears through the
+         middle, where the field is the whole point and there is nothing over it
+         to protect.
+
+         The two ends are NOT symmetrical, and the bottom one is the reason. The
+         top carries a headline — large type at full contrast, which needs the
+         grid quieted but not gone. The bottom carries the trust strip: ~24px
+         client marks in one flat ink, and a mark that size loses its counters
+         against a live dot grid, so it needs the ground actually cleared. The
+         ramp therefore reaches SOLID canvas at 82% and holds it to the bottom
+         edge. That number is measured, not picked: in the auth column the footer
+         starts at 76% of the panel's height and the logo row runs 86-89%, so
+         solid-by-82% puts the whole strip — the tracked overline included, which
+         is nearly as light as the marks — on clean canvas with the ramp finishing
+         above it rather than through it. Below 82% the map is not dimmed, it is
+         finished. Strengthen this end if the strip grows; never the middle, where
+         the clear window through 44-56% is the PoP field itself. -->
+    <template v-if="isPanel">
+      <div
+        class="absolute inset-0 bg-[linear-gradient(to_bottom,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_58%,transparent)_20%,transparent_44%,transparent_56%,color-mix(in_srgb,var(--bg-canvas)_45%,transparent)_68%,color-mix(in_srgb,var(--bg-canvas)_82%,transparent)_76%,var(--bg-canvas)_82%,var(--bg-canvas)_100%)]"
+      />
+    </template>
+    <template v-else>
+      <div
+        class="absolute inset-0 bg-[linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_70%,transparent)_24%,color-mix(in_srgb,var(--bg-canvas)_24%,transparent)_38%,transparent_50%)]"
+      />
+      <div
+        class="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_46%,color-mix(in_srgb,var(--bg-canvas)_45%,transparent)_72%,color-mix(in_srgb,var(--bg-canvas)_85%,transparent)_88%,var(--bg-canvas)_100%)]"
+      />
+    </template>
     <!-- The route, above the wash. 82 single-cell squares are far too sparse to
          compete with a headline, so this layer costs the copy nothing while
          giving the band its one piece of colour.
@@ -5163,9 +5306,10 @@
          existed for them. A 2s cycle offset three ways is slow enough to read
          as ambient rather than as a spinner. -->
     <svg
-      viewBox="143 334 700 412"
-      preserveAspectRatio="xMaxYMid meet"
-      class="absolute top-0 left-[var(--map-inset-inline-start)] h-full w-[calc(100%_-_var(--map-inset-inline-start))] fill-[var(--primary)] mask-[radial-gradient(ellipse_at_center,black_62%,transparent_104%)]"
+      :viewBox="viewBox"
+      :preserveAspectRatio="fit"
+      class="absolute left-[var(--map-inset-inline-start)] w-[calc(100%_-_var(--map-inset-inline-start))] fill-[var(--primary)]"
+      :class="[layerBox, routeMask]"
     >
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:0ms]!">
         <path d="M181.723 311.171V316.149H186.701V311.171H181.723Z" />

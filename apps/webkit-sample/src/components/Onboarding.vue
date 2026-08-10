@@ -58,7 +58,6 @@
   // the field-* wrappers answer a `disabled` prop with a locked helper line of their
   // own ("This field is locked.", lock icon), which reads as permanent when the wait
   // is 900ms. The button's :loading is the message that a wait exists.
-  import { curve, duration } from '@aziontech/theme/animations'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Divider from '@aziontech/webkit/divider'
@@ -67,9 +66,10 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Label from '@aziontech/webkit/label'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, onMounted, reactive, ref } from 'vue'
+  import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { useAuthEntrance } from '../lib/auth-entrance'
   import {
     additionalDataKeys,
     createOrganization,
@@ -124,53 +124,13 @@
     Object.fromEntries(Object.entries(form.additionalData).filter(([, value]) => Boolean(value)))
 
   // ── Entrance ──
-  // The two halves of the screen arrive from opposite sides and settle together:
-  // the console comes in along -X (it starts to the right of where it lands) and
-  // the form along +X, so the page assembles itself around the middle instead of
-  // fading in as one flat block.
-  //
-  // slow-01 + expressive-entrance, and both are the point: a console-sized object
-  // crossing real distance reads as confident at 400ms and as a twitch at 150,
-  // and the expressive curve carries most of the travel early and then eases long,
-  // which is what makes the landing feel fluid rather than abrupt. The console is
-  // held back one fast-01 so the form leads and the console follows it in —
-  // simultaneous arrival reads as a slide transition, a stagger reads as
-  // choreography.
-  //
-  // Timing rides on `style` because Tailwind cannot emit per-state duration /
-  // easing from theme tokens (the same reason AppLayout does it — DESIGN.md
-  // § Motion); the movement and opacity states stay on data-attribute variants.
-  //
-  // The animated property is `translate`, NOT `transform`: Tailwind v4 compiles
-  // `translate-x-*` to the standalone `translate` property, so a transition
-  // declared on `transform` animates nothing and the movement snaps. `transform`
-  // is listed too, harmlessly, so a utility that does use it still eases.
-  const prefersReducedMotion = () =>
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
-
-  const ENTER_TIMING = `${duration['slow-01']} ${curve['expressive-entrance']}`
-  const reduced = prefersReducedMotion()
-  const formEnterStyle = reduced
-    ? { transition: 'none' }
-    : {
-        transition: `opacity ${ENTER_TIMING}, translate ${ENTER_TIMING}, transform ${ENTER_TIMING}`
-      }
-  const wireEnterStyle = reduced
-    ? { transition: 'none' }
-    : { ...formEnterStyle, transitionDelay: duration['fast-01'] }
-
-  // Two frames, not one: a single requestAnimationFrame can land in the same
-  // frame the browser is already painting, so it renders the final state and
-  // there is no change left to transition. The second frame guarantees the offset
-  // state was painted first.
-  const entered = ref(false)
-  onMounted(() => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        entered.value = true
-      })
-    })
-  })
+  // The two halves arrive from opposite sides and settle together: the form comes
+  // in along +X and the console along -X, a beat behind it, so the page assembles
+  // itself around the middle instead of fading in as one flat block. The timing,
+  // the stagger and the reduced-motion escape live in `lib/auth-entrance.js` —
+  // Sign In and Sign Up enter by the same rules, so moving between the three
+  // screens reads as one system.
+  const { entered, leadStyle: formEnterStyle, followStyle: wireEnterStyle } = useAuthEntrance()
 
   // Mock persistence. Reject models a request-level failure (network / 5xx).
   const persistOrganization = () => new Promise((resolve) => setTimeout(resolve, 900))

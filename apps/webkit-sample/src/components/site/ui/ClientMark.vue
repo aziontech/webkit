@@ -22,9 +22,15 @@
   // file is white artwork still gets the per-theme filter, since there is no colour
   // version to show.
   //
+  // `monochrome` overrides both routes and paints the mark as a single flat
+  // silhouette — black on light, white on dark — for a surface that shows a LIST of
+  // clients, where per-brand colour reads as noise rather than as accuracy. One
+  // asset, one filter, no per-client data; the reasoning is in ./clients/index.js
+  // next to the filter itself.
+  //
   // Geometry belongs to the caller: pass it through `mark`, since a strip, a card and
   // a benefit cell each set the mark at a different height.
-  import { artworkFilter } from './clients/index.js'
+  import { artworkFilter, MONOCHROME_FILTER } from './clients/index.js'
 
   defineProps({
     // A CLIENTS entry: { name, logo?, logoLight?, artwork? }.
@@ -41,14 +47,30 @@
     colored: {
       type: Boolean,
       default: false
+    },
+    // Paint every mark in one ink (a flat silhouette) instead of its own colours.
+    monochrome: {
+      type: Boolean,
+      default: false
     }
   })
 </script>
 
 <template>
+  <!-- One ink, both themes. Checked FIRST: it is a deliberate override of the two
+       routes below, and it needs only one of the assets — whichever exists — since
+       the filter erases the difference between them anyway. -->
+  <img
+    v-if="monochrome && (client.logo || client.logoLight)"
+    :src="client.logo || client.logoLight"
+    :alt="client.name"
+    decoding="async"
+    :class="[mark, MONOCHROME_FILTER]"
+  />
+
   <!-- Colour-pinned: the brand file, unfiltered, on either theme. -->
   <img
-    v-if="colored && client.logoLight"
+    v-else-if="colored && client.logoLight"
     :src="client.logoLight"
     :alt="client.name"
     decoding="async"

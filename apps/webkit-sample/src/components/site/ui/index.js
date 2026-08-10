@@ -8,6 +8,8 @@
 //                 parts composed around those marks
 //   banners/      the hero backdrops, selected by name through BannerContainer's
 //                 `banner` prop (see ./banners/index.js to add one)
+//   ClaimChips    the Network argument's soft-accent claim pills, over the one
+//                 shared claim list (NETWORK_CLAIMS, ./claims.js)
 //   clients/      the client marks for the trust strip, each tagged with the
 //                 artwork (color / light / dark) that drives its theme handling
 //   ClientMark    one client logo, placed correctly on both themes
@@ -24,6 +26,8 @@
 export { default as AgentMark } from './AgentMark.vue'
 export { default as AiAgentsScene } from './AiAgentsScene.vue'
 export { BANNER_NAMES, BANNERS } from './banners/index.js'
+export { default as ClaimChips } from './ClaimChips.vue'
+export { NETWORK_CLAIMS } from './claims.js'
 export { default as ClientMark } from './ClientMark.vue'
 export { CLIENTS } from './clients/index.js'
 export { default as FrameBox } from './FrameBox.vue'

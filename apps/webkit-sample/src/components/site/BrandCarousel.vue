@@ -29,15 +29,36 @@
   // follows `prefers-color-scheme`, which says nothing about the app's chosen theme,
   // so a manual toggle would leave these marks inverted the wrong way.
   import Overline from '@aziontech/webkit/overline'
+  import { computed } from 'vue'
 
   import { ClientMark } from './ui/index.js'
 
   // Shared geometry, so a swapped pair and a filtered single mark measure the same.
-  // The max-width is generous enough that a wide wordmark still reaches the full 48px
+  // The max-width is generous enough that a wide wordmark still reaches the full
   // height — cap it too tightly and `object-contain` shrinks the mark to fit instead.
-  const MARK = 'h-12 w-auto max-w-[240px] object-contain'
+  //
+  // Two steps, because the strip runs in two very different widths. 'medium' is the
+  // marketing hero, where the row spans the page. 'small' is a half-page column (the
+  // Sign Up art half): at 48px the marks there are so large that only three fit on
+  // screen and the outer two are always mid-fade, which reads as a broken row rather
+  // than a moving one. Dropping the mark and its gutter roughly doubles what is in
+  // frame, so the strip reads as a list of clients again.
+  //
+  // 'small' is 24px, not 32: it is proof, not a feature. It sits under a form as the
+  // last thing on the page, and at 32px each mark carried the visual weight of the
+  // headline three blocks above it. Smaller also puts ~five marks in frame instead of
+  // four, which is what makes the row read as a list rather than as a slideshow.
+  const MARK = {
+    medium: 'h-12 w-auto max-w-[240px] object-contain',
+    small: 'h-6 w-auto max-w-[120px] object-contain'
+  }
 
-  defineProps({
+  const ITEM_PADDING = {
+    medium: 'px-[var(--spacing-xl)]',
+    small: 'px-[var(--spacing-lg)]'
+  }
+
+  const props = defineProps({
     // [{ name, logo?, logoLight?, artwork?, href? }] — `logo` is an asset URL,
     // `logoLight` its light-theme counterpart, `artwork` one of the ARTWORK_FILTER
     // keys ('color' when omitted), `href` makes the mark a link.
@@ -54,8 +75,24 @@
     duration: {
       type: Number,
       default: 44
+    },
+    // Mark scale: 'medium' for a full-width strip, 'small' for a column.
+    size: {
+      type: String,
+      default: 'medium',
+      validator: (value) => ['medium', 'small'].includes(value)
+    },
+    // Paint every mark in one ink instead of its own brand colours — for a strip
+    // read as a LIST of clients, where twelve palettes in one row become noise.
+    // See ClientMark / clients/index.js § "One ink for every mark".
+    monochrome: {
+      type: Boolean,
+      default: false
     }
   })
+
+  const mark = computed(() => MARK[props.size])
+  const itemPadding = computed(() => ITEM_PADDING[props.size])
 </script>
 
 <template>
@@ -82,7 +119,8 @@
           <li
             v-for="client in clients"
             :key="`${copy}-${client.name}`"
-            class="flex shrink-0 items-center justify-center px-[var(--spacing-xl)]"
+            class="flex shrink-0 items-center justify-center"
+            :class="itemPadding"
           >
             <component
               :is="client.href ? 'a' : 'span'"
@@ -99,7 +137,8 @@
                    typographic wordmark — all of it inside ClientMark. -->
               <ClientMark
                 :client="client"
-                :mark="MARK"
+                :mark="mark"
+                :monochrome="monochrome"
               />
             </component>
           </li>

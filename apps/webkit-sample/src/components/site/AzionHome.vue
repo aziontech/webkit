@@ -45,7 +45,16 @@
   // band is a FrameBox, not a BannerContainer, so there is no container to name
   // it on. The registry still owns it — this is its named export.
   import { MapBanner } from './ui/banners/index.js'
-  import { ClientMark, CLIENTS, FrameBox, HeroTitle, SectionGap, SectionTitle } from './ui/index.js'
+  import {
+    ClaimChips,
+    ClientMark,
+    CLIENTS,
+    FrameBox,
+    HeroTitle,
+    NETWORK_CLAIMS,
+    SectionGap,
+    SectionTitle
+  } from './ui/index.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -134,15 +143,6 @@
         { icon: 'ai ai-edge-dns', title: 'DNS', description: 'Resilient DNS with performance' }
       ]
     }
-  ]
-
-  // Network section — the infrastructure claims, as chips beside the globe.
-  const networkClaims = [
-    '100+ data centers',
-    '100+ Tbps throughput',
-    'High availability',
-    '30 ms median latency',
-    'PCI and SOC 2/3 compliant'
   ]
 
   // The outcome row under the network panel: one benefit per registration-framed
@@ -397,19 +397,11 @@ And it stays up when others go down."
               <h2 class="text-balance text-heading-2xl text-[var(--text-default)]">
                 The most reliable infrastructure
               </h2>
-              <ul class="flex flex-wrap gap-[var(--spacing-xs)]">
-                <!-- Soft-accent claim chips. No Tag severity ships this treatment
-                     (accent is a solid blue fill, primary a solid orange), so the
-                     page composes it from the primary token — a DS gap worth a
-                     `subtle` severity on Tag. -->
-                <li
-                  v-for="claim in networkClaims"
-                  :key="claim"
-                  class="inline-flex h-8 items-center rounded-[var(--shape-elements)] border border-[color-mix(in_srgb,var(--primary)_45%,transparent)] bg-[color-mix(in_srgb,var(--primary)_16%,transparent)] px-[var(--spacing-xs)] text-label-md text-[var(--text-default)]"
-                >
-                  {{ claim }}
-                </li>
-              </ul>
+              <!-- The claim chips, from the shared list and the shared treatment
+                   (`ui/claims.js` + `ClaimChips`) — the same ones the signed-out
+                   NetworkPanel puts under its headline, so the two surfaces cannot
+                   quote different numbers at the same person minutes apart. -->
+              <ClaimChips :claims="NETWORK_CLAIMS" />
             </div>
             <!-- Second cell intentionally empty: the map behind IS the art half. -->
           </div>

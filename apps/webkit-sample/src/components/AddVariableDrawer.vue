@@ -498,19 +498,11 @@
                   :id="sensitiveId"
                   v-model="form.sensitive"
                 />
-                <Label :for="sensitiveId">Sensitive</Label>
-                <Tooltip :text="SENSITIVE_HINT">
-                  <button
-                    type="button"
-                    :aria-label="SENSITIVE_HINT"
-                    class="inline-flex size-5 items-center justify-center rounded-[var(--shape-button)] text-[var(--text-muted)] transition-colors duration-150 ease-out hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
-                  >
-                    <i
-                      class="pi pi-info-circle text-body-xs"
-                      aria-hidden="true"
-                    />
-                  </button>
-                </Tooltip>
+                <Label
+                  :for="sensitiveId"
+                  :hint="SENSITIVE_HINT"
+                  >Sensitive</Label
+                >
               </div>
 
               <div class="flex w-full flex-col gap-[var(--spacing-xs)]">

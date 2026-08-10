@@ -10,6 +10,12 @@
   // async deployment needs (retry + an escape to the module that owns it).
   // Every other toast renders the standard body.
   import AppToaster from './components/ui/AppToaster.vue'
+  // The wire that stands in for the page while an expired session is torn down.
+  // Mounted HERE, beside the toaster and outside the RouterView, for the same
+  // reason: it has to survive the route change it covers — the console goes out
+  // and Sign In comes in underneath it, and neither frame is ever seen.
+  import SessionWire from './components/ui/SessionWire.vue'
+  import { installSessionExpiry, useSession } from './lib/session'
   // Moving any of the header's three switchers — organization, account,
   // workspace — reloads the page you are on: every module list swaps its rows
   // for skeletons and comes back as the new scope's, and an opened resource
@@ -20,9 +26,13 @@
   import { router } from './router'
 
   installTenancyReload(router)
+  installSessionExpiry(router)
+
+  const { expiring } = useSession()
 </script>
 
 <template>
   <RouterView />
+  <SessionWire v-if="expiring" />
   <AppToaster />
 </template>

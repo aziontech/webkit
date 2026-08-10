@@ -26,6 +26,7 @@
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { endSession } from '../../lib/session'
   import AccountSwitcher from './AccountSwitcher.vue'
   import AppSidebar from './AppSidebar.vue'
   import OrgSwitcher from './OrgSwitcher.vue'
@@ -159,7 +160,14 @@
     }
   }
 
-  const signOut = () => router.push('/login')
+  // Logging out deliberately: the session closes with no ceremony — no wire and no
+  // "Session expired" toast, because the operator asked for this and knows why they
+  // are on Sign In. That is the whole difference between this and an expiry (see
+  // ../../lib/session.js).
+  const signOut = () => {
+    endSession()
+    router.push('/login')
+  }
 
   // Drawer variants of the create / account-menu / logout handlers — dismiss the
   // nav first, so the mobile user lands on the target with the nav out of the way.

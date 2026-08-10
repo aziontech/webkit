@@ -64,6 +64,28 @@ export const ARTWORK_FILTER = {
 /** The filter classes for one client entry; `color` (no filter) when unset. */
 export const artworkFilter = (client) => ARTWORK_FILTER[client?.artwork] ?? ARTWORK_FILTER.color
 
+// ── One ink for every mark ──────────────────────────────────────────────────
+// The per-artwork routes above place each mark HONESTLY — brand colours where the
+// brand ships them, an inversion only where a mark would vanish. On a surface
+// whose job is "these companies run on us", that honesty reads as inconsistency
+// instead: a green-and-blue Agibank next to a multicolour América Móvil next to a
+// flat black GPA is twelve competing colour statements in one 24px row, and the
+// eye reads the loudest mark rather than the list.
+//
+// `brightness(0)` collapses every pixel to black while keeping its alpha, so a
+// white mark, a black mark and a full-colour mark all become the SAME silhouette
+// — no per-client data, and nothing to keep in sync when a client is added. On
+// dark, `invert()` after it makes that silhouette white. Tailwind composes its
+// filter utilities in a fixed order (brightness before invert), so the classes
+// can be written in either order and still resolve to
+// `brightness(0) invert(1)` — the order that yields white rather than black.
+//
+// The one requirement is an alpha channel: a mark whose background is opaque
+// white would flatten to a black BOX. Every asset in this registry is
+// transparent-background (the two rasters, itau-logo.webp and
+// magalu-symbol.png, both carry alpha), which is what makes this safe here.
+export const MONOCHROME_FILTER = 'brightness-0 [[data-theme=dark]_&]:invert'
+
 // ── The story card: a client's own brand, not ours ──────────────────────────
 // The story cards in Figma (`Illustrations` node 456:140792) paint each card in the
 // CLIENT's brand colour — Renner red, MadeiraMadeira orange, HeroSpark pink, Magalu

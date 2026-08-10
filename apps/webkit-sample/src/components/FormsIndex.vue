@@ -125,6 +125,16 @@ const examples = [
     path: "/forms/async-deployment",
   },
   {
+    id: "auth-errors",
+    title: "Auth error states",
+    description:
+      "The same question as Error validation, asked on the signed-out screens, where the answer is one rule: auth never toasts. A picker arms the endpoint (401, 503, 500, timeout, 409) and every outcome lands in the same Message inside the card. What changes is the severity and what it carries: nothing after a 401, since the fields under it are the recovery; Retry when nobody can fix it; the two exits when the address is already registered.",
+    icon: "pi pi-lock",
+    surface: "Auth",
+    save: "Sign in / Sign up",
+    path: "/forms/auth-errors",
+  },
+  {
     id: "itemgroup-saves",
     title: "ItemGroup with independent saves",
     description:
