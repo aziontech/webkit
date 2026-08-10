@@ -5456,7 +5456,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to the default disabled message so the lock icon always has matching copy."
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "size",
@@ -5552,7 +5552,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "size",
@@ -5660,7 +5660,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "disabled",
@@ -5768,7 +5768,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "disabled",
@@ -5876,7 +5876,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "disabled",
@@ -5968,6 +5968,53 @@
       ],
       "purpose": "Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it."
     },
+    "hint": {
+      "import": "@aziontech/webkit/hint",
+      "target": "./src/components/inputs/hint/hint.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/hint",
+      "category": "inputs",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "''",
+          "required": "yes",
+          "doc": "Guidance text revealed on hover or focus; also the trigger's accessible name."
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'right' | 'bottom' | 'left' | 'auto'",
+          "default": "'top'",
+          "required": "no",
+          "doc": "Anchor side of the tooltip relative to the glyph."
+        }
+      ],
+      "purpose": "Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a \"why does this matter?\" note to a field name without spending a line of vertical space on it, and it is what `Label`'s `hint` prop renders.",
+      "useWhen": [
+        "A field, switch or setting whose name is clear but whose consequence is not (what \"Sensitive\" does to a stored value).",
+        "A short, self-contained sentence — one that reads fine in a tooltip and is not needed to complete the field.",
+        "Beside a label, a section heading, or a table column header, where a permanent line of helper text would add noise."
+      ],
+      "avoidWhen": [
+        "Guidance the user needs while typing, or any validation message → use `helper-text` (it stays on screen and is wired with `aria-describedby`).",
+        "More than a sentence, links, or formatted content → use `popover`, which is dismissible and can hold real content.",
+        "A plain description of an action already labelled by a control → use `tooltip` directly on that control."
+      ],
+      "related": [
+        "tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.",
+        "helper-text` — persistent guidance under a field; the right choice when the text must always be visible.",
+        "label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component."
+      ],
+      "bestPractices": [
+        "One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.",
+        "Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.",
+        "The `text` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
+        "Place it immediately after the thing it explains, not at the end of a row."
+      ]
+    },
     "label": {
       "import": "@aziontech/webkit/label",
       "target": "./src/components/inputs/label/label.vue",
@@ -5990,6 +6037,13 @@
           "default": "false",
           "required": "no",
           "doc": "Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; \"(Required)\" inherits `var(--text-muted)`."
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Short explanation appended as a `Hint` glyph that reveals it on hover or focus. Empty renders no glyph."
         }
       ],
       "slots": [
@@ -5999,7 +6053,7 @@
           "notes": "Label text; falls back to `label` prop when empty."
         }
       ],
-      "purpose": "Form-field label that pairs descriptive text with an optional required indicator. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word \"(Required)\" in muted text — replacing the older `Tag` badge for a lighter typographic signal."
+      "purpose": "Form-field label that pairs descriptive text with an optional required indicator and an optional hint. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word \"(Required)\" in muted text — replacing the older `Tag` badge for a lighter typographic signal. Setting `hint` appends a `Hint` glyph after the text, so a field name and its one-sentence explanation stay one component instead of a hand-built row."
     },
     "input-password": {
       "import": "@aziontech/webkit/input-password",
@@ -6130,7 +6184,7 @@
           "type": "string",
           "default": "''",
           "required": "no",
-          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted **except** when `disabled` is true — in that case the component falls back to a default disabled message so the lock icon always has matching copy."
+          "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
           "name": "maxLength",
@@ -6144,7 +6198,7 @@
           "type": "boolean",
           "default": "false",
           "required": "no",
-          "doc": "Disables the input and switches the helper to `kind=\"disabled\"` (lock icon)."
+          "doc": "Disables the input; a supplied `helperText` switches to `kind=\"disabled\"` (lock icon)."
         },
         {
           "name": "readonly",
