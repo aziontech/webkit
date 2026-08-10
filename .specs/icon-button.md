@@ -4,7 +4,7 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: e04141e019143f144da49ca06c4298f98f6f650db5688265e7e38335c32d802f
+checksum: 57e712b53b9a33dbf353ad453c5a8706f76bee3610fb4a8a62bb080bd68ab3d5
 created: 2026-05-22
 last_updated: 2026-07-01
 ---
@@ -18,16 +18,16 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `icon` | `string` | `—` | yes | PrimeIcons class for the leading/trailing icon. |
-| `ariaLabel` | `string` | `—` | yes | Accessible name for icon-only controls. |
-| `kind` | `'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'` | `'primary'` | no | Visual variant. |
-| `size` | `'small' | 'medium' | 'large'` | `'large'` | no | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `loading` | `boolean` | `false` | no | Shows loading state and disables activation. |
-| `href` | `string` | `''` | no | When set, renders as a link (`<a>`). |
-| `target` | `'_blank' | '_self'` | `'_self'` | no | Link target when `href` is set. |
-| `iconTransition` | `boolean` | `false` | no | Animates icon swaps with enter/leave transitions. |
-| `iconClass` | `string` | `''` | no | Extra classes applied to the icon glyph. |
+| `icon` | `string` | `—` | true | PrimeIcons class for the leading/trailing icon. |
+| `ariaLabel` | `string` | `—` | true | Accessible name for icon-only controls. |
+| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
+| `href` | `string` | `''` | false | When set, renders as a link (`<a>`). |
+| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
+| `iconTransition` | `boolean` | `false` | false | Animates icon swaps with enter/leave transitions. |
+| `iconClass` | `string` | `''` | false | Extra classes applied to the icon glyph. |
 
 ## Events
 

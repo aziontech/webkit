@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 2
-checksum: 70ce146e0795e71f9e05740f7b5225b479ad688d9f0ef3f1b4691af82741da32
+checksum: 1ddfc6708b0b4e2967eefe43e471ec999e50679be29f2ef3e314e8dafbd6c4e2
 created: 2026-05-22
 last_updated: 2026-07-29
 ---
@@ -41,15 +41,15 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `''` | no | Two-way bound value of the field. |
-| `placeholder` | `string` | `''` | no | Placeholder shown when the field is empty. |
-| `type` | `'text' \| 'email' \| 'number'` | `'text'` | no | Native input type. Restricted to single-line variants the field treats identically. |
-| `maxLength` | `number \| undefined` | `undefined` | no | Native `maxlength` — maximum number of characters allowed. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Marks the field read-only; value is visible but not editable. Native pass-through. |
-| `required` | `boolean` | `false` | no | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
-| `invalid` | `boolean` | `false` | no | Applies the invalid border + ring tokens and sets `aria-invalid`. |
+| `modelValue` | `string` | `''` | false | Two-way bound value of the field. |
+| `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
+| `type` | `'text' \| 'email' \| 'number'` | `'text'` | false | Native input type. Restricted to single-line variants the field treats identically. |
+| `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but not editable. Native pass-through. |
+| `required` | `boolean` | `false` | false | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
+| `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid`. |
 
 ## Events
 

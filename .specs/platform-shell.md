@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-13804
   node_id: 3735:13804
-checksum: 0ec168e40eca70c4d5c391e550f28e80c480a02371f53ef70e4c6186292c6fb9
+checksum: 46b488d9b12ac63202a315555ac7bb1d808d4e486ca30a1384cb8b1072abcd20
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -21,8 +21,8 @@ Application shell template for console-style layouts per [Webkit Example (Figma 
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `headerAriaLabel` | `string` | `'Global header'` | no | Accessible name for the header landmark. |
-| `tabDefaultValue` | `string \| number \| null` | `'tab-1'` | no | Initial active tab when the `tabs` slot is used (uncontrolled). |
+| `headerAriaLabel` | `string` | `'Global header'` | false | Accessible name for the header landmark. |
+| `tabDefaultValue` | `string \| number \| null` | `'tab-1'` | false | Initial active tab when the `tabs` slot is used (uncontrolled). |
 
 ## Events
 

@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7168
   node_id: 2027:7168
-checksum: 71d860aa1da0abed63be20658e74ecf864cd10e20183678eaee0d8a4a1a9576b
+checksum: ff1e526b797056e7c98c868ddafad990a909c912b2e8c6eb8a5018821bf5a358
 created: 2026-05-23
 last_updated: 2026-05-23
 ---
@@ -22,11 +22,11 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 
 | Prop          | Type      | Default     | Required | JSDoc                                             |
 | ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
-| `modelValue`  | `boolean` | `false`     | no       | Selected value for v-model.                       |
-| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
-| `label`       | `string`  | `''`        | no       | Primary label text.                               |
-| `description` | `string`  | `''`        | no       | Secondary description.                            |
-| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
+| `modelValue`  | `boolean` | `false`     | false    | Selected value for v-model.                       |
+| `disabled`    | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens. |
+| `label`       | `string`  | `''`        | false    | Primary label text.                               |
+| `description` | `string`  | `''`        | false    | Secondary description.                            |
+| `helperText`  | `string`  | `''`        | false    | Helper badge text shown when disabled.            |
 
 ## Events
 

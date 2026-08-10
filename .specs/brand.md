@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: 62d98081182fc1883def54d3bfaea330a30141becc0ecc3e31cdca35e26e7f8d
+checksum: 276da7db99e5a69b643d2721dc1c3f82c657fb0ccb85052ff5a7b00b6abdfaf3
 created: 2026-07-13
 last_updated: 2026-07-13
 ---
@@ -34,8 +34,8 @@ import Brand from '@aziontech/webkit/brand'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `'default' \| 'reduced' \| 'extended'` | `'default'` | no | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio. |
+| `kind` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio. |
 
 ## Events
 

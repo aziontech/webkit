@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 55c62a45708b57bc1fde263674c9f19bcd569b1c85ba8cbabef8cfc3e389e394
+checksum: 1d67317d61c12926c675549ac692a3040a16b383a496c05031d9de395e4a670d
 created: 2026-06-15
 last_updated: 2026-06-22
 ---
@@ -56,17 +56,17 @@ const value = defineModel({ default: '' })
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string \| number \| unknown[]` | `undefined` | no | Two-way bound selection. Scalar in single mode; array in multi mode. |
-| `multiple` | `boolean` | `false` | no | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array. |
-| `open` | `boolean` | `undefined` | no | Controlled open state for the dropdown. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `false` | no | Initial open state when uncontrolled. |
-| `placeholder` | `string` | `undefined` | no | Trigger placeholder shown when no option is selected. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`. |
-| `disabled` | `boolean` | `false` | no | Disables the trigger and prevents opening; applies disabled tokens. |
-| `readonly` | `boolean` | `false` | no | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
-| `required` | `boolean` | `false` | no | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
-| `invalid` | `boolean` | `false` | no | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
-| `displayValue` | `(value: unknown) => string` | `undefined` | no | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`. |
+| `modelValue` | `string \| number \| unknown[]` | `undefined` | false | Two-way bound selection. Scalar in single mode; array in multi mode. |
+| `multiple` | `boolean` | `false` | false | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array. |
+| `open` | `boolean` | `undefined` | false | Controlled open state for the dropdown. Use with `v-model:open`. |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
+| `placeholder` | `string` | `undefined` | false | Trigger placeholder shown when no option is selected. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`. |
+| `disabled` | `boolean` | `false` | false | Disables the trigger and prevents opening; applies disabled tokens. |
+| `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
+| `required` | `boolean` | `false` | false | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
+| `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
+| `displayValue` | `(value: unknown) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`. |
 
 ## Events
 

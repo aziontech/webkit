@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 63e139df8a7de006f84ee8c749dd6915815c69ee59a350d15426bb3bf7889c5d
+checksum: 8d954bea6b4d34d91780e0d7fe195ce0e418a288603f60f9394e57a61582c7b8
 created: 2026-06-16
 last_updated: 2026-07-31
 ---
@@ -43,15 +43,15 @@ Aligned with Figma frame `3714:10788` (Webkit / InputPassword). The token mappin
 
 | Prop           | Type                                            | Default              | Required | JSDoc                                                                                                                                                                                                 |
 | -------------- | ----------------------------------------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`   | `string`                                        | `''`                 | no       | Two-way bound value of the field.                                                                                                                                                                     |
-| `placeholder`  | `string`                                        | `''`                 | no       | Placeholder shown when the field is empty.                                                                                                                                                            |
-| `maxLength`    | `number \| undefined`                           | `undefined`          | no       | Native `maxlength` — maximum number of characters allowed.                                                                                                                                            |
-| `disabled`     | `boolean`                                       | `false`              | no       | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state.                                                                                                      |
-| `readonly`     | `boolean`                                       | `false`              | no       | Marks the field read-only; value is visible but not editable. Toggle button stays operable.                                                                                                           |
-| `required`     | `boolean`                                       | `false`              | no       | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component.                                      |
-| `invalid`      | `boolean`                                       | `false`              | no       | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                     |
-| `toggleable`   | `boolean`                                       | `true`               | no       | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
-| `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | no       | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows.                                                                                           |
+| `modelValue`   | `string`                                        | `''`                 | false    | Two-way bound value of the field.                                                                                                                                                                     |
+| `placeholder`  | `string`                                        | `''`                 | false    | Placeholder shown when the field is empty.                                                                                                                                                            |
+| `maxLength`    | `number \| undefined`                           | `undefined`          | false    | Native `maxlength` — maximum number of characters allowed.                                                                                                                                            |
+| `disabled`     | `boolean`                                       | `false`              | false    | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state.                                                                                                      |
+| `readonly`     | `boolean`                                       | `false`              | false    | Marks the field read-only; value is visible but not editable. Toggle button stays operable.                                                                                                           |
+| `required`     | `boolean`                                       | `false`              | false    | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component.                                      |
+| `invalid`      | `boolean`                                       | `false`              | false    | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                     |
+| `toggleable`   | `boolean`                                       | `true`               | false    | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
+| `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false    | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows.                                                                                           |
 
 ## Events
 

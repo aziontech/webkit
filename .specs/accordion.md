@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: a61b7de6515fe24bf2511c6569a2bb4285f0a224a652990f52c9d74703fb4bc6
+checksum: ee1884fc16c8e518d06a2f1643a18741358a0c887c5136fc2bacb5dbba31e0ce
 created: 2026-06-26
 last_updated: 2026-07-15
 ---
@@ -106,12 +106,12 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 
 | Prop            | Type                         | Default     | Required | JSDoc                                                                                                                           |
 | --------------- | ---------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `type`          | `'single' \| 'multiple'`     | `'single'`  | no       | Whether one or multiple items can be open at the same time.                                                                     |
-| `value`         | `string \| string[] \| null` | `undefined` | no       | Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model:value`. |
-| `defaultValue`  | `string \| string[] \| null` | `null`      | no       | Initial open item(s) when uncontrolled.                                                                                         |
-| `collapsible`   | `boolean`                    | `true`      | no       | In single mode, lets the open item collapse so that no item is open.                                                            |
-| `size`          | `'medium' \| 'large'`        | `'medium'`  | no       | Size token; affects header height, padding, and typography. Provided to every item via context.                                 |
-| `arrowPosition` | `'left' \| 'right'`          | `'right'`   | no       | Side of the header the chevron sits on. Provided to every item via context.                                                     |
+| `type`          | `'single' \| 'multiple'`     | `'single'`  | false    | Whether one or multiple items can be open at the same time.                                                                     |
+| `value`         | `string \| string[] \| null` | `undefined` | false    | Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model:value`. |
+| `defaultValue`  | `string \| string[] \| null` | `null`      | false    | Initial open item(s) when uncontrolled.                                                                                         |
+| `collapsible`   | `boolean`                    | `true`      | false    | In single mode, lets the open item collapse so that no item is open.                                                            |
+| `size`          | `'medium' \| 'large'`        | `'medium'`  | false    | Size token; affects header height, padding, and typography. Provided to every item via context.                                 |
+| `arrowPosition` | `'left' \| 'right'`          | `'right'`   | false    | Side of the header the chevron sits on. Provided to every item via context.                                                     |
 
 ## Events
 

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: e41af99148584ab56c4eba12c388df37fc73d2d66bca970634fe8c554968d193
+checksum: 72000bf21e660c4cadd4af45041be64a21e7f0f936880aad8281efe6987da059
 created: 2026-06-02
 last_updated: 2026-06-02
 ---
@@ -37,12 +37,12 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `text` | `string` | `''` | yes | Plain text shown inside the tooltip. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'` | no | Anchor side relative to the trigger. |
-| `delay` | `number` | `200` | no | Hover-open delay in milliseconds. |
-| `disabled` | `boolean` | `false` | no | Disables tooltip activation. |
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `false` | no | Initial open state when uncontrolled. |
+| `text` | `string` | `''` | true | Plain text shown inside the tooltip. |
+| `placement` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'` | false | Anchor side relative to the trigger. |
+| `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
+| `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
+| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open`. |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 
 ## Events
 

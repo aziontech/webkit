@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=542-105
   node_id: 542:105
-checksum: cb2af3c8be6f64a28057091892890ca3ed12e11dcf35c50f21dd714b26efd71b
+checksum: cdf8a6625dba35fd003ae731f4a1a4f94471a84a8876d1ac7c9c515e6a2b8e13
 created: 2026-05-23
 last_updated: 2026-06-23
 ---
@@ -22,11 +22,11 @@ Inline boolean toggle with switch on the leading edge, label, optional descripti
 
 | Prop          | Type      | Default     | Required | JSDoc                                             |
 | ------------- | --------- | ----------- | -------- | ------------------------------------------------- |
-| `modelValue`  | `boolean` | `false`     | no       | Selected value for v-model.                       |
-| `disabled`    | `boolean` | `false`     | no       | Disables interaction and applies disabled tokens. |
-| `label`       | `string`  | `''`        | no       | Primary label text.                               |
-| `description` | `string`  | `''`        | no       | Secondary description.                            |
-| `helperText`  | `string`  | `''`        | no       | Helper badge text shown when disabled.            |
+| `modelValue`  | `boolean` | `false`     | false    | Selected value for v-model.                       |
+| `disabled`    | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens. |
+| `label`       | `string`  | `''`        | false    | Primary label text.                               |
+| `description` | `string`  | `''`        | false    | Secondary description.                            |
+| `helperText`  | `string`  | `''`        | false    | Helper badge text shown when disabled.            |
 
 ## Events
 

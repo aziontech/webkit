@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 1a7bc9bdc211ad0591a48082474922afe6e508a9b620c45ac30fe79ca782c6d7
+checksum: 4f2dae7b566e5f02c7d6c280db5700f9e86b85cf45bb0f376588331668a45c6a
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
@@ -38,11 +38,11 @@ import ProgressBar from '@aziontech/webkit/progress-bar'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `value` | `number` | `0` | no | Current progress, relative to `max`. |
-| `max` | `number` | `100` | no | Upper bound; percentage = `value / max * 100`. |
-| `shape` | `'rounded' \| 'flat'` | `'rounded'` | no | Track and fill corner-radius variant. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | no | Bar height token. |
-| `indeterminate` | `boolean` | `false` | no | Loading state; animates a sliding segment and ignores `value`. |
+| `value` | `number` | `0` | false | Current progress, relative to `max`. |
+| `max` | `number` | `100` | false | Upper bound; percentage = `value / max * 100`. |
+| `shape` | `'rounded' \| 'flat'` | `'rounded'` | false | Track and fill corner-radius variant. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Bar height token. |
+| `indeterminate` | `boolean` | `false` | false | Loading state; animates a sliding segment and ignores `value`. |
 
 ## Events
 

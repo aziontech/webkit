@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: a596c60f97c6c3577e42653724c582a4497edb19f25a01fab68d6e39ad93bd7e
+checksum: 3ab3550f647fad7c754be0b6d516656e530451b734d29e99b36e5f057d2a9a48
 created: 2026-06-16
 last_updated: 2026-06-27
 ---
@@ -103,12 +103,12 @@ const pageSize = ref(10)
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `page` | `number` | `1` | no | Current page, 1-based (data-driven mode). Supports `v-model:page`. |
-| `total` | `number` | `undefined` | no | Total item count. When set, the Paginator runs in data-driven mode and renders its own controls. |
-| `pageSize` | `number` | `10` | no | Rows per page (data-driven mode). Supports `v-model:page-size`. |
-| `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | no | Page-size options offered in the rows-per-page selector. |
-| `siblingCount` | `number` | `1` | no | Page numbers shown on each side of the current page before collapsing into an overflow ellipsis. |
-| `ariaLabel` | `string` | `'Pagination'` | no | Accessible name for the navigation landmark. |
+| `page` | `number` | `1` | false | Current page, 1-based (data-driven mode). Supports `v-model:page`. |
+| `total` | `number` | `undefined` | false | Total item count. When set, the Paginator runs in data-driven mode and renders its own controls. |
+| `pageSize` | `number` | `10` | false | Rows per page (data-driven mode). Supports `v-model:page-size`. |
+| `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | false | Page-size options offered in the rows-per-page selector. |
+| `siblingCount` | `number` | `1` | false | Page numbers shown on each side of the current page before collapsing into an overflow ellipsis. |
+| `ariaLabel` | `string` | `'Pagination'` | false | Accessible name for the navigation landmark. |
 
 ## Events
 

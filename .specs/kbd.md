@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 9ca1374683d5ce977792b211abd2ad4415b3e5b67be511701f8fb75e119fe682
+checksum: 0d5200dbd6defbad67007e7b66555b33baf207acbb9dda2c23a22e8b059c73d1
 created: 2026-07-23
 last_updated: 2026-07-24
 ---
@@ -51,11 +51,11 @@ import Kbd from '@aziontech/webkit/kbd'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `meta` | `boolean` | `false` | no | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). |
-| `ctrl` | `boolean` | `false` | no | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere). |
-| `shift` | `boolean` | `false` | no | Prepend the Shift modifier glyph (⇧). |
-| `alt` | `boolean` | `false` | no | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
-| `size` | `'small' \| 'medium'` | `'medium'` | no | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
+| `meta` | `boolean` | `false` | false | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). |
+| `ctrl` | `boolean` | `false` | false | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere). |
+| `shift` | `boolean` | `false` | false | Prepend the Shift modifier glyph (⇧). |
+| `alt` | `boolean` | `false` | false | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
 
 ## Events
 

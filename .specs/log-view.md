@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: e49713ed13531ddfd8c33e9d31a6396109e5a965e6d0c1345ed902bb3d233434
+checksum: 7a30da59b3f0a22e063672067c3a84d5ee15060de5ad206a03d558a283a76401
 created: 2026-05-26
 last_updated: 2026-08-04
 ---
@@ -55,13 +55,13 @@ LogView ships flat, individually importable sub-components (each from its own `@
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `lines` | `LogViewLine[]` | `[]` | no | Log entries; filtered in LogViewContent by search and warnings-only. |
-| `border` | `boolean` | `true` | no | Draw the outer card border and corner radius around the log shell. On by default; set `:border="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
-| `searchPlaceholder` | `string` | `'Find in Logs'` | no | Placeholder for the default header search field. |
-| `showCopy` | `boolean` | `true` | no | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). |
-| `disabled` | `boolean` | `false` | no | Disables toolbar controls in LogViewHeader. |
-| `loading` | `boolean` | `false` | no | Replaces the LogViewContent log body with a centered spinner and label. |
-| `loadingLabel` | `string` | `'Loading...'` | no | Label shown beneath the spinner while `loading`. |
+| `lines` | `LogViewLine[]` | `[]` | false | Log entries; filtered in LogViewContent by search and warnings-only. |
+| `border` | `boolean` | `true` | false | Draw the outer card border and corner radius around the log shell. On by default; set `:border="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
+| `searchPlaceholder` | `string` | `'Find in Logs'` | false | Placeholder for the default header search field. |
+| `showCopy` | `boolean` | `true` | false | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). |
+| `disabled` | `boolean` | `false` | false | Disables toolbar controls in LogViewHeader. |
+| `loading` | `boolean` | `false` | false | Replaces the LogViewContent log body with a centered spinner and label. |
+| `loadingLabel` | `string` | `'Loading...'` | false | Label shown beneath the spinner while `loading`. |
 
 ## v-model
 

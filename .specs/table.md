@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: a98c4e3e04fe82bcc57bf42fe70073f4f3ffa57a77347011460a024808e17687
+checksum: a7d34d4319092f3269ea3793cb4138f291ec389b32cd4af17b913bdb07815b66
 created: 2026-06-16
 last_updated: 2026-07-01
 ---
@@ -225,33 +225,33 @@ Plug a custom filter builder (e.g. AQL) through `Table.Filter`'s `default` slot;
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `maxHeight` | `string` | `''` | no | Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under the sticky header). |
-| `border` | `boolean` | `false` | no | Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `border` / `:border="…"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected. |
-| `data` | `Record<string, unknown>[]` | `[]` | no | Data-driven mode: row records. |
-| `columns` | `TableColumn[]` | `[]` | no | Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack. |
-| `rowKey` | `string` | `'id'` | no | Field used as the stable row id (for selection). |
-| `enableSorting` | `boolean` | `false` | no | Enable sorting globally; per-column `enableSorting` overrides. |
-| `enableRowSelection` | `boolean` | `false` | no | Add a leading selection-checkbox column. |
-| `selectOnRowClick` | `boolean` | `false` | no | Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click. |
-| `headerKind` | `'default' \| 'compact'` | `'default'` | no | Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`. |
-| `paginated` | `boolean` | `false` | no | Render a Paginator in the footer. |
-| `pageSize` | `number` | `10` | no | Rows per page when paginated. |
-| `sorting` | `SortingState` | `undefined` | no | v-model:sorting (TanStack SortingState). |
-| `rowSelection` | `RowSelectionState` | `undefined` | no | v-model:rowSelection (TanStack RowSelectionState). |
-| `columnVisibility` | `VisibilityState` | `undefined` | no | v-model:columnVisibility (TanStack VisibilityState). |
-| `globalFilter` | `string` | `undefined` | no | v-model:globalFilter text. |
-| `pagination` | `PaginationState` | `undefined` | no | v-model:pagination (TanStack PaginationState). |
-| `manualSorting` | `boolean` | `false` | no | Server-side sorting: emit events, do not sort locally. |
-| `manualPagination` | `boolean` | `false` | no | Server-side pagination: emit events, do not slice locally. |
-| `manualFiltering` | `boolean` | `false` | no | Server-side filtering: emit events, do not filter locally. |
-| `rowCount` | `number` | `undefined` | no | Total row count for manual pagination. |
-| `rowsPerPageOptions` | `number[]` | `[10, 25, 50, 100]` | no | Rows-per-page options shown in the footer selector. |
-| `loading` | `boolean` | `false` | no | Data-driven mode: render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`. |
-| `filters` | `AppliedFilter[]` | `undefined` | no | v-model:filters — structured applied conditions committed by `Table.Filter`, distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch. |
-| `filterFields` | `FilterField[]` | `[]` | no | Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder. |
-| `state` | `TableStateSnapshot` | `undefined` | no | v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern. |
-| `initialState` | `Partial<TableStateSnapshot>` | `undefined` | no | Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model. |
-| `exportFilename` | `string` | `'export.csv'` | no | Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given. |
+| `maxHeight` | `string` | `''` | false | Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under the sticky header). |
+| `border` | `boolean` | `false` | false | Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `border` / `:border="…"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected. |
+| `data` | `Record<string, unknown>[]` | `[]` | false | Data-driven mode: row records. |
+| `columns` | `TableColumn[]` | `[]` | false | Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack. |
+| `rowKey` | `string` | `'id'` | false | Field used as the stable row id (for selection). |
+| `enableSorting` | `boolean` | `false` | false | Enable sorting globally; per-column `enableSorting` overrides. |
+| `enableRowSelection` | `boolean` | `false` | false | Add a leading selection-checkbox column. |
+| `selectOnRowClick` | `boolean` | `false` | false | Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click. |
+| `headerKind` | `'default' \| 'compact'` | `'default'` | false | Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`. |
+| `paginated` | `boolean` | `false` | false | Render a Paginator in the footer. |
+| `pageSize` | `number` | `10` | false | Rows per page when paginated. |
+| `sorting` | `SortingState` | `undefined` | false | v-model:sorting (TanStack SortingState). |
+| `rowSelection` | `RowSelectionState` | `undefined` | false | v-model:rowSelection (TanStack RowSelectionState). |
+| `columnVisibility` | `VisibilityState` | `undefined` | false | v-model:columnVisibility (TanStack VisibilityState). |
+| `globalFilter` | `string` | `undefined` | false | v-model:globalFilter text. |
+| `pagination` | `PaginationState` | `undefined` | false | v-model:pagination (TanStack PaginationState). |
+| `manualSorting` | `boolean` | `false` | false | Server-side sorting: emit events, do not sort locally. |
+| `manualPagination` | `boolean` | `false` | false | Server-side pagination: emit events, do not slice locally. |
+| `manualFiltering` | `boolean` | `false` | false | Server-side filtering: emit events, do not filter locally. |
+| `rowCount` | `number` | `undefined` | false | Total row count for manual pagination. |
+| `rowsPerPageOptions` | `number[]` | `[10, 25, 50, 100]` | false | Rows-per-page options shown in the footer selector. |
+| `loading` | `boolean` | `false` | false | Data-driven mode: render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`. |
+| `filters` | `AppliedFilter[]` | `undefined` | false | v-model:filters — structured applied conditions committed by `Table.Filter`, distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch. |
+| `filterFields` | `FilterField[]` | `[]` | false | Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder. |
+| `state` | `TableStateSnapshot` | `undefined` | false | v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern. |
+| `initialState` | `Partial<TableStateSnapshot>` | `undefined` | false | Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model. |
+| `exportFilename` | `string` | `'export.csv'` | false | Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given. |
 
 ## Events
 

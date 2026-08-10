@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: d7225a12e6cfeadaba0bf012f456346c5a2ed01c8cf2fe033f2e3a246468a3ea
+checksum: 234a4c7523258645ff2c343e58b02ca3ca826506b87017c99653a3f1943c9658
 created: 2026-06-15
 last_updated: 2026-06-15
 ---
@@ -36,8 +36,8 @@ import InputText from '@aziontech/webkit/input-text'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `label` | `string` | `''` | no | Fallback text when the default slot is empty. |
-| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | no | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
+| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
+| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
 
 ## Events
 

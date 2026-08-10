@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 4a01a13e121ff2f1f4bc480a04e9141f6f7d0f7926702e36e5e8e3e91902c05b
+checksum: fae8447c685d8b651ee36f2670fa36535f91eca2b232c5118108baf549a03c6b
 created: 2026-05-22
 last_updated: 2026-07-30
 ---
@@ -52,10 +52,10 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 | Prop          | Type         | Default     | Required | JSDoc                                                 |
 | ------------- | ------------ | ----------- | -------- | ----------------------------------------------------- |
-| `open`        | `boolean`    | `undefined` | no       | Controlled open state. Use with `v-model:open`.       |
-| `defaultOpen` | `boolean`    | `false`     | no       | Initial open state when uncontrolled.                 |
-| `dismissible` | `boolean`    | `true`      | no       | When true, overlay click and Escape close the dialog. |
-| `size`        | `DialogSize` | `'medium'`  | no       | Panel max-width preset passed to the inner Panel.     |
+| `open`        | `boolean`    | `undefined` | false    | Controlled open state. Use with `v-model:open`.       |
+| `defaultOpen` | `boolean`    | `false`     | false    | Initial open state when uncontrolled.                 |
+| `dismissible` | `boolean`    | `true`      | false    | When true, overlay click and Escape close the dialog. |
+| `size`        | `DialogSize` | `'medium'`  | false    | Panel max-width preset passed to the inner Panel.     |
 
 ## Events
 

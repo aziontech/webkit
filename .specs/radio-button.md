@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: ea010cc3dcfd2aafb81ac6dfb7fb45aa0a13aa439248914fb26f73229ea4e4cf
+checksum: db250d52942ba1c85e8a9025985d9740f8d01fc4424b930531cc9e733751de13
 created: 2026-05-22
 last_updated: 2026-05-23
 ---
@@ -21,11 +21,11 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `modelValue` | `string` | `undefined` | no | Selected value for v-model. |
-| `value` | `string` | `undefined` | no | Option value for this radio instance. |
-| `name` | `string` | `undefined` | no | HTML name shared across a mutually exclusive group. |
-| `disabled` | `boolean` | `false` | no | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | no | id for the native input; links label to control. |
+| `modelValue` | `string` | `undefined` | false | Selected value for v-model. |
+| `value` | `string` | `undefined` | false | Option value for this radio instance. |
+| `name` | `string` | `undefined` | false | HTML name shared across a mutually exclusive group. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `inputId` | `string` | `undefined` | false | id for the native input; links label to control. |
 
 ## Events
 

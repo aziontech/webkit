@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 7e46f151e8210ab9ebd0d695c6c0ada5f08dc8c7db2b1db6592c41a522b52a1b
+checksum: e43932adb94c9ff2d1d1557c897336b8973c63ecc0f95d86e02c1b6011a10f4c
 created: 2026-05-22
 last_updated: 2026-05-29
 ---
@@ -24,7 +24,7 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `size` | `PanelSize` | `undefined` | no | Max width of the panel shell. |
+| `size` | `PanelSize` | `undefined` | false | Max width of the panel shell. |
 
 ## Events
 

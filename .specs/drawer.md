@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 39cb1bcbb94a5fa19e3f558b52e4420ad544cc1eb6849818f0b90dbfd8501472
+checksum: 9ff68fe95159eb76ff5d31cd3c0915de99adc3ca9e09c919e592816c2866a18c
 created: 2026-05-22
 last_updated: 2026-07-15
 ---
@@ -49,11 +49,11 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 | Prop          | Type         | Default     | Required | JSDoc                                                                                                   |
 | ------------- | ------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `open`        | `boolean`    | `undefined` | no       | Controlled open state. Use with `v-model:open`.                                                         |
-| `defaultOpen` | `boolean`    | `false`     | no       | Initial open state when uncontrolled.                                                                   |
-| `dismissible` | `boolean`    | `true`      | no       | When true, overlay click and Escape close the drawer.                                                   |
-| `side`        | `DrawerSide` | `'right'`   | no       | Edge the drawer panel slides from.                                                                      |
-| `size`        | `DrawerSize` | `'medium'`  | no       | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
+| `open`        | `boolean`    | `undefined` | false    | Controlled open state. Use with `v-model:open`.                                                         |
+| `defaultOpen` | `boolean`    | `false`     | false    | Initial open state when uncontrolled.                                                                   |
+| `dismissible` | `boolean`    | `true`      | false    | When true, overlay click and Escape close the drawer.                                                   |
+| `side`        | `DrawerSide` | `'right'`   | false    | Edge the drawer panel slides from.                                                                      |
+| `size`        | `DrawerSize` | `'medium'`  | false    | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
 
 ## Events
 
