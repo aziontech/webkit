@@ -13,12 +13,10 @@
 //   clients/      the client marks for the trust strip, each tagged with the
 //                 artwork (color / light / dark) that drives its theme handling
 //   ClientMark    one client logo, placed correctly on both themes
-//   HeroTitle     a hero band's copy block — eyebrow → h1 → description → actions
-//   SectionTitle  a section's framed, centered header row (h2)
-//   FrameBox      the registration frame — a bordered box with a small square set
-//                 inside each corner
-//   SectionGap    that frame used empty, as the air between two sections (it owns
-//                 the page's vertical rhythm)
+//
+// The framed layout set the pages are built from — FrameBox, SectionGap,
+// SectionTitle and HeroTitle — graduated to the design system and now comes from
+// @aziontech/webkit/{frame-box,section-gap,section-title,hero-title}.
 //
 // These are Site components, not design-system ones: anything reusable across
 // products belongs in @aziontech/webkit instead. The page-composition rules they
@@ -30,7 +28,3 @@ export { default as ClaimChips } from './ClaimChips.vue'
 export { NETWORK_CLAIMS } from './claims.js'
 export { default as ClientMark } from './ClientMark.vue'
 export { CLIENTS } from './clients/index.js'
-export { default as FrameBox } from './FrameBox.vue'
-export { default as HeroTitle } from './HeroTitle.vue'
-export { default as SectionGap } from './SectionGap.vue'
-export { default as SectionTitle } from './SectionTitle.vue'

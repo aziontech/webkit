@@ -20,10 +20,10 @@
   //     for what the sample does.
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import FrameBox from '@aziontech/webkit/frame-box'
   import Overline from '@aziontech/webkit/overline'
 
   import { SectionModule } from './foundations/components/layout/index.js'
-  import { FrameBox } from './ui/index.js'
 
   // The capabilities the design lists, each with its check glyph.
   const capabilities = [
@@ -74,7 +74,7 @@ azion deploy`
          frame shares the top one instead of adding a second line beside it. -->
     <FrameBox
       flush
-      class="border-x-0"
+      borders="y"
     >
       <div class="grid lg:grid-cols-2">
         <!-- The pitch. Its action sits on the panel floor; the copy takes the space

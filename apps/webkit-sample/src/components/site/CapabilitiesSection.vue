@@ -10,7 +10,7 @@
   //
   // Borders, per CONTAINERS.md, are drawn exactly once:
   //   • FrameBox owns the band's top rule and the four registration squares. `flush` lands
-  //     that rule ON the SectionGap above instead of beside it, and `border-x-0` hands the
+  //     that rule ON the SectionGap above instead of beside it, and `borders="y"` hands the
   //     vertical rules back to the column, so SectionModule passes `:divided="false"`.
   //   • Every internal rule is the divider grid's own `gap-px` over the border colour —
   //     which is why each cell fills its own `--bg-canvas` and none draws a border.
@@ -21,11 +21,12 @@
   // registry, so the scenes are built from the same parts (rim light, nodes, connectors)
   // as every other illustration in the system and follow both themes for free.
   import Button from '@aziontech/webkit/button'
+  import FrameBox from '@aziontech/webkit/frame-box'
   import Illustration from '@aziontech/webkit/illustration'
   import Overline from '@aziontech/webkit/overline'
 
   import { CardGrid, SectionModule } from './foundations/components/layout/index.js'
-  import { AiAgentsScene, FrameBox } from './ui/index.js'
+  import { AiAgentsScene } from './ui/index.js'
 
   // One cell per capability. `illustration` names an asset in the webkit Illustration
   // registry, loaded on demand — so a page that never renders this band pays for none of
@@ -74,7 +75,7 @@
   >
     <FrameBox
       flush
-      class="border-x-0"
+      borders="y"
     >
       <!-- Three columns at `lg`. Below that the copy takes the full width and the
            capabilities fall into the 2x2 the grid already gives them, so the band never

@@ -24,8 +24,12 @@
   // `gap-px` rather than from four sets of borders, and a component that would wrap
   // itself in its own bordered column is given `:framed="false"` inside this one.
   import Button from '@aziontech/webkit/button'
+  import FrameBox from '@aziontech/webkit/frame-box'
+  import HeroTitle from '@aziontech/webkit/hero-title'
   import Item from '@aziontech/webkit/item'
   import Overline from '@aziontech/webkit/overline'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionTitle from '@aziontech/webkit/section-title'
   import { useRouter } from 'vue-router'
 
   import BrandCarousel from './BrandCarousel.vue'
@@ -45,16 +49,7 @@
   // band is a FrameBox, not a BannerContainer, so there is no container to name
   // it on. The registry still owns it — this is its named export.
   import { MapBanner } from './ui/banners/index.js'
-  import {
-    ClaimChips,
-    ClientMark,
-    CLIENTS,
-    FrameBox,
-    HeroTitle,
-    NETWORK_CLAIMS,
-    SectionGap,
-    SectionTitle
-  } from './ui/index.js'
+  import { ClaimChips, ClientMark, CLIENTS, NETWORK_CLAIMS } from './ui/index.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -286,7 +281,6 @@ And it stays up when others go down."
     >
       <template #header>
         <SectionTitle
-          height="tall"
           title="Serverless AI-Native Primitives for Autonomous Workloads"
           description="Every primitive stands on its own and shares the same network, identity, and observability. Compose only what a workload needs, and add the rest without moving anything."
         />
@@ -357,7 +351,7 @@ And it stays up when others go down."
          animated globe on the right, then the outcome numbers as their own row of
          registration-framed cells.
 
-         Every rule here is drawn exactly once. `border-x-0` on the full-width panel
+         Every rule here is drawn exactly once. `borders="y"` on the full-width panel
          hands the vertical rules back to the column; `flush` lands its top rule on
          the section gap's bottom one instead of beside it; and the benefit row below
          it carries no borders at all — its seams are the grid's own `gap-px` over the
@@ -370,7 +364,8 @@ And it stays up when others go down."
       <div class="flex flex-col">
         <FrameBox
           flush
-          class="overflow-hidden border-x-0"
+          borders="y"
+          class="overflow-hidden"
         >
           <!-- The network itself, as the frame's backdrop: the pixel world map,
                its route picked out in the accent. It parks in the RIGHT part of
@@ -479,14 +474,14 @@ And it stays up when others go down."
          rows of three, so no cell stretches to half the page.
 
          Every cell of that grid is a registration frame, so the module reads as a lattice
-         of marked corners rather than one marked box: each FrameBox is `:bordered="false"`
+         of marked corners rather than one marked box: each FrameBox is `borders="none"`
          — its four edges are already drawn by the grid's `gap-px` (or by the column, at the
          module's outer edges), so it adds no second hairline and contributes only its
          corner nodes.
 
          The outer FrameBox is what remains of the band itself: it owns the module's top and
          bottom rules — `flush` lands the top one ON the SectionGap above instead of beside
-         it, `border-x-0` hands the vertical rules back to the column, which is why
+         it, `borders="y"` hands the vertical rules back to the column, which is why
          SectionModule passes `:divided="false"` — and it draws NO marks. Its four corners
          are the corners of the outermost cells, which mark them already; leaving `marks` on
          would stack a second square on exactly the same 6px. -->
@@ -497,7 +492,7 @@ And it stays up when others go down."
       <FrameBox
         flush
         :marks="false"
-        class="border-x-0"
+        borders="y"
       >
         <div class="grid gap-px bg-[var(--border-default)]">
           <!-- Header band: headline at the start edge, description + actions at the end
@@ -508,7 +503,7 @@ And it stays up when others go down."
              registers its own two top corners. Without it the module would open on a bare
              edge and only start marking corners halfway down. -->
           <FrameBox
-            :bordered="false"
+            borders="none"
             class="bg-[var(--bg-canvas)]"
           >
             <div
@@ -573,7 +568,7 @@ And it stays up when others go down."
             <FrameBox
               v-for="pillar in platformPillars"
               :key="pillar.label"
-              :bordered="false"
+              borders="none"
               class="bg-[var(--bg-canvas)]"
             >
               <div

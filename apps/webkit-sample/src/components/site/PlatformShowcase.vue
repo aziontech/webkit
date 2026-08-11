@@ -11,8 +11,9 @@
   // SectionContainer owns the frame (`border-x`), this module owns its top rule (`border-t`) and
   // its header's `border-b`, and the four panels are an edge-to-edge `CardGrid variant="divider"`
   // whose 1px gaps are the internal rules. No panel draws a border of its own, and none is rounded.
+  import SectionTitle from '@aziontech/webkit/section-title'
+
   import { CardGrid, SectionModule } from './foundations/components/layout/index.js'
-  import { SectionTitle } from './ui/index.js'
 
   // Panel 1 — commit nodes sitting on the `main` line (left %, on the mid rule).
   const commitNodes = [18, 26, 42, 60, 78]
