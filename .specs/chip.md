@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: aa9ca91fe16be0c61abc721d182cdf9b822887ebac041be5d0e11236e4b89ac1
+checksum: 1a57bc3d723e34b3f8412b4bedf43f9486398fd2e830a7114a552634842a9dc2
 created: 2026-06-23
 last_updated: 2026-08-11
 ---
@@ -109,7 +109,7 @@ import Chip from '@aziontech/webkit/chip'
 | remove (chip dismiss) | **none — the chip does not animate its own removal.** It emits `remove` and leaves presence to the consumer; exit motion belongs to whatever owns the list. The chip sets **no inline `transition`**, so a consumer's own `transition-*` utilities on the root are never overridden (an inline style beats every class, which silently killed consumer-authored chip motion). | — | — |
 | kind / border colour change | `transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance` | DESIGN.md § Interactive states | `motion-reduce:transition-none` |
 | remove button hover/focus state change | `transition-colors duration-fast-02 ease-productive-entrance` | DESIGN.md § Interactive states | `motion-reduce:transition-none` |
-| remove tooltip open / close | owned by `tooltip` (`animate-popup-scale-in` / `animate-popup-scale-out`) | semantic/animations.js | `motion-reduce:animate-none` (from `tooltip`) |
+| remove tooltip open / close | **owned by `tooltip`** — the chip composes it and declares no motion of its own for it; the utilities, their tokens and the reduced-motion fallback are that component's contract, not this one's. | see `.specs/tooltip.md` | from `tooltip` |
 | clickable hover / active (chip body) | `::before` ghost-layer `opacity` overlay (`--bg-hover`) shown on `hover` and `active`, only when `clickable`; `active` also flips the border to `--border-strong` | `before:duration-fast-02 before:ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:before:transition-none` |
 
 ## Tokens
