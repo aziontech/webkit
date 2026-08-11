@@ -33,7 +33,7 @@
     v-bind="$attrs"
     :href="href"
     :data-testid="testId"
-    class="inline-flex w-fit items-center gap-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out outline-none hover:text-(--text-muted) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+    class="inline-flex w-fit items-center gap-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out outline-none visited:text-(--text-default) hover:text-(--text-muted) active:text-(--text-muted) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
   >
     <slot />
   </a>

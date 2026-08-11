@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: f655fbd29dbcb5d42d65c24d19789843df494f1e30da65aeccd2e7fcd675c7e2
+checksum: e718d75c87096dcbbe52d0f7b1cfc25df1c38a4363822d80902540bd8143c53f
 created: 2026-08-10
-last_updated: 2026-08-10
+last_updated: 2026-08-11
 ---
 # Footer — Component Spec
 
@@ -103,7 +103,7 @@ import FooterLink from '@aziontech/webkit/footer-link'
 
 ## States
 
-- Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible` on `footer-link`.
+- Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
 
 ## Motion & Animations
@@ -121,7 +121,7 @@ import FooterLink from '@aziontech/webkit/footer-link'
 | columns grid gap / padding | `var(--spacing-lg)` |
 | column internal gap (title → links) | `var(--spacing-md)` |
 | link stack gap | `var(--spacing-xs)` |
-| social bar border (top) | `var(--border-muted)` |
+| social bar border (top) | `var(--border-width-default)` / `var(--border-muted)` |
 | social bar padding-y | `var(--spacing-md)` |
 | social bar padding-x / cluster gap | `var(--spacing-lg)` / `var(--spacing-md)` |
 | column title typography / color | `.text-label-sm` / `var(--text-muted)` |

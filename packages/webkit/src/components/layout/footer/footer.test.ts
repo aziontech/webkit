@@ -109,6 +109,34 @@ describe('Footer', () => {
       expect(social.contains(getByText('All Systems Operational'))).toBe(true)
       expect(social.querySelector('a[aria-label="Azion home"]')).toBeTruthy()
     })
+
+    it('renders the social bar when only social-start is provided', () => {
+      const { getByTestId } = render({
+        components: compoundComponents,
+        template: `
+          <Footer>
+            <template #social-start>
+              <a href="/" aria-label="Azion home">Azion</a>
+            </template>
+          </Footer>
+        `
+      })
+      expect(getByTestId('layout-footer__social')).toBeTruthy()
+    })
+
+    it('renders the social bar when only social-end is provided', () => {
+      const { getByTestId } = render({
+        components: compoundComponents,
+        template: `
+          <Footer>
+            <template #social-end>
+              <a href="https://status.azion.com/">All Systems Operational</a>
+            </template>
+          </Footer>
+        `
+      })
+      expect(getByTestId('layout-footer__social')).toBeTruthy()
+    })
   })
 
   describe('provide/inject — the root testId flows to every part', () => {
