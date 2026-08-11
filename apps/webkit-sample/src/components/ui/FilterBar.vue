@@ -293,9 +293,8 @@
   // returns the outgoing level's rows too — focusing one of those puts the keyboard on
   // an element that is about to be removed, which drops focus to <body>.
   const levelRows = () => [
-    ...(panelRef.value?.querySelectorAll(
-      `[data-level="${levelKey.value}"] [data-filter-row]`
-    ) ?? [])
+    ...(panelRef.value?.querySelectorAll(`[data-level="${levelKey.value}"] [data-filter-row]`) ??
+      [])
   ]
 
   // Arrow keys walk the rows, because this list IS a menu — Tab alone would make
@@ -466,7 +465,7 @@
                      first row had been squeezed. -->
                 <div
                   v-if="activeField"
-                  class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-xs)]"
+                  class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-xs)] py-[var(--spacing-xs)]"
                 >
                   <IconButton
                     icon="pi pi-angle-left"
@@ -502,9 +501,7 @@
                        thing the user is here to change — a "Search" placeholder would
                        name the control instead, and there are two searches on this
                        page. -->
-                  <div
-                    class="border-b border-[var(--border-default)] p-[var(--spacing-xxs)]"
-                  >
+                  <div class="border-b border-[var(--border-default)] p-[var(--spacing-xs)]">
                     <InputText
                       v-model="query"
                       size="medium"
