@@ -59,5 +59,10 @@
     "name": "password-requirements",
     "path": "src/components/inputs/field-password/password-requirements.ts",
     "limit": "0.3 KB"
+  },
+  {
+    "name": "chip",
+    "path": "src/components/inputs/chip/chip.vue",
+    "limit": "5 KB"
   }
 ]
