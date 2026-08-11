@@ -11,6 +11,10 @@
     inheritAttrs: false
   })
 
+  /** Focusable, enabled elements — used both to trap Tab and to restore focus on close. */
+  const FOCUSABLE_SELECTOR =
+    'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+
   defineSlots<{
     default(): unknown
   }>()
@@ -99,16 +103,25 @@
   }
 
   function focusTrigger() {
-    triggerRef.value?.focus({ preventScroll: true })
+    const trigger = triggerRef.value
+    if (!trigger) return
+    // `PopoverTrigger` is a PASSTHROUGH <span> with no tabindex, so focusing it directly
+    // is a no-op: the focusable thing is the consumer's child (a Button, a link). Calling
+    // `.focus()` on the wrapper therefore left focus wherever it was — and since the
+    // panel is unmounting at that moment, the browser dropped it on <body>, silently
+    // losing the user's place every time an overlay closed with focus inside it.
+    // (Dialog/Drawer triggers do not have this problem: their wrappers carry tabindex="0".)
+    const target = trigger.matches(FOCUSABLE_SELECTOR)
+      ? trigger
+      : (trigger.querySelector<globalThis.HTMLElement>(FOCUSABLE_SELECTOR) ?? trigger)
+    target.focus({ preventScroll: true })
   }
 
   /** Returns the focusable, enabled elements inside the panel, in DOM order. */
   function getFocusable(): globalThis.HTMLElement[] {
     const panel = panelRef.value
     if (!panel) return []
-    const selector =
-      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
-    return Array.from(panel.querySelectorAll<globalThis.HTMLElement>(selector))
+    return Array.from(panel.querySelectorAll<globalThis.HTMLElement>(FOCUSABLE_SELECTOR))
   }
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
