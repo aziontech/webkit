@@ -1,7 +1,9 @@
 import Brand from '@aziontech/webkit/brand'
 import Footer from '@aziontech/webkit/footer'
 import IconButton from '@aziontech/webkit/icon-button'
+import Select from '@aziontech/webkit/select'
 import StatusIndicator from '@aziontech/webkit/status-indicator'
+import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -9,7 +11,9 @@ const IMPORT = [
   "import Brand from '@aziontech/webkit/brand'",
   "import Footer from '@aziontech/webkit/footer'",
   "import IconButton from '@aziontech/webkit/icon-button'",
-  "import StatusIndicator from '@aziontech/webkit/status-indicator'"
+  "import Select from '@aziontech/webkit/select'",
+  "import StatusIndicator from '@aziontech/webkit/status-indicator'",
+  "import { ref } from 'vue'"
 ]
 
 // Compound sub-components registered under their dot-notation names so they
@@ -25,6 +29,10 @@ const components = {
   'Footer.Link': Footer.Link,
   Brand,
   IconButton,
+  'Select.Trigger': Select.Trigger,
+  'Select.Content': Select.Content,
+  'Select.Option': Select.Option,
+  Select,
   StatusIndicator
 }
 
@@ -115,18 +123,49 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
     <a href="/" aria-label="Azion home">
       <Brand />
     </a>
-    <IconButton kind="transparent" icon="pi pi-github" aria-label="Azion on GitHub" href="https://github.com/aziontech" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-linkedin" aria-label="Azion on LinkedIn" href="https://www.linkedin.com/company/aziontech" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-youtube" aria-label="Azion on YouTube" href="https://www.youtube.com/aziontech" target="_blank" />
+    <div class="flex items-center gap-1">
+      <IconButton kind="transparent" icon="pi pi-github" aria-label="Azion on GitHub" href="https://github.com/aziontech" target="_blank" />
+      <IconButton kind="transparent" icon="pi pi-linkedin" aria-label="Azion on LinkedIn" href="https://www.linkedin.com/company/aziontech" target="_blank" />
+      <IconButton kind="transparent" icon="pi pi-youtube" aria-label="Azion on YouTube" href="https://www.youtube.com/aziontech" target="_blank" />
+      <IconButton kind="transparent" icon="pi pi-twitter" aria-label="Azion on X" href="https://x.com/aziontech" target="_blank" />
+      <IconButton kind="transparent" icon="pi pi-instagram" aria-label="Azion on Instagram" href="https://www.instagram.com/aziontech" target="_blank" />
+      <IconButton kind="transparent" icon="pi pi-discord" aria-label="Azion on Discord" href="https://discord.gg/azion" target="_blank" />
+      <IconButton kind="transparent" icon="pi pi-reddit" aria-label="Azion on Reddit" href="https://www.reddit.com/r/azion" target="_blank" />
+    </div>
   </template>
   <template #social-end>
     <StatusIndicator severity="success" label="All Systems Operational" />
+    <div class="w-24">
+      <Select v-model="language" placeholder="Language">
+        <Select.Trigger aria-label="Language" />
+        <Select.Content>
+          <Select.Option
+            v-for="o in languageOptions"
+            :key="o.value"
+            :value="o.value"
+          >{{ o.label }}</Select.Option>
+        </Select.Content>
+      </Select>
+    </div>
   </template>`
+
+const SETUP_SNIPPET = `const language = ref('en')
+const languageOptions = [
+  { value: 'en', label: 'EN' },
+  { value: 'pt-br', label: 'PT-BR' },
+  { value: 'es', label: 'ES' }
+]`
 
 const Template = (args) => ({
   components,
   setup() {
-    return { args }
+    const language = ref('en')
+    const languageOptions = [
+      { value: 'en', label: 'EN' },
+      { value: 'pt-br', label: 'PT-BR' },
+      { value: 'es', label: 'ES' }
+    ]
+    return { args, language, languageOptions }
   },
   template: `<Footer v-bind="args">
 ${FOOTER_CONTENT}
@@ -147,7 +186,7 @@ export const DefaultFooter = {
         story:
           'The footer composed with four link columns and the social bar: brand plus social icon buttons at the start, the system status indicator at the end.'
       },
-      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+      source: { code: toSfc([...IMPORT, '', SETUP_SNIPPET], DEFAULT_MARKUP) }
     }
   }
 }

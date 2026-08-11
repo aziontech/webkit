@@ -35,7 +35,7 @@
     v-bind="$attrs"
     :aria-labelledby="titleId"
     :data-testid="testId"
-    class="flex min-w-0 flex-col gap-(--spacing-md)"
+    class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-lg) md:border-r md:border-(length:--border-width-default) md:border-(--border-default) md:last:border-r-0"
   >
     <span
       :id="titleId"

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: e718d75c87096dcbbe52d0f7b1cfc25df1c38a4363822d80902540bd8143c53f
+checksum: 7cc4efef4305e63c50c44c3a007001c28265e937d6dfaa153a588893ace37118
 created: 2026-08-10
 last_updated: 2026-08-11
 ---
@@ -118,12 +118,17 @@ import FooterLink from '@aziontech/webkit/footer-link'
 |---|---|
 | shell surface | `var(--bg-canvas)` |
 | content max-width | `max-w-(--container-5xl)` |
-| columns grid gap / padding | `var(--spacing-lg)` |
+| columns row gap (mobile 2-row wrap) | `var(--spacing-lg)` |
+| column padding | `var(--spacing-lg)` |
+| column divider (border-right, `md`+) | `var(--border-width-default)` / `var(--border-default)` |
 | column internal gap (title → links) | `var(--spacing-md)` |
 | link stack gap | `var(--spacing-xs)` |
-| social bar border (top) | `var(--border-width-default)` / `var(--border-muted)` |
-| social bar padding-y | `var(--spacing-md)` |
-| social bar padding-x / cluster gap | `var(--spacing-lg)` / `var(--spacing-md)` |
+| social bar border (top) | `var(--border-width-default)` / `var(--border-default)` |
+| social bar height (`md`+) | `h-14` (56px) |
+| social bar padding-y (below `md`) | `var(--spacing-md)` |
+| social bar padding-x | `var(--spacing-lg)` |
+| social bar left-cluster gap (brand ↔ social icons) | `var(--spacing-md)` |
+| social bar right-cluster gap (status ↔ language) | `var(--spacing-lg)` |
 | column title typography / color | `.text-label-sm` / `var(--text-muted)` |
 | link typography / color | `.text-label-sm` / `var(--text-default)` |
 | link hover color | `var(--text-muted)` |

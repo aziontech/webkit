@@ -47,19 +47,19 @@
     <div class="mx-auto flex w-full max-w-(--container-5xl) flex-col">
       <div
         :data-testid="`${testId}__columns`"
-        class="grid w-full grid-cols-2 gap-(--spacing-lg) p-(--spacing-lg) md:grid-cols-4"
+        class="grid w-full grid-cols-2 gap-y-(--spacing-lg) md:grid-cols-4 md:gap-y-0"
       >
         <slot />
       </div>
       <div
         v-if="hasSocialBar"
         :data-testid="`${testId}__social`"
-        class="flex w-full flex-col-reverse gap-(--spacing-md) border-t border-(length:--border-width-default) border-(--border-muted) px-(--spacing-lg) py-(--spacing-md) md:flex-row md:items-center md:justify-between"
+        class="flex w-full flex-col-reverse gap-(--spacing-md) border-t border-(length:--border-width-default) border-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:h-14 md:flex-row md:items-center md:justify-between md:py-0"
       >
         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-md)">
           <slot name="social-start" />
         </div>
-        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-md) md:justify-end">
+        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-lg) md:justify-end">
           <slot name="social-end" />
         </div>
       </div>
