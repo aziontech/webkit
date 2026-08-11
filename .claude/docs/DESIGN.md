@@ -163,11 +163,32 @@ Example from Button — horizontal padding and inner gap:
 
 ### Layout containers (page sections)
 
-Use primitive container width tokens with Tailwind max-width utilities:
+A page does **not** pick its own `max-w-*`. It carries one of the four **container types** the layout
+system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page *is*:
 
-```html
-max-w-(--container-md) max-w-(--container-5xl)
-```
+| Class | Type | Measure token | Today | Use for |
+|---|---|---|---|---|
+| `.layout-column` | Data | `--layout-measure` | 1620px | Lists, detail dashboards |
+| `.layout-column-focused` | Focused | `--layout-measure-focused` | 1024px | Home, single-task multi-column pages |
+| `.layout-column-form` | Form | `--layout-measure-form` | 1024px | Settings, in-page edit forms |
+| `.layout-form-create` | Create | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
+
+Full-bleed is the **absence** of all four, never a `w-full`. The unit that picks a class is the **band**,
+not the file: a tab showing a table is measured as data even when the tab beside it is a form. Within one
+band the class is the same everywhere it must align — the scrolling body *and* its sticky action bar — or
+the footer's buttons drift right of the form they submit.
+
+**The boundary is not part of the measure.** `.layout-boundary` (all three insets) and
+`.layout-boundary-inline` (the sides only, for a sticky bar) widen the cap by exactly the inset when they
+sit on the same block, so a padded page and a self-padded page resolve to the same content column.
+
+Rhythm is two steps and no more: `--layout-section-gap` between the sections of a parent,
+`--layout-group-gap` between the parts inside one section. `.layout-section-start` /
+`.layout-group-start` are the margin form, for a band whose parent cannot carry a `gap`.
+
+Every layout token is a `var()` reference to `--spacing-*` / `--container-*` — never a literal length —
+which is what lets the layout scale inherit the spacing scale's breakpoints instead of restating them.
+Full catalog: **Foundations → Layout** in Storybook.
 
 ### Fixed content widths
 
@@ -612,6 +633,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 - **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
+- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the four container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.

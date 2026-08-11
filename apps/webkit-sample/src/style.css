@@ -1,8 +1,13 @@
 /* Theme tokens + the Tailwind v4 entry are imported from src/main.js
-   (`import '@aziontech/theme'`); see the note there. This file carries only
-   the app's own layout tokens, font faces, icon fonts and shell rules. */
-/* Layout tokens — the container system (boundary / rhythm / measure). */
-@import './styles/layout.css';
+   (`import '@aziontech/theme'`); see the note there. This file carries only the
+   app's own font faces, icon fonts and shell rules.
+
+   The container system (boundary / rhythm / measure) used to live here as
+   src/styles/layout.css. It is now `semantic/layouts` in @aziontech/theme, which
+   is what let its classes become real `@utility` blocks — inside Tailwind's own
+   stylesheet graph they finally support variants (`md:layout-column`), which an
+   app-level file outside that graph never could. Same class names, same var
+   names, so nothing here or in any page changed. */
 /* Shell motion — the route transition and the post-loading content entrance. */
 @import './styles/motion.css';
 /* PrimeIcons — webkit components reference `pi pi-*` glyphs. */

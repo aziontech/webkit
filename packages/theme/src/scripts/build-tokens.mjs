@@ -17,6 +17,10 @@
  *   - `tokens/semantic/illustrations.data.js`
  *                               illustration tokens + the `@property`
  *                               registrations and `@utility` blocks they need
+ *   - `tokens/semantic/layouts.data.js`
+ *                               layout tokens (all derived from --spacing-* /
+ *                               --container-*) + the `@utility` blocks that
+ *                               build the container system on them
  *   - `tokens/primitives/animations/{animate,keyframes}.js`
  *                               animation utilities (`--animate-*`) + `@keyframes`
  *                               definitions + extra CSS (transform-origin) for
@@ -40,6 +44,7 @@ import {
   illustrationsProperties,
   illustrationsUtilities,
 } from '../tokens/semantic/illustrations.data.js';
+import { layoutsData, layoutsUtilities } from '../tokens/semantic/layouts.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
 import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
@@ -101,6 +106,7 @@ const buildFlatModel = () => ({
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
   zIndices: flattenSingleValue(zIndicesData, (k) => `--${k}`),
   illustrations: flattenSingleValue(illustrationsData, (k) => `--${k}`),
+  layouts: flattenSingleValue(layoutsData, (k) => `--${k}`),
   texts: flattenBundle(textsData),
 });
 
@@ -278,8 +284,8 @@ const emitPropertyRegistrations = () =>
  * resolver, and these are applied through variants (`group-hover/card:…`,
  * `motion-reduce:`).
  */
-const emitIllustrationUtilities = () =>
-  Object.entries(illustrationsUtilities)
+const emitUtilities = (utilities) =>
+  Object.entries(utilities)
     .map(([name, decls]) => {
       // An object value is a nested rule (`&::before { … }`), the way the typography
       // utilities nest their `&:hover`; a string value is a plain declaration.
@@ -293,6 +299,18 @@ const emitIllustrationUtilities = () =>
       return `@utility ${name} {\n${body}\n}`;
     })
     .join('\n\n');
+
+const emitIllustrationUtilities = () => emitUtilities(illustrationsUtilities);
+
+/**
+ * The container system as `@utility` blocks — same reason as the illustration and
+ * typography utilities: `@layer components` classes are opaque to the variant
+ * resolver, and a layout class is exactly the kind a consumer wants behind a variant
+ * (`md:layout-column`). This is also what the app-level stylesheet these were promoted
+ * from could not offer: it sat outside Tailwind's stylesheet graph, so `@utility` there
+ * would never have been processed.
+ */
+const emitLayoutUtilities = () => emitUtilities(layoutsUtilities);
 
 /** Emit `@keyframes` blocks at the top level of the stylesheet. */
 const emitKeyframes = () => {
@@ -360,6 +378,7 @@ const emitCssV4 = () => {
     ...(m.spacings._ || {}),
     ...(m.zIndices._ || {}),
     ...(m.illustrations._ || {}),
+    ...(m.layouts._ || {}),
     ...(m.texts._ || {}),
   };
 
@@ -370,6 +389,7 @@ const emitCssV4 = () => {
       ...(m.spacings[bp] || {}),
       ...(m.zIndices[bp] || {}),
       ...(m.illustrations[bp] || {}),
+      ...(m.layouts[bp] || {}),
       ...(m.texts[bp] || {}),
     };
     if (Object.keys(merged).length === 0) continue;
@@ -420,6 +440,8 @@ const emitCssV4 = () => {
     emitTextUtilities(),
     '',
     emitIllustrationUtilities(),
+    '',
+    emitLayoutUtilities(),
     '',
     emitSemanticColorUtilities(),
     '',

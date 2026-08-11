@@ -708,6 +708,16 @@
   --illustration-label-small: 0.5rem;
   --illustration-canvas-width: 10.625rem;
   --illustration-canvas-height: 8rem;
+  --layout-boundary-inline: var(--spacing-lg);
+  --layout-boundary-end: var(--spacing-lg);
+  --layout-boundary-start: var(--spacing-lg);
+  --layout-section-gap: var(--spacing-xl);
+  --layout-group-gap: var(--spacing-md);
+  --layout-measure: var(--container-7xl);
+  --layout-measure-focused: var(--container-4xl);
+  --layout-measure-form: var(--container-4xl);
+  --layout-measure-form-create: var(--container-5xl);
+  --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
   --text-big-number-md-font-weight: 400;
@@ -1345,6 +1355,63 @@
 @utility illustration-gauge-readout {
   counter-reset: illustration-gauge var(--illustration-gauge-value, 0);
   &::before { content: counter(illustration-gauge); }
+}
+
+@utility layout-boundary {
+  padding-inline: var(--layout-boundary-inline);
+  padding-block-start: var(--layout-boundary-start);
+  padding-block-end: var(--layout-boundary-end);
+}
+
+@utility layout-boundary-inline {
+  padding-inline: var(--layout-boundary-inline);
+}
+
+@utility layout-section-start {
+  margin-block-start: var(--layout-boundary-start);
+  &:first-child { margin-block-start: 0; }
+}
+
+@utility layout-group-start {
+  margin-block-start: var(--layout-group-gap);
+  &:first-child { margin-block-start: 0; }
+}
+
+@utility layout-column {
+  --layout-column-measure: var(--layout-measure);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-column-focused {
+  --layout-column-measure: var(--layout-measure-focused);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-column-form {
+  --layout-column-measure: var(--layout-measure-form);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-form-create {
+  --layout-column-measure: var(--layout-measure-form-create);
+  --layout-measure-control: var(--container-md);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-field-control {
+  &:not(#\#) { display: flex; flex: 1 1 0%; justify-content: flex-end; max-width: var(--layout-measure-control); }
 }
 
 @utility bg-surface-0 { background-color: var(--surface-0); }
