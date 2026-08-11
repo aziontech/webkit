@@ -101,6 +101,7 @@ const CLAUDE_BUNDLE = [
   'skills/webkit-ui-states/SKILL.md',
   'skills/webkit-form/SKILL.md',
   'skills/webkit-tables/SKILL.md',
+  'skills/webkit-lists/SKILL.md',
   'skills/webkit-navigation/SKILL.md',
   'skills/webkit-microcopy/SKILL.md',
   'skills/webkit-baseline-ui/SKILL.md',

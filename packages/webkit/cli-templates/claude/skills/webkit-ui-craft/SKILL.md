@@ -1,8 +1,8 @@
 ---
 name: webkit-ui-craft
-description: Umbrella entry for building product UI on @aziontech/webkit with taste and PRO UX. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, tables, navigation, microcopy), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
+description: Umbrella entry for building product UI on @aziontech/webkit with taste and PRO UX. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, tables, lists, navigation, microcopy), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
 status: active
-last_updated: 2026-08-05
+last_updated: 2026-08-11
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-tokens, webkit-accessibility, ui-verify]
 ---
@@ -22,7 +22,8 @@ webkit primitives.
 - `/webkit-ui-craft` — apply the principles below to all UI work in this conversation and route to the
   right child skill for the task at hand.
 - `/webkit-ui-craft <file>` — run the progression as a review: structure (`/webkit-ux-heuristics` →
-  `/webkit-ui-states` → `/webkit-form` → `/webkit-navigation` → `/webkit-microcopy`) → foundation (`/webkit-baseline-ui`) →
+  `/webkit-ui-states` → `/webkit-form` → `/webkit-tables` → `/webkit-lists` → `/webkit-navigation` →
+  `/webkit-microcopy`) → foundation (`/webkit-baseline-ui`) →
   cross-cutting quality (`/webkit-theming-dark-mode`, `/webkit-data-viz`) → polish
   (`/webkit-motion-polish` → `/webkit-impeccable-polish`) → verify (`/webkit-ui-verify`). Output each
   child skill's findings under its own heading.
@@ -92,6 +93,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 | Structure  | Full loading/empty/error/partial state surface + async scope-lock & toasts                | `/webkit-ui-states`         |
 | Structure  | Accessible forms: fieldset/legend, submit-time required/invalid                           | `/webkit-form`              |
 | Structure  | Data tables: data-driven `<Table :data :columns>`, toolbar, internal scroll, cell recipes | `/webkit-tables`            |
+| Structure  | The index page around the table: one band, search vs filters, the chip filter bar         | `/webkit-lists`             |
 | Structure  | The two console shells; one GlobalHeader; user always visible                             | `/webkit-navigation`        |
 | Structure  | Every string: punctuation, sentence case, label vs message, one word per concept          | `/webkit-microcopy`         |
 | Foundation | Deslop: components-only, tokens-only, hierarchy, rhythm, containers                       | `/webkit-baseline-ui`       |

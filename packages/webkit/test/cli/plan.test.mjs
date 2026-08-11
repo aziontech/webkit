@@ -365,13 +365,15 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
       '.claude/skills/webkit-usage/SKILL.md',
-      // UI-craft pack (15 skills: the redundancy/false-positive pass + webkit-tables +
-      // webkit-microcopy — Azion product copy rules, unlike the generic content-microcopy dropped below).
+      // UI-craft pack (16 skills: the redundancy/false-positive pass + webkit-tables +
+      // webkit-lists (the page around the table) + webkit-microcopy — Azion product copy
+      // rules, unlike the generic content-microcopy dropped below).
       '.claude/skills/webkit-ui-craft/SKILL.md',
       '.claude/skills/webkit-ux-heuristics/SKILL.md',
       '.claude/skills/webkit-ui-states/SKILL.md',
       '.claude/skills/webkit-form/SKILL.md',
       '.claude/skills/webkit-tables/SKILL.md',
+      '.claude/skills/webkit-lists/SKILL.md',
       '.claude/skills/webkit-navigation/SKILL.md',
       '.claude/skills/webkit-microcopy/SKILL.md',
       '.claude/skills/webkit-baseline-ui/SKILL.md',
