@@ -162,7 +162,7 @@ const openZoneActions = (event, row) =>
 </script>
 
 <template>
-  <AppLayout active="home" :breadcrumb="[{ label: 'Home' }]">
+  <AppLayout active="overview" :breadcrumb="[{ label: 'Overview' }]">
     <main class="layout-column flex flex-col gap-[var(--layout-boundary-start)] xl:flex-row xl:items-start xl:gap-[var(--layout-section-gap)]">
       <!-- Primary column -->
       <div class="flex min-w-0 flex-1 flex-col">

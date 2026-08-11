@@ -78,29 +78,26 @@
 
   // Azion Console navigation.
   //
-  // Four top-level destinations, then the product areas as LABELLED GROUPS, then Settings as
-  // a drill. A product area is a section title, not a control: every product in the console
-  // is one click from the rail, so the areas exist to separate the rows — not to fold them.
-  // Nothing at the root nests, so nothing has to be opened before it can be reached.
+  // Three top-level destinations, then the product areas as LABELLED GROUPS, then More. A
+  // product area is a section title, not a control: every product in the console is one click
+  // from the rail, so the areas exist to separate the rows — not to fold them. Nothing at the
+  // root nests, so nothing has to be opened before it can be reached.
   // Items with a `path` route; the rest highlight only.
   const NAV_TREE = [
     // The destinations come first, unlabeled — the block itself carries the separation from
-    // the titled areas below it.
+    // the titled areas below it. Three rows sit here: where the tenant stands (Overview), what
+    // it serves (Workloads), and what it has shipped (Deployments). Everything else is a
+    // product area, and the areas are titled — so an untitled row at the top means "this is
+    // not one product", which is true of exactly these three.
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' },
+        { id: 'overview', label: 'Overview', icon: 'ai ai-home', path: '/home' },
         { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
         {
           id: 'deployments',
           label: 'Deployments',
           icon: 'ai ai-deploy-pillar',
           path: '/deployments'
-        },
-        {
-          id: 'marketplace',
-          label: 'Marketplace',
-          icon: 'ai ai-marketplace',
-          path: '/marketplace'
         }
       ]
     },
@@ -122,6 +119,20 @@
       ]
     },
     {
+      label: 'Secure',
+      items: [
+        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall' },
+        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
+        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules' },
+        {
+          id: 'certificate-manager',
+          label: 'Certificate Manager',
+          icon: 'ai ai-digital-certificates'
+        },
+        { id: 'network-lists', label: 'Network Lists', icon: 'ai ai-network-lists' }
+      ]
+    },
+    {
       label: 'Store',
       items: [
         {
@@ -140,20 +151,6 @@
       ]
     },
     {
-      label: 'Secure',
-      items: [
-        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall' },
-        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
-        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules' },
-        {
-          id: 'certificate-manager',
-          label: 'Certificate Manager',
-          icon: 'ai ai-digital-certificates'
-        },
-        { id: 'network-lists', label: 'Network Lists', icon: 'ai ai-network-lists' }
-      ]
-    },
-    {
       label: 'Observe',
       items: [
         { id: 'data-stream', label: 'Data Stream', icon: 'ai ai-data-stream' },
@@ -163,6 +160,11 @@
         { id: 'real-time-purge', label: 'Real-Time Purge', icon: 'ai ai-real-time-purge' }
       ]
     },
+    // More: where the tenant gets more to run (Marketplace) and how it is configured
+    // (Settings). Neither is a product area, so neither sits under a product title — and the
+    // block is titled all the same, because an untitled block at the BOTTOM of a titled list
+    // reads as leftovers rather than as its own area.
+    //
     // Drill: `kind: 'drill'` replaces the whole menu with Settings' own menu instead of
     // expanding under it — the console's second-level pattern. The Back row that returns from
     // it is declared once on the Menu below and renders nothing at the root level.
@@ -173,7 +175,14 @@
     // it do — it is one of the rail's destinations, on their column. An inline trigger would
     // not: that one heads the rows it expands beneath it, and the column belongs to them.
     {
+      label: 'More',
       items: [
+        {
+          id: 'marketplace',
+          label: 'Marketplace',
+          icon: 'ai ai-marketplace',
+          path: '/marketplace'
+        },
         {
           id: 'settings',
           label: 'Settings',
@@ -337,18 +346,23 @@
     if (target) emit('navigate', event, target)
   }
 
-  // The palette mirrors the rail: a titled group carries its title straight through as the
-  // heading, and inside an untitled one consecutive plain destinations share an unheaded
-  // block while each container (the Settings drill) becomes its own heading.
+  // The palette mirrors the rail: consecutive plain destinations share their group's title as
+  // the heading (blank for the untitled top block), and each container — the Settings drill —
+  // becomes its own heading instead. A container's leaves have to be headed by the container:
+  // read under "More", "General" and "Billing & Plan" say nothing about which area they
+  // configure, and the rail's own second level is the only place that context exists.
   const paletteGroups = computed(() =>
     navGroups.value.flatMap((group, groupIndex) => {
-      if (group.label) {
-        return [{ key: `area-${groupIndex}`, heading: group.label, items: menuLeaves(group.items) }]
-      }
       const blocks = []
       let run = []
       const flush = () => {
-        if (run.length) blocks.push({ key: `top-${blocks.length}`, heading: '', items: run })
+        if (run.length) {
+          blocks.push({
+            key: `area-${groupIndex}-${blocks.length}`,
+            heading: group.label ?? '',
+            items: menuLeaves(run)
+          })
+        }
         run = []
       }
       for (const item of group.items) {
