@@ -54,7 +54,7 @@
       <div
         v-if="hasSocialBar"
         :data-testid="`${testId}__social`"
-        class="flex w-full flex-col-reverse gap-(--spacing-md) border-t border-(length:--border-width-default) border-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:h-14 md:flex-row md:items-center md:justify-between md:py-0"
+        class="flex w-full flex-col-reverse gap-(--spacing-md) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:h-14 md:flex-row md:items-center md:justify-between md:py-0"
       >
         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-md)">
           <slot name="social-start" />
