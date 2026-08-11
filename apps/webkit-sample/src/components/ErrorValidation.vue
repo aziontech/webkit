@@ -353,7 +353,7 @@ const submit = async () => {
     <!-- The scroll container the positional anchor measures against. -->
     <main
       ref="formScroll"
-      class="min-h-0 flex-1 overflow-auto"
+      class="page-enter min-h-0 flex-1 overflow-auto"
     >
       <form
         class="flex min-h-full flex-col"

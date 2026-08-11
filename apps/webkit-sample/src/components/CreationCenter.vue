@@ -284,7 +284,7 @@
          TemplateBrowser's `scrollable`). Below `lg` the two columns stack, so
          the page scrolls normally — a clamped stack would squeeze both halves
          into unusable slivers. -->
-    <main class="flex min-w-0 flex-1 flex-col overflow-auto lg:min-h-0 lg:overflow-hidden">
+    <main class="page-enter flex min-w-0 flex-1 flex-col overflow-auto lg:min-h-0 lg:overflow-hidden">
       <!-- `.layout-boundary` — the same inset every other page carries, instead of
            the inline `px`/`pt` pair this used to spell out. That pair had no
            `padding-block-end` at all, so below `lg` (where the page scrolls) the

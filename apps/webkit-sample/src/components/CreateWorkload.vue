@@ -165,7 +165,7 @@ const saveAndDeploy = () => persist({ deploy: true });
       @back="cancel"
       @navigate="cancel"
     />
-    <main class="min-h-0 flex-1 overflow-auto">
+    <main class="page-enter min-h-0 flex-1 overflow-auto">
       <form
         class="flex min-h-full flex-col"
         aria-label="Create Workload"

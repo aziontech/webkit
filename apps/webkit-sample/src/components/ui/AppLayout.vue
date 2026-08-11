@@ -420,8 +420,25 @@
            one step more at the top so the header's bottom border gets air
            below it. Retuning the boundary is a one-line edit in that file. -->
       <div class="flex min-w-0 flex-1 flex-col">
+        <!--
+          THE ROUTE TRANSITION lives here, on the content zone alone: the page
+          arrives from the left and travels right into place (`.page-enter`, see
+          src/styles/motion.css), while the header and the rail — the same chrome
+          before and after — stay put. Sliding those would read as a full reload
+          of an app that did not reload.
+
+          `:key="route.path"`, and the path rather than the full path: most
+          routes mount their own component, so the entrance would already play
+          on mount, but one component serves several paths (Settings owns
+          /account, /account/users, /account/teams …) and a detail view stays
+          mounted across a change of id. Keying on the path replays the arrival
+          for those too. The QUERY is deliberately excluded — `?tab=`, a filter
+          or the carried email is the same page answering differently, and
+          re-entering it on every keystroke would be noise.
+        -->
         <div
-          class="min-h-0 flex-1 overflow-auto"
+          :key="route.path"
+          class="page-enter min-h-0 flex-1 overflow-auto"
           :class="{ 'layout-boundary': padded }"
         >
           <slot />

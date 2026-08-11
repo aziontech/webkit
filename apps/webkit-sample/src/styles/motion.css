@@ -1,0 +1,76 @@
+/* ---------------------------------------------------------------------------
+ * Motion — the app shell's arrivals.
+ *
+ * Two classes, one per kind of arrival, both of them shell-level: a page
+ * arriving, and content arriving inside a page that is already there.
+ *
+ * .page-enter — THE ROUTE TRANSITION. Every console navigation brings the page
+ *   in along +X: it starts one boundary step to the LEFT of where it lands and
+ *   travels right into place while it fades up. The direction is the whole
+ *   point — navigation lives on the left edge of the app, so a page that
+ *   arrives from that edge reads as coming FROM the row that was clicked. A
+ *   plain fade has no origin, and a page arriving from the right would read as
+ *   going BACK. Only the content zone moves; the header and the rail are the
+ *   same chrome before and after, and sliding them would announce a reload.
+ *
+ * .content-enter — CONTENT SETTLING after a loading window (Home's usage and
+ *   resources, once the skeletons resolve). It rises a hair instead of
+ *   travelling: the page itself is already in place and only what is inside it
+ *   changed, so a second horizontal slide would re-announce the whole page.
+ *   `--content-enter-delay` staggers a follower — set it per element so a
+ *   two-column page assembles in reading order instead of popping as one slab.
+ *
+ * KEYFRAMES, NOT TRANSITIONS, and deliberately with no `forwards` fill: an
+ * animation that does not fill leaves NO `translate` on the element once it
+ * ends. That matters here — the page-enter box IS the scroll container, and a
+ * lingering transform would make it a containing block for any `position:
+ * fixed` descendant and change what its sticky children measure against.
+ *
+ * Timing comes from @aziontech/theme's motion tokens (moderate-02 with the
+ * productive-entrance curve): the pairing the DS already uses for a panel of
+ * content arriving, so a page and the components on it move as one system.
+ * Both classes are inert under `prefers-reduced-motion`.
+ * ------------------------------------------------------------------------ */
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    translate: calc(var(--layout-boundary-inline) * -1) 0;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes contentEnter {
+  from {
+    opacity: 0;
+    translate: 0 var(--spacing-xs);
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.page-enter {
+  animation: pageEnter var(--transition-duration-moderate-02)
+    var(--ease-productive-entrance);
+}
+
+.content-enter {
+  /* `backwards` so a staggered follower holds its offset through the delay
+     instead of showing the landed state and then jumping back to start. */
+  animation: contentEnter var(--transition-duration-moderate-02)
+    var(--ease-productive-entrance) var(--content-enter-delay, 0s) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .content-enter {
+    animation: none;
+  }
+}

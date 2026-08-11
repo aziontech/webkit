@@ -17,11 +17,12 @@ import Table from "@aziontech/webkit/table";
 import Tag from "@aziontech/webkit/tag";
 import { toast } from "@aziontech/webkit/toast";
 import Tooltip from "@aziontech/webkit/tooltip";
-import { computed, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 import { useTenancyReload } from "../lib/tenancy-reload";
 import AppLayout from "./ui/AppLayout.vue";
 import ContrastBanner from "./ui/ContrastBanner.vue";
+import HomeWire from "./ui/HomeWire.vue";
 
 // Account-level usage. `value` + `unit` is the reading; `percent` drives the
 // small progress bar showing how much of the plan allowance is consumed.
@@ -211,6 +212,27 @@ const filterOptions = Object.entries(resources).map(([value, { label }]) => ({
 // skeletons and come back re-read (src/lib/tenancy-reload.js).
 const { tenancyReloading } = useTenancyReload();
 
+// THE COLD ARRIVAL. Overview is the console's landing page and nothing on it is
+// held: account usage is metered per scope and the resource list is a query. So
+// the page opens as its own WIRE (./ui/HomeWire.vue) and settles once, which is a
+// different window from the tenancy re-read below and deliberately handled
+// differently — arriving there is no page yet to leave standing, whereas a scope
+// switch has a page on screen whose readings are merely stale, so that one keeps
+// the page and swaps only its numbers for skeletons.
+//
+// Long enough to read as a fetch, short enough that nobody waits for it. Shorter
+// than the tenancy reload's 900ms on purpose: this window lands on a first paint,
+// where the shell's own entrance is still arriving underneath it.
+const LOAD_MS = 620;
+const arriving = ref(true);
+let arrivalTimer;
+onMounted(() => {
+  arrivalTimer = setTimeout(() => {
+    arriving.value = false;
+  }, LOAD_MS);
+});
+onUnmounted(() => clearTimeout(arrivalTimer));
+
 const selected = ref("workloads");
 const current = computed(() => resources[selected.value]);
 const isEmpty = computed(() => current.value.rows.length === 0);
@@ -238,8 +260,8 @@ const onRowAction = (event, value, row) => {
 </script>
 
 <template>
-  <AppLayout active="home" :breadcrumb="[{ label: 'Home' }]">
-    <!-- Home is a short page — two stacked blocks that never fill a desktop
+  <AppLayout active="overview" :breadcrumb="[{ label: 'Overview' }]">
+    <!-- Overview is a short page — two stacked blocks that never fill a desktop
          viewport — so it centers in the scroll area instead of hanging from the
          top edge with a void below. `min-h-full`, never `h-full`: min-height
          resolves against the padded scroll box, and once the content does
@@ -248,6 +270,22 @@ const onRowAction = (event, value, row) => {
     <div
       class="layout-column-focused flex min-h-full flex-col justify-center"
     >
+      <!-- THE COLD ARRIVAL: the page's own wire, in the page's own column.
+           Everything below is read rather than held — usage is metered per
+           tenancy scope, the resource list is a query — so Overview opens as its
+           own shape in placeholder fill and settles once the read lands. The wire
+           is the same component the session teardown draws for this route family
+           (./ui/HomeWire.vue), so the layout the reader sees for that beat is
+           exactly the layout that resolves: nothing shifts on arrival.
+
+           A wire and not in-place skeletons, for THIS window only: on a cold
+           arrival there is no page yet to leave standing. A tenancy switch is the
+           other case — the page is already there and only its readings are stale,
+           so that window keeps the numbers' own skeletons (bound to
+           `tenancyReloading` below) instead of tearing the page down. -->
+      <HomeWire v-if="arriving" />
+
+      <template v-else>
       <div class="flex justify-center">
         <ContrastBanner />
       </div>
@@ -259,11 +297,28 @@ const onRowAction = (event, value, row) => {
            pile up below the cards. `grow`, never `flex-1` — a zero flex-basis
            makes a column's intrinsic height contribution ill-defined, and that
            contribution is exactly what the row height derives from. -->
-      <main class="layout-section-start flex flex-col gap-[var(--layout-boundary-start)] lg:flex-row lg:gap-[var(--layout-section-gap)]">
+      <!--
+        THE ENTRANCE. Replacing the wire MOUNTS these two columns, so each one
+        rises into place as it arrives (`.content-enter`, src/styles/motion.css) —
+        usage first, resources one beat behind it, so the page assembles in
+        reading order instead of popping as one slab. Simultaneous arrival reads
+        as a swap; a stagger reads as choreography (the same reasoning as the
+        signed-out screens' entrance, ../lib/auth-entrance.js).
+
+        It rises rather than travelling sideways: the page itself already arrived
+        from the left a beat ago (the route transition), and only what is inside
+        it changed now. The delay token is one fast-01 (70ms) — long enough to
+        read as an order, short enough that the two still land together.
+      -->
+      <main
+        class="layout-section-start flex flex-col gap-[var(--layout-boundary-start)] lg:flex-row lg:gap-[var(--layout-section-gap)]"
+      >
         <!-- Left (minor): account usage — one metric per card, its reading beside a
              small progress bar showing plan consumption. On mobile it spans the
              full width above the resources; on `md`+ it becomes the narrow rail. -->
-        <aside class="flex w-full shrink-0 flex-col gap-[var(--layout-group-gap)] lg:max-w-[var(--container-xs)]">
+        <aside
+          class="content-enter flex w-full shrink-0 flex-col gap-[var(--layout-group-gap)] lg:max-w-[var(--container-xs)]"
+        >
           <div class="flex min-h-[var(--size-8)] items-center px-[var(--spacing-xs)]">
             <h2 class="text-heading-xxs text-[var(--text-default)]">Usage</h2>
           </div>
@@ -325,8 +380,11 @@ const onRowAction = (event, value, row) => {
         </aside>
 
         <!-- Right (major): resources with a filter Dropdown whose selected option
-             carries the checkmark; choosing one swaps the card below. -->
-        <section class="flex w-full min-w-0 flex-col gap-[var(--layout-group-gap)] lg:flex-1">
+             carries the checkmark; choosing one swaps the card below.
+             The entrance's follower — one fast-01 behind the usage column. -->
+        <section
+          class="content-enter flex w-full min-w-0 flex-col gap-[var(--layout-group-gap)] lg:flex-1 [--content-enter-delay:var(--transition-duration-fast-01)]"
+        >
           <header class="flex min-h-[var(--size-8)] items-center gap-[var(--spacing-sm)] px-[var(--spacing-xs)]">
             <h2 class="text-heading-xxs text-[var(--text-default)]">Resources</h2>
 
@@ -482,6 +540,7 @@ const onRowAction = (event, value, row) => {
         </CardBox>
         </section>
       </main>
+      </template>
     </div>
   </AppLayout>
 </template>

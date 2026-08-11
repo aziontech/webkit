@@ -3,6 +3,8 @@
    the app's own layout tokens, font faces, icon fonts and shell rules. */
 /* Layout tokens — the container system (boundary / rhythm / measure). */
 @import './styles/layout.css';
+/* Shell motion — the route transition and the post-loading content entrance. */
+@import './styles/motion.css';
 /* PrimeIcons — webkit components reference `pi pi-*` glyphs. */
 @import 'primeicons/primeicons.css';
 /* Azion icon library — monochrome brand/UI glyphs (`ai ai-*`, colored via

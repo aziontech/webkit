@@ -44,6 +44,8 @@
   import { computed, onMounted, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
+  import HomeWire from './HomeWire.vue'
+
   const route = useRoute()
 
   // Fallbacks are only ever used if the shell is somehow not on screen when the
@@ -121,9 +123,6 @@
 
   // A resource page's tabs, at the widths real tab labels run to.
   const DETAIL_TABS = ['6rem', '3rem', '7.5rem', '8rem', '9rem', '6.5rem']
-
-  // Home's left rail: one card per usage metric.
-  const HOME_METRICS = 4
 </script>
 
 <template>
@@ -387,80 +386,16 @@
           </div>
 
           <!-- HOME — the narrow usage rail beside the resources card, centred in
-               the scroll area the way the real page centres itself. -->
+               the scroll area the way the real page centres itself. The shape
+               itself is ./HomeWire.vue, because Overview shows the same wire on a
+               cold arrival: two hosts, one shape, so a layout change to that page
+               cannot leave one of them drawing a page that no longer exists. -->
           <div
             v-else
             :class="columnClass"
             class="flex min-h-full min-w-0 flex-col justify-center"
           >
-            <div
-              class="flex flex-col gap-[var(--layout-boundary-start)] lg:flex-row lg:gap-[var(--layout-section-gap)]"
-            >
-              <div
-                class="flex w-full shrink-0 flex-col gap-[var(--layout-group-gap)] lg:max-w-[var(--container-xs)]"
-              >
-                <Skeleton
-                  width="4rem"
-                  height="1rem"
-                />
-                <div
-                  class="grid auto-rows-fr grid-cols-2 gap-[var(--layout-group-gap)] lg:grid-cols-1"
-                >
-                  <CardBox
-                    v-for="metric in HOME_METRICS"
-                    :key="metric"
-                  >
-                    <template #content>
-                      <div class="flex flex-col gap-[var(--spacing-md)]">
-                        <Skeleton
-                          width="60%"
-                          height="0.875rem"
-                        />
-                        <Skeleton
-                          width="40%"
-                          height="1.75rem"
-                        />
-                      </div>
-                    </template>
-                  </CardBox>
-                </div>
-              </div>
-
-              <div class="flex min-w-0 grow flex-col gap-[var(--layout-group-gap)]">
-                <Skeleton
-                  width="7rem"
-                  height="1rem"
-                />
-                <CardBox :padded="false">
-                  <template #content>
-                    <div
-                      v-for="row in 6"
-                      :key="row"
-                      class="flex items-center gap-[var(--spacing-md)] px-[var(--spacing-md)] py-[var(--spacing-md)]"
-                      :class="
-                        row > 1
-                          ? 'border-t-[length:var(--border-width-default)] border-[var(--border-default)]'
-                          : ''
-                      "
-                    >
-                      <Skeleton
-                        width="1.5rem"
-                        height="1.5rem"
-                      />
-                      <Skeleton
-                        :width="row % 2 ? '38%' : '28%'"
-                        height="0.875rem"
-                      />
-                      <Skeleton
-                        class="ml-auto"
-                        width="4rem"
-                        height="0.75rem"
-                      />
-                    </div>
-                  </template>
-                </CardBox>
-              </div>
-            </div>
+            <HomeWire />
           </div>
         </div>
 

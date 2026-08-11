@@ -251,7 +251,7 @@
          offset using the theme easing tokens. -->
     <main
       ref="flowScroll"
-      class="relative min-w-0 flex-1 overflow-auto"
+      class="page-enter relative min-w-0 flex-1 overflow-auto"
     >
       <!-- Success is the one moment in the flow worth marking as ours: a linear
            primary glow on the content background behind the card — not on the
