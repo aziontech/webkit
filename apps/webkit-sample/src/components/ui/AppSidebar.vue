@@ -112,24 +112,50 @@
           icon: 'ai ai-edge-application',
           path: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions' },
+        {
+          id: 'functions',
+          label: 'Functions',
+          icon: 'ai ai-edge-functions',
+          path: '/functions'
+        },
         { id: 'variables', label: 'Variables', icon: 'ai ai-variables', path: '/variables' },
-        { id: 'connectors', label: 'Connectors', icon: 'ai ai-edge-connectors' },
-        { id: 'custom-pages', label: 'Custom Pages', icon: 'ai ai-custom-pages' }
+        {
+          id: 'connectors',
+          label: 'Connectors',
+          icon: 'ai ai-edge-connectors',
+          path: '/connectors'
+        },
+        {
+          id: 'custom-pages',
+          label: 'Custom Pages',
+          icon: 'ai ai-custom-pages',
+          path: '/custom-pages'
+        }
       ]
     },
     {
       label: 'Secure',
       items: [
-        { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall' },
+        {
+          id: 'firewall',
+          label: 'Firewall',
+          icon: 'ai ai-edge-firewall',
+          path: '/firewall'
+        },
         { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
-        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules' },
+        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', path: '/waf-rules' },
         {
           id: 'certificate-manager',
           label: 'Certificate Manager',
-          icon: 'ai ai-digital-certificates'
+          icon: 'ai ai-digital-certificates',
+          path: '/certificates'
         },
-        { id: 'network-lists', label: 'Network Lists', icon: 'ai ai-network-lists' }
+        {
+          id: 'network-lists',
+          label: 'Network Lists',
+          icon: 'ai ai-network-lists',
+          path: '/network-lists'
+        }
       ]
     },
     {
@@ -153,11 +179,31 @@
     {
       label: 'Observe',
       items: [
-        { id: 'data-stream', label: 'Data Stream', icon: 'ai ai-data-stream' },
-        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse' },
-        { id: 'real-time-metrics', label: 'Real-Time Metrics', icon: 'ai ai-real-time-metrics' },
-        { id: 'real-time-events', label: 'Real-Time Events', icon: 'ai ai-real-time-events' },
-        { id: 'real-time-purge', label: 'Real-Time Purge', icon: 'ai ai-real-time-purge' }
+        {
+          id: 'data-stream',
+          label: 'Data Stream',
+          icon: 'ai ai-data-stream',
+          path: '/data-stream'
+        },
+        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', path: '/edge-pulse' },
+        {
+          id: 'real-time-metrics',
+          label: 'Real-Time Metrics',
+          icon: 'ai ai-real-time-metrics',
+          path: '/real-time-metrics'
+        },
+        {
+          id: 'real-time-events',
+          label: 'Real-Time Events',
+          icon: 'ai ai-real-time-events',
+          path: '/real-time-events'
+        },
+        {
+          id: 'real-time-purge',
+          label: 'Real-Time Purge',
+          icon: 'ai ai-real-time-purge',
+          path: '/real-time-purge'
+        }
       ]
     },
     // More: where the tenant gets more to run (Marketplace) and how it is configured

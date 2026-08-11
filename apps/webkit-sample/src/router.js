@@ -7,7 +7,9 @@ import AsyncDeployment from './components/AsyncDeployment.vue'
 import AuthErrors from './components/AuthErrors.vue'
 import BucketBrowser from './components/BucketBrowser.vue'
 import CardBoxSaves from './components/CardBoxSaves.vue'
+import Certificates from './components/Certificates.vue'
 import CheckInbox from './components/CheckInbox.vue'
+import Connectors from './components/Connectors.vue'
 import CreateApplication from './components/CreateApplication.vue'
 import CreateOrganization from './components/CreateOrganization.vue'
 import CreateSqlDatabase from './components/CreateSqlDatabase.vue'
@@ -15,7 +17,9 @@ import CreateTeam from './components/CreateTeam.vue'
 import CreateWorkload from './components/CreateWorkload.vue'
 import CreateZone from './components/CreateZone.vue'
 import CreationCenter from './components/CreationCenter.vue'
+import CustomPages from './components/CustomPages.vue'
 import Dashboard from './components/Dashboard.vue'
+import DataStream from './components/DataStream.vue'
 import DeploymentDetail from './components/DeploymentDetail.vue'
 import Deployments from './components/Deployments.vue'
 import DeployTemplate from './components/DeployTemplate.vue'
@@ -26,8 +30,11 @@ import DrawerForm from './components/DrawerForm.vue'
 import DrawerItemGroups from './components/DrawerItemGroups.vue'
 import EdgeDns from './components/EdgeDns.vue'
 import EdgeDnsZoneDetail from './components/EdgeDnsZoneDetail.vue'
+import EdgePulse from './components/EdgePulse.vue'
 import ErrorValidation from './components/ErrorValidation.vue'
+import Firewall from './components/Firewall.vue'
 import FormsIndex from './components/FormsIndex.vue'
+import Functions from './components/Functions.vue'
 import Home from './components/Home.vue'
 import InPageForm from './components/InPageForm.vue'
 import ItemGroupSaves from './components/ItemGroupSaves.vue'
@@ -36,10 +43,14 @@ import LoginScreen from './components/LoginScreen.vue'
 import ManageResources from './components/ManageResources.vue'
 import Marketplace from './components/Marketplace.vue'
 import NestedDrawer from './components/NestedDrawer.vue'
+import NetworkLists from './components/NetworkLists.vue'
 import ObjectStorage from './components/ObjectStorage.vue'
 import Onboarding from './components/Onboarding.vue'
 import PersonalTokens from './components/PersonalTokens.vue'
 import Playground from './components/Playground.vue'
+import RealTimeEvents from './components/RealTimeEvents.vue'
+import RealTimeMetrics from './components/RealTimeMetrics.vue'
+import RealTimePurge from './components/RealTimePurge.vue'
 import ReleaseComposer from './components/ReleaseComposer.vue'
 import SignUp from './components/SignUp.vue'
 import SignupFlow from './components/SignupFlow.vue'
@@ -49,6 +60,7 @@ import SqlDatabase from './components/SqlDatabase.vue'
 import SqlDatabaseDetail from './components/SqlDatabaseDetail.vue'
 import TemplateSettings from './components/TemplateSettings.vue'
 import Variables from './components/Variables.vue'
+import WafRules from './components/WafRules.vue'
 import WorkloadDetail from './components/WorkloadDetail.vue'
 import Workloads from './components/Workloads.vue'
 
@@ -121,6 +133,21 @@ const routes = [
   { path: '/applications/new', name: 'applications-new', component: CreateApplication },
   { path: '/applications/:id', name: 'application-detail', component: ApplicationDetail },
   { path: '/variables', name: 'variables', component: Variables },
+  // Build
+  { path: '/functions', name: 'functions', component: Functions },
+  { path: '/connectors', name: 'connectors', component: Connectors },
+  { path: '/custom-pages', name: 'custom-pages', component: CustomPages },
+  // Secure
+  { path: '/firewall', name: 'firewall', component: Firewall },
+  { path: '/waf-rules', name: 'waf-rules', component: WafRules },
+  { path: '/certificates', name: 'certificates', component: Certificates },
+  { path: '/network-lists', name: 'network-lists', component: NetworkLists },
+  // Observe
+  { path: '/data-stream', name: 'data-stream', component: DataStream },
+  { path: '/real-time-events', name: 'real-time-events', component: RealTimeEvents },
+  { path: '/real-time-metrics', name: 'real-time-metrics', component: RealTimeMetrics },
+  { path: '/edge-pulse', name: 'edge-pulse', component: EdgePulse },
+  { path: '/real-time-purge', name: 'real-time-purge', component: RealTimePurge },
   { path: '/edge-dns', name: 'edge-dns', component: EdgeDns },
   { path: '/edge-dns/new', name: 'edge-dns-new', component: CreateZone },
   { path: '/edge-dns/:id', name: 'edge-dns-zone-detail', component: EdgeDnsZoneDetail },
