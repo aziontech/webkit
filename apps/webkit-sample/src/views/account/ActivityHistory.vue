@@ -14,19 +14,25 @@
   import { ref } from 'vue'
 
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
+  import { daysAgo, formatListDate, hoursAgo } from '../../lib/dates'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/filter-bar'
+  import { useListFilters } from '../../lib/list-state'
 
-  // Free-text search, hoisted into the ControlsHeader above the card.
-  const search = ref('')
-
-  const activity = ref([
+  // `at` is the real instant — the Date field compares it — and `date` (the sortable
+  // display string) is derived from it by one formatter rather than hand-written per
+  // row: parsing a display string back into a Date is engine-dependent, so a filter
+  // built on it would compare garbage on some browsers (src/lib/dates.js).
+  const activity = ref(
+    [
     {
       id: 'a-1',
       action: 'Signed in',
       category: 'Auth',
       user: 'gabriel@cerne.digital',
       ip: '189.6.44.12',
-      date: 'July 16, 2026, 09:12 AM'
+      at: hoursAgo(6)
     },
     {
       id: 'a-2',
@@ -34,7 +40,7 @@
       category: 'Billing',
       user: 'gabriel@cerne.digital',
       ip: '189.6.44.12',
-      date: 'July 15, 2026, 04:48 PM'
+      at: daysAgo(1)
     },
     {
       id: 'a-3',
@@ -42,7 +48,7 @@
       category: 'Security',
       user: 'rafael.umman@azion.com',
       ip: '201.17.88.3',
-      date: 'July 14, 2026, 11:03 AM'
+      at: daysAgo(2)
     },
     {
       id: 'a-4',
@@ -50,7 +56,7 @@
       category: 'Users',
       user: 'gabriel@cerne.digital',
       ip: '189.6.44.12',
-      date: 'July 10, 2026, 02:20 PM'
+      at: daysAgo(6)
     },
     {
       id: 'a-5',
@@ -58,9 +64,10 @@
       category: 'Deploy',
       user: 'lucas.pereira@azion.com',
       ip: '177.92.10.55',
-      date: 'July 08, 2026, 06:41 PM'
+      at: daysAgo(8)
     }
-  ])
+    ].map((entry) => ({ ...entry, date: formatListDate(entry.at) }))
+  )
 
   const activityColumns = [
     { accessorKey: 'action', header: 'Event', principal: true, grow: 2 },
@@ -78,6 +85,54 @@
       Users: 'secondary',
       Deploy: 'success'
     })[category] ?? 'secondary'
+
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // The COLUMNS decide the fields: Category and User are enumerable, Date becomes
+  // relative periods plus a Custom month grid, and Event / IP Address are free text
+  // covered by the search field. An audit log is read by asking two questions — who
+  // did it, and when — so those two are the ones that earn a chip.
+  //
+  // Both option lists come from the entries themselves, so neither can offer a
+  // category or a person with nothing behind them.
+  const categoryOptions = [...new Set(activity.value.map((entry) => entry.category))]
+    .sort((a, b) => a.localeCompare(b))
+    .map((category) => ({ value: category, label: category }))
+
+  const userOptions = [...new Set(activity.value.map((entry) => entry.user))]
+    .sort((a, b) => a.localeCompare(b))
+    .map((user) => ({ value: user, label: user }))
+
+  const filterFields = [
+    {
+      id: 'category',
+      label: 'Category',
+      kind: 'options',
+      options: categoryOptions,
+      match: (entry, values) => values.includes(entry.category)
+    },
+    {
+      id: 'user',
+      label: 'User',
+      kind: 'options',
+      options: userOptions,
+      match: (entry, values) => values.includes(entry.user)
+    },
+    {
+      id: 'date',
+      label: 'Date',
+      kind: 'range',
+      options: DATE_PRESETS,
+      formatValue: formatDateRange,
+      match: (entry, values) => matchDate(entry.at, values)
+    }
+  ]
+
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleActivity
+  } = useListFilters(filterFields, activity)
 </script>
 
 <template>
@@ -116,14 +171,24 @@
             </InputText>
           </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-model="filters"
+            :fields="filterFields"
+          />
+
           <CardBox :padded="false">
             <template #content>
               <Table
+                v-model:pagination="pagination"
                 v-model:globalFilter="search"
-                :data="activity"
+                :data="visibleActivity"
                 :columns="activityColumns"
                 row-key="id"
                 enable-sorting
+                paginated
+                :page-size="10"
                 :border="false"
               >
                 <template #cell-category="{ value }">

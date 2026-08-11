@@ -11,11 +11,11 @@
   // action (the /ux-heuristics "empty = one clear action" rule).
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
-  import InputText from '@aziontech/webkit/input-text'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
+  import InputText from '@aziontech/webkit/input-text'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -23,11 +23,14 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { useTenancyReload } from '../lib/tenancy-reload'
-  import { tenancyRows } from '../lib/tenancy-scope'
+  import { daysAgo, formatListDate, hoursAgo } from '../lib/dates'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
+  import { useListFilters } from '../lib/list-state'
   import { authorAt } from '../lib/people'
+  import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
   const route = useRoute()
@@ -46,25 +49,33 @@
         name: 'store-sessions',
         status: 'Created',
         tables: 4,
-        lastModified: 'July 20, 2026, 01:03:00 PM'
+        modifiedAt: daysAgo(1)
       },
       {
         id: 'db-analytics-events',
         name: 'analytics-events',
         status: 'Created',
         tables: 12,
-        lastModified: 'July 12, 2026, 09:41:00 AM'
+        modifiedAt: daysAgo(9)
       },
       {
         id: 'db-feature-flags',
         name: 'feature-flags',
         status: 'Creating',
         tables: 0,
-        lastModified: 'July 21, 2026, 08:15:00 AM'
+        modifiedAt: hoursAgo(3)
       }
     ].map((db, index) => {
       const person = authorAt(index)
-      return { ...db, author: person.name, authorAvatar: person.avatar }
+      // `modifiedAt` is the real instant — the Last Modified field compares it — and
+      // `lastModified` (the sortable display string) is derived from it by one
+      // formatter rather than hand-written per row (src/lib/dates.js).
+      return {
+        ...db,
+        author: person.name,
+        authorAvatar: person.avatar,
+        lastModified: formatListDate(db.modifiedAt)
+      }
     })
   )
 
@@ -72,14 +83,40 @@
   // the new scope's databases arrive (src/lib/tenancy-reload.js), and a database
   // belongs to one place in the tenancy chain, so the seed is projected through the
   // scope in force (src/lib/tenancy-scope.js).
-  const { tenancyReloading } = useTenancyReload()
   const scopedDatabases = computed(() => tenancyRows(databases.value, 'sql-database'))
 
-  // Free-text search. The field lives in the page's ControlsHeader, above the card, so
-  // it is a plain InputText bound to the table's `v-model:globalFilter` — the
-  // context-aware `Table.Search` only works inside `<Table>`. The table still owns the
-  // matching itself, so the behaviour is identical to the toolbar version it replaces.
-  const search = ref('')
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Status is the one enumerable column and Last Modified becomes the same relative
+  // periods every other list offers; Name, ID and Tables are covered by the search
+  // field (Tables is a magnitude — a chip per table count would be one option per row).
+  const filterFields = [
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [
+        { value: 'Created', label: 'Created' },
+        { value: 'Creating', label: 'Creating' }
+      ],
+      match: (db, values) => values.includes(db.status)
+    },
+    {
+      id: 'modified',
+      label: 'Last Modified',
+      kind: 'range',
+      options: DATE_PRESETS,
+      formatValue: formatDateRange,
+      match: (db, values) => matchDate(db.modifiedAt, values)
+    }
+  ]
+
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleDatabases,
+    loading: tenancyReloading
+  } = useListFilters(filterFields, scopedDatabases)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
@@ -168,6 +205,14 @@
             </template>
           </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-if="scopedDatabases.length"
+            v-model="filters"
+            :fields="filterFields"
+          />
+
           <!-- Empty = one clear next action; otherwise the borderless Table in a
                flush CardBox, framed edge-to-edge. -->
           <section
@@ -226,8 +271,9 @@
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  v-model:pagination="pagination"
                   v-model:globalFilter="search"
-                  :data="scopedDatabases"
+                  :data="visibleDatabases"
                   :columns="columns"
                   row-key="id"
                   enable-sorting

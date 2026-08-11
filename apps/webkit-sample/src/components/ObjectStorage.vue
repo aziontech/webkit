@@ -10,10 +10,10 @@
   // EmptyState with the single "Create Bucket" action (/ux-heuristics).
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
-  import InputText from '@aziontech/webkit/input-text'
   import Dropdown from '@aziontech/webkit/dropdown'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
+  import InputText from '@aziontech/webkit/input-text'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -21,12 +21,15 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { useTenancyReload } from '../lib/tenancy-reload'
-  import { tenancyRows } from '../lib/tenancy-scope'
+  import { daysAgo, formatListDate } from '../lib/dates'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
+  import { useListFilters } from '../lib/list-state'
   import { authorAt } from '../lib/people'
   import { provisionedBuckets, removeDeployment } from '../lib/provisioning'
+  import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
   const route = useRoute()
@@ -46,7 +49,7 @@
         access: 'Public',
         objects: 128,
         size: '412.6 MB',
-        lastModified: 'Jun 22, 2026, 07:21:21 PM'
+        modifiedAt: daysAgo(29)
       },
       {
         id: 'azion-assets-prod',
@@ -54,7 +57,7 @@
         access: 'Public',
         objects: 4210,
         size: '18.4 GB',
-        lastModified: 'Jul 19, 2026, 11:04:00 AM'
+        modifiedAt: daysAgo(2)
       },
       {
         id: 'user-uploads',
@@ -62,11 +65,19 @@
         access: 'Private',
         objects: 902,
         size: '2.1 GB',
-        lastModified: 'Jul 20, 2026, 03:47:00 PM'
+        modifiedAt: daysAgo(1)
       }
     ].map((bucket, index) => {
       const person = authorAt(index)
-      return { ...bucket, author: person.name, authorAvatar: person.avatar }
+      // `modifiedAt` is the real instant — the Last Modified field compares it — and
+      // `lastModified` (the sortable display string) is derived from it by one
+      // formatter rather than hand-written per row (src/lib/dates.js).
+      return {
+        ...bucket,
+        author: person.name,
+        authorAvatar: person.avatar,
+        lastModified: formatListDate(bucket.modifiedAt)
+      }
     })
   )
 
@@ -77,17 +88,46 @@
   // the new scope's buckets arrive (src/lib/tenancy-reload.js). Buckets provisioned
   // by this session's deploy lead the list and are never projected away; the seeded
   // ones below belong to the scope in force (src/lib/tenancy-scope.js).
-  const { tenancyReloading } = useTenancyReload()
   const allBuckets = computed(() => [
     ...provisionedBuckets.value,
     ...tenancyRows(buckets.value, 'object-storage')
   ])
 
-  // Free-text search. The field lives in the page's ControlsHeader, above the card, so
-  // it is a plain InputText bound to the table's `v-model:globalFilter` — the
-  // context-aware `Table.Search` only works inside `<Table>`. The table still owns the
-  // matching itself, so the behaviour is identical to the toolbar version it replaces.
-  const search = ref('')
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Access is the one enumerable column and Last Modified becomes the same relative
+  // periods every other list offers; Name, Objects and Size are covered by the search
+  // field (Objects and Size are magnitudes — a chip per bucket count would be one
+  // option per row).
+  const filterFields = [
+    {
+      id: 'access',
+      label: 'Access',
+      kind: 'options',
+      options: [
+        { value: 'Public', label: 'Public' },
+        { value: 'Private', label: 'Private' }
+      ],
+      match: (bucket, values) => values.includes(bucket.access)
+    },
+    {
+      id: 'modified',
+      label: 'Last Modified',
+      kind: 'range',
+      options: DATE_PRESETS,
+      formatValue: formatDateRange,
+      // A bucket provisioned by this session's deploy may carry no instant yet, so it
+      // is never narrowed away by a window it cannot answer for.
+      match: (bucket, values) => !bucket.modifiedAt || matchDate(bucket.modifiedAt, values)
+    }
+  ]
+
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleBuckets,
+    loading: tenancyReloading
+  } = useListFilters(filterFields, allBuckets)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, grow: 2 },
@@ -173,6 +213,16 @@
             </template>
           </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. It
+               follows the controls row's condition — with no buckets there is nothing
+               to narrow. -->
+          <FilterBar
+            v-if="allBuckets.length"
+            v-model="filters"
+            :fields="filterFields"
+          />
+
           <!-- Empty = one clear next action; otherwise the borderless Table in a
                flush CardBox, framed edge-to-edge. -->
           <section
@@ -228,8 +278,9 @@
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  v-model:pagination="pagination"
                   v-model:globalFilter="search"
-                  :data="allBuckets"
+                  :data="visibleBuckets"
                   :columns="columns"
                   row-key="id"
                   enable-sorting

@@ -23,10 +23,10 @@
   import { ref } from 'vue'
 
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
+  import { useListFilters } from '../../lib/list-state'
 
-  // Free-text search, hoisted into the ControlsHeader above the card.
-  const search = ref('')
 
   const users = ref([
     {
@@ -78,6 +78,37 @@
       lastActive: '2 months ago'
     }
   ])
+
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // The COLUMNS decide the fields: Role and Status are the enumerable ones,
+  // while Name, Email and Last Active are covered by the search field.
+  const filterFields = [
+    {
+      id: 'role',
+      label: 'Role',
+      kind: 'options',
+      options: [...new Set(users.value.map((user) => user.role))]
+        .sort((a, b) => a.localeCompare(b))
+        .map((role) => ({ value: role, label: role })),
+      match: (user, values) => values.includes(user.role)
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [...new Set(users.value.map((user) => user.status))]
+        .sort((a, b) => a.localeCompare(b))
+        .map((status) => ({ value: status, label: status })),
+      match: (user, values) => values.includes(user.status)
+    }
+  ]
+
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleUsers
+  } = useListFilters(filterFields, users, { pageSize: 10 })
 
   const userColumns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
@@ -158,14 +189,24 @@
             </template>
           </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-model="filters"
+            :fields="filterFields"
+          />
+
           <CardBox :padded="false">
             <template #content>
               <Table
+                v-model:pagination="pagination"
                 v-model:globalFilter="search"
-                :data="users"
+                :data="visibleUsers"
                 :columns="userColumns"
                 row-key="id"
                 enable-sorting
+                paginated
+                :page-size="10"
                 :border="false"
               >
                 <template #cell-name="{ row }">

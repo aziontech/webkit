@@ -45,8 +45,11 @@
   import { computed, onMounted, ref } from 'vue'
 
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
   import SectionHeading from '../../components/ui/SectionHeading.vue'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/filter-bar'
+  import { useListFilters } from '../../lib/list-state'
 
   const DOCS = 'https://www.azion.com/en/documentation/'
 
@@ -175,6 +178,9 @@
   ].map((invoice) => ({
     ...invoice,
     cycle: 'Monthly',
+    // The real instant beside the ISO string, so the Billing date field can compare
+    // it — `withinRange` takes a Date and a string would silently match nothing.
+    billedAt: new Date(invoice.billingDate),
     amount: invoice.seats * SEAT_PRICE[invoice.plan]
   }))
 
@@ -295,52 +301,79 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // The filter set the design asks for, minus a Billing date field: the builder
-  // coerces its date operators through Number(), which never matches an ISO
-  // string — a filter that silently returns nothing is worse than no filter.
-  // Chronology is served by the sortable column and by free-text search instead.
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // The same bar every list in the console carries (the webkit-lists skill), not the
+  // table's own field/operator/value builder. Every one of these narrows by
+  // MEMBERSHIP — is this invoice's status one of these — so an operator column would
+  // have offered `is one of` on every row.
+  //
+  // Billing date is a real field again. It could not be one under the builder, whose
+  // date operators coerce through Number() and never match an ISO string — a filter
+  // that silently returns nothing. The bar compares `billedAt`, the instant derived
+  // beside the string above, so chronology is one click instead of a sort plus a scan.
+  //
+  // Seats and Amount are gone, and deliberately: they are magnitudes, not categories.
+  // A membership field over them offers one option per distinct value — twelve chips
+  // that each match one row — and what people actually ask ("over $500") is a
+  // comparison the search field and the sortable column already serve.
   const invoiceFilterFields = [
     {
       id: 'status',
       label: 'Status',
-      type: 'select',
+      kind: 'options',
       options: [
-        { label: 'Paid', value: 'Paid' },
-        { label: 'Refunded', value: 'Refunded' },
-        { label: 'Overdue', value: 'Overdue' }
-      ]
+        { value: 'Paid', label: 'Paid' },
+        { value: 'Refunded', label: 'Refunded' },
+        { value: 'Overdue', label: 'Overdue' }
+      ],
+      match: (invoice, values) => values.includes(invoice.status)
     },
     {
       id: 'plan',
       label: 'Plan',
-      type: 'select',
+      kind: 'options',
       options: [
-        { label: 'Business', value: 'Business' },
-        { label: 'Starter', value: 'Starter' }
-      ]
+        { value: 'Business', label: 'Business' },
+        { value: 'Starter', label: 'Starter' }
+      ],
+      match: (invoice, values) => values.includes(invoice.plan)
     },
     {
       id: 'cycle',
       label: 'Cycle',
-      type: 'select',
+      kind: 'options',
       options: [
-        { label: 'Monthly', value: 'Monthly' },
-        { label: 'Yearly', value: 'Yearly' }
-      ]
+        { value: 'Monthly', label: 'Monthly' },
+        { value: 'Yearly', label: 'Yearly' }
+      ],
+      match: (invoice, values) => values.includes(invoice.cycle)
     },
-    { id: 'seats', label: 'Seats', type: 'number' },
-    { id: 'amount', label: 'Amount', type: 'number' }
+    {
+      id: 'billed',
+      label: 'Billing Date',
+      kind: 'range',
+      options: DATE_PRESETS,
+      formatValue: formatDateRange,
+      match: (invoice, values) => matchDate(invoice.billedAt, values)
+    }
   ]
 
-  // Search and the applied conditions are host-owned, so the empty state can tell
+  // Search and the applied filters are host-owned, so the empty state can tell
   // "nothing matches" from "never invoiced" and clear both in one action.
-  const search = ref('')
-  const appliedFilters = ref([])
-  const isFiltered = computed(() => search.value.length > 0 || appliedFilters.value.length > 0)
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleInvoices
+  } = useListFilters(invoiceFilterFields, invoices)
+
+  const isFiltered = computed(
+    () => search.value.length > 0 || Object.values(filters.value).some((values) => values?.length)
+  )
 
   const clearFilters = () => {
     search.value = ''
-    appliedFilters.value = []
+    filters.value = {}
   }
 
   const invoiceStatusSeverity = (status) =>
@@ -619,14 +652,20 @@
               </InputText>
             </ControlsHeader>
 
+            <!-- The filter bar takes its own row: it grows as filters are applied, so
+                 sharing the controls row would make the search field jump width. -->
+            <FilterBar
+              v-model="filters"
+              :fields="invoiceFilterFields"
+            />
+
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  v-model:pagination="pagination"
                   v-model:globalFilter="search"
-                  v-model:filters="appliedFilters"
-                  :data="invoices"
+                  :data="visibleInvoices"
                   :columns="invoiceColumns"
-                  :filter-fields="invoiceFilterFields"
                   row-key="id"
                   enable-sorting
                   paginated
@@ -636,19 +675,15 @@
                   export-filename="invoices.csv"
                   @refresh="loadBilling"
                 >
-                  <!-- House order, one size: Filter · Search · Refresh · Export ·
-                       ColumnSelector, all `medium` so the row shares one height. -->
+                  <!-- What is left of the toolbar once narrowing moved out of the card:
+                       the three controls that act on the table rather than filter it,
+                       all `medium` so the row shares one height. -->
                   <template #toolbar>
-                    <div class="flex w-full items-center gap-[var(--spacing-xs)]">
-                      <Table.Filter :fields="invoiceFilterFields" />
+                    <div class="flex w-full items-center justify-end gap-[var(--spacing-xs)]">
                       <Table.RefreshButton />
                       <Table.Export />
                       <Table.ColumnSelector />
                     </div>
-                  </template>
-
-                  <template #filters>
-                    <Table.AppliedFilters />
                   </template>
 
                   <!-- Two empties, two copies: a filter that matches nothing is

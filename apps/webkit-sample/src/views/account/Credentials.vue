@@ -20,10 +20,10 @@
   import { ref } from 'vue'
 
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
+  import { useListFilters } from '../../lib/list-state'
 
-  // Free-text search, hoisted into the ControlsHeader above the card.
-  const search = ref('')
 
   const credentials = ref([
     {
@@ -59,6 +59,29 @@
       status: 'Revoked'
     }
   ])
+
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Status is the one enumerable column — Name and Token are free text, and
+  // Created / Last Used are display strings with no instant behind them to compare.
+  const filterFields = [
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [
+        { value: 'Active', label: 'Active' },
+        { value: 'Revoked', label: 'Revoked' }
+      ],
+      match: (credential, values) => values.includes(credential.status)
+    }
+  ]
+
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleCredentials
+  } = useListFilters(filterFields, credentials, { pageSize: 10 })
 
   const credentialColumns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
@@ -134,14 +157,24 @@
             </template>
           </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-model="filters"
+            :fields="filterFields"
+          />
+
           <CardBox :padded="false">
             <template #content>
               <Table
+                v-model:pagination="pagination"
                 v-model:globalFilter="search"
-                :data="credentials"
+                :data="visibleCredentials"
                 :columns="credentialColumns"
                 row-key="id"
                 enable-sorting
+                paginated
+                :page-size="10"
                 :border="false"
               >
                 <!-- A token is data, not code: it keeps the cell's own type and

@@ -36,10 +36,12 @@
   import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { NAMESERVERS, policyLabel } from '../lib/edge-dns'
+  import { NAMESERVERS, POLICY_TYPES, policyLabel, RECORD_TYPES } from '../lib/edge-dns'
+  import { useListFilters } from '../lib/list-state'
   import CreateRecordDrawer from './CreateRecordDrawer.vue'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import FilterBar from './ui/FilterBar.vue'
   import PageTabs from './ui/PageTabs.vue'
   import SectionHeading from './ui/SectionHeading.vue'
 
@@ -53,8 +55,6 @@
     domain: route.query.domain || 'edgeflow.com'
   }
 
-  // Free-text search, hoisted into the ControlsHeader above the card.
-  const search = ref('')
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -177,6 +177,39 @@
       description: 'TESDS'
     }
   ])
+
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Type and Policy are the enumerable columns — a zone's records are read by asking
+  // "show me the CNAMEs" far more often than by name — while Name, Value and
+  // Description are free text, covered by the search field, and TTL / Weight are
+  // magnitudes rather than categories.
+  //
+  // The Type options are the SAME list the create form offers (src/lib/edge-dns.js),
+  // shortened to the bare record type: the form needs "A - IPv4 Address" to teach what
+  // to type, and a chip that already says "Type" only needs the "A".
+  const filterFields = [
+    {
+      id: 'type',
+      label: 'Type',
+      kind: 'options',
+      options: RECORD_TYPES.map((type) => ({ value: type.value, label: type.value })),
+      match: (record, values) => values.includes(record.type)
+    },
+    {
+      id: 'policy',
+      label: 'Policy',
+      kind: 'options',
+      options: POLICY_TYPES,
+      match: (record, values) => values.includes(record.policy)
+    }
+  ]
+
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleRecords
+  } = useListFilters(filterFields, records)
 
   const recordColumns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
@@ -708,11 +741,19 @@
                 </InputText>
               </ControlsHeader>
 
+              <!-- The filter bar takes its own row: it grows as filters are applied, so
+                   sharing the controls row would make the search field jump width. -->
+              <FilterBar
+                v-model="filters"
+                :fields="filterFields"
+              />
+
               <CardBox :padded="false">
                 <template #content>
                   <Table
+                    v-model:pagination="pagination"
                     v-model:globalFilter="search"
-                    :data="records"
+                    :data="visibleRecords"
                     :columns="recordColumns"
                     row-key="id"
                     enable-sorting

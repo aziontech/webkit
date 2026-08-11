@@ -13,15 +13,17 @@
   // The "Rule" button itself is on the page's tab row, not in this heading
   // (ApplicationDetail owns that row). The flow stays here: the shell calls the
   // `openCreate` this view exposes.
-  import InputText from '@aziontech/webkit/input-text'
   import CardBox from '@aziontech/webkit/card-box'
+  import InputText from '@aziontech/webkit/input-text'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
   import CreateRuleDrawer from '../../components/CreateRuleDrawer.vue'
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
+  import { useListFilters } from '../../lib/list-state'
 
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
@@ -31,7 +33,6 @@
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
-  const search = ref('')
 
   const rules = ref([
     {
@@ -54,6 +55,40 @@
 
   // Opened from the page's tab row (ApplicationDetail).
   defineExpose({ openCreate: () => (createOpen.value = true) })
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Phase and Status are the two enumerable columns; Name and Criteria are free
+  // text, covered by the search field.
+  const filterFields = [
+    {
+      id: 'phase',
+      label: 'Phase',
+      kind: 'options',
+      options: [
+        { value: 'Request', label: 'Request' },
+        { value: 'Response', label: 'Response' }
+      ],
+      match: (rule, values) => values.includes(rule.phase)
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [
+        { value: 'Active', label: 'Active' },
+        { value: 'Inactive', label: 'Inactive' }
+      ],
+      match: (rule, values) => values.includes(rule.status)
+    }
+  ]
+
+  // No pagination model: this table lists every row, so there is no page offset a
+  // narrowed set could strand.
+  const {
+    filters,
+    search,
+    visibleRows: visibleRules
+  } = useListFilters(filterFields, rules)
+
 </script>
 
 <template>
@@ -92,11 +127,18 @@
           </InputText>
         </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-model="filters"
+            :fields="filterFields"
+          />
+
         <CardBox :padded="false">
           <template #content>
             <Table
               v-model:globalFilter="search"
-              :data="rules"
+              :data="visibleRules"
               :columns="columns"
               row-key="id"
               enable-sorting

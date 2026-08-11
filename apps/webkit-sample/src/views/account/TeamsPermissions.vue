@@ -24,18 +24,19 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref, computed } from 'vue'
+  import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
+  import { useListFilters } from '../../lib/list-state'
   import { permissionLabel, permissionLabelsFor, useTeams } from '../../teams.js'
 
   const route = useRoute()
   const router = useRouter()
 
   // Free-text search, hoisted into the ControlsHeader above the card.
-  const search = ref('')
 
   // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
@@ -80,6 +81,31 @@
       toast.success(`Team "${row.name}" deleted.`)
     }
   }
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Status is the one enumerable column. Permissions is a LIST per row, not a
+  // value — a field over it would ask "has any of these", which is a different
+  // question from the membership every other field asks, so it stays out.
+  const filterFields = [
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [
+        { value: 'Active', label: 'Active' },
+        { value: 'Inactive', label: 'Inactive' }
+      ],
+      match: (team, values) => values.includes(team.status)
+    }
+  ]
+
+  // No pagination model: this table lists every row, so there is no page offset a
+  // narrowed set could strand.
+  const {
+    filters,
+    search,
+    visibleRows: visibleTeams
+  } = useListFilters(filterFields, teams)
+
 </script>
 
 <template>
@@ -128,11 +154,18 @@
             </template>
           </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-model="filters"
+            :fields="filterFields"
+          />
+
           <CardBox :padded="false">
             <template #content>
               <Table
                 v-model:globalFilter="search"
-                :data="teams"
+                :data="visibleTeams"
                 :columns="teamColumns"
                 row-key="id"
                 enable-sorting

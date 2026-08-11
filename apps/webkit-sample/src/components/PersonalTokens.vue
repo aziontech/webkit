@@ -50,15 +50,15 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { reactive, ref, watch } from 'vue'
 
-  import { useTenancyReload } from '../lib/tenancy-reload'
+  import { useListFilters } from '../lib/list-state'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import FilterBar from './ui/FilterBar.vue'
 
   // Switching organization, account or workspace reloads the page like every other
   // module list. The ROWS are not projected (src/lib/tenancy-scope.js): a personal
   // token authenticates the USER across every scope they can reach, so the same
   // list is the truthful answer in a new one — it is simply re-read.
-  const { tenancyReloading } = useTenancyReload()
 
   // Seeded tokens — a personal token's plaintext is shown only once at creation,
   // so the list never stores it; it tracks identity, lifecycle, and status.
@@ -101,11 +101,31 @@
     }
   ])
 
-  // Free-text search. The field lives in the page's ControlsHeader, above the card, so
-  // it is a plain InputText bound to the table's `v-model:globalFilter` — the
-  // context-aware `Table.Search` only works inside `<Table>`. The table still owns the
-  // matching itself, so the behaviour is identical to the toolbar version it replaces.
-  const search = ref('')
+
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Status is the one enumerable column — Name and Description are free text,
+  // and Created / Expires / Last Used are display strings with no instant behind them.
+  const filterFields = [
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [
+        { value: 'Active', label: 'Active' },
+        { value: 'Expired', label: 'Expired' },
+        { value: 'Revoked', label: 'Revoked' }
+      ],
+      match: (token, values) => values.includes(token.status)
+    }
+  ]
+
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: visibleTokens,
+    loading: tenancyReloading
+  } = useListFilters(filterFields, tokens, { pageSize: 10 })
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
@@ -303,15 +323,25 @@
             </template>
           </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-model="filters"
+            :fields="filterFields"
+          />
+
           <section class="flex min-h-0 flex-col">
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  v-model:pagination="pagination"
                   v-model:globalFilter="search"
-                  :data="tokens"
+                  :data="visibleTokens"
                   :columns="columns"
                   row-key="id"
                   enable-sorting
+                  paginated
+                  :page-size="10"
                   :border="false"
                   :loading="tenancyReloading"
                 >

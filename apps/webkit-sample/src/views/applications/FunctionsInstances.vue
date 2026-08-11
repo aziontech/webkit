@@ -36,10 +36,12 @@
   import { reactive, ref, watch } from 'vue'
 
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
   import ResourceDrawer from '../../components/ui/ResourceDrawer.vue'
   import SectionHeading from '../../components/ui/SectionHeading.vue'
   import { sleep } from '../../lib/forms'
+  import { useListFilters } from '../../lib/list-state'
 
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
@@ -48,7 +50,6 @@
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
-  const search = ref('')
 
   const instances = ref([
     { id: 'fi-auth', name: 'auth-guard', edgeFunction: 'auth-handler', args: '{}' },
@@ -181,6 +182,31 @@
       functionSubmitting.value = false
     }
   }
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // Function is the one enumerable column — which function an instance runs is
+  // what people narrow by. Name and Arguments are free text, covered by the search.
+  const filterFields = [
+    {
+      id: 'edgeFunction',
+      label: 'Function',
+      kind: 'options',
+      get options() {
+        return [...new Set(instances.value.map((instance) => instance.edgeFunction))]
+          .sort((a, b) => a.localeCompare(b))
+          .map((fn) => ({ value: fn, label: fn }))
+      },
+      match: (instance, values) => values.includes(instance.edgeFunction)
+    }
+  ]
+
+  // No pagination model: this table lists every row, so there is no page offset a
+  // narrowed set could strand.
+  const {
+    filters,
+    search,
+    visibleRows: visibleInstances
+  } = useListFilters(filterFields, instances)
+
 </script>
 
 <template>
@@ -219,11 +245,18 @@
           </InputText>
         </ControlsHeader>
 
+          <!-- The filter bar takes its own row: it grows as filters are applied, so
+               sharing the controls row would make the search field jump width. -->
+          <FilterBar
+            v-model="filters"
+            :fields="filterFields"
+          />
+
         <CardBox :padded="false">
           <template #content>
             <Table
               v-model:globalFilter="search"
-              :data="instances"
+              :data="visibleInstances"
               :columns="columns"
               row-key="id"
               enable-sorting
