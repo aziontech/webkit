@@ -11,44 +11,42 @@
   // EmptyState with the single next action (the /ux-heuristics "empty = one clear
   // action" rule).
   //
-  // Narrowing is a SELECTOR PER COLUMN (the same model as Applications and
-  // Workloads), and the COLUMNS decide the fields: every enumerable column gets a
-  // multiple Select (Authors, Status) and the date column gets a plain DATE PICKER
-  // (Calendar, `mode="range"`); the free-text columns (Name, ID, Domain) are covered
-  // by the search field instead of one field each. They live inside the FILTER
-  // POPOVER behind one IconButton (ui/FilterPopover.vue) — the module list pattern —
-  // so the controls row is filter + search, and the trigger's badge says how many
-  // fields are set. They pre-filter `:data`; the search field narrows what is left,
-  // through the table's own global filter. This replaces the field/operator/value
-  // builder that used to sit in the table's own toolbar (`Table.Filter` /
-  // `Table.AppliedFilters`), which could not be hoisted out of the card: both read
-  // the table's filter state through `inject`.
-  import Avatar from '@aziontech/webkit/avatar'
+  // Narrowing is a FILTER BAR of CHIPS (ui/FilterBar.vue) — the one shape every
+  // module list uses, described in the webkit-lists skill. The COLUMNS decide the
+  // fields: every enumerable column becomes one field (Author, Status) and the date
+  // column becomes relative periods plus a Custom month grid (Last Modified); the
+  // free-text columns (Name, ID, Domain) are covered by the search field instead of
+  // one field each. The bar pre-filters `:data`; the search field narrows what is
+  // left, through the table's own global filter.
+  //
+  // This replaced, in two steps, the field/operator/value builder that used to sit
+  // in the table's own toolbar (`Table.Filter` / `Table.AppliedFilters`): it could
+  // not be hoisted out of the card (both read the table's filter state through
+  // `inject`), and its operator column offered `is one of` on every row — a control
+  // with one option.
   import Button from '@aziontech/webkit/button'
-  import Calendar from '@aziontech/webkit/calendar'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
-  import Select from '@aziontech/webkit/select'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { daysAgo, formatListDate, withinRange } from '../lib/dates'
+  import { daysAgo, formatListDate } from '../lib/dates'
   import { NAMESERVERS } from '../lib/edge-dns'
-  import { filterDisplay } from '../lib/filters'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
+  import { useListFilters } from '../lib/list-state'
   import { authorAt } from '../lib/people'
-  import { useTenancyReload } from '../lib/tenancy-reload'
   import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
-  import FilterPopover from './ui/FilterPopover.vue'
+  import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
   const route = useRoute()
@@ -98,15 +96,7 @@
   // shows skeletons while the new scope's zones arrive (src/lib/tenancy-reload.js),
   // and the zones themselves are that scope's — a DNS zone belongs to one place in
   // the tenancy chain (src/lib/tenancy-scope.js).
-  const { tenancyReloading } = useTenancyReload()
   const scopedZones = computed(() => tenancyRows(zones.value, 'edge-dns'))
-
-  // Free-text search. The field lives in the page's ControlsHeader, above the card, so it
-  // is a plain InputText bound to the table's `v-model:globalFilter` — the context-aware
-  // `Table.Search` only works inside `<Table>`. The table still owns the matching (every
-  // visible column, TanStack's global filter), so the behaviour is identical to the
-  // toolbar version it replaces.
-  const search = ref('')
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
@@ -117,59 +107,54 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // ── Column selectors ──────────────────────────────────────────────────────
-  // Authors come from the data, so the selector can never offer someone with no
-  // zones in the list. (The column is "Last Modified"; the person renders inside
-  // that cell as `author`.) Each option carries that person's photo, so the filter
-  // identifies them the same way the cell does — by face first, name second.
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // One field per enumerable column, in the order the COLUMNS read. Authors come
+  // from the data, so the field can never offer someone with no zones in the list.
+  // (The column is "Last Modified"; the person renders inside that cell as
+  // `author`.) Each carries that person's photo, so the filter identifies them the
+  // way the cell does — by face first, name second.
   const authorOptions = [...new Map(zones.value.map((zone) => [zone.author, zone.authorAvatar]))]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([author, avatar]) => ({ value: author, label: author, avatar }))
 
-  const statusOptions = [
-    { value: 'Active', label: 'Active' },
-    { value: 'Inactive', label: 'Inactive' }
+  const filterFields = [
+    {
+      id: 'author',
+      label: 'Author',
+      kind: 'options',
+      options: authorOptions,
+      match: (zone, values) => values.includes(zone.author)
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [
+        { value: 'Active', label: 'Active' },
+        { value: 'Inactive', label: 'Inactive' }
+      ],
+      match: (zone, values) => values.includes(zone.status)
+    },
+    {
+      id: 'modified',
+      label: 'Last Modified',
+      kind: 'range',
+      options: DATE_PRESETS,
+      formatValue: formatDateRange,
+      match: (zone, values) => matchDate(zone.modifiedAt, values)
+    }
   ]
 
-  const authorFilter = ref([])
-  const statusFilter = ref([])
-  const modifiedRange = ref(null)
-
-  // The badge on the filter trigger counts FIELDS that are narrowing the list, not
-  // selected values — two authors is still one filter on Authors. The search is not
-  // counted: it stays visible in the row, so it is never a hidden filter.
-  const activeFilterCount = computed(
-    () =>
-      Number(authorFilter.value.length > 0) +
-      Number(statusFilter.value.length > 0) +
-      Number(Boolean(modifiedRange.value))
-  )
-
-  // "Clear all" resets the fields the panel renders, and only those — the search sits
-  // outside it.
-  const clearFilters = () => {
-    authorFilter.value = []
-    statusFilter.value = []
-    modifiedRange.value = null
-  }
-
-  // The selectors pre-filter `:data`; the search field then narrows what is left
-  // through the table's own global filter.
-  const filteredZones = computed(() =>
-    scopedZones.value.filter((zone) => {
-      if (authorFilter.value.length && !authorFilter.value.includes(zone.author)) return false
-      if (statusFilter.value.length && !statusFilter.value.includes(zone.status)) return false
-      return withinRange(zone.modifiedAt, modifiedRange.value)
-    })
-  )
-
-  // External `:data` filtering does not trip TanStack's `autoResetPageIndex`, so
-  // own the pagination state and rewind to the first page when a filter changes —
-  // or when a tenancy-scope switch narrows the list the same way.
-  const pagination = ref({ pageIndex: 0, pageSize: 8 })
-  watch([authorFilter, statusFilter, modifiedRange, tenancyReloading], () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
-  })
+  // Filter state, search value, surviving rows and their pagination — one place,
+  // including the rewind (src/lib/list-state.js). `loading` is the tenancy reload
+  // window.
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: filteredZones,
+    loading: tenancyReloading
+  } = useListFilters(filterFields, scopedZones)
 
   // Copy Azion's authoritative nameservers so the user can delegate a domain
   // without opening a zone first.
@@ -232,86 +217,9 @@
         <section class="flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--layout-group-gap)]">
           <!-- First-level module list: no PageHeading — the module name already IS the
                header breadcrumb crumb (AppLayout). The page opens with its CONTROLS row
-               (the filter, then the search, the module's own actions on the right); the
-               borderless Table follows in a flush CardBox. -->
+               (the search, the module's own actions on the right), then the filter bar;
+               the borderless Table follows in a flush CardBox. -->
           <ControlsHeader v-if="scopedZones.length">
-            <!-- The column selectors, collapsed behind one icon (ui/FilterPopover.vue) —
-                 the same filter the other module lists carry. They apply as they are
-                 picked; the badge on the trigger reports how many are set. -->
-            <FilterPopover
-              :count="activeFilterCount"
-              description="Narrow zones by author, when they last changed, or status."
-              @clear="clearFilters"
-            >
-              <Select
-                v-model="authorFilter"
-                multiple
-                size="large"
-                placeholder="All Authors"
-                :display-value="filterDisplay('All Authors', authorOptions)"
-              >
-                <Select.Trigger aria-label="Filter by author" />
-                <Select.Content>
-                  <Select.Option
-                    v-for="option in authorOptions"
-                    :key="option.value"
-                    :value="option.value"
-                  >
-                    <template #left>
-                      <Avatar
-                        :src="option.avatar || undefined"
-                        :alt="option.label"
-                        :label="option.label"
-                        size="small"
-                        kind="square"
-                      />
-                    </template>
-                    {{ option.label }}
-                  </Select.Option>
-                </Select.Content>
-              </Select>
-
-              <!-- Last Modified is a plain DATE PICKER: one field, one panel, a month
-                   grid. No `:presets` (that splits the trigger into a preset dropdown +
-                   the range, two controls for one filter) and no `period` (that swaps the
-                   whole thing for the relative-span parser). `clearable` is live in this
-                   single-part branch, so resetting is one click on the field;
-                   `:show-fields="false"` drops the Start/End text inputs, which restate
-                   what the grid already says.
-
-                   The child selectors stretch it to the panel: Calendar's own trigger is
-                   fixed at `--container-3xs` (256px), which would sit short beside the
-                   full-width Selects stacked above and below it. -->
-              <Calendar
-                v-model="modifiedRange"
-                mode="range"
-                size="large"
-                clearable
-                :show-fields="false"
-                placeholder="Last Modified"
-                class="w-full [&>span]:w-full [&>span>span]:w-full"
-              />
-
-              <Select
-                v-model="statusFilter"
-                multiple
-                size="large"
-                placeholder="All Statuses"
-                :display-value="filterDisplay('All Statuses', statusOptions)"
-              >
-                <Select.Trigger aria-label="Filter by status" />
-                <Select.Content>
-                  <Select.Option
-                    v-for="option in statusOptions"
-                    :key="option.value"
-                    :value="option.value"
-                  >
-                    {{ option.label }}
-                  </Select.Option>
-                </Select.Content>
-              </Select>
-            </FilterPopover>
-
             <InputText
               v-model="search"
               size="large"
@@ -344,6 +252,17 @@
               />
             </template>
           </ControlsHeader>
+
+          <!-- The filter bar takes its own row: it grows as filters are applied, and
+               sharing the controls row would make the search field jump width as
+               chips come and go. It follows the controls row's own condition — with
+               no zones there is nothing to narrow, and the empty state below owns
+               the page. -->
+          <FilterBar
+            v-if="scopedZones.length"
+            v-model="filters"
+            :fields="filterFields"
+          />
 
           <!-- Empty = one clear next action; otherwise the borderless Table in a
                flush CardBox, framed edge-to-edge. -->

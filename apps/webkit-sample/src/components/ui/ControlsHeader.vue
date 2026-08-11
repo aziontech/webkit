@@ -22,8 +22,8 @@
   // `--spacing-xs`, the same tight rhythm the table toolbar used. This row and the
   // table under it are ONE band: they sit in a band element that stacks them at the
   // group step (see src/styles/layout.css). That tight
-  // inner gap is what makes the search field and the icon buttons beside it (filter,
-  // export — see ui/FilterPopover.vue) read as one control, not as three.
+  // inner gap is what makes the search field and any icon button beside it read as
+  // one control, not as two.
   //
   // The filters group `grow`s and wraps, so a narrow viewport wraps the fields onto
   // a second line instead of squeezing the actions; the actions group is `shrink-0`

@@ -18,8 +18,8 @@
   //                                       │ Clear Last Modified │
   //                                       └─────────────────────┘
   //
-  // WHY A BAR AND NOT A PANEL. The filter this replaces (ui/FilterPopover.vue) held one
-  // always-mounted Select per column behind a single icon, so what was applied lived
+  // WHY A BAR AND NOT A PANEL. The filter this replaced held one always-mounted
+  // Select per column behind a single icon, so what was applied lived
   // inside a closed panel and only a badge count leaked out — "2" tells you that the
   // list you are reading is not the whole list, but not which two cuts made it, and
   // never on what values. Every question about the current filter cost a click. A chip
@@ -363,7 +363,7 @@
              that says nothing. Overlaid, the trigger's box never changes.
              `pointer-events-none` keeps the dot from swallowing a click meant for the
              trigger, and the canvas-coloured ring separates it from the pill edge under
-             it — the same shape ui/FilterPopover.vue used for its badge.
+             it — the same shape the popover this replaced used for its badge.
              It sits at `top-px right-px`, not at the box's corner. On a PILL the corner
              of the bounding box is empty space outside the curve, so a dot pinned there
              floats free of the shape; the 45° point of a 32px pill's arc is ~4.7px in

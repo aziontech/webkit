@@ -24,26 +24,22 @@
   // strategy }` — the strategy is the reusable half, the rest belongs to one deploy.
   // The Message above the tables is what says so on screen.
   //
-  // Narrowing on both tabs is a SELECTOR PER COLUMN (Applications.vue's model),
-  // never a field/operator/value builder: the COLUMNS decide the fields — every
-  // enumerable column gets a multiple Select and the date column gets a plain DATE
-  // PICKER (no presets, no `period`) — they pre-filter `:data`, and the table sees only
-  // the rows that survive. Both tabs put those fields in the FILTER POPOVER behind one
-  // IconButton (ui/FilterPopover.vue), so the controls row is filter + search on
-  // whichever tab is open. The history tab's Status / Type / Environment / Authors come
-  // from the shared ui/DeploymentTableControls.vue — the same file the internal-level
-  // tables render inside their own toolbar, popover included — and this page adds the
-  // one only a cross-resource list needs, the Deployed range (Calendar), through its
-  // `#selectors` slot. Being a first level, it holds that state itself and binds it
-  // into DeploymentsTable as models.
+  // Narrowing on both tabs is a FILTER BAR of CHIPS (ui/FilterBar.vue) in its own row
+  // under the controls — the one shape every module list uses (the webkit-lists
+  // skill), never a field/operator/value builder. The COLUMNS decide the fields on
+  // each tab; they pre-filter `:data`, and the table sees only the rows that survive.
+  //
+  // The history tab's catalog is the SHARED one (`deploymentFilterFields` in
+  // src/lib/deployments.js) — the same Status / Type / Environment / Author every
+  // deployment surface narrows by — asked for `{ deployed: true }`, the window only a
+  // cross-resource list needs. Being a first level, this page holds the state and
+  // binds it into DeploymentsTable as models.
   import Button from '@aziontech/webkit/button'
-  import Calendar from '@aziontech/webkit/calendar'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Message from '@aziontech/webkit/message'
-  import Select from '@aziontech/webkit/select'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -52,7 +48,6 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import { consoleDeployRows, deployById, deployRows } from '../lib/azion-deploys'
-  import { withinRange } from '../lib/dates'
   import { DEPLOYMENT_HISTORY } from '../lib/deployment-history'
   import {
     azionDefaultStrategy,
@@ -62,17 +57,16 @@
     strategyTypeLabel,
     workspaceStrategies
   } from '../lib/deployment-strategies'
-  import { resourceMeta } from '../lib/deployments'
-  import { filterDisplay } from '../lib/filters'
-  import { useTenancyReload } from '../lib/tenancy-reload'
+  import { deploymentFilterFields, resourceMeta } from '../lib/deployments'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
+  import { useListFilters } from '../lib/list-state'
   import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
   import DeploymentSettingsDrawer from './ui/DeploymentSettingsDrawer.vue'
   import DeploymentsTable from './ui/DeploymentsTable.vue'
-  import DeploymentTableControls from './ui/DeploymentTableControls.vue'
   import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
-  import FilterPopover from './ui/FilterPopover.vue'
+  import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
   import PageTabs from './ui/PageTabs.vue'
   import WorkloadDeploymentDrawer from './ui/WorkloadDeploymentDrawer.vue'
@@ -130,47 +124,36 @@
     ].sort(byNewest)
   )
 
-  // Every selector on this tab is owned HERE, because a first-level page hoists its
-  // controls out of the table (see ui/ControlsHeader.vue): the five the shared
-  // DeploymentsTable normally holds are bound into it as models, and the date range —
-  // which only a cross-resource list needs — pre-filters the rows it is handed.
-  const deploySearch = ref('')
-  const deployStatusFilter = ref([])
-  const deployTypeFilter = ref([])
-  const deployEnvironmentFilter = ref([])
-  const deployAuthorFilter = ref([])
-  const deployedRange = ref(null)
-
-  // Switching account reloads the module (src/lib/tenancy-reload.js): both tabs show
-  // skeletons while the new tenant's records arrive. A deployment belongs to the
-  // account that made it, so the seed is projected through the account in scope; a
-  // container deploy started in THIS session is the operator's own and always shows
-  // (src/lib/tenancy-scope.js).
-  const { tenancyReloading } = useTenancyReload()
-
   // A deploy started in THIS session — from here, or from any resource page — leads
   // the list and is never projected away: it is the operator's own, and it is still
   // moving (Building → Ready | Error), which is why this is a computed rather than a
   // list seeded once at mount.
-  const filteredDeployments = computed(() =>
-    [...consoleDeployRows(), ...tenancyRows(seededDeployments.value, 'deployments')]
-      .sort(byNewest)
-      .filter((deployment) => withinRange(deployment.deployedAt, deployedRange.value))
+  //
+  // Switching account reloads the module (src/lib/tenancy-reload.js): both tabs show
+  // skeletons while the new tenant's records arrive. A deployment belongs to the
+  // account that made it, so the seed is projected through the account in scope
+  // (src/lib/tenancy-scope.js).
+  const allDeployments = computed(() =>
+    [...consoleDeployRows(), ...tenancyRows(seededDeployments.value, 'deployments')].sort(byNewest)
   )
 
-  // "Clear all" (the filter panel's footer) resets every field the panel holds — the
-  // four the shared controls own AND the page's own Deployed range, since a reset that
-  // left one of them set would be lying. It leaves the search alone: that field sits
-  // outside the panel, in plain view, so clearing it from in here would undo something
-  // the user can see and did not ask about.
-  const clearDeployFilters = () => {
-    deployStatusFilter.value = []
-    deployTypeFilter.value = []
-    deployEnvironmentFilter.value = []
-    deployAuthorFilter.value = []
-    deployedRange.value = null
-    toast.info('Filters cleared.')
-  }
+  // The SHARED catalog, asked for the Deployed window — the field only a
+  // cross-resource list needs (src/lib/deployments.js). A getter for the Author
+  // options: a deploy started in this session adds a person, and the field has to be
+  // able to offer them without a reload.
+  const deployFields = computed(() =>
+    deploymentFilterFields(allDeployments.value, { deployed: true })
+  )
+
+  // A first-level page hoists its controls out of the table (see ui/ControlsHeader.vue)
+  // and owns their state, binding the two models into DeploymentsTable. The rows are
+  // passed unfiltered — the table applies the catalog itself, so the narrowing happens
+  // in exactly one place whether the controls are hoisted or not.
+  const {
+    filters: deployFilters,
+    search: deploySearch,
+    loading: tenancyReloading
+  } = useListFilters([], allDeployments)
 
   // ── Settings (deployment strategies) ───────────────────────────────────────
   // What this tab lists is the `strategy` half of the one request Azion takes for a
@@ -189,11 +172,10 @@
   // workspace with no strategies.
   //
   // The COLUMNS still decide this tab's fields, exactly as on the history tab —
-  // Status is its one enumerable column, so it gets a multiple Select, and Last
-  // Modified gets the same plain date picker. Type is a column but NOT a filter:
-  // `default` is the only strategy type the platform exposes, and a selector with one
-  // option narrows nothing.
-  const settingStatusOptions = strategyStatusOptions
+  // Status is its one enumerable column, and Last Modified becomes the same relative
+  // periods every other list offers. Type is a column but NOT a field: `default` is
+  // the only strategy type the platform exposes, and a field with one option narrows
+  // nothing.
 
   // The columns the CLI itself lists a workload's deployments by (`azion list
   // workload-deployment` prints ID · CURRENT · EDGE APPLICATION · EDGE FIREWALL):
@@ -212,45 +194,39 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // Narrowing here is a selector too — one per enumerable column, the same model the
-  // deployment table follows — plus the table's own search.
-  const settingSearch = ref('')
-  const settingStatusFilter = ref([])
-  const settingModifiedRange = ref(null)
+  const settingFilterFields = [
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: strategyStatusOptions,
+      match: (setting, values) => values.includes(setting.status)
+    },
+    {
+      id: 'modified',
+      label: 'Last Modified',
+      kind: 'range',
+      options: DATE_PRESETS,
+      formatValue: formatDateRange,
+      // The platform default has no last-modified instant of its own, so a date
+      // window never narrows it away.
+      match: (setting, values) => !setting.updatedAt || matchDate(setting.updatedAt, values)
+    }
+  ]
 
   // Azion Default leads and is never projected away: it is the platform's strategy,
   // not this workspace's, and it is the fallback every deploy needs. Only the
   // workspace's own strategies go through the tenancy projection.
-  const filteredSettings = computed(() =>
-    [azionDefaultStrategy, ...tenancyRows(workspaceStrategies.value, 'deployment-settings')].filter(
-      (setting) => {
-        if (
-          settingStatusFilter.value.length &&
-          !settingStatusFilter.value.includes(setting.status)
-        ) {
-          return false
-        }
-        // The platform default has no last-modified instant of its own, so a date
-        // range never narrows it away.
-        if (!setting.updatedAt) return true
-        return withinRange(setting.updatedAt, settingModifiedRange.value)
-      }
-    )
-  )
+  const allSettings = computed(() => [
+    azionDefaultStrategy,
+    ...tenancyRows(workspaceStrategies.value, 'deployment-settings')
+  ])
 
-  // What the filter trigger's badge counts: FIELDS that are narrowing the table, not
-  // selected values. The search is left out — it stays visible in the row, so it is
-  // never a hidden filter, which is also why "Clear all" no longer wipes it.
-  const activeSettingFilterCount = computed(
-    () =>
-      Number(settingStatusFilter.value.length > 0) + Number(Boolean(settingModifiedRange.value))
-  )
-
-  const clearSettingFilters = () => {
-    settingStatusFilter.value = []
-    settingModifiedRange.value = null
-    toast.info('Filters cleared.')
-  }
+  const {
+    filters: settingFilters,
+    search: settingSearch,
+    visibleRows: filteredSettings
+  } = useListFilters(settingFilterFields, allSettings)
 
   // ── Actions ────────────────────────────────────────────────────────────────
   // The two create actions of this module, and the whole difference between them:
@@ -458,98 +434,30 @@
 
               <!-- ── All Deployments controls ── -->
               <ControlsHeader
-                key="controls-header-1"
                 v-if="activeTab === 'all'"
-
+                key="controls-header-1"
               >
-                <DeploymentTableControls
-                  v-model:search="deploySearch"
-                  v-model:status-filter="deployStatusFilter"
-                  v-model:type-filter="deployTypeFilter"
-                  v-model:environment-filter="deployEnvironmentFilter"
-                  v-model:author-filter="deployAuthorFilter"
-                  :deployments="filteredDeployments"
-                  :extra-count="deployedRange ? 1 : 0"
-                  @clear="clearDeployFilters"
+                <InputText
+                  v-model="deploySearch"
+                  size="large"
+                  placeholder="Search deployments..."
+                  aria-label="Search deployments"
+                  class="min-w-36 grow basis-[var(--container-2xs)]"
                 >
-                  <template #selectors>
-                    <!-- Status, Type, Environment and Authors are the shared table's own
-                   selectors — one per enumerable column; this module adds the one only its
-                   cross-resource list needs, the Deployed date. It renders last in the
-                   filter panel's stack, and `:extra-count` above is how the panel's badge
-                   knows it is set (the shared controls cannot see a field the page owns).
-
-                   A plain DATE PICKER, the same field Applications and Workloads carry:
-                   no `:presets` (that splits the trigger into a preset dropdown + the
-                   range, two controls for one filter) and no `period` (that swaps it for
-                   the relative-span parser). `clearable` is live in this single-part
-                   branch, so resetting is one click; `:show-fields="false"` drops the
-                   Start/End inputs, which restate what the grid already says. The child
-                   selectors stretch the trigger, which is otherwise fixed at
-                   `--container-3xs`, to the width of the Selects stacked above it. -->
-                    <Calendar
-                      v-model="deployedRange"
-                      mode="range"
-                      size="large"
-                      clearable
-                      :show-fields="false"
-                      placeholder="Deployed"
-                      class="w-full [&>span]:w-full [&>span>span]:w-full"
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
                     />
                   </template>
-                </DeploymentTableControls>
+                </InputText>
               </ControlsHeader>
 
               <!-- ── Settings controls ── -->
               <ControlsHeader
-                key="controls-header-2"
                 v-else
-
+                key="controls-header-2"
               >
-                <!-- The same filter the deployment tab (and every other module list)
-                     carries: the column selectors stacked in a popover behind one icon,
-                     so both tabs of this module narrow the same way — a Select per
-                     ENUMERABLE column (here: Status) and the plain date picker for Last
-                     Modified. Type is a column without a selector on purpose: `default`
-                     is the only strategy type the platform exposes, so a Select offering
-                     it would narrow nothing. -->
-                <FilterPopover
-                  :count="activeSettingFilterCount"
-                  description="Narrow deployment settings by status or when they last changed."
-                  @clear="clearSettingFilters"
-                >
-                  <Select
-                    v-model="settingStatusFilter"
-                    multiple
-                    size="large"
-                    placeholder="Status"
-                    :display-value="filterDisplay('Status', settingStatusOptions)"
-                  >
-                    <Select.Trigger aria-label="Filter by status" />
-                    <Select.Content>
-                      <Select.Option
-                        v-for="option in settingStatusOptions"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Option>
-                    </Select.Content>
-                  </Select>
-
-                  <!-- The child selectors stretch the trigger — fixed at
-                       `--container-3xs` on its own — to the width of the Selects above. -->
-                  <Calendar
-                    v-model="settingModifiedRange"
-                    mode="range"
-                    size="large"
-                    clearable
-                    :show-fields="false"
-                    placeholder="Last Modified"
-                    class="w-full [&>span]:w-full [&>span>span]:w-full"
-                  />
-                </FilterPopover>
-
                 <InputText
                   v-model="settingSearch"
                   size="large"
@@ -566,23 +474,40 @@
                 </InputText>
               </ControlsHeader>
 
+              <!-- The filter bar takes its own row on whichever tab is open, so both
+                   tabs of this module narrow the same way and by the same gesture. The
+                   history tab reads the shared deployment catalog; Settings reads its
+                   own two fields. -->
+              <FilterBar
+                v-if="activeTab === 'all'"
+                key="filter-bar-1"
+                v-model="deployFilters"
+                :fields="deployFields"
+              />
+              <FilterBar
+                v-else
+                key="filter-bar-2"
+                v-model="settingFilters"
+                :fields="settingFilterFields"
+              />
+
               <section class="flex min-h-0 flex-col">
                 <CardBox :padded="false">
                   <template #content>
                     <!-- ── All Deployments ── -->
                     <!-- The shared deployment table owns the columns and the cells; its
-                     controls are hoisted into the page's ControlsHeader above
-                     (`:controls="false"`), with their state bound back in as models. Page
-                     size is the component's default, so every deployment table paginates
-                     and reads the same. -->
+                     controls are hoisted into the page's ControlsHeader and filter row
+                     above (`:controls="false"`), with their state bound back in as the
+                     two models. It applies the catalog itself, so the narrowing happens
+                     in one place whether the controls are hoisted or not. Page size is
+                     the component's default, so every deployment table paginates and
+                     reads the same. -->
                     <DeploymentsTable
                       v-if="activeTab === 'all'"
                       v-model:search="deploySearch"
-                      v-model:status-filter="deployStatusFilter"
-                      v-model:type-filter="deployTypeFilter"
-                      v-model:environment-filter="deployEnvironmentFilter"
-                      v-model:author-filter="deployAuthorFilter"
-                      :deployments="filteredDeployments"
+                      v-model:filters="deployFilters"
+                      :deployments="allDeployments"
+                      :fields="deployFields"
                       :email="userEmail"
                       :controls="false"
                       @row-click="openDeployment"

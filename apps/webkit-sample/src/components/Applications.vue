@@ -19,8 +19,8 @@
   // each. The catalog those fields live in is `filterFields` below — the page declares
   // them, the bar renders and applies them (see lib/filter-bar.js).
   //
-  // This replaces a FILTER POPOVER (ui/FilterPopover.vue) that held one Select per
-  // column behind a single badged IconButton. Collapsing them there fixed the right
+  // This replaced a FILTER POPOVER that held one Select per column behind a single
+  // badged IconButton. Collapsing them there fixed the right
   // problem — four selectors plus the search plus the module's action truncated every
   // one of them at a laptop width — but paid for it by putting the applied state
   // inside a closed panel: the badge said "2 filters", never which two, and never on
@@ -44,20 +44,15 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import { APPLICATIONS } from '../lib/applications'
   import { environmentSeverity } from '../lib/deployments'
-  import {
-    applyFilters,
-    DATE_PRESETS,
-    formatDateRange,
-    matchDate
-  } from '../lib/filter-bar'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
+  import { useListFilters } from '../lib/list-state'
   import { presetIcon, presetLabel } from '../lib/presets'
   import { provisionedApplications, removeDeployment } from '../lib/provisioning'
-  import { useTenancyReload } from '../lib/tenancy-reload'
   import { tenancyRows } from '../lib/tenancy-scope'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
@@ -69,11 +64,6 @@
 
   // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
-
-  // Switching organization, account or workspace reloads the module: the table
-  // shows skeletons while the new scope's applications arrive
-  // (src/lib/tenancy-reload.js).
-  const { tenancyReloading } = useTenancyReload()
 
   // The framework preset → glyph + label map lives in src/lib/presets.js, shared
   // with an application's Build tab so the two can never disagree about a preset.
@@ -161,21 +151,6 @@
     }
   ]
 
-  // The whole applied state, one object: `{ author: ['WITS'], status: ['Active'] }`.
-  // An absent or empty entry is not a filter — which is what makes an unfilled field
-  // render as a dimmed suggestion chip rather than disappear.
-  //
-  // No count lives beside it: the badge the popover needed existed only because the
-  // state was hidden. Here the chips ARE the count.
-  const filters = ref({})
-
-  // Free-text search. The field lives in the page's ControlsHeader, above the card,
-  // so it is a plain InputText bound to the table's `v-model:globalFilter` — the
-  // context-aware `Table.Search` only works inside `<Table>`. The table still owns
-  // the matching itself (every visible column, TanStack's global filter), so the
-  // behaviour is identical to the toolbar version it replaces.
-  const search = ref('')
-
   // Applications provisioned by the deploy flow lead the list, newest first — the
   // second link of the chain a deploy creates (src/lib/provisioning.js). The
   // seeded rows below them belong to one scope, so they are projected through the
@@ -186,21 +161,21 @@
     ...tenancyRows(applications.value, 'applications')
   ])
 
-  // Fields intersect, values inside a field union — `applyFilters` owns that once
-  // (lib/filter-bar.js) so the page never re-derives it per column.
-  const filteredApplications = computed(() =>
-    applyFilters(allApplications.value, filterFields, filters.value)
-  )
-
-  // Filtering `:data` from outside the table does not trip TanStack's
-  // `autoResetPageIndex`, so narrowing to fewer rows than the current page's
-  // offset would render an empty table. Own the pagination state and rewind it.
-  // A scope switch narrows the same way (a scope owns a subset of the seed), so a
-  // reload starts on the first page too.
-  const pagination = ref({ pageIndex: 0, pageSize: 8 })
-  watch([filters, tenancyReloading], () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
-  })
+  // The applied state, the search value, the rows that survive the filters, and the
+  // pagination they are paged into — all four from one place, so the page cannot
+  // forget the rewind that keeps a narrowed list off an empty page offset
+  // (src/lib/list-state.js). The chips ARE the applied count; no badge lives beside
+  // them, because the badge the old popover needed existed only to describe state
+  // the panel was hiding.
+  // `loading` is the tenancy reload window: switching organization, account or
+  // workspace skeletons the table while the new scope's applications arrive.
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: filteredApplications,
+    loading: tenancyReloading
+  } = useListFilters(filterFields, allApplications)
 
   // Entering the module and choosing "create" opens the dedicated create PAGE
   // (a form route), not a modal — see CreateApplication.vue.

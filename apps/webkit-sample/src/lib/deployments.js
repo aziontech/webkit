@@ -8,6 +8,8 @@
 // One module, one answer: a status, a resource type and an environment read
 // identically wherever they appear.
 
+import { DATE_PRESETS, formatDateRange, matchDate } from "./filter-bar";
+
 /** Deployment status → StatusIndicator severity + spinner state. */
 export const STATUS_SEVERITY = {
   Ready: { severity: "success", loading: false },
@@ -100,3 +102,79 @@ export const environmentOptions = [
 /** Production is the live environment (info); everything else is a rehearsal (secondary). */
 export const environmentSeverity = (environment) =>
   environment === "Production" ? "info" : "secondary";
+
+// ── The filter catalog every deployment surface shares ──────────────────────
+// A deployment table renders in three places (the Deployments module, a
+// workload's Version History, its Deployments tab), and each one is narrowed by
+// the same four columns. The catalog is built here rather than per page so a
+// status that gains a value, or an environment that gains a name, reaches every
+// surface at once — the same reason STATUS_SEVERITY lives in this file.
+//
+// AUTHORS COME FROM THE ROWS, so a surface can never offer someone with nothing
+// in it: a workload's history lists the two people who deployed that workload,
+// while the module list lists everyone. The value is the email (what a row
+// carries) and the label is the name (what a person reads).
+
+/**
+ * The fields a deployment table can be narrowed by, in column order.
+ *
+ * @param {Array<object>} rows The rows this surface shows — the Author options come from them.
+ * @param {{ deployed?: boolean }} [options] `deployed` adds the date field. The module
+ *   list wants it (it spans every deployment ever made); a workload's own history is
+ *   already short enough that a date window narrows nothing worth the chip.
+ */
+export const deploymentFilterFields = (rows = [], { deployed = false } = {}) => {
+  const authorOptions = [
+    ...new Map(rows.map((row) => [row.authorEmail, row])).values(),
+  ]
+    .filter((row) => row.authorEmail)
+    .map((row) => ({
+      value: row.authorEmail,
+      label: row.author || row.authorEmail,
+      avatar: row.authorAvatar,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  return [
+    {
+      id: "status",
+      label: "Status",
+      kind: "options",
+      options: statusOptions,
+      match: (row, values) => values.includes(row.status),
+    },
+    {
+      id: "resourceType",
+      label: "Type",
+      kind: "options",
+      options: resourceTypeOptions,
+      match: (row, values) => values.includes(row.resourceType),
+    },
+    {
+      id: "environment",
+      label: "Environment",
+      kind: "options",
+      options: environmentOptions,
+      match: (row, values) => values.includes(row.environment),
+    },
+    {
+      id: "author",
+      label: "Author",
+      kind: "options",
+      options: authorOptions,
+      match: (row, values) => values.includes(row.authorEmail),
+    },
+    ...(deployed
+      ? [
+          {
+            id: "deployed",
+            label: "Deployed",
+            kind: "range",
+            options: DATE_PRESETS,
+            formatValue: formatDateRange,
+            match: (row, values) => matchDate(row.date, values),
+          },
+        ]
+      : []),
+  ];
+};

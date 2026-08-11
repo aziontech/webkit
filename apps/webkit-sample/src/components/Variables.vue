@@ -6,43 +6,41 @@
   // settings, and the two `.env` bulk paths). This page keeps only what a LIST owns:
   // the records, the narrowing, and appending whatever the drawer created.
   //
-  // Narrowing follows the module-list pattern: the COLUMNS decide the fields, and they
-  // live in a FILTER POPOVER behind one IconButton (ui/FilterPopover.vue) that LEADS the
-  // controls row, to the LEFT of the search — every enumerable column gets a multiple
-  // Select (Authors, Type) and the date column gets a plain date picker (Calendar,
-  // `mode="range"`), while the free-text columns (Key, Value) are covered by the search
-  // field instead of one field each. They pre-filter `:data`; the search narrows what is
-  // left, through the table's own global filter. This replaces the generic
-  // field/operator/value builder that sat in the table's own toolbar: `Table.Filter` /
-  // `Table.AppliedFilters` read the table's filter state through `inject`, so they could
-  // never be hoisted out of the card — and `lastEditor` is not a column at all (it
-  // renders inside the Last Modified cell), so the table's own filter state could not
-  // have hosted that field either.
-  import Avatar from '@aziontech/webkit/avatar'
+  // Narrowing follows the module-list pattern (the webkit-lists skill): a FILTER BAR
+  // of CHIPS (ui/FilterBar.vue) in its own row under the controls. The COLUMNS decide
+  // the fields — every enumerable column becomes one field (Author, Type) and the
+  // date column becomes relative periods plus a Custom month grid (Last Modified),
+  // while the free-text columns (Key, Value) are covered by the search field instead
+  // of one field each. The bar pre-filters `:data`; the search narrows what is left,
+  // through the table's own global filter.
+  //
+  // This replaced the generic field/operator/value builder that sat in the table's
+  // own toolbar: `Table.Filter` / `Table.AppliedFilters` read the table's filter
+  // state through `inject`, so they could never be hoisted out of the card — and
+  // `lastEditor` is not a column at all (it renders inside the Last Modified cell),
+  // so the table's own filter state could not have hosted that field either.
   import Button from '@aziontech/webkit/button'
-  import Calendar from '@aziontech/webkit/calendar'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
-  import Select from '@aziontech/webkit/select'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import { daysAgo, formatListDate, withinRange } from '../lib/dates'
-  import { filterDisplay } from '../lib/filters'
+  import { daysAgo, formatListDate } from '../lib/dates'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
+  import { useListFilters } from '../lib/list-state'
   import { authorAt } from '../lib/people'
-  import { useTenancyReload } from '../lib/tenancy-reload'
   import { tenancyRows } from '../lib/tenancy-scope'
   import AddVariableDrawer from './AddVariableDrawer.vue'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
-  import FilterPopover from './ui/FilterPopover.vue'
+  import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
 
   const route = useRoute()
@@ -109,7 +107,6 @@
   // to the scope it was set in, so the seed is projected through the one in force; a
   // variable created in this session is the operator's own and always shows
   // (src/lib/tenancy-scope.js).
-  const { tenancyReloading } = useTenancyReload()
   const scopedVariables = computed(() => tenancyRows(variables.value, 'variables'))
 
   // Column model. `key` is the principal (emphasized) column; the trailing
@@ -122,11 +119,15 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // ── Column selectors ──────────────────────────────────────────────────────
-  // Authors come from the data, so the selector can never offer someone with no
-  // rows in the list. (The column is "Last Modified"; the person renders inside that
-  // cell as `lastEditor`.) Each option carries that person's photo, so the filter
-  // identifies them the way the cell does — by face first, name second.
+  // ── The filter catalog ────────────────────────────────────────────────────
+  // One field per enumerable column, in the order the COLUMNS read. Authors come
+  // from the data, so the field can never offer someone with no rows in the list.
+  // (The column is "Last Modified"; the person renders inside that cell as
+  // `lastEditor`.) Each carries that person's photo, so the filter identifies them
+  // the way the cell does — by face first, name second.
+  //
+  // A getter rather than an array: the drawer appends rows, and a new variable's
+  // editor has to become offerable without a reload.
   const authorOptions = computed(() =>
     [
       ...new Map(
@@ -137,76 +138,48 @@
       .map(([author, avatar]) => ({ value: author, label: author, avatar }))
   )
 
-  // The roster is long enough that scanning it beats reading it: the panel gets its
-  // own search field (Select.Content's `#search` slot), narrowing the options by
-  // name. Cleared on close so the panel never reopens pre-filtered.
-  const authorQuery = ref('')
-  const authorOpen = ref(false)
-  watch(authorOpen, (open) => {
-    if (!open) authorQuery.value = ''
-  })
-  const visibleAuthorOptions = computed(() => {
-    const query = authorQuery.value.trim().toLowerCase()
-    if (!query) return authorOptions.value
-    return authorOptions.value.filter((option) => option.label.toLowerCase().includes(query))
-  })
-
-  // The Type column is a boolean in the record and a Tag in the cell; the selector
-  // speaks the words the cell shows, not `true` / `false`.
-  const typeOptions = [
-    { value: 'variable', label: 'Variable' },
-    { value: 'secret', label: 'Secret' }
+  const filterFields = [
+    {
+      id: 'lastEditor',
+      label: 'Author',
+      kind: 'options',
+      get options() {
+        return authorOptions.value
+      },
+      match: (variable, values) => values.includes(variable.lastEditor)
+    },
+    {
+      // The Type column is a boolean in the record and a Tag in the cell; the field
+      // speaks the words the cell shows, not `true` / `false`.
+      id: 'type',
+      label: 'Type',
+      kind: 'options',
+      options: [
+        { value: 'variable', label: 'Variable' },
+        { value: 'secret', label: 'Secret' }
+      ],
+      match: (variable, values) => values.includes(variable.secret ? 'secret' : 'variable')
+    },
+    {
+      id: 'modified',
+      label: 'Last Modified',
+      kind: 'range',
+      options: DATE_PRESETS,
+      formatValue: formatDateRange,
+      match: (variable, values) => matchDate(variable.modifiedAt, values)
+    }
   ]
 
-  // Free-text search. The field lives in the page's ControlsHeader, above the card, so it
-  // is a plain InputText bound to the table's `v-model:globalFilter` — the context-aware
-  // `Table.Search` only works inside `<Table>`. The table still owns the matching
-  // (every visible column, TanStack's global filter).
-  const search = ref('')
-  const authorFilter = ref([])
-  const typeFilter = ref([])
-  const modifiedRange = ref(null)
-
-  // The badge on the filter trigger counts FIELDS that are narrowing the list, not
-  // selected values — two authors is still one filter on Authors. The search is not
-  // counted: it stays visible in the row, so it is never a hidden filter.
-  const activeFilterCount = computed(
-    () =>
-      Number(authorFilter.value.length > 0) +
-      Number(typeFilter.value.length > 0) +
-      Number(Boolean(modifiedRange.value))
-  )
-
-  // "Clear all" resets the fields the panel renders, and only those — the search sits
-  // outside it.
-  const clearFilters = () => {
-    authorFilter.value = []
-    typeFilter.value = []
-    modifiedRange.value = null
-  }
-
-  // The panel's fields pre-filter `:data`; the search field narrows what is left,
-  // through the table's own global filter.
-  const filteredVariables = computed(() =>
-    scopedVariables.value.filter((variable) => {
-      if (authorFilter.value.length && !authorFilter.value.includes(variable.lastEditor))
-        return false
-      if (
-        typeFilter.value.length &&
-        !typeFilter.value.includes(variable.secret ? 'secret' : 'variable')
-      )
-        return false
-      return withinRange(variable.modifiedAt, modifiedRange.value)
-    })
-  )
-
-  // External `:data` filtering does not trip TanStack's `autoResetPageIndex`, so own
-  // the pagination state and rewind to the first page when a filter changes — or when
-  // a tenancy-scope switch narrows the list the same way.
-  const pagination = ref({ pageIndex: 0, pageSize: 10 })
-  watch([authorFilter, typeFilter, modifiedRange, tenancyReloading], () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
-  })
+  // Filter state, search value, surviving rows and their pagination — one place,
+  // including the rewind (src/lib/list-state.js). `loading` is the tenancy reload
+  // window.
+  const {
+    filters,
+    search,
+    pagination,
+    visibleRows: filteredVariables,
+    loading: tenancyReloading
+  } = useListFilters(filterFields, scopedVariables, { pageSize: 10 })
 
   // Secret values are masked in the list — never render a stored secret in plain
   // text once saved (mirrors the console).
@@ -271,115 +244,12 @@
         <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
           <!-- First-level module list: no PageHeading — the module name already IS the
                header breadcrumb crumb (AppLayout). The page opens with its CONTROLS row
-               — the filter, then the search, the module's own actions on the right — and
-               the table follows. -->
+               — the search, the module's own actions on the right — then the filter bar,
+               and the table follows. -->
           <ControlsHeader v-if="scopedVariables.length">
-            <!-- The column selectors, collapsed behind one icon (ui/FilterPopover.vue) —
-                 the same filter the other module lists carry, leading the row to the LEFT
-                 of the search. They apply as they are picked; the badge on the trigger
-                 reports how many are set. -->
-            <FilterPopover
-              :count="activeFilterCount"
-              description="Narrow variables by author, when they last changed, or type."
-              @clear="clearFilters"
-            >
-              <Select
-                v-model="authorFilter"
-                v-model:open="authorOpen"
-                multiple
-                size="large"
-                placeholder="All Authors"
-                :display-value="filterDisplay('All Authors', authorOptions)"
-              >
-                <Select.Trigger aria-label="Filter by author" />
-                <Select.Content>
-                  <!-- `#search` renders above the scrolling list, so the field stays put
-                       while the options move. `@keydown.stop` keeps the panel's
-                       Arrow/Home/End handler from pulling focus onto an option while the
-                       user is still typing. -->
-                  <template #search>
-                    <InputText
-                      v-model="authorQuery"
-                      size="large"
-                      class="w-full"
-                      placeholder="Search authors..."
-                      aria-label="Search authors"
-                      @keydown.stop
-                    >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </InputText>
-                  </template>
-                  <Select.Option
-                    v-for="option in visibleAuthorOptions"
-                    :key="option.value"
-                    :value="option.value"
-                  >
-                    <template #left>
-                      <Avatar
-                        :src="option.avatar || undefined"
-                        :alt="option.label"
-                        :label="option.label"
-                        size="small"
-                        kind="square"
-                      />
-                    </template>
-                    {{ option.label }}
-                  </Select.Option>
-                  <!-- A search that matches nothing must say so; an empty panel reads as
-                       a broken filter. -->
-                  <p
-                    v-if="!visibleAuthorOptions.length"
-                    class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
-                  >
-                    No author matches “{{ authorQuery }}”.
-                  </p>
-                </Select.Content>
-              </Select>
-
-              <!-- Last Modified is a plain DATE PICKER: one field, one panel, a month
-                   grid. No `:presets`, no `period`. `:show-fields="false"` drops the
-                   Start/End text inputs, which restate what the grid already says; the
-                   width classes stretch Calendar's fixed `--container-3xs` trigger to the
-                   panel, so it lines up with the Selects above and below it. -->
-              <Calendar
-                v-model="modifiedRange"
-                mode="range"
-                size="large"
-                clearable
-                :show-fields="false"
-                placeholder="Last Modified"
-                class="w-full [&>span]:w-full [&>span>span]:w-full"
-              />
-
-              <Select
-                v-model="typeFilter"
-                multiple
-                size="large"
-                placeholder="All Types"
-                :display-value="filterDisplay('All Types', typeOptions)"
-              >
-                <Select.Trigger aria-label="Filter by type" />
-                <Select.Content>
-                  <Select.Option
-                    v-for="option in typeOptions"
-                    :key="option.value"
-                    :value="option.value"
-                  >
-                    {{ option.label }}
-                  </Select.Option>
-                </Select.Content>
-              </Select>
-            </FilterPopover>
-
             <!-- Search drives the table's global filter from outside the card, so the
                  field is a plain InputText (`Table.Search` is context-aware and only works
-                 inside `<Table>`). With the selectors collapsed into the filter popover
-                 beside it, the field keeps the whole row. -->
+                 inside `<Table>`). It keeps the whole row: the filters sit below. -->
             <InputText
               v-model="search"
               size="large"
@@ -405,6 +275,15 @@
               />
             </template>
           </ControlsHeader>
+
+          <!-- The filter bar takes its own row: it grows as filters are applied, and
+               sharing the controls row would make the search field jump width as chips
+               come and go. -->
+          <FilterBar
+            v-if="scopedVariables.length"
+            v-model="filters"
+            :fields="filterFields"
+          />
 
           <!-- Variables table -->
           <section class="flex min-h-0 flex-col">

@@ -25,11 +25,11 @@
   //     and its own record) rather than narrowing anything, so it wears no filter
   //     button and earns no row of its own.
   //   Version History / Deployments — narrowing, so it takes the row every list in the
-  //     console opens with (ui/ControlsHeader.vue): the shared table's own fields
-  //     (ui/DeploymentTableControls.vue) hoisted out of the table's `#toolbar` under the
-  //     heading — `:controls="false"`, and this page owns the state and binds it back in
-  //     as models. Same component and same filter panel as the module list, so only the
-  //     place changes and the two can never drift.
+  //     console opens with (ui/ControlsHeader.vue): the search, then a filter bar of
+  //     chips (ui/FilterBar.vue) over the shared deployment catalog, hoisted out of the
+  //     table's `#toolbar` under the heading — `:controls="false"`, and this page owns
+  //     the state and binds it back in as models. Same catalog as the module list, so
+  //     only the place changes and the two can never drift.
   //
   // Both tables are the shared DeploymentsTable — the one table shape the
   // Deployments module also uses, so a deployment reads identically whether it is
@@ -52,14 +52,14 @@
   import { consoleDeployRowsFor } from '../lib/azion-deploys'
   import { formatListDate } from '../lib/dates'
   import { deploymentRowsFor } from '../lib/deployment-history'
-  import { environmentOptions, statusMeta } from '../lib/deployments'
+  import { deploymentFilterFields, environmentOptions, statusMeta } from '../lib/deployments'
   import { emailOf } from '../lib/people'
   import { demoDeployment, findDeploymentByWorkload, resourceChain } from '../lib/provisioning'
   import { releaseSeedForWorkload } from '../lib/releases'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
   import DeploymentsTable from './ui/DeploymentsTable.vue'
-  import DeploymentTableControls from './ui/DeploymentTableControls.vue'
+  import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
   import PageHeading from './ui/PageHeading.vue'
   import PageTabs from './ui/PageTabs.vue'
@@ -317,32 +317,25 @@
   )
 
   // --- Deployment table controls -------------------------------------------
-  // The fields that narrow the deployment tables sit OUT of the card, in the band's
+  // The controls that narrow the deployment tables sit OUT of the card, in the band's
   // own controls row above it — the placement every list in the console uses
-  // (ui/ControlsHeader.vue), so a deployment table is narrowed the same way here as
-  // in the Deployments module. DeploymentsTable therefore renders no toolbar of its
-  // own (`:controls="false"`) and this page holds the state, binding it back in as
-  // models; the fields themselves still come from the one shared file
-  // (ui/DeploymentTableControls.vue), so the two placements cannot drift.
+  // (ui/ControlsHeader.vue), so a deployment table is narrowed the same way here as in
+  // the Deployments module. DeploymentsTable therefore renders no toolbar of its own
+  // (`:controls="false"`) and this page holds the state, binding it back in as the two
+  // models; the CATALOG still comes from one file (src/lib/deployments.js), so the two
+  // placements cannot drift.
   //
-  // ONE set of refs for both tabs: the Overview's Version History and the Deployments
+  // No Deployed window here: this list is one workload's own history, short enough
+  // that a date field would be a chip nobody opens (the module list, which spans every
+  // deployment ever made, asks for it).
+  //
+  // ONE set of state for both tabs: the Overview's Version History and the Deployments
   // tab list the same deployments, so narrowing them is one decision rather than two,
   // and it carries when the user moves between the tabs. Only one of them is rendered
   // at a time, so the two tables never fight over the models.
+  const deployFields = computed(() => deploymentFilterFields(deployments.value))
   const deploySearch = ref('')
-  const deployStatusFilter = ref([])
-  const deployTypeFilter = ref([])
-  const deployEnvironmentFilter = ref([])
-  const deployAuthorFilter = ref([])
-
-  // The filter panel's "Clear all" resets the four selectors it renders, and only
-  // those — the search sits outside the panel, in plain view.
-  const clearDeployFilters = () => {
-    deployStatusFilter.value = []
-    deployTypeFilter.value = []
-    deployEnvironmentFilter.value = []
-    deployAuthorFilter.value = []
-  }
+  const deployFilters = ref({})
 
   // --- Deployment details drawer -------------------------------------------
   const drawerOpen = ref(false)
@@ -696,26 +689,32 @@
                    controls row. Same component, same panel, same badge — only the
                    PLACE changes, and this page owns the state it drives. -->
               <ControlsHeader>
-                <DeploymentTableControls
-                  v-model:search="deploySearch"
-                  v-model:status-filter="deployStatusFilter"
-                  v-model:type-filter="deployTypeFilter"
-                  v-model:environment-filter="deployEnvironmentFilter"
-                  v-model:author-filter="deployAuthorFilter"
-                  :deployments="deployments"
-                  search-placeholder="Search deployments..."
-                  @clear="clearDeployFilters"
-                />
+                <InputText
+                  v-model="deploySearch"
+                  size="large"
+                  placeholder="Search deployments..."
+                  aria-label="Search deployments"
+                  class="min-w-36 grow basis-[var(--container-2xs)]"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </InputText>
               </ControlsHeader>
+              <FilterBar
+                v-model="deployFilters"
+                :fields="deployFields"
+              />
               <CardBox :padded="false">
                 <template #content>
                   <DeploymentsTable
                     v-model:search="deploySearch"
-                    v-model:status-filter="deployStatusFilter"
-                    v-model:type-filter="deployTypeFilter"
-                    v-model:environment-filter="deployEnvironmentFilter"
-                    v-model:author-filter="deployAuthorFilter"
+                    v-model:filters="deployFilters"
                     :deployments="deployments"
+                    :fields="deployFields"
                     :email="userEmail"
                     :controls="false"
                     @row-click="openDeployment"
@@ -743,26 +742,32 @@
                  (see ui/ControlsHeader.vue). -->
             <div class="flex flex-col gap-[var(--layout-group-gap)]">
               <ControlsHeader>
-                <DeploymentTableControls
-                  v-model:search="deploySearch"
-                  v-model:status-filter="deployStatusFilter"
-                  v-model:type-filter="deployTypeFilter"
-                  v-model:environment-filter="deployEnvironmentFilter"
-                  v-model:author-filter="deployAuthorFilter"
-                  :deployments="deployments"
-                  search-placeholder="Search deployments..."
-                  @clear="clearDeployFilters"
-                />
+                <InputText
+                  v-model="deploySearch"
+                  size="large"
+                  placeholder="Search deployments..."
+                  aria-label="Search deployments"
+                  class="min-w-36 grow basis-[var(--container-2xs)]"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </InputText>
               </ControlsHeader>
+              <FilterBar
+                v-model="deployFilters"
+                :fields="deployFields"
+              />
               <CardBox :padded="false">
                 <template #content>
                   <DeploymentsTable
                     v-model:search="deploySearch"
-                    v-model:status-filter="deployStatusFilter"
-                    v-model:type-filter="deployTypeFilter"
-                    v-model:environment-filter="deployEnvironmentFilter"
-                    v-model:author-filter="deployAuthorFilter"
+                    v-model:filters="deployFilters"
                     :deployments="deployments"
+                    :fields="deployFields"
                     :email="userEmail"
                     :controls="false"
                     @row-click="openDeployment"

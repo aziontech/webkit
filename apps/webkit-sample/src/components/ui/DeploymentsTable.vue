@@ -11,27 +11,29 @@
   //   deployedAt (Date) · date (display string)
   //   author · authorEmail (the Authors selector's key) · authorAvatar
   //
-  // Narrowing is a SELECTOR PER COLUMN, never a field/operator/value builder: Status,
-  // Type, Environment and Authors — what every deployment surface narrows by — stacked
-  // in the filter popover behind one icon (ui/FilterPopover.vue), and a page that needs
-  // more (the module list adds a date range) passes it through `#selectors`, where it
-  // renders in the same panel, and pre-filters `:deployments` itself. The free-text
-  // search stays in the open, narrowing further through the table's global filter.
+  // Narrowing is a FILTER BAR of CHIPS (ui/FilterBar.vue) over the shared catalog in
+  // src/lib/deployments.js — Status, Type, Environment and Author, what every
+  // deployment surface narrows by, plus the Deployed window the module list adds. The
+  // free-text search stays in the open, narrowing further through the table's global
+  // filter. Never a field/operator/value builder: every one of these narrows by
+  // membership, so an operator column would offer `is one of` on every row.
   //
-  // WHERE those fields render depends on the nav level, and is the one thing this
+  // WHERE the controls render depends on the nav level, and is the one thing this
   // component is configured for:
   //
-  //   `controls` (default) — the fields render in the table's own `#toolbar`, inside
-  //     the card. This is what an internal level uses (a workload's Version History /
-  //     Deployments tab), where the table is one band among several.
-  //   `:controls="false"` — no toolbar at all. A FIRST-LEVEL page hoists the same
-  //     fields into its ControlsHeader above the card (see ui/ControlsHeader.vue) and
-  //     owns their state, binding it here through the models below.
+  //   `controls` (default) — search and bar render in the table's own `#toolbar`,
+  //     inside the card. This is what an internal level uses (a workload's Version
+  //     History / Deployments tab), where the table is one band among several.
+  //   `:controls="false"` — no toolbar at all. A FIRST-LEVEL page hoists them into its
+  //     ControlsHeader and filter row above the card (see ui/ControlsHeader.vue) and
+  //     owns their state, binding it here through the two models below.
   //
-  // Either way the fields themselves come from ONE file, ui/DeploymentTableControls.vue,
-  // so the two placements can never drift apart.
+  // Both placements read the SAME catalog and the SAME `{ fieldId: values[] }` state,
+  // so they cannot drift apart — which is what the separate controls component used to
+  // buy at the cost of five models and a `clear` round trip.
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
+  import InputText from '@aziontech/webkit/input-text'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
@@ -44,17 +46,22 @@
     resourceMeta,
     statusMeta
   } from '../../lib/deployments'
+  import { applyFilters } from '../../lib/filter-bar'
   import { useTenancyReload } from '../../lib/tenancy-reload'
-  import DeploymentTableControls from './DeploymentTableControls.vue'
+  import FilterBar from './FilterBar.vue'
   import LastModifiedCell from './LastModifiedCell.vue'
 
   const props = defineProps({
-    /** Deployment records, already narrowed by whatever the page's own selectors apply. */
+    /** Deployment records, already narrowed by whatever the page itself applies. */
     deployments: { type: Array, default: () => [] },
+    /**
+     * The filter catalog — `deploymentFilterFields(rows, { deployed })` from
+     * src/lib/deployments.js. Passed in rather than built here because the Author
+     * options come from the rows a SURFACE shows, and only the surface knows whether
+     * its span is wide enough to want the Deployed window.
+     */
+    fields: { type: Array, default: () => [] },
     pageSize: { type: Number, default: 10 },
-    // Short by design, and it now has the row nearly to itself: the selectors moved
-    // into the filter popover, so only that one icon button sits beside the field
-    // (Applications.vue uses the same text).
     searchPlaceholder: { type: String, default: 'Search...' },
     /** Carried on the resource link so the detail page keeps the session's email. */
     email: { type: String, default: '' },
@@ -62,7 +69,7 @@
     controls: { type: Boolean, default: true }
   })
 
-  const emit = defineEmits(['row-click', 'action', 'clear'])
+  const emit = defineEmits(['row-click', 'action'])
 
   // Deployments belong to the scope that made them, so switching organization,
   // account or workspace reloads this table wherever it renders — the module list
@@ -88,63 +95,28 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // The filter state. Models, not plain refs, so a first-level page that hoists the
-  // controls out of the table can own the same four values and bind them here —
-  // `defineModel` gives the uncontrolled case (an internal level, which passes none of
-  // them) local state for free.
+  // TWO models, not five. Both are `defineModel`, so an internal level that binds
+  // neither gets local state for free while a first-level page that hoists the
+  // controls owns the same two values and binds them here. The applied state is one
+  // object keyed by field id (src/lib/filter-bar.js), so adding a field to the
+  // catalog never adds a model.
   const search = defineModel('search', { type: String, default: '' })
-  const statusFilter = defineModel('statusFilter', { type: Array, default: () => [] })
-  const typeFilter = defineModel('typeFilter', { type: Array, default: () => [] })
-  const environmentFilter = defineModel('environmentFilter', { type: Array, default: () => [] })
-  const authorFilter = defineModel('authorFilter', { type: Array, default: () => [] })
+  const filters = defineModel('filters', { type: Object, default: () => ({}) })
   const pagination = ref({ pageIndex: 0, pageSize: props.pageSize })
 
-  // The selectors pre-filter the rows, so the Table only ever sees what survives
-  // them; the search then narrows that further through the global filter.
+  // The bar pre-filters the rows, so the Table only ever sees what survives it; the
+  // search then narrows that further through the global filter.
   const visibleDeployments = computed(() =>
-    props.deployments.filter((deployment) => {
-      if (statusFilter.value.length && !statusFilter.value.includes(deployment.status)) {
-        return false
-      }
-      if (typeFilter.value.length && !typeFilter.value.includes(deployment.resourceType)) {
-        return false
-      }
-      if (
-        environmentFilter.value.length &&
-        !environmentFilter.value.includes(deployment.environment)
-      ) {
-        return false
-      }
-      if (authorFilter.value.length && !authorFilter.value.includes(deployment.authorEmail)) {
-        return false
-      }
-      return true
-    })
+    applyFilters(props.deployments, props.fields, filters.value)
   )
 
-  // Narrowing `:data` from outside does not trip TanStack's
-  // `autoResetPageIndex`, so landing on a page past the new last one would render
-  // an empty table. Rewind whenever the row set is recomputed.
+  // Narrowing `:data` from outside does not trip TanStack's `autoResetPageIndex`, so
+  // landing on a page past the new last one would render an empty table. Rewind
+  // whenever the row set is recomputed — which also covers `:deployments` changing
+  // under a page that filters before passing them in.
   watch(visibleDeployments, () => {
     pagination.value = { ...pagination.value, pageIndex: 0 }
   })
-
-  // `clear` lets the page reset the selectors it owns in `#selectors` — this component
-  // can only clear the four it holds (Status, Type, Environment and Authors), and a
-  // "Clear all" that left the page's fields set would be lying. The search is not part
-  // of it: it sits outside the filter panel, in plain view, so the panel's footer has
-  // no business wiping it.
-  const clearFilters = () => {
-    statusFilter.value = []
-    typeFilter.value = []
-    environmentFilter.value = []
-    authorFilter.value = []
-    emit('clear')
-  }
-
-  // What a page needs when it hoists the controls: its filter panel's "Clear all" has
-  // to reach the four selectors this component holds.
-  defineExpose({ clearFilters })
 </script>
 
 <template>
@@ -161,28 +133,36 @@
     :loading="tenancyReloading"
     @row-click="(event, row) => emit('row-click', event, row)"
   >
-    <!-- The same fields the page can hoist, rendered here for an internal level. One
-         row, `flex-wrap`, the tight `--spacing-xs` rhythm — the controls component
-         itself is `display: contents`, so its fields are direct children of this row. -->
+    <!-- The same two controls the page can hoist, rendered here for an internal level.
+         Stacked, not side by side: the bar grows a value half per applied chip and
+         wraps to a second line, so sharing a row would make the search field jump
+         width as filters come and go — the same reason the page pattern gives the bar
+         its own row under the ControlsHeader. -->
     <template
       v-if="controls"
       #toolbar
     >
-      <div class="flex w-full flex-wrap items-center gap-[var(--spacing-xs)]">
-        <DeploymentTableControls
-          v-model:search="search"
-          v-model:status-filter="statusFilter"
-          v-model:type-filter="typeFilter"
-          v-model:environment-filter="environmentFilter"
-          v-model:author-filter="authorFilter"
-          :deployments="deployments"
-          :search-placeholder="searchPlaceholder"
-          @clear="clearFilters"
-        >
-          <template #selectors>
-            <slot name="selectors" />
-          </template>
-        </DeploymentTableControls>
+      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+        <div class="flex w-full items-center justify-end">
+          <InputText
+            v-model="search"
+            size="large"
+            :placeholder="searchPlaceholder"
+            :aria-label="searchPlaceholder"
+            class="min-w-36 grow basis-[var(--container-2xs)]"
+          >
+            <template #iconLeft>
+              <i
+                class="pi pi-search"
+                aria-hidden="true"
+              />
+            </template>
+          </InputText>
+        </div>
+        <FilterBar
+          v-model="filters"
+          :fields="fields"
+        />
       </div>
     </template>
 

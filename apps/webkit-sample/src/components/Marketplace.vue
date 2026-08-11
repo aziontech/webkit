@@ -9,13 +9,13 @@
 // (sidebar + GlobalHeader breadcrumb) comes from AppLayout.
 import EmptyState from "@aziontech/webkit/empty-state";
 import InputText from "@aziontech/webkit/input-text";
-import Select from "@aziontech/webkit/select";
 import TabView from "@aziontech/webkit/tab-view";
 import { toast } from "@aziontech/webkit/toast";
 import { computed, ref } from "vue";
 
-import { filterDisplay } from "../lib/filters";
+import { applyFilters } from "../lib/filter-bar";
 import AppLayout from "./ui/AppLayout.vue";
+import FilterBar from "./ui/FilterBar.vue";
 import IntegrationCard from "./ui/IntegrationCard.vue";
 import PageHeading from "./ui/PageHeading.vue";
 import TemplateCard from "./ui/TemplateCard.vue";
@@ -352,39 +352,51 @@ const featuredIntegrations = integrations.filter((item) => featuredIds.has(item.
 // ── Filters (multiple selection, no label, no checkbox) ──
 // Each filter is a MultiSelect whose trigger reads "Publisher: All" until the
 // user narrows it. Empty = no constraint on that axis.
-const selectedPublishers = ref([]);
-const selectedCategories = ref([]);
-const selectedContexts = ref([]);
+// The filter catalog. A card grid narrows by the same membership rule a table does
+// — is this integration's publisher one of these — so it takes the same bar
+// (ui/FilterBar.vue) rather than a row of Selects that had to be width-tuned per
+// field. The grid keeps its own search: unlike a table it has no global filter of
+// its own, so the term is matched here across name, vendor and description.
+const integrationFields = [
+  {
+    id: "vendor",
+    label: "Publisher",
+    kind: "options",
+    options: [...new Set(integrations.map((i) => i.vendor))]
+      .sort((a, b) => a.localeCompare(b))
+      .map((vendor) => ({ value: vendor, label: vendor })),
+    match: (item, values) => values.includes(item.vendor),
+  },
+  {
+    id: "group",
+    label: "Category",
+    kind: "options",
+    options: [...new Set(integrations.map((i) => i.group))].map((group) => ({
+      value: group,
+      label: group,
+    })),
+    match: (item, values) => values.includes(item.group),
+  },
+  {
+    id: "context",
+    label: "Context",
+    kind: "options",
+    options: Object.entries(contextLabels).map(([value, label]) => ({ value, label })),
+    match: (item, values) => values.includes(item.context),
+  },
+];
 
-const publisherOptions = [...new Set(integrations.map((i) => i.vendor))]
-  .sort((a, b) => a.localeCompare(b))
-  .map((vendor) => ({ value: vendor, label: vendor }));
+const integrationFilters = ref({});
 
-const categoryOptions = [...new Set(integrations.map((i) => i.group))].map((group) => ({
-  value: group,
-  label: group,
-}));
-
-const contextOptions = Object.entries(contextLabels).map(([value, label]) => ({ value, label }));
-
-// Search across name/vendor/description, then apply each active filter axis.
+// Search across name/vendor/description, then run the catalog over what is left.
 const filteredIntegrations = computed(() => {
   const term = integrationQuery.value.trim().toLowerCase();
-  return integrations.filter((item) => {
-    if (term && !`${item.name} ${item.vendor} ${item.description}`.toLowerCase().includes(term)) {
-      return false;
-    }
-    if (selectedPublishers.value.length && !selectedPublishers.value.includes(item.vendor)) {
-      return false;
-    }
-    if (selectedCategories.value.length && !selectedCategories.value.includes(item.group)) {
-      return false;
-    }
-    if (selectedContexts.value.length && !selectedContexts.value.includes(item.context)) {
-      return false;
-    }
-    return true;
-  });
+  const matched = term
+    ? integrations.filter((item) =>
+        `${item.name} ${item.vendor} ${item.description}`.toLowerCase().includes(term)
+      )
+    : integrations;
+  return applyFilters(matched, integrationFields, integrationFilters.value);
 });
 const noIntegrations = computed(() => !filteredIntegrations.value.length);
 
@@ -486,66 +498,16 @@ const openIntegration = (item) =>
                   </template>
                 </InputText>
 
-                <Select
-                  v-model="selectedPublishers"
-                  multiple
-                  size="large"
-                  class="w-full md:w-[var(--container-3xs)]"
-                  placeholder="All Publishers"
-                  :display-value="filterDisplay('All Publishers', publisherOptions)"
-                >
-                  <Select.Trigger aria-label="Filter by publisher" />
-                  <Select.Content>
-                    <Select.Option
-                      v-for="option in publisherOptions"
-                      :key="option.value"
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </Select.Option>
-                  </Select.Content>
-                </Select>
-
-                <Select
-                  v-model="selectedCategories"
-                  multiple
-                  size="large"
-                  class="w-full md:w-[var(--container-2xs)]"
-                  placeholder="All Categories"
-                  :display-value="filterDisplay('All Categories', categoryOptions)"
-                >
-                  <Select.Trigger aria-label="Filter by category" />
-                  <Select.Content>
-                    <Select.Option
-                      v-for="option in categoryOptions"
-                      :key="option.value"
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </Select.Option>
-                  </Select.Content>
-                </Select>
-
-                <Select
-                  v-model="selectedContexts"
-                  multiple
-                  size="large"
-                  class="w-full md:w-[var(--container-3xs)]"
-                  placeholder="All Contexts"
-                  :display-value="filterDisplay('All Contexts', contextOptions)"
-                >
-                  <Select.Trigger aria-label="Filter by context" />
-                  <Select.Content>
-                    <Select.Option
-                      v-for="option in contextOptions"
-                      :key="option.value"
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </Select.Option>
-                  </Select.Content>
-                </Select>
               </div>
+
+              <!-- The filter bar takes its own row under the search, the same shape
+                   every module list uses. It wraps rather than scrolling, so a fourth
+                   field costs a line instead of a horizontal scroll nobody finds. -->
+              <FilterBar
+                v-model="integrationFilters"
+                :fields="integrationFields"
+                class="layout-group-start"
+              />
 
               <EmptyState
                 v-if="noIntegrations"
