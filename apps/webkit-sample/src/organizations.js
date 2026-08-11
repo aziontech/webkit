@@ -15,6 +15,8 @@
 // for the organizations the demo opens with.
 import { computed, ref } from "vue";
 
+import { azionPlans } from "./plans.js";
+
 // The accents an organization may wear.
 //
 // `colors` is a three-stop palette in theme tokens, handed to the marble
@@ -249,6 +251,7 @@ export const createOrganization = ({
   name,
   accent = orgAccents[0].value,
   workspace = DEFAULT_WORKSPACE_NAME,
+  plan = azionPlans[0].name,
   additionalData = {},
   owner = {},
 }) => {
@@ -257,7 +260,11 @@ export const createOrganization = ({
     id,
     name: String(name ?? "").trim(),
     accent,
-    plan: "Developer",
+    // The tier the organization starts on. Signup's onboarding asks for it (the
+    // Plan step) and passes the answer; the console's own Create Organization
+    // flow does not ask, so a further organization starts on the free tier —
+    // the only plan it is safe to put someone on without asking.
+    plan,
     // The organization is its own first tenant.
     accounts: 1,
     status: "active",

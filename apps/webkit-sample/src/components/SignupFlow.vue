@@ -27,7 +27,7 @@
 
 <template>
   <AuthSplit>
-    <RouterView v-slot="{ Component }">
+    <RouterView v-slot="{ Component, route }">
       <Transition
         mode="out-in"
         enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
@@ -38,8 +38,29 @@
         leave-to-class="opacity-0"
       >
         <!-- The step's own content: its card, plus whatever belongs on the canvas
-             under it. The column's centring and gap come from AuthSplit. -->
-        <component :is="Component" />
+             under it. The column's centring and gap come from AuthSplit.
+
+             THE KEYED WRAPPER IS LOAD-BEARING. `<Transition mode="out-in">` must
+             not take `<component :is>` as its direct child: with a dynamic
+             component there, the leave completes, the old step is removed, and the
+             branch waiting to enter is dropped — the slot renders an empty comment
+             and the next step never appears at all. Giving the transition a stable
+             keyed ELEMENT to hold, with the dynamic component inside it, is what
+             makes `out-in` resolve; `route.path` is the identity that tells one
+             step from the next.
+
+             The symptom was specific and easy to misdiagnose: /signup/verify was
+             correct on a cold load and after a refresh (no leave to wait for), and
+             blank every single time it was ARRIVED AT from /signup. Collapsing this
+             wrapper back into a bare `<component :is>` brings the blank step
+             straight back, so check the step change by NAVIGATING to it — a
+             reload will always look fine. -->
+        <div
+          :key="route.path"
+          class="flex w-full flex-col items-center"
+        >
+          <component :is="Component" />
+        </div>
       </Transition>
     </RouterView>
   </AuthSplit>
