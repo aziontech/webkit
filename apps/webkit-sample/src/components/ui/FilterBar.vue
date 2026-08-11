@@ -457,10 +457,16 @@
                      name as plain text. Back is a discrete action with a discrete
                      target, which is what an IconButton is for — the whole-row version
                      this replaces made the field's own name a button, so the heading
-                     that says WHERE YOU ARE was also the control that leaves. -->
+                     that says WHERE YOU ARE was also the control that leaves.
+
+                     It pads vertically by `--spacing-xs`, the SAME step every row below
+                     it takes (ROW_CLASS's `py`), so the header is one row tall rather
+                     than a tighter strip: at `--spacing-xxs` its 24px button left a 32px
+                     header above a 40px search block, and the panel read as though its
+                     first row had been squeezed. -->
                 <div
                   v-if="activeField"
-                  class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-xxs)]"
+                  class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-xs)]"
                 >
                   <IconButton
                     icon="pi pi-angle-left"
