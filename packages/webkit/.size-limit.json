@@ -25,17 +25,6 @@
     "limit": "48 KB"
   },
   {
-    "name": "illustration-root",
-    "path": "src/components/content/illustration/illustration.vue",
-    "limit": "2 KB",
-    "entryOnly": true
-  },
-  {
-    "name": "illustration-box",
-    "path": "src/components/content/illustration/illustration-box/illustration-box.vue",
-    "limit": "12 KB"
-  },
-  {
     "name": "frame-box",
     "path": "src/components/layout/frame-box/frame-box.vue",
     "limit": "1.5 KB"
@@ -59,10 +48,5 @@
     "name": "password-requirements",
     "path": "src/components/inputs/field-password/password-requirements.ts",
     "limit": "0.3 KB"
-  },
-  {
-    "name": "chip",
-    "path": "src/components/inputs/chip/chip.vue",
-    "limit": "5 KB"
   }
 ]

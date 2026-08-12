@@ -119,6 +119,7 @@ const HIGHLIGHT_TEMPLATE = `<HeroTitle
 export const Highlight = {
   render: () => ({ components: { HeroTitle }, template: HIGHLIGHT_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {
@@ -142,6 +143,7 @@ const CENTERED_TEMPLATE = `<HeroTitle
 export const Centered = {
   render: () => ({ components: { HeroTitle }, template: CENTERED_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {
@@ -169,6 +171,7 @@ const WITH_ACTIONS_TEMPLATE = `<HeroTitle
 export const WithActions = {
   render: () => ({ components: { HeroTitle, Button }, template: WITH_ACTIONS_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {

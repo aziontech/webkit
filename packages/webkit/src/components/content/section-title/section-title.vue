@@ -21,15 +21,12 @@
     eyebrow?: string
     /** Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. */
     kind?: SectionTitleKind
-    /** Draw the frame's vertical hatch texture behind the copy. */
-    hatch?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     description: '',
     eyebrow: '',
-    kind: 'centered',
-    hatch: false
+    kind: 'centered'
   })
 
   const slots = defineSlots<{
@@ -57,10 +54,9 @@
     v-bind="$attrs"
     flush
     borders="y"
-    :hatch="hatch"
+    marks="bottom"
     :data-testid="testId"
     :data-kind="kind"
-    :data-hatch="hatch || null"
     class="group"
   >
     <div

@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
 
-const { Default, Kinds, WithActions, Hatch } = composeStories(stories)
+const { Default, Kinds, WithActions } = composeStories(stories)
 
 const TESTID = 'content-section-title'
 
@@ -24,8 +24,10 @@ describe('SectionTitle', () => {
     const { getByTestId } = render(SectionTitle, { props })
     const root = getByTestId(TESTID)
 
-    expect(root).toHaveAttribute('data-flush', 'true')
-    expect(root).toHaveAttribute('data-borders', 'y')
+    // flush="top" is subtracted from borders="y", so the header keeps only its bottom rule —
+    // the divider between the header and the section body.
+    expect(root).toHaveAttribute('data-flush', 'top')
+    expect(root).toHaveAttribute('data-borders', 'bottom')
   })
 
   it.each(['centered', 'left', 'horizontal'] as const)(
@@ -112,18 +114,6 @@ describe('SectionTitle', () => {
     expect(getByRole('button', { name: 'Start building' })).toBeInTheDocument()
   })
 
-  it('draws no frame hatch by default', () => {
-    const { getByTestId } = render(SectionTitle, { props })
-
-    expect(getByTestId(TESTID)).not.toHaveAttribute('data-hatch')
-  })
-
-  it('draws the frame hatch when hatch is set', () => {
-    const { getByTestId } = render(SectionTitle, { props: { ...props, hatch: true } })
-
-    expect(getByTestId(TESTID)).toHaveAttribute('data-hatch', 'true')
-  })
-
   it('forwards a consumer data-testid onto the root', () => {
     const { getByTestId } = render(SectionTitle, {
       props,
@@ -165,12 +155,6 @@ describe('SectionTitle', () => {
         'Start building',
         'Read the docs'
       ])
-    })
-
-    it('renders the Hatch story with the texture on', () => {
-      const { getByTestId } = render(Hatch())
-
-      expect(getByTestId(TESTID)).toHaveAttribute('data-hatch', 'true')
     })
   })
 })

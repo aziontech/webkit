@@ -4,12 +4,12 @@ category: layout
 structure: monolithic
 status: approved
 spec_version: 3
-checksum: 839b0020c960365acd2b32f6acedf3885cf91773ff23e150e87645121f7373c7
+checksum: 3a29d07981a70d43fb124c6743d21c4bae6585baa1fedd8036cfd4249c16dfb7
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
 created: 2026-08-11
-last_updated: 2026-08-11
+last_updated: 2026-08-12
 ---
 
 # Section Gap — Component Spec
@@ -41,7 +41,8 @@ The empty registration frame that divides two page sections. On a page with no m
 - Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.
 - Do not override the height from the call site. The steps are multiples of `--spacing-xxl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.
 - Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.
-- Let it carry the shared rule: it renders `flush`, so its top border lands on the section above instead of doubling it.
+- Let it carry the shared rule: it renders `flush` and `marks="bottom"`, so its top rule and top ticks are subtracted and the section above supplies them instead of doubling them.
+- Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.
 - Do not wrap it in a padded container; the gap is the padding.
 
 ## Usage
@@ -61,6 +62,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | How much vertical air the gap holds, as a multiple of `--spacing-xxl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport. |
+| `hatch` | `boolean` | `false` | false | Draw the frame's linear hatch texture in the gap. |
 
 ## Events
 
@@ -74,6 +76,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
+- `data-hatch` present when the hatch texture is drawn
 
 ## Motion & Animations
 
@@ -85,6 +88,7 @@ _none_
 |---|---|
 | frame rule | `var(--border-default)` |
 | corner mark | `var(--border-default)` |
+| hatch line | `var(--border-default)` |
 | height (small) | `var(--spacing-xxl)` — 1× |
 | height (medium) | `var(--spacing-xxl)` — 2× |
 | height (large) | `var(--spacing-xxl)` — 3× |
@@ -113,6 +117,7 @@ _none_
 
 - Default — one gap between two stub sections, so the shared rules and the vertical air are both visible (justified: an empty frame rendered alone shows nothing; the neighbours are what the story is about)
 - Sizes — composite story rendering every `size` value between stub sections
+- Hatch — the `hatch` texture on (mutually-exclusive boolean state of the `hatch` prop)
 
 ## Constraints — DO NOT
 

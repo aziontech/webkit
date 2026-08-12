@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionGap from './section-gap.vue'
 
-const { Default, Sizes } = composeStories(stories)
+const { Default, Hatch, Sizes } = composeStories(stories)
 
 const TESTID = 'layout-section-gap'
 const FRAME_TESTID = 'layout-frame-box'
@@ -23,9 +23,31 @@ describe('SectionGap', () => {
     const { getByTestId } = render(SectionGap)
     const root = getByTestId(TESTID)
 
-    expect(root).toHaveAttribute('data-flush', 'true')
-    expect(root).toHaveAttribute('data-borders', 'y')
-    expect(root).toHaveAttribute('data-marks', 'true')
+    // flush="top" is subtracted from borders="y", so only the bottom rule is left.
+    expect(root).toHaveAttribute('data-flush', 'top')
+    expect(root).toHaveAttribute('data-borders', 'bottom')
+    // Only the bottom pair of ticks: the section above supplies the shared junction's marks.
+    expect(root.getAttribute('data-marks')?.split(' ').sort()).toEqual([
+      'bottom-left',
+      'bottom-right'
+    ])
+    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(2)
+  })
+
+  it('draws no hatch texture by default', () => {
+    const { getByTestId } = render(SectionGap)
+    const root = getByTestId(TESTID)
+
+    expect(root).not.toHaveAttribute('data-hatch')
+    expect(root.querySelectorAll('div[aria-hidden="true"]')).toHaveLength(0)
+  })
+
+  it('draws one hatch layer when hatch is set', () => {
+    const { getByTestId } = render(SectionGap, { props: { hatch: true } })
+    const root = getByTestId(TESTID)
+
+    expect(root).toHaveAttribute('data-hatch', 'true')
+    expect(root.querySelectorAll('div[aria-hidden="true"]')).toHaveLength(1)
   })
 
   it('defaults to the medium size', () => {
@@ -49,7 +71,7 @@ describe('SectionGap', () => {
   it('forwards a consumer data-testid onto the root', () => {
     const { getByTestId } = render(SectionGap, { attrs: { 'data-testid': 'my-gap' } })
 
-    expect(getByTestId('my-gap')).toHaveAttribute('data-borders', 'y')
+    expect(getByTestId('my-gap')).toHaveAttribute('data-borders', 'bottom')
   })
 
   it('has no a11y violations', async () => {
@@ -62,8 +84,14 @@ describe('SectionGap', () => {
       const { getByTestId, getByText } = render(Default())
 
       expect(getByText('Section above')).toBeInTheDocument()
-      expect(getByTestId(TESTID)).toHaveAttribute('data-flush', 'true')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-flush', 'top')
       expect(getByText('Section below')).toBeInTheDocument()
+    })
+
+    it('renders the Hatch story with the texture drawn in the gap', () => {
+      const { getByTestId } = render(Hatch())
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-hatch', 'true')
     })
 
     it('renders the Sizes story with one gap per size step', () => {

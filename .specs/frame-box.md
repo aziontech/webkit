@@ -4,17 +4,17 @@ category: layout
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 4d6e12997c98851fd89c5db4d0ad34ab13b3a227b50e29a9fe13b5b278bc43ef
+checksum: 05c784a5f4f1bc876b5bbe5794d8946d7dc8e50b5842a37c64b0019d67ceed3a
 style_seam: true
 created: 2026-08-11
-last_updated: 2026-08-11
+last_updated: 2026-08-12
 ---
 
 # Frame Box — Component Spec
 
 ## Purpose
 
-The registration frame: a hairline box with a small square set inside each corner and an optional vertical hatch texture behind its content. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.
+The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content. Every side and every corner is addressable on its own, so frames stack and abut without doubling a rule or a mark. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.
 
 ## When to use
 
@@ -37,9 +37,9 @@ The registration frame: a hairline box with a small square set inside each corne
 
 ## Best practices
 
-- Stack frames with `flush` so a junction between two of them reads as one hairline instead of two.
+- Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush="left"`) with the same mechanic.
 - Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.
-- Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid.
+- Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks="bottom"`, `flush="left"` + `marks="right"`) so the junction carries one rule and one mark per corner.
 - Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise.
 
 ## Usage
@@ -60,10 +60,10 @@ import FrameBox from '@aziontech/webkit/frame-box'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `borders` | `'all' \| 'x' \| 'y' \| 'none'` | `'all'` | false | Which of the frame's own rules to draw. Use `y` for a full-bleed band and `none` when a surrounding grid already draws every edge. |
-| `marks` | `boolean` | `true` | false | Show the four corner registration squares, inset from both rules. |
-| `hatch` | `boolean` | `false` | false | Show the faint vertical hatch-line texture behind the content, faded toward the edges. |
-| `flush` | `boolean` | `false` | false | Pull the frame up by its border width so its top rule lands on the bottom rule of the block above, drawing the shared edge once. |
+| `borders` | `'all' \| 'none' \| 'x' \| 'y' \| Side \| Side[]` | `'all'` | false | Which of the frame's own rules to draw. Takes a keyword, one side, or a list of sides. |
+| `marks` | `'all' \| 'none' \| Edge \| Corner \| Corner[]` | `'all'` | false | Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners. |
+| `hatch` | `boolean` | `false` | false | Show the linear hatch texture behind the content, faded toward the edges. Reserved for `section-gap`, whose identity it is. |
+| `flush` | `boolean \| Side \| Side[]` | `false` | false | Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top`; use `left` for a horizontal row, or a list for a grid cell. |
 
 ## Events
 
@@ -78,10 +78,10 @@ import FrameBox from '@aziontech/webkit/frame-box'
 ## States
 
 - Visual states: `default`
-- `data-borders` mirrors the `borders` prop: `all` | `x` | `y` | `none`
-- `data-marks` present when the corner squares are drawn
+- `data-borders` carries the RESOLVED, space-separated side list (`flush` already subtracted), or `none`
+- `data-marks` carries the RESOLVED, space-separated corner list, or `none`
 - `data-hatch` present when the hatch texture is drawn
-- `data-flush` present when the frame shares the rule above
+- `data-flush` carries the space-separated list of sides a neighbour draws; absent when none do
 
 ## Motion & Animations
 
@@ -93,14 +93,19 @@ _none_
 |---|---|
 | frame rule | `var(--border-default)` |
 | corner mark | `var(--border-default)` |
-| hatch line | `var(--border-muted)` |
+| hatch line | `var(--border-default)` |
 | hatch pitch | `var(--spacing-lg)` |
 
 ## Theme gaps
 
+<!-- The frame uses the theme's own border tokens with no local override, so it inherits whatever
+     they resolve to. While those tokens are alpha, a rule paints a different colour on every
+     backdrop and the hatch reads faint; `flush` already keeps a shared edge to one rule, so
+     nothing doubles either way. Making them opaque is a theme concern, tracked separately. -->
+
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | — |
+| opaque neutral rule | `var(--border-default)` / `var(--border-muted)` as they resolve today | The neutral border tokens are semi-transparent, so a frame rule has no fixed identity — it paints one colour on `--bg-canvas` and a brighter one on `--bg-surface-overlay` — and the hatch inherits that faintness. Making both opaque steps of the surface palette is [#889](https://github.com/aziontech/webkit/pull/889); the frame needs no change when it lands. |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -114,9 +119,10 @@ _none_
 ## Stories (Storybook)
 
 - Default
-- Borders — composite story rendering every `borders` value side-by-side (justified: `borders` is the component's only enum axis, and the difference between `all`/`x`/`y`/`none` is only legible when the four are compared in one frame)
+- Borders — composite story rendering every `borders` value side-by-side (justified: the difference between `all`/`x`/`y`/`none` is only legible when the four are compared in one frame)
+- Marks — composite story rendering the `marks` keywords, a single corner and an explicit list side-by-side (justified: which corners are drawn is the axis a stack depends on, and the forms are only readable in comparison)
 - Hatch — the `hatch` texture on (mutually-exclusive boolean state of the `hatch` prop)
-- Flush — two frames stacked, the lower one `flush` (justified: sharing one hairline with the block above is invisible on a single frame; the story is what proves the junction is 1px)
+- Flush — a vertical stack and a horizontal row, each with the second frame flushed against the first (justified: a shared edge is invisible on a single frame, and the story is what proves `flush` works on both axes)
 
 ## Constraints — DO NOT
 
