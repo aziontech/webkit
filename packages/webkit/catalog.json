@@ -7808,7 +7808,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-root": {
       "import": "@aziontech/webkit/dropdown-root",
@@ -7878,7 +7878,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-trigger": {
       "import": "@aziontech/webkit/dropdown-trigger",
