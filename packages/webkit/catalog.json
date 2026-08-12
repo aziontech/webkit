@@ -2773,13 +2773,6 @@
           "default": "'centered'",
           "required": "false",
           "doc": "Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
-        },
-        {
-          "name": "hatch",
-          "type": "boolean",
-          "default": "false",
-          "required": "false",
-          "doc": "Draw the frame's vertical hatch texture behind the copy."
         }
       ],
       "slots": [
@@ -8102,31 +8095,31 @@
       "props": [
         {
           "name": "borders",
-          "type": "'all' | 'x' | 'y' | 'none'",
+          "type": "'all' | 'none' | 'x' | 'y' | Side | Side[]",
           "default": "'all'",
           "required": "false",
-          "doc": "Which of the frame's own rules to draw. Use `y` for a full-bleed band and `none` when a surrounding grid already draws every edge."
+          "doc": "Which of the frame's own rules to draw. Takes a keyword, one side, or a list of sides."
         },
         {
           "name": "marks",
-          "type": "boolean",
-          "default": "true",
+          "type": "'all' | 'none' | Edge | Corner | Corner[]",
+          "default": "'all'",
           "required": "false",
-          "doc": "Show the four corner registration squares, inset from both rules."
+          "doc": "Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners."
         },
         {
           "name": "hatch",
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Show the faint vertical hatch-line texture behind the content, faded toward the edges."
+          "doc": "Show the linear hatch texture behind the content, faded toward the edges. Reserved for `section-gap`, whose identity it is."
         },
         {
           "name": "flush",
-          "type": "boolean",
+          "type": "boolean | Side | Side[]",
           "default": "false",
           "required": "false",
-          "doc": "Pull the frame up by its border width so its top rule lands on the bottom rule of the block above, drawing the shared edge once."
+          "doc": "Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top`; use `left` for a horizontal row, or a list for a grid cell."
         }
       ],
       "slots": [
@@ -8136,7 +8129,7 @@
           "notes": "Frame content; rendered above the hatch texture and stretched to the frame height."
         }
       ],
-      "purpose": "The registration frame: a hairline box with a small square set inside each corner and an optional vertical hatch texture behind its content. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.",
+      "purpose": "The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content. Every side and every corner is addressable on its own, so frames stack and abut without doubling a rule or a mark. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.",
       "useWhen": [
         "Wrapping a page section, band, or grid cell that should read as a framed module.",
         "Building a page whose vertical rhythm is drawn by rules rather than by margins: stack frames and let `flush` collapse each junction to a single hairline.",
@@ -8154,9 +8147,9 @@
         "divider` — one hairline with optional centered label; no corners, no content."
       ],
       "bestPractices": [
-        "Stack frames with `flush` so a junction between two of them reads as one hairline instead of two.",
+        "Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush=\"left\"`) with the same mechanic.",
         "Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.",
-        "Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid.",
+        "Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks=\"bottom\"`, `flush=\"left\"` + `marks=\"right\"`) so the junction carries one rule and one mark per corner.",
         "Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise."
       ],
       "styleSeam": true
@@ -8176,6 +8169,13 @@
           "default": "'medium'",
           "required": "false",
           "doc": "How much vertical air the gap holds, as a multiple of `--spacing-xxl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport."
+        },
+        {
+          "name": "hatch",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the frame's linear hatch texture in the gap."
         }
       ],
       "purpose": "The empty registration frame that divides two page sections. On a page with no margins between sections, this frame *is* the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.",
@@ -8198,7 +8198,8 @@
         "Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.",
         "Do not override the height from the call site. The steps are multiples of `--spacing-xxl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.",
         "Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.",
-        "Let it carry the shared rule: it renders `flush`, so its top border lands on the section above instead of doubling it.",
+        "Let it carry the shared rule: it renders `flush` and `marks=\"bottom\"`, so its top rule and top ticks are subtracted and the section above supplies them instead of doubling them.",
+        "Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.",
         "Do not wrap it in a padded container; the gap is the padding."
       ]
     },

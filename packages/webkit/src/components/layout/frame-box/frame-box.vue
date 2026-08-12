@@ -14,14 +14,7 @@
   export type FrameBoxSides = 'all' | 'none' | 'x' | 'y' | FrameBoxSide | FrameBoxSide[]
   /** Any way of naming a set of corners: a keyword, one corner, or an explicit list. */
   export type FrameBoxMarks =
-    | 'all'
-    | 'none'
-    | 'top'
-    | 'bottom'
-    | 'left'
-    | 'right'
-    | FrameBoxCorner
-    | FrameBoxCorner[]
+    'all' | 'none' | 'top' | 'bottom' | 'left' | 'right' | FrameBoxCorner | FrameBoxCorner[]
 
   interface Props {
     /** Which of the frame's own rules to draw. Takes a keyword (`all`, `none`, `x`, `y`), one side, or a list of sides. */
