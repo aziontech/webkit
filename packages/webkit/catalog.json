@@ -1513,7 +1513,7 @@
         "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
       "highlight-fade": {
-        "value": "highlight ease-in forwards",
+        "value": "highlight 1100ms ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
       },
       "ping": {

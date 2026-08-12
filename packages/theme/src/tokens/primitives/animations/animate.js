@@ -26,7 +26,7 @@ export const animate = {
   'fade-in': 'fadeIn 220ms ease-in-out',
   'fade-out': 'fadeOut 220ms ease-in-out',
   'slide-down': 'slideDown 220ms ease-in-out',
-  'highlight-fade': 'highlight ease-in forwards',
+  'highlight-fade': `highlight ${duration['slow-03']} ease-in forwards`,
   'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
   'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
   'slide-in-left': `slideInLeft ${duration['moderate-02']} ${curve['productive-entrance']}`,
