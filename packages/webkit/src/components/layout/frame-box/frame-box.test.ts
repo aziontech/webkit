@@ -6,9 +6,15 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import FrameBox from './frame-box.vue'
 
-const { Default, Borders, Hatch, Flush } = composeStories(stories)
+const { Default, Borders, Marks, Hatch, Flush } = composeStories(stories)
 
 const TESTID = 'layout-frame-box'
+
+/** The resolved side/corner list off a `data-*` attribute, sorted so order is not asserted. */
+const sides = (el: HTMLElement, attr: string) => {
+  const value = el.getAttribute(attr)
+  return value && value !== 'none' ? value.split(' ').sort() : []
+}
 
 describe('FrameBox', () => {
   it('renders with the default testid and the default frame configuration', () => {
@@ -16,21 +22,37 @@ describe('FrameBox', () => {
     const root = getByTestId(TESTID)
 
     expect(root).toBeInTheDocument()
-    expect(root).toHaveAttribute('data-borders', 'all')
-    // marks defaults to true; hatch/flush are `value || null`, so they are absent.
-    expect(root).toHaveAttribute('data-marks', 'true')
+    // borders/marks carry the RESOLVED side and corner lists, not the raw keyword.
+    expect(sides(root, 'data-borders')).toEqual(['bottom', 'left', 'right', 'top'])
+    expect(sides(root, 'data-marks')).toEqual([
+      'bottom-left',
+      'bottom-right',
+      'top-left',
+      'top-right'
+    ])
     expect(root).not.toHaveAttribute('data-hatch')
     expect(root).not.toHaveAttribute('data-flush')
   })
 
-  it.each(['all', 'x', 'y', 'none'] as const)(
-    'reflects borders="%s" on data-borders',
-    (borders) => {
-      const { getByTestId } = render(FrameBox, { props: { borders } })
+  it.each([
+    ['all', ['bottom', 'left', 'right', 'top']],
+    ['x', ['left', 'right']],
+    ['y', ['bottom', 'top']],
+    ['top', ['top']],
+    ['left', ['left']],
+    ['none', []]
+  ] as const)('resolves borders="%s" to its sides', (borders, expected) => {
+    const { getByTestId } = render(FrameBox, { props: { borders } })
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-borders', borders)
-    }
-  )
+    expect(sides(getByTestId(TESTID), 'data-borders')).toEqual([...expected])
+  })
+
+  it('accepts an explicit list of sides', () => {
+    const { getByTestId } = render(FrameBox, { props: { borders: ['top', 'left'] } })
+    const root = getByTestId(TESTID)
+
+    expect(sides(root, 'data-borders')).toEqual(['left', 'top'])
+  })
 
   it('renders the four corner marks by default', () => {
     const { getByTestId } = render(FrameBox)
@@ -38,12 +60,43 @@ describe('FrameBox', () => {
     expect(getByTestId(TESTID).querySelectorAll('span[aria-hidden="true"]')).toHaveLength(4)
   })
 
-  it('renders no corner marks and drops data-marks when marks is false', () => {
-    const { getByTestId } = render(FrameBox, { props: { marks: false } })
+  it.each([
+    ['all', ['bottom-left', 'bottom-right', 'top-left', 'top-right']],
+    ['top', ['top-left', 'top-right']],
+    ['bottom', ['bottom-left', 'bottom-right']],
+    ['left', ['bottom-left', 'top-left']],
+    ['right', ['bottom-right', 'top-right']],
+    ['top-right', ['top-right']],
+    ['none', []]
+  ] as const)('resolves marks="%s" to its corners', (marks, expected) => {
+    const { getByTestId } = render(FrameBox, { props: { marks } })
     const root = getByTestId(TESTID)
 
-    expect(root).not.toHaveAttribute('data-marks')
-    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(0)
+    expect(sides(root, 'data-marks')).toEqual([...expected])
+    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(expected.length)
+  })
+
+  it('accepts an explicit list of corners', () => {
+    const { getByTestId } = render(FrameBox, {
+      props: { marks: ['top-left', 'bottom-right'] }
+    })
+    const root = getByTestId(TESTID)
+
+    expect(sides(root, 'data-marks')).toEqual(['bottom-right', 'top-left'])
+    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(2)
+  })
+
+  it.each([
+    ['top', 'top-0'],
+    ['bottom', 'bottom-0'],
+    ['left', 'left-0'],
+    ['right', 'right-0']
+  ] as const)('anchors the marks="%s" pair to its own edge', (marks, edgeClass) => {
+    const { getByTestId } = render(FrameBox, { props: { marks } })
+    const squares = [...getByTestId(TESTID).querySelectorAll('span[aria-hidden="true"]')]
+
+    expect(squares).toHaveLength(2)
+    expect(squares.every((square) => square.className.includes(edgeClass))).toBe(true)
   })
 
   it('renders the decorative hatch layer only when hatch is set', () => {
@@ -55,10 +108,40 @@ describe('FrameBox', () => {
     expect(root.querySelectorAll('div[aria-hidden="true"]')).toHaveLength(1)
   })
 
-  it('marks the frame flush when it shares the rule above', () => {
+  it('treats a bare flush as the top side and drops that rule', () => {
     const { getByTestId } = render(FrameBox, { props: { flush: true } })
+    const root = getByTestId(TESTID)
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-flush', 'true')
+    expect(root).toHaveAttribute('data-flush', 'top')
+    expect(sides(root, 'data-borders')).toEqual(['bottom', 'left', 'right'])
+  })
+
+  it.each([
+    ['top', ['bottom', 'left', 'right']],
+    ['right', ['bottom', 'left', 'top']],
+    ['bottom', ['left', 'right', 'top']],
+    ['left', ['bottom', 'right', 'top']]
+  ] as const)('flushes the %s side on either axis', (flush, remaining) => {
+    const { getByTestId } = render(FrameBox, { props: { flush } })
+    const root = getByTestId(TESTID)
+
+    expect(root).toHaveAttribute('data-flush', flush)
+    expect(sides(root, 'data-borders')).toEqual([...remaining])
+  })
+
+  it('flushes several sides at once for a grid cell', () => {
+    const { getByTestId } = render(FrameBox, { props: { flush: ['top', 'left'] } })
+    const root = getByTestId(TESTID)
+
+    expect(sides(root, 'data-flush')).toEqual(['left', 'top'])
+    expect(sides(root, 'data-borders')).toEqual(['bottom', 'right'])
+  })
+
+  it('never leaves a flushed side in the border set', () => {
+    const { getByTestId } = render(FrameBox, { props: { borders: 'y', flush: 'top' } })
+    const root = getByTestId(TESTID)
+
+    expect(sides(root, 'data-borders')).toEqual(['bottom'])
   })
 
   it('renders default slot content above the decorative layers', () => {
@@ -77,7 +160,7 @@ describe('FrameBox', () => {
     })
 
     const root = getByTestId('my-frame')
-    expect(root).toHaveAttribute('data-borders', 'all')
+    expect(sides(root, 'data-borders')).toEqual(['bottom', 'left', 'right', 'top'])
     expect(root.className).toContain('h-40')
   })
 
@@ -99,7 +182,7 @@ describe('FrameBox', () => {
       const { getByTestId, getByText } = render(Default())
       const root = getByTestId(TESTID)
 
-      expect(root).toHaveAttribute('data-borders', 'all')
+      expect(sides(root, 'data-borders')).toEqual(['bottom', 'left', 'right', 'top'])
       expect(getByText('Framed content')).toBeInTheDocument()
     })
 
@@ -107,11 +190,13 @@ describe('FrameBox', () => {
       const { getAllByTestId } = render(Borders())
       const frames = getAllByTestId(TESTID)
 
-      expect(frames.map((frame) => frame.getAttribute('data-borders'))).toEqual([
-        'all',
-        'x',
-        'y',
-        'none'
+      expect(frames.map((frame) => sides(frame, 'data-borders'))).toEqual([
+        ['bottom', 'left', 'right', 'top'],
+        ['left', 'right'],
+        ['bottom', 'top'],
+        ['top'],
+        ['left', 'top'],
+        []
       ])
     })
 
@@ -121,12 +206,31 @@ describe('FrameBox', () => {
       expect(getByTestId(TESTID)).toHaveAttribute('data-hatch', 'true')
     })
 
-    it('renders the Flush story with only the second frame sharing the rule', () => {
-      const { getAllByTestId } = render(Flush())
-      const [first, second] = getAllByTestId(TESTID)
+    it('renders the Marks story with one frame per marks value', () => {
+      const { getAllByTestId } = render(Marks())
+      const frames = getAllByTestId(TESTID)
 
-      expect(first).not.toHaveAttribute('data-flush')
-      expect(second).toHaveAttribute('data-flush', 'true')
+      expect(frames.map((frame) => sides(frame, 'data-marks'))).toEqual([
+        ['bottom-left', 'bottom-right', 'top-left', 'top-right'],
+        ['top-left', 'top-right'],
+        ['bottom-left', 'top-left'],
+        ['top-right'],
+        ['bottom-right', 'top-left'],
+        []
+      ])
+    })
+
+    it('renders the Flush story with a vertical and a horizontal shared edge', () => {
+      const { getAllByTestId } = render(Flush())
+      const [stackTop, stackBottom, rowLeft, rowRight] = getAllByTestId(TESTID)
+
+      expect(stackTop).not.toHaveAttribute('data-flush')
+      expect(stackBottom).toHaveAttribute('data-flush', 'top')
+      expect(sides(stackBottom, 'data-borders')).toEqual(['bottom', 'left', 'right'])
+
+      expect(rowLeft).not.toHaveAttribute('data-flush')
+      expect(rowRight).toHaveAttribute('data-flush', 'left')
+      expect(sides(rowRight, 'data-borders')).toEqual(['bottom', 'right', 'top'])
     })
   })
 })

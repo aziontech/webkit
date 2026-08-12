@@ -14,10 +14,13 @@
   interface Props {
     /** How much vertical air the gap holds, as a multiple of the theme's largest spacing step: `small` is one `--spacing-xxl`, `medium` two, `large` three. The token is responsive, so every step scales with the viewport. */
     size?: SectionGapSize
+    /** Draw the frame's diagonal hatch texture in the gap. */
+    hatch?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
-    size: 'medium'
+    size: 'medium',
+    hatch: false
   })
 
   const attrs = useAttrs()
@@ -34,11 +37,17 @@
        which makes the steps 32/64/96px on a phone and 96/192/288px on a wide screen. The
        ratio (1 : 2 : 3) is what keeps the three weights unmistakable at every width.
        `borders="y"` keeps only the two rules that do the dividing; `flush` draws the one it
-       shares with the section above exactly once. -->
+       shares with the section above exactly once, and `marks="bottom"` leaves the top pair of
+       ticks to that same neighbour so the shared junction carries one mark per corner.
+
+       The gap is where `hatch` belongs on a framed page: it is the one band with no content of
+       its own, so the texture reads as the page's own material instead of competing with copy. -->
   <FrameBox
     v-bind="$attrs"
     flush
     borders="y"
+    marks="bottom"
+    :hatch="hatch"
     :data-testid="testId"
     :data-size="size"
     class="h-[calc(var(--spacing-xxl)*2)] data-[size=small]:h-(--spacing-xxl) data-[size=large]:h-[calc(var(--spacing-xxl)*3)]"

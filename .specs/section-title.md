@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: approved
 spec_version: 2
-checksum: 0faf26ecb887972348aca58986648e5260169bf5ddad72180083d6ec5f2c8699
+checksum: 3a4b15c27d3dda6af9bda55a10bb9e9db13df6865900f9ef805ae97589696e55
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
@@ -74,7 +74,6 @@ import Button from '@aziontech/webkit/button'
 | `description` | `string` | `''` | false | Supporting sentence under the headline; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
 | `kind` | `'centered' \| 'left' \| 'horizontal'` | `'centered'` | false | Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. |
-| `hatch` | `boolean` | `false` | false | Draw the frame's vertical hatch texture behind the copy. |
 
 ## Events
 
@@ -91,7 +90,6 @@ import Button from '@aziontech/webkit/button'
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop: `centered` | `left` | `horizontal`
-- `data-hatch` present when the hatch texture is drawn
 
 ## Motion & Animations
 
@@ -122,7 +120,7 @@ _none_
 
 - Visible focus: not applicable to the header itself; controls composed into the `actions` slot keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` reaches only the controls placed in the `actions` slot, in DOM order.
-- ARIA: the headline is a real `h2` (the page's `h1` belongs to `hero-title`), so no `role` or `aria-label` is added; the frame's rules, corner marks and hatch stay `aria-hidden="true"`. In `horizontal` the headline precedes its description in DOM order, so the reading order matches the visual one.
+- ARIA: the headline is a real `h2` (the page's `h1` belongs to `hero-title`), so no `role` or `aria-label` is added; the frame's rules and corner marks stay `aria-hidden="true"`. In `horizontal` the headline precedes its description in DOM order, so the reading order matches the visual one.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline on `var(--text-default)`, description on `var(--text-muted)`, both over the page canvas.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — the `actions` row stretches its children to full width below `sm`, so slotted buttons keep their own target size.
@@ -132,7 +130,6 @@ _none_
 - Default
 - Kinds — composite story rendering every `kind` value stacked, so the three layouts can be compared (justified: `kind` is the component's only enum axis and the difference is structural)
 - WithActions — an `actions` row under the description (justified: the slot owns its own responsive layout, which no prop-driven story shows)
-- Hatch — the `hatch` texture on (mutually-exclusive boolean state of the `hatch` prop)
 
 ## Constraints — DO NOT
 
