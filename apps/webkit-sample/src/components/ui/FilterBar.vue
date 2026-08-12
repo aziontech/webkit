@@ -2,8 +2,8 @@
   // The FILTER BAR — narrowing a list as a ROW OF PILLS rather than a panel of fields:
   //
   //   (⚟ Add Filter)  (Author ⬤⬤ Bruno +2 ×)  (Last Modified Jun 1 – Jun 17 ×)  (Status)
-  //     ╰─ dashed: it MAKES        ╰─ applied: value, faces, ×        ╰─ an offer: no fill,
-  //        filters, it isn't one      on the DS Chip, pill-shaped        no value, no ×
+  //     ╰─ dashed: it MAKES        ╰─ applied: value, faces, ×        ╰─ an offer: no
+  //        filters, it isn't one      raised by --shadow-sm              value, no ×
   //
   //   The panel is a STACK OF LEVELS that slides, not a form:
   //
@@ -383,8 +383,11 @@
                  are identified by their field name, and a glyph on each would be four
                  different icons competing with the values beside them. Composing it here
                  keeps the component's prop surface from growing for a single call site. -->
+            <!-- The glyph takes the chip's own `--text-default`, not a muted step. It is
+                 half of a two-word label, not an adornment beside one: muting it made the
+                 icon read as a disabled hint next to live text. -->
             <i
-              class="ai ai-filter-alt text-[var(--text-muted)]"
+              class="ai ai-filter-alt"
               aria-hidden="true"
             />
             {{ label }}
@@ -656,25 +659,21 @@
          never destroyed can MOVE when applying a filter promotes it to the front, and
          can GROW as its value appears, instead of one element vanishing and a
          differently-sized one popping in somewhere else.
-         Keeping the node stable is also why `Chip`'s own `removable` is NOT used. Its
-         × animates the whole chip to opacity 0 and only THEN emits `remove` — correct
-         for a chip that is going away, wrong here, where removing a filter leaves the
-         field behind as an offer. Using it left the instance permanently hidden, so the
-         field disappeared from the bar entirely. The × below is therefore ours; the
-         rest of the chip (pill body, hover wash, focus ring, `role`/`tabindex`) is
-         still the DS component's, and the nested-button structure matches the one
-         `Chip` uses for its own ×.
-         THE OFFER STATE IS TOKENS, NOT OPACITY. An offer recedes by dropping to
-         `--border-muted`, losing its fill and its shadow — the applied chip keeps
-         `Chip`'s own raised surface. Opacity was the first attempt and was wrong twice
-         over: it washes the border and the label by the same amount when they should
-         recede differently, and it occupies the ROOT's opacity, which is what the
-         entrance transition needs. It also could not have worked — a base `opacity-60`
-         is emitted after `opacity-0`, so the enter-from class would have been dead on
-         arrival. These overrides ride `data-[offer]` rather than a bare class because
-         an attribute-qualified selector reliably outranks the plain utility `Chip`
-         already sets on the same element, instead of depending on which one Tailwind
-         happens to emit last. -->
+         `Chip`'s own `removable` carries the × here, which it can only do because it
+         emits `remove` and stops. An earlier build faded the whole chip to opacity 0
+         first — correct for a chip that is going away, wrong here, where dropping a
+         value leaves the FIELD behind as an offer, so the instance stayed invisible
+         forever and the field vanished from the bar. Presence is this component's call,
+         and it keeps every chip.
+         THE OFFER STATE IS TOKENS, NOT OPACITY. All chips share one fill
+         (`--bg-surface`) and one border (`--border-default`); an offer recedes by
+         losing the applied chip's `--shadow-sm` and by holding nothing but its muted
+         field name, while an applied one adds a `--text-default` value beside it.
+         Opacity was the first attempt and was wrong twice over: it washes the border
+         and the label by the same amount when they should recede differently, and it
+         occupies the ROOT's opacity, which is what the entrance transition needs. It
+         also could not have worked — a base `opacity-60` is emitted after `opacity-0`,
+         so the enter-from class would have been dead on arrival. -->
     <TransitionGroup
       tag="div"
       class="flex min-w-0 flex-wrap items-center gap-[var(--spacing-xs)]"
@@ -756,7 +755,7 @@
                       :label="option.label"
                       size="small"
                       kind="circle"
-                      class="size-4 ring-1 ring-[var(--bg-surface-raised)]"
+                      class="size-4 ring-1 ring-[var(--bg-surface)]"
                       :class="i > 0 ? '-ml-1' : ''"
                     />
                   </span>
