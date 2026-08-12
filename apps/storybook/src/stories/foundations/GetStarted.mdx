@@ -39,7 +39,8 @@ The MCP server it wires gives your AI the full component catalog — `list_compo
 npm install @aziontech/webkit @aziontech/theme @aziontech/icons
 ```
 
-Then wire the project (lint presets, MCP, pre-commit, agent docs) in one command:
+Then wire the project (theme CSS entry, lint presets, MCP, pre-commit, agent docs) in one
+command:
 
 ```bash
 npx @aziontech/webkit init
@@ -50,15 +51,26 @@ to preview the plan.
 
 ## 2. Add the theme CSS
 
-In your app entry (for example `src/main.js`):
+`@aziontech/theme` ships a Tailwind v4 stylesheet (CSS-first — there's no JS preset). `init`
+already wires this for you: it writes `src/webkit.css`, adds the Tailwind v4 PostCSS plugin,
+and patches it into your app entry. The generated file looks like this:
+
+```css
+/* src/webkit.css */
+@import '@aziontech/theme'; /* design tokens (light/dark aware) + Tailwind */
+@import '@aziontech/webkit/styles'; /* registers webkit's source with Tailwind */
+```
 
 ```js
-import '@aziontech/theme/globals.css' // design tokens (light/dark aware)
+// src/main.js
+import './webkit.css'
 import '@aziontech/icons' // the icon font
 ```
 
-Using Tailwind? The theme also ships a preset — `@aziontech/theme/tailwind-preset` — so
-the semantic utilities (`text-body-sm`, `bg-(--primary)`, …) resolve in your build.
+The second import isn't optional — Tailwind v4 excludes `node_modules` from its content
+scan, so without `@aziontech/webkit/styles` (which carries the `@source` pointing at
+webkit's source) components render **unstyled**. `npx @aziontech/webkit doctor` checks for
+both this `@source` wiring and a PostCSS config that runs `@tailwindcss/postcss`.
 
 ## 3. Add your first component
 
