@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 5c704379efc3736a1e965f972767b47e50dbe3dc8dc1da27c0e631602e8103d8
+checksum: 71dc8c4c59bb7efd1f458b440c87a718a0bc5f2dc0f26aa4a65b664b4be9a70c
 created: 2026-05-22
-last_updated: 2026-08-06
+last_updated: 2026-08-12
 ---
 # Sidebar — Component Spec
 
@@ -135,12 +135,15 @@ it must survive whatever the consumer puts there, and it must go inert with the 
 collapses. The footer region becomes a centred flex row when `collapsible` is set, and the slot
 content takes `min-w-0 flex-1`.
 
-The **band** — the separator and the space above it — then belongs to that row rather than to the
-footer content, which is what makes the line run the full width of the region *past* the trigger
-instead of stopping short of it, and what keeps the trigger on the content's line instead of half a
-padding above it. `SidebarFooter` drops its own `border-t` / top padding whenever it is inside a
-collapsible sidebar for that reason, and **any other footer content must not add its own top
-padding** either.
+The **separator and the space above it belong to the footer region**, not to the band and not to the
+footer content. That is what makes the line run edge-to-edge across the rail — past the trigger and
+past the region's own horizontal padding, flush to the rail's border, the way the divider between
+`Dropdown.Group`s runs flush to the panel's — and what keeps the trigger on the content's line
+instead of half a padding above it. It uses `--border-default`, the separator token, not the fainter
+`--border-muted` the rail's outer edge uses, so it is legible against `--bg-surface` in both themes.
+It is therefore present whether or not the rail is `collapsible` and whatever the consumer puts in
+the slot: `SidebarFooter` carries no `border-t` / top padding of its own, and **any other footer
+content must not add either**.
 
 Both icon-only controls (the collapse trigger and the expand button) carry a **`Tooltip`** whose
 text is the same string as their accessible name, so a pointer user gets the label a screen reader
@@ -355,6 +358,9 @@ pulled to then animates to fully in or fully out.
 | spacing | `var(--spacing-3)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
+| rail outer edge | `border-r border-(--border-muted)` |
+| footer separator | `border-t border-(--border-default)` on the footer region, full-bleed across the rail |
+| footer region spacing | `var(--spacing-md)` |
 | resize handle line | `var(--accent)`, `var(--border-2)` wide |
 | resize handle hit area | `var(--spacing-xs)` |
 | rail width bounds | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |

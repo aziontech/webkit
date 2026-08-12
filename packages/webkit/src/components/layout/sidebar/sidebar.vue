@@ -132,15 +132,16 @@
     transition: railTransition.value
   }))
 
-  const FOOTER_REGION_CLASS = 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
+  /**
+   * The separator lives on the region, not on the band or on `SidebarFooter`, so
+   * it spans the rail edge-to-edge and is there whatever the consumer puts in the
+   * footer slot — and whether or not the rail is collapsible.
+   */
+  const FOOTER_REGION_CLASS = 'w-full shrink-0 border-t border-(--border-default) p-(--spacing-md)'
 
   const footerBandClass = computed(() =>
     props.collapsible
-      ? cn(
-          'flex items-center gap-(--spacing-xs)',
-          'border-t border-(--border-muted) pt-(--spacing-md)',
-          !slots['footer'] ? 'justify-end' : undefined
-        )
+      ? cn('flex items-center gap-(--spacing-xs)', !slots['footer'] ? 'justify-end' : undefined)
       : undefined
   )
 

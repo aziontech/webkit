@@ -22,13 +22,9 @@
       `${ctx?.testId ?? 'layout-sidebar'}__footer-region`
   )
 
-  const rootClasses = computed(() =>
-    cn(
-      'w-full shrink-0',
-      ctx?.collapsible ? undefined : 'border-t border-(--border-muted) pt-(--spacing-md)',
-      attrs.class
-    )
-  )
+  // The separator above the footer belongs to the Sidebar's footer region, which
+  // spans the rail edge-to-edge; this component only lays out its own content.
+  const rootClasses = computed(() => cn('w-full shrink-0', attrs.class))
 </script>
 
 <template>
