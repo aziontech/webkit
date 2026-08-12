@@ -56,11 +56,6 @@ const meta = {
         defaultValue: { summary: "'centered'" }
       }
     },
-    hatch: {
-      control: 'boolean',
-      description: 'Draw the frame’s vertical hatch texture behind the copy.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
-    },
     default: {
       control: false,
       description: 'Description body; replaces the `description` prop when provided.',
@@ -76,8 +71,7 @@ const meta = {
     title: 'Everything runs at the edge',
     description: 'One platform for applications, security and observability.',
     eyebrow: 'Platform',
-    kind: 'centered',
-    hatch: false
+    kind: 'centered'
   }
 }
 
@@ -137,6 +131,7 @@ const KINDS_TEMPLATE = `<div>
 export const Kinds = {
   render: () => ({ components: { SectionTitle }, template: KINDS_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {
@@ -166,6 +161,7 @@ export const WithActions = {
     template: WITH_ACTIONS_TEMPLATE
   }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {
@@ -177,23 +173,3 @@ export const WithActions = {
   }
 }
 
-const HATCH_TEMPLATE = `<SectionTitle
-  hatch
-  eyebrow="Platform"
-  title="Everything runs at the edge"
-  description="One platform for applications, security and observability."
-/>`
-
-/** @type {import('@storybook/vue3').StoryObj<typeof SectionTitle>} */
-export const Hatch = {
-  render: () => ({ components: { SectionTitle }, template: HATCH_TEMPLATE }),
-  parameters: {
-    docs: {
-      controls: { disable: true },
-      description: {
-        story: 'The frame’s vertical hatch texture drawn behind the copy, faded toward the edges.'
-      },
-      source: { code: toSfc(IMPORT, HATCH_TEMPLATE) }
-    }
-  }
-}

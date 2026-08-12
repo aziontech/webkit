@@ -42,10 +42,17 @@ const meta = {
         type: { summary: "'small' | 'medium' | 'large'" },
         defaultValue: { summary: "'medium'" }
       }
+    },
+    hatch: {
+      control: 'boolean',
+      description:
+        'Draw the frame’s diagonal hatch texture in the gap. The gap is the band with no content of its own, so the texture reads as the page’s own material rather than competing with copy.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     }
   },
   args: {
-    size: 'medium'
+    size: 'medium',
+    hatch: false
   }
 }
 
@@ -64,7 +71,7 @@ const Template = (args) => ({
         <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section above</div>
       </FrameBox>
       <SectionGap v-bind="args" />
-      <FrameBox flush borders="y">
+      <FrameBox flush marks="bottom" borders="y">
         <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section below</div>
       </FrameBox>
     </div>
@@ -76,7 +83,7 @@ const DEFAULT_MARKUP = `<div>
     <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section above</div>
   </FrameBox>
   <SectionGap size="medium" />
-  <FrameBox flush borders="y">
+  <FrameBox flush marks="bottom" borders="y">
     <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section below</div>
   </FrameBox>
 </div>`
@@ -95,20 +102,46 @@ export const Default = {
   }
 }
 
+const HATCH_TEMPLATE = `<div>
+  <FrameBox borders="y">
+    <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section above</div>
+  </FrameBox>
+  <SectionGap hatch size="large" />
+  <FrameBox flush marks="bottom" borders="y">
+    <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section below</div>
+  </FrameBox>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof SectionGap>} */
+export const Hatch = {
+  render: () => ({ components: { SectionGap, FrameBox }, template: HATCH_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The diagonal hatch drawn in the gap itself. This is the texture’s home on a framed page: the gap holds no copy, so the hatch gives the break its own identity without sitting behind a headline.'
+      },
+      source: { code: toSfc(IMPORT, HATCH_TEMPLATE) }
+    }
+  }
+}
+
 const SIZES_TEMPLATE = `<div>
   <FrameBox borders="y">
     <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">size="small" — one --spacing-xxl below</div>
   </FrameBox>
   <SectionGap size="small" />
-  <FrameBox flush borders="y">
+  <FrameBox flush marks="bottom" borders="y">
     <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">size="medium" — two below</div>
   </FrameBox>
   <SectionGap size="medium" />
-  <FrameBox flush borders="y">
+  <FrameBox flush marks="bottom" borders="y">
     <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">size="large" — three below</div>
   </FrameBox>
   <SectionGap size="large" />
-  <FrameBox flush borders="y">
+  <FrameBox flush marks="bottom" borders="y">
     <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">End</div>
   </FrameBox>
 </div>`
@@ -117,6 +150,7 @@ const SIZES_TEMPLATE = `<div>
 export const Sizes = {
   render: () => ({ components: { SectionGap, FrameBox }, template: SIZES_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {

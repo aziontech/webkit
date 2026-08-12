@@ -51,7 +51,6 @@ export default meta
 
 const PAGE_TEMPLATE = `<div class="bg-(--bg-canvas)">
   <FrameBox
-    hatch
     borders="y"
     class="px-(--spacing-xl) py-(--spacing-xxl)"
   >
@@ -68,7 +67,7 @@ const PAGE_TEMPLATE = `<div class="bg-(--bg-canvas)">
     </HeroTitle>
   </FrameBox>
 
-  <SectionGap size="large" />
+  <SectionGap hatch size="large" />
 
   <SectionTitle
     kind="horizontal"
@@ -98,10 +97,9 @@ const PAGE_TEMPLATE = `<div class="bg-(--bg-canvas)">
     </FrameBox>
   </div>
 
-  <SectionGap size="medium" />
+  <SectionGap hatch size="medium" />
 
   <SectionTitle
-    hatch
     eyebrow="Get started"
     title="Your first deploy takes a minute"
     description="Create an account, push a project, and watch it go live at every edge location."
@@ -117,6 +115,7 @@ const PAGE_TEMPLATE = `<div class="bg-(--bg-canvas)">
 export const Default = {
   render: () => ({ components: pageComponents, template: PAGE_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {

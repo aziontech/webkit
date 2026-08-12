@@ -29,32 +29,53 @@ const meta = {
   },
   argTypes: {
     borders: {
-      control: 'inline-radio',
-      options: ['all', 'x', 'y', 'none'],
+      control: 'select',
+      options: ['all', 'x', 'y', 'top', 'right', 'bottom', 'left', 'none'],
       description:
-        'Which of the frame’s own rules to draw. Use `y` for a full-bleed band and `none` when a surrounding grid already draws every edge.',
+        'Which of the frame’s own rules to draw. Takes a keyword (`all`, `none`, `x`, `y`), one side, or a list of sides such as `[\'top\', \'left\']`.',
       table: {
         category: 'props',
-        type: { summary: "'all' | 'x' | 'y' | 'none'" },
+        type: { summary: "'all' | 'none' | 'x' | 'y' | Side | Side[]" },
         defaultValue: { summary: "'all'" }
       }
     },
     marks: {
-      control: 'boolean',
-      description: 'Show the four corner registration squares, inset from both rules.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
+      control: 'select',
+      options: [
+        'all',
+        'top',
+        'bottom',
+        'left',
+        'right',
+        'top-left',
+        'top-right',
+        'bottom-left',
+        'bottom-right',
+        'none'
+      ],
+      description:
+        'Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners.',
+      table: {
+        category: 'props',
+        type: { summary: "'all' | 'none' | Edge | Corner | Corner[]" },
+        defaultValue: { summary: "'all'" }
+      }
     },
     hatch: {
       control: 'boolean',
-      description:
-        'Show the faint vertical hatch-line texture behind the content, faded toward the edges.',
+      description: 'Show the diagonal hatch texture behind the content, faded toward the edges.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     flush: {
-      control: 'boolean',
+      control: 'select',
+      options: ['none', 'top', 'right', 'bottom', 'left'],
       description:
-        'Pull the frame up by its border width so its top rule lands on the bottom rule of the block above.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+        'Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top` (a vertical stack); use `left` for a horizontal row, or a list for a grid cell.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean | Side | Side[]' },
+        defaultValue: { summary: 'false' }
+      }
     },
     default: {
       control: false,
@@ -64,9 +85,9 @@ const meta = {
   },
   args: {
     borders: 'all',
-    marks: true,
+    marks: 'all',
     hatch: false,
-    flush: false
+    flush: 'none'
   }
 }
 
@@ -109,10 +130,16 @@ const BORDERS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xl)">
     <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">borders="all"</div>
   </FrameBox>
   <FrameBox borders="x">
-    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">borders="x"</div>
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">borders="x" — left and right</div>
   </FrameBox>
   <FrameBox borders="y">
-    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">borders="y"</div>
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">borders="y" — top and bottom</div>
+  </FrameBox>
+  <FrameBox borders="top">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">borders="top" — one side</div>
+  </FrameBox>
+  <FrameBox :borders="['top', 'left']">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">:borders="['top', 'left']" — an explicit list</div>
   </FrameBox>
   <FrameBox borders="none">
     <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">borders="none"</div>
@@ -123,6 +150,7 @@ const BORDERS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xl)">
 export const Borders = {
   render: () => ({ components: { FrameBox }, template: BORDERS_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {
@@ -130,6 +158,43 @@ export const Borders = {
           'Every `borders` value side by side. `y` is the full-bleed band that keeps only the two dividing rules; `none` hands every edge over to a surrounding grid and contributes just the corner marks.'
       },
       source: { code: toSfc(IMPORT, BORDERS_TEMPLATE) }
+    }
+  }
+}
+
+const MARKS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xl)">
+  <FrameBox marks="all">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">marks="all"</div>
+  </FrameBox>
+  <FrameBox marks="top">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">marks="top" — both top corners</div>
+  </FrameBox>
+  <FrameBox marks="left">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">marks="left" — both left corners</div>
+  </FrameBox>
+  <FrameBox marks="top-right">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">marks="top-right" — one corner</div>
+  </FrameBox>
+  <FrameBox :marks="['top-left', 'bottom-right']">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">:marks="['top-left', 'bottom-right']" — an explicit list</div>
+  </FrameBox>
+  <FrameBox marks="none">
+    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">marks="none"</div>
+  </FrameBox>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FrameBox>} */
+export const Marks = {
+  render: () => ({ components: { FrameBox }, template: MARKS_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Each pair of corner ticks is drawn independently. `top` and `bottom` are what a stack needs: the frame above keeps its `bottom` pair and the frame below asks for `bottom` only, so a shared junction carries one mark per corner instead of two a few pixels apart.'
+      },
+      source: { code: toSfc(IMPORT, MARKS_TEMPLATE) }
     }
   }
 }
@@ -142,6 +207,7 @@ const HATCH_TEMPLATE = `<FrameBox hatch>
 export const Hatch = {
   render: () => ({ components: { FrameBox }, template: HATCH_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {
@@ -153,24 +219,36 @@ export const Hatch = {
   }
 }
 
-const FLUSH_TEMPLATE = `<div>
-  <FrameBox>
-    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">First frame</div>
-  </FrameBox>
-  <FrameBox flush>
-    <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">Second frame, flush</div>
-  </FrameBox>
+const FLUSH_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
+  <div>
+    <FrameBox>
+      <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">Stacked — first frame</div>
+    </FrameBox>
+    <FrameBox flush marks="bottom">
+      <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">flush — shares the rule above</div>
+    </FrameBox>
+  </div>
+
+  <div class="flex">
+    <FrameBox class="flex-1">
+      <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">Row — first frame</div>
+    </FrameBox>
+    <FrameBox flush="left" marks="right" class="flex-1">
+      <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">flush="left" — shares the rule beside</div>
+    </FrameBox>
+  </div>
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FrameBox>} */
 export const Flush = {
   render: () => ({ components: { FrameBox }, template: FLUSH_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
       controls: { disable: true },
       description: {
         story:
-          'Two stacked frames. The lower one is `flush`, so its top rule lands on the bottom rule of the frame above and the junction reads as one hairline instead of two.'
+          '`flush` names the sides a neighbour already draws, so it works on both axes. Vertically, the lower frame is `flush` (shorthand for `top`) with `marks="bottom"`; horizontally, the right-hand frame is `flush="left"` with `marks="right"`. Either way the shared edge reads as one hairline with one mark per corner, instead of two rules and four ticks. It is a subtraction from the frame\'s own side set, not an offset, so nothing overlaps.'
       },
       source: { code: toSfc(IMPORT, FLUSH_TEMPLATE) }
     }
