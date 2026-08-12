@@ -266,19 +266,36 @@ export const Default = {
 // The stories below opt out of the global binding (`shortcut=""`) so the Docs
 // page has a single ⌘K owner — the Default story above. One template const per
 // story renders the canvas AND builds the snippet, so the two cannot drift.
+// Three groups, only one separator — so the story shows both ways groups are
+// spaced (around a separator, and between two bare groups). Half the items carry
+// a `prefix` icon and half do not: the icon column is reserved for the whole
+// list, so every label starts on the same x either way.
 const GROUPED_TEMPLATE = `<Button label="Open grouped palette" kind="primary" @click="open = true" />
 
 <CommandMenu v-model:open="open" shortcut="">
   <CommandMenuInput placeholder="Search commands…" />
   <CommandMenuList>
     <CommandMenuGroup heading="Actions">
-      <CommandMenuItem value="deploy">Deploy Project</CommandMenuItem>
+      <CommandMenuItem value="deploy">
+        <template #prefix><i class="pi pi-cloud-upload" aria-hidden="true" /></template>
+        Deploy Project
+      </CommandMenuItem>
       <CommandMenuItem value="new-app">Create Application</CommandMenuItem>
     </CommandMenuGroup>
     <CommandMenuSeparator />
     <CommandMenuGroup heading="Navigation">
-      <CommandMenuItem value="settings">Go to Settings</CommandMenuItem>
+      <CommandMenuItem value="settings">
+        <template #prefix><i class="pi pi-cog" aria-hidden="true" /></template>
+        Go to Settings
+      </CommandMenuItem>
       <CommandMenuItem value="billing">Go to Billing</CommandMenuItem>
+    </CommandMenuGroup>
+    <CommandMenuGroup heading="Account">
+      <CommandMenuItem value="profile">
+        <template #prefix><i class="pi pi-user" aria-hidden="true" /></template>
+        View Profile
+      </CommandMenuItem>
+      <CommandMenuItem value="logout">Log Out</CommandMenuItem>
     </CommandMenuGroup>
   </CommandMenuList>
 </CommandMenu>`
@@ -297,7 +314,7 @@ export const Grouped = {
       controls: { disable: true },
       description: {
         story:
-          'Two labeled groups separated by a divider — the central grouping anatomy. Opens from a button; `shortcut=""` opts out of the global binding so only Default owns ⌘K on this page.'
+          'Three labeled groups — the central grouping anatomy — showing both spacings: `--spacing-sm` above a `CommandMenuSeparator` and `--spacing-xs` below it, and `--spacing-sm` between two groups with no separator between them. Half the items carry a `prefix` icon and half do not; because one item in the list has a prefix, every item reserves the icon column, so all the labels start on the same x. Opens from a button; `shortcut=""` opts out of the global binding so only Default owns ⌘K on this page.'
       },
       source: {
         code: toSfc(
