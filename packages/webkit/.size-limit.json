@@ -48,5 +48,10 @@
     "name": "password-requirements",
     "path": "src/components/inputs/field-password/password-requirements.ts",
     "limit": "0.3 KB"
+  },
+  {
+    "name": "footer-root",
+    "path": "src/components/layout/footer/footer.vue",
+    "limit": "1.1 KB"
   }
 ]

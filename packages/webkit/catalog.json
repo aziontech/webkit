@@ -8552,6 +8552,134 @@
         "Do not wrap it in a padded container; the gap is the padding."
       ]
     },
+    "footer": {
+      "import": "@aziontech/webkit/footer",
+      "target": "./src/components/layout/footer/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/footer-root",
+      "subcomponents": [
+        "@aziontech/webkit/footer-column",
+        "@aziontech/webkit/footer-link"
+      ],
+      "category": "layout",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Footer'",
+          "required": "false",
+          "doc": "Accessible name for the contentinfo landmark."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
+        },
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "footer-column`: its `Footer.Link` items."
+        },
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "footer-link`: the link label."
+        }
+      ],
+      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell with a centered content measure holding link columns and a social bar separated by a hairline top border. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`): the two presentations are one component switching by CSS at the `md` (768px) breakpoint. Content (links, labels, languages, status) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
+      "useWhen": [
+        "The page-level footer of a site or application, paired with `GlobalHeader`.",
+        "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
+      ],
+      "avoidWhen": [
+        "The bottom area of a panel, table, sidebar, or overlay → use that component's own footer part (`panel-footer`, `table-footer`, `sidebar-footer`, `popover-footer`).",
+        "A single standalone link inside body content → use `link` instead of `Footer.Link`."
+      ],
+      "related": [
+        "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
+        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the social bar; the footer reimplements none of them."
+      ],
+      "bestPractices": [
+        "Compose the social bar from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
+        "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
+        "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
+        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own."
+      ]
+    },
+    "footer-root": {
+      "import": "@aziontech/webkit/footer-root",
+      "target": "./src/components/layout/footer/footer.vue",
+      "kind": "root",
+      "rootOf": "footer",
+      "treeShakeableImport": "@aziontech/webkit/footer-root",
+      "category": "layout",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Footer'",
+          "required": "false",
+          "doc": "Accessible name for the contentinfo landmark."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
+        },
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "footer-column`: its `Footer.Link` items."
+        },
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "footer-link`: the link label."
+        }
+      ],
+      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell with a centered content measure holding link columns and a social bar separated by a hairline top border. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`): the two presentations are one component switching by CSS at the `md` (768px) breakpoint. Content (links, labels, languages, status) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
+      "useWhen": [
+        "The page-level footer of a site or application, paired with `GlobalHeader`.",
+        "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
+      ],
+      "avoidWhen": [
+        "The bottom area of a panel, table, sidebar, or overlay → use that component's own footer part (`panel-footer`, `table-footer`, `sidebar-footer`, `popover-footer`).",
+        "A single standalone link inside body content → use `link` instead of `Footer.Link`."
+      ],
+      "related": [
+        "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
+        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the social bar; the footer reimplements none of them."
+      ],
+      "bestPractices": [
+        "Compose the social bar from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
+        "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
+        "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
+        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own."
+      ]
+    },
+    "footer-column": {
+      "import": "@aziontech/webkit/footer-column",
+      "target": "./src/components/layout/footer/footer-column/footer-column.vue",
+      "kind": "subcomponent",
+      "parent": "footer",
+      "treeShakeableImport": "@aziontech/webkit/footer-column"
+    },
+    "footer-link": {
+      "import": "@aziontech/webkit/footer-link",
+      "target": "./src/components/layout/footer/footer-link/footer-link.vue",
+      "kind": "subcomponent",
+      "parent": "footer",
+      "treeShakeableImport": "@aziontech/webkit/footer-link"
+    },
     "scroll-area": {
       "import": "@aziontech/webkit/scroll-area",
       "target": "./src/components/layout/scroll-area/scroll-area.vue",
