@@ -178,7 +178,60 @@ Three shapes:
 - **Custom-property declarations** — `[--table-row-bg:var(--bg-surface)]`, `data-[state=selected]:[--table-row-bg:var(--bg-selected)]`. There is no paren shorthand for _declaring_ a custom property; `(--x:--y)` compiles to nothing.
 - **Expression values** — anything whose arbitrary value is more than a lone `var(--x)`: `w-[calc(var(--a)*2)]`, gradients (`bg-[linear-gradient(...var(--x)...)]`), box-shadows, and a **var with a fallback** (`bg-[var(--x,var(--y))]`, `text-[length:var(--w,1px)]`). These must remain in brackets — converting them drops the style with **no build or lint error**.
 
+## Transitioning a transform: name `translate` / `scale`, not `transform`
+
+Tailwind v4 does **not** compile the transform utilities to the `transform` property. `translate-x-*` / `translate-y-*` compile to the standalone **`translate`** property, and `scale-*` to **`scale`**:
+
+```css
+/* what Tailwind v4 actually emits */
+.translate-x-\[12\%\] { --tw-translate-x: 12%; translate: var(--tw-translate-x) var(--tw-translate-y) }
+.scale-90             { --tw-scale-x: 90%; --tw-scale-y: 90%; scale: var(--tw-scale-x) var(--tw-scale-y) }
+```
+
+So a transition that names `transform` never animates them. This fails **silently** in the worst way: the class compiles, `vue-tsc` and ESLint pass, the utility is emitted, the element ends up in the right place — and no motion is ever interpolated.
+
+```html
+<!-- ❌ compiles, lints, animates NOTHING -->
+<div class="translate-x-[12%] transition-[transform,opacity] duration-moderate-01">
+
+<!-- ✅ name the properties the utilities actually set -->
+<div class="translate-x-[12%] transition-[translate,opacity] duration-moderate-01">
+<div class="scale-90 transition-[scale,opacity] duration-moderate-01">
+```
+
+**With Vue `<Transition>` / `<TransitionGroup>`, list all three.** The enter/leave classes use the utilities above (`translate`, `scale`), but `TransitionGroup`'s *move* animation sets an inline `transform` of its own, so a group that both moves and fades needs every property named:
+
+```html
+transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none
+```
+
+Two related traps in the same family, both silent:
+
+- **An inline `style="transition: …"` beats every class.** A component that sets one (e.g. for its own dismiss animation) discards any `transition-*` a consumer puts on that same element. Do not set `transition` inline on a component root; express it as a utility so the consumer can override it.
+- **Re-inserting a node discards its pending transition.** Reordering a keyed list moves the DOM node, which cancels any transition that was about to start on it or inside it. A list whose items animate their own size or content cannot also reorder on the same interaction — pick one. (Measured: 8 interpolated frames when the item keeps its position, 0 when it moves.)
+
+**Verify motion by measuring, not by looking.** Sample the animated property across `requestAnimationFrame` and assert there are interpolated frames between the start and end values; a snap and a 150ms ease are indistinguishable by eye in review.
+
 The guardrail token-checks (`typography-raw-length`, `leading-raw`, `tracking-raw`, `font-family-raw`, `animate-arbitrary`, `motion-hardcoded`) match **both** spellings, so accepting the IntelliSense suggestion cannot walk a raw value through the typography / motion / animation gates.
+
+### A malformed shorthand is dead, and looks alive
+
+The shorthand has no tolerance: the parens hold **exactly** `--token` or `type:--token`, nothing else. Get it slightly wrong and the style never reaches the element, while the class keeps reading as correct — in a 1000-character root `class` string, forever.
+
+| Written | What actually happens |
+| --- | --- |
+| `bg-(--bg-surface )` | The space **terminates the candidate**. Tailwind sees the unterminated `bg-(--bg-surface` and emits **nothing**. |
+| `bg-( --bg-surface)` | Same — whitespace anywhere inside the parens. |
+| `min-h-[--(size-4)]` | Bracket/paren inverted. This one *does* emit a rule — `min-height: --(size-4)`, an invalid value the **browser discards at parse time**. |
+
+Both shipped: chip's `filled` kind was fully transparent in both themes from the day it shipped (the first form), and `popover-header`'s min-height was inert from the v4 sweep until 2026-08-12 (the third). Neither is a lint, type, or build error on its own, and **a visual baseline generated from the broken render encodes the bug as correct** — so nothing downstream fails either.
+
+Two consequences worth internalizing:
+
+- **A dead class is invisible to the unit suite.** Vitest browser mode runs without Tailwind, so a computed-style assertion returns the same value whether the class works or does not exist (see [`testing.md`](./testing.md) § "What a real browser does NOT give this suite"). Verify a fill by sampling the rendered pixel, or probe the class through the v4 compile API — not through `getComputedStyle` in a test.
+- **When a style "does nothing", suspect the class before the cascade.** Probe it (`compile(...).build(['the-class'])`) with a deliberately bogus class in the list as a control; if the bogus one also "emits", the probe is measuring nothing.
+
+The **`dead-token-shorthand`** token-check blocks both spellings at write time and in the CI ratchet. It scans raw file text, so a comment that *quotes* a malformed class trips it too — describe such a class in prose instead of spelling it out.
 
 ## A zero length carries no unit
 
@@ -219,6 +272,7 @@ padding: 0 var(--spacing-md);
 ## Hard prohibitions
 
 - No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
+- No malformed token shorthand — no whitespace inside the parens (`bg-(--token )`, `bg-( --token)`) and never the inverted `[--(token)]`. The style silently never applies; blocked by `dead-token-shorthand`.
 - No `const sharedClasses = [...]`, `const kindClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
 - No `<style>` blocks (scoped or unscoped).
 - No `.css` / `.scss` files inside a component directory.
@@ -308,6 +362,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 
 - `scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
+- **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.

@@ -11,6 +11,34 @@ const durationRows = Object.entries(duration).map(([name, value]) => ({
 
 const curveRows = Object.entries(curve).map(([name, value]) => ({ name: `ease-${name}`, value }))
 
+// Tailwind's content scanner is a static text matcher — it cannot resolve the
+// `animate-${name}` template literal below into the class names it produces at
+// runtime, so any `animate-*` utility that never appears as a COMPLETE literal
+// token elsewhere in the scanned source never gets its CSS rule emitted, and
+// applying the class is a silent no-op. This inert literal list exists only so
+// Tailwind's scanner can see every current `animate.js` key spelled out in full;
+// it is never read at runtime. Keep it in sync with `animate.js` — the dev-only
+// check right below throws if a key is ever added there and forgotten here.
+// prettier-ignore
+const TAILWIND_ANIMATE_SAFELIST = [
+  'animate-spin', 'animate-ping', 'animate-pulse', 'animate-bounce',
+  'animate-shimmer', 'animate-blink', 'animate-fade-in', 'animate-fade-out',
+  'animate-slide-down', 'animate-highlight-fade', 'animate-popup-scale-in',
+  'animate-popup-scale-out', 'animate-slide-in-left', 'animate-slide-out-left',
+  'animate-slide-in-right', 'animate-slide-out-right',
+  'animate-progress-indeterminate', 'animate-progress-indeterminate-short',
+  'animate-flow-dash'
+]
+
+const missingFromSafelist = Object.keys(animate)
+  .map((name) => `animate-${name}`)
+  .filter((className) => !TAILWIND_ANIMATE_SAFELIST.includes(className))
+if (missingFromSafelist.length > 0) {
+  throw new Error(
+    `Motion.stories.js: add ${missingFromSafelist.join(', ')} to TAILWIND_ANIMATE_SAFELIST or Tailwind never generates their CSS.`
+  )
+}
+
 // Some utilities are invisible on the default primary square: shimmer animates
 // background-position (needs a gradient + background-size), the progress pair animates
 // inset-inline-* (needs a positioned bar inside the track), slide-down reveals height
@@ -20,7 +48,19 @@ const curveRows = Object.entries(curve).map(([name, value]) => ({ name: `ease-${
 // Each gets a preview shape that actually shows the motion.
 const DEFAULT_PREVIEW_CLASS = 'h-8 w-8 rounded-(--shape-elements) bg-(--primary)'
 
+// Exit animations (fade-out, slide-out-*, popup-scale-out) end on a frame that
+// differs from the element's resting style. In real usage that's invisible —
+// a Vue <Transition> unmounts the element the instant the leave animation ends
+// — but this catalog keeps the box mounted to allow Replay, so without an
+// explicit fill-mode the box would snap back to its resting (visible) state
+// right when the animation completes. Hold the end frame until Replay instead.
+const HOLD_END_FRAME = { animationFillMode: 'forwards' }
+
 const PREVIEW_OVERRIDES = {
+  'fade-out': { style: HOLD_END_FRAME },
+  'slide-out-left': { style: HOLD_END_FRAME },
+  'slide-out-right': { style: HOLD_END_FRAME },
+  'popup-scale-out': { style: HOLD_END_FRAME },
   shimmer: {
     class: 'h-8 w-20 rounded-(--shape-elements)',
     style: {
@@ -69,7 +109,6 @@ export default {
   title: 'Foundations/Motion',
   tags: ['autodocs'],
   parameters: {
-    layout: 'fullscreen',
     controls: { disable: true },
     actions: { disable: true },
     docs: {
@@ -130,7 +169,7 @@ export const Overview = {
                      shows nothing on a div, so it previews on a real stroke instead. -->
                 <svg
                   v-if="row.preview?.stroke"
-                  :key="replayKeys[row.id] || 0"
+                  :key="'svg-' + (replayKeys[row.id] || 0)"
                   width="72"
                   height="2"
                   viewBox="0 0 72 2"
@@ -143,14 +182,18 @@ export const Overview = {
                     y2="1"
                     stroke-width="1"
                     :stroke-dasharray="row.preview.stroke"
-                    class="stroke-(--accent) motion-reduce:animate-none"
+                    class="stroke-(--accent)"
                     :class="row.className"
                   />
                 </svg>
+                <!-- This catalog's whole purpose is to preview each motion, for anyone
+                     auditing it — including a visitor with reduced motion preferred.
+                     So, unlike a real component, the demo intentionally omits the
+                     motion-reduce:animate-none escape here; every real usage of these
+                     utilities still must pair one (see the header note above). -->
                 <div
                   v-else
-                  :key="replayKeys[row.id] || 0"
-                  class="motion-reduce:animate-none"
+                  :key="'div-' + (replayKeys[row.id] || 0)"
                   :class="[row.preview?.class || DEFAULT_PREVIEW_CLASS, row.className]"
                   :style="row.preview?.style"
                 >
