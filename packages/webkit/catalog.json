@@ -225,13 +225,17 @@
       "--color-brand-primary-900",
       "--color-brand-primary-950",
       "--color-gray-100",
+      "--color-gray-150",
       "--color-gray-200",
+      "--color-gray-250",
       "--color-gray-300",
       "--color-gray-400",
       "--color-gray-50",
       "--color-gray-500",
       "--color-gray-600",
       "--color-gray-700",
+      "--color-gray-750",
+      "--color-gray-775",
       "--color-gray-800",
       "--color-gray-900",
       "--color-gray-950",
@@ -514,13 +518,17 @@
       "--success-contrast",
       "--surface-0",
       "--surface-100",
+      "--surface-150",
       "--surface-200",
+      "--surface-250",
       "--surface-300",
       "--surface-400",
       "--surface-50",
       "--surface-500",
       "--surface-600",
       "--surface-700",
+      "--surface-750",
+      "--surface-775",
       "--surface-800",
       "--surface-900",
       "--surface-950",
@@ -929,13 +937,17 @@
         "--color-brand-primary-900",
         "--color-brand-primary-950",
         "--color-gray-100",
+        "--color-gray-150",
         "--color-gray-200",
+        "--color-gray-250",
         "--color-gray-300",
         "--color-gray-400",
         "--color-gray-50",
         "--color-gray-500",
         "--color-gray-600",
         "--color-gray-700",
+        "--color-gray-750",
+        "--color-gray-775",
         "--color-gray-800",
         "--color-gray-900",
         "--color-gray-950",
@@ -1262,13 +1274,17 @@
       "surface": [
         "--surface-0",
         "--surface-100",
+        "--surface-150",
         "--surface-200",
+        "--surface-250",
         "--surface-300",
         "--surface-400",
         "--surface-50",
         "--surface-500",
         "--surface-600",
         "--surface-700",
+        "--surface-750",
+        "--surface-775",
         "--surface-800",
         "--surface-900",
         "--surface-950"
@@ -1497,7 +1513,7 @@
         "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
       "highlight-fade": {
-        "value": "highlight ease-in forwards",
+        "value": "highlight 1100ms ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
       },
       "ping": {
@@ -2657,6 +2673,160 @@
         }
       ],
       "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/card-pricing/`."
+    },
+    "hero-title": {
+      "import": "@aziontech/webkit/hero-title",
+      "target": "./src/components/content/hero-title/hero-title.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/hero-title",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Headline of the page, rendered as the page's `h1`."
+        },
+        {
+          "name": "highlight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Opening phrase of the headline, painted in the brand accent; reads as one sentence with `title`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline; overridden by the default slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "centered",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Center the whole block — copy, headline and actions — instead of aligning it to the start."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "Leading call-to-action row under the copy."
+        }
+      ],
+      "purpose": "The copy block of a hero band: an optional overline, the page's `h1` (with an optional opening phrase painted in the brand accent), a description and a row of leading calls to action, at hero scale. It is the hero counterpart of `section-title` and is meant to sit above a hero backdrop rather than to draw a frame of its own.",
+      "useWhen": [
+        "As the leading copy of a landing or marketing page, inside the hero band's container.",
+        "Whenever a page needs one accented statement, one supporting sentence and up to a couple of primary CTAs."
+      ],
+      "avoidWhen": [
+        "For a section header further down the page → use `section-title`, which renders an `h2` inside a frame.",
+        "For the top bar of an application shell → use `global-header` instead.",
+        "For a bordered, centered band with no `h1` → use `frame-box` instead."
+      ],
+      "related": [
+        "section-title` — the same anatomy at section scale, framed and centered, rendering an `h2`.",
+        "overline` — the eyebrow treatment above the headline.",
+        "frame-box` — the frame a hero band is usually built from."
+      ],
+      "bestPractices": [
+        "Use exactly one `hero-title` per page — it owns the `h1`, and a second one breaks the document outline.",
+        "Keep `highlight` to the opening phrase of the headline: it is part of the same sentence and the same accessible name, only painted differently.",
+        "Leave the block left-aligned (the default) when the backdrop is weighted to one side; `centered` is for a symmetric backdrop or a single statement.",
+        "Put the CTAs in the `actions` slot — it stacks them full-width below `sm`, which is what makes a hero button a comfortable thumb target."
+      ]
+    },
+    "section-title": {
+      "import": "@aziontech/webkit/section-title",
+      "target": "./src/components/content/section-title/section-title.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/section-title",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Headline of the section, rendered as the section's `h2`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline; overridden by the default slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "kind",
+          "type": "'centered' | 'left' | 'horizontal'",
+          "default": "'centered'",
+          "required": "false",
+          "doc": "Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "Call-to-action row under the copy, aligned with the chosen `kind`."
+        }
+      ],
+      "purpose": "The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `kind` picks the layout — `centered` for a symmetric opener, `left` for a reading-order one, and `horizontal` for a wide row that sets the headline against its description.",
+      "useWhen": [
+        "Opening a marketing or landing page section that needs a framed header.",
+        "Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.",
+        "For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind=\"horizontal\"`."
+      ],
+      "avoidWhen": [
+        "For the page's leading band and its `h1` → use `hero-title` instead.",
+        "For the top bar of an application shell → use `global-header` instead.",
+        "For a plain framed container with arbitrary content → use `frame-box` instead."
+      ],
+      "related": [
+        "hero-title` — the hero counterpart; renders the page's `h1` at hero scale.",
+        "frame-box` — the frame this component composes.",
+        "section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.",
+        "overline` — the eyebrow treatment rendered above the headline."
+      ],
+      "bestPractices": [
+        "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline.",
+        "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
+        "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
+        "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.",
+        "The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component."
+      ]
     },
     "item": {
       "import": "@aziontech/webkit/item",
@@ -7939,6 +8109,125 @@
         }
       ],
       "purpose": "Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an \"Or\"-style label) when the default slot or `label` prop is set. Unlike `ScrollArea` it adds no scrolling behaviour; it is a purely decorative-yet-semantic boundary exposing `role=\"separator\"`."
+    },
+    "frame-box": {
+      "import": "@aziontech/webkit/frame-box",
+      "target": "./src/components/layout/frame-box/frame-box.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/frame-box",
+      "category": "layout",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "borders",
+          "type": "'all' | 'none' | 'x' | 'y' | Side | Side[]",
+          "default": "'all'",
+          "required": "false",
+          "doc": "Which of the frame's own rules to draw. Takes a keyword, one side, or a list of sides."
+        },
+        {
+          "name": "marks",
+          "type": "'all' | 'none' | Edge | Corner | Corner[]",
+          "default": "'all'",
+          "required": "false",
+          "doc": "Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners."
+        },
+        {
+          "name": "hatch",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Show the linear hatch texture behind the content, faded toward the edges. Reserved for `section-gap`, whose identity it is."
+        },
+        {
+          "name": "flush",
+          "type": "boolean | Side | Side[]",
+          "default": "false",
+          "required": "false",
+          "doc": "Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top`; use `left` for a horizontal row, or a list for a grid cell."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Frame content; rendered above the hatch texture and stretched to the frame height."
+        }
+      ],
+      "purpose": "The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content. Every side and every corner is addressable on its own, so frames stack and abut without doubling a rule or a mark. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.",
+      "useWhen": [
+        "Wrapping a page section, band, or grid cell that should read as a framed module.",
+        "Building a page whose vertical rhythm is drawn by rules rather than by margins: stack frames and let `flush` collapse each junction to a single hairline.",
+        "Adding the corner registration marks (and optionally the hatch texture) to an area that already has its rules drawn by a surrounding grid — set `borders=\"none\"` and keep `marks`."
+      ],
+      "avoidWhen": [
+        "For a card-shaped surface with padding, a header and a footer → use `card-box` instead.",
+        "For a single separating line between two blocks → use `divider` instead.",
+        "For the empty framed band that separates two sections → use `section-gap`, which is this frame configured for that one job."
+      ],
+      "related": [
+        "section-gap` — an empty `frame-box` that holds the air between two sections.",
+        "section-title` — a `frame-box` around a centered section header.",
+        "card-box` — a padded surface with header/content/footer regions; a card, not a frame.",
+        "divider` — one hairline with optional centered label; no corners, no content."
+      ],
+      "bestPractices": [
+        "Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush=\"left\"`) with the same mechanic.",
+        "Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.",
+        "Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks=\"bottom\"`, `flush=\"left\"` + `marks=\"right\"`) so the junction carries one rule and one mark per corner.",
+        "Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise."
+      ],
+      "styleSeam": true
+    },
+    "section-gap": {
+      "import": "@aziontech/webkit/section-gap",
+      "target": "./src/components/layout/section-gap/section-gap.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/section-gap",
+      "category": "layout",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "How much vertical air the gap holds, as a multiple of `--spacing-xxl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport."
+        },
+        {
+          "name": "hatch",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the frame's linear hatch texture in the gap."
+        }
+      ],
+      "purpose": "The empty registration frame that divides two page sections. On a page with no margins between sections, this frame *is* the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.",
+      "useWhen": [
+        "Between two stacked page sections on a full-bleed, framed layout.",
+        "Wherever a page needs breathing room that still reads as part of the frame instead of as empty margin.",
+        "To change the weight of one break without touching its neighbours — a `large` gap before a new part of the page, `small` between two bands that belong together."
+      ],
+      "avoidWhen": [
+        "To space two elements inside a section → use the layout's own `gap-(--spacing-*)` utility.",
+        "To draw a single separating line with no air → use `divider` instead.",
+        "When the gap must hold content (a headline, a CTA) → use `section-title`, or a `frame-box` you fill yourself."
+      ],
+      "related": [
+        "frame-box` — the frame this component configures; reach for it directly when the gap needs content or different rules.",
+        "section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.",
+        "divider` — a hairline with no vertical air."
+      ],
+      "bestPractices": [
+        "Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.",
+        "Do not override the height from the call site. The steps are multiples of `--spacing-xxl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.",
+        "Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.",
+        "Let it carry the shared rule: it renders `flush` and `marks=\"bottom\"`, so its top rule and top ticks are subtracted and the section above supplies them instead of doubling them.",
+        "Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.",
+        "Do not wrap it in a padded container; the gap is the padding."
+      ]
     },
     "scroll-area": {
       "import": "@aziontech/webkit/scroll-area",

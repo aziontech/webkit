@@ -2,7 +2,7 @@
 name: webkit-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
-last_updated: 2026-07-22
+last_updated: 2026-08-11
 scope: general
 enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---
@@ -76,6 +76,212 @@ and hand the phases to the catalogued pair:
 Same shape with `animate-fade-in/out` for in-place content and backdrops, and
 `animate-slide-down` for vertical disclosure.
 
+### Size transitions — the two sanctioned layout exceptions
+
+A box whose content changes (a form that swaps steps, a chip that gains a value, a panel that
+drills into a sub-level) **snaps** to its new size. That snap is the glitch: it reads as one
+element being replaced by a different one rather than as the same element answering. Neither case
+has a catalogued `animate-*` — a keyframe cannot know the two heights — so both are transitions,
+and both are allowed only in the exact shapes below.
+
+#### A. Height — the box follows its content
+
+CSS cannot interpolate to or from `height: auto`, and `auto` is what the box must be at rest: a
+height pinned in JS stops responding to a resize, a late-loading font, or a validation line
+appearing. So height is measured and pinned **only for the length of the move**, then released.
+
+Two ways to drive it. Use the **observer** when the content resizes continuously (a field appears,
+a Skeleton swaps for a button):
+
+```js
+// The measured element is INSIDE the one being sized and never gets a height of
+// its own — otherwise the wrapper animating to it feeds straight back into the read.
+const cardContent = ref(null)
+const cardHeight = ref(0)
+let observer = null
+
+onMounted(() => {
+  observer = new ResizeObserver(([entry]) => {
+    cardHeight.value = Math.round(entry.contentRect.height)
+  })
+  observer.observe(cardContent.value)
+})
+onBeforeUnmount(() => observer?.disconnect())
+```
+
+```vue
+<!-- Padding lives OUTSIDE the sized box: the read is content-box, so padding on the
+     animated element is counted out of the height it travels to and clips by 2× the step. -->
+<div class="p-(--spacing-lg)">
+  <div
+    :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
+    :data-resizing="resizing || null"
+    class="transition-[height] duration-moderate-02 ease-productive-entrance data-[resizing]:overflow-hidden motion-reduce:transition-none"
+  >
+    <div ref="cardContent"><!-- never sized --></div>
+  </div>
+</div>
+```
+
+Use the **measure-mutate-measure** form when the change is discrete (a wizard step, a panel level):
+
+```js
+const from = node.offsetHeight // still auto — this is what the user is looking at
+mutate()
+await nextTick()
+const to = node.offsetHeight // new content, STILL auto, not yet painted
+if (to === from) return // nothing to animate; height stays auto
+
+height.value = `${from}px` // pin the old value…
+requestAnimationFrame(() =>
+  requestAnimationFrame(() => {
+    height.value = `${to}px` // …let it paint, then travel: px → px interpolates
+  })
+)
+// release to '' (auto) on transitionend, plus a timeout fallback so an interrupted
+// move can never leave the height pinned
+```
+
+Order is load-bearing. The obvious shortcut — pin the old height first, _then_ read
+`scrollHeight` — silently breaks every **shrink**: with a height pinned, `scrollHeight` returns
+the greater of content and box, so a step that got shorter reports the old height and never moves.
+Measure while still `auto` and growing and shrinking behave the same.
+
+- **`overflow-hidden` only while moving** (`data-[resizing]:overflow-hidden`). Permanently on, it
+  shaves the focus ring (`ring-2` + `ring-offset-2` = 4px) off any control flush with the content
+  edge. Permanently off, an out-of-flow leaving block hangs below the box as it shrinks.
+- **Always release on `transitionend` AND a fallback timer** (longest duration + a frame or two).
+  An interrupted or unmounted move never fires `transitionend`, and a box stuck at a pinned height
+  is worse than one that snapped.
+- **Re-entrancy:** land the run in flight before measuring again, or `from` is a value the previous
+  transition is still easing through.
+
+#### B. Width — grow a value into a `0fr → 1fr` grid track
+
+A grid track cannot be transitioned from `auto`, but it **can** from `0fr` to `1fr`. That is the
+whole recipe: put the appearing content in a single-column grid, animate the track, and let the
+element's own `auto` width follow.
+
+```vue
+<span
+  class="grid grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-[shown]:grid-cols-[1fr] motion-reduce:transition-none"
+  :data-shown="applied || null"
+>
+  <!-- The clip is BARE. Padding on it survives the collapse (it is not content, so
+       `min-width: 0` cannot shrink it) and leaves dead space in the empty state —
+       so the gap and padding live on the row INSIDE, which is clipped with the text. -->
+  <span class="min-w-0 overflow-hidden">
+    <span class="flex min-w-0 items-center gap-(--spacing-xxs) whitespace-nowrap pl-(--spacing-xxs)">…</span>
+  </span>
+</span>
+```
+
+It only reads as growth if the element **keeps its DOM position**. A list that reorders when the
+value is applied re-inserts the node, which discards the pending transition — see the glitch
+catalog.
+
+### Entrance choreography (first-paint screens)
+
+A screen that is a composition — a form beside an illustration, a card beside a panel — assembles
+from its parts instead of fading in as one flat block: each part travels in from **its own outer
+edge**, one leading and the other a beat behind.
+
+```js
+const ENTER = `${duration['slow-01']} ${curve['expressive-entrance']}`
+const leadStyle = { transition: `opacity ${ENTER}, translate ${ENTER}, transform ${ENTER}` }
+const followStyle = { ...leadStyle, transitionDelay: duration['fast-01'] }
+
+// TWO frames, not one. A single requestAnimationFrame can land in the frame the
+// browser is already painting, so the from-state is never committed, there is no
+// change left to interpolate, and the move snaps.
+const entered = ref(false)
+onMounted(() => {
+  requestAnimationFrame(() => requestAnimationFrame(() => (entered.value = true)))
+})
+```
+
+```vue
+<div
+  :data-entered="entered || null"
+  :style="leadStyle"
+  class="-translate-x-6 opacity-0 data-[entered]:translate-x-0 data-[entered]:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
+>
+```
+
+- **`slow-01` + `expressive-entrance`, not the interaction budget.** A card- or console-sized object
+  crossing real distance reads as confident at 400ms and as a twitch at 150. The ≤150ms rule governs
+  _feedback_; this is a scene arriving. Keep it to first paint — never replay it on a step change.
+- **Stagger, don't synchronise.** One `fast-01` between lead and follow. Simultaneous arrival reads
+  as a slide transition; the offset reads as choreography.
+- **Timing rides `style`, states ride `data-*`.** Tailwind cannot emit a per-state duration/easing
+  from theme tokens, so the two `transition` declarations are inline (read from `duration` / `curve`
+  — still never a literal) while the offsets and opacities stay in `data-[entered]:` classes.
+- **Scale the offset to the element's relationship with the page edge.** A panel that _is_ the right
+  edge travels a short step (a longer one opens a visible strip of bare canvas beside it on the way
+  in); an element that runs off-page can travel further.
+- **Direction carries meaning.** If two screens sit in a flow, enter each from the side it occupies
+  in that flow, so moving between them reads as a direction rather than as two unrelated page loads.
+- **Reduced motion kills it whole**: `transition: 'none'` in the style _and_ the
+  `motion-reduce:translate-x-0 motion-reduce:opacity-100` landing classes, so the from-state is
+  never what the user is left looking at.
+- **The entrance belongs to the LAYOUT, not the screen.** If three steps share a shell, put the
+  shell (and the entrance) on the parent route so it mounts once — the chrome holds still and only
+  the card swaps. Give each step its own copy and every step change replays the 400ms slide, so the
+  user reads three page loads where they only changed step.
+
+### Route and step transitions
+
+```vue
+<RouterView v-slot="{ Component, route }">
+  <Transition
+    mode="out-in"
+    enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+    enter-from-class="opacity-0"
+    leave-active-class="transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+    leave-to-class="opacity-0"
+  >
+    <!-- THE KEYED WRAPPER IS LOAD-BEARING — see the glitch catalog. -->
+    <div :key="route.path">
+      <component :is="Component" />
+    </div>
+  </Transition>
+</RouterView>
+```
+
+- **A step swap is an order of magnitude smaller than an entrance.** Leave `fast-02`, enter
+  `moderate-01`: the old card is gone before the new one commits, which is what makes a step change
+  read as a step change rather than as a change of screen.
+- **`out-in` between siblings of different heights**, so the two never fight for the same column.
+  But **never `out-in` inside a box that is resizing** — the field area collapses to nothing in
+  between and the box dips on the way. There, cross-fade with the leaving block taken out of flow
+  (`leave-active-class="absolute inset-x-0 top-0"`) so the incoming one owns the layout immediately
+  and the box has a single height to travel to.
+- **Every routed step needs exactly one root element.** A fragment root cannot be animated.
+- **Match the skeleton to what replaces it.** A Skeleton in the exact geometry of its target button
+  makes the swap a pure cross-fade with no height to travel, so nothing jumps under the cursor.
+
+### The glitch catalog
+
+Every entry here compiles, lints, and passes type-check. They fail **silently** — that is what makes
+them expensive. When motion "doesn't work" and nothing is red, start here.
+
+| Symptom                                                      | Cause                                                                                                                             | Fix                                                                                |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Element lands in the right place, no motion at all           | `transition-[transform]` beside `translate-x-*` / `scale-*` — v4 compiles those to `translate` / `scale`                          | Name the real properties: `transition-[translate,scale,opacity]`                   |
+| Entrance snaps to its final state                            | A single `requestAnimationFrame` — the from-state was never painted                                                               | Two nested `requestAnimationFrame`s                                                |
+| Routed step is blank when navigated to, correct on reload    | `<component :is>` as the direct child of `<Transition mode="out-in">` — the leave completes and the entering branch is dropped    | Wrap it in a stable keyed **element**; keying the component does nothing           |
+| `<Transition>` around a component does nothing               | The component's root is a fragment                                                                                                | Give it one root element                                                           |
+| Growing animates, shrinking snaps                            | Height pinned _before_ `scrollHeight` was read                                                                                    | Measure both heights while still `auto`                                            |
+| Box stays stuck at a pinned height                           | `transitionend` never arrived (interrupted, unmounted)                                                                            | Release on a timeout fallback too                                                  |
+| Height transition jitters / never settles                    | `ResizeObserver` is watching the element being sized                                                                              | Observe an inner element that is never given a height                              |
+| Box dips mid-swap                                            | `out-in` inside a height-animated container                                                                                       | Cross-fade with the leaving block `absolute`                                       |
+| Focus ring is clipped on flush-edge controls                 | Permanent `overflow-hidden` on the animated box                                                                                   | Clip only while moving, via `data-[resizing]:`                                     |
+| Consumer's `transition-*` class is ignored                   | An inline `style="transition: …"` on the same element beats every class                                                           | Express it as a utility, or accept the component owns that transition              |
+| Enter-from opacity has no effect                             | A base `opacity-*` on the same element is emitted after `opacity-0`                                                               | Recede with token colours (border/fill), and leave `opacity` to the transition     |
+| Reordering a list kills the item's own animation             | Re-inserting a node discards any transition pending on it or inside it                                                            | A list either reorders or its items animate in place — not both on one interaction |
+| A badge/dot is cut off, or the control jumps when it appears | The host clips to its own shape (`overflow-hidden`), and an in-flow marker widens the box                                         | Overlay it on a `relative` wrapper _outside_ the control, `pointer-events-none`    |
+| Element fades out but never leaves                           | A DS component's own remove animation completed and _then_ emitted — correct for a thing going away, wrong for a thing that stays | Own the control locally when the element must survive                              |
+
 ### Timing only from tokens
 
 - **Durations**: `duration-fast-01` (70ms), `duration-fast-02` (110ms), `duration-moderate-01`
@@ -91,8 +297,16 @@ Same shape with `animate-fade-in/out` for in-place content and backdrops, and
 
 - **MUST** animate compositor props only: `transform` and `opacity`.
 - **NEVER** animate layout props (`width`, `height`, `top`, `left`, `margin`, `padding`) — they
-  thrash layout. (Exception: the catalogued `animate-slide-down` for disclosure height; don't roll
-  your own height/width transition beyond it.)
+  thrash layout. Three exceptions, and only three: the catalogued `animate-slide-down` for a
+  0 → auto disclosure, and the two recipes in **Size transitions** below (a box that follows its
+  own content's height, a value that grows into a `0fr → 1fr` grid track). Anything else that
+  wants to resize is a `transform` in disguise — find it.
+- **Name the property the utility actually sets.** Tailwind v4 compiles `translate-x-*` to the
+  standalone `translate` property and `scale-*` to `scale`, **not** to `transform`. So
+  `transition-[transform]` beside a `translate-x-*` compiles, lints, emits CSS — and animates
+  nothing. Write `transition-[translate,opacity]`, `transition-[scale,opacity]`. A
+  `<TransitionGroup>` sets an inline `transform` for its own move, so its `move-class` names all
+  three: `transition-[transform,translate,scale,opacity]`.
 - **SHOULD** avoid animating paint props (`background`, `color`) except small, local UI (a single
   icon, a chip). For hover/active surface fills use the `::before`/`::after` ghost-layer pattern from
   the Interactive states catalog (listed by the webkit MCP) — fade `opacity` on the pseudo-layer, not
@@ -147,7 +361,17 @@ End with: `motion clean` or `N violations`.
 ## Definition of Done
 
 - [ ] Only `animate-*` utilities and `duration-*` / `ease-*` / `curve` tokens are used.
-- [ ] Only `transform` / `opacity` animate (plus catalogued `animate-slide-down`).
-- [ ] Interaction feedback ≤ 150ms; entrance `ease-out`, exit `ease-in`.
+- [ ] Only `transform` / `opacity` animate — plus catalogued `animate-slide-down` and the two
+      sanctioned size recipes, each in the exact shape above.
+- [ ] Every `transition-[…]` names the property the utility actually sets (`translate` / `scale`,
+      not `transform`).
+- [ ] Interaction feedback ≤ 150ms; entrance `ease-out`, exit `ease-in`. A first-paint entrance is
+      exempt (`slow-01` + expressive) and runs once, on mount only.
+- [ ] Any animated height releases back to `auto` — on `transitionend` **and** a fallback timer —
+      and clips only while it moves.
+- [ ] Motion was **measured, not eyeballed**: sample the animated property across
+      `requestAnimationFrame` and confirm interpolated frames between start and end. A snap and a
+      150ms ease are indistinguishable by eye, and every entry in the glitch catalog looks fine in
+      a screenshot.
 - [ ] Every motion class has a `motion-reduce:*` escape; decorative loops are `aria-hidden` and pause off-screen.
 - [ ] No `@keyframes`, inline `cubic-bezier`, hardcoded ms, or external animation lib.

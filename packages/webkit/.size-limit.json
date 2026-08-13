@@ -25,6 +25,26 @@
     "limit": "48 KB"
   },
   {
+    "name": "frame-box",
+    "path": "src/components/layout/frame-box/frame-box.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "section-gap",
+    "path": "src/components/layout/section-gap/section-gap.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "section-title",
+    "path": "src/components/content/section-title/section-title.vue",
+    "limit": "4 KB"
+  },
+  {
+    "name": "hero-title",
+    "path": "src/components/content/hero-title/hero-title.vue",
+    "limit": "2.5 KB"
+  },
+  {
     "name": "password-requirements",
     "path": "src/components/inputs/field-password/password-requirements.ts",
     "limit": "0.3 KB"
