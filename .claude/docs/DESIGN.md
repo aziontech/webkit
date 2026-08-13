@@ -363,7 +363,7 @@ Use **only** the named utilities below; they ship with `motion-safe` / `motion-r
 | `animate-slide-out-right`            | translateX 0 → 100%                          | `moderate-01` · `productive-exit`                                             |
 | `animate-shimmer`                    | `background-position` 200% → -200% sweep      | 1.6s · `linear` infinite                                                      |
 | `animate-blink`                      | opacity 1/0 cycle                            | 1s · `step-end` infinite                                                      |
-| `animate-highlight-fade`             | row-flash highlight                          | `ease-in forwards`                                                            |
+| `animate-highlight-fade`             | row-flash highlight, holds then fades out    | `slow-03` · `ease-in` forwards                                                |
 | `animate-progress-indeterminate`     | indeterminate bar, primary sweep             | `slow-04` · `productive-entrance` infinite                                    |
 | `animate-progress-indeterminate-short` | indeterminate bar, secondary short sweep   | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
 | `animate-flow-dash`                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0) | `slow-02` · `linear` infinite                            |
