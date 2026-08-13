@@ -178,6 +178,40 @@ Three shapes:
 - **Custom-property declarations** — `[--table-row-bg:var(--bg-surface)]`, `data-[state=selected]:[--table-row-bg:var(--bg-selected)]`. There is no paren shorthand for _declaring_ a custom property; `(--x:--y)` compiles to nothing.
 - **Expression values** — anything whose arbitrary value is more than a lone `var(--x)`: `w-[calc(var(--a)*2)]`, gradients (`bg-[linear-gradient(...var(--x)...)]`), box-shadows, and a **var with a fallback** (`bg-[var(--x,var(--y))]`, `text-[length:var(--w,1px)]`). These must remain in brackets — converting them drops the style with **no build or lint error**.
 
+## Transitioning a transform: name `translate` / `scale`, not `transform`
+
+Tailwind v4 does **not** compile the transform utilities to the `transform` property. `translate-x-*` / `translate-y-*` compile to the standalone **`translate`** property, and `scale-*` to **`scale`**:
+
+```css
+/* what Tailwind v4 actually emits */
+.translate-x-\[12\%\] { --tw-translate-x: 12%; translate: var(--tw-translate-x) var(--tw-translate-y) }
+.scale-90             { --tw-scale-x: 90%; --tw-scale-y: 90%; scale: var(--tw-scale-x) var(--tw-scale-y) }
+```
+
+So a transition that names `transform` never animates them. This fails **silently** in the worst way: the class compiles, `vue-tsc` and ESLint pass, the utility is emitted, the element ends up in the right place — and no motion is ever interpolated.
+
+```html
+<!-- ❌ compiles, lints, animates NOTHING -->
+<div class="translate-x-[12%] transition-[transform,opacity] duration-moderate-01">
+
+<!-- ✅ name the properties the utilities actually set -->
+<div class="translate-x-[12%] transition-[translate,opacity] duration-moderate-01">
+<div class="scale-90 transition-[scale,opacity] duration-moderate-01">
+```
+
+**With Vue `<Transition>` / `<TransitionGroup>`, list all three.** The enter/leave classes use the utilities above (`translate`, `scale`), but `TransitionGroup`'s *move* animation sets an inline `transform` of its own, so a group that both moves and fades needs every property named:
+
+```html
+transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none
+```
+
+Two related traps in the same family, both silent:
+
+- **An inline `style="transition: …"` beats every class.** A component that sets one (e.g. for its own dismiss animation) discards any `transition-*` a consumer puts on that same element. Do not set `transition` inline on a component root; express it as a utility so the consumer can override it.
+- **Re-inserting a node discards its pending transition.** Reordering a keyed list moves the DOM node, which cancels any transition that was about to start on it or inside it. A list whose items animate their own size or content cannot also reorder on the same interaction — pick one. (Measured: 8 interpolated frames when the item keeps its position, 0 when it moves.)
+
+**Verify motion by measuring, not by looking.** Sample the animated property across `requestAnimationFrame` and assert there are interpolated frames between the start and end values; a snap and a 150ms ease are indistinguishable by eye in review.
+
 The guardrail token-checks (`typography-raw-length`, `leading-raw`, `tracking-raw`, `font-family-raw`, `animate-arbitrary`, `motion-hardcoded`) match **both** spellings, so accepting the IntelliSense suggestion cannot walk a raw value through the typography / motion / animation gates.
 
 ### A malformed shorthand is dead, and looks alive
