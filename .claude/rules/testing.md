@@ -12,16 +12,26 @@ Every component ships a co-located `*.test.ts` that proves it **works**, exercis
 
 ## Why browser mode, never jsdom
 
-jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingClientRect`, and does not surface `<Teleport>`d content — so a test that "passes" there is a false positive for exactly the behaviors that break in production (keyboard, focus trap, overlays, positioning, contrast). We run in real Chromium so those are real.
+jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingClientRect`, and does not surface `<Teleport>`d content — so a test that "passes" there is a false positive for exactly the behaviors that break in production (keyboard, focus trap, overlays, positioning). We run in real Chromium so those are real.
 
 - **No mocks for layout / positioning / focus / `<Teleport>`.** If a test "needs" one of those mocks, the test is wrong. Real browser makes them real.
 - Teleported overlay content escapes the render container — query it from `document.body`, not the `render()` result.
 
+### What a real browser does NOT give this suite: CSS
+
+**This env runs no Tailwind, and [`setup.ts`](../../packages/webkit/src/test/setup.ts) deliberately loads no theme CSS.** The DOM is real but _unstyled_: a component's utility classes emit nothing here, so every computed style is the UA default. That is a boundary, not a gap to fix — and it decides what a test may assert:
+
+- **Never assert a computed style, a color, or a utility-derived dimension.** `getComputedStyle(el).backgroundColor` reads `rgba(0, 0, 0, 0)` whether the class is correct, misspelled, or missing entirely, so such an assertion passes in the broken _and_ fixed states — the exact false positive browser mode exists to kill. Same for a height that comes from `h-8`.
+- **`expectNoA11yViolations` therefore checks semantics, not pixels** — role, name, ARIA relationships, focus order. It does **not** validate color contrast here, because there are no colors. Contrast is real only where the stylesheet is: Storybook + the visual-regression gate.
+- **Pixels, contrast and token correctness belong to visual regression.** A dead utility class (a token that emits no CSS) is invisible to this suite by construction; it is caught by [`styling.md`](./styling.md)'s token checks at write time and by the visual gate at review time.
+
+Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring the Tailwind pipeline — the tokens alone would load and nothing would read them, which buys a slower suite and no new signal.
+
 ## The stack (already wired — do not reinvent)
 
 - `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. Story imports of `@aziontech/webkit/*` resolve through the workspace package itself (no alias needed).
-- `packages/webkit/src/test/setup.ts` — imports `@aziontech/theme/globals.css` (styled DOM ⇒ axe contrast is real) + `cleanup()`.
-- `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`.
+- `packages/webkit/src/test/setup.ts` — `cleanup()` + an anchor-navigation guard (a real click on an `<a href>` would navigate and tear down the test iframe). It loads **no** CSS, on purpose — see the CSS boundary above.
+- `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`; semantics only, no contrast (unstyled DOM).
 - `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when webkit/storybook changes; the `toolkit` job runs `test:gate` (existence).
 - Publish-safety: `packages/webkit/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter webkit pack:dry`). Test files never ship to npm.
 
@@ -34,25 +44,25 @@ jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingC
 
 ## What every `<name>.test.ts` must cover
 
-| #   | Surface          | Assertion                                                                                                                 |
-| --- | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Render           | mounts without throwing; the `data-testid` fallback is present; consumer `data-testid` override wins                      |
-| 2   | Props / variants | each variant prop (`kind`, `size`, …) maps to its `data-*` / attribute / rendered state                                   |
-| 3   | Events           | every event in the spec's Events table fires with the right payload on the real user action                               |
-| 4   | Suppression      | when `disabled` / `loading` / `readonly`, the action is **not** emitted                                                   |
-| 5   | v-model          | drive the input, assert `update:modelValue` (and `update:open` / `update:*`) with the exact value                         |
-| 6   | ARIA             | `role`, `aria-expanded`, `aria-busy`, `aria-disabled`, `aria-selected`… as the template declares                          |
-| 7   | a11y             | `expectNoA11yViolations(container)` on the default render + any variant whose semantics differ                            |
-| 8   | Composition      | a context-aware sub-component reflects/drives the root's `provide`/`inject` state with no manual wiring                   |
-| 9   | Overlay          | open/close (trigger + second click), `Escape` closes and returns focus, panel Teleports to `body`, scroll-lock while open |
-| 10  | Recursive        | nested instances ≥2 levels deep render and propagate context (active item, open submenu, orientation)                     |
+| #   | Surface          | Assertion                                                                                                                                                        |
+| --- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Render           | mounts without throwing; the `data-testid` fallback is present; consumer `data-testid` override wins                                                             |
+| 2   | Props / variants | each variant prop (`kind`, `size`, …) maps to its `data-*` / attribute / rendered state                                                                          |
+| 3   | Events           | every event in the spec's Events table fires with the right payload on the real user action                                                                      |
+| 4   | Suppression      | when `disabled` / `loading` / `readonly`, the action is **not** emitted                                                                                          |
+| 5   | v-model          | drive the input, assert `update:modelValue` (and `update:open` / `update:*`) with the exact value                                                                |
+| 6   | ARIA             | `role`, `aria-expanded`, `aria-busy`, `aria-disabled`, `aria-selected`… as the template declares                                                                 |
+| 7   | a11y             | `expectNoA11yViolations(container)` on the default render + any variant whose semantics differ (semantics only — contrast needs CSS, which this env has none of) |
+| 8   | Composition      | a context-aware sub-component reflects/drives the root's `provide`/`inject` state with no manual wiring                                                          |
+| 9   | Overlay          | open/close (trigger + second click), `Escape` closes and returns focus, panel Teleports to `body`, scroll-lock while open                                        |
+| 10  | Recursive        | nested instances ≥2 levels deep render and propagate context (active item, open submenu, orientation)                                                            |
 
 A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **floor**, never the substance.
 
 ## The functional bar — no false positives, no filler
 
 - Assert **only what you read** in the source. Never invent props/events/testids/aria/sub-components.
-- **Forbidden:** assertions on Tailwind/class strings, pixel positions, animation timing, or internal component state.
+- **Forbidden:** assertions on Tailwind/class strings, computed styles/colors, pixel positions, animation timing, or internal component state. A computed-style assertion is not a stricter version of a class assertion — it is a _weaker_ one here, because the unstyled DOM returns the same value whether the style is right or absent.
 - **If a test only passes when the implementation is written one specific way, delete it.** It traps refactors and adds no signal.
 - If a test reveals a real component defect you cannot satisfy without changing the `.vue`, **`it.skip` it with a one-line reason** — never fake a pass or weaken an assertion into meaninglessness. Record the gap in the PR.
 
