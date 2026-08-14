@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs, useSlots } from 'vue'
 
   import Kbd from '../../../content/kbd/kbd.vue'
   import {
@@ -35,8 +35,11 @@
   )
 
   const attrs = useAttrs()
+  const slots = useSlots()
   const ctx = useCommandMenuContext()
   const groupId = inject(CommandMenuGroupIdKey, null)
+
+  const hasPrefix = computed(() => Boolean(slots['prefix']))
 
   const labelRef = ref<HTMLElement | null>(null)
   const itemText = ref(String(props.value))
@@ -83,6 +86,7 @@
       groupId,
       disabled: disabledRef,
       isVisible,
+      hasPrefix,
       activate
     })
   })
@@ -109,9 +113,16 @@
     @keydown.space.prevent="!disabled && activate($event)"
     @mouseenter="!disabled && ctx.setActive(value)"
   >
+    <!--
+      Rendered for every item once ANY item in the list carries a prefix, so the
+      icon column is reserved and all labels start on the same x. The box is a
+      fixed `size-4` — the same glyph size Menu rows use — so an item's own icon
+      cannot widen the column and push its label out of line with the others.
+    -->
     <span
-      v-if="$slots['prefix']"
-      class="flex shrink-0 items-center"
+      v-if="ctx.hasPrefixColumn.value"
+      :data-testid="`${testId}__prefix`"
+      class="flex size-4 shrink-0 items-center justify-center overflow-hidden"
     >
       <slot name="prefix" />
     </span>

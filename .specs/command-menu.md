@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 221223d1c35abb62344f3706d5d8b94c4a520275da4cb4de6d74575a80ae88ed
+checksum: 0f7a3717c0988f3e65db36a677f4eb0b0307d11854c10bc92e917d3e714918d3
 created: 2026-07-23
-last_updated: 2026-07-30
+last_updated: 2026-08-12
 ---
 
 # Command Menu — Component Spec
@@ -109,8 +109,8 @@ packages/webkit/src/components/overlay/command-menu/
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<CommandMenu.Group>` / `<CommandMenu.Item>` / `<CommandMenu.Separator>`, plus an optional `<CommandMenu.Empty>`.
-- `command-menu-group/command-menu-group.vue` — labeled section. Renders an uppercase `heading` row above its items; hides itself entirely when all of its items are filtered out.
-  - Props: `heading: string` default `''` — uppercase section label; omit for an unlabeled group.
+- `command-menu-group/command-menu-group.vue` — labeled section. Renders a `heading` row (`text-label-sm` in `--text-muted`, sentence case) above its items; hides itself entirely when all of its items are filtered out. Carries `--spacing-sm` above itself when it follows another group, and deliberately **not** when it follows a `<CommandMenu.Separator>` — the separator owns the space around itself, so the two rules are mutually exclusive and never stack.
+  - Props: `heading: string` default `''` — section label; omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<CommandMenu.Item>`.
 - `command-menu-item/command-menu-item.vue` — a selectable command row. `role="option"`. Registers itself with the context (value + searchable text) so the root can filter and track the active item. Activated by click, `Enter` while active, or a full-row pointer; activation calls the context, which emits the root `select` and closes the palette. Shows an optional keyboard-shortcut hint rendered with `Kbd`.
@@ -120,6 +120,7 @@ packages/webkit/src/components/overlay/command-menu/
     - `shortcut: string` default `''` — a `'+'`-delimited shortcut hint (e.g. `'meta+d'`, `'meta+shift+p'`, `'esc'`) rendered on the right via `Kbd`. Modifier tokens (`meta`/`ctrl`/`shift`/`alt`) map to `Kbd` modifier props; the final token is the key. Display only — it does not register a global keybinding.
   - Events: _none_ (root emits `select`).
   - Slots: `default` — the item label (rich content allowed); `prefix` — leading icon/avatar; `suffix` — trailing content (mutually exclusive with `shortcut`).
+  - **One icon column for the whole list.** As soon as any item in the list carries a `prefix`, *every* item reserves the icon box — a fixed `size-4`, the same glyph size a `Menu` row uses — so a list that mixes iconed and icon-less items keeps a single label edge instead of a ragged one. A palette where no item has a `prefix` reserves nothing and pays no indent. The box is fixed-width so one item's oversized icon cannot widen the column and pull its own label out of line.
 - `command-menu-empty/command-menu-empty.vue` — the no-results state, shown only when the filter produces zero visible items. Fallback copy lives inside the slot.
   - Props: _none_.
   - Events: _none_.
@@ -175,17 +176,22 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 | input header divider | `border-b border-(--border-default)` |
 | input field chrome (border / surface / text / focus ring) | inherited from `InputText` (`var(--border-default)`, `var(--bg-surface)`, `var(--text-default)`, `var(--ring-color)`) |
 | input placeholder / search icon | `var(--text-muted)` |
-| group heading typography | `.text-overline-sm` + `text-(--text-muted)` |
+| group heading typography | `.text-label-sm` + `text-(--text-muted)` |
 | item label typography | `.text-label-sm` + `text-(--text-default)` |
 | item shape | `var(--shape-button)` |
 | item min-height | `min-h-8` (32px) |
 | item spacing.x | `var(--spacing-sm)` |
 | item spacing.y | `var(--spacing-xxs)` |
 | item gap | `var(--spacing-xs)` |
+| item icon column | `size-4` (16px), reserved for every item when any item has a `prefix` |
+| list spacing.x / spacing.y | `var(--spacing-xxs)` / `var(--spacing-xs)` — the vertical seam is one step up from the row inset, matching the Dropdown panel |
 | item active surface | `var(--bg-selected)` |
 | item hover surface | `var(--bg-hover)` |
 | item disabled text | `var(--text-disabled)` |
 | separator | `border-t border-(--border-default)` |
+| separator spacing.above | `var(--spacing-sm)` |
+| separator spacing.below | `var(--spacing-xs)` |
+| group spacing (after another group) | `var(--spacing-sm)` |
 | empty-state text | `.text-label-sm` + `text-(--text-muted)` |
 | focus ring | `var(--ring-color)` |
 
@@ -210,7 +216,7 @@ _none_
 Composition component with no `kind`/`size` axis. Every story starts **closed** and ships its own opening affordance, matching the `dialog` story pattern: the panel teleports to `document.body`, so a story that forced `open` would stack its panel on top of every other story's panel on the Docs page (leaving each story canvas empty). Only `Default` keeps the global `shortcut`; the remaining stories pass `shortcut=""` so the Docs page has a single ⌘K owner.
 
 - Default — the intended entry point: a large read-only search `InputText` carrying a ⌘K `Kbd` hint that opens the palette via `v-model:open` (the global `meta+k` shortcut opens it too), containing one input, two groups, a separator, and items with and without `shortcut` hints. Covers the "Best practices" controlled `v-model:open` pattern alongside the default composition.
-- Grouped — composite story with two `<CommandMenu.Group>` separated by a `<CommandMenu.Separator>`. Required because grouping + separators are central anatomy not covered by `Default`.
+- Grouped — composite story with three `<CommandMenu.Group>`, only the first pair separated by a `<CommandMenu.Separator>`, and half the items carrying a `prefix` icon. Required because grouping + separators are central anatomy not covered by `Default`; the three-group shape shows both spacings (around a separator and between two bare groups) in one frame, and the mixed icons are the only coverage of the `prefix` slot and of the single label edge it guarantees.
 - WithShortcuts — items carrying `shortcut` hints rendered via `Kbd`. Required because the `shortcut` prop and its `Kbd` rendering are public Item API with no other coverage.
 - Empty — the palette with no matching items, showing the `<CommandMenu.Empty>` state. Required because the empty state is a distinct visual state (the `empty` state in the States table) with no other coverage.
 - Disabled — a group containing a disabled item alongside enabled ones. Required because `disabled` is public Item API and the disabled row is a distinct state.

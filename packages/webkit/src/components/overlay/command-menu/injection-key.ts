@@ -13,6 +13,8 @@ export interface CommandMenuRegisteredItem {
   disabled: Ref<boolean>
   /** Whether the item currently passes the substring filter. */
   isVisible: Ref<boolean>
+  /** Whether the item renders leading `prefix` content. */
+  hasPrefix: Ref<boolean>
   /** Activates the item, emitting the root `select` event. */
   activate: (event: globalThis.MouseEvent | globalThis.KeyboardEvent) => void
 }
@@ -45,6 +47,11 @@ export interface CommandMenuContext {
   isActive: (value: CommandMenuItemValue) => boolean
   /** Whether any registered item currently passes the filter. */
   hasVisibleItems: Ref<boolean>
+  /**
+   * Whether any registered item renders a `prefix`. When true every item reserves
+   * the icon column, so labels share one x whether or not that item has an icon.
+   */
+  hasPrefixColumn: Ref<boolean>
   /** Whether the given group has at least one visible item. */
   groupHasVisibleItems: (groupId: string) => boolean
   /** Keyboard handler for the input — Arrow/Home/End roving nav + Enter activation. */
