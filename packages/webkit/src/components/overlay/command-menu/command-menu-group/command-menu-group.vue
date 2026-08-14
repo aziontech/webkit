@@ -14,7 +14,7 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Uppercase section label rendered above the items. Omit for an unlabeled group. */
+      /** Section label rendered above the items. Omit for an unlabeled group. */
       heading?: string
     }>(),
     {
@@ -45,13 +45,19 @@
     role="group"
     :aria-labelledby="hasHeading ? headingId : undefined"
     :data-testid="testId"
-    class="flex flex-col"
+    class="flex flex-col [:not([role=separator])+&]:mt-(--spacing-sm)"
   >
+    <!--
+      Groups never sit flush. The rhythm is `--spacing-sm` above every group that
+      follows another group, and it deliberately does NOT apply after a
+      `<CommandMenu.Separator>` — the separator owns the space around itself, so
+      the two rules are mutually exclusive and cannot stack.
+    -->
     <div
       v-if="hasHeading"
       :id="headingId"
       :data-testid="`${testId}__heading`"
-      class="px-(--spacing-sm) py-(--spacing-xxs) text-overline-sm uppercase text-(--text-muted)"
+      class="px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
     >
       {{ heading }}
     </div>
