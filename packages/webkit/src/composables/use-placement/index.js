@@ -257,11 +257,17 @@ export function usePlacement({
    */
   function onScroll(event) {
     if (!isOpen.value) return
+    // A scroll INSIDE the panel is not a scroll of the page: the trigger has not
+    // moved, so there is nothing to re-anchor to and nothing to dismiss. The
+    // listener is in the capture phase (scroll does not bubble), so it sees the
+    // panel's own scroll container too — and repositioning on it meant a long
+    // scrollable panel read two `getBoundingClientRect`s and wrote its inline
+    // style on every scrolled frame, which is what made the list stutter.
+    const target = /** @type {Node | null} */ (event?.target ?? null)
+    if (target && panelRef.value?.contains(target)) return
     if (onDismiss) {
       // The panel is anchored once and does not follow the page, so a scroll
-      // outside it dismisses it; a scroll inside the panel is left alone.
-      const target = /** @type {Node | null} */ (event?.target ?? null)
-      if (target && panelRef.value?.contains(target)) return
+      // outside it dismisses it.
       onDismiss()
       return
     }

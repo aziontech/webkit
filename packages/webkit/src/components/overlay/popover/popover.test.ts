@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/vue3'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/popover/Popover.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -466,6 +466,62 @@ describe('Popover (compound / overlay)', () => {
     expect(['bottom-start', 'bottom-end', 'top-start', 'top-end']).toContain(
       (panel() as HTMLElement).getAttribute('data-placement')
     )
+  })
+
+  // ---- Scrolling a long panel ------------------------------------------------------
+  /**
+   * The "+N overflow" shape: a long list scrolling inside the panel. The panel is
+   * anchored to its trigger and re-anchors on page scroll — and that listener is
+   * registered in the CAPTURE phase (scroll does not bubble), so it also sees the
+   * panel's own scroll container. Re-anchoring on it read two bounding rects and
+   * rewrote the inline style on every scrolled frame, for a trigger that had not
+   * moved. Pinned both directions: inner scroll leaves the anchor alone, page
+   * scroll still moves it.
+   */
+  const scrollableHost = () =>
+    defineComponent({
+      components: { Popover, PopoverTrigger, PopoverContent },
+      template: `
+        <div>
+          <Popover>
+            <PopoverTrigger><button type="button">Open</button></PopoverTrigger>
+            <PopoverContent>
+              <div data-testid="domain-list" style="max-height: 120px; overflow: auto">
+                <p v-for="n in 60" :key="n" style="height: 24px">domain-{{ n }}.example.com</p>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <div style="height: 2000px"></div>
+        </div>
+      `
+    })
+
+  it('does not re-measure the trigger when the panel scrolls, but does when the page does', async () => {
+    render(scrollableHost())
+    const trigger = byTestId('overlay-popover__trigger') as HTMLElement
+    await fireEvent.click(trigger)
+    await waitFor(() => expect(panel()).not.toBeNull())
+
+    // Re-anchoring is invisible on an inner scroll (the trigger has not moved, so the
+    // recomputed coordinates are identical) — asserting on `style.top` would pass in
+    // the broken state too. The observable difference is the measurement itself.
+    const measure = vi.spyOn(trigger, 'getBoundingClientRect')
+    // Opening anchors the panel over two ticks; let that settle before counting.
+    await nextTick()
+    await nextTick()
+    measure.mockClear()
+
+    const list = byTestId('domain-list') as HTMLElement
+    list.scrollTop = 200
+    list.dispatchEvent(new Event('scroll'))
+    await nextTick()
+    expect(measure).not.toHaveBeenCalled()
+
+    // Control: a page scroll DOES move the trigger, so the panel re-anchors to it.
+    globalThis.scrollTo(0, 400)
+    await waitFor(() => expect(measure).toHaveBeenCalled())
+    globalThis.scrollTo(0, 0)
+    measure.mockRestore()
   })
 
   // ---- Consumer testid override ---------------------------------------------------

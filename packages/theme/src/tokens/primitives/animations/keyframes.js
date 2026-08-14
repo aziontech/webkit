@@ -36,6 +36,37 @@ export const keyframes = {
     '0%': 'background-position: 200% 0',
     '100%': 'background-position: -200% 0'
   },
+  // ── ARRIVALS ──
+  //
+  // The two entrances an app shell needs, and they are a PAIR: a page arriving, and
+  // content arriving inside a page that is already there. Never run both on one
+  // element at once — the page's own entrance is the only one it gets (see `useWhen`
+  // in ./animate.js).
+  //
+  // `pageEnter` travels along +X: it starts one layout boundary step to the LEFT of
+  // where it lands and moves right into place while it fades up. The direction is the
+  // whole point — navigation lives on the left edge of an app shell, so a page that
+  // arrives from that edge reads as coming FROM the row that was clicked. A plain fade
+  // has no origin, and a page arriving from the right reads as going BACK. Override
+  // `--page-enter-distance` where a shell's inset is not the boundary token.
+  //
+  // NEITHER fills forwards, deliberately: an animation with no fill leaves NO
+  // `translate` on the element once it ends. That matters for `pageEnter`, whose box is
+  // usually the scroll container — a lingering transform would make it a containing
+  // block for any `position: fixed` descendant and change what its sticky children
+  // measure against.
+  pageEnter: {
+    '0%': 'opacity: 0; translate: calc(var(--page-enter-distance, var(--layout-boundary-inline)) * -1) 0',
+    '100%': 'opacity: 1; translate: 0 0'
+  },
+  // Rises a hair instead of travelling: the page is already in place and only what is
+  // inside it changed, so a second horizontal slide would re-announce the whole page.
+  // Stagger a follower with `--content-enter-delay` (one `fast-01` is the house step)
+  // so a two-column block assembles in reading order instead of popping as one slab.
+  contentEnter: {
+    '0%': 'opacity: 0; translate: 0 var(--spacing-xs)',
+    '100%': 'opacity: 1; translate: 0 0'
+  },
   popupScaleIn: {
     '0%': 'opacity: 0; transform: scale(0.9)',
     '100%': 'opacity: 1; transform: scale(1)'
