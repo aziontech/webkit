@@ -95,8 +95,8 @@
        the distinction: `filled` was `--bg-surface-raised` and the other two were
        transparent. That never shipped as designed on two counts. The raised token is the
        SAME value as `--bg-surface` in the light theme, so the applied/available contrast
-       it was meant to carry existed in dark only; and the class was written
-       `bg-(--bg-surface-raised )` — the stray space terminates the Tailwind candidate, so
+       it was meant to carry existed in dark only; and the background utility carried a
+       stray space before the closing paren, which terminates the Tailwind candidate, so
        it compiled to nothing at all (verified against the v4 compiler) and every `filled`
        chip was in fact transparent, in both themes, with only its shadow to tell it from
        an `outlined` one. Giving every kind the real surface is what makes a chip read as a
