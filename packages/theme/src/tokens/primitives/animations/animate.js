@@ -26,7 +26,7 @@ export const animate = {
   'fade-in': 'fadeIn 220ms ease-in-out',
   'fade-out': 'fadeOut 220ms ease-in-out',
   'slide-down': 'slideDown 220ms ease-in-out',
-  'highlight-fade': 'highlight ease-in forwards',
+  'highlight-fade': `highlight ${duration['slow-03']} ease-in forwards`,
   // The two arrivals, and they are a pair — see the note above their keyframes.
   // `page-enter` is the route transition; `content-enter` is content settling inside a
   // page already on screen. Both take `moderate-02` + `productive-entrance`: the

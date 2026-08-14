@@ -28,9 +28,11 @@ export const keyframes = {
     '0%, 100%': 'opacity: 1',
     '50%': 'opacity: 0'
   },
+  // Holds the highlight for the first 40% of the run, then fades it back to
+  // normal over the remaining 60% — a row-flash, not a permanent tint.
   highlight: {
-    '0%': 'background-color: var(--surface-hover); font-weight: 500',
-    '100%': 'background-color: var(--surface-hover); font-weight: 500'
+    '0%, 40%': 'background-color: var(--surface-hover); font-weight: 500',
+    '100%': 'background-color: transparent; font-weight: 400'
   },
   shimmer: {
     '0%': 'background-position: 200% 0',
