@@ -46,27 +46,14 @@ export const animate = {
   'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
   // `linear` (not a curve token) for the same reason as spin/shimmer: an endlessly
   // looping animation must not accelerate, or the seam between repeats is visible.
-  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
-  'illustration-rim-sweep': `illustrationRimSweep ${duration['slow-04']} linear infinite`,
-  // The ambient pair behind the illustrated chat window. `9s` is deliberately off the duration
-  // scale — like `spin`, `pulse`, `shimmer` and `blink` above, which are also literals: that
-  // scale tops out at 2.1s because it budgets UI transitions, and an ambient loop that runs
-  // forever in the corner of a page is not one. At 9s the transcript delivers a message every
-  // 2.25s, which reads as a conversation rather than as a ticker.
-  //
-  // Not `linear`, unlike every other endless loop here: this one is four discrete steps with
-  // holds between them, so there is no continuous motion to keep even — each slide is a small UI
-  // movement in its own right and takes the entrance curve.
-  //
-  // The two MUST share a duration — the pop is phase-locked to the scroll by a per-message
-  // negative delay, so a change to one is a change to both.
-  'illustration-chat-scroll': `illustrationChatScroll 9s ${curve['productive-entrance']} infinite`,
-  'illustration-chat-pop': `illustrationChatPop 9s ${curve['expressive-entrance']} infinite`
+  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`
 }
 
 export const useWhen = {
-  'page-enter': 'A page arriving on a route change — on the CONTENT ZONE only, never the shell. The chrome is the same before and after, and sliding it announces a reload that did not happen. Key it on the route path so a component serving several paths still replays it. Nothing inside the page may animate on mount at the same time: the two run in lockstep and read as one element travelling on a diagonal.',
-  'content-enter': 'Content settling INSIDE a page that is already on screen — a loading window resolving, a filtered list swapping, a step changing. Never on first paint of a page whose own entrance is already running (use it after that entrance, or after a wire). Stagger a follower with --content-enter-delay.',
+  'page-enter':
+    'A page arriving on a route change — on the CONTENT ZONE only, never the shell. The chrome is the same before and after, and sliding it announces a reload that did not happen. Key it on the route path so a component serving several paths still replays it. Nothing inside the page may animate on mount at the same time: the two run in lockstep and read as one element travelling on a diagonal.',
+  'content-enter':
+    'Content settling INSIDE a page that is already on screen — a loading window resolving, a filtered list swapping, a step changing. Never on first paint of a page whose own entrance is already running (use it after that entrance, or after a wire). Stagger a follower with --content-enter-delay.',
   spin: 'Indeterminate circular spinners (loading icons).',
   ping: 'One-off attention ring radiating from a small element (notification dot).',
   pulse: 'Skeleton/placeholder opacity pulse while content loads.',
@@ -89,13 +76,7 @@ export const useWhen = {
   'progress-indeterminate': 'Indeterminate linear progress bar (primary sweep).',
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
   'flow-dash':
-    'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.',
-  'illustration-rim-sweep':
-    'Rim light travelling around an illustration on hover. Apply through the .illustration-rim-sweep utility, which re-declares the ramp stack the angle drives; paused by default and set running from the hovered ancestor.',
-  'illustration-chat-scroll':
-    'A conversation advancing bottom-to-top inside an illustrated window, one message per step. Apply to a track exactly twice the height of its clipped viewport (h-[200%]) holding four EQUAL-height messages per screenful, repeated in the second half — each step is then one message and the loop lands on an identical frame, with no seam.',
-  'illustration-chat-pop':
-    'Each message landing at the bottom of that scroll. Same duration as illustration-chat-scroll, with a negative animation-delay per message (-6.75s / -4.5s / -2.25s / 0s for the four) so its 4% pop fires on the step boundary, with the message standing still and in view.'
+    'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.'
 }
 
 export default { animate, curve, duration, useWhen }

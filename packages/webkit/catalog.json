@@ -44,13 +44,12 @@
       "--accent-selected",
       "--animate-blink",
       "--animate-bounce",
+      "--animate-content-enter",
       "--animate-fade-in",
       "--animate-fade-out",
       "--animate-flow-dash",
       "--animate-highlight-fade",
-      "--animate-illustration-chat-pop",
-      "--animate-illustration-chat-scroll",
-      "--animate-illustration-rim-sweep",
+      "--animate-page-enter",
       "--animate-ping",
       "--animate-popup-scale-in",
       "--animate-popup-scale-out",
@@ -392,38 +391,12 @@
       "--height-80",
       "--height-9",
       "--height-96",
-      "--illustration-canvas-height",
-      "--illustration-canvas-width",
-      "--illustration-label-small",
-      "--illustration-rim",
-      "--illustration-rim-active",
-      "--illustration-rim-angle",
-      "--illustration-rim-boxes",
-      "--illustration-rim-layers",
-      "--illustration-rim-layers-active",
-      "--illustration-rim-width",
-      "--illustration-rim-width-hairline",
-      "--illustration-shape-large",
-      "--illustration-shape-medium",
-      "--illustration-shape-node",
-      "--illustration-shape-small",
       "--info",
       "--info-border",
       "--info-contrast",
       "--inset-shadow-2xs",
       "--inset-shadow-sm",
       "--inset-shadow-xs",
-      "--layout-boundary-end",
-      "--layout-boundary-inline",
-      "--layout-boundary-start",
-      "--layout-column-measure",
-      "--layout-group-gap",
-      "--layout-measure",
-      "--layout-measure-control",
-      "--layout-measure-focused",
-      "--layout-measure-form",
-      "--layout-measure-form-create",
-      "--layout-section-gap",
       "--leading-loose",
       "--leading-none",
       "--leading-normal",
@@ -592,19 +565,14 @@
       "--text-big-number-sm-font-weight",
       "--text-big-number-sm-line-height",
       "--text-body-lg-font-size",
-      "--text-body-lg-font-weight",
       "--text-body-lg-line-height",
       "--text-body-md-font-size",
-      "--text-body-md-font-weight",
       "--text-body-md-line-height",
       "--text-body-sm-font-size",
-      "--text-body-sm-font-weight",
       "--text-body-sm-line-height",
       "--text-body-xs-font-size",
-      "--text-body-xs-font-weight",
       "--text-body-xs-line-height",
       "--text-body-xxs-font-size",
-      "--text-body-xxs-font-weight",
       "--text-body-xxs-line-height",
       "--text-button-lg-font-family",
       "--text-button-lg-font-size",
@@ -776,13 +744,12 @@
       "animate": [
         "--animate-blink",
         "--animate-bounce",
+        "--animate-content-enter",
         "--animate-fade-in",
         "--animate-fade-out",
         "--animate-flow-dash",
         "--animate-highlight-fade",
-        "--animate-illustration-chat-pop",
-        "--animate-illustration-chat-scroll",
-        "--animate-illustration-rim-sweep",
+        "--animate-page-enter",
         "--animate-ping",
         "--animate-popup-scale-in",
         "--animate-popup-scale-out",
@@ -1151,23 +1118,6 @@
         "--height-9",
         "--height-96"
       ],
-      "illustration": [
-        "--illustration-canvas-height",
-        "--illustration-canvas-width",
-        "--illustration-label-small",
-        "--illustration-rim",
-        "--illustration-rim-active",
-        "--illustration-rim-angle",
-        "--illustration-rim-boxes",
-        "--illustration-rim-layers",
-        "--illustration-rim-layers-active",
-        "--illustration-rim-width",
-        "--illustration-rim-width-hairline",
-        "--illustration-shape-large",
-        "--illustration-shape-medium",
-        "--illustration-shape-node",
-        "--illustration-shape-small"
-      ],
       "info": [
         "--info",
         "--info-border",
@@ -1177,19 +1127,6 @@
         "--inset-shadow-2xs",
         "--inset-shadow-sm",
         "--inset-shadow-xs"
-      ],
-      "layout": [
-        "--layout-boundary-end",
-        "--layout-boundary-inline",
-        "--layout-boundary-start",
-        "--layout-column-measure",
-        "--layout-group-gap",
-        "--layout-measure",
-        "--layout-measure-control",
-        "--layout-measure-focused",
-        "--layout-measure-form",
-        "--layout-measure-form-create",
-        "--layout-section-gap"
       ],
       "leading": [
         "--leading-loose",
@@ -1388,19 +1325,14 @@
         "--text-big-number-sm-font-weight",
         "--text-big-number-sm-line-height",
         "--text-body-lg-font-size",
-        "--text-body-lg-font-weight",
         "--text-body-lg-line-height",
         "--text-body-md-font-size",
-        "--text-body-md-font-weight",
         "--text-body-md-line-height",
         "--text-body-sm-font-size",
-        "--text-body-sm-font-weight",
         "--text-body-sm-line-height",
         "--text-body-xs-font-size",
-        "--text-body-xs-font-weight",
         "--text-body-xs-line-height",
         "--text-body-xxs-font-size",
-        "--text-body-xxs-font-weight",
         "--text-body-xxs-line-height",
         "--text-button-lg-font-family",
         "--text-button-lg-font-size",
@@ -1545,13 +1477,12 @@
     "animations": [
       "blink",
       "bounce",
+      "content-enter",
       "fade-in",
       "fade-out",
       "flow-dash",
       "highlight-fade",
-      "illustration-chat-pop",
-      "illustration-chat-scroll",
-      "illustration-rim-sweep",
+      "page-enter",
       "ping",
       "popup-scale-in",
       "popup-scale-out",
@@ -1575,6 +1506,10 @@
         "value": "bounce 1s infinite",
         "useWhen": "Playful attention bounce (scroll-down hints); use sparingly."
       },
+      "content-enter": {
+        "value": "contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards",
+        "useWhen": "Content settling INSIDE a page that is already on screen — a loading window resolving, a filtered list swapping, a step changing. Never on first paint of a page whose own entrance is already running (use it after that entrance, or after a wire). Stagger a follower with --content-enter-delay."
+      },
       "fade-in": {
         "value": "fadeIn 220ms ease-in-out",
         "useWhen": "Content or backdrop appearing in place (no directional origin)."
@@ -1588,20 +1523,12 @@
         "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
       "highlight-fade": {
-        "value": "highlight ease-in forwards",
+        "value": "highlight 1100ms ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
       },
-      "illustration-chat-pop": {
-        "value": "illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite",
-        "useWhen": "Each message landing at the bottom of that scroll. Same duration as illustration-chat-scroll, with a negative animation-delay per message (-6.75s / -4.5s / -2.25s / 0s for the four) so its 4% pop fires on the step boundary, with the message standing still and in view."
-      },
-      "illustration-chat-scroll": {
-        "value": "illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite",
-        "useWhen": "A conversation advancing bottom-to-top inside an illustrated window, one message per step. Apply to a track exactly twice the height of its clipped viewport (h-[200%]) holding four EQUAL-height messages per screenful, repeated in the second half — each step is then one message and the loop lands on an identical frame, with no seam."
-      },
-      "illustration-rim-sweep": {
-        "value": "illustrationRimSweep 2100ms linear infinite",
-        "useWhen": "Rim light travelling around an illustration on hover. Apply through the .illustration-rim-sweep utility, which re-declares the ramp stack the angle drives; paused by default and set running from the hovered ancestor."
+      "page-enter": {
+        "value": "pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1)",
+        "useWhen": "A page arriving on a route change — on the CONTENT ZONE only, never the shell. The chrome is the same before and after, and sliding it announces a reload that did not happen. Key it on the route path so a component serving several paths still replays it. Nothing inside the page may animate on mount at the same time: the two run in lockstep and read as one element travelling on a diagonal."
       },
       "ping": {
         "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
@@ -3118,242 +3045,6 @@
         }
       ],
       "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/currency/`."
-    },
-    "illustration": {
-      "import": "@aziontech/webkit/illustration",
-      "target": "./src/components/content/illustration/index.ts",
-      "kind": "component",
-      "compoundRoot": true,
-      "treeShakeableImport": "@aziontech/webkit/illustration-root",
-      "subcomponents": [
-        "@aziontech/webkit/illustration-box",
-        "@aziontech/webkit/illustration-node",
-        "@aziontech/webkit/illustration-connector",
-        "@aziontech/webkit/illustration-elbow",
-        "@aziontech/webkit/illustration-branch",
-        "@aziontech/webkit/illustration-pill",
-        "@aziontech/webkit/illustration-window",
-        "@aziontech/webkit/illustration-surface",
-        "@aziontech/webkit/illustration-gauge",
-        "@aziontech/webkit/illustration-chart",
-        "@aziontech/webkit/illustration-list"
-      ],
-      "category": "content",
-      "structure": "composition",
-      "status": "approved",
-      "props": [
-        {
-          "name": "name",
-          "type": "string",
-          "default": "''",
-          "required": "no",
-          "doc": "Key of a registered asset to render; empty renders the composed default slot instead."
-        },
-        {
-          "name": "size",
-          "type": "'small' | 'medium' | 'large'",
-          "default": "'medium'",
-          "required": "no",
-          "doc": "Scale of the whole scene; every part inherits it unless it sets its own."
-        },
-        {
-          "name": "active",
-          "type": "boolean",
-          "default": "false",
-          "required": "no",
-          "doc": "Scene-level emphasis; parts inherit it and switch to the brand rim light."
-        },
-        {
-          "name": "ariaLabel",
-          "type": "string",
-          "default": "''",
-          "required": "no",
-          "doc": "Accessible name; empty keeps the illustration decorative and hidden from assistive tech."
-        }
-      ],
-      "slots": [
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "The composed anatomy. Rendered when `name` is empty; ignored when `name` resolves an asset."
-        }
-      ],
-      "purpose": "Renders a product illustration that is **built, not drawn** — composed from token-styled HTML primitives (icon box, node, connector, pill, window) rather than an exported SVG. Pass `name` to render a registered asset, or compose the parts by hand. Because every part is HTML + design tokens, one illustration follows light and dark, scales with `size`, and can animate; an exported `.svg` can do none of those.",
-      "useWhen": [
-        "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
-        "The same illustration must read correctly in both light and dark themes without shipping two files.",
-        "The illustration should highlight one focal part (`active`) — for example the step a flow is currently on.",
-        "The illustration must scale to the container without rasterizing or re-exporting."
-      ],
-      "avoidWhen": [
-        "A single glyph is enough → use an icon from `@aziontech/icons` (`<i class=\"ai ai-…\">`).",
-        "The artwork is pictorial or brand-authored (a logo, a mascot, a photo) → use `svg/azion/*` or an `<img>`; those are drawn, not composed.",
-        "The whole component is \"no data here, with a title and an action\" → use `empty-state`, which already owns that layout and may embed an `Illustration`.",
-        "The graphic is a live data visualization → that is a chart, not an illustration."
-      ],
-      "related": [
-        "empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.",
-        "flow` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.",
-        "skeleton` — the loading placeholder; an illustration is never a loading state.",
-        "svg/azion/*` — drawn brand marks, for artwork that is not composable from primitives."
-      ],
-      "bestPractices": [
-        "Prefer `name` over hand-composition: a registered asset is reviewed once and reused everywhere, so the same concept never drifts between screens.",
-        "Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is `aria-hidden`, which keeps screen readers out of a graphic that adds nothing.",
-        "Set `active` on the one focal part, not on several — the rim light loses its meaning when everything is lit.",
-        "Size a hand-composed illustration through `size`, not a wrapper `width`; the parts pick coherent radii, rim thicknesses and connector lengths per step. A registered asset is fixed to its canvas — scale it with a CSS transform if a call site needs it smaller.",
-        "Compose assets only from the parts. A one-off `<div>` inside an asset is a token leak that will not follow the theme."
-      ]
-    },
-    "illustration-root": {
-      "import": "@aziontech/webkit/illustration-root",
-      "target": "./src/components/content/illustration/illustration.vue",
-      "kind": "root",
-      "rootOf": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-root",
-      "category": "content",
-      "structure": "composition",
-      "status": "approved",
-      "props": [
-        {
-          "name": "name",
-          "type": "string",
-          "default": "''",
-          "required": "no",
-          "doc": "Key of a registered asset to render; empty renders the composed default slot instead."
-        },
-        {
-          "name": "size",
-          "type": "'small' | 'medium' | 'large'",
-          "default": "'medium'",
-          "required": "no",
-          "doc": "Scale of the whole scene; every part inherits it unless it sets its own."
-        },
-        {
-          "name": "active",
-          "type": "boolean",
-          "default": "false",
-          "required": "no",
-          "doc": "Scene-level emphasis; parts inherit it and switch to the brand rim light."
-        },
-        {
-          "name": "ariaLabel",
-          "type": "string",
-          "default": "''",
-          "required": "no",
-          "doc": "Accessible name; empty keeps the illustration decorative and hidden from assistive tech."
-        }
-      ],
-      "slots": [
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "The composed anatomy. Rendered when `name` is empty; ignored when `name` resolves an asset."
-        }
-      ],
-      "purpose": "Renders a product illustration that is **built, not drawn** — composed from token-styled HTML primitives (icon box, node, connector, pill, window) rather than an exported SVG. Pass `name` to render a registered asset, or compose the parts by hand. Because every part is HTML + design tokens, one illustration follows light and dark, scales with `size`, and can animate; an exported `.svg` can do none of those.",
-      "useWhen": [
-        "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
-        "The same illustration must read correctly in both light and dark themes without shipping two files.",
-        "The illustration should highlight one focal part (`active`) — for example the step a flow is currently on.",
-        "The illustration must scale to the container without rasterizing or re-exporting."
-      ],
-      "avoidWhen": [
-        "A single glyph is enough → use an icon from `@aziontech/icons` (`<i class=\"ai ai-…\">`).",
-        "The artwork is pictorial or brand-authored (a logo, a mascot, a photo) → use `svg/azion/*` or an `<img>`; those are drawn, not composed.",
-        "The whole component is \"no data here, with a title and an action\" → use `empty-state`, which already owns that layout and may embed an `Illustration`.",
-        "The graphic is a live data visualization → that is a chart, not an illustration."
-      ],
-      "related": [
-        "empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.",
-        "flow` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.",
-        "skeleton` — the loading placeholder; an illustration is never a loading state.",
-        "svg/azion/*` — drawn brand marks, for artwork that is not composable from primitives."
-      ],
-      "bestPractices": [
-        "Prefer `name` over hand-composition: a registered asset is reviewed once and reused everywhere, so the same concept never drifts between screens.",
-        "Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is `aria-hidden`, which keeps screen readers out of a graphic that adds nothing.",
-        "Set `active` on the one focal part, not on several — the rim light loses its meaning when everything is lit.",
-        "Size a hand-composed illustration through `size`, not a wrapper `width`; the parts pick coherent radii, rim thicknesses and connector lengths per step. A registered asset is fixed to its canvas — scale it with a CSS transform if a call site needs it smaller.",
-        "Compose assets only from the parts. A one-off `<div>` inside an asset is a token leak that will not follow the theme."
-      ]
-    },
-    "illustration-box": {
-      "import": "@aziontech/webkit/illustration-box",
-      "target": "./src/components/content/illustration/illustration-box/illustration-box.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-box"
-    },
-    "illustration-node": {
-      "import": "@aziontech/webkit/illustration-node",
-      "target": "./src/components/content/illustration/illustration-node/illustration-node.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-node"
-    },
-    "illustration-connector": {
-      "import": "@aziontech/webkit/illustration-connector",
-      "target": "./src/components/content/illustration/illustration-connector/illustration-connector.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-connector"
-    },
-    "illustration-elbow": {
-      "import": "@aziontech/webkit/illustration-elbow",
-      "target": "./src/components/content/illustration/illustration-elbow/illustration-elbow.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-elbow"
-    },
-    "illustration-branch": {
-      "import": "@aziontech/webkit/illustration-branch",
-      "target": "./src/components/content/illustration/illustration-branch/illustration-branch.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-branch"
-    },
-    "illustration-pill": {
-      "import": "@aziontech/webkit/illustration-pill",
-      "target": "./src/components/content/illustration/illustration-pill/illustration-pill.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-pill"
-    },
-    "illustration-window": {
-      "import": "@aziontech/webkit/illustration-window",
-      "target": "./src/components/content/illustration/illustration-window/illustration-window.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-window"
-    },
-    "illustration-surface": {
-      "import": "@aziontech/webkit/illustration-surface",
-      "target": "./src/components/content/illustration/illustration-surface/illustration-surface.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-surface"
-    },
-    "illustration-gauge": {
-      "import": "@aziontech/webkit/illustration-gauge",
-      "target": "./src/components/content/illustration/illustration-gauge/illustration-gauge.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-gauge"
-    },
-    "illustration-chart": {
-      "import": "@aziontech/webkit/illustration-chart",
-      "target": "./src/components/content/illustration/illustration-chart/illustration-chart.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-chart"
-    },
-    "illustration-list": {
-      "import": "@aziontech/webkit/illustration-list",
-      "target": "./src/components/content/illustration/illustration-list/illustration-list.vue",
-      "kind": "subcomponent",
-      "parent": "illustration",
-      "treeShakeableImport": "@aziontech/webkit/illustration-list"
     },
     "kbd": {
       "import": "@aziontech/webkit/kbd",
@@ -6853,18 +6544,11 @@
           "doc": "Fallback text when the default slot is empty."
         },
         {
-          "name": "kind",
-          "type": "'filled' | 'outlined' | 'dashed'",
-          "default": "'filled'",
-          "required": "false",
-          "doc": "Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one."
-        },
-        {
           "name": "size",
           "type": "'small' | 'medium'",
           "default": "'medium'",
           "required": "false",
-          "doc": "Size token; `small` is a fixed 24px, `medium` a fixed 32px."
+          "doc": "Size token; `small` is a fixed 20px, `medium`'s height is driven by its vertical padding (~30px)."
         },
         {
           "name": "removable",
@@ -6885,7 +6569,7 @@
         {
           "name": "remove",
           "payload": "(event: MouseEvent, label: string)",
-          "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), **immediately** — the chip does not hide or unmount itself first, so the consumer decides whether the chip disappears, stays, or becomes an `outlined` offer. `label` is the chip's `label` prop, identifying which chip was removed."
+          "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), after the chip's exit (fade-out) animation completes, so the parent removes the chip once it has animated out. `label` is the chip's `label` prop, identifying which chip was removed."
         },
         {
           "name": "click",
@@ -6900,11 +6584,9 @@
           "notes": "Chip content; falls back to `label` when empty."
         }
       ],
-      "purpose": "A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator. `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them: - **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state. - **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu. - **`dashed`** — the control that CREATES a chip (\"Add filter\"). A dashed outline is the standing convention for \"add another one of these\", which is what separates the thing that makes filters from the things that are filters. **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).",
+      "purpose": "A Chip is a compact, self-contained token that labels a discrete value the user has applied — most often a removable filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator.",
       "useWhen": [
         "Represent a selectable or removable token — active filters, multi-select values, entered keywords.",
-        "Represent a value that is *available* but not applied (`kind=\"outlined\"`), so the set of things a view can be narrowed by stays visible.",
-        "Represent the \"add another\" affordance for such a set (`kind=\"dashed\"`).",
         "The element is interactive (clickable / dismissible)."
       ],
       "avoidWhen": [
@@ -6913,8 +6595,7 @@
       ],
       "related": [
         "badge` — static count/short-value indicator.",
-        "tag` — static labelled status/category chip.",
-        "tooltip` — composed by the remove control to name what it removes."
+        "tag` — static labelled status/category chip."
       ],
       "bestPractices": [
         "When removable, expose an accessible remove control with a clear label.",
@@ -7817,7 +7498,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-root": {
       "import": "@aziontech/webkit/dropdown-root",
@@ -7887,7 +7568,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-trigger": {
       "import": "@aziontech/webkit/dropdown-trigger",
@@ -8551,134 +8232,6 @@
         "Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.",
         "Do not wrap it in a padded container; the gap is the padding."
       ]
-    },
-    "footer": {
-      "import": "@aziontech/webkit/footer",
-      "target": "./src/components/layout/footer/index.ts",
-      "kind": "component",
-      "compoundRoot": true,
-      "treeShakeableImport": "@aziontech/webkit/footer-root",
-      "subcomponents": [
-        "@aziontech/webkit/footer-column",
-        "@aziontech/webkit/footer-link"
-      ],
-      "category": "layout",
-      "structure": "composition",
-      "status": "approved",
-      "props": [
-        {
-          "name": "ariaLabel",
-          "type": "string",
-          "default": "'Footer'",
-          "required": "false",
-          "doc": "Accessible name for the contentinfo landmark."
-        }
-      ],
-      "slots": [
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
-        },
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "footer-column`: its `Footer.Link` items."
-        },
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "footer-link`: the link label."
-        }
-      ],
-      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell with a centered content measure holding link columns and a social bar separated by a hairline top border. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`): the two presentations are one component switching by CSS at the `md` (768px) breakpoint. Content (links, labels, languages, status) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
-      "useWhen": [
-        "The page-level footer of a site or application, paired with `GlobalHeader`.",
-        "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
-      ],
-      "avoidWhen": [
-        "The bottom area of a panel, table, sidebar, or overlay → use that component's own footer part (`panel-footer`, `table-footer`, `sidebar-footer`, `popover-footer`).",
-        "A single standalone link inside body content → use `link` instead of `Footer.Link`."
-      ],
-      "related": [
-        "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
-        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the social bar; the footer reimplements none of them."
-      ],
-      "bestPractices": [
-        "Compose the social bar from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
-        "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
-        "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
-        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own."
-      ]
-    },
-    "footer-root": {
-      "import": "@aziontech/webkit/footer-root",
-      "target": "./src/components/layout/footer/footer.vue",
-      "kind": "root",
-      "rootOf": "footer",
-      "treeShakeableImport": "@aziontech/webkit/footer-root",
-      "category": "layout",
-      "structure": "composition",
-      "status": "approved",
-      "props": [
-        {
-          "name": "ariaLabel",
-          "type": "string",
-          "default": "'Footer'",
-          "required": "false",
-          "doc": "Accessible name for the contentinfo landmark."
-        }
-      ],
-      "slots": [
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
-        },
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "footer-column`: its `Footer.Link` items."
-        },
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "footer-link`: the link label."
-        }
-      ],
-      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell with a centered content measure holding link columns and a social bar separated by a hairline top border. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`): the two presentations are one component switching by CSS at the `md` (768px) breakpoint. Content (links, labels, languages, status) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
-      "useWhen": [
-        "The page-level footer of a site or application, paired with `GlobalHeader`.",
-        "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
-      ],
-      "avoidWhen": [
-        "The bottom area of a panel, table, sidebar, or overlay → use that component's own footer part (`panel-footer`, `table-footer`, `sidebar-footer`, `popover-footer`).",
-        "A single standalone link inside body content → use `link` instead of `Footer.Link`."
-      ],
-      "related": [
-        "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
-        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the social bar; the footer reimplements none of them."
-      ],
-      "bestPractices": [
-        "Compose the social bar from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
-        "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
-        "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
-        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own."
-      ]
-    },
-    "footer-column": {
-      "import": "@aziontech/webkit/footer-column",
-      "target": "./src/components/layout/footer/footer-column/footer-column.vue",
-      "kind": "subcomponent",
-      "parent": "footer",
-      "treeShakeableImport": "@aziontech/webkit/footer-column"
-    },
-    "footer-link": {
-      "import": "@aziontech/webkit/footer-link",
-      "target": "./src/components/layout/footer/footer-link/footer-link.vue",
-      "kind": "subcomponent",
-      "parent": "footer",
-      "treeShakeableImport": "@aziontech/webkit/footer-link"
     },
     "scroll-area": {
       "import": "@aziontech/webkit/scroll-area",

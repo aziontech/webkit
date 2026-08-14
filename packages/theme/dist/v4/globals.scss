@@ -408,7 +408,7 @@
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
-  --animate-highlight-fade: highlight ease-in forwards;
+  --animate-highlight-fade: highlight 1100ms ease-in forwards;
   --animate-page-enter: pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
   --animate-content-enter: contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards;
   --animate-popup-scale-in: popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1);
@@ -420,9 +420,6 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
-  --animate-illustration-rim-sweep: illustrationRimSweep 2100ms linear infinite;
-  --animate-illustration-chat-scroll: illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
-  --animate-illustration-chat-pop: illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite;
   --transition-duration-fast-01: 70ms;
   --transition-duration-fast-02: 110ms;
   --transition-duration-moderate-01: 150ms;
@@ -672,7 +669,7 @@
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
-  --animate-highlight-fade: highlight ease-in forwards;
+  --animate-highlight-fade: highlight 1100ms ease-in forwards;
   --animate-page-enter: pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
   --animate-content-enter: contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards;
   --animate-popup-scale-in: popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1);
@@ -684,9 +681,6 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
-  --animate-illustration-rim-sweep: illustrationRimSweep 2100ms linear infinite;
-  --animate-illustration-chat-scroll: illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
-  --animate-illustration-chat-pop: illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite;
   --ring-offset: 0.5px;
   --container-px: 1rem;
   --container-py: 4rem;
@@ -701,31 +695,6 @@
   --z-input-field: 1;
   --z-input-popup: 10;
   --z-input-overlay: 1100;
-  --illustration-rim-angle: 135deg;
-  --illustration-rim: linear-gradient(135deg, var(--border-default) 0%, var(--border-default) 18%, transparent 45%, transparent 55%, var(--border-default) 82%, var(--border-default) 100%);
-  --illustration-rim-active: linear-gradient(135deg, var(--primary) 0%, var(--primary) 18%, transparent 45%, transparent 55%, var(--primary) 82%, var(--primary) 100%);
-  --illustration-rim-layers: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
-  --illustration-rim-layers-active: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim-active), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
-  --illustration-rim-boxes: padding-box, border-box, border-box;
-  --illustration-rim-width: var(--border-2);
-  --illustration-rim-width-hairline: var(--border-width-default);
-  --illustration-shape-node: var(--radius-sm);
-  --illustration-shape-small: var(--radius-lg);
-  --illustration-shape-medium: var(--radius-xl);
-  --illustration-shape-large: var(--radius-2xl);
-  --illustration-label-small: 0.5rem;
-  --illustration-canvas-width: 10.625rem;
-  --illustration-canvas-height: 8rem;
-  --layout-boundary-inline: var(--spacing-lg);
-  --layout-boundary-end: var(--spacing-lg);
-  --layout-boundary-start: var(--spacing-lg);
-  --layout-section-gap: var(--spacing-xl);
-  --layout-group-gap: var(--spacing-md);
-  --layout-measure: var(--container-7xl);
-  --layout-measure-focused: var(--container-4xl);
-  --layout-measure-form: var(--container-4xl);
-  --layout-measure-form-create: var(--container-5xl);
-  --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
   --text-big-number-md-font-weight: 400;
@@ -784,26 +753,21 @@
   --text-label-code-lg-font-weight: 400;
   --text-label-code-lg-letter-spacing: 0;
   --text-body-lg-font-size: 1rem;
-  --text-body-lg-font-weight: 400;
-  --text-body-lg-line-height: 1.375;
+  --text-body-lg-line-height: 1.5;
   --text-body-md-font-size: 1rem;
-  --text-body-md-font-weight: 400;
-  --text-body-md-line-height: 1.375;
+  --text-body-md-line-height: 1.5;
   --text-body-sm-font-size: 0.875rem;
-  --text-body-sm-font-weight: 400;
-  --text-body-sm-line-height: 1.375;
+  --text-body-sm-line-height: 1.5;
   --text-body-xs-font-size: 0.75rem;
-  --text-body-xs-font-weight: 400;
-  --text-body-xs-line-height: 1.375;
-  --text-body-xxs-font-size: 0.75rem;
-  --text-body-xxs-font-weight: 400;
-  --text-body-xxs-line-height: 1.5;
+  --text-body-xs-line-height: 1.5;
   --text-tag-sm-font-size: 0.75rem;
   --text-tag-sm-line-height: 1.25;
-  --text-tag-sm-font-weight: 400;
+  --text-tag-sm-font-weight: 600;
   --text-tag-md-font-size: 0.75rem;
   --text-tag-md-line-height: 1.25;
-  --text-tag-md-font-weight: 400;
+  --text-tag-md-font-weight: 600;
+  --text-body-xxs-font-size: 0.75rem;
+  --text-body-xxs-line-height: 1.5;
   --text-overline-md-font-family: Proto Mono;
   --text-overline-md-font-size: 0.75rem;
   --text-overline-md-line-height: 1.375;
@@ -1023,18 +987,6 @@
   --info-contrast: #66ADFF;
 }
 
-@property --illustration-rim-angle {
-  syntax: '<angle>';
-  inherits: true;
-  initial-value: 135deg;
-}
-
-@property --illustration-gauge-value {
-  syntax: '<integer>';
-  inherits: true;
-  initial-value: 0;
-}
-
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -1056,8 +1008,8 @@
 }
 
 @keyframes highlight {
-  0% { background-color: var(--surface-hover); font-weight: 500; }
-  100% { background-color: var(--surface-hover); font-weight: 500; }
+  0%, 40% { background-color: var(--surface-hover); font-weight: 500; }
+  100% { background-color: transparent; font-weight: 400; }
 }
 
 @keyframes shimmer {
@@ -1120,25 +1072,6 @@
 @keyframes flowDash {
   0% { stroke-dashoffset: 24; }
   100% { stroke-dashoffset: 0; }
-}
-
-@keyframes illustrationRimSweep {
-  0% { --illustration-rim-angle: 135deg; }
-  100% { --illustration-rim-angle: 315deg; }
-}
-
-@keyframes illustrationChatScroll {
-  0%, 18% { transform: translateY(0); }
-  25%, 43% { transform: translateY(-12.5%); }
-  50%, 68% { transform: translateY(-25%); }
-  75%, 93% { transform: translateY(-37.5%); }
-  100% { transform: translateY(-50%); }
-}
-
-@keyframes illustrationChatPop {
-  0% { opacity: 0; transform: scale(0.9); }
-  4% { opacity: 1; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1); }
 }
 
 @layer components {
@@ -1275,32 +1208,22 @@
 
 @utility text-body-lg {
   font-size: var(--text-body-lg-font-size);
-  font-weight: var(--text-body-lg-font-weight);
   line-height: var(--text-body-lg-line-height);
 }
 
 @utility text-body-md {
   font-size: var(--text-body-md-font-size);
-  font-weight: var(--text-body-md-font-weight);
   line-height: var(--text-body-md-line-height);
 }
 
 @utility text-body-sm {
   font-size: var(--text-body-sm-font-size);
-  font-weight: var(--text-body-sm-font-weight);
   line-height: var(--text-body-sm-line-height);
 }
 
 @utility text-body-xs {
   font-size: var(--text-body-xs-font-size);
-  font-weight: var(--text-body-xs-font-weight);
   line-height: var(--text-body-xs-line-height);
-}
-
-@utility text-body-xxs {
-  font-size: var(--text-body-xxs-font-size);
-  font-weight: var(--text-body-xxs-font-weight);
-  line-height: var(--text-body-xxs-line-height);
 }
 
 @utility text-tag-sm {
@@ -1313,6 +1236,11 @@
   font-size: var(--text-tag-md-font-size);
   line-height: var(--text-tag-md-line-height);
   font-weight: var(--text-tag-md-font-weight);
+}
+
+@utility text-body-xxs {
+  font-size: var(--text-body-xxs-font-size);
+  line-height: var(--text-body-xxs-line-height);
 }
 
 @utility text-overline-md {
@@ -1367,77 +1295,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .text-link { transition: none; }
-}
-
-@utility illustration-rim-sweep {
-  --illustration-rim: linear-gradient(var(--illustration-rim-angle, 135deg), var(--illustration-rim-color, var(--border-default)) 0%, var(--illustration-rim-color, var(--border-default)) 18%, transparent 45%, transparent 55%, var(--illustration-rim-color, var(--border-default)) 82%, var(--illustration-rim-color, var(--border-default)) 100%);
-  --illustration-rim-active: linear-gradient(var(--illustration-rim-angle, 135deg), var(--illustration-rim-color-active, var(--primary)) 0%, var(--illustration-rim-color-active, var(--primary)) 18%, transparent 45%, transparent 55%, var(--illustration-rim-color-active, var(--primary)) 82%, var(--illustration-rim-color-active, var(--primary)) 100%);
-  --illustration-rim-layers: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
-  --illustration-rim-layers-active: linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface))), var(--illustration-rim-active), linear-gradient(var(--illustration-fill, var(--bg-surface)), var(--illustration-fill, var(--bg-surface)));
-  animation: var(--animate-illustration-rim-sweep);
-  animation-play-state: paused;
-}
-
-@utility illustration-gauge-readout {
-  counter-reset: illustration-gauge var(--illustration-gauge-value, 0);
-  &::before { content: counter(illustration-gauge); }
-}
-
-@utility layout-boundary {
-  padding-inline: var(--layout-boundary-inline);
-  padding-block-start: var(--layout-boundary-start);
-  padding-block-end: var(--layout-boundary-end);
-}
-
-@utility layout-boundary-inline {
-  padding-inline: var(--layout-boundary-inline);
-}
-
-@utility layout-section-start {
-  margin-block-start: var(--layout-boundary-start);
-  &:first-child { margin-block-start: 0; }
-}
-
-@utility layout-group-start {
-  margin-block-start: var(--layout-group-gap);
-  &:first-child { margin-block-start: 0; }
-}
-
-@utility layout-column {
-  --layout-column-measure: var(--layout-measure);
-  margin-inline: auto;
-  width: 100%;
-  max-width: var(--layout-column-measure);
-  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
-}
-
-@utility layout-column-focused {
-  --layout-column-measure: var(--layout-measure-focused);
-  margin-inline: auto;
-  width: 100%;
-  max-width: var(--layout-column-measure);
-  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
-}
-
-@utility layout-column-form {
-  --layout-column-measure: var(--layout-measure-form);
-  margin-inline: auto;
-  width: 100%;
-  max-width: var(--layout-column-measure);
-  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
-}
-
-@utility layout-form-create {
-  --layout-column-measure: var(--layout-measure-form-create);
-  --layout-measure-control: var(--container-md);
-  margin-inline: auto;
-  width: 100%;
-  max-width: var(--layout-column-measure);
-  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
-}
-
-@utility layout-field-control {
-  &:not(#\#) { display: flex; flex: 1 1 0%; justify-content: flex-end; max-width: var(--layout-measure-control); }
 }
 
 @utility bg-surface-0 { background-color: var(--surface-0); }
