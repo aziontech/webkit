@@ -4,8 +4,7 @@ description: Where a create or settings form LIVES, and what it is built from. U
 status: active
 last_updated: 2026-08-13
 scope: general
-enforced_by:
-  [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom, review]
+enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
 
 # Skill: webkit-create-surface
