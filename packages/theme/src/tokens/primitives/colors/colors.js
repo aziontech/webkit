@@ -21,15 +21,24 @@ export const primitives = {
     900: '#001833',
     950: '#000C1A'
   },
+  // 250 / 750 / 775 fill the two widest gaps in the ramp so an OPAQUE neutral rule has a step
+  // to live on. The scale jumped 200 → 300 (229 → 178) and 700 → 800 (77 → 26), and the steps
+  // bracketing those gaps are already spoken for by background roles — which is why an opaque
+  // border landed exactly on `--bg-selected` / `--bg-disabled` and disappeared. 700 / 800 / 900
+  // are the dark background anchors and keep their values untouched.
   gray: {
     50: '#FAFAFA',
     100: '#F5F5F5',
+    150: '#ECECEC',
     200: '#E5E5E5',
+    250: '#DADADA',
     300: '#B2B2B2',
     400: '#999999',
     500: '#808080',
     600: '#666666',
     700: '#4D4D4D',
+    750: '#2B2B2B',
+    775: '#242424',
     800: '#1A1A1A',
     900: '#141414',
     950: '#0A0A0A'

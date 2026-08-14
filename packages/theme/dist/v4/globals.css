@@ -173,7 +173,7 @@
 
 
 /*
- * `@aziontech/webkit` components use arbitrary values (`bg-[var(--x)]`) that
+ * `@aziontech/webkit` components use arbitrary values (`bg-(--x)`) that
  * Tailwind v4 only picks up when the source files are inside the scan.
  * Auto-detect scans the CWD only, so we point `@source` at the webkit
  * package via a monorepo-relative path (this file is under
@@ -197,12 +197,16 @@
   --color-blue-950: #000C1A;
   --color-gray-50: #FAFAFA;
   --color-gray-100: #F5F5F5;
+  --color-gray-150: #ECECEC;
   --color-gray-200: #E5E5E5;
+  --color-gray-250: #DADADA;
   --color-gray-300: #B2B2B2;
   --color-gray-400: #999999;
   --color-gray-500: #808080;
   --color-gray-600: #666666;
   --color-gray-700: #4D4D4D;
+  --color-gray-750: #2B2B2B;
+  --color-gray-775: #242424;
   --color-gray-800: #1A1A1A;
   --color-gray-900: #141414;
   --color-gray-950: #0A0A0A;
@@ -404,7 +408,7 @@
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
-  --animate-highlight-fade: highlight ease-in forwards;
+  --animate-highlight-fade: highlight 1100ms ease-in forwards;
   --animate-popup-scale-in: popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1);
   --animate-popup-scale-out: popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-slide-in-left: slideInLeft 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
@@ -663,7 +667,7 @@
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
-  --animate-highlight-fade: highlight ease-in forwards;
+  --animate-highlight-fade: highlight 1100ms ease-in forwards;
   --animate-popup-scale-in: popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1);
   --animate-popup-scale-out: popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-slide-in-left: slideInLeft 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
@@ -701,25 +705,25 @@
   --text-big-number-lg-font-family: Proto Mono;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1.25;
-  --text-heading-2xl-font-weight: 400;
+  --text-heading-2xl-font-weight: 300;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
-  --text-heading-xl-font-weight: 400;
+  --text-heading-xl-font-weight: 300;
   --text-heading-lg-font-size: 1.125rem;
   --text-heading-lg-line-height: 1.25;
-  --text-heading-lg-font-weight: 400;
+  --text-heading-lg-font-weight: 300;
   --text-heading-md-font-size: 1rem;
   --text-heading-md-line-height: 1.25;
-  --text-heading-md-font-weight: 400;
+  --text-heading-md-font-weight: 300;
   --text-heading-sm-font-size: 0.875rem;
   --text-heading-sm-line-height: 1.375;
-  --text-heading-sm-font-weight: 400;
+  --text-heading-sm-font-weight: 300;
   --text-heading-xs-font-size: 1rem;
   --text-heading-xs-line-height: 1.375;
-  --text-heading-xs-font-weight: 400;
+  --text-heading-xs-font-weight: 300;
   --text-heading-xxs-font-size: 0.875rem;
   --text-heading-xxs-line-height: 1.375;
-  --text-heading-xxs-font-weight: 400;
+  --text-heading-xxs-font-weight: 300;
   --text-label-lg-font-size: 1rem;
   --text-label-lg-line-height: 1.5;
   --text-label-lg-font-weight: 400;
@@ -745,21 +749,26 @@
   --text-label-code-lg-font-weight: 400;
   --text-label-code-lg-letter-spacing: 0;
   --text-body-lg-font-size: 1rem;
-  --text-body-lg-line-height: 1.5;
+  --text-body-lg-font-weight: 300;
+  --text-body-lg-line-height: 1.375;
   --text-body-md-font-size: 1rem;
-  --text-body-md-line-height: 1.5;
+  --text-body-md-font-weight: 300;
+  --text-body-md-line-height: 1.375;
   --text-body-sm-font-size: 0.875rem;
-  --text-body-sm-line-height: 1.5;
+  --text-body-sm-font-weight: 300;
+  --text-body-sm-line-height: 1.375;
   --text-body-xs-font-size: 0.75rem;
-  --text-body-xs-line-height: 1.5;
+  --text-body-xs-font-weight: 300;
+  --text-body-xs-line-height: 1.375;
+  --text-body-xxs-font-size: 0.75rem;
+  --text-body-xxs-font-weight: 300;
+  --text-body-xxs-line-height: 1.5;
   --text-tag-sm-font-size: 0.75rem;
   --text-tag-sm-line-height: 1.25;
-  --text-tag-sm-font-weight: 600;
+  --text-tag-sm-font-weight: 400;
   --text-tag-md-font-size: 0.75rem;
   --text-tag-md-line-height: 1.25;
-  --text-tag-md-font-weight: 600;
-  --text-body-xxs-font-size: 0.75rem;
-  --text-body-xxs-line-height: 1.5;
+  --text-tag-md-font-weight: 400;
   --text-overline-md-font-family: Proto Mono;
   --text-overline-md-font-size: 0.75rem;
   --text-overline-md-line-height: 1.375;
@@ -833,12 +842,16 @@
   --surface-0: #FFFFFF;
   --surface-50: #FAFAFA;
   --surface-100: #F5F5F5;
+  --surface-150: #ECECEC;
   --surface-200: #E5E5E5;
+  --surface-250: #DADADA;
   --surface-300: #B2B2B2;
   --surface-400: #999999;
   --surface-500: #808080;
   --surface-600: #666666;
   --surface-700: #4D4D4D;
+  --surface-750: #2B2B2B;
+  --surface-775: #242424;
   --surface-800: #1A1A1A;
   --surface-900: #141414;
   --surface-950: #0A0A0A;
@@ -867,8 +880,8 @@
   --bg-selected: #E5E5E5;
   --bg-contrast: #141414;
   --bg-disabled: #E5E5E5;
-  --border-default: #00000014;
-  --border-muted: #00000014;
+  --border-default: #DADADA;
+  --border-muted: #ECECEC;
   --border-strong: #000000;
   --border-selected: #F3652B;
   --text-default: #141414;
@@ -904,12 +917,16 @@
   --surface-0: #FFFFFF;
   --surface-50: #FAFAFA;
   --surface-100: #F5F5F5;
+  --surface-150: #ECECEC;
   --surface-200: #E5E5E5;
+  --surface-250: #DADADA;
   --surface-300: #B2B2B2;
   --surface-400: #999999;
   --surface-500: #808080;
   --surface-600: #666666;
   --surface-700: #4D4D4D;
+  --surface-750: #2B2B2B;
+  --surface-775: #242424;
   --surface-800: #1A1A1A;
   --surface-900: #141414;
   --surface-950: #0A0A0A;
@@ -938,8 +955,8 @@
   --bg-selected: #1A1A1A;
   --bg-contrast: #FAFAFA;
   --bg-disabled: #1A1A1A;
-  --border-default: #FFFFFF1A;
-  --border-muted: #FFFFFF0D;
+  --border-default: #2B2B2B;
+  --border-muted: #242424;
   --border-strong: #FFFFFF;
   --border-selected: #F3652B;
   --text-default: #FAFAFA;
@@ -992,8 +1009,8 @@
 }
 
 @keyframes highlight {
-  0% { background-color: var(--surface-hover); font-weight: 500; }
-  100% { background-color: var(--surface-hover); font-weight: 500; }
+  0%, 40% { background-color: var(--surface-hover); font-weight: 500; }
+  100% { background-color: transparent; font-weight: 400; }
 }
 
 @keyframes shimmer {
@@ -1182,22 +1199,32 @@
 
 @utility text-body-lg {
   font-size: var(--text-body-lg-font-size);
+  font-weight: var(--text-body-lg-font-weight);
   line-height: var(--text-body-lg-line-height);
 }
 
 @utility text-body-md {
   font-size: var(--text-body-md-font-size);
+  font-weight: var(--text-body-md-font-weight);
   line-height: var(--text-body-md-line-height);
 }
 
 @utility text-body-sm {
   font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-body-sm-font-weight);
   line-height: var(--text-body-sm-line-height);
 }
 
 @utility text-body-xs {
   font-size: var(--text-body-xs-font-size);
+  font-weight: var(--text-body-xs-font-weight);
   line-height: var(--text-body-xs-line-height);
+}
+
+@utility text-body-xxs {
+  font-size: var(--text-body-xxs-font-size);
+  font-weight: var(--text-body-xxs-font-weight);
+  line-height: var(--text-body-xxs-line-height);
 }
 
 @utility text-tag-sm {
@@ -1210,11 +1237,6 @@
   font-size: var(--text-tag-md-font-size);
   line-height: var(--text-tag-md-line-height);
   font-weight: var(--text-tag-md-font-weight);
-}
-
-@utility text-body-xxs {
-  font-size: var(--text-body-xxs-font-size);
-  line-height: var(--text-body-xxs-line-height);
 }
 
 @utility text-overline-md {
@@ -1280,9 +1302,15 @@
 @utility bg-surface-100 { background-color: var(--surface-100); }
 @utility text-surface-100 { color: var(--surface-100); }
 @utility border-surface-100 { border-color: var(--surface-100); }
+@utility bg-surface-150 { background-color: var(--surface-150); }
+@utility text-surface-150 { color: var(--surface-150); }
+@utility border-surface-150 { border-color: var(--surface-150); }
 @utility bg-surface-200 { background-color: var(--surface-200); }
 @utility text-surface-200 { color: var(--surface-200); }
 @utility border-surface-200 { border-color: var(--surface-200); }
+@utility bg-surface-250 { background-color: var(--surface-250); }
+@utility text-surface-250 { color: var(--surface-250); }
+@utility border-surface-250 { border-color: var(--surface-250); }
 @utility bg-surface-300 { background-color: var(--surface-300); }
 @utility text-surface-300 { color: var(--surface-300); }
 @utility border-surface-300 { border-color: var(--surface-300); }
@@ -1298,6 +1326,12 @@
 @utility bg-surface-700 { background-color: var(--surface-700); }
 @utility text-surface-700 { color: var(--surface-700); }
 @utility border-surface-700 { border-color: var(--surface-700); }
+@utility bg-surface-750 { background-color: var(--surface-750); }
+@utility text-surface-750 { color: var(--surface-750); }
+@utility border-surface-750 { border-color: var(--surface-750); }
+@utility bg-surface-775 { background-color: var(--surface-775); }
+@utility text-surface-775 { color: var(--surface-775); }
+@utility border-surface-775 { border-color: var(--surface-775); }
 @utility bg-surface-800 { background-color: var(--surface-800); }
 @utility text-surface-800 { color: var(--surface-800); }
 @utility border-surface-800 { border-color: var(--surface-800); }
