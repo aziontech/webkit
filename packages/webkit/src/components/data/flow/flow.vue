@@ -47,7 +47,7 @@
     :data-testid="testId"
     :class="outerClass"
   >
-    <!-- The three `[&…[data-flow-…]]:hidden` rules drop every port that would attach to
+    <!-- The three port-hiding rules on the row below drop every port that would attach to
          nothing: the leading child has no incoming connector, the trailing child no
          outgoing one, and a `terminal` node originates none at all — so the chain opens
          and closes on a node rather than on a stub. connectors.ts stamps leading /
