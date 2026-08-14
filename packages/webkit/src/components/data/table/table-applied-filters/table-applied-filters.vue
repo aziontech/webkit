@@ -66,10 +66,22 @@
 </script>
 
 <template>
-  <div
+  <!-- EXIT MOTION LIVES HERE, not in the Chip. `Chip` emits `remove` and stops; it does
+       not hide or unmount itself, because a chip that did could only ever serve the case
+       where removing it also destroys it. This band IS that case — dropping a filter
+       removes it from the table's state, so the chip really does go — which makes this
+       the right owner for the fade. Leaving chips are taken out of flow so the survivors
+       can slide into the gap instead of jumping. -->
+  <TransitionGroup
     v-bind="$attrs"
+    tag="div"
     :data-testid="testId"
     class="flex flex-wrap items-center gap-(--spacing-xs)"
+    move-class="transition-[transform,translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+    enter-from-class="scale-95 opacity-0"
+    enter-active-class="transition-[transform,translate,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+    leave-to-class="scale-95 opacity-0"
+    leave-active-class="absolute transition-[transform,translate,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
   >
     <template
       v-for="filter in filters"
@@ -91,5 +103,5 @@
         </Chip>
       </slot>
     </template>
-  </div>
+  </TransitionGroup>
 </template>
