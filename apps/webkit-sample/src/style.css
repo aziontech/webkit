@@ -8,8 +8,13 @@
    stylesheet graph they finally support variants (`md:layout-column`), which an
    app-level file outside that graph never could. Same class names, same var
    names, so nothing here or in any page changed. */
-/* Shell motion — the route transition and the post-loading content entrance. */
-@import './styles/motion.css';
+/* The app's two arrivals — `animate-page-enter` (a page arriving on a route change)
+   and `animate-content-enter` (content settling inside a page already on screen) —
+   used to be defined here, in src/styles/motion.css. They now SHIP in
+   @aziontech/theme (primitives/animations/{animate,keyframes}.js), because they are
+   not this app's idea: every console-shaped app needs the same pair, and a copy per
+   app is a copy that drifts. Pair each with `motion-reduce:animate-none`, and stagger
+   a follower with `--content-enter-delay`. */
 /* PrimeIcons — webkit components reference `pi pi-*` glyphs. */
 @import 'primeicons/primeicons.css';
 /* Azion icon library — monochrome brand/UI glyphs (`ai ai-*`, colored via
@@ -93,16 +98,75 @@ body {
 /* Font playground (test harness): src/font.js sets `--app-font` on <html> to
    swap the primary sans face at runtime while keeping the theme's type scale
    (sizes / weights / tracking) untouched. Body text inherits the family from
-   <html>; the button text tokens are pinned here too since `.text-button-*`
-   sets its own family. Code (Roboto Mono), overlines & big numbers (Proto
-   Mono), and icon glyphs (`.pi` / `.ai`, pinned above) keep their own faces. */
+   <html>; the button text tokens are repointed at the *token* level (not by
+   pinning `.text-button-*`) because components apply them through variants —
+   e.g. Link's `data-[size=large]:text-button-lg` — whose compiled selector a
+   bare `.text-button-lg` rule never matches, leaving those components on Sora.
+   Overriding `--text-button-*-font-family` reaches every usage, plain or
+   variant. `:root.azion` matches the theme's own `.azion.azion-light` block
+   specificity and comes later in the cascade (style.css is imported after the
+   theme in main.js). Code (Roboto Mono), overlines & big numbers (Proto Mono),
+   and icon glyphs (`.pi` / `.ai`, pinned above) keep their own faces. */
 :root {
   --app-font: 'Sora', sans-serif;
 }
 html {
   font-family: var(--app-font);
 }
-.text-button-lg,
-.text-button-md {
-  font-family: var(--app-font);
+:root.azion {
+  --text-button-lg-font-family: var(--app-font);
+  --text-button-md-font-family: var(--app-font);
 }
+
+/* THE LOG TABLE FILLS ITS REGION — Real-Time Events (ui/RealTimeEvents.vue).
+   `<Table class="h-full" max-height="100%">` makes the table's ROOT full height, but its
+   scroll viewport stays content-height: `max-height` can cap a height, never grow one. So
+   a short page — a filtered window, or an empty one — left the paginator floating in the
+   middle of the screen with dead space under it, and the empty state sized its own box.
+
+   The fill has to be asked for on the viewport itself, and it is asked for HERE rather
+   than as a Tailwind arbitrary variant on the component (`[&_[data-testid$='__viewport']]:
+   flex-1`) because that candidate never compiles: Tailwind's scanner does not emit a
+   variant whose selector carries a quoted attribute match, so the class lands in the DOM
+   and no rule exists behind it — measured, `display: block; flex: 0 1 auto`. Plain CSS with
+   the same selector always applies.
+
+   `flex: none` on the header and the body is not decoration: a flex column SHRINKS its
+   children before it scrolls, so without it 25 rows squash to fit the viewport instead of
+   scrolling inside it — the same bug from the other side.
+
+   This is app CSS reaching into a DS component's internals, which is a smell, and the
+   real fix belongs in webkit: `Table` should grow its viewport when it is given a height.
+   Until it does, one scoped rule beats a per-page pile of magic pixel heights. */
+.log-table [data-testid$='__viewport'] {
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+  min-height: 0;
+}
+.log-table [data-testid$='__header'],
+.log-table [data-testid$='__body'] {
+  flex: none;
+}
+.log-table [data-testid$='__empty'] {
+  display: flex;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+/* THE SPLIT COLUMN WIDTHS — read by ui/Section.vue for the one case that still
+   splits: a NON-stacked band, where the title and its hint sit in a column beside
+   the content. The `.layout-split` container that used to pair with it is gone:
+   every settings and create surface now takes the FORM measure
+   (`.layout-column-form`) with stacked bands over flush cards, so there is no page
+   left whose outer width is the sum of these three.
+
+   Plain CSS, not an `@utility`: this needs no variants, and app-level CSS sits
+   outside Tailwind's stylesheet graph (see the note at the top of this file). */
+:root {
+  --layout-split-aside: 20rem;
+  --layout-split-gap: 3rem;
+}
+

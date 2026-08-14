@@ -9,6 +9,10 @@
 // across that tree by browsing one type at a time.
 import { computed, ref } from "vue";
 
+import { useSampleMode } from "./lib/sample-mode.js";
+
+const { accountEmpty } = useSampleMode();
+
 // The four levels of the hierarchy, top → bottom. `value` drives the type
 // Select; `singular` matches an account's `type`; `icon` + `severity` render
 // the per-row Type tag. Order mirrors the ownership chain.
@@ -144,8 +148,22 @@ const seedAccounts = [
   { id: 28836, name: "Caixa Econômica Federal", clientId: "3493x", type: "client", parentId: 9140, lastAccessed: "1 month ago", status: "active", charges: "3,910.75" },
 ];
 
-const accounts = ref(seedAccounts);
+const allAccounts = ref(seedAccounts);
 const currentAccountId = ref(FIRST_ACCOUNT_ID);
+
+// THE EMPTY VERSION HAS ONE ACCOUNT (./lib/sample-mode.js).
+//
+// A brand-new customer is a single tenant: there is no Brand → Reseller → Group →
+// Client tree above them, so the roster is the one account they operate and the
+// switcher — when the preset shows it at all — has nothing to switch to. Same
+// projection shape as the organization roster next door: one source, no fork, and
+// flipping the preset back restores the whole tree.
+const accounts = computed(() => {
+  if (!accountEmpty.value) return allAccounts.value;
+  const own =
+    allAccounts.value.find((account) => account.id === FIRST_ACCOUNT_ID) ?? allAccounts.value[0];
+  return own ? [{ ...own, parentId: null }] : [];
+});
 
 const currentAccount = computed(
   () => accounts.value.find((account) => account.id === currentAccountId.value) ?? accounts.value[0],

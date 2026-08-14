@@ -15,11 +15,13 @@
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { useBaseline } from '../lib/forms'
   import { provisionDeployment, resourceChain } from '../lib/provisioning'
   import { getTemplate } from '../templates.js'
   import CreationHeader from './ui/CreationHeader.vue'
   import DeploymentFlow from './ui/DeploymentFlow.vue'
   import TemplatePreview from './ui/TemplatePreview.vue'
+  import UnsavedChangesGuard from './ui/UnsavedChangesGuard.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -112,9 +114,18 @@
     }, 900)
   }
   initFromTemplate(template.value)
+
+  // The leave guard's trigger (ui/UnsavedChangesGuard.vue). The baseline is taken AFTER the
+  // first seed, so the values the template itself supplies are the starting point and not
+  // an edit — and it is re-taken whenever another template is opened in place, or switching
+  // templates would read as unsaved work the reader never typed.
+  const { dirty, commit } = useBaseline(() => ({ repoName: repoName.value, ...settingsValues }))
   watch(
     () => template.value.slug,
-    () => initFromTemplate(template.value)
+    () => {
+      initFromTemplate(template.value)
+      commit()
+    }
   )
 
   // Deploy is enabled once the repo name and every required setting are filled.
@@ -238,6 +249,8 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-[var(--bg-canvas)]">
+    <UnsavedChangesGuard :dirty="dirty && status === 'form'" />
+
     <!-- Single creation header: back + brand + breadcrumb (hidden on success). -->
     <CreationHeader
       :show-back="status !== 'success'"
@@ -251,7 +264,7 @@
          offset using the theme easing tokens. -->
     <main
       ref="flowScroll"
-      class="page-enter relative min-w-0 flex-1 overflow-auto"
+      class="animate-page-enter motion-reduce:animate-none relative min-w-0 flex-1 overflow-auto"
     >
       <!-- Success is the one moment in the flow worth marking as ours: a linear
            primary glow on the content background behind the card — not on the

@@ -12,15 +12,15 @@
   // visible on the canvas and carries the CTA that fills it (see
   // ./diagrams/nodes/EmptyNode.vue). Binding one swaps the placeholder for a
   // real node and solidifies its edges.
-  import { Position, VueFlow, useVueFlow } from '@vue-flow/core'
   import '@vue-flow/core/dist/style.css'
+  import '../lib/vue-flow-theme.css'
 
   import IconButton from '@aziontech/webkit/icon-button'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { Position, useVueFlow,VueFlow } from '@vue-flow/core'
   import { computed, ref } from 'vue'
 
-  import '../lib/vue-flow-theme.css'
   import EmptyNode from './diagrams/nodes/EmptyNode.vue'
   import AppLayout from './ui/AppLayout.vue'
   import PageHeading from './ui/PageHeading.vue'
@@ -233,7 +233,10 @@
         <div
           class="absolute bottom-[var(--spacing-md)] left-[var(--spacing-md)] flex flex-col gap-[var(--spacing-xxs)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)] p-[var(--spacing-xxs)] shadow-sm"
         >
-          <Tooltip text="Zoom in" placement="right">
+          <Tooltip
+            text="Zoom in"
+            placement="right"
+          >
             <IconButton
               icon="pi pi-plus"
               aria-label="Zoom in"
@@ -242,7 +245,10 @@
               @click="() => zoomIn()"
             />
           </Tooltip>
-          <Tooltip text="Zoom out" placement="right">
+          <Tooltip
+            text="Zoom out"
+            placement="right"
+          >
             <IconButton
               icon="pi pi-minus"
               aria-label="Zoom out"
@@ -251,7 +257,10 @@
               @click="() => zoomOut()"
             />
           </Tooltip>
-          <Tooltip text="Fit view" placement="right">
+          <Tooltip
+            text="Fit view"
+            placement="right"
+          >
             <IconButton
               icon="pi pi-expand"
               aria-label="Fit view"
@@ -262,7 +271,10 @@
           </Tooltip>
           <!-- Unbinds both Application-level slots, so the empty-node state can
                be replayed without a reload. -->
-          <Tooltip text="Reset bindings" placement="right">
+          <Tooltip
+            text="Reset bindings"
+            placement="right"
+          >
             <IconButton
               icon="pi pi-refresh"
               aria-label="Reset bindings"

@@ -32,6 +32,18 @@
 // component.
 //
 // The shape each plan must hold for the drawer to render it:
+// A tier's price is carried TWICE, on purpose, because two surfaces read it two
+// different ways:
+//   · `price` — one string ("From $20/mo"), for anywhere a tier is named in passing:
+//     a row's supporting line, a toast, an aria-label.
+//   · `card`  — the same figure DECOMPOSED for the pricing card's Currency
+//     ({ value, prefix, suffix }), because Currency renders the symbol, the amount
+//     and the period as three separately-styled parts. Passing it "From $20/mo" as a
+//     value with the prefix turned off makes it a plain string in a component whose
+//     whole job is to typeset money — the symbol loses its size, the period loses
+//     its muted treatment, and the number no longer aligns with the card beside it.
+//     A free tier has no symbol and no period, so it carries only `value`.
+//
 //   requiresPayment  · false skips the drawer entirely (Hobby is free)
 //   upgrade.lead     · one sentence, with `{name}` where the tier is emphasised
 //   upgrade.features · [{ title, detail }] — `detail` is the metered rate after
@@ -67,6 +79,8 @@ export const azionPlans = [
     headline: "I'm working on personal projects",
     description: "Side projects, learning and demos. One workspace, community support.",
     price: "Free",
+    // No symbol and no period: "Free" is the whole figure.
+    card: { value: "Free", showPrefix: false, showSuffix: false },
     severity: "contrast",
     // The free tier takes no payment, so selecting it never opens the drawer.
     requiresPayment: false,
@@ -77,6 +91,7 @@ export const azionPlans = [
     headline: "I'm working on commercial projects",
     description: "Production traffic for a team, billed on what you use. Priority support.",
     price: "From $20/mo",
+    card: { value: "20", prefix: "$", suffix: "per month" },
     severity: "info",
     requiresPayment: true,
     upgrade: {
@@ -122,8 +137,15 @@ export const azionPlans = [
     headline: "I'm running production at scale",
     description: "Committed volume, SLAs and a named account team. Sales gets in touch.",
     price: "From $2.000/mo",
+    card: { value: "2.000", prefix: "$", suffix: "per month" },
     severity: "primary",
     requiresPayment: true,
+    // Sales-led: the tier is a negotiated contract (committed volume, SLAs, a named
+    // account team), so there is no card to enter — the figure on the card is a
+    // starting point, not a price anyone is charged by pressing a button. The
+    // console's plan comparison therefore offers "Contact Sales" instead of an
+    // upgrade that would take payment for terms nobody has agreed yet.
+    contactSales: true,
     upgrade: {
       lead: "Upgrade to {name} for committed volume, a named account team and contractual SLAs.",
       featuresTitle: "Upgrade features",
@@ -169,6 +191,20 @@ export const azionPlans = [
 // pre-selected tier would be a contract nobody chose, agreed to by pressing
 // Continue.
 export const planFor = (id) => azionPlans.find((plan) => plan.id === id);
+
+// The same lookup by the tier's NAME, which is what an organization stores (see
+// `createOrganization`, which is handed `planNameFor(...)` by the entrance). It is
+// what lets a surface showing an organization's plan — the switcher's tag — paint it
+// in the tier's own severity instead of inventing a neutral one, so a tier reads the
+// same colour everywhere it appears: the entrance's plan step, the upgrade drawer,
+// the profile tag and the organization row.
+export const planByName = (name) =>
+  azionPlans.find((plan) => plan.name.toLowerCase() === String(name ?? "").toLowerCase());
+
+// A tier's severity by name, falling back to the neutral tag: an organization whose
+// plan predates the current tier list still renders, just without a claim about
+// which tier it is.
+export const planSeverityFor = (name) => planByName(name)?.severity ?? "secondary";
 
 // The tier name a plan id resolves to, which is what is stored on the
 // organization. Falls back to Hobby — the free tier is the only safe assumption

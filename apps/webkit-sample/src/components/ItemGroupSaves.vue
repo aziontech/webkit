@@ -1,73 +1,88 @@
 <script setup>
-// Form type: ITEMGROUP WITH INDEPENDENT SAVES (the `/form` skill, "Form types") —
-// the OTHER approach to partitioned saves. Where "CardBox with independent saves"
-// composes Select/Label fields in each card, this uses the Account Settings surface
-// (Approach A: Item rows in a flush CardBox + Item.List dividers, titled by an
-// section titles), but instead of ONE page-level save each topic group owns its OWN Save
-// in the card footer. Each group locks INDEPENDENTLY off its own `submitting` flag
-// (the /usability loading pattern, scoped to the saved block): that group's fields
-// and its right-side controls disable and its Save shows loading, while the other
-// groups stay live. The save reports via toast. In an ItemGroup the Item.Title is the
-// field label; every Item is size="small".
-import Button from "@aziontech/webkit/button";
-import CardBox from "@aziontech/webkit/card-box";
-import InputText from "@aziontech/webkit/input-text";
-import Item from "@aziontech/webkit/item";
-import Select from "@aziontech/webkit/select";
-import Switch from "@aziontech/webkit/switch";
-import { toast } from "@aziontech/webkit/toast";
-import { computed, reactive, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+  // Form type: ITEMGROUP WITH INDEPENDENT SAVES (the `/form` skill, "Form types") —
+  // the OTHER approach to partitioned saves. Where "CardBox with independent saves"
+  // composes Select/Label fields in each card, this uses the Account Settings surface
+  // (Approach A: Item rows in a flush CardBox + Item.List dividers, titled by an
+  // section titles), but instead of ONE page-level save each topic group owns its OWN Save
+  // in the card footer. Each group locks INDEPENDENTLY off its own `submitting` flag
+  // (the /usability loading pattern, scoped to the saved block): that group's fields
+  // and its right-side controls disable and its Save shows loading, while the other
+  // groups stay live. The save reports via toast. In an ItemGroup the Item.Title is the
+  // field label; every Item is size="small".
+  import Button from '@aziontech/webkit/button'
+  import CardBox from '@aziontech/webkit/card-box'
+  import InputText from '@aziontech/webkit/input-text'
+  import Item from '@aziontech/webkit/item'
+  import Select from '@aziontech/webkit/select'
+  import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, reactive, ref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
-import AppLayout from "./ui/AppLayout.vue";
-import PageHeading from "./ui/PageHeading.vue";
+  import { useBaseline } from '../lib/forms'
+  import AppLayout from './ui/AppLayout.vue'
+  import PageHeading from './ui/PageHeading.vue'
+  import UnsavedChangesGuard from './ui/UnsavedChangesGuard.vue'
 
-const route = useRoute();
-const router = useRouter();
-const userEmail = computed(() => route.query.email || "myemail@azion.com");
+  const route = useRoute()
+  const router = useRouter()
+  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-const languages = [
-  { label: "English", value: "en" },
-  { label: "Português", value: "pt" },
-  { label: "Español", value: "es" },
-];
-const languageLabel = (value) =>
-  languages.find((option) => option.value === value)?.label ?? "";
+  const languages = [
+    { label: 'English', value: 'en' },
+    { label: 'Português', value: 'pt' },
+    { label: 'Español', value: 'es' }
+  ]
+  const languageLabel = (value) => languages.find((option) => option.value === value)?.label ?? ''
 
-// --- Group 1: General ---------------------------------------------------
-const general = reactive({ fullName: "Gabriel Lisboa", language: "en" });
-const savingGeneral = ref(false);
+  // --- Group 1: General ---------------------------------------------------
+  const general = reactive({ fullName: 'Gabriel Lisboa', language: 'en' })
+  const savingGeneral = ref(false)
+  const generalBaseline = useBaseline(general)
 
-// --- Group 2: Notifications ---------------------------------------------
-const notifications = reactive({ productUpdates: true, securityAlerts: true });
-const savingNotifications = ref(false);
+  // --- Group 2: Notifications ---------------------------------------------
+  const notifications = reactive({ productUpdates: true, securityAlerts: true })
+  const savingNotifications = ref(false)
+  const notificationsBaseline = useBaseline(notifications)
 
-// Each group commits independently through the same one-flag lock.
-const saveGroup = async (flag, message) => {
-  if (flag.value) return; // per-group re-entrancy lock
-  flag.value = true;
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    toast.success(message);
-  } catch (error) {
-    toast.error("Could not save.", {
-      description: error?.message ?? "Check your connection and try again.",
-    });
-  } finally {
-    flag.value = false;
+  // Each group commits independently through the same one-flag lock.
+  const saveGroup = async (flag, message, commit) => {
+    if (flag.value) return // per-group re-entrancy lock
+    flag.value = true
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 900))
+      // Only THIS band's baseline moves: the other one is still pending, and the leave
+      // guard below has to keep saying so.
+      commit()
+      toast.success(message)
+    } catch (error) {
+      toast.error('Could not save.', {
+        description: error?.message ?? 'Check your connection and try again.'
+      })
+    } finally {
+      flag.value = false
+    }
   }
-};
 
-const saveGeneral = () => saveGroup(savingGeneral, "General settings saved.");
-const saveNotifications = () =>
-  saveGroup(savingNotifications, "Notification settings saved.");
+  // The leave guard reads the PAGE, not a band: this screen commits in parts, so the
+  // reader can leave with one band saved and the other still pending — and that pending
+  // one is exactly what the guard exists to stop them from walking away from.
+  const dirty = computed(() => generalBaseline.dirty.value || notificationsBaseline.dirty.value)
+
+  const saveGeneral = () => saveGroup(savingGeneral, 'General settings saved.', generalBaseline.commit)
+  const saveNotifications = () => saveGroup(savingNotifications, 'Notification settings saved.', notificationsBaseline.commit)
 </script>
 
 <template>
   <AppLayout
     active="forms"
-    :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'ItemGroup with independent saves' }]"
+    :breadcrumb="[
+      { label: 'Forms', href: '/forms' },
+      { label: 'ItemGroup with independent saves' }
+    ]"
   >
+    <UnsavedChangesGuard :dirty="dirty" />
+
     <!-- No `gap` on the stack: every band below owns its own top space via
          `.layout-section-start` (= --layout-boundary-start, the same step
          `.layout-boundary` puts above the heading). -->
@@ -78,12 +93,8 @@ const saveNotifications = () =>
       />
 
       <!-- Group 1 — General (section title, its own footer save). -->
-      <section
-        class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
-      >
-        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
-          General
-        </p>
+      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
+        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">General</p>
         <CardBox :padded="false">
           <template #content>
             <fieldset
@@ -121,7 +132,10 @@ const saveNotifications = () =>
                       class="w-full"
                       :display-value="languageLabel"
                     >
-                      <Select.Trigger id="preferences-language" aria-label="Language" />
+                      <Select.Trigger
+                        id="preferences-language"
+                        aria-label="Language"
+                      />
                       <Select.Content>
                         <Select.Option
                           v-for="option in languages"
@@ -152,9 +166,7 @@ const saveNotifications = () =>
       </section>
 
       <!-- Group 2 — Notifications (section title, its own footer save). -->
-      <section
-        class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
-      >
+      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
         <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
           Notifications
         </p>
@@ -169,7 +181,9 @@ const saveNotifications = () =>
                 <Item size="small">
                   <Item.Content>
                     <Item.Title>Product updates</Item.Title>
-                    <Item.Description>Occasional emails about new features and changes.</Item.Description>
+                    <Item.Description
+                      >Occasional emails about new features and changes.</Item.Description
+                    >
                   </Item.Content>
                   <Item.Actions class="justify-end">
                     <Switch
@@ -183,7 +197,9 @@ const saveNotifications = () =>
                 <Item size="small">
                   <Item.Content>
                     <Item.Title>Security alerts</Item.Title>
-                    <Item.Description>Emails when a sign-in or key change is detected.</Item.Description>
+                    <Item.Description
+                      >Emails when a sign-in or key change is detected.</Item.Description
+                    >
                   </Item.Content>
                   <Item.Actions class="justify-end">
                     <Switch

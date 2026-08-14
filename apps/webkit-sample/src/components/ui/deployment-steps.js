@@ -184,6 +184,22 @@ export const DEPLOY_SPLASH_MS = 2400
 /** The pause DeploymentLogs leaves between two steps. */
 export const STEP_GAP_MS = 450
 
+// ── The two views ──────────────────────────────────────────────────────────
+// The Phased / Complete switch, in one place because the control can be rendered
+// by DeploymentLogs itself (its Logs row) or by the card that HOSTS it (the
+// deployment page puts it in the card header, beside the card's own title). Two
+// surfaces, one option list — otherwise the day a third view is added, only one of
+// them learns about it.
+//
+// `phased` is first because it is the default: arriving at a deployment, the
+// question is which step it is on (or which one broke), and the step rows answer
+// that in one glance. `complete` is the deliberate second step — the raw stream,
+// for when the summary is not enough.
+export const LOG_VIEWS = [
+  { label: 'Phased', value: 'phased' },
+  { label: 'Complete', value: 'complete' }
+]
+
 /**
  * The log lines a run actually plays.
  *

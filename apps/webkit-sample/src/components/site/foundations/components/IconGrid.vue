@@ -1,7 +1,6 @@
 <script setup>
-  import { computed, ref } from 'vue'
-
   import InputText from '@aziontech/webkit/input-text'
+  import { computed, ref } from 'vue'
 
   import ColoredIconPreview from './ColoredIconPreview.vue'
 

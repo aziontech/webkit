@@ -40,6 +40,7 @@
   import AddRowDrawer from './AddRowDrawer.vue'
   import CreateTableDrawer from './CreateTableDrawer.vue'
   import AppLayout from './ui/AppLayout.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
   import PageTabs from './ui/PageTabs.vue'
   import SqlTemplatesDrawer from './ui/SqlTemplatesDrawer.vue'
 
@@ -105,10 +106,23 @@
   }
   const refreshTables = () =>
     toast.info('Tables refreshed', { description: 'Showing the latest schema.' })
+  // Dropping a table takes its rows with it, so the menu click only arms the dialog —
+  // the table's name has to come back before anything is removed.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
   const deleteTable = (event, table) => {
+    pendingDelete.value = table
+    deleteOpen.value = true
+  }
+
+  const confirmDelete = () => {
+    const table = pendingDelete.value
+    if (!table) return
     tables.value = tables.value.filter((item) => item.id !== table.id)
     if (selectedTableId.value === table.id) selectedTableId.value = null
     toast.success(`Table "${table.name}" deleted.`)
+    pendingDelete.value = null
   }
 
   // ── Create Table drawer (the rich, drag-to-reorder CreateTableDrawer) ─────
@@ -459,7 +473,7 @@
       <!-- Tables tab — master/detail: table list on the left, schema on the right. -->
       <section
         v-if="activeTab === 'tables'"
-        class="flex min-h-0 flex-1 overflow-hidden"
+        class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 overflow-hidden"
       >
         <!-- Left: the database's tables (resizable) -->
         <aside
@@ -1225,6 +1239,14 @@
       v-model:open="addRowOpen"
       :table="selectedTable"
       @created="onRowCreated"
+    />
+
+    <DeleteDialog
+      v-model:open="deleteOpen"
+      kind="Table"
+      :name="pendingDelete?.name ?? ''"
+      description="The selected Table will be deleted, along with every row it holds. Check the"
+      @confirm="confirmDelete"
     />
   </AppLayout>
 </template>

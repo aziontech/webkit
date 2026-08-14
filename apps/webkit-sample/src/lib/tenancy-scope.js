@@ -23,15 +23,29 @@
 //
 // The skeleton that covers a new projection arriving is the other half — see
 // ./tenancy-reload.js.
+//
+// ── THE EMPTY VERSION OWNS NOTHING ──
+//
+// The sample's EMPTY version (./sample-mode.js) is a brand-new account, and a new
+// account has no rows in any module — not "fewer applications", none, everywhere.
+// That is enforced HERE rather than in sixteen list pages: every module already
+// projects its seed through this function, so one branch makes the whole console
+// empty and keeps it impossible for a module to be added later that forgets to.
+// What the session PROVISIONED still shows, by the same rule the projection
+// already follows: a resource the operator just created in the empty account is
+// theirs, and watching it appear in a console that had nothing is the whole point
+// of walking the empty version.
 import { FIRST_ACCOUNT_ID, useAccounts } from '../accounts'
 import { FIRST_ORGANIZATION_ID, useOrganizations } from '../organizations'
 import { useWorkspaces } from '../workspaces'
+import { useSampleMode } from './sample-mode'
 
 // The stores are read once, here: `useWorkspaces()` builds its computeds on every
 // call, and this runs inside a page's computed on every re-projection.
 const { currentAccountId } = useAccounts()
 const { currentOrganizationId } = useOrganizations()
 const { workspaces, currentWorkspace } = useWorkspaces()
+const { accountEmpty } = useSampleMode()
 
 // A hash miss every third row: each scope owns roughly two thirds of a seed,
 // enough that two scopes never read as the same list.
@@ -75,6 +89,10 @@ const atBootScope = () =>
 export function tenancyRows(rows, scope) {
   if (!seededIds.has(scope)) seededIds.set(scope, new Set(rows.map(idOf)))
   const seeded = seededIds.get(scope)
+
+  // The empty account: every seeded row goes, in every module. Only what this
+  // session created survives, so a deploy made in the empty version still lands.
+  if (accountEmpty.value) return rows.filter((row, index) => !seeded.has(idOf(row, index)))
 
   if (atBootScope()) return rows
 

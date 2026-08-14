@@ -15,7 +15,11 @@
 // for the organizations the demo opens with.
 import { computed, ref } from "vue";
 
+import { useSampleMode } from "./lib/sample-mode.js";
+import { presetPlanName } from "./lib/sample-preset.js";
 import { azionPlans } from "./plans.js";
+
+const { accountEmpty } = useSampleMode();
 
 // The accents an organization may wear.
 //
@@ -184,12 +188,17 @@ export const DEFAULT_WORKSPACE_NAME = "My Workspace";
 // `status` is the lifecycle state from `orgStatuses`; the seeds are all active,
 // since a seeded suspension against a name states something that isn't ours to
 // state.
+// `plan` is a TIER NAME FROM ./plans.js — the same value the entrance stores when it
+// creates an organization (`createOrganization` is handed `planNameFor(form.plan)`).
+// The seeds used to say "Business", a tier the entrance does not offer and the
+// upgrade drawer cannot price, so an organization created at signup and one seeded
+// here described their contracts in two different vocabularies.
 const seedOrganizations = [
   // Azion wears orange — the brand's own colour, so the org an operator lives
   // in is the one mark that matches the product they are inside.
   { id: "azion", name: "Azion", accent: "orange", plan: "Enterprise", accounts: 12, status: "active" },
-  { id: "nebula", name: "Nebula Labs", accent: "blue", plan: "Business", accounts: 4, status: "active" },
-  { id: "northwind", name: "Northwind Retail", accent: "yellow", plan: "Business", accounts: 7, status: "active" },
+  { id: "nebula", name: "Nebula Labs", accent: "blue", plan: "Pro", accounts: 4, status: "active" },
+  { id: "northwind", name: "Northwind Retail", accent: "yellow", plan: "Pro", accounts: 7, status: "active" },
 ];
 
 // The organization the app opens in. Exported because it is also the top of the
@@ -197,8 +206,32 @@ const seedOrganizations = [
 // boots into the full lists, and switching away projects them.
 export const FIRST_ORGANIZATION_ID = "azion";
 
-const organizations = ref(seedOrganizations);
+// The roster the store actually holds. Everything below reads the PROJECTION.
+const allOrganizations = ref(seedOrganizations);
 const currentOrganizationId = ref(FIRST_ORGANIZATION_ID);
+
+// THE EMPTY VERSION HAS ONE ORGANIZATION (../lib/sample-mode.js).
+//
+// A brand-new account belongs to exactly one organization, holds exactly one
+// account and one workspace, and owns nothing in any module. Two of those three
+// are enforced in the sibling stores; the third is enforced once, for every
+// module, in ../lib/tenancy-scope.js.
+//
+// It is a projection rather than a second seed so nothing forks: the roster, the
+// create flow and the switcher are the same code in both versions, and flipping
+// the preset back restores the full list with the operator's own organizations
+// still in it. `accounts: 1` because the count is the org's own claim about how
+// many tenants live under it, and in this version that is the one you are in.
+// The tier is also projected, not just the count. An organization's plan is what was
+// chosen for it at the entrance — and in the EMPTY version the account being shown is
+// the one the sample preset describes (./lib/sample-preset.js), so its organization
+// carries that tier. Leaving the seeded "Enterprise" there would put an Enterprise tag
+// on the switcher of an account whose profile, upgrade CTA and billing all say Hobby.
+const organizations = computed(() => {
+  if (!accountEmpty.value) return allOrganizations.value;
+  const [first] = allOrganizations.value;
+  return first ? [{ ...first, accounts: 1, plan: presetPlanName() }] : [];
+});
 
 const currentOrganization = computed(
   () =>
@@ -225,9 +258,9 @@ const idFor = (name) => {
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "") || "organization";
-  if (!organizations.value.some((org) => org.id === base)) return base;
+  if (!allOrganizations.value.some((org) => org.id === base)) return base;
   let suffix = 2;
-  while (organizations.value.some((org) => org.id === `${base}-${suffix}`)) suffix += 1;
+  while (allOrganizations.value.some((org) => org.id === `${base}-${suffix}`)) suffix += 1;
   return `${base}-${suffix}`;
 };
 
@@ -278,7 +311,7 @@ export const createOrganization = ({
     // ownership, so the Owner role only ever originates here.
     owner: { ...owner, role: "owner", organizationUser: true },
   };
-  organizations.value = [organization, ...organizations.value];
+  allOrganizations.value = [organization, ...allOrganizations.value];
   currentOrganizationId.value = organization.id;
   return organization;
 };

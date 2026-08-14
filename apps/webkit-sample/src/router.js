@@ -12,6 +12,7 @@ import CheckInbox from './components/CheckInbox.vue'
 import Connectors from './components/Connectors.vue'
 import CreateApplication from './components/CreateApplication.vue'
 import CreateOrganization from './components/CreateOrganization.vue'
+import CreateResource from './components/CreateResource.vue'
 import CreateSqlDatabase from './components/CreateSqlDatabase.vue'
 import CreateTeam from './components/CreateTeam.vue'
 import CreateWorkload from './components/CreateWorkload.vue'
@@ -35,7 +36,6 @@ import ErrorValidation from './components/ErrorValidation.vue'
 import Firewall from './components/Firewall.vue'
 import FormsIndex from './components/FormsIndex.vue'
 import Functions from './components/Functions.vue'
-import Home from './components/Home.vue'
 import InPageForm from './components/InPageForm.vue'
 import ItemGroupSaves from './components/ItemGroupSaves.vue'
 import ItemGroupSettings from './components/ItemGroupSettings.vue'
@@ -46,15 +46,19 @@ import NestedDrawer from './components/NestedDrawer.vue'
 import NetworkLists from './components/NetworkLists.vue'
 import ObjectStorage from './components/ObjectStorage.vue'
 import Onboarding from './components/Onboarding.vue'
+import Overview from './components/Overview.vue'
 import PersonalTokens from './components/PersonalTokens.vue'
 import Playground from './components/Playground.vue'
+import ProductEmptyStates from './components/ProductEmptyStates.vue'
 import RealTimeEvents from './components/RealTimeEvents.vue'
 import RealTimeMetrics from './components/RealTimeMetrics.vue'
 import RealTimePurge from './components/RealTimePurge.vue'
 import ReleaseComposer from './components/ReleaseComposer.vue'
+import ResourceSettings from './components/ResourceSettings.vue'
 import SignUp from './components/SignUp.vue'
 import SignupFlow from './components/SignupFlow.vue'
 import LandingAzion from './components/site/LandingAzion.vue'
+import LandingFunctions from './components/site/LandingFunctions.vue'
 import WebkitHub from './components/site/WebkitHub.vue'
 import SqlDatabase from './components/SqlDatabase.vue'
 import SqlDatabaseDetail from './components/SqlDatabaseDetail.vue'
@@ -63,6 +67,8 @@ import Variables from './components/Variables.vue'
 import WafRules from './components/WafRules.vue'
 import WorkloadDetail from './components/WorkloadDetail.vue'
 import Workloads from './components/Workloads.vue'
+import { createResourcePath, createResources, resourceSettingsPath } from './lib/create-resources'
+import { suppressEntranceMotion } from './lib/interaction'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -71,6 +77,9 @@ const routes = [
   // from the console app shell used by every other route.
   { path: '/site', redirect: '/site/home' },
   { path: '/site/home', name: 'site-home', component: LandingAzion },
+  // A product page in the same shell: one product's argument, where /site/home is the
+  // platform's. The Products mega-menu's Functions entry points here.
+  { path: '/site/functions', name: 'site-functions', component: LandingFunctions },
   { path: '/site/hub', name: 'site-hub', component: WebkitHub },
   // The sample's changelog, rendered as a HIDDEN Hub view: no HubSidebar entry and
   // nothing in the Hub links to it, so it exists only for whoever gets the URL.
@@ -103,7 +112,27 @@ const routes = [
   // once the email is verified, on its own composition and its own entrance, so
   // the full slide is spent on the one move that is a real scene change.
   { path: '/signup/onboarding', name: 'signup-onboarding', component: Onboarding },
-  { path: '/home', name: 'home', component: Home },
+  // Overview. ONE URL, two screens: a brand-new account gets the first access (hero +
+  // doors), and once the reader has walked through Applications or Workloads the same
+  // address becomes the summary with usage and the resource table. Overview.vue holds
+  // the dispatch; ./lib/sample-mode.js holds the condition.
+  { path: '/home', name: 'home', component: Overview },
+  // Each version pinned to its own route, so a review can link to the shape it is
+  // talking about instead of asking the reader to flip the header switcher first.
+  // Both mount the SAME component as /home — the shell is Overview's, and pinning is
+  // a prop on it — so a pinned link and the mode-driven URL cannot drift apart.
+  {
+    path: '/home-empty-state',
+    name: 'home-empty-state',
+    component: Overview,
+    props: { version: 'empty' }
+  },
+  {
+    path: '/home-populated',
+    name: 'home-populated',
+    component: Overview,
+    props: { version: 'populated' }
+  },
   // Creating an organization from inside the console (the header switcher's New
   // organization entry). A focused creation flow on its own page, like every
   // other module create.
@@ -135,6 +164,29 @@ const routes = [
   { path: '/variables', name: 'variables', component: Variables },
   // Build
   { path: '/functions', name: 'functions', component: Functions },
+  // Functions is the one resource whose create is NOT the generic renderer: the
+  // resource IS the code, so it creates in a code editor (./components/CreateFunction.vue
+  // argues it). It is still a PAGE at `/<module>/new` — the surface rule holds, only the
+  // page's shape changes — which is why it is declared here and excluded from the
+  // generated list below rather than routed somewhere new.
+  //
+  // LAZY, unlike every other route in this file: it pulls in Monaco and its language
+  // workers, and none of that belongs in the entry chunk of an app whose other 60 screens
+  // never open an editor.
+  {
+    path: '/functions/new',
+    name: 'functions-new',
+    component: () => import('./components/CreateFunction.vue')
+  },
+  // ...and the same argument for the VIEW of one: a function's record is its code, so it
+  // is read and edited in the same three tabs the create page writes it in
+  // (./components/FunctionDetail.vue), not as a row in the generic settings page. Lazy
+  // for the same reason, and it shares the create page's Monaco chunk.
+  {
+    path: '/functions/:id',
+    name: 'functions-detail',
+    component: () => import('./components/FunctionDetail.vue')
+  },
   { path: '/connectors', name: 'connectors', component: Connectors },
   { path: '/custom-pages', name: 'custom-pages', component: CustomPages },
   // Secure
@@ -192,7 +244,48 @@ const routes = [
     name: 'forms-auth-errors',
     component: AuthErrors
   },
+  // First use, per product: the screen a module shows before it owns anything —
+  // the ways in, then the templates that skip the blank page. One route rather
+  // than one per product: the two sections are the pattern, and what changes
+  // between products is only what they are asked in (see ProductEmptyStates.vue).
+  { path: '/empty-states', name: 'empty-states', component: ProductEmptyStates },
   { path: '/create', name: 'create', component: CreationCenter },
+  // The create page of every first-level resource that did not have one — Domains,
+  // Functions, Connectors, Custom Pages, Firewall, WAF Rules, Certificate Manager,
+  // Network Lists, Data Stream and Object Storage. Ten routes, generated from the one
+  // list that also holds their fields (./lib/create-resources.js), so a route and its
+  // form cannot drift apart: `<module>/new`, the same convention the four hand-written
+  // create flows above already follow.
+  //
+  // Variables is deliberately absent: its create flow is an in-place row on the module's
+  // own page, and turning that into a page would be a regression, not a gap. Functions is
+  // absent for the opposite reason: it has a create page of its own, declared above.
+  ...createResources
+    .filter((resource) => resource.id !== 'functions')
+    .map((resource) => ({
+      path: createResourcePath(resource.id),
+      name: `${resource.id}-new`,
+      component: CreateResource,
+      props: { resource: resource.id }
+    })),
+  // ...and the SETTINGS page of each of them, from the same list and the same fields
+  // (./components/ResourceSettings.vue). Every module's row menu already offered Edit, and
+  // every one of them raised a toast saying the demo stopped there — a reader could create a
+  // resource and then had nowhere to change it. This is where that action goes.
+  //
+  // `<module>/:id/settings`, so it is linkable and survives a reload, and ONE component for
+  // all of them for the same reason the create page is one: what differs between resources
+  // is which fields the API takes, not the shape of the screen. Functions is filtered out
+  // for the same reason it is filtered out above: its record is code, so it is read and
+  // edited at `/functions/:id` in the editor tabs, not as a stack of field rows.
+  ...createResources
+    .filter((resource) => resource.id !== 'functions')
+    .map((resource) => ({
+      path: resourceSettingsPath(resource.id, ':id'),
+      name: `${resource.id}-settings`,
+      component: ResourceSettings,
+      props: { resource: resource.id }
+    })),
   { path: '/deploy', name: 'deploy', component: DeployTemplate },
   // Settings: ONE ROUTE PER CATEGORY, all mounting the same shell (which picks the
   // view from the path — see AccountSettings.vue). The categories are rows in the
@@ -237,4 +330,14 @@ export const router = createRouter({
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
     return { el: to.hash, behavior: reduced ? 'auto' : 'smooth' }
   }
+})
+
+// A NAVIGATION IS AN ENTRANCE. Every routed page mounts fresh, and the click that
+// started the navigation is a real input event — so without this the bands on the
+// arriving page would each read their own mount as "the reader just revealed me" and
+// grow from nothing, on top of the page entrance already playing. Heights animate for
+// answers taking effect, never for arrivals (see src/lib/interaction.js).
+router.beforeEach(() => {
+  suppressEntranceMotion()
+  return true
 })

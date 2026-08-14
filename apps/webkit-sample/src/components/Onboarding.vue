@@ -77,11 +77,7 @@
   import { useAuthEntrance } from '../lib/auth-entrance'
   import { provideOnboardingForm } from '../lib/onboarding-form.js'
   import { onboardingSteps, profileDataKeys } from '../onboarding.js'
-  import {
-    createOrganization,
-    DEFAULT_WORKSPACE_NAME,
-    orgAccents
-  } from '../organizations.js'
+  import { createOrganization, DEFAULT_WORKSPACE_NAME, orgAccents } from '../organizations.js'
   import { planFor, planNameFor } from '../plans.js'
   import AuthShell from './ui/AuthShell.vue'
   import OnboardingOrganizationStep from './ui/OnboardingOrganizationStep.vue'

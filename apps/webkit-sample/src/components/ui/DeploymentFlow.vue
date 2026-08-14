@@ -1,10 +1,10 @@
 <script setup>
   import CardBox from '@aziontech/webkit/card-box'
-  import Spinner from '@aziontech/webkit/spinner'
-  import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 
   import { DEPLOY_SPLASH_MS } from './deployment-steps.js'
   import DeploymentLogs from './DeploymentLogs.vue'
+  import DeploymentLogsControls from './DeploymentLogsControls.vue'
 
   // Drives the post-deploy "Deployment" card: a brief "cloning" splash, then the
   // live DeploymentLogs view (the shared step accordion — see deployment-steps.js
@@ -48,6 +48,30 @@
 
   const failAt = computed(() => (props.outcome === 'error' ? props.failStep : ''))
 
+  // The log view, and the payload the header's copy control hands over. Both live
+  // here because the CONTROLS are in this card's header while the lines they act on
+  // are inside DeploymentLogs: the view travels down as a model, the text comes back
+  // up through the exposed `logsText`. Empty during the cloning splash, when there is
+  // no logs component mounted yet — which is also a run that has not settled, so the
+  // header is showing its status and no copy control at all.
+  const logView = ref('phased')
+  const logsRef = useTemplateRef('logsRef')
+  const logsText = computed(() => logsRef.value?.logsText ?? '')
+
+  // Whether the run this card is watching has stopped moving. It is a VIEW flag,
+  // not the outcome: the run's authority stays in src/lib/deploy-runs.js. All it
+  // does is retire the header spinner, since a settled deploy has no motion left
+  // to convey (the logs below carry which way it settled).
+  const settled = ref(false)
+  const onFinished = () => {
+    settled.value = true
+    emit('finished')
+  }
+  const onFailed = (step) => {
+    settled.value = true
+    emit('failed', step)
+  }
+
   let splashTimer = null
   onMounted(() => {
     if (phase.value === 'live') return
@@ -67,16 +91,21 @@
     :padded="false"
     class="w-full"
   >
-    <!-- Header: title + preparing status while cloning -->
+    <!-- Header: the card's name on the left, and on the right whatever the state
+         puts there — the live status while it deploys, the log controls once it has
+         settled (ui/DeploymentLogsControls.vue, shared with the deployment page).
+         What STEP it is on, and how many are done, belong to the row below, which
+         names both; repeating either here would be the same fact twice.
+         No glyph: the card says "Deployment" and the rows under it are the
+         deployment. A decorative cloud beside that word was the only thing on this
+         card that did not report on the run. -->
     <template #header>
-      <p class="text-heading-xs text-[var(--text-default)]">Deployment</p>
-      <div
-        v-if="phase === 'initial'"
-        class="flex items-center gap-[var(--spacing-sm)]"
-      >
-        <span class="text-label-sm text-[var(--text-muted)]"> Preparing git repository </span>
-        <Spinner class="size-4 text-[var(--text-muted)]" />
-      </div>
+      <p class="truncate text-heading-xs text-[var(--text-default)]">Deployment</p>
+      <DeploymentLogsControls
+        v-model:view="logView"
+        :settled="settled"
+        :logs-text="logsText"
+      />
     </template>
 
     <template #content>
@@ -152,15 +181,26 @@
         </div>
       </div>
 
-      <!-- Live: the shared DeploymentLogs view streams the steps. -->
+      <!-- Live: the shared DeploymentLogs view streams the steps. No label — the
+           card header above already names this region, and a second heading
+           ("Deployment Logs") under "Deployment" is one title too many. What is
+           left of that row is the progress read: how many steps are done and which
+           one is running, the two things the header cannot say. -->
+      <!-- `label="Logs"` and `:controls="false"`: this card owns the header above, so
+           the switch and the copy are rendered there (settled only), and the row
+           below keeps the progress read / outcome the design gives it. -->
       <DeploymentLogs
         v-else
+        ref="logsRef"
+        v-model:view="logView"
         live
+        label="Logs"
+        :controls="false"
         :interval="interval"
         :fail-at="failAt"
         :seek="logSeek"
-        @finished="emit('finished')"
-        @failed="(step) => emit('failed', step)"
+        @finished="onFinished"
+        @failed="onFailed"
       />
     </template>
   </CardBox>

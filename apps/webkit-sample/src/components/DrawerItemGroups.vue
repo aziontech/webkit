@@ -1,143 +1,141 @@
 <script setup>
-// Form type: DRAWER + MULTIPLE ITEMGROUPS (the `/form` skill, "Form types"). A
-// drawer create whose body is NOT one group (that's Variables.vue) nor stacked
-// field-* triads (that's DrawerForm.vue), but SEVERAL section-titled ItemGroup
-// SECTIONS — the Account Settings layout (Approach A: each section a flush CardBox
-// wrapping an Item.List), hosted in a Drawer instead of a page. It is still ONE
-// logical create, so it has ONE scoped save (the drawer's primary action) — the
-// sections group the topic, not the save.
-//
-// Accessibility follows /form Approach A even in a drawer: the section title is an
-// section title above a header-less flush CardBox; in an ItemGroup the Item.Title IS the
-// label (guidance in Item.Description), and each control carries an aria-label (no
-// <Label for>). Validation runs on submit only; with no Label (so no required tag),
-// feedback is a HelperText under the control — amber `required` for an empty field
-// (required is NOT an error), red `invalid` for a filled-but-malformed value — plus
-// the control's matching state, cleared as the user edits — no error-summary, no
-// Message callout. The
-// scope is one native `<form novalidate @submit.prevent>` (Enter submits via the
-// sr-only submit); one `submitting` flag locks the whole scope (fieldset :disabled +
-// every control :disabled + Save :loading, the /usability contract). Only a
-// request-level failure toasts (with Retry).
-import Button from "@aziontech/webkit/button";
-import CardBox from "@aziontech/webkit/card-box";
-import Drawer from "@aziontech/webkit/drawer";
-import DrawerClose from "@aziontech/webkit/drawer-close";
-import DrawerContent from "@aziontech/webkit/drawer-content";
-import DrawerOverlay from "@aziontech/webkit/drawer-overlay";
-import DrawerPortal from "@aziontech/webkit/drawer-portal";
-import DrawerTitle from "@aziontech/webkit/drawer-title";
-import HelperText from "@aziontech/webkit/helper-text";
-import InputText from "@aziontech/webkit/input-text";
-import Item from "@aziontech/webkit/item";
-import PanelContent from "@aziontech/webkit/panel-content";
-import PanelFooter from "@aziontech/webkit/panel-footer";
-import PanelHeader from "@aziontech/webkit/panel-header";
-import Select from "@aziontech/webkit/select";
-import Switch from "@aziontech/webkit/switch";
-import { toast } from "@aziontech/webkit/toast";
-import { computed, reactive, ref, watch } from "vue";
+  // Form type: DRAWER + MULTIPLE ITEMGROUPS (the `/form` skill, "Form types"). A
+  // drawer create whose body is NOT one group (that's Variables.vue) nor stacked
+  // field-* triads (that's DrawerForm.vue), but SEVERAL section-titled ItemGroup
+  // SECTIONS — the Account Settings layout (Approach A: each section a flush CardBox
+  // wrapping an Item.List), hosted in a Drawer instead of a page. It is still ONE
+  // logical create, so it has ONE scoped save (the drawer's primary action) — the
+  // sections group the topic, not the save.
+  //
+  // Accessibility follows /form Approach A even in a drawer: the section title is an
+  // section title above a header-less flush CardBox; in an ItemGroup the Item.Title IS the
+  // label (guidance in Item.Description), and each control carries an aria-label (no
+  // <Label for>). Validation runs on submit only; with no Label (so no required tag),
+  // feedback is a HelperText under the control — amber `required` for an empty field
+  // (required is NOT an error), red `invalid` for a filled-but-malformed value — plus
+  // the control's matching state, cleared as the user edits — no error-summary, no
+  // Message callout. The
+  // scope is one native `<form novalidate @submit.prevent>` (Enter submits via the
+  // sr-only submit); one `submitting` flag locks the whole scope (fieldset :disabled +
+  // every control :disabled + Save :loading, the /usability contract). Only a
+  // request-level failure toasts (with Retry).
+  import Button from '@aziontech/webkit/button'
+  import CardBox from '@aziontech/webkit/card-box'
+  import Drawer from '@aziontech/webkit/drawer'
+  import DrawerClose from '@aziontech/webkit/drawer-close'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+  import DrawerPortal from '@aziontech/webkit/drawer-portal'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import HelperText from '@aziontech/webkit/helper-text'
+  import InputText from '@aziontech/webkit/input-text'
+  import Item from '@aziontech/webkit/item'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
+  import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
+  import { reactive, ref, watch } from 'vue'
 
-import AppLayout from "./ui/AppLayout.vue";
-import PageHeading from "./ui/PageHeading.vue";
+  import AppLayout from './ui/AppLayout.vue'
+  import PageHeading from './ui/PageHeading.vue'
 
-const runtimes = [
-  { label: "Node.js 20", value: "node20" },
-  { label: "Python 3.12", value: "python312" },
-  { label: "Go 1.22", value: "go122" },
-];
-const runtimeLabel = (value) =>
-  runtimes.find((option) => option.value === value)?.label ?? "";
+  const runtimes = [
+    { label: 'Node.js 20', value: 'node20' },
+    { label: 'Python 3.12', value: 'python312' },
+    { label: 'Go 1.22', value: 'go122' }
+  ]
+  const runtimeLabel = (value) => runtimes.find((option) => option.value === value)?.label ?? ''
 
-const regions = [
-  { label: "US East (Washington)", value: "us-east" },
-  { label: "South America (São Paulo)", value: "sa-east" },
-  { label: "Europe (Frankfurt)", value: "eu-west" },
-];
-const regionLabel = (value) =>
-  regions.find((option) => option.value === value)?.label ?? "";
+  const regions = [
+    { label: 'US East (Washington)', value: 'us-east' },
+    { label: 'South America (São Paulo)', value: 'sa-east' },
+    { label: 'Europe (Frankfurt)', value: 'eu-west' }
+  ]
+  const regionLabel = (value) => regions.find((option) => option.value === value)?.label ?? ''
 
-// The list this drawer creates into (kept in memory for the demo).
-const services = ref([
-  { id: "svc-1", name: "checkout-api", runtime: "node20" },
-  { id: "svc-2", name: "image-resizer", runtime: "go122" },
-]);
+  // The list this drawer creates into (kept in memory for the demo).
+  const services = ref([
+    { id: 'svc-1', name: 'checkout-api', runtime: 'node20' },
+    { id: 'svc-2', name: 'image-resizer', runtime: 'go122' }
+  ])
 
-const drawerOpen = ref(false);
+  const drawerOpen = ref(false)
 
-const form = reactive({
-  name: "",
-  description: "",
-  runtime: "",
-  region: "us-east",
-  active: true,
-  logging: false,
-});
+  const form = reactive({
+    name: '',
+    description: '',
+    runtime: '',
+    region: 'us-east',
+    active: true,
+    logging: false
+  })
 
-// Per-field error messages. Empty string = valid; populated ONLY by validate().
-const errors = reactive({ name: "", runtime: "" });
+  // Per-field error messages. Empty string = valid; populated ONLY by validate().
+  const errors = reactive({ name: '', runtime: '' })
 
-// One flag locks the whole drawer scope while the request is in flight.
-const submitting = ref(false);
+  // One flag locks the whole drawer scope while the request is in flight.
+  const submitting = ref(false)
 
-const openCreate = () => {
-  drawerOpen.value = true;
-};
-
-// Reset the form + errors whenever the drawer closes (cancel, overlay, Escape, or a
-// successful create) so the next open is pristine.
-watch(drawerOpen, (open) => {
-  if (open) return;
-  form.name = "";
-  form.description = "";
-  form.runtime = "";
-  form.region = "us-east";
-  form.active = true;
-  form.logging = false;
-  errors.name = "";
-  errors.runtime = "";
-});
-
-const NAME_PATTERN = /^[a-z0-9-]+$/;
-
-const validate = () => {
-  const name = form.name.trim();
-  if (!name) errors.name = "Name is required.";
-  else if (!NAME_PATTERN.test(name))
-    errors.name = "Use lower-case letters, numbers, and hyphen only.";
-  else errors.name = "";
-
-  errors.runtime = form.runtime ? "" : "Runtime is required.";
-
-  return !errors.name && !errors.runtime;
-};
-
-const cancel = () => {
-  drawerOpen.value = false;
-};
-
-const submit = async () => {
-  if (submitting.value) return; // re-entrancy lock
-  if (!validate()) return; // feedback is now on the fields (:invalid)
-
-  submitting.value = true;
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    services.value = [
-      { id: `svc-${Date.now()}`, name: form.name.trim(), runtime: form.runtime },
-      ...services.value,
-    ];
-    toast.success(`Service "${form.name.trim()}" created.`);
-    drawerOpen.value = false; // watch() resets the form
-  } catch (error) {
-    toast.error("Could not create the service.", {
-      description: error?.message ?? "Check your connection and try again.",
-      action: { label: "Retry", onClick: () => submit() },
-    });
-  } finally {
-    submitting.value = false; // release on success AND failure
+  const openCreate = () => {
+    drawerOpen.value = true
   }
-};
+
+  // Reset the form + errors whenever the drawer closes (cancel, overlay, Escape, or a
+  // successful create) so the next open is pristine.
+  watch(drawerOpen, (open) => {
+    if (open) return
+    form.name = ''
+    form.description = ''
+    form.runtime = ''
+    form.region = 'us-east'
+    form.active = true
+    form.logging = false
+    errors.name = ''
+    errors.runtime = ''
+  })
+
+  const NAME_PATTERN = /^[a-z0-9-]+$/
+
+  const validate = () => {
+    const name = form.name.trim()
+    if (!name) errors.name = 'Name is required.'
+    else if (!NAME_PATTERN.test(name))
+      errors.name = 'Use lower-case letters, numbers, and hyphen only.'
+    else errors.name = ''
+
+    errors.runtime = form.runtime ? '' : 'Runtime is required.'
+
+    return !errors.name && !errors.runtime
+  }
+
+  const cancel = () => {
+    drawerOpen.value = false
+  }
+
+  const submit = async () => {
+    if (submitting.value) return // re-entrancy lock
+    if (!validate()) return // feedback is now on the fields (:invalid)
+
+    submitting.value = true
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 900))
+      services.value = [
+        { id: `svc-${Date.now()}`, name: form.name.trim(), runtime: form.runtime },
+        ...services.value
+      ]
+      toast.success(`Service "${form.name.trim()}" created.`)
+      drawerOpen.value = false // watch() resets the form
+    } catch (error) {
+      toast.error('Could not create the service.', {
+        description: error?.message ?? 'Check your connection and try again.',
+        action: { label: 'Retry', onClick: () => submit() }
+      })
+    } finally {
+      submitting.value = false // release on success AND failure
+    }
+  }
 </script>
 
 <template>
@@ -172,14 +170,20 @@ const submit = async () => {
           class="flex items-center justify-between rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
         >
           <span class="text-label-code-sm text-[var(--text-default)]">{{ service.name }}</span>
-          <span class="text-body-xs text-[var(--text-muted)]">{{ runtimeLabel(service.runtime) }}</span>
+          <span class="text-body-xs text-[var(--text-muted)]">{{
+            runtimeLabel(service.runtime)
+          }}</span>
         </li>
       </ul>
     </main>
 
     <!-- Create flow — a large Drawer whose body is several ItemGroup sections
          (section title + flush CardBox + Item.List), all committed by one scoped save. -->
-    <Drawer v-model:open="drawerOpen" size="large" side="right">
+    <Drawer
+      v-model:open="drawerOpen"
+      size="large"
+      side="right"
+    >
       <DrawerPortal>
         <DrawerOverlay />
         <DrawerContent>
@@ -219,7 +223,10 @@ const submit = async () => {
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>
-                        <Item size="small" class="items-start">
+                        <Item
+                          size="small"
+                          class="items-start"
+                        >
                           <Item.Content>
                             <Item.Title>Name</Item.Title>
                             <Item.Description>
@@ -255,7 +262,10 @@ const submit = async () => {
                           </Item.Actions>
                         </Item>
 
-                        <Item size="small" class="items-start">
+                        <Item
+                          size="small"
+                          class="items-start"
+                        >
                           <Item.Content>
                             <Item.Title>Description</Item.Title>
                             <Item.Description>
@@ -286,7 +296,10 @@ const submit = async () => {
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>
-                        <Item size="small" class="items-start">
+                        <Item
+                          size="small"
+                          class="items-start"
+                        >
                           <Item.Content>
                             <Item.Title>Runtime</Item.Title>
                             <Item.Description>The language the service runs on.</Item.Description>
@@ -309,7 +322,9 @@ const submit = async () => {
                                 <Select.Trigger
                                   id="service-runtime"
                                   aria-label="Runtime"
-                                  :aria-describedby="errors.runtime ? 'service-runtime-error' : undefined"
+                                  :aria-describedby="
+                                    errors.runtime ? 'service-runtime-error' : undefined
+                                  "
                                 />
                                 <!-- TEMPORARY WORKAROUND for a webkit bug: Select.Content
                                      teleports to <body> at z-50, so inside the Drawer panel
@@ -335,7 +350,10 @@ const submit = async () => {
                           </Item.Actions>
                         </Item>
 
-                        <Item size="small" class="items-start">
+                        <Item
+                          size="small"
+                          class="items-start"
+                        >
                           <Item.Content>
                             <Item.Title>Region</Item.Title>
                             <Item.Description>Where the service is deployed.</Item.Description>
@@ -348,7 +366,10 @@ const submit = async () => {
                               class="w-full"
                               :display-value="regionLabel"
                             >
-                              <Select.Trigger id="service-region" aria-label="Region" />
+                              <Select.Trigger
+                                id="service-region"
+                                aria-label="Region"
+                              />
                               <Select.Content class="!z-[1002]">
                                 <Select.Option
                                   v-for="option in regions"
@@ -377,7 +398,9 @@ const submit = async () => {
                         <Item size="small">
                           <Item.Content>
                             <Item.Title>Active</Item.Title>
-                            <Item.Description>Start the service immediately after creation.</Item.Description>
+                            <Item.Description
+                              >Start the service immediately after creation.</Item.Description
+                            >
                           </Item.Content>
                           <Item.Actions class="justify-end">
                             <Switch
@@ -391,7 +414,9 @@ const submit = async () => {
                         <Item size="small">
                           <Item.Content>
                             <Item.Title>Request logging</Item.Title>
-                            <Item.Description>Record incoming requests for this service.</Item.Description>
+                            <Item.Description
+                              >Record incoming requests for this service.</Item.Description
+                            >
                           </Item.Content>
                           <Item.Actions class="justify-end">
                             <Switch
@@ -429,7 +454,12 @@ const submit = async () => {
                 :loading="submitting"
                 @click="submit"
               />
-              <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">
+              <button
+                type="submit"
+                class="sr-only"
+                tabindex="-1"
+                aria-hidden="true"
+              >
                 Create
               </button>
             </PanelFooter>

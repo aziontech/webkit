@@ -1,89 +1,88 @@
 <script setup>
-// Form type: DRAWER form (the `/form` skill, "Form types"). In-context creation —
-// the user stays on the list and creates a resource in a side Drawer with one
-// scoped save (the drawer's primary action). Fields are stacked field-* triads
-// (Approach B, a short create). Validation runs on submit; the scope locks off one
-// `submitting` flag (the /usability contract); request errors toast.
-import Button from "@aziontech/webkit/button";
-import Drawer from "@aziontech/webkit/drawer";
-import DrawerClose from "@aziontech/webkit/drawer-close";
-import DrawerContent from "@aziontech/webkit/drawer-content";
-import DrawerOverlay from "@aziontech/webkit/drawer-overlay";
-import DrawerPortal from "@aziontech/webkit/drawer-portal";
-import DrawerTitle from "@aziontech/webkit/drawer-title";
-import FieldText from "@aziontech/webkit/field-text";
-import FieldTextarea from "@aziontech/webkit/field-textarea";
-import HelperText from "@aziontech/webkit/helper-text";
-import Label from "@aziontech/webkit/label";
-import PanelContent from "@aziontech/webkit/panel-content";
-import PanelFooter from "@aziontech/webkit/panel-footer";
-import PanelHeader from "@aziontech/webkit/panel-header";
-import Select from "@aziontech/webkit/select";
-import { toast } from "@aziontech/webkit/toast";
-import { computed, reactive, ref, watch } from "vue";
+  // Form type: DRAWER form (the `/form` skill, "Form types"). In-context creation —
+  // the user stays on the list and creates a resource in a side Drawer with one
+  // scoped save (the drawer's primary action). Fields are stacked field-* triads
+  // (Approach B, a short create). Validation runs on submit; the scope locks off one
+  // `submitting` flag (the /usability contract); request errors toast.
+  import Button from '@aziontech/webkit/button'
+  import Drawer from '@aziontech/webkit/drawer'
+  import DrawerClose from '@aziontech/webkit/drawer-close'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+  import DrawerPortal from '@aziontech/webkit/drawer-portal'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import FieldText from '@aziontech/webkit/field-text'
+  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import HelperText from '@aziontech/webkit/helper-text'
+  import Label from '@aziontech/webkit/label'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, reactive, ref, watch } from 'vue'
 
-import AppLayout from "./ui/AppLayout.vue";
-import PageHeading from "./ui/PageHeading.vue";
+  import AppLayout from './ui/AppLayout.vue'
+  import PageHeading from './ui/PageHeading.vue'
 
-const regions = [
-  { label: "US East (Washington)", value: "us-east" },
-  { label: "South America (São Paulo)", value: "sa-east" },
-  { label: "Europe (Frankfurt)", value: "eu-west" },
-];
-const regionLabel = (value) =>
-  regions.find((option) => option.value === value)?.label ?? "";
+  const regions = [
+    { label: 'US East (Washington)', value: 'us-east' },
+    { label: 'South America (São Paulo)', value: 'sa-east' },
+    { label: 'Europe (Frankfurt)', value: 'eu-west' }
+  ]
+  const regionLabel = (value) => regions.find((option) => option.value === value)?.label ?? ''
 
-// The list this drawer creates into (kept in memory for the demo).
-const environments = ref([
-  { id: "env-1", name: "production", region: "us-east" },
-  { id: "env-2", name: "staging", region: "sa-east" },
-]);
+  // The list this drawer creates into (kept in memory for the demo).
+  const environments = ref([
+    { id: 'env-1', name: 'production', region: 'us-east' },
+    { id: 'env-2', name: 'staging', region: 'sa-east' }
+  ])
 
-const drawerOpen = ref(false);
-const form = reactive({ name: "", region: "", description: "" });
-const submitted = ref(false);
-const submitting = ref(false);
+  const drawerOpen = ref(false)
+  const form = reactive({ name: '', region: '', description: '' })
+  const submitted = ref(false)
+  const submitting = ref(false)
 
-const nameEmpty = computed(() => !form.name.trim());
-const regionEmpty = computed(() => !form.region);
-const isValid = computed(() => !nameEmpty.value && !regionEmpty.value);
+  const nameEmpty = computed(() => !form.name.trim())
+  const regionEmpty = computed(() => !form.region)
+  const isValid = computed(() => !nameEmpty.value && !regionEmpty.value)
 
-// Reset to a clean slate whenever the drawer closes.
-watch(drawerOpen, (open) => {
-  if (open) return;
-  form.name = "";
-  form.region = "";
-  form.description = "";
-  submitted.value = false;
-});
+  // Reset to a clean slate whenever the drawer closes.
+  watch(drawerOpen, (open) => {
+    if (open) return
+    form.name = ''
+    form.region = ''
+    form.description = ''
+    submitted.value = false
+  })
 
-const openCreate = () => {
-  drawerOpen.value = true;
-};
-
-const submit = async () => {
-  if (submitting.value) return; // re-entrancy lock
-  submitted.value = true; // reveal field feedback
-  if (!isValid.value) return;
-
-  submitting.value = true;
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    environments.value = [
-      { id: `env-${Date.now()}`, name: form.name.trim(), region: form.region },
-      ...environments.value,
-    ];
-    toast.success(`Environment "${form.name.trim()}" created.`);
-    drawerOpen.value = false; // watch() resets the form
-  } catch (error) {
-    toast.error("Could not create the environment.", {
-      description: error?.message ?? "Check your connection and try again.",
-      action: { label: "Retry", onClick: () => submit() },
-    });
-  } finally {
-    submitting.value = false;
+  const openCreate = () => {
+    drawerOpen.value = true
   }
-};
+
+  const submit = async () => {
+    if (submitting.value) return // re-entrancy lock
+    submitted.value = true // reveal field feedback
+    if (!isValid.value) return
+
+    submitting.value = true
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 900))
+      environments.value = [
+        { id: `env-${Date.now()}`, name: form.name.trim(), region: form.region },
+        ...environments.value
+      ]
+      toast.success(`Environment "${form.name.trim()}" created.`)
+      drawerOpen.value = false // watch() resets the form
+    } catch (error) {
+      toast.error('Could not create the environment.', {
+        description: error?.message ?? 'Check your connection and try again.',
+        action: { label: 'Retry', onClick: () => submit() }
+      })
+    } finally {
+      submitting.value = false
+    }
+  }
 </script>
 
 <template>
@@ -124,7 +123,11 @@ const submit = async () => {
     </main>
 
     <!-- Drawer form — one scoped save. Enter submits via the sr-only button. -->
-    <Drawer v-model:open="drawerOpen" size="medium" side="right">
+    <Drawer
+      v-model:open="drawerOpen"
+      size="medium"
+      side="right"
+    >
       <DrawerPortal>
         <DrawerOverlay />
         <DrawerContent>
@@ -151,7 +154,11 @@ const submit = async () => {
                      the wrapper gets no `label`); the field's amber :required only
                      fires on an empty submit — required is a prompt, never red. -->
                 <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                  <Label for="env-name" required>Name</Label>
+                  <Label
+                    for="env-name"
+                    required
+                    >Name</Label
+                  >
                   <FieldText
                     v-model="form.name"
                     input-id="env-name"
@@ -169,7 +176,11 @@ const submit = async () => {
                 </div>
 
                 <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                  <Label for="env-region" required>Region</Label>
+                  <Label
+                    for="env-region"
+                    required
+                    >Region</Label
+                  >
                   <!-- Label required ALWAYS; the empty-required Select uses
                        :required (amber semantics), never :invalid (red). Select has
                        no amber border, so the amber HelperText below carries the cue. -->
@@ -238,7 +249,12 @@ const submit = async () => {
                 :loading="submitting"
                 @click="submit"
               />
-              <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">
+              <button
+                type="submit"
+                class="sr-only"
+                tabindex="-1"
+                aria-hidden="true"
+              >
                 Create
               </button>
             </PanelFooter>

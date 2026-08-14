@@ -16,8 +16,9 @@
   // the default slot), and the footer — avatar + user name + the account menu, a
   // Dropdown anchored to the overflow (⋮) button with a single account "Settings"
   // entry (the per-category links are rows in the rail's own Settings level, each
-  // one its own page), a personal section with an identity header, the theme
-  // control, and Logout.
+  // one its own page), a personal section with an identity header carrying the
+  // account's plan tag, the theme control, the prototype's own "Sample preset"
+  // entry, and Logout.
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CommandMenu from '@aziontech/webkit/command-menu'
@@ -34,6 +35,8 @@
   import { computed, ref, watch } from 'vue'
 
   import { menuLeaves, menuPath } from '../../lib/menu-tree.js'
+  import { SAMPLE_MODES } from '../../lib/sample-mode.js'
+  import { nextPlanUp, useSamplePreset } from '../../lib/sample-preset.js'
   import { expireSession } from '../../lib/session.js'
   import { reportNavLevel, setNavPath, useSidebar } from '../../sidebar.js'
   import { useTheme } from '../../theme.js'
@@ -503,6 +506,14 @@
       icon: 'pi pi-book',
       run: (event) => emit('select', event, 'docs')
     },
+    // The prototype's own configuration, reachable without hunting for the ⋮ menu —
+    // the same reason "Expire Session Token" is in here.
+    {
+      id: 'sample-preset',
+      label: 'Sample preset',
+      icon: 'pi pi-sliders-h',
+      run: (event) => emit('select', event, 'sample-preset')
+    },
     {
       id: 'logout',
       label: 'Log Out',
@@ -528,6 +539,29 @@
   // The account menu is controlled so custom (non-Option) rows — the identity
   // header's Settings shortcut and the "Upgrade to Pro" CTA — can close it too.
   const accountMenuOpen = ref(false)
+
+  // Which customer this prototype is pretending to be (../../lib/sample-preset.js).
+  // The menu reads it for two things — the preset summarised on the row that opens
+  // the panel, and which tier the upgrade CTA should sell — but it does NOT tag the
+  // identity block with the plan: the contract belongs to the organization, and the
+  // organization's own switcher carries it. The panel itself is hosted by the shell
+  // (the rail and the mobile drawer are two copies of this component).
+  const { planInfo, mode: sampleMode } = useSamplePreset()
+
+  // Two words, not three: the row is a menu row, and the summary shares it with the
+  // label — a longer string truncates "Sample preset" instead of itself. Plan and
+  // contents are the two the reader cannot see from where they are standing; whether
+  // the account switcher is on is legible in the header behind the menu. "Empty
+  // account" contributes only its first word, which is the whole distinction.
+  const presetSummary = computed(() => {
+    const version = SAMPLE_MODES.find((option) => option.value === sampleMode.value)
+    return [planInfo.value.name, version?.label.split(' ')[0]].filter(Boolean).join(' · ')
+  })
+
+  // The upgrade CTA sells the NEXT tier up, and nothing at the top of the ladder:
+  // an Enterprise account offered an upgrade to Enterprise is the prototype
+  // admitting it does not know which account it is showing.
+  const upgradePlan = computed(() => nextPlanUp())
 
   // Entries the demo can't route anywhere real (Feedback, Changelog, Help,
   // Upgrade) acknowledge with a toast; navigations bubble to the parent, which
@@ -747,6 +781,13 @@
                  Personal Tokens (the account's tokens) sit directly under the
                  identity block. -->
           <Dropdown.Group>
+            <!-- Identity only. NO PLAN TAG HERE: a plan is a contract between Azion
+                 and an ORGANIZATION, not a property of the person signed in — the
+                 same user is on three different contracts in three organizations, and
+                 a tier tagged onto their name claims otherwise. It rides the
+                 organization instead, in the header's org switcher
+                 (./OrgSwitcher.vue), which is the thing the contract is actually
+                 against. -->
             <template #top>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate text-label-md text-[var(--text-default)]">
@@ -796,6 +837,27 @@
                 aria-label="Theme"
               />
             </div>
+          </Dropdown.Group>
+
+          <!-- The one entry in this console that is about the console rather than
+               about the account: which customer the prototype is pretending to be —
+               plan, whether the account owns anything, whether it can switch
+               accounts. It opens a panel (hosted by the shell) instead of listing
+               the knobs here: three unrelated choices as menu rows would read as
+               three account settings, which is exactly what they are not. The row
+               states the preset in force, so the menu answers "which sample am I
+               looking at" without opening anything. -->
+          <Dropdown.Group label="Prototype">
+            <Dropdown.Option
+              value="sample-preset"
+              label="Sample preset"
+            >
+              <template #right>
+                <span class="text-body-xs text-[var(--text-muted)]">
+                  {{ presetSummary }}
+                </span>
+              </template>
+            </Dropdown.Option>
           </Dropdown.Group>
 
           <!-- Resources -->
@@ -876,13 +938,17 @@
             </Dropdown.Option>
           </Dropdown.Group>
 
-          <!-- Upgrade CTA + platform status -->
+          <!-- Upgrade CTA + platform status. The CTA names the next tier up and is
+               absent on the top one — there is nothing left to sell an Enterprise
+               account, and a button that offers it anyway is the console failing to
+               know its own customer. The status line stays either way. -->
           <Dropdown.Group>
             <div
               class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]"
             >
               <Button
-                label="Upgrade to Pro"
+                v-if="upgradePlan"
+                :label="`Upgrade to ${upgradePlan.name}`"
                 kind="secondary"
                 size="medium"
                 class="w-full"

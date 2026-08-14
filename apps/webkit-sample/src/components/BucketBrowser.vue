@@ -1,248 +1,259 @@
 <script setup>
-// Object Storage — bucket file navigator. The console app shell (sidebar +
-// GlobalHeader with the module breadcrumb "Object Storage › <bucket>") comes
-// from AppLayout; following the resource-detail convention (SqlDatabaseDetail),
-// this page carries NO PageHeading — the bucket name lives in the header
-// breadcrumb, so the content is just the CardBox whose Table lists the objects
-// in the current folder.
-//
-// Navigation is path-only (no folder tree): a <Breadcrumb> inside the toolbar
-// is the sole "where am I" surface. Descending is a folder row-click (or the
-// synthetic ".." row that steps up one level); a crumb click jumps straight to
-// that ancestor. Files aren't navigable — clicking one is a demo download.
-import Breadcrumb from "@aziontech/webkit/breadcrumb";
-import CardBox from "@aziontech/webkit/card-box";
-import Dropdown from "@aziontech/webkit/dropdown";
-import EmptyState from "@aziontech/webkit/empty-state";
-import IconButton from "@aziontech/webkit/icon-button";
-import SplitButton from "@aziontech/webkit/split-button";
-import Table from "@aziontech/webkit/table";
-import { toast } from "@aziontech/webkit/toast";
-import Tooltip from "@aziontech/webkit/tooltip";
-import { computed, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+  // Object Storage — bucket file navigator. The console app shell (sidebar +
+  // GlobalHeader with the module breadcrumb "Object Storage › <bucket>") comes
+  // from AppLayout; following the resource-detail convention (SqlDatabaseDetail),
+  // this page carries NO PageHeading — the bucket name lives in the header
+  // breadcrumb, so the content is just the CardBox whose Table lists the objects
+  // in the current folder.
+  //
+  // Navigation is path-only (no folder tree): a <Breadcrumb> inside the toolbar
+  // is the sole "where am I" surface. Descending is a folder row-click (or the
+  // synthetic ".." row that steps up one level); a crumb click jumps straight to
+  // that ancestor. Files aren't navigable — clicking one is a demo download.
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import CardBox from '@aziontech/webkit/card-box'
+  import Dropdown from '@aziontech/webkit/dropdown'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import SplitButton from '@aziontech/webkit/split-button'
+  import Table from '@aziontech/webkit/table'
+  import { toast } from '@aziontech/webkit/toast'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, ref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
-import { authorAt } from "../lib/people";
-import AppLayout from "./ui/AppLayout.vue";
-import LastModifiedCell from "./ui/LastModifiedCell.vue";
+  import { authorAt } from '../lib/people'
+  import AppLayout from './ui/AppLayout.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
+  import LastModifiedCell from './ui/LastModifiedCell.vue'
 
-const route = useRoute();
-const router = useRouter();
+  const route = useRoute()
+  const router = useRouter()
 
-const userEmail = computed(() => route.query.email || "myemail@azion.com");
+  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-// Bucket identity from the route (id in the path, display name carried in the
-// query by the buckets list; falls back to the id).
-const bucketId = computed(() => route.params.bucket);
-const bucketName = computed(() => route.query.name || bucketId.value);
+  // Bucket identity from the route (id in the path, display name carried in the
+  // query by the buckets list; falls back to the id).
+  const bucketId = computed(() => route.params.bucket)
+  const bucketName = computed(() => route.query.name || bucketId.value)
 
-// ── Mock object tree ────────────────────────────────────────────────────────
-// A folder is `{ children }`; a file is `{ size, lastModified, ext }`. The
-// navigator resolves the current folder's entries from `folderPath` below.
-const file = (size, ext) => ({ size, ext, lastModified: "Jun 22, 2026, 07:21:21 PM" });
+  // ── Mock object tree ────────────────────────────────────────────────────────
+  // A folder is `{ children }`; a file is `{ size, lastModified, ext }`. The
+  // navigator resolves the current folder's entries from `folderPath` below.
+  const file = (size, ext) => ({ size, ext, lastModified: 'Jun 22, 2026, 07:21:21 PM' })
 
-const STORYBOOK_BUILD = {
-  "assets/": { children: {} },
-  "sb-addons/": { children: {} },
-  "sb-common-assets/": { children: {} },
-  "sb-manager/": { children: {} },
-  "favicon.svg": file("1.25 KB", "svg"),
-  "iframe.html": file("17.75 KB", "html"),
-  "index.html": file("6.03 KB", "html"),
-  "index.json": file("183.1 KB", "json"),
-  "nunito-sans-bold-italic.woff2": file("49.46 KB", "woff2"),
-  "nunito-sans-bold.woff2": file("47.14 KB", "woff2"),
-  "nunito-sans-italic.woff2": file("49.62 KB", "woff2"),
-  "nunito-sans-regular.woff2": file("47.07 KB", "woff2"),
-  "project.json": file("1.01 KB", "json"),
-};
+  const STORYBOOK_BUILD = {
+    'assets/': { children: {} },
+    'sb-addons/': { children: {} },
+    'sb-common-assets/': { children: {} },
+    'sb-manager/': { children: {} },
+    'favicon.svg': file('1.25 KB', 'svg'),
+    'iframe.html': file('17.75 KB', 'html'),
+    'index.html': file('6.03 KB', 'html'),
+    'index.json': file('183.1 KB', 'json'),
+    'nunito-sans-bold-italic.woff2': file('49.46 KB', 'woff2'),
+    'nunito-sans-bold.woff2': file('47.14 KB', 'woff2'),
+    'nunito-sans-italic.woff2': file('49.62 KB', 'woff2'),
+    'nunito-sans-regular.woff2': file('47.07 KB', 'woff2'),
+    'project.json': file('1.01 KB', 'json')
+  }
 
-// Per-bucket root. `webkit-storybook-dev` mirrors the reference bucket; any other
-// bucket gets a small representative tree so the navigator always has content.
-const BUCKET_TREES = {
-  "webkit-storybook-dev": {
-    "20260622162046/": { children: STORYBOOK_BUILD },
-    "20260610093012/": { children: STORYBOOK_BUILD },
-    "logs/": {
-      children: {
-        "access.log": file("2.4 MB", "log"),
-        "error.log": file("128 KB", "log"),
+  // Per-bucket root. `webkit-storybook-dev` mirrors the reference bucket; any other
+  // bucket gets a small representative tree so the navigator always has content.
+  const BUCKET_TREES = {
+    'webkit-storybook-dev': {
+      '20260622162046/': { children: STORYBOOK_BUILD },
+      '20260610093012/': { children: STORYBOOK_BUILD },
+      'logs/': {
+        children: {
+          'access.log': file('2.4 MB', 'log'),
+          'error.log': file('128 KB', 'log')
+        }
       },
+      'robots.txt': file('64 B', 'txt')
+    }
+  }
+
+  const FALLBACK_TREE = {
+    'images/': {
+      children: {
+        'hero.png': file('842 KB', 'png'),
+        'logo.svg': file('3.2 KB', 'svg')
+      }
     },
-    "robots.txt": file("64 B", "txt"),
-  },
-};
-
-const FALLBACK_TREE = {
-  "images/": {
-    children: {
-      "hero.png": file("842 KB", "png"),
-      "logo.svg": file("3.2 KB", "svg"),
-    },
-  },
-  "docs/": { children: { "readme.md": file("4.1 KB", "md") } },
-  "config.json": file("512 B", "json"),
-};
-
-const tree = computed(() => BUCKET_TREES[bucketId.value] ?? FALLBACK_TREE);
-
-// Current folder as an array of segment names (relative to the bucket root).
-const folderPath = ref([]);
-
-// Resolve the node map for the current folder.
-const currentFolder = computed(() => {
-  let node = tree.value;
-  for (const segment of folderPath.value) {
-    node = node?.[segment]?.children;
-    if (!node) return {};
+    'docs/': { children: { 'readme.md': file('4.1 KB', 'md') } },
+    'config.json': file('512 B', 'json')
   }
-  return node;
-});
 
-const isFolder = (entry) => Boolean(entry && entry.children);
+  const tree = computed(() => BUCKET_TREES[bucketId.value] ?? FALLBACK_TREE)
 
-// File-type glyph. Folders/parent are handled in the cell template.
-const fileIcon = (ext) => {
-  const map = {
-    svg: "pi pi-image",
-    png: "pi pi-image",
-    jpg: "pi pi-image",
-    jpeg: "pi pi-image",
-    html: "pi pi-code",
-    json: "pi pi-database",
-    md: "pi pi-file-edit",
-    txt: "pi pi-file",
-    log: "pi pi-align-left",
-    woff2: "pi pi-star",
-  };
-  return map[ext] ?? "pi pi-file";
-};
+  // Current folder as an array of segment names (relative to the bucket root).
+  const folderPath = ref([])
 
-// Rows for the Table: a synthetic ".." parent when nested, then folders, then
-// files — folders first, each block alphabetical (console convention).
-const rows = computed(() => {
-  const entries = Object.entries(currentFolder.value);
-  // Folders carry no modifier/timestamp — the Last Modified cell stays empty
-  // (the tables skill forbids a raw date, and there is no author for a prefix).
-  const folders = entries
-    .filter(([, entry]) => isFolder(entry))
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([name]) => ({ id: name, name, kind: "folder", size: "-", lastModified: "" }));
-  // Files get a round-robin author from the shared roster so the Last Modified
-  // cell shows an avatar (name on tooltip) + relative time.
-  const files = entries
-    .filter(([, entry]) => !isFolder(entry))
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([name, entry], index) => {
-      const person = authorAt(index);
-      return {
-        id: name,
-        name,
-        kind: "file",
-        ext: entry.ext,
-        size: entry.size,
-        lastModified: entry.lastModified,
-        author: person.name,
-        authorAvatar: person.avatar,
-      };
-    });
+  // Resolve the node map for the current folder.
+  const currentFolder = computed(() => {
+    let node = tree.value
+    for (const segment of folderPath.value) {
+      node = node?.[segment]?.children
+      if (!node) return {}
+    }
+    return node
+  })
 
-  const list = [...folders, ...files];
-  if (folderPath.value.length) {
-    list.unshift({ id: "..", name: "..", kind: "parent", size: "-", lastModified: "" });
+  const isFolder = (entry) => Boolean(entry && entry.children)
+
+  // File-type glyph. Folders/parent are handled in the cell template.
+  const fileIcon = (ext) => {
+    const map = {
+      svg: 'pi pi-image',
+      png: 'pi pi-image',
+      jpg: 'pi pi-image',
+      jpeg: 'pi pi-image',
+      html: 'pi pi-code',
+      json: 'pi pi-database',
+      md: 'pi pi-file-edit',
+      txt: 'pi pi-file',
+      log: 'pi pi-align-left',
+      woff2: 'pi pi-star'
+    }
+    return map[ext] ?? 'pi pi-file'
   }
-  return list;
-});
 
-const columns = [
-  { accessorKey: "name", header: "Name", enableSorting: true, principal: true, grow: 3 },
-  { accessorKey: "size", header: "Size", enableSorting: true },
-  { accessorKey: "lastModified", header: "Last Modified", enableSorting: true, grow: 2 },
-  { id: "actions", kind: "action", hideable: false },
-];
+  // Rows for the Table: a synthetic ".." parent when nested, then folders, then
+  // files — folders first, each block alphabetical (console convention).
+  const rows = computed(() => {
+    const entries = Object.entries(currentFolder.value)
+    // Folders carry no modifier/timestamp — the Last Modified cell stays empty
+    // (the tables skill forbids a raw date, and there is no author for a prefix).
+    const folders = entries
+      .filter(([, entry]) => isFolder(entry))
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([name]) => ({ id: name, name, kind: 'folder', size: '-', lastModified: '' }))
+    // Files get a round-robin author from the shared roster so the Last Modified
+    // cell shows an avatar (name on tooltip) + relative time.
+    const files = entries
+      .filter(([, entry]) => !isFolder(entry))
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([name, entry], index) => {
+        const person = authorAt(index)
+        return {
+          id: name,
+          name,
+          kind: 'file',
+          ext: entry.ext,
+          size: entry.size,
+          lastModified: entry.lastModified,
+          author: person.name,
+          authorAvatar: person.avatar
+        }
+      })
 
-// ── Navigation ────────────────────────────────────────────────────────────
-const enterFolder = (name) => {
-  folderPath.value = [...folderPath.value, name];
-};
+    const list = [...folders, ...files]
+    if (folderPath.value.length) {
+      list.unshift({ id: '..', name: '..', kind: 'parent', size: '-', lastModified: '' })
+    }
+    return list
+  })
 
-const goUp = () => {
-  folderPath.value = folderPath.value.slice(0, -1);
-};
+  const columns = [
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, grow: 3 },
+    { accessorKey: 'size', header: 'Size', enableSorting: true },
+    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+    { id: 'actions', kind: 'action', hideable: false }
+  ]
 
-const onRowClick = (event, row) => {
-  if (row.kind === "parent") {
-    goUp();
-    return;
+  // ── Navigation ────────────────────────────────────────────────────────────
+  const enterFolder = (name) => {
+    folderPath.value = [...folderPath.value, name]
   }
-  if (row.kind === "folder") {
-    enterFolder(row.name);
-    return;
+
+  const goUp = () => {
+    folderPath.value = folderPath.value.slice(0, -1)
   }
-  toast.info(`Downloading ${row.name}`, { description: row.size });
-};
 
-// Folder-path breadcrumb: the bucket root, then each folder segment. `href`
-// carries the target depth so a crumb click truncates the path to that ancestor.
-const pathCrumbs = computed(() => [
-  { label: bucketName.value, href: "0" },
-  ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) })),
-]);
-
-const onCrumb = (event, href) => {
-  // The crumbs are real <a> elements whose href carries the target depth, not a
-  // route — stop the native navigation and truncate the path to that ancestor.
-  event.preventDefault();
-  const depth = Number(href);
-  if (Number.isFinite(depth)) folderPath.value = folderPath.value.slice(0, depth);
-};
-
-const onRowAction = (event, value, row) => {
-  if (value === "open") {
-    onRowClick(event, row);
-    return;
+  const onRowClick = (event, row) => {
+    if (row.kind === 'parent') {
+      goUp()
+      return
+    }
+    if (row.kind === 'folder') {
+      enterFolder(row.name)
+      return
+    }
+    toast.info(`Downloading ${row.name}`, { description: row.size })
   }
-  if (value === "download") {
-    toast.info(`Downloading ${row.name}`, { description: row.size });
-    return;
-  }
-  if (value === "delete") {
-    toast.success(`Deleted "${row.name}".`);
-    return;
-  }
-  toast.info(`${row.name}`, { description: `Object in ${bucketName.value}` });
-};
 
-// "Add to files" is a SplitButton: the primary command uploads a file (the
-// common action); the attached menu offers both "Upload a File" and
-// "Add a Folder". Actions are keyed by `value` so the primary click and the
-// menu rows route through one dispatcher.
-const addToFilesActions = [
-  { label: "Upload a File", value: "upload", icon: "pi pi-upload" },
-  { label: "Add a Folder", value: "folder", icon: "pi pi-folder-plus" },
-];
+  // Folder-path breadcrumb: the bucket root, then each folder segment. `href`
+  // carries the target depth so a crumb click truncates the path to that ancestor.
+  const pathCrumbs = computed(() => [
+    { label: bucketName.value, href: '0' },
+    ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) }))
+  ])
 
-const runAddAction = (value) => {
-  if (value === "folder") {
-    toast.info("Add a folder", { description: `New folder in ${bucketName.value}` });
-    return;
+  const onCrumb = (event, href) => {
+    // The crumbs are real <a> elements whose href carries the target depth, not a
+    // route — stop the native navigation and truncate the path to that ancestor.
+    event.preventDefault()
+    const depth = Number(href)
+    if (Number.isFinite(depth)) folderPath.value = folderPath.value.slice(0, depth)
   }
-  toast.info("Upload a file", { description: `Upload into ${bucketName.value}` });
-};
 
-// Primary segment click → the default (upload) action.
-const onAddPrimary = () => runAddAction("upload");
-// Menu row click → route by the selected action's value.
-const onAddAction = (event, item) => runAddAction(item.value);
+  // An object in a bucket has no version history behind it here, so deleting one is
+  // final: the menu click arms the dialog and the name has to be typed back.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    toast.success(`Deleted "${row.name}".`)
+    pendingDelete.value = null
+  }
+
+  const onRowAction = (event, value, row) => {
+    if (value === 'open') {
+      onRowClick(event, row)
+      return
+    }
+    if (value === 'download') {
+      toast.info(`Downloading ${row.name}`, { description: row.size })
+      return
+    }
+    if (value === 'delete') {
+      pendingDelete.value = row
+      deleteOpen.value = true
+      return
+    }
+    toast.info(`${row.name}`, { description: `Object in ${bucketName.value}` })
+  }
+
+  // "Add to files" is a SplitButton: the primary command uploads a file (the
+  // common action); the attached menu offers both "Upload a File" and
+  // "Add a Folder". Actions are keyed by `value` so the primary click and the
+  // menu rows route through one dispatcher.
+  const addToFilesActions = [
+    { label: 'Upload a File', value: 'upload', icon: 'pi pi-upload' },
+    { label: 'Add a Folder', value: 'folder', icon: 'pi pi-folder-plus' }
+  ]
+
+  const runAddAction = (value) => {
+    if (value === 'folder') {
+      toast.info('Add a folder', { description: `New folder in ${bucketName.value}` })
+      return
+    }
+    toast.info('Upload a file', { description: `Upload into ${bucketName.value}` })
+  }
+
+  // Primary segment click → the default (upload) action.
+  const onAddPrimary = () => runAddAction('upload')
+  // Menu row click → route by the selected action's value.
+  const onAddAction = (event, item) => runAddAction(item.value)
 </script>
 
 <template>
   <AppLayout
     active="object-storage"
-    :breadcrumb="[
-      { label: 'Object Storage', href: '/object-storage' },
-      { label: bucketName },
-    ]"
+    :breadcrumb="[{ label: 'Object Storage', href: '/object-storage' }, { label: bucketName }]"
   >
     <main class="flex h-full min-h-0 flex-col">
       <section class="flex min-h-0 flex-col">
@@ -357,25 +368,40 @@ const onAddAction = (event, item) => runAddAction(item.value);
                   </Dropdown.Trigger>
 
                   <Dropdown.Group>
-                    <Dropdown.Option
+                    <Dropdown.Option key="dropdown.option-1"
                       v-if="row.kind === 'folder'"
                       value="open"
                       label="Open"
                     >
-                      <template #left><i class="pi pi-folder-open" aria-hidden="true" /></template>
+                      <template #left
+                        ><i
+                          class="pi pi-folder-open"
+                          aria-hidden="true"
+                      /></template>
                     </Dropdown.Option>
-                    <Dropdown.Option
+                    <Dropdown.Option key="dropdown.option-2"
                       v-else
                       value="download"
                       label="Download"
                     >
-                      <template #left><i class="pi pi-download" aria-hidden="true" /></template>
+                      <template #left
+                        ><i
+                          class="pi pi-download"
+                          aria-hidden="true"
+                      /></template>
                     </Dropdown.Option>
                   </Dropdown.Group>
 
                   <Dropdown.Group>
-                    <Dropdown.Option value="delete" label="Delete">
-                      <template #left><i class="pi pi-trash" aria-hidden="true" /></template>
+                    <Dropdown.Option
+                      value="delete"
+                      label="Delete"
+                    >
+                      <template #left
+                        ><i
+                          class="pi pi-trash"
+                          aria-hidden="true"
+                      /></template>
                     </Dropdown.Option>
                   </Dropdown.Group>
                 </Dropdown>
@@ -405,6 +431,16 @@ const onAddAction = (event, item) => runAddAction(item.value);
           </template>
         </CardBox>
       </section>
+
+      <!-- An object has no "settings or instances" behind it — what it has is every URL
+           already serving it, which is the thing worth naming. -->
+      <DeleteDialog
+        v-model:open="deleteOpen"
+        kind="Object"
+        :name="pendingDelete?.name ?? ''"
+        description="The selected object will be removed from this bucket, and any URL serving it will stop resolving. Check the"
+        @confirm="confirmDelete"
+      />
     </main>
   </AppLayout>
 </template>

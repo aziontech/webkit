@@ -16,7 +16,10 @@
 import { computed, ref } from "vue";
 
 import { useAccounts } from "./accounts.js";
+import { useSampleMode } from "./lib/sample-mode.js";
 import { useOrganizations } from "./organizations.js";
+
+const { accountEmpty } = useSampleMode();
 
 // Workspaces are seeded per account: the key is the account id from
 // accounts.js, so a workspace can never dangle off a tenant that isn't there.
@@ -79,6 +82,11 @@ export function useWorkspaces() {
   // account switches the whole list — a workspace is meaningless outside the
   // account that owns it.
   const workspaces = computed(() => {
+    // THE EMPTY VERSION HAS ONE WORKSPACE (./lib/sample-mode.js) — the default one
+    // every tenant is given, holding nothing. The account-keyed seeds below all
+    // describe workspaces full of workloads, which is the opposite of the version
+    // being shown; an organization's OWN workspaces are equally seeded lists here.
+    if (accountEmpty.value) return [DEFAULT_WORKSPACE];
     const owned = currentOrganization.value?.workspaces;
     if (owned?.length) return owned;
     return seedWorkspaces[currentAccount.value?.id] ?? [DEFAULT_WORKSPACE];

@@ -33,18 +33,17 @@
   // console home rather than back where it started: the scope has changed, and
   // returning to a page still showing the old organization's rows would be a lie.
   import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import HelperText from '@aziontech/webkit/helper-text'
   import InputText from '@aziontech/webkit/input-text'
-  import Label from '@aziontech/webkit/label'
+  import Item from '@aziontech/webkit/item'
+  import Select from '@aziontech/webkit/select'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import { accountInitials } from '../accounts.js'
+  import { useBaseline } from '../lib/forms'
   import {
     additionalDataKeys,
     createOrganization,
@@ -53,10 +52,11 @@
     statusOf,
     useOrganizations
   } from '../organizations.js'
-  import CreationHeader from './ui/CreationHeader.vue'
+  import CreatePage from './ui/CreatePage.vue'
+  import FieldRow from './ui/FieldRow.vue'
   import OrgAvatar from './ui/OrgAvatar.vue'
   import OrgMarkPicker from './ui/OrgMarkPicker.vue'
-  import PageHeading from './ui/PageHeading.vue'
+  import Section from './ui/Section.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -79,6 +79,12 @@
   })
   const errors = reactive({ name: '', workspace: '' })
   const submitting = ref(false)
+
+  // The leave guard's trigger (ui/UnsavedChangesGuard.vue, mounted by CreatePage): dirty
+  // while the form diverges from the state it opened on. `commit` re-snapshots it, and is
+  // called on the way OUT of a successful create — the page's own navigation must not be
+  // stopped by the guard that exists to protect the input that create just consumed.
+  const { dirty, commit } = useBaseline(form)
 
   // Two names the user cannot tell apart in the switcher are two rows they will
   // pick the wrong one from, so a collision with an organization they already
@@ -125,6 +131,7 @@
       toast.success(`${organization.name} created.`, {
         description: `You're now in it, as its owner. ${organization.workspaces[0].name} is ready for your first deploy.`
       })
+      commit() // the create landed — the leave guard stands down
       router.push({ path: '/home', query: { email: userEmail.value } })
     } catch (error) {
       toast.error('Could not create the organization.', {
@@ -138,307 +145,217 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
-    <CreationHeader
-      :breadcrumb="[{ label: 'Organizations' }, { label: 'Create Organization' }]"
-      back-label="Back to console"
-      @back="cancel"
-      @navigate="cancel"
-    />
-
-    <main class="page-enter min-h-0 flex-1 overflow-auto">
-      <form
-        class="flex min-h-full flex-col"
-        aria-labelledby="create-organization-title"
-        novalidate
-        @submit.prevent="submit"
-      >
-        <!-- Scrollable form body: the heading, then ONE element below it — the
-             `<fieldset>` IS the bands wrapper, so it carries the band step and
-             spaces its cards with the band gap (see src/styles/layout.css). -->
-        <div class="layout-form-create layout-boundary flex flex-1 flex-col">
-          <PageHeading
-            title="Create Organization"
-            description="An organization is the outermost thing you work inside: it owns the workspaces, and every resource deployed in them."
-            title-id="create-organization-title"
-          />
-
-          <!-- One flag locks every control while the request is in flight. -->
-          <fieldset
-            class="layout-section-start mx-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
-            :disabled="submitting"
-          >
-            <legend class="sr-only">Create organization</legend>
-
-            <!-- Band: General — the name, and the mark generated from it. -->
-            <CardBox>
-              <template #content>
-                <div
-                  class="grid grid-cols-1 gap-[var(--spacing-lg)] md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
-                >
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-md)]">
-                    <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                      <h2 class="text-heading-xs text-[var(--text-default)]">General</h2>
-                      <p class="text-body-sm text-[var(--text-muted)]">
-                        Name the organization and pick the colour of its mark. The mark itself is
-                        generated from the name, so no two organizations look alike.
-                      </p>
-                    </div>
-
-                    <!-- How the choice will read in the header — the one place
-                         the name and the mark are seen together, every day. -->
-                    <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
-                      <p class="text-overline-sm text-[var(--text-muted)]">In the header</p>
-                      <span
-                        class="inline-flex min-w-0 max-w-[14rem] items-center gap-1.5 self-start rounded-[var(--shape-button)] border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]"
-                      >
-                        <OrgAvatar
-                          :name="previewName"
-                          :accent="form.accent"
-                          size="small"
-                        />
-                        <span
-                          class="min-w-0 truncate text-label-sm font-medium text-[var(--text-default)]"
-                        >
-                          {{ previewName }}
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="flex w-full flex-col gap-[var(--spacing-lg)]">
-                    <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                      <Label
-                        for="organization-name"
-                        required
-                        >Name</Label
-                      >
-                      <InputText
-                        id="organization-name"
-                        v-model="form.name"
-                        size="large"
-                        class="w-full"
-                        placeholder="Acme Inc."
-                        autocomplete="off"
-                        :required="!!errors.name && !form.name.trim()"
-                        :invalid="!!errors.name && !!form.name.trim()"
-                        :aria-describedby="
-                          submitting
-                            ? undefined
-                            : errors.name
-                              ? 'organization-name-error'
-                              : 'organization-name-help'
-                        "
-                        @update:model-value="errors.name = ''"
-                      />
-                      <HelperText
-                        v-if="errors.name && !submitting"
-                        id="organization-name-error"
-                        key="name-error"
-                        :kind="form.name.trim() ? 'invalid' : 'required'"
-                        :label="errors.name"
-                      />
-                      <HelperText
-                        v-else-if="!submitting"
-                        id="organization-name-help"
-                        key="name-help"
-                        label="Usually your company's name. Everyone you invite will see it."
-                      />
-                    </div>
-
-                    <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                      <Label>Mark</Label>
-                      <OrgMarkPicker
-                        v-model="form.accent"
-                        :disabled="submitting"
-                      />
-                    </div>
-                  </div>
-                </div>
+  <CreatePage
+    :breadcrumb="[{ label: 'Organizations' }, { label: 'Create Organization' }]"
+    back-label="Back to console"
+    title="Create Organization"
+    description="An organization is the outermost thing you work inside: it owns the workspaces, and every resource deployed in them."
+    title-id="create-organization-title"
+    :submitting="submitting"
+    :dirty="dirty"
+    save-label="Create organization"
+    @cancel="cancel"
+    @submit="submit"
+  >
+    <Section
+      stacked
+      :divided="false"
+      title="General"
+      hint="The mark is generated from the name, so no two organizations look alike — you only pick its colour."
+    >
+      <CardBox :padded="false">
+        <template #content>
+          <Item.List>
+            <FieldRow
+              title="Name"
+              description="Usually your company's name. Everyone you invite will see it."
+              :message="submitting ? '' : errors.name"
+              :message-kind="form.name.trim() ? 'invalid' : 'required'"
+            >
+              <template #default="{ messageId }">
+                <InputText
+                  v-model="form.name"
+                  size="large"
+                  class="w-full"
+                  aria-label="Name"
+                  placeholder="Acme Inc."
+                  autocomplete="off"
+                  :disabled="submitting"
+                  :required="!!errors.name && !form.name.trim()"
+                  :invalid="!!errors.name && !!form.name.trim()"
+                  :aria-describedby="messageId"
+                  @update:model-value="errors.name = ''"
+                />
               </template>
-            </CardBox>
+            </FieldRow>
 
-            <!-- Band: Owner — stated, not asked. An invitation can never carry
-                 ownership, so an organization's owner is always whoever created
-                 it, and that is the person filling this form. -->
-            <CardBox>
-              <template #content>
-                <div
-                  class="grid grid-cols-1 gap-[var(--spacing-lg)] md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
-                >
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <h2 class="text-heading-xs text-[var(--text-default)]">Owner</h2>
-                    <p class="text-body-sm text-[var(--text-muted)]">
-                      You create it, so you own it — and only an owner can delete an organization.
-                      You can promote other organization users to owner later; invited users can
-                      never be owners.
-                    </p>
-                  </div>
-
-                  <div
-                    class="flex flex-wrap items-center gap-x-[var(--spacing-sm)] gap-y-[var(--spacing-xs)]"
+            <!-- The picker is a swatch row, not a 256px control, so the row stacks
+                 and shows the result underneath: the header chip is the one place
+                 the name and the mark are seen together, every day. -->
+            <FieldRow
+              kind="wide"
+              title="Mark"
+              description="How the organization is identified in the header and the switcher."
+            >
+              <div class="flex flex-col gap-[var(--spacing-md)]">
+                <OrgMarkPicker
+                  v-model="form.accent"
+                  :disabled="submitting"
+                />
+                <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
+                  <p class="text-overline-sm text-[var(--text-muted)]">In the header</p>
+                  <span
+                    class="inline-flex min-w-0 max-w-[14rem] items-center gap-1.5 self-start rounded-[var(--shape-button)] border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]"
                   >
-                    <Avatar
-                      :label="accountInitials(ownerName)"
-                      size="medium"
-                      kind="square"
+                    <OrgAvatar
+                      :name="previewName"
+                      :accent="form.accent"
+                      size="small"
                     />
-                    <span class="flex min-w-0 flex-1 flex-col">
-                      <span class="truncate text-label-sm text-[var(--text-default)]">
-                        {{ ownerName }}
-                      </span>
-                      <span class="truncate text-body-xs text-[var(--text-muted)]">
-                        {{ userEmail }}
-                      </span>
-                    </span>
-                    <Tag
-                      label="Owner"
-                      severity="accent"
-                      size="medium"
-                      icon="pi pi-key"
-                    />
-                    <Tag
-                      :label="status.label"
-                      :severity="status.severity"
-                      size="medium"
-                    />
-                  </div>
-                </div>
-              </template>
-            </CardBox>
-
-            <!-- Band: First workspace. Every organization is created with one, so
-                 there is somewhere to deploy on day one; Groups (which group
-                 workspaces) come later, when there is more than one to group. -->
-            <CardBox>
-              <template #content>
-                <div
-                  class="grid grid-cols-1 gap-[var(--spacing-lg)] md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
-                >
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <h2 class="text-heading-xs text-[var(--text-default)]">First workspace</h2>
-                    <p class="text-body-sm text-[var(--text-muted)]">
-                      A workspace groups the resources of one context — a team, an environment, a
-                      kind of application. You can add more, and group them, once the organization
-                      exists.
-                    </p>
-                  </div>
-
-                  <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                    <Label
-                      for="organization-workspace"
-                      required
-                      >Name</Label
+                    <span
+                      class="min-w-0 truncate text-label-sm font-medium text-[var(--text-default)]"
                     >
-                    <InputText
-                      id="organization-workspace"
-                      v-model="form.workspace"
-                      size="large"
-                      class="w-full"
-                      :placeholder="DEFAULT_WORKSPACE_NAME"
-                      autocomplete="off"
-                      :required="!!errors.workspace"
-                      :aria-describedby="
-                        submitting
-                          ? undefined
-                          : errors.workspace
-                            ? 'organization-workspace-error'
-                            : 'organization-workspace-help'
-                      "
-                      @update:model-value="errors.workspace = ''"
-                    />
-                    <HelperText
-                      v-if="errors.workspace && !submitting"
-                      id="organization-workspace-error"
-                      key="workspace-error"
-                      kind="required"
-                      :label="errors.workspace"
-                    />
-                    <HelperText
-                      v-else-if="!submitting"
-                      id="organization-workspace-help"
-                      key="workspace-help"
-                      label="Where the organization's first workloads and resources will live."
-                    />
-                  </div>
+                      {{ previewName }}
+                    </span>
+                  </span>
                 </div>
+              </div>
+            </FieldRow>
+          </Item.List>
+        </template>
+      </CardBox>
+    </Section>
+
+    <!-- Stated, not asked. An invitation can never carry ownership, so an
+         organization's owner is always whoever created it — the person filling in
+         this form. -->
+    <Section
+      stacked
+      :divided="false"
+      title="Owner"
+      hint="You create it, so you own it — and only an owner can delete an organization. You can promote other organization users to owner later; invited users can never be owners."
+    >
+      <CardBox :padded="false">
+        <template #content>
+          <Item.List>
+            <Item size="small">
+              <Item.Media>
+                <Avatar
+                  :label="accountInitials(ownerName)"
+                  size="medium"
+                  kind="square"
+                />
+              </Item.Media>
+              <Item.Content>
+                <Item.Title>{{ ownerName }}</Item.Title>
+                <Item.Description>{{ userEmail }}</Item.Description>
+              </Item.Content>
+              <Item.Actions class="justify-end">
+                <Tag
+                  label="Owner"
+                  severity="accent"
+                  size="medium"
+                  icon="pi pi-key"
+                />
+                <Tag
+                  :label="status.label"
+                  :severity="status.severity"
+                  size="medium"
+                />
+              </Item.Actions>
+            </Item>
+          </Item.List>
+        </template>
+      </CardBox>
+    </Section>
+
+    <Section
+      stacked
+      :divided="false"
+      title="First workspace"
+      hint="A workspace groups the resources of one context — a team, an environment, a kind of application. You can add more, and group them, once the organization exists."
+    >
+      <CardBox :padded="false">
+        <template #content>
+          <Item.List>
+            <FieldRow
+              title="Name"
+              description="Where the organization's first workloads and resources will live."
+              :message="submitting ? '' : errors.workspace"
+              message-kind="required"
+            >
+              <template #default="{ messageId }">
+                <InputText
+                  v-model="form.workspace"
+                  size="large"
+                  class="w-full"
+                  aria-label="Workspace name"
+                  :placeholder="DEFAULT_WORKSPACE_NAME"
+                  autocomplete="off"
+                  :disabled="submitting"
+                  :required="!!errors.workspace"
+                  :aria-describedby="messageId"
+                  @update:model-value="errors.workspace = ''"
+                />
               </template>
-            </CardBox>
+            </FieldRow>
+          </Item.List>
+        </template>
+      </CardBox>
+    </Section>
 
-            <!-- Band: additional data — the generic key–value model, one field per
-                 key, each offering only that key's accepted values. Optional; an
-                 unanswered key is absent rather than present-and-empty. -->
-            <CardBox>
-              <template #content>
-                <div
-                  class="grid grid-cols-1 gap-[var(--spacing-lg)] md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
-                >
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <h2 class="text-heading-xs text-[var(--text-default)]">
-                      About the organization
-                    </h2>
-                    <p class="text-body-sm text-[var(--text-muted)]">
-                      Optional. Stored with the organization as additional data, and used to shape
-                      what we recommend inside it.
-                    </p>
-                  </div>
-
-                  <div class="flex w-full flex-col gap-[var(--spacing-lg)]">
-                    <!-- No :disabled here, deliberately — the enclosing
-                         `<fieldset :disabled>` already blocks the trigger (it is
-                         a native button, so an ancestor disabled fieldset covers
-                         it), exactly as it covers the InputText fields above.
-                         Passing the prop as well would make FieldSelect mint its
-                         own helper line — a lock icon over "This field is
-                         locked." — under all four selects for the 900ms of the
-                         request: layout shift, and a claim of a permanent lock
-                         for what is a transient wait the Create button's
-                         :loading already states. -->
-                    <FieldSelect
-                      v-for="entry in additionalDataKeys"
-                      :key="entry.key"
-                      v-model="form.additionalData[entry.key]"
-                      :label="entry.label"
-                      :options="entry.values"
-                      :input-id="`organization-${entry.key}`"
-                      placeholder="Select an option"
-                      size="large"
-                    />
-                  </div>
-                </div>
-              </template>
-            </CardBox>
-          </fieldset>
-        </div>
-
-        <!-- Sticky action bar, as on every creation page. The scope stays locked
-             while the request is in flight. -->
-        <footer
-          class="sticky bottom-0 z-10 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
-        >
-          <div
-            class="layout-form-create layout-boundary-inline flex items-center justify-end gap-[var(--spacing-sm)] py-[var(--spacing-md)]"
-          >
-            <Button
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-              :disabled="submitting"
-              @click="cancel"
-            />
-            <!-- webkit Button renders a native type="button" and does not forward
-                 a type prop, so drive submit from its click event. -->
-            <Button
-              label="Create organization"
-              kind="primary"
-              size="medium"
-              :loading="submitting"
-              @click="submit"
-            />
-          </div>
-        </footer>
-      </form>
-    </main>
-  </div>
+    <!-- The generic key–value model, one row per key, each offering only that key's
+         accepted values. Every one is optional and none carries a default worth
+         showing at rest, so the whole band is the disclosure. -->
+    <Section
+      stacked
+      collapsible
+      :divided="false"
+      icon="pi pi-cog"
+      title="Advanced"
+      hint="Stored with the organization as additional data, and used to shape what we recommend inside it."
+    >
+      <CardBox :padded="false">
+        <template #content>
+          <Item.List>
+            <FieldRow
+              v-for="entry in additionalDataKeys"
+              :key="entry.key"
+              :title="entry.label"
+            >
+              <!-- No :disabled here, deliberately — the enclosing
+                   `<fieldset :disabled>` already blocks the trigger (a native
+                   button, so an ancestor disabled fieldset covers it). Passing the
+                   prop as well would make Select mint its own "This field is
+                   locked." helper line under all four for the 900ms of the request:
+                   layout shift, and a claim of a permanent lock for what is a
+                   transient wait the Create button's :loading already states. -->
+              <Select
+                v-model="form.additionalData[entry.key]"
+                size="large"
+                placeholder="Select an option"
+                :display-value="
+                  (value) => entry.values.find((option) => option.value === value)?.label ?? ''
+                "
+              >
+                <Select.Trigger
+                  class="w-full"
+                  :aria-label="entry.label"
+                />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in entry.values"
+                    :key="String(option.value)"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </FieldRow>
+          </Item.List>
+        </template>
+      </CardBox>
+    </Section>
+  </CreatePage>
 </template>

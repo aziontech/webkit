@@ -17,8 +17,8 @@
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import Message from '@aziontech/webkit/message'
-  import Table from '@aziontech/webkit/table'
   import TabView from '@aziontech/webkit/tab-view'
+  import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -604,12 +604,12 @@
                       size="medium"
                     />
                   </div>
-                  <Message
+                  <Message key="message-3"
                     v-else-if="focused"
                     severity="info"
                     label="This resource has no labels."
                   />
-                  <Message
+                  <Message key="message-4"
                     v-else
                     severity="info"
                     label="Select a single resource to view its labels."

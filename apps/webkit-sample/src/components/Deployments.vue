@@ -47,7 +47,7 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { consoleDeployRows, deployById, deployRows } from '../lib/azion-deploys'
+  import { consoleDeployRows, deployRows } from '../lib/azion-deploys'
   import { DEPLOYMENT_HISTORY } from '../lib/deployment-history'
   import {
     azionDefaultStrategy,
@@ -57,19 +57,29 @@
     strategyTypeLabel,
     workspaceStrategies
   } from '../lib/deployment-strategies'
-  import { deploymentFilterFields, resourceMeta } from '../lib/deployments'
+  import { deploymentFilterFields } from '../lib/deployments'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
   import { useListFilters } from '../lib/list-state'
+  import { useSampleMode } from '../lib/sample-mode'
   import { tenancyRows } from '../lib/tenancy-scope'
+  import { productFirstUse } from '../product-empty-states'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
   import DeploymentSettingsDrawer from './ui/DeploymentSettingsDrawer.vue'
   import DeploymentsTable from './ui/DeploymentsTable.vue'
   import DeployResourceDrawer from './ui/DeployResourceDrawer.vue'
   import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
   import PageTabs from './ui/PageTabs.vue'
-  import WorkloadDeploymentDrawer from './ui/WorkloadDeploymentDrawer.vue'
+  import ProductFirstUse from './ui/ProductFirstUse.vue'
+
+  // The sample's EMPTY version: a deployment is the record of having shipped, so an
+  // account that has shipped nothing has no history AND no strategies — which is why the
+  // empty branch drops the tab bar too, rather than offering two tabs over nothing
+  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
+  const { accountEmpty } = useSampleMode()
+  const firstUse = productFirstUse('deployments')
 
   const route = useRoute()
   const router = useRouter()
@@ -96,7 +106,7 @@
 
   // ── All Deployments ────────────────────────────────────────────────────────
   // The statuses, resource types and environments come from src/lib/deployments.js
-  // — the same vocabulary the workload's tables and the details drawer read, so a
+  // — the same vocabulary the workload's tables and the deployment page read, so a
   // status or a product tag can never mean two things in two places.
   //
   // `deployedAt` is the real instant — the date filter compares it and `date`
@@ -110,10 +120,10 @@
   // The seeded population, the part a tenancy scope owns.
   const seededDeployments = computed(() =>
     [
-      // The deployments that have a PAGE behind them: their whole `azion deploy`
-      // pipeline is recorded — which step failed, which never ran — so a row of
-      // theirs opens `/deployments/:id` instead of the details drawer (see
-      // `openDeployment`). They are mapped by the module that owns those records
+      // The deployments whose whole `azion deploy` pipeline is recorded — which step
+      // failed, which never ran. Every row opens `/deployments/:id`; these are the
+      // ones that arrive there with a real pipeline to show (see `openDeployment`).
+      // They are mapped by the module that owns those records
       // (src/lib/azion-deploys.js) and satisfy the same row contract as every row
       // beside them: the table cannot tell them apart.
       ...deployRows(),
@@ -282,28 +292,29 @@
   // A deployment row opens the read-only details drawer — the same one the
   // workload detail page uses, so a deployment reads identically from either
   // entry point.
-  const drawerOpen = ref(false)
-  const selectedDeployment = ref(null)
-  const openDeployment = (event, row) => {
-    // A deployment whose pipeline is recorded has its own page: the six steps of
-    // its `azion deploy`, the step that broke and the ones that never ran are
-    // things you link to, reload and come back to — so they live at a URL rather
-    // than in a drawer that closes with the Escape key. Everything else reads in
-    // the drawer, which is all a row-shaped deployment needs.
-    if (deployById(row.id)) {
-      router.push({ path: `/deployments/${row.id}`, query: { email: userEmail.value } })
-      return
-    }
-
-    // The drawer reads each resource under its own field name; a deployment here
-    // targets one resource, so only that field is set and the drawer renders the
-    // single block (a workload deployment still carries all three).
-    selectedDeployment.value = {
-      ...row,
-      [resourceMeta(row.resourceType).drawerField]: row.resourceName
-    }
-    drawerOpen.value = true
-  }
+  // Every deployment opens its PAGE, whatever kind of record it is. It used to
+  // split: the runs whose pipeline is recorded went to `/deployments/:id` and every
+  // other row opened a read-only drawer — so the same click gave two different
+  // depths of answer, and the shallower one closed on Escape and could not be linked
+  // to or reloaded. A deployment is the thing people quote in a support thread, so it
+  // gets a URL. The page resolves both families (lib/azion-deploys.js's
+  // `deployPageRecord`) and renders the fields each one actually has.
+  //
+  // The VERSION id is the key, not `row.id`: it is the column this table shows and
+  // the string a person copies, and for a recorded run it is the same value as its
+  // own id — so one route covers both.
+  const openDeployment = (event, row) =>
+    router.push({
+      path: `/deployments/${row.versionId}`,
+      // The workload rides along for the same reason it does from a workload page: a
+      // workload this sample does not seed has a derived history, and a row of it can
+      // reach this list through a session deploy.
+      query: {
+        email: userEmail.value,
+        workload: row.workloadId,
+        workloadName: row.workloadName
+      }
+    })
 
   const onDeploymentAction = (event, value, row) => {
     if (value === 'details') {
@@ -317,11 +328,24 @@
     toast.info(`Promoting version ${row.versionId} to Production.`)
   }
 
+  // A Deployment setting is what releases bind to, so deleting one is felt by every
+  // resource pinned to it — the menu click only arms the confirmation.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    // Azion Default is platform-owned; the menu does not offer this on its row, so
+    // reaching here means the guard in the store is the one doing the work.
+    if (removeStrategy(row.id)) toast.success(`${row.name} deleted`)
+    pendingDelete.value = null
+  }
+
   const onSettingAction = (event, value, row) => {
     if (value === 'delete') {
-      // Azion Default is platform-owned; the menu does not offer this on its row, so
-      // reaching here means the guard in the store is the one doing the work.
-      if (removeStrategy(row.id)) toast.success(`${row.name} deleted`)
+      pendingDelete.value = row
+      deleteOpen.value = true
       return
     }
     const copy = {
@@ -348,7 +372,27 @@
            right-aligned: they act on the tab's subject, so they change with the tab
            while their position never does. Below it, the tab's CONTROLS row (search +
            selectors), then the table. -->
+      <!-- FIRST USE, IN HOME'S CONTAINER: the same centred box every other module's
+           empty version uses, at the FOCUSED measure (the list's own measure is the data
+           one, 1620px, which a lead and three rows would float in). `:padded="false"`
+           means this page carries its own boundary, so the container brings
+           `layout-boundary` with it. -->
+      <!-- The scroll region is a flex COLUMN here, unlike the populated branch's block
+           one: `my-auto` on the box inside it can only centre when its parent has free
+           space to distribute, and a block parent has none to give. -->
+      <section
+        v-if="accountEmpty"
+        class="flex min-h-0 flex-1 flex-col overflow-auto"
+      >
+        <div
+          class="layout-column-focused layout-boundary my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+        >
+          <ProductFirstUse :product="firstUse" />
+        </div>
+      </section>
+
       <PageTabs
+        v-else
         v-model:value="activeTab"
         :tabs="tabs"
       >
@@ -411,11 +455,16 @@
            --layout-group-gap. Here the page is ONE section — the Message, whichever
            tab's controls row is showing, and the table are all parts of one band, so
            they sit at the group step with nothing at the section step. -->
-      <section class="min-h-0 flex-1 overflow-auto">
+      <section
+        v-if="!accountEmpty"
+        class="min-h-0 flex-1 overflow-auto"
+      >
         <div class="layout-column layout-boundary flex min-w-0 flex-col">
           <!-- The page's parent section. It holds ONE section here: the Message, the
                controls row and the table are all parts of the same band. -->
-          <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+          <section
+            class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+          >
             <!-- ONE section, at --layout-group-gap: the Message frames the list, the
                  controls row narrows it, the table is what both are about. -->
             <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
@@ -658,12 +707,6 @@
       </section>
     </main>
 
-    <!-- Read-only deployment details, opened from a row or its actions menu. -->
-    <WorkloadDeploymentDrawer
-      v-model:open="drawerOpen"
-      :deployment="selectedDeployment"
-    />
-
     <!-- The module-level entry into the ONE deploy interaction: nothing preselected,
          so it asks for the workload and the application a resource page already knows.
          Same drawer, same request body, same run. -->
@@ -677,6 +720,17 @@
     <DeploymentSettingsDrawer
       v-model:open="settingsOpen"
       @create="onStrategyCreated"
+    />
+
+    <!-- The generic line would read "settings … settings" here, and it would also
+         understate the blast radius: what goes with a Deployment setting is every
+         release bound to it. -->
+    <DeleteDialog
+      v-model:open="deleteOpen"
+      kind="Deployment setting"
+      :name="pendingDelete?.name ?? ''"
+      description="The selected Deployment setting will be deleted, along with every release bound to it. Check the"
+      @confirm="confirmDelete"
     />
   </AppLayout>
 </template>

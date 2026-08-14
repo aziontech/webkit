@@ -24,15 +24,27 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import { connectorMeta, CONNECTORS, connectorTypeOptions } from '../lib/connectors'
+  import { createResourcePath, resourceSettingsPath } from '../lib/create-resources'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
   import { useListFilters } from '../lib/list-state'
+  import { useSampleMode } from '../lib/sample-mode'
   import { tenancyRows } from '../lib/tenancy-scope'
+  import { productFirstUse } from '../product-empty-states'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
   import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
+  import ProductFirstUse from './ui/ProductFirstUse.vue'
+
+  // The sample's EMPTY version: this module before it owns anything. The same block the
+  // /empty-states gallery reviews, rendered in the module's own page
+  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
+  const { accountEmpty } = useSampleMode()
+  const firstUse = productFirstUse('connectors')
 
   // This page holds its own copy of the seed because it deletes rows; mutating the
   // shared array would leak that into every surface reading it.
@@ -94,13 +106,47 @@
     loading: tenancyReloading
   } = useListFilters(filterFields, scopedConnectors, { pageSize: 8 })
 
+  // Creating: the module's own create page. Its fields come from this resource's
+  // POST body in the Azion v4 API (../lib/create-resources.js), so the form asks for
+  // what the platform actually takes. The email rides along the way every route in this
+  // prototype carries it.
+  const route = useRoute()
+  const router = useRouter()
+
   const create = () =>
-    toast.info('Connector', { description: 'Creating a connector is disabled in the demo.' })
+    router.push({
+      path: createResourcePath('connectors'),
+      query: { email: route.query.email || undefined }
+    })
+
+  // Deleting is the one row action here with no undo, so the menu click only ARMS it:
+  // the row is held until the dialog has been given its name back.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    connectors.value = connectors.value.filter((item) => item.id !== row.id)
+    toast.success(`${row.name} deleted.`)
+    pendingDelete.value = null
+  }
 
   const onRowAction = (event, action, row) => {
+    // EDIT OPENS THE SETTINGS PAGE. It used to raise "edit is disabled in the demo", which
+    // left a reader able to create a connectors and unable to change one. The page is
+    // generated from the same fields as the create page (../lib/create-resources.js via
+    // ./ResourceSettings.vue), and the row hands over the name it already knows.
+    if (action === 'edit') {
+      router.push({
+        path: resourceSettingsPath('connectors', row.id),
+        query: { name: row.name, email: route.query.email || undefined }
+      })
+      return
+    }
     if (action === 'delete') {
-      connectors.value = connectors.value.filter((item) => item.id !== row.id)
-      toast.success(`${row.name} deleted.`)
+      pendingDelete.value = row
+      deleteOpen.value = true
       return
     }
     toast.info(row.name, { description: `${action} is disabled in the demo.` })
@@ -115,11 +161,40 @@
     active="connectors"
     :breadcrumb="[{ label: 'Connectors' }]"
   >
-    <main class="layout-column flex min-h-full flex-col">
+    <main
+      class="flex min-h-full flex-col"
+      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+    >
       <!-- The page's parent section. A module list opens straight on it (no
            PageHeading — the module name is the breadcrumb crumb), so the
            `:first-child` rule zeroes its step and the boundary is its top space. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <!-- FIRST USE, IN HOME'S CONTAINER.
+           The same box the first access uses on /home (./HomeEmptyState.vue) and the
+           /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
+           viewport rather than hanging from the top edge. This screen and that one are the
+           same KIND of screen — a short block answering "there is nothing here yet" — and a
+           short block pinned to the top with a void under it reads as content that failed
+           to load. The section step is gone with it: a centred box measures from the middle,
+           and a top margin would only pull it off centre.
+           CENTRED WITH AUTO MARGINS, not `min-h-full justify-center`. That pair looks
+           right and does nothing: `min-height: 100%` resolves against a parent whose own
+           height is `auto` (main is `min-h-full`, not `h-full`), so the box stayed at
+           content height and `justify-center` then centred the content inside itself — a
+           no-op. `my-auto` asks the flex parent to split its free space above and below
+           this one item, which is the definition of centred; and when the block is TALLER
+           than the viewport the auto margins collapse to 0 instead of clipping its top,
+           which is what `flex-1 justify-center` would have done. -->
+      <div
+        v-if="accountEmpty"
+        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+      >
+        <ProductFirstUse :product="firstUse" />
+      </div>
+
+      <section
+        v-else
+        class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+      >
         <!-- ONE band: the controls, the filters and the rows they narrow. -->
         <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
           <ControlsHeader v-if="scopedConnectors.length">
@@ -307,6 +382,13 @@
           </section>
         </section>
       </section>
+
+      <DeleteDialog
+        v-model:open="deleteOpen"
+        kind="Connector"
+        :name="pendingDelete?.name ?? ''"
+        @confirm="confirmDelete"
+      />
     </main>
   </AppLayout>
 </template>

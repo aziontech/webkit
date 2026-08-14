@@ -4,16 +4,14 @@
   // breadcrumb — the /navigation skill). Its body is a full-bleed tab bar with two
   // destinations:
   //
-  //   Main Settings — the zone's configuration as ItemGroup sections (the /form
-  //                   Approach A: a section-titled flush CardBox whose body is an
-  //                   Item.List; Item.Title is the field label, the control lives in
-  //                   Item.Actions). Each EDITABLE group (General, Domain, DNSSEC,
-  //                   Status) owns its OWN footer Save and commits INDEPENDENTLY
-  //                   off its own flag + JSON baseline dirty check (the /form
-  //                   "ItemGroup with independent saves" pattern + /usability
-  //                   Pattern 1 lock). The nameservers and DNSSEC key values are
-  //                   read-only copy-out fields — an InputText + a copy IconButton
-  //                   as an InputGroup addon — so that section carries no Save.
+  //   Main Settings — the zone's configuration as Sections over flush cards of FieldRows,
+  //                   the same anatomy every settings surface in the console uses, and
+  //                   committed as ONE PAGE from the shared bar (ui/SettingsSaveBar.vue).
+  //                   It used to give each editable band its own footer Save; see the
+  //                   note above `settings` in the script for why that went away. The
+  //                   nameservers and the DNSSEC key material are read-only copy-out rows
+  //                   — an InputText + a CopyButton as an InputGroup addon — so they have
+  //                   nothing to commit.
   //   Records       — a data-driven <Table> of the zone's DNS records with the
   //                   tab's "Record" create action trailing on the tab bar; the
   //                   Create Record drawer appends new rows.
@@ -23,7 +21,6 @@
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
-  import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroup from '@aziontech/webkit/input-group'
   import InputText from '@aziontech/webkit/input-text'
@@ -37,13 +34,17 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import { NAMESERVERS, POLICY_TYPES, policyLabel, RECORD_TYPES } from '../lib/edge-dns'
+  import { saveGroup, useBaseline } from '../lib/forms'
   import { useListFilters } from '../lib/list-state'
   import CreateRecordDrawer from './CreateRecordDrawer.vue'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
+  import FieldRow from './ui/FieldRow.vue'
   import FilterBar from './ui/FilterBar.vue'
   import PageTabs from './ui/PageTabs.vue'
-  import SectionHeading from './ui/SectionHeading.vue'
+  import Section from './ui/Section.vue'
+  import SettingsSaveBar from './ui/SettingsSaveBar.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -54,9 +55,6 @@
     name: route.query.name || 'test',
     domain: route.query.domain || 'edgeflow.com'
   }
-
-
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   // Active tab lives in the URL (?tab=) so it survives reload and is linkable.
   const tabs = [
@@ -69,100 +67,89 @@
     set: (value) => router.replace({ query: { ...route.query, tab: value } })
   })
 
-  // ── Main Settings — independent saves per group ───────────────────────────
-  // Each editable group keeps its own reactive state + a JSON baseline; `*Dirty`
-  // is true only while the live values diverge from the saved baseline, so its
-  // footer Save stays disabled until the group is actually edited. Saving commits
-  // the new baseline, disabling Save again. The nameservers and DNSSEC key values
-  // are read-only, so they carry no state and no Save.
+  // ── Main Settings — ONE page, ONE commit ──────────────────────────────────
+  //
+  // The zone's four editable bands used to own four independent saves: a footer Save per
+  // card, each with its own submitting flag and its own baseline. That is the shape this
+  // console has now dropped everywhere. A zone's name, its domain, its DNSSEC switch and
+  // its Active switch are one record, and four footers asked the reader to notice which
+  // one belonged to the field they just changed — then to press two of them when they
+  // changed something in each, and left the page with no single answer to "is what I see
+  // what is stored".
+  //
+  // So there is ONE editable object, ONE baseline, ONE `saving` flag and ONE bar (the
+  // shared ui/SettingsSaveBar.vue, which mounts on the first real edit). The nameservers
+  // and the DNSSEC key material stay read-only copy-out bands: they carry no state, and
+  // they are not what the bar commits.
   const errors = reactive({ name: '', domain: '' })
 
-  // Group 1 — General (Name).
-  const general = reactive({ name: zone.name })
-  const savingGeneral = ref(false)
-  const generalBaseline = ref(JSON.stringify(general))
-  const generalDirty = computed(() => JSON.stringify(general) !== generalBaseline.value)
+  const settings = reactive({
+    name: zone.name,
+    domain: zone.domain,
+    dnssec: true,
+    active: true
+  })
+  const saving = ref(false)
+  const { dirty, commit } = useBaseline(settings)
 
-  // Group 2 — Domain (Domain Name).
-  const domainForm = reactive({ domain: zone.domain })
-  const savingDomain = ref(false)
-  const domainBaseline = ref(JSON.stringify(domainForm))
-  const domainDirty = computed(() => JSON.stringify(domainForm) !== domainBaseline.value)
+  // `useBaseline` reports dirtiness but does not hand the snapshot back, so the page keeps
+  // its own copy — that copy is what Discard restores, and it is the LAST SAVED state
+  // rather than the zone's opening values.
+  const snapshot = ref(JSON.parse(JSON.stringify(settings)))
 
-  // Group 3 — DNSSEC (enablement toggle; the key material below is read-only).
-  const dnssecForm = reactive({ enabled: true })
-  const savingDnssec = ref(false)
-  const dnssecBaseline = ref(JSON.stringify(dnssecForm))
-  const dnssecDirty = computed(() => JSON.stringify(dnssecForm) !== dnssecBaseline.value)
-
-  // DNSSEC key material — generated by Edge DNS, copied out to the domain provider.
-  const dnssec = {
-    keyTag: '34505',
-    algorithm: '13 (ECDSA Curve P-256 with SHA-256)',
-    digestType: '2 (SHA-256)',
-    digest: '8A9E1F2C3B4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F'
-  }
-
-  // Group 4 — Status (Active).
-  const statusForm = reactive({ active: true })
-  const savingStatus = ref(false)
-  const statusBaseline = ref(JSON.stringify(statusForm))
-  const statusDirty = computed(() => JSON.stringify(statusForm) !== statusBaseline.value)
-
-  // Shared independent-save helper: guard re-entrancy, validate (optional), lock
-  // off the group's flag, commit its baseline on success, release in finally.
-  const saveGroup = async (flag, message, commit, validateFn) => {
-    if (flag.value) return // per-group re-entrancy lock
-    if (validateFn && !validateFn()) return
-    flag.value = true
-    try {
-      await sleep(900)
-      commit()
-      toast.success(message)
-    } catch (error) {
-      toast.error('Could not save the settings.', {
-        description: error?.message ?? 'Check your connection and try again.'
-      })
-    } finally {
-      flag.value = false // release on success AND failure
+  // DNSSEC key material — generated by Edge DNS, copied out to the domain provider. A
+  // LIST rather than four hand-written rows: every one of them is the same row (a name, a
+  // line of guidance, a read-only value with a copy button), and four copies of it drift.
+  const dnssecKeys = [
+    {
+      label: 'Key Tag',
+      value: '34505',
+      description:
+        'Unique identifier for the DNSSEC key used to sign your zone. Use this value with your domain provider.'
+    },
+    {
+      label: 'Algorithm',
+      value: '13 (ECDSA Curve P-256 with SHA-256)',
+      description: 'Specifies the algorithm used to generate the DNSSEC key.'
+    },
+    {
+      label: 'Digest Type',
+      value: '2 (SHA-256)',
+      description: 'Indicates the hash function used for the DNSSEC digest.'
+    },
+    {
+      label: 'Digest',
+      value: '8A9E1F2C3B4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F',
+      description:
+        'Cryptographic hash of the public key for DNSSEC validation. Provide this to your provider.'
     }
+  ]
+
+  // Validation runs on SUBMIT only, and on every field the page commits — one press has
+  // to report everything that would stop the save, not the first thing it hits.
+  const validate = () => {
+    errors.name = settings.name.trim() ? '' : 'This field is required.'
+    errors.domain = settings.domain.trim() ? '' : 'This field is required.'
+    return !errors.name && !errors.domain
   }
 
-  const saveGeneral = () =>
-    saveGroup(
-      savingGeneral,
-      'General settings saved.',
-      () => {
-        generalBaseline.value = JSON.stringify(general)
-      },
-      () => {
-        errors.name = general.name.trim() ? '' : 'This field is required.'
-        return !errors.name
-      }
-    )
-
-  const saveDomain = () =>
-    saveGroup(
-      savingDomain,
-      'Domain saved.',
-      () => {
-        domainBaseline.value = JSON.stringify(domainForm)
-      },
-      () => {
-        errors.domain = domainForm.domain.trim() ? '' : 'This field is required.'
-        return !errors.domain
-      }
-    )
-
-  const saveDnssec = () =>
-    saveGroup(savingDnssec, 'DNSSEC settings saved.', () => {
-      dnssecBaseline.value = JSON.stringify(dnssecForm)
+  const save = () => {
+    if (!validate()) return
+    saveGroup(saving, 'Zone settings saved.', () => {
+      commit()
+      snapshot.value = JSON.parse(JSON.stringify(settings))
     })
+  }
 
-  const saveStatus = () =>
-    saveGroup(savingStatus, 'Status saved.', () => {
-      statusBaseline.value = JSON.stringify(statusForm)
-    })
+  // Discard restores the last saved snapshot in one step — the way back a page-level commit
+  // owes the reader, who otherwise has to undo each field by hand and hope the bar goes
+  // away. It also clears the messages: a required prompt was about a value that no longer
+  // exists.
+  const discard = () => {
+    Object.assign(settings, JSON.parse(JSON.stringify(snapshot.value)))
+    errors.name = ''
+    errors.domain = ''
+  }
 
   // ── Records tab ───────────────────────────────────────────────────────────
   const records = ref([
@@ -231,10 +218,23 @@
     records.value = [record, ...records.value]
   }
 
+  // A record deletion changes where the domain resolves, so it goes through the same
+  // confirmation the resource lists use: the record's name typed back.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    records.value = records.value.filter((record) => record.id !== row.id)
+    toast.success(`Record "${row.name}" deleted.`)
+    pendingDelete.value = null
+  }
+
   const onRecordAction = (event, value, row) => {
     if (value === 'delete') {
-      records.value = records.value.filter((record) => record.id !== row.id)
-      toast.success(`Record "${row.name}" deleted.`)
+      pendingDelete.value = row
+      deleteOpen.value = true
       return
     }
     toast.info(`Editing ${row.name}`, { description: `Record ID ${row.id}` })
@@ -271,11 +271,12 @@
         </template>
       </PageTabs>
 
-      <!-- Main Settings — ItemGroup sections, each editable group with its own
-           independent Save. Only this region scrolls. -->
+      <!-- Main Settings — Sections over flush cards of FieldRows, committed as one page.
+           Only this region scrolls, and it is a flex COLUMN so the save bar below can pin
+           itself to the bottom of the visible area (see the bar at the end of the form). -->
       <section
         v-if="activeTab === 'main-settings'"
-        class="min-h-0 flex-1 overflow-auto"
+        class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col overflow-auto"
       >
         <!-- The FORM measure, not the DATA one the Records tab takes: this band is a
              single stacked column of label-plus-control rows, so past ~1200px the extra
@@ -283,432 +284,237 @@
              field it names. Per layout.css the unit that picks a measure is the BAND,
              not the file — the same split Main Settings and Build make inside
              ApplicationDetail. -->
-        <div class="layout-column-form layout-boundary flex min-w-0 flex-col">
-          <!-- The tab's parent section: it spaces the groups inside it at
-               --layout-section-gap, so no group restates the step (layout.css: the
-               boundary owns the top space, the parent owns the space between). -->
-          <section
-            class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
-          >
-            <!-- Group: General (own Save) -->
-            <form
-              class="flex flex-col gap-[var(--layout-group-gap)]"
-              aria-label="General settings"
-              novalidate
-              @submit.prevent="saveGeneral"
+        <!-- ONE form for the tab. Every band below edits the same zone record, so one
+             submit commits all of them and the shared bar at the end of this form is the
+             only Save on screen (see the note in the script). The read-only bands sit
+             inside it too — they are part of the same page, they just have nothing to
+             commit.
+             `min-h-full` so the bar lands at the bottom of the screen on a short page
+             instead of floating just under the last card. -->
+        <form
+          class="flex min-h-full min-w-0 flex-col"
+          aria-label="Zone settings"
+          novalidate
+          @submit.prevent="save"
+        >
+          <!-- The FORM measure, not the DATA one the Records tab takes: this band is a
+               single stacked column of label-plus-control rows, so past ~1200px the extra
+               width lands inside the controls and leaves each label a head-turn from the
+               field it names. Per layout.css the unit that picks a measure is the BAND,
+               not the file — the same split Main Settings and Build make inside
+               ApplicationDetail. -->
+          <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
+            <!-- The tab's parent section: it spaces the groups inside it at
+                 --layout-section-gap, so no group restates the step (layout.css: the
+                 boundary owns the top space, the parent owns the space between). -->
+            <section
+              class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
             >
-              <SectionHeading
-                title="General"
-                anchor
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <fieldset
-                    class="m-0 flex min-w-0 flex-col border-0 p-0"
-                    :disabled="savingGeneral"
-                  >
-                    <legend class="sr-only">General</legend>
-                    <Item.List>
-                      <Item
-                        size="small"
-                        class="items-start"
-                      >
-                        <Item.Content>
-                          <Item.Title>Name</Item.Title>
-                          <Item.Description>
-                            Give a unique and descriptive name to identify your zone.
-                          </Item.Description>
-                        </Item.Content>
-                        <Item.Actions class="layout-field-control">
-                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+              <!-- One flag locks every editable control while the commit is in flight. -->
+              <fieldset
+                class="m-0 flex min-w-0 flex-col border-0 p-0"
+                :disabled="saving"
+              >
+                <legend class="sr-only">Zone settings</legend>
+
+                <Section
+                  stacked
+                  anchor
+                  :divided="false"
+                  title="General"
+                  hint="How this zone is identified across the console."
+                >
+                  <CardBox :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <FieldRow
+                          title="Name"
+                          description="Give a unique and descriptive name to identify your zone."
+                          :message="errors.name"
+                          message-kind="required"
+                        >
+                          <template #default="{ messageId }">
                             <InputText
-                              v-model="general.name"
+                              v-model="settings.name"
                               size="large"
                               class="w-full"
                               aria-label="Name"
-                              :disabled="savingGeneral"
+                              autocomplete="off"
                               :required="!!errors.name"
-                              :aria-describedby="errors.name ? 'zone-name-error' : undefined"
+                              :aria-describedby="messageId"
+                              :disabled="saving"
                               @update:model-value="errors.name = ''"
                             />
-                            <HelperText
-                              v-if="errors.name"
-                              id="zone-name-error"
-                              kind="required"
-                              :label="errors.name"
-                            />
-                          </div>
-                        </Item.Actions>
-                      </Item>
-                    </Item.List>
-                  </fieldset>
-                </template>
-                <template #footer>
-                  <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
-                    <Button
-                      label="Save"
-                      kind="secondary"
-                      size="medium"
-                      :loading="savingGeneral"
-                      :disabled="!generalDirty"
-                      @click="saveGeneral"
-                    />
-                  </div>
-                </template>
-              </CardBox>
-            </form>
+                          </template>
+                        </FieldRow>
 
-            <!-- Group: Domain (own Save) -->
-            <form
-              class="flex flex-col gap-[var(--layout-group-gap)]"
-              aria-label="Domain settings"
-              novalidate
-              @submit.prevent="saveDomain"
-            >
-              <SectionHeading
-                title="Domain"
-                anchor
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <fieldset
-                    class="m-0 flex min-w-0 flex-col border-0 p-0"
-                    :disabled="savingDomain"
-                  >
-                    <legend class="sr-only">Domain</legend>
-                    <Item.List>
-                      <Item
-                        size="small"
-                        class="items-start"
-                      >
-                        <Item.Content>
-                          <Item.Title>Domain Name</Item.Title>
-                          <Item.Description>
-                            Provide the domain name you want to host. Example: mydomain.com.
-                          </Item.Description>
-                        </Item.Content>
-                        <Item.Actions class="layout-field-control">
-                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                        <FieldRow
+                          title="Domain Name"
+                          description="Provide the domain name you want to host. Example: mydomain.com."
+                          :message="errors.domain"
+                          message-kind="required"
+                        >
+                          <template #default="{ messageId }">
                             <InputText
-                              v-model="domainForm.domain"
+                              v-model="settings.domain"
                               size="large"
                               class="w-full"
                               aria-label="Domain Name"
-                              :disabled="savingDomain"
+                              autocomplete="off"
                               :required="!!errors.domain"
-                              :aria-describedby="errors.domain ? 'zone-domain-error' : undefined"
+                              :aria-describedby="messageId"
+                              :disabled="saving"
                               @update:model-value="errors.domain = ''"
                             />
-                            <HelperText
-                              v-if="errors.domain"
-                              id="zone-domain-error"
-                              kind="required"
-                              :label="errors.domain"
-                            />
+                          </template>
+                        </FieldRow>
+                      </Item.List>
+                    </template>
+                  </CardBox>
+                </Section>
+
+                <!-- Read-only copy-out. No control the reader can change, so nothing here
+                     reaches the bar; each value is an InputText with a copy button as an
+                     InputGroup addon. -->
+                <Section
+                  stacked
+                  anchor
+                  :divided="false"
+                  title="Configure your Nameserver"
+                  hint="Set Azion Edge DNS as the authoritative DNS server for the domain."
+                >
+                  <CardBox :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <FieldRow
+                          title="Nameservers"
+                          description="Set Azion Edge DNS as the authoritative DNS server for a domain by copying the nameservers values."
+                          message="Add the nameservers in your domain provider."
+                        >
+                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                            <InputGroup
+                              v-for="(ns, index) in NAMESERVERS"
+                              :key="ns"
+                            >
+                              <InputText
+                                :model-value="ns"
+                                size="large"
+                                class="flex-1 font-code"
+                                :aria-label="`Nameserver ${index + 1}`"
+                                readonly
+                              />
+                              <CopyButton
+                                kind="transparent"
+                                :value="ns"
+                                :aria-label="`Copy nameserver ${index + 1}`"
+                              />
+                            </InputGroup>
                           </div>
-                        </Item.Actions>
-                      </Item>
-                    </Item.List>
-                  </fieldset>
-                </template>
-                <template #footer>
-                  <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
-                    <Button
-                      label="Save"
-                      kind="secondary"
-                      size="medium"
-                      :loading="savingDomain"
-                      :disabled="!domainDirty"
-                      @click="saveDomain"
-                    />
-                  </div>
-                </template>
-              </CardBox>
-            </form>
+                        </FieldRow>
+                      </Item.List>
+                    </template>
+                  </CardBox>
+                </Section>
 
-            <!-- Group: Configure your Nameserver (read-only copy-out — no Save).
-                 Each value is an InputText with a copy IconButton as an InputGroup
-                 addon. -->
-            <section class="flex flex-col gap-[var(--layout-group-gap)]">
-              <SectionHeading
-                title="Configure your Nameserver"
-                anchor
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <Item.List>
-                    <Item
-                      size="small"
-                      class="items-start"
-                    >
-                      <Item.Content>
-                        <Item.Title>Nameservers</Item.Title>
-                        <Item.Description>
-                          Set Azion Edge DNS as the authoritative DNS server for a domain by copying
-                          the nameservers values.
-                        </Item.Description>
-                      </Item.Content>
-                      <Item.Actions class="layout-field-control">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                          <InputGroup
-                            v-for="(ns, index) in NAMESERVERS"
-                            :key="ns"
-                          >
-                            <InputText
-                              :model-value="ns"
-                              size="large"
-                              class="flex-1 font-code"
-                              :aria-label="`Nameserver ${index + 1}`"
-                              readonly
-                            />
-                            <CopyButton
-                              kind="transparent"
-                              :value="ns"
-                              :aria-label="`Copy nameserver ${index + 1}`"
-                            />
-                          </InputGroup>
-                          <HelperText label="Add the nameservers in your domain provider." />
-                        </div>
-                      </Item.Actions>
-                    </Item>
-                  </Item.List>
-                </template>
-              </CardBox>
-            </section>
-
-            <!-- Group: DNSSEC (own Save on the enablement toggle; key material is
-                 read-only copy-out via InputGroup addons). -->
-            <form
-              class="flex flex-col gap-[var(--layout-group-gap)]"
-              aria-label="DNSSEC settings"
-              novalidate
-              @submit.prevent="saveDnssec"
-            >
-              <SectionHeading
-                title="DNSSEC"
-                anchor
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <fieldset
-                    class="m-0 flex min-w-0 flex-col border-0 p-0"
-                    :disabled="savingDnssec"
-                  >
-                    <legend class="sr-only">DNSSEC</legend>
-                    <Item.List>
-                      <Item
-                        size="small"
-                        class="items-start"
-                      >
-                        <Item.Content>
-                          <Item.Title>Enable DNSSEC</Item.Title>
-                          <Item.Description>
-                            Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing
-                            attacks. Configure the Key Tag and Digest values in your domain provider
-                            to complete the setup.
-                          </Item.Description>
-                        </Item.Content>
-                        <Item.Actions class="justify-end">
+                <Section
+                  stacked
+                  anchor
+                  :divided="false"
+                  title="DNSSEC"
+                  hint="Signs the zone so resolvers can detect spoofed answers."
+                >
+                  <CardBox :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <FieldRow
+                          kind="compact"
+                          title="Enable DNSSEC"
+                          description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the Key Tag and Digest values in your domain provider to complete the setup."
+                        >
                           <Switch
-                            v-model="dnssecForm.enabled"
+                            v-model="settings.dnssec"
                             aria-label="Enable DNSSEC"
-                            :disabled="savingDnssec"
+                            :disabled="saving"
                           />
-                        </Item.Actions>
-                      </Item>
+                        </FieldRow>
 
-                      <template v-if="dnssecForm.enabled">
-                        <Item
-                          size="small"
-                          class="items-start"
-                        >
-                          <Item.Content>
-                            <Item.Title>Key Tag</Item.Title>
-                            <Item.Description>
-                              Unique identifier for the DNSSEC key used to sign your zone. Use this
-                              value with your domain provider.
-                            </Item.Description>
-                          </Item.Content>
-                          <Item.Actions class="layout-field-control">
+                        <!-- The key material appears only once DNSSEC is on: it is what the
+                             reader takes to their provider, and it means nothing while the
+                             feature is off. Read-only, so it is not what the bar commits —
+                             turning the switch on IS the edit. -->
+                        <template v-if="settings.dnssec">
+                          <FieldRow
+                            v-for="key in dnssecKeys"
+                            :key="key.label"
+                            :title="key.label"
+                            :description="key.description"
+                          >
                             <InputGroup class="w-full">
                               <InputText
-                                :model-value="dnssec.keyTag"
+                                :model-value="key.value"
                                 size="large"
                                 class="flex-1 font-code"
-                                aria-label="Key Tag"
+                                :aria-label="key.label"
                                 readonly
                               />
                               <CopyButton
                                 kind="transparent"
-                                :value="dnssec.keyTag"
-                                aria-label="Copy Key Tag"
+                                :value="key.value"
+                                :aria-label="`Copy ${key.label}`"
                               />
                             </InputGroup>
-                          </Item.Actions>
-                        </Item>
+                          </FieldRow>
+                        </template>
+                      </Item.List>
+                    </template>
+                  </CardBox>
+                </Section>
 
-                        <Item
-                          size="small"
-                          class="items-start"
+                <Section
+                  stacked
+                  anchor
+                  :divided="false"
+                  title="Status"
+                  hint="A zone can be held inactive while its records are being built."
+                >
+                  <CardBox :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <FieldRow
+                          kind="compact"
+                          title="Active"
+                          description="When active, the zone answers authoritative DNS queries for the domain."
                         >
-                          <Item.Content>
-                            <Item.Title>Algorithm</Item.Title>
-                            <Item.Description>
-                              Specifies the algorithm used to generate the DNSSEC key.
-                            </Item.Description>
-                          </Item.Content>
-                          <Item.Actions class="layout-field-control">
-                            <InputGroup class="w-full">
-                              <InputText
-                                :model-value="dnssec.algorithm"
-                                size="large"
-                                class="flex-1 font-code"
-                                aria-label="Algorithm"
-                                readonly
-                              />
-                              <CopyButton
-                                kind="transparent"
-                                :value="dnssec.algorithm"
-                                aria-label="Copy Algorithm"
-                              />
-                            </InputGroup>
-                          </Item.Actions>
-                        </Item>
-
-                        <Item
-                          size="small"
-                          class="items-start"
-                        >
-                          <Item.Content>
-                            <Item.Title>Digest Type</Item.Title>
-                            <Item.Description>
-                              Indicates the hash function used for the DNSSEC digest.
-                            </Item.Description>
-                          </Item.Content>
-                          <Item.Actions class="layout-field-control">
-                            <InputGroup class="w-full">
-                              <InputText
-                                :model-value="dnssec.digestType"
-                                size="large"
-                                class="flex-1 font-code"
-                                aria-label="Digest Type"
-                                readonly
-                              />
-                              <CopyButton
-                                kind="transparent"
-                                :value="dnssec.digestType"
-                                aria-label="Copy Digest Type"
-                              />
-                            </InputGroup>
-                          </Item.Actions>
-                        </Item>
-
-                        <Item
-                          size="small"
-                          class="items-start"
-                        >
-                          <Item.Content>
-                            <Item.Title>Digest</Item.Title>
-                            <Item.Description>
-                              Cryptographic hash of the public key for DNSSEC validation. Provide this
-                              to your provider.
-                            </Item.Description>
-                          </Item.Content>
-                          <Item.Actions class="layout-field-control">
-                            <InputGroup class="w-full">
-                              <InputText
-                                :model-value="dnssec.digest"
-                                size="large"
-                                class="flex-1 font-code"
-                                aria-label="Digest"
-                                readonly
-                              />
-                              <CopyButton
-                                kind="transparent"
-                                :value="dnssec.digest"
-                                aria-label="Copy Digest"
-                              />
-                            </InputGroup>
-                          </Item.Actions>
-                        </Item>
-                      </template>
-                    </Item.List>
-                  </fieldset>
-                </template>
-                <template #footer>
-                  <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
-                    <Button
-                      label="Save"
-                      kind="secondary"
-                      size="medium"
-                      :loading="savingDnssec"
-                      :disabled="!dnssecDirty"
-                      @click="saveDnssec"
-                    />
-                  </div>
-                </template>
-              </CardBox>
-            </form>
-
-            <!-- Group: Status (own Save) -->
-            <form
-              class="flex flex-col gap-[var(--layout-group-gap)]"
-              aria-label="Status settings"
-              novalidate
-              @submit.prevent="saveStatus"
-            >
-              <SectionHeading
-                title="Status"
-                anchor
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <fieldset
-                    class="m-0 flex min-w-0 flex-col border-0 p-0"
-                    :disabled="savingStatus"
-                  >
-                    <legend class="sr-only">Status</legend>
-                    <Item.List>
-                      <Item size="small">
-                        <Item.Content>
-                          <Item.Title>Active</Item.Title>
-                          <Item.Description>
-                            When active, the zone answers authoritative DNS queries for the domain.
-                          </Item.Description>
-                        </Item.Content>
-                        <Item.Actions class="justify-end">
                           <Switch
-                            v-model="statusForm.active"
+                            v-model="settings.active"
                             aria-label="Active"
-                            :disabled="savingStatus"
+                            :disabled="saving"
                           />
-                        </Item.Actions>
-                      </Item>
-                    </Item.List>
-                  </fieldset>
-                </template>
-                <template #footer>
-                  <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
-                    <Button
-                      label="Save"
-                      kind="secondary"
-                      size="medium"
-                      :loading="savingStatus"
-                      :disabled="!statusDirty"
-                      @click="saveStatus"
-                    />
-                  </div>
-                </template>
-              </CardBox>
-            </form>
-          </section>
-        </div>
+                        </FieldRow>
+                      </Item.List>
+                    </template>
+                  </CardBox>
+                </Section>
+              </fieldset>
+            </section>
+          </div>
+
+          <!-- ONE bar for the whole tab, from the component every settings surface here
+               shares. `sticky` because this form sits inside the tab's own scroll region,
+               which is the scrollport the bar pins against. -->
+          <SettingsSaveBar
+            :dirty="dirty"
+            :saving="saving"
+            @save="save"
+            @discard="discard"
+          />
+        </form>
       </section>
 
       <!-- Records — a flush borderless Table; the create action is on the tab bar. -->
       <section
         v-else
-        class="min-h-0 flex-1 overflow-auto"
+        class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
       >
         <div class="layout-column layout-boundary flex min-w-0 flex-col">
           <!-- The tab's parent section: it spaces the sections inside it at
@@ -863,8 +669,16 @@
     <!-- Create Record — a right Drawer; on save the record is appended to the list. -->
     <CreateRecordDrawer
       v-model:open="recordDrawerOpen"
-      :domain="domainForm.domain"
+      :domain="settings.domain"
       @created="onRecordCreated"
+    />
+
+    <DeleteDialog
+      v-model:open="deleteOpen"
+      kind="Record"
+      :name="pendingDelete?.name ?? ''"
+      description="The selected Record will be deleted, and resolvers will stop returning it once the change propagates. Check the"
+      @confirm="confirmDelete"
     />
   </AppLayout>
 </template>

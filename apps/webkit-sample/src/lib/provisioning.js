@@ -20,7 +20,7 @@
 import { computed, ref } from 'vue'
 
 import { formatListDate } from './dates'
-import { authorAt } from './people'
+import { authorAt, emailOf } from './people'
 
 // The framework the template declares (`framework` in templates.js) is not
 // always the build preset the console shows on an Application row — normalize
@@ -272,6 +272,58 @@ export function demoDeployment(workloadId, workloadName = 'Workload Name') {
 /** The provisioned record a workload id belongs to, or `undefined`. */
 export const findDeploymentByWorkload = (workloadId) =>
   deployments.value.find((record) => record.workload.id === String(workloadId))
+
+/**
+ * The provisioned record a deployment VERSION id belongs to, or `undefined`.
+ *
+ * Every deployment in this console is read on `/deployments/:versionId`, and the
+ * version a provisioned chain published is a deployment like any other — it leads
+ * its workload's history (see `provisionedDeployRow`). Without this lookup its row
+ * linked to a page that could not resolve it, so a deployment the demo had just
+ * created answered "Deployment not found": the ids are minted here and exist in no
+ * fixture. The store is workload-agnostic, so the URL resolves on a reload too.
+ */
+export const findDeploymentByVersion = (versionId) =>
+  deployments.value.find((record) => record.versionId === String(versionId))
+
+/**
+ * The deployment a provisioned chain published, as a deployments-table ROW.
+ *
+ * One shape, read by both surfaces that show it — the workload's history
+ * (components/WorkloadDetail.vue) and the deployment PAGE, which maps this row the
+ * same way it maps a seeded one (src/lib/azion-deploys.js `deployPageRecord`). It
+ * used to be built inline on the workload page only, which is how the row and the
+ * page could disagree about the very deployment they both named.
+ *
+ * Beyond the row contract it carries the two facts only this family knows: the
+ * workload's `url` (a provisioned chain is live, so the page's Visit works and its
+ * banner can say where), and `trigger: 'console'` — this record exists because
+ * somebody finished a deploy in this UI.
+ *
+ * @param {object} record A record from `provisionDeployment()`.
+ * @returns {object} A row satisfying ui/DeploymentsTable.vue's row contract.
+ */
+export const provisionedDeployRow = (record) => ({
+  id: `deployment-${record.versionId}`,
+  versionId: record.versionId,
+  workloadId: record.workload.id,
+  workloadName: record.workload.name,
+  environment: 'Production',
+  // A just-provisioned chain is what its workload serves.
+  current: true,
+  status: 'Ready',
+  duration: '42s',
+  deployedAt: record.createdAt,
+  date: formatListDate(record.createdAt),
+  resourceType: 'application',
+  resourceName: record.application.name,
+  resourceId: record.application.id,
+  author: record.author.name,
+  authorEmail: emailOf(record.author.name),
+  authorAvatar: record.author.avatar,
+  url: record.workload.url,
+  trigger: 'console'
+})
 
 /**
  * The provisioned record an application id belongs to, or `undefined`.

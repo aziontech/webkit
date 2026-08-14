@@ -5,58 +5,66 @@
 // The mode is mirrored onto the document root: `data-theme` toggles the theme
 // tokens shipped by @aziontech/theme (:root/[data-theme=light] vs
 // [data-theme=dark]); "system" follows the OS preference live.
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
-const STORAGE_KEY = "webkit-sample-theme";
-const MODES = ["system", "light", "dark"];
+const STORAGE_KEY = 'webkit-sample-theme'
+const MODES = ['system', 'light', 'dark']
 
 const prefersDark =
-  typeof window !== "undefined" && window.matchMedia
-    ? window.matchMedia("(prefers-color-scheme: dark)")
-    : null;
+  typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+    : null
 
 const readStoredTheme = () => {
-  if (typeof localStorage === "undefined") return "system";
-  const saved = localStorage.getItem(STORAGE_KEY);
-  return MODES.includes(saved) ? saved : "system";
-};
+  if (typeof localStorage === 'undefined') return 'system'
+  const saved = localStorage.getItem(STORAGE_KEY)
+  return MODES.includes(saved) ? saved : 'system'
+}
 
 // Resolve "system" to the concrete OS preference; light/dark pass through.
 const resolveTheme = (mode) =>
-  mode === "system" ? (prefersDark?.matches ? "dark" : "light") : mode;
+  mode === 'system' ? (prefersDark?.matches ? 'dark' : 'light') : mode
+
+// The CONCRETE theme currently painted — "light" or "dark", never "system". Anything
+// that cannot read the tokens through CSS needs this: a canvas, a chart, or an editor
+// that paints from a JS palette (see components/monaco-editor/). Those consumers must
+// re-read their colors when the OS preference flips under `system`, and the mode ref
+// alone never changes on that flip — only what it resolves to does.
+const resolved = ref(resolveTheme(readStoredTheme()))
 
 const applyTheme = (mode) => {
-  const resolved = resolveTheme(mode);
-  const root = document.documentElement;
+  const next = resolveTheme(mode)
+  resolved.value = next
+  const root = document.documentElement
   // Drive BOTH selectors the theme ships: `data-theme` and the `.azion.azion-*`
   // class pair. The class pair has the highest specificity, so it must track the
   // active theme or a stale `azion-dark` would override `[data-theme=light]`.
-  root.setAttribute("data-theme", resolved);
-  root.classList.add("azion");
-  root.classList.toggle("azion-dark", resolved === "dark");
-  root.classList.toggle("azion-light", resolved === "light");
-};
+  root.setAttribute('data-theme', next)
+  root.classList.add('azion')
+  root.classList.toggle('azion-dark', next === 'dark')
+  root.classList.toggle('azion-light', next === 'light')
+}
 
-const theme = ref(readStoredTheme());
+const theme = ref(readStoredTheme())
 
 watch(
   theme,
   (mode) => {
-    applyTheme(mode);
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem(STORAGE_KEY, mode);
+    applyTheme(mode)
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, mode)
     }
   },
-  { immediate: true },
-);
+  { immediate: true }
+)
 
 // Keep "system" in sync when the OS preference flips while the app is open.
 if (prefersDark) {
-  prefersDark.addEventListener("change", () => {
-    if (theme.value === "system") applyTheme("system");
-  });
+  prefersDark.addEventListener('change', () => {
+    if (theme.value === 'system') applyTheme('system')
+  })
 }
 
 export function useTheme() {
-  return { theme };
+  return { theme, resolvedTheme: resolved }
 }

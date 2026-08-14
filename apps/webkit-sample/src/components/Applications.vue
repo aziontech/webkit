@@ -36,7 +36,6 @@
   // the table's own global filter (`v-model:globalFilter`).
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
@@ -53,11 +52,22 @@
   import { useListFilters } from '../lib/list-state'
   import { presetIcon, presetLabel } from '../lib/presets'
   import { provisionedApplications, removeDeployment } from '../lib/provisioning'
+  import { useSampleMode } from '../lib/sample-mode'
   import { tenancyRows } from '../lib/tenancy-scope'
+  import { productFirstUse } from '../product-empty-states'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
+  import DomainCell from './ui/DomainCell.vue'
   import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
+  import ProductFirstUse from './ui/ProductFirstUse.vue'
+
+  // The sample's EMPTY version: this module before it owns anything. The same block
+  // the /empty-states gallery reviews, rendered in the module's own page
+  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
+  const { accountEmpty } = useSampleMode()
+  const firstUse = productFirstUse('applications')
 
   const route = useRoute()
   const router = useRouter()
@@ -211,16 +221,29 @@
     })
   }
 
-  // Row action menu — Dropdown emits (event, value); `delete` removes the row.
+  // Deleting an application is the one row action with no undo, so the menu click only
+  // ARMS it: the row is held here and the dialog asks for the name back before removing.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    removeDeployment(row.id)
+    applications.value = applications.value.filter((app) => app.id !== row.id)
+    toast.success(`${row.name} deleted`)
+    pendingDelete.value = null
+  }
+
+  // Row action menu — Dropdown emits (event, value); `delete` opens the confirmation.
   const onRowAction = (event, value, row) => {
     if (value === 'deploy') {
       openDeploy(row)
       return
     }
     if (value === 'delete') {
-      removeDeployment(row.id)
-      applications.value = applications.value.filter((app) => app.id !== row.id)
-      toast.success(`${row.name} deleted`)
+      pendingDelete.value = row
+      deleteOpen.value = true
       return
     }
     if (value === 'view') {
@@ -240,11 +263,47 @@
     active="applications"
     :breadcrumb="[{ label: 'Applications' }]"
   >
-    <main class="layout-column flex min-h-full flex-col">
+    <!-- THE MEASURE FOLLOWS THE MODE. A list earns the fluid data measure
+         (`layout-column`, 7xl): columns are the content, and taking width away from
+         them is taking data away. First use has no columns — it is a lead and three
+         rows, which at 7xl becomes a title floating over rows
+         2.5× longer than they read well at. So the empty version takes Overview's
+         FOCUSED measure (4xl), the same one both halves of /home use, and the two
+         first screens of the console stop being two different page widths. -->
+    <main
+      class="flex min-h-full flex-col"
+      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+    >
       <!-- The page's parent section. A module list opens straight on it (no
            PageHeading — the module name is the breadcrumb crumb), so the
            `:first-child` rule zeroes its step and the boundary is its top space. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <!-- FIRST USE, IN HOME'S CONTAINER.
+           The same box the first access uses on /home (./HomeEmptyState.vue) and the
+           /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
+           viewport rather than hanging from the top edge. This screen and that one are the
+           same KIND of screen — a short block answering "there is nothing here yet" — and a
+           short block pinned to the top with a void under it reads as content that failed
+           to load. The section step is gone with it: a centred box measures from the middle,
+           and a top margin would only pull it off centre.
+           CENTRED WITH AUTO MARGINS, not `min-h-full justify-center`. That pair looks
+           right and does nothing: `min-height: 100%` resolves against a parent whose own
+           height is `auto` (main is `min-h-full`, not `h-full`), so the box stayed at
+           content height and `justify-center` then centred the content inside itself — a
+           no-op. `my-auto` asks the flex parent to split its free space above and below
+           this one item, which is the definition of centred; and when the block is TALLER
+           than the viewport the auto margins collapse to 0 instead of clipping its top,
+           which is what `flex-1 justify-center` would have done. -->
+      <div
+        v-if="accountEmpty"
+        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+      >
+        <ProductFirstUse :product="firstUse" />
+      </div>
+
+      <section
+        v-else
+        class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+      >
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
@@ -254,7 +313,6 @@
                right — and the borderless Table follows in a flush CardBox, framed
                edge-to-edge. -->
           <ControlsHeader>
-
             <!-- Search drives the table's global filter from outside the card, so the
                  field is a plain InputText (`Table.Search` is context-aware and only
                  works inside `<Table>`). With narrowing moved to the filter bar on its
@@ -345,28 +403,11 @@
                   </template>
 
                   <template #cell-domainName="{ value }">
-                    <!-- Domain link (truncates) + external-redirect arrow; copy button pinned to the cell's right edge so it aligns across rows. -->
-                    <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
-                      <a
-                        :href="`https://${value}`"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
-                        @click.stop
-                      >
-                        <span class="truncate">{{ value }}</span>
-                        <i
-                          class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
-                          aria-hidden="true"
-                        />
-                      </a>
-                      <CopyButton
-                        kind="outlined"
-                        :value="value"
-                        aria-label="Copy domain name"
-                        class="ml-auto shrink-0"
-                      />
-                    </div>
+                    <!-- Domain link (truncates) + external-redirect arrow; copy button
+                         pinned to the cell's right edge so it aligns across rows. Shared
+                         with Overview's list, which shows these same rows
+                         (./ui/DomainCell.vue). -->
+                    <DomainCell :value="value" />
                   </template>
 
                   <!-- Infrastructure is an enumerable environment, so it reads as a chip
@@ -486,7 +527,13 @@
           </section>
         </section>
       </section>
-    </main>
 
+      <DeleteDialog
+        v-model:open="deleteOpen"
+        kind="Application"
+        :name="pendingDelete?.name ?? ''"
+        @confirm="confirmDelete"
+      />
+    </main>
   </AppLayout>
 </template>

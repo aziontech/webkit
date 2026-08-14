@@ -38,6 +38,7 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { useTabEnter } from '../lib/tab-enter'
   import Build from '../views/applications/Build.vue'
   import CacheSettings from '../views/applications/CacheSettings.vue'
   import DeviceGroups from '../views/applications/DeviceGroups.vue'
@@ -124,6 +125,11 @@
 
   // The tab entry (component + props) the shell mounts. Falls back to the first tab,
   // so an unknown `?tab=` renders Main Settings rather than nothing.
+  // A tab switch replaces a whole screen, so it arrives like one.
+  const scrollRef = ref(null)
+  const enterRef = ref(null)
+  useTabEnter(enterRef, activeTab, scrollRef)
+
   const activeView = computed(() => tabs.find((t) => t.value === activeTab.value) ?? tabs[0])
 
   // The mounted view itself. <KeepAlive> caches the instances, and the ref follows
@@ -165,14 +171,23 @@
 
       <!-- Only this region scrolls. Each view brings its own `.layout-boundary`
            and its own measure. -->
-      <section class="min-h-0 flex-1 overflow-auto">
-        <KeepAlive>
-          <component
-            :is="activeView.component"
-            ref="viewRef"
-            v-bind="activeView.props"
-          />
-        </KeepAlive>
+      <section
+        ref="scrollRef"
+        class="min-h-0 flex-1 overflow-auto"
+      >
+        <!-- A STABLE wrapper, deliberately unkeyed: `useTabEnter` replays the page
+             entrance on it by restarting the class, because keying it would re-mount
+             the <KeepAlive> inside and throw away the in-progress work it exists to
+             keep (see lib/tab-enter.js). -->
+        <div ref="enterRef">
+          <KeepAlive>
+            <component
+              :is="activeView.component"
+              ref="viewRef"
+              v-bind="activeView.props"
+            />
+          </KeepAlive>
+        </div>
       </section>
     </main>
   </AppLayout>

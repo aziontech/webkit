@@ -13,6 +13,18 @@
 //   clients/      the client marks for the trust strip, each tagged with the
 //                 artwork (color / light / dark) that drives its theme handling
 //   ClientMark    one client logo, placed correctly on both themes
+//   FrameworkStackScene
+//                 "your app, shipped from the framework you already use" — webkit
+//                 Illustration parts around the icon library's coloured framework marks
+//   FunctionsHeroCanvas
+//                 the Functions hero's art half: the pixel globe, the sample's own code
+//                 across it, and the runtime's Web APIs under it
+//   NavColumn     one column of product links — overline heading over a rule, then
+//                 its NavItems (Figma: Azion.com › Column)
+//   NavItem       one product link row — registration-framed glyph, name, and one
+//                 line of what it does (Figma: Azion.com › NavigationItem)
+//   RuntimeApiCloud
+//                 those Web APIs as a field of Content Pills, a few lit at a time
 //
 // The framed layout set the pages are built from — FrameBox, SectionGap,
 // SectionTitle and HeroTitle — graduated to the design system and now comes from
@@ -28,3 +40,8 @@ export { default as ClaimChips } from './ClaimChips.vue'
 export { NETWORK_CLAIMS } from './claims.js'
 export { default as ClientMark } from './ClientMark.vue'
 export { CLIENTS } from './clients/index.js'
+export { default as FrameworkStackScene } from './FrameworkStackScene.vue'
+export { default as FunctionsHeroCanvas } from './FunctionsHeroCanvas.vue'
+export { default as NavColumn } from './NavColumn.vue'
+export { default as NavItem } from './NavItem.vue'
+export { default as RuntimeApiCloud } from './RuntimeApiCloud.vue'

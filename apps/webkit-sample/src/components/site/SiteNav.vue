@@ -50,7 +50,8 @@
         {
           icon: 'ai ai-edge-functions',
           label: 'Functions',
-          description: 'Run serverless code at the edge'
+          description: 'Run serverless code at the edge',
+          href: '/site/functions'
         },
         {
           icon: 'ai ai-tiered-cache',

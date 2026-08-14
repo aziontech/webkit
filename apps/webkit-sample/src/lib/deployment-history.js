@@ -21,7 +21,6 @@
 // way ./provisioning.js derives its demo chain.
 import { applicationAt } from './applications'
 import { formatListDate, hoursAgo } from './dates'
-import { resourceMeta } from './deployments'
 import { authorAt, emailOf } from './people'
 import { workloadById, WORKLOADS } from './workloads'
 
@@ -84,10 +83,6 @@ export function historyFor(workload, index) {
     const status = STATUSES[slot][(index + slot) % STATUSES[slot].length]
     const person = authorAt(index + slot)
     const resource = resourceFor(target, application)
-    // The deployment carries its resource under the field the details drawer reads
-    // it as, so the drawer names the ONE resource this deployment targeted instead
-    // of claiming all three (see ui/WorkloadDeploymentDrawer.vue).
-    const drawerField = resourceMeta(target).drawerField
     // Spread ~4 days apart per workload so the module list's Deployed range has a
     // couple of months to narrow, and hours apart inside one workload's history.
     const deployedAt = hoursAgo(index * 96 + slot * 11 + 1)
@@ -109,8 +104,12 @@ export function historyFor(workload, index) {
       // is derived from it by one formatter, never hand-written per row.
       deployedAt,
       date: formatListDate(deployedAt),
+      // `resourceType` + `resourceName` + `resourceId`: the ONE resource this
+      // deployment targeted. It used to ALSO be stamped under a per-type key
+      // (`application` / `firewall` / `customPage`) for the read-only drawer to read;
+      // the drawer is gone — every deployment is a page now — and the page reads the
+      // resource through its type, so the duplicate key went with it.
       ...resource,
-      [drawerField]: resource.resourceName,
       author: person.name,
       // The address is what the table's Authors selector keys each person by.
       authorEmail: emailOf(person.name),
@@ -147,6 +146,22 @@ export const DEPLOYMENT_HISTORY = WORKLOADS.flatMap((workload, index) =>
  * @param {string} [workloadName] Display name, for a workload that is not seeded.
  * @returns {Array<object>} Rows satisfying ui/DeploymentsTable.vue's row contract.
  */
+/**
+ * A seeded deployment by the VERSION id a URL names, or `undefined`.
+ *
+ * Every deployment in this console is read on its own page (`/deployments/:id`), so
+ * the row a list clicked has to be findable again from the URL alone. The version id
+ * is what identifies it: it is the column the table shows, the string a support
+ * thread quotes, and — for the recorded `azion deploy` runs in ./azion-deploys.js —
+ * the same value as the deployment's own id, so one lookup order covers both
+ * families.
+ *
+ * @param {string} versionId
+ * @returns {object|undefined} A row satisfying ui/DeploymentsTable.vue's contract.
+ */
+export const deploymentByVersion = (versionId) =>
+  DEPLOYMENT_HISTORY.find((deployment) => deployment.versionId === String(versionId))
+
 export function deploymentRowsFor(workloadId, workloadName = 'Workload Name') {
   const id = String(workloadId)
   const seeded = DEPLOYMENT_HISTORY.filter((deployment) => deployment.workloadId === id)

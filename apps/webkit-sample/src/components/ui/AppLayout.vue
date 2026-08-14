@@ -15,6 +15,7 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
+  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -26,10 +27,12 @@
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { useSamplePreset } from '../../lib/sample-preset'
   import { endSession } from '../../lib/session'
   import AccountSwitcher from './AccountSwitcher.vue'
   import AppSidebar from './AppSidebar.vue'
   import OrgSwitcher from './OrgSwitcher.vue'
+  import SamplePresetDrawer from './SamplePresetDrawer.vue'
   import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 
   const props = defineProps({
@@ -141,13 +144,27 @@
 
   const openAccount = () => router.push({ path: '/account', query: { email: userEmail.value } })
 
+  // The sample's own configuration — which customer this prototype is pretending to
+  // be (../../lib/sample-preset.js). The drawer is hosted HERE, not in the sidebar
+  // that offers it: the rail and the mobile nav drawer are two copies of AppSidebar,
+  // so a panel owned there would exist twice and the second copy would open behind
+  // the first. The shell is the one thing on screen exactly once.
+  const presetOpen = ref(false)
+
+  // Whether the header chain carries the account link at all. A single-account
+  // contract has nothing to switch to, so the link and the slash before it go
+  // together — a chain that ends in a dangling separator reads as a broken row.
+  const { accountSwitcherVisible } = useSamplePreset()
+
   // Account-menu entries (the sidebar footer ⋮ Dropdown). Navigations route to
   // their page; "Personal Tokens" opens the token create flow (the tokens area
   // under Account Settings), Docs opens externally, and Settings / anything else
   // lands on the /account Settings page. Soft demo entries are handled in the
   // sidebar itself and never reach here.
   const onAccountSelect = (event, value) => {
-    if (value === 'personal-tokens') {
+    if (value === 'sample-preset') {
+      presetOpen.value = true
+    } else if (value === 'personal-tokens') {
       router.push({ path: '/personal-tokens', query: { email: userEmail.value } })
     } else if (value === 'home') {
       router.push({ path: '/home', query: { email: userEmail.value } })
@@ -209,6 +226,14 @@
     if (!open) return
     globalThis.requestAnimationFrame(() => navPanel.value?.$el?.focus?.())
   })
+
+  // A PAGE may open the palette too — the first-access Overview leads with a search
+  // field in its hero (HomeEmptyState.vue), and that field has to open the SAME
+  // palette the rail owns. It cannot mount its own: the ⌘K shortcut and the command
+  // list live in the rail's copy, and a second palette would fight it for the
+  // shortcut and drift from its groups. So the shell forwards the one call, the same
+  // way it does for the mobile drawer above.
+  defineExpose({ showPalette: () => rail.value?.showPalette() })
 </script>
 
 <template>
@@ -218,7 +243,18 @@
          outermost tenant inward: the Azion mark, the organization, the account,
          then the module breadcrumb. -->
     <GlobalHeader aria-label="Azion Console">
-      <GlobalHeader.Left>
+      <!-- `justify-start!`, because the DS region ships `justify-end` — a left region
+           that packs its children against its own trailing edge. It is invisible while
+           the region is content-sized (it grows 0, so there is no free space to
+           distribute), and it becomes visible the moment anything gives the row slack
+           or takes it away: the chain drifts toward the middle, and under pressure it
+           overflows off the START edge, clipping the Azion mark instead of the
+           innermost link. The gap between the links stays the region's own — spacing
+           is the gap's job, not the justification's.
+           Important, not a plain class: `justify-start` and `justify-end` are the same
+           property, and the winner is CSS source order, not the order they are written
+           in the attribute. -->
+      <GlobalHeader.Left class="justify-start!">
         <!-- Mobile nav trigger: below `md` the rail is hidden, so this
              hamburger opens the right-side Drawer that carries the full
              navigation. -->
@@ -247,45 +283,63 @@
              the same box as the org and account marks beside it, so the three
              sit on one baseline. The glyph is 21x18, so it fits INSIDE the 20px
              box (preserveAspectRatio) rather than being stretched to fill it. -->
-        <RouterLink
-          :to="{ path: '/home', query: { email: userEmail } }"
-          aria-label="Azion — home"
-          class="inline-flex shrink-0 items-center self-center rounded-[var(--shape-elements)] transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)] motion-reduce:transition-none"
-        >
-          <AzionLogoMin
-            class="size-[var(--size-5)]"
-            aria-label="Azion"
-          />
-        </RouterLink>
+        <!-- ONE RHYTHM FOR THE WHOLE CHAIN.
+             The chain is a single child of the header region, with NO gap of its own:
+             every element in it — the mark, each slash, each pill — carries the same
+             `--spacing-xxs` of its own padding instead, so the space between any two
+             neighbours is always 4 + 4 and the row reads as one repeating unit.
+             Left to the region's `gap`, the spacing came out uneven in a way that had
+             nothing to do with the design: the gap lands between every child, so each
+             separator collected it TWICE (once before, once after) while the pills
+             added their own padding on top — a pill/slash pair sat at gap + padding
+             and the slash itself at gap + gap, so no two spaces in the chain matched. -->
+        <div class="flex min-w-0 items-center">
+          <RouterLink
+            :to="{ path: '/home', query: { email: userEmail } }"
+            aria-label="Azion — home"
+            class="inline-flex shrink-0 items-center self-center rounded-[var(--shape-elements)] p-[var(--spacing-xxs)] transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)] motion-reduce:transition-none"
+          >
+            <AzionLogoMin
+              class="size-[var(--size-5)]"
+              aria-label="Azion"
+            />
+          </RouterLink>
 
-        <span
-          class="shrink-0 text-body-sm text-[var(--text-muted)]"
-          aria-hidden="true"
-          >/</span
-        >
-        <OrgSwitcher />
-
-        <span
-          class="shrink-0 text-body-sm text-[var(--text-muted)]"
-          aria-hidden="true"
-          >/</span
-        >
-        <AccountSwitcher
-          @select="onAccountSelect"
-          @navigate="onNavigate"
-        />
-
-        <!-- The innermost link is the first thing the chain gives up: below `md`
-             three marks plus the hamburger and the header actions do not fit,
-             and they collapse into an unreadable row of initials. Organization
-             and account survive; the workspace comes back at `md`. -->
-        <div class="hidden items-center gap-[var(--spacing-xs)] md:flex">
           <span
-            class="shrink-0 text-body-sm text-[var(--text-muted)]"
+            class="shrink-0 px-[var(--spacing-xxs)] text-body-sm text-[var(--text-muted)]"
             aria-hidden="true"
             >/</span
           >
-          <WorkspaceSwitcher />
+          <OrgSwitcher />
+
+          <!-- The account link, and only when the preset says this customer has more
+               than one account to be (../../lib/sample-preset.js). The separator is
+               inside the same condition: the chain reads as links joined by slashes,
+               so a slash with nothing after it is a chain that lost a link. -->
+          <template v-if="accountSwitcherVisible">
+            <span
+              class="shrink-0 px-[var(--spacing-xxs)] text-body-sm text-[var(--text-muted)]"
+              aria-hidden="true"
+              >/</span
+            >
+            <AccountSwitcher
+              @select="onAccountSelect"
+              @navigate="onNavigate"
+            />
+          </template>
+
+          <!-- The innermost link is the first thing the chain gives up: below `md`
+               three marks plus the hamburger and the header actions do not fit,
+               and they collapse into an unreadable row of initials. Organization
+               and account survive; the workspace comes back at `md`. -->
+          <div class="hidden items-center md:flex">
+            <span
+              class="shrink-0 px-[var(--spacing-xxs)] text-body-sm text-[var(--text-muted)]"
+              aria-hidden="true"
+              >/</span
+            >
+            <WorkspaceSwitcher />
+          </div>
         </div>
 
         <!-- Location, separated from identity by a rule rather than another
@@ -320,8 +374,11 @@
              the narrow bar; from `md` up they carry their labels. A Tooltip
              names each icon on hover/focus, matching the left-side controls.
 
-             Agent is `outlined`, so Create is the only filled control in the
-             header and stays the unambiguous primary action.
+             Agent is a ButtonHighlight — the gradient/glow treatment reserved
+             for the assistant entry point, so it reads as the one special
+             control in the bar while Create stays a plain `secondary` action.
+             ButtonHighlight requires a label, so the mobile branch keeps an
+             IconButton (icon-only has no highlight variant).
 
              Its glyph is `ai-ask-azion` — the Azion assistant mark, a speech
              bubble carrying a sparkle. It is deliberately NOT a sparkles-only
@@ -366,9 +423,8 @@
             icon="pi pi-plus-circle"
             @click="openCreationCenter"
           />
-          <Button
+          <ButtonHighlight
             label="Agent"
-            kind="outlined"
             size="medium"
             icon="ai ai-ask-azion"
           />
@@ -422,7 +478,7 @@
       <div class="flex min-w-0 flex-1 flex-col">
         <!--
           THE ROUTE TRANSITION lives here, on the content zone alone: the page
-          arrives from the left and travels right into place (`.page-enter`, see
+          arrives from the left and travels right into place (`animate-page-enter`, see
           src/styles/motion.css), while the header and the rail — the same chrome
           before and after — stay put. Sliding those would read as a full reload
           of an app that did not reload.
@@ -438,7 +494,7 @@
         -->
         <div
           :key="route.path"
-          class="page-enter min-h-0 flex-1 overflow-auto"
+          class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
           :class="{ 'layout-boundary': padded }"
         >
           <slot />
@@ -480,5 +536,11 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
+
+    <!-- The sample's own configuration, opened from the account menu on either
+         sidebar. The mobile nav drawer closes itself before handing the selection
+         over (`onMobileSelect`), so the two right-side panels never stack. It
+         teleports to the body, so it costs the shell nothing until it is asked for. -->
+    <SamplePresetDrawer v-model:open="presetOpen" />
   </div>
 </template>

@@ -17,7 +17,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  import { DEFAULT_PERIOD, METRIC_PERIODS, metricsFor,periodLabel } from '../lib/observability'
+  import { DEFAULT_PERIOD, METRIC_PERIODS, metricsFor, periodLabel } from '../lib/observability'
   import AppLayout from './ui/AppLayout.vue'
   import FilterBar from './ui/FilterBar.vue'
   import MetricPanel from './ui/MetricPanel.vue'

@@ -1,10 +1,11 @@
 <script setup>
   // DeploymentLogs — the single, reusable view of an Azion deployment's steps and
-  // output, whatever kind of deployment it is. Each step is one accordion item
-  // carrying its own log, its feedback as a Tag (Complete / Failed / Skipped /
-  // Queued), and how long it took. A flush ProgressBar on the bottom edge keeps
-  // the sense of forward motion while something is still moving, and the header
-  // carries the outcome and the total time.
+  // output, whatever kind of deployment it is. Each step is one accordion item on
+  // ONE line — a status glyph, its title, its sentence and how long it took —
+  // carrying its own log behind the disclosure. A flush ProgressBar on the bottom
+  // edge keeps the sense of forward motion while something is still moving, and the
+  // header carries the progress read (N/M steps + the step in flight), the outcome
+  // and the total time.
   //
   // The step MODEL is the caller's (see deployment-steps.js for the template
   // deploy flow, src/lib/azion-deploys.js for the `azion deploy` pipeline the
@@ -24,9 +25,27 @@
   //              steps behind it never ran), or still on `activeAt`. Used by the
   //              read-only Workload deployment drawer and the deploy page.
   //
-  // TWO VIEWS of that output, switched in the header (SegmentedButton):
-  //   • Phased   — the accordion above: one row per step, with its feedback Tag and
-  //                its timing, and only the step you open showing its log. The
+  // ── The anatomy changes with the state ─────────────────────────────────────
+  // A deployment IN FLIGHT and a deployment that has SETTLED are asked different
+  // questions, so the two rows above the steps carry different things:
+  //
+  //   |          | Card header (the host's, or `title`'s) | Logs row              |
+  //   | -------- | ------------------------------------- | --------------------- |
+  //   | running  | the live status ("Building…")          | N/M steps + the step  |
+  //   |          |                                       | it is on              |
+  //   | settled  | Phased/Complete + copy all logs       | the outcome tag       |
+  //
+  // Nothing in the running column is a CONTROL. While a deploy is in flight the
+  // question is where it is — which the step rows and the progress bar answer — and
+  // both controls are about reading it afterwards: the Complete view is a log that
+  // scrolls out from under someone who is waiting, and there is nothing worth
+  // copying into a support thread until the run has stopped moving. So the switch
+  // and the copy appear only once the deployment settles, either way.
+  //
+  // TWO VIEWS of that output, switched once the deployment has SETTLED — a run in
+  // flight only has the first one:
+  //   • Phased   — the accordion above: one row per step, with its glyph and its
+  //                timing, and only the step you open showing its log. The
   //                synthetic read — WHERE the deployment is, or what broke.
   //   • Complete — every revealed line of every step in one continuous LogView, in
   //                pipeline order. The raw read — what the CLI actually printed,
@@ -46,7 +65,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
-  import { DEFAULT_DEPLOYMENT_STEPS, STEP_GAP_MS } from './deployment-steps.js'
+  import { DEFAULT_DEPLOYMENT_STEPS, LOG_VIEWS, STEP_GAP_MS } from './deployment-steps.js'
 
   const props = defineProps({
     // Step model: [{ key, title, description, duration, durationLabel,
@@ -80,13 +99,29 @@
     // the page (see src/lib/deploy-runs.js) is picked up where it actually is
     // rather than restarted from the first line when the user comes back.
     seek: { type: Number, default: 0 },
-    // Draw the header row — the title, the Phased/Complete switch, the outcome tag
-    // and the copy control. Off leaves only the steps and the progress bar, for a
-    // surface that shows a deployment as an ILLUSTRATION of one rather than as a
-    // thing to operate (the home page's deploy cell). With no switch there is no
-    // second view, so `phased` is the only one rendered, and the per-step copy
-    // control goes with it — nothing here is for taking away.
-    header: { type: Boolean, default: true }
+    // The heading on the header row. Empty on a surface whose own chrome already
+    // names this region (ui/DeploymentFlow.vue's card header), where a second
+    // heading would be the same word twice — the progress read beside it (N/M
+    // steps, and the step the run is on) still renders either way.
+    label: { type: String, default: 'Deployment Logs' },
+    // Draw the Logs row — the label, the progress read / outcome tag, and (unless
+    // `controls` is off) the switch, the copy control and the wall-clock. Off leaves
+    // only the steps and the progress bar, for a surface that shows a deployment as
+    // an ILLUSTRATION of one rather than as a thing to operate (the home page's
+    // deploy cell). With no switch there is no second view, so `phased` is the only
+    // one rendered, and the per-step copy control goes with it — nothing here is for
+    // taking away.
+    header: { type: Boolean, default: true },
+    // Whether the Logs row carries the deployment's CONTROLS and its wall-clock —
+    // the Phased/Complete switch, the copy-all-logs control, and "Failed after 48s".
+    //
+    // Off on a surface whose own card header carries them instead: the deployment
+    // page hoists the switch and the copy up beside the card title (where the design
+    // puts them, in the row that names the card) and states the timing in the page
+    // heading. Rendering either here as well would put the same control, and the
+    // same number, twice on one screen. Such a host drives the view with
+    // `v-model:view` and reads the copy payload off `logsText` (exposed below).
+    controls: { type: Boolean, default: true }
   })
 
   const emit = defineEmits(['finished', 'failed'])
@@ -180,13 +215,20 @@
     return 'pending'
   }
 
-  // The per-step feedback, as a Tag. A running step gets none: the spinner beside
-  // it already says so, and a "Running" chip next to a spinner is one fact twice.
+  // The per-step feedback, as a Tag — for the two states a GLYPH cannot carry on
+  // its own. A chip is spent only where the row would otherwise be ambiguous:
+  //
+  //   • failed  — which step broke is the whole report, so it is said in words.
+  //   • skipped — a step that will never run looks, glyph-only, like one that has
+  //               not run yet; "Skipped" is what separates them.
+  //
+  // `done`, `running` and `pending` get none. A green check already reads as
+  // complete, a spinner as running, and a hollow ring as queued — so a chip beside
+  // any of them is one fact twice, and a "Queued" chip on every row of a pipeline
+  // that has not started is the noisiest way to say nothing has happened.
   const STEP_TAGS = {
-    done: { label: 'Complete', severity: 'success' },
     failed: { label: 'Failed', severity: 'danger' },
-    skipped: { label: 'Skipped', severity: 'secondary' },
-    pending: { label: 'Queued', severity: 'secondary' }
+    skipped: { label: 'Skipped', severity: 'secondary' }
   }
   const stepTag = (i) => STEP_TAGS[stepStatus(i)] ?? null
 
@@ -223,15 +265,17 @@
   )
 
   // ── The two views ──────────────────────────────────────────────────────────
-  // `phased` opens on purpose: arriving at a deployment, the question is which step
-  // it is on (or which one broke), and that is what the step rows answer in one
-  // glance. `complete` is the deliberate second step — the raw stream, for when the
-  // summary is not enough.
-  const view = ref('phased')
-  const views = [
-    { label: 'Phased', value: 'phased' },
-    { label: 'Complete', value: 'complete' }
-  ]
+  // `phased` opens on purpose (see LOG_VIEWS in deployment-steps.js for why).
+  //
+  // A model rather than local state, because the SWITCH is not always rendered
+  // here: a host whose card header carries it (`controls: false`) drives this with
+  // `v-model:view` and renders the control beside its own title. Unbound, the model
+  // is ordinary local state, so every other surface is unchanged.
+  //
+  // A deployment IN FLIGHT is always `phased`: no surface renders the switch until
+  // the deployment settles, so nothing can move this off `phased` mid-stream.
+  const view = defineModel('view', { type: String, default: 'phased' })
+  const views = LOG_VIEWS
 
   // Every revealed line, in pipeline order, as one stream. Ids are re-keyed across
   // the whole run so LogView never sees two lines under the same id — the per-step
@@ -273,6 +317,15 @@
   const elapsedLabel = computed(() => formatDuration(elapsed.value))
   const activeTitle = computed(() => stepList.value[activeStep.value]?.title ?? '')
 
+  // How far along the pipeline is, counted in STEPS rather than log lines: "4/7
+  // steps" is the answer to "where is this?", which is the first thing anyone
+  // arriving at a deployment wants and the one thing neither the step rows nor the
+  // progress bar state outright.
+  const doneCount = computed(
+    () => stepList.value.filter((_step, i) => stepStatus(i) === 'done').length
+  )
+  const progressLabel = computed(() => `${doneCount.value}/${stepList.value.length} steps`)
+
   // The deployment's wall-clock: what the caller reported, else what this view
   // measured (live) or summed from the model. Empty when neither is known — a
   // static deployment whose steps carry their own labels has no total to sum, and
@@ -282,12 +335,14 @@
     return props.live || totalDuration > 0 ? elapsedLabel.value : ''
   })
 
-  const statusLabel = computed(() => {
+  // The outcome and the wall-clock. While the deployment is running this is the
+  // TIME only: the step it is on is named beside the step count in the same row, and
+  // printing it again here left the row saying "Build" twice.
+  const outcomeLabel = computed(() => {
     const time = timeLabel.value
     if (phase.value === 'finished') return time ? `Deployed in ${time}` : 'Deployed'
     if (phase.value === 'failed') return time ? `Failed after ${time}` : 'Failed'
-    if (!activeTitle.value) return time
-    return time ? `${activeTitle.value} · ${time}` : activeTitle.value
+    return time
   })
 
   // Stop the deploy on the step named by `failAt`: it keeps the error output it
@@ -380,50 +435,89 @@
   })
 
   onBeforeUnmount(clearAll)
+
+  // For a host that renders the copy control in its own card header (`controls:
+  // false`): the same payload this component's own control would hand over. It is
+  // exposed rather than recomputed by the host because what is copyable is what has
+  // been REVEALED — the failing step plays its `failLogs`, a skipped step plays
+  // nothing — and that is this component's own bookkeeping. A host deriving it from
+  // the record would drift the day either rule changes.
+  defineExpose({ logsText: allLogsText })
 </script>
 
 <template>
   <div class="flex w-full flex-col">
-    <!-- Header: label + live status / completed tag + running total time -->
+    <!-- The Logs row. It names the region on the left and REPORTS on the right, and
+         what it reports is a function of the state (see the table in the script):
+         while the deployment runs, where it is — how many steps are behind it and
+         the one it is on; once it has settled, the outcome. The two never coexist —
+         a finished pipeline's step count is "10/10", the tag restated as arithmetic,
+         and a running one has no outcome yet. -->
     <div
       v-if="header"
       class="flex items-center justify-between gap-[var(--spacing-sm)] border-b border-[var(--border-default)] px-[var(--spacing-sm)] py-[var(--spacing-sm)]"
     >
-      <p class="text-heading-xxs text-[var(--text-default)]">Deployment Logs</p>
-      <div class="flex items-center gap-[var(--spacing-sm)]">
-        <!-- The view switch leads the group: it is the one CONTROL here, and what
-             follows it (status, spinner, copy) reports on the deployment itself and
-             reads the same in either view. -->
-        <SegmentedButton
-          v-model="view"
-          :options="views"
-          aria-label="Log view"
-        />
+      <p
+        v-if="label"
+        class="shrink-0 text-heading-xxs text-[var(--text-default)]"
+      >
+        {{ label }}
+      </p>
+
+      <div class="ml-auto flex min-w-0 items-center gap-[var(--spacing-sm)]">
+        <!-- Running: the progress read. -->
+        <template v-if="!settled">
+          <span class="shrink-0 text-label-sm text-[var(--text-default)]">{{ progressLabel }}</span>
+          <span
+            v-if="activeTitle"
+            class="truncate text-label-sm text-[var(--text-muted)]"
+          >
+            {{ activeTitle }}
+          </span>
+        </template>
+
+        <!-- Settled: the outcome, named after the step that decided it. -->
         <Tag
-          v-if="phase === 'finished'"
+          v-else-if="phase === 'finished'"
+          key="finished"
           label="Completed"
           severity="success"
         />
         <Tag
-          v-else-if="phase === 'failed'"
+          v-else
+          key="failed"
           :label="failedTitle ? `Failed on ${failedTitle}` : 'Failed'"
           severity="danger"
         />
-        <span class="text-label-sm text-[var(--text-muted)]">{{ statusLabel }}</span>
-        <Spinner
-          v-if="!settled"
-          class="size-4 text-[var(--text-default)]"
-        />
-        <!-- The logs are the evidence of a failure, so copying them matters
-             more here than after a clean deploy. -->
-        <CopyButton
-          v-if="settled"
-          :value="allLogsText"
-          kind="outlined"
-          aria-label="Copy all logs"
-          copied-label="Logs copied"
-          :disabled="!allLogsText"
-        />
+
+        <!-- The wall-clock and the two controls, for a surface with nowhere else to
+             put them. A host that owns a card header takes them over
+             (`:controls="false"`) and renders them up there, beside the card's title
+             — which is where the design puts them.
+
+             Either way they exist only once the deployment has SETTLED. Mid-run, the
+             switch would offer a view that scrolls out from under someone who is
+             waiting, and there is nothing finished to copy. -->
+        <template v-if="controls && settled">
+          <span class="text-label-sm text-[var(--text-muted)]">{{ outcomeLabel }}</span>
+          <SegmentedButton
+            v-model="view"
+            :options="views"
+            aria-label="Log view"
+          />
+          <CopyButton
+            :value="allLogsText"
+            kind="outlined"
+            aria-label="Copy all logs"
+            copied-label="Logs copied"
+            :disabled="!allLogsText"
+          />
+        </template>
+        <!-- No spinner in this row. A running deployment is always in the Phased
+             view, and that view already turns one on the running STEP, beside the
+             step it belongs to — plus the progress bar on the bottom edge, plus the
+             status in the card header above. A fourth would make several things spin
+             to say one thing. -->
       </div>
     </div>
 
@@ -442,14 +536,26 @@
         :value="step.key"
       >
         <Accordion.Trigger>
-          <span class="flex flex-1 items-center gap-[var(--spacing-sm)] py-[var(--spacing-xs)]">
-            <!-- Per-step status glyph -->
+          <!-- No padding of its own: the trigger already carries the DS row height
+               (min-h-8), and a step row that fits on one line should read at that
+               height. The two lines it used to be doubled the list for no
+               information — eight rows of chrome instead of eight facts. -->
+          <span class="flex min-h-8 flex-1 items-center gap-[var(--spacing-sm)]">
+            <!-- Per-step status glyph — the row's whole state vocabulary, one
+                 glyph per row, in the same column down the list so the pipeline
+                 reads as a column of states rather than as a stack of sentences. -->
             <span class="flex size-5 shrink-0 items-center justify-center">
-              <i
+              <!-- Done: a filled disc, so a finished step registers as a solid
+                   mark at a glance rather than as a stroke among strokes. -->
+              <span
                 v-if="stepStatus(i) === 'done'"
-                class="pi pi-check text-[var(--success-contrast)]"
-                aria-hidden="true"
-              />
+                class="flex size-4 items-center justify-center rounded-full bg-[var(--success)]"
+              >
+                <i
+                  class="pi pi-check text-[9px] leading-none text-[var(--success-contrast)]"
+                  aria-hidden="true"
+                />
+              </span>
               <i
                 v-else-if="stepStatus(i) === 'failed'"
                 class="pi pi-times-circle text-[var(--danger-contrast)]"
@@ -467,33 +573,39 @@
                 key="running"
                 class="size-4 text-[var(--text-default)]"
               />
-              <Spinner
+              <!-- Queued: a hollow ring, NOT a dimmed spinner. A spinner on every
+                   queued row had the whole pipeline turning before anything had
+                   started; a still ring says "waiting" without claiming motion. -->
+              <span
                 v-else
-                key="pending"
-                class="size-4 text-[var(--text-muted)] opacity-60"
+                class="size-3.5 rounded-full border border-dashed border-[var(--border-default)]"
               />
             </span>
 
-            <span class="flex min-w-0 flex-col text-left">
-              <span class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
-                <span class="text-label-sm text-[var(--text-default)]">
-                  {{ step.title }}
-                </span>
-                <!-- Per-step feedback is a Tag, the same vocabulary every other
-                     status in the console uses. A running step has none — the
-                     spinner in the glyph column already says it. -->
-                <Tag
-                  v-if="stepTag(i)"
-                  :label="stepTag(i).label"
-                  :severity="stepTag(i).severity"
-                  size="small"
-                />
-              </span>
-              <!-- On the failing step this line is the failure's reason, so it
-                   wraps instead of truncating: the sentence IS the report. -->
+            <!-- One line per step: the title, then its sentence beside it, muted
+                 and clipped. The failing step is the exception — there the
+                 sentence is the reason it broke, so it wraps and reads in full. -->
+            <span
+              :data-state="stepStatus(i)"
+              class="flex min-w-0 flex-1 items-baseline gap-[var(--spacing-xs)] text-left data-[state=failed]:flex-wrap"
+            >
               <span
                 :data-state="stepStatus(i)"
-                class="text-pretty text-body-xs text-[var(--text-muted)] data-[state=failed]:text-[var(--danger-contrast)]"
+                class="shrink-0 text-label-sm text-[var(--text-default)] data-[state=pending]:text-[var(--text-muted)] data-[state=skipped]:text-[var(--text-muted)]"
+              >
+                {{ step.title }}
+              </span>
+              <!-- Feedback only where a glyph is not enough (failed / skipped) —
+                   see STEP_TAGS. -->
+              <Tag
+                v-if="stepTag(i)"
+                :label="stepTag(i).label"
+                :severity="stepTag(i).severity"
+                size="small"
+              />
+              <span
+                :data-state="stepStatus(i)"
+                class="min-w-0 truncate text-body-xs text-[var(--text-muted)] data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-[var(--danger-contrast)]"
               >
                 {{ step.description }}
               </span>
@@ -517,10 +629,16 @@
                (its spinner promises lines). A skipped step is not waiting for
                anything, so it renders the empty body with a sentence that says
                why it has no output. -->
+          <!-- `show-copy` follows the SETTLED state, not just `header`: while the
+               deployment is in flight there is nothing copyable anywhere on this
+               card, per-step included. A step's log is still being written — copying
+               it hands over a fragment that stops mid-pipeline and reads, in a
+               support thread, as the whole story. Copy comes back with the outcome,
+               when the log is final. -->
           <LogView
             :lines="linesByStep[i]"
             :border="false"
-            :show-copy="header"
+            :show-copy="header && settled"
             :loading="stepStatus(i) === 'pending'"
             loading-label="Waiting to start…"
           >
@@ -547,6 +665,7 @@
       v-else
       :lines="allLines"
       :border="false"
+      :show-copy="settled"
       :loading="!settled && !allLines.length"
       loading-label="Waiting to start…"
     >

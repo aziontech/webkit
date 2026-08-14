@@ -69,7 +69,7 @@
       @click="(event) => emit('bind', event, id)"
     />
 
-    <Handle
+    <Handle key="handle-2"
       v-if="data.source"
       type="source"
       :position="Position.Right"

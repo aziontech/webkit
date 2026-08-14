@@ -25,7 +25,12 @@ import { useTenancyReload } from "./tenancy-reload";
 /**
  * Filter + search + pagination for one module list.
  *
- * @param {Array<object>} fields The page's filter catalog (lib/filter-bar.js).
+ * @param {import('vue').MaybeRefOrGetter<Array<object>>} fields The page's filter
+ *   catalog (lib/filter-bar.js) — a plain array for a fixed catalog, or a ref/getter
+ *   for a page whose catalog GROWS at runtime. Real-Time Events is the second kind:
+ *   filtering by a document field from its Fields panel adds that field to the catalog,
+ *   so the chip bar can show and clear it like any other filter. Resolved with
+ *   `toValue`, so an array keeps working exactly as before.
  * @param {import('vue').MaybeRefOrGetter<Array<object>>} rows Every row before filtering —
  *   a ref, a computed or a getter, so a page can compose provisioned rows with
  *   tenancy-scoped ones and still pass one thing.
@@ -56,7 +61,9 @@ export function useListFilters(fields, rows, { pageSize = 8 } = {}) {
 
   // Fields intersect, values inside a field union — `applyFilters` owns that rule
   // once so no page re-derives it per column.
-  const visibleRows = computed(() => applyFilters(toValue(rows), fields, filters.value));
+  const visibleRows = computed(() =>
+    applyFilters(toValue(rows), toValue(fields), filters.value),
+  );
 
   // The rewind. Watching `filters` (a ref holding a replaced object — the bar never
   // mutates in place) and the reload window covers both ways the set narrows under

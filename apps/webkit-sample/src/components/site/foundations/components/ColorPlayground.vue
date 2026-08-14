@@ -1,5 +1,6 @@
 <script setup>
-  import { ref, computed, onMounted, onUnmounted } from 'vue'
+  import { computed, onMounted, onUnmounted,ref } from 'vue'
+
   import { playgroundColorTokens } from '../data/colors.js'
 
   const tokens = Array.isArray(playgroundColorTokens) ? playgroundColorTokens : []

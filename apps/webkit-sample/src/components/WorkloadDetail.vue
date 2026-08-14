@@ -13,7 +13,8 @@
   //    inside the Active Deployment card, in an Accordion; it is a band of its own now,
   //    so the chain reads as a peer of the deployment rather than a detail of it.
   //  - Deployments: the same history, unscoped by the Overview's framing.
-  //  - Settings: a General ItemGroup with an independent Save + a danger delete row.
+  //  - Settings: a General ItemGroup + a danger delete row, committed as ONE page from
+  //    the shared save bar (ui/SettingsSaveBar.vue) like every settings surface here.
   //
   // Every band's CONTROLS sit OUT of its card — inside a card header they read as the
   // card's chrome rather than as the thing that drives it. Where above the card they
@@ -33,8 +34,8 @@
   //
   // Both tables are the shared DeploymentsTable — the one table shape the
   // Deployments module also uses, so a deployment reads identically whether it is
-  // listed here or in the module list. A row (in either table) opens the read-only
-  // WorkloadDeploymentDrawer.
+  // listed here or in the module list. A row (in either table) opens that
+  // deployment's PAGE, which is the only surface a deployment is read on.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -50,23 +51,29 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import { consoleDeployRowsFor } from '../lib/azion-deploys'
-  import { formatListDate } from '../lib/dates'
   import { deploymentRowsFor } from '../lib/deployment-history'
   import { deploymentFilterFields, environmentOptions, statusMeta } from '../lib/deployments'
-  import { emailOf } from '../lib/people'
-  import { demoDeployment, findDeploymentByWorkload, resourceChain } from '../lib/provisioning'
+  import {
+    demoDeployment,
+    findDeploymentByWorkload,
+    provisionedDeployRow,
+    resourceChain
+  } from '../lib/provisioning'
   import { releaseSeedForWorkload } from '../lib/releases'
+  import { useTabEnter } from '../lib/tab-enter'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
   import DeploymentsTable from './ui/DeploymentsTable.vue'
+  import FieldRow from './ui/FieldRow.vue'
   import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
   import PageHeading from './ui/PageHeading.vue'
   import PageTabs from './ui/PageTabs.vue'
-  import SectionHeading from './ui/SectionHeading.vue'
+  import Section from './ui/Section.vue'
+  import SettingsSaveBar from './ui/SettingsSaveBar.vue'
   import TopologyBindNode from './ui/TopologyBindNode.vue'
   import TopologyNodeCard from './ui/TopologyNodeCard.vue'
-  import WorkloadDeploymentDrawer from './ui/WorkloadDeploymentDrawer.vue'
+  import UnsavedChangesGuard from './ui/UnsavedChangesGuard.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -93,7 +100,14 @@
   ]
   const activeTab = computed({
     get: () => (tabs.some((tab) => tab.value === route.query.tab) ? route.query.tab : 'overview'),
-    set: (value) => router.replace({ query: { ...route.query, tab: value } })
+    // Only a real tab is written to the URL — the same guard the Deployments module
+    // carries. The tab bar can emit an empty value while this page is being left
+    // behind, and writing that put a bare `&tab` on the URL of whatever came next:
+    // visible on every deployment link now that a row navigates to a page.
+    set: (value) => {
+      if (!tabs.some((tab) => tab.value === value)) return
+      router.replace({ query: { ...route.query, tab: value } })
+    }
   })
 
   // --- Active deployment (Overview) ----------------------------------------
@@ -251,7 +265,7 @@
   // row in common with the module that listed it.
   //
   // A deployment targets exactly ONE resource (the model src/lib/deployments.js
-  // states), and the history names that resource under the field the details drawer
+  // states), and the history names that resource under the field every deployment
   // reads it as — so a row no longer claims all three of the workload's resources.
   const historicDeployments = computed(() =>
     deploymentRowsFor(workloadId, route.query.name || workload.value.name)
@@ -259,29 +273,12 @@
 
   // A workload created by the deploy flow leads its own history: the version that
   // provisioned it is the current deployment, and the seeded history moves behind it.
+  // The row shape comes from the provisioning store itself (`provisionedDeployRow`),
+  // which is also what `/deployments/:versionId` resolves that version to — the row
+  // and the page it opens are one record, not two hand-built ones.
   const provisionedDeployment = computed(() => {
     const provisioned = findDeploymentByWorkload(workloadId)
-    if (!provisioned) return null
-    return {
-      id: `deployment-${provisioned.versionId}`,
-      versionId: provisioned.versionId,
-      workloadId,
-      workloadName: provisioned.workload.name,
-      environment: 'Production',
-      current: true,
-      status: 'Ready',
-      duration: '42s',
-      deployedAt: provisioned.createdAt,
-      date: formatListDate(provisioned.createdAt),
-      resourceType: 'application',
-      resourceName: provisioned.application.name,
-      resourceId: provisioned.application.id,
-      // The one resource it deployed, under the field the drawer reads.
-      application: provisioned.application.name,
-      author: provisioned.author.name,
-      authorEmail: emailOf(provisioned.author.name),
-      authorAvatar: provisioned.author.avatar
-    }
+    return provisioned ? provisionedDeployRow(provisioned) : null
   })
 
   // Deploys started from the console this session — from this page's own New
@@ -337,13 +334,24 @@
   const deploySearch = ref('')
   const deployFilters = ref({})
 
-  // --- Deployment details drawer -------------------------------------------
-  const drawerOpen = ref(false)
-  const selectedDeployment = ref(null)
-  const openDeployment = (event, row) => {
-    selectedDeployment.value = row
-    drawerOpen.value = true
-  }
+  // --- Opening a deployment -------------------------------------------------
+  // Its PAGE (`/deployments/:versionId`), the same destination the module list uses.
+  // It used to be a read-only drawer here, which meant a deployment read one way from
+  // this page and another way from the module — and the drawer's version of it could
+  // not be linked to or reloaded. One deployment, one surface.
+  // The workload rides along: a workload this sample does not seed has a DERIVED
+  // history (lib/deployment-history.js), so its version ids only mean something
+  // relative to it — without that, a reload of the deployment's URL would find
+  // nothing. For a seeded workload it is redundant and harmless.
+  const openDeployment = (event, row) =>
+    router.push({
+      path: `/deployments/${row.versionId}`,
+      query: {
+        email: userEmail.value,
+        workload: row.workloadId,
+        workloadName: row.workloadName
+      }
+    })
   const onRowAction = (event, value, row) => {
     if (value === 'details') {
       openDeployment(event, row)
@@ -378,6 +386,11 @@
     })
   }
 
+  // A tab switch replaces a whole screen, so it arrives like one.
+  const scrollRef = ref(null)
+  const enterRef = ref(null)
+  useTabEnter(enterRef, activeTab, scrollRef)
+
   const visit = () => toast.info('Opening the workload in a new tab.')
 
   // --- Settings ------------------------------------------------------------
@@ -396,6 +409,11 @@
       savingSettings.value = false
     }
   }
+  // A page-level commit owes a way out that is not undoing each field by hand.
+  const discardSettings = () => {
+    Object.assign(settings, JSON.parse(settingsBaseline.value))
+  }
+
   const deleteWorkload = () => {
     toast.warning('Delete workload is disabled in the demo.')
   }
@@ -440,459 +458,471 @@
         </template>
       </PageTabs>
 
-      <section class="min-h-0 flex-1 overflow-auto">
-        <!-- ── Overview ── -->
-        <div
-          v-if="activeTab === 'overview'"
-          class="layout-column layout-boundary flex min-w-0 flex-col"
-        >
-          <!-- The tab's parent section: it spaces the sections inside it at
-               --layout-section-gap. -->
-          <section
-            class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+      <section
+        ref="scrollRef"
+        class="min-h-0 flex-1 overflow-auto"
+      >
+        <!-- A STABLE wrapper: `useTabEnter` replays the page entrance on it when
+             the tab changes, and sends the region back to the top. -->
+        <div ref="enterRef">
+          <!-- ── Overview ── -->
+          <div
+            v-if="activeTab === 'overview'"
+            class="layout-column layout-boundary flex min-w-0 flex-col"
           >
-            <!-- Active Deployment — the same anatomy as Version History below: a
-                 small PageHeading, then the band's controls, then a flush CardBox,
-                 each at the group gap. The Environment Select is this band's CONTROL,
-                 so it sits in that controls row (out of the card) rather than in a
-                 card header: it narrows what the card shows — the version, the
-                 status, the domain the topology starts from — so it belongs above the
-                 surface it narrows, which is where every other list in the console
-                 puts the fields that drive it (see ui/ControlsHeader.vue). -->
-            <div class="flex flex-col gap-[var(--layout-group-gap)]">
-              <!-- The Environment Select rides the HEADING row as that band's action,
-                   out of the card. It is a control, not a filter — it picks which
-                   deployment the card reports (each environment is its own domain and
-                   its own record) rather than narrowing anything — so it wears no
-                   filter button and needs no row of its own: one line, title left,
-                   control right. -->
-              <PageHeading
-                title="Active Deployment"
-                size="small"
-              >
-                <template #actions>
-                  <!-- MIN-width, not width: Select's own root already carries
-                       `w-full`, and Tailwind emits `.w-full` AFTER any
-                       `w-[var(--container-*)]`, so a width passed in here loses on
-                       source order and the field just sizes to its content. `min-w-*`
-                       is a different property, so it is the one lever a consumer
-                       actually has — `w-full` then resolves against it. -->
-                  <Select
-                    v-model="activeEnvironment"
-                    size="large"
-                    class="min-w-[var(--container-2xs)]"
-                    :display-value="environmentLabel"
-                  >
-                    <Select.Trigger aria-label="Environment" />
-                    <Select.Content>
-                      <Select.Option
-                        v-for="option in environmentOptions"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Option>
-                    </Select.Content>
-                  </Select>
-                </template>
-              </PageHeading>
-              <CardBox :padded="false">
-                <template #content>
-                  <!-- The deployment's four facts. The topology used to sit under this
-                       grid inside a collapsible; it is its own band now, so this card
-                       is the fact grid and nothing else. -->
-                  <div
-                    class="p-[var(--spacing-md)] grid grid-cols-2 gap-[var(--spacing-sm)] lg:grid-cols-4"
-                  >
-                    <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                      <span class="text-label-sm text-[var(--text-muted)]">Version ID</span>
-                      <div class="flex items-center gap-[var(--spacing-xs)]">
-                        <span class="text-body-sm text-[var(--text-default)]">{{
-                          activeDeployment.versionId
-                        }}</span>
-                        <CopyButton
-                          kind="outlined"
-                          :value="activeDeployment.versionId"
-                          aria-label="Copy version ID"
-                        />
-                      </div>
-                    </div>
-                    <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                      <span class="text-label-sm text-[var(--text-muted)]">Environment</span>
-                      <div class="flex items-center gap-[var(--spacing-xs)]">
-                        <span class="text-body-sm text-[var(--text-default)]">{{
-                          activeEnvironment
-                        }}</span>
-                        <Tag
-                          label="Current"
-                          severity="info"
-                          size="small"
-                        />
-                      </div>
-                    </div>
-                    <!-- Status reads horizontally: the StatusIndicator already carries
-                         its own label, so stacking a caption above it spends a second
-                         line on one short word. -->
-                    <div class="flex flex-col items-start gap-[var(--spacing-xs)] self-start">
-                      <span class="text-label-sm text-[var(--text-muted)]">Status</span>
-                      <StatusIndicator
-                        :severity="statusMeta(activeDeployment.status).severity"
-                        :loading="statusMeta(activeDeployment.status).loading"
-                        :label="activeDeployment.status"
-                      />
-                    </div>
-                    <div class="flex items-start justify-between gap-[var(--spacing-xs)]">
-                      <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                        <span class="text-label-sm text-[var(--text-muted)]">Deployed</span>
-                        <LastModifiedCell
-                          :author="activeDeployment.author"
-                          :avatar-src="activeDeployment.authorAvatar"
-                          :date="activeDeployment.deployedAt"
-                        />
-                      </div>
-                      <IconButton
-                        icon="pi pi-ellipsis-v"
-                        kind="transparent"
-                        size="small"
-                        aria-label="Active deployment actions"
-                      />
-                    </div>
-                  </div>
-                </template>
-              </CardBox>
-            </div>
-
-            <!-- Deployment Topology — its own band, with the same anatomy as the two
-                 around it: a small PageHeading over a flush CardBox at the group gap.
-                 It used to be an Accordion tucked under the Active Deployment fact
-                 grid, which cost it twice: a whole subsystem read as a DETAIL of that
-                 card, and the accordion trigger had to grow its own heading-xxs title
-                 to name it, competing with the PageHeading above. As a band it is named
-                 once, by the same component every other band uses, and it sits at the
-                 section gap as the peer of Active Deployment and Version History. No
-                 accordion: the bands around it do not fold, and a section that names
-                 itself does not need a second control to reveal it. -->
-            <div class="flex flex-col gap-[var(--layout-group-gap)]">
-              <PageHeading
-                title="Deployment Topology"
-                size="small"
-              />
-              <!-- `--bg-surface-raised` instead of CardBox's default `--bg-surface`:
-                   the node cards inside are themselves `--bg-surface` and now carry a
-                   `shadow-sm`, so the band needs to sit one step behind them for the
-                   chain to read as cards ON a surface rather than cards IN a box.
-                   CardBox merges a consumer class through `cn`, so the bg override
-                   wins over its default. -->
-              <CardBox
-                :padded="false"
-                class="bg-[var(--bg-surface-raised)]"
-              >
-                <template #content>
-                  <!-- The chain a deploy provisions, left to right:
-                       Workload → Application → Connector → Storage, with the
-                       Application level also carrying its bindable resources
-                       (Firewall, Custom Page) stacked in the same column via
-                       Flow.Parallel. Every node is the same card and every card is a
-                       DISCLOSURE (ui/TopologyNode.vue): the header names the node
-                       (kind + status + the resource's own name) and the fields sit
-                       behind it, so the diagram reads as one system instead of bespoke
-                       boxes — an unbound slot is that same card, dashed, holding the
-                       CTA that fills it. Every node arrives CLOSED (`openNodes`), and a
-                       closed node still says what it is, which is what keeps the chain
-                       legible collapsed and the band short on arrival.
-                       `align="start"` tops the levels against each other, so opening
-                       one node never nudges the others. Flow's own track is `w-fit`;
-                       `[&>div]:w-full` stretches it to the card, and each level takes
-                       an equal share of it (`flex-1`) so every node card is w-full
-                       inside its level instead of a fixed 256px box. Flow carries its
-                       own `--spacing-md` padding, which is why the CardBox stays
-                       `:padded="false"`. -->
-                  <Flow
-                    align="start"
-                    class="[&>div]:w-full"
-                  >
-                    <Flow.Parallel
-                      v-for="level in topologyLevels"
-                      :key="level.key"
-                      align="start"
-                      class="min-w-0 flex-1"
+            <!-- The tab's parent section: it spaces the sections inside it at
+                 --layout-section-gap. -->
+            <section
+              class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+            >
+              <!-- Active Deployment — the same anatomy as Version History below: a
+                   small PageHeading, then the band's controls, then a flush CardBox,
+                   each at the group gap. The Environment Select is this band's CONTROL,
+                   so it sits in that controls row (out of the card) rather than in a
+                   card header: it narrows what the card shows — the version, the
+                   status, the domain the topology starts from — so it belongs above the
+                   surface it narrows, which is where every other list in the console
+                   puts the fields that drive it (see ui/ControlsHeader.vue). -->
+              <div class="flex flex-col gap-[var(--layout-group-gap)]">
+                <!-- The Environment Select rides the HEADING row as that band's action,
+                     out of the card. It is a control, not a filter — it picks which
+                     deployment the card reports (each environment is its own domain and
+                     its own record) rather than narrowing anything — so it wears no
+                     filter button and needs no row of its own: one line, title left,
+                     control right. -->
+                <PageHeading
+                  title="Active Deployment"
+                  size="small"
+                >
+                  <template #actions>
+                    <!-- MIN-width, not width: Select's own root already carries
+                         `w-full`, and Tailwind emits `.w-full` AFTER any width utility
+                         built on a container token, so a width passed in here loses on
+                         source order and the field just sizes to its content. `min-w-*`
+                         is a different property, so it is the one lever a consumer
+                         actually has — `w-full` then resolves against it. -->
+                    <Select
+                      v-model="activeEnvironment"
+                      size="large"
+                      class="min-w-[var(--container-2xs)]"
+                      :display-value="environmentLabel"
                     >
-                      <!-- `terminal` marks the two BINDING slots (Firewall, Custom
-                           Page). They are not links in the provisioned chain: the
-                           workload's relationship to each slot is a platform default,
-                           so a connector reaches them, but nothing flows onward from a
-                           binding to the Connector. Flow's `terminal` says exactly
-                           that — the node receives an incoming connector and
-                           originates none — so the chain runs Workload → Application →
-                           Connector → Storage while the bindings hang off it as
-                           leaves. It applies bound OR unbound: binding one fills the
-                           card, it does not turn the slot into a step. -->
-                      <Flow.Node
-                        v-for="node in level.nodes"
-                        :key="node.key"
-                        unstyled
-                        :terminal="Boolean(node.terminal)"
-                        class="w-full"
-                      >
-                        <!-- Empty node: the slot is open, so the card is the bind
-                           CTA. -->
-                        <TopologyBindNode
-                          v-if="node.empty"
-                          v-model:open="openNodes[node.key]"
-                          :kind="node.kind"
-                          :icon="node.icon"
-                          :description="node.description"
-                          :cta-label="node.ctaLabel"
-                          :options="node.options"
-                          @bind="(event, value) => bindResource(node.key, value)"
-                        />
-                        <TopologyNodeCard
-                          v-else
-                          v-model:open="openNodes[node.key]"
-                          :node="node"
-                          :email="userEmail"
+                      <Select.Trigger aria-label="Environment" />
+                      <Select.Content>
+                        <Select.Option
+                          v-for="option in environmentOptions"
+                          :key="option.value"
+                          :value="option.value"
                         >
-                          <!-- Only the two bindable slots can be emptied again; the
-                             provisioned chain cannot. Unbinding sits in the node's
-                             BODY, not its header: the header is one full-width
-                             disclosure button, and a nested button is invalid — and a
-                             destructive control one stray click from firing is the
-                             last thing a collapsed row should carry. -->
-                          <template
-                            v-if="node.key in bindings"
-                            #actions
+                          {{ option.label }}
+                        </Select.Option>
+                      </Select.Content>
+                    </Select>
+                  </template>
+                </PageHeading>
+                <CardBox :padded="false">
+                  <template #content>
+                    <!-- The deployment's four facts. The topology used to sit under this
+                         grid inside a collapsible; it is its own band now, so this card
+                         is the fact grid and nothing else. -->
+                    <div
+                      class="p-[var(--spacing-md)] grid grid-cols-2 gap-[var(--spacing-sm)] lg:grid-cols-4"
+                    >
+                      <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                        <span class="text-label-sm text-[var(--text-muted)]">Version ID</span>
+                        <div class="flex items-center gap-[var(--spacing-xs)]">
+                          <span class="text-body-sm text-[var(--text-default)]">{{
+                            activeDeployment.versionId
+                          }}</span>
+                          <CopyButton
+                            kind="outlined"
+                            :value="activeDeployment.versionId"
+                            aria-label="Copy version ID"
+                          />
+                        </div>
+                      </div>
+                      <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                        <span class="text-label-sm text-[var(--text-muted)]">Environment</span>
+                        <div class="flex items-center gap-[var(--spacing-xs)]">
+                          <span class="text-body-sm text-[var(--text-default)]">{{
+                            activeEnvironment
+                          }}</span>
+                          <Tag
+                            label="Current"
+                            severity="info"
+                            size="small"
+                          />
+                        </div>
+                      </div>
+                      <!-- Status reads horizontally: the StatusIndicator already carries
+                           its own label, so stacking a caption above it spends a second
+                           line on one short word. -->
+                      <div class="flex flex-col items-start gap-[var(--spacing-xs)] self-start">
+                        <span class="text-label-sm text-[var(--text-muted)]">Status</span>
+                        <StatusIndicator
+                          :severity="statusMeta(activeDeployment.status).severity"
+                          :loading="statusMeta(activeDeployment.status).loading"
+                          :label="activeDeployment.status"
+                        />
+                      </div>
+                      <div class="flex items-start justify-between gap-[var(--spacing-xs)]">
+                        <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                          <span class="text-label-sm text-[var(--text-muted)]">Deployed</span>
+                          <LastModifiedCell
+                            :author="activeDeployment.author"
+                            :avatar-src="activeDeployment.authorAvatar"
+                            :date="activeDeployment.deployedAt"
+                          />
+                        </div>
+                        <IconButton
+                          icon="pi pi-ellipsis-v"
+                          kind="transparent"
+                          size="small"
+                          aria-label="Active deployment actions"
+                        />
+                      </div>
+                    </div>
+                  </template>
+                </CardBox>
+              </div>
+
+              <!-- Deployment Topology — its own band, with the same anatomy as the two
+                   around it: a small PageHeading over a flush CardBox at the group gap.
+                   It used to be an Accordion tucked under the Active Deployment fact
+                   grid, which cost it twice: a whole subsystem read as a DETAIL of that
+                   card, and the accordion trigger had to grow its own heading-xxs title
+                   to name it, competing with the PageHeading above. As a band it is named
+                   once, by the same component every other band uses, and it sits at the
+                   section gap as the peer of Active Deployment and Version History. No
+                   accordion: the bands around it do not fold, and a section that names
+                   itself does not need a second control to reveal it. -->
+              <div class="flex flex-col gap-[var(--layout-group-gap)]">
+                <PageHeading
+                  title="Deployment Topology"
+                  size="small"
+                />
+                <!-- `--bg-surface-raised` instead of CardBox's default `--bg-surface`:
+                     the node cards inside are themselves `--bg-surface` and now carry a
+                     `shadow-sm`, so the band needs to sit one step behind them for the
+                     chain to read as cards ON a surface rather than cards IN a box.
+                     CardBox merges a consumer class through `cn`, so the bg override
+                     wins over its default. -->
+                <CardBox
+                  :padded="false"
+                  class="bg-[var(--bg-surface-raised)]"
+                >
+                  <template #content>
+                    <!-- The chain a deploy provisions, left to right:
+                         Workload → Application → Connector → Storage, with the
+                         Application level also carrying its bindable resources
+                         (Firewall, Custom Page) stacked in the same column via
+                         Flow.Parallel. Every node is the same card and every card is a
+                         DISCLOSURE (ui/TopologyNode.vue): the header names the node
+                         (kind + status + the resource's own name) and the fields sit
+                         behind it, so the diagram reads as one system instead of bespoke
+                         boxes — an unbound slot is that same card, dashed, holding the
+                         CTA that fills it. Every node arrives CLOSED (`openNodes`), and a
+                         closed node still says what it is, which is what keeps the chain
+                         legible collapsed and the band short on arrival.
+                         `align="start"` tops the levels against each other, so opening
+                         one node never nudges the others. Flow's own track is `w-fit`;
+                         `[&>div]:w-full` stretches it to the card, and each level takes
+                         an equal share of it (`flex-1`) so every node card is w-full
+                         inside its level instead of a fixed 256px box. Flow carries its
+                         own `--spacing-md` padding, which is why the CardBox stays
+                         `:padded="false"`. -->
+                    <Flow
+                      align="start"
+                      class="[&>div]:w-full"
+                    >
+                      <Flow.Parallel
+                        v-for="level in topologyLevels"
+                        :key="level.key"
+                        align="start"
+                        class="min-w-0 flex-1"
+                      >
+                        <!-- `terminal` marks the two BINDING slots (Firewall, Custom
+                             Page). They are not links in the provisioned chain: the
+                             workload's relationship to each slot is a platform default,
+                             so a connector reaches them, but nothing flows onward from a
+                             binding to the Connector. Flow's `terminal` says exactly
+                             that — the node receives an incoming connector and
+                             originates none — so the chain runs Workload → Application →
+                             Connector → Storage while the bindings hang off it as
+                             leaves. It applies bound OR unbound: binding one fills the
+                             card, it does not turn the slot into a step. -->
+                        <Flow.Node
+                          v-for="node in level.nodes"
+                          :key="node.key"
+                          unstyled
+                          :terminal="Boolean(node.terminal)"
+                          class="w-full"
+                        >
+                          <!-- Empty node: the slot is open, so the card is the bind
+                             CTA. -->
+                          <TopologyBindNode
+                            v-if="node.empty"
+                            v-model:open="openNodes[node.key]"
+                            :kind="node.kind"
+                            :icon="node.icon"
+                            :description="node.description"
+                            :cta-label="node.ctaLabel"
+                            :options="node.options"
+                            @bind="(event, value) => bindResource(node.key, value)"
+                          />
+                          <TopologyNodeCard
+                            v-else
+                            v-model:open="openNodes[node.key]"
+                            :node="node"
+                            :email="userEmail"
                           >
-                            <Button
-                              :label="`Unbind ${node.kind}`"
-                              kind="text"
-                              size="small"
-                              icon="pi pi-times"
-                              @click="unbindResource(node.key)"
-                            />
-                          </template>
-                        </TopologyNodeCard>
-                      </Flow.Node>
-                    </Flow.Parallel>
-                  </Flow>
-                </template>
-              </CardBox>
-            </div>
+                            <!-- Only the two bindable slots can be emptied again; the
+                               provisioned chain cannot. Unbinding sits in the node's
+                               BODY, not its header: the header is one full-width
+                               disclosure button, and a nested button is invalid — and a
+                               destructive control one stray click from firing is the
+                               last thing a collapsed row should carry. -->
+                            <template
+                              v-if="node.key in bindings"
+                              #actions
+                            >
+                              <Button
+                                :label="`Unbind ${node.kind}`"
+                                kind="text"
+                                size="small"
+                                icon="pi pi-times"
+                                @click="unbindResource(node.key)"
+                              />
+                            </template>
+                          </TopologyNodeCard>
+                        </Flow.Node>
+                      </Flow.Parallel>
+                    </Flow>
+                  </template>
+                </CardBox>
+              </div>
 
-            <!-- Version History — the section this band's shape comes from: the
-                 title above the flush card, not inside it. -->
-            <div class="flex flex-col gap-[var(--layout-group-gap)]">
-              <PageHeading
-                title="Version History"
-                size="small"
-              />
-              <!-- The table's own fields, hoisted out of its toolbar into the band's
-                   controls row. Same component, same panel, same badge — only the
-                   PLACE changes, and this page owns the state it drives. -->
-              <ControlsHeader>
-                <InputText
-                  v-model="deploySearch"
-                  size="large"
-                  placeholder="Search deployments..."
-                  aria-label="Search deployments"
-                  class="min-w-36 grow basis-[var(--container-2xs)]"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
+              <!-- Version History — the section this band's shape comes from: the
+                   title above the flush card, not inside it. -->
+              <div class="flex flex-col gap-[var(--layout-group-gap)]">
+                <PageHeading
+                  title="Version History"
+                  size="small"
+                />
+                <!-- The table's own fields, hoisted out of its toolbar into the band's
+                     controls row. Same component, same panel, same badge — only the
+                     PLACE changes, and this page owns the state it drives. -->
+                <ControlsHeader>
+                  <InputText
+                    v-model="deploySearch"
+                    size="large"
+                    placeholder="Search deployments..."
+                    aria-label="Search deployments"
+                    class="min-w-36 grow basis-[var(--container-2xs)]"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </InputText>
+                </ControlsHeader>
+                <FilterBar
+                  v-model="deployFilters"
+                  :fields="deployFields"
+                />
+                <CardBox :padded="false">
+                  <template #content>
+                    <DeploymentsTable
+                      v-model:search="deploySearch"
+                      v-model:filters="deployFilters"
+                      :deployments="deployments"
+                      :fields="deployFields"
+                      :email="userEmail"
+                      :controls="false"
+                      @row-click="openDeployment"
+                      @action="onRowAction"
                     />
                   </template>
-                </InputText>
-              </ControlsHeader>
-              <FilterBar
-                v-model="deployFilters"
-                :fields="deployFields"
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <DeploymentsTable
-                    v-model:search="deploySearch"
-                    v-model:filters="deployFilters"
-                    :deployments="deployments"
-                    :fields="deployFields"
-                    :email="userEmail"
-                    :controls="false"
-                    @row-click="openDeployment"
-                    @action="onRowAction"
-                  />
-                </template>
-              </CardBox>
-            </div>
-          </section>
-        </div>
+                </CardBox>
+              </div>
+            </section>
+          </div>
 
-        <!-- ── Deployments ── -->
-        <div
-          v-else-if="activeTab === 'deployments'"
-          class="layout-column layout-boundary flex min-w-0 flex-col"
-        >
-          <!-- The tab's parent section: it spaces the sections inside it at
-               --layout-section-gap. -->
-          <section
-            class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+          <!-- ── Deployments ── -->
+          <div
+            v-else-if="activeTab === 'deployments'"
+            class="layout-column layout-boundary flex min-w-0 flex-col"
           >
-            <!-- No section heading: the tab bar already names this band "Deployments",
-                 so the band opens with its CONTROLS instead — the same shape a
-                 first-level module list takes, where the breadcrumb does the naming
-                 (see ui/ControlsHeader.vue). -->
-            <div class="flex flex-col gap-[var(--layout-group-gap)]">
-              <ControlsHeader>
-                <InputText
-                  v-model="deploySearch"
-                  size="large"
-                  placeholder="Search deployments..."
-                  aria-label="Search deployments"
-                  class="min-w-36 grow basis-[var(--container-2xs)]"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
+            <!-- The tab's parent section: it spaces the sections inside it at
+                 --layout-section-gap. -->
+            <section
+              class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+            >
+              <!-- No section heading: the tab bar already names this band "Deployments",
+                   so the band opens with its CONTROLS instead — the same shape a
+                   first-level module list takes, where the breadcrumb does the naming
+                   (see ui/ControlsHeader.vue). -->
+              <div class="flex flex-col gap-[var(--layout-group-gap)]">
+                <ControlsHeader>
+                  <InputText
+                    v-model="deploySearch"
+                    size="large"
+                    placeholder="Search deployments..."
+                    aria-label="Search deployments"
+                    class="min-w-36 grow basis-[var(--container-2xs)]"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </InputText>
+                </ControlsHeader>
+                <FilterBar
+                  v-model="deployFilters"
+                  :fields="deployFields"
+                />
+                <CardBox :padded="false">
+                  <template #content>
+                    <DeploymentsTable
+                      v-model:search="deploySearch"
+                      v-model:filters="deployFilters"
+                      :deployments="deployments"
+                      :fields="deployFields"
+                      :email="userEmail"
+                      :controls="false"
+                      @row-click="openDeployment"
+                      @action="onRowAction"
                     />
                   </template>
-                </InputText>
-              </ControlsHeader>
-              <FilterBar
-                v-model="deployFilters"
-                :fields="deployFields"
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <DeploymentsTable
-                    v-model:search="deploySearch"
-                    v-model:filters="deployFilters"
-                    :deployments="deployments"
-                    :fields="deployFields"
-                    :email="userEmail"
-                    :controls="false"
-                    @row-click="openDeployment"
-                    @action="onRowAction"
-                  />
-                </template>
-              </CardBox>
-            </div>
-          </section>
-        </div>
+                </CardBox>
+              </div>
+            </section>
+          </div>
 
-        <!-- ── Settings ── -->
-        <!-- The FORM measure, not the data one the two tabs above take: this band is
-             a single stacked column of label-plus-control rows, so past ~1200px the
-             extra width lands inside the controls and leaves each label a head-turn
-             from the field it names. Per layout.css the unit that picks a measure is
-             the BAND, not the file — the same split Main Settings and Build make
-             inside ApplicationDetail. -->
-        <div
-          v-else
-          class="layout-column-form layout-boundary flex min-w-0 flex-col"
-        >
-          <PageHeading
-            title="Settings"
-            description="Manage this workload's configuration."
-            size="small"
-          />
-
-          <!-- The tab's parent section: it spaces the sections inside it at
-               --layout-section-gap. -->
-          <section
-            class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+          <!-- ── Settings ── -->
+          <!-- The FORM measure, not the data one the two tabs above take: this band is
+               a single stacked column of label-plus-control rows, so past ~1200px the
+               extra width lands inside the controls and leaves each label a head-turn
+               from the field it names. Per layout.css the unit that picks a measure is
+               the BAND, not the file — the same split Main Settings and Build make
+               inside ApplicationDetail. -->
+          <div
+            v-else
+            class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-[var(--layout-section-gap)] pt-[var(--layout-section-gap)]"
           >
+            <PageHeading
+              title="Settings"
+              description="Manage this workload's configuration."
+              size="small"
+            />
+
+            <!-- The tab's bands, in the console's settings anatomy: a Section (title +
+                 Hint) over a flush card of rows, exactly what the create page that made
+                 this workload is built from. -->
             <form
-              class="flex flex-col gap-[var(--layout-group-gap)]"
-              aria-label="General settings"
+              class="mt-[var(--layout-section-gap)] flex min-w-0 flex-col"
+              aria-label="Workload settings"
               novalidate
               @submit.prevent="saveSettings"
             >
-              <SectionHeading
-                title="General"
-                anchor
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <fieldset
-                    class="m-0 flex min-w-0 flex-col border-0 p-0"
-                    :disabled="savingSettings"
-                  >
-                    <legend class="sr-only">General</legend>
-                    <Item.List>
-                      <Item size="small">
-                        <Item.Content>
-                          <Item.Title>Name</Item.Title>
-                          <Item.Description>
-                            A unique and descriptive name to identify the workload.
-                          </Item.Description>
-                        </Item.Content>
-                        <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+              <fieldset
+                class="m-0 flex min-w-0 flex-col border-0 p-0"
+                :disabled="savingSettings"
+              >
+                <legend class="sr-only">Workload settings</legend>
+
+                <Section
+                  stacked
+                  anchor
+                  :divided="false"
+                  title="General"
+                  hint="How this workload is identified across the console and in its deployments."
+                >
+                  <CardBox :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <FieldRow
+                          title="Name"
+                          description="A unique and descriptive name to identify the workload."
+                        >
                           <InputText
                             v-model="settings.name"
                             size="large"
-                            :disabled="savingSettings"
                             class="w-full"
                             aria-label="Name"
+                            :disabled="savingSettings"
                           />
-                        </Item.Actions>
-                      </Item>
-                    </Item.List>
-                  </fieldset>
-                </template>
-                <template #footer>
-                  <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
-                    <Button
-                      label="Save"
-                      kind="secondary"
-                      size="medium"
-                      :loading="savingSettings"
-                      :disabled="!settingsDirty"
-                      @click="saveSettings"
-                    />
-                  </div>
-                </template>
-              </CardBox>
-            </form>
+                        </FieldRow>
+                      </Item.List>
+                    </template>
+                  </CardBox>
+                </Section>
 
-            <!-- Danger zone -->
-            <div class="flex flex-col gap-[var(--layout-group-gap)]">
-              <SectionHeading
-                title="Danger Zone"
-                anchor
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Delete this workload</Item.Title>
-                        <Item.Description>
-                          Once deleted, the workload and its deployments cannot be recovered.
-                        </Item.Description>
-                      </Item.Content>
-                      <Item.Actions class="justify-end">
-                        <Button
-                          label="Delete Workload"
-                          kind="danger"
-                          size="medium"
-                          icon="pi pi-trash"
-                          @click="deleteWorkload"
-                        />
-                      </Item.Actions>
-                    </Item>
-                  </Item.List>
-                </template>
-              </CardBox>
-            </div>
-          </section>
+                <!-- Danger Zone — titled like every band above it. What marks it as
+                     destructive is the `kind="danger"` Button, not a recoloured title. -->
+                <Section
+                  stacked
+                  anchor
+                  :divided="false"
+                  title="Danger Zone"
+                  hint="Irreversible. Read the row before you click it."
+                >
+                  <CardBox :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <FieldRow
+                          kind="compact"
+                          title="Delete this workload"
+                          description="Once deleted, the workload and its deployments cannot be recovered."
+                        >
+                          <Button
+                            type="button"
+                            label="Delete Workload"
+                            kind="danger"
+                            size="medium"
+                            icon="pi pi-trash"
+                            @click="deleteWorkload"
+                          />
+                        </FieldRow>
+                      </Item.List>
+                    </template>
+                  </CardBox>
+                </Section>
+              </fieldset>
+            </form>
+          </div>
         </div>
       </section>
     </main>
 
-    <!-- Read-only deployment details drawer, opened from either table. -->
-    <WorkloadDeploymentDrawer
-      v-model:open="drawerOpen"
-      :deployment="selectedDeployment"
+    <!-- The Settings tab commits page-level, through the shared bar every settings
+         surface in the console uses (ui/SettingsSaveBar.vue). Gated on the tab so it cannot
+         follow the reader to Overview or Deployments. -->
+    <SettingsSaveBar
+      v-if="activeTab === 'settings'"
+      :dirty="settingsDirty"
+      :saving="savingSettings"
+      @save="saveSettings"
+      @discard="discardSettings"
+    />
+
+    <!-- The bar carries the leave guard, and the bar is gated on the tab — so on Overview
+         or Deployments a pending settings edit would have nothing holding the exit. The
+         guard is mounted directly for exactly those tabs: the pair is mutually exclusive,
+         so one guard is live at all times and never two. The BAR stays tab-gated (that is
+         a deliberate decision, see its comment above); what must not be tab-gated is the
+         protection, because the edit is still pending wherever the reader wandered to. -->
+    <UnsavedChangesGuard
+      v-if="activeTab !== 'settings'"
+      savable
+      :dirty="settingsDirty"
+      :saving="savingSettings"
+      @save="saveSettings"
+      @discard="discardSettings"
     />
   </AppLayout>
 </template>

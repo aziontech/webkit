@@ -15,6 +15,14 @@
   // reason: it has to survive the route change it covers — the console goes out
   // and Sign In comes in underneath it, and neither frame is ever seen.
   import SessionWire from './components/ui/SessionWire.vue'
+  // Which version of the sample is in force — an empty account or a populated one.
+  // Installed here only to read `?state=` off an incoming link; the mode itself is a
+  // module-level singleton that outlives every page (./lib/sample-mode.js).
+  import { installSampleMode } from './lib/sample-mode'
+  // The rest of the pretend account — plan and whether the header can switch
+  // accounts (./lib/sample-preset.js). Same shape as the version above: a query
+  // read on arrival, then a localStorage singleton.
+  import { installSamplePreset } from './lib/sample-preset'
   import { installSessionExpiry, useSession } from './lib/session'
   // Moving any of the header's three switchers — organization, account,
   // workspace — reloads the page you are on: every module list swaps its rows
@@ -27,6 +35,8 @@
 
   installTenancyReload(router)
   installSessionExpiry(router)
+  installSampleMode(router)
+  installSamplePreset(router)
 
   const { expiring } = useSession()
 </script>

@@ -29,21 +29,32 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { computed, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import { daysAgo, formatListDate } from '../lib/dates'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../lib/filter-bar'
   import { useListFilters } from '../lib/list-state'
   import { authorAt } from '../lib/people'
+  import { useSampleMode } from '../lib/sample-mode'
   import { tenancyRows } from '../lib/tenancy-scope'
+  import { productFirstUse } from '../product-empty-states'
   import AddVariableDrawer from './AddVariableDrawer.vue'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
   import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
+  import ProductFirstUse from './ui/ProductFirstUse.vue'
+
+  // The sample's EMPTY version: this module before it owns anything. The same block the
+  // /empty-states gallery reviews, rendered in the module's own page
+  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
+  const { accountEmpty } = useSampleMode()
+  const firstUse = productFirstUse('variables')
 
   const route = useRoute()
+  const router = useRouter()
 
   // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
@@ -196,6 +207,29 @@
     drawerOpen.value = true
   }
 
+  // ── ARRIVING WITH THE CREATE FLOW ASKED FOR (`?create=variable`) ──
+  //
+  // Variables is the one module whose create flow is a DRAWER, so its first-use gates
+  // have no page to route to (./ui/ProductFirstUse.vue routes; it does not reach into a
+  // host's refs). The gate asks for the flow in the URL instead, and this reads it — so
+  // the same gate works from this page's own first use AND from the /empty-states
+  // gallery, and `/variables?create=variable` is a link somebody can send.
+  //
+  // `watch` with `immediate`, not `onMounted`: arriving from this page's own first-use
+  // gate is a query change on a route that is already mounted, which `onMounted` would
+  // never see. The query is read and then dropped from the address bar — it is a way IN
+  // to the flow, not part of the route (the same treatment `?state=` gets in
+  // ../lib/sample-mode.js).
+  watch(
+    () => route.query.create,
+    (requested) => {
+      if (requested !== 'variable') return
+      openCreate()
+      router.replace({ path: route.path, query: { ...route.query, create: undefined } })
+    },
+    { immediate: true }
+  )
+
   // One create can carry several variables (Add Another, an imported `.env`), so the
   // drawer emits a LIST. Each one lands with the same shape as a seeded row: the
   // instant is the record and the display string is derived from it, so a new row
@@ -215,10 +249,23 @@
     ]
   }
 
+  // A variable's KEY is its name here — it is what the row shows and what code reads,
+  // so it is also the phrase the delete dialog asks back before removing it.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    variables.value = variables.value.filter((item) => item.id !== row.id)
+    toast.success(`${row.key} deleted`)
+    pendingDelete.value = null
+  }
+
   const onRowAction = (event, value, row) => {
     if (value === 'delete') {
-      variables.value = variables.value.filter((item) => item.id !== row.id)
-      toast.success(`${row.key} deleted`)
+      pendingDelete.value = row
+      deleteOpen.value = true
       return
     }
     const copy = {
@@ -234,11 +281,40 @@
     active="variables"
     :breadcrumb="[{ label: 'Variables' }]"
   >
-    <main class="layout-column flex min-h-full flex-col">
+    <main
+      class="flex min-h-full flex-col"
+      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+    >
       <!-- The page's parent section. A module list opens straight on it (no
            PageHeading — the module name is the breadcrumb crumb), so the
            `:first-child` rule zeroes its step and the boundary is its top space. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <!-- FIRST USE, IN HOME'S CONTAINER.
+           The same box the first access uses on /home (./HomeEmptyState.vue) and the
+           /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
+           viewport rather than hanging from the top edge. This screen and that one are the
+           same KIND of screen — a short block answering "there is nothing here yet" — and a
+           short block pinned to the top with a void under it reads as content that failed
+           to load. The section step is gone with it: a centred box measures from the middle,
+           and a top margin would only pull it off centre.
+           CENTRED WITH AUTO MARGINS, not `min-h-full justify-center`. That pair looks
+           right and does nothing: `min-height: 100%` resolves against a parent whose own
+           height is `auto` (main is `min-h-full`, not `h-full`), so the box stayed at
+           content height and `justify-center` then centred the content inside itself — a
+           no-op. `my-auto` asks the flex parent to split its free space above and below
+           this one item, which is the definition of centred; and when the block is TALLER
+           than the viewport the auto margins collapse to 0 instead of clipping its top,
+           which is what `flex-1 justify-center` would have done. -->
+      <div
+        v-if="accountEmpty"
+        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+      >
+        <ProductFirstUse :product="firstUse" />
+      </div>
+
+      <section
+        v-else
+        class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+      >
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
@@ -408,6 +484,16 @@
       v-model:open="drawerOpen"
       :existing-keys="existingKeys"
       @created="onCreated"
+    />
+
+    <!-- The phrase is the KEY, not a display name: it is what the row shows and what
+         code reads, so it is the only string a reader can confirm against. -->
+    <DeleteDialog
+      v-model:open="deleteOpen"
+      kind="Variable"
+      :name="pendingDelete?.key ?? ''"
+      description="The selected Variable will be deleted, and anything reading it will stop receiving a value. Check the"
+      @confirm="confirmDelete"
     />
   </AppLayout>
 </template>

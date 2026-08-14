@@ -7,8 +7,8 @@
   // catalog can never drift from what ships. Section ids match HubSidebar's nav items.
   import icons from '@aziontech/icons/catalog'
   import colorIcons from '@aziontech/icons/color-catalog'
-  import CodeBlock from '@aziontech/webkit/code-block'
   import { primitives } from '@aziontech/theme/colors'
+  import CodeBlock from '@aziontech/webkit/code-block'
 
   import ColorPaletteSection from './foundations/components/ColorPaletteSection.vue'
   import IconGrid from './foundations/components/IconGrid.vue'

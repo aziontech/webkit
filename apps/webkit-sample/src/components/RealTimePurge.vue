@@ -107,9 +107,7 @@
           description="Evict cached objects from every edge location. Purged content is fetched from your connector on the next request."
         />
 
-        <section
-          class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
-        >
+        <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
           <Message
             severity="warning"
             size="small"

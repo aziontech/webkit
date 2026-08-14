@@ -24,10 +24,11 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import ControlsHeader from '../../components/ui/ControlsHeader.vue'
+  import DeleteDialog from '../../components/ui/DeleteDialog.vue'
   import FilterBar from '../../components/ui/FilterBar.vue'
   import PageHeading from '../../components/ui/PageHeading.vue'
   import { useListFilters } from '../../lib/list-state'
@@ -77,9 +78,22 @@
       return
     }
     if (value === 'delete') {
-      removeTeam(row.id)
-      toast.success(`Team "${row.name}" deleted.`)
+      pendingDelete.value = row
+      deleteOpen.value = true
     }
+  }
+
+  // Deleting a team takes its permission bindings with it, so it asks for the team's
+  // name back before it happens.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    removeTeam(row.id)
+    toast.success(`Team "${row.name}" deleted.`)
+    pendingDelete.value = null
   }
   // ── The filter catalog ────────────────────────────────────────────────────
   // Status is the one enumerable column. Permissions is a LIST per row, not a
@@ -295,5 +309,12 @@
         </section>
       </section>
     </section>
+
+    <DeleteDialog
+      v-model:open="deleteOpen"
+      kind="Team"
+      :name="pendingDelete?.name ?? ''"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>

@@ -1,69 +1,80 @@
 <script setup>
-// Form type: CARDBOX WITH INDEPENDENT SAVES (the `/form` skill, "Form types"). A
-// long configuration page split into CardBox sections where EACH CARD OWNS ITS OWN
-// SAVE — the user commits changes in parts instead of one giant submit. Approach A
-// inside each card. Each card locks INDEPENDENTLY off its own `submitting` flag (the
-// /usability loading pattern, scoped to the saved block): that card's fields and its
-// right-side controls disable and its Save shows loading, while the other cards stay
-// live. The save reports via toast. Each card's name is the
-// CardBox `title` (its Heading, in the header) — never a title inside the content;
-// the card's guidance is a Message (`label` copy). A per-card Save is
-// `secondary` (the page has no primary), and the first card keeps the Azion Toolbar
-// layout (Save in the box footer, with a Learn-more link).
-import Button from "@aziontech/webkit/button";
-import CardBox from "@aziontech/webkit/card-box";
-import Label from "@aziontech/webkit/label";
-import Link from "@aziontech/webkit/link";
-import Message from "@aziontech/webkit/message";
-import Select from "@aziontech/webkit/select";
-import Switch from "@aziontech/webkit/switch";
-import { toast } from "@aziontech/webkit/toast";
-import { reactive, ref } from "vue";
+  // Form type: CARDBOX WITH INDEPENDENT SAVES (the `/form` skill, "Form types"). A
+  // long configuration page split into CardBox sections where EACH CARD OWNS ITS OWN
+  // SAVE — the user commits changes in parts instead of one giant submit. Approach A
+  // inside each card. Each card locks INDEPENDENTLY off its own `submitting` flag (the
+  // /usability loading pattern, scoped to the saved block): that card's fields and its
+  // right-side controls disable and its Save shows loading, while the other cards stay
+  // live. The save reports via toast. Each card's name is the
+  // CardBox `title` (its Heading, in the header) — never a title inside the content;
+  // the card's guidance is a Message (`label` copy). A per-card Save is
+  // `secondary` (the page has no primary), and the first card keeps the Azion Toolbar
+  // layout (Save in the box footer, with a Learn-more link).
+  import Button from '@aziontech/webkit/button'
+  import CardBox from '@aziontech/webkit/card-box'
+  import Label from '@aziontech/webkit/label'
+  import Link from '@aziontech/webkit/link'
+  import Message from '@aziontech/webkit/message'
+  import Select from '@aziontech/webkit/select'
+  import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, reactive, ref } from 'vue'
 
-import AppLayout from "./ui/AppLayout.vue";
-import PageHeading from "./ui/PageHeading.vue";
+  import { useBaseline } from '../lib/forms'
+  import AppLayout from './ui/AppLayout.vue'
+  import PageHeading from './ui/PageHeading.vue'
+  import UnsavedChangesGuard from './ui/UnsavedChangesGuard.vue'
 
-// --- Card 1: Azion Toolbar ----------------------------------------------
-const toolbarOptions = [
-  { label: "Default (controlled at the team level)", value: "default" },
-  { label: "Enabled", value: "enabled" },
-  { label: "Disabled", value: "disabled" },
-];
-const toolbarLabel = (value) =>
-  toolbarOptions.find((option) => option.value === value)?.label ?? "";
-const toolbar = reactive({ preprod: "default", prod: "default" });
-const savingToolbar = ref(false);
+  // --- Card 1: Azion Toolbar ----------------------------------------------
+  const toolbarOptions = [
+    { label: 'Default (controlled at the team level)', value: 'default' },
+    { label: 'Enabled', value: 'enabled' },
+    { label: 'Disabled', value: 'disabled' }
+  ]
+  const toolbarLabel = (value) =>
+    toolbarOptions.find((option) => option.value === value)?.label ?? ''
+  const toolbar = reactive({ preprod: 'default', prod: 'default' })
+  const savingToolbar = ref(false)
+  const toolbarBaseline = useBaseline(toolbar)
 
-// --- Card 2: Deployment Protection --------------------------------------
-const protectionOptions = [
-  { label: "Standard Protection", value: "standard" },
-  { label: "Only Preview Deployments", value: "preview" },
-  { label: "All Deployments", value: "all" },
-];
-const protectionLabel = (value) =>
-  protectionOptions.find((option) => option.value === value)?.label ?? "";
-const protection = reactive({ level: "standard", shareableLinks: true });
-const savingProtection = ref(false);
+  // --- Card 2: Deployment Protection --------------------------------------
+  const protectionOptions = [
+    { label: 'Standard Protection', value: 'standard' },
+    { label: 'Only Preview Deployments', value: 'preview' },
+    { label: 'All Deployments', value: 'all' }
+  ]
+  const protectionLabel = (value) =>
+    protectionOptions.find((option) => option.value === value)?.label ?? ''
+  const protection = reactive({ level: 'standard', shareableLinks: true })
+  const savingProtection = ref(false)
+  const protectionBaseline = useBaseline(protection)
 
-// Each card commits independently through the same one-flag lock.
-const saveCard = async (flag, message) => {
-  if (flag.value) return; // per-card re-entrancy lock
-  flag.value = true;
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    toast.success(message);
-  } catch (error) {
-    toast.error("Could not save.", {
-      description: error?.message ?? "Check your connection and try again.",
-    });
-  } finally {
-    flag.value = false;
+  // Each card commits independently through the same one-flag lock.
+  const saveCard = async (flag, message, commit) => {
+    if (flag.value) return // per-card re-entrancy lock
+    flag.value = true
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 900))
+      // Only THIS band's baseline moves: the other one is still pending, and the leave
+      // guard below has to keep saying so.
+      commit()
+      toast.success(message)
+    } catch (error) {
+      toast.error('Could not save.', {
+        description: error?.message ?? 'Check your connection and try again.'
+      })
+    } finally {
+      flag.value = false
+    }
   }
-};
 
-const saveToolbar = () => saveCard(savingToolbar, "Azion Toolbar settings saved.");
-const saveProtection = () =>
-  saveCard(savingProtection, "Deployment Protection settings saved.");
+  // The leave guard reads the PAGE, not a band: this screen commits in parts, so the
+  // reader can leave with one band saved and the other still pending — and that pending
+  // one is exactly what the guard exists to stop them from walking away from.
+  const dirty = computed(() => toolbarBaseline.dirty.value || protectionBaseline.dirty.value)
+
+  const saveToolbar = () => saveCard(savingToolbar, 'Azion Toolbar settings saved.', toolbarBaseline.commit)
+  const saveProtection = () => saveCard(savingProtection, 'Deployment Protection settings saved.', protectionBaseline.commit)
 </script>
 
 <template>
@@ -71,6 +82,8 @@ const saveProtection = () =>
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'CardBox with independent saves' }]"
   >
+    <UnsavedChangesGuard :dirty="dirty" />
+
     <!-- No `gap` on the stack: every band below owns its own top space via
          `.layout-section-start` (= --layout-boundary-start, the same step
          `.layout-boundary` puts above the heading). -->
@@ -100,7 +113,12 @@ const saveProtection = () =>
             <div class="grid grid-cols-1 gap-[var(--spacing-lg)] sm:grid-cols-2">
               <div class="flex flex-col gap-[var(--spacing-xs)]">
                 <Label for="tb-preprod">Pre-Production Deployments</Label>
-                <Select v-model="toolbar.preprod" size="large" :disabled="savingToolbar" :display-value="toolbarLabel">
+                <Select
+                  v-model="toolbar.preprod"
+                  size="large"
+                  :disabled="savingToolbar"
+                  :display-value="toolbarLabel"
+                >
                   <Select.Trigger id="tb-preprod" />
                   <Select.Content>
                     <Select.Option
@@ -115,7 +133,12 @@ const saveProtection = () =>
               </div>
               <div class="flex flex-col gap-[var(--spacing-xs)]">
                 <Label for="tb-prod">Production Deployments</Label>
-                <Select v-model="toolbar.prod" size="large" :disabled="savingToolbar" :display-value="toolbarLabel">
+                <Select
+                  v-model="toolbar.prod"
+                  size="large"
+                  :disabled="savingToolbar"
+                  :display-value="toolbarLabel"
+                >
                   <Select.Trigger id="tb-prod" />
                   <Select.Content>
                     <Select.Option
@@ -133,7 +156,11 @@ const saveProtection = () =>
         </template>
         <template #footer>
           <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
-            <Link href="#" label="Learn more about the Azion Toolbar" size="medium" />
+            <Link
+              href="#"
+              label="Learn more about the Azion Toolbar"
+              size="medium"
+            />
             <Button
               label="Save"
               kind="secondary"

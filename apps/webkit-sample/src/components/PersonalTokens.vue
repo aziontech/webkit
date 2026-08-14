@@ -51,18 +51,21 @@
   import { reactive, ref, watch } from 'vue'
 
   import { useListFilters } from '../lib/list-state'
+  import { useSampleMode } from '../lib/sample-mode'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
   import FilterBar from './ui/FilterBar.vue'
 
   // Switching organization, account or workspace reloads the page like every other
   // module list. The ROWS are not projected (src/lib/tenancy-scope.js): a personal
   // token authenticates the USER across every scope they can reach, so the same
   // list is the truthful answer in a new one — it is simply re-read.
+  const { accountEmpty } = useSampleMode()
 
   // Seeded tokens — a personal token's plaintext is shown only once at creation,
   // so the list never stores it; it tracks identity, lifecycle, and status.
-  const tokens = ref([
+  const SEEDED_TOKENS = [
     {
       id: 'pt-1',
       name: 'CLI local',
@@ -99,8 +102,16 @@
       lastUsed: '5 months ago',
       status: 'Revoked'
     }
-  ])
+  ]
 
+  // The EMPTY version has none: somebody who signed up an hour ago has not issued a
+  // token yet, and this list is not projected through the tenancy scope (see above),
+  // so the version has to be read here. Re-read on a flip rather than seeded once,
+  // because the preset can change while this page is on screen.
+  const tokens = ref(accountEmpty.value ? [] : [...SEEDED_TOKENS])
+  watch(accountEmpty, (isEmpty) => {
+    tokens.value = isEmpty ? [] : [...SEEDED_TOKENS]
+  })
 
   // ── The filter catalog ────────────────────────────────────────────────────
   // Status is the one enumerable column — Name and Description are free text,
@@ -140,6 +151,20 @@
   const statusSeverity = (status) =>
     ({ Active: 'success', Expired: 'warning', Revoked: 'danger' })[status] ?? 'secondary'
 
+  // Revoke is reversible enough to stay a menu click — the token stays in the list and
+  // says "Revoked". Delete is not: it takes the record away, so it goes through the
+  // confirmation dialog and only lands once the token's name has been typed back.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    tokens.value = tokens.value.filter((token) => token.id !== row.id)
+    toast.success(`Personal token "${row.name}" deleted.`)
+    pendingDelete.value = null
+  }
+
   const onTokenAction = (event, value, row) => {
     if (value === 'revoke') {
       tokens.value = tokens.value.map((token) =>
@@ -149,8 +174,8 @@
       return
     }
     if (value === 'delete') {
-      tokens.value = tokens.value.filter((token) => token.id !== row.id)
-      toast.success(`Personal token "${row.name}" deleted.`)
+      pendingDelete.value = row
+      deleteOpen.value = true
       return
     }
     toast.info(row.name, { description: row.description })
@@ -650,5 +675,15 @@
         </DialogContent>
       </DialogPortal>
     </Dialog>
+
+    <!-- A token has no "settings or instances" — what it has is whatever is
+         authenticating with it right now, which is what the reader needs told. -->
+    <DeleteDialog
+      v-model:open="deleteOpen"
+      kind="Personal token"
+      :name="pendingDelete?.name ?? ''"
+      description="The selected Personal token will be deleted, and any script or integration signing with it will stop authenticating. Check the"
+      @confirm="confirmDelete"
+    />
   </AppLayout>
 </template>

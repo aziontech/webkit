@@ -353,7 +353,7 @@
 
       <!-- ── Foundations: one view per foundation (tokens/colors/type/theme/
            icons), driven by the sidebar's fanned-out "Foundations" group. ─── -->
-      <HubFoundations
+      <HubFoundations key="hub-foundations-2"
         v-else-if="isFoundation"
         :key="active"
         :section="foundationSection"

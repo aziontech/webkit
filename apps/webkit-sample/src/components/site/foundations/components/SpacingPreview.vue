@@ -1,5 +1,6 @@
 <script setup>
-  import { ref, computed } from 'vue'
+  import { computed,ref } from 'vue'
+
   import { useViewport } from '../composables/useViewport.js'
   import { getActiveBreakpoint } from '../utils/from-tokens.js'
 

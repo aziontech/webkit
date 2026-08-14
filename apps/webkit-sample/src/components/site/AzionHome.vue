@@ -26,7 +26,6 @@
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
   import HeroTitle from '@aziontech/webkit/hero-title'
-  import Item from '@aziontech/webkit/item'
   import Overline from '@aziontech/webkit/overline'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionTitle from '@aziontech/webkit/section-title'
@@ -49,25 +48,37 @@
   // band is a FrameBox, not a BannerContainer, so there is no container to name
   // it on. The registry still owns it — this is its named export.
   import { MapBanner } from './ui/banners/index.js'
-  import { ClaimChips, ClientMark, CLIENTS, NETWORK_CLAIMS } from './ui/index.js'
+  import {
+    ClaimChips,
+    ClientMark,
+    CLIENTS,
+    NavColumn,
+    NavItem,
+    NETWORK_CLAIMS
+  } from './ui/index.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
 
   const clientNamed = (name) => CLIENTS.find((client) => client.name === name)
 
-  // The platform primitives, grouped by capability. Each row renders as an
-  // <Item kind="muted"> — the webkit row component — so the icon frame, the
-  // title/description pairing and the muted surface all come from the DS.
+  // The platform primitives, grouped by capability. One <NavColumn> per group, one
+  // <NavItem> per primitive — the site's own link row, built to the Figma
+  // NavigationItem: registration-framed glyph, name, one line of what it does.
+  //
+  // Every row is a link, because on the site every product row is one — and the hover
+  // state the design draws only exists on a link. `href` carries a real route where this
+  // demo has one and falls back to the placeholder `#`, the same convention the mega-menu
+  // rows in SiteNav already use for products with no page in the sample.
   const primitiveGroups = [
     {
       label: 'Compute',
-      blurb: 'Code that runs at the edge, in the same hop as the request.',
       items: [
         {
           icon: 'ai ai-edge-functions',
           title: 'Functions',
-          description: 'Run code globally, low latency'
+          description: 'Run code globally, low latency',
+          href: '/site/functions'
         },
         { icon: 'pi pi-sitemap', title: 'Rules', description: 'Control traffic routing' },
         {
@@ -84,7 +95,6 @@
     },
     {
       label: 'AI',
-      blurb: 'Inference and gateways that sit beside your data, not a region away.',
       items: [
         {
           icon: 'ai ai-edge-ai',
@@ -96,7 +106,6 @@
     },
     {
       label: 'Data',
-      blurb: 'State that lives where the request lands, not behind a round trip.',
       items: [
         {
           icon: 'ai ai-edge-storage',
@@ -118,7 +127,6 @@
     },
     {
       label: 'Security',
-      blurb: 'Traffic inspected and mitigated before it ever reaches your origin.',
       items: [
         {
           icon: 'ai ai-waf-rules',
@@ -272,9 +280,11 @@ And it stays up when others go down."
          already the hero's border-b.
 
          A framed headline block over a four-column hairline grid, one column per
-         capability. Every row is a webkit <Item kind="muted"> — the DS owns the
-         icon frame, the title/description pairing and the muted row surface, so
-         this page composes rows instead of restyling them. -->
+         capability — <NavColumn> and <NavItem>, the site's own link set, built to
+         the Figma pair. The column heading sits over its own rule and shares the
+         `lg` inset with the rows beneath it, so the label and every product name
+         start on ONE content column; the grid's `gap-px` draws the seams, which is
+         why no column carries a border of its own. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -286,62 +296,33 @@ And it stays up when others go down."
         />
       </template>
 
-      <CardGrid
-        variant="divider"
-        :columns="4"
-        :mobile-columns="2"
-      >
-        <div
-          v-for="group in primitiveGroups"
-          :key="group.label"
-          class="flex flex-col bg-[var(--bg-canvas)]"
+      <!-- The menu is a registration-framed band: rules above and below with a tick in
+           each corner. Only `y` — its left and right edges are the column's own border-x,
+           and drawing them here would put two hairlines on one line. The rule above is
+           also what divides the menu from the headline block, which the `#header` slot
+           does not draw. -->
+      <FrameBox borders="y">
+        <CardGrid
+          variant="divider"
+          :columns="4"
+          :mobile-columns="2"
         >
-          <!-- Column head: label over a one-line blurb. Both blocks share the body's
-               horizontal padding so the column reads as one left edge.
-
-               `-ml-1` on the Overline cancels the 4px `pl-1` the component carries of
-               its own — without it the label sits 4px right of everything beneath it.
-               Padding belongs to the layout here, not to the label. -->
-          <div
-            class="flex flex-col gap-[var(--spacing-xxs)] px-[var(--spacing-md)] pb-[var(--spacing-md)] pt-[var(--spacing-lg)]"
+          <NavColumn
+            v-for="group in primitiveGroups"
+            :key="group.label"
+            :title="group.label"
           >
-            <Overline class="-ml-1">{{ group.label }}</Overline>
-            <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ group.blurb }}</p>
-          </div>
-
-          <!-- The primitives, as rows in one list — not as cards inside a card. The
-               previous shape stacked a filled `muted` pill and a bordered icon frame
-               inside a column that is already a cell of a hairline grid: three nested
-               boxes for one line of text, and a row whose title started 90px right of
-               the column's own label.
-
-               `Item.List` is the DS's answer to exactly that: it forces every row to the
-               `default` kind (transparent, no per-row border) and divides them with the
-               muted hairline the rest of the page uses. With `size="small"` a row pads
-               itself by `md` — the same inset as the column head above it — so the
-               glyph, the heading and the blurb all start on ONE content column. The
-               media loses its `icon` box for the same reason: the glyph itself lands on
-               that column instead of a frame around it. -->
-          <Item.List class="flex-1 border-t border-[var(--border-default)]">
-            <Item
+            <NavItem
               v-for="primitive in group.items"
               :key="primitive.title"
-              size="small"
-            >
-              <Item.Media>
-                <i
-                  :class="[primitive.icon, 'text-body-md text-[var(--text-muted)]']"
-                  aria-hidden="true"
-                />
-              </Item.Media>
-              <Item.Content>
-                <Item.Title>{{ primitive.title }}</Item.Title>
-                <Item.Description>{{ primitive.description }}</Item.Description>
-              </Item.Content>
-            </Item>
-          </Item.List>
-        </div>
-      </CardGrid>
+              :icon="primitive.icon"
+              :title="primitive.title"
+              :description="primitive.description"
+              :href="primitive.href || '#'"
+            />
+          </NavColumn>
+        </CardGrid>
+      </FrameBox>
     </SectionModule>
 
     <SectionGap />
@@ -636,6 +617,21 @@ And it stays up when others go down."
 
     <!-- ── Closing CTA (Figma node 365:114207) ─────────────────────────────── -->
     <SiteCta />
+
+    <!-- The Spacer the design closes the column with, hatched: the one band on the page
+         with no content of its own, so the texture reads as the page's own material.
+
+         A bare FrameBox rather than SectionGap, at that component's own `medium` height,
+         because this one must draw NO rules. The footer below opens with a full-bleed rule
+         the way the hero closes with one, and SectionGap's fixed `borders="y"` would put a
+         second hairline on that same pixel across the column's width. Its sides stay the
+         column's border-x, as everywhere else on the page. -->
+    <FrameBox
+      borders="none"
+      marks="none"
+      hatch
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    />
   </SectionContainer>
   <!-- ══ End framed column ═════════════════════════════════════════════════ -->
 </template>

@@ -22,7 +22,6 @@
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
-  import Popover from '@aziontech/webkit/popover'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -34,12 +33,23 @@
   import { useListFilters } from '../lib/list-state'
   import { provisionedWorkloads, removeDeployment } from '../lib/provisioning'
   import { releaseSeedForWorkload } from '../lib/releases'
+  import { useSampleMode } from '../lib/sample-mode'
   import { tenancyRows } from '../lib/tenancy-scope'
   import { WORKLOADS } from '../lib/workloads'
+  import { productFirstUse } from '../product-empty-states'
   import AppLayout from './ui/AppLayout.vue'
   import ControlsHeader from './ui/ControlsHeader.vue'
+  import DeleteDialog from './ui/DeleteDialog.vue'
+  import DomainOverflowPopover from './ui/DomainOverflowPopover.vue'
   import FilterBar from './ui/FilterBar.vue'
   import LastModifiedCell from './ui/LastModifiedCell.vue'
+  import ProductFirstUse from './ui/ProductFirstUse.vue'
+
+  // The sample's EMPTY version: this module before it owns anything. The same block
+  // the /empty-states gallery reviews, rendered in the module's own page
+  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
+  const { accountEmpty } = useSampleMode()
+  const firstUse = productFirstUse('workloads')
 
   const route = useRoute()
   const router = useRouter()
@@ -171,15 +181,28 @@
     })
   }
 
+  // Deleting a workload takes its domains offline, so it does not happen on the menu
+  // click: the row is held here and the confirmation dialog asks for its name back.
+  const pendingDelete = ref(null)
+  const deleteOpen = ref(false)
+
+  const confirmDelete = () => {
+    const row = pendingDelete.value
+    if (!row) return
+    removeDeployment(row.id)
+    workloads.value = workloads.value.filter((workload) => workload.id !== row.id)
+    toast.success(`${row.name} deleted`)
+    pendingDelete.value = null
+  }
+
   const onRowAction = (event, value, row) => {
     if (value === 'deploy') {
       openDeploy(row)
       return
     }
     if (value === 'delete') {
-      removeDeployment(row.id)
-      workloads.value = workloads.value.filter((workload) => workload.id !== row.id)
-      toast.success(`${row.name} deleted`)
+      pendingDelete.value = row
+      deleteOpen.value = true
       return
     }
     if (value === 'view') {
@@ -197,11 +220,42 @@
     active="workloads"
     :breadcrumb="[{ label: 'Workloads' }]"
   >
-    <main class="layout-column flex min-h-full flex-col">
+    <!-- The measure follows the mode: the fluid data measure for the list, Overview's
+         focused one for first use. The argument is in Applications.vue. -->
+    <main
+      class="flex min-h-full flex-col"
+      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+    >
       <!-- The page's parent section. A module list opens straight on it (no
            PageHeading — the module name is the breadcrumb crumb), so the
            `:first-child` rule zeroes its step and the boundary is its top space. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <!-- FIRST USE, IN HOME'S CONTAINER.
+           The same box the first access uses on /home (./HomeEmptyState.vue) and the
+           /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
+           viewport rather than hanging from the top edge. This screen and that one are the
+           same KIND of screen — a short block answering "there is nothing here yet" — and a
+           short block pinned to the top with a void under it reads as content that failed
+           to load. The section step is gone with it: a centred box measures from the middle,
+           and a top margin would only pull it off centre.
+           CENTRED WITH AUTO MARGINS, not `min-h-full justify-center`. That pair looks
+           right and does nothing: `min-height: 100%` resolves against a parent whose own
+           height is `auto` (main is `min-h-full`, not `h-full`), so the box stayed at
+           content height and `justify-center` then centred the content inside itself — a
+           no-op. `my-auto` asks the flex parent to split its free space above and below
+           this one item, which is the definition of centred; and when the block is TALLER
+           than the viewport the auto margins collapse to 0 instead of clipping its top,
+           which is what `flex-1 justify-center` would have done. -->
+      <div
+        v-if="accountEmpty"
+        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+      >
+        <ProductFirstUse :product="firstUse" />
+      </div>
+
+      <section
+        v-else
+        class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+      >
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
@@ -266,7 +320,9 @@
                   @row-click="openWorkload"
                 >
                   <template #cell-domain="{ row, value }">
-                    <!-- Primary domain link (truncates) + arrow, then "+N" overflow Popover; copy button pinned to the cell's right edge so it aligns across rows. -->
+                    <!-- Primary domain link (truncates) + arrow, then the "+N" overflow
+                         Popover (./ui/DomainOverflowPopover.vue); copy button pinned to
+                         the cell's right edge so it aligns across rows. -->
                     <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
                       <a
                         :href="`https://${value}`"
@@ -281,39 +337,11 @@
                           aria-hidden="true"
                         />
                       </a>
-                      <Popover
+                      <DomainOverflowPopover
                         v-if="row.domainCount"
-                        placement="bottom-start"
-                        width="medium"
-                      >
-                        <Popover.Trigger @click.stop>
-                          <Tag
-                            :label="`+${row.domainCount}`"
-                            severity="secondary"
-                            size="small"
-                            class="shrink-0 cursor-pointer"
-                          />
-                        </Popover.Trigger>
-
-                        <Popover.Content @click.stop>
-                          <div
-                            class="flex max-h-[var(--container-xs)] flex-col overflow-auto p-[var(--spacing-xxs)]"
-                          >
-                            <p
-                              class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-overline-sm text-[var(--text-muted)]"
-                            >
-                              {{ row.domains.length }} domains
-                            </p>
-                            <span
-                              v-for="domain in row.domains"
-                              :key="domain"
-                              class="truncate px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)]"
-                            >
-                              {{ domain }}
-                            </span>
-                          </div>
-                        </Popover.Content>
-                      </Popover>
+                        :domains="row.domains"
+                        :count="row.domainCount"
+                      />
                       <CopyButton
                         kind="outlined"
                         :value="value"
@@ -415,6 +443,13 @@
           </section>
         </section>
       </section>
+
+      <DeleteDialog
+        v-model:open="deleteOpen"
+        kind="Workload"
+        :name="pendingDelete?.name ?? ''"
+        @confirm="confirmDelete"
+      />
     </main>
   </AppLayout>
 </template>

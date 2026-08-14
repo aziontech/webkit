@@ -40,14 +40,23 @@
       v-if="title || description"
       class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]"
     >
-      <h1
+      <!-- The title row. `title-suffix` is for an affordance that belongs to the
+           TITLE rather than to the page — a copy control on a page whose title is
+           an id, which has to sit where the id is stated. Page-level controls go
+           in `actions`, on the other side of the header. -->
+      <div
         v-if="title"
-        :id="titleId"
-        :data-size="size"
-        class="text-balance text-[var(--text-default)] data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
+        class="flex min-w-0 items-center gap-[var(--spacing-xs)]"
       >
-        {{ title }}
-      </h1>
+        <h1
+          :id="titleId"
+          :data-size="size"
+          class="text-balance text-[var(--text-default)] data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
+        >
+          {{ title }}
+        </h1>
+        <slot name="title-suffix" />
+      </div>
       <p
         v-if="description"
         class="text-pretty text-body-sm text-[var(--text-muted)]"

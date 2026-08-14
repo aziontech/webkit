@@ -1,12 +1,13 @@
-// Deployments with a PAGE behind them — the record `/deployments/:id` renders.
+// Deployments whose whole RUN is recorded — the richest records `/deployments/:id`
+// renders.
 //
-// Every other deployment surface in this sample reads a deployment as a ROW:
-// version, status, resource, environment, who and when. That is all a row can
-// hold, and all the read-only drawer needs. A deployment somebody has to diagnose
-// needs more: which artifacts it touched, and the PIPELINE it ran — step by step,
-// including the step that broke and the ones that never ran after it. Those are
-// things you link to, reload and come back to, so they live at a URL (see
-// components/DeploymentDetail.vue).
+// Every deployment in this console is read on that page (see `deployPageRecord` at
+// the bottom of this file, and components/DeploymentDetail.vue). What differs is how
+// much each record knows. A LIST row knows version, status, resource, environment,
+// who and when — all a row can hold. A deployment somebody has to diagnose needs
+// more: which artifacts it touched, and the PIPELINE it ran, step by step, including
+// the step that broke and the ones that never ran after it. Those are the records
+// here.
 //
 // The vocabulary this module does NOT own: `status` is the shared deployment
 // status (src/lib/deployments.js), so these read `Ready` / `Building` / `Error`
@@ -51,7 +52,13 @@
 import { ref } from 'vue'
 
 import { daysAgo, formatListDate, hoursAgo } from './dates'
+// One direction only: the history fixture never imports this module (its own comment
+// says why), so resolving a history row for the deploy PAGE belongs on this side.
+import { deploymentByVersion, deploymentRowsFor } from './deployment-history'
 import { authorAt, emailOf } from './people'
+// Same direction: the provisioning store knows nothing about deployments, so the
+// deploy PAGE's lookup of a provisioned chain's version belongs on this side too.
+import { findDeploymentByVersion, provisionedDeployRow } from './provisioning'
 
 // ── Triggers ───────────────────────────────────────────────────────────────
 // Azion starts a deployment from exactly two places: the Console (the UI you are
@@ -839,7 +846,8 @@ export function restartConsoleDeploy(id) {
 }
 
 /**
- * A deployment by its id, or `undefined` — also the "has a deploy page?" test.
+ * A deployment by its id, or `undefined` — the RECORDED runs only (this module's
+ * own: a whole `azion deploy` pipeline, its artifacts, its failing step).
  *
  * Reads the session store first: a deploy started in this session is the one the
  * user is most likely to be opening, and it is the same kind of record.
@@ -847,6 +855,102 @@ export function restartConsoleDeploy(id) {
 export const deployById = (id) =>
   sessionDeploys.value.find((deploy) => deploy.id === id) ??
   DEPLOYMENTS.find((deploy) => deploy.id === id)
+
+/**
+ * The record `/deployments/:id` renders — for ANY deployment in the console.
+ *
+ * EVERY deployment is read on a page. It used to be two surfaces: the deployments
+ * whose pipeline this module records opened a page, and every other row opened a
+ * read-only drawer — so the same click produced two different depths of answer, and
+ * the shallower one closed on Escape and could not be linked to. One surface means
+ * one lookup, which is what this function is.
+ *
+ * The two families it resolves are genuinely different in what they KNOW, and the
+ * shape says so rather than papering over it:
+ *
+ *   • a RECORDED run (./azion-deploys.js) knows its build artifacts, what triggered
+ *     it, and every step it ran — `edge`, `trigger` and `steps` are populated.
+ *   • a seeded HISTORY row (./deployment-history.js) is row-shaped: who deployed
+ *     what, where and when. `edge` and `trigger` are null and `steps` is empty, and
+ *     the page renders the fields it actually has instead of inventing the rest.
+ *
+ * The page therefore reads ONE shape with honestly-optional parts, instead of
+ * branching on which family it got.
+ *
+ * @param {string} id The version id from the URL (a recorded run's id IS its version).
+ * @param {object} [context] What the link carried about where the row came from.
+ * @param {string} [context.workloadId] The workload whose history holds it. Only
+ *   needed for a workload this sample does not seed: its history is DERIVED from its
+ *   own id (src/lib/deployment-history.js), so those rows are not in the seeded list
+ *   and the version id alone cannot find them. The link that opened the page knows
+ *   which workload it was listing, so it passes it — and a reload of that URL still
+ *   resolves, which is the whole reason the page exists.
+ * @param {string} [context.workloadName] Its display name, for the same reason.
+ * @returns {object|undefined} The page record, or undefined for an id nothing matches.
+ */
+export const deployPageRecord = (id, { workloadId = '', workloadName = '' } = {}) => {
+  const recorded = deployById(String(id))
+  if (recorded)
+    return {
+      ...recorded,
+      // The one resource it deployed. A recorded run is always an application
+      // deploy — that is what `azion deploy` does — so the page can read the same
+      // `resource` block for both families.
+      resource: {
+        type: 'application',
+        name: recorded.application.name,
+        id: recorded.application.id
+      },
+      steps: stepsOf(recorded)
+    }
+
+  // A chain provisioned in this session (./provisioning.js) publishes a deployment
+  // too, and its version id is minted at deploy time — it is in no fixture, so it
+  // has to be looked up in that store or the page it links to finds nothing. It is
+  // read as the same ROW every other family is, so the mapping below is one mapping.
+  const provisioned = findDeploymentByVersion(id)
+  const row =
+    deploymentByVersion(id) ??
+    (provisioned ? provisionedDeployRow(provisioned) : undefined) ??
+    (workloadId
+      ? deploymentRowsFor(workloadId, workloadName || undefined).find(
+          (candidate) => candidate.versionId === String(id)
+        )
+      : undefined)
+  if (!row) return undefined
+
+  return {
+    id: row.versionId,
+    status: row.status,
+    environment: row.environment,
+    createdAt: row.deployedAt,
+    duration: row.duration,
+    author: row.author,
+    authorEmail: row.authorEmail,
+    authorAvatar: row.authorAvatar,
+    current: row.current,
+    workload: { id: row.workloadId, name: row.workloadName, domain: '' },
+    resource: { type: row.resourceType, name: row.resourceName, id: row.resourceId },
+    // Not known for a seeded row, and left empty rather than guessed: a "Triggered
+    // By: Console" on a deployment nobody recorded the trigger of is a made-up fact,
+    // and the page drops the field instead of printing one. A provisioned chain DOES
+    // know — it exists because somebody finished a deploy in this UI — so it carries
+    // the trigger on its row and the page prints it.
+    trigger: row.trigger ?? '',
+    // Build artifacts belong to a run this module recorded; no row family has them.
+    edge: null,
+    // Where it published, for the families that are live and know their address. A
+    // seeded row has none, so Visit stays inert rather than linking nowhere.
+    url: row.url ?? '',
+    error: null,
+    // No recorded pipeline. The page streams the canonical one as an ILLUSTRATION of
+    // where this deployment is (which is what the drawer did for these rows), so
+    // `steps` stays empty and the page decides — it is the surface that can say so.
+    steps: [],
+    failedAt: '',
+    activeStep: ''
+  }
+}
 
 /**
  * A deployment as a Deployments-table ROW.
@@ -886,7 +990,7 @@ export const deployRow = (deploy) => ({
   resourceType: 'application',
   resourceName: deploy.application.name,
   resourceId: deploy.application.id,
-  // The one resource it deployed, under the field the details drawer reads it as.
+  // The one resource it deployed, under the field every deployment surface reads.
   application: deploy.application.name,
   author: deploy.author,
   authorEmail: deploy.authorEmail,

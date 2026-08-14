@@ -1,18 +1,37 @@
 <script setup>
-  // The console's CREATION PATTERN for second-level resources, as a shell: a
-  // LARGE right-side Drawer whose body is section-titled ItemGroup sections
-  // (Approach A of the /form skill), committed by ONE scoped save — never a full
-  // page.
+  // THE DRAWER. One shell for every create that happens INSIDE a resource, and the
+  // only shell for them — see `docs/surfaces.js` for where that rule comes from.
   //
-  // Only the shell lives here — the Drawer/Panel chrome, the form element, the
-  // `submitting` lock and the Cancel/Save footer. The FIELDS come from the tab
-  // that owns the resource, through the default slot, because what a Device Group
-  // asks for has nothing to do with what a Functions Instance asks for. That
-  // split is what lets each tab own its own create flow without repeating this
-  // boilerplate four times.
+  // WHY A SHELL AND NOT A PAGE. A create that lives inside a resource is a step in
+  // work already underway: the reader is on the zone, the table, the rules list, and
+  // what they are adding only means anything in that context. A page would throw the
+  // context away and make them navigate back to it. The drawer keeps the list behind
+  // it, so the thing being added is seen against the things already there.
   //
-  // Validation runs on submit only: the owner validates in its `submit` handler
-  // and closes by setting `open` to false.
+  // THE CHROME IS THE VARIABLES DRAWER'S, deliberately. That flow was the one the
+  // console had already settled, so it is the shape every other in-resource create
+  // now takes rather than each one re-deciding:
+  //   - a right-side Drawer, `medium` by default (`large` only when the body genuinely
+  //     needs the width — a rule builder, a table editor);
+  //   - ONE native `<form novalidate @submit.prevent>` owning the scope, so Enter
+  //     submits through the sr-only submit control (the styled Button cannot be a
+  //     native submit);
+  //   - ONE `submitting` flag locking everything: the body `<fieldset :disabled>` is
+  //     the native safety net and Save carries `:loading`;
+  //   - NO Cancel. The panel's X, the overlay and Escape are all the dismissal, and a
+  //     fourth one in the footer would only compete with Save for the eye. Save sits
+  //     alone on the right.
+  //
+  // THE BODY IS SECTIONS. The default slot is a stack of `Section` bands (title +
+  // Hint, a flush CardBox of Item rows), the same bands a create PAGE uses — so a
+  // drawer create and a page create are the same form in two containers, and the
+  // reader learns one anatomy. A band whose fields the endpoint does not require goes
+  // in a `collapsible` Section titled Advanced, last.
+  //
+  // Validation stays with the OWNER: it validates in its `submit` handler and closes
+  // by setting `open` to false. This shell never decides whether a form is valid,
+  // because what a DNS record requires has nothing to do with what a table column
+  // does.
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -27,29 +46,36 @@
   const open = defineModel('open', { type: Boolean, default: false })
 
   defineProps({
-    // Drawer title, e.g. "Create Device Group".
+    // Drawer title, e.g. "Add Record". It names the ACTION on the resource, not the
+    // resource — the reader already knows which zone they are in.
     title: { type: String, default: '' },
-    // Supporting line under the title.
-    description: {
+    // Optional supporting line under the title. Optional on purpose: a drawer whose
+    // bands already carry hints does not need a paragraph repeating them, and the
+    // Variables drawer ships without one.
+    description: { type: String, default: '' },
+    // The owner's in-flight flag. Locks the whole scope: the body fieldset and the
+    // Save's spinner.
+    submitting: { type: Boolean, default: false },
+    // Panel width. `medium` is the pattern; `large` is the exception a body earns by
+    // being genuinely wide (a rule builder, a schema editor), never by having many
+    // fields — many fields want scrolling, not width.
+    size: {
       type: String,
-      default: 'Configure the resource across grouped sections — all saved together.'
+      default: 'medium',
+      validator: (value) => ['small', 'medium', 'large'].includes(value)
     },
-    // The owner's in-flight flag. Locks the whole scope: the body fieldset, both
-    // footer buttons, and the Save's spinner.
-    submitting: { type: Boolean, default: false }
+    // The commit's own verb. "Save" for most; "Add" / "Create" when the list behind
+    // the drawer is what visibly changes.
+    saveLabel: { type: String, default: 'Save' }
   })
 
   const emit = defineEmits(['submit'])
-
-  const cancel = () => {
-    open.value = false
-  }
 </script>
 
 <template>
   <Drawer
     v-model:open="open"
-    size="large"
+    :size="size"
     side="right"
   >
     <DrawerPortal>
@@ -64,7 +90,10 @@
           <PanelHeader class="w-full">
             <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
               <DrawerTitle>{{ title }}</DrawerTitle>
-              <p class="text-body-sm text-[var(--text-muted)]">
+              <p
+                v-if="description"
+                class="text-body-sm text-[var(--text-muted)]"
+              >
                 {{ description }}
               </p>
             </div>
@@ -73,9 +102,10 @@
 
           <PanelContent>
             <!-- One fieldset for the whole body: a single `disabled` locks every
-                 field in every section while the scoped save runs. -->
+                 field in every band while the scoped save runs. The bands space
+                 themselves (Section owns the step), so nothing here sets a gap. -->
             <fieldset
-              class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
             >
               <legend class="sr-only">{{ title }}</legend>
@@ -83,25 +113,22 @@
             </fieldset>
           </PanelContent>
 
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
+          <!-- `--bg-canvas` sets the footer a shade back from the form it submits, so
+               the two read as different planes. `#start` is for a bulk path that
+               belongs to the whole form (the Variables drawer's Import); everything
+               else stays out of here. -->
+          <PanelFooter class="flex-wrap justify-between bg-[color:var(--bg-canvas)]">
+            <div class="flex min-w-0 items-center gap-[var(--spacing-sm)]">
+              <slot name="start" />
+            </div>
             <Button
-              class="w-full md:w-auto"
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-              :disabled="submitting"
-              @click="cancel"
-            />
-            <Button
-              class="w-full md:w-auto"
-              label="Save"
+              :label="saveLabel"
               kind="primary"
               size="medium"
               :loading="submitting"
               @click="emit('submit')"
             />
-            <!-- Enter-to-submit: the visible Save is a click handler (not a
+            <!-- Enter-to-submit: the visible Save is a click handler (not a native
                  submit button), so the form needs a real submit control for the
                  keyboard path. -->
             <button
@@ -110,7 +137,7 @@
               tabindex="-1"
               aria-hidden="true"
             >
-              Save
+              {{ saveLabel }}
             </button>
           </PanelFooter>
         </form>

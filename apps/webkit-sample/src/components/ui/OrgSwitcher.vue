@@ -11,22 +11,30 @@
   // account count, a checkmark on the current one, and the way to create
   // another.
   //
-  // Two kinds of row end up in this list, and the footer names both: the ones the
-  // user was INVITED into — which is the whole reason a switcher exists — and the
-  // ones they created. "New organization" opens the console's Create Organization
-  // flow (/organizations/new); the first organization a user ever gets is created
-  // for them at signup instead (see Onboarding.vue).
+  // Two kinds of row end up in this list: the ones the user was invited into — which
+  // is the whole reason a switcher exists — and the ones they created. "New
+  // organization" opens the console's Create Organization flow (/organizations/new);
+  // the first organization a user ever gets is created for them at signup instead
+  // (see Onboarding.vue).
   import InputText from '@aziontech/webkit/input-text'
   import Popover from '@aziontech/webkit/popover'
+  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { useSamplePreset } from '../../lib/sample-preset.js'
   import { useOrganizations } from '../../organizations.js'
+  import { planSeverityFor } from '../../plans.js'
+  import ChangePlanDrawer from './ChangePlanDrawer.vue'
   import OrgAvatar from './OrgAvatar.vue'
 
   const { organizations, currentOrganization, currentOrganizationId, switchOrganization } =
     useOrganizations()
+
+  // The contract in force — it decides whether "New organization" opens the create
+  // flow or the plan comparison (../../lib/sample-preset.js).
+  const { plan } = useSamplePreset()
 
   const route = useRoute()
   const router = useRouter()
@@ -36,12 +44,20 @@
   const open = ref(false)
   const query = ref('')
 
-  // The two facts that tell two same-named organizations apart. Pluralized
-  // because a freshly created organization holds exactly one tenant, and
-  // "1 accounts" in the first thing a new user reads about their own
-  // organization is the kind of detail that makes a product feel unfinished.
-  const orgSummary = (organization) =>
-    `${organization.plan} · ${organization.accounts} ${organization.accounts === 1 ? 'account' : 'accounts'}`
+  // Past this many rows the panel earns a search field. Shared with the account and
+  // workspace switchers by convention, not by import — each panel states its own
+  // threshold next to the list it governs.
+  const SEARCH_THRESHOLD = 5
+
+  // Pluralized because a freshly created organization holds exactly one tenant, and
+  // "1 accounts" in the first thing a new user reads about their own organization is
+  // the kind of detail that makes a product feel unfinished.
+  const accountCountOf = (organization) =>
+    `${organization.accounts} ${organization.accounts === 1 ? 'account' : 'accounts'}`
+
+  // The whole summary, for the toast — the row itself now carries the two facts as
+  // separate tags.
+  const orgSummary = (organization) => `${organization.plan} · ${accountCountOf(organization)}`
 
   // Filter on name AND plan: an operator who remembers "the enterprise one"
   // finds it without remembering what it was called.
@@ -77,13 +93,34 @@
 
   // The create flow is a focused page, so the panel closes behind it. The email
   // rides along, like every other navigation out of the console shell.
-  const createOrg = () => {
-    open.value = false
+  const openCreateFlow = () => {
     router.push({
       path: '/organizations/new',
       query: { email: route.query.email || 'myemail@azion.com' }
     })
   }
+
+  // A SECOND ORGANIZATION IS A PAID FEATURE.
+  //
+  // Hobby is one organization — the one you were given at signup — so the row is
+  // still offered and still answers, but what it opens is the plan comparison
+  // (./ChangePlanDrawer.vue) with the sentence that says which action asked for it.
+  // Hiding or disabling the row instead would leave the reader to work out WHY on
+  // their own, which is the version of this moment that loses the customer: a
+  // refusal that names the contract and shows the way past it is a sale, and a
+  // greyed-out row is a dead end.
+  const changePlanOpen = ref(false)
+  const createOrg = () => {
+    open.value = false
+    if (plan.value === 'hobby') {
+      changePlanOpen.value = true
+      return
+    }
+    openCreateFlow()
+  }
+
+  // Paid: pick up exactly where the reader was stopped.
+  const onPlanUpgraded = () => openCreateFlow()
 </script>
 
 <template>
@@ -97,14 +134,21 @@
         type="button"
         :data-state="isOpen ? 'open' : 'closed'"
         :aria-label="`Organization: ${currentOrganization.name}. Switch organization`"
-        class="flex min-w-0 max-w-[11rem] items-center gap-1.5 rounded-[var(--shape-button)] p-[var(--spacing-xxs)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[state=open]:bg-[var(--bg-hover)] motion-reduce:transition-none"
+        class="flex w-auto items-center gap-1.5 rounded-[var(--shape-button)] p-[var(--spacing-xxs)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[state=open]:bg-[var(--bg-hover)] motion-reduce:transition-none"
       >
         <OrgAvatar
           :name="currentOrganization.name"
           :accent="currentOrganization.accent"
           size="small"
         />
-        <span class="min-w-0 truncate text-label-sm font-medium text-[var(--text-default)]">
+        <!-- The label token's own weight — all three chain links carry it, none is
+             emphasised over the others (see AccountSwitcher.vue).
+             `whitespace-nowrap`, not `truncate`: the DS Popover.Trigger wrapping this
+             button is `w-fit shrink-0`, so the pill can never be compressed and the
+             ellipsis could never fire — all `truncate` did was open an overflow box
+             that sized itself off the flex line rather than off the word in it. The
+             name decides the width now. -->
+        <span class="whitespace-nowrap text-label-sm text-[var(--text-default)]">
           {{ currentOrganization.name }}
         </span>
         <i
@@ -120,8 +164,15 @@
         ref="panelRef"
         class="flex flex-col"
       >
-        <!-- Filter: the panel's own field, not the page search. -->
-        <div class="border-b border-[var(--border-muted)] p-[var(--spacing-xxs)]">
+        <!-- Filter: the panel's own field, not the page search. It appears only past
+             SEARCH_THRESHOLD rows — a search box over a list you can read in one look
+             is furniture, and it puts a keystroke between the reader and a row that
+             was already on screen. Same rule in the account and workspace switchers,
+             so the three panels behave alike. -->
+        <div
+          v-if="organizations.length > SEARCH_THRESHOLD"
+          class="border-b border-[var(--border-muted)] p-[var(--spacing-xxs)]"
+        >
           <InputText
             v-model="query"
             placeholder="Find organization..."
@@ -140,12 +191,14 @@
         <!-- The list. Capped so a long roster scrolls inside the panel instead
              of growing it past the viewport. -->
         <div class="flex max-h-[16rem] flex-col overflow-y-auto p-[var(--spacing-xxs)]">
-          <p
-            class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-overline-sm text-[var(--text-muted)]"
-          >
+          <p class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-muted)]">
             Organizations
           </p>
 
+          <!-- One line per row, 24px mark, and the row's numbers as Tags on the
+               trailing edge — the same shape the account and workspace panels use,
+               so the three links of the chain open into three panels that read as
+               one control (see AccountSwitcher.vue). -->
           <button
             v-for="org in filtered"
             :key="org.id"
@@ -156,20 +209,34 @@
             <OrgAvatar
               :name="org.name"
               :accent="org.accent"
-              size="medium"
+              size="small"
             />
-            <span class="flex min-w-0 flex-1 flex-col">
+            <span class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xxs)]">
               <span class="truncate text-label-sm text-[var(--text-default)]">
                 {{ org.name }}
               </span>
-              <span class="truncate text-body-xs text-[var(--text-muted)]">
-                {{ orgSummary(org) }}
-              </span>
+              <!-- The tier in the tier's OWN colour (../../plans.js) — the same tag
+                   the entrance's plan step shows, the upgrade drawer sells and the
+                   account menu carries on the profile. A neutral tag here would make
+                   the one fact this row shares with the rest of the console the one
+                   place it looks different. -->
+              <Tag
+                :label="org.plan"
+                :severity="planSeverityFor(org.plan)"
+                size="small"
+                class="shrink-0"
+              />
+              <i
+                v-if="org.id === currentOrganizationId"
+                class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
             </span>
-            <i
-              v-if="org.id === currentOrganizationId"
-              class="pi pi-check shrink-0 text-body-sm text-[var(--text-default)]"
-              aria-hidden="true"
+            <Tag
+              :label="accountCountOf(org)"
+              severity="secondary"
+              size="small"
+              class="shrink-0 tabular-nums"
             />
           </button>
 
@@ -181,8 +248,8 @@
           </p>
         </div>
 
-        <!-- Create: the last row, separated from the roster it adds to, over the
-             line that says where the other rows came from. -->
+        <!-- Create: the last row, over the line that separates it from the roster it
+             adds to — the same footer the account and workspace panels end with. -->
         <div class="flex flex-col border-t border-[var(--border-muted)] p-[var(--spacing-xxs)]">
           <button
             type="button"
@@ -195,13 +262,16 @@
             />
             New organization
           </button>
-          <p
-            class="px-[var(--spacing-xs)] pb-[var(--spacing-xxs)] text-body-xs text-[var(--text-muted)]"
-          >
-            You also appear here in organizations you were invited to.
-          </p>
         </div>
       </div>
     </Popover.Content>
   </Popover>
+
+  <!-- Opened when the plan refuses a second organization. It teleports to the body,
+       so it survives this popover closing behind it. -->
+  <ChangePlanDrawer
+    v-model:open="changePlanOpen"
+    title="Need more organizations?"
+    @upgraded="onPlanUpgraded"
+  />
 </template>

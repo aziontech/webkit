@@ -11,11 +11,11 @@
   import TabView from '@aziontech/webkit/tab-view'
   import { ref } from 'vue'
 
-  import ContrastBanner from '../ui/ContrastBanner.vue'
   import BannerContainer from '../site/foundations/components/layout/BannerContainer.vue'
   import CardGrid from '../site/foundations/components/layout/CardGrid.vue'
   import SectionContainer from '../site/foundations/components/layout/SectionContainer.vue'
   import SectionModule from '../site/foundations/components/layout/SectionModule.vue'
+  import ContrastBanner from '../ui/ContrastBanner.vue'
 
   const activePrimitive = ref('build')
 

@@ -36,20 +36,11 @@
   import { curve, duration } from '@aziontech/theme/animations'
   import Button from '@aziontech/webkit/button'
   import Divider from '@aziontech/webkit/divider'
-  import Drawer from '@aziontech/webkit/drawer'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputPassword from '@aziontech/webkit/input-password'
   import InputText from '@aziontech/webkit/input-text'
   import Label from '@aziontech/webkit/label'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
@@ -59,6 +50,7 @@
   import { APPLICATIONS } from '../lib/applications'
   import { parseDotenv } from '../lib/dotenv'
   import { presetIcon, presetLabel } from '../lib/presets'
+  import ResourceDrawer from './ui/ResourceDrawer.vue'
 
   const open = defineModel('open', { type: Boolean, default: false })
 
@@ -348,337 +340,298 @@
 </script>
 
 <template>
-  <Drawer
+  <ResourceDrawer
     v-model:open="open"
     size="medium"
-    side="right"
+    title="Add Environment Variable"
+    save-label="Save"
+    :submitting="submitting"
+    @submit="submit"
   >
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <!-- One native form owns the scope: Enter submits (via the sr-only submit
-             control, since the styled Button can't be type=submit), and the fieldset
-             locks every field while the request is in flight. -->
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Add Environment Variable"
-          novalidate
-          @submit.prevent="submit"
+    <!-- THIS body is not made of Sections — it is the flat repeater the Variables
+         flow has always been — so it owns its own rhythm. The shell deliberately sets
+         no gap on its fieldset, because a Section-based body spaces itself and a gap
+         there would double every band step. -->
+    <div class="flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <!-- The variables themselves. Inside a triad the fields sit at the MD step
+                     so the three read as one variable; triad → triad takes the section
+                     step, like every other block in the panel. -->
+      <TransitionGroup
+        tag="div"
+        class="flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+        v-bind="morphTransition"
+        :style="morphStyle"
+      >
+        <div
+          v-for="(entry, index) in form.entries"
+          :key="entry.id"
+          class="flex min-w-0 flex-col gap-[var(--spacing-md)]"
         >
-          <PanelHeader class="w-full">
-            <DrawerTitle>Add Environment Variable</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-
-          <PanelContent>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
-              :disabled="submitting"
-            >
-              <legend class="sr-only">Add environment variable</legend>
-
-              <!-- The variables themselves. Inside a triad the fields sit at the MD step
-                   so the three read as one variable; triad → triad takes the section
-                   step, like every other block in the panel. -->
-              <TransitionGroup
-                tag="div"
-                class="flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
-                v-bind="morphTransition"
-                :style="morphStyle"
+          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <!-- Remove rides the Key label row: it belongs to the whole triad,
+                           and only exists once there is more than one to remove — so at rest
+                           the three labels sit at exactly the same step above their field. -->
+            <div class="flex items-center justify-between gap-[var(--spacing-xs)]">
+              <Label :for="keyId(entry)">Key</Label>
+              <Tooltip
+                v-if="form.entries.length > 1"
+                text="Remove variable"
               >
-                <div
-                  v-for="(entry, index) in form.entries"
-                  :key="entry.id"
-                  class="flex min-w-0 flex-col gap-[var(--spacing-md)]"
-                >
-                  <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                    <!-- Remove rides the Key label row: it belongs to the whole triad,
-                         and only exists once there is more than one to remove — so at rest
-                         the three labels sit at exactly the same step above their field. -->
-                    <div class="flex items-center justify-between gap-[var(--spacing-xs)]">
-                      <Label :for="keyId(entry)">Key</Label>
-                      <Tooltip
-                        v-if="form.entries.length > 1"
-                        text="Remove variable"
-                      >
-                        <IconButton
-                          icon="pi pi-times"
-                          kind="outlined"
-                          size="small"
-                          aria-label="Remove variable"
-                          @click="removeEntry(index)"
-                        />
-                      </Tooltip>
-                    </div>
-                    <InputText
-                      :id="keyId(entry)"
-                      v-model="entry.key"
-                      name="key"
-                      size="large"
-                      class="w-full"
-                      autocomplete="off"
-                      spellcheck="false"
-                      :required="entry.flagged && errors[index].key?.kind === 'required'"
-                      :invalid="entry.flagged && errors[index].key?.kind === 'invalid'"
-                      :aria-describedby="
-                        entry.flagged && errors[index].key ? `${keyId(entry)}-message` : undefined
-                      "
-                      @paste="onKeyPaste($event, index)"
-                    />
-                    <HelperText
-                      v-if="entry.flagged && errors[index].key"
-                      :id="`${keyId(entry)}-message`"
-                      :kind="errors[index].key.kind"
-                      :label="errors[index].key.message"
-                    />
-                  </div>
-
-                  <!-- The value is masked while typing and revealed on demand, whether or
-                       not it is stored sensitive — a value pasted on a shared screen is
-                       the common case. -->
-                  <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                    <Label :for="valueId(entry)">Value</Label>
-                    <InputPassword
-                      :id="valueId(entry)"
-                      v-model="entry.value"
-                      name="value"
-                      class="w-full"
-                      autocomplete="off"
-                      :required="entry.flagged && Boolean(errors[index].value)"
-                      :aria-describedby="
-                        entry.flagged && errors[index].value
-                          ? `${valueId(entry)}-message`
-                          : undefined
-                      "
-                    />
-                    <HelperText
-                      v-if="entry.flagged && errors[index].value"
-                      :id="`${valueId(entry)}-message`"
-                      kind="required"
-                      :label="errors[index].value.message"
-                    />
-                  </div>
-
-                  <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                    <Label :for="noteId(entry)">Note (Optional)</Label>
-                    <InputText
-                      :id="noteId(entry)"
-                      v-model="entry.note"
-                      name="note"
-                      size="large"
-                      class="w-full"
-                      placeholder="Where to rotate, or who to contact"
-                    />
-                  </div>
-                </div>
-              </TransitionGroup>
-
-              <Button
-                class="self-start"
-                label="Add Another"
-                kind="outlined"
-                size="medium"
-                icon="pi pi-plus"
-                @click="addEntry"
-              />
-
-              <!-- Full-bleed boundary: WHAT the variables are, above; HOW they are stored
-                   and scoped, below. The wrapper carries the negative inset so the
-                   Divider itself stays untouched (a `w-full` flex item with negative
-                   margins would shift rather than stretch). -->
-              <div class="-mx-[var(--spacing-lg)]">
-                <Divider />
-              </div>
-
-              <!-- A switch labels itself: the Label points at the control, so the word
-                   toggles it too. The hint hangs off a real focusable control, so it is
-                   reachable by keyboard and named for a screen reader. -->
-              <div class="flex items-center gap-[var(--spacing-sm)]">
-                <Switch
-                  :id="sensitiveId"
-                  v-model="form.sensitive"
+                <IconButton
+                  icon="pi pi-times"
+                  kind="outlined"
+                  size="small"
+                  aria-label="Remove variable"
+                  @click="removeEntry(index)"
                 />
-                <Label
-                  :for="sensitiveId"
-                  :hint="SENSITIVE_HINT"
-                  >Sensitive</Label
-                >
-              </div>
-
-              <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                <Label
-                  :id="`${environmentsId}-label`"
-                  :for="environmentsId"
-                  >Environments</Label
-                >
-                <Select
-                  v-model="form.environments"
-                  multiple
-                  size="large"
-                  placeholder="Select environments"
-                  :required="submitted && environmentsError"
-                  :display-value="environmentsDisplay"
-                >
-                  <!-- The glyph is a full-height island on the leading edge — the
-                       InputGroup addon's anatomy, expressed inside the trigger's own
-                       `#iconLeft` because a real InputGroup pins its Select child to its
-                       content width, and here the Select must fill the field. -->
-                  <Select.Trigger
-                    :id="environmentsId"
-                    class="pl-0"
-                    :aria-labelledby="`${environmentsId}-label`"
-                    :aria-describedby="
-                      submitted && environmentsError ? `${environmentsId}-message` : undefined
-                    "
-                  >
-                    <template #iconLeft>
-                      <span
-                        class="flex shrink-0 items-center self-stretch border-r border-[var(--border-default)] bg-[color:var(--bg-canvas)] px-[var(--spacing-md)] text-[var(--text-muted)]"
-                        aria-hidden="true"
-                      >
-                        <i class="ai ai-layers" />
-                      </span>
-                    </template>
-                  </Select.Trigger>
-                  <Select.Content>
-                    <Select.Option
-                      v-for="option in ENVIRONMENTS"
-                      :key="option.value"
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </Select.Option>
-                  </Select.Content>
-                </Select>
-                <HelperText
-                  v-if="submitted && environmentsError"
-                  :id="`${environmentsId}-message`"
-                  kind="required"
-                  label="Pick at least one environment."
-                />
-              </div>
-
-              <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                <Label
-                  :id="`${projectsId}-label`"
-                  :for="projectsId"
-                  >Link to Projects (optional)</Label
-                >
-                <Select
-                  v-model="form.projects"
-                  v-model:open="projectsOpen"
-                  multiple
-                  size="large"
-                  placeholder="Search projects..."
-                  :display-value="projectsDisplay"
-                >
-                  <Select.Trigger
-                    :id="projectsId"
-                    :aria-labelledby="`${projectsId}-label`"
-                  >
-                    <template #iconLeft>
-                      <i
-                        class="pi pi-search shrink-0 text-[var(--text-muted)]"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Select.Trigger>
-                  <Select.Content>
-                    <!-- `#search` renders above the scrolling list, so the field stays put
-                         while the options move. `@keydown.stop` keeps the panel's
-                         Arrow/Home/End handler from pulling focus onto an option while the
-                         user is still typing. -->
-                    <template #search>
-                      <InputText
-                        v-model="projectQuery"
-                        size="large"
-                        class="w-full"
-                        placeholder="Search projects..."
-                        aria-label="Search projects"
-                        @keydown.stop
-                      >
-                        <template #iconLeft>
-                          <i
-                            class="pi pi-search"
-                            aria-hidden="true"
-                          />
-                        </template>
-                      </InputText>
-                    </template>
-                    <Select.Option
-                      v-for="option in visibleProjects"
-                      :key="option.value"
-                      :value="option.value"
-                    >
-                      <template #left>
-                        <i
-                          :class="`ai-cor ${presetIcon(option.preset)}`"
-                          class="shrink-0 text-[1.15em]"
-                          :title="presetLabel(option.preset)"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ option.label }}
-                    </Select.Option>
-                    <!-- A search that matches nothing must say so; an empty panel reads as
-                         a broken filter. -->
-                    <p
-                      v-if="!visibleProjects.length"
-                      class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
-                    >
-                      No project matches “{{ projectQuery }}”.
-                    </p>
-                  </Select.Content>
-                </Select>
-              </div>
-            </fieldset>
-          </PanelContent>
-
-          <!-- The footer carries the bulk path beside the hint that names the other one,
-               and Save alone on the right (the panel's X, the overlay and Escape are the
-               cancel). --bg-canvas sets it a shade back from the form it submits, so the
-               two read as different planes. -->
-          <PanelFooter class="flex-wrap justify-between bg-[color:var(--bg-canvas)]">
-            <div class="flex min-w-0 items-center gap-[var(--spacing-sm)]">
-              <Button
-                label="Import"
-                kind="outlined"
-                size="medium"
-                icon="pi pi-upload"
-                :disabled="submitting"
-                @click="openImport"
-              />
-              <p class="min-w-0 text-body-sm text-[var(--text-muted)]">
-                or paste .env contents in Key input
-              </p>
-              <input
-                ref="fileRef"
-                type="file"
-                accept=".env,.txt,text/plain"
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-                @change="onFilePicked"
-              />
+              </Tooltip>
             </div>
-            <Button
-              label="Save"
-              kind="primary"
-              size="medium"
-              :loading="submitting"
-              @click="submit"
+            <InputText
+              :id="keyId(entry)"
+              v-model="entry.key"
+              name="key"
+              size="large"
+              class="w-full"
+              autocomplete="off"
+              spellcheck="false"
+              :required="entry.flagged && errors[index].key?.kind === 'required'"
+              :invalid="entry.flagged && errors[index].key?.kind === 'invalid'"
+              :aria-describedby="
+                entry.flagged && errors[index].key ? `${keyId(entry)}-message` : undefined
+              "
+              @paste="onKeyPaste($event, index)"
             />
-            <button
-              type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
+            <HelperText
+              v-if="entry.flagged && errors[index].key"
+              :id="`${keyId(entry)}-message`"
+              :kind="errors[index].key.kind"
+              :label="errors[index].key.message"
+            />
+          </div>
+
+          <!-- The value is masked while typing and revealed on demand, whether or
+                         not it is stored sensitive — a value pasted on a shared screen is
+                         the common case. -->
+          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <Label :for="valueId(entry)">Value</Label>
+            <InputPassword
+              :id="valueId(entry)"
+              v-model="entry.value"
+              name="value"
+              class="w-full"
+              autocomplete="off"
+              :required="entry.flagged && Boolean(errors[index].value)"
+              :aria-describedby="
+                entry.flagged && errors[index].value ? `${valueId(entry)}-message` : undefined
+              "
+            />
+            <HelperText
+              v-if="entry.flagged && errors[index].value"
+              :id="`${valueId(entry)}-message`"
+              kind="required"
+              :label="errors[index].value.message"
+            />
+          </div>
+
+          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <Label :for="noteId(entry)">Note (Optional)</Label>
+            <InputText
+              :id="noteId(entry)"
+              v-model="entry.note"
+              name="note"
+              size="large"
+              class="w-full"
+              placeholder="Where to rotate, or who to contact"
+            />
+          </div>
+        </div>
+      </TransitionGroup>
+
+      <Button
+        class="self-start"
+        label="Add Another"
+        kind="outlined"
+        size="medium"
+        icon="pi pi-plus"
+        @click="addEntry"
+      />
+
+      <!-- Full-bleed boundary: WHAT the variables are, above; HOW they are stored
+                     and scoped, below. The wrapper carries the negative inset so the
+                     Divider itself stays untouched (a `w-full` flex item with negative
+                     margins would shift rather than stretch). -->
+      <div class="-mx-[var(--spacing-lg)]">
+        <Divider />
+      </div>
+
+      <!-- A switch labels itself: the Label points at the control, so the word
+                     toggles it too. The hint hangs off a real focusable control, so it is
+                     reachable by keyboard and named for a screen reader. -->
+      <div class="flex items-center gap-[var(--spacing-sm)]">
+        <Switch
+          :id="sensitiveId"
+          v-model="form.sensitive"
+        />
+        <Label
+          :for="sensitiveId"
+          :hint="SENSITIVE_HINT"
+          >Sensitive</Label
+        >
+      </div>
+
+      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+        <Label
+          :id="`${environmentsId}-label`"
+          :for="environmentsId"
+          >Environments</Label
+        >
+        <Select
+          v-model="form.environments"
+          multiple
+          size="large"
+          placeholder="Select environments"
+          :required="submitted && environmentsError"
+          :display-value="environmentsDisplay"
+        >
+          <!-- The glyph is a full-height island on the leading edge — the
+                         InputGroup addon's anatomy, expressed inside the trigger's own
+                         `#iconLeft` because a real InputGroup pins its Select child to its
+                         content width, and here the Select must fill the field. -->
+          <Select.Trigger
+            :id="environmentsId"
+            class="pl-0"
+            :aria-labelledby="`${environmentsId}-label`"
+            :aria-describedby="
+              submitted && environmentsError ? `${environmentsId}-message` : undefined
+            "
+          >
+            <template #iconLeft>
+              <span
+                class="flex shrink-0 items-center self-stretch border-r border-[var(--border-default)] bg-[color:var(--bg-canvas)] px-[var(--spacing-md)] text-[var(--text-muted)]"
+                aria-hidden="true"
+              >
+                <i class="ai ai-layers" />
+              </span>
+            </template>
+          </Select.Trigger>
+          <Select.Content>
+            <Select.Option
+              v-for="option in ENVIRONMENTS"
+              :key="option.value"
+              :value="option.value"
             >
-              Save
-            </button>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
-  </Drawer>
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
+        <HelperText
+          v-if="submitted && environmentsError"
+          :id="`${environmentsId}-message`"
+          kind="required"
+          label="Pick at least one environment."
+        />
+      </div>
+
+      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+        <Label
+          :id="`${projectsId}-label`"
+          :for="projectsId"
+          >Link to Projects (optional)</Label
+        >
+        <Select
+          v-model="form.projects"
+          v-model:open="projectsOpen"
+          multiple
+          size="large"
+          placeholder="Search projects..."
+          :display-value="projectsDisplay"
+        >
+          <Select.Trigger
+            :id="projectsId"
+            :aria-labelledby="`${projectsId}-label`"
+          >
+            <template #iconLeft>
+              <i
+                class="pi pi-search shrink-0 text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+            </template>
+          </Select.Trigger>
+          <Select.Content>
+            <!-- `#search` renders above the scrolling list, so the field stays put
+                           while the options move. `@keydown.stop` keeps the panel's
+                           Arrow/Home/End handler from pulling focus onto an option while the
+                           user is still typing. -->
+            <template #search>
+              <InputText
+                v-model="projectQuery"
+                size="large"
+                class="w-full"
+                placeholder="Search projects..."
+                aria-label="Search projects"
+                @keydown.stop
+              >
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </InputText>
+            </template>
+            <Select.Option
+              v-for="option in visibleProjects"
+              :key="option.value"
+              :value="option.value"
+            >
+              <template #left>
+                <i
+                  :class="`ai-cor ${presetIcon(option.preset)}`"
+                  class="shrink-0 text-[1.15em]"
+                  :title="presetLabel(option.preset)"
+                  aria-hidden="true"
+                />
+              </template>
+              {{ option.label }}
+            </Select.Option>
+            <!-- A search that matches nothing must say so; an empty panel reads as
+                           a broken filter. -->
+            <p
+              v-if="!visibleProjects.length"
+              class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
+            >
+              No project matches “{{ projectQuery }}”.
+            </p>
+          </Select.Content>
+        </Select>
+      </div>
+    </div>
+
+    <!-- The bulk path belongs to the whole form, so it sits opposite Save.
+         The file input is visually hidden and out of the tab order: the Button is
+         the control, and a second focus stop on a native file field would be a
+         second way to do one thing. -->
+    <template #start>
+      <Button
+        label="Import"
+        kind="outlined"
+        size="medium"
+        icon="pi pi-upload"
+        :disabled="submitting"
+        @click="openImport"
+      />
+      <p class="min-w-0 text-body-sm text-[var(--text-muted)]">
+        or paste .env contents in Key input
+      </p>
+      <input
+        ref="fileRef"
+        type="file"
+        accept=".env,.txt,text/plain"
+        class="sr-only"
+        tabindex="-1"
+        aria-hidden="true"
+        @change="onFilePicked"
+      />
+    </template>
+  </ResourceDrawer>
 </template>

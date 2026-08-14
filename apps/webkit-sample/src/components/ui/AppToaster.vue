@@ -96,7 +96,7 @@ const openDeployment = (run) => {
            classes through `cn`, so this override wins on stylesheet order —
            Tailwind v4 emits align-items utilities alphabetically, putting
            `.items-start` after `.items-center`. Verified in the browser.) -->
-      <ToastItem
+      <ToastItem key="toast-item-1"
         v-if="failedRun(entry)"
         :type="entry.type"
         class="items-start"
@@ -138,7 +138,7 @@ const openDeployment = (run) => {
       <!-- Finished deployment: one shortcut to what was just created. Outlined
            for the same reason, so the primary action of a deployment toast
            looks the same whichever way the run ended. -->
-      <ToastItem
+      <ToastItem key="toast-item-2"
         v-else-if="successRun(entry)"
         :type="entry.type"
         class="items-start"
@@ -166,7 +166,7 @@ const openDeployment = (run) => {
       </ToastItem>
 
       <!-- Everything else: the standard anatomy, unchanged. -->
-      <ToastItem v-else :type="entry.type">
+      <ToastItem key="toast-item-3" v-else :type="entry.type">
         <ToastTitle>{{ entry.message }}</ToastTitle>
         <ToastDescription v-if="entry.description">
           {{ entry.description }}

@@ -14,13 +14,13 @@
   import Error404 from '@aziontech/webkit/svg/error-404'
   import IllustrationLayers from '@aziontech/webkit/svg/illustration-layers'
 
-  import PlatformIllustrations from './PlatformIllustrations.vue'
   import IconGrid from './foundations/components/IconGrid.vue'
   import BannerContainer from './foundations/components/layout/BannerContainer.vue'
   import CardGrid from './foundations/components/layout/CardGrid.vue'
   import PageHeader from './foundations/components/layout/PageHeader.vue'
   import SectionContainer from './foundations/components/layout/SectionContainer.vue'
   import SectionModule from './foundations/components/layout/SectionModule.vue'
+  import PlatformIllustrations from './PlatformIllustrations.vue'
 
   defineProps({
     // Which asset gallery to render: 'brand' | 'icons' | 'illustrations'.
