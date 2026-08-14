@@ -99,6 +99,33 @@ export const TOKEN_CHECKS = [
       'Zero with the wrong unit inside a math function. `calc()`/`min()`/`max()`/`clamp()` require a unit on the zero — write `0rem`, not `0px` / `0em` (.claude/rules/styling.md).'
   },
   {
+    id: 'dead-token-shorthand',
+    // A MALFORMED token shorthand never reaches the element, silently. Two spellings,
+    // both found in the wild, failing at two different stages:
+    //   `bg-(--token )`      a stray space TERMINATES the Tailwind candidate, so it sees
+    //                        the unterminated `bg-(--token` and emits NOTHING at all.
+    //   `min-h-[--(token)]`  bracket/paren inverted. This one DOES emit a rule — with the
+    //                        declaration `min-height: --(token)`, an invalid value the
+    //                        browser discards at parse time. Same outcome, later stage.
+    // Neither is a lint, type, or build error anywhere else, and the class reads as correct
+    // forever. chip's `filled` kind was transparent in BOTH themes from the day it shipped
+    // because of the first, and its own visual baselines were generated from the broken
+    // render — so they encoded the bug as correct and nothing ever failed.
+    //
+    // The scan is over raw file text, so a COMMENT quoting a malformed class trips this
+    // too. Describe such a class ("an inverted bracket/paren shorthand") rather than
+    // spelling it out.
+    //
+    // Read as: `-(`, whose contents mention a custom property, contain whitespace ANYWHERE
+    // (before the `--`, inside it, or trailing), and then close. Requiring the `--` via
+    // lookahead is what keeps this off ordinary subtraction — JS `x -(y + z)` has no `--`
+    // — and `var(--a, var(--b))` never matches because the character before that paren is
+    // `r`, not `-`, so a nested var with a fallback is untouched.
+    regex: /-\((?=[^)]*--)[^)]*\s[^)]*\)|\[--\(/g,
+    message:
+      'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space inside the parens; an inverted `[--(token)]` emits an invalid value the browser discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
+  },
+  {
     id: 'class-in-defineprops',
     regex: /defineProps\s*[<(][^>)]*['"]?class['"]?\s*:/s,
     message:

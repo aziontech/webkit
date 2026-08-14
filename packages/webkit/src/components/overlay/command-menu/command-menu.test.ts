@@ -62,6 +62,39 @@ const composed = (props: Record<string, unknown> = {}, inputProps: Record<string
     `
   })
 
+/**
+ * A palette whose first item carries a `prefix` and whose second does not — the
+ * mixed case the reserved icon column exists for.
+ */
+const mixedPrefixes = () =>
+  defineComponent({
+    components: {
+      CommandMenu,
+      CommandMenuInput,
+      CommandMenuList,
+      CommandMenuGroup,
+      CommandMenuItem
+    },
+    setup() {
+      const open = ref(true)
+      return { open }
+    },
+    template: `
+      <CommandMenu v-model:open="open">
+        <CommandMenuInput placeholder="Search commands…" />
+        <CommandMenuList>
+          <CommandMenuGroup heading="Actions">
+            <CommandMenuItem value="deploy">
+              <template #prefix><i class="pi pi-cloud-upload" aria-hidden="true" /></template>
+              Deploy Project
+            </CommandMenuItem>
+            <CommandMenuItem value="new-app">Create Application</CommandMenuItem>
+          </CommandMenuGroup>
+        </CommandMenuList>
+      </CommandMenu>
+    `
+  })
+
 afterEach(async () => {
   await settle()
 })
@@ -202,6 +235,81 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
 
       expect(onSelect).not.toHaveBeenCalled()
       expect(panel()).not.toBeNull()
+    })
+  })
+
+  // Vitest browser mode compiles no Tailwind, so an emitted `px` cannot be
+  // measured here. These assert the structural mechanism instead: the reserved
+  // box either exists on every row or on none, which is what makes the label
+  // edge single. Geometry is verified in the browser against the story.
+  describe('one icon column for the whole list', () => {
+    it('reserves the prefix box on every item once any item carries a prefix', async () => {
+      render(mixedPrefixes())
+      await settle()
+
+      const items = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command-menu__item"]')
+      )
+      expect(items).toHaveLength(2)
+
+      // Both rows get the box — the icon-less one reserves an empty column so its
+      // label starts where the iconed row's does.
+      for (const item of items) {
+        const box = item.querySelector('[data-testid="overlay-command-menu__item__prefix"]')
+        expect(box).not.toBeNull()
+        expect(box?.className).toContain('size-4')
+      }
+
+      // Only the first actually holds a glyph.
+      expect(items[0].querySelector('i.pi-cloud-upload')).not.toBeNull()
+      expect(items[1].querySelector('i')).toBeNull()
+    })
+
+    it('reserves no column when no item carries a prefix', async () => {
+      render(composed({ defaultOpen: true }))
+      await settle()
+
+      const items = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command-menu__item"]')
+      )
+      expect(items.length).toBeGreaterThan(0)
+      for (const item of items) {
+        expect(item.querySelector('[data-testid="overlay-command-menu__item__prefix"]')).toBeNull()
+      }
+    })
+  })
+
+  describe('group rhythm', () => {
+    it('spaces a group that follows another group, but not one that follows a separator', async () => {
+      render(composed({ defaultOpen: true }))
+      await settle()
+
+      const groups = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command-menu__group"]')
+      )
+      expect(groups).toHaveLength(2)
+
+      // The variant is sibling-scoped, so both groups carry the same class and the
+      // selector decides: it matches after a group, never after a separator.
+      for (const group of groups) {
+        expect(group.className).toContain('[:not([role=separator])+&]:mt-(--spacing-sm)')
+      }
+
+      // Group 2 here follows the separator, so the rule must not match it.
+      expect(groups[1].previousElementSibling?.getAttribute('role')).toBe('separator')
+    })
+
+    it('gives the separator the same rhythm as the Dropdown group divider', async () => {
+      render(composed({ defaultOpen: true }))
+      await settle()
+
+      const separator = document.body.querySelector<HTMLElement>(
+        '[data-testid="overlay-command-menu__separator"]'
+      )
+      expect(separator).not.toBeNull()
+      expect(separator?.className).toContain('mt-(--spacing-sm)')
+      expect(separator?.className).toContain('mb-(--spacing-xs)')
+      expect(separator?.className).toContain('border-t')
     })
   })
 
