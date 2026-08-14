@@ -138,6 +138,48 @@ test('the widened guardrails do not fire on the canonical whole-value paren toke
   }
 })
 
+test('dead-token-shorthand fires on a paren shorthand that emits no CSS', () => {
+  for (const content of [
+    // The one that shipped: a stray space terminates the candidate.
+    'class="data-[kind=filled]:bg-(--bg-surface-raised )"',
+    'class="bg-( --bg-surface)"',
+    'class="text-(length:--text-body-md )"',
+    // A token broken across lines is the same defect.
+    'class="bg-(--bg-\n  surface)"',
+    // Bracket and paren forms inverted.
+    'class="min-h-[--(size-4)]"'
+  ]) {
+    assert.ok(
+      ids(content).includes('dead-token-shorthand'),
+      `expected dead-token-shorthand for: ${content}`
+    )
+  }
+})
+
+test('dead-token-shorthand stays silent on every VALID token spelling', () => {
+  for (const content of [
+    'class="bg-(--bg-surface) text-(--text-default) rounded-(--shape-card)"',
+    'class="text-(length:--text-body-md) font-(family-name:--font-sora)"',
+    'class="data-[disabled]:bg-(--bg-disabled)"',
+    // Declaring a custom property keeps its brackets — the sanctioned form.
+    'class="[--table-row-bg:var(--bg-surface)]"',
+    'class="data-[state=selected]:[--table-row-bg:var(--bg-selected)]"',
+    // Expression values legitimately carry spaces INSIDE brackets, not parens.
+    'class="w-[calc(100%_-_var(--x))]"',
+    'style="width: calc(var(--a) - (var(--b) * 2))"',
+    // A var with a fallback: `-(` never precedes the `--`, so this is not a match.
+    'style="background: var(--x, var(--y))"',
+    // Ordinary subtraction in script, with and without a space.
+    'const gap = width -(padding + border)',
+    'const gap = width - (padding + border)'
+  ]) {
+    assert.ok(
+      !ids(content).includes('dead-token-shorthand'),
+      `expected dead-token-shorthand silent for: ${content}`
+    )
+  }
+})
+
 test('tokenChecksApply scopes enforcement to component sources', () => {
   assert.ok(tokenChecksApply('packages/webkit/src/components/actions/button/button.vue'))
   assert.ok(tokenChecksApply('packages/webkit/src/components/data/table/injection-key.ts'))
