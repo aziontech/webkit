@@ -86,9 +86,20 @@
 </script>
 
 <template>
+  <!-- `padded=false`: BOTH versions carry their own boundary, on the same block as
+       their own measure — Home at the DATA measure (`layout-column layout-boundary`),
+       HomeEmptyState at the focused one (`layout-column-focused layout-boundary`).
+       Two measures under one URL is deliberate: one half is a resource list, the other
+       is a hero (each file argues its own). The shell's inset is the right
+       default for a page that just flows, and the wrong one for these two: Home is a
+       frame from `xl` (only its resource list scrolls), and a frame whose inset lives
+       outside it scrolls to an edge it cannot measure. Passing the boundary down means
+       the inset and the measure are declared together, in the file that owns the
+       layout, which is also the documented self-padded shape (Foundations/Layout). -->
   <AppLayout
     ref="shell"
     active="overview"
+    :padded="false"
     :breadcrumb="[{ label: 'Overview' }]"
   >
     <HomeEmptyState

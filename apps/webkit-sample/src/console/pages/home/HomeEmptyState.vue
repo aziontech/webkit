@@ -284,13 +284,22 @@
 <template>
   <!-- No AppLayout here: the shell is owned by Overview.vue, which holds it ACROSS
        the version swap (see the note there). -->
-  <!-- The SAME measure the populated Overview uses (`layout-column-focused`,
-         --container-4xl), not the wide one. Both versions are the same page, so the
-         content column cannot change width between them: a first access that is 600px
-         wider than the Overview it becomes would make the first resource look like it
-         resized the console. It also stops the three cards stretching to a width where
-         each description runs as one long line. -->
-  <main class="layout-column-focused flex min-h-full flex-col">
+  <!-- The FOCUSED measure (`layout-column-focused`, --container-4xl). The populated
+         Overview moved to the DATA measure (`layout-column`, 1620px) — it is a rail
+         beside a list of every resource the account owns, and how much of that list is
+         visible is the whole point — but a first access has no list: it is a hero, one
+         sentence and three cards, and at 1620px each card description runs as a single
+         long line. So this half keeps the tighter cap, and the cards keep a readable
+         width. The two halves reading at different measures is the point, not drift:
+         they are the same URL answering two different questions.
+         `layout-boundary` rides on the SAME block as the measure because Overview.vue
+         passes `padded=false` to the shell (see the note there). This is the documented
+         self-padded shape, and it does NOT narrow the page: the column utility grows
+         its cap by exactly the inset it now contains
+         (`max-width: calc(measure + 2 * --layout-boundary-inline)`, packages/theme/src/
+         tokens/semantic/layouts.data.js), so the content column is the same 1024px it
+         was when the shell held the padding. -->
+  <main class="layout-column-focused layout-boundary flex min-h-full flex-col">
     <!-- The page's own wire, in the page's own column — see the note on the
            arrival window above. -->
     <HomeFirstUseWire v-if="arriving" />
