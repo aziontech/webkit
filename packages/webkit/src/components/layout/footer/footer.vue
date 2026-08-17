@@ -55,31 +55,14 @@
     :data-testid="testId"
     class="flex w-full flex-col bg-(--bg-canvas)"
   >
-    <!-- The measure and its two gutters are one row, so a gutter is what the leftover width
-         BECOMES rather than something the page has to size: each is `flex-1` against a measure
-         that does not shrink. They appear at `xl` rather than with the rest of the desktop
-         presentation because that is the first breakpoint past the measure itself (1192px):
-         gated any earlier they would resolve to zero width and still paint their corner marks
-         on the measure's own edges. They hold no content — the hatch is page material, so they
-         stay out of the a11y tree. -->
     <div class="flex w-full items-stretch">
       <FrameBox
-        hatch
-        borders="none"
+        :borders="['left']"
         marks="all"
         aria-hidden="true"
         :data-testid="`${testId}__gutter`"
         class="hidden flex-1 xl:block"
       />
-
-      <!-- ONE grid holds all four bands, which is what keeps each of them a single element in a
-           single place in the DOM while their vertical order changes. Stacked, `order-*` reads
-           links → status → signature → social, the order the Mobile variant fixes. From `md`,
-           explicit row/column placement puts the social icons and the status cluster side by
-           side in one row and spans the other two bands across both columns — the row fits at
-           768px because the brand no longer sits in it. The alternative —
-           a wrapper row that only exists on desktop — would mean two copies of the markup, so
-           two copies of the consumer's slot content. -->
       <div
         class="grid w-full max-w-(--container-5xl) shrink-0 grid-cols-1 border-x border-x-(length:--border-width-default) border-x-(--border-default) md:grid-cols-2"
       >
@@ -90,9 +73,6 @@
           <slot />
         </div>
 
-        <!-- Status and language swap places between the two variants — the phone leads with the
-             language select, the desktop row ends with it — so they are two slots the row
-             reverses, not one cluster the consumer orders. -->
         <div
           v-if="hasStatusBar"
           :data-testid="`${testId}__status`"
@@ -104,7 +84,7 @@
 
         <FrameBox
           v-if="hasSignature"
-          borders="all"
+          borders="top"
           marks="all"
           flush="x"
           :data-testid="`${testId}__signature`"
@@ -134,8 +114,7 @@
       </div>
 
       <FrameBox
-        hatch
-        borders="none"
+        :borders="['right']"
         marks="all"
         aria-hidden="true"
         :data-testid="`${testId}__gutter`"
@@ -143,12 +122,8 @@
       />
     </div>
 
-    <!-- The closing band is the page's own material below the last rule: full-bleed, so it is a
-         sibling of the gutter row rather than inside it, and it keeps only the bottom pair of
-         marks because the band above already draws the edge the top pair would sit on. -->
     <FrameBox
-      hatch
-      borders="top"
+      borders="all"
       marks="bottom"
       aria-hidden="true"
       :data-testid="`${testId}__closing`"
