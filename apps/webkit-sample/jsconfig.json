@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
     "moduleResolution": "bundler",
+    // Relative targets, and no `baseUrl` — which TypeScript 7 drops. TS resolves
+    // bare `src/...` targets against this file's own directory, but esbuild (which
+    // the Azion build runs) rejects a non-relative target outright unless `baseUrl`
+    // is set, warning per mapping. The `./` prefix is the one spelling both accept.
     "paths": {
-      "@shared/*": ["src/shared/*"],
-      "@site/*": ["src/site/*"],
-      "@hub/*": ["src/hub/*"],
-      "@console/*": ["src/console/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@site/*": ["./src/site/*"],
+      "@hub/*": ["./src/hub/*"],
+      "@console/*": ["./src/console/*"]
     }
   },
   "include": ["src/**/*.js", "src/**/*.ts", "src/**/*.vue", "vite.config.js"],
