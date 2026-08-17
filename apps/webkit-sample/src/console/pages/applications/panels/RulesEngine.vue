@@ -35,8 +35,15 @@
   // THE ROW OPENS THE RULE. A rule's record is its criteria and its behaviors, which
   // is a whole form, so the row is a way IN to the same drawer that creates one
   // (../../components/CreateRuleDrawer.vue) seeded with the rule — the create-surface
-  // rule's answer for editing inside a resource. The table shows a derived SUMMARY of
-  // those criteria; the drawer is where the model itself is read and changed.
+  // rule's answer for editing inside a resource.
+  //
+  // SO THE ROW DOES NOT SUMMARISE THE CRITERIA. It identifies the rule and says who
+  // touched it last: name, description, status, Last Modified — the four columns every
+  // list in the console carries. A criteria column was a truncated fragment of a
+  // program ("host ~ www.* +2 more"): too little to reason about the rule and too much
+  // to read at a glance, in the place the reader's own sentence about it belongs. The
+  // description is what the author wrote for whoever reads the rule next; the criteria
+  // are read in the drawer, whole, where they are also changed.
   //
   // The table is HAND-COMPOSED (Table.Header / Table.Row / Table.Cell) rather than
   // data-driven: the row is the drag target and the FLIP subject, and only the
@@ -55,10 +62,13 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref } from 'vue'
+  import { daysAgo } from '@shared/lib/dates'
+  import { authorAt } from '@shared/lib/people'
+  import { computed, nextTick, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
+  import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { DRAG_ROW_CLASS, useDragReorder } from '../../../lib/behavior/drag-reorder'
@@ -87,10 +97,10 @@
   // One list per phase, because the order is per phase: request rule 2 runs after
   // request rule 1 and has nothing to do with any response rule.
   //
-  // The criteria are the STRUCTURED model the drawer edits, not a display string.
-  // That is what lets a row be opened, changed and closed with the table's own
-  // summary following the edit; a hand-written `'host = www.*'` would go stale the
-  // moment anyone touched the rule.
+  // The criteria are the STRUCTURED model the drawer edits, not a display string —
+  // which is what lets a row be opened, changed and closed with nothing in this list
+  // going stale. They are not rendered here (see the top of this file); they are the
+  // record the row hands back to the drawer.
   const condition = (variable, operator, argument = '') => ({
     id: `${variable}-${operator}-${argument}`,
     join: null,
@@ -99,124 +109,152 @@
     argument
   })
 
-  const seed = () => ({
-    request: [
-      {
-        id: 're-maintenance',
-        name: 'Maintenance page',
-        description: 'Serves the maintenance page while the header is set.',
-        phase: 'request',
-        criteria: [{ id: 'c1', conditions: [condition('header', 'matches', 'x-maintenance')] }],
-        behaviors: [{ id: 'b1', type: 'deliver' }],
-        status: 'Inactive'
-      },
-      {
-        id: 're-www',
-        name: 'Redirect www',
-        description: 'Sends the www host to the apex domain.',
-        phase: 'request',
-        criteria: [{ id: 'c2', conditions: [condition('host', 'is-equal', 'www.*')] }],
-        behaviors: [{ id: 'b2', type: 'redirect-301' }],
-        status: 'Active'
-      },
-      {
-        id: 're-gateway',
-        name: 'API gateway',
-        description: 'Routes API traffic to the gateway origin.',
-        phase: 'request',
-        criteria: [{ id: 'c3', conditions: [condition('path', 'matches', '/api/*')] }],
-        behaviors: [{ id: 'b3', type: 'run-function' }],
-        status: 'Active'
-      },
-      {
-        id: 're-docs',
-        name: 'Docs rewrite',
-        description: 'Rewrites the docs path onto the documentation origin.',
-        phase: 'request',
-        criteria: [{ id: 'c4', conditions: [condition('path', 'matches', '/docs/*')] }],
-        behaviors: [{ id: 'b4', type: 'deliver' }],
-        status: 'Active'
-      },
-      {
-        id: 're-remote-port',
-        name: 'Add remote port header',
-        description: 'Adds the client port to every request reaching the origin.',
-        phase: 'request',
-        criteria: [{ id: 'c5', conditions: [condition('path', 'matches', '/*')] }],
-        behaviors: [{ id: 'b5', type: 'deliver' }],
-        status: 'Active'
-      }
-    ],
-    response: [
-      {
-        id: 're-cache-bypass',
-        name: 'Cache bypass',
-        description: 'Keeps API responses out of the cache.',
-        phase: 'response',
-        criteria: [{ id: 'c6', conditions: [condition('path', 'matches', '/api')] }],
-        behaviors: [{ id: 'b6', type: 'set-cache-policy' }],
-        status: 'Active'
-      },
-      {
-        id: 're-security-headers',
-        name: 'Security headers',
-        description: 'Adds the security header set to successful responses.',
-        phase: 'response',
-        criteria: [{ id: 'c7', conditions: [condition('status', 'is-equal', '200')] }],
-        behaviors: [{ id: 'b7', type: 'deliver' }],
-        status: 'Active'
-      },
-      {
-        id: 're-compress',
-        name: 'Compress assets',
-        description: 'Compresses script bundles on the way out.',
-        phase: 'response',
-        criteria: [{ id: 'c8', conditions: [condition('path', 'matches', '*.js')] }],
-        behaviors: [{ id: 'b8', type: 'deliver' }],
-        status: 'Inactive'
-      }
-    ]
-  })
+  /**
+   * Puts a face on every rule: the sample's round-robin roster, the same one every
+   * other list's Last Modified cell reads (@shared/lib/people). The index runs across
+   * BOTH phases so no two rules on screen wear the same avatar, and the decoration
+   * happens here — one place — so a seeded rule and one written in the drawer carry
+   * the same block.
+   */
+  const withAuthors = (byPhase) => {
+    let index = 0
+    return Object.fromEntries(
+      Object.entries(byPhase).map(([key, list]) => [
+        key,
+        list.map((rule) => {
+          const person = authorAt(index++)
+          return { ...rule, author: person.name, authorAvatar: person.avatar }
+        })
+      ])
+    )
+  }
+
+  const seed = () =>
+    withAuthors({
+      request: [
+        {
+          id: 're-maintenance',
+          name: 'Maintenance page',
+          description: 'Serves the maintenance page while the header is set.',
+          phase: 'request',
+          criteria: [{ id: 'c1', conditions: [condition('header', 'matches', 'x-maintenance')] }],
+          // A behavior carries the ARGUMENT its type takes, keyed the way the
+          // vocabulary declares it (../../../lib/data/rules-engine.js) — `target` for
+          // a free-text value, `connectorId` / `cacheId` / `functionId` for a record
+          // of this application. That is what the drawer opens populated from, so a
+          // seeded rule and one written here are the same shape.
+          behaviors: [{ id: 'b1', type: 'deliver' }],
+          status: 'Inactive',
+          modifiedAt: daysAgo(34)
+        },
+        {
+          id: 're-www',
+          name: 'Redirect www',
+          description: 'Sends the www host to the apex domain.',
+          phase: 'request',
+          criteria: [{ id: 'c2', conditions: [condition('host', 'is-equal', 'www.*')] }],
+          behaviors: [{ id: 'b2', type: 'redirect-301', target: 'https://edgeflow.com${uri}' }],
+          status: 'Active',
+          modifiedAt: daysAgo(12)
+        },
+        {
+          id: 're-gateway',
+          name: 'API gateway',
+          description: 'Sends API traffic to the gateway connector, through the auth handler.',
+          phase: 'request',
+          criteria: [{ id: 'c3', conditions: [condition('path', 'matches', '/api/*')] }],
+          behaviors: [
+            { id: 'b3', type: 'set-connector', connectorId: '7710021' },
+            { id: 'b3b', type: 'run-function', functionId: '4021884' }
+          ],
+          status: 'Active',
+          modifiedAt: daysAgo(2)
+        },
+        {
+          id: 're-docs',
+          name: 'Docs rewrite',
+          description: 'Rewrites the docs path and caches it as a static asset.',
+          phase: 'request',
+          criteria: [{ id: 'c4', conditions: [condition('path', 'matches', '/docs/*')] }],
+          behaviors: [
+            { id: 'b4', type: 'rewrite-request', target: '/documentation${uri}' },
+            { id: 'b4b', type: 'set-cache-policy', cacheId: 'cs-static' }
+          ],
+          status: 'Active',
+          modifiedAt: daysAgo(21)
+        },
+        {
+          id: 're-remote-port',
+          name: 'Add remote port header',
+          description: 'Adds the client port to every request reaching the origin.',
+          phase: 'request',
+          criteria: [{ id: 'c5', conditions: [condition('path', 'matches', '/*')] }],
+          behaviors: [
+            { id: 'b5', type: 'add-request-header', target: 'x-remote-port: ${remote_port}' }
+          ],
+          status: 'Active',
+          modifiedAt: daysAgo(58)
+        }
+      ],
+      response: [
+        {
+          id: 're-cache-bypass',
+          name: 'Cache bypass',
+          description: 'Keeps API responses out of the cache.',
+          phase: 'response',
+          criteria: [{ id: 'c6', conditions: [condition('path', 'matches', '/api')] }],
+          // The response phase looks at an answer already fetched, so it cannot set a
+          // cache policy — that is a request-phase behavior. What it can do is say the
+          // response is not to be stored.
+          behaviors: [{ id: 'b6', type: 'add-response-header', target: 'cache-control: no-store' }],
+          status: 'Active',
+          modifiedAt: daysAgo(5)
+        },
+        {
+          id: 're-security-headers',
+          name: 'Security headers',
+          description: 'Adds the security header set to successful responses.',
+          phase: 'response',
+          criteria: [{ id: 'c7', conditions: [condition('status', 'is-equal', '200')] }],
+          behaviors: [
+            {
+              id: 'b7',
+              type: 'add-response-header',
+              target: 'strict-transport-security: max-age=31536000'
+            }
+          ],
+          status: 'Active',
+          modifiedAt: daysAgo(9)
+        },
+        {
+          id: 're-compress',
+          name: 'Compress assets',
+          description: 'Compresses script bundles on the way out.',
+          phase: 'response',
+          criteria: [{ id: 'c8', conditions: [condition('path', 'matches', '*.js')] }],
+          behaviors: [{ id: 'b8', type: 'enable-gzip' }],
+          status: 'Inactive',
+          modifiedAt: daysAgo(47)
+        }
+      ]
+    })
 
   const rules = ref(seed())
 
-  // The operator's own words, so the summary reads as the rule reads in the drawer.
-  const OPERATOR_LABELS = {
-    'is-equal': '=',
-    'is-not-equal': '≠',
-    matches: '~',
-    'does-not-match': '!~',
-    'starts-with': '^',
-    exists: 'exists'
-  }
-
-  /**
-   * The table's Criteria cell, derived from the structured model rather than stored
-   * beside it — so it cannot disagree with what the drawer just saved. Long rules
-   * state their first condition and count the rest; the row is a summary, and the
-   * drawer is where the whole thing is read.
-   */
-  const criteriaSummary = (rule) => {
-    const conditions = (rule.criteria ?? []).flatMap((group) => group.conditions)
-    if (!conditions.length) return '—'
-    const [first, ...rest] = conditions
-    const head = [first.variable, OPERATOR_LABELS[first.operator] ?? first.operator, first.argument]
-      .filter(Boolean)
-      .join(' ')
-    return rest.length ? `${head} +${rest.length} more` : head
-  }
-
   const phaseRules = computed(() => rules.value[phase.value])
 
-  // Free-text search over the phase's rules. It narrows what is on screen, which is
-  // exactly why it also suspends reordering below.
+  // Free-text search over the phase's rules — over WHAT THE ROW SHOWS (name,
+  // description, status, the modifier's name), never over a field the reader cannot
+  // see: a hit on a criterion the table does not render looks like a bug, not a match.
+  // It narrows what is on screen, which is exactly why it also suspends reordering
+  // below.
   const search = ref('')
   const visibleRules = computed(() => {
     const term = search.value.trim().toLowerCase()
     if (!term) return [...phaseRules.value]
     return phaseRules.value.filter((rule) =>
-      [rule.name, criteriaSummary(rule), rule.status].some((field) =>
-        field.toLowerCase().includes(term)
+      [rule.name, rule.description, rule.status, rule.author].some((field) =>
+        (field ?? '').toLowerCase().includes(term)
       )
     )
   })
@@ -286,21 +324,104 @@
   // ever disagreeing about it.
   const PINNED_RULES = 1
   const canReorder = computed(() => !narrowed.value && phaseRules.value.length > PINNED_RULES + 1)
-  const { canMove, isDragging, isDropTarget, onDragStart, onDragEnter, onDragEnd, drop, move } =
-    useDragReorder(() => rules.value[phase.value], {
-      enabled: () => canReorder.value,
-      pinned: () => PINNED_RULES
-    })
+  const {
+    canMove,
+    isDragging,
+    isDropTarget,
+    onDragStart,
+    onDragEnter,
+    onDragEnd,
+    drop,
+    move,
+    moveTo
+  } = useDragReorder(() => rules.value[phase.value], {
+    enabled: () => canReorder.value,
+    pinned: () => PINNED_RULES
+  })
 
   /**
-   * Why a row's controls are inert, in the reader's words — the grip's tooltip, and the
-   * thing that decides whether the grip renders live at all. Empty means it can move.
+   * Why a row's controls are inert, in the reader's words — the grip's tooltip, the
+   * position field's, and the thing that decides whether either renders live at all.
+   * Empty means it can move.
+   *
+   * THE SEARCH ANSWERS FIRST, because while the list is narrowed `index` is a position
+   * in what is on SCREEN and not in the phase — so the pinned test below cannot be
+   * trusted, and a single search hit would otherwise be told it is the rule that runs
+   * first no matter where it actually sits.
    */
   const lockReason = (index) => {
-    if (index < PINNED_RULES) return 'The first rule runs first and stays first.'
     if (narrowed.value) return 'Clear the search to change the order rules run in.'
+    if (index < PINNED_RULES) return 'The first rule runs first and stays first.'
     if (!canMove(index)) return 'There is no other rule in this phase to move it past.'
     return ''
+  }
+
+  // ── The position, typed ───────────────────────────────────────────────────
+  // THE NUMBER IS THE CONTROL, not a label beside one. Drag and the two chevrons are
+  // both single-step gestures: moving rule 24 to rule 3 is a hold-and-scroll or 21
+  // clicks, and both of those get worse as the phase grows — while the reader already
+  // knows the number they want. So the position cell is a field: type `3`, commit, and
+  // the row travels there (FLIP-animated like any other move, arming the same save bar).
+  //
+  // ONE draft at a time, keyed by rule id rather than by index: the index is what the
+  // commit CHANGES, so a draft held against it would belong to a different row the
+  // moment the row moved. Every other row's field renders its own position, so the
+  // column cannot show a stale number.
+  const positionDraft = ref(null)
+
+  /**
+   * The rule's position IN THE PHASE — not its row number on screen. The two are the
+   * same until a search narrows the list, and then they are not: the third hit of a
+   * search is not rule 3, and a number field showing `3` for it would be the column
+   * stating something false about the program. (The field is inert while narrowed, but
+   * inert is not an excuse to be wrong.)
+   */
+  const rulePosition = (rule) => phaseRules.value.indexOf(rule) + 1
+
+  const positionValue = (rule) =>
+    positionDraft.value?.id === rule.id ? positionDraft.value.value : String(rulePosition(rule))
+
+  const onPositionInput = (rule, value) => {
+    positionDraft.value = { id: rule.id, value }
+  }
+
+  /**
+   * Commit on Enter and on blur — the two ways a person says "that's the number". A
+   * draft that is not a number is DISCARDED rather than reported: the field re-renders
+   * from the row's real index, which is the correction, and an error under a cell that
+   * shows the answer would be noise. Out-of-range numbers are clamped by `moveTo`.
+   *
+   * THE FIELD STEPS OUT OF THE WAY BEFORE THE ROW MOVES. A focused element inside the
+   * moving row silently cancels the FLIP: `TransitionGroup` measures the row, then the
+   * node is re-inserted at its new index, and Chrome's focus bookkeeping on that
+   * re-insertion leaves nothing to interpolate — the row TELEPORTS, which is the exact
+   * failure the animation exists to prevent, and it is invisible in review because the
+   * row does end up in the right place. Measured on the Enter path: 1 sampled frame with
+   * the field focused, 16 with it blurred first (the chevrons animate because a clicked
+   * `IconButton` never held focus). So: blur, move, then put focus back on the same
+   * field once it has arrived — `preventScroll`, so restoring focus cannot yank a long
+   * list to the row's old position.
+   */
+  const commitPosition = (index, field) => {
+    const draft = positionDraft.value
+    positionDraft.value = null
+    if (!draft) return
+    const typed = Number.parseInt(draft.value, 10)
+    if (!Number.isFinite(typed)) return
+    field?.blur()
+    const to = moveTo(index, typed)
+    if (to === index || !field) return
+    // Restored on the next tick — after the row's transform has been applied, which is
+    // what the blur above bought, and measured not to cancel it (16 sampled frames with
+    // the refocus, same as without). `nextTick` rather than the row's `transitionend`
+    // because that event never fires under `prefers-reduced-motion`, and focus is not
+    // something a motion preference may take away.
+    nextTick(() => field.focus({ preventScroll: true }))
+  }
+
+  /** Escape abandons the edit — the field snaps back to where the row actually is. */
+  const cancelPosition = () => {
+    positionDraft.value = null
   }
 
   // ── Create and edit ───────────────────────────────────────────────────────
@@ -319,7 +440,19 @@
     drawerOpen.value = true
   }
 
-  const onCreated = (rule) => {
+  /**
+   * Stamps a saved rule with WHO touched it and WHEN — the record the drawer emits is
+   * the request body, and the modification is this side's fact. Writing it here means
+   * the Last Modified column answers for a rule written a second ago exactly as it
+   * does for one seeded weeks ago, instead of leaving a blank cell behind a save.
+   */
+  const stampModified = (rule) => {
+    const person = authorAt(0)
+    return { ...rule, modifiedAt: new Date(), author: person.name, authorAvatar: person.avatar }
+  }
+
+  const onCreated = (created) => {
+    const rule = stampModified(created)
     // A new rule lands at the END of its phase: it runs last until someone moves it,
     // which is the only honest default for an ordered list.
     rules.value[rule.phase] = [...rules.value[rule.phase], rule]
@@ -328,7 +461,8 @@
     phase.value = rule.phase
   }
 
-  const onUpdated = (rule) => {
+  const onUpdated = (saved) => {
+    const rule = stampModified(saved)
     const previous = editingRule.value
     // The phase is editable in the drawer, so a save can MOVE the rule between the
     // two lists. Removing it from wherever it was and appending it to the phase it
@@ -380,9 +514,9 @@
          the table it narrows, at the GROUP step — and spaces whatever sits inside
          it at --layout-section-gap. -->
     <section
-      class="layout-section-start flex min-w-0 flex-1 flex-col gap-[var(--layout-section-gap)] pb-[var(--layout-boundary-end)]"
+      class="layout-section-start flex min-w-0 flex-1 flex-col gap-(--layout-section-gap) pb-(--layout-boundary-end)"
     >
-      <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <!-- The band's CONTROLS: the phase switch and the search that narrows it,
              above the card — the same row every list in the console opens with. The
              phase leads because it selects WHICH list the search then narrows. -->
@@ -398,7 +532,7 @@
             size="large"
             :placeholder="`Search ${phaseLabel.toLowerCase()} rules`"
             aria-label="Search rules"
-            class="min-w-36 grow basis-[var(--container-2xs)]"
+            class="min-w-36 grow basis-(--container-2xs)"
           >
             <template #iconLeft>
               <i
@@ -425,16 +559,19 @@
             <Table :border="false">
               <Table.Header>
                 <Table.Row>
+                  <!-- Wider than a number needs, because the number IS a control: the
+                       position field plus the grip and the two nudges. -->
                   <Table.HeadCell
                     align="center"
-                    class="w-32 !flex-none"
+                    class="w-48 flex-none!"
                   >
                     <span class="sr-only">Order</span>
                     <span aria-hidden="true">#</span>
                   </Table.HeadCell>
                   <Table.HeadCell principal>Name</Table.HeadCell>
-                  <Table.HeadCell :grow="2">Criteria</Table.HeadCell>
+                  <Table.HeadCell :grow="3">Description</Table.HeadCell>
                   <Table.HeadCell>Status</Table.HeadCell>
+                  <Table.HeadCell :grow="2">Last Modified</Table.HeadCell>
                 </Table.Row>
               </Table.Header>
 
@@ -491,17 +628,62 @@
                         @drop="drop(index)"
                       >
                         <Table.Row>
-                          <!-- THE ORDER CELL: the position, the grip, and the two buttons that
-                         do the same thing without a pointer. All three drive one `move`,
-                         and all three read one `canMove` — so a rule that cannot go up
-                         has a dim chevron, a dim grip and a drop indicator that refuses
-                         to land there, rather than three controls with three opinions. -->
+                          <!-- THE ORDER CELL: the position — typed — the grip, and the two
+                         buttons that nudge it one step without a pointer. All four drive
+                         one `move`/`moveTo` and all four read one `canMove`, so a rule
+                         that cannot go up has a dim chevron, a dim grip, a disabled
+                         position field and a drop indicator that refuses to land there,
+                         rather than four controls with four opinions. -->
                           <Table.Cell
                             align="center"
-                            class="w-32 !flex-none gap-[var(--spacing-xxs)]"
+                            class="w-48 flex-none! gap-(--spacing-xxs)"
                           >
-                            <span class="w-4 text-body-xs tabular-nums text-[var(--text-muted)]">
-                              {{ index + 1 }}
+                            <!-- THE POSITION IS A FIELD, and it is the only control here
+                                 that crosses a long list in one action. Committed on Enter
+                                 or blur, abandoned on Escape; the text is selected on focus
+                                 so typing REPLACES the number instead of appending to it
+                                 (`24` + `3` = position 243, clamped to the last row — the
+                                 one way this control could surprise someone).
+                                 `InputText` passes `$attrs` through to its real `<input>`,
+                                 which is what lets the key and focus handlers land there —
+                                 and the WIDTH sits on the WRAPPER below: `Tooltip`'s
+                                 trigger appends `w-fit` and `InputText`'s root appends
+                                 `w-full` AFTER the class each is passed, and this package
+                                 composes classes without tailwind-merge — so a width handed
+                                 to either one loses to the one already there. Measured: the
+                                 field came out 168px wide instead of 56. -->
+                            <span class="w-14 shrink-0 [&>span]:w-full">
+                              <Tooltip
+                                key="position-locked"
+                                v-if="lockReason(index)"
+                                :text="lockReason(index)"
+                              >
+                                <InputText
+                                  :model-value="positionValue(rule)"
+                                  size="small"
+                                  disabled
+                                  class="[&_input]:text-center [&_input]:tabular-nums"
+                                  :aria-label="`Position ${rulePosition(rule)}. ${lockReason(index)}`"
+                                />
+                              </Tooltip>
+                              <Tooltip
+                                key="position"
+                                v-else
+                                text="Type a position to move the rule there"
+                              >
+                                <InputText
+                                  :model-value="positionValue(rule)"
+                                  size="small"
+                                  inputmode="numeric"
+                                  class="[&_input]:text-center [&_input]:tabular-nums"
+                                  :aria-label="`Position of ${rule.name}. Type a number from ${PINNED_RULES + 1} to ${visibleRules.length} to move it.`"
+                                  @update:model-value="onPositionInput(rule, $event)"
+                                  @focus="$event.target.select()"
+                                  @keydown.enter.prevent="commitPosition(index, $event.target)"
+                                  @keydown.esc.prevent="cancelPosition()"
+                                  @blur="commitPosition(index, $event.target)"
+                                />
+                              </Tooltip>
                             </span>
                             <!-- The grip is the drag source and the keyboard control at
                            once: hold it to drag, or focus it and press the arrows.
@@ -576,16 +758,17 @@
                           >
                             <button
                               type="button"
-                              class="min-w-0 cursor-pointer truncate rounded-[var(--shape-button)] text-left outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+                              class="min-w-0 cursor-pointer truncate rounded-(--shape-button) text-left outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                               @click="openRule(rule)"
                             >
                               {{ rule.name }}
                             </button>
                           </Table.Cell>
-                          <Table.Cell :grow="2">
-                            <span class="min-w-0 truncate font-code text-label-code-sm">
-                              {{ criteriaSummary(rule) }}
-                            </span>
+                          <!-- What the author wrote for whoever reads this rule next. Not
+                         the criteria: those are a program, and a truncated fragment of
+                         one says less than the sentence a person wrote about it. -->
+                          <Table.Cell :grow="3">
+                            <span class="min-w-0 truncate">{{ rule.description }}</span>
                           </Table.Cell>
                           <!-- Status is a chip, Active/Inactive, the same pair every console
                          list reads (Applications.vue) — never bare text in a cell. -->
@@ -594,6 +777,17 @@
                               :label="rule.status"
                               :severity="rule.status === 'Active' ? 'success' : 'secondary'"
                               size="medium"
+                            />
+                          </Table.Cell>
+                          <!-- WHO changed it and WHEN, in one column: the modifier's avatar
+                         (their name on its tooltip) plus the relative time — the same
+                         cell every console list ends on (ui/LastModifiedCell.vue). The
+                         face is why there is no separate "Created by" column. -->
+                          <Table.Cell :grow="2">
+                            <LastModifiedCell
+                              :author="rule.author"
+                              :avatar-src="rule.authorAvatar"
+                              :date="rule.modifiedAt"
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -607,7 +801,7 @@
                          the same one gesture a populated one does. -->
                     <div
                       v-if="!visibleRules.length"
-                      class="p-[var(--spacing-lg)]"
+                      class="p-(--spacing-lg)"
                     >
                       <EmptyState
                         v-if="!phaseRules.length"
@@ -617,7 +811,7 @@
                       />
                       <p
                         v-else
-                        class="py-[var(--spacing-lg)] text-center text-body-sm text-[var(--text-muted)]"
+                        class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
                       >
                         No rules match "{{ search }}".
                       </p>

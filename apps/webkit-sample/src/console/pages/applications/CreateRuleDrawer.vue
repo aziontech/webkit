@@ -20,6 +20,7 @@
   import CardBox from '@aziontech/webkit/card-box'
   import Divider from '@aziontech/webkit/divider'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
@@ -33,7 +34,19 @@
   import ResourceDrawer from '../../components/form/ResourceDrawer.vue'
   import Section from '../../components/page/Section.vue'
   import { useAnimatedHeight } from '../../lib/behavior/animate-height.js'
-  import { MORPH_TRANSITION } from '../../lib/behavior/list-morph'
+  import { MORPH_COLLAPSE } from '../../lib/behavior/list-morph'
+  import {
+    behaviorAllowedIn,
+    behaviorArgument,
+    behaviorArgumentNote,
+    behaviorLabel,
+    behaviorOptions,
+    behaviorsFor,
+    isTerminalBehavior,
+    operatorLabel,
+    OPERATORS,
+    takesArgument
+  } from '../../lib/data/rules-engine'
 
   const open = defineModel('open', { type: Boolean, default: false })
 
@@ -48,25 +61,6 @@
   const emit = defineEmits(['created', 'updated'])
 
   const editing = computed(() => Boolean(props.rule))
-
-  const OPERATORS = [
-    { value: 'is-equal', label: 'is equal' },
-    { value: 'is-not-equal', label: 'is not equal' },
-    { value: 'matches', label: 'matches' },
-    { value: 'does-not-match', label: 'does not match' },
-    { value: 'starts-with', label: 'starts with' },
-    { value: 'exists', label: 'exists' }
-  ]
-  const operatorLabel = (value) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-
-  const BEHAVIORS = [
-    { value: 'deliver', label: 'Deliver' },
-    { value: 'set-cache-policy', label: 'Set cache policy' },
-    { value: 'redirect-301', label: 'Redirect (301)' },
-    { value: 'run-function', label: 'Run Function' },
-    { value: 'deny', label: 'Deny access (403 Forbidden)' }
-  ]
-  const behaviorLabel = (value) => BEHAVIORS.find((b) => b.value === value)?.label ?? ''
 
   // Stable keys for repeater rows (order-independent).
   let nextId = 0
@@ -136,9 +130,93 @@
     submitted.value = false
   })
 
+  // ── The two conditional forms ─────────────────────────────────────────────
+  //
+  // A rule is `if <criteria> then <behaviors>`, and NEITHER half has a fixed set of
+  // fields: the operator decides whether a condition has an argument, and the
+  // behavior decides what — if anything — the behavior is given. Both answers come
+  // from the vocabulary (../../lib/data/rules-engine.js) rather than from a chain of
+  // `v-if`s per behavior name, so adding a behavior is a row in the catalog.
+  //
+  // THE FIELD IS NOT RENDERED, NOT DISABLED. `exists` reads no value and `Deliver`
+  // takes none, so their inputs are gone. A control that accepts an answer nothing
+  // reads is worse than no control: it is a promise the save quietly breaks.
+  //
+  // The behaviors a phase offers differ, so changing the phase re-checks every
+  // behavior against the new list (see the watch below) instead of leaving a
+  // request-only behavior selected on a response rule.
+  const behaviorsForPhase = computed(() =>
+    behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
+  )
+
+  // The record a `select` argument lists — read live from the store that owns those
+  // records, so a cache policy created in the tab next door is selectable here.
+  const optionsFor = (source) => behaviorOptions(source, form.phase)
+  const optionLabelIn = (source, value) =>
+    optionsFor(source).find((option) => option.value === value)?.label ?? ''
+
+  /**
+   * Selecting a behavior REPLACES its argument rather than merging over it: the
+   * previous type's keys are dropped, so a rule that was `Redirect (301) → //legacy`
+   * and is now `Run Function` does not carry a stale `target` into the save. The row's
+   * `id` survives, so the list morph reads it as the same row changing, not a
+   * remove-and-add.
+   */
+  const setBehaviorType = (index, type) => {
+    if (form.behaviors[index].type === type) return
+    // Through the height animation: the argument region grows and shrinks with the
+    // type (Capture Match Groups is three fields tall, Deliver is none), and that is
+    // the same kind of change as an add or a remove.
+    animateBehaviors(() => {
+      form.behaviors[index] = { id: form.behaviors[index].id, type }
+    })
+  }
+
+  // A behavior whose argument is still blank on submit — amber (not answered yet),
+  // the same state the required name and the condition's variable use.
+  const argumentMissing = (behavior, field) =>
+    submitted.value && !String(behavior[field] ?? '').trim()
+
+  /**
+   * `Add behavior` is spent once the last behavior ENDS the rule (Deliver, Deny, a
+   * redirect): nothing after it can execute, so offering to write another line is
+   * offering to write dead code. Ten is the ceiling the API enforces.
+   */
+  const canAddBehavior = computed(() => {
+    if (form.behaviors.length >= 10) return false
+    return !isTerminalBehavior(form.behaviors[form.behaviors.length - 1]?.type)
+  })
+
+  // The two ceilings the API enforces: five criteria groups per rule, ten conditions
+  // inside one. Held here rather than discovered on save.
+  const canAddCriteria = computed(() => form.criteria.length < 5)
+  const canAddCondition = (group) => group.conditions.length < 10
+
+  // Changing the phase changes which behaviors exist. Any behavior the new phase does
+  // not offer falls back to Deliver — the one behavior both phases have and the only
+  // safe default — and a function chosen for the request phase is cleared when the
+  // response phase would not offer it (its runtime is not available there).
+  watch(
+    () => form.phase,
+    (phase) => {
+      form.behaviors.forEach((behavior, index) => {
+        if (!behaviorAllowedIn(behavior.type, phase)) {
+          form.behaviors[index] = { id: behavior.id, type: 'deliver' }
+          return
+        }
+        const argument = behaviorArgument(behavior.type)
+        if (argument?.kind !== 'select') return
+        const stillOffered = behaviorOptions(argument.source, phase).some(
+          (option) => option.value === behavior[argument.field]
+        )
+        if (!stillOffered) behavior[argument.field] = ''
+      })
+    }
+  )
+
   // ── The two repeater regions ease their own height ──
   //
-  // The rows themselves are handled by MORPH_TRANSITION: a removed row leaves the flow
+  // The rows themselves are handled by MORPH_COLLAPSE: a removed row eases its own height
   // in the first frame and its neighbours FLIP up into the space. That fixes the ROWS,
   // and leaves the REGION — everything under the list (the And/Or buttons, the divider,
   // Add Criteria) still jumped the full height of the removed row, in one frame, while
@@ -149,11 +227,8 @@
   // (../lib/animate-height.js — measure, pin, release back to `auto`), and every add and
   // remove is routed through it. Moves are not: a reorder changes no height, and putting
   // it through the measure would cost a `nextTick` for nothing.
-  const {
-    region: criteriaRegion,
-    height: criteriaHeight,
-    animateHeight: animateCriteria
-  } = useAnimatedHeight()
+  // Criteria needs none of its own: every height change there IS a row arriving or
+  // leaving, and the rows now carry that themselves.
   const {
     region: behaviorsRegion,
     height: behaviorsHeight,
@@ -161,9 +236,13 @@
   } = useAnimatedHeight()
 
   // ── Criteria repeater: add / remove / reorder ──
-  const addCondition = (group, join) =>
-    animateCriteria(() => group.conditions.push(newCondition(join)))
-  const addCriteria = () => animateCriteria(() => form.criteria.push(newGroup()))
+  // No `animateCriteria` around an add or a remove any more: the ROW owns that height
+  // now (MORPH_COLLAPSE), and easing the region as well pins it to a measured value while
+  // its contents are still moving inside it — the two ease against each other and the
+  // region lands before the row does. The region animation stays for the one change that
+  // is NOT a row arriving or leaving: a behavior swapping to a type of a different size.
+  const addCondition = (group, join) => group.conditions.push(newCondition(join))
+  const addCriteria = () => form.criteria.push(newGroup())
 
   // Reorder whole criteria groups (move up/down — same no-drag-lib pattern as the
   // conditions/behaviors). The first group always reads "If", the rest "Or", and
@@ -177,12 +256,10 @@
 
   const removeCondition = (groupIndex, condIndex) => {
     if (totalConditions.value <= 1) return // keep at least one condition overall
-    animateCriteria(() => {
-      const group = form.criteria[groupIndex]
-      group.conditions.splice(condIndex, 1)
-      if (group.conditions.length === 0) form.criteria.splice(groupIndex, 1)
-      else if (condIndex === 0) group.conditions[0].join = null
-    })
+    const group = form.criteria[groupIndex]
+    group.conditions.splice(condIndex, 1)
+    if (group.conditions.length === 0) form.criteria.splice(groupIndex, 1)
+    else if (condIndex === 0) group.conditions[0].join = null
   }
 
   const moveCondition = (groupIndex, condIndex, direction) => {
@@ -195,10 +272,10 @@
   }
 
   // ── Behaviors repeater: add / remove / reorder ──
-  const addBehavior = () => animateBehaviors(() => form.behaviors.push(newBehavior()))
+  const addBehavior = () => form.behaviors.push(newBehavior())
   const removeBehavior = (index) => {
     if (form.behaviors.length <= 1) return
-    animateBehaviors(() => form.behaviors.splice(index, 1))
+    form.behaviors.splice(index, 1)
   }
   const moveBehavior = (index, direction) => {
     const target = index + direction
@@ -221,9 +298,9 @@
   // is the drop zone. Sized to match IconButton large (size-10). Arrow keys on a
   // focused grip reorder without a pointer (keyboard a11y).
   const GRIP_CLASS =
-    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-[var(--shape-button)] ' +
-    'text-[var(--text-muted)] outline-none transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] ' +
-    'focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] active:cursor-grabbing motion-reduce:transition-none'
+    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) ' +
+    'text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none'
 
   // Row states, keyed off the drag: `dragging` = the lifted source row;
   // `drop` = the row currently under the pointer (where it will land).
@@ -236,9 +313,9 @@
   // outline, so no layout shift). `drop` = where the item can be placed: a solid
   // accent line on TOP (a `before` pseudo, so it never shifts layout).
   const dragRowClass =
-    'relative rounded-[var(--shape-card)] transition-[opacity,transform,outline-color] ' +
-    'data-[dragging]:opacity-70 data-[dragging]:scale-[0.98] data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-[var(--accent)] ' +
-    "data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:-top-[var(--spacing-xxs)] data-[drop]:before:border-t-2 data-[drop]:before:border-[var(--accent)] data-[drop]:before:content-['']"
+    'relative rounded-(--shape-card) transition-[opacity,transform,outline-color] ' +
+    'data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) ' +
+    "data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const onDragStart = (scope, index, event) => {
     dnd.scope = scope
@@ -282,12 +359,22 @@
     onDragEnd()
   }
 
+  // Every field the form RENDERS has to be answered — which is the other half of not
+  // rendering the ones that are not read: a condition on `exists` has no argument to
+  // require, and `Deliver` has no value to be missing.
+  const behaviorFilled = (behavior) => {
+    const argument = behaviorArgument(behavior.type)
+    if (!argument) return true
+    const fields = argument.kind === 'group' ? argument.fields : [argument]
+    return fields.every(({ field }) => String(behavior[field] ?? '').trim())
+  }
+
   const isValid = () => {
     const okName = !!form.name.trim()
     const okCriteria = form.criteria.every((group) =>
       group.conditions.every((c) => c.variable.trim())
     )
-    return okName && okCriteria && form.behaviors.length > 0
+    return okName && okCriteria && form.behaviors.length > 0 && form.behaviors.every(behaviorFilled)
   }
 
   const submit = async () => {
@@ -298,10 +385,9 @@
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
-      // The WHOLE record goes up, not just the four display fields: the list behind
-      // the drawer derives its criteria summary from the structured model, so a save
-      // that dropped the repeaters would leave the row describing the rule as it was
-      // before the edit.
+      // The WHOLE record goes up, not just the four display fields: the row the list
+      // keeps IS what reopens this drawer, so a save that dropped the repeaters would
+      // hand the next edit the rule as it was before this one.
       const record = {
         id: props.rule?.id ?? `rule-${uid()}`,
         name: form.name.trim(),
@@ -345,9 +431,9 @@
       stacked
       :divided="false"
       title="General"
-      hint="Names the rule in the list and in the deployment log. The description is for whoever reads this rule next — it never affects what the rule does."
+      hint="Names the rule in the list and in the deployment log. The description is for whoever reads this rule next. It never affects what the rule does."
     >
-      <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <FieldStack
           label="Name"
           :message="nameError ? 'Name is required.' : ''"
@@ -391,8 +477,16 @@
     >
       <CardBox :padded="false">
         <template #content>
-          <div class="flex flex-col gap-[var(--spacing-md)] p-[var(--spacing-md)]">
-            <div class="flex flex-col gap-[var(--spacing-xs)]">
+          <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
+            <!-- THE PHASE IS FIXED ONCE THE RULE EXISTS. It is not a preference the rule
+                 carries, it is WHICH PROGRAM the rule belongs to: the two phases offer
+                 different behaviors, and the watch that guards that falls every behavior
+                 the new phase does not offer back to Deliver. On a rule being written
+                 that is a correction the reader is making as they go; on a rule that
+                 already runs it would silently empty the thing they opened to edit.
+                 So the switch is offered on create and locked afterwards — moving a rule
+                 to the other phase is writing the rule that belongs there. -->
+            <div class="flex flex-col gap-(--spacing-xs)">
               <FieldRadioBlock
                 v-model="form.phase"
                 value="request"
@@ -400,7 +494,7 @@
                 input-id="rule-phase-request"
                 label="Request Phase"
                 description="Configure the requests made to the edge."
-                :disabled="submitting"
+                :disabled="submitting || editing"
               />
               <FieldRadioBlock
                 v-model="form.phase"
@@ -409,7 +503,15 @@
                 input-id="rule-phase-response"
                 label="Response Phase"
                 description="Configure the responses delivered to end-users."
-                :disabled="submitting"
+                :disabled="submitting || editing"
+              />
+              <!-- The disabled state says WHY, and what to do instead — the one case
+                   /webkit-form keeps `kind="disabled"` for: a persistent lock whose
+                   reason is not obvious from the control. -->
+              <HelperText
+                v-if="editing"
+                kind="disabled"
+                label="A rule's phase is set when it is created. Create a rule in the other phase to run these behaviors there."
               />
             </div>
           </div>
@@ -426,22 +528,12 @@
     >
       <CardBox :padded="false">
         <template #content>
-          <!-- The region eases its own height across every add and remove, so the block
-               under the list travels with the rows instead of snapping to their new
-               total in one frame. `overflow-hidden` only WHILE a move is in flight —
-               at rest it has to be gone or it clips the focus ring of whichever control
-               sits against the region's edge. -->
-          <div
-            ref="criteriaRegion"
-            :style="{ height: criteriaHeight }"
-            :data-resizing="criteriaHeight ? '' : null"
-            class="transition-[height] duration-moderate-02 ease-productive-entrance data-[resizing]:overflow-hidden motion-reduce:transition-none"
-          >
-            <div class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-md)]">
+          <div>
+            <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
               <TransitionGroup
                 tag="div"
-                class="relative flex flex-col gap-[var(--spacing-lg)]"
-                v-bind="MORPH_TRANSITION"
+                class="relative flex flex-col gap-(--spacing-lg)"
+                v-bind="MORPH_COLLAPSE"
               >
                 <div
                   v-for="(group, gIdx) in form.criteria"
@@ -449,12 +541,12 @@
                   data-drag-row
                   :data-dragging="isDragging('criteria', gIdx) || null"
                   :data-drop="isDropTarget('criteria', gIdx) || null"
-                  :class="['flex flex-col gap-[var(--spacing-sm)]', dragRowClass]"
+                  :class="['flex flex-col gap-(--spacing-sm)', dragRowClass]"
                   @dragenter.prevent="onDragEnter('criteria', gIdx)"
                   @dragover.prevent
                   @drop="dropOnCriteria(gIdx)"
                 >
-                  <div class="flex items-center gap-[var(--spacing-xs)]">
+                  <div class="flex items-center gap-(--spacing-xs)">
                     <!-- Grip: hold to drag the whole criteria group; the
                                move buttons remain for click / keyboard / touch. -->
                     <span
@@ -474,15 +566,15 @@
                         aria-hidden="true"
                       />
                     </span>
-                    <span class="text-overline-sm text-[var(--text-muted)]">
+                    <span class="text-overline-sm text-(--text-muted)">
                       {{ gIdx === 0 ? 'If' : 'Or' }}
                     </span>
-                    <span class="h-px flex-1 bg-[var(--border-default)]" />
+                    <span class="h-px flex-1 bg-(--border-default)" />
                     <!-- Group-level reorder — surfaced only when there is
                                more than one criteria group to move. -->
                     <div
                       v-if="form.criteria.length > 1"
-                      class="flex items-center gap-[var(--spacing-xxs)]"
+                      class="flex items-center gap-(--spacing-xxs)"
                     >
                       <Tooltip text="Move criteria up">
                         <IconButton
@@ -516,12 +608,12 @@
                              loose vertical line. Border tokens (`--border-muted`)
                              at the default width keep the adornment theme-aware. -->
                   <div
-                    class="ml-[var(--spacing-xs)] flex flex-col gap-[var(--spacing-sm)] rounded-bl-[var(--shape-card)] border-b-[length:var(--border-width-default)] border-l-[length:var(--border-width-default)] border-[var(--border-muted)] pb-[var(--spacing-md)] pl-[var(--spacing-md)]"
+                    class="ml-(--spacing-xs) flex flex-col gap-(--spacing-sm) rounded-bl-(--shape-card) border-b-(length:--border-width-default) border-l-(length:--border-width-default) border-(--border-muted) pb-(--spacing-md) pl-(--spacing-md)"
                   >
                     <TransitionGroup
                       tag="div"
-                      class="relative flex flex-col gap-[var(--spacing-sm)]"
-                      v-bind="MORPH_TRANSITION"
+                      class="relative flex flex-col gap-(--spacing-sm)"
+                      v-bind="MORPH_COLLAPSE"
                     >
                       <div
                         v-for="(cond, cIdx) in group.conditions"
@@ -529,19 +621,19 @@
                         data-drag-row
                         :data-dragging="isDragging('cond-' + gIdx, cIdx) || null"
                         :data-drop="isDropTarget('cond-' + gIdx, cIdx) || null"
-                        :class="['flex flex-col gap-[var(--spacing-xxs)]', dragRowClass]"
+                        :class="['flex flex-col gap-(--spacing-xxs)', dragRowClass]"
                         @dragenter.prevent="onDragEnter('cond-' + gIdx, cIdx)"
                         @dragover.prevent
                         @drop="dropOnCondition(gIdx, cIdx)"
                       >
                         <span
                           v-if="cIdx > 0"
-                          class="text-label-sm text-[var(--text-muted)]"
+                          class="text-label-sm text-(--text-muted)"
                         >
                           {{ cond.join === 'or' ? 'Or' : 'And' }}
                         </span>
                         <div
-                          class="grid grid-cols-1 items-start gap-[var(--spacing-xs)] sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
+                          class="grid grid-cols-1 items-start gap-(--spacing-xs) sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
                         >
                           <InputText
                             v-model="cond.variable"
@@ -568,9 +660,7 @@
                             :display-value="operatorLabel"
                           >
                             <Select.Trigger aria-label="Operator" />
-                            <!-- z workaround: Select.Content teleports to body at
-                                   z-50, behind the Drawer panel (z-[1001]). -->
-                            <Select.Content class="!z-[1002]">
+                            <Select.Content>
                               <Select.Option
                                 v-for="op in OPERATORS"
                                 :key="op.value"
@@ -581,17 +671,24 @@
                             </Select.Content>
                           </Select>
 
+                          <!-- `exists` / `does not exist` test for PRESENCE: there is
+                                 no value to compare against, so the input is not
+                                 rendered rather than rendered and ignored. The cell
+                                 stays in the grid, so the row's columns do not shift
+                                 under the operator that dropped its argument. -->
                           <InputText
+                            v-if="takesArgument(cond.operator)"
                             v-model="cond.argument"
                             size="large"
                             class="w-full"
                             aria-label="Argument"
                             :disabled="submitting"
                           />
+                          <span v-else />
 
                           <!-- Row controls at the fields' size (large) to keep the
                                  horizontal rhythm: drag grip + reorder + remove. -->
-                          <div class="flex items-center gap-[var(--spacing-xxs)]">
+                          <div class="flex items-center gap-(--spacing-xxs)">
                             <span
                               v-if="group.conditions.length > 1"
                               role="button"
@@ -644,14 +741,14 @@
                       </div>
                     </TransitionGroup>
 
-                    <div class="flex items-center gap-[var(--spacing-xs)]">
+                    <div class="flex items-center gap-(--spacing-xs)">
                       <Button
                         type="button"
                         label="And"
                         kind="outlined"
                         size="medium"
                         icon="pi pi-plus-circle"
-                        :disabled="submitting"
+                        :disabled="submitting || !canAddCondition(group)"
                         @click="addCondition(group, 'and')"
                       />
                       <Button
@@ -660,9 +757,15 @@
                         kind="outlined"
                         size="medium"
                         icon="pi pi-plus-circle"
-                        :disabled="submitting"
+                        :disabled="submitting || !canAddCondition(group)"
                         @click="addCondition(group, 'or')"
                       />
+                      <span
+                        v-if="!canAddCondition(group)"
+                        class="text-body-sm text-(--text-muted)"
+                      >
+                        Each criteria holds up to 10 conditions.
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -670,16 +773,22 @@
 
               <Divider />
 
-              <div>
+              <div class="flex flex-wrap items-center gap-(--spacing-sm)">
                 <Button
                   type="button"
-                  label="Add Criteria"
+                  label="Add criteria"
                   kind="outlined"
                   size="medium"
                   icon="pi pi-plus-circle"
-                  :disabled="submitting"
+                  :disabled="submitting || !canAddCriteria"
                   @click="addCriteria"
                 />
+                <span
+                  v-if="!canAddCriteria"
+                  class="text-body-sm text-(--text-muted)"
+                >
+                  A rule holds up to 5 criteria.
+                </span>
               </div>
             </div>
           </div>
@@ -696,24 +805,26 @@
     >
       <CardBox :padded="false">
         <template #content>
-          <!-- Eases its own height across an add / remove, for the same reason the
-               Criteria region does — see the note on that region in the script. -->
+          <!-- The rows own their own height now; this region eases only the ONE change
+               that is not a row arriving or leaving — a behavior swapping to a type whose
+               argument is a different size (Capture Match Groups is three fields tall,
+               Deliver is none). -->
           <div
             ref="behaviorsRegion"
             :style="{ height: behaviorsHeight }"
             :data-resizing="behaviorsHeight ? '' : null"
-            class="transition-[height] duration-moderate-02 ease-productive-entrance data-[resizing]:overflow-hidden motion-reduce:transition-none"
+            class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
           >
-            <div class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-md)]">
-              <div class="flex items-center gap-[var(--spacing-xs)]">
-                <span class="text-overline-sm text-[var(--text-muted)]">Then</span>
-                <span class="h-px flex-1 bg-[var(--border-default)]" />
+            <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+              <div class="flex items-center gap-(--spacing-xs)">
+                <span class="text-overline-sm text-(--text-muted)">Then</span>
+                <span class="h-px flex-1 bg-(--border-default)" />
               </div>
 
               <TransitionGroup
                 tag="div"
-                class="relative flex flex-col gap-[var(--spacing-sm)]"
-                v-bind="MORPH_TRANSITION"
+                class="relative flex flex-col gap-(--spacing-sm)"
+                v-bind="MORPH_COLLAPSE"
               >
                 <div
                   v-for="(behavior, bIdx) in form.behaviors"
@@ -721,22 +832,26 @@
                   data-drag-row
                   :data-dragging="isDragging('behavior', bIdx) || null"
                   :data-drop="isDropTarget('behavior', bIdx) || null"
-                  :class="['flex items-start gap-[var(--spacing-xs)]', dragRowClass]"
+                  :class="[
+                    'grid grid-cols-1 items-start gap-(--spacing-xs) sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]',
+                    dragRowClass
+                  ]"
                   @dragenter.prevent="onDragEnter('behavior', bIdx)"
                   @dragover.prevent
                   @drop="dropOnBehavior(bIdx)"
                 >
                   <Select
-                    v-model="behavior.type"
+                    :model-value="behavior.type"
                     size="large"
-                    class="w-full min-w-0 flex-1"
+                    class="w-full min-w-0"
                     :disabled="submitting"
                     :display-value="behaviorLabel"
+                    @update:model-value="setBehaviorType(bIdx, $event)"
                   >
                     <Select.Trigger aria-label="Behavior" />
-                    <Select.Content class="!z-[1002]">
+                    <Select.Content>
                       <Select.Option
-                        v-for="option in BEHAVIORS"
+                        v-for="option in behaviorsForPhase"
                         :key="option.value"
                         :value="option.value"
                       >
@@ -745,7 +860,86 @@
                     </Select.Content>
                   </Select>
 
-                  <div class="flex items-center gap-[var(--spacing-xxs)]">
+                  <!-- WHAT THE BEHAVIOR IS GIVEN — the conditional half of the row.
+                       Four shapes, all declared by the catalog: nothing at all
+                       (Deliver, Deny), one free-text value with the placeholder that
+                       states its format, one record of this application listed from
+                       the store that owns it, or a group (Capture Match Groups takes
+                       three). The cell holds its place in the grid when the behavior
+                       reads nothing, so the behavior Select keeps one width down the
+                       column instead of resizing as each row's type is chosen. -->
+                  <div class="min-w-0">
+                    <template v-if="behaviorArgument(behavior.type)?.kind === 'text'">
+                      <InputText
+                        v-model="behavior[behaviorArgument(behavior.type).field]"
+                        size="large"
+                        class="w-full"
+                        :aria-label="behaviorArgument(behavior.type).label"
+                        :placeholder="behaviorArgument(behavior.type).placeholder"
+                        :disabled="submitting"
+                        :required="argumentMissing(behavior, behaviorArgument(behavior.type).field)"
+                      />
+                    </template>
+
+                    <template v-else-if="behaviorArgument(behavior.type)?.kind === 'select'">
+                      <div class="flex flex-col gap-(--spacing-xxs)">
+                        <Select
+                          v-model="behavior[behaviorArgument(behavior.type).field]"
+                          size="large"
+                          class="w-full"
+                          :disabled="submitting"
+                          :placeholder="`Select a ${behaviorArgument(behavior.type).label.toLowerCase()}`"
+                          :required="
+                            argumentMissing(behavior, behaviorArgument(behavior.type).field)
+                          "
+                          :display-value="
+                            (value) => optionLabelIn(behaviorArgument(behavior.type).source, value)
+                          "
+                        >
+                          <Select.Trigger :aria-label="behaviorArgument(behavior.type).label" />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="option in optionsFor(behaviorArgument(behavior.type).source)"
+                              :key="option.value"
+                              :value="option.value"
+                            >
+                              {{ option.label }}
+                            </Select.Option>
+                          </Select.Content>
+                        </Select>
+                        <!-- The one thing the reader cannot infer from the list: WHY it
+                             is short. Said under the field it narrows, not in the
+                             section hint, because it is only true in one phase. -->
+                        <HelperText
+                          v-if="
+                            behaviorArgumentNote(behaviorArgument(behavior.type).source, form.phase)
+                          "
+                        >
+                          {{
+                            behaviorArgumentNote(behaviorArgument(behavior.type).source, form.phase)
+                          }}
+                        </HelperText>
+                      </div>
+                    </template>
+
+                    <template v-else-if="behaviorArgument(behavior.type)?.kind === 'group'">
+                      <div class="flex flex-col gap-(--spacing-xs)">
+                        <InputText
+                          v-for="part in behaviorArgument(behavior.type).fields"
+                          :key="part.field"
+                          v-model="behavior[part.field]"
+                          size="large"
+                          class="w-full"
+                          :aria-label="part.label"
+                          :placeholder="part.placeholder"
+                          :disabled="submitting"
+                          :required="argumentMissing(behavior, part.field)"
+                        />
+                      </div>
+                    </template>
+                  </div>
+
+                  <div class="flex items-center gap-(--spacing-xxs)">
                     <span
                       v-if="form.behaviors.length > 1"
                       role="button"
@@ -797,16 +991,30 @@
                 </div>
               </TransitionGroup>
 
-              <div>
+              <!-- Spent once the last behavior ENDS the rule, and it SAYS why: a
+                   disabled button with no reason reads as broken, and the reason
+                   ("Deliver is the end of the rule") is the thing that teaches the
+                   reader how behaviors run. -->
+              <div class="flex flex-wrap items-center gap-(--spacing-sm)">
                 <Button
                   type="button"
                   label="Add behavior"
                   kind="outlined"
                   size="medium"
                   icon="pi pi-plus-circle"
-                  :disabled="submitting"
+                  :disabled="submitting || !canAddBehavior"
                   @click="addBehavior"
                 />
+                <span
+                  v-if="!canAddBehavior"
+                  class="text-body-sm text-(--text-muted)"
+                >
+                  {{
+                    form.behaviors.length >= 10
+                      ? 'A rule holds up to 10 behaviors.'
+                      : `${behaviorLabel(form.behaviors[form.behaviors.length - 1].type)} ends the rule. Nothing after it runs.`
+                  }}
+                </span>
               </div>
             </div>
           </div>
